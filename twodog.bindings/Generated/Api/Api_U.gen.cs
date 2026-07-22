@@ -29,20 +29,14 @@ public unsafe partial class UDPServer : RefCounted
     private static nint __mb_listen;
     public Error Listen(ushort port, string bindAddress = "*")
     {
-        var __mb = __mb_listen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "listen", 3167955072);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.listen is not available in this engine build.");
-            __mb_listen = __mb;
-        }
+        if (__mb_listen == 0) MethodBinds.MissingThrow("UDPServer.listen");
         long __a0 = unchecked((long)port);
         ulong __a1 = NativeString.Create(bindAddress);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_listen, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
     }
@@ -50,120 +44,85 @@ public unsafe partial class UDPServer : RefCounted
     private static nint __mb_poll;
     public Error Poll()
     {
-        var __mb = __mb_poll;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "poll", 166280745);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.poll is not available in this engine build.");
-            __mb_poll = __mb;
-        }
+        if (__mb_poll == 0) MethodBinds.MissingThrow("UDPServer.poll");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_poll, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_is_connection_available;
     public bool IsConnectionAvailable()
     {
-        var __mb = __mb_is_connection_available;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "is_connection_available", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.is_connection_available is not available in this engine build.");
-            __mb_is_connection_available = __mb;
-        }
+        if (__mb_is_connection_available == 0) MethodBinds.MissingThrow("UDPServer.is_connection_available");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_connection_available, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_local_port;
     public int GetLocalPort()
     {
-        var __mb = __mb_get_local_port;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "get_local_port", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.get_local_port is not available in this engine build.");
-            __mb_get_local_port = __mb;
-        }
+        if (__mb_get_local_port == 0) MethodBinds.MissingThrow("UDPServer.get_local_port");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_local_port, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_is_listening;
     public bool IsListening()
     {
-        var __mb = __mb_is_listening;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "is_listening", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.is_listening is not available in this engine build.");
-            __mb_is_listening = __mb;
-        }
+        if (__mb_is_listening == 0) MethodBinds.MissingThrow("UDPServer.is_listening");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_listening, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_take_connection;
     public PacketPeerUDP? TakeConnection()
     {
-        var __mb = __mb_take_connection;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "take_connection", 808734560);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.take_connection is not available in this engine build.");
-            __mb_take_connection = __mb;
-        }
+        if (__mb_take_connection == 0) MethodBinds.MissingThrow("UDPServer.take_connection");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_take_connection, NativePtr, 0, (nint)(&__ret));
         return (PacketPeerUDP?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_stop;
     public void Stop()
     {
-        var __mb = __mb_stop;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "stop", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.stop is not available in this engine build.");
-            __mb_stop = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_stop == 0) MethodBinds.MissingThrow("UDPServer.stop");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_stop, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_max_pending_connections;
     public void SetMaxPendingConnections(int maxPendingConnections)
     {
-        var __mb = __mb_set_max_pending_connections;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "set_max_pending_connections", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.set_max_pending_connections is not available in this engine build.");
-            __mb_set_max_pending_connections = __mb;
-        }
+        if (__mb_set_max_pending_connections == 0) MethodBinds.MissingThrow("UDPServer.set_max_pending_connections");
         long __a0 = unchecked((long)maxPendingConnections);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_pending_connections, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_pending_connections;
     public int GetMaxPendingConnections()
     {
-        var __mb = __mb_get_max_pending_connections;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDPServer", "get_max_pending_connections", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("UDPServer.get_max_pending_connections is not available in this engine build.");
-            __mb_get_max_pending_connections = __mb;
-        }
+        if (__mb_get_max_pending_connections == 0) MethodBinds.MissingThrow("UDPServer.get_max_pending_connections");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_pending_connections, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_listen = MethodBinds.ResolveBulk("UDPServer", "listen", 3167955072);
+        __mb_poll = MethodBinds.ResolveBulk("UDPServer", "poll", 166280745);
+        __mb_is_connection_available = MethodBinds.ResolveBulk("UDPServer", "is_connection_available", 36873697);
+        __mb_get_local_port = MethodBinds.ResolveBulk("UDPServer", "get_local_port", 3905245786);
+        __mb_is_listening = MethodBinds.ResolveBulk("UDPServer", "is_listening", 36873697);
+        __mb_take_connection = MethodBinds.ResolveBulk("UDPServer", "take_connection", 808734560);
+        __mb_stop = MethodBinds.ResolveBulk("UDPServer", "stop", 3218959716);
+        __mb_set_max_pending_connections = MethodBinds.ResolveBulk("UDPServer", "set_max_pending_connections", 1286410249);
+        __mb_get_max_pending_connections = MethodBinds.ResolveBulk("UDPServer", "get_max_pending_connections", 3905245786);
     }
 }
 
@@ -179,18 +138,12 @@ public unsafe partial class UDSServer : SocketServer
     private static nint __mb_listen;
     public Error Listen(string path)
     {
-        var __mb = __mb_listen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDSServer", "listen", 166001499);
-            if (__mb == 0) throw new MissingMethodException("UDSServer.listen is not available in this engine build.");
-            __mb_listen = __mb;
-        }
+        if (__mb_listen == 0) MethodBinds.MissingThrow("UDSServer.listen");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_listen, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -198,16 +151,16 @@ public unsafe partial class UDSServer : SocketServer
     private static nint __mb_take_connection;
     public StreamPeerUDS? TakeConnection()
     {
-        var __mb = __mb_take_connection;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UDSServer", "take_connection", 1623851112);
-            if (__mb == 0) throw new MissingMethodException("UDSServer.take_connection is not available in this engine build.");
-            __mb_take_connection = __mb;
-        }
+        if (__mb_take_connection == 0) MethodBinds.MissingThrow("UDSServer.take_connection");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_take_connection, NativePtr, 0, (nint)(&__ret));
         return (StreamPeerUDS?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_listen = MethodBinds.ResolveBulk("UDSServer", "listen", 166001499);
+        __mb_take_connection = MethodBinds.ResolveBulk("UDSServer", "take_connection", 1623851112);
     }
 }
 
@@ -274,124 +227,76 @@ public unsafe partial class UPNP : RefCounted
     private static nint __mb_get_device_count;
     public int GetDeviceCount()
     {
-        var __mb = __mb_get_device_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "get_device_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("UPNP.get_device_count is not available in this engine build.");
-            __mb_get_device_count = __mb;
-        }
+        if (__mb_get_device_count == 0) MethodBinds.MissingThrow("UPNP.get_device_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_device_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_device;
     public UPNPDevice? GetDevice(int index)
     {
-        var __mb = __mb_get_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "get_device", 2193290270);
-            if (__mb == 0) throw new MissingMethodException("UPNP.get_device is not available in this engine build.");
-            __mb_get_device = __mb;
-        }
+        if (__mb_get_device == 0) MethodBinds.MissingThrow("UPNP.get_device");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_device, NativePtr, (nint)__args, (nint)(&__ret));
         return (UPNPDevice?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_device;
     public void AddDevice(UPNPDevice? device)
     {
-        var __mb = __mb_add_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "add_device", 986715920);
-            if (__mb == 0) throw new MissingMethodException("UPNP.add_device is not available in this engine build.");
-            __mb_add_device = __mb;
-        }
+        if (__mb_add_device == 0) MethodBinds.MissingThrow("UPNP.add_device");
         nint __a0 = device?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_device, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_device;
     public void SetDevice(int index, UPNPDevice? device)
     {
-        var __mb = __mb_set_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "set_device", 3015133723);
-            if (__mb == 0) throw new MissingMethodException("UPNP.set_device is not available in this engine build.");
-            __mb_set_device = __mb;
-        }
+        if (__mb_set_device == 0) MethodBinds.MissingThrow("UPNP.set_device");
         long __a0 = unchecked((long)index);
         nint __a1 = device?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_device, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_device;
     public void RemoveDevice(int index)
     {
-        var __mb = __mb_remove_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "remove_device", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("UPNP.remove_device is not available in this engine build.");
-            __mb_remove_device = __mb;
-        }
+        if (__mb_remove_device == 0) MethodBinds.MissingThrow("UPNP.remove_device");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_device, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear_devices;
     public void ClearDevices()
     {
-        var __mb = __mb_clear_devices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "clear_devices", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("UPNP.clear_devices is not available in this engine build.");
-            __mb_clear_devices = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear_devices == 0) MethodBinds.MissingThrow("UPNP.clear_devices");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_devices, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_gateway;
     public UPNPDevice? GetGateway()
     {
-        var __mb = __mb_get_gateway;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "get_gateway", 2276800779);
-            if (__mb == 0) throw new MissingMethodException("UPNP.get_gateway is not available in this engine build.");
-            __mb_get_gateway = __mb;
-        }
+        if (__mb_get_gateway == 0) MethodBinds.MissingThrow("UPNP.get_gateway");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_gateway, NativePtr, 0, (nint)(&__ret));
         return (UPNPDevice?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_discover;
     public int Discover(int timeout = unchecked((int)(2000)), int ttl = unchecked((int)(2)), string deviceFilter = "InternetGatewayDevice")
     {
-        var __mb = __mb_discover;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "discover", 1575334765);
-            if (__mb == 0) throw new MissingMethodException("UPNP.discover is not available in this engine build.");
-            __mb_discover = __mb;
-        }
+        if (__mb_discover == 0) MethodBinds.MissingThrow("UPNP.discover");
         long __a0 = unchecked((long)timeout);
         long __a1 = unchecked((long)ttl);
         ulong __a2 = NativeString.Create(deviceFilter);
@@ -400,7 +305,7 @@ public unsafe partial class UPNP : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_discover, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a2);
         return unchecked((int)__ret);
     }
@@ -408,28 +313,16 @@ public unsafe partial class UPNP : RefCounted
     private static nint __mb_query_external_address;
     public string QueryExternalAddress()
     {
-        var __mb = __mb_query_external_address;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "query_external_address", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNP.query_external_address is not available in this engine build.");
-            __mb_query_external_address = __mb;
-        }
+        if (__mb_query_external_address == 0) MethodBinds.MissingThrow("UPNP.query_external_address");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_query_external_address, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_add_port_mapping;
     public int AddPortMapping(int port, int portInternal = unchecked((int)(0)), string desc = "", string proto = "UDP", int duration = unchecked((int)(0)))
     {
-        var __mb = __mb_add_port_mapping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "add_port_mapping", 818314583);
-            if (__mb == 0) throw new MissingMethodException("UPNP.add_port_mapping is not available in this engine build.");
-            __mb_add_port_mapping = __mb;
-        }
+        if (__mb_add_port_mapping == 0) MethodBinds.MissingThrow("UPNP.add_port_mapping");
         long __a0 = unchecked((long)port);
         long __a1 = unchecked((long)portInternal);
         ulong __a2 = NativeString.Create(desc);
@@ -442,7 +335,7 @@ public unsafe partial class UPNP : RefCounted
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_port_mapping, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a2);
         NativeString.Destroy(ref __a3);
         return unchecked((int)__ret);
@@ -451,20 +344,14 @@ public unsafe partial class UPNP : RefCounted
     private static nint __mb_delete_port_mapping;
     public int DeletePortMapping(int port, string proto = "UDP")
     {
-        var __mb = __mb_delete_port_mapping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "delete_port_mapping", 3444187325);
-            if (__mb == 0) throw new MissingMethodException("UPNP.delete_port_mapping is not available in this engine build.");
-            __mb_delete_port_mapping = __mb;
-        }
+        if (__mb_delete_port_mapping == 0) MethodBinds.MissingThrow("UPNP.delete_port_mapping");
         long __a0 = unchecked((long)port);
         ulong __a1 = NativeString.Create(proto);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_delete_port_mapping, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
@@ -472,95 +359,80 @@ public unsafe partial class UPNP : RefCounted
     private static nint __mb_set_discover_multicast_if;
     public void SetDiscoverMulticastIf(string mIf)
     {
-        var __mb = __mb_set_discover_multicast_if;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "set_discover_multicast_if", 83702148);
-            if (__mb == 0) throw new MissingMethodException("UPNP.set_discover_multicast_if is not available in this engine build.");
-            __mb_set_discover_multicast_if = __mb;
-        }
+        if (__mb_set_discover_multicast_if == 0) MethodBinds.MissingThrow("UPNP.set_discover_multicast_if");
         ulong __a0 = NativeString.Create(mIf);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_discover_multicast_if, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_discover_multicast_if;
     public string GetDiscoverMulticastIf()
     {
-        var __mb = __mb_get_discover_multicast_if;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "get_discover_multicast_if", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNP.get_discover_multicast_if is not available in this engine build.");
-            __mb_get_discover_multicast_if = __mb;
-        }
+        if (__mb_get_discover_multicast_if == 0) MethodBinds.MissingThrow("UPNP.get_discover_multicast_if");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_discover_multicast_if, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_discover_local_port;
     public void SetDiscoverLocalPort(int port)
     {
-        var __mb = __mb_set_discover_local_port;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "set_discover_local_port", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("UPNP.set_discover_local_port is not available in this engine build.");
-            __mb_set_discover_local_port = __mb;
-        }
+        if (__mb_set_discover_local_port == 0) MethodBinds.MissingThrow("UPNP.set_discover_local_port");
         long __a0 = unchecked((long)port);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_discover_local_port, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_discover_local_port;
     public int GetDiscoverLocalPort()
     {
-        var __mb = __mb_get_discover_local_port;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "get_discover_local_port", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("UPNP.get_discover_local_port is not available in this engine build.");
-            __mb_get_discover_local_port = __mb;
-        }
+        if (__mb_get_discover_local_port == 0) MethodBinds.MissingThrow("UPNP.get_discover_local_port");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_discover_local_port, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_discover_ipv6;
     public void SetDiscoverIpv6(bool ipv6)
     {
-        var __mb = __mb_set_discover_ipv6;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "set_discover_ipv6", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("UPNP.set_discover_ipv6 is not available in this engine build.");
-            __mb_set_discover_ipv6 = __mb;
-        }
+        if (__mb_set_discover_ipv6 == 0) MethodBinds.MissingThrow("UPNP.set_discover_ipv6");
         byte __a0 = ipv6 ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_discover_ipv6, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_discover_ipv6;
     public bool IsDiscoverIpv6()
     {
-        var __mb = __mb_is_discover_ipv6;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNP", "is_discover_ipv6", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UPNP.is_discover_ipv6 is not available in this engine build.");
-            __mb_is_discover_ipv6 = __mb;
-        }
+        if (__mb_is_discover_ipv6 == 0) MethodBinds.MissingThrow("UPNP.is_discover_ipv6");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_discover_ipv6, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_device_count = MethodBinds.ResolveBulk("UPNP", "get_device_count", 3905245786);
+        __mb_get_device = MethodBinds.ResolveBulk("UPNP", "get_device", 2193290270);
+        __mb_add_device = MethodBinds.ResolveBulk("UPNP", "add_device", 986715920);
+        __mb_set_device = MethodBinds.ResolveBulk("UPNP", "set_device", 3015133723);
+        __mb_remove_device = MethodBinds.ResolveBulk("UPNP", "remove_device", 1286410249);
+        __mb_clear_devices = MethodBinds.ResolveBulk("UPNP", "clear_devices", 3218959716);
+        __mb_get_gateway = MethodBinds.ResolveBulk("UPNP", "get_gateway", 2276800779);
+        __mb_discover = MethodBinds.ResolveBulk("UPNP", "discover", 1575334765);
+        __mb_query_external_address = MethodBinds.ResolveBulk("UPNP", "query_external_address", 201670096);
+        __mb_add_port_mapping = MethodBinds.ResolveBulk("UPNP", "add_port_mapping", 818314583);
+        __mb_delete_port_mapping = MethodBinds.ResolveBulk("UPNP", "delete_port_mapping", 3444187325);
+        __mb_set_discover_multicast_if = MethodBinds.ResolveBulk("UPNP", "set_discover_multicast_if", 83702148);
+        __mb_get_discover_multicast_if = MethodBinds.ResolveBulk("UPNP", "get_discover_multicast_if", 201670096);
+        __mb_set_discover_local_port = MethodBinds.ResolveBulk("UPNP", "set_discover_local_port", 1286410249);
+        __mb_get_discover_local_port = MethodBinds.ResolveBulk("UPNP", "get_discover_local_port", 3905245786);
+        __mb_set_discover_ipv6 = MethodBinds.ResolveBulk("UPNP", "set_discover_ipv6", 2586408642);
+        __mb_is_discover_ipv6 = MethodBinds.ResolveBulk("UPNP", "is_discover_ipv6", 36873697);
     }
 }
 
@@ -626,43 +498,25 @@ public unsafe partial class UPNPDevice : RefCounted
     private static nint __mb_is_valid_gateway;
     public bool IsValidGateway()
     {
-        var __mb = __mb_is_valid_gateway;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "is_valid_gateway", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.is_valid_gateway is not available in this engine build.");
-            __mb_is_valid_gateway = __mb;
-        }
+        if (__mb_is_valid_gateway == 0) MethodBinds.MissingThrow("UPNPDevice.is_valid_gateway");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_valid_gateway, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_query_external_address;
     public string QueryExternalAddress()
     {
-        var __mb = __mb_query_external_address;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "query_external_address", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.query_external_address is not available in this engine build.");
-            __mb_query_external_address = __mb;
-        }
+        if (__mb_query_external_address == 0) MethodBinds.MissingThrow("UPNPDevice.query_external_address");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_query_external_address, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_add_port_mapping;
     public int AddPortMapping(int port, int portInternal = unchecked((int)(0)), string desc = "", string proto = "UDP", int duration = unchecked((int)(0)))
     {
-        var __mb = __mb_add_port_mapping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "add_port_mapping", 818314583);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.add_port_mapping is not available in this engine build.");
-            __mb_add_port_mapping = __mb;
-        }
+        if (__mb_add_port_mapping == 0) MethodBinds.MissingThrow("UPNPDevice.add_port_mapping");
         long __a0 = unchecked((long)port);
         long __a1 = unchecked((long)portInternal);
         ulong __a2 = NativeString.Create(desc);
@@ -675,7 +529,7 @@ public unsafe partial class UPNPDevice : RefCounted
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_port_mapping, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a2);
         NativeString.Destroy(ref __a3);
         return unchecked((int)__ret);
@@ -684,20 +538,14 @@ public unsafe partial class UPNPDevice : RefCounted
     private static nint __mb_delete_port_mapping;
     public int DeletePortMapping(int port, string proto = "UDP")
     {
-        var __mb = __mb_delete_port_mapping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "delete_port_mapping", 3444187325);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.delete_port_mapping is not available in this engine build.");
-            __mb_delete_port_mapping = __mb;
-        }
+        if (__mb_delete_port_mapping == 0) MethodBinds.MissingThrow("UPNPDevice.delete_port_mapping");
         long __a0 = unchecked((long)port);
         ulong __a1 = NativeString.Create(proto);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_delete_port_mapping, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return unchecked((int)__ret);
     }
@@ -705,192 +553,140 @@ public unsafe partial class UPNPDevice : RefCounted
     private static nint __mb_set_description_url;
     public void SetDescriptionUrl(string url)
     {
-        var __mb = __mb_set_description_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "set_description_url", 83702148);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.set_description_url is not available in this engine build.");
-            __mb_set_description_url = __mb;
-        }
+        if (__mb_set_description_url == 0) MethodBinds.MissingThrow("UPNPDevice.set_description_url");
         ulong __a0 = NativeString.Create(url);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_description_url, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_description_url;
     public string GetDescriptionUrl()
     {
-        var __mb = __mb_get_description_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "get_description_url", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.get_description_url is not available in this engine build.");
-            __mb_get_description_url = __mb;
-        }
+        if (__mb_get_description_url == 0) MethodBinds.MissingThrow("UPNPDevice.get_description_url");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_description_url, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_service_type;
     public void SetServiceType(string type)
     {
-        var __mb = __mb_set_service_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "set_service_type", 83702148);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.set_service_type is not available in this engine build.");
-            __mb_set_service_type = __mb;
-        }
+        if (__mb_set_service_type == 0) MethodBinds.MissingThrow("UPNPDevice.set_service_type");
         ulong __a0 = NativeString.Create(type);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_service_type, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_service_type;
     public string GetServiceType()
     {
-        var __mb = __mb_get_service_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "get_service_type", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.get_service_type is not available in this engine build.");
-            __mb_get_service_type = __mb;
-        }
+        if (__mb_get_service_type == 0) MethodBinds.MissingThrow("UPNPDevice.get_service_type");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_service_type, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_igd_control_url;
     public void SetIgdControlUrl(string url)
     {
-        var __mb = __mb_set_igd_control_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "set_igd_control_url", 83702148);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.set_igd_control_url is not available in this engine build.");
-            __mb_set_igd_control_url = __mb;
-        }
+        if (__mb_set_igd_control_url == 0) MethodBinds.MissingThrow("UPNPDevice.set_igd_control_url");
         ulong __a0 = NativeString.Create(url);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_igd_control_url, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_igd_control_url;
     public string GetIgdControlUrl()
     {
-        var __mb = __mb_get_igd_control_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "get_igd_control_url", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.get_igd_control_url is not available in this engine build.");
-            __mb_get_igd_control_url = __mb;
-        }
+        if (__mb_get_igd_control_url == 0) MethodBinds.MissingThrow("UPNPDevice.get_igd_control_url");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_igd_control_url, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_igd_service_type;
     public void SetIgdServiceType(string type)
     {
-        var __mb = __mb_set_igd_service_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "set_igd_service_type", 83702148);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.set_igd_service_type is not available in this engine build.");
-            __mb_set_igd_service_type = __mb;
-        }
+        if (__mb_set_igd_service_type == 0) MethodBinds.MissingThrow("UPNPDevice.set_igd_service_type");
         ulong __a0 = NativeString.Create(type);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_igd_service_type, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_igd_service_type;
     public string GetIgdServiceType()
     {
-        var __mb = __mb_get_igd_service_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "get_igd_service_type", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.get_igd_service_type is not available in this engine build.");
-            __mb_get_igd_service_type = __mb;
-        }
+        if (__mb_get_igd_service_type == 0) MethodBinds.MissingThrow("UPNPDevice.get_igd_service_type");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_igd_service_type, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_igd_our_addr;
     public void SetIgdOurAddr(string addr)
     {
-        var __mb = __mb_set_igd_our_addr;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "set_igd_our_addr", 83702148);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.set_igd_our_addr is not available in this engine build.");
-            __mb_set_igd_our_addr = __mb;
-        }
+        if (__mb_set_igd_our_addr == 0) MethodBinds.MissingThrow("UPNPDevice.set_igd_our_addr");
         ulong __a0 = NativeString.Create(addr);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_igd_our_addr, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_igd_our_addr;
     public string GetIgdOurAddr()
     {
-        var __mb = __mb_get_igd_our_addr;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "get_igd_our_addr", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.get_igd_our_addr is not available in this engine build.");
-            __mb_get_igd_our_addr = __mb;
-        }
+        if (__mb_get_igd_our_addr == 0) MethodBinds.MissingThrow("UPNPDevice.get_igd_our_addr");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_igd_our_addr, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_igd_status;
     public void SetIgdStatus(UPNPDevice.IGDStatus status)
     {
-        var __mb = __mb_set_igd_status;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "set_igd_status", 519504122);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.set_igd_status is not available in this engine build.");
-            __mb_set_igd_status = __mb;
-        }
+        if (__mb_set_igd_status == 0) MethodBinds.MissingThrow("UPNPDevice.set_igd_status");
         long __a0 = (long)status;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_igd_status, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_igd_status;
     public UPNPDevice.IGDStatus GetIgdStatus()
     {
-        var __mb = __mb_get_igd_status;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UPNPDevice", "get_igd_status", 180887011);
-            if (__mb == 0) throw new MissingMethodException("UPNPDevice.get_igd_status is not available in this engine build.");
-            __mb_get_igd_status = __mb;
-        }
+        if (__mb_get_igd_status == 0) MethodBinds.MissingThrow("UPNPDevice.get_igd_status");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_igd_status, NativePtr, 0, (nint)(&__ret));
         return (UPNPDevice.IGDStatus)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_valid_gateway = MethodBinds.ResolveBulk("UPNPDevice", "is_valid_gateway", 36873697);
+        __mb_query_external_address = MethodBinds.ResolveBulk("UPNPDevice", "query_external_address", 201670096);
+        __mb_add_port_mapping = MethodBinds.ResolveBulk("UPNPDevice", "add_port_mapping", 818314583);
+        __mb_delete_port_mapping = MethodBinds.ResolveBulk("UPNPDevice", "delete_port_mapping", 3444187325);
+        __mb_set_description_url = MethodBinds.ResolveBulk("UPNPDevice", "set_description_url", 83702148);
+        __mb_get_description_url = MethodBinds.ResolveBulk("UPNPDevice", "get_description_url", 201670096);
+        __mb_set_service_type = MethodBinds.ResolveBulk("UPNPDevice", "set_service_type", 83702148);
+        __mb_get_service_type = MethodBinds.ResolveBulk("UPNPDevice", "get_service_type", 201670096);
+        __mb_set_igd_control_url = MethodBinds.ResolveBulk("UPNPDevice", "set_igd_control_url", 83702148);
+        __mb_get_igd_control_url = MethodBinds.ResolveBulk("UPNPDevice", "get_igd_control_url", 201670096);
+        __mb_set_igd_service_type = MethodBinds.ResolveBulk("UPNPDevice", "set_igd_service_type", 83702148);
+        __mb_get_igd_service_type = MethodBinds.ResolveBulk("UPNPDevice", "get_igd_service_type", 201670096);
+        __mb_set_igd_our_addr = MethodBinds.ResolveBulk("UPNPDevice", "set_igd_our_addr", 83702148);
+        __mb_get_igd_our_addr = MethodBinds.ResolveBulk("UPNPDevice", "get_igd_our_addr", 201670096);
+        __mb_set_igd_status = MethodBinds.ResolveBulk("UPNPDevice", "set_igd_status", 519504122);
+        __mb_get_igd_status = MethodBinds.ResolveBulk("UPNPDevice", "get_igd_status", 180887011);
     }
 }
 
@@ -927,13 +723,7 @@ public unsafe partial class UndoRedo : GodotObject
     private static nint __mb_create_action;
     public void CreateAction(string name, UndoRedo.MergeMode mergeMode = (UndoRedo.MergeMode)(0), bool backwardUndoOps = false)
     {
-        var __mb = __mb_create_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "create_action", 3171901514);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.create_action is not available in this engine build.");
-            __mb_create_action = __mb;
-        }
+        if (__mb_create_action == 0) MethodBinds.MissingThrow("UndoRedo.create_action");
         ulong __a0 = NativeString.Create(name);
         long __a1 = (long)mergeMode;
         byte __a2 = backwardUndoOps ? (byte)1 : (byte)0;
@@ -941,83 +731,53 @@ public unsafe partial class UndoRedo : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_action, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_commit_action;
     public void CommitAction(bool execute = true)
     {
-        var __mb = __mb_commit_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "commit_action", 3216645846);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.commit_action is not available in this engine build.");
-            __mb_commit_action = __mb;
-        }
+        if (__mb_commit_action == 0) MethodBinds.MissingThrow("UndoRedo.commit_action");
         byte __a0 = execute ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_commit_action, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_committing_action;
     public bool IsCommittingAction()
     {
-        var __mb = __mb_is_committing_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "is_committing_action", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.is_committing_action is not available in this engine build.");
-            __mb_is_committing_action = __mb;
-        }
+        if (__mb_is_committing_action == 0) MethodBinds.MissingThrow("UndoRedo.is_committing_action");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_committing_action, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_do_method;
     public void AddDoMethod(Callable callable)
     {
-        var __mb = __mb_add_do_method;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "add_do_method", 1611583062);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_do_method is not available in this engine build.");
-            __mb_add_do_method = __mb;
-        }
+        if (__mb_add_do_method == 0) MethodBinds.MissingThrow("UndoRedo.add_do_method");
         var __a0 = callable.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_do_method, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_undo_method;
     public void AddUndoMethod(Callable callable)
     {
-        var __mb = __mb_add_undo_method;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "add_undo_method", 1611583062);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_undo_method is not available in this engine build.");
-            __mb_add_undo_method = __mb;
-        }
+        if (__mb_add_undo_method == 0) MethodBinds.MissingThrow("UndoRedo.add_undo_method");
         var __a0 = callable.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_undo_method, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_do_property;
     public void AddDoProperty(GodotObject? @object, StringName property, Variant value)
     {
-        var __mb = __mb_add_do_property;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "add_do_property", 1017172818);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_do_property is not available in this engine build.");
-            __mb_add_do_property = __mb;
-        }
+        if (__mb_add_do_property == 0) MethodBinds.MissingThrow("UndoRedo.add_do_property");
         nint __a0 = @object?.NativePtr ?? 0;
         ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
@@ -1025,19 +785,13 @@ public unsafe partial class UndoRedo : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_do_property, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_undo_property;
     public void AddUndoProperty(GodotObject? @object, StringName property, Variant value)
     {
-        var __mb = __mb_add_undo_property;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "add_undo_property", 1017172818);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_undo_property is not available in this engine build.");
-            __mb_add_undo_property = __mb;
-        }
+        if (__mb_add_undo_property == 0) MethodBinds.MissingThrow("UndoRedo.add_undo_property");
         nint __a0 = @object?.NativePtr ?? 0;
         ulong __a1 = property.NativeValue;
         var __a2 = value.Native;
@@ -1045,250 +799,181 @@ public unsafe partial class UndoRedo : GodotObject
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_undo_property, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_do_reference;
     public void AddDoReference(GodotObject? @object)
     {
-        var __mb = __mb_add_do_reference;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "add_do_reference", 3975164845);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_do_reference is not available in this engine build.");
-            __mb_add_do_reference = __mb;
-        }
+        if (__mb_add_do_reference == 0) MethodBinds.MissingThrow("UndoRedo.add_do_reference");
         nint __a0 = @object?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_do_reference, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_undo_reference;
     public void AddUndoReference(GodotObject? @object)
     {
-        var __mb = __mb_add_undo_reference;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "add_undo_reference", 3975164845);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.add_undo_reference is not available in this engine build.");
-            __mb_add_undo_reference = __mb;
-        }
+        if (__mb_add_undo_reference == 0) MethodBinds.MissingThrow("UndoRedo.add_undo_reference");
         nint __a0 = @object?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_undo_reference, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_start_force_keep_in_merge_ends;
     public void StartForceKeepInMergeEnds()
     {
-        var __mb = __mb_start_force_keep_in_merge_ends;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "start_force_keep_in_merge_ends", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.start_force_keep_in_merge_ends is not available in this engine build.");
-            __mb_start_force_keep_in_merge_ends = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_start_force_keep_in_merge_ends == 0) MethodBinds.MissingThrow("UndoRedo.start_force_keep_in_merge_ends");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_force_keep_in_merge_ends, NativePtr, 0, 0);
     }
 
     private static nint __mb_end_force_keep_in_merge_ends;
     public void EndForceKeepInMergeEnds()
     {
-        var __mb = __mb_end_force_keep_in_merge_ends;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "end_force_keep_in_merge_ends", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.end_force_keep_in_merge_ends is not available in this engine build.");
-            __mb_end_force_keep_in_merge_ends = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_end_force_keep_in_merge_ends == 0) MethodBinds.MissingThrow("UndoRedo.end_force_keep_in_merge_ends");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_end_force_keep_in_merge_ends, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_history_count;
     public int GetHistoryCount()
     {
-        var __mb = __mb_get_history_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "get_history_count", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.get_history_count is not available in this engine build.");
-            __mb_get_history_count = __mb;
-        }
+        if (__mb_get_history_count == 0) MethodBinds.MissingThrow("UndoRedo.get_history_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_history_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_current_action;
     public int GetCurrentAction()
     {
-        var __mb = __mb_get_current_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "get_current_action", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.get_current_action is not available in this engine build.");
-            __mb_get_current_action = __mb;
-        }
+        if (__mb_get_current_action == 0) MethodBinds.MissingThrow("UndoRedo.get_current_action");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_action, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_action_name;
     public string GetActionName(int id)
     {
-        var __mb = __mb_get_action_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "get_action_name", 990163283);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.get_action_name is not available in this engine build.");
-            __mb_get_action_name = __mb;
-        }
+        if (__mb_get_action_name == 0) MethodBinds.MissingThrow("UndoRedo.get_action_name");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_name, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_clear_history;
     public void ClearHistory(bool increaseVersion = true)
     {
-        var __mb = __mb_clear_history;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "clear_history", 3216645846);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.clear_history is not available in this engine build.");
-            __mb_clear_history = __mb;
-        }
+        if (__mb_clear_history == 0) MethodBinds.MissingThrow("UndoRedo.clear_history");
         byte __a0 = increaseVersion ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_history, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_current_action_name;
     public string GetCurrentActionName()
     {
-        var __mb = __mb_get_current_action_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "get_current_action_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.get_current_action_name is not available in this engine build.");
-            __mb_get_current_action_name = __mb;
-        }
+        if (__mb_get_current_action_name == 0) MethodBinds.MissingThrow("UndoRedo.get_current_action_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_action_name, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_has_undo;
     public bool HasUndo()
     {
-        var __mb = __mb_has_undo;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "has_undo", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.has_undo is not available in this engine build.");
-            __mb_has_undo = __mb;
-        }
+        if (__mb_has_undo == 0) MethodBinds.MissingThrow("UndoRedo.has_undo");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_undo, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_redo;
     public bool HasRedo()
     {
-        var __mb = __mb_has_redo;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "has_redo", 36873697);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.has_redo is not available in this engine build.");
-            __mb_has_redo = __mb;
-        }
+        if (__mb_has_redo == 0) MethodBinds.MissingThrow("UndoRedo.has_redo");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_redo, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_version;
     public ulong GetVersion()
     {
-        var __mb = __mb_get_version;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "get_version", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.get_version is not available in this engine build.");
-            __mb_get_version = __mb;
-        }
+        if (__mb_get_version == 0) MethodBinds.MissingThrow("UndoRedo.get_version");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_version, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_set_max_steps;
     public void SetMaxSteps(int maxSteps)
     {
-        var __mb = __mb_set_max_steps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "set_max_steps", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.set_max_steps is not available in this engine build.");
-            __mb_set_max_steps = __mb;
-        }
+        if (__mb_set_max_steps == 0) MethodBinds.MissingThrow("UndoRedo.set_max_steps");
         long __a0 = unchecked((long)maxSteps);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_steps, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_steps;
     public int GetMaxSteps()
     {
-        var __mb = __mb_get_max_steps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "get_max_steps", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.get_max_steps is not available in this engine build.");
-            __mb_get_max_steps = __mb;
-        }
+        if (__mb_get_max_steps == 0) MethodBinds.MissingThrow("UndoRedo.get_max_steps");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_steps, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_redo;
     public bool Redo()
     {
-        var __mb = __mb_redo;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "redo", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.redo is not available in this engine build.");
-            __mb_redo = __mb;
-        }
+        if (__mb_redo == 0) MethodBinds.MissingThrow("UndoRedo.redo");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_redo, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_undo;
     public bool Undo()
     {
-        var __mb = __mb_undo;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UndoRedo", "undo", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("UndoRedo.undo is not available in this engine build.");
-            __mb_undo = __mb;
-        }
+        if (__mb_undo == 0) MethodBinds.MissingThrow("UndoRedo.undo");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_undo, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create_action = MethodBinds.ResolveBulk("UndoRedo", "create_action", 3171901514);
+        __mb_commit_action = MethodBinds.ResolveBulk("UndoRedo", "commit_action", 3216645846);
+        __mb_is_committing_action = MethodBinds.ResolveBulk("UndoRedo", "is_committing_action", 36873697);
+        __mb_add_do_method = MethodBinds.ResolveBulk("UndoRedo", "add_do_method", 1611583062);
+        __mb_add_undo_method = MethodBinds.ResolveBulk("UndoRedo", "add_undo_method", 1611583062);
+        __mb_add_do_property = MethodBinds.ResolveBulk("UndoRedo", "add_do_property", 1017172818);
+        __mb_add_undo_property = MethodBinds.ResolveBulk("UndoRedo", "add_undo_property", 1017172818);
+        __mb_add_do_reference = MethodBinds.ResolveBulk("UndoRedo", "add_do_reference", 3975164845);
+        __mb_add_undo_reference = MethodBinds.ResolveBulk("UndoRedo", "add_undo_reference", 3975164845);
+        __mb_start_force_keep_in_merge_ends = MethodBinds.ResolveBulk("UndoRedo", "start_force_keep_in_merge_ends", 3218959716);
+        __mb_end_force_keep_in_merge_ends = MethodBinds.ResolveBulk("UndoRedo", "end_force_keep_in_merge_ends", 3218959716);
+        __mb_get_history_count = MethodBinds.ResolveBulk("UndoRedo", "get_history_count", 2455072627);
+        __mb_get_current_action = MethodBinds.ResolveBulk("UndoRedo", "get_current_action", 2455072627);
+        __mb_get_action_name = MethodBinds.ResolveBulk("UndoRedo", "get_action_name", 990163283);
+        __mb_clear_history = MethodBinds.ResolveBulk("UndoRedo", "clear_history", 3216645846);
+        __mb_get_current_action_name = MethodBinds.ResolveBulk("UndoRedo", "get_current_action_name", 201670096);
+        __mb_has_undo = MethodBinds.ResolveBulk("UndoRedo", "has_undo", 36873697);
+        __mb_has_redo = MethodBinds.ResolveBulk("UndoRedo", "has_redo", 36873697);
+        __mb_get_version = MethodBinds.ResolveBulk("UndoRedo", "get_version", 3905245786);
+        __mb_set_max_steps = MethodBinds.ResolveBulk("UndoRedo", "set_max_steps", 1286410249);
+        __mb_get_max_steps = MethodBinds.ResolveBulk("UndoRedo", "get_max_steps", 3905245786);
+        __mb_redo = MethodBinds.ResolveBulk("UndoRedo", "redo", 2240911060);
+        __mb_undo = MethodBinds.ResolveBulk("UndoRedo", "undo", 2240911060);
     }
 }
 
@@ -1304,13 +989,7 @@ public unsafe partial class UniformSetCacheRD : GodotObject
     private static nint __mb_get_cache;
     public static Rid GetCache(Rid shader, uint set, Godot.Collections.Array uniforms)
     {
-        var __mb = __mb_get_cache;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("UniformSetCacheRD", "get_cache", 658571723);
-            if (__mb == 0) throw new MissingMethodException("UniformSetCacheRD.get_cache is not available in this engine build.");
-            __mb_get_cache = __mb;
-        }
+        if (__mb_get_cache == 0) MethodBinds.MissingThrow("UniformSetCacheRD.get_cache");
         var __a0 = shader;
         long __a1 = unchecked((long)set);
         ulong __a2 = uniforms.Native;
@@ -1319,8 +998,13 @@ public unsafe partial class UniformSetCacheRD : GodotObject
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cache, 0, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_cache = MethodBinds.ResolveBulk("UniformSetCacheRD", "get_cache", 658571723);
     }
 }
 

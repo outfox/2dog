@@ -23,16 +23,15 @@ public unsafe partial class WeakRef : RefCounted
     private static nint __mb_get_ref;
     public Variant GetRef()
     {
-        var __mb = __mb_get_ref;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WeakRef", "get_ref", 1214101251);
-            if (__mb == 0) throw new MissingMethodException("WeakRef.get_ref is not available in this engine build.");
-            __mb_get_ref = __mb;
-        }
+        if (__mb_get_ref == 0) MethodBinds.MissingThrow("WeakRef.get_ref");
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_ref, NativePtr, 0, (nint)(&__ret));
         return new Variant(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_ref = MethodBinds.ResolveBulk("WeakRef", "get_ref", 1214101251);
     }
 }
 
@@ -63,210 +62,144 @@ public unsafe partial class WebRTCDataChannel : PacketPeer
     private static nint __mb_poll;
     public Error Poll()
     {
-        var __mb = __mb_poll;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "poll", 166280745);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.poll is not available in this engine build.");
-            __mb_poll = __mb;
-        }
+        if (__mb_poll == 0) MethodBinds.MissingThrow("WebRTCDataChannel.poll");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_poll, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_close;
     public void Close()
     {
-        var __mb = __mb_close;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "close", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.close is not available in this engine build.");
-            __mb_close = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_close == 0) MethodBinds.MissingThrow("WebRTCDataChannel.close");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close, NativePtr, 0, 0);
     }
 
     private static nint __mb_was_string_packet;
     public bool WasStringPacket()
     {
-        var __mb = __mb_was_string_packet;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "was_string_packet", 36873697);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.was_string_packet is not available in this engine build.");
-            __mb_was_string_packet = __mb;
-        }
+        if (__mb_was_string_packet == 0) MethodBinds.MissingThrow("WebRTCDataChannel.was_string_packet");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_was_string_packet, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_write_mode;
     public void SetWriteMode(WebRTCDataChannel.WriteModeEnum writeMode)
     {
-        var __mb = __mb_set_write_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "set_write_mode", 1999768052);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.set_write_mode is not available in this engine build.");
-            __mb_set_write_mode = __mb;
-        }
+        if (__mb_set_write_mode == 0) MethodBinds.MissingThrow("WebRTCDataChannel.set_write_mode");
         long __a0 = (long)writeMode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_write_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_write_mode;
     public WebRTCDataChannel.WriteModeEnum GetWriteMode()
     {
-        var __mb = __mb_get_write_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_write_mode", 2848495172);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_write_mode is not available in this engine build.");
-            __mb_get_write_mode = __mb;
-        }
+        if (__mb_get_write_mode == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_write_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_write_mode, NativePtr, 0, (nint)(&__ret));
         return (WebRTCDataChannel.WriteModeEnum)__ret;
     }
 
     private static nint __mb_get_ready_state;
     public WebRTCDataChannel.ChannelState GetReadyState()
     {
-        var __mb = __mb_get_ready_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_ready_state", 3501143017);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_ready_state is not available in this engine build.");
-            __mb_get_ready_state = __mb;
-        }
+        if (__mb_get_ready_state == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_ready_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_ready_state, NativePtr, 0, (nint)(&__ret));
         return (WebRTCDataChannel.ChannelState)__ret;
     }
 
     private static nint __mb_get_label;
     public string GetLabel()
     {
-        var __mb = __mb_get_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_label", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_label is not available in this engine build.");
-            __mb_get_label = __mb;
-        }
+        if (__mb_get_label == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_label");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_label, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_ordered;
     public bool IsOrdered()
     {
-        var __mb = __mb_is_ordered;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "is_ordered", 36873697);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.is_ordered is not available in this engine build.");
-            __mb_is_ordered = __mb;
-        }
+        if (__mb_is_ordered == 0) MethodBinds.MissingThrow("WebRTCDataChannel.is_ordered");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_ordered, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_id;
     public int GetId()
     {
-        var __mb = __mb_get_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_id is not available in this engine build.");
-            __mb_get_id = __mb;
-        }
+        if (__mb_get_id == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_max_packet_life_time;
     public int GetMaxPacketLifeTime()
     {
-        var __mb = __mb_get_max_packet_life_time;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_max_packet_life_time", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_max_packet_life_time is not available in this engine build.");
-            __mb_get_max_packet_life_time = __mb;
-        }
+        if (__mb_get_max_packet_life_time == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_max_packet_life_time");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_packet_life_time, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_max_retransmits;
     public int GetMaxRetransmits()
     {
-        var __mb = __mb_get_max_retransmits;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_max_retransmits", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_max_retransmits is not available in this engine build.");
-            __mb_get_max_retransmits = __mb;
-        }
+        if (__mb_get_max_retransmits == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_max_retransmits");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_retransmits, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_protocol;
     public string GetProtocol()
     {
-        var __mb = __mb_get_protocol;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_protocol", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_protocol is not available in this engine build.");
-            __mb_get_protocol = __mb;
-        }
+        if (__mb_get_protocol == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_protocol");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_protocol, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_negotiated;
     public bool IsNegotiated()
     {
-        var __mb = __mb_is_negotiated;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "is_negotiated", 36873697);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.is_negotiated is not available in this engine build.");
-            __mb_is_negotiated = __mb;
-        }
+        if (__mb_is_negotiated == 0) MethodBinds.MissingThrow("WebRTCDataChannel.is_negotiated");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_negotiated, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_buffered_amount;
     public int GetBufferedAmount()
     {
-        var __mb = __mb_get_buffered_amount;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCDataChannel", "get_buffered_amount", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebRTCDataChannel.get_buffered_amount is not available in this engine build.");
-            __mb_get_buffered_amount = __mb;
-        }
+        if (__mb_get_buffered_amount == 0) MethodBinds.MissingThrow("WebRTCDataChannel.get_buffered_amount");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_buffered_amount, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_poll = MethodBinds.ResolveBulk("WebRTCDataChannel", "poll", 166280745);
+        __mb_close = MethodBinds.ResolveBulk("WebRTCDataChannel", "close", 3218959716);
+        __mb_was_string_packet = MethodBinds.ResolveBulk("WebRTCDataChannel", "was_string_packet", 36873697);
+        __mb_set_write_mode = MethodBinds.ResolveBulk("WebRTCDataChannel", "set_write_mode", 1999768052);
+        __mb_get_write_mode = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_write_mode", 2848495172);
+        __mb_get_ready_state = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_ready_state", 3501143017);
+        __mb_get_label = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_label", 201670096);
+        __mb_is_ordered = MethodBinds.ResolveBulk("WebRTCDataChannel", "is_ordered", 36873697);
+        __mb_get_id = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_id", 3905245786);
+        __mb_get_max_packet_life_time = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_max_packet_life_time", 3905245786);
+        __mb_get_max_retransmits = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_max_retransmits", 3905245786);
+        __mb_get_protocol = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_protocol", 201670096);
+        __mb_is_negotiated = MethodBinds.ResolveBulk("WebRTCDataChannel", "is_negotiated", 36873697);
+        __mb_get_buffered_amount = MethodBinds.ResolveBulk("WebRTCDataChannel", "get_buffered_amount", 3905245786);
     }
 }
 
@@ -442,71 +375,47 @@ public unsafe partial class WebRTCMultiplayerPeer : MultiplayerPeer
     private static nint __mb_create_server;
     public Error CreateServer(Godot.Collections.Array channelsConfig)
     {
-        var __mb = __mb_create_server;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "create_server", 2865356025);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.create_server is not available in this engine build.");
-            __mb_create_server = __mb;
-        }
+        if (__mb_create_server == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.create_server");
         ulong __a0 = channelsConfig.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_server, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_create_client;
     public Error CreateClient(int peerId, Godot.Collections.Array channelsConfig)
     {
-        var __mb = __mb_create_client;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "create_client", 2641732907);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.create_client is not available in this engine build.");
-            __mb_create_client = __mb;
-        }
+        if (__mb_create_client == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.create_client");
         long __a0 = unchecked((long)peerId);
         ulong __a1 = channelsConfig.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_client, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_create_mesh;
     public Error CreateMesh(int peerId, Godot.Collections.Array channelsConfig)
     {
-        var __mb = __mb_create_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "create_mesh", 2641732907);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.create_mesh is not available in this engine build.");
-            __mb_create_mesh = __mb;
-        }
+        if (__mb_create_mesh == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.create_mesh");
         long __a0 = unchecked((long)peerId);
         ulong __a1 = channelsConfig.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_mesh, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_add_peer;
     public Error AddPeer(WebRTCPeerConnection? peer, int peerId, int unreliableLifetime = unchecked((int)(1)))
     {
-        var __mb = __mb_add_peer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "add_peer", 4078953270);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.add_peer is not available in this engine build.");
-            __mb_add_peer = __mb;
-        }
+        if (__mb_add_peer == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.add_peer");
         nint __a0 = peer?.NativePtr ?? 0;
         long __a1 = unchecked((long)peerId);
         long __a2 = unchecked((long)unreliableLifetime);
@@ -515,75 +424,63 @@ public unsafe partial class WebRTCMultiplayerPeer : MultiplayerPeer
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_peer, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_remove_peer;
     public void RemovePeer(int peerId)
     {
-        var __mb = __mb_remove_peer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "remove_peer", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.remove_peer is not available in this engine build.");
-            __mb_remove_peer = __mb;
-        }
+        if (__mb_remove_peer == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.remove_peer");
         long __a0 = unchecked((long)peerId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_peer, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_peer;
     public bool HasPeer(int peerId)
     {
-        var __mb = __mb_has_peer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "has_peer", 3067735520);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.has_peer is not available in this engine build.");
-            __mb_has_peer = __mb;
-        }
+        if (__mb_has_peer == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.has_peer");
         long __a0 = unchecked((long)peerId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_peer, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_peer;
     public Godot.Collections.Dictionary GetPeer(int peerId)
     {
-        var __mb = __mb_get_peer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "get_peer", 3554694381);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.get_peer is not available in this engine build.");
-            __mb_get_peer = __mb;
-        }
+        if (__mb_get_peer == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.get_peer");
         long __a0 = unchecked((long)peerId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_peer, NativePtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_peers;
     public Godot.Collections.Dictionary GetPeers()
     {
-        var __mb = __mb_get_peers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCMultiplayerPeer", "get_peers", 2382534195);
-            if (__mb == 0) throw new MissingMethodException("WebRTCMultiplayerPeer.get_peers is not available in this engine build.");
-            __mb_get_peers = __mb;
-        }
+        if (__mb_get_peers == 0) MethodBinds.MissingThrow("WebRTCMultiplayerPeer.get_peers");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_peers, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create_server = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "create_server", 2865356025);
+        __mb_create_client = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "create_client", 2641732907);
+        __mb_create_mesh = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "create_mesh", 2641732907);
+        __mb_add_peer = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "add_peer", 4078953270);
+        __mb_remove_peer = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "remove_peer", 1286410249);
+        __mb_has_peer = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "has_peer", 3067735520);
+        __mb_get_peer = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "get_peer", 3554694381);
+        __mb_get_peers = MethodBinds.ResolveBulk("WebRTCMultiplayerPeer", "get_peers", 2382534195);
     }
 }
 
@@ -650,54 +547,36 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
     private static nint __mb_set_default_extension;
     public static void SetDefaultExtension(StringName extensionClass)
     {
-        var __mb = __mb_set_default_extension;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "set_default_extension", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.set_default_extension is not available in this engine build.");
-            __mb_set_default_extension = __mb;
-        }
+        if (__mb_set_default_extension == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.set_default_extension");
         ulong __a0 = extensionClass.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_default_extension, 0, (nint)__args, 0);
     }
 
     private static nint __mb_initialize;
     public Error Initialize(Godot.Collections.Dictionary configuration)
     {
-        var __mb = __mb_initialize;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "initialize", 2625064318);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.initialize is not available in this engine build.");
-            __mb_initialize = __mb;
-        }
+        if (__mb_initialize == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.initialize");
         ulong __a0 = configuration.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_initialize, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_create_data_channel;
     public WebRTCDataChannel? CreateDataChannel(string label, Godot.Collections.Dictionary options)
     {
-        var __mb = __mb_create_data_channel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "create_data_channel", 1288557393);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.create_data_channel is not available in this engine build.");
-            __mb_create_data_channel = __mb;
-        }
+        if (__mb_create_data_channel == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.create_data_channel");
         ulong __a0 = NativeString.Create(label);
         ulong __a1 = options.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_data_channel, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (WebRTCDataChannel?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -705,35 +584,23 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
     private static nint __mb_create_offer;
     public Error CreateOffer()
     {
-        var __mb = __mb_create_offer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "create_offer", 166280745);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.create_offer is not available in this engine build.");
-            __mb_create_offer = __mb;
-        }
+        if (__mb_create_offer == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.create_offer");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_offer, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_set_local_description;
     public Error SetLocalDescription(string type, string sdp)
     {
-        var __mb = __mb_set_local_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "set_local_description", 852856452);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.set_local_description is not available in this engine build.");
-            __mb_set_local_description = __mb;
-        }
+        if (__mb_set_local_description == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.set_local_description");
         ulong __a0 = NativeString.Create(type);
         ulong __a1 = NativeString.Create(sdp);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_local_description, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -742,20 +609,14 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
     private static nint __mb_set_remote_description;
     public Error SetRemoteDescription(string type, string sdp)
     {
-        var __mb = __mb_set_remote_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "set_remote_description", 852856452);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.set_remote_description is not available in this engine build.");
-            __mb_set_remote_description = __mb;
-        }
+        if (__mb_set_remote_description == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.set_remote_description");
         ulong __a0 = NativeString.Create(type);
         ulong __a1 = NativeString.Create(sdp);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_remote_description, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
@@ -764,13 +625,7 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
     private static nint __mb_add_ice_candidate;
     public Error AddIceCandidate(string media, int index, string name)
     {
-        var __mb = __mb_add_ice_candidate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "add_ice_candidate", 3958950400);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.add_ice_candidate is not available in this engine build.");
-            __mb_add_ice_candidate = __mb;
-        }
+        if (__mb_add_ice_candidate == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.add_ice_candidate");
         ulong __a0 = NativeString.Create(media);
         long __a1 = unchecked((long)index);
         ulong __a2 = NativeString.Create(name);
@@ -779,7 +634,7 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_ice_candidate, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         NativeString.Destroy(ref __a2);
         return (Error)__ret;
@@ -788,74 +643,60 @@ public unsafe partial class WebRTCPeerConnection : RefCounted
     private static nint __mb_poll;
     public Error Poll()
     {
-        var __mb = __mb_poll;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "poll", 166280745);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.poll is not available in this engine build.");
-            __mb_poll = __mb;
-        }
+        if (__mb_poll == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.poll");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_poll, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_close;
     public void Close()
     {
-        var __mb = __mb_close;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "close", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.close is not available in this engine build.");
-            __mb_close = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_close == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.close");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_connection_state;
     public WebRTCPeerConnection.ConnectionState GetConnectionState()
     {
-        var __mb = __mb_get_connection_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "get_connection_state", 2275710506);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.get_connection_state is not available in this engine build.");
-            __mb_get_connection_state = __mb;
-        }
+        if (__mb_get_connection_state == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.get_connection_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_connection_state, NativePtr, 0, (nint)(&__ret));
         return (WebRTCPeerConnection.ConnectionState)__ret;
     }
 
     private static nint __mb_get_gathering_state;
     public WebRTCPeerConnection.GatheringState GetGatheringState()
     {
-        var __mb = __mb_get_gathering_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "get_gathering_state", 4262591401);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.get_gathering_state is not available in this engine build.");
-            __mb_get_gathering_state = __mb;
-        }
+        if (__mb_get_gathering_state == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.get_gathering_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_gathering_state, NativePtr, 0, (nint)(&__ret));
         return (WebRTCPeerConnection.GatheringState)__ret;
     }
 
     private static nint __mb_get_signaling_state;
     public WebRTCPeerConnection.SignalingState GetSignalingState()
     {
-        var __mb = __mb_get_signaling_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebRTCPeerConnection", "get_signaling_state", 3342956226);
-            if (__mb == 0) throw new MissingMethodException("WebRTCPeerConnection.get_signaling_state is not available in this engine build.");
-            __mb_get_signaling_state = __mb;
-        }
+        if (__mb_get_signaling_state == 0) MethodBinds.MissingThrow("WebRTCPeerConnection.get_signaling_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_signaling_state, NativePtr, 0, (nint)(&__ret));
         return (WebRTCPeerConnection.SignalingState)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_default_extension = MethodBinds.ResolveBulk("WebRTCPeerConnection", "set_default_extension", 3304788590);
+        __mb_initialize = MethodBinds.ResolveBulk("WebRTCPeerConnection", "initialize", 2625064318);
+        __mb_create_data_channel = MethodBinds.ResolveBulk("WebRTCPeerConnection", "create_data_channel", 1288557393);
+        __mb_create_offer = MethodBinds.ResolveBulk("WebRTCPeerConnection", "create_offer", 166280745);
+        __mb_set_local_description = MethodBinds.ResolveBulk("WebRTCPeerConnection", "set_local_description", 852856452);
+        __mb_set_remote_description = MethodBinds.ResolveBulk("WebRTCPeerConnection", "set_remote_description", 852856452);
+        __mb_add_ice_candidate = MethodBinds.ResolveBulk("WebRTCPeerConnection", "add_ice_candidate", 3958950400);
+        __mb_poll = MethodBinds.ResolveBulk("WebRTCPeerConnection", "poll", 166280745);
+        __mb_close = MethodBinds.ResolveBulk("WebRTCPeerConnection", "close", 3218959716);
+        __mb_get_connection_state = MethodBinds.ResolveBulk("WebRTCPeerConnection", "get_connection_state", 2275710506);
+        __mb_get_gathering_state = MethodBinds.ResolveBulk("WebRTCPeerConnection", "get_gathering_state", 4262591401);
+        __mb_get_signaling_state = MethodBinds.ResolveBulk("WebRTCPeerConnection", "get_signaling_state", 3342956226);
     }
 }
 
@@ -1004,20 +845,14 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     private static nint __mb_create_client;
     public Error CreateClient(string url, TLSOptions? tlsClientOptions = null)
     {
-        var __mb = __mb_create_client;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "create_client", 1966198364);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.create_client is not available in this engine build.");
-            __mb_create_client = __mb;
-        }
+        if (__mb_create_client == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.create_client");
         ulong __a0 = NativeString.Create(url);
         nint __a1 = tlsClientOptions?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_client, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1025,13 +860,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     private static nint __mb_create_server;
     public Error CreateServer(int port, string bindAddress = "*", TLSOptions? tlsServerOptions = null)
     {
-        var __mb = __mb_create_server;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "create_server", 2400822951);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.create_server is not available in this engine build.");
-            __mb_create_server = __mb;
-        }
+        if (__mb_create_server == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.create_server");
         long __a0 = unchecked((long)port);
         ulong __a1 = NativeString.Create(bindAddress);
         nint __a2 = tlsServerOptions?.NativePtr ?? 0;
@@ -1040,7 +869,7 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_server, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a1);
         return (Error)__ret;
     }
@@ -1048,243 +877,174 @@ public unsafe partial class WebSocketMultiplayerPeer : MultiplayerPeer
     private static nint __mb_get_peer;
     public WebSocketPeer? GetPeer(int peerId)
     {
-        var __mb = __mb_get_peer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_peer", 1381378851);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_peer is not available in this engine build.");
-            __mb_get_peer = __mb;
-        }
+        if (__mb_get_peer == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_peer");
         long __a0 = unchecked((long)peerId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_peer, NativePtr, (nint)__args, (nint)(&__ret));
         return (WebSocketPeer?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_peer_address;
     public string GetPeerAddress(int id)
     {
-        var __mb = __mb_get_peer_address;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_peer_address", 844755477);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_peer_address is not available in this engine build.");
-            __mb_get_peer_address = __mb;
-        }
+        if (__mb_get_peer_address == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_peer_address");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_peer_address, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_peer_port;
     public int GetPeerPort(int id)
     {
-        var __mb = __mb_get_peer_port;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_peer_port", 923996154);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_peer_port is not available in this engine build.");
-            __mb_get_peer_port = __mb;
-        }
+        if (__mb_get_peer_port == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_peer_port");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_peer_port, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_supported_protocols;
     public string[] GetSupportedProtocols()
     {
-        var __mb = __mb_get_supported_protocols;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_supported_protocols", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_supported_protocols is not available in this engine build.");
-            __mb_get_supported_protocols = __mb;
-        }
+        if (__mb_get_supported_protocols == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_supported_protocols");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_supported_protocols, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_supported_protocols;
     public void SetSupportedProtocols(string[] protocols)
     {
-        var __mb = __mb_set_supported_protocols;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_supported_protocols", 4015028928);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_supported_protocols is not available in this engine build.");
-            __mb_set_supported_protocols = __mb;
-        }
+        if (__mb_set_supported_protocols == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.set_supported_protocols");
         var __a0 = Packed.CreateStrings(protocols);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_supported_protocols, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_handshake_headers;
     public string[] GetHandshakeHeaders()
     {
-        var __mb = __mb_get_handshake_headers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_handshake_headers", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_handshake_headers is not available in this engine build.");
-            __mb_get_handshake_headers = __mb;
-        }
+        if (__mb_get_handshake_headers == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_handshake_headers");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_handshake_headers, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_handshake_headers;
     public void SetHandshakeHeaders(string[] protocols)
     {
-        var __mb = __mb_set_handshake_headers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_handshake_headers", 4015028928);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_handshake_headers is not available in this engine build.");
-            __mb_set_handshake_headers = __mb;
-        }
+        if (__mb_set_handshake_headers == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.set_handshake_headers");
         var __a0 = Packed.CreateStrings(protocols);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_handshake_headers, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_inbound_buffer_size;
     public int GetInboundBufferSize()
     {
-        var __mb = __mb_get_inbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_inbound_buffer_size", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_inbound_buffer_size is not available in this engine build.");
-            __mb_get_inbound_buffer_size = __mb;
-        }
+        if (__mb_get_inbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_inbound_buffer_size");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_inbound_buffer_size, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_inbound_buffer_size;
     public void SetInboundBufferSize(int bufferSize)
     {
-        var __mb = __mb_set_inbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_inbound_buffer_size", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_inbound_buffer_size is not available in this engine build.");
-            __mb_set_inbound_buffer_size = __mb;
-        }
+        if (__mb_set_inbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.set_inbound_buffer_size");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_inbound_buffer_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_outbound_buffer_size;
     public int GetOutboundBufferSize()
     {
-        var __mb = __mb_get_outbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_outbound_buffer_size", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_outbound_buffer_size is not available in this engine build.");
-            __mb_get_outbound_buffer_size = __mb;
-        }
+        if (__mb_get_outbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_outbound_buffer_size");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_outbound_buffer_size, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_outbound_buffer_size;
     public void SetOutboundBufferSize(int bufferSize)
     {
-        var __mb = __mb_set_outbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_outbound_buffer_size", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_outbound_buffer_size is not available in this engine build.");
-            __mb_set_outbound_buffer_size = __mb;
-        }
+        if (__mb_set_outbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.set_outbound_buffer_size");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_outbound_buffer_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_handshake_timeout;
     public float GetHandshakeTimeout()
     {
-        var __mb = __mb_get_handshake_timeout;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_handshake_timeout", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_handshake_timeout is not available in this engine build.");
-            __mb_get_handshake_timeout = __mb;
-        }
+        if (__mb_get_handshake_timeout == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_handshake_timeout");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_handshake_timeout, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_handshake_timeout;
     public void SetHandshakeTimeout(float timeout)
     {
-        var __mb = __mb_set_handshake_timeout;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_handshake_timeout", 373806689);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_handshake_timeout is not available in this engine build.");
-            __mb_set_handshake_timeout = __mb;
-        }
+        if (__mb_set_handshake_timeout == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.set_handshake_timeout");
         double __a0 = timeout;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_handshake_timeout, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_max_queued_packets;
     public void SetMaxQueuedPackets(int maxQueuedPackets)
     {
-        var __mb = __mb_set_max_queued_packets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "set_max_queued_packets", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.set_max_queued_packets is not available in this engine build.");
-            __mb_set_max_queued_packets = __mb;
-        }
+        if (__mb_set_max_queued_packets == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.set_max_queued_packets");
         long __a0 = unchecked((long)maxQueuedPackets);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_queued_packets, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_queued_packets;
     public int GetMaxQueuedPackets()
     {
-        var __mb = __mb_get_max_queued_packets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketMultiplayerPeer", "get_max_queued_packets", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketMultiplayerPeer.get_max_queued_packets is not available in this engine build.");
-            __mb_get_max_queued_packets = __mb;
-        }
+        if (__mb_get_max_queued_packets == 0) MethodBinds.MissingThrow("WebSocketMultiplayerPeer.get_max_queued_packets");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_queued_packets, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create_client = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "create_client", 1966198364);
+        __mb_create_server = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "create_server", 2400822951);
+        __mb_get_peer = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_peer", 1381378851);
+        __mb_get_peer_address = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_peer_address", 844755477);
+        __mb_get_peer_port = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_peer_port", 923996154);
+        __mb_get_supported_protocols = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_supported_protocols", 1139954409);
+        __mb_set_supported_protocols = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "set_supported_protocols", 4015028928);
+        __mb_get_handshake_headers = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_handshake_headers", 1139954409);
+        __mb_set_handshake_headers = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "set_handshake_headers", 4015028928);
+        __mb_get_inbound_buffer_size = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_inbound_buffer_size", 3905245786);
+        __mb_set_inbound_buffer_size = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "set_inbound_buffer_size", 1286410249);
+        __mb_get_outbound_buffer_size = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_outbound_buffer_size", 3905245786);
+        __mb_set_outbound_buffer_size = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "set_outbound_buffer_size", 1286410249);
+        __mb_get_handshake_timeout = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_handshake_timeout", 1740695150);
+        __mb_set_handshake_timeout = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "set_handshake_timeout", 373806689);
+        __mb_set_max_queued_packets = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "set_max_queued_packets", 1286410249);
+        __mb_get_max_queued_packets = MethodBinds.ResolveBulk("WebSocketMultiplayerPeer", "get_max_queued_packets", 3905245786);
     }
 }
 
@@ -1350,20 +1110,14 @@ public unsafe partial class WebSocketPeer : PacketPeer
     private static nint __mb_connect_to_url;
     public Error ConnectToUrl(string url, TLSOptions? tlsClientOptions = null)
     {
-        var __mb = __mb_connect_to_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "connect_to_url", 1966198364);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.connect_to_url is not available in this engine build.");
-            __mb_connect_to_url = __mb;
-        }
+        if (__mb_connect_to_url == 0) MethodBinds.MissingThrow("WebSocketPeer.connect_to_url");
         ulong __a0 = NativeString.Create(url);
         nint __a1 = tlsClientOptions?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_connect_to_url, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1371,38 +1125,26 @@ public unsafe partial class WebSocketPeer : PacketPeer
     private static nint __mb_accept_stream;
     public Error AcceptStream(StreamPeer? stream)
     {
-        var __mb = __mb_accept_stream;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "accept_stream", 255125695);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.accept_stream is not available in this engine build.");
-            __mb_accept_stream = __mb;
-        }
+        if (__mb_accept_stream == 0) MethodBinds.MissingThrow("WebSocketPeer.accept_stream");
         nint __a0 = stream?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accept_stream, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_send;
     public Error Send(byte[] message, WebSocketPeer.WriteMode writeMode = (WebSocketPeer.WriteMode)(1))
     {
-        var __mb = __mb_send;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "send", 2780360567);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.send is not available in this engine build.");
-            __mb_send = __mb;
-        }
+        if (__mb_send == 0) MethodBinds.MissingThrow("WebSocketPeer.send");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, message);
         long __a1 = (long)writeMode;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_send, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1410,18 +1152,12 @@ public unsafe partial class WebSocketPeer : PacketPeer
     private static nint __mb_send_text;
     public Error SendText(string message)
     {
-        var __mb = __mb_send_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "send_text", 166001499);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.send_text is not available in this engine build.");
-            __mb_send_text = __mb;
-        }
+        if (__mb_send_text == 0) MethodBinds.MissingThrow("WebSocketPeer.send_text");
         ulong __a0 = NativeString.Create(message);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_send_text, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1429,372 +1165,260 @@ public unsafe partial class WebSocketPeer : PacketPeer
     private static nint __mb_was_string_packet;
     public bool WasStringPacket()
     {
-        var __mb = __mb_was_string_packet;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "was_string_packet", 36873697);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.was_string_packet is not available in this engine build.");
-            __mb_was_string_packet = __mb;
-        }
+        if (__mb_was_string_packet == 0) MethodBinds.MissingThrow("WebSocketPeer.was_string_packet");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_was_string_packet, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_poll;
     public void Poll()
     {
-        var __mb = __mb_poll;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "poll", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.poll is not available in this engine build.");
-            __mb_poll = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_poll == 0) MethodBinds.MissingThrow("WebSocketPeer.poll");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_poll, NativePtr, 0, 0);
     }
 
     private static nint __mb_close;
     public void Close(int code = unchecked((int)(1000)), string reason = "")
     {
-        var __mb = __mb_close;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "close", 1047156615);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.close is not available in this engine build.");
-            __mb_close = __mb;
-        }
+        if (__mb_close == 0) MethodBinds.MissingThrow("WebSocketPeer.close");
         long __a0 = unchecked((long)code);
         ulong __a1 = NativeString.Create(reason);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_close, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_get_connected_host;
     public string GetConnectedHost()
     {
-        var __mb = __mb_get_connected_host;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_connected_host", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_connected_host is not available in this engine build.");
-            __mb_get_connected_host = __mb;
-        }
+        if (__mb_get_connected_host == 0) MethodBinds.MissingThrow("WebSocketPeer.get_connected_host");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_connected_host, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_connected_port;
     public ushort GetConnectedPort()
     {
-        var __mb = __mb_get_connected_port;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_connected_port", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_connected_port is not available in this engine build.");
-            __mb_get_connected_port = __mb;
-        }
+        if (__mb_get_connected_port == 0) MethodBinds.MissingThrow("WebSocketPeer.get_connected_port");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_connected_port, NativePtr, 0, (nint)(&__ret));
         return unchecked((ushort)__ret);
     }
 
     private static nint __mb_get_selected_protocol;
     public string GetSelectedProtocol()
     {
-        var __mb = __mb_get_selected_protocol;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_selected_protocol", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_selected_protocol is not available in this engine build.");
-            __mb_get_selected_protocol = __mb;
-        }
+        if (__mb_get_selected_protocol == 0) MethodBinds.MissingThrow("WebSocketPeer.get_selected_protocol");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_selected_protocol, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_requested_url;
     public string GetRequestedUrl()
     {
-        var __mb = __mb_get_requested_url;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_requested_url", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_requested_url is not available in this engine build.");
-            __mb_get_requested_url = __mb;
-        }
+        if (__mb_get_requested_url == 0) MethodBinds.MissingThrow("WebSocketPeer.get_requested_url");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_requested_url, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_no_delay;
     public void SetNoDelay(bool enabled)
     {
-        var __mb = __mb_set_no_delay;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_no_delay", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_no_delay is not available in this engine build.");
-            __mb_set_no_delay = __mb;
-        }
+        if (__mb_set_no_delay == 0) MethodBinds.MissingThrow("WebSocketPeer.set_no_delay");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_no_delay, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_current_outbound_buffered_amount;
     public int GetCurrentOutboundBufferedAmount()
     {
-        var __mb = __mb_get_current_outbound_buffered_amount;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_current_outbound_buffered_amount", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_current_outbound_buffered_amount is not available in this engine build.");
-            __mb_get_current_outbound_buffered_amount = __mb;
-        }
+        if (__mb_get_current_outbound_buffered_amount == 0) MethodBinds.MissingThrow("WebSocketPeer.get_current_outbound_buffered_amount");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_outbound_buffered_amount, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_ready_state;
     public WebSocketPeer.State GetReadyState()
     {
-        var __mb = __mb_get_ready_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_ready_state", 346482985);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_ready_state is not available in this engine build.");
-            __mb_get_ready_state = __mb;
-        }
+        if (__mb_get_ready_state == 0) MethodBinds.MissingThrow("WebSocketPeer.get_ready_state");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_ready_state, NativePtr, 0, (nint)(&__ret));
         return (WebSocketPeer.State)__ret;
     }
 
     private static nint __mb_get_close_code;
     public int GetCloseCode()
     {
-        var __mb = __mb_get_close_code;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_close_code", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_close_code is not available in this engine build.");
-            __mb_get_close_code = __mb;
-        }
+        if (__mb_get_close_code == 0) MethodBinds.MissingThrow("WebSocketPeer.get_close_code");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_close_code, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_close_reason;
     public string GetCloseReason()
     {
-        var __mb = __mb_get_close_reason;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_close_reason", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_close_reason is not available in this engine build.");
-            __mb_get_close_reason = __mb;
-        }
+        if (__mb_get_close_reason == 0) MethodBinds.MissingThrow("WebSocketPeer.get_close_reason");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_close_reason, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_supported_protocols;
     public string[] GetSupportedProtocols()
     {
-        var __mb = __mb_get_supported_protocols;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_supported_protocols", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_supported_protocols is not available in this engine build.");
-            __mb_get_supported_protocols = __mb;
-        }
+        if (__mb_get_supported_protocols == 0) MethodBinds.MissingThrow("WebSocketPeer.get_supported_protocols");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_supported_protocols, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_supported_protocols;
     public void SetSupportedProtocols(string[] protocols)
     {
-        var __mb = __mb_set_supported_protocols;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_supported_protocols", 4015028928);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_supported_protocols is not available in this engine build.");
-            __mb_set_supported_protocols = __mb;
-        }
+        if (__mb_set_supported_protocols == 0) MethodBinds.MissingThrow("WebSocketPeer.set_supported_protocols");
         var __a0 = Packed.CreateStrings(protocols);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_supported_protocols, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_handshake_headers;
     public string[] GetHandshakeHeaders()
     {
-        var __mb = __mb_get_handshake_headers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_handshake_headers", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_handshake_headers is not available in this engine build.");
-            __mb_get_handshake_headers = __mb;
-        }
+        if (__mb_get_handshake_headers == 0) MethodBinds.MissingThrow("WebSocketPeer.get_handshake_headers");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_handshake_headers, NativePtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_set_handshake_headers;
     public void SetHandshakeHeaders(string[] protocols)
     {
-        var __mb = __mb_set_handshake_headers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_handshake_headers", 4015028928);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_handshake_headers is not available in this engine build.");
-            __mb_set_handshake_headers = __mb;
-        }
+        if (__mb_set_handshake_headers == 0) MethodBinds.MissingThrow("WebSocketPeer.set_handshake_headers");
         var __a0 = Packed.CreateStrings(protocols);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_handshake_headers, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_STRING_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_inbound_buffer_size;
     public int GetInboundBufferSize()
     {
-        var __mb = __mb_get_inbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_inbound_buffer_size", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_inbound_buffer_size is not available in this engine build.");
-            __mb_get_inbound_buffer_size = __mb;
-        }
+        if (__mb_get_inbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketPeer.get_inbound_buffer_size");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_inbound_buffer_size, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_inbound_buffer_size;
     public void SetInboundBufferSize(int bufferSize)
     {
-        var __mb = __mb_set_inbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_inbound_buffer_size", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_inbound_buffer_size is not available in this engine build.");
-            __mb_set_inbound_buffer_size = __mb;
-        }
+        if (__mb_set_inbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketPeer.set_inbound_buffer_size");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_inbound_buffer_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_outbound_buffer_size;
     public int GetOutboundBufferSize()
     {
-        var __mb = __mb_get_outbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_outbound_buffer_size", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_outbound_buffer_size is not available in this engine build.");
-            __mb_get_outbound_buffer_size = __mb;
-        }
+        if (__mb_get_outbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketPeer.get_outbound_buffer_size");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_outbound_buffer_size, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_outbound_buffer_size;
     public void SetOutboundBufferSize(int bufferSize)
     {
-        var __mb = __mb_set_outbound_buffer_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_outbound_buffer_size", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_outbound_buffer_size is not available in this engine build.");
-            __mb_set_outbound_buffer_size = __mb;
-        }
+        if (__mb_set_outbound_buffer_size == 0) MethodBinds.MissingThrow("WebSocketPeer.set_outbound_buffer_size");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_outbound_buffer_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_max_queued_packets;
     public void SetMaxQueuedPackets(int bufferSize)
     {
-        var __mb = __mb_set_max_queued_packets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_max_queued_packets", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_max_queued_packets is not available in this engine build.");
-            __mb_set_max_queued_packets = __mb;
-        }
+        if (__mb_set_max_queued_packets == 0) MethodBinds.MissingThrow("WebSocketPeer.set_max_queued_packets");
         long __a0 = unchecked((long)bufferSize);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_queued_packets, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_queued_packets;
     public int GetMaxQueuedPackets()
     {
-        var __mb = __mb_get_max_queued_packets;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_max_queued_packets", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_max_queued_packets is not available in this engine build.");
-            __mb_get_max_queued_packets = __mb;
-        }
+        if (__mb_get_max_queued_packets == 0) MethodBinds.MissingThrow("WebSocketPeer.get_max_queued_packets");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_queued_packets, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_heartbeat_interval;
     public void SetHeartbeatInterval(double interval)
     {
-        var __mb = __mb_set_heartbeat_interval;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "set_heartbeat_interval", 373806689);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.set_heartbeat_interval is not available in this engine build.");
-            __mb_set_heartbeat_interval = __mb;
-        }
+        if (__mb_set_heartbeat_interval == 0) MethodBinds.MissingThrow("WebSocketPeer.set_heartbeat_interval");
         double __a0 = interval;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_heartbeat_interval, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_heartbeat_interval;
     public double GetHeartbeatInterval()
     {
-        var __mb = __mb_get_heartbeat_interval;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebSocketPeer", "get_heartbeat_interval", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("WebSocketPeer.get_heartbeat_interval is not available in this engine build.");
-            __mb_get_heartbeat_interval = __mb;
-        }
+        if (__mb_get_heartbeat_interval == 0) MethodBinds.MissingThrow("WebSocketPeer.get_heartbeat_interval");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_heartbeat_interval, NativePtr, 0, (nint)(&__ret));
         return (double)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_connect_to_url = MethodBinds.ResolveBulk("WebSocketPeer", "connect_to_url", 1966198364);
+        __mb_accept_stream = MethodBinds.ResolveBulk("WebSocketPeer", "accept_stream", 255125695);
+        __mb_send = MethodBinds.ResolveBulk("WebSocketPeer", "send", 2780360567);
+        __mb_send_text = MethodBinds.ResolveBulk("WebSocketPeer", "send_text", 166001499);
+        __mb_was_string_packet = MethodBinds.ResolveBulk("WebSocketPeer", "was_string_packet", 36873697);
+        __mb_poll = MethodBinds.ResolveBulk("WebSocketPeer", "poll", 3218959716);
+        __mb_close = MethodBinds.ResolveBulk("WebSocketPeer", "close", 1047156615);
+        __mb_get_connected_host = MethodBinds.ResolveBulk("WebSocketPeer", "get_connected_host", 201670096);
+        __mb_get_connected_port = MethodBinds.ResolveBulk("WebSocketPeer", "get_connected_port", 3905245786);
+        __mb_get_selected_protocol = MethodBinds.ResolveBulk("WebSocketPeer", "get_selected_protocol", 201670096);
+        __mb_get_requested_url = MethodBinds.ResolveBulk("WebSocketPeer", "get_requested_url", 201670096);
+        __mb_set_no_delay = MethodBinds.ResolveBulk("WebSocketPeer", "set_no_delay", 2586408642);
+        __mb_get_current_outbound_buffered_amount = MethodBinds.ResolveBulk("WebSocketPeer", "get_current_outbound_buffered_amount", 3905245786);
+        __mb_get_ready_state = MethodBinds.ResolveBulk("WebSocketPeer", "get_ready_state", 346482985);
+        __mb_get_close_code = MethodBinds.ResolveBulk("WebSocketPeer", "get_close_code", 3905245786);
+        __mb_get_close_reason = MethodBinds.ResolveBulk("WebSocketPeer", "get_close_reason", 201670096);
+        __mb_get_supported_protocols = MethodBinds.ResolveBulk("WebSocketPeer", "get_supported_protocols", 1139954409);
+        __mb_set_supported_protocols = MethodBinds.ResolveBulk("WebSocketPeer", "set_supported_protocols", 4015028928);
+        __mb_get_handshake_headers = MethodBinds.ResolveBulk("WebSocketPeer", "get_handshake_headers", 1139954409);
+        __mb_set_handshake_headers = MethodBinds.ResolveBulk("WebSocketPeer", "set_handshake_headers", 4015028928);
+        __mb_get_inbound_buffer_size = MethodBinds.ResolveBulk("WebSocketPeer", "get_inbound_buffer_size", 3905245786);
+        __mb_set_inbound_buffer_size = MethodBinds.ResolveBulk("WebSocketPeer", "set_inbound_buffer_size", 1286410249);
+        __mb_get_outbound_buffer_size = MethodBinds.ResolveBulk("WebSocketPeer", "get_outbound_buffer_size", 3905245786);
+        __mb_set_outbound_buffer_size = MethodBinds.ResolveBulk("WebSocketPeer", "set_outbound_buffer_size", 1286410249);
+        __mb_set_max_queued_packets = MethodBinds.ResolveBulk("WebSocketPeer", "set_max_queued_packets", 1286410249);
+        __mb_get_max_queued_packets = MethodBinds.ResolveBulk("WebSocketPeer", "get_max_queued_packets", 3905245786);
+        __mb_set_heartbeat_interval = MethodBinds.ResolveBulk("WebSocketPeer", "set_heartbeat_interval", 373806689);
+        __mb_get_heartbeat_interval = MethodBinds.ResolveBulk("WebSocketPeer", "get_heartbeat_interval", 1740695150);
     }
 }
 
@@ -1947,291 +1571,205 @@ public unsafe partial class WebXRInterface : XRInterface
     private static nint __mb_is_session_supported;
     public void IsSessionSupported(string sessionMode)
     {
-        var __mb = __mb_is_session_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "is_session_supported", 83702148);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.is_session_supported is not available in this engine build.");
-            __mb_is_session_supported = __mb;
-        }
+        if (__mb_is_session_supported == 0) MethodBinds.MissingThrow("WebXRInterface.is_session_supported");
         ulong __a0 = NativeString.Create(sessionMode);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_session_supported, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_set_session_mode;
     public void SetSessionMode(string sessionMode)
     {
-        var __mb = __mb_set_session_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "set_session_mode", 83702148);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.set_session_mode is not available in this engine build.");
-            __mb_set_session_mode = __mb;
-        }
+        if (__mb_set_session_mode == 0) MethodBinds.MissingThrow("WebXRInterface.set_session_mode");
         ulong __a0 = NativeString.Create(sessionMode);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_session_mode, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_session_mode;
     public string GetSessionMode()
     {
-        var __mb = __mb_get_session_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_session_mode", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_session_mode is not available in this engine build.");
-            __mb_get_session_mode = __mb;
-        }
+        if (__mb_get_session_mode == 0) MethodBinds.MissingThrow("WebXRInterface.get_session_mode");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_session_mode, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_required_features;
     public void SetRequiredFeatures(string requiredFeatures)
     {
-        var __mb = __mb_set_required_features;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "set_required_features", 83702148);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.set_required_features is not available in this engine build.");
-            __mb_set_required_features = __mb;
-        }
+        if (__mb_set_required_features == 0) MethodBinds.MissingThrow("WebXRInterface.set_required_features");
         ulong __a0 = NativeString.Create(requiredFeatures);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_required_features, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_required_features;
     public string GetRequiredFeatures()
     {
-        var __mb = __mb_get_required_features;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_required_features", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_required_features is not available in this engine build.");
-            __mb_get_required_features = __mb;
-        }
+        if (__mb_get_required_features == 0) MethodBinds.MissingThrow("WebXRInterface.get_required_features");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_required_features, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_optional_features;
     public void SetOptionalFeatures(string optionalFeatures)
     {
-        var __mb = __mb_set_optional_features;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "set_optional_features", 83702148);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.set_optional_features is not available in this engine build.");
-            __mb_set_optional_features = __mb;
-        }
+        if (__mb_set_optional_features == 0) MethodBinds.MissingThrow("WebXRInterface.set_optional_features");
         ulong __a0 = NativeString.Create(optionalFeatures);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_optional_features, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_optional_features;
     public string GetOptionalFeatures()
     {
-        var __mb = __mb_get_optional_features;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_optional_features", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_optional_features is not available in this engine build.");
-            __mb_get_optional_features = __mb;
-        }
+        if (__mb_get_optional_features == 0) MethodBinds.MissingThrow("WebXRInterface.get_optional_features");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_optional_features, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_reference_space_type;
     public string GetReferenceSpaceType()
     {
-        var __mb = __mb_get_reference_space_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_reference_space_type", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_reference_space_type is not available in this engine build.");
-            __mb_get_reference_space_type = __mb;
-        }
+        if (__mb_get_reference_space_type == 0) MethodBinds.MissingThrow("WebXRInterface.get_reference_space_type");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_reference_space_type, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_enabled_features;
     public string GetEnabledFeatures()
     {
-        var __mb = __mb_get_enabled_features;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_enabled_features", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_enabled_features is not available in this engine build.");
-            __mb_get_enabled_features = __mb;
-        }
+        if (__mb_get_enabled_features == 0) MethodBinds.MissingThrow("WebXRInterface.get_enabled_features");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_enabled_features, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_requested_reference_space_types;
     public void SetRequestedReferenceSpaceTypes(string requestedReferenceSpaceTypes)
     {
-        var __mb = __mb_set_requested_reference_space_types;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "set_requested_reference_space_types", 83702148);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.set_requested_reference_space_types is not available in this engine build.");
-            __mb_set_requested_reference_space_types = __mb;
-        }
+        if (__mb_set_requested_reference_space_types == 0) MethodBinds.MissingThrow("WebXRInterface.set_requested_reference_space_types");
         ulong __a0 = NativeString.Create(requestedReferenceSpaceTypes);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_requested_reference_space_types, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_requested_reference_space_types;
     public string GetRequestedReferenceSpaceTypes()
     {
-        var __mb = __mb_get_requested_reference_space_types;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_requested_reference_space_types", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_requested_reference_space_types is not available in this engine build.");
-            __mb_get_requested_reference_space_types = __mb;
-        }
+        if (__mb_get_requested_reference_space_types == 0) MethodBinds.MissingThrow("WebXRInterface.get_requested_reference_space_types");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_requested_reference_space_types, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_input_source_active;
     public bool IsInputSourceActive(int inputSourceId)
     {
-        var __mb = __mb_is_input_source_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "is_input_source_active", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.is_input_source_active is not available in this engine build.");
-            __mb_is_input_source_active = __mb;
-        }
+        if (__mb_is_input_source_active == 0) MethodBinds.MissingThrow("WebXRInterface.is_input_source_active");
         long __a0 = unchecked((long)inputSourceId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_input_source_active, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_input_source_tracker;
     public XRControllerTracker? GetInputSourceTracker(int inputSourceId)
     {
-        var __mb = __mb_get_input_source_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_input_source_tracker", 399776966);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_input_source_tracker is not available in this engine build.");
-            __mb_get_input_source_tracker = __mb;
-        }
+        if (__mb_get_input_source_tracker == 0) MethodBinds.MissingThrow("WebXRInterface.get_input_source_tracker");
         long __a0 = unchecked((long)inputSourceId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_input_source_tracker, NativePtr, (nint)__args, (nint)(&__ret));
         return (XRControllerTracker?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_input_source_target_ray_mode;
     public WebXRInterface.TargetRayMode GetInputSourceTargetRayMode(int inputSourceId)
     {
-        var __mb = __mb_get_input_source_target_ray_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_input_source_target_ray_mode", 2852387453);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_input_source_target_ray_mode is not available in this engine build.");
-            __mb_get_input_source_target_ray_mode = __mb;
-        }
+        if (__mb_get_input_source_target_ray_mode == 0) MethodBinds.MissingThrow("WebXRInterface.get_input_source_target_ray_mode");
         long __a0 = unchecked((long)inputSourceId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_input_source_target_ray_mode, NativePtr, (nint)__args, (nint)(&__ret));
         return (WebXRInterface.TargetRayMode)__ret;
     }
 
     private static nint __mb_get_visibility_state;
     public string GetVisibilityState()
     {
-        var __mb = __mb_get_visibility_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_visibility_state", 201670096);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_visibility_state is not available in this engine build.");
-            __mb_get_visibility_state = __mb;
-        }
+        if (__mb_get_visibility_state == 0) MethodBinds.MissingThrow("WebXRInterface.get_visibility_state");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_visibility_state, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_display_refresh_rate;
     public float GetDisplayRefreshRate()
     {
-        var __mb = __mb_get_display_refresh_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_display_refresh_rate", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_display_refresh_rate is not available in this engine build.");
-            __mb_get_display_refresh_rate = __mb;
-        }
+        if (__mb_get_display_refresh_rate == 0) MethodBinds.MissingThrow("WebXRInterface.get_display_refresh_rate");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_display_refresh_rate, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_display_refresh_rate;
     public void SetDisplayRefreshRate(float refreshRate)
     {
-        var __mb = __mb_set_display_refresh_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "set_display_refresh_rate", 373806689);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.set_display_refresh_rate is not available in this engine build.");
-            __mb_set_display_refresh_rate = __mb;
-        }
+        if (__mb_set_display_refresh_rate == 0) MethodBinds.MissingThrow("WebXRInterface.set_display_refresh_rate");
         double __a0 = refreshRate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_display_refresh_rate, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_available_display_refresh_rates;
     public Godot.Collections.Array GetAvailableDisplayRefreshRates()
     {
-        var __mb = __mb_get_available_display_refresh_rates;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WebXRInterface", "get_available_display_refresh_rates", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("WebXRInterface.get_available_display_refresh_rates is not available in this engine build.");
-            __mb_get_available_display_refresh_rates = __mb;
-        }
+        if (__mb_get_available_display_refresh_rates == 0) MethodBinds.MissingThrow("WebXRInterface.get_available_display_refresh_rates");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_available_display_refresh_rates, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_session_supported = MethodBinds.ResolveBulk("WebXRInterface", "is_session_supported", 83702148);
+        __mb_set_session_mode = MethodBinds.ResolveBulk("WebXRInterface", "set_session_mode", 83702148);
+        __mb_get_session_mode = MethodBinds.ResolveBulk("WebXRInterface", "get_session_mode", 201670096);
+        __mb_set_required_features = MethodBinds.ResolveBulk("WebXRInterface", "set_required_features", 83702148);
+        __mb_get_required_features = MethodBinds.ResolveBulk("WebXRInterface", "get_required_features", 201670096);
+        __mb_set_optional_features = MethodBinds.ResolveBulk("WebXRInterface", "set_optional_features", 83702148);
+        __mb_get_optional_features = MethodBinds.ResolveBulk("WebXRInterface", "get_optional_features", 201670096);
+        __mb_get_reference_space_type = MethodBinds.ResolveBulk("WebXRInterface", "get_reference_space_type", 201670096);
+        __mb_get_enabled_features = MethodBinds.ResolveBulk("WebXRInterface", "get_enabled_features", 201670096);
+        __mb_set_requested_reference_space_types = MethodBinds.ResolveBulk("WebXRInterface", "set_requested_reference_space_types", 83702148);
+        __mb_get_requested_reference_space_types = MethodBinds.ResolveBulk("WebXRInterface", "get_requested_reference_space_types", 201670096);
+        __mb_is_input_source_active = MethodBinds.ResolveBulk("WebXRInterface", "is_input_source_active", 1116898809);
+        __mb_get_input_source_tracker = MethodBinds.ResolveBulk("WebXRInterface", "get_input_source_tracker", 399776966);
+        __mb_get_input_source_target_ray_mode = MethodBinds.ResolveBulk("WebXRInterface", "get_input_source_target_ray_mode", 2852387453);
+        __mb_get_visibility_state = MethodBinds.ResolveBulk("WebXRInterface", "get_visibility_state", 201670096);
+        __mb_get_display_refresh_rate = MethodBinds.ResolveBulk("WebXRInterface", "get_display_refresh_rate", 1740695150);
+        __mb_set_display_refresh_rate = MethodBinds.ResolveBulk("WebXRInterface", "set_display_refresh_rate", 373806689);
+        __mb_get_available_display_refresh_rates = MethodBinds.ResolveBulk("WebXRInterface", "get_available_display_refresh_rates", 3995934104);
     }
 }
 
@@ -2683,2138 +2221,1340 @@ public unsafe partial class Window : Viewport
     private static nint __mb_set_title;
     public void SetTitle(string title)
     {
-        var __mb = __mb_set_title;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_title", 83702148);
-            if (__mb == 0) throw new MissingMethodException("Window.set_title is not available in this engine build.");
-            __mb_set_title = __mb;
-        }
+        if (__mb_set_title == 0) MethodBinds.MissingThrow("Window.set_title");
         ulong __a0 = NativeString.Create(title);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_title, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_title;
     public string GetTitle()
     {
-        var __mb = __mb_get_title;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_title", 201670096);
-            if (__mb == 0) throw new MissingMethodException("Window.get_title is not available in this engine build.");
-            __mb_get_title = __mb;
-        }
+        if (__mb_get_title == 0) MethodBinds.MissingThrow("Window.get_title");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_title, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_initial_position;
     public void SetInitialPosition(Window.WindowInitialPosition initialPosition)
     {
-        var __mb = __mb_set_initial_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_initial_position", 4084468099);
-            if (__mb == 0) throw new MissingMethodException("Window.set_initial_position is not available in this engine build.");
-            __mb_set_initial_position = __mb;
-        }
+        if (__mb_set_initial_position == 0) MethodBinds.MissingThrow("Window.set_initial_position");
         long __a0 = (long)initialPosition;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_initial_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_initial_position;
     public Window.WindowInitialPosition GetInitialPosition()
     {
-        var __mb = __mb_get_initial_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_initial_position", 4294066647);
-            if (__mb == 0) throw new MissingMethodException("Window.get_initial_position is not available in this engine build.");
-            __mb_get_initial_position = __mb;
-        }
+        if (__mb_get_initial_position == 0) MethodBinds.MissingThrow("Window.get_initial_position");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_initial_position, NativePtr, 0, (nint)(&__ret));
         return (Window.WindowInitialPosition)__ret;
     }
 
     private static nint __mb_set_current_screen;
     public void SetCurrentScreen(int index)
     {
-        var __mb = __mb_set_current_screen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_current_screen", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("Window.set_current_screen is not available in this engine build.");
-            __mb_set_current_screen = __mb;
-        }
+        if (__mb_set_current_screen == 0) MethodBinds.MissingThrow("Window.set_current_screen");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_current_screen, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_current_screen;
     public int GetCurrentScreen()
     {
-        var __mb = __mb_get_current_screen;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_current_screen", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Window.get_current_screen is not available in this engine build.");
-            __mb_get_current_screen = __mb;
-        }
+        if (__mb_get_current_screen == 0) MethodBinds.MissingThrow("Window.get_current_screen");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_screen, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_position;
     public void SetPosition(Vector2I position)
     {
-        var __mb = __mb_set_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_position", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("Window.set_position is not available in this engine build.");
-            __mb_set_position = __mb;
-        }
+        if (__mb_set_position == 0) MethodBinds.MissingThrow("Window.set_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_position;
     public Vector2I GetPosition()
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_position", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("Window.get_position");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_move_to_center;
     public void MoveToCenter()
     {
-        var __mb = __mb_move_to_center;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "move_to_center", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.move_to_center is not available in this engine build.");
-            __mb_move_to_center = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_move_to_center == 0) MethodBinds.MissingThrow("Window.move_to_center");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_move_to_center, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_size;
     public void SetSize(Vector2I size)
     {
-        var __mb = __mb_set_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("Window.set_size is not available in this engine build.");
-            __mb_set_size = __mb;
-        }
+        if (__mb_set_size == 0) MethodBinds.MissingThrow("Window.set_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_size;
     public Vector2I GetSize()
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("Window.get_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_reset_size;
     public void ResetSize()
     {
-        var __mb = __mb_reset_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "reset_size", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.reset_size is not available in this engine build.");
-            __mb_reset_size = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_reset_size == 0) MethodBinds.MissingThrow("Window.reset_size");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_reset_size, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_position_with_decorations;
     public Vector2I GetPositionWithDecorations()
     {
-        var __mb = __mb_get_position_with_decorations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_position_with_decorations", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_position_with_decorations is not available in this engine build.");
-            __mb_get_position_with_decorations = __mb;
-        }
+        if (__mb_get_position_with_decorations == 0) MethodBinds.MissingThrow("Window.get_position_with_decorations");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position_with_decorations, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_size_with_decorations;
     public Vector2I GetSizeWithDecorations()
     {
-        var __mb = __mb_get_size_with_decorations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_size_with_decorations", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_size_with_decorations is not available in this engine build.");
-            __mb_get_size_with_decorations = __mb;
-        }
+        if (__mb_get_size_with_decorations == 0) MethodBinds.MissingThrow("Window.get_size_with_decorations");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size_with_decorations, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_max_size;
     public void SetMaxSize(Vector2I maxSize)
     {
-        var __mb = __mb_set_max_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_max_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("Window.set_max_size is not available in this engine build.");
-            __mb_set_max_size = __mb;
-        }
+        if (__mb_set_max_size == 0) MethodBinds.MissingThrow("Window.set_max_size");
         var __a0 = maxSize;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_size;
     public Vector2I GetMaxSize()
     {
-        var __mb = __mb_get_max_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_max_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_max_size is not available in this engine build.");
-            __mb_get_max_size = __mb;
-        }
+        if (__mb_get_max_size == 0) MethodBinds.MissingThrow("Window.get_max_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_min_size;
     public void SetMinSize(Vector2I minSize)
     {
-        var __mb = __mb_set_min_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_min_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("Window.set_min_size is not available in this engine build.");
-            __mb_set_min_size = __mb;
-        }
+        if (__mb_set_min_size == 0) MethodBinds.MissingThrow("Window.set_min_size");
         var __a0 = minSize;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_min_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_min_size;
     public Vector2I GetMinSize()
     {
-        var __mb = __mb_get_min_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_min_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_min_size is not available in this engine build.");
-            __mb_get_min_size = __mb;
-        }
+        if (__mb_get_min_size == 0) MethodBinds.MissingThrow("Window.get_min_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_min_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_mode;
     public void SetMode(Window.ModeEnum mode)
     {
-        var __mb = __mb_set_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_mode", 3095236531);
-            if (__mb == 0) throw new MissingMethodException("Window.set_mode is not available in this engine build.");
-            __mb_set_mode = __mb;
-        }
+        if (__mb_set_mode == 0) MethodBinds.MissingThrow("Window.set_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mode;
     public Window.ModeEnum GetMode()
     {
-        var __mb = __mb_get_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_mode", 2566346114);
-            if (__mb == 0) throw new MissingMethodException("Window.get_mode is not available in this engine build.");
-            __mb_get_mode = __mb;
-        }
+        if (__mb_get_mode == 0) MethodBinds.MissingThrow("Window.get_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mode, NativePtr, 0, (nint)(&__ret));
         return (Window.ModeEnum)__ret;
     }
 
     private static nint __mb_set_flag;
     public void SetFlag(Window.Flags flag, bool enabled)
     {
-        var __mb = __mb_set_flag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_flag", 3426449779);
-            if (__mb == 0) throw new MissingMethodException("Window.set_flag is not available in this engine build.");
-            __mb_set_flag = __mb;
-        }
+        if (__mb_set_flag == 0) MethodBinds.MissingThrow("Window.set_flag");
         long __a0 = (long)flag;
         byte __a1 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_flag, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_flag;
     public bool GetFlag(Window.Flags flag)
     {
-        var __mb = __mb_get_flag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_flag", 3062752289);
-            if (__mb == 0) throw new MissingMethodException("Window.get_flag is not available in this engine build.");
-            __mb_get_flag = __mb;
-        }
+        if (__mb_get_flag == 0) MethodBinds.MissingThrow("Window.get_flag");
         long __a0 = (long)flag;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_flag, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_hdr_output_requested;
     public void SetHdrOutputRequested(bool requested)
     {
-        var __mb = __mb_set_hdr_output_requested;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_hdr_output_requested", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_hdr_output_requested is not available in this engine build.");
-            __mb_set_hdr_output_requested = __mb;
-        }
+        if (__mb_set_hdr_output_requested == 0) MethodBinds.MissingThrow("Window.set_hdr_output_requested");
         byte __a0 = requested ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hdr_output_requested, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_hdr_output_requested;
     public bool IsHdrOutputRequested()
     {
-        var __mb = __mb_is_hdr_output_requested;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_hdr_output_requested", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_hdr_output_requested is not available in this engine build.");
-            __mb_is_hdr_output_requested = __mb;
-        }
+        if (__mb_is_hdr_output_requested == 0) MethodBinds.MissingThrow("Window.is_hdr_output_requested");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_hdr_output_requested, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_output_max_linear_value;
     public float GetOutputMaxLinearValue()
     {
-        var __mb = __mb_get_output_max_linear_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_output_max_linear_value", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Window.get_output_max_linear_value is not available in this engine build.");
-            __mb_get_output_max_linear_value = __mb;
-        }
+        if (__mb_get_output_max_linear_value == 0) MethodBinds.MissingThrow("Window.get_output_max_linear_value");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_output_max_linear_value, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_maximize_allowed;
     public bool IsMaximizeAllowed()
     {
-        var __mb = __mb_is_maximize_allowed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_maximize_allowed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_maximize_allowed is not available in this engine build.");
-            __mb_is_maximize_allowed = __mb;
-        }
+        if (__mb_is_maximize_allowed == 0) MethodBinds.MissingThrow("Window.is_maximize_allowed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_maximize_allowed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_request_attention;
     public void RequestAttention()
     {
-        var __mb = __mb_request_attention;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "request_attention", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.request_attention is not available in this engine build.");
-            __mb_request_attention = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_request_attention == 0) MethodBinds.MissingThrow("Window.request_attention");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_request_attention, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_taskbar_progress_value;
     public void SetTaskbarProgressValue(float value)
     {
-        var __mb = __mb_set_taskbar_progress_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_taskbar_progress_value", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Window.set_taskbar_progress_value is not available in this engine build.");
-            __mb_set_taskbar_progress_value = __mb;
-        }
+        if (__mb_set_taskbar_progress_value == 0) MethodBinds.MissingThrow("Window.set_taskbar_progress_value");
         double __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_taskbar_progress_value, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_taskbar_progress_state;
     public void SetTaskbarProgressState(DisplayServer.ProgressState state)
     {
-        var __mb = __mb_set_taskbar_progress_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_taskbar_progress_state", 824071031);
-            if (__mb == 0) throw new MissingMethodException("Window.set_taskbar_progress_state is not available in this engine build.");
-            __mb_set_taskbar_progress_state = __mb;
-        }
+        if (__mb_set_taskbar_progress_state == 0) MethodBinds.MissingThrow("Window.set_taskbar_progress_state");
         long __a0 = (long)state;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_taskbar_progress_state, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_move_to_foreground;
     public void MoveToForeground()
     {
-        var __mb = __mb_move_to_foreground;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "move_to_foreground", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.move_to_foreground is not available in this engine build.");
-            __mb_move_to_foreground = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_move_to_foreground == 0) MethodBinds.MissingThrow("Window.move_to_foreground");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_move_to_foreground, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_visible;
     public void SetVisible(bool visible)
     {
-        var __mb = __mb_set_visible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_visible", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_visible is not available in this engine build.");
-            __mb_set_visible = __mb;
-        }
+        if (__mb_set_visible == 0) MethodBinds.MissingThrow("Window.set_visible");
         byte __a0 = visible ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_visible, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_visible;
     public bool IsVisible()
     {
-        var __mb = __mb_is_visible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_visible", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_visible is not available in this engine build.");
-            __mb_is_visible = __mb;
-        }
+        if (__mb_is_visible == 0) MethodBinds.MissingThrow("Window.is_visible");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_visible, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_hide;
     public void Hide()
     {
-        var __mb = __mb_hide;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "hide", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.hide is not available in this engine build.");
-            __mb_hide = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_hide == 0) MethodBinds.MissingThrow("Window.hide");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_hide, NativePtr, 0, 0);
     }
 
     private static nint __mb_show;
     public void Show()
     {
-        var __mb = __mb_show;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "show", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.show is not available in this engine build.");
-            __mb_show = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_show == 0) MethodBinds.MissingThrow("Window.show");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_show, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_transient;
     public void SetTransient(bool transient)
     {
-        var __mb = __mb_set_transient;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_transient", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_transient is not available in this engine build.");
-            __mb_set_transient = __mb;
-        }
+        if (__mb_set_transient == 0) MethodBinds.MissingThrow("Window.set_transient");
         byte __a0 = transient ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_transient, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_transient;
     public bool IsTransient()
     {
-        var __mb = __mb_is_transient;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_transient", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_transient is not available in this engine build.");
-            __mb_is_transient = __mb;
-        }
+        if (__mb_is_transient == 0) MethodBinds.MissingThrow("Window.is_transient");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_transient, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_transient_to_focused;
     public void SetTransientToFocused(bool enable)
     {
-        var __mb = __mb_set_transient_to_focused;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_transient_to_focused", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_transient_to_focused is not available in this engine build.");
-            __mb_set_transient_to_focused = __mb;
-        }
+        if (__mb_set_transient_to_focused == 0) MethodBinds.MissingThrow("Window.set_transient_to_focused");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_transient_to_focused, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_transient_to_focused;
     public bool IsTransientToFocused()
     {
-        var __mb = __mb_is_transient_to_focused;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_transient_to_focused", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_transient_to_focused is not available in this engine build.");
-            __mb_is_transient_to_focused = __mb;
-        }
+        if (__mb_is_transient_to_focused == 0) MethodBinds.MissingThrow("Window.is_transient_to_focused");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_transient_to_focused, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_exclusive;
     public void SetExclusive(bool exclusive)
     {
-        var __mb = __mb_set_exclusive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_exclusive", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_exclusive is not available in this engine build.");
-            __mb_set_exclusive = __mb;
-        }
+        if (__mb_set_exclusive == 0) MethodBinds.MissingThrow("Window.set_exclusive");
         byte __a0 = exclusive ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_exclusive, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_exclusive;
     public bool IsExclusive()
     {
-        var __mb = __mb_is_exclusive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_exclusive", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_exclusive is not available in this engine build.");
-            __mb_is_exclusive = __mb;
-        }
+        if (__mb_is_exclusive == 0) MethodBinds.MissingThrow("Window.is_exclusive");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_exclusive, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_unparent_when_invisible;
     public void SetUnparentWhenInvisible(bool unparent)
     {
-        var __mb = __mb_set_unparent_when_invisible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_unparent_when_invisible", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_unparent_when_invisible is not available in this engine build.");
-            __mb_set_unparent_when_invisible = __mb;
-        }
+        if (__mb_set_unparent_when_invisible == 0) MethodBinds.MissingThrow("Window.set_unparent_when_invisible");
         byte __a0 = unparent ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_unparent_when_invisible, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_can_draw;
     public bool CanDraw()
     {
-        var __mb = __mb_can_draw;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "can_draw", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.can_draw is not available in this engine build.");
-            __mb_can_draw = __mb;
-        }
+        if (__mb_can_draw == 0) MethodBinds.MissingThrow("Window.can_draw");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_can_draw, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_focus;
     public bool HasFocus()
     {
-        var __mb = __mb_has_focus;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_focus", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.has_focus is not available in this engine build.");
-            __mb_has_focus = __mb;
-        }
+        if (__mb_has_focus == 0) MethodBinds.MissingThrow("Window.has_focus");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_focus, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_grab_focus;
     public void GrabFocus()
     {
-        var __mb = __mb_grab_focus;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "grab_focus", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.grab_focus is not available in this engine build.");
-            __mb_grab_focus = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_grab_focus == 0) MethodBinds.MissingThrow("Window.grab_focus");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_grab_focus, NativePtr, 0, 0);
     }
 
     private static nint __mb_start_drag;
     public void StartDrag()
     {
-        var __mb = __mb_start_drag;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "start_drag", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.start_drag is not available in this engine build.");
-            __mb_start_drag = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_start_drag == 0) MethodBinds.MissingThrow("Window.start_drag");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_drag, NativePtr, 0, 0);
     }
 
     private static nint __mb_start_resize;
     public void StartResize(DisplayServer.WindowResizeEdge edge)
     {
-        var __mb = __mb_start_resize;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "start_resize", 122288853);
-            if (__mb == 0) throw new MissingMethodException("Window.start_resize is not available in this engine build.");
-            __mb_start_resize = __mb;
-        }
+        if (__mb_start_resize == 0) MethodBinds.MissingThrow("Window.start_resize");
         long __a0 = (long)edge;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_resize, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_ime_active;
     public void SetImeActive(bool active)
     {
-        var __mb = __mb_set_ime_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_ime_active", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_ime_active is not available in this engine build.");
-            __mb_set_ime_active = __mb;
-        }
+        if (__mb_set_ime_active == 0) MethodBinds.MissingThrow("Window.set_ime_active");
         byte __a0 = active ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_ime_active, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_ime_position;
     public void SetImePosition(Vector2I position)
     {
-        var __mb = __mb_set_ime_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_ime_position", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("Window.set_ime_position is not available in this engine build.");
-            __mb_set_ime_position = __mb;
-        }
+        if (__mb_set_ime_position == 0) MethodBinds.MissingThrow("Window.set_ime_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_ime_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_embedded;
     public bool IsEmbedded()
     {
-        var __mb = __mb_is_embedded;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_embedded", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_embedded is not available in this engine build.");
-            __mb_is_embedded = __mb;
-        }
+        if (__mb_is_embedded == 0) MethodBinds.MissingThrow("Window.is_embedded");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_embedded, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_contents_minimum_size;
     public Vector2 GetContentsMinimumSize()
     {
-        var __mb = __mb_get_contents_minimum_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_contents_minimum_size", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("Window.get_contents_minimum_size is not available in this engine build.");
-            __mb_get_contents_minimum_size = __mb;
-        }
+        if (__mb_get_contents_minimum_size == 0) MethodBinds.MissingThrow("Window.get_contents_minimum_size");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_contents_minimum_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_force_native;
     public void SetForceNative(bool forceNative)
     {
-        var __mb = __mb_set_force_native;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_force_native", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_force_native is not available in this engine build.");
-            __mb_set_force_native = __mb;
-        }
+        if (__mb_set_force_native == 0) MethodBinds.MissingThrow("Window.set_force_native");
         byte __a0 = forceNative ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_force_native, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_force_native;
     public bool GetForceNative()
     {
-        var __mb = __mb_get_force_native;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_force_native", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.get_force_native is not available in this engine build.");
-            __mb_get_force_native = __mb;
-        }
+        if (__mb_get_force_native == 0) MethodBinds.MissingThrow("Window.get_force_native");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_force_native, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_content_scale_size;
     public void SetContentScaleSize(Vector2I size)
     {
-        var __mb = __mb_set_content_scale_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_content_scale_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("Window.set_content_scale_size is not available in this engine build.");
-            __mb_set_content_scale_size = __mb;
-        }
+        if (__mb_set_content_scale_size == 0) MethodBinds.MissingThrow("Window.set_content_scale_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_content_scale_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_content_scale_size;
     public Vector2I GetContentScaleSize()
     {
-        var __mb = __mb_get_content_scale_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_content_scale_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Window.get_content_scale_size is not available in this engine build.");
-            __mb_get_content_scale_size = __mb;
-        }
+        if (__mb_get_content_scale_size == 0) MethodBinds.MissingThrow("Window.get_content_scale_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_content_scale_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_content_scale_mode;
     public void SetContentScaleMode(Window.ContentScaleModeEnum mode)
     {
-        var __mb = __mb_set_content_scale_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_content_scale_mode", 2937716473);
-            if (__mb == 0) throw new MissingMethodException("Window.set_content_scale_mode is not available in this engine build.");
-            __mb_set_content_scale_mode = __mb;
-        }
+        if (__mb_set_content_scale_mode == 0) MethodBinds.MissingThrow("Window.set_content_scale_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_content_scale_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_content_scale_mode;
     public Window.ContentScaleModeEnum GetContentScaleMode()
     {
-        var __mb = __mb_get_content_scale_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_content_scale_mode", 161585230);
-            if (__mb == 0) throw new MissingMethodException("Window.get_content_scale_mode is not available in this engine build.");
-            __mb_get_content_scale_mode = __mb;
-        }
+        if (__mb_get_content_scale_mode == 0) MethodBinds.MissingThrow("Window.get_content_scale_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_content_scale_mode, NativePtr, 0, (nint)(&__ret));
         return (Window.ContentScaleModeEnum)__ret;
     }
 
     private static nint __mb_set_content_scale_aspect;
     public void SetContentScaleAspect(Window.ContentScaleAspectEnum aspect)
     {
-        var __mb = __mb_set_content_scale_aspect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_content_scale_aspect", 2370399418);
-            if (__mb == 0) throw new MissingMethodException("Window.set_content_scale_aspect is not available in this engine build.");
-            __mb_set_content_scale_aspect = __mb;
-        }
+        if (__mb_set_content_scale_aspect == 0) MethodBinds.MissingThrow("Window.set_content_scale_aspect");
         long __a0 = (long)aspect;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_content_scale_aspect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_content_scale_aspect;
     public Window.ContentScaleAspectEnum GetContentScaleAspect()
     {
-        var __mb = __mb_get_content_scale_aspect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_content_scale_aspect", 4158790715);
-            if (__mb == 0) throw new MissingMethodException("Window.get_content_scale_aspect is not available in this engine build.");
-            __mb_get_content_scale_aspect = __mb;
-        }
+        if (__mb_get_content_scale_aspect == 0) MethodBinds.MissingThrow("Window.get_content_scale_aspect");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_content_scale_aspect, NativePtr, 0, (nint)(&__ret));
         return (Window.ContentScaleAspectEnum)__ret;
     }
 
     private static nint __mb_set_content_scale_stretch;
     public void SetContentScaleStretch(Window.ContentScaleStretchEnum stretch)
     {
-        var __mb = __mb_set_content_scale_stretch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_content_scale_stretch", 349355940);
-            if (__mb == 0) throw new MissingMethodException("Window.set_content_scale_stretch is not available in this engine build.");
-            __mb_set_content_scale_stretch = __mb;
-        }
+        if (__mb_set_content_scale_stretch == 0) MethodBinds.MissingThrow("Window.set_content_scale_stretch");
         long __a0 = (long)stretch;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_content_scale_stretch, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_content_scale_stretch;
     public Window.ContentScaleStretchEnum GetContentScaleStretch()
     {
-        var __mb = __mb_get_content_scale_stretch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_content_scale_stretch", 536857316);
-            if (__mb == 0) throw new MissingMethodException("Window.get_content_scale_stretch is not available in this engine build.");
-            __mb_get_content_scale_stretch = __mb;
-        }
+        if (__mb_get_content_scale_stretch == 0) MethodBinds.MissingThrow("Window.get_content_scale_stretch");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_content_scale_stretch, NativePtr, 0, (nint)(&__ret));
         return (Window.ContentScaleStretchEnum)__ret;
     }
 
     private static nint __mb_set_nonclient_area;
     public void SetNonclientArea(Rect2I area)
     {
-        var __mb = __mb_set_nonclient_area;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_nonclient_area", 1763793166);
-            if (__mb == 0) throw new MissingMethodException("Window.set_nonclient_area is not available in this engine build.");
-            __mb_set_nonclient_area = __mb;
-        }
+        if (__mb_set_nonclient_area == 0) MethodBinds.MissingThrow("Window.set_nonclient_area");
         var __a0 = area;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_nonclient_area, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_nonclient_area;
     public Rect2I GetNonclientArea()
     {
-        var __mb = __mb_get_nonclient_area;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_nonclient_area", 410525958);
-            if (__mb == 0) throw new MissingMethodException("Window.get_nonclient_area is not available in this engine build.");
-            __mb_get_nonclient_area = __mb;
-        }
+        if (__mb_get_nonclient_area == 0) MethodBinds.MissingThrow("Window.get_nonclient_area");
         var __ret = default(Rect2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_nonclient_area, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_keep_title_visible;
     public void SetKeepTitleVisible(bool titleVisible)
     {
-        var __mb = __mb_set_keep_title_visible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_keep_title_visible", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_keep_title_visible is not available in this engine build.");
-            __mb_set_keep_title_visible = __mb;
-        }
+        if (__mb_set_keep_title_visible == 0) MethodBinds.MissingThrow("Window.set_keep_title_visible");
         byte __a0 = titleVisible ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_keep_title_visible, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_keep_title_visible;
     public bool GetKeepTitleVisible()
     {
-        var __mb = __mb_get_keep_title_visible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_keep_title_visible", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.get_keep_title_visible is not available in this engine build.");
-            __mb_get_keep_title_visible = __mb;
-        }
+        if (__mb_get_keep_title_visible == 0) MethodBinds.MissingThrow("Window.get_keep_title_visible");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_keep_title_visible, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_content_scale_factor;
     public void SetContentScaleFactor(float factor)
     {
-        var __mb = __mb_set_content_scale_factor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_content_scale_factor", 373806689);
-            if (__mb == 0) throw new MissingMethodException("Window.set_content_scale_factor is not available in this engine build.");
-            __mb_set_content_scale_factor = __mb;
-        }
+        if (__mb_set_content_scale_factor == 0) MethodBinds.MissingThrow("Window.set_content_scale_factor");
         double __a0 = factor;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_content_scale_factor, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_content_scale_factor;
     public float GetContentScaleFactor()
     {
-        var __mb = __mb_get_content_scale_factor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_content_scale_factor", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Window.get_content_scale_factor is not available in this engine build.");
-            __mb_get_content_scale_factor = __mb;
-        }
+        if (__mb_get_content_scale_factor == 0) MethodBinds.MissingThrow("Window.get_content_scale_factor");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_content_scale_factor, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_mouse_passthrough_polygon;
     public void SetMousePassthroughPolygon(Vector2[] polygon)
     {
-        var __mb = __mb_set_mouse_passthrough_polygon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_mouse_passthrough_polygon", 1509147220);
-            if (__mb == 0) throw new MissingMethodException("Window.set_mouse_passthrough_polygon is not available in this engine build.");
-            __mb_set_mouse_passthrough_polygon = __mb;
-        }
+        if (__mb_set_mouse_passthrough_polygon == 0) MethodBinds.MissingThrow("Window.set_mouse_passthrough_polygon");
         var __a0 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, polygon);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mouse_passthrough_polygon, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a0);
     }
 
     private static nint __mb_get_mouse_passthrough_polygon;
     public Vector2[] GetMousePassthroughPolygon()
     {
-        var __mb = __mb_get_mouse_passthrough_polygon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_mouse_passthrough_polygon", 2961356807);
-            if (__mb == 0) throw new MissingMethodException("Window.get_mouse_passthrough_polygon is not available in this engine build.");
-            __mb_get_mouse_passthrough_polygon = __mb;
-        }
+        if (__mb_get_mouse_passthrough_polygon == 0) MethodBinds.MissingThrow("Window.get_mouse_passthrough_polygon");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mouse_passthrough_polygon, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_wrap_controls;
     public void SetWrapControls(bool enable)
     {
-        var __mb = __mb_set_wrap_controls;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_wrap_controls", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_wrap_controls is not available in this engine build.");
-            __mb_set_wrap_controls = __mb;
-        }
+        if (__mb_set_wrap_controls == 0) MethodBinds.MissingThrow("Window.set_wrap_controls");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_wrap_controls, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_wrapping_controls;
     public bool IsWrappingControls()
     {
-        var __mb = __mb_is_wrapping_controls;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_wrapping_controls", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_wrapping_controls is not available in this engine build.");
-            __mb_is_wrapping_controls = __mb;
-        }
+        if (__mb_is_wrapping_controls == 0) MethodBinds.MissingThrow("Window.is_wrapping_controls");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_wrapping_controls, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_child_controls_changed;
     public void ChildControlsChanged()
     {
-        var __mb = __mb_child_controls_changed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "child_controls_changed", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.child_controls_changed is not available in this engine build.");
-            __mb_child_controls_changed = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_child_controls_changed == 0) MethodBinds.MissingThrow("Window.child_controls_changed");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_child_controls_changed, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_theme;
     public void SetTheme(Theme? theme)
     {
-        var __mb = __mb_set_theme;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_theme", 2326690814);
-            if (__mb == 0) throw new MissingMethodException("Window.set_theme is not available in this engine build.");
-            __mb_set_theme = __mb;
-        }
+        if (__mb_set_theme == 0) MethodBinds.MissingThrow("Window.set_theme");
         nint __a0 = theme?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_theme, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme;
     public Theme? GetTheme()
     {
-        var __mb = __mb_get_theme;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme", 3846893731);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme is not available in this engine build.");
-            __mb_get_theme = __mb;
-        }
+        if (__mb_get_theme == 0) MethodBinds.MissingThrow("Window.get_theme");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme, NativePtr, 0, (nint)(&__ret));
         return (Theme?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_theme_type_variation;
     public void SetThemeTypeVariation(StringName themeType)
     {
-        var __mb = __mb_set_theme_type_variation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_theme_type_variation", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.set_theme_type_variation is not available in this engine build.");
-            __mb_set_theme_type_variation = __mb;
-        }
+        if (__mb_set_theme_type_variation == 0) MethodBinds.MissingThrow("Window.set_theme_type_variation");
         ulong __a0 = themeType.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_theme_type_variation, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme_type_variation;
     public StringName GetThemeTypeVariation()
     {
-        var __mb = __mb_get_theme_type_variation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_type_variation", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_type_variation is not available in this engine build.");
-            __mb_get_theme_type_variation = __mb;
-        }
+        if (__mb_get_theme_type_variation == 0) MethodBinds.MissingThrow("Window.get_theme_type_variation");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_type_variation, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_begin_bulk_theme_override;
     public void BeginBulkThemeOverride()
     {
-        var __mb = __mb_begin_bulk_theme_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "begin_bulk_theme_override", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.begin_bulk_theme_override is not available in this engine build.");
-            __mb_begin_bulk_theme_override = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_begin_bulk_theme_override == 0) MethodBinds.MissingThrow("Window.begin_bulk_theme_override");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_begin_bulk_theme_override, NativePtr, 0, 0);
     }
 
     private static nint __mb_end_bulk_theme_override;
     public void EndBulkThemeOverride()
     {
-        var __mb = __mb_end_bulk_theme_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "end_bulk_theme_override", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Window.end_bulk_theme_override is not available in this engine build.");
-            __mb_end_bulk_theme_override = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_end_bulk_theme_override == 0) MethodBinds.MissingThrow("Window.end_bulk_theme_override");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_end_bulk_theme_override, NativePtr, 0, 0);
     }
 
     private static nint __mb_add_theme_icon_override;
     public void AddThemeIconOverride(StringName name, Texture2D? texture)
     {
-        var __mb = __mb_add_theme_icon_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "add_theme_icon_override", 1373065600);
-            if (__mb == 0) throw new MissingMethodException("Window.add_theme_icon_override is not available in this engine build.");
-            __mb_add_theme_icon_override = __mb;
-        }
+        if (__mb_add_theme_icon_override == 0) MethodBinds.MissingThrow("Window.add_theme_icon_override");
         ulong __a0 = name.NativeValue;
         nint __a1 = texture?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_theme_icon_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_theme_stylebox_override;
     public void AddThemeStyleboxOverride(StringName name, StyleBox? stylebox)
     {
-        var __mb = __mb_add_theme_stylebox_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "add_theme_stylebox_override", 4188838905);
-            if (__mb == 0) throw new MissingMethodException("Window.add_theme_stylebox_override is not available in this engine build.");
-            __mb_add_theme_stylebox_override = __mb;
-        }
+        if (__mb_add_theme_stylebox_override == 0) MethodBinds.MissingThrow("Window.add_theme_stylebox_override");
         ulong __a0 = name.NativeValue;
         nint __a1 = stylebox?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_theme_stylebox_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_theme_font_override;
     public void AddThemeFontOverride(StringName name, Font? font)
     {
-        var __mb = __mb_add_theme_font_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "add_theme_font_override", 3518018674);
-            if (__mb == 0) throw new MissingMethodException("Window.add_theme_font_override is not available in this engine build.");
-            __mb_add_theme_font_override = __mb;
-        }
+        if (__mb_add_theme_font_override == 0) MethodBinds.MissingThrow("Window.add_theme_font_override");
         ulong __a0 = name.NativeValue;
         nint __a1 = font?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_theme_font_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_theme_font_size_override;
     public void AddThemeFontSizeOverride(StringName name, int fontSize)
     {
-        var __mb = __mb_add_theme_font_size_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "add_theme_font_size_override", 2415702435);
-            if (__mb == 0) throw new MissingMethodException("Window.add_theme_font_size_override is not available in this engine build.");
-            __mb_add_theme_font_size_override = __mb;
-        }
+        if (__mb_add_theme_font_size_override == 0) MethodBinds.MissingThrow("Window.add_theme_font_size_override");
         ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)fontSize);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_theme_font_size_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_theme_color_override;
     public void AddThemeColorOverride(StringName name, Color color)
     {
-        var __mb = __mb_add_theme_color_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "add_theme_color_override", 4260178595);
-            if (__mb == 0) throw new MissingMethodException("Window.add_theme_color_override is not available in this engine build.");
-            __mb_add_theme_color_override = __mb;
-        }
+        if (__mb_add_theme_color_override == 0) MethodBinds.MissingThrow("Window.add_theme_color_override");
         ulong __a0 = name.NativeValue;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_theme_color_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_add_theme_constant_override;
     public void AddThemeConstantOverride(StringName name, int constant)
     {
-        var __mb = __mb_add_theme_constant_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "add_theme_constant_override", 2415702435);
-            if (__mb == 0) throw new MissingMethodException("Window.add_theme_constant_override is not available in this engine build.");
-            __mb_add_theme_constant_override = __mb;
-        }
+        if (__mb_add_theme_constant_override == 0) MethodBinds.MissingThrow("Window.add_theme_constant_override");
         ulong __a0 = name.NativeValue;
         long __a1 = unchecked((long)constant);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_theme_constant_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_icon_override;
     public void RemoveThemeIconOverride(StringName name)
     {
-        var __mb = __mb_remove_theme_icon_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "remove_theme_icon_override", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.remove_theme_icon_override is not available in this engine build.");
-            __mb_remove_theme_icon_override = __mb;
-        }
+        if (__mb_remove_theme_icon_override == 0) MethodBinds.MissingThrow("Window.remove_theme_icon_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_theme_icon_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_stylebox_override;
     public void RemoveThemeStyleboxOverride(StringName name)
     {
-        var __mb = __mb_remove_theme_stylebox_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "remove_theme_stylebox_override", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.remove_theme_stylebox_override is not available in this engine build.");
-            __mb_remove_theme_stylebox_override = __mb;
-        }
+        if (__mb_remove_theme_stylebox_override == 0) MethodBinds.MissingThrow("Window.remove_theme_stylebox_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_theme_stylebox_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_font_override;
     public void RemoveThemeFontOverride(StringName name)
     {
-        var __mb = __mb_remove_theme_font_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "remove_theme_font_override", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.remove_theme_font_override is not available in this engine build.");
-            __mb_remove_theme_font_override = __mb;
-        }
+        if (__mb_remove_theme_font_override == 0) MethodBinds.MissingThrow("Window.remove_theme_font_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_theme_font_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_font_size_override;
     public void RemoveThemeFontSizeOverride(StringName name)
     {
-        var __mb = __mb_remove_theme_font_size_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "remove_theme_font_size_override", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.remove_theme_font_size_override is not available in this engine build.");
-            __mb_remove_theme_font_size_override = __mb;
-        }
+        if (__mb_remove_theme_font_size_override == 0) MethodBinds.MissingThrow("Window.remove_theme_font_size_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_theme_font_size_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_color_override;
     public void RemoveThemeColorOverride(StringName name)
     {
-        var __mb = __mb_remove_theme_color_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "remove_theme_color_override", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.remove_theme_color_override is not available in this engine build.");
-            __mb_remove_theme_color_override = __mb;
-        }
+        if (__mb_remove_theme_color_override == 0) MethodBinds.MissingThrow("Window.remove_theme_color_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_theme_color_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_theme_constant_override;
     public void RemoveThemeConstantOverride(StringName name)
     {
-        var __mb = __mb_remove_theme_constant_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "remove_theme_constant_override", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Window.remove_theme_constant_override is not available in this engine build.");
-            __mb_remove_theme_constant_override = __mb;
-        }
+        if (__mb_remove_theme_constant_override == 0) MethodBinds.MissingThrow("Window.remove_theme_constant_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_theme_constant_override, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_theme_icon;
     public Texture2D? GetThemeIcon(StringName name, StringName themeType)
     {
-        var __mb = __mb_get_theme_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_icon", 3163973443);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_icon is not available in this engine build.");
-            __mb_get_theme_icon = __mb;
-        }
+        if (__mb_get_theme_icon == 0) MethodBinds.MissingThrow("Window.get_theme_icon");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_icon, NativePtr, (nint)__args, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_theme_stylebox;
     public StyleBox? GetThemeStylebox(StringName name, StringName themeType)
     {
-        var __mb = __mb_get_theme_stylebox;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_stylebox", 604739069);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_stylebox is not available in this engine build.");
-            __mb_get_theme_stylebox = __mb;
-        }
+        if (__mb_get_theme_stylebox == 0) MethodBinds.MissingThrow("Window.get_theme_stylebox");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_stylebox, NativePtr, (nint)__args, (nint)(&__ret));
         return (StyleBox?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_theme_font;
     public Font? GetThemeFont(StringName name, StringName themeType)
     {
-        var __mb = __mb_get_theme_font;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_font", 2826986490);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_font is not available in this engine build.");
-            __mb_get_theme_font = __mb;
-        }
+        if (__mb_get_theme_font == 0) MethodBinds.MissingThrow("Window.get_theme_font");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_font, NativePtr, (nint)__args, (nint)(&__ret));
         return (Font?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_theme_font_size;
     public int GetThemeFontSize(StringName name, StringName themeType)
     {
-        var __mb = __mb_get_theme_font_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_font_size", 1327056374);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_font_size is not available in this engine build.");
-            __mb_get_theme_font_size = __mb;
-        }
+        if (__mb_get_theme_font_size == 0) MethodBinds.MissingThrow("Window.get_theme_font_size");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_font_size, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_theme_color;
     public Color GetThemeColor(StringName name, StringName themeType)
     {
-        var __mb = __mb_get_theme_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_color", 2798751242);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_color is not available in this engine build.");
-            __mb_get_theme_color = __mb;
-        }
+        if (__mb_get_theme_color == 0) MethodBinds.MissingThrow("Window.get_theme_color");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_color, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_theme_constant;
     public int GetThemeConstant(StringName name, StringName themeType)
     {
-        var __mb = __mb_get_theme_constant;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_constant", 1327056374);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_constant is not available in this engine build.");
-            __mb_get_theme_constant = __mb;
-        }
+        if (__mb_get_theme_constant == 0) MethodBinds.MissingThrow("Window.get_theme_constant");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_constant, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_has_theme_icon_override;
     public bool HasThemeIconOverride(StringName name)
     {
-        var __mb = __mb_has_theme_icon_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_icon_override", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_icon_override is not available in this engine build.");
-            __mb_has_theme_icon_override = __mb;
-        }
+        if (__mb_has_theme_icon_override == 0) MethodBinds.MissingThrow("Window.has_theme_icon_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_icon_override, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_stylebox_override;
     public bool HasThemeStyleboxOverride(StringName name)
     {
-        var __mb = __mb_has_theme_stylebox_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_stylebox_override", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_stylebox_override is not available in this engine build.");
-            __mb_has_theme_stylebox_override = __mb;
-        }
+        if (__mb_has_theme_stylebox_override == 0) MethodBinds.MissingThrow("Window.has_theme_stylebox_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_stylebox_override, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_font_override;
     public bool HasThemeFontOverride(StringName name)
     {
-        var __mb = __mb_has_theme_font_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_font_override", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_font_override is not available in this engine build.");
-            __mb_has_theme_font_override = __mb;
-        }
+        if (__mb_has_theme_font_override == 0) MethodBinds.MissingThrow("Window.has_theme_font_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_font_override, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_font_size_override;
     public bool HasThemeFontSizeOverride(StringName name)
     {
-        var __mb = __mb_has_theme_font_size_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_font_size_override", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_font_size_override is not available in this engine build.");
-            __mb_has_theme_font_size_override = __mb;
-        }
+        if (__mb_has_theme_font_size_override == 0) MethodBinds.MissingThrow("Window.has_theme_font_size_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_font_size_override, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_color_override;
     public bool HasThemeColorOverride(StringName name)
     {
-        var __mb = __mb_has_theme_color_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_color_override", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_color_override is not available in this engine build.");
-            __mb_has_theme_color_override = __mb;
-        }
+        if (__mb_has_theme_color_override == 0) MethodBinds.MissingThrow("Window.has_theme_color_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_color_override, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_constant_override;
     public bool HasThemeConstantOverride(StringName name)
     {
-        var __mb = __mb_has_theme_constant_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_constant_override", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_constant_override is not available in this engine build.");
-            __mb_has_theme_constant_override = __mb;
-        }
+        if (__mb_has_theme_constant_override == 0) MethodBinds.MissingThrow("Window.has_theme_constant_override");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_constant_override, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_icon;
     public bool HasThemeIcon(StringName name, StringName themeType)
     {
-        var __mb = __mb_has_theme_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_icon", 866386512);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_icon is not available in this engine build.");
-            __mb_has_theme_icon = __mb;
-        }
+        if (__mb_has_theme_icon == 0) MethodBinds.MissingThrow("Window.has_theme_icon");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_icon, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_stylebox;
     public bool HasThemeStylebox(StringName name, StringName themeType)
     {
-        var __mb = __mb_has_theme_stylebox;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_stylebox", 866386512);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_stylebox is not available in this engine build.");
-            __mb_has_theme_stylebox = __mb;
-        }
+        if (__mb_has_theme_stylebox == 0) MethodBinds.MissingThrow("Window.has_theme_stylebox");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_stylebox, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_font;
     public bool HasThemeFont(StringName name, StringName themeType)
     {
-        var __mb = __mb_has_theme_font;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_font", 866386512);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_font is not available in this engine build.");
-            __mb_has_theme_font = __mb;
-        }
+        if (__mb_has_theme_font == 0) MethodBinds.MissingThrow("Window.has_theme_font");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_font, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_font_size;
     public bool HasThemeFontSize(StringName name, StringName themeType)
     {
-        var __mb = __mb_has_theme_font_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_font_size", 866386512);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_font_size is not available in this engine build.");
-            __mb_has_theme_font_size = __mb;
-        }
+        if (__mb_has_theme_font_size == 0) MethodBinds.MissingThrow("Window.has_theme_font_size");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_font_size, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_color;
     public bool HasThemeColor(StringName name, StringName themeType)
     {
-        var __mb = __mb_has_theme_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_color", 866386512);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_color is not available in this engine build.");
-            __mb_has_theme_color = __mb;
-        }
+        if (__mb_has_theme_color == 0) MethodBinds.MissingThrow("Window.has_theme_color");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_color, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_theme_constant;
     public bool HasThemeConstant(StringName name, StringName themeType)
     {
-        var __mb = __mb_has_theme_constant;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "has_theme_constant", 866386512);
-            if (__mb == 0) throw new MissingMethodException("Window.has_theme_constant is not available in this engine build.");
-            __mb_has_theme_constant = __mb;
-        }
+        if (__mb_has_theme_constant == 0) MethodBinds.MissingThrow("Window.has_theme_constant");
         ulong __a0 = name.NativeValue;
         ulong __a1 = themeType.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_theme_constant, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_theme_default_base_scale;
     public float GetThemeDefaultBaseScale()
     {
-        var __mb = __mb_get_theme_default_base_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_default_base_scale", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_default_base_scale is not available in this engine build.");
-            __mb_get_theme_default_base_scale = __mb;
-        }
+        if (__mb_get_theme_default_base_scale == 0) MethodBinds.MissingThrow("Window.get_theme_default_base_scale");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_default_base_scale, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_theme_default_font;
     public Font? GetThemeDefaultFont()
     {
-        var __mb = __mb_get_theme_default_font;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_default_font", 3229501585);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_default_font is not available in this engine build.");
-            __mb_get_theme_default_font = __mb;
-        }
+        if (__mb_get_theme_default_font == 0) MethodBinds.MissingThrow("Window.get_theme_default_font");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_default_font, NativePtr, 0, (nint)(&__ret));
         return (Font?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_theme_default_font_size;
     public int GetThemeDefaultFontSize()
     {
-        var __mb = __mb_get_theme_default_font_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_theme_default_font_size", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Window.get_theme_default_font_size is not available in this engine build.");
-            __mb_get_theme_default_font_size = __mb;
-        }
+        if (__mb_get_theme_default_font_size == 0) MethodBinds.MissingThrow("Window.get_theme_default_font_size");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_theme_default_font_size, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_window_id;
     public int GetWindowId()
     {
-        var __mb = __mb_get_window_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_window_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Window.get_window_id is not available in this engine build.");
-            __mb_get_window_id = __mb;
-        }
+        if (__mb_get_window_id == 0) MethodBinds.MissingThrow("Window.get_window_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_window_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_accessibility_name;
     public void SetAccessibilityName(string name)
     {
-        var __mb = __mb_set_accessibility_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_accessibility_name", 83702148);
-            if (__mb == 0) throw new MissingMethodException("Window.set_accessibility_name is not available in this engine build.");
-            __mb_set_accessibility_name = __mb;
-        }
+        if (__mb_set_accessibility_name == 0) MethodBinds.MissingThrow("Window.set_accessibility_name");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_accessibility_name, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_accessibility_name;
     public string GetAccessibilityName()
     {
-        var __mb = __mb_get_accessibility_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_accessibility_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("Window.get_accessibility_name is not available in this engine build.");
-            __mb_get_accessibility_name = __mb;
-        }
+        if (__mb_get_accessibility_name == 0) MethodBinds.MissingThrow("Window.get_accessibility_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_accessibility_name, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_accessibility_description;
     public void SetAccessibilityDescription(string description)
     {
-        var __mb = __mb_set_accessibility_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_accessibility_description", 83702148);
-            if (__mb == 0) throw new MissingMethodException("Window.set_accessibility_description is not available in this engine build.");
-            __mb_set_accessibility_description = __mb;
-        }
+        if (__mb_set_accessibility_description == 0) MethodBinds.MissingThrow("Window.set_accessibility_description");
         ulong __a0 = NativeString.Create(description);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_accessibility_description, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_accessibility_description;
     public string GetAccessibilityDescription()
     {
-        var __mb = __mb_get_accessibility_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_accessibility_description", 201670096);
-            if (__mb == 0) throw new MissingMethodException("Window.get_accessibility_description is not available in this engine build.");
-            __mb_get_accessibility_description = __mb;
-        }
+        if (__mb_get_accessibility_description == 0) MethodBinds.MissingThrow("Window.get_accessibility_description");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_accessibility_description, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_focused_window;
     public static Window? GetFocusedWindow()
     {
-        var __mb = __mb_get_focused_window;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_focused_window", 1835468782);
-            if (__mb == 0) throw new MissingMethodException("Window.get_focused_window is not available in this engine build.");
-            __mb_get_focused_window = __mb;
-        }
+        if (__mb_get_focused_window == 0) MethodBinds.MissingThrow("Window.get_focused_window");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_focused_window, 0, 0, (nint)(&__ret));
         return (Window?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_set_layout_direction;
     public void SetLayoutDirection(Window.LayoutDirection direction)
     {
-        var __mb = __mb_set_layout_direction;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_layout_direction", 3094704184);
-            if (__mb == 0) throw new MissingMethodException("Window.set_layout_direction is not available in this engine build.");
-            __mb_set_layout_direction = __mb;
-        }
+        if (__mb_set_layout_direction == 0) MethodBinds.MissingThrow("Window.set_layout_direction");
         long __a0 = (long)direction;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_layout_direction, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_layout_direction;
     public Window.LayoutDirection GetLayoutDirection()
     {
-        var __mb = __mb_get_layout_direction;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "get_layout_direction", 3909617982);
-            if (__mb == 0) throw new MissingMethodException("Window.get_layout_direction is not available in this engine build.");
-            __mb_get_layout_direction = __mb;
-        }
+        if (__mb_get_layout_direction == 0) MethodBinds.MissingThrow("Window.get_layout_direction");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_layout_direction, NativePtr, 0, (nint)(&__ret));
         return (Window.LayoutDirection)__ret;
     }
 
     private static nint __mb_is_layout_rtl;
     public bool IsLayoutRtl()
     {
-        var __mb = __mb_is_layout_rtl;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_layout_rtl", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_layout_rtl is not available in this engine build.");
-            __mb_is_layout_rtl = __mb;
-        }
+        if (__mb_is_layout_rtl == 0) MethodBinds.MissingThrow("Window.is_layout_rtl");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_layout_rtl, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_auto_translate;
     public void SetAutoTranslate(bool enable)
     {
-        var __mb = __mb_set_auto_translate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_auto_translate", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_auto_translate is not available in this engine build.");
-            __mb_set_auto_translate = __mb;
-        }
+        if (__mb_set_auto_translate == 0) MethodBinds.MissingThrow("Window.set_auto_translate");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_auto_translate, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_auto_translating;
     public bool IsAutoTranslating()
     {
-        var __mb = __mb_is_auto_translating;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_auto_translating", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_auto_translating is not available in this engine build.");
-            __mb_is_auto_translating = __mb;
-        }
+        if (__mb_is_auto_translating == 0) MethodBinds.MissingThrow("Window.is_auto_translating");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_auto_translating, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_use_font_oversampling;
     public void SetUseFontOversampling(bool enable)
     {
-        var __mb = __mb_set_use_font_oversampling;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "set_use_font_oversampling", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Window.set_use_font_oversampling is not available in this engine build.");
-            __mb_set_use_font_oversampling = __mb;
-        }
+        if (__mb_set_use_font_oversampling == 0) MethodBinds.MissingThrow("Window.set_use_font_oversampling");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_use_font_oversampling, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_using_font_oversampling;
     public bool IsUsingFontOversampling()
     {
-        var __mb = __mb_is_using_font_oversampling;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "is_using_font_oversampling", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Window.is_using_font_oversampling is not available in this engine build.");
-            __mb_is_using_font_oversampling = __mb;
-        }
+        if (__mb_is_using_font_oversampling == 0) MethodBinds.MissingThrow("Window.is_using_font_oversampling");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_using_font_oversampling, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_popup;
     public void Popup(Rect2I rect = default)
     {
-        var __mb = __mb_popup;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup", 1680304321);
-            if (__mb == 0) throw new MissingMethodException("Window.popup is not available in this engine build.");
-            __mb_popup = __mb;
-        }
+        if (__mb_popup == 0) MethodBinds.MissingThrow("Window.popup");
         var __a0 = rect;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_on_parent;
     public void PopupOnParent(Rect2I parentRect)
     {
-        var __mb = __mb_popup_on_parent;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_on_parent", 1763793166);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_on_parent is not available in this engine build.");
-            __mb_popup_on_parent = __mb;
-        }
+        if (__mb_popup_on_parent == 0) MethodBinds.MissingThrow("Window.popup_on_parent");
         var __a0 = parentRect;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_on_parent, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_centered;
     public void PopupCentered(Vector2I minsize = default)
     {
-        var __mb = __mb_popup_centered;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_centered", 3447975422);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_centered is not available in this engine build.");
-            __mb_popup_centered = __mb;
-        }
+        if (__mb_popup_centered == 0) MethodBinds.MissingThrow("Window.popup_centered");
         var __a0 = minsize;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_centered, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_centered_ratio;
     public void PopupCenteredRatio(float ratio = 0.8f)
     {
-        var __mb = __mb_popup_centered_ratio;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_centered_ratio", 1014814997);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_centered_ratio is not available in this engine build.");
-            __mb_popup_centered_ratio = __mb;
-        }
+        if (__mb_popup_centered_ratio == 0) MethodBinds.MissingThrow("Window.popup_centered_ratio");
         double __a0 = ratio;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_centered_ratio, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_centered_clamped;
     public void PopupCenteredClamped(Vector2I minsize = default, float fallbackRatio = 0.75f)
     {
-        var __mb = __mb_popup_centered_clamped;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_centered_clamped", 2613752477);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_centered_clamped is not available in this engine build.");
-            __mb_popup_centered_clamped = __mb;
-        }
+        if (__mb_popup_centered_clamped == 0) MethodBinds.MissingThrow("Window.popup_centered_clamped");
         var __a0 = minsize;
         double __a1 = fallbackRatio;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_centered_clamped, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_exclusive;
     public void PopupExclusive(Node? fromNode, Rect2I rect = default)
     {
-        var __mb = __mb_popup_exclusive;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_exclusive", 2134721627);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_exclusive is not available in this engine build.");
-            __mb_popup_exclusive = __mb;
-        }
+        if (__mb_popup_exclusive == 0) MethodBinds.MissingThrow("Window.popup_exclusive");
         nint __a0 = fromNode?.NativePtr ?? 0;
         var __a1 = rect;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_exclusive, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_exclusive_on_parent;
     public void PopupExclusiveOnParent(Node? fromNode, Rect2I parentRect)
     {
-        var __mb = __mb_popup_exclusive_on_parent;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_exclusive_on_parent", 2344671043);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_exclusive_on_parent is not available in this engine build.");
-            __mb_popup_exclusive_on_parent = __mb;
-        }
+        if (__mb_popup_exclusive_on_parent == 0) MethodBinds.MissingThrow("Window.popup_exclusive_on_parent");
         nint __a0 = fromNode?.NativePtr ?? 0;
         var __a1 = parentRect;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_exclusive_on_parent, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_exclusive_centered;
     public void PopupExclusiveCentered(Node? fromNode, Vector2I minsize = default)
     {
-        var __mb = __mb_popup_exclusive_centered;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_exclusive_centered", 3357594017);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_exclusive_centered is not available in this engine build.");
-            __mb_popup_exclusive_centered = __mb;
-        }
+        if (__mb_popup_exclusive_centered == 0) MethodBinds.MissingThrow("Window.popup_exclusive_centered");
         nint __a0 = fromNode?.NativePtr ?? 0;
         var __a1 = minsize;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_exclusive_centered, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_exclusive_centered_ratio;
     public void PopupExclusiveCenteredRatio(Node? fromNode, float ratio = 0.8f)
     {
-        var __mb = __mb_popup_exclusive_centered_ratio;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_exclusive_centered_ratio", 2284776287);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_exclusive_centered_ratio is not available in this engine build.");
-            __mb_popup_exclusive_centered_ratio = __mb;
-        }
+        if (__mb_popup_exclusive_centered_ratio == 0) MethodBinds.MissingThrow("Window.popup_exclusive_centered_ratio");
         nint __a0 = fromNode?.NativePtr ?? 0;
         double __a1 = ratio;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_exclusive_centered_ratio, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_popup_exclusive_centered_clamped;
     public void PopupExclusiveCenteredClamped(Node? fromNode, Vector2I minsize = default, float fallbackRatio = 0.75f)
     {
-        var __mb = __mb_popup_exclusive_centered_clamped;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Window", "popup_exclusive_centered_clamped", 2612708785);
-            if (__mb == 0) throw new MissingMethodException("Window.popup_exclusive_centered_clamped is not available in this engine build.");
-            __mb_popup_exclusive_centered_clamped = __mb;
-        }
+        if (__mb_popup_exclusive_centered_clamped == 0) MethodBinds.MissingThrow("Window.popup_exclusive_centered_clamped");
         nint __a0 = fromNode?.NativePtr ?? 0;
         var __a1 = minsize;
         double __a2 = fallbackRatio;
@@ -4822,7 +3562,7 @@ public unsafe partial class Window : Viewport
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_popup_exclusive_centered_clamped, NativePtr, (nint)__args, 0);
     }
 
     public virtual Vector2 _GetContentsMinimumSize() => default!;
@@ -4839,6 +3579,143 @@ public unsafe partial class Window : Viewport
         }
         return base.__CallVirtual(nameSn, args, ret);
     }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_title = MethodBinds.ResolveBulk("Window", "set_title", 83702148);
+        __mb_get_title = MethodBinds.ResolveBulk("Window", "get_title", 201670096);
+        __mb_set_initial_position = MethodBinds.ResolveBulk("Window", "set_initial_position", 4084468099);
+        __mb_get_initial_position = MethodBinds.ResolveBulk("Window", "get_initial_position", 4294066647);
+        __mb_set_current_screen = MethodBinds.ResolveBulk("Window", "set_current_screen", 1286410249);
+        __mb_get_current_screen = MethodBinds.ResolveBulk("Window", "get_current_screen", 3905245786);
+        __mb_set_position = MethodBinds.ResolveBulk("Window", "set_position", 1130785943);
+        __mb_get_position = MethodBinds.ResolveBulk("Window", "get_position", 3690982128);
+        __mb_move_to_center = MethodBinds.ResolveBulk("Window", "move_to_center", 3218959716);
+        __mb_set_size = MethodBinds.ResolveBulk("Window", "set_size", 1130785943);
+        __mb_get_size = MethodBinds.ResolveBulk("Window", "get_size", 3690982128);
+        __mb_reset_size = MethodBinds.ResolveBulk("Window", "reset_size", 3218959716);
+        __mb_get_position_with_decorations = MethodBinds.ResolveBulk("Window", "get_position_with_decorations", 3690982128);
+        __mb_get_size_with_decorations = MethodBinds.ResolveBulk("Window", "get_size_with_decorations", 3690982128);
+        __mb_set_max_size = MethodBinds.ResolveBulk("Window", "set_max_size", 1130785943);
+        __mb_get_max_size = MethodBinds.ResolveBulk("Window", "get_max_size", 3690982128);
+        __mb_set_min_size = MethodBinds.ResolveBulk("Window", "set_min_size", 1130785943);
+        __mb_get_min_size = MethodBinds.ResolveBulk("Window", "get_min_size", 3690982128);
+        __mb_set_mode = MethodBinds.ResolveBulk("Window", "set_mode", 3095236531);
+        __mb_get_mode = MethodBinds.ResolveBulk("Window", "get_mode", 2566346114);
+        __mb_set_flag = MethodBinds.ResolveBulk("Window", "set_flag", 3426449779);
+        __mb_get_flag = MethodBinds.ResolveBulk("Window", "get_flag", 3062752289);
+        __mb_set_hdr_output_requested = MethodBinds.ResolveBulk("Window", "set_hdr_output_requested", 2586408642);
+        __mb_is_hdr_output_requested = MethodBinds.ResolveBulk("Window", "is_hdr_output_requested", 36873697);
+        __mb_get_output_max_linear_value = MethodBinds.ResolveBulk("Window", "get_output_max_linear_value", 1740695150);
+        __mb_is_maximize_allowed = MethodBinds.ResolveBulk("Window", "is_maximize_allowed", 36873697);
+        __mb_request_attention = MethodBinds.ResolveBulk("Window", "request_attention", 3218959716);
+        __mb_set_taskbar_progress_value = MethodBinds.ResolveBulk("Window", "set_taskbar_progress_value", 373806689);
+        __mb_set_taskbar_progress_state = MethodBinds.ResolveBulk("Window", "set_taskbar_progress_state", 824071031);
+        __mb_move_to_foreground = MethodBinds.ResolveBulk("Window", "move_to_foreground", 3218959716);
+        __mb_set_visible = MethodBinds.ResolveBulk("Window", "set_visible", 2586408642);
+        __mb_is_visible = MethodBinds.ResolveBulk("Window", "is_visible", 36873697);
+        __mb_hide = MethodBinds.ResolveBulk("Window", "hide", 3218959716);
+        __mb_show = MethodBinds.ResolveBulk("Window", "show", 3218959716);
+        __mb_set_transient = MethodBinds.ResolveBulk("Window", "set_transient", 2586408642);
+        __mb_is_transient = MethodBinds.ResolveBulk("Window", "is_transient", 36873697);
+        __mb_set_transient_to_focused = MethodBinds.ResolveBulk("Window", "set_transient_to_focused", 2586408642);
+        __mb_is_transient_to_focused = MethodBinds.ResolveBulk("Window", "is_transient_to_focused", 36873697);
+        __mb_set_exclusive = MethodBinds.ResolveBulk("Window", "set_exclusive", 2586408642);
+        __mb_is_exclusive = MethodBinds.ResolveBulk("Window", "is_exclusive", 36873697);
+        __mb_set_unparent_when_invisible = MethodBinds.ResolveBulk("Window", "set_unparent_when_invisible", 2586408642);
+        __mb_can_draw = MethodBinds.ResolveBulk("Window", "can_draw", 36873697);
+        __mb_has_focus = MethodBinds.ResolveBulk("Window", "has_focus", 36873697);
+        __mb_grab_focus = MethodBinds.ResolveBulk("Window", "grab_focus", 3218959716);
+        __mb_start_drag = MethodBinds.ResolveBulk("Window", "start_drag", 3218959716);
+        __mb_start_resize = MethodBinds.ResolveBulk("Window", "start_resize", 122288853);
+        __mb_set_ime_active = MethodBinds.ResolveBulk("Window", "set_ime_active", 2586408642);
+        __mb_set_ime_position = MethodBinds.ResolveBulk("Window", "set_ime_position", 1130785943);
+        __mb_is_embedded = MethodBinds.ResolveBulk("Window", "is_embedded", 36873697);
+        __mb_get_contents_minimum_size = MethodBinds.ResolveBulk("Window", "get_contents_minimum_size", 3341600327);
+        __mb_set_force_native = MethodBinds.ResolveBulk("Window", "set_force_native", 2586408642);
+        __mb_get_force_native = MethodBinds.ResolveBulk("Window", "get_force_native", 36873697);
+        __mb_set_content_scale_size = MethodBinds.ResolveBulk("Window", "set_content_scale_size", 1130785943);
+        __mb_get_content_scale_size = MethodBinds.ResolveBulk("Window", "get_content_scale_size", 3690982128);
+        __mb_set_content_scale_mode = MethodBinds.ResolveBulk("Window", "set_content_scale_mode", 2937716473);
+        __mb_get_content_scale_mode = MethodBinds.ResolveBulk("Window", "get_content_scale_mode", 161585230);
+        __mb_set_content_scale_aspect = MethodBinds.ResolveBulk("Window", "set_content_scale_aspect", 2370399418);
+        __mb_get_content_scale_aspect = MethodBinds.ResolveBulk("Window", "get_content_scale_aspect", 4158790715);
+        __mb_set_content_scale_stretch = MethodBinds.ResolveBulk("Window", "set_content_scale_stretch", 349355940);
+        __mb_get_content_scale_stretch = MethodBinds.ResolveBulk("Window", "get_content_scale_stretch", 536857316);
+        __mb_set_nonclient_area = MethodBinds.ResolveBulk("Window", "set_nonclient_area", 1763793166);
+        __mb_get_nonclient_area = MethodBinds.ResolveBulk("Window", "get_nonclient_area", 410525958);
+        __mb_set_keep_title_visible = MethodBinds.ResolveBulk("Window", "set_keep_title_visible", 2586408642);
+        __mb_get_keep_title_visible = MethodBinds.ResolveBulk("Window", "get_keep_title_visible", 36873697);
+        __mb_set_content_scale_factor = MethodBinds.ResolveBulk("Window", "set_content_scale_factor", 373806689);
+        __mb_get_content_scale_factor = MethodBinds.ResolveBulk("Window", "get_content_scale_factor", 1740695150);
+        __mb_set_mouse_passthrough_polygon = MethodBinds.ResolveBulk("Window", "set_mouse_passthrough_polygon", 1509147220);
+        __mb_get_mouse_passthrough_polygon = MethodBinds.ResolveBulk("Window", "get_mouse_passthrough_polygon", 2961356807);
+        __mb_set_wrap_controls = MethodBinds.ResolveBulk("Window", "set_wrap_controls", 2586408642);
+        __mb_is_wrapping_controls = MethodBinds.ResolveBulk("Window", "is_wrapping_controls", 36873697);
+        __mb_child_controls_changed = MethodBinds.ResolveBulk("Window", "child_controls_changed", 3218959716);
+        __mb_set_theme = MethodBinds.ResolveBulk("Window", "set_theme", 2326690814);
+        __mb_get_theme = MethodBinds.ResolveBulk("Window", "get_theme", 3846893731);
+        __mb_set_theme_type_variation = MethodBinds.ResolveBulk("Window", "set_theme_type_variation", 3304788590);
+        __mb_get_theme_type_variation = MethodBinds.ResolveBulk("Window", "get_theme_type_variation", 2002593661);
+        __mb_begin_bulk_theme_override = MethodBinds.ResolveBulk("Window", "begin_bulk_theme_override", 3218959716);
+        __mb_end_bulk_theme_override = MethodBinds.ResolveBulk("Window", "end_bulk_theme_override", 3218959716);
+        __mb_add_theme_icon_override = MethodBinds.ResolveBulk("Window", "add_theme_icon_override", 1373065600);
+        __mb_add_theme_stylebox_override = MethodBinds.ResolveBulk("Window", "add_theme_stylebox_override", 4188838905);
+        __mb_add_theme_font_override = MethodBinds.ResolveBulk("Window", "add_theme_font_override", 3518018674);
+        __mb_add_theme_font_size_override = MethodBinds.ResolveBulk("Window", "add_theme_font_size_override", 2415702435);
+        __mb_add_theme_color_override = MethodBinds.ResolveBulk("Window", "add_theme_color_override", 4260178595);
+        __mb_add_theme_constant_override = MethodBinds.ResolveBulk("Window", "add_theme_constant_override", 2415702435);
+        __mb_remove_theme_icon_override = MethodBinds.ResolveBulk("Window", "remove_theme_icon_override", 3304788590);
+        __mb_remove_theme_stylebox_override = MethodBinds.ResolveBulk("Window", "remove_theme_stylebox_override", 3304788590);
+        __mb_remove_theme_font_override = MethodBinds.ResolveBulk("Window", "remove_theme_font_override", 3304788590);
+        __mb_remove_theme_font_size_override = MethodBinds.ResolveBulk("Window", "remove_theme_font_size_override", 3304788590);
+        __mb_remove_theme_color_override = MethodBinds.ResolveBulk("Window", "remove_theme_color_override", 3304788590);
+        __mb_remove_theme_constant_override = MethodBinds.ResolveBulk("Window", "remove_theme_constant_override", 3304788590);
+        __mb_get_theme_icon = MethodBinds.ResolveBulk("Window", "get_theme_icon", 3163973443);
+        __mb_get_theme_stylebox = MethodBinds.ResolveBulk("Window", "get_theme_stylebox", 604739069);
+        __mb_get_theme_font = MethodBinds.ResolveBulk("Window", "get_theme_font", 2826986490);
+        __mb_get_theme_font_size = MethodBinds.ResolveBulk("Window", "get_theme_font_size", 1327056374);
+        __mb_get_theme_color = MethodBinds.ResolveBulk("Window", "get_theme_color", 2798751242);
+        __mb_get_theme_constant = MethodBinds.ResolveBulk("Window", "get_theme_constant", 1327056374);
+        __mb_has_theme_icon_override = MethodBinds.ResolveBulk("Window", "has_theme_icon_override", 2619796661);
+        __mb_has_theme_stylebox_override = MethodBinds.ResolveBulk("Window", "has_theme_stylebox_override", 2619796661);
+        __mb_has_theme_font_override = MethodBinds.ResolveBulk("Window", "has_theme_font_override", 2619796661);
+        __mb_has_theme_font_size_override = MethodBinds.ResolveBulk("Window", "has_theme_font_size_override", 2619796661);
+        __mb_has_theme_color_override = MethodBinds.ResolveBulk("Window", "has_theme_color_override", 2619796661);
+        __mb_has_theme_constant_override = MethodBinds.ResolveBulk("Window", "has_theme_constant_override", 2619796661);
+        __mb_has_theme_icon = MethodBinds.ResolveBulk("Window", "has_theme_icon", 866386512);
+        __mb_has_theme_stylebox = MethodBinds.ResolveBulk("Window", "has_theme_stylebox", 866386512);
+        __mb_has_theme_font = MethodBinds.ResolveBulk("Window", "has_theme_font", 866386512);
+        __mb_has_theme_font_size = MethodBinds.ResolveBulk("Window", "has_theme_font_size", 866386512);
+        __mb_has_theme_color = MethodBinds.ResolveBulk("Window", "has_theme_color", 866386512);
+        __mb_has_theme_constant = MethodBinds.ResolveBulk("Window", "has_theme_constant", 866386512);
+        __mb_get_theme_default_base_scale = MethodBinds.ResolveBulk("Window", "get_theme_default_base_scale", 1740695150);
+        __mb_get_theme_default_font = MethodBinds.ResolveBulk("Window", "get_theme_default_font", 3229501585);
+        __mb_get_theme_default_font_size = MethodBinds.ResolveBulk("Window", "get_theme_default_font_size", 3905245786);
+        __mb_get_window_id = MethodBinds.ResolveBulk("Window", "get_window_id", 3905245786);
+        __mb_set_accessibility_name = MethodBinds.ResolveBulk("Window", "set_accessibility_name", 83702148);
+        __mb_get_accessibility_name = MethodBinds.ResolveBulk("Window", "get_accessibility_name", 201670096);
+        __mb_set_accessibility_description = MethodBinds.ResolveBulk("Window", "set_accessibility_description", 83702148);
+        __mb_get_accessibility_description = MethodBinds.ResolveBulk("Window", "get_accessibility_description", 201670096);
+        __mb_get_focused_window = MethodBinds.ResolveBulk("Window", "get_focused_window", 1835468782);
+        __mb_set_layout_direction = MethodBinds.ResolveBulk("Window", "set_layout_direction", 3094704184);
+        __mb_get_layout_direction = MethodBinds.ResolveBulk("Window", "get_layout_direction", 3909617982);
+        __mb_is_layout_rtl = MethodBinds.ResolveBulk("Window", "is_layout_rtl", 36873697);
+        __mb_set_auto_translate = MethodBinds.ResolveBulk("Window", "set_auto_translate", 2586408642);
+        __mb_is_auto_translating = MethodBinds.ResolveBulk("Window", "is_auto_translating", 36873697);
+        __mb_set_use_font_oversampling = MethodBinds.ResolveBulk("Window", "set_use_font_oversampling", 2586408642);
+        __mb_is_using_font_oversampling = MethodBinds.ResolveBulk("Window", "is_using_font_oversampling", 36873697);
+        __mb_popup = MethodBinds.ResolveBulk("Window", "popup", 1680304321);
+        __mb_popup_on_parent = MethodBinds.ResolveBulk("Window", "popup_on_parent", 1763793166);
+        __mb_popup_centered = MethodBinds.ResolveBulk("Window", "popup_centered", 3447975422);
+        __mb_popup_centered_ratio = MethodBinds.ResolveBulk("Window", "popup_centered_ratio", 1014814997);
+        __mb_popup_centered_clamped = MethodBinds.ResolveBulk("Window", "popup_centered_clamped", 2613752477);
+        __mb_popup_exclusive = MethodBinds.ResolveBulk("Window", "popup_exclusive", 2134721627);
+        __mb_popup_exclusive_on_parent = MethodBinds.ResolveBulk("Window", "popup_exclusive_on_parent", 2344671043);
+        __mb_popup_exclusive_centered = MethodBinds.ResolveBulk("Window", "popup_exclusive_centered", 3357594017);
+        __mb_popup_exclusive_centered_ratio = MethodBinds.ResolveBulk("Window", "popup_exclusive_centered_ratio", 2284776287);
+        __mb_popup_exclusive_centered_clamped = MethodBinds.ResolveBulk("Window", "popup_exclusive_centered_clamped", 2612708785);
+    }
 }
 
 public static unsafe partial class WorkerThreadPool
@@ -4853,13 +3730,7 @@ public static unsafe partial class WorkerThreadPool
     private static nint __mb_add_task;
     public static long AddTask(Callable action, bool highPriority = false, string description = "")
     {
-        var __mb = __mb_add_task;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "add_task", 3745067146);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.add_task is not available in this engine build.");
-            __mb_add_task = __mb;
-        }
+        if (__mb_add_task == 0) MethodBinds.MissingThrow("WorkerThreadPool.add_task");
         var __a0 = action.Native;
         byte __a1 = highPriority ? (byte)1 : (byte)0;
         ulong __a2 = NativeString.Create(description);
@@ -4868,7 +3739,7 @@ public static unsafe partial class WorkerThreadPool
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_task, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a2);
         return unchecked((long)__ret);
     }
@@ -4876,64 +3747,40 @@ public static unsafe partial class WorkerThreadPool
     private static nint __mb_is_task_completed;
     public static bool IsTaskCompleted(long taskId)
     {
-        var __mb = __mb_is_task_completed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "is_task_completed", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.is_task_completed is not available in this engine build.");
-            __mb_is_task_completed = __mb;
-        }
+        if (__mb_is_task_completed == 0) MethodBinds.MissingThrow("WorkerThreadPool.is_task_completed");
         long __a0 = unchecked((long)taskId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_task_completed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_wait_for_task_completion;
     public static Error WaitForTaskCompletion(long taskId)
     {
-        var __mb = __mb_wait_for_task_completion;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "wait_for_task_completion", 844576869);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.wait_for_task_completion is not available in this engine build.");
-            __mb_wait_for_task_completion = __mb;
-        }
+        if (__mb_wait_for_task_completion == 0) MethodBinds.MissingThrow("WorkerThreadPool.wait_for_task_completion");
         long __a0 = unchecked((long)taskId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_wait_for_task_completion, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_get_caller_task_id;
     public static long GetCallerTaskId()
     {
-        var __mb = __mb_get_caller_task_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "get_caller_task_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.get_caller_task_id is not available in this engine build.");
-            __mb_get_caller_task_id = __mb;
-        }
+        if (__mb_get_caller_task_id == 0) MethodBinds.MissingThrow("WorkerThreadPool.get_caller_task_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_caller_task_id, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_add_group_task;
     public static long AddGroupTask(Callable action, int elements, int tasksNeeded = unchecked((int)(-1)), bool highPriority = false, string description = "")
     {
-        var __mb = __mb_add_group_task;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "add_group_task", 1801953219);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.add_group_task is not available in this engine build.");
-            __mb_add_group_task = __mb;
-        }
+        if (__mb_add_group_task == 0) MethodBinds.MissingThrow("WorkerThreadPool.add_group_task");
         var __a0 = action.Native;
         long __a1 = unchecked((long)elements);
         long __a2 = unchecked((long)tasksNeeded);
@@ -4946,7 +3793,7 @@ public static unsafe partial class WorkerThreadPool
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_group_task, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a4);
         return unchecked((long)__ret);
     }
@@ -4954,68 +3801,57 @@ public static unsafe partial class WorkerThreadPool
     private static nint __mb_is_group_task_completed;
     public static bool IsGroupTaskCompleted(long groupId)
     {
-        var __mb = __mb_is_group_task_completed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "is_group_task_completed", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.is_group_task_completed is not available in this engine build.");
-            __mb_is_group_task_completed = __mb;
-        }
+        if (__mb_is_group_task_completed == 0) MethodBinds.MissingThrow("WorkerThreadPool.is_group_task_completed");
         long __a0 = unchecked((long)groupId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_group_task_completed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_group_processed_element_count;
     public static uint GetGroupProcessedElementCount(long groupId)
     {
-        var __mb = __mb_get_group_processed_element_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "get_group_processed_element_count", 923996154);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.get_group_processed_element_count is not available in this engine build.");
-            __mb_get_group_processed_element_count = __mb;
-        }
+        if (__mb_get_group_processed_element_count == 0) MethodBinds.MissingThrow("WorkerThreadPool.get_group_processed_element_count");
         long __a0 = unchecked((long)groupId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_group_processed_element_count, SingletonPtr, (nint)__args, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_wait_for_group_task_completion;
     public static void WaitForGroupTaskCompletion(long groupId)
     {
-        var __mb = __mb_wait_for_group_task_completion;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "wait_for_group_task_completion", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.wait_for_group_task_completion is not available in this engine build.");
-            __mb_wait_for_group_task_completion = __mb;
-        }
+        if (__mb_wait_for_group_task_completion == 0) MethodBinds.MissingThrow("WorkerThreadPool.wait_for_group_task_completion");
         long __a0 = unchecked((long)groupId);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_wait_for_group_task_completion, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_caller_group_id;
     public static long GetCallerGroupId()
     {
-        var __mb = __mb_get_caller_group_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorkerThreadPool", "get_caller_group_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("WorkerThreadPool.get_caller_group_id is not available in this engine build.");
-            __mb_get_caller_group_id = __mb;
-        }
+        if (__mb_get_caller_group_id == 0) MethodBinds.MissingThrow("WorkerThreadPool.get_caller_group_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_caller_group_id, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_add_task = MethodBinds.ResolveBulk("WorkerThreadPool", "add_task", 3745067146);
+        __mb_is_task_completed = MethodBinds.ResolveBulk("WorkerThreadPool", "is_task_completed", 1116898809);
+        __mb_wait_for_task_completion = MethodBinds.ResolveBulk("WorkerThreadPool", "wait_for_task_completion", 844576869);
+        __mb_get_caller_task_id = MethodBinds.ResolveBulk("WorkerThreadPool", "get_caller_task_id", 3905245786);
+        __mb_add_group_task = MethodBinds.ResolveBulk("WorkerThreadPool", "add_group_task", 1801953219);
+        __mb_is_group_task_completed = MethodBinds.ResolveBulk("WorkerThreadPool", "is_group_task_completed", 1116898809);
+        __mb_get_group_processed_element_count = MethodBinds.ResolveBulk("WorkerThreadPool", "get_group_processed_element_count", 923996154);
+        __mb_wait_for_group_task_completion = MethodBinds.ResolveBulk("WorkerThreadPool", "wait_for_group_task_completion", 1286410249);
+        __mb_get_caller_group_id = MethodBinds.ResolveBulk("WorkerThreadPool", "get_caller_group_id", 3905245786);
     }
 }
 
@@ -5039,61 +3875,45 @@ public unsafe partial class World2D : Resource
     private static nint __mb_get_canvas;
     public Rid GetCanvas()
     {
-        var __mb = __mb_get_canvas;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World2D", "get_canvas", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("World2D.get_canvas is not available in this engine build.");
-            __mb_get_canvas = __mb;
-        }
+        if (__mb_get_canvas == 0) MethodBinds.MissingThrow("World2D.get_canvas");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_canvas, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_navigation_map;
     public Rid GetNavigationMap()
     {
-        var __mb = __mb_get_navigation_map;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World2D", "get_navigation_map", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("World2D.get_navigation_map is not available in this engine build.");
-            __mb_get_navigation_map = __mb;
-        }
+        if (__mb_get_navigation_map == 0) MethodBinds.MissingThrow("World2D.get_navigation_map");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_navigation_map, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_space;
     public Rid GetSpace()
     {
-        var __mb = __mb_get_space;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World2D", "get_space", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("World2D.get_space is not available in this engine build.");
-            __mb_get_space = __mb;
-        }
+        if (__mb_get_space == 0) MethodBinds.MissingThrow("World2D.get_space");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_space, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_direct_space_state;
     public PhysicsDirectSpaceState2D? GetDirectSpaceState()
     {
-        var __mb = __mb_get_direct_space_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World2D", "get_direct_space_state", 2506717822);
-            if (__mb == 0) throw new MissingMethodException("World2D.get_direct_space_state is not available in this engine build.");
-            __mb_get_direct_space_state = __mb;
-        }
+        if (__mb_get_direct_space_state == 0) MethodBinds.MissingThrow("World2D.get_direct_space_state");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_direct_space_state, NativePtr, 0, (nint)(&__ret));
         return (PhysicsDirectSpaceState2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_canvas = MethodBinds.ResolveBulk("World2D", "get_canvas", 2944877500);
+        __mb_get_navigation_map = MethodBinds.ResolveBulk("World2D", "get_navigation_map", 2944877500);
+        __mb_get_space = MethodBinds.ResolveBulk("World2D", "get_space", 2944877500);
+        __mb_get_direct_space_state = MethodBinds.ResolveBulk("World2D", "get_direct_space_state", 2506717822);
     }
 }
 
@@ -5135,154 +3955,108 @@ public unsafe partial class World3D : Resource
     private static nint __mb_get_space;
     public Rid GetSpace()
     {
-        var __mb = __mb_get_space;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_space", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_space is not available in this engine build.");
-            __mb_get_space = __mb;
-        }
+        if (__mb_get_space == 0) MethodBinds.MissingThrow("World3D.get_space");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_space, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_navigation_map;
     public Rid GetNavigationMap()
     {
-        var __mb = __mb_get_navigation_map;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_navigation_map", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_navigation_map is not available in this engine build.");
-            __mb_get_navigation_map = __mb;
-        }
+        if (__mb_get_navigation_map == 0) MethodBinds.MissingThrow("World3D.get_navigation_map");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_navigation_map, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_scenario;
     public Rid GetScenario()
     {
-        var __mb = __mb_get_scenario;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_scenario", 2944877500);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_scenario is not available in this engine build.");
-            __mb_get_scenario = __mb;
-        }
+        if (__mb_get_scenario == 0) MethodBinds.MissingThrow("World3D.get_scenario");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_scenario, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_environment;
     public void SetEnvironment(Environment? env)
     {
-        var __mb = __mb_set_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "set_environment", 4143518816);
-            if (__mb == 0) throw new MissingMethodException("World3D.set_environment is not available in this engine build.");
-            __mb_set_environment = __mb;
-        }
+        if (__mb_set_environment == 0) MethodBinds.MissingThrow("World3D.set_environment");
         nint __a0 = env?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_environment, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_environment;
     public Environment? GetEnvironment()
     {
-        var __mb = __mb_get_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_environment", 3082064660);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_environment is not available in this engine build.");
-            __mb_get_environment = __mb;
-        }
+        if (__mb_get_environment == 0) MethodBinds.MissingThrow("World3D.get_environment");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_environment, NativePtr, 0, (nint)(&__ret));
         return (Environment?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_fallback_environment;
     public void SetFallbackEnvironment(Environment? env)
     {
-        var __mb = __mb_set_fallback_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "set_fallback_environment", 4143518816);
-            if (__mb == 0) throw new MissingMethodException("World3D.set_fallback_environment is not available in this engine build.");
-            __mb_set_fallback_environment = __mb;
-        }
+        if (__mb_set_fallback_environment == 0) MethodBinds.MissingThrow("World3D.set_fallback_environment");
         nint __a0 = env?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fallback_environment, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fallback_environment;
     public Environment? GetFallbackEnvironment()
     {
-        var __mb = __mb_get_fallback_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_fallback_environment", 3082064660);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_fallback_environment is not available in this engine build.");
-            __mb_get_fallback_environment = __mb;
-        }
+        if (__mb_get_fallback_environment == 0) MethodBinds.MissingThrow("World3D.get_fallback_environment");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_fallback_environment, NativePtr, 0, (nint)(&__ret));
         return (Environment?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_camera_attributes;
     public void SetCameraAttributes(CameraAttributes? attributes)
     {
-        var __mb = __mb_set_camera_attributes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "set_camera_attributes", 2817810567);
-            if (__mb == 0) throw new MissingMethodException("World3D.set_camera_attributes is not available in this engine build.");
-            __mb_set_camera_attributes = __mb;
-        }
+        if (__mb_set_camera_attributes == 0) MethodBinds.MissingThrow("World3D.set_camera_attributes");
         nint __a0 = attributes?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_camera_attributes, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_camera_attributes;
     public CameraAttributes? GetCameraAttributes()
     {
-        var __mb = __mb_get_camera_attributes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_camera_attributes", 3921283215);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_camera_attributes is not available in this engine build.");
-            __mb_get_camera_attributes = __mb;
-        }
+        if (__mb_get_camera_attributes == 0) MethodBinds.MissingThrow("World3D.get_camera_attributes");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_camera_attributes, NativePtr, 0, (nint)(&__ret));
         return (CameraAttributes?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_direct_space_state;
     public PhysicsDirectSpaceState3D? GetDirectSpaceState()
     {
-        var __mb = __mb_get_direct_space_state;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("World3D", "get_direct_space_state", 2069328350);
-            if (__mb == 0) throw new MissingMethodException("World3D.get_direct_space_state is not available in this engine build.");
-            __mb_get_direct_space_state = __mb;
-        }
+        if (__mb_get_direct_space_state == 0) MethodBinds.MissingThrow("World3D.get_direct_space_state");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_direct_space_state, NativePtr, 0, (nint)(&__ret));
         return (PhysicsDirectSpaceState3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_space = MethodBinds.ResolveBulk("World3D", "get_space", 2944877500);
+        __mb_get_navigation_map = MethodBinds.ResolveBulk("World3D", "get_navigation_map", 2944877500);
+        __mb_get_scenario = MethodBinds.ResolveBulk("World3D", "get_scenario", 2944877500);
+        __mb_set_environment = MethodBinds.ResolveBulk("World3D", "set_environment", 4143518816);
+        __mb_get_environment = MethodBinds.ResolveBulk("World3D", "get_environment", 3082064660);
+        __mb_set_fallback_environment = MethodBinds.ResolveBulk("World3D", "set_fallback_environment", 4143518816);
+        __mb_get_fallback_environment = MethodBinds.ResolveBulk("World3D", "get_fallback_environment", 3082064660);
+        __mb_set_camera_attributes = MethodBinds.ResolveBulk("World3D", "set_camera_attributes", 2817810567);
+        __mb_get_camera_attributes = MethodBinds.ResolveBulk("World3D", "get_camera_attributes", 3921283215);
+        __mb_get_direct_space_state = MethodBinds.ResolveBulk("World3D", "get_direct_space_state", 2069328350);
     }
 }
 
@@ -5310,63 +4084,47 @@ public unsafe partial class WorldBoundaryShape2D : Shape2D
     private static nint __mb_set_normal;
     public void SetNormal(Vector2 normal)
     {
-        var __mb = __mb_set_normal;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldBoundaryShape2D", "set_normal", 743155724);
-            if (__mb == 0) throw new MissingMethodException("WorldBoundaryShape2D.set_normal is not available in this engine build.");
-            __mb_set_normal = __mb;
-        }
+        if (__mb_set_normal == 0) MethodBinds.MissingThrow("WorldBoundaryShape2D.set_normal");
         var __a0 = normal;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_normal, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_normal;
     public Vector2 GetNormal()
     {
-        var __mb = __mb_get_normal;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldBoundaryShape2D", "get_normal", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("WorldBoundaryShape2D.get_normal is not available in this engine build.");
-            __mb_get_normal = __mb;
-        }
+        if (__mb_get_normal == 0) MethodBinds.MissingThrow("WorldBoundaryShape2D.get_normal");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_normal, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_distance;
     public void SetDistance(float distance)
     {
-        var __mb = __mb_set_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldBoundaryShape2D", "set_distance", 373806689);
-            if (__mb == 0) throw new MissingMethodException("WorldBoundaryShape2D.set_distance is not available in this engine build.");
-            __mb_set_distance = __mb;
-        }
+        if (__mb_set_distance == 0) MethodBinds.MissingThrow("WorldBoundaryShape2D.set_distance");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_distance, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_distance;
     public float GetDistance()
     {
-        var __mb = __mb_get_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldBoundaryShape2D", "get_distance", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("WorldBoundaryShape2D.get_distance is not available in this engine build.");
-            __mb_get_distance = __mb;
-        }
+        if (__mb_get_distance == 0) MethodBinds.MissingThrow("WorldBoundaryShape2D.get_distance");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_distance, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_normal = MethodBinds.ResolveBulk("WorldBoundaryShape2D", "set_normal", 743155724);
+        __mb_get_normal = MethodBinds.ResolveBulk("WorldBoundaryShape2D", "get_normal", 3341600327);
+        __mb_set_distance = MethodBinds.ResolveBulk("WorldBoundaryShape2D", "set_distance", 373806689);
+        __mb_get_distance = MethodBinds.ResolveBulk("WorldBoundaryShape2D", "get_distance", 1740695150);
     }
 }
 
@@ -5388,32 +4146,26 @@ public unsafe partial class WorldBoundaryShape3D : Shape3D
     private static nint __mb_set_plane;
     public void SetPlane(Plane plane)
     {
-        var __mb = __mb_set_plane;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldBoundaryShape3D", "set_plane", 3505987427);
-            if (__mb == 0) throw new MissingMethodException("WorldBoundaryShape3D.set_plane is not available in this engine build.");
-            __mb_set_plane = __mb;
-        }
+        if (__mb_set_plane == 0) MethodBinds.MissingThrow("WorldBoundaryShape3D.set_plane");
         var __a0 = plane;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_plane, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_plane;
     public Plane GetPlane()
     {
-        var __mb = __mb_get_plane;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldBoundaryShape3D", "get_plane", 2753500971);
-            if (__mb == 0) throw new MissingMethodException("WorldBoundaryShape3D.get_plane is not available in this engine build.");
-            __mb_get_plane = __mb;
-        }
+        if (__mb_get_plane == 0) MethodBinds.MissingThrow("WorldBoundaryShape3D.get_plane");
         var __ret = default(Plane);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_plane, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_plane = MethodBinds.ResolveBulk("WorldBoundaryShape3D", "set_plane", 3505987427);
+        __mb_get_plane = MethodBinds.ResolveBulk("WorldBoundaryShape3D", "get_plane", 2753500971);
     }
 }
 
@@ -5447,94 +4199,68 @@ public unsafe partial class WorldEnvironment : Node
     private static nint __mb_set_environment;
     public void SetEnvironment(Environment? env)
     {
-        var __mb = __mb_set_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldEnvironment", "set_environment", 4143518816);
-            if (__mb == 0) throw new MissingMethodException("WorldEnvironment.set_environment is not available in this engine build.");
-            __mb_set_environment = __mb;
-        }
+        if (__mb_set_environment == 0) MethodBinds.MissingThrow("WorldEnvironment.set_environment");
         nint __a0 = env?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_environment, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_environment;
     public Environment? GetEnvironment()
     {
-        var __mb = __mb_get_environment;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldEnvironment", "get_environment", 3082064660);
-            if (__mb == 0) throw new MissingMethodException("WorldEnvironment.get_environment is not available in this engine build.");
-            __mb_get_environment = __mb;
-        }
+        if (__mb_get_environment == 0) MethodBinds.MissingThrow("WorldEnvironment.get_environment");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_environment, NativePtr, 0, (nint)(&__ret));
         return (Environment?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_camera_attributes;
     public void SetCameraAttributes(CameraAttributes? cameraAttributes)
     {
-        var __mb = __mb_set_camera_attributes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldEnvironment", "set_camera_attributes", 2817810567);
-            if (__mb == 0) throw new MissingMethodException("WorldEnvironment.set_camera_attributes is not available in this engine build.");
-            __mb_set_camera_attributes = __mb;
-        }
+        if (__mb_set_camera_attributes == 0) MethodBinds.MissingThrow("WorldEnvironment.set_camera_attributes");
         nint __a0 = cameraAttributes?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_camera_attributes, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_camera_attributes;
     public CameraAttributes? GetCameraAttributes()
     {
-        var __mb = __mb_get_camera_attributes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldEnvironment", "get_camera_attributes", 3921283215);
-            if (__mb == 0) throw new MissingMethodException("WorldEnvironment.get_camera_attributes is not available in this engine build.");
-            __mb_get_camera_attributes = __mb;
-        }
+        if (__mb_get_camera_attributes == 0) MethodBinds.MissingThrow("WorldEnvironment.get_camera_attributes");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_camera_attributes, NativePtr, 0, (nint)(&__ret));
         return (CameraAttributes?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_compositor;
     public void SetCompositor(Compositor? compositor)
     {
-        var __mb = __mb_set_compositor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldEnvironment", "set_compositor", 1586754307);
-            if (__mb == 0) throw new MissingMethodException("WorldEnvironment.set_compositor is not available in this engine build.");
-            __mb_set_compositor = __mb;
-        }
+        if (__mb_set_compositor == 0) MethodBinds.MissingThrow("WorldEnvironment.set_compositor");
         nint __a0 = compositor?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_compositor, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_compositor;
     public Compositor? GetCompositor()
     {
-        var __mb = __mb_get_compositor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("WorldEnvironment", "get_compositor", 3647707413);
-            if (__mb == 0) throw new MissingMethodException("WorldEnvironment.get_compositor is not available in this engine build.");
-            __mb_get_compositor = __mb;
-        }
+        if (__mb_get_compositor == 0) MethodBinds.MissingThrow("WorldEnvironment.get_compositor");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_compositor, NativePtr, 0, (nint)(&__ret));
         return (Compositor?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_environment = MethodBinds.ResolveBulk("WorldEnvironment", "set_environment", 4143518816);
+        __mb_get_environment = MethodBinds.ResolveBulk("WorldEnvironment", "get_environment", 3082064660);
+        __mb_set_camera_attributes = MethodBinds.ResolveBulk("WorldEnvironment", "set_camera_attributes", 2817810567);
+        __mb_get_camera_attributes = MethodBinds.ResolveBulk("WorldEnvironment", "get_camera_attributes", 3921283215);
+        __mb_set_compositor = MethodBinds.ResolveBulk("WorldEnvironment", "set_compositor", 1586754307);
+        __mb_get_compositor = MethodBinds.ResolveBulk("WorldEnvironment", "get_compositor", 3647707413);
     }
 }
 

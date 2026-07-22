@@ -24,89 +24,63 @@ public unsafe partial class IKModifier3D : SkeletonModifier3D
     private static nint __mb_set_setting_count;
     public void SetSettingCount(int count)
     {
-        var __mb = __mb_set_setting_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IKModifier3D", "set_setting_count", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("IKModifier3D.set_setting_count is not available in this engine build.");
-            __mb_set_setting_count = __mb;
-        }
+        if (__mb_set_setting_count == 0) MethodBinds.MissingThrow("IKModifier3D.set_setting_count");
         long __a0 = unchecked((long)count);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_setting_count, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_setting_count;
     public int GetSettingCount()
     {
-        var __mb = __mb_get_setting_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IKModifier3D", "get_setting_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("IKModifier3D.get_setting_count is not available in this engine build.");
-            __mb_get_setting_count = __mb;
-        }
+        if (__mb_get_setting_count == 0) MethodBinds.MissingThrow("IKModifier3D.get_setting_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_setting_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_clear_settings;
     public void ClearSettings()
     {
-        var __mb = __mb_clear_settings;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IKModifier3D", "clear_settings", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("IKModifier3D.clear_settings is not available in this engine build.");
-            __mb_clear_settings = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear_settings == 0) MethodBinds.MissingThrow("IKModifier3D.clear_settings");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_settings, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_mutable_bone_axes;
     public void SetMutableBoneAxes(bool enabled)
     {
-        var __mb = __mb_set_mutable_bone_axes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IKModifier3D", "set_mutable_bone_axes", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("IKModifier3D.set_mutable_bone_axes is not available in this engine build.");
-            __mb_set_mutable_bone_axes = __mb;
-        }
+        if (__mb_set_mutable_bone_axes == 0) MethodBinds.MissingThrow("IKModifier3D.set_mutable_bone_axes");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mutable_bone_axes, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_are_bone_axes_mutable;
     public bool AreBoneAxesMutable()
     {
-        var __mb = __mb_are_bone_axes_mutable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IKModifier3D", "are_bone_axes_mutable", 36873697);
-            if (__mb == 0) throw new MissingMethodException("IKModifier3D.are_bone_axes_mutable is not available in this engine build.");
-            __mb_are_bone_axes_mutable = __mb;
-        }
+        if (__mb_are_bone_axes_mutable == 0) MethodBinds.MissingThrow("IKModifier3D.are_bone_axes_mutable");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_are_bone_axes_mutable, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_reset;
     public void Reset()
     {
-        var __mb = __mb_reset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IKModifier3D", "reset", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("IKModifier3D.reset is not available in this engine build.");
-            __mb_reset = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_reset == 0) MethodBinds.MissingThrow("IKModifier3D.reset");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_reset, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_setting_count = MethodBinds.ResolveBulk("IKModifier3D", "set_setting_count", 1286410249);
+        __mb_get_setting_count = MethodBinds.ResolveBulk("IKModifier3D", "get_setting_count", 3905245786);
+        __mb_clear_settings = MethodBinds.ResolveBulk("IKModifier3D", "clear_settings", 3218959716);
+        __mb_set_mutable_bone_axes = MethodBinds.ResolveBulk("IKModifier3D", "set_mutable_bone_axes", 2586408642);
+        __mb_are_bone_axes_mutable = MethodBinds.ResolveBulk("IKModifier3D", "are_bone_axes_mutable", 36873697);
+        __mb_reset = MethodBinds.ResolveBulk("IKModifier3D", "reset", 3218959716);
     }
 }
 
@@ -138,20 +112,14 @@ public static unsafe partial class IP
     private static nint __mb_resolve_hostname;
     public static string ResolveHostname(string host, IP.Type ipType = (IP.Type)(3))
     {
-        var __mb = __mb_resolve_hostname;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "resolve_hostname", 4283295457);
-            if (__mb == 0) throw new MissingMethodException("IP.resolve_hostname is not available in this engine build.");
-            __mb_resolve_hostname = __mb;
-        }
+        if (__mb_resolve_hostname == 0) MethodBinds.MissingThrow("IP.resolve_hostname");
         ulong __a0 = NativeString.Create(host);
         long __a1 = (long)ipType;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_resolve_hostname, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -159,20 +127,14 @@ public static unsafe partial class IP
     private static nint __mb_resolve_hostname_addresses;
     public static string[] ResolveHostnameAddresses(string host, IP.Type ipType = (IP.Type)(3))
     {
-        var __mb = __mb_resolve_hostname_addresses;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "resolve_hostname_addresses", 773767525);
-            if (__mb == 0) throw new MissingMethodException("IP.resolve_hostname_addresses is not available in this engine build.");
-            __mb_resolve_hostname_addresses = __mb;
-        }
+        if (__mb_resolve_hostname_addresses == 0) MethodBinds.MissingThrow("IP.resolve_hostname_addresses");
         ulong __a0 = NativeString.Create(host);
         long __a1 = (long)ipType;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_resolve_hostname_addresses, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return Packed.ToStringArray(ref __ret);
     }
@@ -180,20 +142,14 @@ public static unsafe partial class IP
     private static nint __mb_resolve_hostname_queue_item;
     public static int ResolveHostnameQueueItem(string host, IP.Type ipType = (IP.Type)(3))
     {
-        var __mb = __mb_resolve_hostname_queue_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "resolve_hostname_queue_item", 1749894742);
-            if (__mb == 0) throw new MissingMethodException("IP.resolve_hostname_queue_item is not available in this engine build.");
-            __mb_resolve_hostname_queue_item = __mb;
-        }
+        if (__mb_resolve_hostname_queue_item == 0) MethodBinds.MissingThrow("IP.resolve_hostname_queue_item");
         ulong __a0 = NativeString.Create(host);
         long __a1 = (long)ipType;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_resolve_hostname_queue_item, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -201,118 +157,90 @@ public static unsafe partial class IP
     private static nint __mb_get_resolve_item_status;
     public static IP.ResolverStatus GetResolveItemStatus(int id)
     {
-        var __mb = __mb_get_resolve_item_status;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "get_resolve_item_status", 3812250196);
-            if (__mb == 0) throw new MissingMethodException("IP.get_resolve_item_status is not available in this engine build.");
-            __mb_get_resolve_item_status = __mb;
-        }
+        if (__mb_get_resolve_item_status == 0) MethodBinds.MissingThrow("IP.get_resolve_item_status");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_resolve_item_status, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (IP.ResolverStatus)__ret;
     }
 
     private static nint __mb_get_resolve_item_address;
     public static string GetResolveItemAddress(int id)
     {
-        var __mb = __mb_get_resolve_item_address;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "get_resolve_item_address", 844755477);
-            if (__mb == 0) throw new MissingMethodException("IP.get_resolve_item_address is not available in this engine build.");
-            __mb_get_resolve_item_address = __mb;
-        }
+        if (__mb_get_resolve_item_address == 0) MethodBinds.MissingThrow("IP.get_resolve_item_address");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_resolve_item_address, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_resolve_item_addresses;
     public static Godot.Collections.Array GetResolveItemAddresses(int id)
     {
-        var __mb = __mb_get_resolve_item_addresses;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "get_resolve_item_addresses", 663333327);
-            if (__mb == 0) throw new MissingMethodException("IP.get_resolve_item_addresses is not available in this engine build.");
-            __mb_get_resolve_item_addresses = __mb;
-        }
+        if (__mb_get_resolve_item_addresses == 0) MethodBinds.MissingThrow("IP.get_resolve_item_addresses");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_resolve_item_addresses, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_erase_resolve_item;
     public static void EraseResolveItem(int id)
     {
-        var __mb = __mb_erase_resolve_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "erase_resolve_item", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("IP.erase_resolve_item is not available in this engine build.");
-            __mb_erase_resolve_item = __mb;
-        }
+        if (__mb_erase_resolve_item == 0) MethodBinds.MissingThrow("IP.erase_resolve_item");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_erase_resolve_item, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_local_addresses;
     public static string[] GetLocalAddresses()
     {
-        var __mb = __mb_get_local_addresses;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "get_local_addresses", 1139954409);
-            if (__mb == 0) throw new MissingMethodException("IP.get_local_addresses is not available in this engine build.");
-            __mb_get_local_addresses = __mb;
-        }
+        if (__mb_get_local_addresses == 0) MethodBinds.MissingThrow("IP.get_local_addresses");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_local_addresses, SingletonPtr, 0, (nint)(&__ret));
         return Packed.ToStringArray(ref __ret);
     }
 
     private static nint __mb_get_local_interfaces;
     public static Godot.Collections.Array GetLocalInterfaces()
     {
-        var __mb = __mb_get_local_interfaces;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "get_local_interfaces", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("IP.get_local_interfaces is not available in this engine build.");
-            __mb_get_local_interfaces = __mb;
-        }
+        if (__mb_get_local_interfaces == 0) MethodBinds.MissingThrow("IP.get_local_interfaces");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_local_interfaces, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_clear_cache;
     public static void ClearCache(string hostname = "")
     {
-        var __mb = __mb_clear_cache;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IP", "clear_cache", 3005725572);
-            if (__mb == 0) throw new MissingMethodException("IP.clear_cache is not available in this engine build.");
-            __mb_clear_cache = __mb;
-        }
+        if (__mb_clear_cache == 0) MethodBinds.MissingThrow("IP.clear_cache");
         ulong __a0 = NativeString.Create(hostname);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_cache, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_resolve_hostname = MethodBinds.ResolveBulk("IP", "resolve_hostname", 4283295457);
+        __mb_resolve_hostname_addresses = MethodBinds.ResolveBulk("IP", "resolve_hostname_addresses", 773767525);
+        __mb_resolve_hostname_queue_item = MethodBinds.ResolveBulk("IP", "resolve_hostname_queue_item", 1749894742);
+        __mb_get_resolve_item_status = MethodBinds.ResolveBulk("IP", "get_resolve_item_status", 3812250196);
+        __mb_get_resolve_item_address = MethodBinds.ResolveBulk("IP", "get_resolve_item_address", 844755477);
+        __mb_get_resolve_item_addresses = MethodBinds.ResolveBulk("IP", "get_resolve_item_addresses", 663333327);
+        __mb_erase_resolve_item = MethodBinds.ResolveBulk("IP", "erase_resolve_item", 1286410249);
+        __mb_get_local_addresses = MethodBinds.ResolveBulk("IP", "get_local_addresses", 1139954409);
+        __mb_get_local_interfaces = MethodBinds.ResolveBulk("IP", "get_local_interfaces", 3995934104);
+        __mb_clear_cache = MethodBinds.ResolveBulk("IP", "clear_cache", 3005725572);
     }
 }
 
@@ -429,185 +357,113 @@ public unsafe partial class Image : Resource
     private static nint __mb_get_width;
     public int GetWidth()
     {
-        var __mb = __mb_get_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_width", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Image.get_width is not available in this engine build.");
-            __mb_get_width = __mb;
-        }
+        if (__mb_get_width == 0) MethodBinds.MissingThrow("Image.get_width");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_width, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_height;
     public int GetHeight()
     {
-        var __mb = __mb_get_height;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_height", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Image.get_height is not available in this engine build.");
-            __mb_get_height = __mb;
-        }
+        if (__mb_get_height == 0) MethodBinds.MissingThrow("Image.get_height");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_height, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_size;
     public Vector2I GetSize()
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("Image.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("Image.get_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_has_mipmaps;
     public bool HasMipmaps()
     {
-        var __mb = __mb_has_mipmaps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "has_mipmaps", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Image.has_mipmaps is not available in this engine build.");
-            __mb_has_mipmaps = __mb;
-        }
+        if (__mb_has_mipmaps == 0) MethodBinds.MissingThrow("Image.has_mipmaps");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_mipmaps, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_format;
     public Image.Format GetFormat()
     {
-        var __mb = __mb_get_format;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_format", 3847873762);
-            if (__mb == 0) throw new MissingMethodException("Image.get_format is not available in this engine build.");
-            __mb_get_format = __mb;
-        }
+        if (__mb_get_format == 0) MethodBinds.MissingThrow("Image.get_format");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_format, NativePtr, 0, (nint)(&__ret));
         return (Image.Format)__ret;
     }
 
     private static nint __mb_get_data;
     public byte[] GetData()
     {
-        var __mb = __mb_get_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_data", 2362200018);
-            if (__mb == 0) throw new MissingMethodException("Image.get_data is not available in this engine build.");
-            __mb_get_data = __mb;
-        }
+        if (__mb_get_data == 0) MethodBinds.MissingThrow("Image.get_data");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_data, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_data_size;
     public long GetDataSize()
     {
-        var __mb = __mb_get_data_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_data_size", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Image.get_data_size is not available in this engine build.");
-            __mb_get_data_size = __mb;
-        }
+        if (__mb_get_data_size == 0) MethodBinds.MissingThrow("Image.get_data_size");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_data_size, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_convert;
     public void Convert(Image.Format format)
     {
-        var __mb = __mb_convert;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "convert", 2120693146);
-            if (__mb == 0) throw new MissingMethodException("Image.convert is not available in this engine build.");
-            __mb_convert = __mb;
-        }
+        if (__mb_convert == 0) MethodBinds.MissingThrow("Image.convert");
         long __a0 = (long)format;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_convert, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mipmap_count;
     public int GetMipmapCount()
     {
-        var __mb = __mb_get_mipmap_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_mipmap_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("Image.get_mipmap_count is not available in this engine build.");
-            __mb_get_mipmap_count = __mb;
-        }
+        if (__mb_get_mipmap_count == 0) MethodBinds.MissingThrow("Image.get_mipmap_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mipmap_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_mipmap_offset;
     public long GetMipmapOffset(int mipmap)
     {
-        var __mb = __mb_get_mipmap_offset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_mipmap_offset", 923996154);
-            if (__mb == 0) throw new MissingMethodException("Image.get_mipmap_offset is not available in this engine build.");
-            __mb_get_mipmap_offset = __mb;
-        }
+        if (__mb_get_mipmap_offset == 0) MethodBinds.MissingThrow("Image.get_mipmap_offset");
         long __a0 = unchecked((long)mipmap);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mipmap_offset, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((long)__ret);
     }
 
     private static nint __mb_resize_to_po2;
     public void ResizeToPo2(bool square = false, Image.Interpolation interpolation = (Image.Interpolation)(1))
     {
-        var __mb = __mb_resize_to_po2;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "resize_to_po2", 4189212329);
-            if (__mb == 0) throw new MissingMethodException("Image.resize_to_po2 is not available in this engine build.");
-            __mb_resize_to_po2 = __mb;
-        }
+        if (__mb_resize_to_po2 == 0) MethodBinds.MissingThrow("Image.resize_to_po2");
         byte __a0 = square ? (byte)1 : (byte)0;
         long __a1 = (long)interpolation;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_resize_to_po2, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_resize;
     public void Resize(int width, int height, Image.Interpolation interpolation = (Image.Interpolation)(1))
     {
-        var __mb = __mb_resize;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "resize", 994498151);
-            if (__mb == 0) throw new MissingMethodException("Image.resize is not available in this engine build.");
-            __mb_resize = __mb;
-        }
+        if (__mb_resize == 0) MethodBinds.MissingThrow("Image.resize");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         long __a2 = (long)interpolation;
@@ -615,107 +471,65 @@ public unsafe partial class Image : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_resize, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_shrink_x2;
     public void ShrinkX2()
     {
-        var __mb = __mb_shrink_x2;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "shrink_x2", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.shrink_x2 is not available in this engine build.");
-            __mb_shrink_x2 = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_shrink_x2 == 0) MethodBinds.MissingThrow("Image.shrink_x2");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_shrink_x2, NativePtr, 0, 0);
     }
 
     private static nint __mb_crop;
     public void Crop(int width, int height)
     {
-        var __mb = __mb_crop;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "crop", 3937882851);
-            if (__mb == 0) throw new MissingMethodException("Image.crop is not available in this engine build.");
-            __mb_crop = __mb;
-        }
+        if (__mb_crop == 0) MethodBinds.MissingThrow("Image.crop");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_crop, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_flip_x;
     public void FlipX()
     {
-        var __mb = __mb_flip_x;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "flip_x", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.flip_x is not available in this engine build.");
-            __mb_flip_x = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_flip_x == 0) MethodBinds.MissingThrow("Image.flip_x");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_flip_x, NativePtr, 0, 0);
     }
 
     private static nint __mb_flip_y;
     public void FlipY()
     {
-        var __mb = __mb_flip_y;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "flip_y", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.flip_y is not available in this engine build.");
-            __mb_flip_y = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_flip_y == 0) MethodBinds.MissingThrow("Image.flip_y");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_flip_y, NativePtr, 0, 0);
     }
 
     private static nint __mb_generate_mipmaps;
     public Error GenerateMipmaps(bool renormalize = false)
     {
-        var __mb = __mb_generate_mipmaps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "generate_mipmaps", 1633102583);
-            if (__mb == 0) throw new MissingMethodException("Image.generate_mipmaps is not available in this engine build.");
-            __mb_generate_mipmaps = __mb;
-        }
+        if (__mb_generate_mipmaps == 0) MethodBinds.MissingThrow("Image.generate_mipmaps");
         byte __a0 = renormalize ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_generate_mipmaps, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_clear_mipmaps;
     public void ClearMipmaps()
     {
-        var __mb = __mb_clear_mipmaps;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "clear_mipmaps", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.clear_mipmaps is not available in this engine build.");
-            __mb_clear_mipmaps = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear_mipmaps == 0) MethodBinds.MissingThrow("Image.clear_mipmaps");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_mipmaps, NativePtr, 0, 0);
     }
 
     private static nint __mb_create;
     public static Image? Create(int width, int height, bool useMipmaps, Image.Format format)
     {
-        var __mb = __mb_create;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "create", 986942177);
-            if (__mb == 0) throw new MissingMethodException("Image.create is not available in this engine build.");
-            __mb_create = __mb;
-        }
+        if (__mb_create == 0) MethodBinds.MissingThrow("Image.create");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         byte __a2 = useMipmaps ? (byte)1 : (byte)0;
@@ -726,20 +540,14 @@ public unsafe partial class Image : Resource
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create, 0, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_create_empty;
     public static Image? CreateEmpty(int width, int height, bool useMipmaps, Image.Format format)
     {
-        var __mb = __mb_create_empty;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "create_empty", 986942177);
-            if (__mb == 0) throw new MissingMethodException("Image.create_empty is not available in this engine build.");
-            __mb_create_empty = __mb;
-        }
+        if (__mb_create_empty == 0) MethodBinds.MissingThrow("Image.create_empty");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         byte __a2 = useMipmaps ? (byte)1 : (byte)0;
@@ -750,20 +558,14 @@ public unsafe partial class Image : Resource
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_empty, 0, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_create_from_data;
     public static Image? CreateFromData(int width, int height, bool useMipmaps, Image.Format format, byte[] data)
     {
-        var __mb = __mb_create_from_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "create_from_data", 299398494);
-            if (__mb == 0) throw new MissingMethodException("Image.create_from_data is not available in this engine build.");
-            __mb_create_from_data = __mb;
-        }
+        if (__mb_create_from_data == 0) MethodBinds.MissingThrow("Image.create_from_data");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         byte __a2 = useMipmaps ? (byte)1 : (byte)0;
@@ -776,7 +578,7 @@ public unsafe partial class Image : Resource
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_from_data, 0, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a4);
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -784,13 +586,7 @@ public unsafe partial class Image : Resource
     private static nint __mb_set_data;
     public void SetData(int width, int height, bool useMipmaps, Image.Format format, byte[] data)
     {
-        var __mb = __mb_set_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "set_data", 2740482212);
-            if (__mb == 0) throw new MissingMethodException("Image.set_data is not available in this engine build.");
-            __mb_set_data = __mb;
-        }
+        if (__mb_set_data == 0) MethodBinds.MissingThrow("Image.set_data");
         long __a0 = unchecked((long)width);
         long __a1 = unchecked((long)height);
         byte __a2 = useMipmaps ? (byte)1 : (byte)0;
@@ -802,40 +598,28 @@ public unsafe partial class Image : Resource
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_data, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a4);
     }
 
     private static nint __mb_is_empty;
     public bool IsEmpty()
     {
-        var __mb = __mb_is_empty;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "is_empty", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Image.is_empty is not available in this engine build.");
-            __mb_is_empty = __mb;
-        }
+        if (__mb_is_empty == 0) MethodBinds.MissingThrow("Image.is_empty");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_empty, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_load;
     public Error Load(string path)
     {
-        var __mb = __mb_load;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load", 166001499);
-            if (__mb == 0) throw new MissingMethodException("Image.load is not available in this engine build.");
-            __mb_load = __mb;
-        }
+        if (__mb_load == 0) MethodBinds.MissingThrow("Image.load");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -843,18 +627,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_from_file;
     public static Image? LoadFromFile(string path)
     {
-        var __mb = __mb_load_from_file;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_from_file", 736337515);
-            if (__mb == 0) throw new MissingMethodException("Image.load_from_file is not available in this engine build.");
-            __mb_load_from_file = __mb;
-        }
+        if (__mb_load_from_file == 0) MethodBinds.MissingThrow("Image.load_from_file");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_from_file, 0, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -862,18 +640,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_save_png;
     public Error SavePng(string path)
     {
-        var __mb = __mb_save_png;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_png", 2113323047);
-            if (__mb == 0) throw new MissingMethodException("Image.save_png is not available in this engine build.");
-            __mb_save_png = __mb;
-        }
+        if (__mb_save_png == 0) MethodBinds.MissingThrow("Image.save_png");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_png, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -881,35 +653,23 @@ public unsafe partial class Image : Resource
     private static nint __mb_save_png_to_buffer;
     public byte[] SavePngToBuffer()
     {
-        var __mb = __mb_save_png_to_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_png_to_buffer", 2362200018);
-            if (__mb == 0) throw new MissingMethodException("Image.save_png_to_buffer is not available in this engine build.");
-            __mb_save_png_to_buffer = __mb;
-        }
+        if (__mb_save_png_to_buffer == 0) MethodBinds.MissingThrow("Image.save_png_to_buffer");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_png_to_buffer, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_save_jpg;
     public Error SaveJpg(string path, float quality = 0.75f)
     {
-        var __mb = __mb_save_jpg;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_jpg", 2800019068);
-            if (__mb == 0) throw new MissingMethodException("Image.save_jpg is not available in this engine build.");
-            __mb_save_jpg = __mb;
-        }
+        if (__mb_save_jpg == 0) MethodBinds.MissingThrow("Image.save_jpg");
         ulong __a0 = NativeString.Create(path);
         double __a1 = quality;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_jpg, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -917,31 +677,19 @@ public unsafe partial class Image : Resource
     private static nint __mb_save_jpg_to_buffer;
     public byte[] SaveJpgToBuffer(float quality = 0.75f)
     {
-        var __mb = __mb_save_jpg_to_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_jpg_to_buffer", 592235273);
-            if (__mb == 0) throw new MissingMethodException("Image.save_jpg_to_buffer is not available in this engine build.");
-            __mb_save_jpg_to_buffer = __mb;
-        }
+        if (__mb_save_jpg_to_buffer == 0) MethodBinds.MissingThrow("Image.save_jpg_to_buffer");
         double __a0 = quality;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_jpg_to_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_save_exr;
     public Error SaveExr(string path, bool grayscale = false, bool colorImage = false, float maxLinearValue = -1.0f)
     {
-        var __mb = __mb_save_exr;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_exr", 2018602448);
-            if (__mb == 0) throw new MissingMethodException("Image.save_exr is not available in this engine build.");
-            __mb_save_exr = __mb;
-        }
+        if (__mb_save_exr == 0) MethodBinds.MissingThrow("Image.save_exr");
         ulong __a0 = NativeString.Create(path);
         byte __a1 = grayscale ? (byte)1 : (byte)0;
         byte __a2 = colorImage ? (byte)1 : (byte)0;
@@ -952,7 +700,7 @@ public unsafe partial class Image : Resource
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_exr, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -960,13 +708,7 @@ public unsafe partial class Image : Resource
     private static nint __mb_save_exr_to_buffer;
     public byte[] SaveExrToBuffer(bool grayscale = false, bool colorImage = false, float maxLinearValue = -1.0f)
     {
-        var __mb = __mb_save_exr_to_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_exr_to_buffer", 1477518536);
-            if (__mb == 0) throw new MissingMethodException("Image.save_exr_to_buffer is not available in this engine build.");
-            __mb_save_exr_to_buffer = __mb;
-        }
+        if (__mb_save_exr_to_buffer == 0) MethodBinds.MissingThrow("Image.save_exr_to_buffer");
         byte __a0 = grayscale ? (byte)1 : (byte)0;
         byte __a1 = colorImage ? (byte)1 : (byte)0;
         double __a2 = maxLinearValue;
@@ -975,25 +717,19 @@ public unsafe partial class Image : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_exr_to_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_save_dds;
     public Error SaveDds(string path)
     {
-        var __mb = __mb_save_dds;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_dds", 2113323047);
-            if (__mb == 0) throw new MissingMethodException("Image.save_dds is not available in this engine build.");
-            __mb_save_dds = __mb;
-        }
+        if (__mb_save_dds == 0) MethodBinds.MissingThrow("Image.save_dds");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_dds, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1001,28 +737,16 @@ public unsafe partial class Image : Resource
     private static nint __mb_save_dds_to_buffer;
     public byte[] SaveDdsToBuffer()
     {
-        var __mb = __mb_save_dds_to_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_dds_to_buffer", 2362200018);
-            if (__mb == 0) throw new MissingMethodException("Image.save_dds_to_buffer is not available in this engine build.");
-            __mb_save_dds_to_buffer = __mb;
-        }
+        if (__mb_save_dds_to_buffer == 0) MethodBinds.MissingThrow("Image.save_dds_to_buffer");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_dds_to_buffer, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_save_webp;
     public Error SaveWebp(string path, bool lossy = false, float quality = 0.75f)
     {
-        var __mb = __mb_save_webp;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_webp", 2781156876);
-            if (__mb == 0) throw new MissingMethodException("Image.save_webp is not available in this engine build.");
-            __mb_save_webp = __mb;
-        }
+        if (__mb_save_webp == 0) MethodBinds.MissingThrow("Image.save_webp");
         ulong __a0 = NativeString.Create(path);
         byte __a1 = lossy ? (byte)1 : (byte)0;
         double __a2 = quality;
@@ -1031,7 +755,7 @@ public unsafe partial class Image : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_webp, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -1039,81 +763,51 @@ public unsafe partial class Image : Resource
     private static nint __mb_save_webp_to_buffer;
     public byte[] SaveWebpToBuffer(bool lossy = false, float quality = 0.75f)
     {
-        var __mb = __mb_save_webp_to_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "save_webp_to_buffer", 1214628238);
-            if (__mb == 0) throw new MissingMethodException("Image.save_webp_to_buffer is not available in this engine build.");
-            __mb_save_webp_to_buffer = __mb;
-        }
+        if (__mb_save_webp_to_buffer == 0) MethodBinds.MissingThrow("Image.save_webp_to_buffer");
         byte __a0 = lossy ? (byte)1 : (byte)0;
         double __a1 = quality;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_webp_to_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_detect_alpha;
     public Image.AlphaMode DetectAlpha()
     {
-        var __mb = __mb_detect_alpha;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "detect_alpha", 2030116505);
-            if (__mb == 0) throw new MissingMethodException("Image.detect_alpha is not available in this engine build.");
-            __mb_detect_alpha = __mb;
-        }
+        if (__mb_detect_alpha == 0) MethodBinds.MissingThrow("Image.detect_alpha");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_detect_alpha, NativePtr, 0, (nint)(&__ret));
         return (Image.AlphaMode)__ret;
     }
 
     private static nint __mb_is_invisible;
     public bool IsInvisible()
     {
-        var __mb = __mb_is_invisible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "is_invisible", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Image.is_invisible is not available in this engine build.");
-            __mb_is_invisible = __mb;
-        }
+        if (__mb_is_invisible == 0) MethodBinds.MissingThrow("Image.is_invisible");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_invisible, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_detect_used_channels;
     public Image.UsedChannels DetectUsedChannels(Image.CompressSource source = (Image.CompressSource)(0))
     {
-        var __mb = __mb_detect_used_channels;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "detect_used_channels", 2703139984);
-            if (__mb == 0) throw new MissingMethodException("Image.detect_used_channels is not available in this engine build.");
-            __mb_detect_used_channels = __mb;
-        }
+        if (__mb_detect_used_channels == 0) MethodBinds.MissingThrow("Image.detect_used_channels");
         long __a0 = (long)source;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_detect_used_channels, NativePtr, (nint)__args, (nint)(&__ret));
         return (Image.UsedChannels)__ret;
     }
 
     private static nint __mb_compress;
     public Error Compress(Image.CompressMode mode, Image.CompressSource source = (Image.CompressSource)(0), Image.ASTCFormat astcFormat = (Image.ASTCFormat)(0))
     {
-        var __mb = __mb_compress;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "compress", 2975424957);
-            if (__mb == 0) throw new MissingMethodException("Image.compress is not available in this engine build.");
-            __mb_compress = __mb;
-        }
+        if (__mb_compress == 0) MethodBinds.MissingThrow("Image.compress");
         long __a0 = (long)mode;
         long __a1 = (long)source;
         long __a2 = (long)astcFormat;
@@ -1122,20 +816,14 @@ public unsafe partial class Image : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_compress, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_compress_from_channels;
     public Error CompressFromChannels(Image.CompressMode mode, Image.UsedChannels channels, Image.ASTCFormat astcFormat = (Image.ASTCFormat)(0))
     {
-        var __mb = __mb_compress_from_channels;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "compress_from_channels", 4212890953);
-            if (__mb == 0) throw new MissingMethodException("Image.compress_from_channels is not available in this engine build.");
-            __mb_compress_from_channels = __mb;
-        }
+        if (__mb_compress_from_channels == 0) MethodBinds.MissingThrow("Image.compress_from_channels");
         long __a0 = (long)mode;
         long __a1 = (long)channels;
         long __a2 = (long)astcFormat;
@@ -1144,195 +832,117 @@ public unsafe partial class Image : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_compress_from_channels, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_decompress;
     public Error Decompress()
     {
-        var __mb = __mb_decompress;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "decompress", 166280745);
-            if (__mb == 0) throw new MissingMethodException("Image.decompress is not available in this engine build.");
-            __mb_decompress = __mb;
-        }
+        if (__mb_decompress == 0) MethodBinds.MissingThrow("Image.decompress");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_decompress, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_is_compressed;
     public bool IsCompressed()
     {
-        var __mb = __mb_is_compressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "is_compressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Image.is_compressed is not available in this engine build.");
-            __mb_is_compressed = __mb;
-        }
+        if (__mb_is_compressed == 0) MethodBinds.MissingThrow("Image.is_compressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_compressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_rotate_90;
     public void Rotate90(ClockDirection direction)
     {
-        var __mb = __mb_rotate_90;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "rotate_90", 1901204267);
-            if (__mb == 0) throw new MissingMethodException("Image.rotate_90 is not available in this engine build.");
-            __mb_rotate_90 = __mb;
-        }
+        if (__mb_rotate_90 == 0) MethodBinds.MissingThrow("Image.rotate_90");
         long __a0 = (long)direction;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_rotate_90, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_rotate_180;
     public void Rotate180()
     {
-        var __mb = __mb_rotate_180;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "rotate_180", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.rotate_180 is not available in this engine build.");
-            __mb_rotate_180 = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_rotate_180 == 0) MethodBinds.MissingThrow("Image.rotate_180");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_rotate_180, NativePtr, 0, 0);
     }
 
     private static nint __mb_fix_alpha_edges;
     public void FixAlphaEdges()
     {
-        var __mb = __mb_fix_alpha_edges;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "fix_alpha_edges", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.fix_alpha_edges is not available in this engine build.");
-            __mb_fix_alpha_edges = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_fix_alpha_edges == 0) MethodBinds.MissingThrow("Image.fix_alpha_edges");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_fix_alpha_edges, NativePtr, 0, 0);
     }
 
     private static nint __mb_premultiply_alpha;
     public void PremultiplyAlpha()
     {
-        var __mb = __mb_premultiply_alpha;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "premultiply_alpha", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.premultiply_alpha is not available in this engine build.");
-            __mb_premultiply_alpha = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_premultiply_alpha == 0) MethodBinds.MissingThrow("Image.premultiply_alpha");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_premultiply_alpha, NativePtr, 0, 0);
     }
 
     private static nint __mb_srgb_to_linear;
     public void SrgbToLinear()
     {
-        var __mb = __mb_srgb_to_linear;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "srgb_to_linear", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.srgb_to_linear is not available in this engine build.");
-            __mb_srgb_to_linear = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_srgb_to_linear == 0) MethodBinds.MissingThrow("Image.srgb_to_linear");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_srgb_to_linear, NativePtr, 0, 0);
     }
 
     private static nint __mb_linear_to_srgb;
     public void LinearToSrgb()
     {
-        var __mb = __mb_linear_to_srgb;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "linear_to_srgb", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.linear_to_srgb is not available in this engine build.");
-            __mb_linear_to_srgb = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_linear_to_srgb == 0) MethodBinds.MissingThrow("Image.linear_to_srgb");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_linear_to_srgb, NativePtr, 0, 0);
     }
 
     private static nint __mb_normal_map_to_xy;
     public void NormalMapToXy()
     {
-        var __mb = __mb_normal_map_to_xy;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "normal_map_to_xy", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Image.normal_map_to_xy is not available in this engine build.");
-            __mb_normal_map_to_xy = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_normal_map_to_xy == 0) MethodBinds.MissingThrow("Image.normal_map_to_xy");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_normal_map_to_xy, NativePtr, 0, 0);
     }
 
     private static nint __mb_rgbe_to_srgb;
     public Image? RgbeToSrgb()
     {
-        var __mb = __mb_rgbe_to_srgb;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "rgbe_to_srgb", 564927088);
-            if (__mb == 0) throw new MissingMethodException("Image.rgbe_to_srgb is not available in this engine build.");
-            __mb_rgbe_to_srgb = __mb;
-        }
+        if (__mb_rgbe_to_srgb == 0) MethodBinds.MissingThrow("Image.rgbe_to_srgb");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_rgbe_to_srgb, NativePtr, 0, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_bump_map_to_normal_map;
     public void BumpMapToNormalMap(float bumpScale = 1.0f)
     {
-        var __mb = __mb_bump_map_to_normal_map;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "bump_map_to_normal_map", 3423495036);
-            if (__mb == 0) throw new MissingMethodException("Image.bump_map_to_normal_map is not available in this engine build.");
-            __mb_bump_map_to_normal_map = __mb;
-        }
+        if (__mb_bump_map_to_normal_map == 0) MethodBinds.MissingThrow("Image.bump_map_to_normal_map");
         double __a0 = bumpScale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_bump_map_to_normal_map, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_compute_image_metrics;
     public Godot.Collections.Dictionary ComputeImageMetrics(Image? comparedImage, bool useLuma)
     {
-        var __mb = __mb_compute_image_metrics;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "compute_image_metrics", 3080961247);
-            if (__mb == 0) throw new MissingMethodException("Image.compute_image_metrics is not available in this engine build.");
-            __mb_compute_image_metrics = __mb;
-        }
+        if (__mb_compute_image_metrics == 0) MethodBinds.MissingThrow("Image.compute_image_metrics");
         nint __a0 = comparedImage?.NativePtr ?? 0;
         byte __a1 = useLuma ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_compute_image_metrics, NativePtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_blit_rect;
     public void BlitRect(Image? src, Rect2I srcRect, Vector2I dst)
     {
-        var __mb = __mb_blit_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "blit_rect", 2903928755);
-            if (__mb == 0) throw new MissingMethodException("Image.blit_rect is not available in this engine build.");
-            __mb_blit_rect = __mb;
-        }
+        if (__mb_blit_rect == 0) MethodBinds.MissingThrow("Image.blit_rect");
         nint __a0 = src?.NativePtr ?? 0;
         var __a1 = srcRect;
         var __a2 = dst;
@@ -1340,19 +950,13 @@ public unsafe partial class Image : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_blit_rect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_blit_rect_mask;
     public void BlitRectMask(Image? src, Image? mask, Rect2I srcRect, Vector2I dst)
     {
-        var __mb = __mb_blit_rect_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "blit_rect_mask", 3383581145);
-            if (__mb == 0) throw new MissingMethodException("Image.blit_rect_mask is not available in this engine build.");
-            __mb_blit_rect_mask = __mb;
-        }
+        if (__mb_blit_rect_mask == 0) MethodBinds.MissingThrow("Image.blit_rect_mask");
         nint __a0 = src?.NativePtr ?? 0;
         nint __a1 = mask?.NativePtr ?? 0;
         var __a2 = srcRect;
@@ -1362,19 +966,13 @@ public unsafe partial class Image : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_blit_rect_mask, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_blend_rect;
     public void BlendRect(Image? src, Rect2I srcRect, Vector2I dst)
     {
-        var __mb = __mb_blend_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "blend_rect", 2903928755);
-            if (__mb == 0) throw new MissingMethodException("Image.blend_rect is not available in this engine build.");
-            __mb_blend_rect = __mb;
-        }
+        if (__mb_blend_rect == 0) MethodBinds.MissingThrow("Image.blend_rect");
         nint __a0 = src?.NativePtr ?? 0;
         var __a1 = srcRect;
         var __a2 = dst;
@@ -1382,19 +980,13 @@ public unsafe partial class Image : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_blend_rect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_blend_rect_mask;
     public void BlendRectMask(Image? src, Image? mask, Rect2I srcRect, Vector2I dst)
     {
-        var __mb = __mb_blend_rect_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "blend_rect_mask", 3383581145);
-            if (__mb == 0) throw new MissingMethodException("Image.blend_rect_mask is not available in this engine build.");
-            __mb_blend_rect_mask = __mb;
-        }
+        if (__mb_blend_rect_mask == 0) MethodBinds.MissingThrow("Image.blend_rect_mask");
         nint __a0 = src?.NativePtr ?? 0;
         nint __a1 = mask?.NativePtr ?? 0;
         var __a2 = srcRect;
@@ -1404,158 +996,104 @@ public unsafe partial class Image : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_blend_rect_mask, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_fill;
     public void Fill(Color color)
     {
-        var __mb = __mb_fill;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "fill", 2920490490);
-            if (__mb == 0) throw new MissingMethodException("Image.fill is not available in this engine build.");
-            __mb_fill = __mb;
-        }
+        if (__mb_fill == 0) MethodBinds.MissingThrow("Image.fill");
         var __a0 = color;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_fill, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_fill_rect;
     public void FillRect(Rect2I rect, Color color)
     {
-        var __mb = __mb_fill_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "fill_rect", 514693913);
-            if (__mb == 0) throw new MissingMethodException("Image.fill_rect is not available in this engine build.");
-            __mb_fill_rect = __mb;
-        }
+        if (__mb_fill_rect == 0) MethodBinds.MissingThrow("Image.fill_rect");
         var __a0 = rect;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_fill_rect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_used_rect;
     public Rect2I GetUsedRect()
     {
-        var __mb = __mb_get_used_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_used_rect", 410525958);
-            if (__mb == 0) throw new MissingMethodException("Image.get_used_rect is not available in this engine build.");
-            __mb_get_used_rect = __mb;
-        }
+        if (__mb_get_used_rect == 0) MethodBinds.MissingThrow("Image.get_used_rect");
         var __ret = default(Rect2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_used_rect, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_region;
     public Image? GetRegion(Rect2I region)
     {
-        var __mb = __mb_get_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_region", 2601441065);
-            if (__mb == 0) throw new MissingMethodException("Image.get_region is not available in this engine build.");
-            __mb_get_region = __mb;
-        }
+        if (__mb_get_region == 0) MethodBinds.MissingThrow("Image.get_region");
         var __a0 = region;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_region, NativePtr, (nint)__args, (nint)(&__ret));
         return (Image?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_copy_from;
     public void CopyFrom(Image? src)
     {
-        var __mb = __mb_copy_from;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "copy_from", 532598488);
-            if (__mb == 0) throw new MissingMethodException("Image.copy_from is not available in this engine build.");
-            __mb_copy_from = __mb;
-        }
+        if (__mb_copy_from == 0) MethodBinds.MissingThrow("Image.copy_from");
         nint __a0 = src?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_copy_from, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pixelv;
     public Color GetPixelv(Vector2I point)
     {
-        var __mb = __mb_get_pixelv;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_pixelv", 1532707496);
-            if (__mb == 0) throw new MissingMethodException("Image.get_pixelv is not available in this engine build.");
-            __mb_get_pixelv = __mb;
-        }
+        if (__mb_get_pixelv == 0) MethodBinds.MissingThrow("Image.get_pixelv");
         var __a0 = point;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pixelv, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_pixel;
     public Color GetPixel(int x, int y)
     {
-        var __mb = __mb_get_pixel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "get_pixel", 2165839948);
-            if (__mb == 0) throw new MissingMethodException("Image.get_pixel is not available in this engine build.");
-            __mb_get_pixel = __mb;
-        }
+        if (__mb_get_pixel == 0) MethodBinds.MissingThrow("Image.get_pixel");
         long __a0 = unchecked((long)x);
         long __a1 = unchecked((long)y);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pixel, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_pixelv;
     public void SetPixelv(Vector2I point, Color color)
     {
-        var __mb = __mb_set_pixelv;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "set_pixelv", 287851464);
-            if (__mb == 0) throw new MissingMethodException("Image.set_pixelv is not available in this engine build.");
-            __mb_set_pixelv = __mb;
-        }
+        if (__mb_set_pixelv == 0) MethodBinds.MissingThrow("Image.set_pixelv");
         var __a0 = point;
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pixelv, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_pixel;
     public void SetPixel(int x, int y, Color color)
     {
-        var __mb = __mb_set_pixel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "set_pixel", 3733378741);
-            if (__mb == 0) throw new MissingMethodException("Image.set_pixel is not available in this engine build.");
-            __mb_set_pixel = __mb;
-        }
+        if (__mb_set_pixel == 0) MethodBinds.MissingThrow("Image.set_pixel");
         long __a0 = unchecked((long)x);
         long __a1 = unchecked((long)y);
         var __a2 = color;
@@ -1563,19 +1101,13 @@ public unsafe partial class Image : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pixel, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_adjust_bcs;
     public void AdjustBcs(float brightness, float contrast, float saturation)
     {
-        var __mb = __mb_adjust_bcs;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "adjust_bcs", 2385087082);
-            if (__mb == 0) throw new MissingMethodException("Image.adjust_bcs is not available in this engine build.");
-            __mb_adjust_bcs = __mb;
-        }
+        if (__mb_adjust_bcs == 0) MethodBinds.MissingThrow("Image.adjust_bcs");
         double __a0 = brightness;
         double __a1 = contrast;
         double __a2 = saturation;
@@ -1583,24 +1115,18 @@ public unsafe partial class Image : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_adjust_bcs, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_load_png_from_buffer;
     public Error LoadPngFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_png_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_png_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_png_from_buffer is not available in this engine build.");
-            __mb_load_png_from_buffer = __mb;
-        }
+        if (__mb_load_png_from_buffer == 0) MethodBinds.MissingThrow("Image.load_png_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_png_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1608,18 +1134,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_jpg_from_buffer;
     public Error LoadJpgFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_jpg_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_jpg_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_jpg_from_buffer is not available in this engine build.");
-            __mb_load_jpg_from_buffer = __mb;
-        }
+        if (__mb_load_jpg_from_buffer == 0) MethodBinds.MissingThrow("Image.load_jpg_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_jpg_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1627,18 +1147,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_webp_from_buffer;
     public Error LoadWebpFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_webp_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_webp_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_webp_from_buffer is not available in this engine build.");
-            __mb_load_webp_from_buffer = __mb;
-        }
+        if (__mb_load_webp_from_buffer == 0) MethodBinds.MissingThrow("Image.load_webp_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_webp_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1646,18 +1160,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_tga_from_buffer;
     public Error LoadTgaFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_tga_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_tga_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_tga_from_buffer is not available in this engine build.");
-            __mb_load_tga_from_buffer = __mb;
-        }
+        if (__mb_load_tga_from_buffer == 0) MethodBinds.MissingThrow("Image.load_tga_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_tga_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1665,18 +1173,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_bmp_from_buffer;
     public Error LoadBmpFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_bmp_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_bmp_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_bmp_from_buffer is not available in this engine build.");
-            __mb_load_bmp_from_buffer = __mb;
-        }
+        if (__mb_load_bmp_from_buffer == 0) MethodBinds.MissingThrow("Image.load_bmp_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_bmp_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1684,18 +1186,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_ktx_from_buffer;
     public Error LoadKtxFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_ktx_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_ktx_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_ktx_from_buffer is not available in this engine build.");
-            __mb_load_ktx_from_buffer = __mb;
-        }
+        if (__mb_load_ktx_from_buffer == 0) MethodBinds.MissingThrow("Image.load_ktx_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_ktx_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1703,18 +1199,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_dds_from_buffer;
     public Error LoadDdsFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_dds_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_dds_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_dds_from_buffer is not available in this engine build.");
-            __mb_load_dds_from_buffer = __mb;
-        }
+        if (__mb_load_dds_from_buffer == 0) MethodBinds.MissingThrow("Image.load_dds_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_dds_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1722,18 +1212,12 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_exr_from_buffer;
     public Error LoadExrFromBuffer(byte[] buffer)
     {
-        var __mb = __mb_load_exr_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_exr_from_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("Image.load_exr_from_buffer is not available in this engine build.");
-            __mb_load_exr_from_buffer = __mb;
-        }
+        if (__mb_load_exr_from_buffer == 0) MethodBinds.MissingThrow("Image.load_exr_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_exr_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1741,20 +1225,14 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_svg_from_buffer;
     public Error LoadSvgFromBuffer(byte[] buffer, float scale = 1.0f)
     {
-        var __mb = __mb_load_svg_from_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_svg_from_buffer", 311853421);
-            if (__mb == 0) throw new MissingMethodException("Image.load_svg_from_buffer is not available in this engine build.");
-            __mb_load_svg_from_buffer = __mb;
-        }
+        if (__mb_load_svg_from_buffer == 0) MethodBinds.MissingThrow("Image.load_svg_from_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         double __a1 = scale;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_svg_from_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
     }
@@ -1762,22 +1240,96 @@ public unsafe partial class Image : Resource
     private static nint __mb_load_svg_from_string;
     public Error LoadSvgFromString(string svgStr, float scale = 1.0f)
     {
-        var __mb = __mb_load_svg_from_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Image", "load_svg_from_string", 3254053600);
-            if (__mb == 0) throw new MissingMethodException("Image.load_svg_from_string is not available in this engine build.");
-            __mb_load_svg_from_string = __mb;
-        }
+        if (__mb_load_svg_from_string == 0) MethodBinds.MissingThrow("Image.load_svg_from_string");
         ulong __a0 = NativeString.Create(svgStr);
         double __a1 = scale;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_svg_from_string, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_width = MethodBinds.ResolveBulk("Image", "get_width", 3905245786);
+        __mb_get_height = MethodBinds.ResolveBulk("Image", "get_height", 3905245786);
+        __mb_get_size = MethodBinds.ResolveBulk("Image", "get_size", 3690982128);
+        __mb_has_mipmaps = MethodBinds.ResolveBulk("Image", "has_mipmaps", 36873697);
+        __mb_get_format = MethodBinds.ResolveBulk("Image", "get_format", 3847873762);
+        __mb_get_data = MethodBinds.ResolveBulk("Image", "get_data", 2362200018);
+        __mb_get_data_size = MethodBinds.ResolveBulk("Image", "get_data_size", 3905245786);
+        __mb_convert = MethodBinds.ResolveBulk("Image", "convert", 2120693146);
+        __mb_get_mipmap_count = MethodBinds.ResolveBulk("Image", "get_mipmap_count", 3905245786);
+        __mb_get_mipmap_offset = MethodBinds.ResolveBulk("Image", "get_mipmap_offset", 923996154);
+        __mb_resize_to_po2 = MethodBinds.ResolveBulk("Image", "resize_to_po2", 4189212329);
+        __mb_resize = MethodBinds.ResolveBulk("Image", "resize", 994498151);
+        __mb_shrink_x2 = MethodBinds.ResolveBulk("Image", "shrink_x2", 3218959716);
+        __mb_crop = MethodBinds.ResolveBulk("Image", "crop", 3937882851);
+        __mb_flip_x = MethodBinds.ResolveBulk("Image", "flip_x", 3218959716);
+        __mb_flip_y = MethodBinds.ResolveBulk("Image", "flip_y", 3218959716);
+        __mb_generate_mipmaps = MethodBinds.ResolveBulk("Image", "generate_mipmaps", 1633102583);
+        __mb_clear_mipmaps = MethodBinds.ResolveBulk("Image", "clear_mipmaps", 3218959716);
+        __mb_create = MethodBinds.ResolveBulk("Image", "create", 986942177);
+        __mb_create_empty = MethodBinds.ResolveBulk("Image", "create_empty", 986942177);
+        __mb_create_from_data = MethodBinds.ResolveBulk("Image", "create_from_data", 299398494);
+        __mb_set_data = MethodBinds.ResolveBulk("Image", "set_data", 2740482212);
+        __mb_is_empty = MethodBinds.ResolveBulk("Image", "is_empty", 36873697);
+        __mb_load = MethodBinds.ResolveBulk("Image", "load", 166001499);
+        __mb_load_from_file = MethodBinds.ResolveBulk("Image", "load_from_file", 736337515);
+        __mb_save_png = MethodBinds.ResolveBulk("Image", "save_png", 2113323047);
+        __mb_save_png_to_buffer = MethodBinds.ResolveBulk("Image", "save_png_to_buffer", 2362200018);
+        __mb_save_jpg = MethodBinds.ResolveBulk("Image", "save_jpg", 2800019068);
+        __mb_save_jpg_to_buffer = MethodBinds.ResolveBulk("Image", "save_jpg_to_buffer", 592235273);
+        __mb_save_exr = MethodBinds.ResolveBulk("Image", "save_exr", 2018602448);
+        __mb_save_exr_to_buffer = MethodBinds.ResolveBulk("Image", "save_exr_to_buffer", 1477518536);
+        __mb_save_dds = MethodBinds.ResolveBulk("Image", "save_dds", 2113323047);
+        __mb_save_dds_to_buffer = MethodBinds.ResolveBulk("Image", "save_dds_to_buffer", 2362200018);
+        __mb_save_webp = MethodBinds.ResolveBulk("Image", "save_webp", 2781156876);
+        __mb_save_webp_to_buffer = MethodBinds.ResolveBulk("Image", "save_webp_to_buffer", 1214628238);
+        __mb_detect_alpha = MethodBinds.ResolveBulk("Image", "detect_alpha", 2030116505);
+        __mb_is_invisible = MethodBinds.ResolveBulk("Image", "is_invisible", 36873697);
+        __mb_detect_used_channels = MethodBinds.ResolveBulk("Image", "detect_used_channels", 2703139984);
+        __mb_compress = MethodBinds.ResolveBulk("Image", "compress", 2975424957);
+        __mb_compress_from_channels = MethodBinds.ResolveBulk("Image", "compress_from_channels", 4212890953);
+        __mb_decompress = MethodBinds.ResolveBulk("Image", "decompress", 166280745);
+        __mb_is_compressed = MethodBinds.ResolveBulk("Image", "is_compressed", 36873697);
+        __mb_rotate_90 = MethodBinds.ResolveBulk("Image", "rotate_90", 1901204267);
+        __mb_rotate_180 = MethodBinds.ResolveBulk("Image", "rotate_180", 3218959716);
+        __mb_fix_alpha_edges = MethodBinds.ResolveBulk("Image", "fix_alpha_edges", 3218959716);
+        __mb_premultiply_alpha = MethodBinds.ResolveBulk("Image", "premultiply_alpha", 3218959716);
+        __mb_srgb_to_linear = MethodBinds.ResolveBulk("Image", "srgb_to_linear", 3218959716);
+        __mb_linear_to_srgb = MethodBinds.ResolveBulk("Image", "linear_to_srgb", 3218959716);
+        __mb_normal_map_to_xy = MethodBinds.ResolveBulk("Image", "normal_map_to_xy", 3218959716);
+        __mb_rgbe_to_srgb = MethodBinds.ResolveBulk("Image", "rgbe_to_srgb", 564927088);
+        __mb_bump_map_to_normal_map = MethodBinds.ResolveBulk("Image", "bump_map_to_normal_map", 3423495036);
+        __mb_compute_image_metrics = MethodBinds.ResolveBulk("Image", "compute_image_metrics", 3080961247);
+        __mb_blit_rect = MethodBinds.ResolveBulk("Image", "blit_rect", 2903928755);
+        __mb_blit_rect_mask = MethodBinds.ResolveBulk("Image", "blit_rect_mask", 3383581145);
+        __mb_blend_rect = MethodBinds.ResolveBulk("Image", "blend_rect", 2903928755);
+        __mb_blend_rect_mask = MethodBinds.ResolveBulk("Image", "blend_rect_mask", 3383581145);
+        __mb_fill = MethodBinds.ResolveBulk("Image", "fill", 2920490490);
+        __mb_fill_rect = MethodBinds.ResolveBulk("Image", "fill_rect", 514693913);
+        __mb_get_used_rect = MethodBinds.ResolveBulk("Image", "get_used_rect", 410525958);
+        __mb_get_region = MethodBinds.ResolveBulk("Image", "get_region", 2601441065);
+        __mb_copy_from = MethodBinds.ResolveBulk("Image", "copy_from", 532598488);
+        __mb_get_pixelv = MethodBinds.ResolveBulk("Image", "get_pixelv", 1532707496);
+        __mb_get_pixel = MethodBinds.ResolveBulk("Image", "get_pixel", 2165839948);
+        __mb_set_pixelv = MethodBinds.ResolveBulk("Image", "set_pixelv", 287851464);
+        __mb_set_pixel = MethodBinds.ResolveBulk("Image", "set_pixel", 3733378741);
+        __mb_adjust_bcs = MethodBinds.ResolveBulk("Image", "adjust_bcs", 2385087082);
+        __mb_load_png_from_buffer = MethodBinds.ResolveBulk("Image", "load_png_from_buffer", 680677267);
+        __mb_load_jpg_from_buffer = MethodBinds.ResolveBulk("Image", "load_jpg_from_buffer", 680677267);
+        __mb_load_webp_from_buffer = MethodBinds.ResolveBulk("Image", "load_webp_from_buffer", 680677267);
+        __mb_load_tga_from_buffer = MethodBinds.ResolveBulk("Image", "load_tga_from_buffer", 680677267);
+        __mb_load_bmp_from_buffer = MethodBinds.ResolveBulk("Image", "load_bmp_from_buffer", 680677267);
+        __mb_load_ktx_from_buffer = MethodBinds.ResolveBulk("Image", "load_ktx_from_buffer", 680677267);
+        __mb_load_dds_from_buffer = MethodBinds.ResolveBulk("Image", "load_dds_from_buffer", 680677267);
+        __mb_load_exr_from_buffer = MethodBinds.ResolveBulk("Image", "load_exr_from_buffer", 680677267);
+        __mb_load_svg_from_buffer = MethodBinds.ResolveBulk("Image", "load_svg_from_buffer", 311853421);
+        __mb_load_svg_from_string = MethodBinds.ResolveBulk("Image", "load_svg_from_string", 3254053600);
     }
 }
 
@@ -1806,27 +1358,15 @@ public unsafe partial class ImageFormatLoaderExtension : ImageFormatLoader
     private static nint __mb_add_format_loader;
     public void AddFormatLoader()
     {
-        var __mb = __mb_add_format_loader;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageFormatLoaderExtension", "add_format_loader", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ImageFormatLoaderExtension.add_format_loader is not available in this engine build.");
-            __mb_add_format_loader = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_add_format_loader == 0) MethodBinds.MissingThrow("ImageFormatLoaderExtension.add_format_loader");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_format_loader, NativePtr, 0, 0);
     }
 
     private static nint __mb_remove_format_loader;
     public void RemoveFormatLoader()
     {
-        var __mb = __mb_remove_format_loader;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageFormatLoaderExtension", "remove_format_loader", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ImageFormatLoaderExtension.remove_format_loader is not available in this engine build.");
-            __mb_remove_format_loader = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_remove_format_loader == 0) MethodBinds.MissingThrow("ImageFormatLoaderExtension.remove_format_loader");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_format_loader, NativePtr, 0, 0);
     }
 
     public virtual string[] _GetRecognizedExtensions() => default!;
@@ -1852,6 +1392,12 @@ public unsafe partial class ImageFormatLoaderExtension : ImageFormatLoader
         }
         return base.__CallVirtual(nameSn, args, ret);
     }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_add_format_loader = MethodBinds.ResolveBulk("ImageFormatLoaderExtension", "add_format_loader", 3218959716);
+        __mb_remove_format_loader = MethodBinds.ResolveBulk("ImageFormatLoaderExtension", "remove_format_loader", 3218959716);
+    }
 }
 
 public unsafe partial class ImageTexture : Texture2D
@@ -1868,67 +1414,51 @@ public unsafe partial class ImageTexture : Texture2D
     private static nint __mb_create_from_image;
     public static ImageTexture? CreateFromImage(Image? image)
     {
-        var __mb = __mb_create_from_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTexture", "create_from_image", 2775144163);
-            if (__mb == 0) throw new MissingMethodException("ImageTexture.create_from_image is not available in this engine build.");
-            __mb_create_from_image = __mb;
-        }
+        if (__mb_create_from_image == 0) MethodBinds.MissingThrow("ImageTexture.create_from_image");
         nint __a0 = image?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_from_image, 0, (nint)__args, (nint)(&__ret));
         return (ImageTexture?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_image;
     public void SetImage(Image? image)
     {
-        var __mb = __mb_set_image;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTexture", "set_image", 532598488);
-            if (__mb == 0) throw new MissingMethodException("ImageTexture.set_image is not available in this engine build.");
-            __mb_set_image = __mb;
-        }
+        if (__mb_set_image == 0) MethodBinds.MissingThrow("ImageTexture.set_image");
         nint __a0 = image?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_image, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_update;
     public void Update(Image? image)
     {
-        var __mb = __mb_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTexture", "update", 532598488);
-            if (__mb == 0) throw new MissingMethodException("ImageTexture.update is not available in this engine build.");
-            __mb_update = __mb;
-        }
+        if (__mb_update == 0) MethodBinds.MissingThrow("ImageTexture.update");
         nint __a0 = image?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_update, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_size_override;
     public void SetSizeOverride(Vector2I size)
     {
-        var __mb = __mb_set_size_override;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTexture", "set_size_override", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("ImageTexture.set_size_override is not available in this engine build.");
-            __mb_set_size_override = __mb;
-        }
+        if (__mb_set_size_override == 0) MethodBinds.MissingThrow("ImageTexture.set_size_override");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_size_override, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create_from_image = MethodBinds.ResolveBulk("ImageTexture", "create_from_image", 2775144163);
+        __mb_set_image = MethodBinds.ResolveBulk("ImageTexture", "set_image", 532598488);
+        __mb_update = MethodBinds.ResolveBulk("ImageTexture", "update", 532598488);
+        __mb_set_size_override = MethodBinds.ResolveBulk("ImageTexture", "set_size_override", 1130785943);
     }
 }
 
@@ -1944,13 +1474,7 @@ public unsafe partial class ImageTexture3D : Texture3D
     private static nint __mb_create;
     public Error Create(Image.Format format, int width, int height, int depth, bool useMipmaps, Godot.Collections.Array data)
     {
-        var __mb = __mb_create;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTexture3D", "create", 1130379827);
-            if (__mb == 0) throw new MissingMethodException("ImageTexture3D.create is not available in this engine build.");
-            __mb_create = __mb;
-        }
+        if (__mb_create == 0) MethodBinds.MissingThrow("ImageTexture3D.create");
         long __a0 = (long)format;
         long __a1 = unchecked((long)width);
         long __a2 = unchecked((long)height);
@@ -1965,24 +1489,24 @@ public unsafe partial class ImageTexture3D : Texture3D
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_update;
     public void Update(Godot.Collections.Array data)
     {
-        var __mb = __mb_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTexture3D", "update", 381264803);
-            if (__mb == 0) throw new MissingMethodException("ImageTexture3D.update is not available in this engine build.");
-            __mb_update = __mb;
-        }
+        if (__mb_update == 0) MethodBinds.MissingThrow("ImageTexture3D.update");
         ulong __a0 = data.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_update, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create = MethodBinds.ResolveBulk("ImageTexture3D", "create", 1130379827);
+        __mb_update = MethodBinds.ResolveBulk("ImageTexture3D", "update", 381264803);
     }
 }
 
@@ -1993,37 +1517,31 @@ public unsafe partial class ImageTextureLayered : TextureLayered
     private static nint __mb_create_from_images;
     public Error CreateFromImages(Godot.Collections.Array images)
     {
-        var __mb = __mb_create_from_images;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTextureLayered", "create_from_images", 2785773503);
-            if (__mb == 0) throw new MissingMethodException("ImageTextureLayered.create_from_images is not available in this engine build.");
-            __mb_create_from_images = __mb;
-        }
+        if (__mb_create_from_images == 0) MethodBinds.MissingThrow("ImageTextureLayered.create_from_images");
         ulong __a0 = images.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_from_images, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_update_layer;
     public void UpdateLayer(Image? image, int layer)
     {
-        var __mb = __mb_update_layer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImageTextureLayered", "update_layer", 3331733361);
-            if (__mb == 0) throw new MissingMethodException("ImageTextureLayered.update_layer is not available in this engine build.");
-            __mb_update_layer = __mb;
-        }
+        if (__mb_update_layer == 0) MethodBinds.MissingThrow("ImageTextureLayered.update_layer");
         nint __a0 = image?.NativePtr ?? 0;
         long __a1 = unchecked((long)layer);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_update_layer, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_create_from_images = MethodBinds.ResolveBulk("ImageTextureLayered", "create_from_images", 2785773503);
+        __mb_update_layer = MethodBinds.ResolveBulk("ImageTextureLayered", "update_layer", 3331733361);
     }
 }
 
@@ -2039,157 +1557,111 @@ public unsafe partial class ImmediateMesh : Mesh
     private static nint __mb_surface_begin;
     public void SurfaceBegin(Mesh.PrimitiveType primitive, Material? material = null)
     {
-        var __mb = __mb_surface_begin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_begin", 2794442543);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_begin is not available in this engine build.");
-            __mb_surface_begin = __mb;
-        }
+        if (__mb_surface_begin == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_begin");
         long __a0 = (long)primitive;
         nint __a1 = material?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_begin, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_set_color;
     public void SurfaceSetColor(Color color)
     {
-        var __mb = __mb_surface_set_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_set_color", 2920490490);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_set_color is not available in this engine build.");
-            __mb_surface_set_color = __mb;
-        }
+        if (__mb_surface_set_color == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_set_color");
         var __a0 = color;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_set_color, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_set_normal;
     public void SurfaceSetNormal(Vector3 normal)
     {
-        var __mb = __mb_surface_set_normal;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_set_normal", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_set_normal is not available in this engine build.");
-            __mb_surface_set_normal = __mb;
-        }
+        if (__mb_surface_set_normal == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_set_normal");
         var __a0 = normal;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_set_normal, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_set_tangent;
     public void SurfaceSetTangent(Plane tangent)
     {
-        var __mb = __mb_surface_set_tangent;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_set_tangent", 3505987427);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_set_tangent is not available in this engine build.");
-            __mb_surface_set_tangent = __mb;
-        }
+        if (__mb_surface_set_tangent == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_set_tangent");
         var __a0 = tangent;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_set_tangent, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_set_uv;
     public void SurfaceSetUv(Vector2 uv)
     {
-        var __mb = __mb_surface_set_uv;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_set_uv", 743155724);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_set_uv is not available in this engine build.");
-            __mb_surface_set_uv = __mb;
-        }
+        if (__mb_surface_set_uv == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_set_uv");
         var __a0 = uv;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_set_uv, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_set_uv2;
     public void SurfaceSetUv2(Vector2 uv2)
     {
-        var __mb = __mb_surface_set_uv2;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_set_uv2", 743155724);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_set_uv2 is not available in this engine build.");
-            __mb_surface_set_uv2 = __mb;
-        }
+        if (__mb_surface_set_uv2 == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_set_uv2");
         var __a0 = uv2;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_set_uv2, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_add_vertex;
     public void SurfaceAddVertex(Vector3 vertex)
     {
-        var __mb = __mb_surface_add_vertex;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_add_vertex", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_add_vertex is not available in this engine build.");
-            __mb_surface_add_vertex = __mb;
-        }
+        if (__mb_surface_add_vertex == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_add_vertex");
         var __a0 = vertex;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_add_vertex, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_add_vertex_2d;
     public void SurfaceAddVertex2D(Vector2 vertex)
     {
-        var __mb = __mb_surface_add_vertex_2d;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_add_vertex_2d", 743155724);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_add_vertex_2d is not available in this engine build.");
-            __mb_surface_add_vertex_2d = __mb;
-        }
+        if (__mb_surface_add_vertex_2d == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_add_vertex_2d");
         var __a0 = vertex;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_add_vertex_2d, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_surface_end;
     public void SurfaceEnd()
     {
-        var __mb = __mb_surface_end;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "surface_end", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.surface_end is not available in this engine build.");
-            __mb_surface_end = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_surface_end == 0) MethodBinds.MissingThrow("ImmediateMesh.surface_end");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_surface_end, NativePtr, 0, 0);
     }
 
     private static nint __mb_clear_surfaces;
     public void ClearSurfaces()
     {
-        var __mb = __mb_clear_surfaces;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImmediateMesh", "clear_surfaces", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ImmediateMesh.clear_surfaces is not available in this engine build.");
-            __mb_clear_surfaces = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear_surfaces == 0) MethodBinds.MissingThrow("ImmediateMesh.clear_surfaces");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_surfaces, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_surface_begin = MethodBinds.ResolveBulk("ImmediateMesh", "surface_begin", 2794442543);
+        __mb_surface_set_color = MethodBinds.ResolveBulk("ImmediateMesh", "surface_set_color", 2920490490);
+        __mb_surface_set_normal = MethodBinds.ResolveBulk("ImmediateMesh", "surface_set_normal", 3460891852);
+        __mb_surface_set_tangent = MethodBinds.ResolveBulk("ImmediateMesh", "surface_set_tangent", 3505987427);
+        __mb_surface_set_uv = MethodBinds.ResolveBulk("ImmediateMesh", "surface_set_uv", 743155724);
+        __mb_surface_set_uv2 = MethodBinds.ResolveBulk("ImmediateMesh", "surface_set_uv2", 743155724);
+        __mb_surface_add_vertex = MethodBinds.ResolveBulk("ImmediateMesh", "surface_add_vertex", 3460891852);
+        __mb_surface_add_vertex_2d = MethodBinds.ResolveBulk("ImmediateMesh", "surface_add_vertex_2d", 743155724);
+        __mb_surface_end = MethodBinds.ResolveBulk("ImmediateMesh", "surface_end", 3218959716);
+        __mb_clear_surfaces = MethodBinds.ResolveBulk("ImmediateMesh", "clear_surfaces", 3218959716);
     }
 }
 
@@ -2205,13 +1677,7 @@ public unsafe partial class ImporterMesh : Resource
     private static nint __mb_merge_importer_meshes;
     public static ImporterMesh? MergeImporterMeshes(Godot.Collections.Array importerMeshes, Godot.Collections.Array relativeTransforms, bool deduplicateSurfaces = true)
     {
-        var __mb = __mb_merge_importer_meshes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "merge_importer_meshes", 1030647649);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.merge_importer_meshes is not available in this engine build.");
-            __mb_merge_importer_meshes = __mb;
-        }
+        if (__mb_merge_importer_meshes == 0) MethodBinds.MissingThrow("ImporterMesh.merge_importer_meshes");
         ulong __a0 = importerMeshes.Native;
         ulong __a1 = relativeTransforms.Native;
         byte __a2 = deduplicateSurfaces ? (byte)1 : (byte)0;
@@ -2220,101 +1686,65 @@ public unsafe partial class ImporterMesh : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_merge_importer_meshes, 0, (nint)__args, (nint)(&__ret));
         return (ImporterMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_add_blend_shape;
     public void AddBlendShape(string name)
     {
-        var __mb = __mb_add_blend_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "add_blend_shape", 83702148);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.add_blend_shape is not available in this engine build.");
-            __mb_add_blend_shape = __mb;
-        }
+        if (__mb_add_blend_shape == 0) MethodBinds.MissingThrow("ImporterMesh.add_blend_shape");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_blend_shape, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_blend_shape_count;
     public int GetBlendShapeCount()
     {
-        var __mb = __mb_get_blend_shape_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_blend_shape_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_blend_shape_count is not available in this engine build.");
-            __mb_get_blend_shape_count = __mb;
-        }
+        if (__mb_get_blend_shape_count == 0) MethodBinds.MissingThrow("ImporterMesh.get_blend_shape_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_blend_shape_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_blend_shape_name;
     public string GetBlendShapeName(int blendShapeIdx)
     {
-        var __mb = __mb_get_blend_shape_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_blend_shape_name", 844755477);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_blend_shape_name is not available in this engine build.");
-            __mb_get_blend_shape_name = __mb;
-        }
+        if (__mb_get_blend_shape_name == 0) MethodBinds.MissingThrow("ImporterMesh.get_blend_shape_name");
         long __a0 = unchecked((long)blendShapeIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_blend_shape_name, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_blend_shape_mode;
     public void SetBlendShapeMode(Mesh.BlendShapeMode mode)
     {
-        var __mb = __mb_set_blend_shape_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "set_blend_shape_mode", 227983991);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.set_blend_shape_mode is not available in this engine build.");
-            __mb_set_blend_shape_mode = __mb;
-        }
+        if (__mb_set_blend_shape_mode == 0) MethodBinds.MissingThrow("ImporterMesh.set_blend_shape_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_blend_shape_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_blend_shape_mode;
     public Mesh.BlendShapeMode GetBlendShapeMode()
     {
-        var __mb = __mb_get_blend_shape_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_blend_shape_mode", 836485024);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_blend_shape_mode is not available in this engine build.");
-            __mb_get_blend_shape_mode = __mb;
-        }
+        if (__mb_get_blend_shape_mode == 0) MethodBinds.MissingThrow("ImporterMesh.get_blend_shape_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_blend_shape_mode, NativePtr, 0, (nint)(&__ret));
         return (Mesh.BlendShapeMode)__ret;
     }
 
     private static nint __mb_add_surface;
     public void AddSurface(Mesh.PrimitiveType primitive, Godot.Collections.Array arrays, Godot.Collections.Array blendShapes, Godot.Collections.Dictionary lods, Material? material = null, string name = "", ulong flags = unchecked((ulong)(0)))
     {
-        var __mb = __mb_add_surface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "add_surface", 1740448849);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.add_surface is not available in this engine build.");
-            __mb_add_surface = __mb;
-        }
+        if (__mb_add_surface == 0) MethodBinds.MissingThrow("ImporterMesh.add_surface");
         long __a0 = (long)primitive;
         ulong __a1 = arrays.Native;
         ulong __a2 = blendShapes.Native;
@@ -2330,240 +1760,162 @@ public unsafe partial class ImporterMesh : Resource
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
         __args[6] = (nint)(&__a6);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_surface, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a5);
     }
 
     private static nint __mb_get_surface_count;
     public int GetSurfaceCount()
     {
-        var __mb = __mb_get_surface_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_count is not available in this engine build.");
-            __mb_get_surface_count = __mb;
-        }
+        if (__mb_get_surface_count == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_surface_primitive_type;
     public Mesh.PrimitiveType GetSurfacePrimitiveType(int surfaceIdx)
     {
-        var __mb = __mb_get_surface_primitive_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_primitive_type", 3552571330);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_primitive_type is not available in this engine build.");
-            __mb_get_surface_primitive_type = __mb;
-        }
+        if (__mb_get_surface_primitive_type == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_primitive_type");
         long __a0 = unchecked((long)surfaceIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_primitive_type, NativePtr, (nint)__args, (nint)(&__ret));
         return (Mesh.PrimitiveType)__ret;
     }
 
     private static nint __mb_get_surface_name;
     public string GetSurfaceName(int surfaceIdx)
     {
-        var __mb = __mb_get_surface_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_name", 844755477);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_name is not available in this engine build.");
-            __mb_get_surface_name = __mb;
-        }
+        if (__mb_get_surface_name == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_name");
         long __a0 = unchecked((long)surfaceIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_name, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_surface_arrays;
     public Godot.Collections.Array GetSurfaceArrays(int surfaceIdx)
     {
-        var __mb = __mb_get_surface_arrays;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_arrays", 663333327);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_arrays is not available in this engine build.");
-            __mb_get_surface_arrays = __mb;
-        }
+        if (__mb_get_surface_arrays == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_arrays");
         long __a0 = unchecked((long)surfaceIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_arrays, NativePtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_surface_blend_shape_arrays;
     public Godot.Collections.Array GetSurfaceBlendShapeArrays(int surfaceIdx, int blendShapeIdx)
     {
-        var __mb = __mb_get_surface_blend_shape_arrays;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_blend_shape_arrays", 2345056839);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_blend_shape_arrays is not available in this engine build.");
-            __mb_get_surface_blend_shape_arrays = __mb;
-        }
+        if (__mb_get_surface_blend_shape_arrays == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_blend_shape_arrays");
         long __a0 = unchecked((long)surfaceIdx);
         long __a1 = unchecked((long)blendShapeIdx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_blend_shape_arrays, NativePtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_surface_lod_count;
     public int GetSurfaceLodCount(int surfaceIdx)
     {
-        var __mb = __mb_get_surface_lod_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_lod_count", 923996154);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_lod_count is not available in this engine build.");
-            __mb_get_surface_lod_count = __mb;
-        }
+        if (__mb_get_surface_lod_count == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_lod_count");
         long __a0 = unchecked((long)surfaceIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_lod_count, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_surface_lod_size;
     public float GetSurfaceLodSize(int surfaceIdx, int lodIdx)
     {
-        var __mb = __mb_get_surface_lod_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_lod_size", 3085491603);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_lod_size is not available in this engine build.");
-            __mb_get_surface_lod_size = __mb;
-        }
+        if (__mb_get_surface_lod_size == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_lod_size");
         long __a0 = unchecked((long)surfaceIdx);
         long __a1 = unchecked((long)lodIdx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_lod_size, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_surface_lod_indices;
     public int[] GetSurfaceLodIndices(int surfaceIdx, int lodIdx)
     {
-        var __mb = __mb_get_surface_lod_indices;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_lod_indices", 1265128013);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_lod_indices is not available in this engine build.");
-            __mb_get_surface_lod_indices = __mb;
-        }
+        if (__mb_get_surface_lod_indices == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_lod_indices");
         long __a0 = unchecked((long)surfaceIdx);
         long __a1 = unchecked((long)lodIdx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_lod_indices, NativePtr, (nint)__args, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_surface_material;
     public Material? GetSurfaceMaterial(int surfaceIdx)
     {
-        var __mb = __mb_get_surface_material;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_material", 2897466400);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_material is not available in this engine build.");
-            __mb_get_surface_material = __mb;
-        }
+        if (__mb_get_surface_material == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_material");
         long __a0 = unchecked((long)surfaceIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_material, NativePtr, (nint)__args, (nint)(&__ret));
         return (Material?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_surface_format;
     public ulong GetSurfaceFormat(int surfaceIdx)
     {
-        var __mb = __mb_get_surface_format;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_surface_format", 923996154);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_surface_format is not available in this engine build.");
-            __mb_get_surface_format = __mb;
-        }
+        if (__mb_get_surface_format == 0) MethodBinds.MissingThrow("ImporterMesh.get_surface_format");
         long __a0 = unchecked((long)surfaceIdx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_surface_format, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_set_surface_name;
     public void SetSurfaceName(int surfaceIdx, string name)
     {
-        var __mb = __mb_set_surface_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "set_surface_name", 501894301);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.set_surface_name is not available in this engine build.");
-            __mb_set_surface_name = __mb;
-        }
+        if (__mb_set_surface_name == 0) MethodBinds.MissingThrow("ImporterMesh.set_surface_name");
         long __a0 = unchecked((long)surfaceIdx);
         ulong __a1 = NativeString.Create(name);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_surface_name, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_set_surface_material;
     public void SetSurfaceMaterial(int surfaceIdx, Material? material)
     {
-        var __mb = __mb_set_surface_material;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "set_surface_material", 3671737478);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.set_surface_material is not available in this engine build.");
-            __mb_set_surface_material = __mb;
-        }
+        if (__mb_set_surface_material == 0) MethodBinds.MissingThrow("ImporterMesh.set_surface_material");
         long __a0 = unchecked((long)surfaceIdx);
         nint __a1 = material?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_surface_material, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_generate_lods;
     public void GenerateLods(float normalMergeAngle, float normalSplitAngle, Godot.Collections.Array boneTransformArray)
     {
-        var __mb = __mb_generate_lods;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "generate_lods", 2491878677);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.generate_lods is not available in this engine build.");
-            __mb_generate_lods = __mb;
-        }
+        if (__mb_generate_lods == 0) MethodBinds.MissingThrow("ImporterMesh.generate_lods");
         double __a0 = normalMergeAngle;
         double __a1 = normalSplitAngle;
         ulong __a2 = boneTransformArray.Native;
@@ -2571,87 +1923,86 @@ public unsafe partial class ImporterMesh : Resource
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_generate_lods, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mesh;
     public ArrayMesh? GetMesh(ArrayMesh? baseMesh = null)
     {
-        var __mb = __mb_get_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_mesh", 1457573577);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_mesh is not available in this engine build.");
-            __mb_get_mesh = __mb;
-        }
+        if (__mb_get_mesh == 0) MethodBinds.MissingThrow("ImporterMesh.get_mesh");
         nint __a0 = baseMesh?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mesh, NativePtr, (nint)__args, (nint)(&__ret));
         return (ArrayMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_from_mesh;
     public static ImporterMesh? FromMesh(Mesh? mesh)
     {
-        var __mb = __mb_from_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "from_mesh", 283226343);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.from_mesh is not available in this engine build.");
-            __mb_from_mesh = __mb;
-        }
+        if (__mb_from_mesh == 0) MethodBinds.MissingThrow("ImporterMesh.from_mesh");
         nint __a0 = mesh?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, 0, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_from_mesh, 0, (nint)__args, (nint)(&__ret));
         return (ImporterMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_clear;
     public void Clear()
     {
-        var __mb = __mb_clear;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "clear", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.clear is not available in this engine build.");
-            __mb_clear = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear == 0) MethodBinds.MissingThrow("ImporterMesh.clear");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_lightmap_size_hint;
     public void SetLightmapSizeHint(Vector2I size)
     {
-        var __mb = __mb_set_lightmap_size_hint;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "set_lightmap_size_hint", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.set_lightmap_size_hint is not available in this engine build.");
-            __mb_set_lightmap_size_hint = __mb;
-        }
+        if (__mb_set_lightmap_size_hint == 0) MethodBinds.MissingThrow("ImporterMesh.set_lightmap_size_hint");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_lightmap_size_hint, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_lightmap_size_hint;
     public Vector2I GetLightmapSizeHint()
     {
-        var __mb = __mb_get_lightmap_size_hint;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMesh", "get_lightmap_size_hint", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("ImporterMesh.get_lightmap_size_hint is not available in this engine build.");
-            __mb_get_lightmap_size_hint = __mb;
-        }
+        if (__mb_get_lightmap_size_hint == 0) MethodBinds.MissingThrow("ImporterMesh.get_lightmap_size_hint");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_lightmap_size_hint, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_merge_importer_meshes = MethodBinds.ResolveBulk("ImporterMesh", "merge_importer_meshes", 1030647649);
+        __mb_add_blend_shape = MethodBinds.ResolveBulk("ImporterMesh", "add_blend_shape", 83702148);
+        __mb_get_blend_shape_count = MethodBinds.ResolveBulk("ImporterMesh", "get_blend_shape_count", 3905245786);
+        __mb_get_blend_shape_name = MethodBinds.ResolveBulk("ImporterMesh", "get_blend_shape_name", 844755477);
+        __mb_set_blend_shape_mode = MethodBinds.ResolveBulk("ImporterMesh", "set_blend_shape_mode", 227983991);
+        __mb_get_blend_shape_mode = MethodBinds.ResolveBulk("ImporterMesh", "get_blend_shape_mode", 836485024);
+        __mb_add_surface = MethodBinds.ResolveBulk("ImporterMesh", "add_surface", 1740448849);
+        __mb_get_surface_count = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_count", 3905245786);
+        __mb_get_surface_primitive_type = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_primitive_type", 3552571330);
+        __mb_get_surface_name = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_name", 844755477);
+        __mb_get_surface_arrays = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_arrays", 663333327);
+        __mb_get_surface_blend_shape_arrays = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_blend_shape_arrays", 2345056839);
+        __mb_get_surface_lod_count = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_lod_count", 923996154);
+        __mb_get_surface_lod_size = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_lod_size", 3085491603);
+        __mb_get_surface_lod_indices = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_lod_indices", 1265128013);
+        __mb_get_surface_material = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_material", 2897466400);
+        __mb_get_surface_format = MethodBinds.ResolveBulk("ImporterMesh", "get_surface_format", 923996154);
+        __mb_set_surface_name = MethodBinds.ResolveBulk("ImporterMesh", "set_surface_name", 501894301);
+        __mb_set_surface_material = MethodBinds.ResolveBulk("ImporterMesh", "set_surface_material", 3671737478);
+        __mb_generate_lods = MethodBinds.ResolveBulk("ImporterMesh", "generate_lods", 2491878677);
+        __mb_get_mesh = MethodBinds.ResolveBulk("ImporterMesh", "get_mesh", 1457573577);
+        __mb_from_mesh = MethodBinds.ResolveBulk("ImporterMesh", "from_mesh", 283226343);
+        __mb_clear = MethodBinds.ResolveBulk("ImporterMesh", "clear", 3218959716);
+        __mb_set_lightmap_size_hint = MethodBinds.ResolveBulk("ImporterMesh", "set_lightmap_size_hint", 1130785943);
+        __mb_get_lightmap_size_hint = MethodBinds.ResolveBulk("ImporterMesh", "get_lightmap_size_hint", 3690982128);
     }
 }
 
@@ -2727,311 +2078,215 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     private static nint __mb_set_mesh;
     public void SetMesh(ImporterMesh? mesh)
     {
-        var __mb = __mb_set_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_mesh", 2255166972);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_mesh is not available in this engine build.");
-            __mb_set_mesh = __mb;
-        }
+        if (__mb_set_mesh == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_mesh");
         nint __a0 = mesh?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mesh, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mesh;
     public ImporterMesh? GetMesh()
     {
-        var __mb = __mb_get_mesh;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_mesh", 3161779525);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_mesh is not available in this engine build.");
-            __mb_get_mesh = __mb;
-        }
+        if (__mb_get_mesh == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_mesh");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mesh, NativePtr, 0, (nint)(&__ret));
         return (ImporterMesh?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_skin;
     public void SetSkin(Skin? skin)
     {
-        var __mb = __mb_set_skin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_skin", 3971435618);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_skin is not available in this engine build.");
-            __mb_set_skin = __mb;
-        }
+        if (__mb_set_skin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_skin");
         nint __a0 = skin?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_skin, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_skin;
     public Skin? GetSkin()
     {
-        var __mb = __mb_get_skin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_skin", 2074563878);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_skin is not available in this engine build.");
-            __mb_get_skin = __mb;
-        }
+        if (__mb_get_skin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_skin");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_skin, NativePtr, 0, (nint)(&__ret));
         return (Skin?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_skeleton_path;
     public void SetSkeletonPath(NodePath skeletonPath)
     {
-        var __mb = __mb_set_skeleton_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_skeleton_path", 1348162250);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_skeleton_path is not available in this engine build.");
-            __mb_set_skeleton_path = __mb;
-        }
+        if (__mb_set_skeleton_path == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_skeleton_path");
         ulong __a0 = skeletonPath.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_skeleton_path, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_skeleton_path;
     public NodePath GetSkeletonPath()
     {
-        var __mb = __mb_get_skeleton_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_skeleton_path", 4075236667);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_skeleton_path is not available in this engine build.");
-            __mb_get_skeleton_path = __mb;
-        }
+        if (__mb_get_skeleton_path == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_skeleton_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_skeleton_path, NativePtr, 0, (nint)(&__ret));
         return new NodePath(__ret);
     }
 
     private static nint __mb_set_layer_mask;
     public void SetLayerMask(uint layerMask)
     {
-        var __mb = __mb_set_layer_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_layer_mask", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_layer_mask is not available in this engine build.");
-            __mb_set_layer_mask = __mb;
-        }
+        if (__mb_set_layer_mask == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_layer_mask");
         long __a0 = unchecked((long)layerMask);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_layer_mask, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_layer_mask;
     public uint GetLayerMask()
     {
-        var __mb = __mb_get_layer_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_layer_mask", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_layer_mask is not available in this engine build.");
-            __mb_get_layer_mask = __mb;
-        }
+        if (__mb_get_layer_mask == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_layer_mask");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_layer_mask, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_set_cast_shadows_setting;
     public void SetCastShadowsSetting(GeometryInstance3D.ShadowCastingSetting shadowCastingSetting)
     {
-        var __mb = __mb_set_cast_shadows_setting;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_cast_shadows_setting", 856677339);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_cast_shadows_setting is not available in this engine build.");
-            __mb_set_cast_shadows_setting = __mb;
-        }
+        if (__mb_set_cast_shadows_setting == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_cast_shadows_setting");
         long __a0 = (long)shadowCastingSetting;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_cast_shadows_setting, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_cast_shadows_setting;
     public GeometryInstance3D.ShadowCastingSetting GetCastShadowsSetting()
     {
-        var __mb = __mb_get_cast_shadows_setting;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_cast_shadows_setting", 3383019359);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_cast_shadows_setting is not available in this engine build.");
-            __mb_get_cast_shadows_setting = __mb;
-        }
+        if (__mb_get_cast_shadows_setting == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_cast_shadows_setting");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_cast_shadows_setting, NativePtr, 0, (nint)(&__ret));
         return (GeometryInstance3D.ShadowCastingSetting)__ret;
     }
 
     private static nint __mb_set_visibility_range_end_margin;
     public void SetVisibilityRangeEndMargin(float distance)
     {
-        var __mb = __mb_set_visibility_range_end_margin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_visibility_range_end_margin", 373806689);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_visibility_range_end_margin is not available in this engine build.");
-            __mb_set_visibility_range_end_margin = __mb;
-        }
+        if (__mb_set_visibility_range_end_margin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_visibility_range_end_margin");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_visibility_range_end_margin, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_visibility_range_end_margin;
     public float GetVisibilityRangeEndMargin()
     {
-        var __mb = __mb_get_visibility_range_end_margin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_visibility_range_end_margin", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_visibility_range_end_margin is not available in this engine build.");
-            __mb_get_visibility_range_end_margin = __mb;
-        }
+        if (__mb_get_visibility_range_end_margin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_visibility_range_end_margin");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_visibility_range_end_margin, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_visibility_range_end;
     public void SetVisibilityRangeEnd(float distance)
     {
-        var __mb = __mb_set_visibility_range_end;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_visibility_range_end", 373806689);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_visibility_range_end is not available in this engine build.");
-            __mb_set_visibility_range_end = __mb;
-        }
+        if (__mb_set_visibility_range_end == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_visibility_range_end");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_visibility_range_end, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_visibility_range_end;
     public float GetVisibilityRangeEnd()
     {
-        var __mb = __mb_get_visibility_range_end;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_visibility_range_end", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_visibility_range_end is not available in this engine build.");
-            __mb_get_visibility_range_end = __mb;
-        }
+        if (__mb_get_visibility_range_end == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_visibility_range_end");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_visibility_range_end, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_visibility_range_begin_margin;
     public void SetVisibilityRangeBeginMargin(float distance)
     {
-        var __mb = __mb_set_visibility_range_begin_margin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_visibility_range_begin_margin", 373806689);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_visibility_range_begin_margin is not available in this engine build.");
-            __mb_set_visibility_range_begin_margin = __mb;
-        }
+        if (__mb_set_visibility_range_begin_margin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_visibility_range_begin_margin");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_visibility_range_begin_margin, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_visibility_range_begin_margin;
     public float GetVisibilityRangeBeginMargin()
     {
-        var __mb = __mb_get_visibility_range_begin_margin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_visibility_range_begin_margin", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_visibility_range_begin_margin is not available in this engine build.");
-            __mb_get_visibility_range_begin_margin = __mb;
-        }
+        if (__mb_get_visibility_range_begin_margin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_visibility_range_begin_margin");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_visibility_range_begin_margin, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_visibility_range_begin;
     public void SetVisibilityRangeBegin(float distance)
     {
-        var __mb = __mb_set_visibility_range_begin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_visibility_range_begin", 373806689);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_visibility_range_begin is not available in this engine build.");
-            __mb_set_visibility_range_begin = __mb;
-        }
+        if (__mb_set_visibility_range_begin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_visibility_range_begin");
         double __a0 = distance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_visibility_range_begin, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_visibility_range_begin;
     public float GetVisibilityRangeBegin()
     {
-        var __mb = __mb_get_visibility_range_begin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_visibility_range_begin", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_visibility_range_begin is not available in this engine build.");
-            __mb_get_visibility_range_begin = __mb;
-        }
+        if (__mb_get_visibility_range_begin == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_visibility_range_begin");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_visibility_range_begin, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_visibility_range_fade_mode;
     public void SetVisibilityRangeFadeMode(GeometryInstance3D.VisibilityRangeFadeModeEnum mode)
     {
-        var __mb = __mb_set_visibility_range_fade_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "set_visibility_range_fade_mode", 1440117808);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.set_visibility_range_fade_mode is not available in this engine build.");
-            __mb_set_visibility_range_fade_mode = __mb;
-        }
+        if (__mb_set_visibility_range_fade_mode == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.set_visibility_range_fade_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_visibility_range_fade_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_visibility_range_fade_mode;
     public GeometryInstance3D.VisibilityRangeFadeModeEnum GetVisibilityRangeFadeMode()
     {
-        var __mb = __mb_get_visibility_range_fade_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ImporterMeshInstance3D", "get_visibility_range_fade_mode", 2067221882);
-            if (__mb == 0) throw new MissingMethodException("ImporterMeshInstance3D.get_visibility_range_fade_mode is not available in this engine build.");
-            __mb_get_visibility_range_fade_mode = __mb;
-        }
+        if (__mb_get_visibility_range_fade_mode == 0) MethodBinds.MissingThrow("ImporterMeshInstance3D.get_visibility_range_fade_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_visibility_range_fade_mode, NativePtr, 0, (nint)(&__ret));
         return (GeometryInstance3D.VisibilityRangeFadeModeEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_mesh = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_mesh", 2255166972);
+        __mb_get_mesh = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_mesh", 3161779525);
+        __mb_set_skin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_skin", 3971435618);
+        __mb_get_skin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_skin", 2074563878);
+        __mb_set_skeleton_path = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_skeleton_path", 1348162250);
+        __mb_get_skeleton_path = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_skeleton_path", 4075236667);
+        __mb_set_layer_mask = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_layer_mask", 1286410249);
+        __mb_get_layer_mask = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_layer_mask", 3905245786);
+        __mb_set_cast_shadows_setting = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_cast_shadows_setting", 856677339);
+        __mb_get_cast_shadows_setting = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_cast_shadows_setting", 3383019359);
+        __mb_set_visibility_range_end_margin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_visibility_range_end_margin", 373806689);
+        __mb_get_visibility_range_end_margin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_visibility_range_end_margin", 1740695150);
+        __mb_set_visibility_range_end = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_visibility_range_end", 373806689);
+        __mb_get_visibility_range_end = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_visibility_range_end", 1740695150);
+        __mb_set_visibility_range_begin_margin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_visibility_range_begin_margin", 373806689);
+        __mb_get_visibility_range_begin_margin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_visibility_range_begin_margin", 1740695150);
+        __mb_set_visibility_range_begin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_visibility_range_begin", 373806689);
+        __mb_get_visibility_range_begin = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_visibility_range_begin", 1740695150);
+        __mb_set_visibility_range_fade_mode = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "set_visibility_range_fade_mode", 1440117808);
+        __mb_get_visibility_range_fade_mode = MethodBinds.ResolveBulk("ImporterMeshInstance3D", "get_visibility_range_fade_mode", 2067221882);
     }
 }
 
@@ -3116,180 +2371,120 @@ public static unsafe partial class Input
     private static nint __mb_is_anything_pressed;
     public static bool IsAnythingPressed()
     {
-        var __mb = __mb_is_anything_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_anything_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Input.is_anything_pressed is not available in this engine build.");
-            __mb_is_anything_pressed = __mb;
-        }
+        if (__mb_is_anything_pressed == 0) MethodBinds.MissingThrow("Input.is_anything_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_anything_pressed, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_key_pressed;
     public static bool IsKeyPressed(Key keycode)
     {
-        var __mb = __mb_is_key_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_key_pressed", 1938909964);
-            if (__mb == 0) throw new MissingMethodException("Input.is_key_pressed is not available in this engine build.");
-            __mb_is_key_pressed = __mb;
-        }
+        if (__mb_is_key_pressed == 0) MethodBinds.MissingThrow("Input.is_key_pressed");
         long __a0 = (long)keycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_key_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_physical_key_pressed;
     public static bool IsPhysicalKeyPressed(Key keycode)
     {
-        var __mb = __mb_is_physical_key_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_physical_key_pressed", 1938909964);
-            if (__mb == 0) throw new MissingMethodException("Input.is_physical_key_pressed is not available in this engine build.");
-            __mb_is_physical_key_pressed = __mb;
-        }
+        if (__mb_is_physical_key_pressed == 0) MethodBinds.MissingThrow("Input.is_physical_key_pressed");
         long __a0 = (long)keycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_physical_key_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_key_label_pressed;
     public static bool IsKeyLabelPressed(Key keycode)
     {
-        var __mb = __mb_is_key_label_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_key_label_pressed", 1938909964);
-            if (__mb == 0) throw new MissingMethodException("Input.is_key_label_pressed is not available in this engine build.");
-            __mb_is_key_label_pressed = __mb;
-        }
+        if (__mb_is_key_label_pressed == 0) MethodBinds.MissingThrow("Input.is_key_label_pressed");
         long __a0 = (long)keycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_key_label_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_mouse_button_pressed;
     public static bool IsMouseButtonPressed(MouseButton button)
     {
-        var __mb = __mb_is_mouse_button_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_mouse_button_pressed", 1821097125);
-            if (__mb == 0) throw new MissingMethodException("Input.is_mouse_button_pressed is not available in this engine build.");
-            __mb_is_mouse_button_pressed = __mb;
-        }
+        if (__mb_is_mouse_button_pressed == 0) MethodBinds.MissingThrow("Input.is_mouse_button_pressed");
         long __a0 = (long)button;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_mouse_button_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_joy_button_pressed;
     public static bool IsJoyButtonPressed(int device, JoyButton button)
     {
-        var __mb = __mb_is_joy_button_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_joy_button_pressed", 787208542);
-            if (__mb == 0) throw new MissingMethodException("Input.is_joy_button_pressed is not available in this engine build.");
-            __mb_is_joy_button_pressed = __mb;
-        }
+        if (__mb_is_joy_button_pressed == 0) MethodBinds.MissingThrow("Input.is_joy_button_pressed");
         long __a0 = unchecked((long)device);
         long __a1 = (long)button;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_joy_button_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_pressed;
     public static bool IsActionPressed(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_action_pressed", 1558498928);
-            if (__mb == 0) throw new MissingMethodException("Input.is_action_pressed is not available in this engine build.");
-            __mb_is_action_pressed = __mb;
-        }
+        if (__mb_is_action_pressed == 0) MethodBinds.MissingThrow("Input.is_action_pressed");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_pressed;
     public static bool IsActionJustPressed(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_just_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_action_just_pressed", 1558498928);
-            if (__mb == 0) throw new MissingMethodException("Input.is_action_just_pressed is not available in this engine build.");
-            __mb_is_action_just_pressed = __mb;
-        }
+        if (__mb_is_action_just_pressed == 0) MethodBinds.MissingThrow("Input.is_action_just_pressed");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_just_pressed, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_released;
     public static bool IsActionJustReleased(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_just_released;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_action_just_released", 1558498928);
-            if (__mb == 0) throw new MissingMethodException("Input.is_action_just_released is not available in this engine build.");
-            __mb_is_action_just_released = __mb;
-        }
+        if (__mb_is_action_just_released == 0) MethodBinds.MissingThrow("Input.is_action_just_released");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_just_released, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_pressed_by_event;
     public static bool IsActionJustPressedByEvent(StringName action, InputEvent? @event, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_just_pressed_by_event;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_action_just_pressed_by_event", 551972873);
-            if (__mb == 0) throw new MissingMethodException("Input.is_action_just_pressed_by_event is not available in this engine build.");
-            __mb_is_action_just_pressed_by_event = __mb;
-        }
+        if (__mb_is_action_just_pressed_by_event == 0) MethodBinds.MissingThrow("Input.is_action_just_pressed_by_event");
         ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
@@ -3298,20 +2493,14 @@ public static unsafe partial class Input
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_just_pressed_by_event, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_just_released_by_event;
     public static bool IsActionJustReleasedByEvent(StringName action, InputEvent? @event, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_just_released_by_event;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_action_just_released_by_event", 551972873);
-            if (__mb == 0) throw new MissingMethodException("Input.is_action_just_released_by_event is not available in this engine build.");
-            __mb_is_action_just_released_by_event = __mb;
-        }
+        if (__mb_is_action_just_released_by_event == 0) MethodBinds.MissingThrow("Input.is_action_just_released_by_event");
         ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
@@ -3320,80 +2509,56 @@ public static unsafe partial class Input
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_just_released_by_event, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_action_strength;
     public static float GetActionStrength(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_get_action_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_action_strength", 801543509);
-            if (__mb == 0) throw new MissingMethodException("Input.get_action_strength is not available in this engine build.");
-            __mb_get_action_strength = __mb;
-        }
+        if (__mb_get_action_strength == 0) MethodBinds.MissingThrow("Input.get_action_strength");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_strength, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_action_raw_strength;
     public static float GetActionRawStrength(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_get_action_raw_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_action_raw_strength", 801543509);
-            if (__mb == 0) throw new MissingMethodException("Input.get_action_raw_strength is not available in this engine build.");
-            __mb_get_action_raw_strength = __mb;
-        }
+        if (__mb_get_action_raw_strength == 0) MethodBinds.MissingThrow("Input.get_action_raw_strength");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_raw_strength, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_axis;
     public static float GetAxis(StringName negativeAction, StringName positiveAction)
     {
-        var __mb = __mb_get_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_axis", 1958752504);
-            if (__mb == 0) throw new MissingMethodException("Input.get_axis is not available in this engine build.");
-            __mb_get_axis = __mb;
-        }
+        if (__mb_get_axis == 0) MethodBinds.MissingThrow("Input.get_axis");
         ulong __a0 = negativeAction.NativeValue;
         ulong __a1 = positiveAction.NativeValue;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_axis, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_vector;
     public static Vector2 GetVector(StringName negativeX, StringName positiveX, StringName negativeY, StringName positiveY, float deadzone = -1.0f)
     {
-        var __mb = __mb_get_vector;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_vector", 2479607902);
-            if (__mb == 0) throw new MissingMethodException("Input.get_vector is not available in this engine build.");
-            __mb_get_vector = __mb;
-        }
+        if (__mb_get_vector == 0) MethodBinds.MissingThrow("Input.get_vector");
         ulong __a0 = negativeX.NativeValue;
         ulong __a1 = positiveX.NativeValue;
         ulong __a2 = negativeY.NativeValue;
@@ -3406,273 +2571,183 @@ public static unsafe partial class Input
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vector, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_add_joy_mapping;
     public static void AddJoyMapping(string mapping, bool updateExisting = false)
     {
-        var __mb = __mb_add_joy_mapping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "add_joy_mapping", 1168363258);
-            if (__mb == 0) throw new MissingMethodException("Input.add_joy_mapping is not available in this engine build.");
-            __mb_add_joy_mapping = __mb;
-        }
+        if (__mb_add_joy_mapping == 0) MethodBinds.MissingThrow("Input.add_joy_mapping");
         ulong __a0 = NativeString.Create(mapping);
         byte __a1 = updateExisting ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_joy_mapping, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_remove_joy_mapping;
     public static void RemoveJoyMapping(string guid)
     {
-        var __mb = __mb_remove_joy_mapping;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "remove_joy_mapping", 83702148);
-            if (__mb == 0) throw new MissingMethodException("Input.remove_joy_mapping is not available in this engine build.");
-            __mb_remove_joy_mapping = __mb;
-        }
+        if (__mb_remove_joy_mapping == 0) MethodBinds.MissingThrow("Input.remove_joy_mapping");
         ulong __a0 = NativeString.Create(guid);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_joy_mapping, SingletonPtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_is_joy_known;
     public static bool IsJoyKnown(int device)
     {
-        var __mb = __mb_is_joy_known;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_joy_known", 3067735520);
-            if (__mb == 0) throw new MissingMethodException("Input.is_joy_known is not available in this engine build.");
-            __mb_is_joy_known = __mb;
-        }
+        if (__mb_is_joy_known == 0) MethodBinds.MissingThrow("Input.is_joy_known");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_joy_known, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_joy_axis;
     public static float GetJoyAxis(int device, JoyAxis axis)
     {
-        var __mb = __mb_get_joy_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_axis", 4063175957);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_axis is not available in this engine build.");
-            __mb_get_joy_axis = __mb;
-        }
+        if (__mb_get_joy_axis == 0) MethodBinds.MissingThrow("Input.get_joy_axis");
         long __a0 = unchecked((long)device);
         long __a1 = (long)axis;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_axis, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_joy_name;
     public static string GetJoyName(int device)
     {
-        var __mb = __mb_get_joy_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_name", 990163283);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_name is not available in this engine build.");
-            __mb_get_joy_name = __mb;
-        }
+        if (__mb_get_joy_name == 0) MethodBinds.MissingThrow("Input.get_joy_name");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_name, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_joy_guid;
     public static string GetJoyGuid(int device)
     {
-        var __mb = __mb_get_joy_guid;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_guid", 844755477);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_guid is not available in this engine build.");
-            __mb_get_joy_guid = __mb;
-        }
+        if (__mb_get_joy_guid == 0) MethodBinds.MissingThrow("Input.get_joy_guid");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_guid, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_joy_info;
     public static Godot.Collections.Dictionary GetJoyInfo(int device)
     {
-        var __mb = __mb_get_joy_info;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_info", 3485342025);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_info is not available in this engine build.");
-            __mb_get_joy_info = __mb;
-        }
+        if (__mb_get_joy_info == 0) MethodBinds.MissingThrow("Input.get_joy_info");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_info, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_should_ignore_device;
     public static bool ShouldIgnoreDevice(int vendorId, int productId)
     {
-        var __mb = __mb_should_ignore_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "should_ignore_device", 2522259332);
-            if (__mb == 0) throw new MissingMethodException("Input.should_ignore_device is not available in this engine build.");
-            __mb_should_ignore_device = __mb;
-        }
+        if (__mb_should_ignore_device == 0) MethodBinds.MissingThrow("Input.should_ignore_device");
         long __a0 = unchecked((long)vendorId);
         long __a1 = unchecked((long)productId);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_should_ignore_device, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_connected_joypads;
     public static Godot.Collections.Array GetConnectedJoypads()
     {
-        var __mb = __mb_get_connected_joypads;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_connected_joypads", 2915620761);
-            if (__mb == 0) throw new MissingMethodException("Input.get_connected_joypads is not available in this engine build.");
-            __mb_get_connected_joypads = __mb;
-        }
+        if (__mb_get_connected_joypads == 0) MethodBinds.MissingThrow("Input.get_connected_joypads");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_connected_joypads, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_get_joy_vibration_strength;
     public static Vector2 GetJoyVibrationStrength(int device)
     {
-        var __mb = __mb_get_joy_vibration_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_vibration_strength", 3114997196);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_vibration_strength is not available in this engine build.");
-            __mb_get_joy_vibration_strength = __mb;
-        }
+        if (__mb_get_joy_vibration_strength == 0) MethodBinds.MissingThrow("Input.get_joy_vibration_strength");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_vibration_strength, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_vibration_duration;
     public static float GetJoyVibrationDuration(int device)
     {
-        var __mb = __mb_get_joy_vibration_duration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_vibration_duration", 4025615559);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_vibration_duration is not available in this engine build.");
-            __mb_get_joy_vibration_duration = __mb;
-        }
+        if (__mb_get_joy_vibration_duration == 0) MethodBinds.MissingThrow("Input.get_joy_vibration_duration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_vibration_duration, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_joy_vibration_remaining_duration;
     public static float GetJoyVibrationRemainingDuration(int device)
     {
-        var __mb = __mb_get_joy_vibration_remaining_duration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_vibration_remaining_duration", 4025615559);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_vibration_remaining_duration is not available in this engine build.");
-            __mb_get_joy_vibration_remaining_duration = __mb;
-        }
+        if (__mb_get_joy_vibration_remaining_duration == 0) MethodBinds.MissingThrow("Input.get_joy_vibration_remaining_duration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_vibration_remaining_duration, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_joy_vibrating;
     public static bool IsJoyVibrating(int device)
     {
-        var __mb = __mb_is_joy_vibrating;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_joy_vibrating", 3067735520);
-            if (__mb == 0) throw new MissingMethodException("Input.is_joy_vibrating is not available in this engine build.");
-            __mb_is_joy_vibrating = __mb;
-        }
+        if (__mb_is_joy_vibrating == 0) MethodBinds.MissingThrow("Input.is_joy_vibrating");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_joy_vibrating, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_has_joy_vibration;
     public static bool HasJoyVibration(int device)
     {
-        var __mb = __mb_has_joy_vibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "has_joy_vibration", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("Input.has_joy_vibration is not available in this engine build.");
-            __mb_has_joy_vibration = __mb;
-        }
+        if (__mb_has_joy_vibration == 0) MethodBinds.MissingThrow("Input.has_joy_vibration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_joy_vibration, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_joy_vibration;
     public static void StartJoyVibration(int device, float weakMagnitude, float strongMagnitude, float duration = 0f)
     {
-        var __mb = __mb_start_joy_vibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "start_joy_vibration", 2576575033);
-            if (__mb == 0) throw new MissingMethodException("Input.start_joy_vibration is not available in this engine build.");
-            __mb_start_joy_vibration = __mb;
-        }
+        if (__mb_start_joy_vibration == 0) MethodBinds.MissingThrow("Input.start_joy_vibration");
         long __a0 = unchecked((long)device);
         double __a1 = weakMagnitude;
         double __a2 = strongMagnitude;
@@ -3682,647 +2757,413 @@ public static unsafe partial class Input
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_joy_vibration, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_stop_joy_vibration;
     public static void StopJoyVibration(int device)
     {
-        var __mb = __mb_stop_joy_vibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "stop_joy_vibration", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("Input.stop_joy_vibration is not available in this engine build.");
-            __mb_stop_joy_vibration = __mb;
-        }
+        if (__mb_stop_joy_vibration == 0) MethodBinds.MissingThrow("Input.stop_joy_vibration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_stop_joy_vibration, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_vibrate_handheld;
     public static void VibrateHandheld(int durationMs = unchecked((int)(500)), float amplitude = -1.0f)
     {
-        var __mb = __mb_vibrate_handheld;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "vibrate_handheld", 544894297);
-            if (__mb == 0) throw new MissingMethodException("Input.vibrate_handheld is not available in this engine build.");
-            __mb_vibrate_handheld = __mb;
-        }
+        if (__mb_vibrate_handheld == 0) MethodBinds.MissingThrow("Input.vibrate_handheld");
         long __a0 = unchecked((long)durationMs);
         double __a1 = amplitude;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_vibrate_handheld, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_ignore_joypad_on_unfocused_application;
     public static void SetIgnoreJoypadOnUnfocusedApplication(bool enable)
     {
-        var __mb = __mb_set_ignore_joypad_on_unfocused_application;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_ignore_joypad_on_unfocused_application", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Input.set_ignore_joypad_on_unfocused_application is not available in this engine build.");
-            __mb_set_ignore_joypad_on_unfocused_application = __mb;
-        }
+        if (__mb_set_ignore_joypad_on_unfocused_application == 0) MethodBinds.MissingThrow("Input.set_ignore_joypad_on_unfocused_application");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_ignore_joypad_on_unfocused_application, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_ignoring_joypad_on_unfocused_application;
     public static bool IsIgnoringJoypadOnUnfocusedApplication()
     {
-        var __mb = __mb_is_ignoring_joypad_on_unfocused_application;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_ignoring_joypad_on_unfocused_application", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Input.is_ignoring_joypad_on_unfocused_application is not available in this engine build.");
-            __mb_is_ignoring_joypad_on_unfocused_application = __mb;
-        }
+        if (__mb_is_ignoring_joypad_on_unfocused_application == 0) MethodBinds.MissingThrow("Input.is_ignoring_joypad_on_unfocused_application");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_ignoring_joypad_on_unfocused_application, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_gravity;
     public static Vector3 GetGravity()
     {
-        var __mb = __mb_get_gravity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_gravity", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("Input.get_gravity is not available in this engine build.");
-            __mb_get_gravity = __mb;
-        }
+        if (__mb_get_gravity == 0) MethodBinds.MissingThrow("Input.get_gravity");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_gravity, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_accelerometer;
     public static Vector3 GetAccelerometer()
     {
-        var __mb = __mb_get_accelerometer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_accelerometer", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("Input.get_accelerometer is not available in this engine build.");
-            __mb_get_accelerometer = __mb;
-        }
+        if (__mb_get_accelerometer == 0) MethodBinds.MissingThrow("Input.get_accelerometer");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_accelerometer, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_magnetometer;
     public static Vector3 GetMagnetometer()
     {
-        var __mb = __mb_get_magnetometer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_magnetometer", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("Input.get_magnetometer is not available in this engine build.");
-            __mb_get_magnetometer = __mb;
-        }
+        if (__mb_get_magnetometer == 0) MethodBinds.MissingThrow("Input.get_magnetometer");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_magnetometer, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_gyroscope;
     public static Vector3 GetGyroscope()
     {
-        var __mb = __mb_get_gyroscope;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_gyroscope", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("Input.get_gyroscope is not available in this engine build.");
-            __mb_get_gyroscope = __mb;
-        }
+        if (__mb_get_gyroscope == 0) MethodBinds.MissingThrow("Input.get_gyroscope");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_gyroscope, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_accelerometer;
     public static Vector3 GetJoyAccelerometer(int device)
     {
-        var __mb = __mb_get_joy_accelerometer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_accelerometer", 711720468);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_accelerometer is not available in this engine build.");
-            __mb_get_joy_accelerometer = __mb;
-        }
+        if (__mb_get_joy_accelerometer == 0) MethodBinds.MissingThrow("Input.get_joy_accelerometer");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_accelerometer, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_gravity;
     public static Vector3 GetJoyGravity(int device)
     {
-        var __mb = __mb_get_joy_gravity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_gravity", 711720468);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_gravity is not available in this engine build.");
-            __mb_get_joy_gravity = __mb;
-        }
+        if (__mb_get_joy_gravity == 0) MethodBinds.MissingThrow("Input.get_joy_gravity");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_gravity, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_gyroscope;
     public static Vector3 GetJoyGyroscope(int device)
     {
-        var __mb = __mb_get_joy_gyroscope;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_gyroscope", 711720468);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_gyroscope is not available in this engine build.");
-            __mb_get_joy_gyroscope = __mb;
-        }
+        if (__mb_get_joy_gyroscope == 0) MethodBinds.MissingThrow("Input.get_joy_gyroscope");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_gyroscope, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_joy_motion_sensors_rate;
     public static float GetJoyMotionSensorsRate(int device)
     {
-        var __mb = __mb_get_joy_motion_sensors_rate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_motion_sensors_rate", 2339986948);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_motion_sensors_rate is not available in this engine build.");
-            __mb_get_joy_motion_sensors_rate = __mb;
-        }
+        if (__mb_get_joy_motion_sensors_rate == 0) MethodBinds.MissingThrow("Input.get_joy_motion_sensors_rate");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_motion_sensors_rate, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_joy_motion_sensors_enabled;
     public static bool IsJoyMotionSensorsEnabled(int device)
     {
-        var __mb = __mb_is_joy_motion_sensors_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_joy_motion_sensors_enabled", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("Input.is_joy_motion_sensors_enabled is not available in this engine build.");
-            __mb_is_joy_motion_sensors_enabled = __mb;
-        }
+        if (__mb_is_joy_motion_sensors_enabled == 0) MethodBinds.MissingThrow("Input.is_joy_motion_sensors_enabled");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_joy_motion_sensors_enabled, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_joy_motion_sensors_enabled;
     public static void SetJoyMotionSensorsEnabled(int device, bool enable)
     {
-        var __mb = __mb_set_joy_motion_sensors_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_joy_motion_sensors_enabled", 300928843);
-            if (__mb == 0) throw new MissingMethodException("Input.set_joy_motion_sensors_enabled is not available in this engine build.");
-            __mb_set_joy_motion_sensors_enabled = __mb;
-        }
+        if (__mb_set_joy_motion_sensors_enabled == 0) MethodBinds.MissingThrow("Input.set_joy_motion_sensors_enabled");
         long __a0 = unchecked((long)device);
         byte __a1 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joy_motion_sensors_enabled, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_joy_motion_sensors;
     public static bool HasJoyMotionSensors(int device)
     {
-        var __mb = __mb_has_joy_motion_sensors;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "has_joy_motion_sensors", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("Input.has_joy_motion_sensors is not available in this engine build.");
-            __mb_has_joy_motion_sensors = __mb;
-        }
+        if (__mb_has_joy_motion_sensors == 0) MethodBinds.MissingThrow("Input.has_joy_motion_sensors");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_joy_motion_sensors, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_joy_motion_sensors_calibration;
     public static void StartJoyMotionSensorsCalibration(int device)
     {
-        var __mb = __mb_start_joy_motion_sensors_calibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "start_joy_motion_sensors_calibration", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("Input.start_joy_motion_sensors_calibration is not available in this engine build.");
-            __mb_start_joy_motion_sensors_calibration = __mb;
-        }
+        if (__mb_start_joy_motion_sensors_calibration == 0) MethodBinds.MissingThrow("Input.start_joy_motion_sensors_calibration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_joy_motion_sensors_calibration, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_stop_joy_motion_sensors_calibration;
     public static void StopJoyMotionSensorsCalibration(int device)
     {
-        var __mb = __mb_stop_joy_motion_sensors_calibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "stop_joy_motion_sensors_calibration", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("Input.stop_joy_motion_sensors_calibration is not available in this engine build.");
-            __mb_stop_joy_motion_sensors_calibration = __mb;
-        }
+        if (__mb_stop_joy_motion_sensors_calibration == 0) MethodBinds.MissingThrow("Input.stop_joy_motion_sensors_calibration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_stop_joy_motion_sensors_calibration, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear_joy_motion_sensors_calibration;
     public static void ClearJoyMotionSensorsCalibration(int device)
     {
-        var __mb = __mb_clear_joy_motion_sensors_calibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "clear_joy_motion_sensors_calibration", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("Input.clear_joy_motion_sensors_calibration is not available in this engine build.");
-            __mb_clear_joy_motion_sensors_calibration = __mb;
-        }
+        if (__mb_clear_joy_motion_sensors_calibration == 0) MethodBinds.MissingThrow("Input.clear_joy_motion_sensors_calibration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_joy_motion_sensors_calibration, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joy_motion_sensors_calibration;
     public static Godot.Collections.Dictionary GetJoyMotionSensorsCalibration(int device)
     {
-        var __mb = __mb_get_joy_motion_sensors_calibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_joy_motion_sensors_calibration", 3485342025);
-            if (__mb == 0) throw new MissingMethodException("Input.get_joy_motion_sensors_calibration is not available in this engine build.");
-            __mb_get_joy_motion_sensors_calibration = __mb;
-        }
+        if (__mb_get_joy_motion_sensors_calibration == 0) MethodBinds.MissingThrow("Input.get_joy_motion_sensors_calibration");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joy_motion_sensors_calibration, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_set_joy_motion_sensors_calibration;
     public static void SetJoyMotionSensorsCalibration(int device, Godot.Collections.Dictionary calibrationInfo)
     {
-        var __mb = __mb_set_joy_motion_sensors_calibration;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_joy_motion_sensors_calibration", 64545446);
-            if (__mb == 0) throw new MissingMethodException("Input.set_joy_motion_sensors_calibration is not available in this engine build.");
-            __mb_set_joy_motion_sensors_calibration = __mb;
-        }
+        if (__mb_set_joy_motion_sensors_calibration == 0) MethodBinds.MissingThrow("Input.set_joy_motion_sensors_calibration");
         long __a0 = unchecked((long)device);
         ulong __a1 = calibrationInfo.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joy_motion_sensors_calibration, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_joy_motion_sensors_calibrated;
     public static bool IsJoyMotionSensorsCalibrated(int device)
     {
-        var __mb = __mb_is_joy_motion_sensors_calibrated;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_joy_motion_sensors_calibrated", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("Input.is_joy_motion_sensors_calibrated is not available in this engine build.");
-            __mb_is_joy_motion_sensors_calibrated = __mb;
-        }
+        if (__mb_is_joy_motion_sensors_calibrated == 0) MethodBinds.MissingThrow("Input.is_joy_motion_sensors_calibrated");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_joy_motion_sensors_calibrated, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_joy_motion_sensors_calibrating;
     public static bool IsJoyMotionSensorsCalibrating(int device)
     {
-        var __mb = __mb_is_joy_motion_sensors_calibrating;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_joy_motion_sensors_calibrating", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("Input.is_joy_motion_sensors_calibrating is not available in this engine build.");
-            __mb_is_joy_motion_sensors_calibrating = __mb;
-        }
+        if (__mb_is_joy_motion_sensors_calibrating == 0) MethodBinds.MissingThrow("Input.is_joy_motion_sensors_calibrating");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_joy_motion_sensors_calibrating, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_gravity;
     public static void SetGravity(Vector3 value)
     {
-        var __mb = __mb_set_gravity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_gravity", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("Input.set_gravity is not available in this engine build.");
-            __mb_set_gravity = __mb;
-        }
+        if (__mb_set_gravity == 0) MethodBinds.MissingThrow("Input.set_gravity");
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_gravity, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_accelerometer;
     public static void SetAccelerometer(Vector3 value)
     {
-        var __mb = __mb_set_accelerometer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_accelerometer", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("Input.set_accelerometer is not available in this engine build.");
-            __mb_set_accelerometer = __mb;
-        }
+        if (__mb_set_accelerometer == 0) MethodBinds.MissingThrow("Input.set_accelerometer");
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_accelerometer, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_magnetometer;
     public static void SetMagnetometer(Vector3 value)
     {
-        var __mb = __mb_set_magnetometer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_magnetometer", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("Input.set_magnetometer is not available in this engine build.");
-            __mb_set_magnetometer = __mb;
-        }
+        if (__mb_set_magnetometer == 0) MethodBinds.MissingThrow("Input.set_magnetometer");
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_magnetometer, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_gyroscope;
     public static void SetGyroscope(Vector3 value)
     {
-        var __mb = __mb_set_gyroscope;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_gyroscope", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("Input.set_gyroscope is not available in this engine build.");
-            __mb_set_gyroscope = __mb;
-        }
+        if (__mb_set_gyroscope == 0) MethodBinds.MissingThrow("Input.set_gyroscope");
         var __a0 = value;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_gyroscope, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_joy_light;
     public static void SetJoyLight(int device, Color color)
     {
-        var __mb = __mb_set_joy_light;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_joy_light", 2878471219);
-            if (__mb == 0) throw new MissingMethodException("Input.set_joy_light is not available in this engine build.");
-            __mb_set_joy_light = __mb;
-        }
+        if (__mb_set_joy_light == 0) MethodBinds.MissingThrow("Input.set_joy_light");
         long __a0 = unchecked((long)device);
         var __a1 = color;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joy_light, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_joy_light;
     public static bool HasJoyLight(int device)
     {
-        var __mb = __mb_has_joy_light;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "has_joy_light", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("Input.has_joy_light is not available in this engine build.");
-            __mb_has_joy_light = __mb;
-        }
+        if (__mb_has_joy_light == 0) MethodBinds.MissingThrow("Input.has_joy_light");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_joy_light, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_last_mouse_velocity;
     public static Vector2 GetLastMouseVelocity()
     {
-        var __mb = __mb_get_last_mouse_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_last_mouse_velocity", 1497962370);
-            if (__mb == 0) throw new MissingMethodException("Input.get_last_mouse_velocity is not available in this engine build.");
-            __mb_get_last_mouse_velocity = __mb;
-        }
+        if (__mb_get_last_mouse_velocity == 0) MethodBinds.MissingThrow("Input.get_last_mouse_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_last_mouse_velocity, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_last_mouse_screen_velocity;
     public static Vector2 GetLastMouseScreenVelocity()
     {
-        var __mb = __mb_get_last_mouse_screen_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_last_mouse_screen_velocity", 1497962370);
-            if (__mb == 0) throw new MissingMethodException("Input.get_last_mouse_screen_velocity is not available in this engine build.");
-            __mb_get_last_mouse_screen_velocity = __mb;
-        }
+        if (__mb_get_last_mouse_screen_velocity == 0) MethodBinds.MissingThrow("Input.get_last_mouse_screen_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_last_mouse_screen_velocity, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_mouse_button_mask;
     public static MouseButtonMask GetMouseButtonMask()
     {
-        var __mb = __mb_get_mouse_button_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_mouse_button_mask", 2512161324);
-            if (__mb == 0) throw new MissingMethodException("Input.get_mouse_button_mask is not available in this engine build.");
-            __mb_get_mouse_button_mask = __mb;
-        }
+        if (__mb_get_mouse_button_mask == 0) MethodBinds.MissingThrow("Input.get_mouse_button_mask");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mouse_button_mask, SingletonPtr, 0, (nint)(&__ret));
         return (MouseButtonMask)__ret;
     }
 
     private static nint __mb_set_mouse_mode;
     public static void SetMouseMode(Input.MouseModeEnum mode)
     {
-        var __mb = __mb_set_mouse_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_mouse_mode", 2228490894);
-            if (__mb == 0) throw new MissingMethodException("Input.set_mouse_mode is not available in this engine build.");
-            __mb_set_mouse_mode = __mb;
-        }
+        if (__mb_set_mouse_mode == 0) MethodBinds.MissingThrow("Input.set_mouse_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_mouse_mode, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_mouse_mode;
     public static Input.MouseModeEnum GetMouseMode()
     {
-        var __mb = __mb_get_mouse_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_mouse_mode", 965286182);
-            if (__mb == 0) throw new MissingMethodException("Input.get_mouse_mode is not available in this engine build.");
-            __mb_get_mouse_mode = __mb;
-        }
+        if (__mb_get_mouse_mode == 0) MethodBinds.MissingThrow("Input.get_mouse_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_mouse_mode, SingletonPtr, 0, (nint)(&__ret));
         return (Input.MouseModeEnum)__ret;
     }
 
     private static nint __mb_warp_mouse;
     public static void WarpMouse(Vector2 position)
     {
-        var __mb = __mb_warp_mouse;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "warp_mouse", 743155724);
-            if (__mb == 0) throw new MissingMethodException("Input.warp_mouse is not available in this engine build.");
-            __mb_warp_mouse = __mb;
-        }
+        if (__mb_warp_mouse == 0) MethodBinds.MissingThrow("Input.warp_mouse");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_warp_mouse, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_press;
     public static void ActionPress(StringName action, float strength = 1.0f)
     {
-        var __mb = __mb_action_press;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "action_press", 1713091165);
-            if (__mb == 0) throw new MissingMethodException("Input.action_press is not available in this engine build.");
-            __mb_action_press = __mb;
-        }
+        if (__mb_action_press == 0) MethodBinds.MissingThrow("Input.action_press");
         ulong __a0 = action.NativeValue;
         double __a1 = strength;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_press, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_release;
     public static void ActionRelease(StringName action)
     {
-        var __mb = __mb_action_release;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "action_release", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("Input.action_release is not available in this engine build.");
-            __mb_action_release = __mb;
-        }
+        if (__mb_action_release == 0) MethodBinds.MissingThrow("Input.action_release");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_release, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_default_cursor_shape;
     public static void SetDefaultCursorShape(Input.CursorShape shape = (Input.CursorShape)(0))
     {
-        var __mb = __mb_set_default_cursor_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_default_cursor_shape", 2124816902);
-            if (__mb == 0) throw new MissingMethodException("Input.set_default_cursor_shape is not available in this engine build.");
-            __mb_set_default_cursor_shape = __mb;
-        }
+        if (__mb_set_default_cursor_shape == 0) MethodBinds.MissingThrow("Input.set_default_cursor_shape");
         long __a0 = (long)shape;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_default_cursor_shape, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_current_cursor_shape;
     public static Input.CursorShape GetCurrentCursorShape()
     {
-        var __mb = __mb_get_current_cursor_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "get_current_cursor_shape", 3455658929);
-            if (__mb == 0) throw new MissingMethodException("Input.get_current_cursor_shape is not available in this engine build.");
-            __mb_get_current_cursor_shape = __mb;
-        }
+        if (__mb_get_current_cursor_shape == 0) MethodBinds.MissingThrow("Input.get_current_cursor_shape");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_cursor_shape, SingletonPtr, 0, (nint)(&__ret));
         return (Input.CursorShape)__ret;
     }
 
     private static nint __mb_set_custom_mouse_cursor;
     public static void SetCustomMouseCursor(Resource? image, Input.CursorShape shape = (Input.CursorShape)(0), Vector2 hotspot = default)
     {
-        var __mb = __mb_set_custom_mouse_cursor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_custom_mouse_cursor", 703945977);
-            if (__mb == 0) throw new MissingMethodException("Input.set_custom_mouse_cursor is not available in this engine build.");
-            __mb_set_custom_mouse_cursor = __mb;
-        }
+        if (__mb_set_custom_mouse_cursor == 0) MethodBinds.MissingThrow("Input.set_custom_mouse_cursor");
         nint __a0 = image?.NativePtr ?? 0;
         long __a1 = (long)shape;
         var __a2 = hotspot;
@@ -4330,129 +3171,162 @@ public static unsafe partial class Input
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_custom_mouse_cursor, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_parse_input_event;
     public static void ParseInputEvent(InputEvent? @event)
     {
-        var __mb = __mb_parse_input_event;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "parse_input_event", 3754044979);
-            if (__mb == 0) throw new MissingMethodException("Input.parse_input_event is not available in this engine build.");
-            __mb_parse_input_event = __mb;
-        }
+        if (__mb_parse_input_event == 0) MethodBinds.MissingThrow("Input.parse_input_event");
         nint __a0 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_parse_input_event, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_use_accumulated_input;
     public static void SetUseAccumulatedInput(bool enable)
     {
-        var __mb = __mb_set_use_accumulated_input;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_use_accumulated_input", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Input.set_use_accumulated_input is not available in this engine build.");
-            __mb_set_use_accumulated_input = __mb;
-        }
+        if (__mb_set_use_accumulated_input == 0) MethodBinds.MissingThrow("Input.set_use_accumulated_input");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_use_accumulated_input, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_using_accumulated_input;
     public static bool IsUsingAccumulatedInput()
     {
-        var __mb = __mb_is_using_accumulated_input;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_using_accumulated_input", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("Input.is_using_accumulated_input is not available in this engine build.");
-            __mb_is_using_accumulated_input = __mb;
-        }
+        if (__mb_is_using_accumulated_input == 0) MethodBinds.MissingThrow("Input.is_using_accumulated_input");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_using_accumulated_input, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_flush_buffered_events;
     public static void FlushBufferedEvents()
     {
-        var __mb = __mb_flush_buffered_events;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "flush_buffered_events", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("Input.flush_buffered_events is not available in this engine build.");
-            __mb_flush_buffered_events = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_flush_buffered_events == 0) MethodBinds.MissingThrow("Input.flush_buffered_events");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_flush_buffered_events, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_set_emulate_mouse_from_touch;
     public static void SetEmulateMouseFromTouch(bool enable)
     {
-        var __mb = __mb_set_emulate_mouse_from_touch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_emulate_mouse_from_touch", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Input.set_emulate_mouse_from_touch is not available in this engine build.");
-            __mb_set_emulate_mouse_from_touch = __mb;
-        }
+        if (__mb_set_emulate_mouse_from_touch == 0) MethodBinds.MissingThrow("Input.set_emulate_mouse_from_touch");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_emulate_mouse_from_touch, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_emulating_mouse_from_touch;
     public static bool IsEmulatingMouseFromTouch()
     {
-        var __mb = __mb_is_emulating_mouse_from_touch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_emulating_mouse_from_touch", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Input.is_emulating_mouse_from_touch is not available in this engine build.");
-            __mb_is_emulating_mouse_from_touch = __mb;
-        }
+        if (__mb_is_emulating_mouse_from_touch == 0) MethodBinds.MissingThrow("Input.is_emulating_mouse_from_touch");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_emulating_mouse_from_touch, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_emulate_touch_from_mouse;
     public static void SetEmulateTouchFromMouse(bool enable)
     {
-        var __mb = __mb_set_emulate_touch_from_mouse;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "set_emulate_touch_from_mouse", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("Input.set_emulate_touch_from_mouse is not available in this engine build.");
-            __mb_set_emulate_touch_from_mouse = __mb;
-        }
+        if (__mb_set_emulate_touch_from_mouse == 0) MethodBinds.MissingThrow("Input.set_emulate_touch_from_mouse");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_emulate_touch_from_mouse, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_emulating_touch_from_mouse;
     public static bool IsEmulatingTouchFromMouse()
     {
-        var __mb = __mb_is_emulating_touch_from_mouse;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("Input", "is_emulating_touch_from_mouse", 36873697);
-            if (__mb == 0) throw new MissingMethodException("Input.is_emulating_touch_from_mouse is not available in this engine build.");
-            __mb_is_emulating_touch_from_mouse = __mb;
-        }
+        if (__mb_is_emulating_touch_from_mouse == 0) MethodBinds.MissingThrow("Input.is_emulating_touch_from_mouse");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_emulating_touch_from_mouse, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_anything_pressed = MethodBinds.ResolveBulk("Input", "is_anything_pressed", 36873697);
+        __mb_is_key_pressed = MethodBinds.ResolveBulk("Input", "is_key_pressed", 1938909964);
+        __mb_is_physical_key_pressed = MethodBinds.ResolveBulk("Input", "is_physical_key_pressed", 1938909964);
+        __mb_is_key_label_pressed = MethodBinds.ResolveBulk("Input", "is_key_label_pressed", 1938909964);
+        __mb_is_mouse_button_pressed = MethodBinds.ResolveBulk("Input", "is_mouse_button_pressed", 1821097125);
+        __mb_is_joy_button_pressed = MethodBinds.ResolveBulk("Input", "is_joy_button_pressed", 787208542);
+        __mb_is_action_pressed = MethodBinds.ResolveBulk("Input", "is_action_pressed", 1558498928);
+        __mb_is_action_just_pressed = MethodBinds.ResolveBulk("Input", "is_action_just_pressed", 1558498928);
+        __mb_is_action_just_released = MethodBinds.ResolveBulk("Input", "is_action_just_released", 1558498928);
+        __mb_is_action_just_pressed_by_event = MethodBinds.ResolveBulk("Input", "is_action_just_pressed_by_event", 551972873);
+        __mb_is_action_just_released_by_event = MethodBinds.ResolveBulk("Input", "is_action_just_released_by_event", 551972873);
+        __mb_get_action_strength = MethodBinds.ResolveBulk("Input", "get_action_strength", 801543509);
+        __mb_get_action_raw_strength = MethodBinds.ResolveBulk("Input", "get_action_raw_strength", 801543509);
+        __mb_get_axis = MethodBinds.ResolveBulk("Input", "get_axis", 1958752504);
+        __mb_get_vector = MethodBinds.ResolveBulk("Input", "get_vector", 2479607902);
+        __mb_add_joy_mapping = MethodBinds.ResolveBulk("Input", "add_joy_mapping", 1168363258);
+        __mb_remove_joy_mapping = MethodBinds.ResolveBulk("Input", "remove_joy_mapping", 83702148);
+        __mb_is_joy_known = MethodBinds.ResolveBulk("Input", "is_joy_known", 3067735520);
+        __mb_get_joy_axis = MethodBinds.ResolveBulk("Input", "get_joy_axis", 4063175957);
+        __mb_get_joy_name = MethodBinds.ResolveBulk("Input", "get_joy_name", 990163283);
+        __mb_get_joy_guid = MethodBinds.ResolveBulk("Input", "get_joy_guid", 844755477);
+        __mb_get_joy_info = MethodBinds.ResolveBulk("Input", "get_joy_info", 3485342025);
+        __mb_should_ignore_device = MethodBinds.ResolveBulk("Input", "should_ignore_device", 2522259332);
+        __mb_get_connected_joypads = MethodBinds.ResolveBulk("Input", "get_connected_joypads", 2915620761);
+        __mb_get_joy_vibration_strength = MethodBinds.ResolveBulk("Input", "get_joy_vibration_strength", 3114997196);
+        __mb_get_joy_vibration_duration = MethodBinds.ResolveBulk("Input", "get_joy_vibration_duration", 4025615559);
+        __mb_get_joy_vibration_remaining_duration = MethodBinds.ResolveBulk("Input", "get_joy_vibration_remaining_duration", 4025615559);
+        __mb_is_joy_vibrating = MethodBinds.ResolveBulk("Input", "is_joy_vibrating", 3067735520);
+        __mb_has_joy_vibration = MethodBinds.ResolveBulk("Input", "has_joy_vibration", 1116898809);
+        __mb_start_joy_vibration = MethodBinds.ResolveBulk("Input", "start_joy_vibration", 2576575033);
+        __mb_stop_joy_vibration = MethodBinds.ResolveBulk("Input", "stop_joy_vibration", 1286410249);
+        __mb_vibrate_handheld = MethodBinds.ResolveBulk("Input", "vibrate_handheld", 544894297);
+        __mb_set_ignore_joypad_on_unfocused_application = MethodBinds.ResolveBulk("Input", "set_ignore_joypad_on_unfocused_application", 2586408642);
+        __mb_is_ignoring_joypad_on_unfocused_application = MethodBinds.ResolveBulk("Input", "is_ignoring_joypad_on_unfocused_application", 36873697);
+        __mb_get_gravity = MethodBinds.ResolveBulk("Input", "get_gravity", 3360562783);
+        __mb_get_accelerometer = MethodBinds.ResolveBulk("Input", "get_accelerometer", 3360562783);
+        __mb_get_magnetometer = MethodBinds.ResolveBulk("Input", "get_magnetometer", 3360562783);
+        __mb_get_gyroscope = MethodBinds.ResolveBulk("Input", "get_gyroscope", 3360562783);
+        __mb_get_joy_accelerometer = MethodBinds.ResolveBulk("Input", "get_joy_accelerometer", 711720468);
+        __mb_get_joy_gravity = MethodBinds.ResolveBulk("Input", "get_joy_gravity", 711720468);
+        __mb_get_joy_gyroscope = MethodBinds.ResolveBulk("Input", "get_joy_gyroscope", 711720468);
+        __mb_get_joy_motion_sensors_rate = MethodBinds.ResolveBulk("Input", "get_joy_motion_sensors_rate", 2339986948);
+        __mb_is_joy_motion_sensors_enabled = MethodBinds.ResolveBulk("Input", "is_joy_motion_sensors_enabled", 1116898809);
+        __mb_set_joy_motion_sensors_enabled = MethodBinds.ResolveBulk("Input", "set_joy_motion_sensors_enabled", 300928843);
+        __mb_has_joy_motion_sensors = MethodBinds.ResolveBulk("Input", "has_joy_motion_sensors", 1116898809);
+        __mb_start_joy_motion_sensors_calibration = MethodBinds.ResolveBulk("Input", "start_joy_motion_sensors_calibration", 1286410249);
+        __mb_stop_joy_motion_sensors_calibration = MethodBinds.ResolveBulk("Input", "stop_joy_motion_sensors_calibration", 1286410249);
+        __mb_clear_joy_motion_sensors_calibration = MethodBinds.ResolveBulk("Input", "clear_joy_motion_sensors_calibration", 1286410249);
+        __mb_get_joy_motion_sensors_calibration = MethodBinds.ResolveBulk("Input", "get_joy_motion_sensors_calibration", 3485342025);
+        __mb_set_joy_motion_sensors_calibration = MethodBinds.ResolveBulk("Input", "set_joy_motion_sensors_calibration", 64545446);
+        __mb_is_joy_motion_sensors_calibrated = MethodBinds.ResolveBulk("Input", "is_joy_motion_sensors_calibrated", 1116898809);
+        __mb_is_joy_motion_sensors_calibrating = MethodBinds.ResolveBulk("Input", "is_joy_motion_sensors_calibrating", 1116898809);
+        __mb_set_gravity = MethodBinds.ResolveBulk("Input", "set_gravity", 3460891852);
+        __mb_set_accelerometer = MethodBinds.ResolveBulk("Input", "set_accelerometer", 3460891852);
+        __mb_set_magnetometer = MethodBinds.ResolveBulk("Input", "set_magnetometer", 3460891852);
+        __mb_set_gyroscope = MethodBinds.ResolveBulk("Input", "set_gyroscope", 3460891852);
+        __mb_set_joy_light = MethodBinds.ResolveBulk("Input", "set_joy_light", 2878471219);
+        __mb_has_joy_light = MethodBinds.ResolveBulk("Input", "has_joy_light", 1116898809);
+        __mb_get_last_mouse_velocity = MethodBinds.ResolveBulk("Input", "get_last_mouse_velocity", 1497962370);
+        __mb_get_last_mouse_screen_velocity = MethodBinds.ResolveBulk("Input", "get_last_mouse_screen_velocity", 1497962370);
+        __mb_get_mouse_button_mask = MethodBinds.ResolveBulk("Input", "get_mouse_button_mask", 2512161324);
+        __mb_set_mouse_mode = MethodBinds.ResolveBulk("Input", "set_mouse_mode", 2228490894);
+        __mb_get_mouse_mode = MethodBinds.ResolveBulk("Input", "get_mouse_mode", 965286182);
+        __mb_warp_mouse = MethodBinds.ResolveBulk("Input", "warp_mouse", 743155724);
+        __mb_action_press = MethodBinds.ResolveBulk("Input", "action_press", 1713091165);
+        __mb_action_release = MethodBinds.ResolveBulk("Input", "action_release", 3304788590);
+        __mb_set_default_cursor_shape = MethodBinds.ResolveBulk("Input", "set_default_cursor_shape", 2124816902);
+        __mb_get_current_cursor_shape = MethodBinds.ResolveBulk("Input", "get_current_cursor_shape", 3455658929);
+        __mb_set_custom_mouse_cursor = MethodBinds.ResolveBulk("Input", "set_custom_mouse_cursor", 703945977);
+        __mb_parse_input_event = MethodBinds.ResolveBulk("Input", "parse_input_event", 3754044979);
+        __mb_set_use_accumulated_input = MethodBinds.ResolveBulk("Input", "set_use_accumulated_input", 2586408642);
+        __mb_is_using_accumulated_input = MethodBinds.ResolveBulk("Input", "is_using_accumulated_input", 2240911060);
+        __mb_flush_buffered_events = MethodBinds.ResolveBulk("Input", "flush_buffered_events", 3218959716);
+        __mb_set_emulate_mouse_from_touch = MethodBinds.ResolveBulk("Input", "set_emulate_mouse_from_touch", 2586408642);
+        __mb_is_emulating_mouse_from_touch = MethodBinds.ResolveBulk("Input", "is_emulating_mouse_from_touch", 36873697);
+        __mb_set_emulate_touch_from_mouse = MethodBinds.ResolveBulk("Input", "set_emulate_touch_from_mouse", 2586408642);
+        __mb_is_emulating_touch_from_mouse = MethodBinds.ResolveBulk("Input", "is_emulating_touch_from_mouse", 36873697);
     }
 }
 
@@ -4469,64 +3343,40 @@ public unsafe partial class InputEvent : Resource
     private static nint __mb_set_device;
     public void SetDevice(int device)
     {
-        var __mb = __mb_set_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "set_device", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.set_device is not available in this engine build.");
-            __mb_set_device = __mb;
-        }
+        if (__mb_set_device == 0) MethodBinds.MissingThrow("InputEvent.set_device");
         long __a0 = unchecked((long)device);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_device, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_device;
     public int GetDevice()
     {
-        var __mb = __mb_get_device;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "get_device", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.get_device is not available in this engine build.");
-            __mb_get_device = __mb;
-        }
+        if (__mb_get_device == 0) MethodBinds.MissingThrow("InputEvent.get_device");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_device, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_is_action;
     public bool IsAction(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_is_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_action", 1558498928);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_action is not available in this engine build.");
-            __mb_is_action = __mb;
-        }
+        if (__mb_is_action == 0) MethodBinds.MissingThrow("InputEvent.is_action");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_pressed;
     public bool IsActionPressed(StringName action, bool allowEcho = false, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_action_pressed", 1631499404);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_action_pressed is not available in this engine build.");
-            __mb_is_action_pressed = __mb;
-        }
+        if (__mb_is_action_pressed == 0) MethodBinds.MissingThrow("InputEvent.is_action_pressed");
         ulong __a0 = action.NativeValue;
         byte __a1 = allowEcho ? (byte)1 : (byte)0;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
@@ -4535,196 +3385,149 @@ public unsafe partial class InputEvent : Resource
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_pressed, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_released;
     public bool IsActionReleased(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_is_action_released;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_action_released", 1558498928);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_action_released is not available in this engine build.");
-            __mb_is_action_released = __mb;
-        }
+        if (__mb_is_action_released == 0) MethodBinds.MissingThrow("InputEvent.is_action_released");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_released, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_action_strength;
     public float GetActionStrength(StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_get_action_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "get_action_strength", 801543509);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.get_action_strength is not available in this engine build.");
-            __mb_get_action_strength = __mb;
-        }
+        if (__mb_get_action_strength == 0) MethodBinds.MissingThrow("InputEvent.get_action_strength");
         ulong __a0 = action.NativeValue;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_strength, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_is_canceled;
     public bool IsCanceled()
     {
-        var __mb = __mb_is_canceled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_canceled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_canceled is not available in this engine build.");
-            __mb_is_canceled = __mb;
-        }
+        if (__mb_is_canceled == 0) MethodBinds.MissingThrow("InputEvent.is_canceled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_canceled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_pressed;
     public bool IsPressed()
     {
-        var __mb = __mb_is_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_pressed is not available in this engine build.");
-            __mb_is_pressed = __mb;
-        }
+        if (__mb_is_pressed == 0) MethodBinds.MissingThrow("InputEvent.is_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_pressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_released;
     public bool IsReleased()
     {
-        var __mb = __mb_is_released;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_released", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_released is not available in this engine build.");
-            __mb_is_released = __mb;
-        }
+        if (__mb_is_released == 0) MethodBinds.MissingThrow("InputEvent.is_released");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_released, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_echo;
     public bool IsEcho()
     {
-        var __mb = __mb_is_echo;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_echo", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_echo is not available in this engine build.");
-            __mb_is_echo = __mb;
-        }
+        if (__mb_is_echo == 0) MethodBinds.MissingThrow("InputEvent.is_echo");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_echo, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_as_text;
     public string AsText()
     {
-        var __mb = __mb_as_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "as_text", 201670096);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.as_text is not available in this engine build.");
-            __mb_as_text = __mb;
-        }
+        if (__mb_as_text == 0) MethodBinds.MissingThrow("InputEvent.as_text");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_as_text, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_is_match;
     public bool IsMatch(InputEvent? @event, bool exactMatch = true)
     {
-        var __mb = __mb_is_match;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_match", 1754951977);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_match is not available in this engine build.");
-            __mb_is_match = __mb;
-        }
+        if (__mb_is_match == 0) MethodBinds.MissingThrow("InputEvent.is_match");
         nint __a0 = @event?.NativePtr ?? 0;
         byte __a1 = exactMatch ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_match, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_action_type;
     public bool IsActionType()
     {
-        var __mb = __mb_is_action_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "is_action_type", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.is_action_type is not available in this engine build.");
-            __mb_is_action_type = __mb;
-        }
+        if (__mb_is_action_type == 0) MethodBinds.MissingThrow("InputEvent.is_action_type");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_action_type, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_accumulate;
     public bool Accumulate(InputEvent? withEvent)
     {
-        var __mb = __mb_accumulate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "accumulate", 1062211774);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.accumulate is not available in this engine build.");
-            __mb_accumulate = __mb;
-        }
+        if (__mb_accumulate == 0) MethodBinds.MissingThrow("InputEvent.accumulate");
         nint __a0 = withEvent?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_accumulate, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_xformed_by;
     public InputEvent? XformedBy(Transform2D xform, Vector2 localOfs = default)
     {
-        var __mb = __mb_xformed_by;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEvent", "xformed_by", 1282766827);
-            if (__mb == 0) throw new MissingMethodException("InputEvent.xformed_by is not available in this engine build.");
-            __mb_xformed_by = __mb;
-        }
+        if (__mb_xformed_by == 0) MethodBinds.MissingThrow("InputEvent.xformed_by");
         var __a0 = xform;
         var __a1 = localOfs;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_xformed_by, NativePtr, (nint)__args, (nint)(&__ret));
         return (InputEvent?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_device = MethodBinds.ResolveBulk("InputEvent", "set_device", 1286410249);
+        __mb_get_device = MethodBinds.ResolveBulk("InputEvent", "get_device", 3905245786);
+        __mb_is_action = MethodBinds.ResolveBulk("InputEvent", "is_action", 1558498928);
+        __mb_is_action_pressed = MethodBinds.ResolveBulk("InputEvent", "is_action_pressed", 1631499404);
+        __mb_is_action_released = MethodBinds.ResolveBulk("InputEvent", "is_action_released", 1558498928);
+        __mb_get_action_strength = MethodBinds.ResolveBulk("InputEvent", "get_action_strength", 801543509);
+        __mb_is_canceled = MethodBinds.ResolveBulk("InputEvent", "is_canceled", 36873697);
+        __mb_is_pressed = MethodBinds.ResolveBulk("InputEvent", "is_pressed", 36873697);
+        __mb_is_released = MethodBinds.ResolveBulk("InputEvent", "is_released", 36873697);
+        __mb_is_echo = MethodBinds.ResolveBulk("InputEvent", "is_echo", 36873697);
+        __mb_as_text = MethodBinds.ResolveBulk("InputEvent", "as_text", 201670096);
+        __mb_is_match = MethodBinds.ResolveBulk("InputEvent", "is_match", 1754951977);
+        __mb_is_action_type = MethodBinds.ResolveBulk("InputEvent", "is_action_type", 36873697);
+        __mb_accumulate = MethodBinds.ResolveBulk("InputEvent", "accumulate", 1062211774);
+        __mb_xformed_by = MethodBinds.ResolveBulk("InputEvent", "xformed_by", 1282766827);
     }
 }
 
@@ -4764,110 +3567,79 @@ public unsafe partial class InputEventAction : InputEvent
     private static nint __mb_set_action;
     public void SetAction(StringName action)
     {
-        var __mb = __mb_set_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "set_action", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.set_action is not available in this engine build.");
-            __mb_set_action = __mb;
-        }
+        if (__mb_set_action == 0) MethodBinds.MissingThrow("InputEventAction.set_action");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_action, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action;
     public StringName GetAction()
     {
-        var __mb = __mb_get_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "get_action", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.get_action is not available in this engine build.");
-            __mb_get_action = __mb;
-        }
+        if (__mb_get_action == 0) MethodBinds.MissingThrow("InputEventAction.get_action");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_pressed;
     public void SetPressed(bool pressed)
     {
-        var __mb = __mb_set_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "set_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.set_pressed is not available in this engine build.");
-            __mb_set_pressed = __mb;
-        }
+        if (__mb_set_pressed == 0) MethodBinds.MissingThrow("InputEventAction.set_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_strength;
     public void SetStrength(float strength)
     {
-        var __mb = __mb_set_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "set_strength", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.set_strength is not available in this engine build.");
-            __mb_set_strength = __mb;
-        }
+        if (__mb_set_strength == 0) MethodBinds.MissingThrow("InputEventAction.set_strength");
         double __a0 = strength;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_strength, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_strength;
     public float GetStrength()
     {
-        var __mb = __mb_get_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "get_strength", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.get_strength is not available in this engine build.");
-            __mb_get_strength = __mb;
-        }
+        if (__mb_get_strength == 0) MethodBinds.MissingThrow("InputEventAction.get_strength");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_strength, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_event_index;
     public void SetEventIndex(int index)
     {
-        var __mb = __mb_set_event_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "set_event_index", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.set_event_index is not available in this engine build.");
-            __mb_set_event_index = __mb;
-        }
+        if (__mb_set_event_index == 0) MethodBinds.MissingThrow("InputEventAction.set_event_index");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_event_index, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_event_index;
     public int GetEventIndex()
     {
-        var __mb = __mb_get_event_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventAction", "get_event_index", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventAction.get_event_index is not available in this engine build.");
-            __mb_get_event_index = __mb;
-        }
+        if (__mb_get_event_index == 0) MethodBinds.MissingThrow("InputEventAction.get_event_index");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_event_index, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_action = MethodBinds.ResolveBulk("InputEventAction", "set_action", 3304788590);
+        __mb_get_action = MethodBinds.ResolveBulk("InputEventAction", "get_action", 2002593661);
+        __mb_set_pressed = MethodBinds.ResolveBulk("InputEventAction", "set_pressed", 2586408642);
+        __mb_set_strength = MethodBinds.ResolveBulk("InputEventAction", "set_strength", 373806689);
+        __mb_get_strength = MethodBinds.ResolveBulk("InputEventAction", "get_strength", 1740695150);
+        __mb_set_event_index = MethodBinds.ResolveBulk("InputEventAction", "set_event_index", 1286410249);
+        __mb_get_event_index = MethodBinds.ResolveBulk("InputEventAction", "get_event_index", 3905245786);
     }
 }
 
@@ -4884,32 +3656,26 @@ public unsafe partial class InputEventFromWindow : InputEvent
     private static nint __mb_set_window_id;
     public void SetWindowId(long id)
     {
-        var __mb = __mb_set_window_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventFromWindow", "set_window_id", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventFromWindow.set_window_id is not available in this engine build.");
-            __mb_set_window_id = __mb;
-        }
+        if (__mb_set_window_id == 0) MethodBinds.MissingThrow("InputEventFromWindow.set_window_id");
         long __a0 = unchecked((long)id);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_window_id, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_window_id;
     public long GetWindowId()
     {
-        var __mb = __mb_get_window_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventFromWindow", "get_window_id", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventFromWindow.get_window_id is not available in this engine build.");
-            __mb_get_window_id = __mb;
-        }
+        if (__mb_get_window_id == 0) MethodBinds.MissingThrow("InputEventFromWindow.get_window_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_window_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((long)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_window_id = MethodBinds.ResolveBulk("InputEventFromWindow", "set_window_id", 1286410249);
+        __mb_get_window_id = MethodBinds.ResolveBulk("InputEventFromWindow", "get_window_id", 3905245786);
     }
 }
 
@@ -4926,32 +3692,26 @@ public unsafe partial class InputEventGesture : InputEventWithModifiers
     private static nint __mb_set_position;
     public void SetPosition(Vector2 position)
     {
-        var __mb = __mb_set_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventGesture", "set_position", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventGesture.set_position is not available in this engine build.");
-            __mb_set_position = __mb;
-        }
+        if (__mb_set_position == 0) MethodBinds.MissingThrow("InputEventGesture.set_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_position;
     public Vector2 GetPosition()
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventGesture", "get_position", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventGesture.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("InputEventGesture.get_position");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_position = MethodBinds.ResolveBulk("InputEventGesture", "set_position", 743155724);
+        __mb_get_position = MethodBinds.ResolveBulk("InputEventGesture", "get_position", 3341600327);
     }
 }
 
@@ -4985,79 +3745,58 @@ public unsafe partial class InputEventJoypadButton : InputEvent
     private static nint __mb_set_button_index;
     public void SetButtonIndex(JoyButton buttonIndex)
     {
-        var __mb = __mb_set_button_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadButton", "set_button_index", 1466368136);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadButton.set_button_index is not available in this engine build.");
-            __mb_set_button_index = __mb;
-        }
+        if (__mb_set_button_index == 0) MethodBinds.MissingThrow("InputEventJoypadButton.set_button_index");
         long __a0 = (long)buttonIndex;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_button_index, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_button_index;
     public JoyButton GetButtonIndex()
     {
-        var __mb = __mb_get_button_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadButton", "get_button_index", 595588182);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadButton.get_button_index is not available in this engine build.");
-            __mb_get_button_index = __mb;
-        }
+        if (__mb_get_button_index == 0) MethodBinds.MissingThrow("InputEventJoypadButton.get_button_index");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_button_index, NativePtr, 0, (nint)(&__ret));
         return (JoyButton)__ret;
     }
 
     private static nint __mb_set_pressure;
     public void SetPressure(float pressure)
     {
-        var __mb = __mb_set_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadButton", "set_pressure", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadButton.set_pressure is not available in this engine build.");
-            __mb_set_pressure = __mb;
-        }
+        if (__mb_set_pressure == 0) MethodBinds.MissingThrow("InputEventJoypadButton.set_pressure");
         double __a0 = pressure;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressure, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pressure;
     public float GetPressure()
     {
-        var __mb = __mb_get_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadButton", "get_pressure", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadButton.get_pressure is not available in this engine build.");
-            __mb_get_pressure = __mb;
-        }
+        if (__mb_get_pressure == 0) MethodBinds.MissingThrow("InputEventJoypadButton.get_pressure");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pressure, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_pressed;
     public void SetPressed(bool pressed)
     {
-        var __mb = __mb_set_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadButton", "set_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadButton.set_pressed is not available in this engine build.");
-            __mb_set_pressed = __mb;
-        }
+        if (__mb_set_pressed == 0) MethodBinds.MissingThrow("InputEventJoypadButton.set_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressed, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_button_index = MethodBinds.ResolveBulk("InputEventJoypadButton", "set_button_index", 1466368136);
+        __mb_get_button_index = MethodBinds.ResolveBulk("InputEventJoypadButton", "get_button_index", 595588182);
+        __mb_set_pressure = MethodBinds.ResolveBulk("InputEventJoypadButton", "set_pressure", 373806689);
+        __mb_get_pressure = MethodBinds.ResolveBulk("InputEventJoypadButton", "get_pressure", 1740695150);
+        __mb_set_pressed = MethodBinds.ResolveBulk("InputEventJoypadButton", "set_pressed", 2586408642);
     }
 }
 
@@ -5085,63 +3824,47 @@ public unsafe partial class InputEventJoypadMotion : InputEvent
     private static nint __mb_set_axis;
     public void SetAxis(JoyAxis axis)
     {
-        var __mb = __mb_set_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadMotion", "set_axis", 1332685170);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadMotion.set_axis is not available in this engine build.");
-            __mb_set_axis = __mb;
-        }
+        if (__mb_set_axis == 0) MethodBinds.MissingThrow("InputEventJoypadMotion.set_axis");
         long __a0 = (long)axis;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_axis, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_axis;
     public JoyAxis GetAxis()
     {
-        var __mb = __mb_get_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadMotion", "get_axis", 4019121683);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadMotion.get_axis is not available in this engine build.");
-            __mb_get_axis = __mb;
-        }
+        if (__mb_get_axis == 0) MethodBinds.MissingThrow("InputEventJoypadMotion.get_axis");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_axis, NativePtr, 0, (nint)(&__ret));
         return (JoyAxis)__ret;
     }
 
     private static nint __mb_set_axis_value;
     public void SetAxisValue(float axisValue)
     {
-        var __mb = __mb_set_axis_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadMotion", "set_axis_value", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadMotion.set_axis_value is not available in this engine build.");
-            __mb_set_axis_value = __mb;
-        }
+        if (__mb_set_axis_value == 0) MethodBinds.MissingThrow("InputEventJoypadMotion.set_axis_value");
         double __a0 = axisValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_axis_value, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_axis_value;
     public float GetAxisValue()
     {
-        var __mb = __mb_get_axis_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventJoypadMotion", "get_axis_value", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventJoypadMotion.get_axis_value is not available in this engine build.");
-            __mb_get_axis_value = __mb;
-        }
+        if (__mb_get_axis_value == 0) MethodBinds.MissingThrow("InputEventJoypadMotion.get_axis_value");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_axis_value, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_axis = MethodBinds.ResolveBulk("InputEventJoypadMotion", "set_axis", 1332685170);
+        __mb_get_axis = MethodBinds.ResolveBulk("InputEventJoypadMotion", "get_axis", 4019121683);
+        __mb_set_axis_value = MethodBinds.ResolveBulk("InputEventJoypadMotion", "set_axis_value", 373806689);
+        __mb_get_axis_value = MethodBinds.ResolveBulk("InputEventJoypadMotion", "get_axis_value", 1740695150);
     }
 }
 
@@ -5199,293 +3922,202 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     private static nint __mb_set_pressed;
     public void SetPressed(bool pressed)
     {
-        var __mb = __mb_set_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_pressed is not available in this engine build.");
-            __mb_set_pressed = __mb;
-        }
+        if (__mb_set_pressed == 0) MethodBinds.MissingThrow("InputEventKey.set_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_keycode;
     public void SetKeycode(Key keycode)
     {
-        var __mb = __mb_set_keycode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_keycode", 888074362);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_keycode is not available in this engine build.");
-            __mb_set_keycode = __mb;
-        }
+        if (__mb_set_keycode == 0) MethodBinds.MissingThrow("InputEventKey.set_keycode");
         long __a0 = (long)keycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_keycode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_keycode;
     public Key GetKeycode()
     {
-        var __mb = __mb_get_keycode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_keycode", 1585896689);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_keycode is not available in this engine build.");
-            __mb_get_keycode = __mb;
-        }
+        if (__mb_get_keycode == 0) MethodBinds.MissingThrow("InputEventKey.get_keycode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_keycode, NativePtr, 0, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_set_physical_keycode;
     public void SetPhysicalKeycode(Key physicalKeycode)
     {
-        var __mb = __mb_set_physical_keycode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_physical_keycode", 888074362);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_physical_keycode is not available in this engine build.");
-            __mb_set_physical_keycode = __mb;
-        }
+        if (__mb_set_physical_keycode == 0) MethodBinds.MissingThrow("InputEventKey.set_physical_keycode");
         long __a0 = (long)physicalKeycode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_physical_keycode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_physical_keycode;
     public Key GetPhysicalKeycode()
     {
-        var __mb = __mb_get_physical_keycode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_physical_keycode", 1585896689);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_physical_keycode is not available in this engine build.");
-            __mb_get_physical_keycode = __mb;
-        }
+        if (__mb_get_physical_keycode == 0) MethodBinds.MissingThrow("InputEventKey.get_physical_keycode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_physical_keycode, NativePtr, 0, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_set_key_label;
     public void SetKeyLabel(Key keyLabel)
     {
-        var __mb = __mb_set_key_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_key_label", 888074362);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_key_label is not available in this engine build.");
-            __mb_set_key_label = __mb;
-        }
+        if (__mb_set_key_label == 0) MethodBinds.MissingThrow("InputEventKey.set_key_label");
         long __a0 = (long)keyLabel;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_key_label, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_key_label;
     public Key GetKeyLabel()
     {
-        var __mb = __mb_get_key_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_key_label", 1585896689);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_key_label is not available in this engine build.");
-            __mb_get_key_label = __mb;
-        }
+        if (__mb_get_key_label == 0) MethodBinds.MissingThrow("InputEventKey.get_key_label");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_key_label, NativePtr, 0, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_set_unicode;
     public void SetUnicode(int unicode)
     {
-        var __mb = __mb_set_unicode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_unicode", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_unicode is not available in this engine build.");
-            __mb_set_unicode = __mb;
-        }
+        if (__mb_set_unicode == 0) MethodBinds.MissingThrow("InputEventKey.set_unicode");
         long __a0 = unchecked((long)unicode);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_unicode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_unicode;
     public int GetUnicode()
     {
-        var __mb = __mb_get_unicode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_unicode", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_unicode is not available in this engine build.");
-            __mb_get_unicode = __mb;
-        }
+        if (__mb_get_unicode == 0) MethodBinds.MissingThrow("InputEventKey.get_unicode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_unicode, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_location;
     public void SetLocation(KeyLocation location)
     {
-        var __mb = __mb_set_location;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_location", 634453155);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_location is not available in this engine build.");
-            __mb_set_location = __mb;
-        }
+        if (__mb_set_location == 0) MethodBinds.MissingThrow("InputEventKey.set_location");
         long __a0 = (long)location;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_location, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_location;
     public KeyLocation GetLocation()
     {
-        var __mb = __mb_get_location;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_location", 211810873);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_location is not available in this engine build.");
-            __mb_get_location = __mb;
-        }
+        if (__mb_get_location == 0) MethodBinds.MissingThrow("InputEventKey.get_location");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_location, NativePtr, 0, (nint)(&__ret));
         return (KeyLocation)__ret;
     }
 
     private static nint __mb_set_echo;
     public void SetEcho(bool echo)
     {
-        var __mb = __mb_set_echo;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "set_echo", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.set_echo is not available in this engine build.");
-            __mb_set_echo = __mb;
-        }
+        if (__mb_set_echo == 0) MethodBinds.MissingThrow("InputEventKey.set_echo");
         byte __a0 = echo ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_echo, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_keycode_with_modifiers;
     public Key GetKeycodeWithModifiers()
     {
-        var __mb = __mb_get_keycode_with_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_keycode_with_modifiers", 1585896689);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_keycode_with_modifiers is not available in this engine build.");
-            __mb_get_keycode_with_modifiers = __mb;
-        }
+        if (__mb_get_keycode_with_modifiers == 0) MethodBinds.MissingThrow("InputEventKey.get_keycode_with_modifiers");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_keycode_with_modifiers, NativePtr, 0, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_get_physical_keycode_with_modifiers;
     public Key GetPhysicalKeycodeWithModifiers()
     {
-        var __mb = __mb_get_physical_keycode_with_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_physical_keycode_with_modifiers", 1585896689);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_physical_keycode_with_modifiers is not available in this engine build.");
-            __mb_get_physical_keycode_with_modifiers = __mb;
-        }
+        if (__mb_get_physical_keycode_with_modifiers == 0) MethodBinds.MissingThrow("InputEventKey.get_physical_keycode_with_modifiers");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_physical_keycode_with_modifiers, NativePtr, 0, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_get_key_label_with_modifiers;
     public Key GetKeyLabelWithModifiers()
     {
-        var __mb = __mb_get_key_label_with_modifiers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "get_key_label_with_modifiers", 1585896689);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.get_key_label_with_modifiers is not available in this engine build.");
-            __mb_get_key_label_with_modifiers = __mb;
-        }
+        if (__mb_get_key_label_with_modifiers == 0) MethodBinds.MissingThrow("InputEventKey.get_key_label_with_modifiers");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_key_label_with_modifiers, NativePtr, 0, (nint)(&__ret));
         return (Key)__ret;
     }
 
     private static nint __mb_as_text_keycode;
     public string AsTextKeycode()
     {
-        var __mb = __mb_as_text_keycode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "as_text_keycode", 201670096);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.as_text_keycode is not available in this engine build.");
-            __mb_as_text_keycode = __mb;
-        }
+        if (__mb_as_text_keycode == 0) MethodBinds.MissingThrow("InputEventKey.as_text_keycode");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_as_text_keycode, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_as_text_physical_keycode;
     public string AsTextPhysicalKeycode()
     {
-        var __mb = __mb_as_text_physical_keycode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "as_text_physical_keycode", 201670096);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.as_text_physical_keycode is not available in this engine build.");
-            __mb_as_text_physical_keycode = __mb;
-        }
+        if (__mb_as_text_physical_keycode == 0) MethodBinds.MissingThrow("InputEventKey.as_text_physical_keycode");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_as_text_physical_keycode, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_as_text_key_label;
     public string AsTextKeyLabel()
     {
-        var __mb = __mb_as_text_key_label;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "as_text_key_label", 201670096);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.as_text_key_label is not available in this engine build.");
-            __mb_as_text_key_label = __mb;
-        }
+        if (__mb_as_text_key_label == 0) MethodBinds.MissingThrow("InputEventKey.as_text_key_label");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_as_text_key_label, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_as_text_location;
     public string AsTextLocation()
     {
-        var __mb = __mb_as_text_location;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventKey", "as_text_location", 201670096);
-            if (__mb == 0) throw new MissingMethodException("InputEventKey.as_text_location is not available in this engine build.");
-            __mb_as_text_location = __mb;
-        }
+        if (__mb_as_text_location == 0) MethodBinds.MissingThrow("InputEventKey.as_text_location");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_as_text_location, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_pressed = MethodBinds.ResolveBulk("InputEventKey", "set_pressed", 2586408642);
+        __mb_set_keycode = MethodBinds.ResolveBulk("InputEventKey", "set_keycode", 888074362);
+        __mb_get_keycode = MethodBinds.ResolveBulk("InputEventKey", "get_keycode", 1585896689);
+        __mb_set_physical_keycode = MethodBinds.ResolveBulk("InputEventKey", "set_physical_keycode", 888074362);
+        __mb_get_physical_keycode = MethodBinds.ResolveBulk("InputEventKey", "get_physical_keycode", 1585896689);
+        __mb_set_key_label = MethodBinds.ResolveBulk("InputEventKey", "set_key_label", 888074362);
+        __mb_get_key_label = MethodBinds.ResolveBulk("InputEventKey", "get_key_label", 1585896689);
+        __mb_set_unicode = MethodBinds.ResolveBulk("InputEventKey", "set_unicode", 1286410249);
+        __mb_get_unicode = MethodBinds.ResolveBulk("InputEventKey", "get_unicode", 3905245786);
+        __mb_set_location = MethodBinds.ResolveBulk("InputEventKey", "set_location", 634453155);
+        __mb_get_location = MethodBinds.ResolveBulk("InputEventKey", "get_location", 211810873);
+        __mb_set_echo = MethodBinds.ResolveBulk("InputEventKey", "set_echo", 2586408642);
+        __mb_get_keycode_with_modifiers = MethodBinds.ResolveBulk("InputEventKey", "get_keycode_with_modifiers", 1585896689);
+        __mb_get_physical_keycode_with_modifiers = MethodBinds.ResolveBulk("InputEventKey", "get_physical_keycode_with_modifiers", 1585896689);
+        __mb_get_key_label_with_modifiers = MethodBinds.ResolveBulk("InputEventKey", "get_key_label_with_modifiers", 1585896689);
+        __mb_as_text_keycode = MethodBinds.ResolveBulk("InputEventKey", "as_text_keycode", 201670096);
+        __mb_as_text_physical_keycode = MethodBinds.ResolveBulk("InputEventKey", "as_text_physical_keycode", 201670096);
+        __mb_as_text_key_label = MethodBinds.ResolveBulk("InputEventKey", "as_text_key_label", 201670096);
+        __mb_as_text_location = MethodBinds.ResolveBulk("InputEventKey", "as_text_location", 201670096);
     }
 }
 
@@ -5549,249 +4181,173 @@ public unsafe partial class InputEventMIDI : InputEvent
     private static nint __mb_set_channel;
     public void SetChannel(int channel)
     {
-        var __mb = __mb_set_channel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_channel", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_channel is not available in this engine build.");
-            __mb_set_channel = __mb;
-        }
+        if (__mb_set_channel == 0) MethodBinds.MissingThrow("InputEventMIDI.set_channel");
         long __a0 = unchecked((long)channel);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_channel, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_channel;
     public int GetChannel()
     {
-        var __mb = __mb_get_channel;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_channel", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_channel is not available in this engine build.");
-            __mb_get_channel = __mb;
-        }
+        if (__mb_get_channel == 0) MethodBinds.MissingThrow("InputEventMIDI.get_channel");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_channel, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_message;
     public void SetMessage(MIDIMessage message)
     {
-        var __mb = __mb_set_message;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_message", 1064271510);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_message is not available in this engine build.");
-            __mb_set_message = __mb;
-        }
+        if (__mb_set_message == 0) MethodBinds.MissingThrow("InputEventMIDI.set_message");
         long __a0 = (long)message;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_message, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_message;
     public MIDIMessage GetMessage()
     {
-        var __mb = __mb_get_message;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_message", 1936512097);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_message is not available in this engine build.");
-            __mb_get_message = __mb;
-        }
+        if (__mb_get_message == 0) MethodBinds.MissingThrow("InputEventMIDI.get_message");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_message, NativePtr, 0, (nint)(&__ret));
         return (MIDIMessage)__ret;
     }
 
     private static nint __mb_set_pitch;
     public void SetPitch(int pitch)
     {
-        var __mb = __mb_set_pitch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_pitch", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_pitch is not available in this engine build.");
-            __mb_set_pitch = __mb;
-        }
+        if (__mb_set_pitch == 0) MethodBinds.MissingThrow("InputEventMIDI.set_pitch");
         long __a0 = unchecked((long)pitch);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pitch, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pitch;
     public int GetPitch()
     {
-        var __mb = __mb_get_pitch;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_pitch", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_pitch is not available in this engine build.");
-            __mb_get_pitch = __mb;
-        }
+        if (__mb_get_pitch == 0) MethodBinds.MissingThrow("InputEventMIDI.get_pitch");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pitch, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_velocity;
     public void SetVelocity(int velocity)
     {
-        var __mb = __mb_set_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_velocity", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_velocity is not available in this engine build.");
-            __mb_set_velocity = __mb;
-        }
+        if (__mb_set_velocity == 0) MethodBinds.MissingThrow("InputEventMIDI.set_velocity");
         long __a0 = unchecked((long)velocity);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_velocity;
     public int GetVelocity()
     {
-        var __mb = __mb_get_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_velocity", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_velocity is not available in this engine build.");
-            __mb_get_velocity = __mb;
-        }
+        if (__mb_get_velocity == 0) MethodBinds.MissingThrow("InputEventMIDI.get_velocity");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_velocity, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_instrument;
     public void SetInstrument(int instrument)
     {
-        var __mb = __mb_set_instrument;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_instrument", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_instrument is not available in this engine build.");
-            __mb_set_instrument = __mb;
-        }
+        if (__mb_set_instrument == 0) MethodBinds.MissingThrow("InputEventMIDI.set_instrument");
         long __a0 = unchecked((long)instrument);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_instrument, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_instrument;
     public int GetInstrument()
     {
-        var __mb = __mb_get_instrument;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_instrument", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_instrument is not available in this engine build.");
-            __mb_get_instrument = __mb;
-        }
+        if (__mb_get_instrument == 0) MethodBinds.MissingThrow("InputEventMIDI.get_instrument");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_instrument, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_pressure;
     public void SetPressure(int pressure)
     {
-        var __mb = __mb_set_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_pressure", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_pressure is not available in this engine build.");
-            __mb_set_pressure = __mb;
-        }
+        if (__mb_set_pressure == 0) MethodBinds.MissingThrow("InputEventMIDI.set_pressure");
         long __a0 = unchecked((long)pressure);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressure, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pressure;
     public int GetPressure()
     {
-        var __mb = __mb_get_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_pressure", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_pressure is not available in this engine build.");
-            __mb_get_pressure = __mb;
-        }
+        if (__mb_get_pressure == 0) MethodBinds.MissingThrow("InputEventMIDI.get_pressure");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pressure, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_controller_number;
     public void SetControllerNumber(int controllerNumber)
     {
-        var __mb = __mb_set_controller_number;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_controller_number", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_controller_number is not available in this engine build.");
-            __mb_set_controller_number = __mb;
-        }
+        if (__mb_set_controller_number == 0) MethodBinds.MissingThrow("InputEventMIDI.set_controller_number");
         long __a0 = unchecked((long)controllerNumber);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_controller_number, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_controller_number;
     public int GetControllerNumber()
     {
-        var __mb = __mb_get_controller_number;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_controller_number", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_controller_number is not available in this engine build.");
-            __mb_get_controller_number = __mb;
-        }
+        if (__mb_get_controller_number == 0) MethodBinds.MissingThrow("InputEventMIDI.get_controller_number");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_controller_number, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_controller_value;
     public void SetControllerValue(int controllerValue)
     {
-        var __mb = __mb_set_controller_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "set_controller_value", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.set_controller_value is not available in this engine build.");
-            __mb_set_controller_value = __mb;
-        }
+        if (__mb_set_controller_value == 0) MethodBinds.MissingThrow("InputEventMIDI.set_controller_value");
         long __a0 = unchecked((long)controllerValue);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_controller_value, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_controller_value;
     public int GetControllerValue()
     {
-        var __mb = __mb_get_controller_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMIDI", "get_controller_value", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventMIDI.get_controller_value is not available in this engine build.");
-            __mb_get_controller_value = __mb;
-        }
+        if (__mb_get_controller_value == 0) MethodBinds.MissingThrow("InputEventMIDI.get_controller_value");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_controller_value, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_channel = MethodBinds.ResolveBulk("InputEventMIDI", "set_channel", 1286410249);
+        __mb_get_channel = MethodBinds.ResolveBulk("InputEventMIDI", "get_channel", 3905245786);
+        __mb_set_message = MethodBinds.ResolveBulk("InputEventMIDI", "set_message", 1064271510);
+        __mb_get_message = MethodBinds.ResolveBulk("InputEventMIDI", "get_message", 1936512097);
+        __mb_set_pitch = MethodBinds.ResolveBulk("InputEventMIDI", "set_pitch", 1286410249);
+        __mb_get_pitch = MethodBinds.ResolveBulk("InputEventMIDI", "get_pitch", 3905245786);
+        __mb_set_velocity = MethodBinds.ResolveBulk("InputEventMIDI", "set_velocity", 1286410249);
+        __mb_get_velocity = MethodBinds.ResolveBulk("InputEventMIDI", "get_velocity", 3905245786);
+        __mb_set_instrument = MethodBinds.ResolveBulk("InputEventMIDI", "set_instrument", 1286410249);
+        __mb_get_instrument = MethodBinds.ResolveBulk("InputEventMIDI", "get_instrument", 3905245786);
+        __mb_set_pressure = MethodBinds.ResolveBulk("InputEventMIDI", "set_pressure", 1286410249);
+        __mb_get_pressure = MethodBinds.ResolveBulk("InputEventMIDI", "get_pressure", 3905245786);
+        __mb_set_controller_number = MethodBinds.ResolveBulk("InputEventMIDI", "set_controller_number", 1286410249);
+        __mb_get_controller_number = MethodBinds.ResolveBulk("InputEventMIDI", "get_controller_number", 3905245786);
+        __mb_set_controller_value = MethodBinds.ResolveBulk("InputEventMIDI", "set_controller_value", 1286410249);
+        __mb_get_controller_value = MethodBinds.ResolveBulk("InputEventMIDI", "get_controller_value", 3905245786);
     }
 }
 
@@ -5813,32 +4369,26 @@ public unsafe partial class InputEventMagnifyGesture : InputEventGesture
     private static nint __mb_set_factor;
     public void SetFactor(float factor)
     {
-        var __mb = __mb_set_factor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMagnifyGesture", "set_factor", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventMagnifyGesture.set_factor is not available in this engine build.");
-            __mb_set_factor = __mb;
-        }
+        if (__mb_set_factor == 0) MethodBinds.MissingThrow("InputEventMagnifyGesture.set_factor");
         double __a0 = factor;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_factor, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_factor;
     public float GetFactor()
     {
-        var __mb = __mb_get_factor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMagnifyGesture", "get_factor", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventMagnifyGesture.get_factor is not available in this engine build.");
-            __mb_get_factor = __mb;
-        }
+        if (__mb_get_factor == 0) MethodBinds.MissingThrow("InputEventMagnifyGesture.get_factor");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_factor, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_factor = MethodBinds.ResolveBulk("InputEventMagnifyGesture", "set_factor", 373806689);
+        __mb_get_factor = MethodBinds.ResolveBulk("InputEventMagnifyGesture", "get_factor", 1740695150);
     }
 }
 
@@ -5867,94 +4417,68 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     private static nint __mb_set_button_mask;
     public void SetButtonMask(MouseButtonMask buttonMask)
     {
-        var __mb = __mb_set_button_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouse", "set_button_mask", 3950145251);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouse.set_button_mask is not available in this engine build.");
-            __mb_set_button_mask = __mb;
-        }
+        if (__mb_set_button_mask == 0) MethodBinds.MissingThrow("InputEventMouse.set_button_mask");
         long __a0 = (long)buttonMask;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_button_mask, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_button_mask;
     public MouseButtonMask GetButtonMask()
     {
-        var __mb = __mb_get_button_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouse", "get_button_mask", 2512161324);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouse.get_button_mask is not available in this engine build.");
-            __mb_get_button_mask = __mb;
-        }
+        if (__mb_get_button_mask == 0) MethodBinds.MissingThrow("InputEventMouse.get_button_mask");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_button_mask, NativePtr, 0, (nint)(&__ret));
         return (MouseButtonMask)__ret;
     }
 
     private static nint __mb_set_position;
     public void SetPosition(Vector2 position)
     {
-        var __mb = __mb_set_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouse", "set_position", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouse.set_position is not available in this engine build.");
-            __mb_set_position = __mb;
-        }
+        if (__mb_set_position == 0) MethodBinds.MissingThrow("InputEventMouse.set_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_position;
     public Vector2 GetPosition()
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouse", "get_position", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouse.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("InputEventMouse.get_position");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_global_position;
     public void SetGlobalPosition(Vector2 globalPosition)
     {
-        var __mb = __mb_set_global_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouse", "set_global_position", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouse.set_global_position is not available in this engine build.");
-            __mb_set_global_position = __mb;
-        }
+        if (__mb_set_global_position == 0) MethodBinds.MissingThrow("InputEventMouse.set_global_position");
         var __a0 = globalPosition;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_global_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_global_position;
     public Vector2 GetGlobalPosition()
     {
-        var __mb = __mb_get_global_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouse", "get_global_position", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouse.get_global_position is not available in this engine build.");
-            __mb_get_global_position = __mb;
-        }
+        if (__mb_get_global_position == 0) MethodBinds.MissingThrow("InputEventMouse.get_global_position");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_global_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_button_mask = MethodBinds.ResolveBulk("InputEventMouse", "set_button_mask", 3950145251);
+        __mb_get_button_mask = MethodBinds.ResolveBulk("InputEventMouse", "get_button_mask", 2512161324);
+        __mb_set_position = MethodBinds.ResolveBulk("InputEventMouse", "set_position", 743155724);
+        __mb_get_position = MethodBinds.ResolveBulk("InputEventMouse", "get_position", 3341600327);
+        __mb_set_global_position = MethodBinds.ResolveBulk("InputEventMouse", "set_global_position", 743155724);
+        __mb_get_global_position = MethodBinds.ResolveBulk("InputEventMouse", "get_global_position", 3341600327);
     }
 }
 
@@ -6000,126 +4524,90 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     private static nint __mb_set_factor;
     public void SetFactor(float factor)
     {
-        var __mb = __mb_set_factor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "set_factor", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.set_factor is not available in this engine build.");
-            __mb_set_factor = __mb;
-        }
+        if (__mb_set_factor == 0) MethodBinds.MissingThrow("InputEventMouseButton.set_factor");
         double __a0 = factor;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_factor, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_factor;
     public float GetFactor()
     {
-        var __mb = __mb_get_factor;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "get_factor", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.get_factor is not available in this engine build.");
-            __mb_get_factor = __mb;
-        }
+        if (__mb_get_factor == 0) MethodBinds.MissingThrow("InputEventMouseButton.get_factor");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_factor, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_button_index;
     public void SetButtonIndex(MouseButton buttonIndex)
     {
-        var __mb = __mb_set_button_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "set_button_index", 3624991109);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.set_button_index is not available in this engine build.");
-            __mb_set_button_index = __mb;
-        }
+        if (__mb_set_button_index == 0) MethodBinds.MissingThrow("InputEventMouseButton.set_button_index");
         long __a0 = (long)buttonIndex;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_button_index, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_button_index;
     public MouseButton GetButtonIndex()
     {
-        var __mb = __mb_get_button_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "get_button_index", 1132662608);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.get_button_index is not available in this engine build.");
-            __mb_get_button_index = __mb;
-        }
+        if (__mb_get_button_index == 0) MethodBinds.MissingThrow("InputEventMouseButton.get_button_index");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_button_index, NativePtr, 0, (nint)(&__ret));
         return (MouseButton)__ret;
     }
 
     private static nint __mb_set_pressed;
     public void SetPressed(bool pressed)
     {
-        var __mb = __mb_set_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "set_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.set_pressed is not available in this engine build.");
-            __mb_set_pressed = __mb;
-        }
+        if (__mb_set_pressed == 0) MethodBinds.MissingThrow("InputEventMouseButton.set_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_canceled;
     public void SetCanceled(bool canceled)
     {
-        var __mb = __mb_set_canceled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "set_canceled", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.set_canceled is not available in this engine build.");
-            __mb_set_canceled = __mb;
-        }
+        if (__mb_set_canceled == 0) MethodBinds.MissingThrow("InputEventMouseButton.set_canceled");
         byte __a0 = canceled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_canceled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_double_click;
     public void SetDoubleClick(bool doubleClick)
     {
-        var __mb = __mb_set_double_click;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "set_double_click", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.set_double_click is not available in this engine build.");
-            __mb_set_double_click = __mb;
-        }
+        if (__mb_set_double_click == 0) MethodBinds.MissingThrow("InputEventMouseButton.set_double_click");
         byte __a0 = doubleClick ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_double_click, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_double_click;
     public bool IsDoubleClick()
     {
-        var __mb = __mb_is_double_click;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseButton", "is_double_click", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseButton.is_double_click is not available in this engine build.");
-            __mb_is_double_click = __mb;
-        }
+        if (__mb_is_double_click == 0) MethodBinds.MissingThrow("InputEventMouseButton.is_double_click");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_double_click, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_factor = MethodBinds.ResolveBulk("InputEventMouseButton", "set_factor", 373806689);
+        __mb_get_factor = MethodBinds.ResolveBulk("InputEventMouseButton", "get_factor", 1740695150);
+        __mb_set_button_index = MethodBinds.ResolveBulk("InputEventMouseButton", "set_button_index", 3624991109);
+        __mb_get_button_index = MethodBinds.ResolveBulk("InputEventMouseButton", "get_button_index", 1132662608);
+        __mb_set_pressed = MethodBinds.ResolveBulk("InputEventMouseButton", "set_pressed", 2586408642);
+        __mb_set_canceled = MethodBinds.ResolveBulk("InputEventMouseButton", "set_canceled", 2586408642);
+        __mb_set_double_click = MethodBinds.ResolveBulk("InputEventMouseButton", "set_double_click", 2586408642);
+        __mb_is_double_click = MethodBinds.ResolveBulk("InputEventMouseButton", "is_double_click", 36873697);
     }
 }
 
@@ -6177,218 +4665,152 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     private static nint __mb_set_tilt;
     public void SetTilt(Vector2 tilt)
     {
-        var __mb = __mb_set_tilt;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_tilt", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_tilt is not available in this engine build.");
-            __mb_set_tilt = __mb;
-        }
+        if (__mb_set_tilt == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_tilt");
         var __a0 = tilt;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tilt, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tilt;
     public Vector2 GetTilt()
     {
-        var __mb = __mb_get_tilt;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_tilt", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_tilt is not available in this engine build.");
-            __mb_get_tilt = __mb;
-        }
+        if (__mb_get_tilt == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_tilt");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tilt, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_pressure;
     public void SetPressure(float pressure)
     {
-        var __mb = __mb_set_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_pressure", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_pressure is not available in this engine build.");
-            __mb_set_pressure = __mb;
-        }
+        if (__mb_set_pressure == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_pressure");
         double __a0 = pressure;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressure, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pressure;
     public float GetPressure()
     {
-        var __mb = __mb_get_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_pressure", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_pressure is not available in this engine build.");
-            __mb_get_pressure = __mb;
-        }
+        if (__mb_get_pressure == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_pressure");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pressure, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_pen_inverted;
     public void SetPenInverted(bool penInverted)
     {
-        var __mb = __mb_set_pen_inverted;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_pen_inverted", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_pen_inverted is not available in this engine build.");
-            __mb_set_pen_inverted = __mb;
-        }
+        if (__mb_set_pen_inverted == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_pen_inverted");
         byte __a0 = penInverted ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pen_inverted, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pen_inverted;
     public bool GetPenInverted()
     {
-        var __mb = __mb_get_pen_inverted;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_pen_inverted", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_pen_inverted is not available in this engine build.");
-            __mb_get_pen_inverted = __mb;
-        }
+        if (__mb_get_pen_inverted == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_pen_inverted");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pen_inverted, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_relative;
     public void SetRelative(Vector2 relative)
     {
-        var __mb = __mb_set_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_relative", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_relative is not available in this engine build.");
-            __mb_set_relative = __mb;
-        }
+        if (__mb_set_relative == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_relative");
         var __a0 = relative;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_relative, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_relative;
     public Vector2 GetRelative()
     {
-        var __mb = __mb_get_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_relative", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_relative is not available in this engine build.");
-            __mb_get_relative = __mb;
-        }
+        if (__mb_get_relative == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_relative");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_relative, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_screen_relative;
     public void SetScreenRelative(Vector2 relative)
     {
-        var __mb = __mb_set_screen_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_screen_relative", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_screen_relative is not available in this engine build.");
-            __mb_set_screen_relative = __mb;
-        }
+        if (__mb_set_screen_relative == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_screen_relative");
         var __a0 = relative;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_screen_relative, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_screen_relative;
     public Vector2 GetScreenRelative()
     {
-        var __mb = __mb_get_screen_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_screen_relative", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_screen_relative is not available in this engine build.");
-            __mb_get_screen_relative = __mb;
-        }
+        if (__mb_get_screen_relative == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_screen_relative");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_screen_relative, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_velocity;
     public void SetVelocity(Vector2 velocity)
     {
-        var __mb = __mb_set_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_velocity", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_velocity is not available in this engine build.");
-            __mb_set_velocity = __mb;
-        }
+        if (__mb_set_velocity == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_velocity");
         var __a0 = velocity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_velocity;
     public Vector2 GetVelocity()
     {
-        var __mb = __mb_get_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_velocity", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_velocity is not available in this engine build.");
-            __mb_get_velocity = __mb;
-        }
+        if (__mb_get_velocity == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_screen_velocity;
     public void SetScreenVelocity(Vector2 velocity)
     {
-        var __mb = __mb_set_screen_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "set_screen_velocity", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.set_screen_velocity is not available in this engine build.");
-            __mb_set_screen_velocity = __mb;
-        }
+        if (__mb_set_screen_velocity == 0) MethodBinds.MissingThrow("InputEventMouseMotion.set_screen_velocity");
         var __a0 = velocity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_screen_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_screen_velocity;
     public Vector2 GetScreenVelocity()
     {
-        var __mb = __mb_get_screen_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventMouseMotion", "get_screen_velocity", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventMouseMotion.get_screen_velocity is not available in this engine build.");
-            __mb_get_screen_velocity = __mb;
-        }
+        if (__mb_get_screen_velocity == 0) MethodBinds.MissingThrow("InputEventMouseMotion.get_screen_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_screen_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_tilt = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_tilt", 743155724);
+        __mb_get_tilt = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_tilt", 3341600327);
+        __mb_set_pressure = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_pressure", 373806689);
+        __mb_get_pressure = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_pressure", 1740695150);
+        __mb_set_pen_inverted = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_pen_inverted", 2586408642);
+        __mb_get_pen_inverted = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_pen_inverted", 36873697);
+        __mb_set_relative = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_relative", 743155724);
+        __mb_get_relative = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_relative", 3341600327);
+        __mb_set_screen_relative = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_screen_relative", 743155724);
+        __mb_get_screen_relative = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_screen_relative", 3341600327);
+        __mb_set_velocity = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_velocity", 743155724);
+        __mb_get_velocity = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_velocity", 3341600327);
+        __mb_set_screen_velocity = MethodBinds.ResolveBulk("InputEventMouseMotion", "set_screen_velocity", 743155724);
+        __mb_get_screen_velocity = MethodBinds.ResolveBulk("InputEventMouseMotion", "get_screen_velocity", 3341600327);
     }
 }
 
@@ -6410,32 +4832,26 @@ public unsafe partial class InputEventPanGesture : InputEventGesture
     private static nint __mb_set_delta;
     public void SetDelta(Vector2 delta)
     {
-        var __mb = __mb_set_delta;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventPanGesture", "set_delta", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventPanGesture.set_delta is not available in this engine build.");
-            __mb_set_delta = __mb;
-        }
+        if (__mb_set_delta == 0) MethodBinds.MissingThrow("InputEventPanGesture.set_delta");
         var __a0 = delta;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_delta, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_delta;
     public Vector2 GetDelta()
     {
-        var __mb = __mb_get_delta;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventPanGesture", "get_delta", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventPanGesture.get_delta is not available in this engine build.");
-            __mb_get_delta = __mb;
-        }
+        if (__mb_get_delta == 0) MethodBinds.MissingThrow("InputEventPanGesture.get_delta");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_delta, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_delta = MethodBinds.ResolveBulk("InputEventPanGesture", "set_delta", 743155724);
+        __mb_get_delta = MethodBinds.ResolveBulk("InputEventPanGesture", "get_delta", 3341600327);
     }
 }
 
@@ -6505,280 +4921,194 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     private static nint __mb_set_index;
     public void SetIndex(int index)
     {
-        var __mb = __mb_set_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_index", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_index is not available in this engine build.");
-            __mb_set_index = __mb;
-        }
+        if (__mb_set_index == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_index");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_index, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_index;
     public int GetIndex()
     {
-        var __mb = __mb_get_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_index", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_index is not available in this engine build.");
-            __mb_get_index = __mb;
-        }
+        if (__mb_get_index == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_index");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_index, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_tilt;
     public void SetTilt(Vector2 tilt)
     {
-        var __mb = __mb_set_tilt;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_tilt", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_tilt is not available in this engine build.");
-            __mb_set_tilt = __mb;
-        }
+        if (__mb_set_tilt == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_tilt");
         var __a0 = tilt;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tilt, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tilt;
     public Vector2 GetTilt()
     {
-        var __mb = __mb_get_tilt;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_tilt", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_tilt is not available in this engine build.");
-            __mb_get_tilt = __mb;
-        }
+        if (__mb_get_tilt == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_tilt");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tilt, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_pressure;
     public void SetPressure(float pressure)
     {
-        var __mb = __mb_set_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_pressure", 373806689);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_pressure is not available in this engine build.");
-            __mb_set_pressure = __mb;
-        }
+        if (__mb_set_pressure == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_pressure");
         double __a0 = pressure;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressure, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pressure;
     public float GetPressure()
     {
-        var __mb = __mb_get_pressure;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_pressure", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_pressure is not available in this engine build.");
-            __mb_get_pressure = __mb;
-        }
+        if (__mb_get_pressure == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_pressure");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pressure, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_pen_inverted;
     public void SetPenInverted(bool penInverted)
     {
-        var __mb = __mb_set_pen_inverted;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_pen_inverted", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_pen_inverted is not available in this engine build.");
-            __mb_set_pen_inverted = __mb;
-        }
+        if (__mb_set_pen_inverted == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_pen_inverted");
         byte __a0 = penInverted ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pen_inverted, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pen_inverted;
     public bool GetPenInverted()
     {
-        var __mb = __mb_get_pen_inverted;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_pen_inverted", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_pen_inverted is not available in this engine build.");
-            __mb_get_pen_inverted = __mb;
-        }
+        if (__mb_get_pen_inverted == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_pen_inverted");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pen_inverted, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_position;
     public void SetPosition(Vector2 position)
     {
-        var __mb = __mb_set_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_position", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_position is not available in this engine build.");
-            __mb_set_position = __mb;
-        }
+        if (__mb_set_position == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_position;
     public Vector2 GetPosition()
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_position", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_position");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_relative;
     public void SetRelative(Vector2 relative)
     {
-        var __mb = __mb_set_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_relative", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_relative is not available in this engine build.");
-            __mb_set_relative = __mb;
-        }
+        if (__mb_set_relative == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_relative");
         var __a0 = relative;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_relative, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_relative;
     public Vector2 GetRelative()
     {
-        var __mb = __mb_get_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_relative", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_relative is not available in this engine build.");
-            __mb_get_relative = __mb;
-        }
+        if (__mb_get_relative == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_relative");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_relative, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_screen_relative;
     public void SetScreenRelative(Vector2 relative)
     {
-        var __mb = __mb_set_screen_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_screen_relative", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_screen_relative is not available in this engine build.");
-            __mb_set_screen_relative = __mb;
-        }
+        if (__mb_set_screen_relative == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_screen_relative");
         var __a0 = relative;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_screen_relative, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_screen_relative;
     public Vector2 GetScreenRelative()
     {
-        var __mb = __mb_get_screen_relative;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_screen_relative", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_screen_relative is not available in this engine build.");
-            __mb_get_screen_relative = __mb;
-        }
+        if (__mb_get_screen_relative == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_screen_relative");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_screen_relative, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_velocity;
     public void SetVelocity(Vector2 velocity)
     {
-        var __mb = __mb_set_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_velocity", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_velocity is not available in this engine build.");
-            __mb_set_velocity = __mb;
-        }
+        if (__mb_set_velocity == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_velocity");
         var __a0 = velocity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_velocity;
     public Vector2 GetVelocity()
     {
-        var __mb = __mb_get_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_velocity", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_velocity is not available in this engine build.");
-            __mb_get_velocity = __mb;
-        }
+        if (__mb_get_velocity == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_screen_velocity;
     public void SetScreenVelocity(Vector2 velocity)
     {
-        var __mb = __mb_set_screen_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "set_screen_velocity", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.set_screen_velocity is not available in this engine build.");
-            __mb_set_screen_velocity = __mb;
-        }
+        if (__mb_set_screen_velocity == 0) MethodBinds.MissingThrow("InputEventScreenDrag.set_screen_velocity");
         var __a0 = velocity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_screen_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_screen_velocity;
     public Vector2 GetScreenVelocity()
     {
-        var __mb = __mb_get_screen_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenDrag", "get_screen_velocity", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenDrag.get_screen_velocity is not available in this engine build.");
-            __mb_get_screen_velocity = __mb;
-        }
+        if (__mb_get_screen_velocity == 0) MethodBinds.MissingThrow("InputEventScreenDrag.get_screen_velocity");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_screen_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_index = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_index", 1286410249);
+        __mb_get_index = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_index", 3905245786);
+        __mb_set_tilt = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_tilt", 743155724);
+        __mb_get_tilt = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_tilt", 3341600327);
+        __mb_set_pressure = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_pressure", 373806689);
+        __mb_get_pressure = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_pressure", 1740695150);
+        __mb_set_pen_inverted = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_pen_inverted", 2586408642);
+        __mb_get_pen_inverted = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_pen_inverted", 36873697);
+        __mb_set_position = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_position", 743155724);
+        __mb_get_position = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_position", 3341600327);
+        __mb_set_relative = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_relative", 743155724);
+        __mb_get_relative = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_relative", 3341600327);
+        __mb_set_screen_relative = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_screen_relative", 743155724);
+        __mb_get_screen_relative = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_screen_relative", 3341600327);
+        __mb_set_velocity = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_velocity", 743155724);
+        __mb_get_velocity = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_velocity", 3341600327);
+        __mb_set_screen_velocity = MethodBinds.ResolveBulk("InputEventScreenDrag", "set_screen_velocity", 743155724);
+        __mb_get_screen_velocity = MethodBinds.ResolveBulk("InputEventScreenDrag", "get_screen_velocity", 3341600327);
     }
 }
 
@@ -6824,126 +5154,90 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     private static nint __mb_set_index;
     public void SetIndex(int index)
     {
-        var __mb = __mb_set_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "set_index", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.set_index is not available in this engine build.");
-            __mb_set_index = __mb;
-        }
+        if (__mb_set_index == 0) MethodBinds.MissingThrow("InputEventScreenTouch.set_index");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_index, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_index;
     public int GetIndex()
     {
-        var __mb = __mb_get_index;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "get_index", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.get_index is not available in this engine build.");
-            __mb_get_index = __mb;
-        }
+        if (__mb_get_index == 0) MethodBinds.MissingThrow("InputEventScreenTouch.get_index");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_index, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_position;
     public void SetPosition(Vector2 position)
     {
-        var __mb = __mb_set_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "set_position", 743155724);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.set_position is not available in this engine build.");
-            __mb_set_position = __mb;
-        }
+        if (__mb_set_position == 0) MethodBinds.MissingThrow("InputEventScreenTouch.set_position");
         var __a0 = position;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_position, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_position;
     public Vector2 GetPosition()
     {
-        var __mb = __mb_get_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "get_position", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.get_position is not available in this engine build.");
-            __mb_get_position = __mb;
-        }
+        if (__mb_get_position == 0) MethodBinds.MissingThrow("InputEventScreenTouch.get_position");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_position, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_pressed;
     public void SetPressed(bool pressed)
     {
-        var __mb = __mb_set_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "set_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.set_pressed is not available in this engine build.");
-            __mb_set_pressed = __mb;
-        }
+        if (__mb_set_pressed == 0) MethodBinds.MissingThrow("InputEventScreenTouch.set_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_canceled;
     public void SetCanceled(bool canceled)
     {
-        var __mb = __mb_set_canceled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "set_canceled", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.set_canceled is not available in this engine build.");
-            __mb_set_canceled = __mb;
-        }
+        if (__mb_set_canceled == 0) MethodBinds.MissingThrow("InputEventScreenTouch.set_canceled");
         byte __a0 = canceled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_canceled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_double_tap;
     public void SetDoubleTap(bool doubleTap)
     {
-        var __mb = __mb_set_double_tap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "set_double_tap", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.set_double_tap is not available in this engine build.");
-            __mb_set_double_tap = __mb;
-        }
+        if (__mb_set_double_tap == 0) MethodBinds.MissingThrow("InputEventScreenTouch.set_double_tap");
         byte __a0 = doubleTap ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_double_tap, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_double_tap;
     public bool IsDoubleTap()
     {
-        var __mb = __mb_is_double_tap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventScreenTouch", "is_double_tap", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventScreenTouch.is_double_tap is not available in this engine build.");
-            __mb_is_double_tap = __mb;
-        }
+        if (__mb_is_double_tap == 0) MethodBinds.MissingThrow("InputEventScreenTouch.is_double_tap");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_double_tap, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_index = MethodBinds.ResolveBulk("InputEventScreenTouch", "set_index", 1286410249);
+        __mb_get_index = MethodBinds.ResolveBulk("InputEventScreenTouch", "get_index", 3905245786);
+        __mb_set_position = MethodBinds.ResolveBulk("InputEventScreenTouch", "set_position", 743155724);
+        __mb_get_position = MethodBinds.ResolveBulk("InputEventScreenTouch", "get_position", 3341600327);
+        __mb_set_pressed = MethodBinds.ResolveBulk("InputEventScreenTouch", "set_pressed", 2586408642);
+        __mb_set_canceled = MethodBinds.ResolveBulk("InputEventScreenTouch", "set_canceled", 2586408642);
+        __mb_set_double_tap = MethodBinds.ResolveBulk("InputEventScreenTouch", "set_double_tap", 2586408642);
+        __mb_is_double_tap = MethodBinds.ResolveBulk("InputEventScreenTouch", "is_double_tap", 36873697);
     }
 }
 
@@ -6965,32 +5259,26 @@ public unsafe partial class InputEventShortcut : InputEvent
     private static nint __mb_set_shortcut;
     public void SetShortcut(Shortcut? shortcut)
     {
-        var __mb = __mb_set_shortcut;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventShortcut", "set_shortcut", 857163497);
-            if (__mb == 0) throw new MissingMethodException("InputEventShortcut.set_shortcut is not available in this engine build.");
-            __mb_set_shortcut = __mb;
-        }
+        if (__mb_set_shortcut == 0) MethodBinds.MissingThrow("InputEventShortcut.set_shortcut");
         nint __a0 = shortcut?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_shortcut, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_shortcut;
     public Shortcut? GetShortcut()
     {
-        var __mb = __mb_get_shortcut;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventShortcut", "get_shortcut", 3766804753);
-            if (__mb == 0) throw new MissingMethodException("InputEventShortcut.get_shortcut is not available in this engine build.");
-            __mb_get_shortcut = __mb;
-        }
+        if (__mb_get_shortcut == 0) MethodBinds.MissingThrow("InputEventShortcut.get_shortcut");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_shortcut, NativePtr, 0, (nint)(&__ret));
         return (Shortcut?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_shortcut = MethodBinds.ResolveBulk("InputEventShortcut", "set_shortcut", 857163497);
+        __mb_get_shortcut = MethodBinds.ResolveBulk("InputEventShortcut", "get_shortcut", 3766804753);
     }
 }
 
@@ -7031,186 +5319,130 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     private static nint __mb_set_command_or_control_autoremap;
     public void SetCommandOrControlAutoremap(bool enable)
     {
-        var __mb = __mb_set_command_or_control_autoremap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "set_command_or_control_autoremap", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.set_command_or_control_autoremap is not available in this engine build.");
-            __mb_set_command_or_control_autoremap = __mb;
-        }
+        if (__mb_set_command_or_control_autoremap == 0) MethodBinds.MissingThrow("InputEventWithModifiers.set_command_or_control_autoremap");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_command_or_control_autoremap, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_command_or_control_autoremap;
     public bool IsCommandOrControlAutoremap()
     {
-        var __mb = __mb_is_command_or_control_autoremap;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "is_command_or_control_autoremap", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.is_command_or_control_autoremap is not available in this engine build.");
-            __mb_is_command_or_control_autoremap = __mb;
-        }
+        if (__mb_is_command_or_control_autoremap == 0) MethodBinds.MissingThrow("InputEventWithModifiers.is_command_or_control_autoremap");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_command_or_control_autoremap, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_command_or_control_pressed;
     public bool IsCommandOrControlPressed()
     {
-        var __mb = __mb_is_command_or_control_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "is_command_or_control_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.is_command_or_control_pressed is not available in this engine build.");
-            __mb_is_command_or_control_pressed = __mb;
-        }
+        if (__mb_is_command_or_control_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.is_command_or_control_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_command_or_control_pressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_alt_pressed;
     public void SetAltPressed(bool pressed)
     {
-        var __mb = __mb_set_alt_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "set_alt_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.set_alt_pressed is not available in this engine build.");
-            __mb_set_alt_pressed = __mb;
-        }
+        if (__mb_set_alt_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.set_alt_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_alt_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_alt_pressed;
     public bool IsAltPressed()
     {
-        var __mb = __mb_is_alt_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "is_alt_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.is_alt_pressed is not available in this engine build.");
-            __mb_is_alt_pressed = __mb;
-        }
+        if (__mb_is_alt_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.is_alt_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_alt_pressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_shift_pressed;
     public void SetShiftPressed(bool pressed)
     {
-        var __mb = __mb_set_shift_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "set_shift_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.set_shift_pressed is not available in this engine build.");
-            __mb_set_shift_pressed = __mb;
-        }
+        if (__mb_set_shift_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.set_shift_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_shift_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_shift_pressed;
     public bool IsShiftPressed()
     {
-        var __mb = __mb_is_shift_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "is_shift_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.is_shift_pressed is not available in this engine build.");
-            __mb_is_shift_pressed = __mb;
-        }
+        if (__mb_is_shift_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.is_shift_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_shift_pressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_ctrl_pressed;
     public void SetCtrlPressed(bool pressed)
     {
-        var __mb = __mb_set_ctrl_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "set_ctrl_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.set_ctrl_pressed is not available in this engine build.");
-            __mb_set_ctrl_pressed = __mb;
-        }
+        if (__mb_set_ctrl_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.set_ctrl_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_ctrl_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_ctrl_pressed;
     public bool IsCtrlPressed()
     {
-        var __mb = __mb_is_ctrl_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "is_ctrl_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.is_ctrl_pressed is not available in this engine build.");
-            __mb_is_ctrl_pressed = __mb;
-        }
+        if (__mb_is_ctrl_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.is_ctrl_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_ctrl_pressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_meta_pressed;
     public void SetMetaPressed(bool pressed)
     {
-        var __mb = __mb_set_meta_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "set_meta_pressed", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.set_meta_pressed is not available in this engine build.");
-            __mb_set_meta_pressed = __mb;
-        }
+        if (__mb_set_meta_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.set_meta_pressed");
         byte __a0 = pressed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_meta_pressed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_meta_pressed;
     public bool IsMetaPressed()
     {
-        var __mb = __mb_is_meta_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "is_meta_pressed", 36873697);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.is_meta_pressed is not available in this engine build.");
-            __mb_is_meta_pressed = __mb;
-        }
+        if (__mb_is_meta_pressed == 0) MethodBinds.MissingThrow("InputEventWithModifiers.is_meta_pressed");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_meta_pressed, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_modifiers_mask;
     public KeyModifierMask GetModifiersMask()
     {
-        var __mb = __mb_get_modifiers_mask;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputEventWithModifiers", "get_modifiers_mask", 1258259499);
-            if (__mb == 0) throw new MissingMethodException("InputEventWithModifiers.get_modifiers_mask is not available in this engine build.");
-            __mb_get_modifiers_mask = __mb;
-        }
+        if (__mb_get_modifiers_mask == 0) MethodBinds.MissingThrow("InputEventWithModifiers.get_modifiers_mask");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_modifiers_mask, NativePtr, 0, (nint)(&__ret));
         return (KeyModifierMask)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_command_or_control_autoremap = MethodBinds.ResolveBulk("InputEventWithModifiers", "set_command_or_control_autoremap", 2586408642);
+        __mb_is_command_or_control_autoremap = MethodBinds.ResolveBulk("InputEventWithModifiers", "is_command_or_control_autoremap", 36873697);
+        __mb_is_command_or_control_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "is_command_or_control_pressed", 36873697);
+        __mb_set_alt_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "set_alt_pressed", 2586408642);
+        __mb_is_alt_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "is_alt_pressed", 36873697);
+        __mb_set_shift_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "set_shift_pressed", 2586408642);
+        __mb_is_shift_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "is_shift_pressed", 36873697);
+        __mb_set_ctrl_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "set_ctrl_pressed", 2586408642);
+        __mb_is_ctrl_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "is_ctrl_pressed", 36873697);
+        __mb_set_meta_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "set_meta_pressed", 2586408642);
+        __mb_is_meta_pressed = MethodBinds.ResolveBulk("InputEventWithModifiers", "is_meta_pressed", 36873697);
+        __mb_get_modifiers_mask = MethodBinds.ResolveBulk("InputEventWithModifiers", "get_modifiers_mask", 1258259499);
     }
 }
 
@@ -7234,224 +5466,146 @@ public static unsafe partial class InputMap
     private static nint __mb_has_action;
     public static bool HasAction(StringName action)
     {
-        var __mb = __mb_has_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "has_action", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("InputMap.has_action is not available in this engine build.");
-            __mb_has_action = __mb;
-        }
+        if (__mb_has_action == 0) MethodBinds.MissingThrow("InputMap.has_action");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_action, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_actions;
     public static Godot.Collections.Array GetActions()
     {
-        var __mb = __mb_get_actions;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "get_actions", 2915620761);
-            if (__mb == 0) throw new MissingMethodException("InputMap.get_actions is not available in this engine build.");
-            __mb_get_actions = __mb;
-        }
+        if (__mb_get_actions == 0) MethodBinds.MissingThrow("InputMap.get_actions");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_actions, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_add_action;
     public static void AddAction(StringName action, float deadzone = 0.2f)
     {
-        var __mb = __mb_add_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "add_action", 1195233573);
-            if (__mb == 0) throw new MissingMethodException("InputMap.add_action is not available in this engine build.");
-            __mb_add_action = __mb;
-        }
+        if (__mb_add_action == 0) MethodBinds.MissingThrow("InputMap.add_action");
         ulong __a0 = action.NativeValue;
         double __a1 = deadzone;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_action, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_erase_action;
     public static void EraseAction(StringName action)
     {
-        var __mb = __mb_erase_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "erase_action", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("InputMap.erase_action is not available in this engine build.");
-            __mb_erase_action = __mb;
-        }
+        if (__mb_erase_action == 0) MethodBinds.MissingThrow("InputMap.erase_action");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_erase_action, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_action_description;
     public static string GetActionDescription(StringName action)
     {
-        var __mb = __mb_get_action_description;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "get_action_description", 957595536);
-            if (__mb == 0) throw new MissingMethodException("InputMap.get_action_description is not available in this engine build.");
-            __mb_get_action_description = __mb;
-        }
+        if (__mb_get_action_description == 0) MethodBinds.MissingThrow("InputMap.get_action_description");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_action_description, SingletonPtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_action_set_deadzone;
     public static void ActionSetDeadzone(StringName action, float deadzone)
     {
-        var __mb = __mb_action_set_deadzone;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_set_deadzone", 4135858297);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_set_deadzone is not available in this engine build.");
-            __mb_action_set_deadzone = __mb;
-        }
+        if (__mb_action_set_deadzone == 0) MethodBinds.MissingThrow("InputMap.action_set_deadzone");
         ulong __a0 = action.NativeValue;
         double __a1 = deadzone;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_set_deadzone, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_get_deadzone;
     public static float ActionGetDeadzone(StringName action)
     {
-        var __mb = __mb_action_get_deadzone;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_get_deadzone", 1391627649);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_get_deadzone is not available in this engine build.");
-            __mb_action_get_deadzone = __mb;
-        }
+        if (__mb_action_get_deadzone == 0) MethodBinds.MissingThrow("InputMap.action_get_deadzone");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_get_deadzone, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_action_add_event;
     public static void ActionAddEvent(StringName action, InputEvent? @event)
     {
-        var __mb = __mb_action_add_event;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_add_event", 518302593);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_add_event is not available in this engine build.");
-            __mb_action_add_event = __mb;
-        }
+        if (__mb_action_add_event == 0) MethodBinds.MissingThrow("InputMap.action_add_event");
         ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_add_event, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_has_event;
     public static bool ActionHasEvent(StringName action, InputEvent? @event)
     {
-        var __mb = __mb_action_has_event;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_has_event", 1185871985);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_has_event is not available in this engine build.");
-            __mb_action_has_event = __mb;
-        }
+        if (__mb_action_has_event == 0) MethodBinds.MissingThrow("InputMap.action_has_event");
         ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_has_event, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_action_erase_event;
     public static void ActionEraseEvent(StringName action, InputEvent? @event)
     {
-        var __mb = __mb_action_erase_event;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_erase_event", 518302593);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_erase_event is not available in this engine build.");
-            __mb_action_erase_event = __mb;
-        }
+        if (__mb_action_erase_event == 0) MethodBinds.MissingThrow("InputMap.action_erase_event");
         ulong __a0 = action.NativeValue;
         nint __a1 = @event?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_erase_event, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_erase_events;
     public static void ActionEraseEvents(StringName action)
     {
-        var __mb = __mb_action_erase_events;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_erase_events", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_erase_events is not available in this engine build.");
-            __mb_action_erase_events = __mb;
-        }
+        if (__mb_action_erase_events == 0) MethodBinds.MissingThrow("InputMap.action_erase_events");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_erase_events, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_action_get_events;
     public static Godot.Collections.Array ActionGetEvents(StringName action)
     {
-        var __mb = __mb_action_get_events;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "action_get_events", 689397652);
-            if (__mb == 0) throw new MissingMethodException("InputMap.action_get_events is not available in this engine build.");
-            __mb_action_get_events = __mb;
-        }
+        if (__mb_action_get_events == 0) MethodBinds.MissingThrow("InputMap.action_get_events");
         ulong __a0 = action.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_action_get_events, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_event_is_action;
     public static bool EventIsAction(InputEvent? @event, StringName action, bool exactMatch = false)
     {
-        var __mb = __mb_event_is_action;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "event_is_action", 3193353650);
-            if (__mb == 0) throw new MissingMethodException("InputMap.event_is_action is not available in this engine build.");
-            __mb_event_is_action = __mb;
-        }
+        if (__mb_event_is_action == 0) MethodBinds.MissingThrow("InputMap.event_is_action");
         nint __a0 = @event?.NativePtr ?? 0;
         ulong __a1 = action.NativeValue;
         byte __a2 = exactMatch ? (byte)1 : (byte)0;
@@ -7460,21 +5614,33 @@ public static unsafe partial class InputMap
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_event_is_action, SingletonPtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_load_from_project_settings;
     public static void LoadFromProjectSettings()
     {
-        var __mb = __mb_load_from_project_settings;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InputMap", "load_from_project_settings", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("InputMap.load_from_project_settings is not available in this engine build.");
-            __mb_load_from_project_settings = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_load_from_project_settings == 0) MethodBinds.MissingThrow("InputMap.load_from_project_settings");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_from_project_settings, SingletonPtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_has_action = MethodBinds.ResolveBulk("InputMap", "has_action", 2619796661);
+        __mb_get_actions = MethodBinds.ResolveBulk("InputMap", "get_actions", 2915620761);
+        __mb_add_action = MethodBinds.ResolveBulk("InputMap", "add_action", 1195233573);
+        __mb_erase_action = MethodBinds.ResolveBulk("InputMap", "erase_action", 3304788590);
+        __mb_get_action_description = MethodBinds.ResolveBulk("InputMap", "get_action_description", 957595536);
+        __mb_action_set_deadzone = MethodBinds.ResolveBulk("InputMap", "action_set_deadzone", 4135858297);
+        __mb_action_get_deadzone = MethodBinds.ResolveBulk("InputMap", "action_get_deadzone", 1391627649);
+        __mb_action_add_event = MethodBinds.ResolveBulk("InputMap", "action_add_event", 518302593);
+        __mb_action_has_event = MethodBinds.ResolveBulk("InputMap", "action_has_event", 1185871985);
+        __mb_action_erase_event = MethodBinds.ResolveBulk("InputMap", "action_erase_event", 518302593);
+        __mb_action_erase_events = MethodBinds.ResolveBulk("InputMap", "action_erase_events", 3304788590);
+        __mb_action_get_events = MethodBinds.ResolveBulk("InputMap", "action_get_events", 689397652);
+        __mb_event_is_action = MethodBinds.ResolveBulk("InputMap", "event_is_action", 3193353650);
+        __mb_load_from_project_settings = MethodBinds.ResolveBulk("InputMap", "load_from_project_settings", 3218959716);
     }
 }
 
@@ -7485,54 +5651,43 @@ public unsafe partial class InstancePlaceholder : Node
     private static nint __mb_get_stored_values;
     public Godot.Collections.Dictionary GetStoredValues(bool withOrder = false)
     {
-        var __mb = __mb_get_stored_values;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InstancePlaceholder", "get_stored_values", 2230153369);
-            if (__mb == 0) throw new MissingMethodException("InstancePlaceholder.get_stored_values is not available in this engine build.");
-            __mb_get_stored_values = __mb;
-        }
+        if (__mb_get_stored_values == 0) MethodBinds.MissingThrow("InstancePlaceholder.get_stored_values");
         byte __a0 = withOrder ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_stored_values, NativePtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_create_instance;
     public Node? CreateInstance(bool replace = false, PackedScene? customScene = null)
     {
-        var __mb = __mb_create_instance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InstancePlaceholder", "create_instance", 3794612210);
-            if (__mb == 0) throw new MissingMethodException("InstancePlaceholder.create_instance is not available in this engine build.");
-            __mb_create_instance = __mb;
-        }
+        if (__mb_create_instance == 0) MethodBinds.MissingThrow("InstancePlaceholder.create_instance");
         byte __a0 = replace ? (byte)1 : (byte)0;
         nint __a1 = customScene?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_create_instance, NativePtr, (nint)__args, (nint)(&__ret));
         return (Node?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_instance_path;
     public string GetInstancePath()
     {
-        var __mb = __mb_get_instance_path;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("InstancePlaceholder", "get_instance_path", 201670096);
-            if (__mb == 0) throw new MissingMethodException("InstancePlaceholder.get_instance_path is not available in this engine build.");
-            __mb_get_instance_path = __mb;
-        }
+        if (__mb_get_instance_path == 0) MethodBinds.MissingThrow("InstancePlaceholder.get_instance_path");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_instance_path, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_stored_values = MethodBinds.ResolveBulk("InstancePlaceholder", "get_stored_values", 2230153369);
+        __mb_create_instance = MethodBinds.ResolveBulk("InstancePlaceholder", "create_instance", 3794612210);
+        __mb_get_instance_path = MethodBinds.ResolveBulk("InstancePlaceholder", "get_instance_path", 201670096);
     }
 }
 
@@ -7727,13 +5882,7 @@ public unsafe partial class ItemList : Control
     private static nint __mb_add_item;
     public int AddItem(string text, Texture2D? icon = null, bool selectable = true)
     {
-        var __mb = __mb_add_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "add_item", 359861678);
-            if (__mb == 0) throw new MissingMethodException("ItemList.add_item is not available in this engine build.");
-            __mb_add_item = __mb;
-        }
+        if (__mb_add_item == 0) MethodBinds.MissingThrow("ItemList.add_item");
         ulong __a0 = NativeString.Create(text);
         nint __a1 = icon?.NativePtr ?? 0;
         byte __a2 = selectable ? (byte)1 : (byte)0;
@@ -7742,7 +5891,7 @@ public unsafe partial class ItemList : Control
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_item, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return unchecked((int)__ret);
     }
@@ -7750,1391 +5899,976 @@ public unsafe partial class ItemList : Control
     private static nint __mb_add_icon_item;
     public int AddIconItem(Texture2D? icon, bool selectable = true)
     {
-        var __mb = __mb_add_icon_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "add_icon_item", 4256579627);
-            if (__mb == 0) throw new MissingMethodException("ItemList.add_icon_item is not available in this engine build.");
-            __mb_add_icon_item = __mb;
-        }
+        if (__mb_add_icon_item == 0) MethodBinds.MissingThrow("ItemList.add_icon_item");
         nint __a0 = icon?.NativePtr ?? 0;
         byte __a1 = selectable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_icon_item, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_item_text;
     public void SetItemText(int idx, string text)
     {
-        var __mb = __mb_set_item_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_text", 501894301);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_text is not available in this engine build.");
-            __mb_set_item_text = __mb;
-        }
+        if (__mb_set_item_text == 0) MethodBinds.MissingThrow("ItemList.set_item_text");
         long __a0 = unchecked((long)idx);
         ulong __a1 = NativeString.Create(text);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_text, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_get_item_text;
     public string GetItemText(int idx)
     {
-        var __mb = __mb_get_item_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_text", 844755477);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_text is not available in this engine build.");
-            __mb_get_item_text = __mb;
-        }
+        if (__mb_get_item_text == 0) MethodBinds.MissingThrow("ItemList.get_item_text");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_text, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_item_icon;
     public void SetItemIcon(int idx, Texture2D? icon)
     {
-        var __mb = __mb_set_item_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_icon", 666127730);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_icon is not available in this engine build.");
-            __mb_set_item_icon = __mb;
-        }
+        if (__mb_set_item_icon == 0) MethodBinds.MissingThrow("ItemList.set_item_icon");
         long __a0 = unchecked((long)idx);
         nint __a1 = icon?.NativePtr ?? 0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_icon, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_icon;
     public Texture2D? GetItemIcon(int idx)
     {
-        var __mb = __mb_get_item_icon;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_icon", 3536238170);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_icon is not available in this engine build.");
-            __mb_get_item_icon = __mb;
-        }
+        if (__mb_get_item_icon == 0) MethodBinds.MissingThrow("ItemList.get_item_icon");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_icon, NativePtr, (nint)__args, (nint)(&__ret));
         return (Texture2D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_item_text_direction;
     public void SetItemTextDirection(int idx, Control.TextDirection direction)
     {
-        var __mb = __mb_set_item_text_direction;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_text_direction", 1707680378);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_text_direction is not available in this engine build.");
-            __mb_set_item_text_direction = __mb;
-        }
+        if (__mb_set_item_text_direction == 0) MethodBinds.MissingThrow("ItemList.set_item_text_direction");
         long __a0 = unchecked((long)idx);
         long __a1 = (long)direction;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_text_direction, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_text_direction;
     public Control.TextDirection GetItemTextDirection(int idx)
     {
-        var __mb = __mb_get_item_text_direction;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_text_direction", 4235602388);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_text_direction is not available in this engine build.");
-            __mb_get_item_text_direction = __mb;
-        }
+        if (__mb_get_item_text_direction == 0) MethodBinds.MissingThrow("ItemList.get_item_text_direction");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_text_direction, NativePtr, (nint)__args, (nint)(&__ret));
         return (Control.TextDirection)__ret;
     }
 
     private static nint __mb_set_item_language;
     public void SetItemLanguage(int idx, string language)
     {
-        var __mb = __mb_set_item_language;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_language", 501894301);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_language is not available in this engine build.");
-            __mb_set_item_language = __mb;
-        }
+        if (__mb_set_item_language == 0) MethodBinds.MissingThrow("ItemList.set_item_language");
         long __a0 = unchecked((long)idx);
         ulong __a1 = NativeString.Create(language);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_language, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_get_item_language;
     public string GetItemLanguage(int idx)
     {
-        var __mb = __mb_get_item_language;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_language", 844755477);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_language is not available in this engine build.");
-            __mb_get_item_language = __mb;
-        }
+        if (__mb_get_item_language == 0) MethodBinds.MissingThrow("ItemList.get_item_language");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_language, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_item_auto_translate_mode;
     public void SetItemAutoTranslateMode(int idx, Node.AutoTranslateModeEnum mode)
     {
-        var __mb = __mb_set_item_auto_translate_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_auto_translate_mode", 287402019);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_auto_translate_mode is not available in this engine build.");
-            __mb_set_item_auto_translate_mode = __mb;
-        }
+        if (__mb_set_item_auto_translate_mode == 0) MethodBinds.MissingThrow("ItemList.set_item_auto_translate_mode");
         long __a0 = unchecked((long)idx);
         long __a1 = (long)mode;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_auto_translate_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_auto_translate_mode;
     public Node.AutoTranslateModeEnum GetItemAutoTranslateMode(int idx)
     {
-        var __mb = __mb_get_item_auto_translate_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_auto_translate_mode", 906302372);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_auto_translate_mode is not available in this engine build.");
-            __mb_get_item_auto_translate_mode = __mb;
-        }
+        if (__mb_get_item_auto_translate_mode == 0) MethodBinds.MissingThrow("ItemList.get_item_auto_translate_mode");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_auto_translate_mode, NativePtr, (nint)__args, (nint)(&__ret));
         return (Node.AutoTranslateModeEnum)__ret;
     }
 
     private static nint __mb_set_item_icon_transposed;
     public void SetItemIconTransposed(int idx, bool transposed)
     {
-        var __mb = __mb_set_item_icon_transposed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_icon_transposed", 300928843);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_icon_transposed is not available in this engine build.");
-            __mb_set_item_icon_transposed = __mb;
-        }
+        if (__mb_set_item_icon_transposed == 0) MethodBinds.MissingThrow("ItemList.set_item_icon_transposed");
         long __a0 = unchecked((long)idx);
         byte __a1 = transposed ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_icon_transposed, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_item_icon_transposed;
     public bool IsItemIconTransposed(int idx)
     {
-        var __mb = __mb_is_item_icon_transposed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_item_icon_transposed", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_item_icon_transposed is not available in this engine build.");
-            __mb_is_item_icon_transposed = __mb;
-        }
+        if (__mb_is_item_icon_transposed == 0) MethodBinds.MissingThrow("ItemList.is_item_icon_transposed");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_item_icon_transposed, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_item_icon_region;
     public void SetItemIconRegion(int idx, Rect2 rect)
     {
-        var __mb = __mb_set_item_icon_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_icon_region", 1356297692);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_icon_region is not available in this engine build.");
-            __mb_set_item_icon_region = __mb;
-        }
+        if (__mb_set_item_icon_region == 0) MethodBinds.MissingThrow("ItemList.set_item_icon_region");
         long __a0 = unchecked((long)idx);
         var __a1 = rect;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_icon_region, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_icon_region;
     public Rect2 GetItemIconRegion(int idx)
     {
-        var __mb = __mb_get_item_icon_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_icon_region", 3327874267);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_icon_region is not available in this engine build.");
-            __mb_get_item_icon_region = __mb;
-        }
+        if (__mb_get_item_icon_region == 0) MethodBinds.MissingThrow("ItemList.get_item_icon_region");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rect2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_icon_region, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_item_icon_modulate;
     public void SetItemIconModulate(int idx, Color modulate)
     {
-        var __mb = __mb_set_item_icon_modulate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_icon_modulate", 2878471219);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_icon_modulate is not available in this engine build.");
-            __mb_set_item_icon_modulate = __mb;
-        }
+        if (__mb_set_item_icon_modulate == 0) MethodBinds.MissingThrow("ItemList.set_item_icon_modulate");
         long __a0 = unchecked((long)idx);
         var __a1 = modulate;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_icon_modulate, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_icon_modulate;
     public Color GetItemIconModulate(int idx)
     {
-        var __mb = __mb_get_item_icon_modulate;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_icon_modulate", 3457211756);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_icon_modulate is not available in this engine build.");
-            __mb_get_item_icon_modulate = __mb;
-        }
+        if (__mb_get_item_icon_modulate == 0) MethodBinds.MissingThrow("ItemList.get_item_icon_modulate");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_icon_modulate, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_item_selectable;
     public void SetItemSelectable(int idx, bool selectable)
     {
-        var __mb = __mb_set_item_selectable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_selectable", 300928843);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_selectable is not available in this engine build.");
-            __mb_set_item_selectable = __mb;
-        }
+        if (__mb_set_item_selectable == 0) MethodBinds.MissingThrow("ItemList.set_item_selectable");
         long __a0 = unchecked((long)idx);
         byte __a1 = selectable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_selectable, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_item_selectable;
     public bool IsItemSelectable(int idx)
     {
-        var __mb = __mb_is_item_selectable;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_item_selectable", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_item_selectable is not available in this engine build.");
-            __mb_is_item_selectable = __mb;
-        }
+        if (__mb_is_item_selectable == 0) MethodBinds.MissingThrow("ItemList.is_item_selectable");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_item_selectable, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_item_disabled;
     public void SetItemDisabled(int idx, bool disabled)
     {
-        var __mb = __mb_set_item_disabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_disabled", 300928843);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_disabled is not available in this engine build.");
-            __mb_set_item_disabled = __mb;
-        }
+        if (__mb_set_item_disabled == 0) MethodBinds.MissingThrow("ItemList.set_item_disabled");
         long __a0 = unchecked((long)idx);
         byte __a1 = disabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_disabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_item_disabled;
     public bool IsItemDisabled(int idx)
     {
-        var __mb = __mb_is_item_disabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_item_disabled", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_item_disabled is not available in this engine build.");
-            __mb_is_item_disabled = __mb;
-        }
+        if (__mb_is_item_disabled == 0) MethodBinds.MissingThrow("ItemList.is_item_disabled");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_item_disabled, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_item_metadata;
     public void SetItemMetadata(int idx, Variant metadata)
     {
-        var __mb = __mb_set_item_metadata;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_metadata", 2152698145);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_metadata is not available in this engine build.");
-            __mb_set_item_metadata = __mb;
-        }
+        if (__mb_set_item_metadata == 0) MethodBinds.MissingThrow("ItemList.set_item_metadata");
         long __a0 = unchecked((long)idx);
         var __a1 = metadata.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_metadata, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_metadata;
     public Variant GetItemMetadata(int idx)
     {
-        var __mb = __mb_get_item_metadata;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_metadata", 4227898402);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_metadata is not available in this engine build.");
-            __mb_get_item_metadata = __mb;
-        }
+        if (__mb_get_item_metadata == 0) MethodBinds.MissingThrow("ItemList.get_item_metadata");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_metadata, NativePtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_set_item_custom_bg_color;
     public void SetItemCustomBgColor(int idx, Color customBgColor)
     {
-        var __mb = __mb_set_item_custom_bg_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_custom_bg_color", 2878471219);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_custom_bg_color is not available in this engine build.");
-            __mb_set_item_custom_bg_color = __mb;
-        }
+        if (__mb_set_item_custom_bg_color == 0) MethodBinds.MissingThrow("ItemList.set_item_custom_bg_color");
         long __a0 = unchecked((long)idx);
         var __a1 = customBgColor;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_custom_bg_color, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_custom_bg_color;
     public Color GetItemCustomBgColor(int idx)
     {
-        var __mb = __mb_get_item_custom_bg_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_custom_bg_color", 3457211756);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_custom_bg_color is not available in this engine build.");
-            __mb_get_item_custom_bg_color = __mb;
-        }
+        if (__mb_get_item_custom_bg_color == 0) MethodBinds.MissingThrow("ItemList.get_item_custom_bg_color");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_custom_bg_color, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_item_custom_fg_color;
     public void SetItemCustomFgColor(int idx, Color customFgColor)
     {
-        var __mb = __mb_set_item_custom_fg_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_custom_fg_color", 2878471219);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_custom_fg_color is not available in this engine build.");
-            __mb_set_item_custom_fg_color = __mb;
-        }
+        if (__mb_set_item_custom_fg_color == 0) MethodBinds.MissingThrow("ItemList.set_item_custom_fg_color");
         long __a0 = unchecked((long)idx);
         var __a1 = customFgColor;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_custom_fg_color, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_custom_fg_color;
     public Color GetItemCustomFgColor(int idx)
     {
-        var __mb = __mb_get_item_custom_fg_color;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_custom_fg_color", 3457211756);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_custom_fg_color is not available in this engine build.");
-            __mb_get_item_custom_fg_color = __mb;
-        }
+        if (__mb_get_item_custom_fg_color == 0) MethodBinds.MissingThrow("ItemList.get_item_custom_fg_color");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Color);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_custom_fg_color, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_item_rect;
     public Rect2 GetItemRect(int idx, bool expand = true)
     {
-        var __mb = __mb_get_item_rect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_rect", 159227807);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_rect is not available in this engine build.");
-            __mb_get_item_rect = __mb;
-        }
+        if (__mb_get_item_rect == 0) MethodBinds.MissingThrow("ItemList.get_item_rect");
         long __a0 = unchecked((long)idx);
         byte __a1 = expand ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rect2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_rect, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_item_tooltip_enabled;
     public void SetItemTooltipEnabled(int idx, bool enable)
     {
-        var __mb = __mb_set_item_tooltip_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_tooltip_enabled", 300928843);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_tooltip_enabled is not available in this engine build.");
-            __mb_set_item_tooltip_enabled = __mb;
-        }
+        if (__mb_set_item_tooltip_enabled == 0) MethodBinds.MissingThrow("ItemList.set_item_tooltip_enabled");
         long __a0 = unchecked((long)idx);
         byte __a1 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_tooltip_enabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_item_tooltip_enabled;
     public bool IsItemTooltipEnabled(int idx)
     {
-        var __mb = __mb_is_item_tooltip_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_item_tooltip_enabled", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_item_tooltip_enabled is not available in this engine build.");
-            __mb_is_item_tooltip_enabled = __mb;
-        }
+        if (__mb_is_item_tooltip_enabled == 0) MethodBinds.MissingThrow("ItemList.is_item_tooltip_enabled");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_item_tooltip_enabled, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_item_tooltip;
     public void SetItemTooltip(int idx, string tooltip)
     {
-        var __mb = __mb_set_item_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_tooltip", 501894301);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_tooltip is not available in this engine build.");
-            __mb_set_item_tooltip = __mb;
-        }
+        if (__mb_set_item_tooltip == 0) MethodBinds.MissingThrow("ItemList.set_item_tooltip");
         long __a0 = unchecked((long)idx);
         ulong __a1 = NativeString.Create(tooltip);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_tooltip, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a1);
     }
 
     private static nint __mb_get_item_tooltip;
     public string GetItemTooltip(int idx)
     {
-        var __mb = __mb_get_item_tooltip;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_tooltip", 844755477);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_tooltip is not available in this engine build.");
-            __mb_get_item_tooltip = __mb;
-        }
+        if (__mb_get_item_tooltip == 0) MethodBinds.MissingThrow("ItemList.get_item_tooltip");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_tooltip, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_select;
     public void Select(int idx, bool single = true)
     {
-        var __mb = __mb_select;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "select", 972357352);
-            if (__mb == 0) throw new MissingMethodException("ItemList.select is not available in this engine build.");
-            __mb_select = __mb;
-        }
+        if (__mb_select == 0) MethodBinds.MissingThrow("ItemList.select");
         long __a0 = unchecked((long)idx);
         byte __a1 = single ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_select, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_deselect;
     public void Deselect(int idx)
     {
-        var __mb = __mb_deselect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "deselect", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ItemList.deselect is not available in this engine build.");
-            __mb_deselect = __mb;
-        }
+        if (__mb_deselect == 0) MethodBinds.MissingThrow("ItemList.deselect");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_deselect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_deselect_all;
     public void DeselectAll()
     {
-        var __mb = __mb_deselect_all;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "deselect_all", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ItemList.deselect_all is not available in this engine build.");
-            __mb_deselect_all = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_deselect_all == 0) MethodBinds.MissingThrow("ItemList.deselect_all");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_deselect_all, NativePtr, 0, 0);
     }
 
     private static nint __mb_is_selected;
     public bool IsSelected(int idx)
     {
-        var __mb = __mb_is_selected;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_selected", 1116898809);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_selected is not available in this engine build.");
-            __mb_is_selected = __mb;
-        }
+        if (__mb_is_selected == 0) MethodBinds.MissingThrow("ItemList.is_selected");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_selected, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_selected_items;
     public int[] GetSelectedItems()
     {
-        var __mb = __mb_get_selected_items;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_selected_items", 969006518);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_selected_items is not available in this engine build.");
-            __mb_get_selected_items = __mb;
-        }
+        if (__mb_get_selected_items == 0) MethodBinds.MissingThrow("ItemList.get_selected_items");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_selected_items, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<int>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_INT32_ARRAY, GdExtensionInterface.PackedInt32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_move_item;
     public void MoveItem(int fromIdx, int toIdx)
     {
-        var __mb = __mb_move_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "move_item", 3937882851);
-            if (__mb == 0) throw new MissingMethodException("ItemList.move_item is not available in this engine build.");
-            __mb_move_item = __mb;
-        }
+        if (__mb_move_item == 0) MethodBinds.MissingThrow("ItemList.move_item");
         long __a0 = unchecked((long)fromIdx);
         long __a1 = unchecked((long)toIdx);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_move_item, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_item_count;
     public void SetItemCount(int count)
     {
-        var __mb = __mb_set_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_item_count", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_item_count is not available in this engine build.");
-            __mb_set_item_count = __mb;
-        }
+        if (__mb_set_item_count == 0) MethodBinds.MissingThrow("ItemList.set_item_count");
         long __a0 = unchecked((long)count);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_item_count, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_item_count;
     public int GetItemCount()
     {
-        var __mb = __mb_get_item_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_count is not available in this engine build.");
-            __mb_get_item_count = __mb;
-        }
+        if (__mb_get_item_count == 0) MethodBinds.MissingThrow("ItemList.get_item_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_remove_item;
     public void RemoveItem(int idx)
     {
-        var __mb = __mb_remove_item;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "remove_item", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ItemList.remove_item is not available in this engine build.");
-            __mb_remove_item = __mb;
-        }
+        if (__mb_remove_item == 0) MethodBinds.MissingThrow("ItemList.remove_item");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_item, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_clear;
     public void Clear()
     {
-        var __mb = __mb_clear;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "clear", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ItemList.clear is not available in this engine build.");
-            __mb_clear = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_clear == 0) MethodBinds.MissingThrow("ItemList.clear");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear, NativePtr, 0, 0);
     }
 
     private static nint __mb_sort_items_by_text;
     public void SortItemsByText()
     {
-        var __mb = __mb_sort_items_by_text;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "sort_items_by_text", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ItemList.sort_items_by_text is not available in this engine build.");
-            __mb_sort_items_by_text = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_sort_items_by_text == 0) MethodBinds.MissingThrow("ItemList.sort_items_by_text");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_sort_items_by_text, NativePtr, 0, 0);
     }
 
     private static nint __mb_set_fixed_column_width;
     public void SetFixedColumnWidth(int width)
     {
-        var __mb = __mb_set_fixed_column_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_fixed_column_width", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_fixed_column_width is not available in this engine build.");
-            __mb_set_fixed_column_width = __mb;
-        }
+        if (__mb_set_fixed_column_width == 0) MethodBinds.MissingThrow("ItemList.set_fixed_column_width");
         long __a0 = unchecked((long)width);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fixed_column_width, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fixed_column_width;
     public int GetFixedColumnWidth()
     {
-        var __mb = __mb_get_fixed_column_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_fixed_column_width", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_fixed_column_width is not available in this engine build.");
-            __mb_get_fixed_column_width = __mb;
-        }
+        if (__mb_get_fixed_column_width == 0) MethodBinds.MissingThrow("ItemList.get_fixed_column_width");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_fixed_column_width, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_same_column_width;
     public void SetSameColumnWidth(bool enable)
     {
-        var __mb = __mb_set_same_column_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_same_column_width", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_same_column_width is not available in this engine build.");
-            __mb_set_same_column_width = __mb;
-        }
+        if (__mb_set_same_column_width == 0) MethodBinds.MissingThrow("ItemList.set_same_column_width");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_same_column_width, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_same_column_width;
     public bool IsSameColumnWidth()
     {
-        var __mb = __mb_is_same_column_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_same_column_width", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_same_column_width is not available in this engine build.");
-            __mb_is_same_column_width = __mb;
-        }
+        if (__mb_is_same_column_width == 0) MethodBinds.MissingThrow("ItemList.is_same_column_width");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_same_column_width, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_max_text_lines;
     public void SetMaxTextLines(int lines)
     {
-        var __mb = __mb_set_max_text_lines;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_max_text_lines", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_max_text_lines is not available in this engine build.");
-            __mb_set_max_text_lines = __mb;
-        }
+        if (__mb_set_max_text_lines == 0) MethodBinds.MissingThrow("ItemList.set_max_text_lines");
         long __a0 = unchecked((long)lines);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_text_lines, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_text_lines;
     public int GetMaxTextLines()
     {
-        var __mb = __mb_get_max_text_lines;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_max_text_lines", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_max_text_lines is not available in this engine build.");
-            __mb_get_max_text_lines = __mb;
-        }
+        if (__mb_get_max_text_lines == 0) MethodBinds.MissingThrow("ItemList.get_max_text_lines");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_text_lines, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_max_columns;
     public void SetMaxColumns(int amount)
     {
-        var __mb = __mb_set_max_columns;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_max_columns", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_max_columns is not available in this engine build.");
-            __mb_set_max_columns = __mb;
-        }
+        if (__mb_set_max_columns == 0) MethodBinds.MissingThrow("ItemList.set_max_columns");
         long __a0 = unchecked((long)amount);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_columns, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_columns;
     public int GetMaxColumns()
     {
-        var __mb = __mb_get_max_columns;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_max_columns", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_max_columns is not available in this engine build.");
-            __mb_get_max_columns = __mb;
-        }
+        if (__mb_get_max_columns == 0) MethodBinds.MissingThrow("ItemList.get_max_columns");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_columns, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_select_mode;
     public void SetSelectMode(ItemList.SelectModeEnum mode)
     {
-        var __mb = __mb_set_select_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_select_mode", 928267388);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_select_mode is not available in this engine build.");
-            __mb_set_select_mode = __mb;
-        }
+        if (__mb_set_select_mode == 0) MethodBinds.MissingThrow("ItemList.set_select_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_select_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_select_mode;
     public ItemList.SelectModeEnum GetSelectMode()
     {
-        var __mb = __mb_get_select_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_select_mode", 1191945842);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_select_mode is not available in this engine build.");
-            __mb_get_select_mode = __mb;
-        }
+        if (__mb_get_select_mode == 0) MethodBinds.MissingThrow("ItemList.get_select_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_select_mode, NativePtr, 0, (nint)(&__ret));
         return (ItemList.SelectModeEnum)__ret;
     }
 
     private static nint __mb_set_icon_mode;
     public void SetIconMode(ItemList.IconModeEnum mode)
     {
-        var __mb = __mb_set_icon_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_icon_mode", 2025053633);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_icon_mode is not available in this engine build.");
-            __mb_set_icon_mode = __mb;
-        }
+        if (__mb_set_icon_mode == 0) MethodBinds.MissingThrow("ItemList.set_icon_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_icon_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_icon_mode;
     public ItemList.IconModeEnum GetIconMode()
     {
-        var __mb = __mb_get_icon_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_icon_mode", 3353929232);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_icon_mode is not available in this engine build.");
-            __mb_get_icon_mode = __mb;
-        }
+        if (__mb_get_icon_mode == 0) MethodBinds.MissingThrow("ItemList.get_icon_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_icon_mode, NativePtr, 0, (nint)(&__ret));
         return (ItemList.IconModeEnum)__ret;
     }
 
     private static nint __mb_set_fixed_icon_size;
     public void SetFixedIconSize(Vector2I size)
     {
-        var __mb = __mb_set_fixed_icon_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_fixed_icon_size", 1130785943);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_fixed_icon_size is not available in this engine build.");
-            __mb_set_fixed_icon_size = __mb;
-        }
+        if (__mb_set_fixed_icon_size == 0) MethodBinds.MissingThrow("ItemList.set_fixed_icon_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_fixed_icon_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_fixed_icon_size;
     public Vector2I GetFixedIconSize()
     {
-        var __mb = __mb_get_fixed_icon_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_fixed_icon_size", 3690982128);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_fixed_icon_size is not available in this engine build.");
-            __mb_get_fixed_icon_size = __mb;
-        }
+        if (__mb_get_fixed_icon_size == 0) MethodBinds.MissingThrow("ItemList.get_fixed_icon_size");
         var __ret = default(Vector2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_fixed_icon_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_icon_scale;
     public void SetIconScale(float scale)
     {
-        var __mb = __mb_set_icon_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_icon_scale", 373806689);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_icon_scale is not available in this engine build.");
-            __mb_set_icon_scale = __mb;
-        }
+        if (__mb_set_icon_scale == 0) MethodBinds.MissingThrow("ItemList.set_icon_scale");
         double __a0 = scale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_icon_scale, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_icon_scale;
     public float GetIconScale()
     {
-        var __mb = __mb_get_icon_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_icon_scale", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_icon_scale is not available in this engine build.");
-            __mb_get_icon_scale = __mb;
-        }
+        if (__mb_get_icon_scale == 0) MethodBinds.MissingThrow("ItemList.get_icon_scale");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_icon_scale, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_allow_rmb_select;
     public void SetAllowRmbSelect(bool allow)
     {
-        var __mb = __mb_set_allow_rmb_select;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_allow_rmb_select", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_allow_rmb_select is not available in this engine build.");
-            __mb_set_allow_rmb_select = __mb;
-        }
+        if (__mb_set_allow_rmb_select == 0) MethodBinds.MissingThrow("ItemList.set_allow_rmb_select");
         byte __a0 = allow ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_allow_rmb_select, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_allow_rmb_select;
     public bool GetAllowRmbSelect()
     {
-        var __mb = __mb_get_allow_rmb_select;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_allow_rmb_select", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_allow_rmb_select is not available in this engine build.");
-            __mb_get_allow_rmb_select = __mb;
-        }
+        if (__mb_get_allow_rmb_select == 0) MethodBinds.MissingThrow("ItemList.get_allow_rmb_select");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_allow_rmb_select, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_allow_reselect;
     public void SetAllowReselect(bool allow)
     {
-        var __mb = __mb_set_allow_reselect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_allow_reselect", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_allow_reselect is not available in this engine build.");
-            __mb_set_allow_reselect = __mb;
-        }
+        if (__mb_set_allow_reselect == 0) MethodBinds.MissingThrow("ItemList.set_allow_reselect");
         byte __a0 = allow ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_allow_reselect, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_allow_reselect;
     public bool GetAllowReselect()
     {
-        var __mb = __mb_get_allow_reselect;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_allow_reselect", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_allow_reselect is not available in this engine build.");
-            __mb_get_allow_reselect = __mb;
-        }
+        if (__mb_get_allow_reselect == 0) MethodBinds.MissingThrow("ItemList.get_allow_reselect");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_allow_reselect, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_allow_search;
     public void SetAllowSearch(bool allow)
     {
-        var __mb = __mb_set_allow_search;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_allow_search", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_allow_search is not available in this engine build.");
-            __mb_set_allow_search = __mb;
-        }
+        if (__mb_set_allow_search == 0) MethodBinds.MissingThrow("ItemList.set_allow_search");
         byte __a0 = allow ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_allow_search, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_allow_search;
     public bool GetAllowSearch()
     {
-        var __mb = __mb_get_allow_search;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_allow_search", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_allow_search is not available in this engine build.");
-            __mb_get_allow_search = __mb;
-        }
+        if (__mb_get_allow_search == 0) MethodBinds.MissingThrow("ItemList.get_allow_search");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_allow_search, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_auto_width;
     public void SetAutoWidth(bool enable)
     {
-        var __mb = __mb_set_auto_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_auto_width", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_auto_width is not available in this engine build.");
-            __mb_set_auto_width = __mb;
-        }
+        if (__mb_set_auto_width == 0) MethodBinds.MissingThrow("ItemList.set_auto_width");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_auto_width, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_auto_width;
     public bool HasAutoWidth()
     {
-        var __mb = __mb_has_auto_width;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "has_auto_width", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.has_auto_width is not available in this engine build.");
-            __mb_has_auto_width = __mb;
-        }
+        if (__mb_has_auto_width == 0) MethodBinds.MissingThrow("ItemList.has_auto_width");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_auto_width, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_auto_height;
     public void SetAutoHeight(bool enable)
     {
-        var __mb = __mb_set_auto_height;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_auto_height", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_auto_height is not available in this engine build.");
-            __mb_set_auto_height = __mb;
-        }
+        if (__mb_set_auto_height == 0) MethodBinds.MissingThrow("ItemList.set_auto_height");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_auto_height, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_auto_height;
     public bool HasAutoHeight()
     {
-        var __mb = __mb_has_auto_height;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "has_auto_height", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.has_auto_height is not available in this engine build.");
-            __mb_has_auto_height = __mb;
-        }
+        if (__mb_has_auto_height == 0) MethodBinds.MissingThrow("ItemList.has_auto_height");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_auto_height, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_anything_selected;
     public bool IsAnythingSelected()
     {
-        var __mb = __mb_is_anything_selected;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_anything_selected", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_anything_selected is not available in this engine build.");
-            __mb_is_anything_selected = __mb;
-        }
+        if (__mb_is_anything_selected == 0) MethodBinds.MissingThrow("ItemList.is_anything_selected");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_anything_selected, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_item_at_position;
     public int GetItemAtPosition(Vector2 position, bool exact = false)
     {
-        var __mb = __mb_get_item_at_position;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_item_at_position", 2300324924);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_item_at_position is not available in this engine build.");
-            __mb_get_item_at_position = __mb;
-        }
+        if (__mb_get_item_at_position == 0) MethodBinds.MissingThrow("ItemList.get_item_at_position");
         var __a0 = position;
         byte __a1 = exact ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_item_at_position, NativePtr, (nint)__args, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_ensure_current_is_visible;
     public void EnsureCurrentIsVisible()
     {
-        var __mb = __mb_ensure_current_is_visible;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "ensure_current_is_visible", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ItemList.ensure_current_is_visible is not available in this engine build.");
-            __mb_ensure_current_is_visible = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_ensure_current_is_visible == 0) MethodBinds.MissingThrow("ItemList.ensure_current_is_visible");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_ensure_current_is_visible, NativePtr, 0, 0);
     }
 
     private static nint __mb_center_on_current;
     public void CenterOnCurrent(bool centerVerically = true, bool centerHorizontally = true)
     {
-        var __mb = __mb_center_on_current;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "center_on_current", 3058350285);
-            if (__mb == 0) throw new MissingMethodException("ItemList.center_on_current is not available in this engine build.");
-            __mb_center_on_current = __mb;
-        }
+        if (__mb_center_on_current == 0) MethodBinds.MissingThrow("ItemList.center_on_current");
         byte __a0 = centerVerically ? (byte)1 : (byte)0;
         byte __a1 = centerHorizontally ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_center_on_current, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_v_scroll_bar;
     public VScrollBar? GetVScrollBar()
     {
-        var __mb = __mb_get_v_scroll_bar;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_v_scroll_bar", 2630340773);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_v_scroll_bar is not available in this engine build.");
-            __mb_get_v_scroll_bar = __mb;
-        }
+        if (__mb_get_v_scroll_bar == 0) MethodBinds.MissingThrow("ItemList.get_v_scroll_bar");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_v_scroll_bar, NativePtr, 0, (nint)(&__ret));
         return (VScrollBar?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_get_h_scroll_bar;
     public HScrollBar? GetHScrollBar()
     {
-        var __mb = __mb_get_h_scroll_bar;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_h_scroll_bar", 4004517983);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_h_scroll_bar is not available in this engine build.");
-            __mb_get_h_scroll_bar = __mb;
-        }
+        if (__mb_get_h_scroll_bar == 0) MethodBinds.MissingThrow("ItemList.get_h_scroll_bar");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_h_scroll_bar, NativePtr, 0, (nint)(&__ret));
         return (HScrollBar?)InstanceBindings.GetOrCreate(__ret, adoptRef: false);
     }
 
     private static nint __mb_set_scroll_hint_mode;
     public void SetScrollHintMode(ItemList.ScrollHintModeEnum scrollHintMode)
     {
-        var __mb = __mb_set_scroll_hint_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_scroll_hint_mode", 2917787337);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_scroll_hint_mode is not available in this engine build.");
-            __mb_set_scroll_hint_mode = __mb;
-        }
+        if (__mb_set_scroll_hint_mode == 0) MethodBinds.MissingThrow("ItemList.set_scroll_hint_mode");
         long __a0 = (long)scrollHintMode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_scroll_hint_mode, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_scroll_hint_mode;
     public ItemList.ScrollHintModeEnum GetScrollHintMode()
     {
-        var __mb = __mb_get_scroll_hint_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_scroll_hint_mode", 2522227939);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_scroll_hint_mode is not available in this engine build.");
-            __mb_get_scroll_hint_mode = __mb;
-        }
+        if (__mb_get_scroll_hint_mode == 0) MethodBinds.MissingThrow("ItemList.get_scroll_hint_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_scroll_hint_mode, NativePtr, 0, (nint)(&__ret));
         return (ItemList.ScrollHintModeEnum)__ret;
     }
 
     private static nint __mb_set_tile_scroll_hint;
     public void SetTileScrollHint(bool tileScrollHint)
     {
-        var __mb = __mb_set_tile_scroll_hint;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_tile_scroll_hint", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_tile_scroll_hint is not available in this engine build.");
-            __mb_set_tile_scroll_hint = __mb;
-        }
+        if (__mb_set_tile_scroll_hint == 0) MethodBinds.MissingThrow("ItemList.set_tile_scroll_hint");
         byte __a0 = tileScrollHint ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tile_scroll_hint, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_scroll_hint_tiled;
     public bool IsScrollHintTiled()
     {
-        var __mb = __mb_is_scroll_hint_tiled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "is_scroll_hint_tiled", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("ItemList.is_scroll_hint_tiled is not available in this engine build.");
-            __mb_is_scroll_hint_tiled = __mb;
-        }
+        if (__mb_is_scroll_hint_tiled == 0) MethodBinds.MissingThrow("ItemList.is_scroll_hint_tiled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_scroll_hint_tiled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_text_overrun_behavior;
     public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
-        var __mb = __mb_set_text_overrun_behavior;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_text_overrun_behavior", 1008890932);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_text_overrun_behavior is not available in this engine build.");
-            __mb_set_text_overrun_behavior = __mb;
-        }
+        if (__mb_set_text_overrun_behavior == 0) MethodBinds.MissingThrow("ItemList.set_text_overrun_behavior");
         long __a0 = (long)overrunBehavior;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_text_overrun_behavior, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_text_overrun_behavior;
     public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
-        var __mb = __mb_get_text_overrun_behavior;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "get_text_overrun_behavior", 3779142101);
-            if (__mb == 0) throw new MissingMethodException("ItemList.get_text_overrun_behavior is not available in this engine build.");
-            __mb_get_text_overrun_behavior = __mb;
-        }
+        if (__mb_get_text_overrun_behavior == 0) MethodBinds.MissingThrow("ItemList.get_text_overrun_behavior");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_text_overrun_behavior, NativePtr, 0, (nint)(&__ret));
         return (TextServer.OverrunBehavior)__ret;
     }
 
     private static nint __mb_set_wraparound_items;
     public void SetWraparoundItems(bool enable)
     {
-        var __mb = __mb_set_wraparound_items;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "set_wraparound_items", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("ItemList.set_wraparound_items is not available in this engine build.");
-            __mb_set_wraparound_items = __mb;
-        }
+        if (__mb_set_wraparound_items == 0) MethodBinds.MissingThrow("ItemList.set_wraparound_items");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_wraparound_items, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_wraparound_items;
     public bool HasWraparoundItems()
     {
-        var __mb = __mb_has_wraparound_items;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "has_wraparound_items", 36873697);
-            if (__mb == 0) throw new MissingMethodException("ItemList.has_wraparound_items is not available in this engine build.");
-            __mb_has_wraparound_items = __mb;
-        }
+        if (__mb_has_wraparound_items == 0) MethodBinds.MissingThrow("ItemList.has_wraparound_items");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_wraparound_items, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_force_update_list_size;
     public void ForceUpdateListSize()
     {
-        var __mb = __mb_force_update_list_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("ItemList", "force_update_list_size", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("ItemList.force_update_list_size is not available in this engine build.");
-            __mb_force_update_list_size = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_force_update_list_size == 0) MethodBinds.MissingThrow("ItemList.force_update_list_size");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_force_update_list_size, NativePtr, 0, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_add_item = MethodBinds.ResolveBulk("ItemList", "add_item", 359861678);
+        __mb_add_icon_item = MethodBinds.ResolveBulk("ItemList", "add_icon_item", 4256579627);
+        __mb_set_item_text = MethodBinds.ResolveBulk("ItemList", "set_item_text", 501894301);
+        __mb_get_item_text = MethodBinds.ResolveBulk("ItemList", "get_item_text", 844755477);
+        __mb_set_item_icon = MethodBinds.ResolveBulk("ItemList", "set_item_icon", 666127730);
+        __mb_get_item_icon = MethodBinds.ResolveBulk("ItemList", "get_item_icon", 3536238170);
+        __mb_set_item_text_direction = MethodBinds.ResolveBulk("ItemList", "set_item_text_direction", 1707680378);
+        __mb_get_item_text_direction = MethodBinds.ResolveBulk("ItemList", "get_item_text_direction", 4235602388);
+        __mb_set_item_language = MethodBinds.ResolveBulk("ItemList", "set_item_language", 501894301);
+        __mb_get_item_language = MethodBinds.ResolveBulk("ItemList", "get_item_language", 844755477);
+        __mb_set_item_auto_translate_mode = MethodBinds.ResolveBulk("ItemList", "set_item_auto_translate_mode", 287402019);
+        __mb_get_item_auto_translate_mode = MethodBinds.ResolveBulk("ItemList", "get_item_auto_translate_mode", 906302372);
+        __mb_set_item_icon_transposed = MethodBinds.ResolveBulk("ItemList", "set_item_icon_transposed", 300928843);
+        __mb_is_item_icon_transposed = MethodBinds.ResolveBulk("ItemList", "is_item_icon_transposed", 1116898809);
+        __mb_set_item_icon_region = MethodBinds.ResolveBulk("ItemList", "set_item_icon_region", 1356297692);
+        __mb_get_item_icon_region = MethodBinds.ResolveBulk("ItemList", "get_item_icon_region", 3327874267);
+        __mb_set_item_icon_modulate = MethodBinds.ResolveBulk("ItemList", "set_item_icon_modulate", 2878471219);
+        __mb_get_item_icon_modulate = MethodBinds.ResolveBulk("ItemList", "get_item_icon_modulate", 3457211756);
+        __mb_set_item_selectable = MethodBinds.ResolveBulk("ItemList", "set_item_selectable", 300928843);
+        __mb_is_item_selectable = MethodBinds.ResolveBulk("ItemList", "is_item_selectable", 1116898809);
+        __mb_set_item_disabled = MethodBinds.ResolveBulk("ItemList", "set_item_disabled", 300928843);
+        __mb_is_item_disabled = MethodBinds.ResolveBulk("ItemList", "is_item_disabled", 1116898809);
+        __mb_set_item_metadata = MethodBinds.ResolveBulk("ItemList", "set_item_metadata", 2152698145);
+        __mb_get_item_metadata = MethodBinds.ResolveBulk("ItemList", "get_item_metadata", 4227898402);
+        __mb_set_item_custom_bg_color = MethodBinds.ResolveBulk("ItemList", "set_item_custom_bg_color", 2878471219);
+        __mb_get_item_custom_bg_color = MethodBinds.ResolveBulk("ItemList", "get_item_custom_bg_color", 3457211756);
+        __mb_set_item_custom_fg_color = MethodBinds.ResolveBulk("ItemList", "set_item_custom_fg_color", 2878471219);
+        __mb_get_item_custom_fg_color = MethodBinds.ResolveBulk("ItemList", "get_item_custom_fg_color", 3457211756);
+        __mb_get_item_rect = MethodBinds.ResolveBulk("ItemList", "get_item_rect", 159227807);
+        __mb_set_item_tooltip_enabled = MethodBinds.ResolveBulk("ItemList", "set_item_tooltip_enabled", 300928843);
+        __mb_is_item_tooltip_enabled = MethodBinds.ResolveBulk("ItemList", "is_item_tooltip_enabled", 1116898809);
+        __mb_set_item_tooltip = MethodBinds.ResolveBulk("ItemList", "set_item_tooltip", 501894301);
+        __mb_get_item_tooltip = MethodBinds.ResolveBulk("ItemList", "get_item_tooltip", 844755477);
+        __mb_select = MethodBinds.ResolveBulk("ItemList", "select", 972357352);
+        __mb_deselect = MethodBinds.ResolveBulk("ItemList", "deselect", 1286410249);
+        __mb_deselect_all = MethodBinds.ResolveBulk("ItemList", "deselect_all", 3218959716);
+        __mb_is_selected = MethodBinds.ResolveBulk("ItemList", "is_selected", 1116898809);
+        __mb_get_selected_items = MethodBinds.ResolveBulk("ItemList", "get_selected_items", 969006518);
+        __mb_move_item = MethodBinds.ResolveBulk("ItemList", "move_item", 3937882851);
+        __mb_set_item_count = MethodBinds.ResolveBulk("ItemList", "set_item_count", 1286410249);
+        __mb_get_item_count = MethodBinds.ResolveBulk("ItemList", "get_item_count", 3905245786);
+        __mb_remove_item = MethodBinds.ResolveBulk("ItemList", "remove_item", 1286410249);
+        __mb_clear = MethodBinds.ResolveBulk("ItemList", "clear", 3218959716);
+        __mb_sort_items_by_text = MethodBinds.ResolveBulk("ItemList", "sort_items_by_text", 3218959716);
+        __mb_set_fixed_column_width = MethodBinds.ResolveBulk("ItemList", "set_fixed_column_width", 1286410249);
+        __mb_get_fixed_column_width = MethodBinds.ResolveBulk("ItemList", "get_fixed_column_width", 3905245786);
+        __mb_set_same_column_width = MethodBinds.ResolveBulk("ItemList", "set_same_column_width", 2586408642);
+        __mb_is_same_column_width = MethodBinds.ResolveBulk("ItemList", "is_same_column_width", 36873697);
+        __mb_set_max_text_lines = MethodBinds.ResolveBulk("ItemList", "set_max_text_lines", 1286410249);
+        __mb_get_max_text_lines = MethodBinds.ResolveBulk("ItemList", "get_max_text_lines", 3905245786);
+        __mb_set_max_columns = MethodBinds.ResolveBulk("ItemList", "set_max_columns", 1286410249);
+        __mb_get_max_columns = MethodBinds.ResolveBulk("ItemList", "get_max_columns", 3905245786);
+        __mb_set_select_mode = MethodBinds.ResolveBulk("ItemList", "set_select_mode", 928267388);
+        __mb_get_select_mode = MethodBinds.ResolveBulk("ItemList", "get_select_mode", 1191945842);
+        __mb_set_icon_mode = MethodBinds.ResolveBulk("ItemList", "set_icon_mode", 2025053633);
+        __mb_get_icon_mode = MethodBinds.ResolveBulk("ItemList", "get_icon_mode", 3353929232);
+        __mb_set_fixed_icon_size = MethodBinds.ResolveBulk("ItemList", "set_fixed_icon_size", 1130785943);
+        __mb_get_fixed_icon_size = MethodBinds.ResolveBulk("ItemList", "get_fixed_icon_size", 3690982128);
+        __mb_set_icon_scale = MethodBinds.ResolveBulk("ItemList", "set_icon_scale", 373806689);
+        __mb_get_icon_scale = MethodBinds.ResolveBulk("ItemList", "get_icon_scale", 1740695150);
+        __mb_set_allow_rmb_select = MethodBinds.ResolveBulk("ItemList", "set_allow_rmb_select", 2586408642);
+        __mb_get_allow_rmb_select = MethodBinds.ResolveBulk("ItemList", "get_allow_rmb_select", 36873697);
+        __mb_set_allow_reselect = MethodBinds.ResolveBulk("ItemList", "set_allow_reselect", 2586408642);
+        __mb_get_allow_reselect = MethodBinds.ResolveBulk("ItemList", "get_allow_reselect", 36873697);
+        __mb_set_allow_search = MethodBinds.ResolveBulk("ItemList", "set_allow_search", 2586408642);
+        __mb_get_allow_search = MethodBinds.ResolveBulk("ItemList", "get_allow_search", 36873697);
+        __mb_set_auto_width = MethodBinds.ResolveBulk("ItemList", "set_auto_width", 2586408642);
+        __mb_has_auto_width = MethodBinds.ResolveBulk("ItemList", "has_auto_width", 36873697);
+        __mb_set_auto_height = MethodBinds.ResolveBulk("ItemList", "set_auto_height", 2586408642);
+        __mb_has_auto_height = MethodBinds.ResolveBulk("ItemList", "has_auto_height", 36873697);
+        __mb_is_anything_selected = MethodBinds.ResolveBulk("ItemList", "is_anything_selected", 2240911060);
+        __mb_get_item_at_position = MethodBinds.ResolveBulk("ItemList", "get_item_at_position", 2300324924);
+        __mb_ensure_current_is_visible = MethodBinds.ResolveBulk("ItemList", "ensure_current_is_visible", 3218959716);
+        __mb_center_on_current = MethodBinds.ResolveBulk("ItemList", "center_on_current", 3058350285);
+        __mb_get_v_scroll_bar = MethodBinds.ResolveBulk("ItemList", "get_v_scroll_bar", 2630340773);
+        __mb_get_h_scroll_bar = MethodBinds.ResolveBulk("ItemList", "get_h_scroll_bar", 4004517983);
+        __mb_set_scroll_hint_mode = MethodBinds.ResolveBulk("ItemList", "set_scroll_hint_mode", 2917787337);
+        __mb_get_scroll_hint_mode = MethodBinds.ResolveBulk("ItemList", "get_scroll_hint_mode", 2522227939);
+        __mb_set_tile_scroll_hint = MethodBinds.ResolveBulk("ItemList", "set_tile_scroll_hint", 2586408642);
+        __mb_is_scroll_hint_tiled = MethodBinds.ResolveBulk("ItemList", "is_scroll_hint_tiled", 2240911060);
+        __mb_set_text_overrun_behavior = MethodBinds.ResolveBulk("ItemList", "set_text_overrun_behavior", 1008890932);
+        __mb_get_text_overrun_behavior = MethodBinds.ResolveBulk("ItemList", "get_text_overrun_behavior", 3779142101);
+        __mb_set_wraparound_items = MethodBinds.ResolveBulk("ItemList", "set_wraparound_items", 2586408642);
+        __mb_has_wraparound_items = MethodBinds.ResolveBulk("ItemList", "has_wraparound_items", 36873697);
+        __mb_force_update_list_size = MethodBinds.ResolveBulk("ItemList", "force_update_list_size", 3218959716);
     }
 }
 
@@ -9175,173 +6909,107 @@ public unsafe partial class IterateIK3D : ChainIK3D
     private static nint __mb_set_max_iterations;
     public void SetMaxIterations(int maxIterations)
     {
-        var __mb = __mb_set_max_iterations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_max_iterations", 1286410249);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_max_iterations is not available in this engine build.");
-            __mb_set_max_iterations = __mb;
-        }
+        if (__mb_set_max_iterations == 0) MethodBinds.MissingThrow("IterateIK3D.set_max_iterations");
         long __a0 = unchecked((long)maxIterations);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_max_iterations, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_max_iterations;
     public int GetMaxIterations()
     {
-        var __mb = __mb_get_max_iterations;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_max_iterations", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_max_iterations is not available in this engine build.");
-            __mb_get_max_iterations = __mb;
-        }
+        if (__mb_get_max_iterations == 0) MethodBinds.MissingThrow("IterateIK3D.get_max_iterations");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_max_iterations, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_set_min_distance;
     public void SetMinDistance(double minDistance)
     {
-        var __mb = __mb_set_min_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_min_distance", 373806689);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_min_distance is not available in this engine build.");
-            __mb_set_min_distance = __mb;
-        }
+        if (__mb_set_min_distance == 0) MethodBinds.MissingThrow("IterateIK3D.set_min_distance");
         double __a0 = minDistance;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_min_distance, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_min_distance;
     public double GetMinDistance()
     {
-        var __mb = __mb_get_min_distance;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_min_distance", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_min_distance is not available in this engine build.");
-            __mb_get_min_distance = __mb;
-        }
+        if (__mb_get_min_distance == 0) MethodBinds.MissingThrow("IterateIK3D.get_min_distance");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_min_distance, NativePtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_set_angular_delta_limit;
     public void SetAngularDeltaLimit(double angularDeltaLimit)
     {
-        var __mb = __mb_set_angular_delta_limit;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_angular_delta_limit", 373806689);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_angular_delta_limit is not available in this engine build.");
-            __mb_set_angular_delta_limit = __mb;
-        }
+        if (__mb_set_angular_delta_limit == 0) MethodBinds.MissingThrow("IterateIK3D.set_angular_delta_limit");
         double __a0 = angularDeltaLimit;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_angular_delta_limit, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_angular_delta_limit;
     public double GetAngularDeltaLimit()
     {
-        var __mb = __mb_get_angular_delta_limit;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_angular_delta_limit", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_angular_delta_limit is not available in this engine build.");
-            __mb_get_angular_delta_limit = __mb;
-        }
+        if (__mb_get_angular_delta_limit == 0) MethodBinds.MissingThrow("IterateIK3D.get_angular_delta_limit");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_angular_delta_limit, NativePtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_set_deterministic;
     public void SetDeterministic(bool deterministic)
     {
-        var __mb = __mb_set_deterministic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_deterministic", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_deterministic is not available in this engine build.");
-            __mb_set_deterministic = __mb;
-        }
+        if (__mb_set_deterministic == 0) MethodBinds.MissingThrow("IterateIK3D.set_deterministic");
         byte __a0 = deterministic ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_deterministic, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_deterministic;
     public bool IsDeterministic()
     {
-        var __mb = __mb_is_deterministic;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "is_deterministic", 36873697);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.is_deterministic is not available in this engine build.");
-            __mb_is_deterministic = __mb;
-        }
+        if (__mb_is_deterministic == 0) MethodBinds.MissingThrow("IterateIK3D.is_deterministic");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_deterministic, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_target_node;
     public void SetTargetNode(int index, NodePath targetNode)
     {
-        var __mb = __mb_set_target_node;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_target_node", 2761262315);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_target_node is not available in this engine build.");
-            __mb_set_target_node = __mb;
-        }
+        if (__mb_set_target_node == 0) MethodBinds.MissingThrow("IterateIK3D.set_target_node");
         long __a0 = unchecked((long)index);
         ulong __a1 = targetNode.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_target_node, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_target_node;
     public NodePath GetTargetNode(int index)
     {
-        var __mb = __mb_get_target_node;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_target_node", 408788394);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_target_node is not available in this engine build.");
-            __mb_get_target_node = __mb;
-        }
+        if (__mb_get_target_node == 0) MethodBinds.MissingThrow("IterateIK3D.get_target_node");
         long __a0 = unchecked((long)index);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_target_node, NativePtr, (nint)__args, (nint)(&__ret));
         return new NodePath(__ret);
     }
 
     private static nint __mb_set_joint_rotation_axis;
     public void SetJointRotationAxis(int index, int joint, SkeletonModifier3D.RotationAxis axis)
     {
-        var __mb = __mb_set_joint_rotation_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_joint_rotation_axis", 1391134969);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_joint_rotation_axis is not available in this engine build.");
-            __mb_set_joint_rotation_axis = __mb;
-        }
+        if (__mb_set_joint_rotation_axis == 0) MethodBinds.MissingThrow("IterateIK3D.set_joint_rotation_axis");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         long __a2 = (long)axis;
@@ -9349,39 +7017,27 @@ public unsafe partial class IterateIK3D : ChainIK3D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_rotation_axis, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_rotation_axis;
     public SkeletonModifier3D.RotationAxis GetJointRotationAxis(int index, int joint)
     {
-        var __mb = __mb_get_joint_rotation_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_joint_rotation_axis", 3312594080);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_joint_rotation_axis is not available in this engine build.");
-            __mb_get_joint_rotation_axis = __mb;
-        }
+        if (__mb_get_joint_rotation_axis == 0) MethodBinds.MissingThrow("IterateIK3D.get_joint_rotation_axis");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_rotation_axis, NativePtr, (nint)__args, (nint)(&__ret));
         return (SkeletonModifier3D.RotationAxis)__ret;
     }
 
     private static nint __mb_set_joint_rotation_axis_vector;
     public void SetJointRotationAxisVector(int index, int joint, Vector3 axisVector)
     {
-        var __mb = __mb_set_joint_rotation_axis_vector;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_joint_rotation_axis_vector", 2866752138);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_joint_rotation_axis_vector is not available in this engine build.");
-            __mb_set_joint_rotation_axis_vector = __mb;
-        }
+        if (__mb_set_joint_rotation_axis_vector == 0) MethodBinds.MissingThrow("IterateIK3D.set_joint_rotation_axis_vector");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __a2 = axisVector;
@@ -9389,39 +7045,27 @@ public unsafe partial class IterateIK3D : ChainIK3D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_rotation_axis_vector, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_rotation_axis_vector;
     public Vector3 GetJointRotationAxisVector(int index, int joint)
     {
-        var __mb = __mb_get_joint_rotation_axis_vector;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_joint_rotation_axis_vector", 1592972041);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_joint_rotation_axis_vector is not available in this engine build.");
-            __mb_get_joint_rotation_axis_vector = __mb;
-        }
+        if (__mb_get_joint_rotation_axis_vector == 0) MethodBinds.MissingThrow("IterateIK3D.get_joint_rotation_axis_vector");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_rotation_axis_vector, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_joint_limitation;
     public void SetJointLimitation(int index, int joint, JointLimitation3D? limitation)
     {
-        var __mb = __mb_set_joint_limitation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_joint_limitation", 1194636955);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_joint_limitation is not available in this engine build.");
-            __mb_set_joint_limitation = __mb;
-        }
+        if (__mb_set_joint_limitation == 0) MethodBinds.MissingThrow("IterateIK3D.set_joint_limitation");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         nint __a2 = limitation?.NativePtr ?? 0;
@@ -9429,39 +7073,27 @@ public unsafe partial class IterateIK3D : ChainIK3D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_limitation, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_limitation;
     public JointLimitation3D? GetJointLimitation(int index, int joint)
     {
-        var __mb = __mb_get_joint_limitation;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_joint_limitation", 91665146);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_joint_limitation is not available in this engine build.");
-            __mb_get_joint_limitation = __mb;
-        }
+        if (__mb_get_joint_limitation == 0) MethodBinds.MissingThrow("IterateIK3D.get_joint_limitation");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_limitation, NativePtr, (nint)__args, (nint)(&__ret));
         return (JointLimitation3D?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_joint_limitation_right_axis;
     public void SetJointLimitationRightAxis(int index, int joint, SkeletonModifier3D.SecondaryDirection direction)
     {
-        var __mb = __mb_set_joint_limitation_right_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_joint_limitation_right_axis", 3838967147);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_joint_limitation_right_axis is not available in this engine build.");
-            __mb_set_joint_limitation_right_axis = __mb;
-        }
+        if (__mb_set_joint_limitation_right_axis == 0) MethodBinds.MissingThrow("IterateIK3D.set_joint_limitation_right_axis");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         long __a2 = (long)direction;
@@ -9469,39 +7101,27 @@ public unsafe partial class IterateIK3D : ChainIK3D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_limitation_right_axis, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_limitation_right_axis;
     public SkeletonModifier3D.SecondaryDirection GetJointLimitationRightAxis(int index, int joint)
     {
-        var __mb = __mb_get_joint_limitation_right_axis;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_joint_limitation_right_axis", 623936134);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_joint_limitation_right_axis is not available in this engine build.");
-            __mb_get_joint_limitation_right_axis = __mb;
-        }
+        if (__mb_get_joint_limitation_right_axis == 0) MethodBinds.MissingThrow("IterateIK3D.get_joint_limitation_right_axis");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_limitation_right_axis, NativePtr, (nint)__args, (nint)(&__ret));
         return (SkeletonModifier3D.SecondaryDirection)__ret;
     }
 
     private static nint __mb_set_joint_limitation_right_axis_vector;
     public void SetJointLimitationRightAxisVector(int index, int joint, Vector3 vector)
     {
-        var __mb = __mb_set_joint_limitation_right_axis_vector;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_joint_limitation_right_axis_vector", 2866752138);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_joint_limitation_right_axis_vector is not available in this engine build.");
-            __mb_set_joint_limitation_right_axis_vector = __mb;
-        }
+        if (__mb_set_joint_limitation_right_axis_vector == 0) MethodBinds.MissingThrow("IterateIK3D.set_joint_limitation_right_axis_vector");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __a2 = vector;
@@ -9509,39 +7129,27 @@ public unsafe partial class IterateIK3D : ChainIK3D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_limitation_right_axis_vector, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_limitation_right_axis_vector;
     public Vector3 GetJointLimitationRightAxisVector(int index, int joint)
     {
-        var __mb = __mb_get_joint_limitation_right_axis_vector;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_joint_limitation_right_axis_vector", 1592972041);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_joint_limitation_right_axis_vector is not available in this engine build.");
-            __mb_get_joint_limitation_right_axis_vector = __mb;
-        }
+        if (__mb_get_joint_limitation_right_axis_vector == 0) MethodBinds.MissingThrow("IterateIK3D.get_joint_limitation_right_axis_vector");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_limitation_right_axis_vector, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_joint_limitation_rotation_offset;
     public void SetJointLimitationRotationOffset(int index, int joint, Quaternion offset)
     {
-        var __mb = __mb_set_joint_limitation_rotation_offset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "set_joint_limitation_rotation_offset", 4188936002);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.set_joint_limitation_rotation_offset is not available in this engine build.");
-            __mb_set_joint_limitation_rotation_offset = __mb;
-        }
+        if (__mb_set_joint_limitation_rotation_offset == 0) MethodBinds.MissingThrow("IterateIK3D.set_joint_limitation_rotation_offset");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __a2 = offset;
@@ -9549,27 +7157,47 @@ public unsafe partial class IterateIK3D : ChainIK3D
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         __args[2] = (nint)(&__a2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_limitation_rotation_offset, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_limitation_rotation_offset;
     public Quaternion GetJointLimitationRotationOffset(int index, int joint)
     {
-        var __mb = __mb_get_joint_limitation_rotation_offset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("IterateIK3D", "get_joint_limitation_rotation_offset", 2722473700);
-            if (__mb == 0) throw new MissingMethodException("IterateIK3D.get_joint_limitation_rotation_offset is not available in this engine build.");
-            __mb_get_joint_limitation_rotation_offset = __mb;
-        }
+        if (__mb_get_joint_limitation_rotation_offset == 0) MethodBinds.MissingThrow("IterateIK3D.get_joint_limitation_rotation_offset");
         long __a0 = unchecked((long)index);
         long __a1 = unchecked((long)joint);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Quaternion);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_limitation_rotation_offset, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_max_iterations = MethodBinds.ResolveBulk("IterateIK3D", "set_max_iterations", 1286410249);
+        __mb_get_max_iterations = MethodBinds.ResolveBulk("IterateIK3D", "get_max_iterations", 3905245786);
+        __mb_set_min_distance = MethodBinds.ResolveBulk("IterateIK3D", "set_min_distance", 373806689);
+        __mb_get_min_distance = MethodBinds.ResolveBulk("IterateIK3D", "get_min_distance", 1740695150);
+        __mb_set_angular_delta_limit = MethodBinds.ResolveBulk("IterateIK3D", "set_angular_delta_limit", 373806689);
+        __mb_get_angular_delta_limit = MethodBinds.ResolveBulk("IterateIK3D", "get_angular_delta_limit", 1740695150);
+        __mb_set_deterministic = MethodBinds.ResolveBulk("IterateIK3D", "set_deterministic", 2586408642);
+        __mb_is_deterministic = MethodBinds.ResolveBulk("IterateIK3D", "is_deterministic", 36873697);
+        __mb_set_target_node = MethodBinds.ResolveBulk("IterateIK3D", "set_target_node", 2761262315);
+        __mb_get_target_node = MethodBinds.ResolveBulk("IterateIK3D", "get_target_node", 408788394);
+        __mb_set_joint_rotation_axis = MethodBinds.ResolveBulk("IterateIK3D", "set_joint_rotation_axis", 1391134969);
+        __mb_get_joint_rotation_axis = MethodBinds.ResolveBulk("IterateIK3D", "get_joint_rotation_axis", 3312594080);
+        __mb_set_joint_rotation_axis_vector = MethodBinds.ResolveBulk("IterateIK3D", "set_joint_rotation_axis_vector", 2866752138);
+        __mb_get_joint_rotation_axis_vector = MethodBinds.ResolveBulk("IterateIK3D", "get_joint_rotation_axis_vector", 1592972041);
+        __mb_set_joint_limitation = MethodBinds.ResolveBulk("IterateIK3D", "set_joint_limitation", 1194636955);
+        __mb_get_joint_limitation = MethodBinds.ResolveBulk("IterateIK3D", "get_joint_limitation", 91665146);
+        __mb_set_joint_limitation_right_axis = MethodBinds.ResolveBulk("IterateIK3D", "set_joint_limitation_right_axis", 3838967147);
+        __mb_get_joint_limitation_right_axis = MethodBinds.ResolveBulk("IterateIK3D", "get_joint_limitation_right_axis", 623936134);
+        __mb_set_joint_limitation_right_axis_vector = MethodBinds.ResolveBulk("IterateIK3D", "set_joint_limitation_right_axis_vector", 2866752138);
+        __mb_get_joint_limitation_right_axis_vector = MethodBinds.ResolveBulk("IterateIK3D", "get_joint_limitation_right_axis_vector", 1592972041);
+        __mb_set_joint_limitation_rotation_offset = MethodBinds.ResolveBulk("IterateIK3D", "set_joint_limitation_rotation_offset", 4188936002);
+        __mb_get_joint_limitation_rotation_offset = MethodBinds.ResolveBulk("IterateIK3D", "get_joint_limitation_rotation_offset", 2722473700);
     }
 }
 

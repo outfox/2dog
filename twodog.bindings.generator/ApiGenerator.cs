@@ -36,7 +36,8 @@ public static class ApiGenerator
         "Dispose", "Free", "NativePtr", "InstanceId", "IsRefCounted", "IsValid", "Singleton",
     ];
 
-    private sealed record ClassInfo(string GdName, string CsName, string BaseCs, bool RefCounted, bool Instantiable);
+    private sealed record ClassInfo(string GdName, string CsName, string BaseCs, bool RefCounted, bool Instantiable,
+        bool EditorApi);
 
     private sealed record TypeRef(string Kind, string Cs, string? PackedElem = null, string? PackedGd = null)
     {
@@ -86,6 +87,14 @@ public static class ApiGenerator
     // GodotSharp parity note: property accessor methods (GetX/SetX/IsX) are
     // emitted PUBLIC alongside the folded property - GodotSharp exposes both
     // and converted game code calls them directly.
+
+    // Method binds resolve once at engine init (GeneratedBinds.ResolveScene/
+    // ResolveEditor via __ResolveBinds per class), not lazily per call: call
+    // sites stay small (JIT-inlinable) and re-resolution on every SCENE init
+    // keeps cached binds valid across engine restarts. Call sites keep a
+    // single cold-throw guard for methods absent from the running build.
+    private static readonly List<string> _bindResolves = [];
+    private static readonly List<(string CsName, bool EditorApi)> _resolverClasses = [];
     private static readonly Dictionary<(string cls, string enumName), string> _enumRenames = [];
     private static readonly SortedDictionary<string, string> _virtualNameMap = []; // gd virtual name -> cs stub name
     private static readonly HashSet<string> _staticSingletons = [];
@@ -110,7 +119,8 @@ public static class ApiGenerator
             var baseCs = baseGd == "" ? "" : baseGd == "Object" ? "GodotObject" : baseGd;
             _classes[gd] = new ClassInfo(gd, cs, baseCs,
                 c.GetProperty("is_refcounted").GetBoolean(),
-                c.GetProperty("is_instantiable").GetBoolean());
+                c.GetProperty("is_instantiable").GetBoolean(),
+                c.GetProperty("api_type").GetString() == "editor");
             _classJson[gd] = c;
             var methods = new Dictionary<string, JsonElement>();
             if (c.TryGetProperty("methods", out var ms))
@@ -195,6 +205,7 @@ public static class ApiGenerator
         _virtualsEmitted = 0;
         _virtualsSkipped = 0;
         _virtualNameMap.Clear();
+        _resolverClasses.Clear();
         var chunks = new Dictionary<char, StringBuilder>();
         foreach (var c in root.GetProperty("classes").EnumerateArray())
         {
@@ -231,6 +242,39 @@ public static class ApiGenerator
                 sbReg.AppendLine($"        Entries[\"{i.GdName}\"] = (static (p, rc) => new {factory}(p, rc), {Bool(i.RefCounted)});");
             }
             sbReg.AppendLine("    }");
+        }
+        sbReg.AppendLine("}");
+
+        // ---- startup method-bind resolution ----
+        sbReg.AppendLine();
+        sbReg.AppendLine("/// <summary>");
+        sbReg.AppendLine("/// Bulk method-bind resolution, invoked by GdExtensionHost: core/scene API at");
+        sbReg.AppendLine("/// SCENE init, editor API at EDITOR init (those classes exist only then).");
+        sbReg.AppendLine("/// Typed API calls before SCENE initialization throw MissingMethodException.");
+        sbReg.AppendLine("/// </summary>");
+        sbReg.AppendLine("public static class GeneratedBinds");
+        sbReg.AppendLine("{");
+        foreach (var editor in new[] { false, true })
+        {
+            var name = editor ? "Editor" : "Scene";
+            var classes = _resolverClasses.Where(r => r.EditorApi == editor).ToList();
+            var resolverGroups = classes.GroupBy(r => r.CsName[0]).OrderBy(g => g.Key).ToList();
+            sbReg.AppendLine($"    public static void Resolve{name}()");
+            sbReg.AppendLine("    {");
+            foreach (var g in resolverGroups)
+                sbReg.AppendLine($"        Resolve{name}{g.Key}();");
+            sbReg.AppendLine("    }");
+            foreach (var g in resolverGroups)
+            {
+                sbReg.AppendLine();
+                sbReg.AppendLine($"    private static void Resolve{name}{g.Key}()");
+                sbReg.AppendLine("    {");
+                foreach (var r in g)
+                    sbReg.AppendLine($"        {r.CsName}.__ResolveBinds();");
+                sbReg.AppendLine("    }");
+            }
+            if (editor) continue;
+            sbReg.AppendLine();
         }
         sbReg.AppendLine("}");
         Write(outDir, "ApiRegistry.gen.cs", sbReg);
@@ -285,6 +329,7 @@ public static class ApiGenerator
     {
         var isObject = info.CsName == "GodotObject";
         var isStaticSingleton = _staticSingletons.Contains(info.GdName);
+        _bindResolves.Clear();
 
         sb.AppendLine(isStaticSingleton
             ? $"public static unsafe partial class {info.CsName}"
@@ -348,6 +393,16 @@ public static class ApiGenerator
         }
 
         EmitVirtuals(sb, virtuals);
+
+        if (_bindResolves.Count > 0)
+        {
+            sb.AppendLine();
+            sb.AppendLine("    internal static void __ResolveBinds()");
+            sb.AppendLine("    {");
+            foreach (var line in _bindResolves) sb.AppendLine($"        {line}");
+            sb.AppendLine("    }");
+            _resolverClasses.Add((info.CsName, info.EditorApi));
+        }
 
         sb.AppendLine("}");
         sb.AppendLine();
@@ -551,15 +606,10 @@ public static class ApiGenerator
         sb.AppendLine($"    private static nint {mbField};");
         var paramList = string.Join(", ", args.Select((a, i) =>
             $"{ParamType(a.type)} {a.name}{(defaults[i] is null ? "" : $" = {defaults[i]}")}"));
+        _bindResolves.Add($"{mbField} = MethodBinds.ResolveBulk(\"{info.GdName}\", \"{gdName}\", {hash});");
         sb.AppendLine($"    {visibility} {(isStatic ? "static " : "")}{RetType(ret)} {csName}({paramList})");
         sb.AppendLine("    {");
-        sb.AppendLine($"        var __mb = {mbField};");
-        sb.AppendLine("        if (__mb == 0)");
-        sb.AppendLine("        {");
-        sb.AppendLine($"            __mb = MethodBinds.Resolve(\"{info.GdName}\", \"{gdName}\", {hash});");
-        sb.AppendLine($"            if (__mb == 0) throw new MissingMethodException(\"{info.GdName}.{gdName} is not available in this engine build.\");");
-        sb.AppendLine($"            {mbField} = __mb;");
-        sb.AppendLine("        }");
+        sb.AppendLine($"        if ({mbField} == 0) MethodBinds.MissingThrow(\"{info.GdName}.{gdName}\");");
 
         // encode args
         for (var i = 0; i < args.Count; i++)
@@ -599,49 +649,49 @@ public static class ApiGenerator
         switch (ret.Kind)
         {
             case "void":
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, 0);");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, 0);");
                 break;
             case "bool":
                 sb.AppendLine("        byte __ret = 0;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "int":
             case "enum":
                 sb.AppendLine("        long __ret = 0;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "float":
                 sb.AppendLine("        double __ret = 0;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "string":
             case "stringname":
                 sb.AppendLine("        ulong __ret = 0;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "math":
                 sb.AppendLine($"        var __ret = default({ret.Cs});");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "class":
                 // MUST be zero-initialized: for RefCounted returns the engine
                 // assigns into this slot as a Ref<T> (unrefs previous content).
                 sb.AppendLine("        nint __ret = 0;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "variant":
                 // Zero-init = NIL; the engine assigns over it (destroys prior).
                 sb.AppendLine("        NativeVariant __ret = default;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "builtinref":
                 // Zero-init = empty/null handle; engine assigns a ref into it.
                 sb.AppendLine("        ulong __ret = 0;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
             case "opaque16" or "packed":
                 sb.AppendLine("        Opaque16 __ret = default;");
-                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, {self}, {argsPtr}, (nint)(&__ret));");
+                sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindPtrcall({mbField}, {self}, {argsPtr}, (nint)(&__ret));");
                 break;
         }
 
@@ -740,15 +790,10 @@ public static class ApiGenerator
         sb.AppendLine();
         sb.AppendLine($"    private static nint {mbField};");
         var paramList = string.Join(", ", lead.Select(a => $"{ParamType(a.type)} {a.name}").Append("params Variant[] args"));
+        _bindResolves.Add($"{mbField} = MethodBinds.ResolveBulk(\"{info.GdName}\", \"{gdName}\", {hash});");
         sb.AppendLine($"    {visibility} {(staticClass || jsonStatic ? "static " : "")}{RetType(ret)} {csName}({paramList})");
         sb.AppendLine("    {");
-        sb.AppendLine($"        var __mb = {mbField};");
-        sb.AppendLine("        if (__mb == 0)");
-        sb.AppendLine("        {");
-        sb.AppendLine($"            __mb = MethodBinds.Resolve(\"{info.GdName}\", \"{gdName}\", {hash});");
-        sb.AppendLine($"            if (__mb == 0) throw new MissingMethodException(\"{info.GdName}.{gdName} is not available in this engine build.\");");
-        sb.AppendLine($"            {mbField} = __mb;");
-        sb.AppendLine("        }");
+        sb.AppendLine($"        if ({mbField} == 0) MethodBinds.MissingThrow(\"{info.GdName}.{gdName}\");");
         sb.AppendLine($"        var __n = {k} + args.Length;");
         sb.AppendLine("        var __ptrs = stackalloc nint[Math.Max(__n, 1)];");
         if (k > 0)
@@ -768,7 +813,7 @@ public static class ApiGenerator
         sb.AppendLine("        }");
         sb.AppendLine("        NativeVariant __ret = default;");
         sb.AppendLine("        GDExtensionCallError __err = default;");
-        sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindCall(__mb, {self}, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));");
+        sb.AppendLine($"        GdExtensionInterface.ObjectMethodBindCall({mbField}, {self}, (nint)__ptrs, __n, (nint)(&__ret), (nint)(&__err));");
         if (k > 0)
         {
             sb.AppendLine($"        for (var __i = 0; __i < {k}; __i++) Variants.Destroy(ref __lead[__i]);");

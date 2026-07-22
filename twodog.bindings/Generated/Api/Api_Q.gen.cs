@@ -39,32 +39,26 @@ public unsafe partial class QuadOccluder3D : Occluder3D
     private static nint __mb_set_size;
     public void SetSize(Vector2 size)
     {
-        var __mb = __mb_set_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("QuadOccluder3D", "set_size", 743155724);
-            if (__mb == 0) throw new MissingMethodException("QuadOccluder3D.set_size is not available in this engine build.");
-            __mb_set_size = __mb;
-        }
+        if (__mb_set_size == 0) MethodBinds.MissingThrow("QuadOccluder3D.set_size");
         var __a0 = size;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_size, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_size;
     public Vector2 GetSize()
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("QuadOccluder3D", "get_size", 3341600327);
-            if (__mb == 0) throw new MissingMethodException("QuadOccluder3D.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("QuadOccluder3D.get_size");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_size = MethodBinds.ResolveBulk("QuadOccluder3D", "set_size", 743155724);
+        __mb_get_size = MethodBinds.ResolveBulk("QuadOccluder3D", "get_size", 3341600327);
     }
 }
 

@@ -23,18 +23,12 @@ public unsafe partial class X509Certificate : Resource
     private static nint __mb_save;
     public Error Save(string path)
     {
-        var __mb = __mb_save;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("X509Certificate", "save", 166001499);
-            if (__mb == 0) throw new MissingMethodException("X509Certificate.save is not available in this engine build.");
-            __mb_save = __mb;
-        }
+        if (__mb_save == 0) MethodBinds.MissingThrow("X509Certificate.save");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -42,18 +36,12 @@ public unsafe partial class X509Certificate : Resource
     private static nint __mb_load;
     public Error Load(string path)
     {
-        var __mb = __mb_load;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("X509Certificate", "load", 166001499);
-            if (__mb == 0) throw new MissingMethodException("X509Certificate.load is not available in this engine build.");
-            __mb_load = __mb;
-        }
+        if (__mb_load == 0) MethodBinds.MissingThrow("X509Certificate.load");
         ulong __a0 = NativeString.Create(path);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -61,35 +49,31 @@ public unsafe partial class X509Certificate : Resource
     private static nint __mb_save_to_string;
     public string SaveToString()
     {
-        var __mb = __mb_save_to_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("X509Certificate", "save_to_string", 2841200299);
-            if (__mb == 0) throw new MissingMethodException("X509Certificate.save_to_string is not available in this engine build.");
-            __mb_save_to_string = __mb;
-        }
+        if (__mb_save_to_string == 0) MethodBinds.MissingThrow("X509Certificate.save_to_string");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_save_to_string, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_load_from_string;
     public Error LoadFromString(string @string)
     {
-        var __mb = __mb_load_from_string;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("X509Certificate", "load_from_string", 166001499);
-            if (__mb == 0) throw new MissingMethodException("X509Certificate.load_from_string is not available in this engine build.");
-            __mb_load_from_string = __mb;
-        }
+        if (__mb_load_from_string == 0) MethodBinds.MissingThrow("X509Certificate.load_from_string");
         ulong __a0 = NativeString.Create(@string);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_load_from_string, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_save = MethodBinds.ResolveBulk("X509Certificate", "save", 166001499);
+        __mb_load = MethodBinds.ResolveBulk("X509Certificate", "load", 166001499);
+        __mb_save_to_string = MethodBinds.ResolveBulk("X509Certificate", "save_to_string", 2841200299);
+        __mb_load_from_string = MethodBinds.ResolveBulk("X509Certificate", "load_from_string", 166001499);
     }
 }
 
@@ -116,144 +100,90 @@ public unsafe partial class XMLParser : RefCounted
     private static nint __mb_read;
     public Error Read()
     {
-        var __mb = __mb_read;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "read", 166280745);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.read is not available in this engine build.");
-            __mb_read = __mb;
-        }
+        if (__mb_read == 0) MethodBinds.MissingThrow("XMLParser.read");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_read, NativePtr, 0, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_get_node_type;
     public XMLParser.NodeType GetNodeType()
     {
-        var __mb = __mb_get_node_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_node_type", 2984359541);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_node_type is not available in this engine build.");
-            __mb_get_node_type = __mb;
-        }
+        if (__mb_get_node_type == 0) MethodBinds.MissingThrow("XMLParser.get_node_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_node_type, NativePtr, 0, (nint)(&__ret));
         return (XMLParser.NodeType)__ret;
     }
 
     private static nint __mb_get_node_name;
     public string GetNodeName()
     {
-        var __mb = __mb_get_node_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_node_name", 201670096);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_node_name is not available in this engine build.");
-            __mb_get_node_name = __mb;
-        }
+        if (__mb_get_node_name == 0) MethodBinds.MissingThrow("XMLParser.get_node_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_node_name, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_node_data;
     public string GetNodeData()
     {
-        var __mb = __mb_get_node_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_node_data", 201670096);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_node_data is not available in this engine build.");
-            __mb_get_node_data = __mb;
-        }
+        if (__mb_get_node_data == 0) MethodBinds.MissingThrow("XMLParser.get_node_data");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_node_data, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_node_offset;
     public ulong GetNodeOffset()
     {
-        var __mb = __mb_get_node_offset;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_node_offset", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_node_offset is not available in this engine build.");
-            __mb_get_node_offset = __mb;
-        }
+        if (__mb_get_node_offset == 0) MethodBinds.MissingThrow("XMLParser.get_node_offset");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_node_offset, NativePtr, 0, (nint)(&__ret));
         return unchecked((ulong)__ret);
     }
 
     private static nint __mb_get_attribute_count;
     public int GetAttributeCount()
     {
-        var __mb = __mb_get_attribute_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_attribute_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_attribute_count is not available in this engine build.");
-            __mb_get_attribute_count = __mb;
-        }
+        if (__mb_get_attribute_count == 0) MethodBinds.MissingThrow("XMLParser.get_attribute_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_attribute_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_get_attribute_name;
     public string GetAttributeName(int idx)
     {
-        var __mb = __mb_get_attribute_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_attribute_name", 844755477);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_attribute_name is not available in this engine build.");
-            __mb_get_attribute_name = __mb;
-        }
+        if (__mb_get_attribute_name == 0) MethodBinds.MissingThrow("XMLParser.get_attribute_name");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_attribute_name, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_get_attribute_value;
     public string GetAttributeValue(int idx)
     {
-        var __mb = __mb_get_attribute_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_attribute_value", 844755477);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_attribute_value is not available in this engine build.");
-            __mb_get_attribute_value = __mb;
-        }
+        if (__mb_get_attribute_value == 0) MethodBinds.MissingThrow("XMLParser.get_attribute_value");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_attribute_value, NativePtr, (nint)__args, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_has_attribute;
     public bool HasAttribute(string name)
     {
-        var __mb = __mb_has_attribute;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "has_attribute", 3927539163);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.has_attribute is not available in this engine build.");
-            __mb_has_attribute = __mb;
-        }
+        if (__mb_has_attribute == 0) MethodBinds.MissingThrow("XMLParser.has_attribute");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_attribute, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return __ret != 0;
     }
@@ -261,18 +191,12 @@ public unsafe partial class XMLParser : RefCounted
     private static nint __mb_get_named_attribute_value;
     public string GetNamedAttributeValue(string name)
     {
-        var __mb = __mb_get_named_attribute_value;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_named_attribute_value", 3135753539);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_named_attribute_value is not available in this engine build.");
-            __mb_get_named_attribute_value = __mb;
-        }
+        if (__mb_get_named_attribute_value == 0) MethodBinds.MissingThrow("XMLParser.get_named_attribute_value");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_named_attribute_value, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -280,18 +204,12 @@ public unsafe partial class XMLParser : RefCounted
     private static nint __mb_get_named_attribute_value_safe;
     public string GetNamedAttributeValueSafe(string name)
     {
-        var __mb = __mb_get_named_attribute_value_safe;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_named_attribute_value_safe", 3135753539);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_named_attribute_value_safe is not available in this engine build.");
-            __mb_get_named_attribute_value_safe = __mb;
-        }
+        if (__mb_get_named_attribute_value_safe == 0) MethodBinds.MissingThrow("XMLParser.get_named_attribute_value_safe");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_named_attribute_value_safe, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return NativeString.ReadAndDestroy(ref __ret);
     }
@@ -299,79 +217,49 @@ public unsafe partial class XMLParser : RefCounted
     private static nint __mb_is_empty;
     public bool IsEmpty()
     {
-        var __mb = __mb_is_empty;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "is_empty", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.is_empty is not available in this engine build.");
-            __mb_is_empty = __mb;
-        }
+        if (__mb_is_empty == 0) MethodBinds.MissingThrow("XMLParser.is_empty");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_empty, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_current_line;
     public int GetCurrentLine()
     {
-        var __mb = __mb_get_current_line;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "get_current_line", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.get_current_line is not available in this engine build.");
-            __mb_get_current_line = __mb;
-        }
+        if (__mb_get_current_line == 0) MethodBinds.MissingThrow("XMLParser.get_current_line");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_current_line, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_skip_section;
     public void SkipSection()
     {
-        var __mb = __mb_skip_section;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "skip_section", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.skip_section is not available in this engine build.");
-            __mb_skip_section = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_skip_section == 0) MethodBinds.MissingThrow("XMLParser.skip_section");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_skip_section, NativePtr, 0, 0);
     }
 
     private static nint __mb_seek;
     public Error Seek(ulong position)
     {
-        var __mb = __mb_seek;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "seek", 844576869);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.seek is not available in this engine build.");
-            __mb_seek = __mb;
-        }
+        if (__mb_seek == 0) MethodBinds.MissingThrow("XMLParser.seek");
         long __a0 = unchecked((long)position);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_seek, NativePtr, (nint)__args, (nint)(&__ret));
         return (Error)__ret;
     }
 
     private static nint __mb_open;
     public Error Open(string file)
     {
-        var __mb = __mb_open;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "open", 166001499);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.open is not available in this engine build.");
-            __mb_open = __mb;
-        }
+        if (__mb_open == 0) MethodBinds.MissingThrow("XMLParser.open");
         ulong __a0 = NativeString.Create(file);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open, NativePtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (Error)__ret;
     }
@@ -379,20 +267,35 @@ public unsafe partial class XMLParser : RefCounted
     private static nint __mb_open_buffer;
     public Error OpenBuffer(byte[] buffer)
     {
-        var __mb = __mb_open_buffer;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XMLParser", "open_buffer", 680677267);
-            if (__mb == 0) throw new MissingMethodException("XMLParser.open_buffer is not available in this engine build.");
-            __mb_open_buffer = __mb;
-        }
+        if (__mb_open_buffer == 0) MethodBinds.MissingThrow("XMLParser.open_buffer");
         var __a0 = Packed.CreatePod<byte>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, GdExtensionInterface.PackedByteArrayOperatorIndex, buffer);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_open_buffer, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_BYTE_ARRAY, ref __a0);
         return (Error)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_read = MethodBinds.ResolveBulk("XMLParser", "read", 166280745);
+        __mb_get_node_type = MethodBinds.ResolveBulk("XMLParser", "get_node_type", 2984359541);
+        __mb_get_node_name = MethodBinds.ResolveBulk("XMLParser", "get_node_name", 201670096);
+        __mb_get_node_data = MethodBinds.ResolveBulk("XMLParser", "get_node_data", 201670096);
+        __mb_get_node_offset = MethodBinds.ResolveBulk("XMLParser", "get_node_offset", 3905245786);
+        __mb_get_attribute_count = MethodBinds.ResolveBulk("XMLParser", "get_attribute_count", 3905245786);
+        __mb_get_attribute_name = MethodBinds.ResolveBulk("XMLParser", "get_attribute_name", 844755477);
+        __mb_get_attribute_value = MethodBinds.ResolveBulk("XMLParser", "get_attribute_value", 844755477);
+        __mb_has_attribute = MethodBinds.ResolveBulk("XMLParser", "has_attribute", 3927539163);
+        __mb_get_named_attribute_value = MethodBinds.ResolveBulk("XMLParser", "get_named_attribute_value", 3135753539);
+        __mb_get_named_attribute_value_safe = MethodBinds.ResolveBulk("XMLParser", "get_named_attribute_value_safe", 3135753539);
+        __mb_is_empty = MethodBinds.ResolveBulk("XMLParser", "is_empty", 36873697);
+        __mb_get_current_line = MethodBinds.ResolveBulk("XMLParser", "get_current_line", 3905245786);
+        __mb_skip_section = MethodBinds.ResolveBulk("XMLParser", "skip_section", 3218959716);
+        __mb_seek = MethodBinds.ResolveBulk("XMLParser", "seek", 844576869);
+        __mb_open = MethodBinds.ResolveBulk("XMLParser", "open", 166001499);
+        __mb_open_buffer = MethodBinds.ResolveBulk("XMLParser", "open_buffer", 680677267);
     }
 }
 
@@ -408,31 +311,25 @@ public unsafe partial class XRAnchor3D : XRNode3D
     private static nint __mb_get_size;
     public Vector3 GetSize()
     {
-        var __mb = __mb_get_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRAnchor3D", "get_size", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("XRAnchor3D.get_size is not available in this engine build.");
-            __mb_get_size = __mb;
-        }
+        if (__mb_get_size == 0) MethodBinds.MissingThrow("XRAnchor3D.get_size");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_plane;
     public Plane GetPlane()
     {
-        var __mb = __mb_get_plane;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRAnchor3D", "get_plane", 2753500971);
-            if (__mb == 0) throw new MissingMethodException("XRAnchor3D.get_plane is not available in this engine build.");
-            __mb_get_plane = __mb;
-        }
+        if (__mb_get_plane == 0) MethodBinds.MissingThrow("XRAnchor3D.get_plane");
         var __ret = default(Plane);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_plane, NativePtr, 0, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_size = MethodBinds.ResolveBulk("XRAnchor3D", "get_size", 3360562783);
+        __mb_get_plane = MethodBinds.ResolveBulk("XRAnchor3D", "get_plane", 2753500971);
     }
 }
 
@@ -481,94 +378,68 @@ public unsafe partial class XRBodyModifier3D : SkeletonModifier3D
     private static nint __mb_set_body_tracker;
     public void SetBodyTracker(StringName trackerName)
     {
-        var __mb = __mb_set_body_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyModifier3D", "set_body_tracker", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.set_body_tracker is not available in this engine build.");
-            __mb_set_body_tracker = __mb;
-        }
+        if (__mb_set_body_tracker == 0) MethodBinds.MissingThrow("XRBodyModifier3D.set_body_tracker");
         ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_body_tracker, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_body_tracker;
     public StringName GetBodyTracker()
     {
-        var __mb = __mb_get_body_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyModifier3D", "get_body_tracker", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.get_body_tracker is not available in this engine build.");
-            __mb_get_body_tracker = __mb;
-        }
+        if (__mb_get_body_tracker == 0) MethodBinds.MissingThrow("XRBodyModifier3D.get_body_tracker");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_body_tracker, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_body_update;
     public void SetBodyUpdate(XRBodyModifier3D.BodyUpdateEnum bodyUpdate)
     {
-        var __mb = __mb_set_body_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyModifier3D", "set_body_update", 2211199417);
-            if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.set_body_update is not available in this engine build.");
-            __mb_set_body_update = __mb;
-        }
+        if (__mb_set_body_update == 0) MethodBinds.MissingThrow("XRBodyModifier3D.set_body_update");
         long __a0 = (long)bodyUpdate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_body_update, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_body_update;
     public XRBodyModifier3D.BodyUpdateEnum GetBodyUpdate()
     {
-        var __mb = __mb_get_body_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyModifier3D", "get_body_update", 2642335328);
-            if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.get_body_update is not available in this engine build.");
-            __mb_get_body_update = __mb;
-        }
+        if (__mb_get_body_update == 0) MethodBinds.MissingThrow("XRBodyModifier3D.get_body_update");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_body_update, NativePtr, 0, (nint)(&__ret));
         return (XRBodyModifier3D.BodyUpdateEnum)__ret;
     }
 
     private static nint __mb_set_bone_update;
     public void SetBoneUpdate(XRBodyModifier3D.BoneUpdateEnum boneUpdate)
     {
-        var __mb = __mb_set_bone_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyModifier3D", "set_bone_update", 3356796943);
-            if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.set_bone_update is not available in this engine build.");
-            __mb_set_bone_update = __mb;
-        }
+        if (__mb_set_bone_update == 0) MethodBinds.MissingThrow("XRBodyModifier3D.set_bone_update");
         long __a0 = (long)boneUpdate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bone_update, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bone_update;
     public XRBodyModifier3D.BoneUpdateEnum GetBoneUpdate()
     {
-        var __mb = __mb_get_bone_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyModifier3D", "get_bone_update", 1309305964);
-            if (__mb == 0) throw new MissingMethodException("XRBodyModifier3D.get_bone_update is not available in this engine build.");
-            __mb_get_bone_update = __mb;
-        }
+        if (__mb_get_bone_update == 0) MethodBinds.MissingThrow("XRBodyModifier3D.get_bone_update");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bone_update, NativePtr, 0, (nint)(&__ret));
         return (XRBodyModifier3D.BoneUpdateEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_body_tracker = MethodBinds.ResolveBulk("XRBodyModifier3D", "set_body_tracker", 3304788590);
+        __mb_get_body_tracker = MethodBinds.ResolveBulk("XRBodyModifier3D", "get_body_tracker", 2002593661);
+        __mb_set_body_update = MethodBinds.ResolveBulk("XRBodyModifier3D", "set_body_update", 2211199417);
+        __mb_get_body_update = MethodBinds.ResolveBulk("XRBodyModifier3D", "get_body_update", 2642335328);
+        __mb_set_bone_update = MethodBinds.ResolveBulk("XRBodyModifier3D", "set_bone_update", 3356796943);
+        __mb_get_bone_update = MethodBinds.ResolveBulk("XRBodyModifier3D", "get_bone_update", 1309305964);
     }
 }
 
@@ -705,135 +576,99 @@ public unsafe partial class XRBodyTracker : XRPositionalTracker
     private static nint __mb_set_has_tracking_data;
     public void SetHasTrackingData(bool hasData)
     {
-        var __mb = __mb_set_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "set_has_tracking_data", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.set_has_tracking_data is not available in this engine build.");
-            __mb_set_has_tracking_data = __mb;
-        }
+        if (__mb_set_has_tracking_data == 0) MethodBinds.MissingThrow("XRBodyTracker.set_has_tracking_data");
         byte __a0 = hasData ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_has_tracking_data, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_has_tracking_data;
     public bool GetHasTrackingData()
     {
-        var __mb = __mb_get_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "get_has_tracking_data", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.get_has_tracking_data is not available in this engine build.");
-            __mb_get_has_tracking_data = __mb;
-        }
+        if (__mb_get_has_tracking_data == 0) MethodBinds.MissingThrow("XRBodyTracker.get_has_tracking_data");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_has_tracking_data, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_body_flags;
     public void SetBodyFlags(XRBodyTracker.BodyFlagsEnum flags)
     {
-        var __mb = __mb_set_body_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "set_body_flags", 2103235750);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.set_body_flags is not available in this engine build.");
-            __mb_set_body_flags = __mb;
-        }
+        if (__mb_set_body_flags == 0) MethodBinds.MissingThrow("XRBodyTracker.set_body_flags");
         long __a0 = (long)flags;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_body_flags, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_body_flags;
     public XRBodyTracker.BodyFlagsEnum GetBodyFlags()
     {
-        var __mb = __mb_get_body_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "get_body_flags", 3543166366);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.get_body_flags is not available in this engine build.");
-            __mb_get_body_flags = __mb;
-        }
+        if (__mb_get_body_flags == 0) MethodBinds.MissingThrow("XRBodyTracker.get_body_flags");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_body_flags, NativePtr, 0, (nint)(&__ret));
         return (XRBodyTracker.BodyFlagsEnum)__ret;
     }
 
     private static nint __mb_set_joint_flags;
     public void SetJointFlags(XRBodyTracker.Joint joint, XRBodyTracker.JointFlags flags)
     {
-        var __mb = __mb_set_joint_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "set_joint_flags", 592144999);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.set_joint_flags is not available in this engine build.");
-            __mb_set_joint_flags = __mb;
-        }
+        if (__mb_set_joint_flags == 0) MethodBinds.MissingThrow("XRBodyTracker.set_joint_flags");
         long __a0 = (long)joint;
         long __a1 = (long)flags;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_flags, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_flags;
     public XRBodyTracker.JointFlags GetJointFlags(XRBodyTracker.Joint joint)
     {
-        var __mb = __mb_get_joint_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "get_joint_flags", 1030162609);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.get_joint_flags is not available in this engine build.");
-            __mb_get_joint_flags = __mb;
-        }
+        if (__mb_get_joint_flags == 0) MethodBinds.MissingThrow("XRBodyTracker.get_joint_flags");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_flags, NativePtr, (nint)__args, (nint)(&__ret));
         return (XRBodyTracker.JointFlags)__ret;
     }
 
     private static nint __mb_set_joint_transform;
     public void SetJointTransform(XRBodyTracker.Joint joint, Transform3D transform)
     {
-        var __mb = __mb_set_joint_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "set_joint_transform", 2635424328);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.set_joint_transform is not available in this engine build.");
-            __mb_set_joint_transform = __mb;
-        }
+        if (__mb_set_joint_transform == 0) MethodBinds.MissingThrow("XRBodyTracker.set_joint_transform");
         long __a0 = (long)joint;
         var __a1 = transform;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_joint_transform, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_joint_transform;
     public Transform3D GetJointTransform(XRBodyTracker.Joint joint)
     {
-        var __mb = __mb_get_joint_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRBodyTracker", "get_joint_transform", 3474811534);
-            if (__mb == 0) throw new MissingMethodException("XRBodyTracker.get_joint_transform is not available in this engine build.");
-            __mb_get_joint_transform = __mb;
-        }
+        if (__mb_get_joint_transform == 0) MethodBinds.MissingThrow("XRBodyTracker.get_joint_transform");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_joint_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_has_tracking_data = MethodBinds.ResolveBulk("XRBodyTracker", "set_has_tracking_data", 2586408642);
+        __mb_get_has_tracking_data = MethodBinds.ResolveBulk("XRBodyTracker", "get_has_tracking_data", 36873697);
+        __mb_set_body_flags = MethodBinds.ResolveBulk("XRBodyTracker", "set_body_flags", 2103235750);
+        __mb_get_body_flags = MethodBinds.ResolveBulk("XRBodyTracker", "get_body_flags", 3543166366);
+        __mb_set_joint_flags = MethodBinds.ResolveBulk("XRBodyTracker", "set_joint_flags", 592144999);
+        __mb_get_joint_flags = MethodBinds.ResolveBulk("XRBodyTracker", "get_joint_flags", 1030162609);
+        __mb_set_joint_transform = MethodBinds.ResolveBulk("XRBodyTracker", "set_joint_transform", 2635424328);
+        __mb_get_joint_transform = MethodBinds.ResolveBulk("XRBodyTracker", "get_joint_transform", 3474811534);
     }
 }
 
@@ -899,88 +734,67 @@ public unsafe partial class XRController3D : XRNode3D
     private static nint __mb_is_button_pressed;
     public bool IsButtonPressed(StringName name)
     {
-        var __mb = __mb_is_button_pressed;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRController3D", "is_button_pressed", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("XRController3D.is_button_pressed is not available in this engine build.");
-            __mb_is_button_pressed = __mb;
-        }
+        if (__mb_is_button_pressed == 0) MethodBinds.MissingThrow("XRController3D.is_button_pressed");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_button_pressed, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_input;
     public Variant GetInput(StringName name)
     {
-        var __mb = __mb_get_input;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRController3D", "get_input", 2760726917);
-            if (__mb == 0) throw new MissingMethodException("XRController3D.get_input is not available in this engine build.");
-            __mb_get_input = __mb;
-        }
+        if (__mb_get_input == 0) MethodBinds.MissingThrow("XRController3D.get_input");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_input, NativePtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_get_float;
     public float GetFloat(StringName name)
     {
-        var __mb = __mb_get_float;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRController3D", "get_float", 2349060816);
-            if (__mb == 0) throw new MissingMethodException("XRController3D.get_float is not available in this engine build.");
-            __mb_get_float = __mb;
-        }
+        if (__mb_get_float == 0) MethodBinds.MissingThrow("XRController3D.get_float");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_float, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_get_vector2;
     public Vector2 GetVector2(StringName name)
     {
-        var __mb = __mb_get_vector2;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRController3D", "get_vector2", 3100822709);
-            if (__mb == 0) throw new MissingMethodException("XRController3D.get_vector2 is not available in this engine build.");
-            __mb_get_vector2 = __mb;
-        }
+        if (__mb_get_vector2 == 0) MethodBinds.MissingThrow("XRController3D.get_vector2");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vector2, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_tracker_hand;
     public XRPositionalTracker.TrackerHand GetTrackerHand()
     {
-        var __mb = __mb_get_tracker_hand;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRController3D", "get_tracker_hand", 4181770860);
-            if (__mb == 0) throw new MissingMethodException("XRController3D.get_tracker_hand is not available in this engine build.");
-            __mb_get_tracker_hand = __mb;
-        }
+        if (__mb_get_tracker_hand == 0) MethodBinds.MissingThrow("XRController3D.get_tracker_hand");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker_hand, NativePtr, 0, (nint)(&__ret));
         return (XRPositionalTracker.TrackerHand)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_is_button_pressed = MethodBinds.ResolveBulk("XRController3D", "is_button_pressed", 2619796661);
+        __mb_get_input = MethodBinds.ResolveBulk("XRController3D", "get_input", 2760726917);
+        __mb_get_float = MethodBinds.ResolveBulk("XRController3D", "get_float", 2349060816);
+        __mb_get_vector2 = MethodBinds.ResolveBulk("XRController3D", "get_vector2", 3100822709);
+        __mb_get_tracker_hand = MethodBinds.ResolveBulk("XRController3D", "get_tracker_hand", 4181770860);
     }
 }
 
@@ -1018,63 +832,47 @@ public unsafe partial class XRFaceModifier3D : Node3D
     private static nint __mb_set_face_tracker;
     public void SetFaceTracker(StringName trackerName)
     {
-        var __mb = __mb_set_face_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceModifier3D", "set_face_tracker", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.set_face_tracker is not available in this engine build.");
-            __mb_set_face_tracker = __mb;
-        }
+        if (__mb_set_face_tracker == 0) MethodBinds.MissingThrow("XRFaceModifier3D.set_face_tracker");
         ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_face_tracker, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_face_tracker;
     public StringName GetFaceTracker()
     {
-        var __mb = __mb_get_face_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceModifier3D", "get_face_tracker", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.get_face_tracker is not available in this engine build.");
-            __mb_get_face_tracker = __mb;
-        }
+        if (__mb_get_face_tracker == 0) MethodBinds.MissingThrow("XRFaceModifier3D.get_face_tracker");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_face_tracker, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_target;
     public void SetTarget(NodePath target)
     {
-        var __mb = __mb_set_target;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceModifier3D", "set_target", 1348162250);
-            if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.set_target is not available in this engine build.");
-            __mb_set_target = __mb;
-        }
+        if (__mb_set_target == 0) MethodBinds.MissingThrow("XRFaceModifier3D.set_target");
         ulong __a0 = target.Native;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_target, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_target;
     public NodePath GetTarget()
     {
-        var __mb = __mb_get_target;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceModifier3D", "get_target", 4075236667);
-            if (__mb == 0) throw new MissingMethodException("XRFaceModifier3D.get_target is not available in this engine build.");
-            __mb_get_target = __mb;
-        }
+        if (__mb_get_target == 0) MethodBinds.MissingThrow("XRFaceModifier3D.get_target");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_target, NativePtr, 0, (nint)(&__ret));
         return new NodePath(__ret);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_face_tracker = MethodBinds.ResolveBulk("XRFaceModifier3D", "set_face_tracker", 3304788590);
+        __mb_get_face_tracker = MethodBinds.ResolveBulk("XRFaceModifier3D", "get_face_tracker", 2002593661);
+        __mb_set_target = MethodBinds.ResolveBulk("XRFaceModifier3D", "set_target", 1348162250);
+        __mb_get_target = MethodBinds.ResolveBulk("XRFaceModifier3D", "get_target", 4075236667);
     }
 }
 
@@ -1244,69 +1042,53 @@ public unsafe partial class XRFaceTracker : XRTracker
     private static nint __mb_get_blend_shape;
     public float GetBlendShape(XRFaceTracker.BlendShapeEntry blendShape)
     {
-        var __mb = __mb_get_blend_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceTracker", "get_blend_shape", 330010046);
-            if (__mb == 0) throw new MissingMethodException("XRFaceTracker.get_blend_shape is not available in this engine build.");
-            __mb_get_blend_shape = __mb;
-        }
+        if (__mb_get_blend_shape == 0) MethodBinds.MissingThrow("XRFaceTracker.get_blend_shape");
         long __a0 = (long)blendShape;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_blend_shape, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_blend_shape;
     public void SetBlendShape(XRFaceTracker.BlendShapeEntry blendShape, float weight)
     {
-        var __mb = __mb_set_blend_shape;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceTracker", "set_blend_shape", 2352588791);
-            if (__mb == 0) throw new MissingMethodException("XRFaceTracker.set_blend_shape is not available in this engine build.");
-            __mb_set_blend_shape = __mb;
-        }
+        if (__mb_set_blend_shape == 0) MethodBinds.MissingThrow("XRFaceTracker.set_blend_shape");
         long __a0 = (long)blendShape;
         double __a1 = weight;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_blend_shape, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_blend_shapes;
     public float[] GetBlendShapes()
     {
-        var __mb = __mb_get_blend_shapes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceTracker", "get_blend_shapes", 675695659);
-            if (__mb == 0) throw new MissingMethodException("XRFaceTracker.get_blend_shapes is not available in this engine build.");
-            __mb_get_blend_shapes = __mb;
-        }
+        if (__mb_get_blend_shapes == 0) MethodBinds.MissingThrow("XRFaceTracker.get_blend_shapes");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_blend_shapes, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_set_blend_shapes;
     public void SetBlendShapes(float[] weights)
     {
-        var __mb = __mb_set_blend_shapes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRFaceTracker", "set_blend_shapes", 2899603908);
-            if (__mb == 0) throw new MissingMethodException("XRFaceTracker.set_blend_shapes is not available in this engine build.");
-            __mb_set_blend_shapes = __mb;
-        }
+        if (__mb_set_blend_shapes == 0) MethodBinds.MissingThrow("XRFaceTracker.set_blend_shapes");
         var __a0 = Packed.CreatePod<float>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, GdExtensionInterface.PackedFloat32ArrayOperatorIndex, weights);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_blend_shapes, NativePtr, (nint)__args, 0);
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_FLOAT32_ARRAY, ref __a0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_blend_shape = MethodBinds.ResolveBulk("XRFaceTracker", "get_blend_shape", 330010046);
+        __mb_set_blend_shape = MethodBinds.ResolveBulk("XRFaceTracker", "set_blend_shape", 2352588791);
+        __mb_get_blend_shapes = MethodBinds.ResolveBulk("XRFaceTracker", "get_blend_shapes", 675695659);
+        __mb_set_blend_shapes = MethodBinds.ResolveBulk("XRFaceTracker", "set_blend_shapes", 2899603908);
     }
 }
 
@@ -1341,63 +1123,47 @@ public unsafe partial class XRHandModifier3D : SkeletonModifier3D
     private static nint __mb_set_hand_tracker;
     public void SetHandTracker(StringName trackerName)
     {
-        var __mb = __mb_set_hand_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandModifier3D", "set_hand_tracker", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRHandModifier3D.set_hand_tracker is not available in this engine build.");
-            __mb_set_hand_tracker = __mb;
-        }
+        if (__mb_set_hand_tracker == 0) MethodBinds.MissingThrow("XRHandModifier3D.set_hand_tracker");
         ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_tracker, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_tracker;
     public StringName GetHandTracker()
     {
-        var __mb = __mb_get_hand_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandModifier3D", "get_hand_tracker", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRHandModifier3D.get_hand_tracker is not available in this engine build.");
-            __mb_get_hand_tracker = __mb;
-        }
+        if (__mb_get_hand_tracker == 0) MethodBinds.MissingThrow("XRHandModifier3D.get_hand_tracker");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_tracker, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_bone_update;
     public void SetBoneUpdate(XRHandModifier3D.BoneUpdateEnum boneUpdate)
     {
-        var __mb = __mb_set_bone_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandModifier3D", "set_bone_update", 3635701455);
-            if (__mb == 0) throw new MissingMethodException("XRHandModifier3D.set_bone_update is not available in this engine build.");
-            __mb_set_bone_update = __mb;
-        }
+        if (__mb_set_bone_update == 0) MethodBinds.MissingThrow("XRHandModifier3D.set_bone_update");
         long __a0 = (long)boneUpdate;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_bone_update, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_bone_update;
     public XRHandModifier3D.BoneUpdateEnum GetBoneUpdate()
     {
-        var __mb = __mb_get_bone_update;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandModifier3D", "get_bone_update", 2873665691);
-            if (__mb == 0) throw new MissingMethodException("XRHandModifier3D.get_bone_update is not available in this engine build.");
-            __mb_get_bone_update = __mb;
-        }
+        if (__mb_get_bone_update == 0) MethodBinds.MissingThrow("XRHandModifier3D.get_bone_update");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_bone_update, NativePtr, 0, (nint)(&__ret));
         return (XRHandModifier3D.BoneUpdateEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_hand_tracker = MethodBinds.ResolveBulk("XRHandModifier3D", "set_hand_tracker", 3304788590);
+        __mb_get_hand_tracker = MethodBinds.ResolveBulk("XRHandModifier3D", "get_hand_tracker", 2002593661);
+        __mb_set_bone_update = MethodBinds.ResolveBulk("XRHandModifier3D", "set_bone_update", 3635701455);
+        __mb_get_bone_update = MethodBinds.ResolveBulk("XRHandModifier3D", "get_bone_update", 2873665691);
     }
 }
 
@@ -1476,243 +1242,177 @@ public unsafe partial class XRHandTracker : XRPositionalTracker
     private static nint __mb_set_has_tracking_data;
     public void SetHasTrackingData(bool hasData)
     {
-        var __mb = __mb_set_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_has_tracking_data", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_has_tracking_data is not available in this engine build.");
-            __mb_set_has_tracking_data = __mb;
-        }
+        if (__mb_set_has_tracking_data == 0) MethodBinds.MissingThrow("XRHandTracker.set_has_tracking_data");
         byte __a0 = hasData ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_has_tracking_data, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_has_tracking_data;
     public bool GetHasTrackingData()
     {
-        var __mb = __mb_get_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_has_tracking_data", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_has_tracking_data is not available in this engine build.");
-            __mb_get_has_tracking_data = __mb;
-        }
+        if (__mb_get_has_tracking_data == 0) MethodBinds.MissingThrow("XRHandTracker.get_has_tracking_data");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_has_tracking_data, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_hand_tracking_source;
     public void SetHandTrackingSource(XRHandTracker.HandTrackingSourceEnum source)
     {
-        var __mb = __mb_set_hand_tracking_source;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_hand_tracking_source", 2958308861);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_hand_tracking_source is not available in this engine build.");
-            __mb_set_hand_tracking_source = __mb;
-        }
+        if (__mb_set_hand_tracking_source == 0) MethodBinds.MissingThrow("XRHandTracker.set_hand_tracking_source");
         long __a0 = (long)source;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_tracking_source, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_tracking_source;
     public XRHandTracker.HandTrackingSourceEnum GetHandTrackingSource()
     {
-        var __mb = __mb_get_hand_tracking_source;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_hand_tracking_source", 2475045250);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_hand_tracking_source is not available in this engine build.");
-            __mb_get_hand_tracking_source = __mb;
-        }
+        if (__mb_get_hand_tracking_source == 0) MethodBinds.MissingThrow("XRHandTracker.get_hand_tracking_source");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_tracking_source, NativePtr, 0, (nint)(&__ret));
         return (XRHandTracker.HandTrackingSourceEnum)__ret;
     }
 
     private static nint __mb_set_hand_joint_flags;
     public void SetHandJointFlags(XRHandTracker.HandJoint joint, XRHandTracker.HandJointFlags flags)
     {
-        var __mb = __mb_set_hand_joint_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_hand_joint_flags", 3028437365);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_hand_joint_flags is not available in this engine build.");
-            __mb_set_hand_joint_flags = __mb;
-        }
+        if (__mb_set_hand_joint_flags == 0) MethodBinds.MissingThrow("XRHandTracker.set_hand_joint_flags");
         long __a0 = (long)joint;
         long __a1 = (long)flags;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_joint_flags, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_joint_flags;
     public XRHandTracker.HandJointFlags GetHandJointFlags(XRHandTracker.HandJoint joint)
     {
-        var __mb = __mb_get_hand_joint_flags;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_hand_joint_flags", 1730972401);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_hand_joint_flags is not available in this engine build.");
-            __mb_get_hand_joint_flags = __mb;
-        }
+        if (__mb_get_hand_joint_flags == 0) MethodBinds.MissingThrow("XRHandTracker.get_hand_joint_flags");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_flags, NativePtr, (nint)__args, (nint)(&__ret));
         return (XRHandTracker.HandJointFlags)__ret;
     }
 
     private static nint __mb_set_hand_joint_transform;
     public void SetHandJointTransform(XRHandTracker.HandJoint joint, Transform3D transform)
     {
-        var __mb = __mb_set_hand_joint_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_hand_joint_transform", 2529959613);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_hand_joint_transform is not available in this engine build.");
-            __mb_set_hand_joint_transform = __mb;
-        }
+        if (__mb_set_hand_joint_transform == 0) MethodBinds.MissingThrow("XRHandTracker.set_hand_joint_transform");
         long __a0 = (long)joint;
         var __a1 = transform;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_joint_transform, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_joint_transform;
     public Transform3D GetHandJointTransform(XRHandTracker.HandJoint joint)
     {
-        var __mb = __mb_get_hand_joint_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_hand_joint_transform", 1090840196);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_hand_joint_transform is not available in this engine build.");
-            __mb_get_hand_joint_transform = __mb;
-        }
+        if (__mb_get_hand_joint_transform == 0) MethodBinds.MissingThrow("XRHandTracker.get_hand_joint_transform");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_transform, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_hand_joint_radius;
     public void SetHandJointRadius(XRHandTracker.HandJoint joint, float radius)
     {
-        var __mb = __mb_set_hand_joint_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_hand_joint_radius", 2723659615);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_hand_joint_radius is not available in this engine build.");
-            __mb_set_hand_joint_radius = __mb;
-        }
+        if (__mb_set_hand_joint_radius == 0) MethodBinds.MissingThrow("XRHandTracker.set_hand_joint_radius");
         long __a0 = (long)joint;
         double __a1 = radius;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_joint_radius, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_joint_radius;
     public float GetHandJointRadius(XRHandTracker.HandJoint joint)
     {
-        var __mb = __mb_get_hand_joint_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_hand_joint_radius", 3400025734);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_hand_joint_radius is not available in this engine build.");
-            __mb_get_hand_joint_radius = __mb;
-        }
+        if (__mb_get_hand_joint_radius == 0) MethodBinds.MissingThrow("XRHandTracker.get_hand_joint_radius");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_radius, NativePtr, (nint)__args, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_hand_joint_linear_velocity;
     public void SetHandJointLinearVelocity(XRHandTracker.HandJoint joint, Vector3 linearVelocity)
     {
-        var __mb = __mb_set_hand_joint_linear_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_hand_joint_linear_velocity", 1978646737);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_hand_joint_linear_velocity is not available in this engine build.");
-            __mb_set_hand_joint_linear_velocity = __mb;
-        }
+        if (__mb_set_hand_joint_linear_velocity == 0) MethodBinds.MissingThrow("XRHandTracker.set_hand_joint_linear_velocity");
         long __a0 = (long)joint;
         var __a1 = linearVelocity;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_joint_linear_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_joint_linear_velocity;
     public Vector3 GetHandJointLinearVelocity(XRHandTracker.HandJoint joint)
     {
-        var __mb = __mb_get_hand_joint_linear_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_hand_joint_linear_velocity", 547240792);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_hand_joint_linear_velocity is not available in this engine build.");
-            __mb_get_hand_joint_linear_velocity = __mb;
-        }
+        if (__mb_get_hand_joint_linear_velocity == 0) MethodBinds.MissingThrow("XRHandTracker.get_hand_joint_linear_velocity");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_linear_velocity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_hand_joint_angular_velocity;
     public void SetHandJointAngularVelocity(XRHandTracker.HandJoint joint, Vector3 angularVelocity)
     {
-        var __mb = __mb_set_hand_joint_angular_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "set_hand_joint_angular_velocity", 1978646737);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.set_hand_joint_angular_velocity is not available in this engine build.");
-            __mb_set_hand_joint_angular_velocity = __mb;
-        }
+        if (__mb_set_hand_joint_angular_velocity == 0) MethodBinds.MissingThrow("XRHandTracker.set_hand_joint_angular_velocity");
         long __a0 = (long)joint;
         var __a1 = angularVelocity;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_hand_joint_angular_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hand_joint_angular_velocity;
     public Vector3 GetHandJointAngularVelocity(XRHandTracker.HandJoint joint)
     {
-        var __mb = __mb_get_hand_joint_angular_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRHandTracker", "get_hand_joint_angular_velocity", 547240792);
-            if (__mb == 0) throw new MissingMethodException("XRHandTracker.get_hand_joint_angular_velocity is not available in this engine build.");
-            __mb_get_hand_joint_angular_velocity = __mb;
-        }
+        if (__mb_get_hand_joint_angular_velocity == 0) MethodBinds.MissingThrow("XRHandTracker.get_hand_joint_angular_velocity");
         long __a0 = (long)joint;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hand_joint_angular_velocity, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_has_tracking_data = MethodBinds.ResolveBulk("XRHandTracker", "set_has_tracking_data", 2586408642);
+        __mb_get_has_tracking_data = MethodBinds.ResolveBulk("XRHandTracker", "get_has_tracking_data", 36873697);
+        __mb_set_hand_tracking_source = MethodBinds.ResolveBulk("XRHandTracker", "set_hand_tracking_source", 2958308861);
+        __mb_get_hand_tracking_source = MethodBinds.ResolveBulk("XRHandTracker", "get_hand_tracking_source", 2475045250);
+        __mb_set_hand_joint_flags = MethodBinds.ResolveBulk("XRHandTracker", "set_hand_joint_flags", 3028437365);
+        __mb_get_hand_joint_flags = MethodBinds.ResolveBulk("XRHandTracker", "get_hand_joint_flags", 1730972401);
+        __mb_set_hand_joint_transform = MethodBinds.ResolveBulk("XRHandTracker", "set_hand_joint_transform", 2529959613);
+        __mb_get_hand_joint_transform = MethodBinds.ResolveBulk("XRHandTracker", "get_hand_joint_transform", 1090840196);
+        __mb_set_hand_joint_radius = MethodBinds.ResolveBulk("XRHandTracker", "set_hand_joint_radius", 2723659615);
+        __mb_get_hand_joint_radius = MethodBinds.ResolveBulk("XRHandTracker", "get_hand_joint_radius", 3400025734);
+        __mb_set_hand_joint_linear_velocity = MethodBinds.ResolveBulk("XRHandTracker", "set_hand_joint_linear_velocity", 1978646737);
+        __mb_get_hand_joint_linear_velocity = MethodBinds.ResolveBulk("XRHandTracker", "get_hand_joint_linear_velocity", 547240792);
+        __mb_set_hand_joint_angular_velocity = MethodBinds.ResolveBulk("XRHandTracker", "set_hand_joint_angular_velocity", 1978646737);
+        __mb_get_hand_joint_angular_velocity = MethodBinds.ResolveBulk("XRHandTracker", "get_hand_joint_angular_velocity", 547240792);
     }
 }
 
@@ -1799,177 +1499,105 @@ public unsafe partial class XRInterface : RefCounted
     private static nint __mb_get_name;
     public StringName GetName()
     {
-        var __mb = __mb_get_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_name", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_name is not available in this engine build.");
-            __mb_get_name = __mb;
-        }
+        if (__mb_get_name == 0) MethodBinds.MissingThrow("XRInterface.get_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_name, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_get_capabilities;
     public uint GetCapabilities()
     {
-        var __mb = __mb_get_capabilities;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_capabilities", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_capabilities is not available in this engine build.");
-            __mb_get_capabilities = __mb;
-        }
+        if (__mb_get_capabilities == 0) MethodBinds.MissingThrow("XRInterface.get_capabilities");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_capabilities, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_is_primary;
     public bool IsPrimary()
     {
-        var __mb = __mb_is_primary;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "is_primary", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.is_primary is not available in this engine build.");
-            __mb_is_primary = __mb;
-        }
+        if (__mb_is_primary == 0) MethodBinds.MissingThrow("XRInterface.is_primary");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_primary, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_primary;
     public void SetPrimary(bool primary)
     {
-        var __mb = __mb_set_primary;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "set_primary", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.set_primary is not available in this engine build.");
-            __mb_set_primary = __mb;
-        }
+        if (__mb_set_primary == 0) MethodBinds.MissingThrow("XRInterface.set_primary");
         byte __a0 = primary ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_primary, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_initialized;
     public bool IsInitialized()
     {
-        var __mb = __mb_is_initialized;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "is_initialized", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.is_initialized is not available in this engine build.");
-            __mb_is_initialized = __mb;
-        }
+        if (__mb_is_initialized == 0) MethodBinds.MissingThrow("XRInterface.is_initialized");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_initialized, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_initialize;
     public bool Initialize()
     {
-        var __mb = __mb_initialize;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "initialize", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.initialize is not available in this engine build.");
-            __mb_initialize = __mb;
-        }
+        if (__mb_initialize == 0) MethodBinds.MissingThrow("XRInterface.initialize");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_initialize, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_uninitialize;
     public void Uninitialize()
     {
-        var __mb = __mb_uninitialize;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "uninitialize", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.uninitialize is not available in this engine build.");
-            __mb_uninitialize = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_uninitialize == 0) MethodBinds.MissingThrow("XRInterface.uninitialize");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_uninitialize, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_system_info;
     public Godot.Collections.Dictionary GetSystemInfo()
     {
-        var __mb = __mb_get_system_info;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_system_info", 2382534195);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_system_info is not available in this engine build.");
-            __mb_get_system_info = __mb;
-        }
+        if (__mb_get_system_info == 0) MethodBinds.MissingThrow("XRInterface.get_system_info");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_system_info, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_tracking_status;
     public XRInterface.TrackingStatus GetTrackingStatus()
     {
-        var __mb = __mb_get_tracking_status;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_tracking_status", 167423259);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_tracking_status is not available in this engine build.");
-            __mb_get_tracking_status = __mb;
-        }
+        if (__mb_get_tracking_status == 0) MethodBinds.MissingThrow("XRInterface.get_tracking_status");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracking_status, NativePtr, 0, (nint)(&__ret));
         return (XRInterface.TrackingStatus)__ret;
     }
 
     private static nint __mb_get_render_target_size;
     public Vector2 GetRenderTargetSize()
     {
-        var __mb = __mb_get_render_target_size;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_render_target_size", 1497962370);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_render_target_size is not available in this engine build.");
-            __mb_get_render_target_size = __mb;
-        }
+        if (__mb_get_render_target_size == 0) MethodBinds.MissingThrow("XRInterface.get_render_target_size");
         var __ret = default(Vector2);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_render_target_size, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_view_count;
     public uint GetViewCount()
     {
-        var __mb = __mb_get_view_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_view_count", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_view_count is not available in this engine build.");
-            __mb_get_view_count = __mb;
-        }
+        if (__mb_get_view_count == 0) MethodBinds.MissingThrow("XRInterface.get_view_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_view_count, NativePtr, 0, (nint)(&__ret));
         return unchecked((uint)__ret);
     }
 
     private static nint __mb_trigger_haptic_pulse;
     public void TriggerHapticPulse(string actionName, StringName trackerName, double frequency, double amplitude, double durationSec, double delaySec)
     {
-        var __mb = __mb_trigger_haptic_pulse;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "trigger_haptic_pulse", 3752640163);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.trigger_haptic_pulse is not available in this engine build.");
-            __mb_trigger_haptic_pulse = __mb;
-        }
+        if (__mb_trigger_haptic_pulse == 0) MethodBinds.MissingThrow("XRInterface.trigger_haptic_pulse");
         ulong __a0 = NativeString.Create(actionName);
         ulong __a1 = trackerName.NativeValue;
         double __a2 = frequency;
@@ -1983,210 +1611,132 @@ public unsafe partial class XRInterface : RefCounted
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
         __args[5] = (nint)(&__a5);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_trigger_haptic_pulse, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_supports_play_area_mode;
     public bool SupportsPlayAreaMode(XRInterface.PlayAreaMode mode)
     {
-        var __mb = __mb_supports_play_area_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "supports_play_area_mode", 3429955281);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.supports_play_area_mode is not available in this engine build.");
-            __mb_supports_play_area_mode = __mb;
-        }
+        if (__mb_supports_play_area_mode == 0) MethodBinds.MissingThrow("XRInterface.supports_play_area_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_supports_play_area_mode, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_play_area_mode;
     public XRInterface.PlayAreaMode GetPlayAreaMode()
     {
-        var __mb = __mb_get_play_area_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_play_area_mode", 1615132885);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_play_area_mode is not available in this engine build.");
-            __mb_get_play_area_mode = __mb;
-        }
+        if (__mb_get_play_area_mode == 0) MethodBinds.MissingThrow("XRInterface.get_play_area_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_play_area_mode, NativePtr, 0, (nint)(&__ret));
         return (XRInterface.PlayAreaMode)__ret;
     }
 
     private static nint __mb_set_play_area_mode;
     public bool SetPlayAreaMode(XRInterface.PlayAreaMode mode)
     {
-        var __mb = __mb_set_play_area_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "set_play_area_mode", 3429955281);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.set_play_area_mode is not available in this engine build.");
-            __mb_set_play_area_mode = __mb;
-        }
+        if (__mb_set_play_area_mode == 0) MethodBinds.MissingThrow("XRInterface.set_play_area_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_play_area_mode, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_play_area;
     public Vector3[] GetPlayArea()
     {
-        var __mb = __mb_get_play_area;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_play_area", 497664490);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_play_area is not available in this engine build.");
-            __mb_get_play_area = __mb;
-        }
+        if (__mb_get_play_area == 0) MethodBinds.MissingThrow("XRInterface.get_play_area");
         Opaque16 __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_play_area, NativePtr, 0, (nint)(&__ret));
         return Packed.ToPodArray<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY, GdExtensionInterface.PackedVector3ArrayOperatorIndex, ref __ret);
     }
 
     private static nint __mb_get_anchor_detection_is_enabled;
     public bool GetAnchorDetectionIsEnabled()
     {
-        var __mb = __mb_get_anchor_detection_is_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_anchor_detection_is_enabled", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_anchor_detection_is_enabled is not available in this engine build.");
-            __mb_get_anchor_detection_is_enabled = __mb;
-        }
+        if (__mb_get_anchor_detection_is_enabled == 0) MethodBinds.MissingThrow("XRInterface.get_anchor_detection_is_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_anchor_detection_is_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_anchor_detection_is_enabled;
     public void SetAnchorDetectionIsEnabled(bool enable)
     {
-        var __mb = __mb_set_anchor_detection_is_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "set_anchor_detection_is_enabled", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.set_anchor_detection_is_enabled is not available in this engine build.");
-            __mb_set_anchor_detection_is_enabled = __mb;
-        }
+        if (__mb_set_anchor_detection_is_enabled == 0) MethodBinds.MissingThrow("XRInterface.set_anchor_detection_is_enabled");
         byte __a0 = enable ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_anchor_detection_is_enabled, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_camera_feed_id;
     public int GetCameraFeedId()
     {
-        var __mb = __mb_get_camera_feed_id;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_camera_feed_id", 2455072627);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_camera_feed_id is not available in this engine build.");
-            __mb_get_camera_feed_id = __mb;
-        }
+        if (__mb_get_camera_feed_id == 0) MethodBinds.MissingThrow("XRInterface.get_camera_feed_id");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_camera_feed_id, NativePtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_is_passthrough_supported;
     public bool IsPassthroughSupported()
     {
-        var __mb = __mb_is_passthrough_supported;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "is_passthrough_supported", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.is_passthrough_supported is not available in this engine build.");
-            __mb_is_passthrough_supported = __mb;
-        }
+        if (__mb_is_passthrough_supported == 0) MethodBinds.MissingThrow("XRInterface.is_passthrough_supported");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_passthrough_supported, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_is_passthrough_enabled;
     public bool IsPassthroughEnabled()
     {
-        var __mb = __mb_is_passthrough_enabled;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "is_passthrough_enabled", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.is_passthrough_enabled is not available in this engine build.");
-            __mb_is_passthrough_enabled = __mb;
-        }
+        if (__mb_is_passthrough_enabled == 0) MethodBinds.MissingThrow("XRInterface.is_passthrough_enabled");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_passthrough_enabled, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_start_passthrough;
     public bool StartPassthrough()
     {
-        var __mb = __mb_start_passthrough;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "start_passthrough", 2240911060);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.start_passthrough is not available in this engine build.");
-            __mb_start_passthrough = __mb;
-        }
+        if (__mb_start_passthrough == 0) MethodBinds.MissingThrow("XRInterface.start_passthrough");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_start_passthrough, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_stop_passthrough;
     public void StopPassthrough()
     {
-        var __mb = __mb_stop_passthrough;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "stop_passthrough", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.stop_passthrough is not available in this engine build.");
-            __mb_stop_passthrough = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, 0);
+        if (__mb_stop_passthrough == 0) MethodBinds.MissingThrow("XRInterface.stop_passthrough");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_stop_passthrough, NativePtr, 0, 0);
     }
 
     private static nint __mb_get_transform_for_view;
     public Transform3D GetTransformForView(uint view, Transform3D camTransform)
     {
-        var __mb = __mb_get_transform_for_view;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_transform_for_view", 518934792);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_transform_for_view is not available in this engine build.");
-            __mb_get_transform_for_view = __mb;
-        }
+        if (__mb_get_transform_for_view == 0) MethodBinds.MissingThrow("XRInterface.get_transform_for_view");
         long __a0 = unchecked((long)view);
         var __a1 = camTransform;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_transform_for_view, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_projection_for_view;
     public Projection GetProjectionForView(uint view, double aspect, double near, double far)
     {
-        var __mb = __mb_get_projection_for_view;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_projection_for_view", 3766090294);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_projection_for_view is not available in this engine build.");
-            __mb_get_projection_for_view = __mb;
-        }
+        if (__mb_get_projection_for_view == 0) MethodBinds.MissingThrow("XRInterface.get_projection_for_view");
         long __a0 = unchecked((long)view);
         double __a1 = aspect;
         double __a2 = near;
@@ -2197,56 +1747,70 @@ public unsafe partial class XRInterface : RefCounted
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         var __ret = default(Projection);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_projection_for_view, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_supported_environment_blend_modes;
     public Godot.Collections.Array GetSupportedEnvironmentBlendModes()
     {
-        var __mb = __mb_get_supported_environment_blend_modes;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_supported_environment_blend_modes", 2915620761);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_supported_environment_blend_modes is not available in this engine build.");
-            __mb_get_supported_environment_blend_modes = __mb;
-        }
+        if (__mb_get_supported_environment_blend_modes == 0) MethodBinds.MissingThrow("XRInterface.get_supported_environment_blend_modes");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_supported_environment_blend_modes, NativePtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_set_environment_blend_mode;
     public bool SetEnvironmentBlendMode(XRInterface.EnvironmentBlendModeEnum mode)
     {
-        var __mb = __mb_set_environment_blend_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "set_environment_blend_mode", 551152418);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.set_environment_blend_mode is not available in this engine build.");
-            __mb_set_environment_blend_mode = __mb;
-        }
+        if (__mb_set_environment_blend_mode == 0) MethodBinds.MissingThrow("XRInterface.set_environment_blend_mode");
         long __a0 = (long)mode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_environment_blend_mode, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_environment_blend_mode;
     public XRInterface.EnvironmentBlendModeEnum GetEnvironmentBlendMode()
     {
-        var __mb = __mb_get_environment_blend_mode;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterface", "get_environment_blend_mode", 1984334071);
-            if (__mb == 0) throw new MissingMethodException("XRInterface.get_environment_blend_mode is not available in this engine build.");
-            __mb_get_environment_blend_mode = __mb;
-        }
+        if (__mb_get_environment_blend_mode == 0) MethodBinds.MissingThrow("XRInterface.get_environment_blend_mode");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_environment_blend_mode, NativePtr, 0, (nint)(&__ret));
         return (XRInterface.EnvironmentBlendModeEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_name = MethodBinds.ResolveBulk("XRInterface", "get_name", 2002593661);
+        __mb_get_capabilities = MethodBinds.ResolveBulk("XRInterface", "get_capabilities", 3905245786);
+        __mb_is_primary = MethodBinds.ResolveBulk("XRInterface", "is_primary", 2240911060);
+        __mb_set_primary = MethodBinds.ResolveBulk("XRInterface", "set_primary", 2586408642);
+        __mb_is_initialized = MethodBinds.ResolveBulk("XRInterface", "is_initialized", 36873697);
+        __mb_initialize = MethodBinds.ResolveBulk("XRInterface", "initialize", 2240911060);
+        __mb_uninitialize = MethodBinds.ResolveBulk("XRInterface", "uninitialize", 3218959716);
+        __mb_get_system_info = MethodBinds.ResolveBulk("XRInterface", "get_system_info", 2382534195);
+        __mb_get_tracking_status = MethodBinds.ResolveBulk("XRInterface", "get_tracking_status", 167423259);
+        __mb_get_render_target_size = MethodBinds.ResolveBulk("XRInterface", "get_render_target_size", 1497962370);
+        __mb_get_view_count = MethodBinds.ResolveBulk("XRInterface", "get_view_count", 2455072627);
+        __mb_trigger_haptic_pulse = MethodBinds.ResolveBulk("XRInterface", "trigger_haptic_pulse", 3752640163);
+        __mb_supports_play_area_mode = MethodBinds.ResolveBulk("XRInterface", "supports_play_area_mode", 3429955281);
+        __mb_get_play_area_mode = MethodBinds.ResolveBulk("XRInterface", "get_play_area_mode", 1615132885);
+        __mb_set_play_area_mode = MethodBinds.ResolveBulk("XRInterface", "set_play_area_mode", 3429955281);
+        __mb_get_play_area = MethodBinds.ResolveBulk("XRInterface", "get_play_area", 497664490);
+        __mb_get_anchor_detection_is_enabled = MethodBinds.ResolveBulk("XRInterface", "get_anchor_detection_is_enabled", 36873697);
+        __mb_set_anchor_detection_is_enabled = MethodBinds.ResolveBulk("XRInterface", "set_anchor_detection_is_enabled", 2586408642);
+        __mb_get_camera_feed_id = MethodBinds.ResolveBulk("XRInterface", "get_camera_feed_id", 2455072627);
+        __mb_is_passthrough_supported = MethodBinds.ResolveBulk("XRInterface", "is_passthrough_supported", 2240911060);
+        __mb_is_passthrough_enabled = MethodBinds.ResolveBulk("XRInterface", "is_passthrough_enabled", 2240911060);
+        __mb_start_passthrough = MethodBinds.ResolveBulk("XRInterface", "start_passthrough", 2240911060);
+        __mb_stop_passthrough = MethodBinds.ResolveBulk("XRInterface", "stop_passthrough", 3218959716);
+        __mb_get_transform_for_view = MethodBinds.ResolveBulk("XRInterface", "get_transform_for_view", 518934792);
+        __mb_get_projection_for_view = MethodBinds.ResolveBulk("XRInterface", "get_projection_for_view", 3766090294);
+        __mb_get_supported_environment_blend_modes = MethodBinds.ResolveBulk("XRInterface", "get_supported_environment_blend_modes", 2915620761);
+        __mb_set_environment_blend_mode = MethodBinds.ResolveBulk("XRInterface", "set_environment_blend_mode", 551152418);
+        __mb_get_environment_blend_mode = MethodBinds.ResolveBulk("XRInterface", "get_environment_blend_mode", 1984334071);
     }
 }
 
@@ -2262,58 +1826,34 @@ public unsafe partial class XRInterfaceExtension : XRInterface
     private static nint __mb_get_color_texture;
     public Rid GetColorTexture()
     {
-        var __mb = __mb_get_color_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterfaceExtension", "get_color_texture", 529393457);
-            if (__mb == 0) throw new MissingMethodException("XRInterfaceExtension.get_color_texture is not available in this engine build.");
-            __mb_get_color_texture = __mb;
-        }
+        if (__mb_get_color_texture == 0) MethodBinds.MissingThrow("XRInterfaceExtension.get_color_texture");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_color_texture, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_depth_texture;
     public Rid GetDepthTexture()
     {
-        var __mb = __mb_get_depth_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterfaceExtension", "get_depth_texture", 529393457);
-            if (__mb == 0) throw new MissingMethodException("XRInterfaceExtension.get_depth_texture is not available in this engine build.");
-            __mb_get_depth_texture = __mb;
-        }
+        if (__mb_get_depth_texture == 0) MethodBinds.MissingThrow("XRInterfaceExtension.get_depth_texture");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_depth_texture, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_velocity_texture;
     public Rid GetVelocityTexture()
     {
-        var __mb = __mb_get_velocity_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterfaceExtension", "get_velocity_texture", 529393457);
-            if (__mb == 0) throw new MissingMethodException("XRInterfaceExtension.get_velocity_texture is not available in this engine build.");
-            __mb_get_velocity_texture = __mb;
-        }
+        if (__mb_get_velocity_texture == 0) MethodBinds.MissingThrow("XRInterfaceExtension.get_velocity_texture");
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_velocity_texture, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_add_blit;
     public void AddBlit(Rid renderTarget, Rect2 srcRect, Rect2I dstRect, bool useLayer, uint layer, bool applyLensDistortion, Vector2 eyeCenter, double k1, double k2, double upscale, double aspectRatio)
     {
-        var __mb = __mb_add_blit;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterfaceExtension", "add_blit", 258596971);
-            if (__mb == 0) throw new MissingMethodException("XRInterfaceExtension.add_blit is not available in this engine build.");
-            __mb_add_blit = __mb;
-        }
+        if (__mb_add_blit == 0) MethodBinds.MissingThrow("XRInterfaceExtension.add_blit");
         var __a0 = renderTarget;
         var __a1 = srcRect;
         var __a2 = dstRect;
@@ -2337,24 +1877,18 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         __args[8] = (nint)(&__a8);
         __args[9] = (nint)(&__a9);
         __args[10] = (nint)(&__a10);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_blit, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_render_target_texture;
     public Rid GetRenderTargetTexture(Rid renderTarget)
     {
-        var __mb = __mb_get_render_target_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRInterfaceExtension", "get_render_target_texture", 41030802);
-            if (__mb == 0) throw new MissingMethodException("XRInterfaceExtension.get_render_target_texture is not available in this engine build.");
-            __mb_get_render_target_texture = __mb;
-        }
+        if (__mb_get_render_target_texture == 0) MethodBinds.MissingThrow("XRInterfaceExtension.get_render_target_texture");
         var __a0 = renderTarget;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_render_target_texture, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret;
     }
 
@@ -2642,6 +2176,15 @@ public unsafe partial class XRInterfaceExtension : XRInterface
         }
         return base.__CallVirtual(nameSn, args, ret);
     }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_color_texture = MethodBinds.ResolveBulk("XRInterfaceExtension", "get_color_texture", 529393457);
+        __mb_get_depth_texture = MethodBinds.ResolveBulk("XRInterfaceExtension", "get_depth_texture", 529393457);
+        __mb_get_velocity_texture = MethodBinds.ResolveBulk("XRInterfaceExtension", "get_velocity_texture", 529393457);
+        __mb_add_blit = MethodBinds.ResolveBulk("XRInterfaceExtension", "add_blit", 258596971);
+        __mb_get_render_target_texture = MethodBinds.ResolveBulk("XRInterfaceExtension", "get_render_target_texture", 41030802);
+    }
 }
 
 public unsafe partial class XRNode3D : Node3D
@@ -2682,151 +2225,91 @@ public unsafe partial class XRNode3D : Node3D
     private static nint __mb_set_tracker;
     public void SetTracker(StringName trackerName)
     {
-        var __mb = __mb_set_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "set_tracker", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.set_tracker is not available in this engine build.");
-            __mb_set_tracker = __mb;
-        }
+        if (__mb_set_tracker == 0) MethodBinds.MissingThrow("XRNode3D.set_tracker");
         ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tracker;
     public StringName GetTracker()
     {
-        var __mb = __mb_get_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "get_tracker", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.get_tracker is not available in this engine build.");
-            __mb_get_tracker = __mb;
-        }
+        if (__mb_get_tracker == 0) MethodBinds.MissingThrow("XRNode3D.get_tracker");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_pose_name;
     public void SetPoseName(StringName pose)
     {
-        var __mb = __mb_set_pose_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "set_pose_name", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.set_pose_name is not available in this engine build.");
-            __mb_set_pose_name = __mb;
-        }
+        if (__mb_set_pose_name == 0) MethodBinds.MissingThrow("XRNode3D.set_pose_name");
         ulong __a0 = pose.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pose_name, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_pose_name;
     public StringName GetPoseName()
     {
-        var __mb = __mb_get_pose_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "get_pose_name", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.get_pose_name is not available in this engine build.");
-            __mb_get_pose_name = __mb;
-        }
+        if (__mb_get_pose_name == 0) MethodBinds.MissingThrow("XRNode3D.get_pose_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pose_name, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_show_when_tracked;
     public void SetShowWhenTracked(bool show)
     {
-        var __mb = __mb_set_show_when_tracked;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "set_show_when_tracked", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.set_show_when_tracked is not available in this engine build.");
-            __mb_set_show_when_tracked = __mb;
-        }
+        if (__mb_set_show_when_tracked == 0) MethodBinds.MissingThrow("XRNode3D.set_show_when_tracked");
         byte __a0 = show ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_show_when_tracked, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_show_when_tracked;
     public bool GetShowWhenTracked()
     {
-        var __mb = __mb_get_show_when_tracked;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "get_show_when_tracked", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.get_show_when_tracked is not available in this engine build.");
-            __mb_get_show_when_tracked = __mb;
-        }
+        if (__mb_get_show_when_tracked == 0) MethodBinds.MissingThrow("XRNode3D.get_show_when_tracked");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_show_when_tracked, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_is_active;
     public bool GetIsActive()
     {
-        var __mb = __mb_get_is_active;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "get_is_active", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.get_is_active is not available in this engine build.");
-            __mb_get_is_active = __mb;
-        }
+        if (__mb_get_is_active == 0) MethodBinds.MissingThrow("XRNode3D.get_is_active");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_is_active, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_has_tracking_data;
     public bool GetHasTrackingData()
     {
-        var __mb = __mb_get_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "get_has_tracking_data", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.get_has_tracking_data is not available in this engine build.");
-            __mb_get_has_tracking_data = __mb;
-        }
+        if (__mb_get_has_tracking_data == 0) MethodBinds.MissingThrow("XRNode3D.get_has_tracking_data");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_has_tracking_data, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_pose;
     public XRPose? GetPose()
     {
-        var __mb = __mb_get_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "get_pose", 2806551826);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.get_pose is not available in this engine build.");
-            __mb_get_pose = __mb;
-        }
+        if (__mb_get_pose == 0) MethodBinds.MissingThrow("XRNode3D.get_pose");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pose, NativePtr, 0, (nint)(&__ret));
         return (XRPose?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_trigger_haptic_pulse;
     public void TriggerHapticPulse(string actionName, double frequency, double amplitude, double durationSec, double delaySec)
     {
-        var __mb = __mb_trigger_haptic_pulse;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRNode3D", "trigger_haptic_pulse", 508576839);
-            if (__mb == 0) throw new MissingMethodException("XRNode3D.trigger_haptic_pulse is not available in this engine build.");
-            __mb_trigger_haptic_pulse = __mb;
-        }
+        if (__mb_trigger_haptic_pulse == 0) MethodBinds.MissingThrow("XRNode3D.trigger_haptic_pulse");
         ulong __a0 = NativeString.Create(actionName);
         double __a1 = frequency;
         double __a2 = amplitude;
@@ -2838,8 +2321,22 @@ public unsafe partial class XRNode3D : Node3D
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_trigger_haptic_pulse, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_tracker = MethodBinds.ResolveBulk("XRNode3D", "set_tracker", 3304788590);
+        __mb_get_tracker = MethodBinds.ResolveBulk("XRNode3D", "get_tracker", 2002593661);
+        __mb_set_pose_name = MethodBinds.ResolveBulk("XRNode3D", "set_pose_name", 3304788590);
+        __mb_get_pose_name = MethodBinds.ResolveBulk("XRNode3D", "get_pose_name", 2002593661);
+        __mb_set_show_when_tracked = MethodBinds.ResolveBulk("XRNode3D", "set_show_when_tracked", 2586408642);
+        __mb_get_show_when_tracked = MethodBinds.ResolveBulk("XRNode3D", "get_show_when_tracked", 36873697);
+        __mb_get_is_active = MethodBinds.ResolveBulk("XRNode3D", "get_is_active", 36873697);
+        __mb_get_has_tracking_data = MethodBinds.ResolveBulk("XRNode3D", "get_has_tracking_data", 36873697);
+        __mb_get_pose = MethodBinds.ResolveBulk("XRNode3D", "get_pose", 2806551826);
+        __mb_trigger_haptic_pulse = MethodBinds.ResolveBulk("XRNode3D", "trigger_haptic_pulse", 508576839);
     }
 }
 
@@ -2867,63 +2364,47 @@ public unsafe partial class XROrigin3D : Node3D
     private static nint __mb_set_world_scale;
     public void SetWorldScale(float worldScale)
     {
-        var __mb = __mb_set_world_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XROrigin3D", "set_world_scale", 373806689);
-            if (__mb == 0) throw new MissingMethodException("XROrigin3D.set_world_scale is not available in this engine build.");
-            __mb_set_world_scale = __mb;
-        }
+        if (__mb_set_world_scale == 0) MethodBinds.MissingThrow("XROrigin3D.set_world_scale");
         double __a0 = worldScale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_world_scale, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_world_scale;
     public float GetWorldScale()
     {
-        var __mb = __mb_get_world_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XROrigin3D", "get_world_scale", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("XROrigin3D.get_world_scale is not available in this engine build.");
-            __mb_get_world_scale = __mb;
-        }
+        if (__mb_get_world_scale == 0) MethodBinds.MissingThrow("XROrigin3D.get_world_scale");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_world_scale, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_current;
     public void SetCurrent(bool enabled)
     {
-        var __mb = __mb_set_current;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XROrigin3D", "set_current", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XROrigin3D.set_current is not available in this engine build.");
-            __mb_set_current = __mb;
-        }
+        if (__mb_set_current == 0) MethodBinds.MissingThrow("XROrigin3D.set_current");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_current, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_current;
     public bool IsCurrent()
     {
-        var __mb = __mb_is_current;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XROrigin3D", "is_current", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XROrigin3D.is_current is not available in this engine build.");
-            __mb_is_current = __mb;
-        }
+        if (__mb_is_current == 0) MethodBinds.MissingThrow("XROrigin3D.is_current");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_current, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_world_scale = MethodBinds.ResolveBulk("XROrigin3D", "set_world_scale", 373806689);
+        __mb_get_world_scale = MethodBinds.ResolveBulk("XROrigin3D", "get_world_scale", 1740695150);
+        __mb_set_current = MethodBinds.ResolveBulk("XROrigin3D", "set_current", 2586408642);
+        __mb_is_current = MethodBinds.ResolveBulk("XROrigin3D", "is_current", 36873697);
     }
 }
 
@@ -2982,202 +2463,141 @@ public unsafe partial class XRPose : RefCounted
     private static nint __mb_set_has_tracking_data;
     public void SetHasTrackingData(bool hasTrackingData)
     {
-        var __mb = __mb_set_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "set_has_tracking_data", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRPose.set_has_tracking_data is not available in this engine build.");
-            __mb_set_has_tracking_data = __mb;
-        }
+        if (__mb_set_has_tracking_data == 0) MethodBinds.MissingThrow("XRPose.set_has_tracking_data");
         byte __a0 = hasTrackingData ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_has_tracking_data, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_has_tracking_data;
     public bool GetHasTrackingData()
     {
-        var __mb = __mb_get_has_tracking_data;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_has_tracking_data", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_has_tracking_data is not available in this engine build.");
-            __mb_get_has_tracking_data = __mb;
-        }
+        if (__mb_get_has_tracking_data == 0) MethodBinds.MissingThrow("XRPose.get_has_tracking_data");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_has_tracking_data, NativePtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_set_name;
     public void SetName(StringName name)
     {
-        var __mb = __mb_set_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "set_name", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRPose.set_name is not available in this engine build.");
-            __mb_set_name = __mb;
-        }
+        if (__mb_set_name == 0) MethodBinds.MissingThrow("XRPose.set_name");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_name, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_name;
     public StringName GetName()
     {
-        var __mb = __mb_get_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_name", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_name is not available in this engine build.");
-            __mb_get_name = __mb;
-        }
+        if (__mb_get_name == 0) MethodBinds.MissingThrow("XRPose.get_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_name, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_transform;
     public void SetTransform(Transform3D transform)
     {
-        var __mb = __mb_set_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "set_transform", 2952846383);
-            if (__mb == 0) throw new MissingMethodException("XRPose.set_transform is not available in this engine build.");
-            __mb_set_transform = __mb;
-        }
+        if (__mb_set_transform == 0) MethodBinds.MissingThrow("XRPose.set_transform");
         var __a0 = transform;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_transform, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_transform;
     public Transform3D GetTransform()
     {
-        var __mb = __mb_get_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_transform", 3229777777);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_transform is not available in this engine build.");
-            __mb_get_transform = __mb;
-        }
+        if (__mb_get_transform == 0) MethodBinds.MissingThrow("XRPose.get_transform");
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_transform, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_get_adjusted_transform;
     public Transform3D GetAdjustedTransform()
     {
-        var __mb = __mb_get_adjusted_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_adjusted_transform", 3229777777);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_adjusted_transform is not available in this engine build.");
-            __mb_get_adjusted_transform = __mb;
-        }
+        if (__mb_get_adjusted_transform == 0) MethodBinds.MissingThrow("XRPose.get_adjusted_transform");
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_adjusted_transform, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_linear_velocity;
     public void SetLinearVelocity(Vector3 velocity)
     {
-        var __mb = __mb_set_linear_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "set_linear_velocity", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("XRPose.set_linear_velocity is not available in this engine build.");
-            __mb_set_linear_velocity = __mb;
-        }
+        if (__mb_set_linear_velocity == 0) MethodBinds.MissingThrow("XRPose.set_linear_velocity");
         var __a0 = velocity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_linear_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_linear_velocity;
     public Vector3 GetLinearVelocity()
     {
-        var __mb = __mb_get_linear_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_linear_velocity", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_linear_velocity is not available in this engine build.");
-            __mb_get_linear_velocity = __mb;
-        }
+        if (__mb_get_linear_velocity == 0) MethodBinds.MissingThrow("XRPose.get_linear_velocity");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_linear_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_angular_velocity;
     public void SetAngularVelocity(Vector3 velocity)
     {
-        var __mb = __mb_set_angular_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "set_angular_velocity", 3460891852);
-            if (__mb == 0) throw new MissingMethodException("XRPose.set_angular_velocity is not available in this engine build.");
-            __mb_set_angular_velocity = __mb;
-        }
+        if (__mb_set_angular_velocity == 0) MethodBinds.MissingThrow("XRPose.set_angular_velocity");
         var __a0 = velocity;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_angular_velocity, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_angular_velocity;
     public Vector3 GetAngularVelocity()
     {
-        var __mb = __mb_get_angular_velocity;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_angular_velocity", 3360562783);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_angular_velocity is not available in this engine build.");
-            __mb_get_angular_velocity = __mb;
-        }
+        if (__mb_get_angular_velocity == 0) MethodBinds.MissingThrow("XRPose.get_angular_velocity");
         var __ret = default(Vector3);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_angular_velocity, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_tracking_confidence;
     public void SetTrackingConfidence(XRPose.TrackingConfidenceEnum trackingConfidence)
     {
-        var __mb = __mb_set_tracking_confidence;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "set_tracking_confidence", 4171656666);
-            if (__mb == 0) throw new MissingMethodException("XRPose.set_tracking_confidence is not available in this engine build.");
-            __mb_set_tracking_confidence = __mb;
-        }
+        if (__mb_set_tracking_confidence == 0) MethodBinds.MissingThrow("XRPose.set_tracking_confidence");
         long __a0 = (long)trackingConfidence;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracking_confidence, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tracking_confidence;
     public XRPose.TrackingConfidenceEnum GetTrackingConfidence()
     {
-        var __mb = __mb_get_tracking_confidence;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPose", "get_tracking_confidence", 2064923680);
-            if (__mb == 0) throw new MissingMethodException("XRPose.get_tracking_confidence is not available in this engine build.");
-            __mb_get_tracking_confidence = __mb;
-        }
+        if (__mb_get_tracking_confidence == 0) MethodBinds.MissingThrow("XRPose.get_tracking_confidence");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracking_confidence, NativePtr, 0, (nint)(&__ret));
         return (XRPose.TrackingConfidenceEnum)__ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_set_has_tracking_data = MethodBinds.ResolveBulk("XRPose", "set_has_tracking_data", 2586408642);
+        __mb_get_has_tracking_data = MethodBinds.ResolveBulk("XRPose", "get_has_tracking_data", 36873697);
+        __mb_set_name = MethodBinds.ResolveBulk("XRPose", "set_name", 3304788590);
+        __mb_get_name = MethodBinds.ResolveBulk("XRPose", "get_name", 2002593661);
+        __mb_set_transform = MethodBinds.ResolveBulk("XRPose", "set_transform", 2952846383);
+        __mb_get_transform = MethodBinds.ResolveBulk("XRPose", "get_transform", 3229777777);
+        __mb_get_adjusted_transform = MethodBinds.ResolveBulk("XRPose", "get_adjusted_transform", 3229777777);
+        __mb_set_linear_velocity = MethodBinds.ResolveBulk("XRPose", "set_linear_velocity", 3460891852);
+        __mb_get_linear_velocity = MethodBinds.ResolveBulk("XRPose", "get_linear_velocity", 3360562783);
+        __mb_set_angular_velocity = MethodBinds.ResolveBulk("XRPose", "set_angular_velocity", 3460891852);
+        __mb_get_angular_velocity = MethodBinds.ResolveBulk("XRPose", "get_angular_velocity", 3360562783);
+        __mb_set_tracking_confidence = MethodBinds.ResolveBulk("XRPose", "set_tracking_confidence", 4171656666);
+        __mb_get_tracking_confidence = MethodBinds.ResolveBulk("XRPose", "get_tracking_confidence", 2064923680);
     }
 }
 
@@ -3269,128 +2689,80 @@ public unsafe partial class XRPositionalTracker : XRTracker
     private static nint __mb_get_tracker_profile;
     public string GetTrackerProfile()
     {
-        var __mb = __mb_get_tracker_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "get_tracker_profile", 201670096);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_tracker_profile is not available in this engine build.");
-            __mb_get_tracker_profile = __mb;
-        }
+        if (__mb_get_tracker_profile == 0) MethodBinds.MissingThrow("XRPositionalTracker.get_tracker_profile");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker_profile, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_tracker_profile;
     public void SetTrackerProfile(string profile)
     {
-        var __mb = __mb_set_tracker_profile;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "set_tracker_profile", 83702148);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_tracker_profile is not available in this engine build.");
-            __mb_set_tracker_profile = __mb;
-        }
+        if (__mb_set_tracker_profile == 0) MethodBinds.MissingThrow("XRPositionalTracker.set_tracker_profile");
         ulong __a0 = NativeString.Create(profile);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker_profile, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
     }
 
     private static nint __mb_get_tracker_hand;
     public XRPositionalTracker.TrackerHand GetTrackerHand()
     {
-        var __mb = __mb_get_tracker_hand;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "get_tracker_hand", 4181770860);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_tracker_hand is not available in this engine build.");
-            __mb_get_tracker_hand = __mb;
-        }
+        if (__mb_get_tracker_hand == 0) MethodBinds.MissingThrow("XRPositionalTracker.get_tracker_hand");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker_hand, NativePtr, 0, (nint)(&__ret));
         return (XRPositionalTracker.TrackerHand)__ret;
     }
 
     private static nint __mb_set_tracker_hand;
     public void SetTrackerHand(XRPositionalTracker.TrackerHand hand)
     {
-        var __mb = __mb_set_tracker_hand;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "set_tracker_hand", 3904108980);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_tracker_hand is not available in this engine build.");
-            __mb_set_tracker_hand = __mb;
-        }
+        if (__mb_set_tracker_hand == 0) MethodBinds.MissingThrow("XRPositionalTracker.set_tracker_hand");
         long __a0 = (long)hand;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker_hand, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_has_pose;
     public bool HasPose(StringName name)
     {
-        var __mb = __mb_has_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "has_pose", 2619796661);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.has_pose is not available in this engine build.");
-            __mb_has_pose = __mb;
-        }
+        if (__mb_has_pose == 0) MethodBinds.MissingThrow("XRPositionalTracker.has_pose");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_has_pose, NativePtr, (nint)__args, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_get_pose;
     public XRPose? GetPose(StringName name)
     {
-        var __mb = __mb_get_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "get_pose", 4099720006);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_pose is not available in this engine build.");
-            __mb_get_pose = __mb;
-        }
+        if (__mb_get_pose == 0) MethodBinds.MissingThrow("XRPositionalTracker.get_pose");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_pose, NativePtr, (nint)__args, (nint)(&__ret));
         return (XRPose?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_invalidate_pose;
     public void InvalidatePose(StringName name)
     {
-        var __mb = __mb_invalidate_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "invalidate_pose", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.invalidate_pose is not available in this engine build.");
-            __mb_invalidate_pose = __mb;
-        }
+        if (__mb_invalidate_pose == 0) MethodBinds.MissingThrow("XRPositionalTracker.invalidate_pose");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_invalidate_pose, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_set_pose;
     public void SetPose(StringName name, Transform3D transform, Vector3 linearVelocity, Vector3 angularVelocity, XRPose.TrackingConfidenceEnum trackingConfidence)
     {
-        var __mb = __mb_set_pose;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "set_pose", 3451230163);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_pose is not available in this engine build.");
-            __mb_set_pose = __mb;
-        }
+        if (__mb_set_pose == 0) MethodBinds.MissingThrow("XRPositionalTracker.set_pose");
         ulong __a0 = name.NativeValue;
         var __a1 = transform;
         var __a2 = linearVelocity;
@@ -3402,43 +2774,45 @@ public unsafe partial class XRPositionalTracker : XRTracker
         __args[2] = (nint)(&__a2);
         __args[3] = (nint)(&__a3);
         __args[4] = (nint)(&__a4);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_pose, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_input;
     public Variant GetInput(StringName name)
     {
-        var __mb = __mb_get_input;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "get_input", 2760726917);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.get_input is not available in this engine build.");
-            __mb_get_input = __mb;
-        }
+        if (__mb_get_input == 0) MethodBinds.MissingThrow("XRPositionalTracker.get_input");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         NativeVariant __ret = default;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_input, NativePtr, (nint)__args, (nint)(&__ret));
         return new Variant(__ret);
     }
 
     private static nint __mb_set_input;
     public void SetInput(StringName name, Variant value)
     {
-        var __mb = __mb_set_input;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRPositionalTracker", "set_input", 3776071444);
-            if (__mb == 0) throw new MissingMethodException("XRPositionalTracker.set_input is not available in this engine build.");
-            __mb_set_input = __mb;
-        }
+        if (__mb_set_input == 0) MethodBinds.MissingThrow("XRPositionalTracker.set_input");
         ulong __a0 = name.NativeValue;
         var __a1 = value.Native;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_input, NativePtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_tracker_profile = MethodBinds.ResolveBulk("XRPositionalTracker", "get_tracker_profile", 201670096);
+        __mb_set_tracker_profile = MethodBinds.ResolveBulk("XRPositionalTracker", "set_tracker_profile", 83702148);
+        __mb_get_tracker_hand = MethodBinds.ResolveBulk("XRPositionalTracker", "get_tracker_hand", 4181770860);
+        __mb_set_tracker_hand = MethodBinds.ResolveBulk("XRPositionalTracker", "set_tracker_hand", 3904108980);
+        __mb_has_pose = MethodBinds.ResolveBulk("XRPositionalTracker", "has_pose", 2619796661);
+        __mb_get_pose = MethodBinds.ResolveBulk("XRPositionalTracker", "get_pose", 4099720006);
+        __mb_invalidate_pose = MethodBinds.ResolveBulk("XRPositionalTracker", "invalidate_pose", 3304788590);
+        __mb_set_pose = MethodBinds.ResolveBulk("XRPositionalTracker", "set_pose", 3451230163);
+        __mb_get_input = MethodBinds.ResolveBulk("XRPositionalTracker", "get_input", 2760726917);
+        __mb_set_input = MethodBinds.ResolveBulk("XRPositionalTracker", "set_input", 3776071444);
     }
 }
 
@@ -3555,252 +2929,156 @@ public static unsafe partial class XRServer
     private static nint __mb_get_world_scale;
     public static double GetWorldScale()
     {
-        var __mb = __mb_get_world_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_world_scale", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_world_scale is not available in this engine build.");
-            __mb_get_world_scale = __mb;
-        }
+        if (__mb_get_world_scale == 0) MethodBinds.MissingThrow("XRServer.get_world_scale");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_world_scale, SingletonPtr, 0, (nint)(&__ret));
         return (double)__ret;
     }
 
     private static nint __mb_set_world_scale;
     public static void SetWorldScale(double scale)
     {
-        var __mb = __mb_set_world_scale;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "set_world_scale", 373806689);
-            if (__mb == 0) throw new MissingMethodException("XRServer.set_world_scale is not available in this engine build.");
-            __mb_set_world_scale = __mb;
-        }
+        if (__mb_set_world_scale == 0) MethodBinds.MissingThrow("XRServer.set_world_scale");
         double __a0 = scale;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_world_scale, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_world_origin;
     public static Transform3D GetWorldOrigin()
     {
-        var __mb = __mb_get_world_origin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_world_origin", 3229777777);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_world_origin is not available in this engine build.");
-            __mb_get_world_origin = __mb;
-        }
+        if (__mb_get_world_origin == 0) MethodBinds.MissingThrow("XRServer.get_world_origin");
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_world_origin, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_world_origin;
     public static void SetWorldOrigin(Transform3D worldOrigin)
     {
-        var __mb = __mb_set_world_origin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "set_world_origin", 2952846383);
-            if (__mb == 0) throw new MissingMethodException("XRServer.set_world_origin is not available in this engine build.");
-            __mb_set_world_origin = __mb;
-        }
+        if (__mb_set_world_origin == 0) MethodBinds.MissingThrow("XRServer.set_world_origin");
         var __a0 = worldOrigin;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_world_origin, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_reference_frame;
     public static Transform3D GetReferenceFrame()
     {
-        var __mb = __mb_get_reference_frame;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_reference_frame", 3229777777);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_reference_frame is not available in this engine build.");
-            __mb_get_reference_frame = __mb;
-        }
+        if (__mb_get_reference_frame == 0) MethodBinds.MissingThrow("XRServer.get_reference_frame");
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_reference_frame, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_clear_reference_frame;
     public static void ClearReferenceFrame()
     {
-        var __mb = __mb_clear_reference_frame;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "clear_reference_frame", 3218959716);
-            if (__mb == 0) throw new MissingMethodException("XRServer.clear_reference_frame is not available in this engine build.");
-            __mb_clear_reference_frame = __mb;
-        }
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, 0);
+        if (__mb_clear_reference_frame == 0) MethodBinds.MissingThrow("XRServer.clear_reference_frame");
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_clear_reference_frame, SingletonPtr, 0, 0);
     }
 
     private static nint __mb_center_on_hmd;
     public static void CenterOnHmd(XRServer.RotationMode rotationMode, bool keepHeight)
     {
-        var __mb = __mb_center_on_hmd;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "center_on_hmd", 1450904707);
-            if (__mb == 0) throw new MissingMethodException("XRServer.center_on_hmd is not available in this engine build.");
-            __mb_center_on_hmd = __mb;
-        }
+        if (__mb_center_on_hmd == 0) MethodBinds.MissingThrow("XRServer.center_on_hmd");
         long __a0 = (long)rotationMode;
         byte __a1 = keepHeight ? (byte)1 : (byte)0;
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_center_on_hmd, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_hmd_transform;
     public static Transform3D GetHmdTransform()
     {
-        var __mb = __mb_get_hmd_transform;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_hmd_transform", 4183770049);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_hmd_transform is not available in this engine build.");
-            __mb_get_hmd_transform = __mb;
-        }
+        if (__mb_get_hmd_transform == 0) MethodBinds.MissingThrow("XRServer.get_hmd_transform");
         var __ret = default(Transform3D);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_hmd_transform, SingletonPtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_camera_locked_to_origin;
     public static void SetCameraLockedToOrigin(bool enabled)
     {
-        var __mb = __mb_set_camera_locked_to_origin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "set_camera_locked_to_origin", 2586408642);
-            if (__mb == 0) throw new MissingMethodException("XRServer.set_camera_locked_to_origin is not available in this engine build.");
-            __mb_set_camera_locked_to_origin = __mb;
-        }
+        if (__mb_set_camera_locked_to_origin == 0) MethodBinds.MissingThrow("XRServer.set_camera_locked_to_origin");
         byte __a0 = enabled ? (byte)1 : (byte)0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_camera_locked_to_origin, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_is_camera_locked_to_origin;
     public static bool IsCameraLockedToOrigin()
     {
-        var __mb = __mb_is_camera_locked_to_origin;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "is_camera_locked_to_origin", 36873697);
-            if (__mb == 0) throw new MissingMethodException("XRServer.is_camera_locked_to_origin is not available in this engine build.");
-            __mb_is_camera_locked_to_origin = __mb;
-        }
+        if (__mb_is_camera_locked_to_origin == 0) MethodBinds.MissingThrow("XRServer.is_camera_locked_to_origin");
         byte __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_is_camera_locked_to_origin, SingletonPtr, 0, (nint)(&__ret));
         return __ret != 0;
     }
 
     private static nint __mb_add_interface;
     public static void AddInterface(XRInterface? @interface)
     {
-        var __mb = __mb_add_interface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "add_interface", 1898711491);
-            if (__mb == 0) throw new MissingMethodException("XRServer.add_interface is not available in this engine build.");
-            __mb_add_interface = __mb;
-        }
+        if (__mb_add_interface == 0) MethodBinds.MissingThrow("XRServer.add_interface");
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_interface, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interface_count;
     public static int GetInterfaceCount()
     {
-        var __mb = __mb_get_interface_count;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_interface_count", 3905245786);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_interface_count is not available in this engine build.");
-            __mb_get_interface_count = __mb;
-        }
+        if (__mb_get_interface_count == 0) MethodBinds.MissingThrow("XRServer.get_interface_count");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interface_count, SingletonPtr, 0, (nint)(&__ret));
         return unchecked((int)__ret);
     }
 
     private static nint __mb_remove_interface;
     public static void RemoveInterface(XRInterface? @interface)
     {
-        var __mb = __mb_remove_interface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "remove_interface", 1898711491);
-            if (__mb == 0) throw new MissingMethodException("XRServer.remove_interface is not available in this engine build.");
-            __mb_remove_interface = __mb;
-        }
+        if (__mb_remove_interface == 0) MethodBinds.MissingThrow("XRServer.remove_interface");
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_interface, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_interface;
     public static XRInterface? GetInterface(int idx)
     {
-        var __mb = __mb_get_interface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_interface", 4237347919);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_interface is not available in this engine build.");
-            __mb_get_interface = __mb;
-        }
+        if (__mb_get_interface == 0) MethodBinds.MissingThrow("XRServer.get_interface");
         long __a0 = unchecked((long)idx);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interface, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_interfaces;
     public static Godot.Collections.Array GetInterfaces()
     {
-        var __mb = __mb_get_interfaces;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_interfaces", 3995934104);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_interfaces is not available in this engine build.");
-            __mb_get_interfaces = __mb;
-        }
+        if (__mb_get_interfaces == 0) MethodBinds.MissingThrow("XRServer.get_interfaces");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_interfaces, SingletonPtr, 0, (nint)(&__ret));
         return new Godot.Collections.Array(__ret);
     }
 
     private static nint __mb_find_interface;
     public static XRInterface? FindInterface(string name)
     {
-        var __mb = __mb_find_interface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "find_interface", 1395192955);
-            if (__mb == 0) throw new MissingMethodException("XRServer.find_interface is not available in this engine build.");
-            __mb_find_interface = __mb;
-        }
+        if (__mb_find_interface == 0) MethodBinds.MissingThrow("XRServer.find_interface");
         ulong __a0 = NativeString.Create(name);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_find_interface, SingletonPtr, (nint)__args, (nint)(&__ret));
         NativeString.Destroy(ref __a0);
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
@@ -3808,100 +3086,90 @@ public static unsafe partial class XRServer
     private static nint __mb_add_tracker;
     public static void AddTracker(XRTracker? tracker)
     {
-        var __mb = __mb_add_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "add_tracker", 684804553);
-            if (__mb == 0) throw new MissingMethodException("XRServer.add_tracker is not available in this engine build.");
-            __mb_add_tracker = __mb;
-        }
+        if (__mb_add_tracker == 0) MethodBinds.MissingThrow("XRServer.add_tracker");
         nint __a0 = tracker?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_add_tracker, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_remove_tracker;
     public static void RemoveTracker(XRTracker? tracker)
     {
-        var __mb = __mb_remove_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "remove_tracker", 684804553);
-            if (__mb == 0) throw new MissingMethodException("XRServer.remove_tracker is not available in this engine build.");
-            __mb_remove_tracker = __mb;
-        }
+        if (__mb_remove_tracker == 0) MethodBinds.MissingThrow("XRServer.remove_tracker");
         nint __a0 = tracker?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_remove_tracker, SingletonPtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_trackers;
     public static Godot.Collections.Dictionary GetTrackers(int trackerTypes)
     {
-        var __mb = __mb_get_trackers;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_trackers", 3554694381);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_trackers is not available in this engine build.");
-            __mb_get_trackers = __mb;
-        }
+        if (__mb_get_trackers == 0) MethodBinds.MissingThrow("XRServer.get_trackers");
         long __a0 = unchecked((long)trackerTypes);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_trackers, SingletonPtr, (nint)__args, (nint)(&__ret));
         return new Godot.Collections.Dictionary(__ret);
     }
 
     private static nint __mb_get_tracker;
     public static XRTracker? GetTracker(StringName trackerName)
     {
-        var __mb = __mb_get_tracker;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_tracker", 147382240);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_tracker is not available in this engine build.");
-            __mb_get_tracker = __mb;
-        }
+        if (__mb_get_tracker == 0) MethodBinds.MissingThrow("XRServer.get_tracker");
         ulong __a0 = trackerName.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker, SingletonPtr, (nint)__args, (nint)(&__ret));
         return (XRTracker?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_get_primary_interface;
     public static XRInterface? GetPrimaryInterface()
     {
-        var __mb = __mb_get_primary_interface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "get_primary_interface", 2143545064);
-            if (__mb == 0) throw new MissingMethodException("XRServer.get_primary_interface is not available in this engine build.");
-            __mb_get_primary_interface = __mb;
-        }
+        if (__mb_get_primary_interface == 0) MethodBinds.MissingThrow("XRServer.get_primary_interface");
         nint __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_primary_interface, SingletonPtr, 0, (nint)(&__ret));
         return (XRInterface?)InstanceBindings.GetOrCreate(__ret, adoptRef: true);
     }
 
     private static nint __mb_set_primary_interface;
     public static void SetPrimaryInterface(XRInterface? @interface)
     {
-        var __mb = __mb_set_primary_interface;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRServer", "set_primary_interface", 1898711491);
-            if (__mb == 0) throw new MissingMethodException("XRServer.set_primary_interface is not available in this engine build.");
-            __mb_set_primary_interface = __mb;
-        }
+        if (__mb_set_primary_interface == 0) MethodBinds.MissingThrow("XRServer.set_primary_interface");
         nint __a0 = @interface?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, SingletonPtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_primary_interface, SingletonPtr, (nint)__args, 0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_world_scale = MethodBinds.ResolveBulk("XRServer", "get_world_scale", 1740695150);
+        __mb_set_world_scale = MethodBinds.ResolveBulk("XRServer", "set_world_scale", 373806689);
+        __mb_get_world_origin = MethodBinds.ResolveBulk("XRServer", "get_world_origin", 3229777777);
+        __mb_set_world_origin = MethodBinds.ResolveBulk("XRServer", "set_world_origin", 2952846383);
+        __mb_get_reference_frame = MethodBinds.ResolveBulk("XRServer", "get_reference_frame", 3229777777);
+        __mb_clear_reference_frame = MethodBinds.ResolveBulk("XRServer", "clear_reference_frame", 3218959716);
+        __mb_center_on_hmd = MethodBinds.ResolveBulk("XRServer", "center_on_hmd", 1450904707);
+        __mb_get_hmd_transform = MethodBinds.ResolveBulk("XRServer", "get_hmd_transform", 4183770049);
+        __mb_set_camera_locked_to_origin = MethodBinds.ResolveBulk("XRServer", "set_camera_locked_to_origin", 2586408642);
+        __mb_is_camera_locked_to_origin = MethodBinds.ResolveBulk("XRServer", "is_camera_locked_to_origin", 36873697);
+        __mb_add_interface = MethodBinds.ResolveBulk("XRServer", "add_interface", 1898711491);
+        __mb_get_interface_count = MethodBinds.ResolveBulk("XRServer", "get_interface_count", 3905245786);
+        __mb_remove_interface = MethodBinds.ResolveBulk("XRServer", "remove_interface", 1898711491);
+        __mb_get_interface = MethodBinds.ResolveBulk("XRServer", "get_interface", 4237347919);
+        __mb_get_interfaces = MethodBinds.ResolveBulk("XRServer", "get_interfaces", 3995934104);
+        __mb_find_interface = MethodBinds.ResolveBulk("XRServer", "find_interface", 1395192955);
+        __mb_add_tracker = MethodBinds.ResolveBulk("XRServer", "add_tracker", 684804553);
+        __mb_remove_tracker = MethodBinds.ResolveBulk("XRServer", "remove_tracker", 684804553);
+        __mb_get_trackers = MethodBinds.ResolveBulk("XRServer", "get_trackers", 3554694381);
+        __mb_get_tracker = MethodBinds.ResolveBulk("XRServer", "get_tracker", 147382240);
+        __mb_get_primary_interface = MethodBinds.ResolveBulk("XRServer", "get_primary_interface", 2143545064);
+        __mb_set_primary_interface = MethodBinds.ResolveBulk("XRServer", "set_primary_interface", 1898711491);
     }
 }
 
@@ -3930,95 +3198,69 @@ public unsafe partial class XRTracker : RefCounted
     private static nint __mb_get_tracker_type;
     public XRServer.TrackerType GetTrackerType()
     {
-        var __mb = __mb_get_tracker_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRTracker", "get_tracker_type", 2784508102);
-            if (__mb == 0) throw new MissingMethodException("XRTracker.get_tracker_type is not available in this engine build.");
-            __mb_get_tracker_type = __mb;
-        }
+        if (__mb_get_tracker_type == 0) MethodBinds.MissingThrow("XRTracker.get_tracker_type");
         long __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker_type, NativePtr, 0, (nint)(&__ret));
         return (XRServer.TrackerType)__ret;
     }
 
     private static nint __mb_set_tracker_type;
     public void SetTrackerType(XRServer.TrackerType type)
     {
-        var __mb = __mb_set_tracker_type;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRTracker", "set_tracker_type", 3055763575);
-            if (__mb == 0) throw new MissingMethodException("XRTracker.set_tracker_type is not available in this engine build.");
-            __mb_set_tracker_type = __mb;
-        }
+        if (__mb_set_tracker_type == 0) MethodBinds.MissingThrow("XRTracker.set_tracker_type");
         long __a0 = (long)type;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker_type, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tracker_name;
     public StringName GetTrackerName()
     {
-        var __mb = __mb_get_tracker_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRTracker", "get_tracker_name", 2002593661);
-            if (__mb == 0) throw new MissingMethodException("XRTracker.get_tracker_name is not available in this engine build.");
-            __mb_get_tracker_name = __mb;
-        }
+        if (__mb_get_tracker_name == 0) MethodBinds.MissingThrow("XRTracker.get_tracker_name");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker_name, NativePtr, 0, (nint)(&__ret));
         return StringName.Intern(StringNames.ReadAndDestroy(ref __ret));
     }
 
     private static nint __mb_set_tracker_name;
     public void SetTrackerName(StringName name)
     {
-        var __mb = __mb_set_tracker_name;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRTracker", "set_tracker_name", 3304788590);
-            if (__mb == 0) throw new MissingMethodException("XRTracker.set_tracker_name is not available in this engine build.");
-            __mb_set_tracker_name = __mb;
-        }
+        if (__mb_set_tracker_name == 0) MethodBinds.MissingThrow("XRTracker.set_tracker_name");
         ulong __a0 = name.NativeValue;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker_name, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_tracker_desc;
     public string GetTrackerDesc()
     {
-        var __mb = __mb_get_tracker_desc;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRTracker", "get_tracker_desc", 201670096);
-            if (__mb == 0) throw new MissingMethodException("XRTracker.get_tracker_desc is not available in this engine build.");
-            __mb_get_tracker_desc = __mb;
-        }
+        if (__mb_get_tracker_desc == 0) MethodBinds.MissingThrow("XRTracker.get_tracker_desc");
         ulong __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_tracker_desc, NativePtr, 0, (nint)(&__ret));
         return NativeString.ReadAndDestroy(ref __ret);
     }
 
     private static nint __mb_set_tracker_desc;
     public void SetTrackerDesc(string description)
     {
-        var __mb = __mb_set_tracker_desc;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRTracker", "set_tracker_desc", 83702148);
-            if (__mb == 0) throw new MissingMethodException("XRTracker.set_tracker_desc is not available in this engine build.");
-            __mb_set_tracker_desc = __mb;
-        }
+        if (__mb_set_tracker_desc == 0) MethodBinds.MissingThrow("XRTracker.set_tracker_desc");
         ulong __a0 = NativeString.Create(description);
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_tracker_desc, NativePtr, (nint)__args, 0);
         NativeString.Destroy(ref __a0);
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_tracker_type = MethodBinds.ResolveBulk("XRTracker", "get_tracker_type", 2784508102);
+        __mb_set_tracker_type = MethodBinds.ResolveBulk("XRTracker", "set_tracker_type", 3055763575);
+        __mb_get_tracker_name = MethodBinds.ResolveBulk("XRTracker", "get_tracker_name", 2002593661);
+        __mb_set_tracker_name = MethodBinds.ResolveBulk("XRTracker", "set_tracker_name", 3304788590);
+        __mb_get_tracker_desc = MethodBinds.ResolveBulk("XRTracker", "get_tracker_desc", 201670096);
+        __mb_set_tracker_desc = MethodBinds.ResolveBulk("XRTracker", "set_tracker_desc", 83702148);
     }
 }
 
@@ -4052,115 +3294,84 @@ public unsafe partial class XRVRS : GodotObject
     private static nint __mb_get_vrs_min_radius;
     public float GetVrsMinRadius()
     {
-        var __mb = __mb_get_vrs_min_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "get_vrs_min_radius", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.get_vrs_min_radius is not available in this engine build.");
-            __mb_get_vrs_min_radius = __mb;
-        }
+        if (__mb_get_vrs_min_radius == 0) MethodBinds.MissingThrow("XRVRS.get_vrs_min_radius");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vrs_min_radius, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_vrs_min_radius;
     public void SetVrsMinRadius(float radius)
     {
-        var __mb = __mb_set_vrs_min_radius;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "set_vrs_min_radius", 373806689);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.set_vrs_min_radius is not available in this engine build.");
-            __mb_set_vrs_min_radius = __mb;
-        }
+        if (__mb_set_vrs_min_radius == 0) MethodBinds.MissingThrow("XRVRS.set_vrs_min_radius");
         double __a0 = radius;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_vrs_min_radius, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_vrs_strength;
     public float GetVrsStrength()
     {
-        var __mb = __mb_get_vrs_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "get_vrs_strength", 1740695150);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.get_vrs_strength is not available in this engine build.");
-            __mb_get_vrs_strength = __mb;
-        }
+        if (__mb_get_vrs_strength == 0) MethodBinds.MissingThrow("XRVRS.get_vrs_strength");
         double __ret = 0;
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vrs_strength, NativePtr, 0, (nint)(&__ret));
         return (float)__ret;
     }
 
     private static nint __mb_set_vrs_strength;
     public void SetVrsStrength(float strength)
     {
-        var __mb = __mb_set_vrs_strength;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "set_vrs_strength", 373806689);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.set_vrs_strength is not available in this engine build.");
-            __mb_set_vrs_strength = __mb;
-        }
+        if (__mb_set_vrs_strength == 0) MethodBinds.MissingThrow("XRVRS.set_vrs_strength");
         double __a0 = strength;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_vrs_strength, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_vrs_render_region;
     public Rect2I GetVrsRenderRegion()
     {
-        var __mb = __mb_get_vrs_render_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "get_vrs_render_region", 410525958);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.get_vrs_render_region is not available in this engine build.");
-            __mb_get_vrs_render_region = __mb;
-        }
+        if (__mb_get_vrs_render_region == 0) MethodBinds.MissingThrow("XRVRS.get_vrs_render_region");
         var __ret = default(Rect2I);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_get_vrs_render_region, NativePtr, 0, (nint)(&__ret));
         return __ret;
     }
 
     private static nint __mb_set_vrs_render_region;
     public void SetVrsRenderRegion(Rect2I renderRegion)
     {
-        var __mb = __mb_set_vrs_render_region;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "set_vrs_render_region", 1763793166);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.set_vrs_render_region is not available in this engine build.");
-            __mb_set_vrs_render_region = __mb;
-        }
+        if (__mb_set_vrs_render_region == 0) MethodBinds.MissingThrow("XRVRS.set_vrs_render_region");
         var __a0 = renderRegion;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_set_vrs_render_region, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_make_vrs_texture;
     public Rid MakeVrsTexture(Vector2 targetSize, Vector2[] eyeFoci)
     {
-        var __mb = __mb_make_vrs_texture;
-        if (__mb == 0)
-        {
-            __mb = MethodBinds.Resolve("XRVRS", "make_vrs_texture", 3647044786);
-            if (__mb == 0) throw new MissingMethodException("XRVRS.make_vrs_texture is not available in this engine build.");
-            __mb_make_vrs_texture = __mb;
-        }
+        if (__mb_make_vrs_texture == 0) MethodBinds.MissingThrow("XRVRS.make_vrs_texture");
         var __a0 = targetSize;
         var __a1 = Packed.CreatePod<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, GdExtensionInterface.PackedVector2ArrayOperatorIndex, eyeFoci);
         var __args = stackalloc nint[2];
         __args[0] = (nint)(&__a0);
         __args[1] = (nint)(&__a1);
         var __ret = default(Rid);
-        GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, (nint)(&__ret));
+        GdExtensionInterface.ObjectMethodBindPtrcall(__mb_make_vrs_texture, NativePtr, (nint)__args, (nint)(&__ret));
         Packed.Destroy(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY, ref __a1);
         return __ret;
+    }
+
+    internal static void __ResolveBinds()
+    {
+        __mb_get_vrs_min_radius = MethodBinds.ResolveBulk("XRVRS", "get_vrs_min_radius", 1740695150);
+        __mb_set_vrs_min_radius = MethodBinds.ResolveBulk("XRVRS", "set_vrs_min_radius", 373806689);
+        __mb_get_vrs_strength = MethodBinds.ResolveBulk("XRVRS", "get_vrs_strength", 1740695150);
+        __mb_set_vrs_strength = MethodBinds.ResolveBulk("XRVRS", "set_vrs_strength", 373806689);
+        __mb_get_vrs_render_region = MethodBinds.ResolveBulk("XRVRS", "get_vrs_render_region", 410525958);
+        __mb_set_vrs_render_region = MethodBinds.ResolveBulk("XRVRS", "set_vrs_render_region", 1763793166);
+        __mb_make_vrs_texture = MethodBinds.ResolveBulk("XRVRS", "make_vrs_texture", 3647044786);
     }
 }
 
