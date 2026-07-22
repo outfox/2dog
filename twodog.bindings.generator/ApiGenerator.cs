@@ -94,6 +94,7 @@ public static class ApiGenerator
     {
         var root = JsonDocument.Parse(File.ReadAllText(apiJsonPath)).RootElement;
         Directory.CreateDirectory(outDir);
+        _written.Clear();
 
         // ---- collect classes ----
         _classes = [];
@@ -259,6 +260,17 @@ public static class ApiGenerator
         }
         sbVirt.AppendLine("}");
         Write(outDir, "GeneratedVirtualNames.gen.cs", sbVirt);
+
+        // Prune stale outputs (e.g. Api_X.gen.cs chunks whose letter vanished)
+        // so the committed directory always mirrors exactly one generator run.
+        foreach (var path in Directory.GetFiles(outDir, "*.gen.cs"))
+        {
+            if (!_written.Contains(Path.GetFileName(path)))
+            {
+                File.Delete(path);
+                Console.WriteLine($"Deleted stale output: {Path.GetFileName(path)}");
+            }
+        }
 
         Console.WriteLine($"Generated typed API: {_classes.Count} classes, {_emitted} methods emitted, {_skipped} skipped (unsupported types), " +
                           $"{_propsEmitted} properties ({_propsSkipped} skipped, {_enumRenames.Count} enum renames), " +
@@ -1385,6 +1397,11 @@ public static class ApiGenerator
         return sb;
     }
 
-    private static void Write(string outDir, string file, StringBuilder sb) =>
+    private static readonly HashSet<string> _written = [];
+
+    private static void Write(string outDir, string file, StringBuilder sb)
+    {
+        _written.Add(file);
         File.WriteAllText(Path.Combine(outDir, file), sb.ToString());
+    }
 }

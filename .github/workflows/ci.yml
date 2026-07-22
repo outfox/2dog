@@ -253,6 +253,22 @@ jobs:
           dotnet pack twodog.xunit
           dotnet pack twodog
 
+      # The committed generated bindings ship as-is in 2dog.bindings — fail
+      # if they drift from their inputs (extension_api.json, generator logic,
+      # fnptr interop signatures). The ABI interface layer needs the godot
+      # submodule (not checked out here); its input only moves with fork
+      # pointer bumps, which rebuild natives and regenerate it anyway.
+      - name: Verify committed generated bindings are fresh
+        run: |
+          dotnet run --project twodog.bindings.generator -c Release -- api gdextension/extension_api.json twodog.bindings/Generated/Api
+          python3 scripts/gen_web_trampolines.py
+          if [ -n "$(git status --porcelain twodog.bindings/Generated)" ]; then
+            git status --porcelain twodog.bindings/Generated
+            git diff twodog.bindings/Generated | head -100
+            echo "::error::Committed generated bindings are stale. Re-run twodog.bindings.generator ('api gdextension/extension_api.json twodog.bindings/Generated/Api') and scripts/gen_web_trampolines.py, then commit the diff."
+            exit 1
+          fi
+
       # GDExtension stack: 2dog.bindings + 2dog.gdextension (the source
       # generator rides inside 2dog.gdextension as an analyzer asset, keyed
       # on $(Configuration) — pack Release explicitly).
