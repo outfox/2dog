@@ -187,6 +187,15 @@ def parse_arguments():
         help="Enable Single Compilation Unit build",
     )
 
+    parser.add_argument(
+        "--mono",
+        type=str,
+        choices=["yes", "no"],
+        default="yes",
+        help="Build with the mono module (GodotSharp). 'no' produces a pure "
+        "GDExtension-consumable libgodot and skips glue generation",
+    )
+
     # Build steps control
     parser.add_argument(
         "--no-library",
@@ -326,6 +335,7 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Dev Build", args.dev_build)
+    table.add_row("Mono Module", args.mono)
 
     # Build steps
     table.add_row("─" * 30, "─" * 11)
@@ -340,14 +350,17 @@ def show_build_config(args, platform_config: PlatformConfig):
 def build_editor(args, platform_config: PlatformConfig):
     """Build Godot executable."""
     console.print("\n[bold yellow]┌── Building Godot Editor ──┐[/bold yellow]")
-    task_desc = "Building Godot Editor (with mono)"
+    task_desc = f"Building Godot Editor (mono={args.mono})"
+    # gdext (non-mono) builds get their own suffix so both flavors coexist
+    # in godot/bin (mono library builds carry no .mono infix).
+    exe_suffix = "executable" if args.mono == "yes" else "gdext_executable"
     cmd = [
         "scons",
         f"platform={platform_config.godot_platform}",
         f"arch={platform_config.godot_arch}",
         "target=editor",
-        "module_mono_enabled=yes",
-        "extra_suffix=executable",
+        f"module_mono_enabled={args.mono}",
+        f"extra_suffix={exe_suffix}",
         "d3d12=no",
         f"dev_build={args.dev_build}",
         f"scu_build={args.scu_build}",
@@ -393,7 +406,8 @@ def check_emscripten_version():
 
 def build_libgodot_web(args):
     """Build the web (emscripten) static library and assemble the packaging
-    payload under godot/bin/web/<target>/."""
+    payload under godot/bin/web/<target>/ (mono flavor) or
+    godot/bin/web-gdext/<target>/ (gdext flavor)."""
     console.print("\n[bold yellow]┌── Building libgodot (web static library) ──┐[/bold yellow]")
 
     check_emscripten_version()
@@ -406,16 +420,28 @@ def build_libgodot_web(args):
     else:
         targets = [args.target]
 
+    # gdext (non-mono) web builds get their own suffix and staging dir so both
+    # flavors coexist in godot/bin (same convention as the desktop builds).
+    lib_suffix = "static_library" if args.mono == "yes" else "gdext_static_library"
+    web_dir = "web" if args.mono == "yes" else "web-gdext"
+
+    import shutil
+
     for target in targets:
-        task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32)"
+        # scons only ever adds to the .web_zip staging dir; wipe it so files
+        # from a previous flavor/module set don't leak into this payload.
+        stale_zip = os.path.join("godot", "bin", ".web_zip")
+        if os.path.isdir(stale_zip):
+            shutil.rmtree(stale_zip)
+        task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32, mono={args.mono})"
         cmd = [
             "scons",
             "platform=web",
             "arch=wasm32",
             f"target={target}",
-            "module_mono_enabled=yes",
+            f"module_mono_enabled={args.mono}",
             "library_type=static_library",
-            "extra_suffix=static_library",
+            f"extra_suffix={lib_suffix}",
             "threads=no",
             "lto=none",
             "disable_crash_handler=yes",
@@ -434,11 +460,9 @@ def build_libgodot_web(args):
         #   web/<target>/shell/     - the Godot engine boot shell the page
         #                             loads (godot.js wraps mono_bridge +
         #                             engine.js; plus audio worklets)
-        import shutil
-
         zip_dir = os.path.join("godot", "bin", ".web_zip")
         src = os.path.join(zip_dir, "libgodot")
-        dst = os.path.join("godot", "bin", "web", target)
+        dst = os.path.join("godot", "bin", web_dir, target)
         if not os.path.isfile(os.path.join(src, "libgodot.a")):
             console.print(f"[bold red]Expected web payload not found at {src}[/bold red]")
             sys.exit(1)
@@ -477,15 +501,16 @@ def build_libgodot(args, platform_config: PlatformConfig):
             f"arch={platform_config.godot_arch}, dev_build={use_dev_build})"
         )
 
+        lib_suffix = "shared_library" if args.mono == "yes" else "gdext_shared_library"
         cmd = [
             "scons",
             f"platform={platform_config.godot_platform}",
             f"arch={platform_config.godot_arch}",
             f"target={target}",
-            "module_mono_enabled=yes",
+            f"module_mono_enabled={args.mono}",
             "d3d12=no",
             "library_type=shared_library",
-            "extra_suffix=shared_library",
+            f"extra_suffix={lib_suffix}",
             f"dev_build={use_dev_build}",
             f"scu_build={args.scu_build}",
             f"debug_symbols={args.debug_symbols}",
@@ -563,6 +588,10 @@ def main():
     if platform_config.godot_platform == Platform.WEB.value:
         # No editor or glue on web; both come from desktop builds.
         args.no_editor = True
+        args.no_glue = True
+
+    if args.mono == "no":
+        # Mono glue requires a mono-enabled editor binary.
         args.no_glue = True
 
     if not args.no_editor:

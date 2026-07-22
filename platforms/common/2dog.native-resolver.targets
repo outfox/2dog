@@ -1,0 +1,99 @@
+<Project>
+    <!--
+      Shared native resolver for the 2dog desktop platform meta packages.
+
+      Each platform package's build/<id>.targets declares a
+      TwoDogNativeResolver item describing its natives:
+        Identity      - the runtime identifier (win-x64, linux-x64, osx-arm64)
+        PackageId     - variant package id prefix (2dog.win-x64 -> .release/.debug/.editor)
+        PackageVersion- version folder of the variant packages
+        LibPrefix     - output library prefix (libgodot / libgodot-gdext)
+        Ext           - native library extension (dll / so / dylib)
+        HostOs        - IsOSPlatform name gating host builds (Windows / Linux / OSX)
+        RidPrefix     - RuntimeIdentifier prefix gating publishes (win / linux / osx)
+        LocalBin      - godot/bin fallback directory (source checkouts)
+        LocalRelease / LocalDebug / LocalEditor - fallback file names per variant
+
+      The targets below resolve the $(TwoDogVariant) native per item - NuGet
+      package first, local godot/bin second - and copy it to the output and
+      publish directories as <LibPrefix>-<variant>.<Ext>. The runtime loads
+      the native by that variant-qualified name, so a mismatched or stale
+      native fails loudly instead of half-working.
+
+      Every desktop platform package ships an identical copy of this file;
+      the _TwoDogNativeResolverImported guard makes the first import win.
+    -->
+    <PropertyGroup>
+        <_TwoDogNativeResolverImported>true</_TwoDogNativeResolverImported>
+    </PropertyGroup>
+
+    <Target Name="TwoDogResolveNativeLibs">
+        <PropertyGroup>
+            <_TwoDogNativeVariant>$(TwoDogVariant)</_TwoDogNativeVariant>
+            <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == ''">release</_TwoDogNativeVariant>
+        </PropertyGroup>
+        <ItemGroup>
+            <_TwoDogNativeResolved Include="@(TwoDogNativeResolver)"/>
+            <_TwoDogNativeResolved>
+                <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'release'">%(LocalRelease)</LocalFile>
+                <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'debug'">%(LocalDebug)</LocalFile>
+                <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'editor'">%(LocalEditor)</LocalFile>
+                <OutName>%(LibPrefix)-$(_TwoDogNativeVariant).%(Ext)</OutName>
+                <!-- Defined-but-empty so the conditional fills below can read
+                     it on every item (unqualified metadata reads error on
+                     items that never defined the metadata). -->
+                <Resolved></Resolved>
+            </_TwoDogNativeResolved>
+            <_TwoDogNativeResolved>
+                <PkgPath>$(NuGetPackageRoot)/%(PackageId).$(_TwoDogNativeVariant)/%(PackageVersion)/runtimes/%(Identity)/native/%(OutName)</PkgPath>
+                <LocalPath>%(LocalBin)%(LocalFile)</LocalPath>
+            </_TwoDogNativeResolved>
+            <_TwoDogNativeResolved>
+                <Resolved Condition="Exists('%(PkgPath)')">%(PkgPath)</Resolved>
+            </_TwoDogNativeResolved>
+            <_TwoDogNativeResolved>
+                <Resolved Condition="'%(Resolved)' == '' And Exists('%(LocalPath)')">%(LocalPath)</Resolved>
+            </_TwoDogNativeResolved>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="TwoDogCopyNativeLibs"
+            AfterTargets="Build"
+            DependsOnTargets="TwoDogResolveNativeLibs"
+            Condition="'$(DesignTimeBuild)' != 'true'">
+        <ItemGroup>
+            <_TwoDogNativeForBuild Include="@(_TwoDogNativeResolved)"
+                                   Condition="$([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))"/>
+        </ItemGroup>
+        <Warning Condition="'@(_TwoDogNativeForBuild)' != '' And '%(_TwoDogNativeForBuild.Resolved)' == ''"
+                 Text="2dog: could not locate %(_TwoDogNativeForBuild.OutName) for %(_TwoDogNativeForBuild.Identity). Searched NuGet: %(_TwoDogNativeForBuild.PkgPath) - local: %(_TwoDogNativeForBuild.LocalPath). The application will fail at runtime with DllNotFoundException."/>
+        <Copy SourceFiles="%(_TwoDogNativeForBuild.Resolved)"
+              DestinationFiles="$(OutputPath)%(_TwoDogNativeForBuild.OutName)"
+              SkipUnchangedFiles="true"
+              Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
+        <Message Importance="normal"
+                 Text="2dog: copied %(_TwoDogNativeForBuild.OutName) to $(OutputPath)"
+                 Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
+    </Target>
+
+    <!-- A RID-less publish targets the build host, so an empty
+         RuntimeIdentifier counts when the host OS matches - otherwise the
+         publish folder ships without the native and the app dies with
+         DllNotFoundException. -->
+    <Target Name="TwoDogPublishNativeLibs"
+            AfterTargets="Publish"
+            DependsOnTargets="TwoDogResolveNativeLibs"
+            Condition="'$(DesignTimeBuild)' != 'true'">
+        <ItemGroup>
+            <_TwoDogNativeForPublish Include="@(_TwoDogNativeResolved)"
+                                     Condition="('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('%(_TwoDogNativeResolved.RidPrefix)'))"/>
+        </ItemGroup>
+        <Copy SourceFiles="%(_TwoDogNativeForPublish.Resolved)"
+              DestinationFiles="$(PublishDir)%(_TwoDogNativeForPublish.OutName)"
+              SkipUnchangedFiles="true"
+              Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
+        <Message Importance="high"
+                 Text="2dog: published %(_TwoDogNativeForPublish.OutName) to $(PublishDir)"
+                 Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
+    </Target>
+</Project>

@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RootNamespace>twodog</RootNamespace>
+        <AssemblyName>twodog.gdextension</AssemblyName>
+
+        <IsPackable>true</IsPackable>
+        <PackageId>2dog.gdextension</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>Host layer for the GDExtension-based 2dog stack: start and pump Godot's MainLoop from your C# application, no mono module required. Drop-in alternative to 2dog.engine - swap the package reference, keep your code. Pair with a 2dog.gdextension.[rid] natives package.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../twodog.bindings/twodog.bindings.csproj"/>
+        <!-- Build ordering only; the generator ships as an analyzer asset below.
+             Analyzers do not flow across ProjectReference: package consumers get
+             the generator automatically, but projects referencing this csproj
+             directly must add their own reference with OutputItemType="Analyzer"
+             (see twodog.bindings.tests.csproj). -->
+        <ProjectReference Include="../twodog.generators/twodog.generators.csproj"
+                          ReferenceOutputAssembly="false"
+                          PrivateAssets="all"/>
+    </ItemGroup>
+
+    <!-- Ship the [Export]/[Signal] source generator to consumers. -->
+    <ItemGroup>
+        <None Include="../twodog.generators/bin/$(Configuration)/netstandard2.0/twodog.generators.dll"
+              Pack="true"
+              PackagePath="analyzers/dotnet/cs/"
+              Visible="false"/>
+    </ItemGroup>
+
+    <!-- Consumer MSBuild targets (TwoDogVariant default + metadata stamping) -->
+    <ItemGroup>
+        <None Include="build/2dog.gdextension.targets" Pack="true" PackagePath="build/"/>
+        <None Include="buildTransitive/2dog.gdextension.targets" Pack="true" PackagePath="buildTransitive/"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+        <None Include="../nuget/GODOT_LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="false"/>
+        <None Include="../nuget/GODOT_AUTHORS.md" Pack="true" PackagePath="AUTHORS.md" Visible="false"/>
+    </ItemGroup>
+
+</Project>

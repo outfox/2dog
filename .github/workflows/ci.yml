@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -189,6 +189,11 @@ jobs:
                 mkdir -p "godot/bin/web/$target"
                 unzip -o "$z" -d "godot/bin/web/$target/"
                 ;;
+              libgodot-gdext-browser-wasm-*)
+                target="${base#libgodot-gdext-browser-wasm-}"
+                mkdir -p "godot/bin/web-gdext/$target"
+                unzip -o "$z" -d "godot/bin/web-gdext/$target/"
+                ;;
               *)
                 unzip -o "$z" -d godot/bin/
                 ;;
@@ -201,6 +206,26 @@ jobs:
           for f in godot/bin/libgodot.so godot/bin/libgodot.dll godot/bin/libgodot.dylib; do
             if [ -e "$f" ]; then
               echo "::error::Release godot-${{ needs.check-natives.outputs.hash }} uses the old asset layout (generic ${f##*/} inside the native zips). Re-run the '2dog Build Natives' workflow with force=true to regenerate it."
+              exit 1
+            fi
+          done
+
+          # The GDExtension-flavor (non-mono) natives ship in the same release.
+          # Releases created before the gdext builds existed lack them — fail
+          # early instead of letting ForcePackAllPlatforms silently produce
+          # 2dog.gdextension.[rid] packages with no native library inside.
+          for os in windows linuxbsd macos; do
+            count=$(ls godot/bin/*godot.$os.*.gdext_shared_library.* 2>/dev/null | wc -l)
+            if [ "$count" -ne 3 ]; then
+              echo "::error::Release godot-${{ needs.check-natives.outputs.hash }} has $count/3 GDExtension-flavor natives for $os. Re-run the '2dog Build Natives' workflow with force=true to add them."
+              exit 1
+            fi
+          done
+
+          # Same guard for the gdext web payloads (2dog.gdextension.browser-wasm).
+          for target in template_release template_debug; do
+            if [ ! -f "godot/bin/web-gdext/$target/libgodot/libgodot.a" ]; then
+              echo "::error::Release godot-${{ needs.check-natives.outputs.hash }} lacks the gdext web payload for $target. Re-run the '2dog Build Natives' workflow with force=true to add it."
               exit 1
             fi
           done
@@ -227,6 +252,30 @@ jobs:
           dotnet pack twodog.engine
           dotnet pack twodog.xunit
           dotnet pack twodog
+
+      # The committed generated bindings ship as-is in 2dog.bindings — fail
+      # if they drift from their inputs (extension_api.json, generator logic,
+      # fnptr interop signatures). The ABI interface layer needs the godot
+      # submodule (not checked out here); its input only moves with fork
+      # pointer bumps, which rebuild natives and regenerate it anyway.
+      - name: Verify committed generated bindings are fresh
+        run: |
+          dotnet run --project twodog.bindings.generator -c Release -- api gdextension/extension_api.json twodog.bindings/Generated/Api
+          python3 scripts/gen_web_trampolines.py
+          if [ -n "$(git status --porcelain twodog.bindings/Generated)" ]; then
+            git status --porcelain twodog.bindings/Generated
+            git diff twodog.bindings/Generated | head -100
+            echo "::error::Committed generated bindings are stale. Re-run twodog.bindings.generator ('api gdextension/extension_api.json twodog.bindings/Generated/Api') and scripts/gen_web_trampolines.py, then commit the diff."
+            exit 1
+          fi
+
+      # GDExtension stack: 2dog.bindings + 2dog.gdextension (the source
+      # generator rides inside 2dog.gdextension as an analyzer asset, keyed
+      # on $(Configuration) — pack Release explicitly).
+      - name: Pack gdextension packages
+        run: |
+          dotnet pack twodog.bindings -c Release
+          dotnet pack twodog.gdextension -c Release
           ls -lh packages/
 
       - name: Upload godot-bin artifact
@@ -268,7 +317,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -298,6 +347,65 @@ jobs:
 
       - name: Test (Editor)
         run: dotnet test 2dog.tests.slnf -c Editor --no-restore
+
+  # Run the GDExtension-stack bindings tests on each platform, once per native
+  # variant (the package versions shipped by 2dog.gdextension.[rid]: release,
+  # debug, editor). The fixture selects the godot/bin native via TWODOG_VARIANT.
+  test-gdext:
+    name: Test GDExtension (${{ matrix.name }})
+    needs: [pack]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+          - name: win-x64
+            runner: blacksmith-4vcpu-windows-2025
+          - name: osx-arm64
+            runner: blacksmith-6vcpu-macos-latest
+
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      # nuget.config declares packages/ as a source; it is gitignored and this
+      # job doesn't need the package artifact, so create it empty for restore.
+      - name: Create local package source dir
+        shell: bash
+        run: mkdir -p packages
+
+      - name: Restore
+        run: dotnet restore twodog.bindings.tests
+
+      - name: Test (release variant)
+        env:
+          TWODOG_VARIANT: release
+        run: dotnet test twodog.bindings.tests --no-restore
+
+      - name: Test (debug variant)
+        env:
+          TWODOG_VARIANT: debug
+        run: dotnet test twodog.bindings.tests --no-restore
+
+      - name: Test (editor variant)
+        env:
+          TWODOG_VARIANT: editor
+        run: dotnet test twodog.bindings.tests --no-restore
 
   # Publish the demo desktop host the way an end user does (Release, RID) and
   # run the result headless. Regression guard: the engine used to load the
@@ -332,7 +440,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -448,6 +556,69 @@ jobs:
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
           exit $fail
 
+  # Publish the GDExtension host demo the way an end user does - PackageReference
+  # to the packed 2dog.gdextension + natives packages from the local feed - and
+  # run it headless once per native variant (release, debug, editor).
+  # Deliberately no godot-bin download: NativeLoader must find the package-copied
+  # native next to the app; a godot/bin fallback would mask a broken package.
+  desktop-smoke-gdext:
+    name: GDExtension Smoke (${{ matrix.name }})
+    needs: [pack]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+            exe: gdext.host.demo
+          - name: win-x64
+            runner: blacksmith-4vcpu-windows-2025
+            exe: gdext.host.demo.exe
+          - name: osx-arm64
+            runner: blacksmith-6vcpu-macos-latest
+            exe: gdext.host.demo
+
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      - name: Publish and run (all variants)
+        shell: bash
+        run: |
+          fail=0
+          for variant in release debug editor; do
+            out="spikes/gdext.host.demo/bin/smoke-$variant"
+            dotnet publish spikes/gdext.host.demo -c Release \
+              -p:TwoDogUsePackages=true -p:TwoDogVariant=$variant -o "$out"
+            set +e
+            "$out/${{ matrix.exe }}" 2>&1 | tee "smoke-gdext-$variant.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            if [ "$status" != "0" ]; then
+              echo "::error::[gdext-smoke $variant] host exited with code $status"
+              fail=1
+            fi
+            if ! grep -q "2DOG_GDEXT_SMOKE_PASSED" "smoke-gdext-$variant.log"; then
+              echo "::error::[gdext-smoke $variant] smoke marker missing"
+              fail=1
+            fi
+          done
+          exit $fail
+
   # Publish the web demo end-to-end: statically links the web libgodot.a into
   # dotnet.native.wasm via the wasm-tools workload and asserts the app bundle
   # is complete. Consumers never install emsdk — the workload ships the
@@ -463,12 +634,12 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           package-manager-cache: false
@@ -586,6 +757,125 @@ jobs:
 
           echo "Web runtime API smoke OK"
 
+  # Publish and run the GDExtension-stack browser demo: non-mono libgodot.a
+  # statically linked into the .NET wasm module, extension classes registered
+  # through the embedded init callback, pck exported via the gdext editor
+  # libgodot. Mirrors web-smoke for the 2dog.gdextension.browser-wasm packages.
+  web-smoke-gdext:
+    name: Web Smoke gdext (browser-wasm publish)
+    needs: [pack]
+    runs-on: blacksmith-8vcpu-ubuntu-2404
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Install wasm-tools workload
+        run: dotnet workload install wasm-tools
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      # The publish exports the spike Godot project as godot.pck via the
+      # import helper in --gdext mode against the gdext editor libgodot
+      # (staged in godot/bin by the download above).
+      - name: Build import helper
+        run: dotnet build twodog.import -c Release
+
+      - name: Publish gdext web demo
+        run: dotnet publish spikes/gdext.host.demo.web -c Release
+
+      - name: Verify app bundle
+        run: |
+          BUNDLE=spikes/gdext.host.demo.web/AppBundle
+          for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" "$BUNDLE/_framework/dotnet.js"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing $f in the published gdext app bundle"
+              ls -R "$BUNDLE" || true
+              exit 1
+            fi
+          done
+          SIZE=$(stat -c%s "$BUNDLE/godot.wasm")
+          echo "godot.wasm size: $SIZE bytes"
+          if [ "$SIZE" -lt 20000000 ]; then
+            echo "::error::godot.wasm is suspiciously small ($SIZE bytes) — engine may be missing from the link"
+            exit 1
+          fi
+          echo "gdext web app bundle OK"
+
+      - name: Run browser smoke
+        run: |
+          BUNDLE=spikes/gdext.host.demo.web/AppBundle
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
+          if [ -z "$CHROME" ]; then
+            echo "::error::No Chrome/Chromium executable is available on the runner"
+            exit 1
+          fi
+
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+          SERVER_PID=$!
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then
+              kill "$CHROME_PID" 2>/dev/null || true
+            fi
+            kill "$SERVER_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --use-gl=angle \
+            --use-angle=swiftshader-webgl \
+            --enable-unsafe-swiftshader \
+            --disable-dev-shm-usage \
+            --enable-logging=stderr \
+            --remote-debugging-address=127.0.0.1 \
+            --remote-debugging-port=9222 \
+            '--remote-allow-origins=*' \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-gdext" \
+            http://127.0.0.1:8000/index.html \
+            > /tmp/2dog-browser.log 2>&1 &
+          CHROME_PID=$!
+
+          set +e
+          timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
+            http://127.0.0.1:8000/index.html 120000 9222
+          SMOKE_STATUS=$?
+          set -e
+
+          cat /tmp/2dog-web-server.log
+          cat /tmp/2dog-browser.log
+
+          if [ "$SMOKE_STATUS" -ne 0 ]; then
+            echo "::error::The gdext browser app did not complete the smoke probe"
+            exit "$SMOKE_STATUS"
+          fi
+
+          echo "gdext web runtime smoke OK"
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).
@@ -594,8 +884,9 @@ jobs:
     name: Deploy to NuGet
     # web-smoke gates deploy because the 2dog.browser-wasm packages it
     # exercises are among the packages being published; desktop-smoke gates it
-    # because it is the only check that runs a Release-only publish.
-    needs: [test, desktop-smoke, web-smoke]
+    # because it is the only check that runs a Release-only publish. The gdext
+    # jobs gate it because the 2dog.gdextension packages publish alongside.
+    needs: [test, test-gdext, desktop-smoke, desktop-smoke-gdext, web-smoke, web-smoke-gdext]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
@@ -615,7 +906,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.engine"; do
+          for pkg in "2dog" "2dog.engine" "2dog.bindings" "2dog.gdextension"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"
@@ -625,7 +916,7 @@ jobs:
           done
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 

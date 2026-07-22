@@ -1,0 +1,6 @@
+; Minimal Godot project for the GDExtension spike host.
+config_version=5
+
+[application]
+config/name="gdext.spike"
+run/main_scene="res://main.tscn"

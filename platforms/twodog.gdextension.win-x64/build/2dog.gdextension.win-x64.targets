@@ -1,0 +1,37 @@
+<Project>
+    <!--
+      2dog.gdextension Windows x64 Meta Package Targets
+
+      Parameter block for the shared native resolver
+      (2dog.native-resolver.targets, shipped alongside this file): declares
+      where this package's non-mono natives live and how they are named. The
+      shared targets resolve the $(TwoDogVariant) native - NuGet package
+      first, local godot/bin fallback (extra_suffix=gdext_shared_library) -
+      and copy it to output/publish as libgodot-gdext-<variant>.dll.
+    -->
+    <PropertyGroup>
+        <_TwoDogGdextWinX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogGdextWinX64TargetsDir>
+        <TwoDogGdextWinX64PackageVersion Condition="'$(TwoDogGdextWinX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogGdextWinX64TargetsDir)'))))</TwoDogGdextWinX64PackageVersion>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <TwoDogNativeResolver Include="win-x64">
+            <PackageId>2dog.gdextension.win-x64</PackageId>
+            <PackageVersion>$(TwoDogGdextWinX64PackageVersion)</PackageVersion>
+            <LibPrefix>libgodot-gdext</LibPrefix>
+            <Ext>dll</Ext>
+            <HostOs>Windows</HostOs>
+            <RidPrefix>win</RidPrefix>
+            <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
+            <LocalRelease>godot.windows.template_release.x86_64.gdext_shared_library.dll</LocalRelease>
+            <LocalDebug>godot.windows.template_debug.x86_64.gdext_shared_library.dll</LocalDebug>
+            <LocalEditor>godot.windows.editor.x86_64.gdext_shared_library.dll</LocalEditor>
+        </TwoDogNativeResolver>
+    </ItemGroup>
+
+    <Import Project="$(MSBuildThisFileDirectory)2dog.native-resolver.targets"
+            Condition="'$(_TwoDogNativeResolverImported)' != 'true' And Exists('$(MSBuildThisFileDirectory)2dog.native-resolver.targets')"/>
+    <Import Project="$(MSBuildThisFileDirectory)../../common/2dog.native-resolver.targets"
+            Condition="'$(_TwoDogNativeResolverImported)' != 'true'"/>
+</Project>

@@ -177,9 +177,9 @@ The build copies the selected variant into your output directory as
 name, so switching variants can never silently run a stale native from a
 previous build.
 
-The `TwoDogBuildType` property (`template_release`, `template_debug`,
-`editor`) is derived from `TwoDogVariant` and only needs to be set directly
-for advanced overrides.
+`TwoDogVariant` is the single configuration axis: the native selection, the
+GodotPlugins layout and the embedded variant metadata all follow it, so they
+can never disagree.
 
 ## CI/CD Integration
 

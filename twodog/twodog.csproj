@@ -23,13 +23,9 @@
         <PackageId>2dog</PackageId>
         <PackageType>DotnetTool;Template</PackageType>
         <Version>$(TwoDogVersion)</Version>
-        <Authors>Moritz Voss</Authors>
         <Description>2dog command-line tool and project templates. `dnx 2dog convert` converts an existing Godot project to the 2dog layout (nested host projects for desktop, browser-wasm and xUnit testing); `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IsPackable>true</IsPackable>
         <!-- Suppress NU5128: template content folder doesn't need contentFiles metadata -->
         <NoWarn>$(NoWarn);NU5128</NoWarn>

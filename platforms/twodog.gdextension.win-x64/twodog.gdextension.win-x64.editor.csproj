@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Platform-specific configuration (GDExtension flavor: non-mono natives) -->
+    <PropertyGroup>
+        <GdExtension>true</GdExtension>
+        <PlatformRID>win-x64</PlatformRID>
+        <PlatformOS>windows</PlatformOS>
+        <BuildVariant>editor</BuildVariant>
+        <NativeLibExt>dll</NativeLibExt>
+        <PackageSuffix>.editor</PackageSuffix>
+        <Description>Windows x64 editor native libgodot-gdext library for 2dog.gdextension. Reference this package alongside 2dog.gdextension for Windows editor support.</Description>
+    </PropertyGroup>
+</Project>

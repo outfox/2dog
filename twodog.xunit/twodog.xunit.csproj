@@ -18,13 +18,9 @@
     <PropertyGroup>
         <PackageId>2dog.xunit</PackageId>
         <Version>$(TwoDogVersion)</Version>
-        <Authors>Moritz Voss</Authors>
         <Description>xUnit collection definitions for testing Godot applications with twodog. The collections are compiled into your test assembly so xUnit discovers them correctly; the GodotFixture/GodotHeadlessFixture they bind come from the 2dog.engine package.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/outfox/2dog</PackageProjectUrl>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageOutputPath>$(MSBuildProjectDirectory)/../packages/</PackageOutputPath>
         <IsPackable>true</IsPackable>
         <!--
           Build-only package: the collection definitions ship as compile-in source (see below), so
