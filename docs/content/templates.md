@@ -45,7 +45,7 @@ host projects are nested inside it, each carrying a `.gdignore` file so the
 Godot editor, importer, and exporter skip them. This creates:
 
 - `MyGame.csproj` + `project.godot` + `main.tscn` - Sample Godot project (Godot.NET.Sdk) with a simple scene
-- `MyGame.sln` - The single solution, next to `project.godot`
+- `MyGame.slnx` - The single solution, next to `project.godot`
 - `TwoDogWebBoot.cs` - Web bootstrap, compiled into the game assembly (`LIBGODOT_ENABLED`-guarded)
 - `MyGame.2dog/` - Desktop host with 2dog package references and a minimal `Program.cs`
 - `MyGame.tests/` - xUnit test project with 2dog.xunit fixtures and sample tests
@@ -88,7 +88,7 @@ The template creates a project structure like this:
 MyGame/                     # Godot project root = solution root
 ├── project.godot           # Godot project file
 ├── MyGame.csproj           # Godot.NET.Sdk project (assembly_name=MyGame)
-├── MyGame.sln              # Solution file
+├── MyGame.slnx             # Solution file
 ├── main.tscn               # Main scene
 ├── export_presets.cfg      # Export presets (Web preset for the wasm host)
 ├── global.json             # Pins a wasm-capable SDK (--web false to omit)

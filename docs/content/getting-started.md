@@ -1,193 +1,176 @@
-# Let's take `Godot` for walkies 🦴
+# Let's Take `Godot` for Walkies 🦴
 
-![a white dog smiling over the soft logotype text '2dog'](/logo-animated.svg)
+This guide takes an existing or new Godot C# project through the same first
+journey: run it as a .NET application, meet the project layout, test it, and
+prepare it for the web. No engine internals or lifecycle code required yet.
 
-## Prerequisites
+## Before You Grab the Leash
+
+You need:
 
 - .NET SDK 10.0 or later
-- [Godot (.NET)](https://godotengine.org/) (optional  –  only for editing scenes in the editor UI; asset import happens automatically during build)
+- A supported platform: `win-x64`, `linux-x64`, or `osx-arm64`
+- Godot .NET only when you want to edit scenes in the editor UI
 
-## Installation
+2dog imports assets automatically during `dotnet build`, so installing the
+Godot editor is not a prerequisite for builds or CI.
 
-There is nothing to install up front  –  pick your entry point:
+## 1. Choose Your Starting Point
 
-- **Existing Godot project?** Run `dnx 2dog convert` on it  –  `dnx`
-  executes the tool straight from NuGet, and the converted project references
-  the 2dog packages itself.
-- **New project?** Installing 2dog *is* installing its project template:
-  `dotnet new install 2dog` registers the `2dog` template, and every project
-  created from it references the packages it needs.
+Both routes create the same recommended structure. Converting is the shortest
+path for an existing Godot C# developer; the template is there when you want a
+fresh project.
 
-Packages are available on [NuGet](https://www.nuget.org/packages?q=2dog&includeComputedFrameworks=true&sortby=created-desc). Package versions follow the embedded Godot version plus a 2dog iteration number (the current release is `:2dog-version:`, embedding Godot `:godot-version:`). Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`.
+::: code-group
 
-::: warning Pin 2dog to your Godot line
-Because the package version starts with the embedded Godot version, NuGet's
-"highest version wins" resolution means an unpinned reference will silently
-jump to a newer Godot line when one is released. Pin the package to your
-project's Godot line with a floating version:
+```bash [🐕 Existing Project]
+# Convert in place. Existing game content stays where it is.
+dnx 2dog convert path/to/MyGame
+cd path/to/MyGame
+```
+
+```bash [🌱 Fresh Project]
+# Register the template once, then create the project.
+dotnet new install 2dog
+dotnet new 2dog -n MyGame
+cd MyGame
+```
+
+:::
+
+::: tip Existing project?
+Run `dnx 2dog convert path/to/MyGame --dry-run` first if you want to inspect
+every planned action. The [conversion guide](/convert) documents exactly what
+the command creates and patches.
+:::
+
+## 2. Run the Desktop Host
+
+```bash
+dotnet run --project MyGame.2dog
+```
+
+::: info Trail marker
+You should now see your configured Godot main scene. A fresh project shows the
+sample scene; a converted project runs the main scene already configured in
+`project.godot`.
+:::
+
+This is still your Godot game. The difference is that `MyGame.2dog` is now the
+process entry point and starts Godot as an embedded library.
+
+## 3. Meet the Pack
+
+Your Godot project is also the solution root. Three small host projects sit
+inside it:
+
+```text
+MyGame/                       Godot project and solution root
+├── project.godot
+├── MyGame.csproj             Scenes and C# game scripts
+├── MyGame.2dog/              Desktop host
+├── MyGame.web/               Browser host
+└── MyGame.tests/             xUnit host
+```
+
+Each host folder contains `.gdignore`, so it remains invisible to the Godot
+editor, importer, and exporter. Your scenes, scripts, and assets stay at the
+root where Godot expects them.
+
+Read [The Recommended Project Layout](/project-layout) for the complete tour
+and the responsibility of each layer.
+
+## 4. Keep Using Godot
+
+Open the same project root in the Godot .NET editor:
+
+```bash
+godot-mono --editor .
+```
+
+Edit a scene or C# script as usual. The next `dotnet build`, `dotnet run`, or
+`dotnet test` detects changed project inputs and performs the required Godot
+resource import automatically.
+
+::: info Trail marker
+You now have two compatible ways into the same project: the Godot editor for
+authoring and the .NET hosts for running, testing, and publishing.
+:::
+
+## 5. Run the Tests
+
+Generated and converted projects include a headless xUnit host by default:
+
+```bash
+dotnet test MyGame.tests
+```
+
+This starts Godot without a window, loads the project, and runs tests through
+the normal .NET test runner. The supplied fixture also handles Godot's
+one-instance-per-process constraint for you.
+
+Continue with [Testing with xUnit](/testing) when you are ready to load your
+own scenes and assert game behavior.
+
+## 6. Publish to the Browser
+
+Install the WebAssembly build tools once:
+
+```bash
+dotnet workload install wasm-tools
+dotnet tool install --global dotnet-serve
+```
+
+Then publish the web host:
+
+```bash
+dotnet publish MyGame.web
+```
+
+The static site is written to `MyGame.web/AppBundle/`. Serve that directory
+with any static file server; for example:
+
+```bash
+dotnet serve --directory MyGame.web/AppBundle
+```
+
+::: info Trail marker
+The same C# Godot project now runs through desktop, test, and browser hosts.
+You did not create a second game or port its scripts to another language.
+:::
+
+The [Web / Browser guide](/web) covers the development loop, deployment,
+configuration, and current browser limitations.
+
+## What You Just Built
+
+- A regular Godot C# project that still opens in the editor
+- A desktop application hosted by .NET
+- A headless xUnit test project
+- A browser host that publishes a static WebAssembly site
+- An incremental asset-import step shared by those hosts
+
+The mechanism underneath all of this is small but powerful: your .NET process
+owns Godot's lifecycle. [Core Concepts](/concepts) is the next stop when you
+want to see that code and understand the main loop.
+
+## Choose the Next Trail
+
+- Learn exactly [what conversion changes](/convert).
+- Understand [the recommended project layout](/project-layout).
+- Write a useful [scene test with xUnit](/testing).
+- Tune the [browser build and deployment](/web).
+- Learn about [native build variants](/build-configurations).
+- Look up [MSBuild configuration properties](/configuration).
+
+## Package Version Note
+
+Package versions begin with the embedded Godot version. If you add
+`2dog.engine` manually, pin it to your project's Godot line so NuGet does not
+silently select a newer engine line:
 
 ```xml
 <PackageReference Include="2dog.engine" Version=":godot-version:.*"/>
 ```
 
-This picks up new 2dog iterations for your Godot line but never a different
-engine version  –  deliberately including engine patch releases: moving from
-Godot :godot-version: to the next patch means new native libraries, so bump
-the pin together with your `Godot.NET.Sdk` version when you upgrade.
-(Projects generated by `dotnet new 2dog` pin exact versions already.)
-:::
-
-## Your First 2dog Application
-
-::: tip Upgrading an Existing Godot Project (Recommended)
-One `dnx` command converts an existing Godot project into a 2dog project  –  in
-place, without moving or renaming anything  –  and sets it up for a browser
-(WebAssembly) release:
-
-```bash
-# Convert in place - scaffolds the desktop, web, and test hosts
-dnx 2dog convert path/to/MyGodotApp
-
-cd path/to/MyGodotApp
-
-# Run on desktop
-dotnet run --project MyGodotApp.2dog
-
-# Publish for the browser as a static site
-# (one-time: dotnet workload install wasm-tools)
-dotnet publish MyGodotApp.web
-```
-
-See [Converting a Godot Project](./convert) and [Web / Browser](./web) for
-details.
-:::
-
-::: tip Creating a New Project
-For a fresh start, install the 2dog project template  –  that *is* the
-installation  –  and create a project from it:
-
-```bash
-# "Install" 2dog: register the project template
-dotnet new install 2dog
-
-# Create a new project (includes xUnit tests and a web host by default)
-dotnet new 2dog -n MyGodotApp
-
-# Navigate into the project
-cd MyGodotApp
-
-# Run tests (assets are imported automatically during build)
-dotnet test
-
-# Run the game
-dotnet run --project MyGodotApp.2dog
-
-# Edit in Godot (optional) - the project root IS the Godot project
-godot-mono -e --path .
-```
-
-This creates a complete project with sample Godot content and everything configured: the Godot project is the solution root, with the desktop host, tests, and web host nested inside it (hidden from the Godot editor by `.gdignore` files). See [Project Templates](./templates) for details.
-:::
-
-### Manual Setup
-
-Alternatively, create a new console application manually:
-
-```bash
-dotnet new console -n MyGodotApp
-cd MyGodotApp
-dotnet add package 2dog.engine
-```
-
-Replace `Program.cs`:
-
-```csharp
-using twodog;
-
-// Create engine pointing to your Godot project
-using var engine = new Engine("MyGodotApp", "./project");
-
-// Start Godot
-using var godot = engine.Start();
-
-// Run the main loop
-while (!godot.Iteration())
-{
-    // Your code runs here every frame
-    // Access the scene tree via engine.Tree
-}
-```
-
-## Project Structure
-
-A minimal 2dog project requires:
-
-```
-MyGodotApp/
-├── MyGodotApp.csproj
-├── Program.cs
-└── project/
-    └── project.godot    # Minimal Godot project file
-```
-
-The `project/` directory must contain at least a `project.godot` file. You can create one with the Godot editor or use a minimal template:
-
-```ini
-; project.godot
-config_version=5
-
-[application]
-config/name="MyGodotApp"
-```
-
-## Building from Source
-
-If you prefer to build everything locally instead of using the NuGet packages:
-
-1. Clone with submodules:
-
-```bash
-git clone --recursive https://github.com/outfox/2dog
-cd 2dog
-```
-
-2. Build Godot (requires Python with uv):
-
-```bash
-uv run poe build-godot
-```
-
-3. Build 2dog platform packages, and the main library and NuGet packages:
-
-```bash
-uv run poe build
-```
-
-> You can also run `uv run poe build-all` to do steps 2 and 3 in one go.
-
-## Native Variants
-
-2dog ships three native library variants for different use cases:
-
-- `release` (default)  –  optimized production build
-- `debug`  –  development build with debug symbols and assertions
-- `editor`  –  editor build with `TOOLS_ENABLED` compiled in
-
-Referencing the `2dog.engine` package gives you the `release` variant automatically.
-For `debug` or `editor`, set `<TwoDogVariant>` in your project  –  all three
-variants ship with the platform packages, and the one you select is copied
-and loaded as `libgodot-<variant>`.
-
-Note that the editor variant enables editor code paths at compile time. Asset
-import runs automatically at build time in a separate helper process against
-the editor-variant libgodot  –  see [Resource Import](./import-tool).
-
-See [Build Configurations](./build-configurations) for detailed information.
-
-## Next Steps
-
-- Use [Project Templates](./templates) to quickly scaffold new projects
-- Learn about [Core Concepts](./concepts) to understand the architecture
-- Explore [Build Configurations](./build-configurations) for Debug, Release, and Editor modes
-- Check the [API Reference](./api-reference) for detailed documentation
-- Set up [Testing with xUnit](./testing) for your project
+Generated and converted projects configure their package versions for you.

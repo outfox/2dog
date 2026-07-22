@@ -152,9 +152,6 @@ publish**. That cost is inherent to static linking, so iterate the fast way:
   itch.io.)
 - **No external GDExtension side modules** in web builds  –  the .NET runtime
   owns the wasm main module, so loadable native extensions cannot be dlopened.
-  (The 2dog.gdextension stack itself runs fine on web: its host registers as
-  the engine's *embedded* extension, no dynamic loading involved  –  see the
-  `2dog.gdextension.browser-wasm` package.)
 - **One `IL2104` trim warning** per publish is expected: GodotSharp is not
   trim-annotated upstream and is deliberately preserved whole. Your own
   assemblies are still trimmed and fully analyzed.
