@@ -153,7 +153,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_horizontal_alignment;
-    internal void SetHorizontalAlignment(HorizontalAlignment alignment)
+    public void SetHorizontalAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_horizontal_alignment;
         if (__mb == 0)
@@ -169,7 +169,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_horizontal_alignment;
-    internal HorizontalAlignment GetHorizontalAlignment()
+    public HorizontalAlignment GetHorizontalAlignment()
     {
         var __mb = __mb_get_horizontal_alignment;
         if (__mb == 0)
@@ -184,7 +184,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_vertical_alignment;
-    internal void SetVerticalAlignment(VerticalAlignment alignment)
+    public void SetVerticalAlignment(VerticalAlignment alignment)
     {
         var __mb = __mb_set_vertical_alignment;
         if (__mb == 0)
@@ -200,7 +200,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_vertical_alignment;
-    internal VerticalAlignment GetVerticalAlignment()
+    public VerticalAlignment GetVerticalAlignment()
     {
         var __mb = __mb_get_vertical_alignment;
         if (__mb == 0)
@@ -215,7 +215,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -232,7 +232,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -247,7 +247,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_label_settings;
-    internal void SetLabelSettings(LabelSettings? settings)
+    public void SetLabelSettings(LabelSettings? settings)
     {
         var __mb = __mb_set_label_settings;
         if (__mb == 0)
@@ -263,7 +263,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_label_settings;
-    internal LabelSettings? GetLabelSettings()
+    public LabelSettings? GetLabelSettings()
     {
         var __mb = __mb_get_label_settings;
         if (__mb == 0)
@@ -278,7 +278,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(Control.TextDirection direction)
+    public void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -294,7 +294,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_text_direction;
-    internal Control.TextDirection GetTextDirection()
+    public Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -309,7 +309,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -326,7 +326,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -341,7 +341,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_paragraph_separator;
-    internal void SetParagraphSeparator(string paragraphSeparator)
+    public void SetParagraphSeparator(string paragraphSeparator)
     {
         var __mb = __mb_set_paragraph_separator;
         if (__mb == 0)
@@ -358,7 +358,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_paragraph_separator;
-    internal string GetParagraphSeparator()
+    public string GetParagraphSeparator()
     {
         var __mb = __mb_get_paragraph_separator;
         if (__mb == 0)
@@ -373,7 +373,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_autowrap_mode;
-    internal void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
+    public void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
     {
         var __mb = __mb_set_autowrap_mode;
         if (__mb == 0)
@@ -389,7 +389,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_autowrap_mode;
-    internal TextServer.AutowrapMode GetAutowrapMode()
+    public TextServer.AutowrapMode GetAutowrapMode()
     {
         var __mb = __mb_get_autowrap_mode;
         if (__mb == 0)
@@ -404,7 +404,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_autowrap_trim_flags;
-    internal void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
+    public void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
     {
         var __mb = __mb_set_autowrap_trim_flags;
         if (__mb == 0)
@@ -420,7 +420,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_autowrap_trim_flags;
-    internal TextServer.LineBreakFlag GetAutowrapTrimFlags()
+    public TextServer.LineBreakFlag GetAutowrapTrimFlags()
     {
         var __mb = __mb_get_autowrap_trim_flags;
         if (__mb == 0)
@@ -435,7 +435,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_justification_flags;
-    internal void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
+    public void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
     {
         var __mb = __mb_set_justification_flags;
         if (__mb == 0)
@@ -451,7 +451,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_justification_flags;
-    internal TextServer.JustificationFlag GetJustificationFlags()
+    public TextServer.JustificationFlag GetJustificationFlags()
     {
         var __mb = __mb_get_justification_flags;
         if (__mb == 0)
@@ -466,7 +466,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_clip_text;
-    internal void SetClipText(bool enable)
+    public void SetClipText(bool enable)
     {
         var __mb = __mb_set_clip_text;
         if (__mb == 0)
@@ -482,7 +482,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_is_clipping_text;
-    internal bool IsClippingText()
+    public bool IsClippingText()
     {
         var __mb = __mb_is_clipping_text;
         if (__mb == 0)
@@ -497,7 +497,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_tab_stops;
-    internal void SetTabStops(float[] tabStops)
+    public void SetTabStops(float[] tabStops)
     {
         var __mb = __mb_set_tab_stops;
         if (__mb == 0)
@@ -514,7 +514,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_tab_stops;
-    internal float[] GetTabStops()
+    public float[] GetTabStops()
     {
         var __mb = __mb_get_tab_stops;
         if (__mb == 0)
@@ -529,7 +529,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_text_overrun_behavior;
-    internal void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_text_overrun_behavior;
         if (__mb == 0)
@@ -545,7 +545,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_text_overrun_behavior;
-    internal TextServer.OverrunBehavior GetTextOverrunBehavior()
+    public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
         var __mb = __mb_get_text_overrun_behavior;
         if (__mb == 0)
@@ -560,7 +560,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_ellipsis_char;
-    internal void SetEllipsisChar(string @char)
+    public void SetEllipsisChar(string @char)
     {
         var __mb = __mb_set_ellipsis_char;
         if (__mb == 0)
@@ -577,7 +577,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_ellipsis_char;
-    internal string GetEllipsisChar()
+    public string GetEllipsisChar()
     {
         var __mb = __mb_get_ellipsis_char;
         if (__mb == 0)
@@ -592,7 +592,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_uppercase;
-    internal void SetUppercase(bool enable)
+    public void SetUppercase(bool enable)
     {
         var __mb = __mb_set_uppercase;
         if (__mb == 0)
@@ -608,7 +608,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_is_uppercase;
-    internal bool IsUppercase()
+    public bool IsUppercase()
     {
         var __mb = __mb_is_uppercase;
         if (__mb == 0)
@@ -686,7 +686,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_visible_characters;
-    internal void SetVisibleCharacters(int amount)
+    public void SetVisibleCharacters(int amount)
     {
         var __mb = __mb_set_visible_characters;
         if (__mb == 0)
@@ -702,7 +702,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_visible_characters;
-    internal int GetVisibleCharacters()
+    public int GetVisibleCharacters()
     {
         var __mb = __mb_get_visible_characters;
         if (__mb == 0)
@@ -717,7 +717,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_visible_characters_behavior;
-    internal TextServer.VisibleCharactersBehavior GetVisibleCharactersBehavior()
+    public TextServer.VisibleCharactersBehavior GetVisibleCharactersBehavior()
     {
         var __mb = __mb_get_visible_characters_behavior;
         if (__mb == 0)
@@ -732,7 +732,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_visible_characters_behavior;
-    internal void SetVisibleCharactersBehavior(TextServer.VisibleCharactersBehavior behavior)
+    public void SetVisibleCharactersBehavior(TextServer.VisibleCharactersBehavior behavior)
     {
         var __mb = __mb_set_visible_characters_behavior;
         if (__mb == 0)
@@ -748,7 +748,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_visible_ratio;
-    internal void SetVisibleRatio(float ratio)
+    public void SetVisibleRatio(float ratio)
     {
         var __mb = __mb_set_visible_ratio;
         if (__mb == 0)
@@ -764,7 +764,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_visible_ratio;
-    internal float GetVisibleRatio()
+    public float GetVisibleRatio()
     {
         var __mb = __mb_get_visible_ratio;
         if (__mb == 0)
@@ -779,7 +779,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_lines_skipped;
-    internal void SetLinesSkipped(int linesSkipped)
+    public void SetLinesSkipped(int linesSkipped)
     {
         var __mb = __mb_set_lines_skipped;
         if (__mb == 0)
@@ -795,7 +795,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_lines_skipped;
-    internal int GetLinesSkipped()
+    public int GetLinesSkipped()
     {
         var __mb = __mb_get_lines_skipped;
         if (__mb == 0)
@@ -810,7 +810,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_max_lines_visible;
-    internal void SetMaxLinesVisible(int linesVisible)
+    public void SetMaxLinesVisible(int linesVisible)
     {
         var __mb = __mb_set_max_lines_visible;
         if (__mb == 0)
@@ -826,7 +826,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_max_lines_visible;
-    internal int GetMaxLinesVisible()
+    public int GetMaxLinesVisible()
     {
         var __mb = __mb_get_max_lines_visible;
         if (__mb == 0)
@@ -841,7 +841,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -857,7 +857,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -872,7 +872,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -888,7 +888,7 @@ public unsafe partial class Label : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -1146,7 +1146,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_horizontal_alignment;
-    internal void SetHorizontalAlignment(HorizontalAlignment alignment)
+    public void SetHorizontalAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_horizontal_alignment;
         if (__mb == 0)
@@ -1162,7 +1162,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_horizontal_alignment;
-    internal HorizontalAlignment GetHorizontalAlignment()
+    public HorizontalAlignment GetHorizontalAlignment()
     {
         var __mb = __mb_get_horizontal_alignment;
         if (__mb == 0)
@@ -1177,7 +1177,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_vertical_alignment;
-    internal void SetVerticalAlignment(VerticalAlignment alignment)
+    public void SetVerticalAlignment(VerticalAlignment alignment)
     {
         var __mb = __mb_set_vertical_alignment;
         if (__mb == 0)
@@ -1193,7 +1193,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_vertical_alignment;
-    internal VerticalAlignment GetVerticalAlignment()
+    public VerticalAlignment GetVerticalAlignment()
     {
         var __mb = __mb_get_vertical_alignment;
         if (__mb == 0)
@@ -1208,7 +1208,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_modulate;
-    internal void SetModulate(Color modulate)
+    public void SetModulate(Color modulate)
     {
         var __mb = __mb_set_modulate;
         if (__mb == 0)
@@ -1224,7 +1224,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_modulate;
-    internal Color GetModulate()
+    public Color GetModulate()
     {
         var __mb = __mb_get_modulate;
         if (__mb == 0)
@@ -1239,7 +1239,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_outline_modulate;
-    internal void SetOutlineModulate(Color modulate)
+    public void SetOutlineModulate(Color modulate)
     {
         var __mb = __mb_set_outline_modulate;
         if (__mb == 0)
@@ -1255,7 +1255,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_outline_modulate;
-    internal Color GetOutlineModulate()
+    public Color GetOutlineModulate()
     {
         var __mb = __mb_get_outline_modulate;
         if (__mb == 0)
@@ -1270,7 +1270,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -1287,7 +1287,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -1302,7 +1302,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(TextServer.Direction direction)
+    public void SetTextDirection(TextServer.Direction direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -1318,7 +1318,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_text_direction;
-    internal TextServer.Direction GetTextDirection()
+    public TextServer.Direction GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -1333,7 +1333,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -1350,7 +1350,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -1365,7 +1365,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -1381,7 +1381,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -1396,7 +1396,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -1412,7 +1412,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -1427,7 +1427,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_uppercase;
-    internal void SetUppercase(bool enable)
+    public void SetUppercase(bool enable)
     {
         var __mb = __mb_set_uppercase;
         if (__mb == 0)
@@ -1443,7 +1443,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_is_uppercase;
-    internal bool IsUppercase()
+    public bool IsUppercase()
     {
         var __mb = __mb_is_uppercase;
         if (__mb == 0)
@@ -1458,7 +1458,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_render_priority;
-    internal void SetRenderPriority(int priority)
+    public void SetRenderPriority(int priority)
     {
         var __mb = __mb_set_render_priority;
         if (__mb == 0)
@@ -1474,7 +1474,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_render_priority;
-    internal int GetRenderPriority()
+    public int GetRenderPriority()
     {
         var __mb = __mb_get_render_priority;
         if (__mb == 0)
@@ -1489,7 +1489,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_outline_render_priority;
-    internal void SetOutlineRenderPriority(int priority)
+    public void SetOutlineRenderPriority(int priority)
     {
         var __mb = __mb_set_outline_render_priority;
         if (__mb == 0)
@@ -1505,7 +1505,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_outline_render_priority;
-    internal int GetOutlineRenderPriority()
+    public int GetOutlineRenderPriority()
     {
         var __mb = __mb_get_outline_render_priority;
         if (__mb == 0)
@@ -1520,7 +1520,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_font;
-    internal void SetFont(Font? font)
+    public void SetFont(Font? font)
     {
         var __mb = __mb_set_font;
         if (__mb == 0)
@@ -1536,7 +1536,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_font;
-    internal Font? GetFont()
+    public Font? GetFont()
     {
         var __mb = __mb_get_font;
         if (__mb == 0)
@@ -1551,7 +1551,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_font_size;
-    internal void SetFontSize(int size)
+    public void SetFontSize(int size)
     {
         var __mb = __mb_set_font_size;
         if (__mb == 0)
@@ -1567,7 +1567,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_font_size;
-    internal int GetFontSize()
+    public int GetFontSize()
     {
         var __mb = __mb_get_font_size;
         if (__mb == 0)
@@ -1582,7 +1582,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_outline_size;
-    internal void SetOutlineSize(int outlineSize)
+    public void SetOutlineSize(int outlineSize)
     {
         var __mb = __mb_set_outline_size;
         if (__mb == 0)
@@ -1598,7 +1598,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_outline_size;
-    internal int GetOutlineSize()
+    public int GetOutlineSize()
     {
         var __mb = __mb_get_outline_size;
         if (__mb == 0)
@@ -1613,7 +1613,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_line_spacing;
-    internal void SetLineSpacing(float lineSpacing)
+    public void SetLineSpacing(float lineSpacing)
     {
         var __mb = __mb_set_line_spacing;
         if (__mb == 0)
@@ -1629,7 +1629,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_line_spacing;
-    internal float GetLineSpacing()
+    public float GetLineSpacing()
     {
         var __mb = __mb_get_line_spacing;
         if (__mb == 0)
@@ -1644,7 +1644,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_autowrap_mode;
-    internal void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
+    public void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
     {
         var __mb = __mb_set_autowrap_mode;
         if (__mb == 0)
@@ -1660,7 +1660,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_autowrap_mode;
-    internal TextServer.AutowrapMode GetAutowrapMode()
+    public TextServer.AutowrapMode GetAutowrapMode()
     {
         var __mb = __mb_get_autowrap_mode;
         if (__mb == 0)
@@ -1675,7 +1675,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_autowrap_trim_flags;
-    internal void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
+    public void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
     {
         var __mb = __mb_set_autowrap_trim_flags;
         if (__mb == 0)
@@ -1691,7 +1691,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_autowrap_trim_flags;
-    internal TextServer.LineBreakFlag GetAutowrapTrimFlags()
+    public TextServer.LineBreakFlag GetAutowrapTrimFlags()
     {
         var __mb = __mb_get_autowrap_trim_flags;
         if (__mb == 0)
@@ -1706,7 +1706,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_justification_flags;
-    internal void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
+    public void SetJustificationFlags(TextServer.JustificationFlag justificationFlags)
     {
         var __mb = __mb_set_justification_flags;
         if (__mb == 0)
@@ -1722,7 +1722,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_justification_flags;
-    internal TextServer.JustificationFlag GetJustificationFlags()
+    public TextServer.JustificationFlag GetJustificationFlags()
     {
         var __mb = __mb_get_justification_flags;
         if (__mb == 0)
@@ -1737,7 +1737,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_width;
-    internal void SetWidth(float width)
+    public void SetWidth(float width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -1753,7 +1753,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_width;
-    internal float GetWidth()
+    public float GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -1768,7 +1768,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_pixel_size;
-    internal void SetPixelSize(float pixelSize)
+    public void SetPixelSize(float pixelSize)
     {
         var __mb = __mb_set_pixel_size;
         if (__mb == 0)
@@ -1784,7 +1784,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_pixel_size;
-    internal float GetPixelSize()
+    public float GetPixelSize()
     {
         var __mb = __mb_get_pixel_size;
         if (__mb == 0)
@@ -1799,7 +1799,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_offset;
-    internal void SetOffset(Vector2 offset)
+    public void SetOffset(Vector2 offset)
     {
         var __mb = __mb_set_offset;
         if (__mb == 0)
@@ -1815,7 +1815,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_offset;
-    internal Vector2 GetOffset()
+    public Vector2 GetOffset()
     {
         var __mb = __mb_get_offset;
         if (__mb == 0)
@@ -1830,7 +1830,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_draw_flag;
-    internal void SetDrawFlag(Label3D.DrawFlags flag, bool enabled)
+    public void SetDrawFlag(Label3D.DrawFlags flag, bool enabled)
     {
         var __mb = __mb_set_draw_flag;
         if (__mb == 0)
@@ -1848,7 +1848,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_draw_flag;
-    internal bool GetDrawFlag(Label3D.DrawFlags flag)
+    public bool GetDrawFlag(Label3D.DrawFlags flag)
     {
         var __mb = __mb_get_draw_flag;
         if (__mb == 0)
@@ -1866,7 +1866,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_billboard_mode;
-    internal void SetBillboardMode(BaseMaterial3D.BillboardModeEnum mode)
+    public void SetBillboardMode(BaseMaterial3D.BillboardModeEnum mode)
     {
         var __mb = __mb_set_billboard_mode;
         if (__mb == 0)
@@ -1882,7 +1882,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_billboard_mode;
-    internal BaseMaterial3D.BillboardModeEnum GetBillboardMode()
+    public BaseMaterial3D.BillboardModeEnum GetBillboardMode()
     {
         var __mb = __mb_get_billboard_mode;
         if (__mb == 0)
@@ -1897,7 +1897,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_alpha_cut_mode;
-    internal void SetAlphaCutMode(Label3D.AlphaCutMode mode)
+    public void SetAlphaCutMode(Label3D.AlphaCutMode mode)
     {
         var __mb = __mb_set_alpha_cut_mode;
         if (__mb == 0)
@@ -1913,7 +1913,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_alpha_cut_mode;
-    internal Label3D.AlphaCutMode GetAlphaCutMode()
+    public Label3D.AlphaCutMode GetAlphaCutMode()
     {
         var __mb = __mb_get_alpha_cut_mode;
         if (__mb == 0)
@@ -1928,7 +1928,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_alpha_scissor_threshold;
-    internal void SetAlphaScissorThreshold(float threshold)
+    public void SetAlphaScissorThreshold(float threshold)
     {
         var __mb = __mb_set_alpha_scissor_threshold;
         if (__mb == 0)
@@ -1944,7 +1944,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_alpha_scissor_threshold;
-    internal float GetAlphaScissorThreshold()
+    public float GetAlphaScissorThreshold()
     {
         var __mb = __mb_get_alpha_scissor_threshold;
         if (__mb == 0)
@@ -1959,7 +1959,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_alpha_hash_scale;
-    internal void SetAlphaHashScale(float threshold)
+    public void SetAlphaHashScale(float threshold)
     {
         var __mb = __mb_set_alpha_hash_scale;
         if (__mb == 0)
@@ -1975,7 +1975,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_alpha_hash_scale;
-    internal float GetAlphaHashScale()
+    public float GetAlphaHashScale()
     {
         var __mb = __mb_get_alpha_hash_scale;
         if (__mb == 0)
@@ -1990,7 +1990,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_alpha_antialiasing;
-    internal void SetAlphaAntialiasing(BaseMaterial3D.AlphaAntiAliasing alphaAa)
+    public void SetAlphaAntialiasing(BaseMaterial3D.AlphaAntiAliasing alphaAa)
     {
         var __mb = __mb_set_alpha_antialiasing;
         if (__mb == 0)
@@ -2006,7 +2006,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_alpha_antialiasing;
-    internal BaseMaterial3D.AlphaAntiAliasing GetAlphaAntialiasing()
+    public BaseMaterial3D.AlphaAntiAliasing GetAlphaAntialiasing()
     {
         var __mb = __mb_get_alpha_antialiasing;
         if (__mb == 0)
@@ -2021,7 +2021,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_alpha_antialiasing_edge;
-    internal void SetAlphaAntialiasingEdge(float edge)
+    public void SetAlphaAntialiasingEdge(float edge)
     {
         var __mb = __mb_set_alpha_antialiasing_edge;
         if (__mb == 0)
@@ -2037,7 +2037,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_alpha_antialiasing_edge;
-    internal float GetAlphaAntialiasingEdge()
+    public float GetAlphaAntialiasingEdge()
     {
         var __mb = __mb_get_alpha_antialiasing_edge;
         if (__mb == 0)
@@ -2052,7 +2052,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_set_texture_filter;
-    internal void SetTextureFilter(BaseMaterial3D.TextureFilterEnum mode)
+    public void SetTextureFilter(BaseMaterial3D.TextureFilterEnum mode)
     {
         var __mb = __mb_set_texture_filter;
         if (__mb == 0)
@@ -2068,7 +2068,7 @@ public unsafe partial class Label3D : GeometryInstance3D
     }
 
     private static nint __mb_get_texture_filter;
-    internal BaseMaterial3D.TextureFilterEnum GetTextureFilter()
+    public BaseMaterial3D.TextureFilterEnum GetTextureFilter()
     {
         var __mb = __mb_get_texture_filter;
         if (__mb == 0)
@@ -2180,7 +2180,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_line_spacing;
-    internal void SetLineSpacing(float spacing)
+    public void SetLineSpacing(float spacing)
     {
         var __mb = __mb_set_line_spacing;
         if (__mb == 0)
@@ -2196,7 +2196,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_line_spacing;
-    internal float GetLineSpacing()
+    public float GetLineSpacing()
     {
         var __mb = __mb_get_line_spacing;
         if (__mb == 0)
@@ -2211,7 +2211,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_paragraph_spacing;
-    internal void SetParagraphSpacing(float spacing)
+    public void SetParagraphSpacing(float spacing)
     {
         var __mb = __mb_set_paragraph_spacing;
         if (__mb == 0)
@@ -2227,7 +2227,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_paragraph_spacing;
-    internal float GetParagraphSpacing()
+    public float GetParagraphSpacing()
     {
         var __mb = __mb_get_paragraph_spacing;
         if (__mb == 0)
@@ -2242,7 +2242,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_font;
-    internal void SetFont(Font? font)
+    public void SetFont(Font? font)
     {
         var __mb = __mb_set_font;
         if (__mb == 0)
@@ -2258,7 +2258,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_font;
-    internal Font? GetFont()
+    public Font? GetFont()
     {
         var __mb = __mb_get_font;
         if (__mb == 0)
@@ -2273,7 +2273,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_font_size;
-    internal void SetFontSize(int size)
+    public void SetFontSize(int size)
     {
         var __mb = __mb_set_font_size;
         if (__mb == 0)
@@ -2289,7 +2289,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_font_size;
-    internal int GetFontSize()
+    public int GetFontSize()
     {
         var __mb = __mb_get_font_size;
         if (__mb == 0)
@@ -2304,7 +2304,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_font_color;
-    internal void SetFontColor(Color color)
+    public void SetFontColor(Color color)
     {
         var __mb = __mb_set_font_color;
         if (__mb == 0)
@@ -2320,7 +2320,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_font_color;
-    internal Color GetFontColor()
+    public Color GetFontColor()
     {
         var __mb = __mb_get_font_color;
         if (__mb == 0)
@@ -2335,7 +2335,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_outline_size;
-    internal void SetOutlineSize(int size)
+    public void SetOutlineSize(int size)
     {
         var __mb = __mb_set_outline_size;
         if (__mb == 0)
@@ -2351,7 +2351,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_outline_size;
-    internal int GetOutlineSize()
+    public int GetOutlineSize()
     {
         var __mb = __mb_get_outline_size;
         if (__mb == 0)
@@ -2366,7 +2366,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_outline_color;
-    internal void SetOutlineColor(Color color)
+    public void SetOutlineColor(Color color)
     {
         var __mb = __mb_set_outline_color;
         if (__mb == 0)
@@ -2382,7 +2382,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_outline_color;
-    internal Color GetOutlineColor()
+    public Color GetOutlineColor()
     {
         var __mb = __mb_get_outline_color;
         if (__mb == 0)
@@ -2397,7 +2397,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_shadow_size;
-    internal void SetShadowSize(int size)
+    public void SetShadowSize(int size)
     {
         var __mb = __mb_set_shadow_size;
         if (__mb == 0)
@@ -2413,7 +2413,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_shadow_size;
-    internal int GetShadowSize()
+    public int GetShadowSize()
     {
         var __mb = __mb_get_shadow_size;
         if (__mb == 0)
@@ -2428,7 +2428,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_shadow_color;
-    internal void SetShadowColor(Color color)
+    public void SetShadowColor(Color color)
     {
         var __mb = __mb_set_shadow_color;
         if (__mb == 0)
@@ -2444,7 +2444,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_shadow_color;
-    internal Color GetShadowColor()
+    public Color GetShadowColor()
     {
         var __mb = __mb_get_shadow_color;
         if (__mb == 0)
@@ -2459,7 +2459,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_shadow_offset;
-    internal void SetShadowOffset(Vector2 offset)
+    public void SetShadowOffset(Vector2 offset)
     {
         var __mb = __mb_set_shadow_offset;
         if (__mb == 0)
@@ -2475,7 +2475,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_shadow_offset;
-    internal Vector2 GetShadowOffset()
+    public Vector2 GetShadowOffset()
     {
         var __mb = __mb_get_shadow_offset;
         if (__mb == 0)
@@ -2490,7 +2490,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_stacked_outline_count;
-    internal int GetStackedOutlineCount()
+    public int GetStackedOutlineCount()
     {
         var __mb = __mb_get_stacked_outline_count;
         if (__mb == 0)
@@ -2505,7 +2505,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_stacked_outline_count;
-    internal void SetStackedOutlineCount(int count)
+    public void SetStackedOutlineCount(int count)
     {
         var __mb = __mb_set_stacked_outline_count;
         if (__mb == 0)
@@ -2643,7 +2643,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_get_stacked_shadow_count;
-    internal int GetStackedShadowCount()
+    public int GetStackedShadowCount()
     {
         var __mb = __mb_get_stacked_shadow_count;
         if (__mb == 0)
@@ -2658,7 +2658,7 @@ public unsafe partial class LabelSettings : Resource
     }
 
     private static nint __mb_set_stacked_shadow_count;
-    internal void SetStackedShadowCount(int count)
+    public void SetStackedShadowCount(int count)
     {
         var __mb = __mb_set_stacked_shadow_count;
         if (__mb == 0)
@@ -2941,7 +2941,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_enabled;
-    internal void SetEnabled(bool enabled)
+    public void SetEnabled(bool enabled)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -2957,7 +2957,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_is_enabled;
-    internal bool IsEnabled()
+    public bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -2972,7 +2972,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_editor_only;
-    internal void SetEditorOnly(bool editorOnly)
+    public void SetEditorOnly(bool editorOnly)
     {
         var __mb = __mb_set_editor_only;
         if (__mb == 0)
@@ -2988,7 +2988,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_is_editor_only;
-    internal bool IsEditorOnly()
+    public bool IsEditorOnly()
     {
         var __mb = __mb_is_editor_only;
         if (__mb == 0)
@@ -3003,7 +3003,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_color;
-    internal void SetColor(Color color)
+    public void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -3019,7 +3019,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_color;
-    internal Color GetColor()
+    public Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -3034,7 +3034,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_energy;
-    internal void SetEnergy(float energy)
+    public void SetEnergy(float energy)
     {
         var __mb = __mb_set_energy;
         if (__mb == 0)
@@ -3050,7 +3050,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_energy;
-    internal float GetEnergy()
+    public float GetEnergy()
     {
         var __mb = __mb_get_energy;
         if (__mb == 0)
@@ -3065,7 +3065,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_z_range_min;
-    internal void SetZRangeMin(int z)
+    public void SetZRangeMin(int z)
     {
         var __mb = __mb_set_z_range_min;
         if (__mb == 0)
@@ -3081,7 +3081,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_z_range_min;
-    internal int GetZRangeMin()
+    public int GetZRangeMin()
     {
         var __mb = __mb_get_z_range_min;
         if (__mb == 0)
@@ -3096,7 +3096,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_z_range_max;
-    internal void SetZRangeMax(int z)
+    public void SetZRangeMax(int z)
     {
         var __mb = __mb_set_z_range_max;
         if (__mb == 0)
@@ -3112,7 +3112,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_z_range_max;
-    internal int GetZRangeMax()
+    public int GetZRangeMax()
     {
         var __mb = __mb_get_z_range_max;
         if (__mb == 0)
@@ -3127,7 +3127,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_layer_range_min;
-    internal void SetLayerRangeMin(int layer)
+    public void SetLayerRangeMin(int layer)
     {
         var __mb = __mb_set_layer_range_min;
         if (__mb == 0)
@@ -3143,7 +3143,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_layer_range_min;
-    internal int GetLayerRangeMin()
+    public int GetLayerRangeMin()
     {
         var __mb = __mb_get_layer_range_min;
         if (__mb == 0)
@@ -3158,7 +3158,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_layer_range_max;
-    internal void SetLayerRangeMax(int layer)
+    public void SetLayerRangeMax(int layer)
     {
         var __mb = __mb_set_layer_range_max;
         if (__mb == 0)
@@ -3174,7 +3174,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_layer_range_max;
-    internal int GetLayerRangeMax()
+    public int GetLayerRangeMax()
     {
         var __mb = __mb_get_layer_range_max;
         if (__mb == 0)
@@ -3189,7 +3189,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_item_cull_mask;
-    internal void SetItemCullMask(int itemCullMask)
+    public void SetItemCullMask(int itemCullMask)
     {
         var __mb = __mb_set_item_cull_mask;
         if (__mb == 0)
@@ -3205,7 +3205,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_item_cull_mask;
-    internal int GetItemCullMask()
+    public int GetItemCullMask()
     {
         var __mb = __mb_get_item_cull_mask;
         if (__mb == 0)
@@ -3220,7 +3220,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_item_shadow_cull_mask;
-    internal void SetItemShadowCullMask(int itemShadowCullMask)
+    public void SetItemShadowCullMask(int itemShadowCullMask)
     {
         var __mb = __mb_set_item_shadow_cull_mask;
         if (__mb == 0)
@@ -3236,7 +3236,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_item_shadow_cull_mask;
-    internal int GetItemShadowCullMask()
+    public int GetItemShadowCullMask()
     {
         var __mb = __mb_get_item_shadow_cull_mask;
         if (__mb == 0)
@@ -3251,7 +3251,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_shadow_enabled;
-    internal void SetShadowEnabled(bool enabled)
+    public void SetShadowEnabled(bool enabled)
     {
         var __mb = __mb_set_shadow_enabled;
         if (__mb == 0)
@@ -3267,7 +3267,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_is_shadow_enabled;
-    internal bool IsShadowEnabled()
+    public bool IsShadowEnabled()
     {
         var __mb = __mb_is_shadow_enabled;
         if (__mb == 0)
@@ -3282,7 +3282,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_shadow_smooth;
-    internal void SetShadowSmooth(float smooth)
+    public void SetShadowSmooth(float smooth)
     {
         var __mb = __mb_set_shadow_smooth;
         if (__mb == 0)
@@ -3298,7 +3298,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_shadow_smooth;
-    internal float GetShadowSmooth()
+    public float GetShadowSmooth()
     {
         var __mb = __mb_get_shadow_smooth;
         if (__mb == 0)
@@ -3313,7 +3313,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_shadow_filter;
-    internal void SetShadowFilter(Light2D.ShadowFilterEnum filter)
+    public void SetShadowFilter(Light2D.ShadowFilterEnum filter)
     {
         var __mb = __mb_set_shadow_filter;
         if (__mb == 0)
@@ -3329,7 +3329,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_shadow_filter;
-    internal Light2D.ShadowFilterEnum GetShadowFilter()
+    public Light2D.ShadowFilterEnum GetShadowFilter()
     {
         var __mb = __mb_get_shadow_filter;
         if (__mb == 0)
@@ -3344,7 +3344,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_shadow_color;
-    internal void SetShadowColor(Color shadowColor)
+    public void SetShadowColor(Color shadowColor)
     {
         var __mb = __mb_set_shadow_color;
         if (__mb == 0)
@@ -3360,7 +3360,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_shadow_color;
-    internal Color GetShadowColor()
+    public Color GetShadowColor()
     {
         var __mb = __mb_get_shadow_color;
         if (__mb == 0)
@@ -3375,7 +3375,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_blend_mode;
-    internal void SetBlendMode(Light2D.BlendModeEnum mode)
+    public void SetBlendMode(Light2D.BlendModeEnum mode)
     {
         var __mb = __mb_set_blend_mode;
         if (__mb == 0)
@@ -3391,7 +3391,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_blend_mode;
-    internal Light2D.BlendModeEnum GetBlendMode()
+    public Light2D.BlendModeEnum GetBlendMode()
     {
         var __mb = __mb_get_blend_mode;
         if (__mb == 0)
@@ -3406,7 +3406,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_set_height;
-    internal void SetHeight(float height)
+    public void SetHeight(float height)
     {
         var __mb = __mb_set_height;
         if (__mb == 0)
@@ -3422,7 +3422,7 @@ public unsafe partial class Light2D : Node2D
     }
 
     private static nint __mb_get_height;
-    internal float GetHeight()
+    public float GetHeight()
     {
         var __mb = __mb_get_height;
         if (__mb == 0)
@@ -3637,7 +3637,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_editor_only;
-    internal void SetEditorOnly(bool editorOnly)
+    public void SetEditorOnly(bool editorOnly)
     {
         var __mb = __mb_set_editor_only;
         if (__mb == 0)
@@ -3653,7 +3653,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_is_editor_only;
-    internal bool IsEditorOnly()
+    public bool IsEditorOnly()
     {
         var __mb = __mb_is_editor_only;
         if (__mb == 0)
@@ -3668,7 +3668,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_param;
-    internal void SetParam(Light3D.Param param, float value)
+    public void SetParam(Light3D.Param param, float value)
     {
         var __mb = __mb_set_param;
         if (__mb == 0)
@@ -3686,7 +3686,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_param;
-    internal float GetParam(Light3D.Param param)
+    public float GetParam(Light3D.Param param)
     {
         var __mb = __mb_get_param;
         if (__mb == 0)
@@ -3704,7 +3704,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_shadow;
-    internal void SetShadow(bool enabled)
+    public void SetShadow(bool enabled)
     {
         var __mb = __mb_set_shadow;
         if (__mb == 0)
@@ -3720,7 +3720,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_has_shadow;
-    internal bool HasShadow()
+    public bool HasShadow()
     {
         var __mb = __mb_has_shadow;
         if (__mb == 0)
@@ -3735,7 +3735,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_negative;
-    internal void SetNegative(bool enabled)
+    public void SetNegative(bool enabled)
     {
         var __mb = __mb_set_negative;
         if (__mb == 0)
@@ -3751,7 +3751,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_is_negative;
-    internal bool IsNegative()
+    public bool IsNegative()
     {
         var __mb = __mb_is_negative;
         if (__mb == 0)
@@ -3766,7 +3766,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_cull_mask;
-    internal void SetCullMask(uint cullMask)
+    public void SetCullMask(uint cullMask)
     {
         var __mb = __mb_set_cull_mask;
         if (__mb == 0)
@@ -3782,7 +3782,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_cull_mask;
-    internal uint GetCullMask()
+    public uint GetCullMask()
     {
         var __mb = __mb_get_cull_mask;
         if (__mb == 0)
@@ -3797,7 +3797,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_enable_distance_fade;
-    internal void SetEnableDistanceFade(bool enable)
+    public void SetEnableDistanceFade(bool enable)
     {
         var __mb = __mb_set_enable_distance_fade;
         if (__mb == 0)
@@ -3813,7 +3813,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_is_distance_fade_enabled;
-    internal bool IsDistanceFadeEnabled()
+    public bool IsDistanceFadeEnabled()
     {
         var __mb = __mb_is_distance_fade_enabled;
         if (__mb == 0)
@@ -3828,7 +3828,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_distance_fade_begin;
-    internal void SetDistanceFadeBegin(float distance)
+    public void SetDistanceFadeBegin(float distance)
     {
         var __mb = __mb_set_distance_fade_begin;
         if (__mb == 0)
@@ -3844,7 +3844,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_distance_fade_begin;
-    internal float GetDistanceFadeBegin()
+    public float GetDistanceFadeBegin()
     {
         var __mb = __mb_get_distance_fade_begin;
         if (__mb == 0)
@@ -3859,7 +3859,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_distance_fade_shadow;
-    internal void SetDistanceFadeShadow(float distance)
+    public void SetDistanceFadeShadow(float distance)
     {
         var __mb = __mb_set_distance_fade_shadow;
         if (__mb == 0)
@@ -3875,7 +3875,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_distance_fade_shadow;
-    internal float GetDistanceFadeShadow()
+    public float GetDistanceFadeShadow()
     {
         var __mb = __mb_get_distance_fade_shadow;
         if (__mb == 0)
@@ -3890,7 +3890,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_distance_fade_length;
-    internal void SetDistanceFadeLength(float distance)
+    public void SetDistanceFadeLength(float distance)
     {
         var __mb = __mb_set_distance_fade_length;
         if (__mb == 0)
@@ -3906,7 +3906,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_distance_fade_length;
-    internal float GetDistanceFadeLength()
+    public float GetDistanceFadeLength()
     {
         var __mb = __mb_get_distance_fade_length;
         if (__mb == 0)
@@ -3921,7 +3921,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_color;
-    internal void SetColor(Color color)
+    public void SetColor(Color color)
     {
         var __mb = __mb_set_color;
         if (__mb == 0)
@@ -3937,7 +3937,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_color;
-    internal Color GetColor()
+    public Color GetColor()
     {
         var __mb = __mb_get_color;
         if (__mb == 0)
@@ -3952,7 +3952,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_shadow_reverse_cull_face;
-    internal void SetShadowReverseCullFace(bool enable)
+    public void SetShadowReverseCullFace(bool enable)
     {
         var __mb = __mb_set_shadow_reverse_cull_face;
         if (__mb == 0)
@@ -3968,7 +3968,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_shadow_reverse_cull_face;
-    internal bool GetShadowReverseCullFace()
+    public bool GetShadowReverseCullFace()
     {
         var __mb = __mb_get_shadow_reverse_cull_face;
         if (__mb == 0)
@@ -3983,7 +3983,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_shadow_caster_mask;
-    internal void SetShadowCasterMask(uint casterMask)
+    public void SetShadowCasterMask(uint casterMask)
     {
         var __mb = __mb_set_shadow_caster_mask;
         if (__mb == 0)
@@ -3999,7 +3999,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_shadow_caster_mask;
-    internal uint GetShadowCasterMask()
+    public uint GetShadowCasterMask()
     {
         var __mb = __mb_get_shadow_caster_mask;
         if (__mb == 0)
@@ -4014,7 +4014,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_bake_mode;
-    internal void SetBakeMode(Light3D.BakeMode bakeMode)
+    public void SetBakeMode(Light3D.BakeMode bakeMode)
     {
         var __mb = __mb_set_bake_mode;
         if (__mb == 0)
@@ -4030,7 +4030,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_bake_mode;
-    internal Light3D.BakeMode GetBakeMode()
+    public Light3D.BakeMode GetBakeMode()
     {
         var __mb = __mb_get_bake_mode;
         if (__mb == 0)
@@ -4045,7 +4045,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_projector;
-    internal void SetProjector(Texture2D? projector)
+    public void SetProjector(Texture2D? projector)
     {
         var __mb = __mb_set_projector;
         if (__mb == 0)
@@ -4061,7 +4061,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_projector;
-    internal Texture2D? GetProjector()
+    public Texture2D? GetProjector()
     {
         var __mb = __mb_get_projector;
         if (__mb == 0)
@@ -4076,7 +4076,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_set_temperature;
-    internal void SetTemperature(float temperature)
+    public void SetTemperature(float temperature)
     {
         var __mb = __mb_set_temperature;
         if (__mb == 0)
@@ -4092,7 +4092,7 @@ public unsafe partial class Light3D : VisualInstance3D
     }
 
     private static nint __mb_get_temperature;
-    internal float GetTemperature()
+    public float GetTemperature()
     {
         var __mb = __mb_get_temperature;
         if (__mb == 0)
@@ -4150,7 +4150,7 @@ public unsafe partial class LightOccluder2D : Node2D
     }
 
     private static nint __mb_set_occluder_polygon;
-    internal void SetOccluderPolygon(OccluderPolygon2D? polygon)
+    public void SetOccluderPolygon(OccluderPolygon2D? polygon)
     {
         var __mb = __mb_set_occluder_polygon;
         if (__mb == 0)
@@ -4166,7 +4166,7 @@ public unsafe partial class LightOccluder2D : Node2D
     }
 
     private static nint __mb_get_occluder_polygon;
-    internal OccluderPolygon2D? GetOccluderPolygon()
+    public OccluderPolygon2D? GetOccluderPolygon()
     {
         var __mb = __mb_get_occluder_polygon;
         if (__mb == 0)
@@ -4181,7 +4181,7 @@ public unsafe partial class LightOccluder2D : Node2D
     }
 
     private static nint __mb_set_occluder_light_mask;
-    internal void SetOccluderLightMask(int mask)
+    public void SetOccluderLightMask(int mask)
     {
         var __mb = __mb_set_occluder_light_mask;
         if (__mb == 0)
@@ -4197,7 +4197,7 @@ public unsafe partial class LightOccluder2D : Node2D
     }
 
     private static nint __mb_get_occluder_light_mask;
-    internal int GetOccluderLightMask()
+    public int GetOccluderLightMask()
     {
         var __mb = __mb_get_occluder_light_mask;
         if (__mb == 0)
@@ -4212,7 +4212,7 @@ public unsafe partial class LightOccluder2D : Node2D
     }
 
     private static nint __mb_set_as_sdf_collision;
-    internal void SetAsSdfCollision(bool enable)
+    public void SetAsSdfCollision(bool enable)
     {
         var __mb = __mb_set_as_sdf_collision;
         if (__mb == 0)
@@ -4228,7 +4228,7 @@ public unsafe partial class LightOccluder2D : Node2D
     }
 
     private static nint __mb_is_set_as_sdf_collision;
-    internal bool IsSetAsSdfCollision()
+    public bool IsSetAsSdfCollision()
     {
         var __mb = __mb_is_set_as_sdf_collision;
         if (__mb == 0)
@@ -4426,7 +4426,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_light_data;
-    internal void SetLightData(LightmapGIData? data)
+    public void SetLightData(LightmapGIData? data)
     {
         var __mb = __mb_set_light_data;
         if (__mb == 0)
@@ -4442,7 +4442,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_light_data;
-    internal LightmapGIData? GetLightData()
+    public LightmapGIData? GetLightData()
     {
         var __mb = __mb_get_light_data;
         if (__mb == 0)
@@ -4457,7 +4457,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_bake_quality;
-    internal void SetBakeQuality(LightmapGI.BakeQuality bakeQuality)
+    public void SetBakeQuality(LightmapGI.BakeQuality bakeQuality)
     {
         var __mb = __mb_set_bake_quality;
         if (__mb == 0)
@@ -4473,7 +4473,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_bake_quality;
-    internal LightmapGI.BakeQuality GetBakeQuality()
+    public LightmapGI.BakeQuality GetBakeQuality()
     {
         var __mb = __mb_get_bake_quality;
         if (__mb == 0)
@@ -4488,7 +4488,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_bounces;
-    internal void SetBounces(int bounces)
+    public void SetBounces(int bounces)
     {
         var __mb = __mb_set_bounces;
         if (__mb == 0)
@@ -4504,7 +4504,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_bounces;
-    internal int GetBounces()
+    public int GetBounces()
     {
         var __mb = __mb_get_bounces;
         if (__mb == 0)
@@ -4519,7 +4519,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_bounce_indirect_energy;
-    internal void SetBounceIndirectEnergy(float bounceIndirectEnergy)
+    public void SetBounceIndirectEnergy(float bounceIndirectEnergy)
     {
         var __mb = __mb_set_bounce_indirect_energy;
         if (__mb == 0)
@@ -4535,7 +4535,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_bounce_indirect_energy;
-    internal float GetBounceIndirectEnergy()
+    public float GetBounceIndirectEnergy()
     {
         var __mb = __mb_get_bounce_indirect_energy;
         if (__mb == 0)
@@ -4550,7 +4550,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_generate_probes;
-    internal void SetGenerateProbes(LightmapGI.GenerateProbes subdivision)
+    public void SetGenerateProbes(LightmapGI.GenerateProbes subdivision)
     {
         var __mb = __mb_set_generate_probes;
         if (__mb == 0)
@@ -4566,7 +4566,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_generate_probes;
-    internal LightmapGI.GenerateProbes GetGenerateProbes()
+    public LightmapGI.GenerateProbes GetGenerateProbes()
     {
         var __mb = __mb_get_generate_probes;
         if (__mb == 0)
@@ -4581,7 +4581,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_bias;
-    internal void SetBias(float bias)
+    public void SetBias(float bias)
     {
         var __mb = __mb_set_bias;
         if (__mb == 0)
@@ -4597,7 +4597,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_bias;
-    internal float GetBias()
+    public float GetBias()
     {
         var __mb = __mb_get_bias;
         if (__mb == 0)
@@ -4612,7 +4612,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_environment_mode;
-    internal void SetEnvironmentMode(LightmapGI.EnvironmentModeEnum mode)
+    public void SetEnvironmentMode(LightmapGI.EnvironmentModeEnum mode)
     {
         var __mb = __mb_set_environment_mode;
         if (__mb == 0)
@@ -4628,7 +4628,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_environment_mode;
-    internal LightmapGI.EnvironmentModeEnum GetEnvironmentMode()
+    public LightmapGI.EnvironmentModeEnum GetEnvironmentMode()
     {
         var __mb = __mb_get_environment_mode;
         if (__mb == 0)
@@ -4643,7 +4643,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_environment_custom_sky;
-    internal void SetEnvironmentCustomSky(Sky? sky)
+    public void SetEnvironmentCustomSky(Sky? sky)
     {
         var __mb = __mb_set_environment_custom_sky;
         if (__mb == 0)
@@ -4659,7 +4659,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_environment_custom_sky;
-    internal Sky? GetEnvironmentCustomSky()
+    public Sky? GetEnvironmentCustomSky()
     {
         var __mb = __mb_get_environment_custom_sky;
         if (__mb == 0)
@@ -4674,7 +4674,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_environment_custom_color;
-    internal void SetEnvironmentCustomColor(Color color)
+    public void SetEnvironmentCustomColor(Color color)
     {
         var __mb = __mb_set_environment_custom_color;
         if (__mb == 0)
@@ -4690,7 +4690,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_environment_custom_color;
-    internal Color GetEnvironmentCustomColor()
+    public Color GetEnvironmentCustomColor()
     {
         var __mb = __mb_get_environment_custom_color;
         if (__mb == 0)
@@ -4705,7 +4705,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_environment_custom_energy;
-    internal void SetEnvironmentCustomEnergy(float energy)
+    public void SetEnvironmentCustomEnergy(float energy)
     {
         var __mb = __mb_set_environment_custom_energy;
         if (__mb == 0)
@@ -4721,7 +4721,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_environment_custom_energy;
-    internal float GetEnvironmentCustomEnergy()
+    public float GetEnvironmentCustomEnergy()
     {
         var __mb = __mb_get_environment_custom_energy;
         if (__mb == 0)
@@ -4736,7 +4736,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_texel_scale;
-    internal void SetTexelScale(float texelScale)
+    public void SetTexelScale(float texelScale)
     {
         var __mb = __mb_set_texel_scale;
         if (__mb == 0)
@@ -4752,7 +4752,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_texel_scale;
-    internal float GetTexelScale()
+    public float GetTexelScale()
     {
         var __mb = __mb_get_texel_scale;
         if (__mb == 0)
@@ -4767,7 +4767,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_max_texture_size;
-    internal void SetMaxTextureSize(int maxTextureSize)
+    public void SetMaxTextureSize(int maxTextureSize)
     {
         var __mb = __mb_set_max_texture_size;
         if (__mb == 0)
@@ -4783,7 +4783,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_max_texture_size;
-    internal int GetMaxTextureSize()
+    public int GetMaxTextureSize()
     {
         var __mb = __mb_get_max_texture_size;
         if (__mb == 0)
@@ -4798,7 +4798,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_supersampling_enabled;
-    internal void SetSupersamplingEnabled(bool enable)
+    public void SetSupersamplingEnabled(bool enable)
     {
         var __mb = __mb_set_supersampling_enabled;
         if (__mb == 0)
@@ -4814,7 +4814,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_is_supersampling_enabled;
-    internal bool IsSupersamplingEnabled()
+    public bool IsSupersamplingEnabled()
     {
         var __mb = __mb_is_supersampling_enabled;
         if (__mb == 0)
@@ -4829,7 +4829,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_supersampling_factor;
-    internal void SetSupersamplingFactor(float factor)
+    public void SetSupersamplingFactor(float factor)
     {
         var __mb = __mb_set_supersampling_factor;
         if (__mb == 0)
@@ -4845,7 +4845,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_supersampling_factor;
-    internal float GetSupersamplingFactor()
+    public float GetSupersamplingFactor()
     {
         var __mb = __mb_get_supersampling_factor;
         if (__mb == 0)
@@ -4860,7 +4860,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_use_denoiser;
-    internal void SetUseDenoiser(bool useDenoiser)
+    public void SetUseDenoiser(bool useDenoiser)
     {
         var __mb = __mb_set_use_denoiser;
         if (__mb == 0)
@@ -4876,7 +4876,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_is_using_denoiser;
-    internal bool IsUsingDenoiser()
+    public bool IsUsingDenoiser()
     {
         var __mb = __mb_is_using_denoiser;
         if (__mb == 0)
@@ -4891,7 +4891,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_denoiser_strength;
-    internal void SetDenoiserStrength(float denoiserStrength)
+    public void SetDenoiserStrength(float denoiserStrength)
     {
         var __mb = __mb_set_denoiser_strength;
         if (__mb == 0)
@@ -4907,7 +4907,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_denoiser_strength;
-    internal float GetDenoiserStrength()
+    public float GetDenoiserStrength()
     {
         var __mb = __mb_get_denoiser_strength;
         if (__mb == 0)
@@ -4922,7 +4922,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_denoiser_range;
-    internal void SetDenoiserRange(int denoiserRange)
+    public void SetDenoiserRange(int denoiserRange)
     {
         var __mb = __mb_set_denoiser_range;
         if (__mb == 0)
@@ -4938,7 +4938,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_denoiser_range;
-    internal int GetDenoiserRange()
+    public int GetDenoiserRange()
     {
         var __mb = __mb_get_denoiser_range;
         if (__mb == 0)
@@ -4953,7 +4953,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_interior;
-    internal void SetInterior(bool enable)
+    public void SetInterior(bool enable)
     {
         var __mb = __mb_set_interior;
         if (__mb == 0)
@@ -4969,7 +4969,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_is_interior;
-    internal bool IsInterior()
+    public bool IsInterior()
     {
         var __mb = __mb_is_interior;
         if (__mb == 0)
@@ -4984,7 +4984,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_directional;
-    internal void SetDirectional(bool directional)
+    public void SetDirectional(bool directional)
     {
         var __mb = __mb_set_directional;
         if (__mb == 0)
@@ -5000,7 +5000,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_is_directional;
-    internal bool IsDirectional()
+    public bool IsDirectional()
     {
         var __mb = __mb_is_directional;
         if (__mb == 0)
@@ -5015,7 +5015,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_shadowmask_mode;
-    internal void SetShadowmaskMode(LightmapGIData.ShadowmaskMode mode)
+    public void SetShadowmaskMode(LightmapGIData.ShadowmaskMode mode)
     {
         var __mb = __mb_set_shadowmask_mode;
         if (__mb == 0)
@@ -5031,7 +5031,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_shadowmask_mode;
-    internal LightmapGIData.ShadowmaskMode GetShadowmaskMode()
+    public LightmapGIData.ShadowmaskMode GetShadowmaskMode()
     {
         var __mb = __mb_get_shadowmask_mode;
         if (__mb == 0)
@@ -5046,7 +5046,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_use_texture_for_bounces;
-    internal void SetUseTextureForBounces(bool useTextureForBounces)
+    public void SetUseTextureForBounces(bool useTextureForBounces)
     {
         var __mb = __mb_set_use_texture_for_bounces;
         if (__mb == 0)
@@ -5062,7 +5062,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_is_using_texture_for_bounces;
-    internal bool IsUsingTextureForBounces()
+    public bool IsUsingTextureForBounces()
     {
         var __mb = __mb_is_using_texture_for_bounces;
         if (__mb == 0)
@@ -5077,7 +5077,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_set_camera_attributes;
-    internal void SetCameraAttributes(CameraAttributes? cameraAttributes)
+    public void SetCameraAttributes(CameraAttributes? cameraAttributes)
     {
         var __mb = __mb_set_camera_attributes;
         if (__mb == 0)
@@ -5093,7 +5093,7 @@ public unsafe partial class LightmapGI : VisualInstance3D
     }
 
     private static nint __mb_get_camera_attributes;
-    internal CameraAttributes? GetCameraAttributes()
+    public CameraAttributes? GetCameraAttributes()
     {
         var __mb = __mb_get_camera_attributes;
         if (__mb == 0)
@@ -5149,7 +5149,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_set_lightmap_textures;
-    internal void SetLightmapTextures(Godot.Collections.Array lightTextures)
+    public void SetLightmapTextures(Godot.Collections.Array lightTextures)
     {
         var __mb = __mb_set_lightmap_textures;
         if (__mb == 0)
@@ -5165,7 +5165,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_get_lightmap_textures;
-    internal Godot.Collections.Array GetLightmapTextures()
+    public Godot.Collections.Array GetLightmapTextures()
     {
         var __mb = __mb_get_lightmap_textures;
         if (__mb == 0)
@@ -5180,7 +5180,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_set_shadowmask_textures;
-    internal void SetShadowmaskTextures(Godot.Collections.Array shadowmaskTextures)
+    public void SetShadowmaskTextures(Godot.Collections.Array shadowmaskTextures)
     {
         var __mb = __mb_set_shadowmask_textures;
         if (__mb == 0)
@@ -5196,7 +5196,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_get_shadowmask_textures;
-    internal Godot.Collections.Array GetShadowmaskTextures()
+    public Godot.Collections.Array GetShadowmaskTextures()
     {
         var __mb = __mb_get_shadowmask_textures;
         if (__mb == 0)
@@ -5211,7 +5211,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_set_uses_spherical_harmonics;
-    internal void SetUsesSphericalHarmonics(bool usesSphericalHarmonics)
+    public void SetUsesSphericalHarmonics(bool usesSphericalHarmonics)
     {
         var __mb = __mb_set_uses_spherical_harmonics;
         if (__mb == 0)
@@ -5227,7 +5227,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_is_using_spherical_harmonics;
-    internal bool IsUsingSphericalHarmonics()
+    public bool IsUsingSphericalHarmonics()
     {
         var __mb = __mb_is_using_spherical_harmonics;
         if (__mb == 0)
@@ -5310,7 +5310,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_set_light_texture;
-    internal void SetLightTexture(TextureLayered? lightTexture)
+    public void SetLightTexture(TextureLayered? lightTexture)
     {
         var __mb = __mb_set_light_texture;
         if (__mb == 0)
@@ -5326,7 +5326,7 @@ public unsafe partial class LightmapGIData : Resource
     }
 
     private static nint __mb_get_light_texture;
-    internal TextureLayered? GetLightTexture()
+    public TextureLayered? GetLightTexture()
     {
         var __mb = __mb_get_light_texture;
         if (__mb == 0)
@@ -5540,7 +5540,7 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_chain_count;
-    internal void SetChainCount(int count)
+    public void SetChainCount(int count)
     {
         var __mb = __mb_set_chain_count;
         if (__mb == 0)
@@ -5556,7 +5556,7 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_chain_count;
-    internal int GetChainCount()
+    public int GetChainCount()
     {
         var __mb = __mb_get_chain_count;
         if (__mb == 0)
@@ -5584,7 +5584,7 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_max_angular_velocity;
-    internal void SetMaxAngularVelocity(double angularVelocity)
+    public void SetMaxAngularVelocity(double angularVelocity)
     {
         var __mb = __mb_set_max_angular_velocity;
         if (__mb == 0)
@@ -5600,7 +5600,7 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_max_angular_velocity;
-    internal double GetMaxAngularVelocity()
+    public double GetMaxAngularVelocity()
     {
         var __mb = __mb_get_max_angular_velocity;
         if (__mb == 0)
@@ -5615,7 +5615,7 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_exclude;
-    internal void SetExclude(bool exclude)
+    public void SetExclude(bool exclude)
     {
         var __mb = __mb_set_exclude;
         if (__mb == 0)
@@ -5631,7 +5631,7 @@ public unsafe partial class LimitAngularVelocityModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_is_exclude;
-    internal bool IsExclude()
+    public bool IsExclude()
     {
         var __mb = __mb_is_exclude;
         if (__mb == 0)
@@ -5774,7 +5774,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_points;
-    internal void SetPoints(Vector2[] points)
+    public void SetPoints(Vector2[] points)
     {
         var __mb = __mb_set_points;
         if (__mb == 0)
@@ -5791,7 +5791,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_points;
-    internal Vector2[] GetPoints()
+    public Vector2[] GetPoints()
     {
         var __mb = __mb_get_points;
         if (__mb == 0)
@@ -5904,7 +5904,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_closed;
-    internal void SetClosed(bool closed)
+    public void SetClosed(bool closed)
     {
         var __mb = __mb_set_closed;
         if (__mb == 0)
@@ -5920,7 +5920,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_is_closed;
-    internal bool IsClosed()
+    public bool IsClosed()
     {
         var __mb = __mb_is_closed;
         if (__mb == 0)
@@ -5935,7 +5935,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_width;
-    internal void SetWidth(float width)
+    public void SetWidth(float width)
     {
         var __mb = __mb_set_width;
         if (__mb == 0)
@@ -5951,7 +5951,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_width;
-    internal float GetWidth()
+    public float GetWidth()
     {
         var __mb = __mb_get_width;
         if (__mb == 0)
@@ -5966,7 +5966,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_curve;
-    internal void SetCurve(Curve? curve)
+    public void SetCurve(Curve? curve)
     {
         var __mb = __mb_set_curve;
         if (__mb == 0)
@@ -5982,7 +5982,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_curve;
-    internal Curve? GetCurve()
+    public Curve? GetCurve()
     {
         var __mb = __mb_get_curve;
         if (__mb == 0)
@@ -5997,7 +5997,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_default_color;
-    internal void SetDefaultColor(Color color)
+    public void SetDefaultColor(Color color)
     {
         var __mb = __mb_set_default_color;
         if (__mb == 0)
@@ -6013,7 +6013,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_default_color;
-    internal Color GetDefaultColor()
+    public Color GetDefaultColor()
     {
         var __mb = __mb_get_default_color;
         if (__mb == 0)
@@ -6028,7 +6028,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_gradient;
-    internal void SetGradient(Gradient? color)
+    public void SetGradient(Gradient? color)
     {
         var __mb = __mb_set_gradient;
         if (__mb == 0)
@@ -6044,7 +6044,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_gradient;
-    internal Gradient? GetGradient()
+    public Gradient? GetGradient()
     {
         var __mb = __mb_get_gradient;
         if (__mb == 0)
@@ -6059,7 +6059,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture2D? texture)
+    public void SetTexture(Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -6075,7 +6075,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture()
+    public Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -6090,7 +6090,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_texture_mode;
-    internal void SetTextureMode(Line2D.LineTextureMode mode)
+    public void SetTextureMode(Line2D.LineTextureMode mode)
     {
         var __mb = __mb_set_texture_mode;
         if (__mb == 0)
@@ -6106,7 +6106,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_texture_mode;
-    internal Line2D.LineTextureMode GetTextureMode()
+    public Line2D.LineTextureMode GetTextureMode()
     {
         var __mb = __mb_get_texture_mode;
         if (__mb == 0)
@@ -6121,7 +6121,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_joint_mode;
-    internal void SetJointMode(Line2D.LineJointMode mode)
+    public void SetJointMode(Line2D.LineJointMode mode)
     {
         var __mb = __mb_set_joint_mode;
         if (__mb == 0)
@@ -6137,7 +6137,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_joint_mode;
-    internal Line2D.LineJointMode GetJointMode()
+    public Line2D.LineJointMode GetJointMode()
     {
         var __mb = __mb_get_joint_mode;
         if (__mb == 0)
@@ -6152,7 +6152,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_begin_cap_mode;
-    internal void SetBeginCapMode(Line2D.LineCapMode mode)
+    public void SetBeginCapMode(Line2D.LineCapMode mode)
     {
         var __mb = __mb_set_begin_cap_mode;
         if (__mb == 0)
@@ -6168,7 +6168,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_begin_cap_mode;
-    internal Line2D.LineCapMode GetBeginCapMode()
+    public Line2D.LineCapMode GetBeginCapMode()
     {
         var __mb = __mb_get_begin_cap_mode;
         if (__mb == 0)
@@ -6183,7 +6183,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_end_cap_mode;
-    internal void SetEndCapMode(Line2D.LineCapMode mode)
+    public void SetEndCapMode(Line2D.LineCapMode mode)
     {
         var __mb = __mb_set_end_cap_mode;
         if (__mb == 0)
@@ -6199,7 +6199,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_end_cap_mode;
-    internal Line2D.LineCapMode GetEndCapMode()
+    public Line2D.LineCapMode GetEndCapMode()
     {
         var __mb = __mb_get_end_cap_mode;
         if (__mb == 0)
@@ -6214,7 +6214,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_sharp_limit;
-    internal void SetSharpLimit(float limit)
+    public void SetSharpLimit(float limit)
     {
         var __mb = __mb_set_sharp_limit;
         if (__mb == 0)
@@ -6230,7 +6230,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_sharp_limit;
-    internal float GetSharpLimit()
+    public float GetSharpLimit()
     {
         var __mb = __mb_get_sharp_limit;
         if (__mb == 0)
@@ -6245,7 +6245,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_round_precision;
-    internal void SetRoundPrecision(int precision)
+    public void SetRoundPrecision(int precision)
     {
         var __mb = __mb_set_round_precision;
         if (__mb == 0)
@@ -6261,7 +6261,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_round_precision;
-    internal int GetRoundPrecision()
+    public int GetRoundPrecision()
     {
         var __mb = __mb_get_round_precision;
         if (__mb == 0)
@@ -6276,7 +6276,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_set_antialiased;
-    internal void SetAntialiased(bool antialiased)
+    public void SetAntialiased(bool antialiased)
     {
         var __mb = __mb_set_antialiased;
         if (__mb == 0)
@@ -6292,7 +6292,7 @@ public unsafe partial class Line2D : Node2D
     }
 
     private static nint __mb_get_antialiased;
-    internal bool GetAntialiased()
+    public bool GetAntialiased()
     {
         var __mb = __mb_get_antialiased;
         if (__mb == 0)
@@ -6661,7 +6661,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_horizontal_alignment;
-    internal void SetHorizontalAlignment(HorizontalAlignment alignment)
+    public void SetHorizontalAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_horizontal_alignment;
         if (__mb == 0)
@@ -6677,7 +6677,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_horizontal_alignment;
-    internal HorizontalAlignment GetHorizontalAlignment()
+    public HorizontalAlignment GetHorizontalAlignment()
     {
         var __mb = __mb_get_horizontal_alignment;
         if (__mb == 0)
@@ -6736,7 +6736,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_keep_editing_on_text_submit;
-    internal void SetKeepEditingOnTextSubmit(bool enable)
+    public void SetKeepEditingOnTextSubmit(bool enable)
     {
         var __mb = __mb_set_keep_editing_on_text_submit;
         if (__mb == 0)
@@ -6752,7 +6752,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_editing_kept_on_text_submit;
-    internal bool IsEditingKeptOnTextSubmit()
+    public bool IsEditingKeptOnTextSubmit()
     {
         var __mb = __mb_is_editing_kept_on_text_submit;
         if (__mb == 0)
@@ -6914,7 +6914,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -6931,7 +6931,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -6946,7 +6946,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_draw_control_chars;
-    internal bool GetDrawControlChars()
+    public bool GetDrawControlChars()
     {
         var __mb = __mb_get_draw_control_chars;
         if (__mb == 0)
@@ -6961,7 +6961,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_draw_control_chars;
-    internal void SetDrawControlChars(bool enable)
+    public void SetDrawControlChars(bool enable)
     {
         var __mb = __mb_set_draw_control_chars;
         if (__mb == 0)
@@ -6977,7 +6977,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(Control.TextDirection direction)
+    public void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -6993,7 +6993,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_text_direction;
-    internal Control.TextDirection GetTextDirection()
+    public Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -7008,7 +7008,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -7025,7 +7025,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -7040,7 +7040,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -7056,7 +7056,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -7071,7 +7071,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -7087,7 +7087,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -7102,7 +7102,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_placeholder;
-    internal void SetPlaceholder(string text)
+    public void SetPlaceholder(string text)
     {
         var __mb = __mb_set_placeholder;
         if (__mb == 0)
@@ -7119,7 +7119,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_placeholder;
-    internal string GetPlaceholder()
+    public string GetPlaceholder()
     {
         var __mb = __mb_get_placeholder;
         if (__mb == 0)
@@ -7134,7 +7134,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_caret_column;
-    internal void SetCaretColumn(int position)
+    public void SetCaretColumn(int position)
     {
         var __mb = __mb_set_caret_column;
         if (__mb == 0)
@@ -7150,7 +7150,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_caret_column;
-    internal int GetCaretColumn()
+    public int GetCaretColumn()
     {
         var __mb = __mb_get_caret_column;
         if (__mb == 0)
@@ -7216,7 +7216,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_expand_to_text_length_enabled;
-    internal void SetExpandToTextLengthEnabled(bool enabled)
+    public void SetExpandToTextLengthEnabled(bool enabled)
     {
         var __mb = __mb_set_expand_to_text_length_enabled;
         if (__mb == 0)
@@ -7232,7 +7232,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_expand_to_text_length_enabled;
-    internal bool IsExpandToTextLengthEnabled()
+    public bool IsExpandToTextLengthEnabled()
     {
         var __mb = __mb_is_expand_to_text_length_enabled;
         if (__mb == 0)
@@ -7247,7 +7247,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_caret_blink_enabled;
-    internal void SetCaretBlinkEnabled(bool enabled)
+    public void SetCaretBlinkEnabled(bool enabled)
     {
         var __mb = __mb_set_caret_blink_enabled;
         if (__mb == 0)
@@ -7263,7 +7263,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_caret_blink_enabled;
-    internal bool IsCaretBlinkEnabled()
+    public bool IsCaretBlinkEnabled()
     {
         var __mb = __mb_is_caret_blink_enabled;
         if (__mb == 0)
@@ -7278,7 +7278,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_caret_mid_grapheme_enabled;
-    internal void SetCaretMidGraphemeEnabled(bool enabled)
+    public void SetCaretMidGraphemeEnabled(bool enabled)
     {
         var __mb = __mb_set_caret_mid_grapheme_enabled;
         if (__mb == 0)
@@ -7294,7 +7294,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_caret_mid_grapheme_enabled;
-    internal bool IsCaretMidGraphemeEnabled()
+    public bool IsCaretMidGraphemeEnabled()
     {
         var __mb = __mb_is_caret_mid_grapheme_enabled;
         if (__mb == 0)
@@ -7309,7 +7309,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_caret_force_displayed;
-    internal void SetCaretForceDisplayed(bool enabled)
+    public void SetCaretForceDisplayed(bool enabled)
     {
         var __mb = __mb_set_caret_force_displayed;
         if (__mb == 0)
@@ -7325,7 +7325,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_caret_force_displayed;
-    internal bool IsCaretForceDisplayed()
+    public bool IsCaretForceDisplayed()
     {
         var __mb = __mb_is_caret_force_displayed;
         if (__mb == 0)
@@ -7340,7 +7340,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_caret_blink_interval;
-    internal void SetCaretBlinkInterval(float interval)
+    public void SetCaretBlinkInterval(float interval)
     {
         var __mb = __mb_set_caret_blink_interval;
         if (__mb == 0)
@@ -7356,7 +7356,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_caret_blink_interval;
-    internal float GetCaretBlinkInterval()
+    public float GetCaretBlinkInterval()
     {
         var __mb = __mb_get_caret_blink_interval;
         if (__mb == 0)
@@ -7371,7 +7371,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_max_length;
-    internal void SetMaxLength(int chars)
+    public void SetMaxLength(int chars)
     {
         var __mb = __mb_set_max_length;
         if (__mb == 0)
@@ -7387,7 +7387,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_max_length;
-    internal int GetMaxLength()
+    public int GetMaxLength()
     {
         var __mb = __mb_get_max_length;
         if (__mb == 0)
@@ -7450,7 +7450,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_editable;
-    internal void SetEditable(bool enabled)
+    public void SetEditable(bool enabled)
     {
         var __mb = __mb_set_editable;
         if (__mb == 0)
@@ -7466,7 +7466,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_editable;
-    internal bool IsEditable()
+    public bool IsEditable()
     {
         var __mb = __mb_is_editable;
         if (__mb == 0)
@@ -7481,7 +7481,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_secret;
-    internal void SetSecret(bool enabled)
+    public void SetSecret(bool enabled)
     {
         var __mb = __mb_set_secret;
         if (__mb == 0)
@@ -7497,7 +7497,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_secret;
-    internal bool IsSecret()
+    public bool IsSecret()
     {
         var __mb = __mb_is_secret;
         if (__mb == 0)
@@ -7512,7 +7512,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_secret_character;
-    internal void SetSecretCharacter(string character)
+    public void SetSecretCharacter(string character)
     {
         var __mb = __mb_set_secret_character;
         if (__mb == 0)
@@ -7529,7 +7529,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_secret_character;
-    internal string GetSecretCharacter()
+    public string GetSecretCharacter()
     {
         var __mb = __mb_get_secret_character;
         if (__mb == 0)
@@ -7590,7 +7590,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_context_menu_enabled;
-    internal void SetContextMenuEnabled(bool enable)
+    public void SetContextMenuEnabled(bool enable)
     {
         var __mb = __mb_set_context_menu_enabled;
         if (__mb == 0)
@@ -7606,7 +7606,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_context_menu_enabled;
-    internal bool IsContextMenuEnabled()
+    public bool IsContextMenuEnabled()
     {
         var __mb = __mb_is_context_menu_enabled;
         if (__mb == 0)
@@ -7621,7 +7621,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_emoji_menu_enabled;
-    internal void SetEmojiMenuEnabled(bool enable)
+    public void SetEmojiMenuEnabled(bool enable)
     {
         var __mb = __mb_set_emoji_menu_enabled;
         if (__mb == 0)
@@ -7637,7 +7637,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_emoji_menu_enabled;
-    internal bool IsEmojiMenuEnabled()
+    public bool IsEmojiMenuEnabled()
     {
         var __mb = __mb_is_emoji_menu_enabled;
         if (__mb == 0)
@@ -7652,7 +7652,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_backspace_deletes_composite_character_enabled;
-    internal void SetBackspaceDeletesCompositeCharacterEnabled(bool enable)
+    public void SetBackspaceDeletesCompositeCharacterEnabled(bool enable)
     {
         var __mb = __mb_set_backspace_deletes_composite_character_enabled;
         if (__mb == 0)
@@ -7668,7 +7668,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_backspace_deletes_composite_character_enabled;
-    internal bool IsBackspaceDeletesCompositeCharacterEnabled()
+    public bool IsBackspaceDeletesCompositeCharacterEnabled()
     {
         var __mb = __mb_is_backspace_deletes_composite_character_enabled;
         if (__mb == 0)
@@ -7683,7 +7683,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_virtual_keyboard_enabled;
-    internal void SetVirtualKeyboardEnabled(bool enable)
+    public void SetVirtualKeyboardEnabled(bool enable)
     {
         var __mb = __mb_set_virtual_keyboard_enabled;
         if (__mb == 0)
@@ -7699,7 +7699,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_virtual_keyboard_enabled;
-    internal bool IsVirtualKeyboardEnabled()
+    public bool IsVirtualKeyboardEnabled()
     {
         var __mb = __mb_is_virtual_keyboard_enabled;
         if (__mb == 0)
@@ -7714,7 +7714,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_virtual_keyboard_show_on_focus;
-    internal void SetVirtualKeyboardShowOnFocus(bool showOnFocus)
+    public void SetVirtualKeyboardShowOnFocus(bool showOnFocus)
     {
         var __mb = __mb_set_virtual_keyboard_show_on_focus;
         if (__mb == 0)
@@ -7730,7 +7730,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_virtual_keyboard_show_on_focus;
-    internal bool GetVirtualKeyboardShowOnFocus()
+    public bool GetVirtualKeyboardShowOnFocus()
     {
         var __mb = __mb_get_virtual_keyboard_show_on_focus;
         if (__mb == 0)
@@ -7745,7 +7745,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_virtual_keyboard_type;
-    internal void SetVirtualKeyboardType(LineEdit.VirtualKeyboardTypeEnum type)
+    public void SetVirtualKeyboardType(LineEdit.VirtualKeyboardTypeEnum type)
     {
         var __mb = __mb_set_virtual_keyboard_type;
         if (__mb == 0)
@@ -7761,7 +7761,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_virtual_keyboard_type;
-    internal LineEdit.VirtualKeyboardTypeEnum GetVirtualKeyboardType()
+    public LineEdit.VirtualKeyboardTypeEnum GetVirtualKeyboardType()
     {
         var __mb = __mb_get_virtual_keyboard_type;
         if (__mb == 0)
@@ -7776,7 +7776,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_clear_button_enabled;
-    internal void SetClearButtonEnabled(bool enable)
+    public void SetClearButtonEnabled(bool enable)
     {
         var __mb = __mb_set_clear_button_enabled;
         if (__mb == 0)
@@ -7792,7 +7792,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_clear_button_enabled;
-    internal bool IsClearButtonEnabled()
+    public bool IsClearButtonEnabled()
     {
         var __mb = __mb_is_clear_button_enabled;
         if (__mb == 0)
@@ -7807,7 +7807,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_shortcut_keys_enabled;
-    internal void SetShortcutKeysEnabled(bool enable)
+    public void SetShortcutKeysEnabled(bool enable)
     {
         var __mb = __mb_set_shortcut_keys_enabled;
         if (__mb == 0)
@@ -7823,7 +7823,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_shortcut_keys_enabled;
-    internal bool IsShortcutKeysEnabled()
+    public bool IsShortcutKeysEnabled()
     {
         var __mb = __mb_is_shortcut_keys_enabled;
         if (__mb == 0)
@@ -7838,7 +7838,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_middle_mouse_paste_enabled;
-    internal void SetMiddleMousePasteEnabled(bool enable)
+    public void SetMiddleMousePasteEnabled(bool enable)
     {
         var __mb = __mb_set_middle_mouse_paste_enabled;
         if (__mb == 0)
@@ -7854,7 +7854,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_middle_mouse_paste_enabled;
-    internal bool IsMiddleMousePasteEnabled()
+    public bool IsMiddleMousePasteEnabled()
     {
         var __mb = __mb_is_middle_mouse_paste_enabled;
         if (__mb == 0)
@@ -7869,7 +7869,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_selecting_enabled;
-    internal void SetSelectingEnabled(bool enable)
+    public void SetSelectingEnabled(bool enable)
     {
         var __mb = __mb_set_selecting_enabled;
         if (__mb == 0)
@@ -7885,7 +7885,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_selecting_enabled;
-    internal bool IsSelectingEnabled()
+    public bool IsSelectingEnabled()
     {
         var __mb = __mb_is_selecting_enabled;
         if (__mb == 0)
@@ -7900,7 +7900,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_deselect_on_focus_loss_enabled;
-    internal void SetDeselectOnFocusLossEnabled(bool enable)
+    public void SetDeselectOnFocusLossEnabled(bool enable)
     {
         var __mb = __mb_set_deselect_on_focus_loss_enabled;
         if (__mb == 0)
@@ -7916,7 +7916,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_deselect_on_focus_loss_enabled;
-    internal bool IsDeselectOnFocusLossEnabled()
+    public bool IsDeselectOnFocusLossEnabled()
     {
         var __mb = __mb_is_deselect_on_focus_loss_enabled;
         if (__mb == 0)
@@ -7931,7 +7931,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_drag_and_drop_selection_enabled;
-    internal void SetDragAndDropSelectionEnabled(bool enable)
+    public void SetDragAndDropSelectionEnabled(bool enable)
     {
         var __mb = __mb_set_drag_and_drop_selection_enabled;
         if (__mb == 0)
@@ -7947,7 +7947,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_drag_and_drop_selection_enabled;
-    internal bool IsDragAndDropSelectionEnabled()
+    public bool IsDragAndDropSelectionEnabled()
     {
         var __mb = __mb_is_drag_and_drop_selection_enabled;
         if (__mb == 0)
@@ -7962,7 +7962,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_right_icon;
-    internal void SetRightIcon(Texture2D? icon)
+    public void SetRightIcon(Texture2D? icon)
     {
         var __mb = __mb_set_right_icon;
         if (__mb == 0)
@@ -7978,7 +7978,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_right_icon;
-    internal Texture2D? GetRightIcon()
+    public Texture2D? GetRightIcon()
     {
         var __mb = __mb_get_right_icon;
         if (__mb == 0)
@@ -7993,7 +7993,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_icon_expand_mode;
-    internal void SetIconExpandMode(LineEdit.ExpandMode mode)
+    public void SetIconExpandMode(LineEdit.ExpandMode mode)
     {
         var __mb = __mb_set_icon_expand_mode;
         if (__mb == 0)
@@ -8009,7 +8009,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_icon_expand_mode;
-    internal LineEdit.ExpandMode GetIconExpandMode()
+    public LineEdit.ExpandMode GetIconExpandMode()
     {
         var __mb = __mb_get_icon_expand_mode;
         if (__mb == 0)
@@ -8024,7 +8024,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_right_icon_scale;
-    internal void SetRightIconScale(float scale)
+    public void SetRightIconScale(float scale)
     {
         var __mb = __mb_set_right_icon_scale;
         if (__mb == 0)
@@ -8040,7 +8040,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_get_right_icon_scale;
-    internal float GetRightIconScale()
+    public float GetRightIconScale()
     {
         var __mb = __mb_get_right_icon_scale;
         if (__mb == 0)
@@ -8055,7 +8055,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_flat;
-    internal void SetFlat(bool enabled)
+    public void SetFlat(bool enabled)
     {
         var __mb = __mb_set_flat;
         if (__mb == 0)
@@ -8071,7 +8071,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_flat;
-    internal bool IsFlat()
+    public bool IsFlat()
     {
         var __mb = __mb_is_flat;
         if (__mb == 0)
@@ -8086,7 +8086,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_set_select_all_on_focus;
-    internal void SetSelectAllOnFocus(bool enabled)
+    public void SetSelectAllOnFocus(bool enabled)
     {
         var __mb = __mb_set_select_all_on_focus;
         if (__mb == 0)
@@ -8102,7 +8102,7 @@ public unsafe partial class LineEdit : Control
     }
 
     private static nint __mb_is_select_all_on_focus;
-    internal bool IsSelectAllOnFocus()
+    public bool IsSelectAllOnFocus()
     {
         var __mb = __mb_is_select_all_on_focus;
         if (__mb == 0)
@@ -8188,7 +8188,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -8205,7 +8205,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -8220,7 +8220,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_text_overrun_behavior;
-    internal void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_text_overrun_behavior;
         if (__mb == 0)
@@ -8236,7 +8236,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_text_overrun_behavior;
-    internal TextServer.OverrunBehavior GetTextOverrunBehavior()
+    public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
         var __mb = __mb_get_text_overrun_behavior;
         if (__mb == 0)
@@ -8251,7 +8251,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_ellipsis_char;
-    internal void SetEllipsisChar(string @char)
+    public void SetEllipsisChar(string @char)
     {
         var __mb = __mb_set_ellipsis_char;
         if (__mb == 0)
@@ -8268,7 +8268,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_ellipsis_char;
-    internal string GetEllipsisChar()
+    public string GetEllipsisChar()
     {
         var __mb = __mb_get_ellipsis_char;
         if (__mb == 0)
@@ -8283,7 +8283,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(Control.TextDirection direction)
+    public void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -8299,7 +8299,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_text_direction;
-    internal Control.TextDirection GetTextDirection()
+    public Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -8314,7 +8314,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -8331,7 +8331,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -8346,7 +8346,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_uri;
-    internal void SetUri(string uri)
+    public void SetUri(string uri)
     {
         var __mb = __mb_set_uri;
         if (__mb == 0)
@@ -8363,7 +8363,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_uri;
-    internal string GetUri()
+    public string GetUri()
     {
         var __mb = __mb_get_uri;
         if (__mb == 0)
@@ -8378,7 +8378,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_underline_mode;
-    internal void SetUnderlineMode(LinkButton.UnderlineMode underlineMode)
+    public void SetUnderlineMode(LinkButton.UnderlineMode underlineMode)
     {
         var __mb = __mb_set_underline_mode;
         if (__mb == 0)
@@ -8394,7 +8394,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_underline_mode;
-    internal LinkButton.UnderlineMode GetUnderlineMode()
+    public LinkButton.UnderlineMode GetUnderlineMode()
     {
         var __mb = __mb_get_underline_mode;
         if (__mb == 0)
@@ -8409,7 +8409,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_structured_text_bidi_override;
-    internal void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
+    public void SetStructuredTextBidiOverride(TextServer.StructuredTextParser parser)
     {
         var __mb = __mb_set_structured_text_bidi_override;
         if (__mb == 0)
@@ -8425,7 +8425,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_structured_text_bidi_override;
-    internal TextServer.StructuredTextParser GetStructuredTextBidiOverride()
+    public TextServer.StructuredTextParser GetStructuredTextBidiOverride()
     {
         var __mb = __mb_get_structured_text_bidi_override;
         if (__mb == 0)
@@ -8440,7 +8440,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_set_structured_text_bidi_override_options;
-    internal void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
+    public void SetStructuredTextBidiOverrideOptions(Godot.Collections.Array args)
     {
         var __mb = __mb_set_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -8456,7 +8456,7 @@ public unsafe partial class LinkButton : BaseButton
     }
 
     private static nint __mb_get_structured_text_bidi_override_options;
-    internal Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
+    public Godot.Collections.Array GetStructuredTextBidiOverrideOptions()
     {
         var __mb = __mb_get_structured_text_bidi_override_options;
         if (__mb == 0)
@@ -8695,7 +8695,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_target_node;
-    internal void SetTargetNode(NodePath targetNode)
+    public void SetTargetNode(NodePath targetNode)
     {
         var __mb = __mb_set_target_node;
         if (__mb == 0)
@@ -8711,7 +8711,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_target_node;
-    internal NodePath GetTargetNode()
+    public NodePath GetTargetNode()
     {
         var __mb = __mb_get_target_node;
         if (__mb == 0)
@@ -8726,7 +8726,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone_name;
-    internal void SetBoneName(string boneName)
+    public void SetBoneName(string boneName)
     {
         var __mb = __mb_set_bone_name;
         if (__mb == 0)
@@ -8743,7 +8743,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone_name;
-    internal string GetBoneName()
+    public string GetBoneName()
     {
         var __mb = __mb_get_bone_name;
         if (__mb == 0)
@@ -8758,7 +8758,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_bone;
-    internal void SetBone(int bone)
+    public void SetBone(int bone)
     {
         var __mb = __mb_set_bone;
         if (__mb == 0)
@@ -8774,7 +8774,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_bone;
-    internal int GetBone()
+    public int GetBone()
     {
         var __mb = __mb_get_bone;
         if (__mb == 0)
@@ -8789,7 +8789,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_forward_axis;
-    internal void SetForwardAxis(SkeletonModifier3D.BoneAxis forwardAxis)
+    public void SetForwardAxis(SkeletonModifier3D.BoneAxis forwardAxis)
     {
         var __mb = __mb_set_forward_axis;
         if (__mb == 0)
@@ -8805,7 +8805,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_forward_axis;
-    internal SkeletonModifier3D.BoneAxis GetForwardAxis()
+    public SkeletonModifier3D.BoneAxis GetForwardAxis()
     {
         var __mb = __mb_get_forward_axis;
         if (__mb == 0)
@@ -8820,7 +8820,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_use_secondary_rotation;
-    internal void SetUseSecondaryRotation(bool enabled)
+    public void SetUseSecondaryRotation(bool enabled)
     {
         var __mb = __mb_set_use_secondary_rotation;
         if (__mb == 0)
@@ -8836,7 +8836,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_is_using_secondary_rotation;
-    internal bool IsUsingSecondaryRotation()
+    public bool IsUsingSecondaryRotation()
     {
         var __mb = __mb_is_using_secondary_rotation;
         if (__mb == 0)
@@ -8851,7 +8851,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_relative;
-    internal void SetRelative(bool enabled)
+    public void SetRelative(bool enabled)
     {
         var __mb = __mb_set_relative;
         if (__mb == 0)
@@ -8867,7 +8867,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_is_relative;
-    internal bool IsRelative()
+    public bool IsRelative()
     {
         var __mb = __mb_is_relative;
         if (__mb == 0)
@@ -8882,7 +8882,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_origin_safe_margin;
-    internal void SetOriginSafeMargin(float margin)
+    public void SetOriginSafeMargin(float margin)
     {
         var __mb = __mb_set_origin_safe_margin;
         if (__mb == 0)
@@ -8898,7 +8898,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_origin_safe_margin;
-    internal float GetOriginSafeMargin()
+    public float GetOriginSafeMargin()
     {
         var __mb = __mb_get_origin_safe_margin;
         if (__mb == 0)
@@ -8913,7 +8913,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_origin_from;
-    internal void SetOriginFrom(LookAtModifier3D.OriginFromEnum originFrom)
+    public void SetOriginFrom(LookAtModifier3D.OriginFromEnum originFrom)
     {
         var __mb = __mb_set_origin_from;
         if (__mb == 0)
@@ -8929,7 +8929,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_origin_from;
-    internal LookAtModifier3D.OriginFromEnum GetOriginFrom()
+    public LookAtModifier3D.OriginFromEnum GetOriginFrom()
     {
         var __mb = __mb_get_origin_from;
         if (__mb == 0)
@@ -8944,7 +8944,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_origin_bone_name;
-    internal void SetOriginBoneName(string boneName)
+    public void SetOriginBoneName(string boneName)
     {
         var __mb = __mb_set_origin_bone_name;
         if (__mb == 0)
@@ -8961,7 +8961,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_origin_bone_name;
-    internal string GetOriginBoneName()
+    public string GetOriginBoneName()
     {
         var __mb = __mb_get_origin_bone_name;
         if (__mb == 0)
@@ -8976,7 +8976,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_origin_bone;
-    internal void SetOriginBone(int bone)
+    public void SetOriginBone(int bone)
     {
         var __mb = __mb_set_origin_bone;
         if (__mb == 0)
@@ -8992,7 +8992,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_origin_bone;
-    internal int GetOriginBone()
+    public int GetOriginBone()
     {
         var __mb = __mb_get_origin_bone;
         if (__mb == 0)
@@ -9007,7 +9007,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_origin_external_node;
-    internal void SetOriginExternalNode(NodePath externalNode)
+    public void SetOriginExternalNode(NodePath externalNode)
     {
         var __mb = __mb_set_origin_external_node;
         if (__mb == 0)
@@ -9023,7 +9023,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_origin_external_node;
-    internal NodePath GetOriginExternalNode()
+    public NodePath GetOriginExternalNode()
     {
         var __mb = __mb_get_origin_external_node;
         if (__mb == 0)
@@ -9038,7 +9038,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_origin_offset;
-    internal void SetOriginOffset(Vector3 offset)
+    public void SetOriginOffset(Vector3 offset)
     {
         var __mb = __mb_set_origin_offset;
         if (__mb == 0)
@@ -9054,7 +9054,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_origin_offset;
-    internal Vector3 GetOriginOffset()
+    public Vector3 GetOriginOffset()
     {
         var __mb = __mb_get_origin_offset;
         if (__mb == 0)
@@ -9069,7 +9069,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_duration;
-    internal void SetDuration(float duration)
+    public void SetDuration(float duration)
     {
         var __mb = __mb_set_duration;
         if (__mb == 0)
@@ -9085,7 +9085,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_duration;
-    internal float GetDuration()
+    public float GetDuration()
     {
         var __mb = __mb_get_duration;
         if (__mb == 0)
@@ -9100,7 +9100,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_transition_type;
-    internal void SetTransitionType(Tween.TransitionType transitionType)
+    public void SetTransitionType(Tween.TransitionType transitionType)
     {
         var __mb = __mb_set_transition_type;
         if (__mb == 0)
@@ -9116,7 +9116,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_transition_type;
-    internal Tween.TransitionType GetTransitionType()
+    public Tween.TransitionType GetTransitionType()
     {
         var __mb = __mb_get_transition_type;
         if (__mb == 0)
@@ -9131,7 +9131,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_ease_type;
-    internal void SetEaseType(Tween.EaseType easeType)
+    public void SetEaseType(Tween.EaseType easeType)
     {
         var __mb = __mb_set_ease_type;
         if (__mb == 0)
@@ -9147,7 +9147,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_ease_type;
-    internal Tween.EaseType GetEaseType()
+    public Tween.EaseType GetEaseType()
     {
         var __mb = __mb_get_ease_type;
         if (__mb == 0)
@@ -9162,7 +9162,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_use_angle_limitation;
-    internal void SetUseAngleLimitation(bool enabled)
+    public void SetUseAngleLimitation(bool enabled)
     {
         var __mb = __mb_set_use_angle_limitation;
         if (__mb == 0)
@@ -9178,7 +9178,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_is_using_angle_limitation;
-    internal bool IsUsingAngleLimitation()
+    public bool IsUsingAngleLimitation()
     {
         var __mb = __mb_is_using_angle_limitation;
         if (__mb == 0)
@@ -9193,7 +9193,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_symmetry_limitation;
-    internal void SetSymmetryLimitation(bool enabled)
+    public void SetSymmetryLimitation(bool enabled)
     {
         var __mb = __mb_set_symmetry_limitation;
         if (__mb == 0)
@@ -9209,7 +9209,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_is_limitation_symmetry;
-    internal bool IsLimitationSymmetry()
+    public bool IsLimitationSymmetry()
     {
         var __mb = __mb_is_limitation_symmetry;
         if (__mb == 0)
@@ -9224,7 +9224,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_primary_limit_angle;
-    internal void SetPrimaryLimitAngle(float angle)
+    public void SetPrimaryLimitAngle(float angle)
     {
         var __mb = __mb_set_primary_limit_angle;
         if (__mb == 0)
@@ -9240,7 +9240,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_primary_limit_angle;
-    internal float GetPrimaryLimitAngle()
+    public float GetPrimaryLimitAngle()
     {
         var __mb = __mb_get_primary_limit_angle;
         if (__mb == 0)
@@ -9255,7 +9255,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_primary_damp_threshold;
-    internal void SetPrimaryDampThreshold(float power)
+    public void SetPrimaryDampThreshold(float power)
     {
         var __mb = __mb_set_primary_damp_threshold;
         if (__mb == 0)
@@ -9271,7 +9271,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_primary_damp_threshold;
-    internal float GetPrimaryDampThreshold()
+    public float GetPrimaryDampThreshold()
     {
         var __mb = __mb_get_primary_damp_threshold;
         if (__mb == 0)
@@ -9286,7 +9286,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_primary_positive_limit_angle;
-    internal void SetPrimaryPositiveLimitAngle(float angle)
+    public void SetPrimaryPositiveLimitAngle(float angle)
     {
         var __mb = __mb_set_primary_positive_limit_angle;
         if (__mb == 0)
@@ -9302,7 +9302,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_primary_positive_limit_angle;
-    internal float GetPrimaryPositiveLimitAngle()
+    public float GetPrimaryPositiveLimitAngle()
     {
         var __mb = __mb_get_primary_positive_limit_angle;
         if (__mb == 0)
@@ -9317,7 +9317,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_primary_positive_damp_threshold;
-    internal void SetPrimaryPositiveDampThreshold(float power)
+    public void SetPrimaryPositiveDampThreshold(float power)
     {
         var __mb = __mb_set_primary_positive_damp_threshold;
         if (__mb == 0)
@@ -9333,7 +9333,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_primary_positive_damp_threshold;
-    internal float GetPrimaryPositiveDampThreshold()
+    public float GetPrimaryPositiveDampThreshold()
     {
         var __mb = __mb_get_primary_positive_damp_threshold;
         if (__mb == 0)
@@ -9348,7 +9348,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_primary_negative_limit_angle;
-    internal void SetPrimaryNegativeLimitAngle(float angle)
+    public void SetPrimaryNegativeLimitAngle(float angle)
     {
         var __mb = __mb_set_primary_negative_limit_angle;
         if (__mb == 0)
@@ -9364,7 +9364,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_primary_negative_limit_angle;
-    internal float GetPrimaryNegativeLimitAngle()
+    public float GetPrimaryNegativeLimitAngle()
     {
         var __mb = __mb_get_primary_negative_limit_angle;
         if (__mb == 0)
@@ -9379,7 +9379,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_primary_negative_damp_threshold;
-    internal void SetPrimaryNegativeDampThreshold(float power)
+    public void SetPrimaryNegativeDampThreshold(float power)
     {
         var __mb = __mb_set_primary_negative_damp_threshold;
         if (__mb == 0)
@@ -9395,7 +9395,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_primary_negative_damp_threshold;
-    internal float GetPrimaryNegativeDampThreshold()
+    public float GetPrimaryNegativeDampThreshold()
     {
         var __mb = __mb_get_primary_negative_damp_threshold;
         if (__mb == 0)
@@ -9410,7 +9410,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_secondary_limit_angle;
-    internal void SetSecondaryLimitAngle(float angle)
+    public void SetSecondaryLimitAngle(float angle)
     {
         var __mb = __mb_set_secondary_limit_angle;
         if (__mb == 0)
@@ -9426,7 +9426,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_secondary_limit_angle;
-    internal float GetSecondaryLimitAngle()
+    public float GetSecondaryLimitAngle()
     {
         var __mb = __mb_get_secondary_limit_angle;
         if (__mb == 0)
@@ -9441,7 +9441,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_secondary_damp_threshold;
-    internal void SetSecondaryDampThreshold(float power)
+    public void SetSecondaryDampThreshold(float power)
     {
         var __mb = __mb_set_secondary_damp_threshold;
         if (__mb == 0)
@@ -9457,7 +9457,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_secondary_damp_threshold;
-    internal float GetSecondaryDampThreshold()
+    public float GetSecondaryDampThreshold()
     {
         var __mb = __mb_get_secondary_damp_threshold;
         if (__mb == 0)
@@ -9472,7 +9472,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_secondary_positive_limit_angle;
-    internal void SetSecondaryPositiveLimitAngle(float angle)
+    public void SetSecondaryPositiveLimitAngle(float angle)
     {
         var __mb = __mb_set_secondary_positive_limit_angle;
         if (__mb == 0)
@@ -9488,7 +9488,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_secondary_positive_limit_angle;
-    internal float GetSecondaryPositiveLimitAngle()
+    public float GetSecondaryPositiveLimitAngle()
     {
         var __mb = __mb_get_secondary_positive_limit_angle;
         if (__mb == 0)
@@ -9503,7 +9503,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_secondary_positive_damp_threshold;
-    internal void SetSecondaryPositiveDampThreshold(float power)
+    public void SetSecondaryPositiveDampThreshold(float power)
     {
         var __mb = __mb_set_secondary_positive_damp_threshold;
         if (__mb == 0)
@@ -9519,7 +9519,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_secondary_positive_damp_threshold;
-    internal float GetSecondaryPositiveDampThreshold()
+    public float GetSecondaryPositiveDampThreshold()
     {
         var __mb = __mb_get_secondary_positive_damp_threshold;
         if (__mb == 0)
@@ -9534,7 +9534,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_secondary_negative_limit_angle;
-    internal void SetSecondaryNegativeLimitAngle(float angle)
+    public void SetSecondaryNegativeLimitAngle(float angle)
     {
         var __mb = __mb_set_secondary_negative_limit_angle;
         if (__mb == 0)
@@ -9550,7 +9550,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_secondary_negative_limit_angle;
-    internal float GetSecondaryNegativeLimitAngle()
+    public float GetSecondaryNegativeLimitAngle()
     {
         var __mb = __mb_get_secondary_negative_limit_angle;
         if (__mb == 0)
@@ -9565,7 +9565,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_secondary_negative_damp_threshold;
-    internal void SetSecondaryNegativeDampThreshold(float power)
+    public void SetSecondaryNegativeDampThreshold(float power)
     {
         var __mb = __mb_set_secondary_negative_damp_threshold;
         if (__mb == 0)
@@ -9581,7 +9581,7 @@ public unsafe partial class LookAtModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_secondary_negative_damp_threshold;
-    internal float GetSecondaryNegativeDampThreshold()
+    public float GetSecondaryNegativeDampThreshold()
     {
         var __mb = __mb_get_secondary_negative_damp_threshold;
         if (__mb == 0)

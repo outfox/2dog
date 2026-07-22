@@ -22,7 +22,7 @@ public unsafe partial class IKModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_setting_count;
-    internal void SetSettingCount(int count)
+    public void SetSettingCount(int count)
     {
         var __mb = __mb_set_setting_count;
         if (__mb == 0)
@@ -38,7 +38,7 @@ public unsafe partial class IKModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_setting_count;
-    internal int GetSettingCount()
+    public int GetSettingCount()
     {
         var __mb = __mb_get_setting_count;
         if (__mb == 0)
@@ -66,7 +66,7 @@ public unsafe partial class IKModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_mutable_bone_axes;
-    internal void SetMutableBoneAxes(bool enabled)
+    public void SetMutableBoneAxes(bool enabled)
     {
         var __mb = __mb_set_mutable_bone_axes;
         if (__mb == 0)
@@ -82,7 +82,7 @@ public unsafe partial class IKModifier3D : SkeletonModifier3D
     }
 
     private static nint __mb_are_bone_axes_mutable;
-    internal bool AreBoneAxesMutable()
+    public bool AreBoneAxesMutable()
     {
         var __mb = __mb_are_bone_axes_mutable;
         if (__mb == 0)
@@ -2151,7 +2151,7 @@ public unsafe partial class ImmediateMesh : Mesh
     }
 
     private static nint __mb_surface_add_vertex_2d;
-    public void SurfaceAddVertex2d(Vector2 vertex)
+    public void SurfaceAddVertex2D(Vector2 vertex)
     {
         var __mb = __mb_surface_add_vertex_2d;
         if (__mb == 0)
@@ -2725,7 +2725,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_mesh;
-    internal void SetMesh(ImporterMesh? mesh)
+    public void SetMesh(ImporterMesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -2741,7 +2741,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_mesh;
-    internal ImporterMesh? GetMesh()
+    public ImporterMesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -2756,7 +2756,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_skin;
-    internal void SetSkin(Skin? skin)
+    public void SetSkin(Skin? skin)
     {
         var __mb = __mb_set_skin;
         if (__mb == 0)
@@ -2772,7 +2772,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_skin;
-    internal Skin? GetSkin()
+    public Skin? GetSkin()
     {
         var __mb = __mb_get_skin;
         if (__mb == 0)
@@ -2787,7 +2787,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_skeleton_path;
-    internal void SetSkeletonPath(NodePath skeletonPath)
+    public void SetSkeletonPath(NodePath skeletonPath)
     {
         var __mb = __mb_set_skeleton_path;
         if (__mb == 0)
@@ -2803,7 +2803,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_skeleton_path;
-    internal NodePath GetSkeletonPath()
+    public NodePath GetSkeletonPath()
     {
         var __mb = __mb_get_skeleton_path;
         if (__mb == 0)
@@ -2818,7 +2818,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_layer_mask;
-    internal void SetLayerMask(uint layerMask)
+    public void SetLayerMask(uint layerMask)
     {
         var __mb = __mb_set_layer_mask;
         if (__mb == 0)
@@ -2834,7 +2834,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_layer_mask;
-    internal uint GetLayerMask()
+    public uint GetLayerMask()
     {
         var __mb = __mb_get_layer_mask;
         if (__mb == 0)
@@ -2849,7 +2849,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_cast_shadows_setting;
-    internal void SetCastShadowsSetting(GeometryInstance3D.ShadowCastingSetting shadowCastingSetting)
+    public void SetCastShadowsSetting(GeometryInstance3D.ShadowCastingSetting shadowCastingSetting)
     {
         var __mb = __mb_set_cast_shadows_setting;
         if (__mb == 0)
@@ -2865,7 +2865,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_cast_shadows_setting;
-    internal GeometryInstance3D.ShadowCastingSetting GetCastShadowsSetting()
+    public GeometryInstance3D.ShadowCastingSetting GetCastShadowsSetting()
     {
         var __mb = __mb_get_cast_shadows_setting;
         if (__mb == 0)
@@ -2880,7 +2880,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_visibility_range_end_margin;
-    internal void SetVisibilityRangeEndMargin(float distance)
+    public void SetVisibilityRangeEndMargin(float distance)
     {
         var __mb = __mb_set_visibility_range_end_margin;
         if (__mb == 0)
@@ -2896,7 +2896,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_visibility_range_end_margin;
-    internal float GetVisibilityRangeEndMargin()
+    public float GetVisibilityRangeEndMargin()
     {
         var __mb = __mb_get_visibility_range_end_margin;
         if (__mb == 0)
@@ -2911,7 +2911,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_visibility_range_end;
-    internal void SetVisibilityRangeEnd(float distance)
+    public void SetVisibilityRangeEnd(float distance)
     {
         var __mb = __mb_set_visibility_range_end;
         if (__mb == 0)
@@ -2927,7 +2927,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_visibility_range_end;
-    internal float GetVisibilityRangeEnd()
+    public float GetVisibilityRangeEnd()
     {
         var __mb = __mb_get_visibility_range_end;
         if (__mb == 0)
@@ -2942,7 +2942,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_visibility_range_begin_margin;
-    internal void SetVisibilityRangeBeginMargin(float distance)
+    public void SetVisibilityRangeBeginMargin(float distance)
     {
         var __mb = __mb_set_visibility_range_begin_margin;
         if (__mb == 0)
@@ -2958,7 +2958,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_visibility_range_begin_margin;
-    internal float GetVisibilityRangeBeginMargin()
+    public float GetVisibilityRangeBeginMargin()
     {
         var __mb = __mb_get_visibility_range_begin_margin;
         if (__mb == 0)
@@ -2973,7 +2973,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_visibility_range_begin;
-    internal void SetVisibilityRangeBegin(float distance)
+    public void SetVisibilityRangeBegin(float distance)
     {
         var __mb = __mb_set_visibility_range_begin;
         if (__mb == 0)
@@ -2989,7 +2989,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_visibility_range_begin;
-    internal float GetVisibilityRangeBegin()
+    public float GetVisibilityRangeBegin()
     {
         var __mb = __mb_get_visibility_range_begin;
         if (__mb == 0)
@@ -3004,7 +3004,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_set_visibility_range_fade_mode;
-    internal void SetVisibilityRangeFadeMode(GeometryInstance3D.VisibilityRangeFadeModeEnum mode)
+    public void SetVisibilityRangeFadeMode(GeometryInstance3D.VisibilityRangeFadeModeEnum mode)
     {
         var __mb = __mb_set_visibility_range_fade_mode;
         if (__mb == 0)
@@ -3020,7 +3020,7 @@ public unsafe partial class ImporterMeshInstance3D : Node3D
     }
 
     private static nint __mb_get_visibility_range_fade_mode;
-    internal GeometryInstance3D.VisibilityRangeFadeModeEnum GetVisibilityRangeFadeMode()
+    public GeometryInstance3D.VisibilityRangeFadeModeEnum GetVisibilityRangeFadeMode()
     {
         var __mb = __mb_get_visibility_range_fade_mode;
         if (__mb == 0)
@@ -3720,7 +3720,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_set_ignore_joypad_on_unfocused_application;
-    internal static void SetIgnoreJoypadOnUnfocusedApplication(bool enable)
+    public static void SetIgnoreJoypadOnUnfocusedApplication(bool enable)
     {
         var __mb = __mb_set_ignore_joypad_on_unfocused_application;
         if (__mb == 0)
@@ -3736,7 +3736,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_ignoring_joypad_on_unfocused_application;
-    internal static bool IsIgnoringJoypadOnUnfocusedApplication()
+    public static bool IsIgnoringJoypadOnUnfocusedApplication()
     {
         var __mb = __mb_is_ignoring_joypad_on_unfocused_application;
         if (__mb == 0)
@@ -4202,7 +4202,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_set_mouse_mode;
-    internal static void SetMouseMode(Input.MouseModeEnum mode)
+    public static void SetMouseMode(Input.MouseModeEnum mode)
     {
         var __mb = __mb_set_mouse_mode;
         if (__mb == 0)
@@ -4218,7 +4218,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_get_mouse_mode;
-    internal static Input.MouseModeEnum GetMouseMode()
+    public static Input.MouseModeEnum GetMouseMode()
     {
         var __mb = __mb_get_mouse_mode;
         if (__mb == 0)
@@ -4350,7 +4350,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_set_use_accumulated_input;
-    internal static void SetUseAccumulatedInput(bool enable)
+    public static void SetUseAccumulatedInput(bool enable)
     {
         var __mb = __mb_set_use_accumulated_input;
         if (__mb == 0)
@@ -4366,7 +4366,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_using_accumulated_input;
-    internal static bool IsUsingAccumulatedInput()
+    public static bool IsUsingAccumulatedInput()
     {
         var __mb = __mb_is_using_accumulated_input;
         if (__mb == 0)
@@ -4394,7 +4394,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_set_emulate_mouse_from_touch;
-    internal static void SetEmulateMouseFromTouch(bool enable)
+    public static void SetEmulateMouseFromTouch(bool enable)
     {
         var __mb = __mb_set_emulate_mouse_from_touch;
         if (__mb == 0)
@@ -4410,7 +4410,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_emulating_mouse_from_touch;
-    internal static bool IsEmulatingMouseFromTouch()
+    public static bool IsEmulatingMouseFromTouch()
     {
         var __mb = __mb_is_emulating_mouse_from_touch;
         if (__mb == 0)
@@ -4425,7 +4425,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_set_emulate_touch_from_mouse;
-    internal static void SetEmulateTouchFromMouse(bool enable)
+    public static void SetEmulateTouchFromMouse(bool enable)
     {
         var __mb = __mb_set_emulate_touch_from_mouse;
         if (__mb == 0)
@@ -4441,7 +4441,7 @@ public static unsafe partial class Input
     }
 
     private static nint __mb_is_emulating_touch_from_mouse;
-    internal static bool IsEmulatingTouchFromMouse()
+    public static bool IsEmulatingTouchFromMouse()
     {
         var __mb = __mb_is_emulating_touch_from_mouse;
         if (__mb == 0)
@@ -4467,7 +4467,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_set_device;
-    internal void SetDevice(int device)
+    public void SetDevice(int device)
     {
         var __mb = __mb_set_device;
         if (__mb == 0)
@@ -4483,7 +4483,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_get_device;
-    internal int GetDevice()
+    public int GetDevice()
     {
         var __mb = __mb_get_device;
         if (__mb == 0)
@@ -4580,7 +4580,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_canceled;
-    internal bool IsCanceled()
+    public bool IsCanceled()
     {
         var __mb = __mb_is_canceled;
         if (__mb == 0)
@@ -4595,7 +4595,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_pressed;
-    internal bool IsPressed()
+    public bool IsPressed()
     {
         var __mb = __mb_is_pressed;
         if (__mb == 0)
@@ -4625,7 +4625,7 @@ public unsafe partial class InputEvent : Resource
     }
 
     private static nint __mb_is_echo;
-    internal bool IsEcho()
+    public bool IsEcho()
     {
         var __mb = __mb_is_echo;
         if (__mb == 0)
@@ -4762,7 +4762,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_set_action;
-    internal void SetAction(StringName action)
+    public void SetAction(StringName action)
     {
         var __mb = __mb_set_action;
         if (__mb == 0)
@@ -4778,7 +4778,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_get_action;
-    internal StringName GetAction()
+    public StringName GetAction()
     {
         var __mb = __mb_get_action;
         if (__mb == 0)
@@ -4793,7 +4793,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_set_pressed;
-    internal void SetPressed(bool pressed)
+    public void SetPressed(bool pressed)
     {
         var __mb = __mb_set_pressed;
         if (__mb == 0)
@@ -4809,7 +4809,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_set_strength;
-    internal void SetStrength(float strength)
+    public void SetStrength(float strength)
     {
         var __mb = __mb_set_strength;
         if (__mb == 0)
@@ -4825,7 +4825,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_get_strength;
-    internal float GetStrength()
+    public float GetStrength()
     {
         var __mb = __mb_get_strength;
         if (__mb == 0)
@@ -4840,7 +4840,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_set_event_index;
-    internal void SetEventIndex(int index)
+    public void SetEventIndex(int index)
     {
         var __mb = __mb_set_event_index;
         if (__mb == 0)
@@ -4856,7 +4856,7 @@ public unsafe partial class InputEventAction : InputEvent
     }
 
     private static nint __mb_get_event_index;
-    internal int GetEventIndex()
+    public int GetEventIndex()
     {
         var __mb = __mb_get_event_index;
         if (__mb == 0)
@@ -4882,7 +4882,7 @@ public unsafe partial class InputEventFromWindow : InputEvent
     }
 
     private static nint __mb_set_window_id;
-    internal void SetWindowId(long id)
+    public void SetWindowId(long id)
     {
         var __mb = __mb_set_window_id;
         if (__mb == 0)
@@ -4898,7 +4898,7 @@ public unsafe partial class InputEventFromWindow : InputEvent
     }
 
     private static nint __mb_get_window_id;
-    internal long GetWindowId()
+    public long GetWindowId()
     {
         var __mb = __mb_get_window_id;
         if (__mb == 0)
@@ -4924,7 +4924,7 @@ public unsafe partial class InputEventGesture : InputEventWithModifiers
     }
 
     private static nint __mb_set_position;
-    internal void SetPosition(Vector2 position)
+    public void SetPosition(Vector2 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -4940,7 +4940,7 @@ public unsafe partial class InputEventGesture : InputEventWithModifiers
     }
 
     private static nint __mb_get_position;
-    internal Vector2 GetPosition()
+    public Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -4983,7 +4983,7 @@ public unsafe partial class InputEventJoypadButton : InputEvent
     }
 
     private static nint __mb_set_button_index;
-    internal void SetButtonIndex(JoyButton buttonIndex)
+    public void SetButtonIndex(JoyButton buttonIndex)
     {
         var __mb = __mb_set_button_index;
         if (__mb == 0)
@@ -4999,7 +4999,7 @@ public unsafe partial class InputEventJoypadButton : InputEvent
     }
 
     private static nint __mb_get_button_index;
-    internal JoyButton GetButtonIndex()
+    public JoyButton GetButtonIndex()
     {
         var __mb = __mb_get_button_index;
         if (__mb == 0)
@@ -5014,7 +5014,7 @@ public unsafe partial class InputEventJoypadButton : InputEvent
     }
 
     private static nint __mb_set_pressure;
-    internal void SetPressure(float pressure)
+    public void SetPressure(float pressure)
     {
         var __mb = __mb_set_pressure;
         if (__mb == 0)
@@ -5030,7 +5030,7 @@ public unsafe partial class InputEventJoypadButton : InputEvent
     }
 
     private static nint __mb_get_pressure;
-    internal float GetPressure()
+    public float GetPressure()
     {
         var __mb = __mb_get_pressure;
         if (__mb == 0)
@@ -5045,7 +5045,7 @@ public unsafe partial class InputEventJoypadButton : InputEvent
     }
 
     private static nint __mb_set_pressed;
-    internal void SetPressed(bool pressed)
+    public void SetPressed(bool pressed)
     {
         var __mb = __mb_set_pressed;
         if (__mb == 0)
@@ -5083,7 +5083,7 @@ public unsafe partial class InputEventJoypadMotion : InputEvent
     }
 
     private static nint __mb_set_axis;
-    internal void SetAxis(JoyAxis axis)
+    public void SetAxis(JoyAxis axis)
     {
         var __mb = __mb_set_axis;
         if (__mb == 0)
@@ -5099,7 +5099,7 @@ public unsafe partial class InputEventJoypadMotion : InputEvent
     }
 
     private static nint __mb_get_axis;
-    internal JoyAxis GetAxis()
+    public JoyAxis GetAxis()
     {
         var __mb = __mb_get_axis;
         if (__mb == 0)
@@ -5114,7 +5114,7 @@ public unsafe partial class InputEventJoypadMotion : InputEvent
     }
 
     private static nint __mb_set_axis_value;
-    internal void SetAxisValue(float axisValue)
+    public void SetAxisValue(float axisValue)
     {
         var __mb = __mb_set_axis_value;
         if (__mb == 0)
@@ -5130,7 +5130,7 @@ public unsafe partial class InputEventJoypadMotion : InputEvent
     }
 
     private static nint __mb_get_axis_value;
-    internal float GetAxisValue()
+    public float GetAxisValue()
     {
         var __mb = __mb_get_axis_value;
         if (__mb == 0)
@@ -5197,7 +5197,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_pressed;
-    internal void SetPressed(bool pressed)
+    public void SetPressed(bool pressed)
     {
         var __mb = __mb_set_pressed;
         if (__mb == 0)
@@ -5213,7 +5213,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_keycode;
-    internal void SetKeycode(Key keycode)
+    public void SetKeycode(Key keycode)
     {
         var __mb = __mb_set_keycode;
         if (__mb == 0)
@@ -5229,7 +5229,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_get_keycode;
-    internal Key GetKeycode()
+    public Key GetKeycode()
     {
         var __mb = __mb_get_keycode;
         if (__mb == 0)
@@ -5244,7 +5244,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_physical_keycode;
-    internal void SetPhysicalKeycode(Key physicalKeycode)
+    public void SetPhysicalKeycode(Key physicalKeycode)
     {
         var __mb = __mb_set_physical_keycode;
         if (__mb == 0)
@@ -5260,7 +5260,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_get_physical_keycode;
-    internal Key GetPhysicalKeycode()
+    public Key GetPhysicalKeycode()
     {
         var __mb = __mb_get_physical_keycode;
         if (__mb == 0)
@@ -5275,7 +5275,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_key_label;
-    internal void SetKeyLabel(Key keyLabel)
+    public void SetKeyLabel(Key keyLabel)
     {
         var __mb = __mb_set_key_label;
         if (__mb == 0)
@@ -5291,7 +5291,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_get_key_label;
-    internal Key GetKeyLabel()
+    public Key GetKeyLabel()
     {
         var __mb = __mb_get_key_label;
         if (__mb == 0)
@@ -5306,7 +5306,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_unicode;
-    internal void SetUnicode(int unicode)
+    public void SetUnicode(int unicode)
     {
         var __mb = __mb_set_unicode;
         if (__mb == 0)
@@ -5322,7 +5322,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_get_unicode;
-    internal int GetUnicode()
+    public int GetUnicode()
     {
         var __mb = __mb_get_unicode;
         if (__mb == 0)
@@ -5337,7 +5337,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_location;
-    internal void SetLocation(KeyLocation location)
+    public void SetLocation(KeyLocation location)
     {
         var __mb = __mb_set_location;
         if (__mb == 0)
@@ -5353,7 +5353,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_get_location;
-    internal KeyLocation GetLocation()
+    public KeyLocation GetLocation()
     {
         var __mb = __mb_get_location;
         if (__mb == 0)
@@ -5368,7 +5368,7 @@ public unsafe partial class InputEventKey : InputEventWithModifiers
     }
 
     private static nint __mb_set_echo;
-    internal void SetEcho(bool echo)
+    public void SetEcho(bool echo)
     {
         var __mb = __mb_set_echo;
         if (__mb == 0)
@@ -5547,7 +5547,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_channel;
-    internal void SetChannel(int channel)
+    public void SetChannel(int channel)
     {
         var __mb = __mb_set_channel;
         if (__mb == 0)
@@ -5563,7 +5563,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_channel;
-    internal int GetChannel()
+    public int GetChannel()
     {
         var __mb = __mb_get_channel;
         if (__mb == 0)
@@ -5578,7 +5578,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_message;
-    internal void SetMessage(MIDIMessage message)
+    public void SetMessage(MIDIMessage message)
     {
         var __mb = __mb_set_message;
         if (__mb == 0)
@@ -5594,7 +5594,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_message;
-    internal MIDIMessage GetMessage()
+    public MIDIMessage GetMessage()
     {
         var __mb = __mb_get_message;
         if (__mb == 0)
@@ -5609,7 +5609,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_pitch;
-    internal void SetPitch(int pitch)
+    public void SetPitch(int pitch)
     {
         var __mb = __mb_set_pitch;
         if (__mb == 0)
@@ -5625,7 +5625,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_pitch;
-    internal int GetPitch()
+    public int GetPitch()
     {
         var __mb = __mb_get_pitch;
         if (__mb == 0)
@@ -5640,7 +5640,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_velocity;
-    internal void SetVelocity(int velocity)
+    public void SetVelocity(int velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -5656,7 +5656,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_velocity;
-    internal int GetVelocity()
+    public int GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -5671,7 +5671,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_instrument;
-    internal void SetInstrument(int instrument)
+    public void SetInstrument(int instrument)
     {
         var __mb = __mb_set_instrument;
         if (__mb == 0)
@@ -5687,7 +5687,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_instrument;
-    internal int GetInstrument()
+    public int GetInstrument()
     {
         var __mb = __mb_get_instrument;
         if (__mb == 0)
@@ -5702,7 +5702,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_pressure;
-    internal void SetPressure(int pressure)
+    public void SetPressure(int pressure)
     {
         var __mb = __mb_set_pressure;
         if (__mb == 0)
@@ -5718,7 +5718,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_pressure;
-    internal int GetPressure()
+    public int GetPressure()
     {
         var __mb = __mb_get_pressure;
         if (__mb == 0)
@@ -5733,7 +5733,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_controller_number;
-    internal void SetControllerNumber(int controllerNumber)
+    public void SetControllerNumber(int controllerNumber)
     {
         var __mb = __mb_set_controller_number;
         if (__mb == 0)
@@ -5749,7 +5749,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_controller_number;
-    internal int GetControllerNumber()
+    public int GetControllerNumber()
     {
         var __mb = __mb_get_controller_number;
         if (__mb == 0)
@@ -5764,7 +5764,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_set_controller_value;
-    internal void SetControllerValue(int controllerValue)
+    public void SetControllerValue(int controllerValue)
     {
         var __mb = __mb_set_controller_value;
         if (__mb == 0)
@@ -5780,7 +5780,7 @@ public unsafe partial class InputEventMIDI : InputEvent
     }
 
     private static nint __mb_get_controller_value;
-    internal int GetControllerValue()
+    public int GetControllerValue()
     {
         var __mb = __mb_get_controller_value;
         if (__mb == 0)
@@ -5811,7 +5811,7 @@ public unsafe partial class InputEventMagnifyGesture : InputEventGesture
     }
 
     private static nint __mb_set_factor;
-    internal void SetFactor(float factor)
+    public void SetFactor(float factor)
     {
         var __mb = __mb_set_factor;
         if (__mb == 0)
@@ -5827,7 +5827,7 @@ public unsafe partial class InputEventMagnifyGesture : InputEventGesture
     }
 
     private static nint __mb_get_factor;
-    internal float GetFactor()
+    public float GetFactor()
     {
         var __mb = __mb_get_factor;
         if (__mb == 0)
@@ -5865,7 +5865,7 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     }
 
     private static nint __mb_set_button_mask;
-    internal void SetButtonMask(MouseButtonMask buttonMask)
+    public void SetButtonMask(MouseButtonMask buttonMask)
     {
         var __mb = __mb_set_button_mask;
         if (__mb == 0)
@@ -5881,7 +5881,7 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     }
 
     private static nint __mb_get_button_mask;
-    internal MouseButtonMask GetButtonMask()
+    public MouseButtonMask GetButtonMask()
     {
         var __mb = __mb_get_button_mask;
         if (__mb == 0)
@@ -5896,7 +5896,7 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     }
 
     private static nint __mb_set_position;
-    internal void SetPosition(Vector2 position)
+    public void SetPosition(Vector2 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -5912,7 +5912,7 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     }
 
     private static nint __mb_get_position;
-    internal Vector2 GetPosition()
+    public Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -5927,7 +5927,7 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     }
 
     private static nint __mb_set_global_position;
-    internal void SetGlobalPosition(Vector2 globalPosition)
+    public void SetGlobalPosition(Vector2 globalPosition)
     {
         var __mb = __mb_set_global_position;
         if (__mb == 0)
@@ -5943,7 +5943,7 @@ public unsafe partial class InputEventMouse : InputEventWithModifiers
     }
 
     private static nint __mb_get_global_position;
-    internal Vector2 GetGlobalPosition()
+    public Vector2 GetGlobalPosition()
     {
         var __mb = __mb_get_global_position;
         if (__mb == 0)
@@ -5998,7 +5998,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_set_factor;
-    internal void SetFactor(float factor)
+    public void SetFactor(float factor)
     {
         var __mb = __mb_set_factor;
         if (__mb == 0)
@@ -6014,7 +6014,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_get_factor;
-    internal float GetFactor()
+    public float GetFactor()
     {
         var __mb = __mb_get_factor;
         if (__mb == 0)
@@ -6029,7 +6029,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_set_button_index;
-    internal void SetButtonIndex(MouseButton buttonIndex)
+    public void SetButtonIndex(MouseButton buttonIndex)
     {
         var __mb = __mb_set_button_index;
         if (__mb == 0)
@@ -6045,7 +6045,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_get_button_index;
-    internal MouseButton GetButtonIndex()
+    public MouseButton GetButtonIndex()
     {
         var __mb = __mb_get_button_index;
         if (__mb == 0)
@@ -6060,7 +6060,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_set_pressed;
-    internal void SetPressed(bool pressed)
+    public void SetPressed(bool pressed)
     {
         var __mb = __mb_set_pressed;
         if (__mb == 0)
@@ -6076,7 +6076,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_set_canceled;
-    internal void SetCanceled(bool canceled)
+    public void SetCanceled(bool canceled)
     {
         var __mb = __mb_set_canceled;
         if (__mb == 0)
@@ -6092,7 +6092,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_set_double_click;
-    internal void SetDoubleClick(bool doubleClick)
+    public void SetDoubleClick(bool doubleClick)
     {
         var __mb = __mb_set_double_click;
         if (__mb == 0)
@@ -6108,7 +6108,7 @@ public unsafe partial class InputEventMouseButton : InputEventMouse
     }
 
     private static nint __mb_is_double_click;
-    internal bool IsDoubleClick()
+    public bool IsDoubleClick()
     {
         var __mb = __mb_is_double_click;
         if (__mb == 0)
@@ -6175,7 +6175,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_tilt;
-    internal void SetTilt(Vector2 tilt)
+    public void SetTilt(Vector2 tilt)
     {
         var __mb = __mb_set_tilt;
         if (__mb == 0)
@@ -6191,7 +6191,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_tilt;
-    internal Vector2 GetTilt()
+    public Vector2 GetTilt()
     {
         var __mb = __mb_get_tilt;
         if (__mb == 0)
@@ -6206,7 +6206,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_pressure;
-    internal void SetPressure(float pressure)
+    public void SetPressure(float pressure)
     {
         var __mb = __mb_set_pressure;
         if (__mb == 0)
@@ -6222,7 +6222,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_pressure;
-    internal float GetPressure()
+    public float GetPressure()
     {
         var __mb = __mb_get_pressure;
         if (__mb == 0)
@@ -6237,7 +6237,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_pen_inverted;
-    internal void SetPenInverted(bool penInverted)
+    public void SetPenInverted(bool penInverted)
     {
         var __mb = __mb_set_pen_inverted;
         if (__mb == 0)
@@ -6253,7 +6253,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_pen_inverted;
-    internal bool GetPenInverted()
+    public bool GetPenInverted()
     {
         var __mb = __mb_get_pen_inverted;
         if (__mb == 0)
@@ -6268,7 +6268,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_relative;
-    internal void SetRelative(Vector2 relative)
+    public void SetRelative(Vector2 relative)
     {
         var __mb = __mb_set_relative;
         if (__mb == 0)
@@ -6284,7 +6284,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_relative;
-    internal Vector2 GetRelative()
+    public Vector2 GetRelative()
     {
         var __mb = __mb_get_relative;
         if (__mb == 0)
@@ -6299,7 +6299,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_screen_relative;
-    internal void SetScreenRelative(Vector2 relative)
+    public void SetScreenRelative(Vector2 relative)
     {
         var __mb = __mb_set_screen_relative;
         if (__mb == 0)
@@ -6315,7 +6315,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_screen_relative;
-    internal Vector2 GetScreenRelative()
+    public Vector2 GetScreenRelative()
     {
         var __mb = __mb_get_screen_relative;
         if (__mb == 0)
@@ -6330,7 +6330,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_velocity;
-    internal void SetVelocity(Vector2 velocity)
+    public void SetVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -6346,7 +6346,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_velocity;
-    internal Vector2 GetVelocity()
+    public Vector2 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -6361,7 +6361,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_set_screen_velocity;
-    internal void SetScreenVelocity(Vector2 velocity)
+    public void SetScreenVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_screen_velocity;
         if (__mb == 0)
@@ -6377,7 +6377,7 @@ public unsafe partial class InputEventMouseMotion : InputEventMouse
     }
 
     private static nint __mb_get_screen_velocity;
-    internal Vector2 GetScreenVelocity()
+    public Vector2 GetScreenVelocity()
     {
         var __mb = __mb_get_screen_velocity;
         if (__mb == 0)
@@ -6408,7 +6408,7 @@ public unsafe partial class InputEventPanGesture : InputEventGesture
     }
 
     private static nint __mb_set_delta;
-    internal void SetDelta(Vector2 delta)
+    public void SetDelta(Vector2 delta)
     {
         var __mb = __mb_set_delta;
         if (__mb == 0)
@@ -6424,7 +6424,7 @@ public unsafe partial class InputEventPanGesture : InputEventGesture
     }
 
     private static nint __mb_get_delta;
-    internal Vector2 GetDelta()
+    public Vector2 GetDelta()
     {
         var __mb = __mb_get_delta;
         if (__mb == 0)
@@ -6503,7 +6503,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_index;
-    internal void SetIndex(int index)
+    public void SetIndex(int index)
     {
         var __mb = __mb_set_index;
         if (__mb == 0)
@@ -6519,7 +6519,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_index;
-    internal int GetIndex()
+    public int GetIndex()
     {
         var __mb = __mb_get_index;
         if (__mb == 0)
@@ -6534,7 +6534,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_tilt;
-    internal void SetTilt(Vector2 tilt)
+    public void SetTilt(Vector2 tilt)
     {
         var __mb = __mb_set_tilt;
         if (__mb == 0)
@@ -6550,7 +6550,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_tilt;
-    internal Vector2 GetTilt()
+    public Vector2 GetTilt()
     {
         var __mb = __mb_get_tilt;
         if (__mb == 0)
@@ -6565,7 +6565,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_pressure;
-    internal void SetPressure(float pressure)
+    public void SetPressure(float pressure)
     {
         var __mb = __mb_set_pressure;
         if (__mb == 0)
@@ -6581,7 +6581,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_pressure;
-    internal float GetPressure()
+    public float GetPressure()
     {
         var __mb = __mb_get_pressure;
         if (__mb == 0)
@@ -6596,7 +6596,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_pen_inverted;
-    internal void SetPenInverted(bool penInverted)
+    public void SetPenInverted(bool penInverted)
     {
         var __mb = __mb_set_pen_inverted;
         if (__mb == 0)
@@ -6612,7 +6612,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_pen_inverted;
-    internal bool GetPenInverted()
+    public bool GetPenInverted()
     {
         var __mb = __mb_get_pen_inverted;
         if (__mb == 0)
@@ -6627,7 +6627,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_position;
-    internal void SetPosition(Vector2 position)
+    public void SetPosition(Vector2 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -6643,7 +6643,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_position;
-    internal Vector2 GetPosition()
+    public Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -6658,7 +6658,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_relative;
-    internal void SetRelative(Vector2 relative)
+    public void SetRelative(Vector2 relative)
     {
         var __mb = __mb_set_relative;
         if (__mb == 0)
@@ -6674,7 +6674,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_relative;
-    internal Vector2 GetRelative()
+    public Vector2 GetRelative()
     {
         var __mb = __mb_get_relative;
         if (__mb == 0)
@@ -6689,7 +6689,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_screen_relative;
-    internal void SetScreenRelative(Vector2 relative)
+    public void SetScreenRelative(Vector2 relative)
     {
         var __mb = __mb_set_screen_relative;
         if (__mb == 0)
@@ -6705,7 +6705,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_screen_relative;
-    internal Vector2 GetScreenRelative()
+    public Vector2 GetScreenRelative()
     {
         var __mb = __mb_get_screen_relative;
         if (__mb == 0)
@@ -6720,7 +6720,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_velocity;
-    internal void SetVelocity(Vector2 velocity)
+    public void SetVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_velocity;
         if (__mb == 0)
@@ -6736,7 +6736,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_velocity;
-    internal Vector2 GetVelocity()
+    public Vector2 GetVelocity()
     {
         var __mb = __mb_get_velocity;
         if (__mb == 0)
@@ -6751,7 +6751,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_set_screen_velocity;
-    internal void SetScreenVelocity(Vector2 velocity)
+    public void SetScreenVelocity(Vector2 velocity)
     {
         var __mb = __mb_set_screen_velocity;
         if (__mb == 0)
@@ -6767,7 +6767,7 @@ public unsafe partial class InputEventScreenDrag : InputEventFromWindow
     }
 
     private static nint __mb_get_screen_velocity;
-    internal Vector2 GetScreenVelocity()
+    public Vector2 GetScreenVelocity()
     {
         var __mb = __mb_get_screen_velocity;
         if (__mb == 0)
@@ -6822,7 +6822,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_set_index;
-    internal void SetIndex(int index)
+    public void SetIndex(int index)
     {
         var __mb = __mb_set_index;
         if (__mb == 0)
@@ -6838,7 +6838,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_get_index;
-    internal int GetIndex()
+    public int GetIndex()
     {
         var __mb = __mb_get_index;
         if (__mb == 0)
@@ -6853,7 +6853,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_set_position;
-    internal void SetPosition(Vector2 position)
+    public void SetPosition(Vector2 position)
     {
         var __mb = __mb_set_position;
         if (__mb == 0)
@@ -6869,7 +6869,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_get_position;
-    internal Vector2 GetPosition()
+    public Vector2 GetPosition()
     {
         var __mb = __mb_get_position;
         if (__mb == 0)
@@ -6884,7 +6884,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_set_pressed;
-    internal void SetPressed(bool pressed)
+    public void SetPressed(bool pressed)
     {
         var __mb = __mb_set_pressed;
         if (__mb == 0)
@@ -6900,7 +6900,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_set_canceled;
-    internal void SetCanceled(bool canceled)
+    public void SetCanceled(bool canceled)
     {
         var __mb = __mb_set_canceled;
         if (__mb == 0)
@@ -6916,7 +6916,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_set_double_tap;
-    internal void SetDoubleTap(bool doubleTap)
+    public void SetDoubleTap(bool doubleTap)
     {
         var __mb = __mb_set_double_tap;
         if (__mb == 0)
@@ -6932,7 +6932,7 @@ public unsafe partial class InputEventScreenTouch : InputEventFromWindow
     }
 
     private static nint __mb_is_double_tap;
-    internal bool IsDoubleTap()
+    public bool IsDoubleTap()
     {
         var __mb = __mb_is_double_tap;
         if (__mb == 0)
@@ -6963,7 +6963,7 @@ public unsafe partial class InputEventShortcut : InputEvent
     }
 
     private static nint __mb_set_shortcut;
-    internal void SetShortcut(Shortcut? shortcut)
+    public void SetShortcut(Shortcut? shortcut)
     {
         var __mb = __mb_set_shortcut;
         if (__mb == 0)
@@ -6979,7 +6979,7 @@ public unsafe partial class InputEventShortcut : InputEvent
     }
 
     private static nint __mb_get_shortcut;
-    internal Shortcut? GetShortcut()
+    public Shortcut? GetShortcut()
     {
         var __mb = __mb_get_shortcut;
         if (__mb == 0)
@@ -7029,7 +7029,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_set_command_or_control_autoremap;
-    internal void SetCommandOrControlAutoremap(bool enable)
+    public void SetCommandOrControlAutoremap(bool enable)
     {
         var __mb = __mb_set_command_or_control_autoremap;
         if (__mb == 0)
@@ -7045,7 +7045,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_is_command_or_control_autoremap;
-    internal bool IsCommandOrControlAutoremap()
+    public bool IsCommandOrControlAutoremap()
     {
         var __mb = __mb_is_command_or_control_autoremap;
         if (__mb == 0)
@@ -7075,7 +7075,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_set_alt_pressed;
-    internal void SetAltPressed(bool pressed)
+    public void SetAltPressed(bool pressed)
     {
         var __mb = __mb_set_alt_pressed;
         if (__mb == 0)
@@ -7091,7 +7091,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_is_alt_pressed;
-    internal bool IsAltPressed()
+    public bool IsAltPressed()
     {
         var __mb = __mb_is_alt_pressed;
         if (__mb == 0)
@@ -7106,7 +7106,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_set_shift_pressed;
-    internal void SetShiftPressed(bool pressed)
+    public void SetShiftPressed(bool pressed)
     {
         var __mb = __mb_set_shift_pressed;
         if (__mb == 0)
@@ -7122,7 +7122,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_is_shift_pressed;
-    internal bool IsShiftPressed()
+    public bool IsShiftPressed()
     {
         var __mb = __mb_is_shift_pressed;
         if (__mb == 0)
@@ -7137,7 +7137,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_set_ctrl_pressed;
-    internal void SetCtrlPressed(bool pressed)
+    public void SetCtrlPressed(bool pressed)
     {
         var __mb = __mb_set_ctrl_pressed;
         if (__mb == 0)
@@ -7153,7 +7153,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_is_ctrl_pressed;
-    internal bool IsCtrlPressed()
+    public bool IsCtrlPressed()
     {
         var __mb = __mb_is_ctrl_pressed;
         if (__mb == 0)
@@ -7168,7 +7168,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_set_meta_pressed;
-    internal void SetMetaPressed(bool pressed)
+    public void SetMetaPressed(bool pressed)
     {
         var __mb = __mb_set_meta_pressed;
         if (__mb == 0)
@@ -7184,7 +7184,7 @@ public unsafe partial class InputEventWithModifiers : InputEventFromWindow
     }
 
     private static nint __mb_is_meta_pressed;
-    internal bool IsMetaPressed()
+    public bool IsMetaPressed()
     {
         var __mb = __mb_is_meta_pressed;
         if (__mb == 0)
@@ -8429,7 +8429,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_item_count;
-    internal void SetItemCount(int count)
+    public void SetItemCount(int count)
     {
         var __mb = __mb_set_item_count;
         if (__mb == 0)
@@ -8445,7 +8445,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_item_count;
-    internal int GetItemCount()
+    public int GetItemCount()
     {
         var __mb = __mb_get_item_count;
         if (__mb == 0)
@@ -8502,7 +8502,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_fixed_column_width;
-    internal void SetFixedColumnWidth(int width)
+    public void SetFixedColumnWidth(int width)
     {
         var __mb = __mb_set_fixed_column_width;
         if (__mb == 0)
@@ -8518,7 +8518,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_fixed_column_width;
-    internal int GetFixedColumnWidth()
+    public int GetFixedColumnWidth()
     {
         var __mb = __mb_get_fixed_column_width;
         if (__mb == 0)
@@ -8533,7 +8533,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_same_column_width;
-    internal void SetSameColumnWidth(bool enable)
+    public void SetSameColumnWidth(bool enable)
     {
         var __mb = __mb_set_same_column_width;
         if (__mb == 0)
@@ -8549,7 +8549,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_is_same_column_width;
-    internal bool IsSameColumnWidth()
+    public bool IsSameColumnWidth()
     {
         var __mb = __mb_is_same_column_width;
         if (__mb == 0)
@@ -8564,7 +8564,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_max_text_lines;
-    internal void SetMaxTextLines(int lines)
+    public void SetMaxTextLines(int lines)
     {
         var __mb = __mb_set_max_text_lines;
         if (__mb == 0)
@@ -8580,7 +8580,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_max_text_lines;
-    internal int GetMaxTextLines()
+    public int GetMaxTextLines()
     {
         var __mb = __mb_get_max_text_lines;
         if (__mb == 0)
@@ -8595,7 +8595,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_max_columns;
-    internal void SetMaxColumns(int amount)
+    public void SetMaxColumns(int amount)
     {
         var __mb = __mb_set_max_columns;
         if (__mb == 0)
@@ -8611,7 +8611,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_max_columns;
-    internal int GetMaxColumns()
+    public int GetMaxColumns()
     {
         var __mb = __mb_get_max_columns;
         if (__mb == 0)
@@ -8626,7 +8626,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_select_mode;
-    internal void SetSelectMode(ItemList.SelectModeEnum mode)
+    public void SetSelectMode(ItemList.SelectModeEnum mode)
     {
         var __mb = __mb_set_select_mode;
         if (__mb == 0)
@@ -8642,7 +8642,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_select_mode;
-    internal ItemList.SelectModeEnum GetSelectMode()
+    public ItemList.SelectModeEnum GetSelectMode()
     {
         var __mb = __mb_get_select_mode;
         if (__mb == 0)
@@ -8657,7 +8657,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_icon_mode;
-    internal void SetIconMode(ItemList.IconModeEnum mode)
+    public void SetIconMode(ItemList.IconModeEnum mode)
     {
         var __mb = __mb_set_icon_mode;
         if (__mb == 0)
@@ -8673,7 +8673,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_icon_mode;
-    internal ItemList.IconModeEnum GetIconMode()
+    public ItemList.IconModeEnum GetIconMode()
     {
         var __mb = __mb_get_icon_mode;
         if (__mb == 0)
@@ -8688,7 +8688,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_fixed_icon_size;
-    internal void SetFixedIconSize(Vector2I size)
+    public void SetFixedIconSize(Vector2I size)
     {
         var __mb = __mb_set_fixed_icon_size;
         if (__mb == 0)
@@ -8704,7 +8704,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_fixed_icon_size;
-    internal Vector2I GetFixedIconSize()
+    public Vector2I GetFixedIconSize()
     {
         var __mb = __mb_get_fixed_icon_size;
         if (__mb == 0)
@@ -8719,7 +8719,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_icon_scale;
-    internal void SetIconScale(float scale)
+    public void SetIconScale(float scale)
     {
         var __mb = __mb_set_icon_scale;
         if (__mb == 0)
@@ -8735,7 +8735,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_icon_scale;
-    internal float GetIconScale()
+    public float GetIconScale()
     {
         var __mb = __mb_get_icon_scale;
         if (__mb == 0)
@@ -8750,7 +8750,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_allow_rmb_select;
-    internal void SetAllowRmbSelect(bool allow)
+    public void SetAllowRmbSelect(bool allow)
     {
         var __mb = __mb_set_allow_rmb_select;
         if (__mb == 0)
@@ -8766,7 +8766,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_allow_rmb_select;
-    internal bool GetAllowRmbSelect()
+    public bool GetAllowRmbSelect()
     {
         var __mb = __mb_get_allow_rmb_select;
         if (__mb == 0)
@@ -8781,7 +8781,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_allow_reselect;
-    internal void SetAllowReselect(bool allow)
+    public void SetAllowReselect(bool allow)
     {
         var __mb = __mb_set_allow_reselect;
         if (__mb == 0)
@@ -8797,7 +8797,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_allow_reselect;
-    internal bool GetAllowReselect()
+    public bool GetAllowReselect()
     {
         var __mb = __mb_get_allow_reselect;
         if (__mb == 0)
@@ -8812,7 +8812,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_allow_search;
-    internal void SetAllowSearch(bool allow)
+    public void SetAllowSearch(bool allow)
     {
         var __mb = __mb_set_allow_search;
         if (__mb == 0)
@@ -8828,7 +8828,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_allow_search;
-    internal bool GetAllowSearch()
+    public bool GetAllowSearch()
     {
         var __mb = __mb_get_allow_search;
         if (__mb == 0)
@@ -8843,7 +8843,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_auto_width;
-    internal void SetAutoWidth(bool enable)
+    public void SetAutoWidth(bool enable)
     {
         var __mb = __mb_set_auto_width;
         if (__mb == 0)
@@ -8859,7 +8859,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_has_auto_width;
-    internal bool HasAutoWidth()
+    public bool HasAutoWidth()
     {
         var __mb = __mb_has_auto_width;
         if (__mb == 0)
@@ -8874,7 +8874,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_auto_height;
-    internal void SetAutoHeight(bool enable)
+    public void SetAutoHeight(bool enable)
     {
         var __mb = __mb_set_auto_height;
         if (__mb == 0)
@@ -8890,7 +8890,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_has_auto_height;
-    internal bool HasAutoHeight()
+    public bool HasAutoHeight()
     {
         var __mb = __mb_has_auto_height;
         if (__mb == 0)
@@ -9001,7 +9001,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_scroll_hint_mode;
-    internal void SetScrollHintMode(ItemList.ScrollHintModeEnum scrollHintMode)
+    public void SetScrollHintMode(ItemList.ScrollHintModeEnum scrollHintMode)
     {
         var __mb = __mb_set_scroll_hint_mode;
         if (__mb == 0)
@@ -9017,7 +9017,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_scroll_hint_mode;
-    internal ItemList.ScrollHintModeEnum GetScrollHintMode()
+    public ItemList.ScrollHintModeEnum GetScrollHintMode()
     {
         var __mb = __mb_get_scroll_hint_mode;
         if (__mb == 0)
@@ -9032,7 +9032,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_tile_scroll_hint;
-    internal void SetTileScrollHint(bool tileScrollHint)
+    public void SetTileScrollHint(bool tileScrollHint)
     {
         var __mb = __mb_set_tile_scroll_hint;
         if (__mb == 0)
@@ -9048,7 +9048,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_is_scroll_hint_tiled;
-    internal bool IsScrollHintTiled()
+    public bool IsScrollHintTiled()
     {
         var __mb = __mb_is_scroll_hint_tiled;
         if (__mb == 0)
@@ -9063,7 +9063,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_text_overrun_behavior;
-    internal void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_text_overrun_behavior;
         if (__mb == 0)
@@ -9079,7 +9079,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_get_text_overrun_behavior;
-    internal TextServer.OverrunBehavior GetTextOverrunBehavior()
+    public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
         var __mb = __mb_get_text_overrun_behavior;
         if (__mb == 0)
@@ -9094,7 +9094,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_set_wraparound_items;
-    internal void SetWraparoundItems(bool enable)
+    public void SetWraparoundItems(bool enable)
     {
         var __mb = __mb_set_wraparound_items;
         if (__mb == 0)
@@ -9110,7 +9110,7 @@ public unsafe partial class ItemList : Control
     }
 
     private static nint __mb_has_wraparound_items;
-    internal bool HasWraparoundItems()
+    public bool HasWraparoundItems()
     {
         var __mb = __mb_has_wraparound_items;
         if (__mb == 0)
@@ -9173,7 +9173,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_set_max_iterations;
-    internal void SetMaxIterations(int maxIterations)
+    public void SetMaxIterations(int maxIterations)
     {
         var __mb = __mb_set_max_iterations;
         if (__mb == 0)
@@ -9189,7 +9189,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_get_max_iterations;
-    internal int GetMaxIterations()
+    public int GetMaxIterations()
     {
         var __mb = __mb_get_max_iterations;
         if (__mb == 0)
@@ -9204,7 +9204,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_set_min_distance;
-    internal void SetMinDistance(double minDistance)
+    public void SetMinDistance(double minDistance)
     {
         var __mb = __mb_set_min_distance;
         if (__mb == 0)
@@ -9220,7 +9220,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_get_min_distance;
-    internal double GetMinDistance()
+    public double GetMinDistance()
     {
         var __mb = __mb_get_min_distance;
         if (__mb == 0)
@@ -9235,7 +9235,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_set_angular_delta_limit;
-    internal void SetAngularDeltaLimit(double angularDeltaLimit)
+    public void SetAngularDeltaLimit(double angularDeltaLimit)
     {
         var __mb = __mb_set_angular_delta_limit;
         if (__mb == 0)
@@ -9251,7 +9251,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_get_angular_delta_limit;
-    internal double GetAngularDeltaLimit()
+    public double GetAngularDeltaLimit()
     {
         var __mb = __mb_get_angular_delta_limit;
         if (__mb == 0)
@@ -9266,7 +9266,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_set_deterministic;
-    internal void SetDeterministic(bool deterministic)
+    public void SetDeterministic(bool deterministic)
     {
         var __mb = __mb_set_deterministic;
         if (__mb == 0)
@@ -9282,7 +9282,7 @@ public unsafe partial class IterateIK3D : ChainIK3D
     }
 
     private static nint __mb_is_deterministic;
-    internal bool IsDeterministic()
+    public bool IsDeterministic()
     {
         var __mb = __mb_is_deterministic;
         if (__mb == 0)

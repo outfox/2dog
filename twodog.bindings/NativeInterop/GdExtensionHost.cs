@@ -69,6 +69,10 @@ public static unsafe class GdExtensionHost
             if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
                 SceneLevelInitialized = true;
             LevelInitialized?.Invoke((GDExtensionInitializationLevel)level);
+            // After user class registrations flushed: wire the C# script
+            // language (scenes referencing res://*.cs scripts).
+            if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
+                ScriptShim.Initialize();
         }
         catch (Exception e)
         {
@@ -81,6 +85,22 @@ public static unsafe class GdExtensionHost
     {
         try
         {
+            if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_SCENE)
+            {
+                ScriptShim.Shutdown();
+                // The scene tree and script instances are gone, so wrappers of
+                // engine resources are unrooted garbage. Run their finalizer ->
+                // DisposalQueue pipeline now - extension classes are still
+                // registered at this point (they unregister after this callback),
+                // and ObjectDB's exit leak accounting would otherwise count our
+                // owned refs as leaks. Two rounds: a release can unroot more.
+                for (var i = 0; i < 2; i++)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    DisposalQueue.Drain();
+                }
+            }
             LevelDeinitialized?.Invoke((GDExtensionInitializationLevel)level);
         }
         catch (Exception e)

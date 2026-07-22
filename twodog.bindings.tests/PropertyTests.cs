@@ -56,11 +56,11 @@ public class PropertyTests
     }
 
     [Fact]
-    public void AccessorMethods_AreHiddenFromPublicSurface()
+    public void AccessorMethods_ArePublicAlongsideTheProperty()
     {
-        // GodotSharp compat: the property is the API; accessors are internal.
-        Assert.Null(typeof(Node2D).GetMethod("GetPosition", BindingFlags.Public | BindingFlags.Instance));
-        Assert.NotNull(typeof(Node2D).GetMethod("GetPosition", BindingFlags.NonPublic | BindingFlags.Instance));
+        // GodotSharp compat: GodotSharp exposes BOTH the folded property and
+        // the accessor methods; converted game code calls either.
+        Assert.NotNull(typeof(Node2D).GetMethod("GetPosition", BindingFlags.Public | BindingFlags.Instance));
         Assert.NotNull(typeof(Node2D).GetProperty("Position"));
     }
 

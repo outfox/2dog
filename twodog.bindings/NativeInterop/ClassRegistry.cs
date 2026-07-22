@@ -27,11 +27,16 @@ namespace Godot.NativeInterop;
 public static unsafe class ClassRegistry
 {
     // Registered types are reached by reflection (Activator.CreateInstance,
-    // __BindMembers, virtual-override probing) - keep them whole when trimming.
+    // __BindMembers, virtual-override probing, script-instance member access) -
+    // keep them whole when trimming.
     private const DynamicallyAccessedMemberTypes RegisteredTypeMembers =
         DynamicallyAccessedMemberTypes.PublicParameterlessConstructor |
         DynamicallyAccessedMemberTypes.PublicMethods |
-        DynamicallyAccessedMemberTypes.NonPublicMethods;
+        DynamicallyAccessedMemberTypes.NonPublicMethods |
+        DynamicallyAccessedMemberTypes.PublicProperties |
+        DynamicallyAccessedMemberTypes.NonPublicProperties |
+        DynamicallyAccessedMemberTypes.PublicFields |
+        DynamicallyAccessedMemberTypes.NonPublicFields;
 
     public sealed class ClassInfo
     {
@@ -43,6 +48,12 @@ public static unsafe class ClassRegistry
         public required bool RefCounted { get; init; }
         internal GCHandle SelfHandle;
         internal readonly Dictionary<ulong, bool> OverriddenCache = [];
+
+        // Script-shim internal classes: virtuals the reflection scheme cannot
+        // see (dispatched by a hand-written __CallVirtual override), or a
+        // blanket claim to silence the engine's required-virtual validation.
+        internal bool ClaimAllVirtuals;
+        internal HashSet<string>? CustomVirtuals;
     }
 
     private static readonly object Gate = new();
@@ -110,6 +121,32 @@ public static unsafe class ClassRegistry
                 return;
             }
 
+            RegisterCore(type, claimAllVirtuals: false, customVirtuals: null);
+        }
+    }
+
+    /// <summary>
+    /// Registers an internal (shim) class with custom virtual handling: names in
+    /// <paramref name="customVirtuals"/> - or all names, with
+    /// <paramref name="claimAllVirtuals"/> - report as overridden and dispatch
+    /// through the class's hand-written __CallVirtual override. Engine must be
+    /// at SCENE init or later.
+    /// </summary>
+    internal static void RegisterInternal(
+        [DynamicallyAccessedMembers(RegisteredTypeMembers)] Type type,
+        bool claimAllVirtuals = false, string[]? customVirtuals = null)
+    {
+        lock (Gate)
+        {
+            RegisterCore(type, claimAllVirtuals, customVirtuals);
+        }
+    }
+
+    private static void RegisterCore(
+        [DynamicallyAccessedMembers(RegisteredTypeMembers)] Type type,
+        bool claimAllVirtuals, string[]? customVirtuals)
+    {
+        {
             if (ByType.ContainsKey(type)) return;
 
             var (parentName, baseEngineClass, refCounted) = ResolveParent(type);
@@ -121,6 +158,8 @@ public static unsafe class ClassRegistry
                 ParentName = parentName,
                 BaseEngineClass = baseEngineClass,
                 RefCounted = refCounted,
+                ClaimAllVirtuals = claimAllVirtuals,
+                CustomVirtuals = customVirtuals is { Length: > 0 } ? [.. customVirtuals] : null,
             };
             info.SelfHandle = GCHandle.Alloc(info);
 
@@ -203,8 +242,32 @@ public static unsafe class ClassRegistry
     /// the extension-instance path for registered types, or the plain wrapper
     /// path for direct engine-class construction.
     /// </summary>
+    /// <summary>
+    /// Parks an existing plain engine object for the next constructed managed
+    /// instance to adopt as a script wrapper: the object keeps its native class
+    /// (no object_set_instance), the managed type layers on top like a
+    /// GodotSharp script. Strong rooting comes from the script instance.
+    /// </summary>
+    [ThreadStatic] internal static nint PendingScriptOwner;
+
+    internal static bool TryGetByClassName(string className, out ClassInfo info)
+    {
+        lock (Gate) return ByClassSn.TryGetValue(StringNames.Get(className).Opaque, out info!);
+    }
+
     internal static void AttachNew(GodotObject instance, string declaredGdClass)
     {
+        var scriptOwner = PendingScriptOwner;
+        if (scriptOwner != 0)
+        {
+            PendingScriptOwner = 0;
+            instance.NativePtr = scriptOwner;
+            instance.InstanceId = GdExtensionInterface.ObjectGetInstanceId(scriptOwner);
+            // Weak binding so GetOrCreate resolves this same managed object.
+            InstanceBindings.InstallWeakBinding(instance);
+            return;
+        }
+
         if (TryGet(instance.GetType(), out var info))
         {
             var native = _pendingNative;
@@ -335,13 +398,22 @@ public static unsafe class ClassRegistry
 
     private static bool IsOverridden(ClassInfo info, ulong nameSnPayload)
     {
+        // Shim classes claim their custom (or all) virtuals; dispatch happens in
+        // their hand-written __CallVirtual, unknown names no-op to the engine's
+        // caller-initialized default return.
+        if (info.ClaimAllVirtuals) return true;
+
         lock (Gate)
         {
             if (info.OverriddenCache.TryGetValue(nameSnPayload, out var cached)) return cached;
 
             var overridden = false;
             var gdName = StringNames.Read(nameSnPayload);
-            if (GeneratedVirtualNames.Map.TryGetValue(gdName, out var csName))
+            if (info.CustomVirtuals?.Contains(gdName) == true)
+            {
+                overridden = true;
+            }
+            else if (GeneratedVirtualNames.Map.TryGetValue(gdName, out var csName))
             {
                 var mi = info.Type.GetMethod(csName,
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);

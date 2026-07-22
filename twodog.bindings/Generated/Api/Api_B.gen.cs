@@ -40,7 +40,7 @@ public unsafe partial class BackBufferCopy : Node2D
     }
 
     private static nint __mb_set_rect;
-    internal void SetRect(Rect2 rect)
+    public void SetRect(Rect2 rect)
     {
         var __mb = __mb_set_rect;
         if (__mb == 0)
@@ -56,7 +56,7 @@ public unsafe partial class BackBufferCopy : Node2D
     }
 
     private static nint __mb_get_rect;
-    internal Rect2 GetRect()
+    public Rect2 GetRect()
     {
         var __mb = __mb_get_rect;
         if (__mb == 0)
@@ -71,7 +71,7 @@ public unsafe partial class BackBufferCopy : Node2D
     }
 
     private static nint __mb_set_copy_mode;
-    internal void SetCopyMode(BackBufferCopy.CopyModeEnum copyMode)
+    public void SetCopyMode(BackBufferCopy.CopyModeEnum copyMode)
     {
         var __mb = __mb_set_copy_mode;
         if (__mb == 0)
@@ -87,7 +87,7 @@ public unsafe partial class BackBufferCopy : Node2D
     }
 
     private static nint __mb_get_copy_mode;
-    internal BackBufferCopy.CopyModeEnum GetCopyMode()
+    public BackBufferCopy.CopyModeEnum GetCopyMode()
     {
         var __mb = __mb_get_copy_mode;
         if (__mb == 0)
@@ -219,7 +219,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_pressed;
-    internal void SetPressed(bool pressed)
+    public void SetPressed(bool pressed)
     {
         var __mb = __mb_set_pressed;
         if (__mb == 0)
@@ -235,7 +235,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_is_pressed;
-    internal bool IsPressed()
+    public bool IsPressed()
     {
         var __mb = __mb_is_pressed;
         if (__mb == 0)
@@ -281,7 +281,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_toggle_mode;
-    internal void SetToggleMode(bool enabled)
+    public void SetToggleMode(bool enabled)
     {
         var __mb = __mb_set_toggle_mode;
         if (__mb == 0)
@@ -297,7 +297,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_is_toggle_mode;
-    internal bool IsToggleMode()
+    public bool IsToggleMode()
     {
         var __mb = __mb_is_toggle_mode;
         if (__mb == 0)
@@ -312,7 +312,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_shortcut_in_tooltip;
-    internal void SetShortcutInTooltip(bool enabled)
+    public void SetShortcutInTooltip(bool enabled)
     {
         var __mb = __mb_set_shortcut_in_tooltip;
         if (__mb == 0)
@@ -328,7 +328,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_is_shortcut_in_tooltip_enabled;
-    internal bool IsShortcutInTooltipEnabled()
+    public bool IsShortcutInTooltipEnabled()
     {
         var __mb = __mb_is_shortcut_in_tooltip_enabled;
         if (__mb == 0)
@@ -343,7 +343,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_disabled;
-    internal void SetDisabled(bool disabled)
+    public void SetDisabled(bool disabled)
     {
         var __mb = __mb_set_disabled;
         if (__mb == 0)
@@ -359,7 +359,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_is_disabled;
-    internal bool IsDisabled()
+    public bool IsDisabled()
     {
         var __mb = __mb_is_disabled;
         if (__mb == 0)
@@ -374,7 +374,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_action_mode;
-    internal void SetActionMode(BaseButton.ActionModeEnum mode)
+    public void SetActionMode(BaseButton.ActionModeEnum mode)
     {
         var __mb = __mb_set_action_mode;
         if (__mb == 0)
@@ -390,7 +390,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_get_action_mode;
-    internal BaseButton.ActionModeEnum GetActionMode()
+    public BaseButton.ActionModeEnum GetActionMode()
     {
         var __mb = __mb_get_action_mode;
         if (__mb == 0)
@@ -405,7 +405,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_button_mask;
-    internal void SetButtonMask(MouseButtonMask mask)
+    public void SetButtonMask(MouseButtonMask mask)
     {
         var __mb = __mb_set_button_mask;
         if (__mb == 0)
@@ -421,7 +421,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_get_button_mask;
-    internal MouseButtonMask GetButtonMask()
+    public MouseButtonMask GetButtonMask()
     {
         var __mb = __mb_get_button_mask;
         if (__mb == 0)
@@ -451,7 +451,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_keep_pressed_outside;
-    internal void SetKeepPressedOutside(bool enabled)
+    public void SetKeepPressedOutside(bool enabled)
     {
         var __mb = __mb_set_keep_pressed_outside;
         if (__mb == 0)
@@ -467,7 +467,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_is_keep_pressed_outside;
-    internal bool IsKeepPressedOutside()
+    public bool IsKeepPressedOutside()
     {
         var __mb = __mb_is_keep_pressed_outside;
         if (__mb == 0)
@@ -482,7 +482,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_shortcut_feedback;
-    internal void SetShortcutFeedback(bool enabled)
+    public void SetShortcutFeedback(bool enabled)
     {
         var __mb = __mb_set_shortcut_feedback;
         if (__mb == 0)
@@ -498,7 +498,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_is_shortcut_feedback;
-    internal bool IsShortcutFeedback()
+    public bool IsShortcutFeedback()
     {
         var __mb = __mb_is_shortcut_feedback;
         if (__mb == 0)
@@ -513,7 +513,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_shortcut;
-    internal void SetShortcut(Shortcut? shortcut)
+    public void SetShortcut(Shortcut? shortcut)
     {
         var __mb = __mb_set_shortcut;
         if (__mb == 0)
@@ -529,7 +529,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_get_shortcut;
-    internal Shortcut? GetShortcut()
+    public Shortcut? GetShortcut()
     {
         var __mb = __mb_get_shortcut;
         if (__mb == 0)
@@ -544,7 +544,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_set_button_group;
-    internal void SetButtonGroup(ButtonGroup? buttonGroup)
+    public void SetButtonGroup(ButtonGroup? buttonGroup)
     {
         var __mb = __mb_set_button_group;
         if (__mb == 0)
@@ -560,7 +560,7 @@ public unsafe partial class BaseButton : Control
     }
 
     private static nint __mb_get_button_group;
-    internal ButtonGroup? GetButtonGroup()
+    public ButtonGroup? GetButtonGroup()
     {
         var __mb = __mb_get_button_group;
         if (__mb == 0)
@@ -1605,7 +1605,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_albedo;
-    internal void SetAlbedo(Color albedo)
+    public void SetAlbedo(Color albedo)
     {
         var __mb = __mb_set_albedo;
         if (__mb == 0)
@@ -1621,7 +1621,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_albedo;
-    internal Color GetAlbedo()
+    public Color GetAlbedo()
     {
         var __mb = __mb_get_albedo;
         if (__mb == 0)
@@ -1636,7 +1636,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_transparency;
-    internal void SetTransparency(BaseMaterial3D.TransparencyEnum transparency)
+    public void SetTransparency(BaseMaterial3D.TransparencyEnum transparency)
     {
         var __mb = __mb_set_transparency;
         if (__mb == 0)
@@ -1652,7 +1652,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_transparency;
-    internal BaseMaterial3D.TransparencyEnum GetTransparency()
+    public BaseMaterial3D.TransparencyEnum GetTransparency()
     {
         var __mb = __mb_get_transparency;
         if (__mb == 0)
@@ -1667,7 +1667,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_alpha_antialiasing;
-    internal void SetAlphaAntialiasing(BaseMaterial3D.AlphaAntiAliasing alphaAa)
+    public void SetAlphaAntialiasing(BaseMaterial3D.AlphaAntiAliasing alphaAa)
     {
         var __mb = __mb_set_alpha_antialiasing;
         if (__mb == 0)
@@ -1683,7 +1683,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_alpha_antialiasing;
-    internal BaseMaterial3D.AlphaAntiAliasing GetAlphaAntialiasing()
+    public BaseMaterial3D.AlphaAntiAliasing GetAlphaAntialiasing()
     {
         var __mb = __mb_get_alpha_antialiasing;
         if (__mb == 0)
@@ -1698,7 +1698,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_alpha_antialiasing_edge;
-    internal void SetAlphaAntialiasingEdge(float edge)
+    public void SetAlphaAntialiasingEdge(float edge)
     {
         var __mb = __mb_set_alpha_antialiasing_edge;
         if (__mb == 0)
@@ -1714,7 +1714,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_alpha_antialiasing_edge;
-    internal float GetAlphaAntialiasingEdge()
+    public float GetAlphaAntialiasingEdge()
     {
         var __mb = __mb_get_alpha_antialiasing_edge;
         if (__mb == 0)
@@ -1729,7 +1729,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_shading_mode;
-    internal void SetShadingMode(BaseMaterial3D.ShadingModeEnum shadingMode)
+    public void SetShadingMode(BaseMaterial3D.ShadingModeEnum shadingMode)
     {
         var __mb = __mb_set_shading_mode;
         if (__mb == 0)
@@ -1745,7 +1745,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_shading_mode;
-    internal BaseMaterial3D.ShadingModeEnum GetShadingMode()
+    public BaseMaterial3D.ShadingModeEnum GetShadingMode()
     {
         var __mb = __mb_get_shading_mode;
         if (__mb == 0)
@@ -1760,7 +1760,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_specular;
-    internal void SetSpecular(float specular)
+    public void SetSpecular(float specular)
     {
         var __mb = __mb_set_specular;
         if (__mb == 0)
@@ -1776,7 +1776,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_specular;
-    internal float GetSpecular()
+    public float GetSpecular()
     {
         var __mb = __mb_get_specular;
         if (__mb == 0)
@@ -1791,7 +1791,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_metallic;
-    internal void SetMetallic(float metallic)
+    public void SetMetallic(float metallic)
     {
         var __mb = __mb_set_metallic;
         if (__mb == 0)
@@ -1807,7 +1807,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_metallic;
-    internal float GetMetallic()
+    public float GetMetallic()
     {
         var __mb = __mb_get_metallic;
         if (__mb == 0)
@@ -1822,7 +1822,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_roughness;
-    internal void SetRoughness(float roughness)
+    public void SetRoughness(float roughness)
     {
         var __mb = __mb_set_roughness;
         if (__mb == 0)
@@ -1838,7 +1838,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_roughness;
-    internal float GetRoughness()
+    public float GetRoughness()
     {
         var __mb = __mb_get_roughness;
         if (__mb == 0)
@@ -1853,7 +1853,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_emission;
-    internal void SetEmission(Color emission)
+    public void SetEmission(Color emission)
     {
         var __mb = __mb_set_emission;
         if (__mb == 0)
@@ -1869,7 +1869,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_emission;
-    internal Color GetEmission()
+    public Color GetEmission()
     {
         var __mb = __mb_get_emission;
         if (__mb == 0)
@@ -1884,7 +1884,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_emission_energy_multiplier;
-    internal void SetEmissionEnergyMultiplier(float emissionEnergyMultiplier)
+    public void SetEmissionEnergyMultiplier(float emissionEnergyMultiplier)
     {
         var __mb = __mb_set_emission_energy_multiplier;
         if (__mb == 0)
@@ -1900,7 +1900,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_emission_energy_multiplier;
-    internal float GetEmissionEnergyMultiplier()
+    public float GetEmissionEnergyMultiplier()
     {
         var __mb = __mb_get_emission_energy_multiplier;
         if (__mb == 0)
@@ -1915,7 +1915,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_emission_intensity;
-    internal void SetEmissionIntensity(float emissionEnergyMultiplier)
+    public void SetEmissionIntensity(float emissionEnergyMultiplier)
     {
         var __mb = __mb_set_emission_intensity;
         if (__mb == 0)
@@ -1931,7 +1931,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_emission_intensity;
-    internal float GetEmissionIntensity()
+    public float GetEmissionIntensity()
     {
         var __mb = __mb_get_emission_intensity;
         if (__mb == 0)
@@ -1946,7 +1946,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_normal_scale;
-    internal void SetNormalScale(float normalScale)
+    public void SetNormalScale(float normalScale)
     {
         var __mb = __mb_set_normal_scale;
         if (__mb == 0)
@@ -1962,7 +1962,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_normal_scale;
-    internal float GetNormalScale()
+    public float GetNormalScale()
     {
         var __mb = __mb_get_normal_scale;
         if (__mb == 0)
@@ -1977,7 +1977,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_rim;
-    internal void SetRim(float rim)
+    public void SetRim(float rim)
     {
         var __mb = __mb_set_rim;
         if (__mb == 0)
@@ -1993,7 +1993,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_rim;
-    internal float GetRim()
+    public float GetRim()
     {
         var __mb = __mb_get_rim;
         if (__mb == 0)
@@ -2008,7 +2008,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_rim_tint;
-    internal void SetRimTint(float rimTint)
+    public void SetRimTint(float rimTint)
     {
         var __mb = __mb_set_rim_tint;
         if (__mb == 0)
@@ -2024,7 +2024,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_rim_tint;
-    internal float GetRimTint()
+    public float GetRimTint()
     {
         var __mb = __mb_get_rim_tint;
         if (__mb == 0)
@@ -2039,7 +2039,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_clearcoat;
-    internal void SetClearcoat(float clearcoat)
+    public void SetClearcoat(float clearcoat)
     {
         var __mb = __mb_set_clearcoat;
         if (__mb == 0)
@@ -2055,7 +2055,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_clearcoat;
-    internal float GetClearcoat()
+    public float GetClearcoat()
     {
         var __mb = __mb_get_clearcoat;
         if (__mb == 0)
@@ -2070,7 +2070,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_clearcoat_roughness;
-    internal void SetClearcoatRoughness(float clearcoatRoughness)
+    public void SetClearcoatRoughness(float clearcoatRoughness)
     {
         var __mb = __mb_set_clearcoat_roughness;
         if (__mb == 0)
@@ -2086,7 +2086,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_clearcoat_roughness;
-    internal float GetClearcoatRoughness()
+    public float GetClearcoatRoughness()
     {
         var __mb = __mb_get_clearcoat_roughness;
         if (__mb == 0)
@@ -2101,7 +2101,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_anisotropy;
-    internal void SetAnisotropy(float anisotropy)
+    public void SetAnisotropy(float anisotropy)
     {
         var __mb = __mb_set_anisotropy;
         if (__mb == 0)
@@ -2117,7 +2117,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_anisotropy;
-    internal float GetAnisotropy()
+    public float GetAnisotropy()
     {
         var __mb = __mb_get_anisotropy;
         if (__mb == 0)
@@ -2132,7 +2132,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_heightmap_scale;
-    internal void SetHeightmapScale(float heightmapScale)
+    public void SetHeightmapScale(float heightmapScale)
     {
         var __mb = __mb_set_heightmap_scale;
         if (__mb == 0)
@@ -2148,7 +2148,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_heightmap_scale;
-    internal float GetHeightmapScale()
+    public float GetHeightmapScale()
     {
         var __mb = __mb_get_heightmap_scale;
         if (__mb == 0)
@@ -2163,7 +2163,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_subsurface_scattering_strength;
-    internal void SetSubsurfaceScatteringStrength(float strength)
+    public void SetSubsurfaceScatteringStrength(float strength)
     {
         var __mb = __mb_set_subsurface_scattering_strength;
         if (__mb == 0)
@@ -2179,7 +2179,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_subsurface_scattering_strength;
-    internal float GetSubsurfaceScatteringStrength()
+    public float GetSubsurfaceScatteringStrength()
     {
         var __mb = __mb_get_subsurface_scattering_strength;
         if (__mb == 0)
@@ -2194,7 +2194,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_transmittance_color;
-    internal void SetTransmittanceColor(Color color)
+    public void SetTransmittanceColor(Color color)
     {
         var __mb = __mb_set_transmittance_color;
         if (__mb == 0)
@@ -2210,7 +2210,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_transmittance_color;
-    internal Color GetTransmittanceColor()
+    public Color GetTransmittanceColor()
     {
         var __mb = __mb_get_transmittance_color;
         if (__mb == 0)
@@ -2225,7 +2225,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_transmittance_depth;
-    internal void SetTransmittanceDepth(float depth)
+    public void SetTransmittanceDepth(float depth)
     {
         var __mb = __mb_set_transmittance_depth;
         if (__mb == 0)
@@ -2241,7 +2241,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_transmittance_depth;
-    internal float GetTransmittanceDepth()
+    public float GetTransmittanceDepth()
     {
         var __mb = __mb_get_transmittance_depth;
         if (__mb == 0)
@@ -2256,7 +2256,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_transmittance_boost;
-    internal void SetTransmittanceBoost(float boost)
+    public void SetTransmittanceBoost(float boost)
     {
         var __mb = __mb_set_transmittance_boost;
         if (__mb == 0)
@@ -2272,7 +2272,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_transmittance_boost;
-    internal float GetTransmittanceBoost()
+    public float GetTransmittanceBoost()
     {
         var __mb = __mb_get_transmittance_boost;
         if (__mb == 0)
@@ -2287,7 +2287,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_backlight;
-    internal void SetBacklight(Color backlight)
+    public void SetBacklight(Color backlight)
     {
         var __mb = __mb_set_backlight;
         if (__mb == 0)
@@ -2303,7 +2303,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_backlight;
-    internal Color GetBacklight()
+    public Color GetBacklight()
     {
         var __mb = __mb_get_backlight;
         if (__mb == 0)
@@ -2318,7 +2318,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_refraction;
-    internal void SetRefraction(float refraction)
+    public void SetRefraction(float refraction)
     {
         var __mb = __mb_set_refraction;
         if (__mb == 0)
@@ -2334,7 +2334,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_refraction;
-    internal float GetRefraction()
+    public float GetRefraction()
     {
         var __mb = __mb_get_refraction;
         if (__mb == 0)
@@ -2349,7 +2349,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_point_size;
-    internal void SetPointSize(float pointSize)
+    public void SetPointSize(float pointSize)
     {
         var __mb = __mb_set_point_size;
         if (__mb == 0)
@@ -2365,7 +2365,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_point_size;
-    internal float GetPointSize()
+    public float GetPointSize()
     {
         var __mb = __mb_get_point_size;
         if (__mb == 0)
@@ -2380,7 +2380,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_detail_uv;
-    internal void SetDetailUv(BaseMaterial3D.DetailUV detailUv)
+    public void SetDetailUv(BaseMaterial3D.DetailUV detailUv)
     {
         var __mb = __mb_set_detail_uv;
         if (__mb == 0)
@@ -2396,7 +2396,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_detail_uv;
-    internal BaseMaterial3D.DetailUV GetDetailUv()
+    public BaseMaterial3D.DetailUV GetDetailUv()
     {
         var __mb = __mb_get_detail_uv;
         if (__mb == 0)
@@ -2411,7 +2411,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_blend_mode;
-    internal void SetBlendMode(BaseMaterial3D.BlendModeEnum blendMode)
+    public void SetBlendMode(BaseMaterial3D.BlendModeEnum blendMode)
     {
         var __mb = __mb_set_blend_mode;
         if (__mb == 0)
@@ -2427,7 +2427,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_blend_mode;
-    internal BaseMaterial3D.BlendModeEnum GetBlendMode()
+    public BaseMaterial3D.BlendModeEnum GetBlendMode()
     {
         var __mb = __mb_get_blend_mode;
         if (__mb == 0)
@@ -2442,7 +2442,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_depth_draw_mode;
-    internal void SetDepthDrawMode(BaseMaterial3D.DepthDrawModeEnum depthDrawMode)
+    public void SetDepthDrawMode(BaseMaterial3D.DepthDrawModeEnum depthDrawMode)
     {
         var __mb = __mb_set_depth_draw_mode;
         if (__mb == 0)
@@ -2458,7 +2458,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_depth_draw_mode;
-    internal BaseMaterial3D.DepthDrawModeEnum GetDepthDrawMode()
+    public BaseMaterial3D.DepthDrawModeEnum GetDepthDrawMode()
     {
         var __mb = __mb_get_depth_draw_mode;
         if (__mb == 0)
@@ -2473,7 +2473,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_depth_test;
-    internal void SetDepthTest(BaseMaterial3D.DepthTestEnum depthTest)
+    public void SetDepthTest(BaseMaterial3D.DepthTestEnum depthTest)
     {
         var __mb = __mb_set_depth_test;
         if (__mb == 0)
@@ -2489,7 +2489,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_depth_test;
-    internal BaseMaterial3D.DepthTestEnum GetDepthTest()
+    public BaseMaterial3D.DepthTestEnum GetDepthTest()
     {
         var __mb = __mb_get_depth_test;
         if (__mb == 0)
@@ -2504,7 +2504,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_cull_mode;
-    internal void SetCullMode(BaseMaterial3D.CullModeEnum cullMode)
+    public void SetCullMode(BaseMaterial3D.CullModeEnum cullMode)
     {
         var __mb = __mb_set_cull_mode;
         if (__mb == 0)
@@ -2520,7 +2520,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_cull_mode;
-    internal BaseMaterial3D.CullModeEnum GetCullMode()
+    public BaseMaterial3D.CullModeEnum GetCullMode()
     {
         var __mb = __mb_get_cull_mode;
         if (__mb == 0)
@@ -2535,7 +2535,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_diffuse_mode;
-    internal void SetDiffuseMode(BaseMaterial3D.DiffuseModeEnum diffuseMode)
+    public void SetDiffuseMode(BaseMaterial3D.DiffuseModeEnum diffuseMode)
     {
         var __mb = __mb_set_diffuse_mode;
         if (__mb == 0)
@@ -2551,7 +2551,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_diffuse_mode;
-    internal BaseMaterial3D.DiffuseModeEnum GetDiffuseMode()
+    public BaseMaterial3D.DiffuseModeEnum GetDiffuseMode()
     {
         var __mb = __mb_get_diffuse_mode;
         if (__mb == 0)
@@ -2566,7 +2566,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_specular_mode;
-    internal void SetSpecularMode(BaseMaterial3D.SpecularModeEnum specularMode)
+    public void SetSpecularMode(BaseMaterial3D.SpecularModeEnum specularMode)
     {
         var __mb = __mb_set_specular_mode;
         if (__mb == 0)
@@ -2582,7 +2582,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_specular_mode;
-    internal BaseMaterial3D.SpecularModeEnum GetSpecularMode()
+    public BaseMaterial3D.SpecularModeEnum GetSpecularMode()
     {
         var __mb = __mb_get_specular_mode;
         if (__mb == 0)
@@ -2597,7 +2597,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_flag;
-    internal void SetFlag(BaseMaterial3D.Flags flag, bool enable)
+    public void SetFlag(BaseMaterial3D.Flags flag, bool enable)
     {
         var __mb = __mb_set_flag;
         if (__mb == 0)
@@ -2615,7 +2615,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_flag;
-    internal bool GetFlag(BaseMaterial3D.Flags flag)
+    public bool GetFlag(BaseMaterial3D.Flags flag)
     {
         var __mb = __mb_get_flag;
         if (__mb == 0)
@@ -2633,7 +2633,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_texture_filter;
-    internal void SetTextureFilter(BaseMaterial3D.TextureFilterEnum mode)
+    public void SetTextureFilter(BaseMaterial3D.TextureFilterEnum mode)
     {
         var __mb = __mb_set_texture_filter;
         if (__mb == 0)
@@ -2649,7 +2649,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_texture_filter;
-    internal BaseMaterial3D.TextureFilterEnum GetTextureFilter()
+    public BaseMaterial3D.TextureFilterEnum GetTextureFilter()
     {
         var __mb = __mb_get_texture_filter;
         if (__mb == 0)
@@ -2664,7 +2664,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_feature;
-    internal void SetFeature(BaseMaterial3D.Feature feature, bool enable)
+    public void SetFeature(BaseMaterial3D.Feature feature, bool enable)
     {
         var __mb = __mb_set_feature;
         if (__mb == 0)
@@ -2682,7 +2682,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_feature;
-    internal bool GetFeature(BaseMaterial3D.Feature feature)
+    public bool GetFeature(BaseMaterial3D.Feature feature)
     {
         var __mb = __mb_get_feature;
         if (__mb == 0)
@@ -2700,7 +2700,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(BaseMaterial3D.TextureParam param, Texture2D? texture)
+    public void SetTexture(BaseMaterial3D.TextureParam param, Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -2718,7 +2718,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture(BaseMaterial3D.TextureParam param)
+    public Texture2D? GetTexture(BaseMaterial3D.TextureParam param)
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -2736,7 +2736,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_detail_blend_mode;
-    internal void SetDetailBlendMode(BaseMaterial3D.BlendModeEnum detailBlendMode)
+    public void SetDetailBlendMode(BaseMaterial3D.BlendModeEnum detailBlendMode)
     {
         var __mb = __mb_set_detail_blend_mode;
         if (__mb == 0)
@@ -2752,7 +2752,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_detail_blend_mode;
-    internal BaseMaterial3D.BlendModeEnum GetDetailBlendMode()
+    public BaseMaterial3D.BlendModeEnum GetDetailBlendMode()
     {
         var __mb = __mb_get_detail_blend_mode;
         if (__mb == 0)
@@ -2767,7 +2767,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_uv1_scale;
-    internal void SetUv1Scale(Vector3 scale)
+    public void SetUv1Scale(Vector3 scale)
     {
         var __mb = __mb_set_uv1_scale;
         if (__mb == 0)
@@ -2783,7 +2783,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_uv1_scale;
-    internal Vector3 GetUv1Scale()
+    public Vector3 GetUv1Scale()
     {
         var __mb = __mb_get_uv1_scale;
         if (__mb == 0)
@@ -2798,7 +2798,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_uv1_offset;
-    internal void SetUv1Offset(Vector3 offset)
+    public void SetUv1Offset(Vector3 offset)
     {
         var __mb = __mb_set_uv1_offset;
         if (__mb == 0)
@@ -2814,7 +2814,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_uv1_offset;
-    internal Vector3 GetUv1Offset()
+    public Vector3 GetUv1Offset()
     {
         var __mb = __mb_get_uv1_offset;
         if (__mb == 0)
@@ -2829,7 +2829,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_uv1_triplanar_blend_sharpness;
-    internal void SetUv1TriplanarBlendSharpness(float sharpness)
+    public void SetUv1TriplanarBlendSharpness(float sharpness)
     {
         var __mb = __mb_set_uv1_triplanar_blend_sharpness;
         if (__mb == 0)
@@ -2845,7 +2845,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_uv1_triplanar_blend_sharpness;
-    internal float GetUv1TriplanarBlendSharpness()
+    public float GetUv1TriplanarBlendSharpness()
     {
         var __mb = __mb_get_uv1_triplanar_blend_sharpness;
         if (__mb == 0)
@@ -2860,7 +2860,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_uv2_scale;
-    internal void SetUv2Scale(Vector3 scale)
+    public void SetUv2Scale(Vector3 scale)
     {
         var __mb = __mb_set_uv2_scale;
         if (__mb == 0)
@@ -2876,7 +2876,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_uv2_scale;
-    internal Vector3 GetUv2Scale()
+    public Vector3 GetUv2Scale()
     {
         var __mb = __mb_get_uv2_scale;
         if (__mb == 0)
@@ -2891,7 +2891,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_uv2_offset;
-    internal void SetUv2Offset(Vector3 offset)
+    public void SetUv2Offset(Vector3 offset)
     {
         var __mb = __mb_set_uv2_offset;
         if (__mb == 0)
@@ -2907,7 +2907,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_uv2_offset;
-    internal Vector3 GetUv2Offset()
+    public Vector3 GetUv2Offset()
     {
         var __mb = __mb_get_uv2_offset;
         if (__mb == 0)
@@ -2922,7 +2922,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_uv2_triplanar_blend_sharpness;
-    internal void SetUv2TriplanarBlendSharpness(float sharpness)
+    public void SetUv2TriplanarBlendSharpness(float sharpness)
     {
         var __mb = __mb_set_uv2_triplanar_blend_sharpness;
         if (__mb == 0)
@@ -2938,7 +2938,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_uv2_triplanar_blend_sharpness;
-    internal float GetUv2TriplanarBlendSharpness()
+    public float GetUv2TriplanarBlendSharpness()
     {
         var __mb = __mb_get_uv2_triplanar_blend_sharpness;
         if (__mb == 0)
@@ -2953,7 +2953,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_billboard_mode;
-    internal void SetBillboardMode(BaseMaterial3D.BillboardModeEnum mode)
+    public void SetBillboardMode(BaseMaterial3D.BillboardModeEnum mode)
     {
         var __mb = __mb_set_billboard_mode;
         if (__mb == 0)
@@ -2969,7 +2969,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_billboard_mode;
-    internal BaseMaterial3D.BillboardModeEnum GetBillboardMode()
+    public BaseMaterial3D.BillboardModeEnum GetBillboardMode()
     {
         var __mb = __mb_get_billboard_mode;
         if (__mb == 0)
@@ -2984,7 +2984,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_particles_anim_h_frames;
-    internal void SetParticlesAnimHFrames(int frames)
+    public void SetParticlesAnimHFrames(int frames)
     {
         var __mb = __mb_set_particles_anim_h_frames;
         if (__mb == 0)
@@ -3000,7 +3000,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_particles_anim_h_frames;
-    internal int GetParticlesAnimHFrames()
+    public int GetParticlesAnimHFrames()
     {
         var __mb = __mb_get_particles_anim_h_frames;
         if (__mb == 0)
@@ -3015,7 +3015,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_particles_anim_v_frames;
-    internal void SetParticlesAnimVFrames(int frames)
+    public void SetParticlesAnimVFrames(int frames)
     {
         var __mb = __mb_set_particles_anim_v_frames;
         if (__mb == 0)
@@ -3031,7 +3031,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_particles_anim_v_frames;
-    internal int GetParticlesAnimVFrames()
+    public int GetParticlesAnimVFrames()
     {
         var __mb = __mb_get_particles_anim_v_frames;
         if (__mb == 0)
@@ -3046,7 +3046,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_particles_anim_loop;
-    internal void SetParticlesAnimLoop(bool loop)
+    public void SetParticlesAnimLoop(bool loop)
     {
         var __mb = __mb_set_particles_anim_loop;
         if (__mb == 0)
@@ -3062,7 +3062,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_particles_anim_loop;
-    internal bool GetParticlesAnimLoop()
+    public bool GetParticlesAnimLoop()
     {
         var __mb = __mb_get_particles_anim_loop;
         if (__mb == 0)
@@ -3077,7 +3077,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_heightmap_deep_parallax;
-    internal void SetHeightmapDeepParallax(bool enable)
+    public void SetHeightmapDeepParallax(bool enable)
     {
         var __mb = __mb_set_heightmap_deep_parallax;
         if (__mb == 0)
@@ -3093,7 +3093,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_is_heightmap_deep_parallax_enabled;
-    internal bool IsHeightmapDeepParallaxEnabled()
+    public bool IsHeightmapDeepParallaxEnabled()
     {
         var __mb = __mb_is_heightmap_deep_parallax_enabled;
         if (__mb == 0)
@@ -3108,7 +3108,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_heightmap_deep_parallax_min_layers;
-    internal void SetHeightmapDeepParallaxMinLayers(int layer)
+    public void SetHeightmapDeepParallaxMinLayers(int layer)
     {
         var __mb = __mb_set_heightmap_deep_parallax_min_layers;
         if (__mb == 0)
@@ -3124,7 +3124,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_heightmap_deep_parallax_min_layers;
-    internal int GetHeightmapDeepParallaxMinLayers()
+    public int GetHeightmapDeepParallaxMinLayers()
     {
         var __mb = __mb_get_heightmap_deep_parallax_min_layers;
         if (__mb == 0)
@@ -3139,7 +3139,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_heightmap_deep_parallax_max_layers;
-    internal void SetHeightmapDeepParallaxMaxLayers(int layer)
+    public void SetHeightmapDeepParallaxMaxLayers(int layer)
     {
         var __mb = __mb_set_heightmap_deep_parallax_max_layers;
         if (__mb == 0)
@@ -3155,7 +3155,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_heightmap_deep_parallax_max_layers;
-    internal int GetHeightmapDeepParallaxMaxLayers()
+    public int GetHeightmapDeepParallaxMaxLayers()
     {
         var __mb = __mb_get_heightmap_deep_parallax_max_layers;
         if (__mb == 0)
@@ -3170,7 +3170,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_heightmap_deep_parallax_flip_tangent;
-    internal void SetHeightmapDeepParallaxFlipTangent(bool flip)
+    public void SetHeightmapDeepParallaxFlipTangent(bool flip)
     {
         var __mb = __mb_set_heightmap_deep_parallax_flip_tangent;
         if (__mb == 0)
@@ -3186,7 +3186,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_heightmap_deep_parallax_flip_tangent;
-    internal bool GetHeightmapDeepParallaxFlipTangent()
+    public bool GetHeightmapDeepParallaxFlipTangent()
     {
         var __mb = __mb_get_heightmap_deep_parallax_flip_tangent;
         if (__mb == 0)
@@ -3201,7 +3201,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_heightmap_deep_parallax_flip_binormal;
-    internal void SetHeightmapDeepParallaxFlipBinormal(bool flip)
+    public void SetHeightmapDeepParallaxFlipBinormal(bool flip)
     {
         var __mb = __mb_set_heightmap_deep_parallax_flip_binormal;
         if (__mb == 0)
@@ -3217,7 +3217,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_heightmap_deep_parallax_flip_binormal;
-    internal bool GetHeightmapDeepParallaxFlipBinormal()
+    public bool GetHeightmapDeepParallaxFlipBinormal()
     {
         var __mb = __mb_get_heightmap_deep_parallax_flip_binormal;
         if (__mb == 0)
@@ -3232,7 +3232,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_grow;
-    internal void SetGrow(float amount)
+    public void SetGrow(float amount)
     {
         var __mb = __mb_set_grow;
         if (__mb == 0)
@@ -3248,7 +3248,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_grow;
-    internal float GetGrow()
+    public float GetGrow()
     {
         var __mb = __mb_get_grow;
         if (__mb == 0)
@@ -3263,7 +3263,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_emission_operator;
-    internal void SetEmissionOperator(BaseMaterial3D.EmissionOperatorEnum @operator)
+    public void SetEmissionOperator(BaseMaterial3D.EmissionOperatorEnum @operator)
     {
         var __mb = __mb_set_emission_operator;
         if (__mb == 0)
@@ -3279,7 +3279,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_emission_operator;
-    internal BaseMaterial3D.EmissionOperatorEnum GetEmissionOperator()
+    public BaseMaterial3D.EmissionOperatorEnum GetEmissionOperator()
     {
         var __mb = __mb_get_emission_operator;
         if (__mb == 0)
@@ -3294,7 +3294,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_ao_light_affect;
-    internal void SetAoLightAffect(float amount)
+    public void SetAoLightAffect(float amount)
     {
         var __mb = __mb_set_ao_light_affect;
         if (__mb == 0)
@@ -3310,7 +3310,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_ao_light_affect;
-    internal float GetAoLightAffect()
+    public float GetAoLightAffect()
     {
         var __mb = __mb_get_ao_light_affect;
         if (__mb == 0)
@@ -3325,7 +3325,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_alpha_scissor_threshold;
-    internal void SetAlphaScissorThreshold(float threshold)
+    public void SetAlphaScissorThreshold(float threshold)
     {
         var __mb = __mb_set_alpha_scissor_threshold;
         if (__mb == 0)
@@ -3341,7 +3341,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_alpha_scissor_threshold;
-    internal float GetAlphaScissorThreshold()
+    public float GetAlphaScissorThreshold()
     {
         var __mb = __mb_get_alpha_scissor_threshold;
         if (__mb == 0)
@@ -3356,7 +3356,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_alpha_hash_scale;
-    internal void SetAlphaHashScale(float threshold)
+    public void SetAlphaHashScale(float threshold)
     {
         var __mb = __mb_set_alpha_hash_scale;
         if (__mb == 0)
@@ -3372,7 +3372,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_alpha_hash_scale;
-    internal float GetAlphaHashScale()
+    public float GetAlphaHashScale()
     {
         var __mb = __mb_get_alpha_hash_scale;
         if (__mb == 0)
@@ -3387,7 +3387,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_grow_enabled;
-    internal void SetGrowEnabled(bool enable)
+    public void SetGrowEnabled(bool enable)
     {
         var __mb = __mb_set_grow_enabled;
         if (__mb == 0)
@@ -3403,7 +3403,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_is_grow_enabled;
-    internal bool IsGrowEnabled()
+    public bool IsGrowEnabled()
     {
         var __mb = __mb_is_grow_enabled;
         if (__mb == 0)
@@ -3418,7 +3418,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_metallic_texture_channel;
-    internal void SetMetallicTextureChannel(BaseMaterial3D.TextureChannel channel)
+    public void SetMetallicTextureChannel(BaseMaterial3D.TextureChannel channel)
     {
         var __mb = __mb_set_metallic_texture_channel;
         if (__mb == 0)
@@ -3434,7 +3434,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_metallic_texture_channel;
-    internal BaseMaterial3D.TextureChannel GetMetallicTextureChannel()
+    public BaseMaterial3D.TextureChannel GetMetallicTextureChannel()
     {
         var __mb = __mb_get_metallic_texture_channel;
         if (__mb == 0)
@@ -3449,7 +3449,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_roughness_texture_channel;
-    internal void SetRoughnessTextureChannel(BaseMaterial3D.TextureChannel channel)
+    public void SetRoughnessTextureChannel(BaseMaterial3D.TextureChannel channel)
     {
         var __mb = __mb_set_roughness_texture_channel;
         if (__mb == 0)
@@ -3465,7 +3465,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_roughness_texture_channel;
-    internal BaseMaterial3D.TextureChannel GetRoughnessTextureChannel()
+    public BaseMaterial3D.TextureChannel GetRoughnessTextureChannel()
     {
         var __mb = __mb_get_roughness_texture_channel;
         if (__mb == 0)
@@ -3480,7 +3480,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_ao_texture_channel;
-    internal void SetAoTextureChannel(BaseMaterial3D.TextureChannel channel)
+    public void SetAoTextureChannel(BaseMaterial3D.TextureChannel channel)
     {
         var __mb = __mb_set_ao_texture_channel;
         if (__mb == 0)
@@ -3496,7 +3496,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_ao_texture_channel;
-    internal BaseMaterial3D.TextureChannel GetAoTextureChannel()
+    public BaseMaterial3D.TextureChannel GetAoTextureChannel()
     {
         var __mb = __mb_get_ao_texture_channel;
         if (__mb == 0)
@@ -3511,7 +3511,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_refraction_texture_channel;
-    internal void SetRefractionTextureChannel(BaseMaterial3D.TextureChannel channel)
+    public void SetRefractionTextureChannel(BaseMaterial3D.TextureChannel channel)
     {
         var __mb = __mb_set_refraction_texture_channel;
         if (__mb == 0)
@@ -3527,7 +3527,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_refraction_texture_channel;
-    internal BaseMaterial3D.TextureChannel GetRefractionTextureChannel()
+    public BaseMaterial3D.TextureChannel GetRefractionTextureChannel()
     {
         var __mb = __mb_get_refraction_texture_channel;
         if (__mb == 0)
@@ -3542,7 +3542,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_proximity_fade_enabled;
-    internal void SetProximityFadeEnabled(bool enabled)
+    public void SetProximityFadeEnabled(bool enabled)
     {
         var __mb = __mb_set_proximity_fade_enabled;
         if (__mb == 0)
@@ -3558,7 +3558,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_is_proximity_fade_enabled;
-    internal bool IsProximityFadeEnabled()
+    public bool IsProximityFadeEnabled()
     {
         var __mb = __mb_is_proximity_fade_enabled;
         if (__mb == 0)
@@ -3573,7 +3573,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_proximity_fade_distance;
-    internal void SetProximityFadeDistance(float distance)
+    public void SetProximityFadeDistance(float distance)
     {
         var __mb = __mb_set_proximity_fade_distance;
         if (__mb == 0)
@@ -3589,7 +3589,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_proximity_fade_distance;
-    internal float GetProximityFadeDistance()
+    public float GetProximityFadeDistance()
     {
         var __mb = __mb_get_proximity_fade_distance;
         if (__mb == 0)
@@ -3604,7 +3604,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_msdf_pixel_range;
-    internal void SetMsdfPixelRange(float range)
+    public void SetMsdfPixelRange(float range)
     {
         var __mb = __mb_set_msdf_pixel_range;
         if (__mb == 0)
@@ -3620,7 +3620,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_msdf_pixel_range;
-    internal float GetMsdfPixelRange()
+    public float GetMsdfPixelRange()
     {
         var __mb = __mb_get_msdf_pixel_range;
         if (__mb == 0)
@@ -3635,7 +3635,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_msdf_outline_size;
-    internal void SetMsdfOutlineSize(float size)
+    public void SetMsdfOutlineSize(float size)
     {
         var __mb = __mb_set_msdf_outline_size;
         if (__mb == 0)
@@ -3651,7 +3651,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_msdf_outline_size;
-    internal float GetMsdfOutlineSize()
+    public float GetMsdfOutlineSize()
     {
         var __mb = __mb_get_msdf_outline_size;
         if (__mb == 0)
@@ -3666,7 +3666,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_distance_fade;
-    internal void SetDistanceFade(BaseMaterial3D.DistanceFadeModeEnum mode)
+    public void SetDistanceFade(BaseMaterial3D.DistanceFadeModeEnum mode)
     {
         var __mb = __mb_set_distance_fade;
         if (__mb == 0)
@@ -3682,7 +3682,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_distance_fade;
-    internal BaseMaterial3D.DistanceFadeModeEnum GetDistanceFade()
+    public BaseMaterial3D.DistanceFadeModeEnum GetDistanceFade()
     {
         var __mb = __mb_get_distance_fade;
         if (__mb == 0)
@@ -3697,7 +3697,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_distance_fade_max_distance;
-    internal void SetDistanceFadeMaxDistance(float distance)
+    public void SetDistanceFadeMaxDistance(float distance)
     {
         var __mb = __mb_set_distance_fade_max_distance;
         if (__mb == 0)
@@ -3713,7 +3713,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_distance_fade_max_distance;
-    internal float GetDistanceFadeMaxDistance()
+    public float GetDistanceFadeMaxDistance()
     {
         var __mb = __mb_get_distance_fade_max_distance;
         if (__mb == 0)
@@ -3728,7 +3728,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_distance_fade_min_distance;
-    internal void SetDistanceFadeMinDistance(float distance)
+    public void SetDistanceFadeMinDistance(float distance)
     {
         var __mb = __mb_set_distance_fade_min_distance;
         if (__mb == 0)
@@ -3744,7 +3744,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_distance_fade_min_distance;
-    internal float GetDistanceFadeMinDistance()
+    public float GetDistanceFadeMinDistance()
     {
         var __mb = __mb_get_distance_fade_min_distance;
         if (__mb == 0)
@@ -3759,7 +3759,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_z_clip_scale;
-    internal void SetZClipScale(float scale)
+    public void SetZClipScale(float scale)
     {
         var __mb = __mb_set_z_clip_scale;
         if (__mb == 0)
@@ -3775,7 +3775,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_z_clip_scale;
-    internal float GetZClipScale()
+    public float GetZClipScale()
     {
         var __mb = __mb_get_z_clip_scale;
         if (__mb == 0)
@@ -3790,7 +3790,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_fov_override;
-    internal void SetFovOverride(float scale)
+    public void SetFovOverride(float scale)
     {
         var __mb = __mb_set_fov_override;
         if (__mb == 0)
@@ -3806,7 +3806,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_fov_override;
-    internal float GetFovOverride()
+    public float GetFovOverride()
     {
         var __mb = __mb_get_fov_override;
         if (__mb == 0)
@@ -3821,7 +3821,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_stencil_mode;
-    internal void SetStencilMode(BaseMaterial3D.StencilModeEnum stencilMode)
+    public void SetStencilMode(BaseMaterial3D.StencilModeEnum stencilMode)
     {
         var __mb = __mb_set_stencil_mode;
         if (__mb == 0)
@@ -3837,7 +3837,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_stencil_mode;
-    internal BaseMaterial3D.StencilModeEnum GetStencilMode()
+    public BaseMaterial3D.StencilModeEnum GetStencilMode()
     {
         var __mb = __mb_get_stencil_mode;
         if (__mb == 0)
@@ -3852,7 +3852,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_stencil_flags;
-    internal void SetStencilFlags(int stencilFlags)
+    public void SetStencilFlags(int stencilFlags)
     {
         var __mb = __mb_set_stencil_flags;
         if (__mb == 0)
@@ -3868,7 +3868,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_stencil_flags;
-    internal int GetStencilFlags()
+    public int GetStencilFlags()
     {
         var __mb = __mb_get_stencil_flags;
         if (__mb == 0)
@@ -3883,7 +3883,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_stencil_compare;
-    internal void SetStencilCompare(BaseMaterial3D.StencilCompareEnum stencilCompare)
+    public void SetStencilCompare(BaseMaterial3D.StencilCompareEnum stencilCompare)
     {
         var __mb = __mb_set_stencil_compare;
         if (__mb == 0)
@@ -3899,7 +3899,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_stencil_compare;
-    internal BaseMaterial3D.StencilCompareEnum GetStencilCompare()
+    public BaseMaterial3D.StencilCompareEnum GetStencilCompare()
     {
         var __mb = __mb_get_stencil_compare;
         if (__mb == 0)
@@ -3914,7 +3914,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_stencil_reference;
-    internal void SetStencilReference(int stencilReference)
+    public void SetStencilReference(int stencilReference)
     {
         var __mb = __mb_set_stencil_reference;
         if (__mb == 0)
@@ -3930,7 +3930,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_stencil_reference;
-    internal int GetStencilReference()
+    public int GetStencilReference()
     {
         var __mb = __mb_get_stencil_reference;
         if (__mb == 0)
@@ -3945,7 +3945,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_stencil_effect_color;
-    internal void SetStencilEffectColor(Color stencilColor)
+    public void SetStencilEffectColor(Color stencilColor)
     {
         var __mb = __mb_set_stencil_effect_color;
         if (__mb == 0)
@@ -3961,7 +3961,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_stencil_effect_color;
-    internal Color GetStencilEffectColor()
+    public Color GetStencilEffectColor()
     {
         var __mb = __mb_get_stencil_effect_color;
         if (__mb == 0)
@@ -3976,7 +3976,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_set_stencil_effect_outline_thickness;
-    internal void SetStencilEffectOutlineThickness(float stencilOutlineThickness)
+    public void SetStencilEffectOutlineThickness(float stencilOutlineThickness)
     {
         var __mb = __mb_set_stencil_effect_outline_thickness;
         if (__mb == 0)
@@ -3992,7 +3992,7 @@ public unsafe partial class BaseMaterial3D : Material
     }
 
     private static nint __mb_get_stencil_effect_outline_thickness;
-    internal float GetStencilEffectOutlineThickness()
+    public float GetStencilEffectOutlineThickness()
     {
         var __mb = __mb_get_stencil_effect_outline_thickness;
         if (__mb == 0)
@@ -4269,7 +4269,7 @@ public unsafe partial class BlitMaterial : Material
     }
 
     private static nint __mb_set_blend_mode;
-    internal void SetBlendMode(BlitMaterial.BlendModeEnum blendMode)
+    public void SetBlendMode(BlitMaterial.BlendModeEnum blendMode)
     {
         var __mb = __mb_set_blend_mode;
         if (__mb == 0)
@@ -4285,7 +4285,7 @@ public unsafe partial class BlitMaterial : Material
     }
 
     private static nint __mb_get_blend_mode;
-    internal BlitMaterial.BlendModeEnum GetBlendMode()
+    public BlitMaterial.BlendModeEnum GetBlendMode()
     {
         var __mb = __mb_get_blend_mode;
         if (__mb == 0)
@@ -4316,7 +4316,7 @@ public unsafe partial class Bone2D : Node2D
     }
 
     private static nint __mb_set_rest;
-    internal void SetRest(Transform2D rest)
+    public void SetRest(Transform2D rest)
     {
         var __mb = __mb_set_rest;
         if (__mb == 0)
@@ -4332,7 +4332,7 @@ public unsafe partial class Bone2D : Node2D
     }
 
     private static nint __mb_get_rest;
-    internal Transform2D GetRest()
+    public Transform2D GetRest()
     {
         var __mb = __mb_get_rest;
         if (__mb == 0)
@@ -4538,7 +4538,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_set_bone_name;
-    internal void SetBoneName(string boneName)
+    public void SetBoneName(string boneName)
     {
         var __mb = __mb_set_bone_name;
         if (__mb == 0)
@@ -4555,7 +4555,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_get_bone_name;
-    internal string GetBoneName()
+    public string GetBoneName()
     {
         var __mb = __mb_get_bone_name;
         if (__mb == 0)
@@ -4570,7 +4570,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_set_bone_idx;
-    internal void SetBoneIdx(int boneIdx)
+    public void SetBoneIdx(int boneIdx)
     {
         var __mb = __mb_set_bone_idx;
         if (__mb == 0)
@@ -4586,7 +4586,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_get_bone_idx;
-    internal int GetBoneIdx()
+    public int GetBoneIdx()
     {
         var __mb = __mb_get_bone_idx;
         if (__mb == 0)
@@ -4614,7 +4614,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_set_override_pose;
-    internal void SetOverridePose(bool overridePose)
+    public void SetOverridePose(bool overridePose)
     {
         var __mb = __mb_set_override_pose;
         if (__mb == 0)
@@ -4630,7 +4630,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_get_override_pose;
-    internal bool GetOverridePose()
+    public bool GetOverridePose()
     {
         var __mb = __mb_get_override_pose;
         if (__mb == 0)
@@ -4645,7 +4645,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_set_use_external_skeleton;
-    internal void SetUseExternalSkeleton(bool useExternalSkeleton)
+    public void SetUseExternalSkeleton(bool useExternalSkeleton)
     {
         var __mb = __mb_set_use_external_skeleton;
         if (__mb == 0)
@@ -4661,7 +4661,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_get_use_external_skeleton;
-    internal bool GetUseExternalSkeleton()
+    public bool GetUseExternalSkeleton()
     {
         var __mb = __mb_get_use_external_skeleton;
         if (__mb == 0)
@@ -4676,7 +4676,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_set_external_skeleton;
-    internal void SetExternalSkeleton(NodePath externalSkeleton)
+    public void SetExternalSkeleton(NodePath externalSkeleton)
     {
         var __mb = __mb_set_external_skeleton;
         if (__mb == 0)
@@ -4692,7 +4692,7 @@ public unsafe partial class BoneAttachment3D : Node3D
     }
 
     private static nint __mb_get_external_skeleton;
-    internal NodePath GetExternalSkeleton()
+    public NodePath GetExternalSkeleton()
     {
         var __mb = __mb_get_external_skeleton;
         if (__mb == 0)
@@ -4977,7 +4977,7 @@ public unsafe partial class BoneConstraint3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_setting_count;
-    internal void SetSettingCount(int count)
+    public void SetSettingCount(int count)
     {
         var __mb = __mb_set_setting_count;
         if (__mb == 0)
@@ -4993,7 +4993,7 @@ public unsafe partial class BoneConstraint3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_setting_count;
-    internal int GetSettingCount()
+    public int GetSettingCount()
     {
         var __mb = __mb_get_setting_count;
         if (__mb == 0)
@@ -5053,7 +5053,7 @@ public unsafe partial class BoneMap : Resource
     }
 
     private static nint __mb_get_profile;
-    internal SkeletonProfile? GetProfile()
+    public SkeletonProfile? GetProfile()
     {
         var __mb = __mb_get_profile;
         if (__mb == 0)
@@ -5068,7 +5068,7 @@ public unsafe partial class BoneMap : Resource
     }
 
     private static nint __mb_set_profile;
-    internal void SetProfile(SkeletonProfile? profile)
+    public void SetProfile(SkeletonProfile? profile)
     {
         var __mb = __mb_set_profile;
         if (__mb == 0)
@@ -5167,7 +5167,7 @@ public unsafe partial class BoneTwistDisperser3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_setting_count;
-    internal void SetSettingCount(int count)
+    public void SetSettingCount(int count)
     {
         var __mb = __mb_set_setting_count;
         if (__mb == 0)
@@ -5183,7 +5183,7 @@ public unsafe partial class BoneTwistDisperser3D : SkeletonModifier3D
     }
 
     private static nint __mb_get_setting_count;
-    internal int GetSettingCount()
+    public int GetSettingCount()
     {
         var __mb = __mb_get_setting_count;
         if (__mb == 0)
@@ -5211,7 +5211,7 @@ public unsafe partial class BoneTwistDisperser3D : SkeletonModifier3D
     }
 
     private static nint __mb_set_mutable_bone_axes;
-    internal void SetMutableBoneAxes(bool enabled)
+    public void SetMutableBoneAxes(bool enabled)
     {
         var __mb = __mb_set_mutable_bone_axes;
         if (__mb == 0)
@@ -5227,7 +5227,7 @@ public unsafe partial class BoneTwistDisperser3D : SkeletonModifier3D
     }
 
     private static nint __mb_are_bone_axes_mutable;
-    internal bool AreBoneAxesMutable()
+    public bool AreBoneAxesMutable()
     {
         var __mb = __mb_are_bone_axes_mutable;
         if (__mb == 0)
@@ -5821,7 +5821,7 @@ public unsafe partial class BoxContainer : Container
     }
 
     private static nint __mb_set_alignment;
-    internal void SetAlignment(BoxContainer.AlignmentMode alignment)
+    public void SetAlignment(BoxContainer.AlignmentMode alignment)
     {
         var __mb = __mb_set_alignment;
         if (__mb == 0)
@@ -5837,7 +5837,7 @@ public unsafe partial class BoxContainer : Container
     }
 
     private static nint __mb_get_alignment;
-    internal BoxContainer.AlignmentMode GetAlignment()
+    public BoxContainer.AlignmentMode GetAlignment()
     {
         var __mb = __mb_get_alignment;
         if (__mb == 0)
@@ -5852,7 +5852,7 @@ public unsafe partial class BoxContainer : Container
     }
 
     private static nint __mb_set_vertical;
-    internal void SetVertical(bool vertical)
+    public void SetVertical(bool vertical)
     {
         var __mb = __mb_set_vertical;
         if (__mb == 0)
@@ -5868,7 +5868,7 @@ public unsafe partial class BoxContainer : Container
     }
 
     private static nint __mb_is_vertical;
-    internal bool IsVertical()
+    public bool IsVertical()
     {
         var __mb = __mb_is_vertical;
         if (__mb == 0)
@@ -5917,7 +5917,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_size;
-    internal void SetSize(Vector3 size)
+    public void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -5933,7 +5933,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_size;
-    internal Vector3 GetSize()
+    public Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -5948,7 +5948,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_width;
-    internal void SetSubdivideWidth(int subdivide)
+    public void SetSubdivideWidth(int subdivide)
     {
         var __mb = __mb_set_subdivide_width;
         if (__mb == 0)
@@ -5964,7 +5964,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_width;
-    internal int GetSubdivideWidth()
+    public int GetSubdivideWidth()
     {
         var __mb = __mb_get_subdivide_width;
         if (__mb == 0)
@@ -5979,7 +5979,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_height;
-    internal void SetSubdivideHeight(int divisions)
+    public void SetSubdivideHeight(int divisions)
     {
         var __mb = __mb_set_subdivide_height;
         if (__mb == 0)
@@ -5995,7 +5995,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_height;
-    internal int GetSubdivideHeight()
+    public int GetSubdivideHeight()
     {
         var __mb = __mb_get_subdivide_height;
         if (__mb == 0)
@@ -6010,7 +6010,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_set_subdivide_depth;
-    internal void SetSubdivideDepth(int divisions)
+    public void SetSubdivideDepth(int divisions)
     {
         var __mb = __mb_set_subdivide_depth;
         if (__mb == 0)
@@ -6026,7 +6026,7 @@ public unsafe partial class BoxMesh : PrimitiveMesh
     }
 
     private static nint __mb_get_subdivide_depth;
-    internal int GetSubdivideDepth()
+    public int GetSubdivideDepth()
     {
         var __mb = __mb_get_subdivide_depth;
         if (__mb == 0)
@@ -6057,7 +6057,7 @@ public unsafe partial class BoxOccluder3D : Occluder3D
     }
 
     private static nint __mb_set_size;
-    internal void SetSize(Vector3 size)
+    public void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -6073,7 +6073,7 @@ public unsafe partial class BoxOccluder3D : Occluder3D
     }
 
     private static nint __mb_get_size;
-    internal Vector3 GetSize()
+    public Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -6104,7 +6104,7 @@ public unsafe partial class BoxShape3D : Shape3D
     }
 
     private static nint __mb_set_size;
-    internal void SetSize(Vector3 size)
+    public void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -6120,7 +6120,7 @@ public unsafe partial class BoxShape3D : Shape3D
     }
 
     private static nint __mb_get_size;
-    internal Vector3 GetSize()
+    public Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -6223,7 +6223,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_text;
-    internal void SetText(string text)
+    public void SetText(string text)
     {
         var __mb = __mb_set_text;
         if (__mb == 0)
@@ -6240,7 +6240,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_text;
-    internal string GetText()
+    public string GetText()
     {
         var __mb = __mb_get_text;
         if (__mb == 0)
@@ -6255,7 +6255,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_text_overrun_behavior;
-    internal void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
+    public void SetTextOverrunBehavior(TextServer.OverrunBehavior overrunBehavior)
     {
         var __mb = __mb_set_text_overrun_behavior;
         if (__mb == 0)
@@ -6271,7 +6271,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_text_overrun_behavior;
-    internal TextServer.OverrunBehavior GetTextOverrunBehavior()
+    public TextServer.OverrunBehavior GetTextOverrunBehavior()
     {
         var __mb = __mb_get_text_overrun_behavior;
         if (__mb == 0)
@@ -6286,7 +6286,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_autowrap_mode;
-    internal void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
+    public void SetAutowrapMode(TextServer.AutowrapMode autowrapMode)
     {
         var __mb = __mb_set_autowrap_mode;
         if (__mb == 0)
@@ -6302,7 +6302,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_autowrap_mode;
-    internal TextServer.AutowrapMode GetAutowrapMode()
+    public TextServer.AutowrapMode GetAutowrapMode()
     {
         var __mb = __mb_get_autowrap_mode;
         if (__mb == 0)
@@ -6317,7 +6317,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_autowrap_trim_flags;
-    internal void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
+    public void SetAutowrapTrimFlags(TextServer.LineBreakFlag autowrapTrimFlags)
     {
         var __mb = __mb_set_autowrap_trim_flags;
         if (__mb == 0)
@@ -6333,7 +6333,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_autowrap_trim_flags;
-    internal TextServer.LineBreakFlag GetAutowrapTrimFlags()
+    public TextServer.LineBreakFlag GetAutowrapTrimFlags()
     {
         var __mb = __mb_get_autowrap_trim_flags;
         if (__mb == 0)
@@ -6348,7 +6348,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_text_direction;
-    internal void SetTextDirection(Control.TextDirection direction)
+    public void SetTextDirection(Control.TextDirection direction)
     {
         var __mb = __mb_set_text_direction;
         if (__mb == 0)
@@ -6364,7 +6364,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_text_direction;
-    internal Control.TextDirection GetTextDirection()
+    public Control.TextDirection GetTextDirection()
     {
         var __mb = __mb_get_text_direction;
         if (__mb == 0)
@@ -6379,7 +6379,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_language;
-    internal void SetLanguage(string language)
+    public void SetLanguage(string language)
     {
         var __mb = __mb_set_language;
         if (__mb == 0)
@@ -6396,7 +6396,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_language;
-    internal string GetLanguage()
+    public string GetLanguage()
     {
         var __mb = __mb_get_language;
         if (__mb == 0)
@@ -6411,7 +6411,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_button_icon;
-    internal void SetButtonIcon(Texture2D? texture)
+    public void SetButtonIcon(Texture2D? texture)
     {
         var __mb = __mb_set_button_icon;
         if (__mb == 0)
@@ -6427,7 +6427,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_button_icon;
-    internal Texture2D? GetButtonIcon()
+    public Texture2D? GetButtonIcon()
     {
         var __mb = __mb_get_button_icon;
         if (__mb == 0)
@@ -6442,7 +6442,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_flat;
-    internal void SetFlat(bool enabled)
+    public void SetFlat(bool enabled)
     {
         var __mb = __mb_set_flat;
         if (__mb == 0)
@@ -6458,7 +6458,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_is_flat;
-    internal bool IsFlat()
+    public bool IsFlat()
     {
         var __mb = __mb_is_flat;
         if (__mb == 0)
@@ -6473,7 +6473,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_clip_text;
-    internal void SetClipText(bool enabled)
+    public void SetClipText(bool enabled)
     {
         var __mb = __mb_set_clip_text;
         if (__mb == 0)
@@ -6489,7 +6489,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_clip_text;
-    internal bool GetClipText()
+    public bool GetClipText()
     {
         var __mb = __mb_get_clip_text;
         if (__mb == 0)
@@ -6504,7 +6504,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_text_alignment;
-    internal void SetTextAlignment(HorizontalAlignment alignment)
+    public void SetTextAlignment(HorizontalAlignment alignment)
     {
         var __mb = __mb_set_text_alignment;
         if (__mb == 0)
@@ -6520,7 +6520,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_text_alignment;
-    internal HorizontalAlignment GetTextAlignment()
+    public HorizontalAlignment GetTextAlignment()
     {
         var __mb = __mb_get_text_alignment;
         if (__mb == 0)
@@ -6535,7 +6535,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_icon_alignment;
-    internal void SetIconAlignment(HorizontalAlignment iconAlignment)
+    public void SetIconAlignment(HorizontalAlignment iconAlignment)
     {
         var __mb = __mb_set_icon_alignment;
         if (__mb == 0)
@@ -6551,7 +6551,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_icon_alignment;
-    internal HorizontalAlignment GetIconAlignment()
+    public HorizontalAlignment GetIconAlignment()
     {
         var __mb = __mb_get_icon_alignment;
         if (__mb == 0)
@@ -6566,7 +6566,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_vertical_icon_alignment;
-    internal void SetVerticalIconAlignment(VerticalAlignment verticalIconAlignment)
+    public void SetVerticalIconAlignment(VerticalAlignment verticalIconAlignment)
     {
         var __mb = __mb_set_vertical_icon_alignment;
         if (__mb == 0)
@@ -6582,7 +6582,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_get_vertical_icon_alignment;
-    internal VerticalAlignment GetVerticalIconAlignment()
+    public VerticalAlignment GetVerticalIconAlignment()
     {
         var __mb = __mb_get_vertical_icon_alignment;
         if (__mb == 0)
@@ -6597,7 +6597,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_set_expand_icon;
-    internal void SetExpandIcon(bool enabled)
+    public void SetExpandIcon(bool enabled)
     {
         var __mb = __mb_set_expand_icon;
         if (__mb == 0)
@@ -6613,7 +6613,7 @@ public unsafe partial class Button : BaseButton
     }
 
     private static nint __mb_is_expand_icon;
-    internal bool IsExpandIcon()
+    public bool IsExpandIcon()
     {
         var __mb = __mb_is_expand_icon;
         if (__mb == 0)
@@ -6682,7 +6682,7 @@ public unsafe partial class ButtonGroup : Resource
     }
 
     private static nint __mb_set_allow_unpress;
-    internal void SetAllowUnpress(bool enabled)
+    public void SetAllowUnpress(bool enabled)
     {
         var __mb = __mb_set_allow_unpress;
         if (__mb == 0)
@@ -6698,7 +6698,7 @@ public unsafe partial class ButtonGroup : Resource
     }
 
     private static nint __mb_is_allow_unpress;
-    internal bool IsAllowUnpress()
+    public bool IsAllowUnpress()
     {
         var __mb = __mb_is_allow_unpress;
         if (__mb == 0)

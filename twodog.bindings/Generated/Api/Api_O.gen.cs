@@ -189,7 +189,7 @@ public static unsafe partial class OS
     }
 
     private static nint __mb_set_low_processor_usage_mode;
-    internal static void SetLowProcessorUsageMode(bool enable)
+    public static void SetLowProcessorUsageMode(bool enable)
     {
         var __mb = __mb_set_low_processor_usage_mode;
         if (__mb == 0)
@@ -205,7 +205,7 @@ public static unsafe partial class OS
     }
 
     private static nint __mb_is_in_low_processor_usage_mode;
-    internal static bool IsInLowProcessorUsageMode()
+    public static bool IsInLowProcessorUsageMode()
     {
         var __mb = __mb_is_in_low_processor_usage_mode;
         if (__mb == 0)
@@ -220,7 +220,7 @@ public static unsafe partial class OS
     }
 
     private static nint __mb_set_low_processor_usage_mode_sleep_usec;
-    internal static void SetLowProcessorUsageModeSleepUsec(int usec)
+    public static void SetLowProcessorUsageModeSleepUsec(int usec)
     {
         var __mb = __mb_set_low_processor_usage_mode_sleep_usec;
         if (__mb == 0)
@@ -236,7 +236,7 @@ public static unsafe partial class OS
     }
 
     private static nint __mb_get_low_processor_usage_mode_sleep_usec;
-    internal static int GetLowProcessorUsageModeSleepUsec()
+    public static int GetLowProcessorUsageModeSleepUsec()
     {
         var __mb = __mb_get_low_processor_usage_mode_sleep_usec;
         if (__mb == 0)
@@ -251,7 +251,7 @@ public static unsafe partial class OS
     }
 
     private static nint __mb_set_delta_smoothing;
-    internal static void SetDeltaSmoothing(bool deltaSmoothingEnabled)
+    public static void SetDeltaSmoothing(bool deltaSmoothingEnabled)
     {
         var __mb = __mb_set_delta_smoothing;
         if (__mb == 0)
@@ -267,7 +267,7 @@ public static unsafe partial class OS
     }
 
     private static nint __mb_is_delta_smoothing_enabled;
-    internal static bool IsDeltaSmoothingEnabled()
+    public static bool IsDeltaSmoothingEnabled()
     {
         var __mb = __mb_is_delta_smoothing_enabled;
         if (__mb == 0)
@@ -1486,7 +1486,7 @@ public unsafe partial class Occluder3D : Resource
     internal Occluder3D(nint ptr, bool rc) : base(ptr, rc) { }
 
     private static nint __mb_get_vertices;
-    internal Vector3[] GetVertices()
+    public Vector3[] GetVertices()
     {
         var __mb = __mb_get_vertices;
         if (__mb == 0)
@@ -1501,7 +1501,7 @@ public unsafe partial class Occluder3D : Resource
     }
 
     private static nint __mb_get_indices;
-    internal int[] GetIndices()
+    public int[] GetIndices()
     {
         var __mb = __mb_get_indices;
         if (__mb == 0)
@@ -1544,7 +1544,7 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_bake_mask;
-    internal void SetBakeMask(uint mask)
+    public void SetBakeMask(uint mask)
     {
         var __mb = __mb_set_bake_mask;
         if (__mb == 0)
@@ -1560,7 +1560,7 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_bake_mask;
-    internal uint GetBakeMask()
+    public uint GetBakeMask()
     {
         var __mb = __mb_get_bake_mask;
         if (__mb == 0)
@@ -1611,7 +1611,7 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_bake_simplification_distance;
-    internal void SetBakeSimplificationDistance(float simplificationDistance)
+    public void SetBakeSimplificationDistance(float simplificationDistance)
     {
         var __mb = __mb_set_bake_simplification_distance;
         if (__mb == 0)
@@ -1627,7 +1627,7 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_bake_simplification_distance;
-    internal float GetBakeSimplificationDistance()
+    public float GetBakeSimplificationDistance()
     {
         var __mb = __mb_get_bake_simplification_distance;
         if (__mb == 0)
@@ -1642,7 +1642,7 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     }
 
     private static nint __mb_set_occluder;
-    internal void SetOccluder(Occluder3D? occluder)
+    public void SetOccluder(Occluder3D? occluder)
     {
         var __mb = __mb_set_occluder;
         if (__mb == 0)
@@ -1658,7 +1658,7 @@ public unsafe partial class OccluderInstance3D : VisualInstance3D
     }
 
     private static nint __mb_get_occluder;
-    internal Occluder3D? GetOccluder()
+    public Occluder3D? GetOccluder()
     {
         var __mb = __mb_get_occluder;
         if (__mb == 0)
@@ -1708,7 +1708,7 @@ public unsafe partial class OccluderPolygon2D : Resource
     }
 
     private static nint __mb_set_closed;
-    internal void SetClosed(bool closed)
+    public void SetClosed(bool closed)
     {
         var __mb = __mb_set_closed;
         if (__mb == 0)
@@ -1724,7 +1724,7 @@ public unsafe partial class OccluderPolygon2D : Resource
     }
 
     private static nint __mb_is_closed;
-    internal bool IsClosed()
+    public bool IsClosed()
     {
         var __mb = __mb_is_closed;
         if (__mb == 0)
@@ -1739,7 +1739,7 @@ public unsafe partial class OccluderPolygon2D : Resource
     }
 
     private static nint __mb_set_cull_mode;
-    internal void SetCullMode(OccluderPolygon2D.CullModeEnum cullMode)
+    public void SetCullMode(OccluderPolygon2D.CullModeEnum cullMode)
     {
         var __mb = __mb_set_cull_mode;
         if (__mb == 0)
@@ -1755,7 +1755,7 @@ public unsafe partial class OccluderPolygon2D : Resource
     }
 
     private static nint __mb_get_cull_mode;
-    internal OccluderPolygon2D.CullModeEnum GetCullMode()
+    public OccluderPolygon2D.CullModeEnum GetCullMode()
     {
         var __mb = __mb_get_cull_mode;
         if (__mb == 0)
@@ -1770,7 +1770,7 @@ public unsafe partial class OccluderPolygon2D : Resource
     }
 
     private static nint __mb_set_polygon;
-    internal void SetPolygon(Vector2[] polygon)
+    public void SetPolygon(Vector2[] polygon)
     {
         var __mb = __mb_set_polygon;
         if (__mb == 0)
@@ -1787,7 +1787,7 @@ public unsafe partial class OccluderPolygon2D : Resource
     }
 
     private static nint __mb_get_polygon;
-    internal Vector2[] GetPolygon()
+    public Vector2[] GetPolygon()
     {
         var __mb = __mb_get_polygon;
         if (__mb == 0)
@@ -1840,7 +1840,7 @@ public unsafe partial class OggPacketSequence : Resource
     }
 
     private static nint __mb_set_packet_data;
-    internal void SetPacketData(Godot.Collections.Array packetData)
+    public void SetPacketData(Godot.Collections.Array packetData)
     {
         var __mb = __mb_set_packet_data;
         if (__mb == 0)
@@ -1856,7 +1856,7 @@ public unsafe partial class OggPacketSequence : Resource
     }
 
     private static nint __mb_get_packet_data;
-    internal Godot.Collections.Array GetPacketData()
+    public Godot.Collections.Array GetPacketData()
     {
         var __mb = __mb_get_packet_data;
         if (__mb == 0)
@@ -1871,7 +1871,7 @@ public unsafe partial class OggPacketSequence : Resource
     }
 
     private static nint __mb_set_packet_granule_positions;
-    internal void SetPacketGranulePositions(long[] granulePositions)
+    public void SetPacketGranulePositions(long[] granulePositions)
     {
         var __mb = __mb_set_packet_granule_positions;
         if (__mb == 0)
@@ -1888,7 +1888,7 @@ public unsafe partial class OggPacketSequence : Resource
     }
 
     private static nint __mb_get_packet_granule_positions;
-    internal long[] GetPacketGranulePositions()
+    public long[] GetPacketGranulePositions()
     {
         var __mb = __mb_get_packet_granule_positions;
         if (__mb == 0)
@@ -1903,7 +1903,7 @@ public unsafe partial class OggPacketSequence : Resource
     }
 
     private static nint __mb_set_sampling_rate;
-    internal void SetSamplingRate(float samplingRate)
+    public void SetSamplingRate(float samplingRate)
     {
         var __mb = __mb_set_sampling_rate;
         if (__mb == 0)
@@ -1919,7 +1919,7 @@ public unsafe partial class OggPacketSequence : Resource
     }
 
     private static nint __mb_get_sampling_rate;
-    internal float GetSamplingRate()
+    public float GetSamplingRate()
     {
         var __mb = __mb_get_sampling_rate;
         if (__mb == 0)
@@ -1993,7 +1993,7 @@ public unsafe partial class OmniLight3D : Light3D
     }
 
     private static nint __mb_set_shadow_mode;
-    internal void SetShadowMode(OmniLight3D.ShadowMode mode)
+    public void SetShadowMode(OmniLight3D.ShadowMode mode)
     {
         var __mb = __mb_set_shadow_mode;
         if (__mb == 0)
@@ -2009,7 +2009,7 @@ public unsafe partial class OmniLight3D : Light3D
     }
 
     private static nint __mb_get_shadow_mode;
-    internal OmniLight3D.ShadowMode GetShadowMode()
+    public OmniLight3D.ShadowMode GetShadowMode()
     {
         var __mb = __mb_get_shadow_mode;
         if (__mb == 0)
@@ -2888,7 +2888,7 @@ public unsafe partial class OpenXRAction : Resource
     }
 
     private static nint __mb_set_localized_name;
-    internal void SetLocalizedName(string localizedName)
+    public void SetLocalizedName(string localizedName)
     {
         var __mb = __mb_set_localized_name;
         if (__mb == 0)
@@ -2905,7 +2905,7 @@ public unsafe partial class OpenXRAction : Resource
     }
 
     private static nint __mb_get_localized_name;
-    internal string GetLocalizedName()
+    public string GetLocalizedName()
     {
         var __mb = __mb_get_localized_name;
         if (__mb == 0)
@@ -2920,7 +2920,7 @@ public unsafe partial class OpenXRAction : Resource
     }
 
     private static nint __mb_set_action_type;
-    internal void SetActionType(OpenXRAction.ActionTypeEnum actionType)
+    public void SetActionType(OpenXRAction.ActionTypeEnum actionType)
     {
         var __mb = __mb_set_action_type;
         if (__mb == 0)
@@ -2936,7 +2936,7 @@ public unsafe partial class OpenXRAction : Resource
     }
 
     private static nint __mb_get_action_type;
-    internal OpenXRAction.ActionTypeEnum GetActionType()
+    public OpenXRAction.ActionTypeEnum GetActionType()
     {
         var __mb = __mb_get_action_type;
         if (__mb == 0)
@@ -2951,7 +2951,7 @@ public unsafe partial class OpenXRAction : Resource
     }
 
     private static nint __mb_set_toplevel_paths;
-    internal void SetToplevelPaths(string[] toplevelPaths)
+    public void SetToplevelPaths(string[] toplevelPaths)
     {
         var __mb = __mb_set_toplevel_paths;
         if (__mb == 0)
@@ -2968,7 +2968,7 @@ public unsafe partial class OpenXRAction : Resource
     }
 
     private static nint __mb_get_toplevel_paths;
-    internal string[] GetToplevelPaths()
+    public string[] GetToplevelPaths()
     {
         var __mb = __mb_get_toplevel_paths;
         if (__mb == 0)
@@ -3015,7 +3015,7 @@ public unsafe partial class OpenXRActionMap : Resource
     }
 
     private static nint __mb_set_action_sets;
-    internal void SetActionSets(Godot.Collections.Array actionSets)
+    public void SetActionSets(Godot.Collections.Array actionSets)
     {
         var __mb = __mb_set_action_sets;
         if (__mb == 0)
@@ -3031,7 +3031,7 @@ public unsafe partial class OpenXRActionMap : Resource
     }
 
     private static nint __mb_get_action_sets;
-    internal Godot.Collections.Array GetActionSets()
+    public Godot.Collections.Array GetActionSets()
     {
         var __mb = __mb_get_action_sets;
         if (__mb == 0)
@@ -3130,7 +3130,7 @@ public unsafe partial class OpenXRActionMap : Resource
     }
 
     private static nint __mb_set_interaction_profiles;
-    internal void SetInteractionProfiles(Godot.Collections.Array interactionProfiles)
+    public void SetInteractionProfiles(Godot.Collections.Array interactionProfiles)
     {
         var __mb = __mb_set_interaction_profiles;
         if (__mb == 0)
@@ -3146,7 +3146,7 @@ public unsafe partial class OpenXRActionMap : Resource
     }
 
     private static nint __mb_get_interaction_profiles;
-    internal Godot.Collections.Array GetInteractionProfiles()
+    public Godot.Collections.Array GetInteractionProfiles()
     {
         var __mb = __mb_get_interaction_profiles;
         if (__mb == 0)
@@ -3286,7 +3286,7 @@ public unsafe partial class OpenXRActionSet : Resource
     }
 
     private static nint __mb_set_localized_name;
-    internal void SetLocalizedName(string localizedName)
+    public void SetLocalizedName(string localizedName)
     {
         var __mb = __mb_set_localized_name;
         if (__mb == 0)
@@ -3303,7 +3303,7 @@ public unsafe partial class OpenXRActionSet : Resource
     }
 
     private static nint __mb_get_localized_name;
-    internal string GetLocalizedName()
+    public string GetLocalizedName()
     {
         var __mb = __mb_get_localized_name;
         if (__mb == 0)
@@ -3318,7 +3318,7 @@ public unsafe partial class OpenXRActionSet : Resource
     }
 
     private static nint __mb_set_priority;
-    internal void SetPriority(int priority)
+    public void SetPriority(int priority)
     {
         var __mb = __mb_set_priority;
         if (__mb == 0)
@@ -3334,7 +3334,7 @@ public unsafe partial class OpenXRActionSet : Resource
     }
 
     private static nint __mb_get_priority;
-    internal int GetPriority()
+    public int GetPriority()
     {
         var __mb = __mb_get_priority;
         if (__mb == 0)
@@ -3364,7 +3364,7 @@ public unsafe partial class OpenXRActionSet : Resource
     }
 
     private static nint __mb_set_actions;
-    internal void SetActions(Godot.Collections.Array actions)
+    public void SetActions(Godot.Collections.Array actions)
     {
         var __mb = __mb_set_actions;
         if (__mb == 0)
@@ -3380,7 +3380,7 @@ public unsafe partial class OpenXRActionSet : Resource
     }
 
     private static nint __mb_get_actions;
-    internal Godot.Collections.Array GetActions()
+    public Godot.Collections.Array GetActions()
     {
         var __mb = __mb_get_actions;
         if (__mb == 0)
@@ -3461,7 +3461,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_set_on_threshold;
-    internal void SetOnThreshold(float onThreshold)
+    public void SetOnThreshold(float onThreshold)
     {
         var __mb = __mb_set_on_threshold;
         if (__mb == 0)
@@ -3477,7 +3477,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_get_on_threshold;
-    internal float GetOnThreshold()
+    public float GetOnThreshold()
     {
         var __mb = __mb_get_on_threshold;
         if (__mb == 0)
@@ -3492,7 +3492,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_set_off_threshold;
-    internal void SetOffThreshold(float offThreshold)
+    public void SetOffThreshold(float offThreshold)
     {
         var __mb = __mb_set_off_threshold;
         if (__mb == 0)
@@ -3508,7 +3508,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_get_off_threshold;
-    internal float GetOffThreshold()
+    public float GetOffThreshold()
     {
         var __mb = __mb_get_off_threshold;
         if (__mb == 0)
@@ -3523,7 +3523,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_set_on_haptic;
-    internal void SetOnHaptic(OpenXRHapticBase? haptic)
+    public void SetOnHaptic(OpenXRHapticBase? haptic)
     {
         var __mb = __mb_set_on_haptic;
         if (__mb == 0)
@@ -3539,7 +3539,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_get_on_haptic;
-    internal OpenXRHapticBase? GetOnHaptic()
+    public OpenXRHapticBase? GetOnHaptic()
     {
         var __mb = __mb_get_on_haptic;
         if (__mb == 0)
@@ -3554,7 +3554,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_set_off_haptic;
-    internal void SetOffHaptic(OpenXRHapticBase? haptic)
+    public void SetOffHaptic(OpenXRHapticBase? haptic)
     {
         var __mb = __mb_set_off_haptic;
         if (__mb == 0)
@@ -3570,7 +3570,7 @@ public unsafe partial class OpenXRAnalogThresholdModifier : OpenXRActionBindingM
     }
 
     private static nint __mb_get_off_haptic;
-    internal OpenXRHapticBase? GetOffHaptic()
+    public OpenXRHapticBase? GetOffHaptic()
     {
         var __mb = __mb_get_off_haptic;
         if (__mb == 0)
@@ -3624,7 +3624,7 @@ public unsafe partial class OpenXRAnchorTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_uuid;
-    internal void SetUuid(string uuid)
+    public void SetUuid(string uuid)
     {
         var __mb = __mb_set_uuid;
         if (__mb == 0)
@@ -3641,7 +3641,7 @@ public unsafe partial class OpenXRAnchorTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_uuid;
-    internal string GetUuid()
+    public string GetUuid()
     {
         var __mb = __mb_get_uuid;
         if (__mb == 0)
@@ -3933,7 +3933,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_layer_viewport;
-    internal void SetLayerViewport(SubViewport? viewport)
+    public void SetLayerViewport(SubViewport? viewport)
     {
         var __mb = __mb_set_layer_viewport;
         if (__mb == 0)
@@ -3949,7 +3949,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_layer_viewport;
-    internal SubViewport? GetLayerViewport()
+    public SubViewport? GetLayerViewport()
     {
         var __mb = __mb_get_layer_viewport;
         if (__mb == 0)
@@ -3964,7 +3964,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_use_android_surface;
-    internal void SetUseAndroidSurface(bool enable)
+    public void SetUseAndroidSurface(bool enable)
     {
         var __mb = __mb_set_use_android_surface;
         if (__mb == 0)
@@ -3980,7 +3980,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_use_android_surface;
-    internal bool GetUseAndroidSurface()
+    public bool GetUseAndroidSurface()
     {
         var __mb = __mb_get_use_android_surface;
         if (__mb == 0)
@@ -3995,7 +3995,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_android_surface_size;
-    internal void SetAndroidSurfaceSize(Vector2I size)
+    public void SetAndroidSurfaceSize(Vector2I size)
     {
         var __mb = __mb_set_android_surface_size;
         if (__mb == 0)
@@ -4011,7 +4011,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_android_surface_size;
-    internal Vector2I GetAndroidSurfaceSize()
+    public Vector2I GetAndroidSurfaceSize()
     {
         var __mb = __mb_get_android_surface_size;
         if (__mb == 0)
@@ -4026,7 +4026,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_enable_hole_punch;
-    internal void SetEnableHolePunch(bool enable)
+    public void SetEnableHolePunch(bool enable)
     {
         var __mb = __mb_set_enable_hole_punch;
         if (__mb == 0)
@@ -4042,7 +4042,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_enable_hole_punch;
-    internal bool GetEnableHolePunch()
+    public bool GetEnableHolePunch()
     {
         var __mb = __mb_get_enable_hole_punch;
         if (__mb == 0)
@@ -4057,7 +4057,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_sort_order;
-    internal void SetSortOrder(int order)
+    public void SetSortOrder(int order)
     {
         var __mb = __mb_set_sort_order;
         if (__mb == 0)
@@ -4073,7 +4073,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_sort_order;
-    internal int GetSortOrder()
+    public int GetSortOrder()
     {
         var __mb = __mb_get_sort_order;
         if (__mb == 0)
@@ -4088,7 +4088,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_alpha_blend;
-    internal void SetAlphaBlend(bool enabled)
+    public void SetAlphaBlend(bool enabled)
     {
         var __mb = __mb_set_alpha_blend;
         if (__mb == 0)
@@ -4104,7 +4104,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_alpha_blend;
-    internal bool GetAlphaBlend()
+    public bool GetAlphaBlend()
     {
         var __mb = __mb_get_alpha_blend;
         if (__mb == 0)
@@ -4149,7 +4149,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_is_protected_content;
-    internal bool IsProtectedContent()
+    public bool IsProtectedContent()
     {
         var __mb = __mb_is_protected_content;
         if (__mb == 0)
@@ -4164,7 +4164,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_protected_content;
-    internal void SetProtectedContent(bool protectedContent)
+    public void SetProtectedContent(bool protectedContent)
     {
         var __mb = __mb_set_protected_content;
         if (__mb == 0)
@@ -4180,7 +4180,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_min_filter;
-    internal void SetMinFilter(OpenXRCompositionLayer.Filter mode)
+    public void SetMinFilter(OpenXRCompositionLayer.Filter mode)
     {
         var __mb = __mb_set_min_filter;
         if (__mb == 0)
@@ -4196,7 +4196,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_min_filter;
-    internal OpenXRCompositionLayer.Filter GetMinFilter()
+    public OpenXRCompositionLayer.Filter GetMinFilter()
     {
         var __mb = __mb_get_min_filter;
         if (__mb == 0)
@@ -4211,7 +4211,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_mag_filter;
-    internal void SetMagFilter(OpenXRCompositionLayer.Filter mode)
+    public void SetMagFilter(OpenXRCompositionLayer.Filter mode)
     {
         var __mb = __mb_set_mag_filter;
         if (__mb == 0)
@@ -4227,7 +4227,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_mag_filter;
-    internal OpenXRCompositionLayer.Filter GetMagFilter()
+    public OpenXRCompositionLayer.Filter GetMagFilter()
     {
         var __mb = __mb_get_mag_filter;
         if (__mb == 0)
@@ -4242,7 +4242,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_mipmap_mode;
-    internal void SetMipmapMode(OpenXRCompositionLayer.MipmapMode mode)
+    public void SetMipmapMode(OpenXRCompositionLayer.MipmapMode mode)
     {
         var __mb = __mb_set_mipmap_mode;
         if (__mb == 0)
@@ -4258,7 +4258,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_mipmap_mode;
-    internal OpenXRCompositionLayer.MipmapMode GetMipmapMode()
+    public OpenXRCompositionLayer.MipmapMode GetMipmapMode()
     {
         var __mb = __mb_get_mipmap_mode;
         if (__mb == 0)
@@ -4273,7 +4273,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_horizontal_wrap;
-    internal void SetHorizontalWrap(OpenXRCompositionLayer.Wrap mode)
+    public void SetHorizontalWrap(OpenXRCompositionLayer.Wrap mode)
     {
         var __mb = __mb_set_horizontal_wrap;
         if (__mb == 0)
@@ -4289,7 +4289,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_horizontal_wrap;
-    internal OpenXRCompositionLayer.Wrap GetHorizontalWrap()
+    public OpenXRCompositionLayer.Wrap GetHorizontalWrap()
     {
         var __mb = __mb_get_horizontal_wrap;
         if (__mb == 0)
@@ -4304,7 +4304,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_vertical_wrap;
-    internal void SetVerticalWrap(OpenXRCompositionLayer.Wrap mode)
+    public void SetVerticalWrap(OpenXRCompositionLayer.Wrap mode)
     {
         var __mb = __mb_set_vertical_wrap;
         if (__mb == 0)
@@ -4320,7 +4320,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_vertical_wrap;
-    internal OpenXRCompositionLayer.Wrap GetVerticalWrap()
+    public OpenXRCompositionLayer.Wrap GetVerticalWrap()
     {
         var __mb = __mb_get_vertical_wrap;
         if (__mb == 0)
@@ -4335,7 +4335,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_red_swizzle;
-    internal void SetRedSwizzle(OpenXRCompositionLayer.Swizzle mode)
+    public void SetRedSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
         var __mb = __mb_set_red_swizzle;
         if (__mb == 0)
@@ -4351,7 +4351,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_red_swizzle;
-    internal OpenXRCompositionLayer.Swizzle GetRedSwizzle()
+    public OpenXRCompositionLayer.Swizzle GetRedSwizzle()
     {
         var __mb = __mb_get_red_swizzle;
         if (__mb == 0)
@@ -4366,7 +4366,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_green_swizzle;
-    internal void SetGreenSwizzle(OpenXRCompositionLayer.Swizzle mode)
+    public void SetGreenSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
         var __mb = __mb_set_green_swizzle;
         if (__mb == 0)
@@ -4382,7 +4382,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_green_swizzle;
-    internal OpenXRCompositionLayer.Swizzle GetGreenSwizzle()
+    public OpenXRCompositionLayer.Swizzle GetGreenSwizzle()
     {
         var __mb = __mb_get_green_swizzle;
         if (__mb == 0)
@@ -4397,7 +4397,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_blue_swizzle;
-    internal void SetBlueSwizzle(OpenXRCompositionLayer.Swizzle mode)
+    public void SetBlueSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
         var __mb = __mb_set_blue_swizzle;
         if (__mb == 0)
@@ -4413,7 +4413,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_blue_swizzle;
-    internal OpenXRCompositionLayer.Swizzle GetBlueSwizzle()
+    public OpenXRCompositionLayer.Swizzle GetBlueSwizzle()
     {
         var __mb = __mb_get_blue_swizzle;
         if (__mb == 0)
@@ -4428,7 +4428,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_alpha_swizzle;
-    internal void SetAlphaSwizzle(OpenXRCompositionLayer.Swizzle mode)
+    public void SetAlphaSwizzle(OpenXRCompositionLayer.Swizzle mode)
     {
         var __mb = __mb_set_alpha_swizzle;
         if (__mb == 0)
@@ -4444,7 +4444,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_alpha_swizzle;
-    internal OpenXRCompositionLayer.Swizzle GetAlphaSwizzle()
+    public OpenXRCompositionLayer.Swizzle GetAlphaSwizzle()
     {
         var __mb = __mb_get_alpha_swizzle;
         if (__mb == 0)
@@ -4459,7 +4459,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_max_anisotropy;
-    internal void SetMaxAnisotropy(float value)
+    public void SetMaxAnisotropy(float value)
     {
         var __mb = __mb_set_max_anisotropy;
         if (__mb == 0)
@@ -4475,7 +4475,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_max_anisotropy;
-    internal float GetMaxAnisotropy()
+    public float GetMaxAnisotropy()
     {
         var __mb = __mb_get_max_anisotropy;
         if (__mb == 0)
@@ -4490,7 +4490,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_border_color;
-    internal void SetBorderColor(Color color)
+    public void SetBorderColor(Color color)
     {
         var __mb = __mb_set_border_color;
         if (__mb == 0)
@@ -4506,7 +4506,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_border_color;
-    internal Color GetBorderColor()
+    public Color GetBorderColor()
     {
         var __mb = __mb_get_border_color;
         if (__mb == 0)
@@ -4521,7 +4521,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_set_eye_visibility;
-    internal void SetEyeVisibility(OpenXRCompositionLayer.EyeVisibilityEnum eyeVisibility)
+    public void SetEyeVisibility(OpenXRCompositionLayer.EyeVisibilityEnum eyeVisibility)
     {
         var __mb = __mb_set_eye_visibility;
         if (__mb == 0)
@@ -4537,7 +4537,7 @@ public unsafe partial class OpenXRCompositionLayer : Node3D
     }
 
     private static nint __mb_get_eye_visibility;
-    internal OpenXRCompositionLayer.EyeVisibilityEnum GetEyeVisibility()
+    public OpenXRCompositionLayer.EyeVisibilityEnum GetEyeVisibility()
     {
         var __mb = __mb_get_eye_visibility;
         if (__mb == 0)
@@ -4606,7 +4606,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_set_radius;
-    internal void SetRadius(float radius)
+    public void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -4622,7 +4622,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_get_radius;
-    internal float GetRadius()
+    public float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -4637,7 +4637,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_set_aspect_ratio;
-    internal void SetAspectRatio(float aspectRatio)
+    public void SetAspectRatio(float aspectRatio)
     {
         var __mb = __mb_set_aspect_ratio;
         if (__mb == 0)
@@ -4653,7 +4653,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_get_aspect_ratio;
-    internal float GetAspectRatio()
+    public float GetAspectRatio()
     {
         var __mb = __mb_get_aspect_ratio;
         if (__mb == 0)
@@ -4668,7 +4668,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_set_central_angle;
-    internal void SetCentralAngle(float angle)
+    public void SetCentralAngle(float angle)
     {
         var __mb = __mb_set_central_angle;
         if (__mb == 0)
@@ -4684,7 +4684,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_get_central_angle;
-    internal float GetCentralAngle()
+    public float GetCentralAngle()
     {
         var __mb = __mb_get_central_angle;
         if (__mb == 0)
@@ -4699,7 +4699,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_set_fallback_segments;
-    internal void SetFallbackSegments(uint segments)
+    public void SetFallbackSegments(uint segments)
     {
         var __mb = __mb_set_fallback_segments;
         if (__mb == 0)
@@ -4715,7 +4715,7 @@ public unsafe partial class OpenXRCompositionLayerCylinder : OpenXRCompositionLa
     }
 
     private static nint __mb_get_fallback_segments;
-    internal uint GetFallbackSegments()
+    public uint GetFallbackSegments()
     {
         var __mb = __mb_get_fallback_segments;
         if (__mb == 0)
@@ -4770,7 +4770,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_set_radius;
-    internal void SetRadius(float radius)
+    public void SetRadius(float radius)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -4786,7 +4786,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_get_radius;
-    internal float GetRadius()
+    public float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -4801,7 +4801,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_set_central_horizontal_angle;
-    internal void SetCentralHorizontalAngle(float angle)
+    public void SetCentralHorizontalAngle(float angle)
     {
         var __mb = __mb_set_central_horizontal_angle;
         if (__mb == 0)
@@ -4817,7 +4817,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_get_central_horizontal_angle;
-    internal float GetCentralHorizontalAngle()
+    public float GetCentralHorizontalAngle()
     {
         var __mb = __mb_get_central_horizontal_angle;
         if (__mb == 0)
@@ -4832,7 +4832,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_set_upper_vertical_angle;
-    internal void SetUpperVerticalAngle(float angle)
+    public void SetUpperVerticalAngle(float angle)
     {
         var __mb = __mb_set_upper_vertical_angle;
         if (__mb == 0)
@@ -4848,7 +4848,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_get_upper_vertical_angle;
-    internal float GetUpperVerticalAngle()
+    public float GetUpperVerticalAngle()
     {
         var __mb = __mb_get_upper_vertical_angle;
         if (__mb == 0)
@@ -4863,7 +4863,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_set_lower_vertical_angle;
-    internal void SetLowerVerticalAngle(float angle)
+    public void SetLowerVerticalAngle(float angle)
     {
         var __mb = __mb_set_lower_vertical_angle;
         if (__mb == 0)
@@ -4879,7 +4879,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_get_lower_vertical_angle;
-    internal float GetLowerVerticalAngle()
+    public float GetLowerVerticalAngle()
     {
         var __mb = __mb_get_lower_vertical_angle;
         if (__mb == 0)
@@ -4894,7 +4894,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_set_fallback_segments;
-    internal void SetFallbackSegments(uint segments)
+    public void SetFallbackSegments(uint segments)
     {
         var __mb = __mb_set_fallback_segments;
         if (__mb == 0)
@@ -4910,7 +4910,7 @@ public unsafe partial class OpenXRCompositionLayerEquirect : OpenXRCompositionLa
     }
 
     private static nint __mb_get_fallback_segments;
-    internal uint GetFallbackSegments()
+    public uint GetFallbackSegments()
     {
         var __mb = __mb_get_fallback_segments;
         if (__mb == 0)
@@ -4941,7 +4941,7 @@ public unsafe partial class OpenXRCompositionLayerQuad : OpenXRCompositionLayer
     }
 
     private static nint __mb_set_quad_size;
-    internal void SetQuadSize(Vector2 size)
+    public void SetQuadSize(Vector2 size)
     {
         var __mb = __mb_set_quad_size;
         if (__mb == 0)
@@ -4957,7 +4957,7 @@ public unsafe partial class OpenXRCompositionLayerQuad : OpenXRCompositionLayer
     }
 
     private static nint __mb_get_quad_size;
-    internal Vector2 GetQuadSize()
+    public Vector2 GetQuadSize()
     {
         var __mb = __mb_get_quad_size;
         if (__mb == 0)
@@ -5036,7 +5036,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_action_set;
-    internal void SetActionSet(OpenXRActionSet? actionSet)
+    public void SetActionSet(OpenXRActionSet? actionSet)
     {
         var __mb = __mb_set_action_set;
         if (__mb == 0)
@@ -5052,7 +5052,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_action_set;
-    internal OpenXRActionSet? GetActionSet()
+    public OpenXRActionSet? GetActionSet()
     {
         var __mb = __mb_get_action_set;
         if (__mb == 0)
@@ -5067,7 +5067,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_input_path;
-    internal void SetInputPath(string inputPath)
+    public void SetInputPath(string inputPath)
     {
         var __mb = __mb_set_input_path;
         if (__mb == 0)
@@ -5084,7 +5084,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_input_path;
-    internal string GetInputPath()
+    public string GetInputPath()
     {
         var __mb = __mb_get_input_path;
         if (__mb == 0)
@@ -5099,7 +5099,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_threshold;
-    internal void SetThreshold(float threshold)
+    public void SetThreshold(float threshold)
     {
         var __mb = __mb_set_threshold;
         if (__mb == 0)
@@ -5115,7 +5115,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_threshold;
-    internal float GetThreshold()
+    public float GetThreshold()
     {
         var __mb = __mb_get_threshold;
         if (__mb == 0)
@@ -5130,7 +5130,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_threshold_released;
-    internal void SetThresholdReleased(float thresholdReleased)
+    public void SetThresholdReleased(float thresholdReleased)
     {
         var __mb = __mb_set_threshold_released;
         if (__mb == 0)
@@ -5146,7 +5146,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_threshold_released;
-    internal float GetThresholdReleased()
+    public float GetThresholdReleased()
     {
         var __mb = __mb_get_threshold_released;
         if (__mb == 0)
@@ -5161,7 +5161,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_center_region;
-    internal void SetCenterRegion(float centerRegion)
+    public void SetCenterRegion(float centerRegion)
     {
         var __mb = __mb_set_center_region;
         if (__mb == 0)
@@ -5177,7 +5177,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_center_region;
-    internal float GetCenterRegion()
+    public float GetCenterRegion()
     {
         var __mb = __mb_get_center_region;
         if (__mb == 0)
@@ -5192,7 +5192,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_wedge_angle;
-    internal void SetWedgeAngle(float wedgeAngle)
+    public void SetWedgeAngle(float wedgeAngle)
     {
         var __mb = __mb_set_wedge_angle;
         if (__mb == 0)
@@ -5208,7 +5208,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_wedge_angle;
-    internal float GetWedgeAngle()
+    public float GetWedgeAngle()
     {
         var __mb = __mb_get_wedge_angle;
         if (__mb == 0)
@@ -5223,7 +5223,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_is_sticky;
-    internal void SetIsSticky(bool isSticky)
+    public void SetIsSticky(bool isSticky)
     {
         var __mb = __mb_set_is_sticky;
         if (__mb == 0)
@@ -5239,7 +5239,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_is_sticky;
-    internal bool GetIsSticky()
+    public bool GetIsSticky()
     {
         var __mb = __mb_get_is_sticky;
         if (__mb == 0)
@@ -5254,7 +5254,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_on_haptic;
-    internal void SetOnHaptic(OpenXRHapticBase? haptic)
+    public void SetOnHaptic(OpenXRHapticBase? haptic)
     {
         var __mb = __mb_set_on_haptic;
         if (__mb == 0)
@@ -5270,7 +5270,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_on_haptic;
-    internal OpenXRHapticBase? GetOnHaptic()
+    public OpenXRHapticBase? GetOnHaptic()
     {
         var __mb = __mb_get_on_haptic;
         if (__mb == 0)
@@ -5285,7 +5285,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_set_off_haptic;
-    internal void SetOffHaptic(OpenXRHapticBase? haptic)
+    public void SetOffHaptic(OpenXRHapticBase? haptic)
     {
         var __mb = __mb_set_off_haptic;
         if (__mb == 0)
@@ -5301,7 +5301,7 @@ public unsafe partial class OpenXRDpadBindingModifier : OpenXRIPBindingModifier
     }
 
     private static nint __mb_get_off_haptic;
-    internal OpenXRHapticBase? GetOffHaptic()
+    public OpenXRHapticBase? GetOffHaptic()
     {
         var __mb = __mb_get_off_haptic;
         if (__mb == 0)
@@ -5641,7 +5641,7 @@ public unsafe partial class OpenXRFrameSynthesisExtension : OpenXRExtensionWrapp
     }
 
     private static nint __mb_is_enabled;
-    internal bool IsEnabled()
+    public bool IsEnabled()
     {
         var __mb = __mb_is_enabled;
         if (__mb == 0)
@@ -5656,7 +5656,7 @@ public unsafe partial class OpenXRFrameSynthesisExtension : OpenXRExtensionWrapp
     }
 
     private static nint __mb_set_enabled;
-    internal void SetEnabled(bool enable)
+    public void SetEnabled(bool enable)
     {
         var __mb = __mb_set_enabled;
         if (__mb == 0)
@@ -5672,7 +5672,7 @@ public unsafe partial class OpenXRFrameSynthesisExtension : OpenXRExtensionWrapp
     }
 
     private static nint __mb_get_relax_frame_interval;
-    internal bool GetRelaxFrameInterval()
+    public bool GetRelaxFrameInterval()
     {
         var __mb = __mb_get_relax_frame_interval;
         if (__mb == 0)
@@ -5687,7 +5687,7 @@ public unsafe partial class OpenXRFrameSynthesisExtension : OpenXRExtensionWrapp
     }
 
     private static nint __mb_set_relax_frame_interval;
-    internal void SetRelaxFrameInterval(bool relaxFrameInterval)
+    public void SetRelaxFrameInterval(bool relaxFrameInterval)
     {
         var __mb = __mb_set_relax_frame_interval;
         if (__mb == 0)
@@ -5939,7 +5939,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_set_hand;
-    internal void SetHand(OpenXRHand.Hands hand)
+    public void SetHand(OpenXRHand.Hands hand)
     {
         var __mb = __mb_set_hand;
         if (__mb == 0)
@@ -5955,7 +5955,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_get_hand;
-    internal OpenXRHand.Hands GetHand()
+    public OpenXRHand.Hands GetHand()
     {
         var __mb = __mb_get_hand;
         if (__mb == 0)
@@ -5970,7 +5970,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_set_hand_skeleton;
-    internal void SetHandSkeleton(NodePath handSkeleton)
+    public void SetHandSkeleton(NodePath handSkeleton)
     {
         var __mb = __mb_set_hand_skeleton;
         if (__mb == 0)
@@ -5986,7 +5986,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_get_hand_skeleton;
-    internal NodePath GetHandSkeleton()
+    public NodePath GetHandSkeleton()
     {
         var __mb = __mb_get_hand_skeleton;
         if (__mb == 0)
@@ -6001,7 +6001,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_set_motion_range;
-    internal void SetMotionRange(OpenXRHand.MotionRangeEnum motionRange)
+    public void SetMotionRange(OpenXRHand.MotionRangeEnum motionRange)
     {
         var __mb = __mb_set_motion_range;
         if (__mb == 0)
@@ -6017,7 +6017,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_get_motion_range;
-    internal OpenXRHand.MotionRangeEnum GetMotionRange()
+    public OpenXRHand.MotionRangeEnum GetMotionRange()
     {
         var __mb = __mb_get_motion_range;
         if (__mb == 0)
@@ -6032,7 +6032,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_set_skeleton_rig;
-    internal void SetSkeletonRig(OpenXRHand.SkeletonRigEnum skeletonRig)
+    public void SetSkeletonRig(OpenXRHand.SkeletonRigEnum skeletonRig)
     {
         var __mb = __mb_set_skeleton_rig;
         if (__mb == 0)
@@ -6048,7 +6048,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_get_skeleton_rig;
-    internal OpenXRHand.SkeletonRigEnum GetSkeletonRig()
+    public OpenXRHand.SkeletonRigEnum GetSkeletonRig()
     {
         var __mb = __mb_get_skeleton_rig;
         if (__mb == 0)
@@ -6063,7 +6063,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_set_bone_update;
-    internal void SetBoneUpdate(OpenXRHand.BoneUpdateEnum boneUpdate)
+    public void SetBoneUpdate(OpenXRHand.BoneUpdateEnum boneUpdate)
     {
         var __mb = __mb_set_bone_update;
         if (__mb == 0)
@@ -6079,7 +6079,7 @@ public unsafe partial class OpenXRHand : Node3D
     }
 
     private static nint __mb_get_bone_update;
-    internal OpenXRHand.BoneUpdateEnum GetBoneUpdate()
+    public OpenXRHand.BoneUpdateEnum GetBoneUpdate()
     {
         var __mb = __mb_get_bone_update;
         if (__mb == 0)
@@ -6127,7 +6127,7 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     }
 
     private static nint __mb_set_duration;
-    internal void SetDuration(long duration)
+    public void SetDuration(long duration)
     {
         var __mb = __mb_set_duration;
         if (__mb == 0)
@@ -6143,7 +6143,7 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     }
 
     private static nint __mb_get_duration;
-    internal long GetDuration()
+    public long GetDuration()
     {
         var __mb = __mb_get_duration;
         if (__mb == 0)
@@ -6158,7 +6158,7 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     }
 
     private static nint __mb_set_frequency;
-    internal void SetFrequency(float frequency)
+    public void SetFrequency(float frequency)
     {
         var __mb = __mb_set_frequency;
         if (__mb == 0)
@@ -6174,7 +6174,7 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     }
 
     private static nint __mb_get_frequency;
-    internal float GetFrequency()
+    public float GetFrequency()
     {
         var __mb = __mb_get_frequency;
         if (__mb == 0)
@@ -6189,7 +6189,7 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     }
 
     private static nint __mb_set_amplitude;
-    internal void SetAmplitude(float amplitude)
+    public void SetAmplitude(float amplitude)
     {
         var __mb = __mb_set_amplitude;
         if (__mb == 0)
@@ -6205,7 +6205,7 @@ public unsafe partial class OpenXRHapticVibration : OpenXRHapticBase
     }
 
     private static nint __mb_get_amplitude;
-    internal float GetAmplitude()
+    public float GetAmplitude()
     {
         var __mb = __mb_get_amplitude;
         if (__mb == 0)
@@ -6254,7 +6254,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_set_action;
-    internal void SetAction(OpenXRAction? action)
+    public void SetAction(OpenXRAction? action)
     {
         var __mb = __mb_set_action;
         if (__mb == 0)
@@ -6270,7 +6270,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_get_action;
-    internal OpenXRAction? GetAction()
+    public OpenXRAction? GetAction()
     {
         var __mb = __mb_get_action;
         if (__mb == 0)
@@ -6285,7 +6285,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_set_binding_path;
-    internal void SetBindingPath(string bindingPath)
+    public void SetBindingPath(string bindingPath)
     {
         var __mb = __mb_set_binding_path;
         if (__mb == 0)
@@ -6302,7 +6302,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_get_binding_path;
-    internal string GetBindingPath()
+    public string GetBindingPath()
     {
         var __mb = __mb_get_binding_path;
         if (__mb == 0)
@@ -6350,7 +6350,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_set_binding_modifiers;
-    internal void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
+    public void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
     {
         var __mb = __mb_set_binding_modifiers;
         if (__mb == 0)
@@ -6366,7 +6366,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_get_binding_modifiers;
-    internal Godot.Collections.Array GetBindingModifiers()
+    public Godot.Collections.Array GetBindingModifiers()
     {
         var __mb = __mb_get_binding_modifiers;
         if (__mb == 0)
@@ -6381,7 +6381,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_set_paths;
-    internal void SetPaths(string[] paths)
+    public void SetPaths(string[] paths)
     {
         var __mb = __mb_set_paths;
         if (__mb == 0)
@@ -6398,7 +6398,7 @@ public unsafe partial class OpenXRIPBinding : Resource
     }
 
     private static nint __mb_get_paths;
-    internal string[] GetPaths()
+    public string[] GetPaths()
     {
         var __mb = __mb_get_paths;
         if (__mb == 0)
@@ -6519,7 +6519,7 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     }
 
     private static nint __mb_set_interaction_profile_path;
-    internal void SetInteractionProfilePath(string interactionProfilePath)
+    public void SetInteractionProfilePath(string interactionProfilePath)
     {
         var __mb = __mb_set_interaction_profile_path;
         if (__mb == 0)
@@ -6536,7 +6536,7 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     }
 
     private static nint __mb_get_interaction_profile_path;
-    internal string GetInteractionProfilePath()
+    public string GetInteractionProfilePath()
     {
         var __mb = __mb_get_interaction_profile_path;
         if (__mb == 0)
@@ -6584,7 +6584,7 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     }
 
     private static nint __mb_set_bindings;
-    internal void SetBindings(Godot.Collections.Array bindings)
+    public void SetBindings(Godot.Collections.Array bindings)
     {
         var __mb = __mb_set_bindings;
         if (__mb == 0)
@@ -6600,7 +6600,7 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     }
 
     private static nint __mb_get_bindings;
-    internal Godot.Collections.Array GetBindings()
+    public Godot.Collections.Array GetBindings()
     {
         var __mb = __mb_get_bindings;
         if (__mb == 0)
@@ -6648,7 +6648,7 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     }
 
     private static nint __mb_set_binding_modifiers;
-    internal void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
+    public void SetBindingModifiers(Godot.Collections.Array bindingModifiers)
     {
         var __mb = __mb_set_binding_modifiers;
         if (__mb == 0)
@@ -6664,7 +6664,7 @@ public unsafe partial class OpenXRInteractionProfile : Resource
     }
 
     private static nint __mb_get_binding_modifiers;
-    internal Godot.Collections.Array GetBindingModifiers()
+    public Godot.Collections.Array GetBindingModifiers()
     {
         var __mb = __mb_get_binding_modifiers;
         if (__mb == 0)
@@ -7132,7 +7132,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_display_refresh_rate;
-    internal float GetDisplayRefreshRate()
+    public float GetDisplayRefreshRate()
     {
         var __mb = __mb_get_display_refresh_rate;
         if (__mb == 0)
@@ -7147,7 +7147,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_display_refresh_rate;
-    internal void SetDisplayRefreshRate(float refreshRate)
+    public void SetDisplayRefreshRate(float refreshRate)
     {
         var __mb = __mb_set_display_refresh_rate;
         if (__mb == 0)
@@ -7163,7 +7163,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_render_target_size_multiplier;
-    internal double GetRenderTargetSizeMultiplier()
+    public double GetRenderTargetSizeMultiplier()
     {
         var __mb = __mb_get_render_target_size_multiplier;
         if (__mb == 0)
@@ -7178,7 +7178,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_render_target_size_multiplier;
-    internal void SetRenderTargetSizeMultiplier(double multiplier)
+    public void SetRenderTargetSizeMultiplier(double multiplier)
     {
         var __mb = __mb_set_render_target_size_multiplier;
         if (__mb == 0)
@@ -7209,7 +7209,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_foveation_level;
-    internal int GetFoveationLevel()
+    public int GetFoveationLevel()
     {
         var __mb = __mb_get_foveation_level;
         if (__mb == 0)
@@ -7224,7 +7224,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_foveation_level;
-    internal void SetFoveationLevel(int foveationLevel)
+    public void SetFoveationLevel(int foveationLevel)
     {
         var __mb = __mb_set_foveation_level;
         if (__mb == 0)
@@ -7240,7 +7240,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_foveation_dynamic;
-    internal bool GetFoveationDynamic()
+    public bool GetFoveationDynamic()
     {
         var __mb = __mb_get_foveation_dynamic;
         if (__mb == 0)
@@ -7255,7 +7255,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_foveation_dynamic;
-    internal void SetFoveationDynamic(bool foveationDynamic)
+    public void SetFoveationDynamic(bool foveationDynamic)
     {
         var __mb = __mb_set_foveation_dynamic;
         if (__mb == 0)
@@ -7271,7 +7271,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_foveation_with_subsampled_images;
-    internal bool GetFoveationWithSubsampledImages()
+    public bool GetFoveationWithSubsampledImages()
     {
         var __mb = __mb_get_foveation_with_subsampled_images;
         if (__mb == 0)
@@ -7286,7 +7286,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_foveation_with_subsampled_images;
-    internal void SetFoveationWithSubsampledImages(bool enabled)
+    public void SetFoveationWithSubsampledImages(bool enabled)
     {
         var __mb = __mb_set_foveation_with_subsampled_images;
         if (__mb == 0)
@@ -7589,7 +7589,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_vrs_min_radius;
-    internal float GetVrsMinRadius()
+    public float GetVrsMinRadius()
     {
         var __mb = __mb_get_vrs_min_radius;
         if (__mb == 0)
@@ -7604,7 +7604,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_vrs_min_radius;
-    internal void SetVrsMinRadius(float radius)
+    public void SetVrsMinRadius(float radius)
     {
         var __mb = __mb_set_vrs_min_radius;
         if (__mb == 0)
@@ -7620,7 +7620,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_get_vrs_strength;
-    internal float GetVrsStrength()
+    public float GetVrsStrength()
     {
         var __mb = __mb_get_vrs_strength;
         if (__mb == 0)
@@ -7635,7 +7635,7 @@ public unsafe partial class OpenXRInterface : XRInterface
     }
 
     private static nint __mb_set_vrs_strength;
-    internal void SetVrsStrength(float strength)
+    public void SetVrsStrength(float strength)
     {
         var __mb = __mb_set_vrs_strength;
         if (__mb == 0)
@@ -7711,7 +7711,7 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_bounds_size;
-    internal void SetBoundsSize(Vector2 boundsSize)
+    public void SetBoundsSize(Vector2 boundsSize)
     {
         var __mb = __mb_set_bounds_size;
         if (__mb == 0)
@@ -7727,7 +7727,7 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_bounds_size;
-    internal Vector2 GetBoundsSize()
+    public Vector2 GetBoundsSize()
     {
         var __mb = __mb_get_bounds_size;
         if (__mb == 0)
@@ -7742,7 +7742,7 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_marker_type;
-    internal void SetMarkerType(OpenXRSpatialComponentMarkerList.MarkerType markerType)
+    public void SetMarkerType(OpenXRSpatialComponentMarkerList.MarkerType markerType)
     {
         var __mb = __mb_set_marker_type;
         if (__mb == 0)
@@ -7758,7 +7758,7 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_marker_type;
-    internal OpenXRSpatialComponentMarkerList.MarkerType GetMarkerType()
+    public OpenXRSpatialComponentMarkerList.MarkerType GetMarkerType()
     {
         var __mb = __mb_get_marker_type;
         if (__mb == 0)
@@ -7773,7 +7773,7 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_marker_id;
-    internal void SetMarkerId(uint markerId)
+    public void SetMarkerId(uint markerId)
     {
         var __mb = __mb_set_marker_id;
         if (__mb == 0)
@@ -7789,7 +7789,7 @@ public unsafe partial class OpenXRMarkerTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_marker_id;
-    internal uint GetMarkerId()
+    public uint GetMarkerId()
     {
         var __mb = __mb_get_marker_id;
         if (__mb == 0)
@@ -7871,7 +7871,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_bounds_size;
-    internal void SetBoundsSize(Vector2 boundsSize)
+    public void SetBoundsSize(Vector2 boundsSize)
     {
         var __mb = __mb_set_bounds_size;
         if (__mb == 0)
@@ -7887,7 +7887,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_bounds_size;
-    internal Vector2 GetBoundsSize()
+    public Vector2 GetBoundsSize()
     {
         var __mb = __mb_get_bounds_size;
         if (__mb == 0)
@@ -7902,7 +7902,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_plane_alignment;
-    internal void SetPlaneAlignment(OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment planeAlignment)
+    public void SetPlaneAlignment(OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment planeAlignment)
     {
         var __mb = __mb_set_plane_alignment;
         if (__mb == 0)
@@ -7918,7 +7918,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_plane_alignment;
-    internal OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment GetPlaneAlignment()
+    public OpenXRSpatialComponentPlaneAlignmentList.PlaneAlignment GetPlaneAlignment()
     {
         var __mb = __mb_get_plane_alignment;
         if (__mb == 0)
@@ -7933,7 +7933,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_set_plane_label;
-    internal void SetPlaneLabel(string planeLabel)
+    public void SetPlaneLabel(string planeLabel)
     {
         var __mb = __mb_set_plane_label;
         if (__mb == 0)
@@ -7950,7 +7950,7 @@ public unsafe partial class OpenXRPlaneTracker : OpenXRSpatialEntityTracker
     }
 
     private static nint __mb_get_plane_label;
-    internal string GetPlaneLabel()
+    public string GetPlaneLabel()
     {
         var __mb = __mb_get_plane_label;
         if (__mb == 0)
@@ -8087,7 +8087,7 @@ public unsafe partial class OpenXRRenderModel : Node3D
     }
 
     private static nint __mb_get_render_model;
-    internal Rid GetRenderModel()
+    public Rid GetRenderModel()
     {
         var __mb = __mb_get_render_model;
         if (__mb == 0)
@@ -8102,7 +8102,7 @@ public unsafe partial class OpenXRRenderModel : Node3D
     }
 
     private static nint __mb_set_render_model;
-    internal void SetRenderModel(Rid renderModel)
+    public void SetRenderModel(Rid renderModel)
     {
         var __mb = __mb_set_render_model;
         if (__mb == 0)
@@ -8430,7 +8430,7 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
     }
 
     private static nint __mb_get_tracker;
-    internal OpenXRRenderModelManager.RenderModelTracker GetTracker()
+    public OpenXRRenderModelManager.RenderModelTracker GetTracker()
     {
         var __mb = __mb_get_tracker;
         if (__mb == 0)
@@ -8445,7 +8445,7 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
     }
 
     private static nint __mb_set_tracker;
-    internal void SetTracker(OpenXRRenderModelManager.RenderModelTracker tracker)
+    public void SetTracker(OpenXRRenderModelManager.RenderModelTracker tracker)
     {
         var __mb = __mb_set_tracker;
         if (__mb == 0)
@@ -8461,7 +8461,7 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
     }
 
     private static nint __mb_get_make_local_to_pose;
-    internal string GetMakeLocalToPose()
+    public string GetMakeLocalToPose()
     {
         var __mb = __mb_get_make_local_to_pose;
         if (__mb == 0)
@@ -8476,7 +8476,7 @@ public unsafe partial class OpenXRRenderModelManager : Node3D
     }
 
     private static nint __mb_set_make_local_to_pose;
-    internal void SetMakeLocalToPose(string makeLocalToPose)
+    public void SetMakeLocalToPose(string makeLocalToPose)
     {
         var __mb = __mb_set_make_local_to_pose;
         if (__mb == 0)
@@ -8823,7 +8823,7 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAprilTag : OpenX
     }
 
     private static nint __mb_set_april_dict;
-    internal void SetAprilDict(OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict aprilDict)
+    public void SetAprilDict(OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict aprilDict)
     {
         var __mb = __mb_set_april_dict;
         if (__mb == 0)
@@ -8839,7 +8839,7 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAprilTag : OpenX
     }
 
     private static nint __mb_get_april_dict;
-    internal OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict GetAprilDict()
+    public OpenXRSpatialCapabilityConfigurationAprilTag.AprilTagDict GetAprilDict()
     {
         var __mb = __mb_get_april_dict;
         if (__mb == 0)
@@ -8905,7 +8905,7 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAruco : OpenXRSp
     }
 
     private static nint __mb_set_aruco_dict;
-    internal void SetArucoDict(OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum arucoDict)
+    public void SetArucoDict(OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum arucoDict)
     {
         var __mb = __mb_set_aruco_dict;
         if (__mb == 0)
@@ -8921,7 +8921,7 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationAruco : OpenXRSp
     }
 
     private static nint __mb_get_aruco_dict;
-    internal OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum GetArucoDict()
+    public OpenXRSpatialCapabilityConfigurationAruco.ArucoDictEnum GetArucoDict()
     {
         var __mb = __mb_get_aruco_dict;
         if (__mb == 0)
@@ -9035,7 +9035,7 @@ public unsafe partial class OpenXRSpatialCapabilityConfigurationPlaneTracking : 
     }
 
     private static nint __mb_supports_mesh_2d;
-    public bool SupportsMesh2d()
+    public bool SupportsMesh2D()
     {
         var __mb = __mb_supports_mesh_2d;
         if (__mb == 0)
@@ -10387,7 +10387,7 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_entity;
-    internal void SetEntity(Rid entity)
+    public void SetEntity(Rid entity)
     {
         var __mb = __mb_set_entity;
         if (__mb == 0)
@@ -10403,7 +10403,7 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_entity;
-    internal Rid GetEntity()
+    public Rid GetEntity()
     {
         var __mb = __mb_get_entity;
         if (__mb == 0)
@@ -10418,7 +10418,7 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
     }
 
     private static nint __mb_set_spatial_tracking_state;
-    internal void SetSpatialTrackingState(OpenXRSpatialEntityTracker.EntityTrackingState spatialTrackingState)
+    public void SetSpatialTrackingState(OpenXRSpatialEntityTracker.EntityTrackingState spatialTrackingState)
     {
         var __mb = __mb_set_spatial_tracking_state;
         if (__mb == 0)
@@ -10434,7 +10434,7 @@ public unsafe partial class OpenXRSpatialEntityTracker : XRPositionalTracker
     }
 
     private static nint __mb_get_spatial_tracking_state;
-    internal OpenXRSpatialEntityTracker.EntityTrackingState GetSpatialTrackingState()
+    public OpenXRSpatialEntityTracker.EntityTrackingState GetSpatialTrackingState()
     {
         var __mb = __mb_get_spatial_tracking_state;
         if (__mb == 0)
@@ -10757,7 +10757,7 @@ public unsafe partial class OpenXRStructureBase : RefCounted
     }
 
     private static nint __mb_set_next;
-    internal void SetNext(OpenXRStructureBase? entity)
+    public void SetNext(OpenXRStructureBase? entity)
     {
         var __mb = __mb_set_next;
         if (__mb == 0)
@@ -10773,7 +10773,7 @@ public unsafe partial class OpenXRStructureBase : RefCounted
     }
 
     private static nint __mb_get_next;
-    internal OpenXRStructureBase? GetNext()
+    public OpenXRStructureBase? GetNext()
     {
         var __mb = __mb_get_next;
         if (__mb == 0)
@@ -11079,7 +11079,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_search_bar_enabled;
-    internal void SetSearchBarEnabled(bool enabled)
+    public void SetSearchBarEnabled(bool enabled)
     {
         var __mb = __mb_set_search_bar_enabled;
         if (__mb == 0)
@@ -11095,7 +11095,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_search_bar_min_item_count;
-    internal void SetSearchBarMinItemCount(int count)
+    public void SetSearchBarMinItemCount(int count)
     {
         var __mb = __mb_set_search_bar_min_item_count;
         if (__mb == 0)
@@ -11111,7 +11111,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_get_search_bar_min_item_count;
-    internal int GetSearchBarMinItemCount()
+    public int GetSearchBarMinItemCount()
     {
         var __mb = __mb_get_search_bar_min_item_count;
         if (__mb == 0)
@@ -11126,7 +11126,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_search_bar_fuzzy_search_enabled;
-    internal void SetSearchBarFuzzySearchEnabled(bool enabled)
+    public void SetSearchBarFuzzySearchEnabled(bool enabled)
     {
         var __mb = __mb_set_search_bar_fuzzy_search_enabled;
         if (__mb == 0)
@@ -11142,7 +11142,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_is_search_bar_fuzzy_search_enabled;
-    internal bool IsSearchBarFuzzySearchEnabled()
+    public bool IsSearchBarFuzzySearchEnabled()
     {
         var __mb = __mb_is_search_bar_fuzzy_search_enabled;
         if (__mb == 0)
@@ -11157,7 +11157,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_search_bar_fuzzy_search_max_misses;
-    internal void SetSearchBarFuzzySearchMaxMisses(int maxMisses)
+    public void SetSearchBarFuzzySearchMaxMisses(int maxMisses)
     {
         var __mb = __mb_set_search_bar_fuzzy_search_max_misses;
         if (__mb == 0)
@@ -11173,7 +11173,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_get_search_bar_fuzzy_search_max_misses;
-    internal int GetSearchBarFuzzySearchMaxMisses()
+    public int GetSearchBarFuzzySearchMaxMisses()
     {
         var __mb = __mb_get_search_bar_fuzzy_search_max_misses;
         if (__mb == 0)
@@ -11350,7 +11350,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_is_search_bar_enabled;
-    internal bool IsSearchBarEnabled()
+    public bool IsSearchBarEnabled()
     {
         var __mb = __mb_is_search_bar_enabled;
         if (__mb == 0)
@@ -11411,7 +11411,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_get_selected;
-    internal int GetSelected()
+    public int GetSelected()
     {
         var __mb = __mb_get_selected;
         if (__mb == 0)
@@ -11500,7 +11500,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_item_count;
-    internal void SetItemCount(int count)
+    public void SetItemCount(int count)
     {
         var __mb = __mb_set_item_count;
         if (__mb == 0)
@@ -11516,7 +11516,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_get_item_count;
-    internal int GetItemCount()
+    public int GetItemCount()
     {
         var __mb = __mb_get_item_count;
         if (__mb == 0)
@@ -11564,7 +11564,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_fit_to_longest_item;
-    internal void SetFitToLongestItem(bool fit)
+    public void SetFitToLongestItem(bool fit)
     {
         var __mb = __mb_set_fit_to_longest_item;
         if (__mb == 0)
@@ -11580,7 +11580,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_is_fit_to_longest_item;
-    internal bool IsFitToLongestItem()
+    public bool IsFitToLongestItem()
     {
         var __mb = __mb_is_fit_to_longest_item;
         if (__mb == 0)
@@ -11595,7 +11595,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_set_allow_reselect;
-    internal void SetAllowReselect(bool allow)
+    public void SetAllowReselect(bool allow)
     {
         var __mb = __mb_set_allow_reselect;
         if (__mb == 0)
@@ -11611,7 +11611,7 @@ public unsafe partial class OptionButton : Button
     }
 
     private static nint __mb_get_allow_reselect;
-    internal bool GetAllowReselect()
+    public bool GetAllowReselect()
     {
         var __mb = __mb_get_allow_reselect;
         if (__mb == 0)

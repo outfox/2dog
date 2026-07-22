@@ -3,7 +3,6 @@
 // non-mono libgodot. This is what "swap the package reference" buys.
 
 using Godot;
-using Godot.NativeInterop;
 using twodog;
 using Engine = twodog.Engine; // same alias 2dog.engine users need (Godot.Engine exists there too)
 
@@ -26,7 +25,8 @@ void Check(bool ok, string what)
     if (!ok) failures++;
 }
 
-ClassRegistry.Register<Spinner>();
+// No ClassRegistry.Register call: Spinner registers via the source generator's
+// module initializer (this smoke validates auto-registration end-to-end).
 
 using (var engine = new Engine("gdext.host.demo", projectDir, "--headless"))
 {

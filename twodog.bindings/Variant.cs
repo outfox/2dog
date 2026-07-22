@@ -36,6 +36,9 @@ public struct Variant : IDisposable
     public static implicit operator Variant(Vector3 value) =>
         new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, in value));
 
+    public static implicit operator Variant(Vector4 value) =>
+        new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR4, in value));
+
     public static implicit operator Variant(Color value) =>
         new(Variants.FromStruct(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, in value));
 
@@ -72,6 +75,7 @@ public struct Variant : IDisposable
 
     public Vector2 AsVector2() => Variants.ToStruct<Vector2>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR2, in Native);
     public Vector3 AsVector3() => Variants.ToStruct<Vector3>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR3, in Native);
+    public Vector4 AsVector4() => Variants.ToStruct<Vector4>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_VECTOR4, in Native);
     public Color AsColor() => Variants.ToStruct<Color>(GDExtensionVariantType.GDEXTENSION_VARIANT_TYPE_COLOR, in Native);
 
     public GodotObject? AsGodotObject() =>

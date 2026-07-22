@@ -37,6 +37,16 @@ public unsafe partial class GodotObject : IDisposable
     /// </summary>
     internal virtual bool __CallVirtual(ulong nameSn, nint* args, nint ret) => false;
 
+    public const int NotificationPostinitialize = 0;
+    public const int NotificationPredelete = 1;
+
+    /// <summary>
+    /// GodotSharp compat: object notifications (NotificationReady, ...). Fired
+    /// for script-attached instances via the script instance's notification
+    /// callback; extension-class instances do not receive it yet.
+    /// </summary>
+    public virtual void _Notification(int what) { }
+
     /// <summary>True while the engine object exists (ObjectID-validated, never dangles).</summary>
     public bool IsValid => NativePtr != 0 && GdExtensionInterface.ObjectGetInstanceFromId(InstanceId) != 0;
 

@@ -36,7 +36,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
 
     private static async Task<bool> AwaitDied(ExportNode node)
     {
-        await node.ToSignal(node, "died");
+        await node.ToSignal(node, "Died");
         return true;
     }
 
@@ -64,7 +64,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
     }
 
     private static async Task<Variant[]> AwaitScored(ExportNode node) =>
-        await node.ToSignal(node, "scored");
+        await node.ToSignal(node, "Scored");
 
     [Fact]
     public void Await_AlreadyCompleted_ContinuesSynchronously()
@@ -74,7 +74,7 @@ public class SignalAwaiterTests(GodotBindingsFixture godot)
         try
         {
             // Emit BETWEEN creating the awaiter and awaiting it.
-            var awaiter = node.ToSignal(node, "died");
+            var awaiter = node.ToSignal(node, "Died");
             node.EmitSignalDied();
             Assert.True(awaiter.IsCompleted);
 

@@ -136,7 +136,7 @@ public unsafe partial class UDPServer : RefCounted
     }
 
     private static nint __mb_set_max_pending_connections;
-    internal void SetMaxPendingConnections(int maxPendingConnections)
+    public void SetMaxPendingConnections(int maxPendingConnections)
     {
         var __mb = __mb_set_max_pending_connections;
         if (__mb == 0)
@@ -152,7 +152,7 @@ public unsafe partial class UDPServer : RefCounted
     }
 
     private static nint __mb_get_max_pending_connections;
-    internal int GetMaxPendingConnections()
+    public int GetMaxPendingConnections()
     {
         var __mb = __mb_get_max_pending_connections;
         if (__mb == 0)
@@ -470,7 +470,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_set_discover_multicast_if;
-    internal void SetDiscoverMulticastIf(string mIf)
+    public void SetDiscoverMulticastIf(string mIf)
     {
         var __mb = __mb_set_discover_multicast_if;
         if (__mb == 0)
@@ -487,7 +487,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_get_discover_multicast_if;
-    internal string GetDiscoverMulticastIf()
+    public string GetDiscoverMulticastIf()
     {
         var __mb = __mb_get_discover_multicast_if;
         if (__mb == 0)
@@ -502,7 +502,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_set_discover_local_port;
-    internal void SetDiscoverLocalPort(int port)
+    public void SetDiscoverLocalPort(int port)
     {
         var __mb = __mb_set_discover_local_port;
         if (__mb == 0)
@@ -518,7 +518,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_get_discover_local_port;
-    internal int GetDiscoverLocalPort()
+    public int GetDiscoverLocalPort()
     {
         var __mb = __mb_get_discover_local_port;
         if (__mb == 0)
@@ -533,7 +533,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_set_discover_ipv6;
-    internal void SetDiscoverIpv6(bool ipv6)
+    public void SetDiscoverIpv6(bool ipv6)
     {
         var __mb = __mb_set_discover_ipv6;
         if (__mb == 0)
@@ -549,7 +549,7 @@ public unsafe partial class UPNP : RefCounted
     }
 
     private static nint __mb_is_discover_ipv6;
-    internal bool IsDiscoverIpv6()
+    public bool IsDiscoverIpv6()
     {
         var __mb = __mb_is_discover_ipv6;
         if (__mb == 0)
@@ -703,7 +703,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_set_description_url;
-    internal void SetDescriptionUrl(string url)
+    public void SetDescriptionUrl(string url)
     {
         var __mb = __mb_set_description_url;
         if (__mb == 0)
@@ -720,7 +720,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_get_description_url;
-    internal string GetDescriptionUrl()
+    public string GetDescriptionUrl()
     {
         var __mb = __mb_get_description_url;
         if (__mb == 0)
@@ -735,7 +735,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_set_service_type;
-    internal void SetServiceType(string type)
+    public void SetServiceType(string type)
     {
         var __mb = __mb_set_service_type;
         if (__mb == 0)
@@ -752,7 +752,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_get_service_type;
-    internal string GetServiceType()
+    public string GetServiceType()
     {
         var __mb = __mb_get_service_type;
         if (__mb == 0)
@@ -767,7 +767,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_set_igd_control_url;
-    internal void SetIgdControlUrl(string url)
+    public void SetIgdControlUrl(string url)
     {
         var __mb = __mb_set_igd_control_url;
         if (__mb == 0)
@@ -784,7 +784,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_get_igd_control_url;
-    internal string GetIgdControlUrl()
+    public string GetIgdControlUrl()
     {
         var __mb = __mb_get_igd_control_url;
         if (__mb == 0)
@@ -799,7 +799,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_set_igd_service_type;
-    internal void SetIgdServiceType(string type)
+    public void SetIgdServiceType(string type)
     {
         var __mb = __mb_set_igd_service_type;
         if (__mb == 0)
@@ -816,7 +816,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_get_igd_service_type;
-    internal string GetIgdServiceType()
+    public string GetIgdServiceType()
     {
         var __mb = __mb_get_igd_service_type;
         if (__mb == 0)
@@ -831,7 +831,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_set_igd_our_addr;
-    internal void SetIgdOurAddr(string addr)
+    public void SetIgdOurAddr(string addr)
     {
         var __mb = __mb_set_igd_our_addr;
         if (__mb == 0)
@@ -848,7 +848,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_get_igd_our_addr;
-    internal string GetIgdOurAddr()
+    public string GetIgdOurAddr()
     {
         var __mb = __mb_get_igd_our_addr;
         if (__mb == 0)
@@ -863,7 +863,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_set_igd_status;
-    internal void SetIgdStatus(UPNPDevice.IGDStatus status)
+    public void SetIgdStatus(UPNPDevice.IGDStatus status)
     {
         var __mb = __mb_set_igd_status;
         if (__mb == 0)
@@ -879,7 +879,7 @@ public unsafe partial class UPNPDevice : RefCounted
     }
 
     private static nint __mb_get_igd_status;
-    internal UPNPDevice.IGDStatus GetIgdStatus()
+    public UPNPDevice.IGDStatus GetIgdStatus()
     {
         var __mb = __mb_get_igd_status;
         if (__mb == 0)
@@ -1231,7 +1231,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_set_max_steps;
-    internal void SetMaxSteps(int maxSteps)
+    public void SetMaxSteps(int maxSteps)
     {
         var __mb = __mb_set_max_steps;
         if (__mb == 0)
@@ -1247,7 +1247,7 @@ public unsafe partial class UndoRedo : GodotObject
     }
 
     private static nint __mb_get_max_steps;
-    internal int GetMaxSteps()
+    public int GetMaxSteps()
     {
         var __mb = __mb_get_max_steps;
         if (__mb == 0)

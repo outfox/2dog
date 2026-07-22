@@ -10,6 +10,9 @@ public class TooltipControl : Control
     public override string _GetTooltip(Vector2 atPosition) => $"tip:{(int)atPosition.X}:{(int)atPosition.Y}";
 }
 
+// [SkipAutoRegister] keeps the generator away from this deliberately broken
+// hierarchy (the skip propagates to OrphanChild), preserving the manual-error test.
+[SkipAutoRegister]
 public class UnregisteredBase : Node;
 
 public class OrphanChild : UnregisteredBase;

@@ -108,7 +108,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_set_fix_alpha_border;
-    internal void SetFixAlphaBorder(bool fixAlphaBorder)
+    public void SetFixAlphaBorder(bool fixAlphaBorder)
     {
         var __mb = __mb_set_fix_alpha_border;
         if (__mb == 0)
@@ -124,7 +124,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_get_fix_alpha_border;
-    internal bool GetFixAlphaBorder()
+    public bool GetFixAlphaBorder()
     {
         var __mb = __mb_get_fix_alpha_border;
         if (__mb == 0)
@@ -139,7 +139,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_set_premult_alpha;
-    internal void SetPremultAlpha(bool premultAlpha)
+    public void SetPremultAlpha(bool premultAlpha)
     {
         var __mb = __mb_set_premult_alpha;
         if (__mb == 0)
@@ -155,7 +155,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_get_premult_alpha;
-    internal bool GetPremultAlpha()
+    public bool GetPremultAlpha()
     {
         var __mb = __mb_get_premult_alpha;
         if (__mb == 0)
@@ -170,7 +170,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_set_base_scale;
-    internal void SetBaseScale(float baseScale)
+    public void SetBaseScale(float baseScale)
     {
         var __mb = __mb_set_base_scale;
         if (__mb == 0)
@@ -186,7 +186,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_get_base_scale;
-    internal float GetBaseScale()
+    public float GetBaseScale()
     {
         var __mb = __mb_get_base_scale;
         if (__mb == 0)
@@ -201,7 +201,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_set_saturation;
-    internal void SetSaturation(float saturation)
+    public void SetSaturation(float saturation)
     {
         var __mb = __mb_set_saturation;
         if (__mb == 0)
@@ -217,7 +217,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_get_saturation;
-    internal float GetSaturation()
+    public float GetSaturation()
     {
         var __mb = __mb_get_saturation;
         if (__mb == 0)
@@ -232,7 +232,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_set_color_map;
-    internal void SetColorMap(Godot.Collections.Dictionary colorMap)
+    public void SetColorMap(Godot.Collections.Dictionary colorMap)
     {
         var __mb = __mb_set_color_map;
         if (__mb == 0)
@@ -248,7 +248,7 @@ public unsafe partial class DPITexture : Texture2D
     }
 
     private static nint __mb_get_color_map;
-    internal Godot.Collections.Dictionary GetColorMap()
+    public Godot.Collections.Dictionary GetColorMap()
     {
         var __mb = __mb_get_color_map;
         if (__mb == 0)
@@ -374,7 +374,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_set_length;
-    internal void SetLength(float length)
+    public void SetLength(float length)
     {
         var __mb = __mb_set_length;
         if (__mb == 0)
@@ -390,7 +390,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_get_length;
-    internal float GetLength()
+    public float GetLength()
     {
         var __mb = __mb_get_length;
         if (__mb == 0)
@@ -405,7 +405,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_set_rest_length;
-    internal void SetRestLength(float restLength)
+    public void SetRestLength(float restLength)
     {
         var __mb = __mb_set_rest_length;
         if (__mb == 0)
@@ -421,7 +421,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_get_rest_length;
-    internal float GetRestLength()
+    public float GetRestLength()
     {
         var __mb = __mb_get_rest_length;
         if (__mb == 0)
@@ -436,7 +436,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_set_stiffness;
-    internal void SetStiffness(float stiffness)
+    public void SetStiffness(float stiffness)
     {
         var __mb = __mb_set_stiffness;
         if (__mb == 0)
@@ -452,7 +452,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_get_stiffness;
-    internal float GetStiffness()
+    public float GetStiffness()
     {
         var __mb = __mb_get_stiffness;
         if (__mb == 0)
@@ -467,7 +467,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_set_damping;
-    internal void SetDamping(float damping)
+    public void SetDamping(float damping)
     {
         var __mb = __mb_set_damping;
         if (__mb == 0)
@@ -483,7 +483,7 @@ public unsafe partial class DampedSpringJoint2D : Joint2D
     }
 
     private static nint __mb_get_damping;
-    internal float GetDamping()
+    public float GetDamping()
     {
         var __mb = __mb_get_damping;
         if (__mb == 0)
@@ -607,7 +607,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_size;
-    internal void SetSize(Vector3 size)
+    public void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -623,7 +623,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_size;
-    internal Vector3 GetSize()
+    public Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -638,7 +638,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Decal.DecalTexture type, Texture2D? texture)
+    public void SetTexture(Decal.DecalTexture type, Texture2D? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -656,7 +656,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture(Decal.DecalTexture type)
+    public Texture2D? GetTexture(Decal.DecalTexture type)
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -674,7 +674,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_emission_energy;
-    internal void SetEmissionEnergy(float energy)
+    public void SetEmissionEnergy(float energy)
     {
         var __mb = __mb_set_emission_energy;
         if (__mb == 0)
@@ -690,7 +690,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_emission_energy;
-    internal float GetEmissionEnergy()
+    public float GetEmissionEnergy()
     {
         var __mb = __mb_get_emission_energy;
         if (__mb == 0)
@@ -705,7 +705,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_albedo_mix;
-    internal void SetAlbedoMix(float energy)
+    public void SetAlbedoMix(float energy)
     {
         var __mb = __mb_set_albedo_mix;
         if (__mb == 0)
@@ -721,7 +721,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_albedo_mix;
-    internal float GetAlbedoMix()
+    public float GetAlbedoMix()
     {
         var __mb = __mb_get_albedo_mix;
         if (__mb == 0)
@@ -736,7 +736,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_modulate;
-    internal void SetModulate(Color color)
+    public void SetModulate(Color color)
     {
         var __mb = __mb_set_modulate;
         if (__mb == 0)
@@ -752,7 +752,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_modulate;
-    internal Color GetModulate()
+    public Color GetModulate()
     {
         var __mb = __mb_get_modulate;
         if (__mb == 0)
@@ -767,7 +767,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_upper_fade;
-    internal void SetUpperFade(float fade)
+    public void SetUpperFade(float fade)
     {
         var __mb = __mb_set_upper_fade;
         if (__mb == 0)
@@ -783,7 +783,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_upper_fade;
-    internal float GetUpperFade()
+    public float GetUpperFade()
     {
         var __mb = __mb_get_upper_fade;
         if (__mb == 0)
@@ -798,7 +798,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_lower_fade;
-    internal void SetLowerFade(float fade)
+    public void SetLowerFade(float fade)
     {
         var __mb = __mb_set_lower_fade;
         if (__mb == 0)
@@ -814,7 +814,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_lower_fade;
-    internal float GetLowerFade()
+    public float GetLowerFade()
     {
         var __mb = __mb_get_lower_fade;
         if (__mb == 0)
@@ -829,7 +829,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_normal_fade;
-    internal void SetNormalFade(float fade)
+    public void SetNormalFade(float fade)
     {
         var __mb = __mb_set_normal_fade;
         if (__mb == 0)
@@ -845,7 +845,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_normal_fade;
-    internal float GetNormalFade()
+    public float GetNormalFade()
     {
         var __mb = __mb_get_normal_fade;
         if (__mb == 0)
@@ -860,7 +860,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_enable_distance_fade;
-    internal void SetEnableDistanceFade(bool enable)
+    public void SetEnableDistanceFade(bool enable)
     {
         var __mb = __mb_set_enable_distance_fade;
         if (__mb == 0)
@@ -876,7 +876,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_is_distance_fade_enabled;
-    internal bool IsDistanceFadeEnabled()
+    public bool IsDistanceFadeEnabled()
     {
         var __mb = __mb_is_distance_fade_enabled;
         if (__mb == 0)
@@ -891,7 +891,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_distance_fade_begin;
-    internal void SetDistanceFadeBegin(float distance)
+    public void SetDistanceFadeBegin(float distance)
     {
         var __mb = __mb_set_distance_fade_begin;
         if (__mb == 0)
@@ -907,7 +907,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_distance_fade_begin;
-    internal float GetDistanceFadeBegin()
+    public float GetDistanceFadeBegin()
     {
         var __mb = __mb_get_distance_fade_begin;
         if (__mb == 0)
@@ -922,7 +922,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_distance_fade_length;
-    internal void SetDistanceFadeLength(float distance)
+    public void SetDistanceFadeLength(float distance)
     {
         var __mb = __mb_set_distance_fade_length;
         if (__mb == 0)
@@ -938,7 +938,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_distance_fade_length;
-    internal float GetDistanceFadeLength()
+    public float GetDistanceFadeLength()
     {
         var __mb = __mb_get_distance_fade_length;
         if (__mb == 0)
@@ -953,7 +953,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_set_cull_mask;
-    internal void SetCullMask(uint mask)
+    public void SetCullMask(uint mask)
     {
         var __mb = __mb_set_cull_mask;
         if (__mb == 0)
@@ -969,7 +969,7 @@ public unsafe partial class Decal : VisualInstance3D
     }
 
     private static nint __mb_get_cull_mask;
-    internal uint GetCullMask()
+    public uint GetCullMask()
     {
         var __mb = __mb_get_cull_mask;
         if (__mb == 0)
@@ -1642,7 +1642,7 @@ public unsafe partial class DirAccess : RefCounted
     }
 
     private static nint __mb_set_include_navigational;
-    internal void SetIncludeNavigational(bool enable)
+    public void SetIncludeNavigational(bool enable)
     {
         var __mb = __mb_set_include_navigational;
         if (__mb == 0)
@@ -1658,7 +1658,7 @@ public unsafe partial class DirAccess : RefCounted
     }
 
     private static nint __mb_get_include_navigational;
-    internal bool GetIncludeNavigational()
+    public bool GetIncludeNavigational()
     {
         var __mb = __mb_get_include_navigational;
         if (__mb == 0)
@@ -1673,7 +1673,7 @@ public unsafe partial class DirAccess : RefCounted
     }
 
     private static nint __mb_set_include_hidden;
-    internal void SetIncludeHidden(bool enable)
+    public void SetIncludeHidden(bool enable)
     {
         var __mb = __mb_set_include_hidden;
         if (__mb == 0)
@@ -1689,7 +1689,7 @@ public unsafe partial class DirAccess : RefCounted
     }
 
     private static nint __mb_get_include_hidden;
-    internal bool GetIncludeHidden()
+    public bool GetIncludeHidden()
     {
         var __mb = __mb_get_include_hidden;
         if (__mb == 0)
@@ -1782,7 +1782,7 @@ public unsafe partial class DirectionalLight2D : Light2D
     }
 
     private static nint __mb_set_max_distance;
-    internal void SetMaxDistance(float pixels)
+    public void SetMaxDistance(float pixels)
     {
         var __mb = __mb_set_max_distance;
         if (__mb == 0)
@@ -1798,7 +1798,7 @@ public unsafe partial class DirectionalLight2D : Light2D
     }
 
     private static nint __mb_get_max_distance;
-    internal float GetMaxDistance()
+    public float GetMaxDistance()
     {
         var __mb = __mb_get_max_distance;
         if (__mb == 0)
@@ -1891,7 +1891,7 @@ public unsafe partial class DirectionalLight3D : Light3D
     }
 
     private static nint __mb_set_shadow_mode;
-    internal void SetShadowMode(DirectionalLight3D.ShadowMode mode)
+    public void SetShadowMode(DirectionalLight3D.ShadowMode mode)
     {
         var __mb = __mb_set_shadow_mode;
         if (__mb == 0)
@@ -1907,7 +1907,7 @@ public unsafe partial class DirectionalLight3D : Light3D
     }
 
     private static nint __mb_get_shadow_mode;
-    internal DirectionalLight3D.ShadowMode GetShadowMode()
+    public DirectionalLight3D.ShadowMode GetShadowMode()
     {
         var __mb = __mb_get_shadow_mode;
         if (__mb == 0)
@@ -1922,7 +1922,7 @@ public unsafe partial class DirectionalLight3D : Light3D
     }
 
     private static nint __mb_set_blend_splits;
-    internal void SetBlendSplits(bool enabled)
+    public void SetBlendSplits(bool enabled)
     {
         var __mb = __mb_set_blend_splits;
         if (__mb == 0)
@@ -1938,7 +1938,7 @@ public unsafe partial class DirectionalLight3D : Light3D
     }
 
     private static nint __mb_is_blend_splits_enabled;
-    internal bool IsBlendSplitsEnabled()
+    public bool IsBlendSplitsEnabled()
     {
         var __mb = __mb_is_blend_splits_enabled;
         if (__mb == 0)
@@ -1953,7 +1953,7 @@ public unsafe partial class DirectionalLight3D : Light3D
     }
 
     private static nint __mb_set_sky_mode;
-    internal void SetSkyMode(DirectionalLight3D.SkyModeEnum mode)
+    public void SetSkyMode(DirectionalLight3D.SkyModeEnum mode)
     {
         var __mb = __mb_set_sky_mode;
         if (__mb == 0)
@@ -1969,7 +1969,7 @@ public unsafe partial class DirectionalLight3D : Light3D
     }
 
     private static nint __mb_get_sky_mode;
-    internal DirectionalLight3D.SkyModeEnum GetSkyMode()
+    public DirectionalLight3D.SkyModeEnum GetSkyMode()
     {
         var __mb = __mb_get_sky_mode;
         if (__mb == 0)

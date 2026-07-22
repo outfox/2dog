@@ -63,7 +63,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_set_compression_level;
-    internal void SetCompressionLevel(int compressionLevel)
+    public void SetCompressionLevel(int compressionLevel)
     {
         var __mb = __mb_set_compression_level;
         if (__mb == 0)
@@ -79,7 +79,7 @@ public unsafe partial class ZIPPacker : RefCounted
     }
 
     private static nint __mb_get_compression_level;
-    internal int GetCompressionLevel()
+    public int GetCompressionLevel()
     {
         var __mb = __mb_get_compression_level;
         if (__mb == 0)

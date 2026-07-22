@@ -99,7 +99,7 @@ public unsafe partial class VehicleBody3D : RigidBody3D
     }
 
     private static nint __mb_set_engine_force;
-    internal void SetEngineForce(float engineForce)
+    public void SetEngineForce(float engineForce)
     {
         var __mb = __mb_set_engine_force;
         if (__mb == 0)
@@ -115,7 +115,7 @@ public unsafe partial class VehicleBody3D : RigidBody3D
     }
 
     private static nint __mb_get_engine_force;
-    internal float GetEngineForce()
+    public float GetEngineForce()
     {
         var __mb = __mb_get_engine_force;
         if (__mb == 0)
@@ -130,7 +130,7 @@ public unsafe partial class VehicleBody3D : RigidBody3D
     }
 
     private static nint __mb_set_brake;
-    internal void SetBrake(float brake)
+    public void SetBrake(float brake)
     {
         var __mb = __mb_set_brake;
         if (__mb == 0)
@@ -146,7 +146,7 @@ public unsafe partial class VehicleBody3D : RigidBody3D
     }
 
     private static nint __mb_get_brake;
-    internal float GetBrake()
+    public float GetBrake()
     {
         var __mb = __mb_get_brake;
         if (__mb == 0)
@@ -161,7 +161,7 @@ public unsafe partial class VehicleBody3D : RigidBody3D
     }
 
     private static nint __mb_set_steering;
-    internal void SetSteering(float steering)
+    public void SetSteering(float steering)
     {
         var __mb = __mb_set_steering;
         if (__mb == 0)
@@ -177,7 +177,7 @@ public unsafe partial class VehicleBody3D : RigidBody3D
     }
 
     private static nint __mb_get_steering;
-    internal float GetSteering()
+    public float GetSteering()
     {
         var __mb = __mb_get_steering;
         if (__mb == 0)
@@ -286,7 +286,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_radius;
-    internal void SetRadius(float length)
+    public void SetRadius(float length)
     {
         var __mb = __mb_set_radius;
         if (__mb == 0)
@@ -302,7 +302,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_radius;
-    internal float GetRadius()
+    public float GetRadius()
     {
         var __mb = __mb_get_radius;
         if (__mb == 0)
@@ -317,7 +317,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_suspension_rest_length;
-    internal void SetSuspensionRestLength(float length)
+    public void SetSuspensionRestLength(float length)
     {
         var __mb = __mb_set_suspension_rest_length;
         if (__mb == 0)
@@ -333,7 +333,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_suspension_rest_length;
-    internal float GetSuspensionRestLength()
+    public float GetSuspensionRestLength()
     {
         var __mb = __mb_get_suspension_rest_length;
         if (__mb == 0)
@@ -348,7 +348,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_suspension_travel;
-    internal void SetSuspensionTravel(float length)
+    public void SetSuspensionTravel(float length)
     {
         var __mb = __mb_set_suspension_travel;
         if (__mb == 0)
@@ -364,7 +364,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_suspension_travel;
-    internal float GetSuspensionTravel()
+    public float GetSuspensionTravel()
     {
         var __mb = __mb_get_suspension_travel;
         if (__mb == 0)
@@ -379,7 +379,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_suspension_stiffness;
-    internal void SetSuspensionStiffness(float length)
+    public void SetSuspensionStiffness(float length)
     {
         var __mb = __mb_set_suspension_stiffness;
         if (__mb == 0)
@@ -395,7 +395,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_suspension_stiffness;
-    internal float GetSuspensionStiffness()
+    public float GetSuspensionStiffness()
     {
         var __mb = __mb_get_suspension_stiffness;
         if (__mb == 0)
@@ -410,7 +410,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_suspension_max_force;
-    internal void SetSuspensionMaxForce(float length)
+    public void SetSuspensionMaxForce(float length)
     {
         var __mb = __mb_set_suspension_max_force;
         if (__mb == 0)
@@ -426,7 +426,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_suspension_max_force;
-    internal float GetSuspensionMaxForce()
+    public float GetSuspensionMaxForce()
     {
         var __mb = __mb_get_suspension_max_force;
         if (__mb == 0)
@@ -441,7 +441,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_damping_compression;
-    internal void SetDampingCompression(float length)
+    public void SetDampingCompression(float length)
     {
         var __mb = __mb_set_damping_compression;
         if (__mb == 0)
@@ -457,7 +457,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_damping_compression;
-    internal float GetDampingCompression()
+    public float GetDampingCompression()
     {
         var __mb = __mb_get_damping_compression;
         if (__mb == 0)
@@ -472,7 +472,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_damping_relaxation;
-    internal void SetDampingRelaxation(float length)
+    public void SetDampingRelaxation(float length)
     {
         var __mb = __mb_set_damping_relaxation;
         if (__mb == 0)
@@ -488,7 +488,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_damping_relaxation;
-    internal float GetDampingRelaxation()
+    public float GetDampingRelaxation()
     {
         var __mb = __mb_get_damping_relaxation;
         if (__mb == 0)
@@ -503,7 +503,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_use_as_traction;
-    internal void SetUseAsTraction(bool enable)
+    public void SetUseAsTraction(bool enable)
     {
         var __mb = __mb_set_use_as_traction;
         if (__mb == 0)
@@ -519,7 +519,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_is_used_as_traction;
-    internal bool IsUsedAsTraction()
+    public bool IsUsedAsTraction()
     {
         var __mb = __mb_is_used_as_traction;
         if (__mb == 0)
@@ -534,7 +534,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_use_as_steering;
-    internal void SetUseAsSteering(bool enable)
+    public void SetUseAsSteering(bool enable)
     {
         var __mb = __mb_set_use_as_steering;
         if (__mb == 0)
@@ -550,7 +550,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_is_used_as_steering;
-    internal bool IsUsedAsSteering()
+    public bool IsUsedAsSteering()
     {
         var __mb = __mb_is_used_as_steering;
         if (__mb == 0)
@@ -565,7 +565,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_friction_slip;
-    internal void SetFrictionSlip(float length)
+    public void SetFrictionSlip(float length)
     {
         var __mb = __mb_set_friction_slip;
         if (__mb == 0)
@@ -581,7 +581,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_friction_slip;
-    internal float GetFrictionSlip()
+    public float GetFrictionSlip()
     {
         var __mb = __mb_get_friction_slip;
         if (__mb == 0)
@@ -656,7 +656,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_roll_influence;
-    internal void SetRollInfluence(float rollInfluence)
+    public void SetRollInfluence(float rollInfluence)
     {
         var __mb = __mb_set_roll_influence;
         if (__mb == 0)
@@ -672,7 +672,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_roll_influence;
-    internal float GetRollInfluence()
+    public float GetRollInfluence()
     {
         var __mb = __mb_get_roll_influence;
         if (__mb == 0)
@@ -717,7 +717,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_engine_force;
-    internal void SetEngineForce(float engineForce)
+    public void SetEngineForce(float engineForce)
     {
         var __mb = __mb_set_engine_force;
         if (__mb == 0)
@@ -733,7 +733,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_engine_force;
-    internal float GetEngineForce()
+    public float GetEngineForce()
     {
         var __mb = __mb_get_engine_force;
         if (__mb == 0)
@@ -748,7 +748,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_brake;
-    internal void SetBrake(float brake)
+    public void SetBrake(float brake)
     {
         var __mb = __mb_set_brake;
         if (__mb == 0)
@@ -764,7 +764,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_brake;
-    internal float GetBrake()
+    public float GetBrake()
     {
         var __mb = __mb_get_brake;
         if (__mb == 0)
@@ -779,7 +779,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_set_steering;
-    internal void SetSteering(float steering)
+    public void SetSteering(float steering)
     {
         var __mb = __mb_set_steering;
         if (__mb == 0)
@@ -795,7 +795,7 @@ public unsafe partial class VehicleWheel3D : Node3D
     }
 
     private static nint __mb_get_steering;
-    internal float GetSteering()
+    public float GetSteering()
     {
         var __mb = __mb_get_steering;
         if (__mb == 0)
@@ -826,7 +826,7 @@ public unsafe partial class VideoStream : Resource
     }
 
     private static nint __mb_set_file;
-    internal void SetFile(string file)
+    public void SetFile(string file)
     {
         var __mb = __mb_set_file;
         if (__mb == 0)
@@ -843,7 +843,7 @@ public unsafe partial class VideoStream : Resource
     }
 
     private static nint __mb_get_file;
-    internal string GetFile()
+    public string GetFile()
     {
         var __mb = __mb_get_file;
         if (__mb == 0)
@@ -1119,7 +1119,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_stream;
-    internal void SetStream(VideoStream? stream)
+    public void SetStream(VideoStream? stream)
     {
         var __mb = __mb_set_stream;
         if (__mb == 0)
@@ -1135,7 +1135,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_stream;
-    internal VideoStream? GetStream()
+    public VideoStream? GetStream()
     {
         var __mb = __mb_get_stream;
         if (__mb == 0)
@@ -1191,7 +1191,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_paused;
-    internal void SetPaused(bool paused)
+    public void SetPaused(bool paused)
     {
         var __mb = __mb_set_paused;
         if (__mb == 0)
@@ -1207,7 +1207,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_is_paused;
-    internal bool IsPaused()
+    public bool IsPaused()
     {
         var __mb = __mb_is_paused;
         if (__mb == 0)
@@ -1222,7 +1222,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_loop;
-    internal void SetLoop(bool loop)
+    public void SetLoop(bool loop)
     {
         var __mb = __mb_set_loop;
         if (__mb == 0)
@@ -1238,7 +1238,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_has_loop;
-    internal bool HasLoop()
+    public bool HasLoop()
     {
         var __mb = __mb_has_loop;
         if (__mb == 0)
@@ -1253,7 +1253,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_volume;
-    internal void SetVolume(float volume)
+    public void SetVolume(float volume)
     {
         var __mb = __mb_set_volume;
         if (__mb == 0)
@@ -1269,7 +1269,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_volume;
-    internal float GetVolume()
+    public float GetVolume()
     {
         var __mb = __mb_get_volume;
         if (__mb == 0)
@@ -1284,7 +1284,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_volume_db;
-    internal void SetVolumeDb(float db)
+    public void SetVolumeDb(float db)
     {
         var __mb = __mb_set_volume_db;
         if (__mb == 0)
@@ -1300,7 +1300,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_volume_db;
-    internal float GetVolumeDb()
+    public float GetVolumeDb()
     {
         var __mb = __mb_get_volume_db;
         if (__mb == 0)
@@ -1315,7 +1315,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_speed_scale;
-    internal void SetSpeedScale(float speedScale)
+    public void SetSpeedScale(float speedScale)
     {
         var __mb = __mb_set_speed_scale;
         if (__mb == 0)
@@ -1331,7 +1331,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_speed_scale;
-    internal float GetSpeedScale()
+    public float GetSpeedScale()
     {
         var __mb = __mb_get_speed_scale;
         if (__mb == 0)
@@ -1346,7 +1346,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_audio_track;
-    internal void SetAudioTrack(int track)
+    public void SetAudioTrack(int track)
     {
         var __mb = __mb_set_audio_track;
         if (__mb == 0)
@@ -1362,7 +1362,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_audio_track;
-    internal int GetAudioTrack()
+    public int GetAudioTrack()
     {
         var __mb = __mb_get_audio_track;
         if (__mb == 0)
@@ -1407,7 +1407,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_stream_position;
-    internal void SetStreamPosition(double position)
+    public void SetStreamPosition(double position)
     {
         var __mb = __mb_set_stream_position;
         if (__mb == 0)
@@ -1423,7 +1423,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_stream_position;
-    internal double GetStreamPosition()
+    public double GetStreamPosition()
     {
         var __mb = __mb_get_stream_position;
         if (__mb == 0)
@@ -1438,7 +1438,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_autoplay;
-    internal void SetAutoplay(bool enabled)
+    public void SetAutoplay(bool enabled)
     {
         var __mb = __mb_set_autoplay;
         if (__mb == 0)
@@ -1454,7 +1454,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_has_autoplay;
-    internal bool HasAutoplay()
+    public bool HasAutoplay()
     {
         var __mb = __mb_has_autoplay;
         if (__mb == 0)
@@ -1469,7 +1469,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_expand;
-    internal void SetExpand(bool enable)
+    public void SetExpand(bool enable)
     {
         var __mb = __mb_set_expand;
         if (__mb == 0)
@@ -1485,7 +1485,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_has_expand;
-    internal bool HasExpand()
+    public bool HasExpand()
     {
         var __mb = __mb_has_expand;
         if (__mb == 0)
@@ -1500,7 +1500,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_buffering_msec;
-    internal void SetBufferingMsec(int msec)
+    public void SetBufferingMsec(int msec)
     {
         var __mb = __mb_set_buffering_msec;
         if (__mb == 0)
@@ -1516,7 +1516,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_buffering_msec;
-    internal int GetBufferingMsec()
+    public int GetBufferingMsec()
     {
         var __mb = __mb_get_buffering_msec;
         if (__mb == 0)
@@ -1531,7 +1531,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_set_bus;
-    internal void SetBus(StringName bus)
+    public void SetBus(StringName bus)
     {
         var __mb = __mb_set_bus;
         if (__mb == 0)
@@ -1547,7 +1547,7 @@ public unsafe partial class VideoStreamPlayer : Control
     }
 
     private static nint __mb_get_bus;
-    internal StringName GetBus()
+    public StringName GetBus()
     {
         var __mb = __mb_get_bus;
         if (__mb == 0)
@@ -1603,7 +1603,7 @@ public unsafe partial class Viewport : Node
         Max = 7,
     }
 
-    public enum Scaling3DMode : long
+    public enum Scaling3DModeEnum : long
     {
         Bilinear = 0,
         Fsr = 1,
@@ -1742,10 +1742,10 @@ public unsafe partial class Viewport : Node
         Max = 3,
     }
 
-    public bool Disable3d
+    public bool Disable3D
     {
-        get => Is3dDisabled();
-        set => SetDisable3d(value);
+        get => Is3DDisabled();
+        set => SetDisable3D(value);
     }
 
     public bool UseXr
@@ -1754,22 +1754,22 @@ public unsafe partial class Viewport : Node
         set => SetUseXr(value);
     }
 
-    public bool OwnWorld3d
+    public bool OwnWorld3D
     {
-        get => IsUsingOwnWorld3d();
-        set => SetUseOwnWorld3d(value);
+        get => IsUsingOwnWorld3D();
+        set => SetUseOwnWorld3D(value);
     }
 
-    public World3D? World3d
+    public World3D? World3D
     {
-        get => GetWorld3d();
-        set => SetWorld3d(value);
+        get => GetWorld3D();
+        set => SetWorld3D(value);
     }
 
-    public World2D? World2d
+    public World2D? World2D
     {
-        get => GetWorld2d();
-        set => SetWorld2d(value);
+        get => GetWorld2D();
+        set => SetWorld2D(value);
     }
 
     public bool TransparentBg
@@ -1784,28 +1784,28 @@ public unsafe partial class Viewport : Node
         set => SetHandleInputLocally(value);
     }
 
-    public bool Snap2dTransformsToPixel
+    public bool Snap2DTransformsToPixel
     {
-        get => IsSnap2dTransformsToPixelEnabled();
-        set => SetSnap2dTransformsToPixel(value);
+        get => IsSnap2DTransformsToPixelEnabled();
+        set => SetSnap2DTransformsToPixel(value);
     }
 
-    public bool Snap2dVerticesToPixel
+    public bool Snap2DVerticesToPixel
     {
-        get => IsSnap2dVerticesToPixelEnabled();
-        set => SetSnap2dVerticesToPixel(value);
+        get => IsSnap2DVerticesToPixelEnabled();
+        set => SetSnap2DVerticesToPixel(value);
     }
 
-    public Viewport.MSAA Msaa2d
+    public Viewport.MSAA Msaa2D
     {
-        get => GetMsaa2d();
-        set => SetMsaa2d(value);
+        get => GetMsaa2D();
+        set => SetMsaa2D(value);
     }
 
-    public Viewport.MSAA Msaa3d
+    public Viewport.MSAA Msaa3D
     {
-        get => GetMsaa3d();
-        set => SetMsaa3d(value);
+        get => GetMsaa3D();
+        set => SetMsaa3D(value);
     }
 
     public Viewport.ScreenSpaceAA ScreenSpaceAa
@@ -1844,22 +1844,22 @@ public unsafe partial class Viewport : Node
         set => SetDebugDraw(value);
     }
 
-    public bool UseHdr2d
+    public bool UseHdr2D
     {
-        get => IsUsingHdr2d();
-        set => SetUseHdr2d(value);
+        get => IsUsingHdr2D();
+        set => SetUseHdr2D(value);
     }
 
-    public Viewport.Scaling3DMode Scaling3dMode
+    public Viewport.Scaling3DModeEnum Scaling3DMode
     {
-        get => GetScaling3dMode();
-        set => SetScaling3dMode(value);
+        get => GetScaling3DMode();
+        set => SetScaling3DMode(value);
     }
 
-    public float Scaling3dScale
+    public float Scaling3DScale
     {
-        get => GetScaling3dScale();
-        set => SetScaling3dScale(value);
+        get => GetScaling3DScale();
+        set => SetScaling3DScale(value);
     }
 
     public float TextureMipmapBias
@@ -1910,16 +1910,16 @@ public unsafe partial class Viewport : Node
         set => SetDefaultCanvasItemTextureRepeat(value);
     }
 
-    public bool AudioListenerEnable2d
+    public bool AudioListenerEnable2D
     {
-        get => IsAudioListener2d();
-        set => SetAsAudioListener2d(value);
+        get => IsAudioListener2D();
+        set => SetAsAudioListener2D(value);
     }
 
-    public bool AudioListenerEnable3d
+    public bool AudioListenerEnable3D
     {
-        get => IsAudioListener3d();
-        set => SetAsAudioListener3d(value);
+        get => IsAudioListener3D();
+        set => SetAsAudioListener3D(value);
     }
 
     public bool PhysicsObjectPicking
@@ -2059,7 +2059,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_world_2d;
-    internal void SetWorld2d(World2D? world2d)
+    public void SetWorld2D(World2D? world2D)
     {
         var __mb = __mb_set_world_2d;
         if (__mb == 0)
@@ -2068,14 +2068,14 @@ public unsafe partial class Viewport : Node
             if (__mb == 0) throw new MissingMethodException("Viewport.set_world_2d is not available in this engine build.");
             __mb_set_world_2d = __mb;
         }
-        nint __a0 = world2d?.NativePtr ?? 0;
+        nint __a0 = world2D?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_world_2d;
-    internal World2D? GetWorld2d()
+    public World2D? GetWorld2D()
     {
         var __mb = __mb_get_world_2d;
         if (__mb == 0)
@@ -2090,7 +2090,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_find_world_2d;
-    public World2D? FindWorld2d()
+    public World2D? FindWorld2D()
     {
         var __mb = __mb_find_world_2d;
         if (__mb == 0)
@@ -2105,7 +2105,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_canvas_transform;
-    internal void SetCanvasTransform(Transform2D xform)
+    public void SetCanvasTransform(Transform2D xform)
     {
         var __mb = __mb_set_canvas_transform;
         if (__mb == 0)
@@ -2121,7 +2121,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_canvas_transform;
-    internal Transform2D GetCanvasTransform()
+    public Transform2D GetCanvasTransform()
     {
         var __mb = __mb_get_canvas_transform;
         if (__mb == 0)
@@ -2136,7 +2136,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_global_canvas_transform;
-    internal void SetGlobalCanvasTransform(Transform2D xform)
+    public void SetGlobalCanvasTransform(Transform2D xform)
     {
         var __mb = __mb_set_global_canvas_transform;
         if (__mb == 0)
@@ -2152,7 +2152,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_global_canvas_transform;
-    internal Transform2D GetGlobalCanvasTransform()
+    public Transform2D GetGlobalCanvasTransform()
     {
         var __mb = __mb_get_global_canvas_transform;
         if (__mb == 0)
@@ -2227,7 +2227,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_transparent_background;
-    internal void SetTransparentBackground(bool enable)
+    public void SetTransparentBackground(bool enable)
     {
         var __mb = __mb_set_transparent_background;
         if (__mb == 0)
@@ -2243,7 +2243,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_has_transparent_background;
-    internal bool HasTransparentBackground()
+    public bool HasTransparentBackground()
     {
         var __mb = __mb_has_transparent_background;
         if (__mb == 0)
@@ -2258,7 +2258,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_hdr_2d;
-    internal void SetUseHdr2d(bool enable)
+    public void SetUseHdr2D(bool enable)
     {
         var __mb = __mb_set_use_hdr_2d;
         if (__mb == 0)
@@ -2274,7 +2274,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_hdr_2d;
-    internal bool IsUsingHdr2d()
+    public bool IsUsingHdr2D()
     {
         var __mb = __mb_is_using_hdr_2d;
         if (__mb == 0)
@@ -2289,7 +2289,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_msaa_2d;
-    internal void SetMsaa2d(Viewport.MSAA msaa)
+    public void SetMsaa2D(Viewport.MSAA msaa)
     {
         var __mb = __mb_set_msaa_2d;
         if (__mb == 0)
@@ -2305,7 +2305,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_msaa_2d;
-    internal Viewport.MSAA GetMsaa2d()
+    public Viewport.MSAA GetMsaa2D()
     {
         var __mb = __mb_get_msaa_2d;
         if (__mb == 0)
@@ -2320,7 +2320,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_msaa_3d;
-    internal void SetMsaa3d(Viewport.MSAA msaa)
+    public void SetMsaa3D(Viewport.MSAA msaa)
     {
         var __mb = __mb_set_msaa_3d;
         if (__mb == 0)
@@ -2336,7 +2336,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_msaa_3d;
-    internal Viewport.MSAA GetMsaa3d()
+    public Viewport.MSAA GetMsaa3D()
     {
         var __mb = __mb_get_msaa_3d;
         if (__mb == 0)
@@ -2351,7 +2351,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_screen_space_aa;
-    internal void SetScreenSpaceAa(Viewport.ScreenSpaceAA screenSpaceAa)
+    public void SetScreenSpaceAa(Viewport.ScreenSpaceAA screenSpaceAa)
     {
         var __mb = __mb_set_screen_space_aa;
         if (__mb == 0)
@@ -2367,7 +2367,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_screen_space_aa;
-    internal Viewport.ScreenSpaceAA GetScreenSpaceAa()
+    public Viewport.ScreenSpaceAA GetScreenSpaceAa()
     {
         var __mb = __mb_get_screen_space_aa;
         if (__mb == 0)
@@ -2382,7 +2382,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_taa;
-    internal void SetUseTaa(bool enable)
+    public void SetUseTaa(bool enable)
     {
         var __mb = __mb_set_use_taa;
         if (__mb == 0)
@@ -2398,7 +2398,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_taa;
-    internal bool IsUsingTaa()
+    public bool IsUsingTaa()
     {
         var __mb = __mb_is_using_taa;
         if (__mb == 0)
@@ -2413,7 +2413,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_debanding;
-    internal void SetUseDebanding(bool enable)
+    public void SetUseDebanding(bool enable)
     {
         var __mb = __mb_set_use_debanding;
         if (__mb == 0)
@@ -2429,7 +2429,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_debanding;
-    internal bool IsUsingDebanding()
+    public bool IsUsingDebanding()
     {
         var __mb = __mb_is_using_debanding;
         if (__mb == 0)
@@ -2444,7 +2444,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_occlusion_culling;
-    internal void SetUseOcclusionCulling(bool enable)
+    public void SetUseOcclusionCulling(bool enable)
     {
         var __mb = __mb_set_use_occlusion_culling;
         if (__mb == 0)
@@ -2460,7 +2460,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_occlusion_culling;
-    internal bool IsUsingOcclusionCulling()
+    public bool IsUsingOcclusionCulling()
     {
         var __mb = __mb_is_using_occlusion_culling;
         if (__mb == 0)
@@ -2475,7 +2475,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_debug_draw;
-    internal void SetDebugDraw(Viewport.DebugDrawEnum debugDraw)
+    public void SetDebugDraw(Viewport.DebugDrawEnum debugDraw)
     {
         var __mb = __mb_set_debug_draw;
         if (__mb == 0)
@@ -2491,7 +2491,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_debug_draw;
-    internal Viewport.DebugDrawEnum GetDebugDraw()
+    public Viewport.DebugDrawEnum GetDebugDraw()
     {
         var __mb = __mb_get_debug_draw;
         if (__mb == 0)
@@ -2506,7 +2506,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_oversampling;
-    internal void SetUseOversampling(bool enable)
+    public void SetUseOversampling(bool enable)
     {
         var __mb = __mb_set_use_oversampling;
         if (__mb == 0)
@@ -2522,7 +2522,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_oversampling;
-    internal bool IsUsingOversampling()
+    public bool IsUsingOversampling()
     {
         var __mb = __mb_is_using_oversampling;
         if (__mb == 0)
@@ -2537,7 +2537,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_oversampling_override;
-    internal void SetOversamplingOverride(float oversampling)
+    public void SetOversamplingOverride(float oversampling)
     {
         var __mb = __mb_set_oversampling_override;
         if (__mb == 0)
@@ -2553,7 +2553,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_oversampling_override;
-    internal float GetOversamplingOverride()
+    public float GetOversamplingOverride()
     {
         var __mb = __mb_get_oversampling_override;
         if (__mb == 0)
@@ -2618,7 +2618,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_physics_object_picking;
-    internal void SetPhysicsObjectPicking(bool enable)
+    public void SetPhysicsObjectPicking(bool enable)
     {
         var __mb = __mb_set_physics_object_picking;
         if (__mb == 0)
@@ -2634,7 +2634,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_physics_object_picking;
-    internal bool GetPhysicsObjectPicking()
+    public bool GetPhysicsObjectPicking()
     {
         var __mb = __mb_get_physics_object_picking;
         if (__mb == 0)
@@ -2649,7 +2649,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_physics_object_picking_sort;
-    internal void SetPhysicsObjectPickingSort(bool enable)
+    public void SetPhysicsObjectPickingSort(bool enable)
     {
         var __mb = __mb_set_physics_object_picking_sort;
         if (__mb == 0)
@@ -2665,7 +2665,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_physics_object_picking_sort;
-    internal bool GetPhysicsObjectPickingSort()
+    public bool GetPhysicsObjectPickingSort()
     {
         var __mb = __mb_get_physics_object_picking_sort;
         if (__mb == 0)
@@ -2680,7 +2680,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_physics_object_picking_first_only;
-    internal void SetPhysicsObjectPickingFirstOnly(bool enable)
+    public void SetPhysicsObjectPickingFirstOnly(bool enable)
     {
         var __mb = __mb_set_physics_object_picking_first_only;
         if (__mb == 0)
@@ -2696,7 +2696,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_physics_object_picking_first_only;
-    internal bool GetPhysicsObjectPickingFirstOnly()
+    public bool GetPhysicsObjectPickingFirstOnly()
     {
         var __mb = __mb_get_physics_object_picking_first_only;
         if (__mb == 0)
@@ -2982,7 +2982,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_disable_input;
-    internal void SetDisableInput(bool disable)
+    public void SetDisableInput(bool disable)
     {
         var __mb = __mb_set_disable_input;
         if (__mb == 0)
@@ -2998,7 +2998,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_input_disabled;
-    internal bool IsInputDisabled()
+    public bool IsInputDisabled()
     {
         var __mb = __mb_is_input_disabled;
         if (__mb == 0)
@@ -3013,7 +3013,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_positional_shadow_atlas_size;
-    internal void SetPositionalShadowAtlasSize(int size)
+    public void SetPositionalShadowAtlasSize(int size)
     {
         var __mb = __mb_set_positional_shadow_atlas_size;
         if (__mb == 0)
@@ -3029,7 +3029,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_positional_shadow_atlas_size;
-    internal int GetPositionalShadowAtlasSize()
+    public int GetPositionalShadowAtlasSize()
     {
         var __mb = __mb_get_positional_shadow_atlas_size;
         if (__mb == 0)
@@ -3044,7 +3044,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_positional_shadow_atlas_16_bits;
-    internal void SetPositionalShadowAtlas16Bits(bool enable)
+    public void SetPositionalShadowAtlas16Bits(bool enable)
     {
         var __mb = __mb_set_positional_shadow_atlas_16_bits;
         if (__mb == 0)
@@ -3060,7 +3060,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_positional_shadow_atlas_16_bits;
-    internal bool GetPositionalShadowAtlas16Bits()
+    public bool GetPositionalShadowAtlas16Bits()
     {
         var __mb = __mb_get_positional_shadow_atlas_16_bits;
         if (__mb == 0)
@@ -3075,7 +3075,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_snap_controls_to_pixels;
-    internal void SetSnapControlsToPixels(bool enabled)
+    public void SetSnapControlsToPixels(bool enabled)
     {
         var __mb = __mb_set_snap_controls_to_pixels;
         if (__mb == 0)
@@ -3091,7 +3091,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_snap_controls_to_pixels_enabled;
-    internal bool IsSnapControlsToPixelsEnabled()
+    public bool IsSnapControlsToPixelsEnabled()
     {
         var __mb = __mb_is_snap_controls_to_pixels_enabled;
         if (__mb == 0)
@@ -3106,7 +3106,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_snap_2d_transforms_to_pixel;
-    internal void SetSnap2dTransformsToPixel(bool enabled)
+    public void SetSnap2DTransformsToPixel(bool enabled)
     {
         var __mb = __mb_set_snap_2d_transforms_to_pixel;
         if (__mb == 0)
@@ -3122,7 +3122,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_snap_2d_transforms_to_pixel_enabled;
-    internal bool IsSnap2dTransformsToPixelEnabled()
+    public bool IsSnap2DTransformsToPixelEnabled()
     {
         var __mb = __mb_is_snap_2d_transforms_to_pixel_enabled;
         if (__mb == 0)
@@ -3137,7 +3137,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_snap_2d_vertices_to_pixel;
-    internal void SetSnap2dVerticesToPixel(bool enabled)
+    public void SetSnap2DVerticesToPixel(bool enabled)
     {
         var __mb = __mb_set_snap_2d_vertices_to_pixel;
         if (__mb == 0)
@@ -3153,7 +3153,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_snap_2d_vertices_to_pixel_enabled;
-    internal bool IsSnap2dVerticesToPixelEnabled()
+    public bool IsSnap2DVerticesToPixelEnabled()
     {
         var __mb = __mb_is_snap_2d_vertices_to_pixel_enabled;
         if (__mb == 0)
@@ -3168,7 +3168,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_positional_shadow_atlas_quadrant_subdiv;
-    internal void SetPositionalShadowAtlasQuadrantSubdiv(int quadrant, Viewport.PositionalShadowAtlasQuadrantSubdiv subdiv)
+    public void SetPositionalShadowAtlasQuadrantSubdiv(int quadrant, Viewport.PositionalShadowAtlasQuadrantSubdiv subdiv)
     {
         var __mb = __mb_set_positional_shadow_atlas_quadrant_subdiv;
         if (__mb == 0)
@@ -3186,7 +3186,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_positional_shadow_atlas_quadrant_subdiv;
-    internal Viewport.PositionalShadowAtlasQuadrantSubdiv GetPositionalShadowAtlasQuadrantSubdiv(int quadrant)
+    public Viewport.PositionalShadowAtlasQuadrantSubdiv GetPositionalShadowAtlasQuadrantSubdiv(int quadrant)
     {
         var __mb = __mb_get_positional_shadow_atlas_quadrant_subdiv;
         if (__mb == 0)
@@ -3232,7 +3232,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_handle_input_locally;
-    internal void SetHandleInputLocally(bool enable)
+    public void SetHandleInputLocally(bool enable)
     {
         var __mb = __mb_set_handle_input_locally;
         if (__mb == 0)
@@ -3248,7 +3248,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_handling_input_locally;
-    internal bool IsHandlingInputLocally()
+    public bool IsHandlingInputLocally()
     {
         var __mb = __mb_is_handling_input_locally;
         if (__mb == 0)
@@ -3263,7 +3263,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_default_canvas_item_texture_filter;
-    internal void SetDefaultCanvasItemTextureFilter(Viewport.DefaultCanvasItemTextureFilter mode)
+    public void SetDefaultCanvasItemTextureFilter(Viewport.DefaultCanvasItemTextureFilter mode)
     {
         var __mb = __mb_set_default_canvas_item_texture_filter;
         if (__mb == 0)
@@ -3279,7 +3279,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_default_canvas_item_texture_filter;
-    internal Viewport.DefaultCanvasItemTextureFilter GetDefaultCanvasItemTextureFilter()
+    public Viewport.DefaultCanvasItemTextureFilter GetDefaultCanvasItemTextureFilter()
     {
         var __mb = __mb_get_default_canvas_item_texture_filter;
         if (__mb == 0)
@@ -3294,7 +3294,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_embedding_subwindows;
-    internal void SetEmbeddingSubwindows(bool enable)
+    public void SetEmbeddingSubwindows(bool enable)
     {
         var __mb = __mb_set_embedding_subwindows;
         if (__mb == 0)
@@ -3310,7 +3310,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_embedding_subwindows;
-    internal bool IsEmbeddingSubwindows()
+    public bool IsEmbeddingSubwindows()
     {
         var __mb = __mb_is_embedding_subwindows;
         if (__mb == 0)
@@ -3340,7 +3340,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_drag_threshold;
-    internal void SetDragThreshold(int threshold)
+    public void SetDragThreshold(int threshold)
     {
         var __mb = __mb_set_drag_threshold;
         if (__mb == 0)
@@ -3356,7 +3356,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_drag_threshold;
-    internal int GetDragThreshold()
+    public int GetDragThreshold()
     {
         var __mb = __mb_get_drag_threshold;
         if (__mb == 0)
@@ -3371,7 +3371,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_canvas_cull_mask;
-    internal void SetCanvasCullMask(uint mask)
+    public void SetCanvasCullMask(uint mask)
     {
         var __mb = __mb_set_canvas_cull_mask;
         if (__mb == 0)
@@ -3387,7 +3387,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_canvas_cull_mask;
-    internal uint GetCanvasCullMask()
+    public uint GetCanvasCullMask()
     {
         var __mb = __mb_get_canvas_cull_mask;
         if (__mb == 0)
@@ -3438,7 +3438,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_default_canvas_item_texture_repeat;
-    internal void SetDefaultCanvasItemTextureRepeat(Viewport.DefaultCanvasItemTextureRepeat mode)
+    public void SetDefaultCanvasItemTextureRepeat(Viewport.DefaultCanvasItemTextureRepeat mode)
     {
         var __mb = __mb_set_default_canvas_item_texture_repeat;
         if (__mb == 0)
@@ -3454,7 +3454,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_default_canvas_item_texture_repeat;
-    internal Viewport.DefaultCanvasItemTextureRepeat GetDefaultCanvasItemTextureRepeat()
+    public Viewport.DefaultCanvasItemTextureRepeat GetDefaultCanvasItemTextureRepeat()
     {
         var __mb = __mb_get_default_canvas_item_texture_repeat;
         if (__mb == 0)
@@ -3469,7 +3469,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_sdf_oversize;
-    internal void SetSdfOversize(Viewport.SDFOversize oversize)
+    public void SetSdfOversize(Viewport.SDFOversize oversize)
     {
         var __mb = __mb_set_sdf_oversize;
         if (__mb == 0)
@@ -3485,7 +3485,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_sdf_oversize;
-    internal Viewport.SDFOversize GetSdfOversize()
+    public Viewport.SDFOversize GetSdfOversize()
     {
         var __mb = __mb_get_sdf_oversize;
         if (__mb == 0)
@@ -3500,7 +3500,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_sdf_scale;
-    internal void SetSdfScale(Viewport.SDFScale scale)
+    public void SetSdfScale(Viewport.SDFScale scale)
     {
         var __mb = __mb_set_sdf_scale;
         if (__mb == 0)
@@ -3516,7 +3516,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_sdf_scale;
-    internal Viewport.SDFScale GetSdfScale()
+    public Viewport.SDFScale GetSdfScale()
     {
         var __mb = __mb_get_sdf_scale;
         if (__mb == 0)
@@ -3531,7 +3531,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_mesh_lod_threshold;
-    internal void SetMeshLodThreshold(float pixels)
+    public void SetMeshLodThreshold(float pixels)
     {
         var __mb = __mb_set_mesh_lod_threshold;
         if (__mb == 0)
@@ -3547,7 +3547,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_mesh_lod_threshold;
-    internal float GetMeshLodThreshold()
+    public float GetMeshLodThreshold()
     {
         var __mb = __mb_get_mesh_lod_threshold;
         if (__mb == 0)
@@ -3562,7 +3562,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_as_audio_listener_2d;
-    internal void SetAsAudioListener2d(bool enable)
+    public void SetAsAudioListener2D(bool enable)
     {
         var __mb = __mb_set_as_audio_listener_2d;
         if (__mb == 0)
@@ -3578,7 +3578,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_audio_listener_2d;
-    internal bool IsAudioListener2d()
+    public bool IsAudioListener2D()
     {
         var __mb = __mb_is_audio_listener_2d;
         if (__mb == 0)
@@ -3593,7 +3593,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_audio_listener_2d;
-    public AudioListener2D? GetAudioListener2d()
+    public AudioListener2D? GetAudioListener2D()
     {
         var __mb = __mb_get_audio_listener_2d;
         if (__mb == 0)
@@ -3608,7 +3608,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_camera_2d;
-    public Camera2D? GetCamera2d()
+    public Camera2D? GetCamera2D()
     {
         var __mb = __mb_get_camera_2d;
         if (__mb == 0)
@@ -3623,7 +3623,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_world_3d;
-    internal void SetWorld3d(World3D? world3d)
+    public void SetWorld3D(World3D? world3D)
     {
         var __mb = __mb_set_world_3d;
         if (__mb == 0)
@@ -3632,14 +3632,14 @@ public unsafe partial class Viewport : Node
             if (__mb == 0) throw new MissingMethodException("Viewport.set_world_3d is not available in this engine build.");
             __mb_set_world_3d = __mb;
         }
-        nint __a0 = world3d?.NativePtr ?? 0;
+        nint __a0 = world3D?.NativePtr ?? 0;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_world_3d;
-    internal World3D? GetWorld3d()
+    public World3D? GetWorld3D()
     {
         var __mb = __mb_get_world_3d;
         if (__mb == 0)
@@ -3654,7 +3654,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_find_world_3d;
-    public World3D? FindWorld3d()
+    public World3D? FindWorld3D()
     {
         var __mb = __mb_find_world_3d;
         if (__mb == 0)
@@ -3669,7 +3669,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_own_world_3d;
-    internal void SetUseOwnWorld3d(bool enable)
+    public void SetUseOwnWorld3D(bool enable)
     {
         var __mb = __mb_set_use_own_world_3d;
         if (__mb == 0)
@@ -3685,7 +3685,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_own_world_3d;
-    internal bool IsUsingOwnWorld3d()
+    public bool IsUsingOwnWorld3D()
     {
         var __mb = __mb_is_using_own_world_3d;
         if (__mb == 0)
@@ -3700,7 +3700,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_audio_listener_3d;
-    public AudioListener3D? GetAudioListener3d()
+    public AudioListener3D? GetAudioListener3D()
     {
         var __mb = __mb_get_audio_listener_3d;
         if (__mb == 0)
@@ -3715,7 +3715,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_camera_3d;
-    public Camera3D? GetCamera3d()
+    public Camera3D? GetCamera3D()
     {
         var __mb = __mb_get_camera_3d;
         if (__mb == 0)
@@ -3730,7 +3730,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_as_audio_listener_3d;
-    internal void SetAsAudioListener3d(bool enable)
+    public void SetAsAudioListener3D(bool enable)
     {
         var __mb = __mb_set_as_audio_listener_3d;
         if (__mb == 0)
@@ -3746,7 +3746,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_audio_listener_3d;
-    internal bool IsAudioListener3d()
+    public bool IsAudioListener3D()
     {
         var __mb = __mb_is_audio_listener_3d;
         if (__mb == 0)
@@ -3761,7 +3761,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_disable_3d;
-    internal void SetDisable3d(bool disable)
+    public void SetDisable3D(bool disable)
     {
         var __mb = __mb_set_disable_3d;
         if (__mb == 0)
@@ -3777,7 +3777,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_3d_disabled;
-    internal bool Is3dDisabled()
+    public bool Is3DDisabled()
     {
         var __mb = __mb_is_3d_disabled;
         if (__mb == 0)
@@ -3792,7 +3792,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_use_xr;
-    internal void SetUseXr(bool use)
+    public void SetUseXr(bool use)
     {
         var __mb = __mb_set_use_xr;
         if (__mb == 0)
@@ -3808,7 +3808,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_is_using_xr;
-    internal bool IsUsingXr()
+    public bool IsUsingXr()
     {
         var __mb = __mb_is_using_xr;
         if (__mb == 0)
@@ -3823,7 +3823,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_scaling_3d_mode;
-    internal void SetScaling3dMode(Viewport.Scaling3DMode scaling3dMode)
+    public void SetScaling3DMode(Viewport.Scaling3DModeEnum scaling3DMode)
     {
         var __mb = __mb_set_scaling_3d_mode;
         if (__mb == 0)
@@ -3832,14 +3832,14 @@ public unsafe partial class Viewport : Node
             if (__mb == 0) throw new MissingMethodException("Viewport.set_scaling_3d_mode is not available in this engine build.");
             __mb_set_scaling_3d_mode = __mb;
         }
-        long __a0 = (long)scaling3dMode;
+        long __a0 = (long)scaling3DMode;
         var __args = stackalloc nint[1];
         __args[0] = (nint)(&__a0);
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, (nint)__args, 0);
     }
 
     private static nint __mb_get_scaling_3d_mode;
-    internal Viewport.Scaling3DMode GetScaling3dMode()
+    public Viewport.Scaling3DModeEnum GetScaling3DMode()
     {
         var __mb = __mb_get_scaling_3d_mode;
         if (__mb == 0)
@@ -3850,11 +3850,11 @@ public unsafe partial class Viewport : Node
         }
         long __ret = 0;
         GdExtensionInterface.ObjectMethodBindPtrcall(__mb, NativePtr, 0, (nint)(&__ret));
-        return (Viewport.Scaling3DMode)__ret;
+        return (Viewport.Scaling3DModeEnum)__ret;
     }
 
     private static nint __mb_set_scaling_3d_scale;
-    internal void SetScaling3dScale(float scale)
+    public void SetScaling3DScale(float scale)
     {
         var __mb = __mb_set_scaling_3d_scale;
         if (__mb == 0)
@@ -3870,7 +3870,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_scaling_3d_scale;
-    internal float GetScaling3dScale()
+    public float GetScaling3DScale()
     {
         var __mb = __mb_get_scaling_3d_scale;
         if (__mb == 0)
@@ -3885,7 +3885,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_fsr_sharpness;
-    internal void SetFsrSharpness(float fsrSharpness)
+    public void SetFsrSharpness(float fsrSharpness)
     {
         var __mb = __mb_set_fsr_sharpness;
         if (__mb == 0)
@@ -3901,7 +3901,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_fsr_sharpness;
-    internal float GetFsrSharpness()
+    public float GetFsrSharpness()
     {
         var __mb = __mb_get_fsr_sharpness;
         if (__mb == 0)
@@ -3916,7 +3916,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_texture_mipmap_bias;
-    internal void SetTextureMipmapBias(float textureMipmapBias)
+    public void SetTextureMipmapBias(float textureMipmapBias)
     {
         var __mb = __mb_set_texture_mipmap_bias;
         if (__mb == 0)
@@ -3932,7 +3932,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_texture_mipmap_bias;
-    internal float GetTextureMipmapBias()
+    public float GetTextureMipmapBias()
     {
         var __mb = __mb_get_texture_mipmap_bias;
         if (__mb == 0)
@@ -3947,7 +3947,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_anisotropic_filtering_level;
-    internal void SetAnisotropicFilteringLevel(Viewport.AnisotropicFiltering anisotropicFilteringLevel)
+    public void SetAnisotropicFilteringLevel(Viewport.AnisotropicFiltering anisotropicFilteringLevel)
     {
         var __mb = __mb_set_anisotropic_filtering_level;
         if (__mb == 0)
@@ -3963,7 +3963,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_anisotropic_filtering_level;
-    internal Viewport.AnisotropicFiltering GetAnisotropicFilteringLevel()
+    public Viewport.AnisotropicFiltering GetAnisotropicFilteringLevel()
     {
         var __mb = __mb_get_anisotropic_filtering_level;
         if (__mb == 0)
@@ -3978,7 +3978,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_vrs_mode;
-    internal void SetVrsMode(Viewport.VRSMode mode)
+    public void SetVrsMode(Viewport.VRSMode mode)
     {
         var __mb = __mb_set_vrs_mode;
         if (__mb == 0)
@@ -3994,7 +3994,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_vrs_mode;
-    internal Viewport.VRSMode GetVrsMode()
+    public Viewport.VRSMode GetVrsMode()
     {
         var __mb = __mb_get_vrs_mode;
         if (__mb == 0)
@@ -4009,7 +4009,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_vrs_update_mode;
-    internal void SetVrsUpdateMode(Viewport.VRSUpdateMode mode)
+    public void SetVrsUpdateMode(Viewport.VRSUpdateMode mode)
     {
         var __mb = __mb_set_vrs_update_mode;
         if (__mb == 0)
@@ -4025,7 +4025,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_vrs_update_mode;
-    internal Viewport.VRSUpdateMode GetVrsUpdateMode()
+    public Viewport.VRSUpdateMode GetVrsUpdateMode()
     {
         var __mb = __mb_get_vrs_update_mode;
         if (__mb == 0)
@@ -4040,7 +4040,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_set_vrs_texture;
-    internal void SetVrsTexture(Texture2D? texture)
+    public void SetVrsTexture(Texture2D? texture)
     {
         var __mb = __mb_set_vrs_texture;
         if (__mb == 0)
@@ -4056,7 +4056,7 @@ public unsafe partial class Viewport : Node
     }
 
     private static nint __mb_get_vrs_texture;
-    internal Texture2D? GetVrsTexture()
+    public Texture2D? GetVrsTexture()
     {
         var __mb = __mb_get_vrs_texture;
         if (__mb == 0)
@@ -4087,7 +4087,7 @@ public unsafe partial class ViewportTexture : Texture2D
     }
 
     private static nint __mb_set_viewport_path_in_scene;
-    internal void SetViewportPathInScene(NodePath path)
+    public void SetViewportPathInScene(NodePath path)
     {
         var __mb = __mb_set_viewport_path_in_scene;
         if (__mb == 0)
@@ -4103,7 +4103,7 @@ public unsafe partial class ViewportTexture : Texture2D
     }
 
     private static nint __mb_get_viewport_path_in_scene;
-    internal NodePath GetViewportPathInScene()
+    public NodePath GetViewportPathInScene()
     {
         var __mb = __mb_get_viewport_path_in_scene;
         if (__mb == 0)
@@ -4247,7 +4247,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_joystick_mode;
-    internal void SetJoystickMode(VirtualJoystick.JoystickModeEnum mode)
+    public void SetJoystickMode(VirtualJoystick.JoystickModeEnum mode)
     {
         var __mb = __mb_set_joystick_mode;
         if (__mb == 0)
@@ -4263,7 +4263,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_joystick_mode;
-    internal VirtualJoystick.JoystickModeEnum GetJoystickMode()
+    public VirtualJoystick.JoystickModeEnum GetJoystickMode()
     {
         var __mb = __mb_get_joystick_mode;
         if (__mb == 0)
@@ -4278,7 +4278,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_joystick_size;
-    internal void SetJoystickSize(float size)
+    public void SetJoystickSize(float size)
     {
         var __mb = __mb_set_joystick_size;
         if (__mb == 0)
@@ -4294,7 +4294,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_joystick_size;
-    internal float GetJoystickSize()
+    public float GetJoystickSize()
     {
         var __mb = __mb_get_joystick_size;
         if (__mb == 0)
@@ -4309,7 +4309,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_tip_size;
-    internal void SetTipSize(float size)
+    public void SetTipSize(float size)
     {
         var __mb = __mb_set_tip_size;
         if (__mb == 0)
@@ -4325,7 +4325,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_tip_size;
-    internal float GetTipSize()
+    public float GetTipSize()
     {
         var __mb = __mb_get_tip_size;
         if (__mb == 0)
@@ -4340,7 +4340,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_deadzone_ratio;
-    internal void SetDeadzoneRatio(float ratio)
+    public void SetDeadzoneRatio(float ratio)
     {
         var __mb = __mb_set_deadzone_ratio;
         if (__mb == 0)
@@ -4356,7 +4356,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_deadzone_ratio;
-    internal float GetDeadzoneRatio()
+    public float GetDeadzoneRatio()
     {
         var __mb = __mb_get_deadzone_ratio;
         if (__mb == 0)
@@ -4371,7 +4371,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_clampzone_ratio;
-    internal void SetClampzoneRatio(float ratio)
+    public void SetClampzoneRatio(float ratio)
     {
         var __mb = __mb_set_clampzone_ratio;
         if (__mb == 0)
@@ -4387,7 +4387,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_clampzone_ratio;
-    internal float GetClampzoneRatio()
+    public float GetClampzoneRatio()
     {
         var __mb = __mb_get_clampzone_ratio;
         if (__mb == 0)
@@ -4402,7 +4402,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_initial_offset_ratio;
-    internal void SetInitialOffsetRatio(Vector2 ratio)
+    public void SetInitialOffsetRatio(Vector2 ratio)
     {
         var __mb = __mb_set_initial_offset_ratio;
         if (__mb == 0)
@@ -4418,7 +4418,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_initial_offset_ratio;
-    internal Vector2 GetInitialOffsetRatio()
+    public Vector2 GetInitialOffsetRatio()
     {
         var __mb = __mb_get_initial_offset_ratio;
         if (__mb == 0)
@@ -4433,7 +4433,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_action_left;
-    internal void SetActionLeft(StringName action)
+    public void SetActionLeft(StringName action)
     {
         var __mb = __mb_set_action_left;
         if (__mb == 0)
@@ -4449,7 +4449,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_action_left;
-    internal StringName GetActionLeft()
+    public StringName GetActionLeft()
     {
         var __mb = __mb_get_action_left;
         if (__mb == 0)
@@ -4464,7 +4464,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_action_right;
-    internal void SetActionRight(StringName action)
+    public void SetActionRight(StringName action)
     {
         var __mb = __mb_set_action_right;
         if (__mb == 0)
@@ -4480,7 +4480,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_action_right;
-    internal StringName GetActionRight()
+    public StringName GetActionRight()
     {
         var __mb = __mb_get_action_right;
         if (__mb == 0)
@@ -4495,7 +4495,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_action_up;
-    internal void SetActionUp(StringName action)
+    public void SetActionUp(StringName action)
     {
         var __mb = __mb_set_action_up;
         if (__mb == 0)
@@ -4511,7 +4511,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_action_up;
-    internal StringName GetActionUp()
+    public StringName GetActionUp()
     {
         var __mb = __mb_get_action_up;
         if (__mb == 0)
@@ -4526,7 +4526,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_action_down;
-    internal void SetActionDown(StringName action)
+    public void SetActionDown(StringName action)
     {
         var __mb = __mb_set_action_down;
         if (__mb == 0)
@@ -4542,7 +4542,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_action_down;
-    internal StringName GetActionDown()
+    public StringName GetActionDown()
     {
         var __mb = __mb_get_action_down;
         if (__mb == 0)
@@ -4557,7 +4557,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_set_visibility_mode;
-    internal void SetVisibilityMode(VirtualJoystick.VisibilityModeEnum mode)
+    public void SetVisibilityMode(VirtualJoystick.VisibilityModeEnum mode)
     {
         var __mb = __mb_set_visibility_mode;
         if (__mb == 0)
@@ -4573,7 +4573,7 @@ public unsafe partial class VirtualJoystick : Control
     }
 
     private static nint __mb_get_visibility_mode;
-    internal VirtualJoystick.VisibilityModeEnum GetVisibilityMode()
+    public VirtualJoystick.VisibilityModeEnum GetVisibilityMode()
     {
         var __mb = __mb_get_visibility_mode;
         if (__mb == 0)
@@ -4617,7 +4617,7 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
     }
 
     private static nint __mb_set_enable_mode;
-    internal void SetEnableMode(VisibleOnScreenEnabler2D.EnableModeEnum mode)
+    public void SetEnableMode(VisibleOnScreenEnabler2D.EnableModeEnum mode)
     {
         var __mb = __mb_set_enable_mode;
         if (__mb == 0)
@@ -4633,7 +4633,7 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
     }
 
     private static nint __mb_get_enable_mode;
-    internal VisibleOnScreenEnabler2D.EnableModeEnum GetEnableMode()
+    public VisibleOnScreenEnabler2D.EnableModeEnum GetEnableMode()
     {
         var __mb = __mb_get_enable_mode;
         if (__mb == 0)
@@ -4648,7 +4648,7 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
     }
 
     private static nint __mb_set_enable_node_path;
-    internal void SetEnableNodePath(NodePath path)
+    public void SetEnableNodePath(NodePath path)
     {
         var __mb = __mb_set_enable_node_path;
         if (__mb == 0)
@@ -4664,7 +4664,7 @@ public unsafe partial class VisibleOnScreenEnabler2D : VisibleOnScreenNotifier2D
     }
 
     private static nint __mb_get_enable_node_path;
-    internal NodePath GetEnableNodePath()
+    public NodePath GetEnableNodePath()
     {
         var __mb = __mb_get_enable_node_path;
         if (__mb == 0)
@@ -4708,7 +4708,7 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
     }
 
     private static nint __mb_set_enable_mode;
-    internal void SetEnableMode(VisibleOnScreenEnabler3D.EnableModeEnum mode)
+    public void SetEnableMode(VisibleOnScreenEnabler3D.EnableModeEnum mode)
     {
         var __mb = __mb_set_enable_mode;
         if (__mb == 0)
@@ -4724,7 +4724,7 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
     }
 
     private static nint __mb_get_enable_mode;
-    internal VisibleOnScreenEnabler3D.EnableModeEnum GetEnableMode()
+    public VisibleOnScreenEnabler3D.EnableModeEnum GetEnableMode()
     {
         var __mb = __mb_get_enable_mode;
         if (__mb == 0)
@@ -4739,7 +4739,7 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
     }
 
     private static nint __mb_set_enable_node_path;
-    internal void SetEnableNodePath(NodePath path)
+    public void SetEnableNodePath(NodePath path)
     {
         var __mb = __mb_set_enable_node_path;
         if (__mb == 0)
@@ -4755,7 +4755,7 @@ public unsafe partial class VisibleOnScreenEnabler3D : VisibleOnScreenNotifier3D
     }
 
     private static nint __mb_get_enable_node_path;
-    internal NodePath GetEnableNodePath()
+    public NodePath GetEnableNodePath()
     {
         var __mb = __mb_get_enable_node_path;
         if (__mb == 0)
@@ -4808,7 +4808,7 @@ public unsafe partial class VisibleOnScreenNotifier2D : Node2D
     }
 
     private static nint __mb_set_rect;
-    internal void SetRect(Rect2 rect)
+    public void SetRect(Rect2 rect)
     {
         var __mb = __mb_set_rect;
         if (__mb == 0)
@@ -4824,7 +4824,7 @@ public unsafe partial class VisibleOnScreenNotifier2D : Node2D
     }
 
     private static nint __mb_get_rect;
-    internal Rect2 GetRect()
+    public Rect2 GetRect()
     {
         var __mb = __mb_get_rect;
         if (__mb == 0)
@@ -4839,7 +4839,7 @@ public unsafe partial class VisibleOnScreenNotifier2D : Node2D
     }
 
     private static nint __mb_set_show_rect;
-    internal void SetShowRect(bool showRect)
+    public void SetShowRect(bool showRect)
     {
         var __mb = __mb_set_show_rect;
         if (__mb == 0)
@@ -4855,7 +4855,7 @@ public unsafe partial class VisibleOnScreenNotifier2D : Node2D
     }
 
     private static nint __mb_is_showing_rect;
-    internal bool IsShowingRect()
+    public bool IsShowingRect()
     {
         var __mb = __mb_is_showing_rect;
         if (__mb == 0)
@@ -4917,7 +4917,7 @@ public unsafe partial class VisibleOnScreenNotifier3D : VisualInstance3D
     }
 
     private static nint __mb_set_aabb;
-    internal void SetAabb(Aabb rect)
+    public void SetAabb(Aabb rect)
     {
         var __mb = __mb_set_aabb;
         if (__mb == 0)
@@ -5022,7 +5022,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_set_layer_mask;
-    internal void SetLayerMask(uint mask)
+    public void SetLayerMask(uint mask)
     {
         var __mb = __mb_set_layer_mask;
         if (__mb == 0)
@@ -5038,7 +5038,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_get_layer_mask;
-    internal uint GetLayerMask()
+    public uint GetLayerMask()
     {
         var __mb = __mb_get_layer_mask;
         if (__mb == 0)
@@ -5089,7 +5089,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_set_sorting_offset;
-    internal void SetSortingOffset(float offset)
+    public void SetSortingOffset(float offset)
     {
         var __mb = __mb_set_sorting_offset;
         if (__mb == 0)
@@ -5105,7 +5105,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_get_sorting_offset;
-    internal float GetSortingOffset()
+    public float GetSortingOffset()
     {
         var __mb = __mb_get_sorting_offset;
         if (__mb == 0)
@@ -5120,7 +5120,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_set_sorting_use_aabb_center;
-    internal void SetSortingUseAabbCenter(bool enabled)
+    public void SetSortingUseAabbCenter(bool enabled)
     {
         var __mb = __mb_set_sorting_use_aabb_center;
         if (__mb == 0)
@@ -5136,7 +5136,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_is_sorting_use_aabb_center;
-    internal bool IsSortingUseAabbCenter()
+    public bool IsSortingUseAabbCenter()
     {
         var __mb = __mb_is_sorting_use_aabb_center;
         if (__mb == 0)
@@ -5151,7 +5151,7 @@ public unsafe partial class VisualInstance3D : Node3D
     }
 
     private static nint __mb_get_aabb;
-    internal Aabb GetAabb()
+    public Aabb GetAabb()
     {
         var __mb = __mb_get_aabb;
         if (__mb == 0)
@@ -5644,7 +5644,7 @@ public unsafe partial class VisualShader : Shader
     }
 
     private static nint __mb_set_graph_offset;
-    internal void SetGraphOffset(Vector2 offset)
+    public void SetGraphOffset(Vector2 offset)
     {
         var __mb = __mb_set_graph_offset;
         if (__mb == 0)
@@ -5660,7 +5660,7 @@ public unsafe partial class VisualShader : Shader
     }
 
     private static nint __mb_get_graph_offset;
-    internal Vector2 GetGraphOffset()
+    public Vector2 GetGraphOffset()
     {
         var __mb = __mb_get_graph_offset;
         if (__mb == 0)
@@ -5730,7 +5730,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_set_output_port_for_preview;
-    internal void SetOutputPortForPreview(int port)
+    public void SetOutputPortForPreview(int port)
     {
         var __mb = __mb_set_output_port_for_preview;
         if (__mb == 0)
@@ -5746,7 +5746,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_get_output_port_for_preview;
-    internal int GetOutputPortForPreview()
+    public int GetOutputPortForPreview()
     {
         var __mb = __mb_get_output_port_for_preview;
         if (__mb == 0)
@@ -5828,7 +5828,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_set_default_input_values;
-    internal void SetDefaultInputValues(Godot.Collections.Array values)
+    public void SetDefaultInputValues(Godot.Collections.Array values)
     {
         var __mb = __mb_set_default_input_values;
         if (__mb == 0)
@@ -5844,7 +5844,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_get_default_input_values;
-    internal Godot.Collections.Array GetDefaultInputValues()
+    public Godot.Collections.Array GetDefaultInputValues()
     {
         var __mb = __mb_get_default_input_values;
         if (__mb == 0)
@@ -5859,7 +5859,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_set_frame;
-    internal void SetFrame(int frame)
+    public void SetFrame(int frame)
     {
         var __mb = __mb_set_frame;
         if (__mb == 0)
@@ -5875,7 +5875,7 @@ public unsafe partial class VisualShaderNode : Resource
     }
 
     private static nint __mb_get_frame;
-    internal int GetFrame()
+    public int GetFrame()
     {
         var __mb = __mb_get_frame;
         if (__mb == 0)
@@ -5921,7 +5921,7 @@ public unsafe partial class VisualShaderNodeBillboard : VisualShaderNode
     }
 
     private static nint __mb_set_billboard_type;
-    internal void SetBillboardType(VisualShaderNodeBillboard.BillboardTypeEnum billboardType)
+    public void SetBillboardType(VisualShaderNodeBillboard.BillboardTypeEnum billboardType)
     {
         var __mb = __mb_set_billboard_type;
         if (__mb == 0)
@@ -5937,7 +5937,7 @@ public unsafe partial class VisualShaderNodeBillboard : VisualShaderNode
     }
 
     private static nint __mb_get_billboard_type;
-    internal VisualShaderNodeBillboard.BillboardTypeEnum GetBillboardType()
+    public VisualShaderNodeBillboard.BillboardTypeEnum GetBillboardType()
     {
         var __mb = __mb_get_billboard_type;
         if (__mb == 0)
@@ -5952,7 +5952,7 @@ public unsafe partial class VisualShaderNodeBillboard : VisualShaderNode
     }
 
     private static nint __mb_set_keep_scale_enabled;
-    internal void SetKeepScaleEnabled(bool enabled)
+    public void SetKeepScaleEnabled(bool enabled)
     {
         var __mb = __mb_set_keep_scale_enabled;
         if (__mb == 0)
@@ -5968,7 +5968,7 @@ public unsafe partial class VisualShaderNodeBillboard : VisualShaderNode
     }
 
     private static nint __mb_is_keep_scale_enabled;
-    internal bool IsKeepScaleEnabled()
+    public bool IsKeepScaleEnabled()
     {
         var __mb = __mb_is_keep_scale_enabled;
         if (__mb == 0)
@@ -5999,7 +5999,7 @@ public unsafe partial class VisualShaderNodeBooleanConstant : VisualShaderNodeCo
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(bool constant)
+    public void SetConstant(bool constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -6015,7 +6015,7 @@ public unsafe partial class VisualShaderNodeBooleanConstant : VisualShaderNodeCo
     }
 
     private static nint __mb_get_constant;
-    internal bool GetConstant()
+    public bool GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -6052,7 +6052,7 @@ public unsafe partial class VisualShaderNodeBooleanParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -6068,7 +6068,7 @@ public unsafe partial class VisualShaderNodeBooleanParameter : VisualShaderNodeP
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -6083,7 +6083,7 @@ public unsafe partial class VisualShaderNodeBooleanParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(bool value)
+    public void SetDefaultValue(bool value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -6099,7 +6099,7 @@ public unsafe partial class VisualShaderNodeBooleanParameter : VisualShaderNodeP
     }
 
     private static nint __mb_get_default_value;
-    internal bool GetDefaultValue()
+    public bool GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -6141,7 +6141,7 @@ public unsafe partial class VisualShaderNodeClamp : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeClamp.OpTypeEnum opType)
+    public void SetOpType(VisualShaderNodeClamp.OpTypeEnum opType)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -6157,7 +6157,7 @@ public unsafe partial class VisualShaderNodeClamp : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeClamp.OpTypeEnum GetOpType()
+    public VisualShaderNodeClamp.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -6188,7 +6188,7 @@ public unsafe partial class VisualShaderNodeColorConstant : VisualShaderNodeCons
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(Color constant)
+    public void SetConstant(Color constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -6204,7 +6204,7 @@ public unsafe partial class VisualShaderNodeColorConstant : VisualShaderNodeCons
     }
 
     private static nint __mb_get_constant;
-    internal Color GetConstant()
+    public Color GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -6246,7 +6246,7 @@ public unsafe partial class VisualShaderNodeColorFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeColorFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeColorFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -6262,7 +6262,7 @@ public unsafe partial class VisualShaderNodeColorFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeColorFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeColorFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -6307,7 +6307,7 @@ public unsafe partial class VisualShaderNodeColorOp : VisualShaderNode
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeColorOp.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeColorOp.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -6323,7 +6323,7 @@ public unsafe partial class VisualShaderNodeColorOp : VisualShaderNode
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeColorOp.OperatorEnum GetOperator()
+    public VisualShaderNodeColorOp.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -6360,7 +6360,7 @@ public unsafe partial class VisualShaderNodeColorParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -6376,7 +6376,7 @@ public unsafe partial class VisualShaderNodeColorParameter : VisualShaderNodePar
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -6391,7 +6391,7 @@ public unsafe partial class VisualShaderNodeColorParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(Color value)
+    public void SetDefaultValue(Color value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -6407,7 +6407,7 @@ public unsafe partial class VisualShaderNodeColorParameter : VisualShaderNodePar
     }
 
     private static nint __mb_get_default_value;
-    internal Color GetDefaultValue()
+    public Color GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -6438,7 +6438,7 @@ public unsafe partial class VisualShaderNodeComment : VisualShaderNodeFrame
     }
 
     private static nint __mb_set_description;
-    internal void SetDescription(string description)
+    public void SetDescription(string description)
     {
         var __mb = __mb_set_description;
         if (__mb == 0)
@@ -6455,7 +6455,7 @@ public unsafe partial class VisualShaderNodeComment : VisualShaderNodeFrame
     }
 
     private static nint __mb_get_description;
-    internal string GetDescription()
+    public string GetDescription()
     {
         var __mb = __mb_get_description;
         if (__mb == 0)
@@ -6529,7 +6529,7 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
     }
 
     private static nint __mb_set_comparison_type;
-    internal void SetComparisonType(VisualShaderNodeCompare.ComparisonType type)
+    public void SetComparisonType(VisualShaderNodeCompare.ComparisonType type)
     {
         var __mb = __mb_set_comparison_type;
         if (__mb == 0)
@@ -6545,7 +6545,7 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
     }
 
     private static nint __mb_get_comparison_type;
-    internal VisualShaderNodeCompare.ComparisonType GetComparisonType()
+    public VisualShaderNodeCompare.ComparisonType GetComparisonType()
     {
         var __mb = __mb_get_comparison_type;
         if (__mb == 0)
@@ -6560,7 +6560,7 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeCompare.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeCompare.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -6576,7 +6576,7 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeCompare.FunctionEnum GetFunction()
+    public VisualShaderNodeCompare.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -6591,7 +6591,7 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
     }
 
     private static nint __mb_set_condition;
-    internal void SetCondition(VisualShaderNodeCompare.ConditionEnum condition)
+    public void SetCondition(VisualShaderNodeCompare.ConditionEnum condition)
     {
         var __mb = __mb_set_condition;
         if (__mb == 0)
@@ -6607,7 +6607,7 @@ public unsafe partial class VisualShaderNodeCompare : VisualShaderNode
     }
 
     private static nint __mb_get_condition;
-    internal VisualShaderNodeCompare.ConditionEnum GetCondition()
+    public VisualShaderNodeCompare.ConditionEnum GetCondition()
     {
         var __mb = __mb_get_condition;
         if (__mb == 0)
@@ -6670,7 +6670,7 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
     }
 
     private static nint __mb_set_source;
-    internal void SetSource(VisualShaderNodeCubemap.SourceEnum value)
+    public void SetSource(VisualShaderNodeCubemap.SourceEnum value)
     {
         var __mb = __mb_set_source;
         if (__mb == 0)
@@ -6686,7 +6686,7 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
     }
 
     private static nint __mb_get_source;
-    internal VisualShaderNodeCubemap.SourceEnum GetSource()
+    public VisualShaderNodeCubemap.SourceEnum GetSource()
     {
         var __mb = __mb_get_source;
         if (__mb == 0)
@@ -6701,7 +6701,7 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
     }
 
     private static nint __mb_set_cube_map;
-    internal void SetCubeMap(TextureLayered? value)
+    public void SetCubeMap(TextureLayered? value)
     {
         var __mb = __mb_set_cube_map;
         if (__mb == 0)
@@ -6717,7 +6717,7 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
     }
 
     private static nint __mb_get_cube_map;
-    internal TextureLayered? GetCubeMap()
+    public TextureLayered? GetCubeMap()
     {
         var __mb = __mb_get_cube_map;
         if (__mb == 0)
@@ -6732,7 +6732,7 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
     }
 
     private static nint __mb_set_texture_type;
-    internal void SetTextureType(VisualShaderNodeCubemap.TextureTypeEnum value)
+    public void SetTextureType(VisualShaderNodeCubemap.TextureTypeEnum value)
     {
         var __mb = __mb_set_texture_type;
         if (__mb == 0)
@@ -6748,7 +6748,7 @@ public unsafe partial class VisualShaderNodeCubemap : VisualShaderNode
     }
 
     private static nint __mb_get_texture_type;
-    internal VisualShaderNodeCubemap.TextureTypeEnum GetTextureType()
+    public VisualShaderNodeCubemap.TextureTypeEnum GetTextureType()
     {
         var __mb = __mb_get_texture_type;
         if (__mb == 0)
@@ -6789,7 +6789,7 @@ public unsafe partial class VisualShaderNodeCurveTexture : VisualShaderNodeResiz
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(CurveTexture? texture)
+    public void SetTexture(CurveTexture? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -6805,7 +6805,7 @@ public unsafe partial class VisualShaderNodeCurveTexture : VisualShaderNodeResiz
     }
 
     private static nint __mb_get_texture;
-    internal CurveTexture? GetTexture()
+    public CurveTexture? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -6836,7 +6836,7 @@ public unsafe partial class VisualShaderNodeCurveXYZTexture : VisualShaderNodeRe
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(CurveXYZTexture? texture)
+    public void SetTexture(CurveXYZTexture? texture)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -6852,7 +6852,7 @@ public unsafe partial class VisualShaderNodeCurveXYZTexture : VisualShaderNodeRe
     }
 
     private static nint __mb_get_texture;
-    internal CurveXYZTexture? GetTexture()
+    public CurveXYZTexture? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -7125,7 +7125,7 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeDerivativeFunc.OpTypeEnum type)
+    public void SetOpType(VisualShaderNodeDerivativeFunc.OpTypeEnum type)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -7141,7 +7141,7 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeDerivativeFunc.OpTypeEnum GetOpType()
+    public VisualShaderNodeDerivativeFunc.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -7156,7 +7156,7 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeDerivativeFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeDerivativeFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -7172,7 +7172,7 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeDerivativeFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeDerivativeFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -7187,7 +7187,7 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
     }
 
     private static nint __mb_set_precision;
-    internal void SetPrecision(VisualShaderNodeDerivativeFunc.PrecisionEnum precision)
+    public void SetPrecision(VisualShaderNodeDerivativeFunc.PrecisionEnum precision)
     {
         var __mb = __mb_set_precision;
         if (__mb == 0)
@@ -7203,7 +7203,7 @@ public unsafe partial class VisualShaderNodeDerivativeFunc : VisualShaderNode
     }
 
     private static nint __mb_get_precision;
-    internal VisualShaderNodeDerivativeFunc.PrecisionEnum GetPrecision()
+    public VisualShaderNodeDerivativeFunc.PrecisionEnum GetPrecision()
     {
         var __mb = __mb_get_precision;
         if (__mb == 0)
@@ -7264,7 +7264,7 @@ public unsafe partial class VisualShaderNodeExpression : VisualShaderNodeGroupBa
     }
 
     private static nint __mb_set_expression;
-    internal void SetExpression(string expression)
+    public void SetExpression(string expression)
     {
         var __mb = __mb_set_expression;
         if (__mb == 0)
@@ -7281,7 +7281,7 @@ public unsafe partial class VisualShaderNodeExpression : VisualShaderNodeGroupBa
     }
 
     private static nint __mb_get_expression;
-    internal string GetExpression()
+    public string GetExpression()
     {
         var __mb = __mb_get_expression;
         if (__mb == 0)
@@ -7322,7 +7322,7 @@ public unsafe partial class VisualShaderNodeFloatConstant : VisualShaderNodeCons
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(float constant)
+    public void SetConstant(float constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -7338,7 +7338,7 @@ public unsafe partial class VisualShaderNodeFloatConstant : VisualShaderNodeCons
     }
 
     private static nint __mb_get_constant;
-    internal float GetConstant()
+    public float GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -7406,7 +7406,7 @@ public unsafe partial class VisualShaderNodeFloatFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeFloatFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeFloatFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -7422,7 +7422,7 @@ public unsafe partial class VisualShaderNodeFloatFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeFloatFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeFloatFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -7468,7 +7468,7 @@ public unsafe partial class VisualShaderNodeFloatOp : VisualShaderNode
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeFloatOp.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeFloatOp.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -7484,7 +7484,7 @@ public unsafe partial class VisualShaderNodeFloatOp : VisualShaderNode
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeFloatOp.OperatorEnum GetOperator()
+    public VisualShaderNodeFloatOp.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -7553,7 +7553,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_hint;
-    internal void SetHint(VisualShaderNodeFloatParameter.HintEnum hint)
+    public void SetHint(VisualShaderNodeFloatParameter.HintEnum hint)
     {
         var __mb = __mb_set_hint;
         if (__mb == 0)
@@ -7569,7 +7569,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_get_hint;
-    internal VisualShaderNodeFloatParameter.HintEnum GetHint()
+    public VisualShaderNodeFloatParameter.HintEnum GetHint()
     {
         var __mb = __mb_get_hint;
         if (__mb == 0)
@@ -7584,7 +7584,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_min;
-    internal void SetMin(float value)
+    public void SetMin(float value)
     {
         var __mb = __mb_set_min;
         if (__mb == 0)
@@ -7600,7 +7600,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_get_min;
-    internal float GetMin()
+    public float GetMin()
     {
         var __mb = __mb_get_min;
         if (__mb == 0)
@@ -7615,7 +7615,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_max;
-    internal void SetMax(float value)
+    public void SetMax(float value)
     {
         var __mb = __mb_set_max;
         if (__mb == 0)
@@ -7631,7 +7631,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_get_max;
-    internal float GetMax()
+    public float GetMax()
     {
         var __mb = __mb_get_max;
         if (__mb == 0)
@@ -7646,7 +7646,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_step;
-    internal void SetStep(float value)
+    public void SetStep(float value)
     {
         var __mb = __mb_set_step;
         if (__mb == 0)
@@ -7662,7 +7662,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_get_step;
-    internal float GetStep()
+    public float GetStep()
     {
         var __mb = __mb_get_step;
         if (__mb == 0)
@@ -7677,7 +7677,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -7693,7 +7693,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -7708,7 +7708,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(float value)
+    public void SetDefaultValue(float value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -7724,7 +7724,7 @@ public unsafe partial class VisualShaderNodeFloatParameter : VisualShaderNodePar
     }
 
     private static nint __mb_get_default_value;
-    internal float GetDefaultValue()
+    public float GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -7779,7 +7779,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_set_title;
-    internal void SetTitle(string title)
+    public void SetTitle(string title)
     {
         var __mb = __mb_set_title;
         if (__mb == 0)
@@ -7796,7 +7796,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_get_title;
-    internal string GetTitle()
+    public string GetTitle()
     {
         var __mb = __mb_get_title;
         if (__mb == 0)
@@ -7811,7 +7811,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_set_tint_color_enabled;
-    internal void SetTintColorEnabled(bool enable)
+    public void SetTintColorEnabled(bool enable)
     {
         var __mb = __mb_set_tint_color_enabled;
         if (__mb == 0)
@@ -7827,7 +7827,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_is_tint_color_enabled;
-    internal bool IsTintColorEnabled()
+    public bool IsTintColorEnabled()
     {
         var __mb = __mb_is_tint_color_enabled;
         if (__mb == 0)
@@ -7842,7 +7842,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_set_tint_color;
-    internal void SetTintColor(Color color)
+    public void SetTintColor(Color color)
     {
         var __mb = __mb_set_tint_color;
         if (__mb == 0)
@@ -7858,7 +7858,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_get_tint_color;
-    internal Color GetTintColor()
+    public Color GetTintColor()
     {
         var __mb = __mb_get_tint_color;
         if (__mb == 0)
@@ -7873,7 +7873,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_set_autoshrink_enabled;
-    internal void SetAutoshrinkEnabled(bool enable)
+    public void SetAutoshrinkEnabled(bool enable)
     {
         var __mb = __mb_set_autoshrink_enabled;
         if (__mb == 0)
@@ -7889,7 +7889,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_is_autoshrink_enabled;
-    internal bool IsAutoshrinkEnabled()
+    public bool IsAutoshrinkEnabled()
     {
         var __mb = __mb_is_autoshrink_enabled;
         if (__mb == 0)
@@ -7936,7 +7936,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_set_attached_nodes;
-    internal void SetAttachedNodes(int[] attachedNodes)
+    public void SetAttachedNodes(int[] attachedNodes)
     {
         var __mb = __mb_set_attached_nodes;
         if (__mb == 0)
@@ -7953,7 +7953,7 @@ public unsafe partial class VisualShaderNodeFrame : VisualShaderNodeResizableBas
     }
 
     private static nint __mb_get_attached_nodes;
-    internal int[] GetAttachedNodes()
+    public int[] GetAttachedNodes()
     {
         var __mb = __mb_get_attached_nodes;
         if (__mb == 0)
@@ -8380,7 +8380,7 @@ public unsafe partial class VisualShaderNodeInput : VisualShaderNode
     }
 
     private static nint __mb_set_input_name;
-    internal void SetInputName(string name)
+    public void SetInputName(string name)
     {
         var __mb = __mb_set_input_name;
         if (__mb == 0)
@@ -8397,7 +8397,7 @@ public unsafe partial class VisualShaderNodeInput : VisualShaderNode
     }
 
     private static nint __mb_get_input_name;
-    internal string GetInputName()
+    public string GetInputName()
     {
         var __mb = __mb_get_input_name;
         if (__mb == 0)
@@ -8443,7 +8443,7 @@ public unsafe partial class VisualShaderNodeIntConstant : VisualShaderNodeConsta
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(int constant)
+    public void SetConstant(int constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -8459,7 +8459,7 @@ public unsafe partial class VisualShaderNodeIntConstant : VisualShaderNodeConsta
     }
 
     private static nint __mb_get_constant;
-    internal int GetConstant()
+    public int GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -8499,7 +8499,7 @@ public unsafe partial class VisualShaderNodeIntFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeIntFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeIntFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -8515,7 +8515,7 @@ public unsafe partial class VisualShaderNodeIntFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeIntFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeIntFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -8563,7 +8563,7 @@ public unsafe partial class VisualShaderNodeIntOp : VisualShaderNode
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeIntOp.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeIntOp.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -8579,7 +8579,7 @@ public unsafe partial class VisualShaderNodeIntOp : VisualShaderNode
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeIntOp.OperatorEnum GetOperator()
+    public VisualShaderNodeIntOp.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -8655,7 +8655,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_hint;
-    internal void SetHint(VisualShaderNodeIntParameter.HintEnum hint)
+    public void SetHint(VisualShaderNodeIntParameter.HintEnum hint)
     {
         var __mb = __mb_set_hint;
         if (__mb == 0)
@@ -8671,7 +8671,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_get_hint;
-    internal VisualShaderNodeIntParameter.HintEnum GetHint()
+    public VisualShaderNodeIntParameter.HintEnum GetHint()
     {
         var __mb = __mb_get_hint;
         if (__mb == 0)
@@ -8686,7 +8686,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_min;
-    internal void SetMin(int value)
+    public void SetMin(int value)
     {
         var __mb = __mb_set_min;
         if (__mb == 0)
@@ -8702,7 +8702,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_get_min;
-    internal int GetMin()
+    public int GetMin()
     {
         var __mb = __mb_get_min;
         if (__mb == 0)
@@ -8717,7 +8717,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_max;
-    internal void SetMax(int value)
+    public void SetMax(int value)
     {
         var __mb = __mb_set_max;
         if (__mb == 0)
@@ -8733,7 +8733,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_get_max;
-    internal int GetMax()
+    public int GetMax()
     {
         var __mb = __mb_get_max;
         if (__mb == 0)
@@ -8748,7 +8748,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_step;
-    internal void SetStep(int value)
+    public void SetStep(int value)
     {
         var __mb = __mb_set_step;
         if (__mb == 0)
@@ -8764,7 +8764,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_get_step;
-    internal int GetStep()
+    public int GetStep()
     {
         var __mb = __mb_get_step;
         if (__mb == 0)
@@ -8779,7 +8779,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_enum_names;
-    internal void SetEnumNames(string[] names)
+    public void SetEnumNames(string[] names)
     {
         var __mb = __mb_set_enum_names;
         if (__mb == 0)
@@ -8796,7 +8796,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_get_enum_names;
-    internal string[] GetEnumNames()
+    public string[] GetEnumNames()
     {
         var __mb = __mb_get_enum_names;
         if (__mb == 0)
@@ -8811,7 +8811,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -8827,7 +8827,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -8842,7 +8842,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(int value)
+    public void SetDefaultValue(int value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -8858,7 +8858,7 @@ public unsafe partial class VisualShaderNodeIntParameter : VisualShaderNodeParam
     }
 
     private static nint __mb_get_default_value;
-    internal int GetDefaultValue()
+    public int GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -8896,7 +8896,7 @@ public unsafe partial class VisualShaderNodeIs : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeIs.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeIs.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -8912,7 +8912,7 @@ public unsafe partial class VisualShaderNodeIs : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeIs.FunctionEnum GetFunction()
+    public VisualShaderNodeIs.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -8965,7 +8965,7 @@ public unsafe partial class VisualShaderNodeMix : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeMix.OpTypeEnum opType)
+    public void SetOpType(VisualShaderNodeMix.OpTypeEnum opType)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -8981,7 +8981,7 @@ public unsafe partial class VisualShaderNodeMix : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeMix.OpTypeEnum GetOpType()
+    public VisualShaderNodeMix.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -9021,7 +9021,7 @@ public unsafe partial class VisualShaderNodeMultiplyAdd : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeMultiplyAdd.OpTypeEnum type)
+    public void SetOpType(VisualShaderNodeMultiplyAdd.OpTypeEnum type)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -9037,7 +9037,7 @@ public unsafe partial class VisualShaderNodeMultiplyAdd : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeMultiplyAdd.OpTypeEnum GetOpType()
+    public VisualShaderNodeMultiplyAdd.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -9099,7 +9099,7 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
     }
 
     private static nint __mb_set_parameter_name;
-    internal void SetParameterName(string name)
+    public void SetParameterName(string name)
     {
         var __mb = __mb_set_parameter_name;
         if (__mb == 0)
@@ -9116,7 +9116,7 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
     }
 
     private static nint __mb_get_parameter_name;
-    internal string GetParameterName()
+    public string GetParameterName()
     {
         var __mb = __mb_get_parameter_name;
         if (__mb == 0)
@@ -9131,7 +9131,7 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
     }
 
     private static nint __mb_set_qualifier;
-    internal void SetQualifier(VisualShaderNodeParameter.QualifierEnum qualifier)
+    public void SetQualifier(VisualShaderNodeParameter.QualifierEnum qualifier)
     {
         var __mb = __mb_set_qualifier;
         if (__mb == 0)
@@ -9147,7 +9147,7 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
     }
 
     private static nint __mb_get_qualifier;
-    internal VisualShaderNodeParameter.QualifierEnum GetQualifier()
+    public VisualShaderNodeParameter.QualifierEnum GetQualifier()
     {
         var __mb = __mb_get_qualifier;
         if (__mb == 0)
@@ -9162,7 +9162,7 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
     }
 
     private static nint __mb_set_instance_index;
-    internal void SetInstanceIndex(int instanceIndex)
+    public void SetInstanceIndex(int instanceIndex)
     {
         var __mb = __mb_set_instance_index;
         if (__mb == 0)
@@ -9178,7 +9178,7 @@ public unsafe partial class VisualShaderNodeParameter : VisualShaderNode
     }
 
     private static nint __mb_get_instance_index;
-    internal int GetInstanceIndex()
+    public int GetInstanceIndex()
     {
         var __mb = __mb_get_instance_index;
         if (__mb == 0)
@@ -9209,7 +9209,7 @@ public unsafe partial class VisualShaderNodeParameterRef : VisualShaderNode
     }
 
     private static nint __mb_set_parameter_name;
-    internal void SetParameterName(string name)
+    public void SetParameterName(string name)
     {
         var __mb = __mb_set_parameter_name;
         if (__mb == 0)
@@ -9226,7 +9226,7 @@ public unsafe partial class VisualShaderNodeParameterRef : VisualShaderNode
     }
 
     private static nint __mb_get_parameter_name;
-    internal string GetParameterName()
+    public string GetParameterName()
     {
         var __mb = __mb_get_parameter_name;
         if (__mb == 0)
@@ -9265,7 +9265,7 @@ public unsafe partial class VisualShaderNodeParticleAccelerator : VisualShaderNo
     }
 
     private static nint __mb_set_mode;
-    internal void SetMode(VisualShaderNodeParticleAccelerator.ModeEnum mode)
+    public void SetMode(VisualShaderNodeParticleAccelerator.ModeEnum mode)
     {
         var __mb = __mb_set_mode;
         if (__mb == 0)
@@ -9281,7 +9281,7 @@ public unsafe partial class VisualShaderNodeParticleAccelerator : VisualShaderNo
     }
 
     private static nint __mb_get_mode;
-    internal VisualShaderNodeParticleAccelerator.ModeEnum GetMode()
+    public VisualShaderNodeParticleAccelerator.ModeEnum GetMode()
     {
         var __mb = __mb_get_mode;
         if (__mb == 0)
@@ -9341,7 +9341,7 @@ public unsafe partial class VisualShaderNodeParticleEmit : VisualShaderNode
     }
 
     private static nint __mb_set_flags;
-    internal void SetFlags(VisualShaderNodeParticleEmit.EmitFlags flags)
+    public void SetFlags(VisualShaderNodeParticleEmit.EmitFlags flags)
     {
         var __mb = __mb_set_flags;
         if (__mb == 0)
@@ -9357,7 +9357,7 @@ public unsafe partial class VisualShaderNodeParticleEmit : VisualShaderNode
     }
 
     private static nint __mb_get_flags;
-    internal VisualShaderNodeParticleEmit.EmitFlags GetFlags()
+    public VisualShaderNodeParticleEmit.EmitFlags GetFlags()
     {
         var __mb = __mb_get_flags;
         if (__mb == 0)
@@ -9376,14 +9376,14 @@ public unsafe partial class VisualShaderNodeParticleEmitter : VisualShaderNode
 {
     internal VisualShaderNodeParticleEmitter(nint ptr, bool rc) : base(ptr, rc) { }
 
-    public bool Mode2d
+    public bool Mode2D
     {
-        get => IsMode2d();
-        set => SetMode2d(value);
+        get => IsMode2D();
+        set => SetMode2D(value);
     }
 
     private static nint __mb_set_mode_2d;
-    internal void SetMode2d(bool enabled)
+    public void SetMode2D(bool enabled)
     {
         var __mb = __mb_set_mode_2d;
         if (__mb == 0)
@@ -9399,7 +9399,7 @@ public unsafe partial class VisualShaderNodeParticleEmitter : VisualShaderNode
     }
 
     private static nint __mb_is_mode_2d;
-    internal bool IsMode2d()
+    public bool IsMode2D()
     {
         var __mb = __mb_is_mode_2d;
         if (__mb == 0)
@@ -9442,7 +9442,7 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
     }
 
     private static nint __mb_set_mesh;
-    internal void SetMesh(Mesh? mesh)
+    public void SetMesh(Mesh? mesh)
     {
         var __mb = __mb_set_mesh;
         if (__mb == 0)
@@ -9458,7 +9458,7 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
     }
 
     private static nint __mb_get_mesh;
-    internal Mesh? GetMesh()
+    public Mesh? GetMesh()
     {
         var __mb = __mb_get_mesh;
         if (__mb == 0)
@@ -9473,7 +9473,7 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
     }
 
     private static nint __mb_set_use_all_surfaces;
-    internal void SetUseAllSurfaces(bool enabled)
+    public void SetUseAllSurfaces(bool enabled)
     {
         var __mb = __mb_set_use_all_surfaces;
         if (__mb == 0)
@@ -9489,7 +9489,7 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
     }
 
     private static nint __mb_is_use_all_surfaces;
-    internal bool IsUseAllSurfaces()
+    public bool IsUseAllSurfaces()
     {
         var __mb = __mb_is_use_all_surfaces;
         if (__mb == 0)
@@ -9504,7 +9504,7 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
     }
 
     private static nint __mb_set_surface_index;
-    internal void SetSurfaceIndex(int surfaceIndex)
+    public void SetSurfaceIndex(int surfaceIndex)
     {
         var __mb = __mb_set_surface_index;
         if (__mb == 0)
@@ -9520,7 +9520,7 @@ public unsafe partial class VisualShaderNodeParticleMeshEmitter : VisualShaderNo
     }
 
     private static nint __mb_get_surface_index;
-    internal int GetSurfaceIndex()
+    public int GetSurfaceIndex()
     {
         var __mb = __mb_get_surface_index;
         if (__mb == 0)
@@ -9551,7 +9551,7 @@ public unsafe partial class VisualShaderNodeParticleMultiplyByAxisAngle : Visual
     }
 
     private static nint __mb_set_degrees_mode;
-    internal void SetDegreesMode(bool enabled)
+    public void SetDegreesMode(bool enabled)
     {
         var __mb = __mb_set_degrees_mode;
         if (__mb == 0)
@@ -9567,7 +9567,7 @@ public unsafe partial class VisualShaderNodeParticleMultiplyByAxisAngle : Visual
     }
 
     private static nint __mb_is_degrees_mode;
-    internal bool IsDegreesMode()
+    public bool IsDegreesMode()
     {
         var __mb = __mb_is_degrees_mode;
         if (__mb == 0)
@@ -9617,7 +9617,7 @@ public unsafe partial class VisualShaderNodeParticleRandomness : VisualShaderNod
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeParticleRandomness.OpTypeEnum type)
+    public void SetOpType(VisualShaderNodeParticleRandomness.OpTypeEnum type)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -9633,7 +9633,7 @@ public unsafe partial class VisualShaderNodeParticleRandomness : VisualShaderNod
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeParticleRandomness.OpTypeEnum GetOpType()
+    public VisualShaderNodeParticleRandomness.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -9716,7 +9716,7 @@ public unsafe partial class VisualShaderNodeRemap : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeRemap.OpTypeEnum opType)
+    public void SetOpType(VisualShaderNodeRemap.OpTypeEnum opType)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -9732,7 +9732,7 @@ public unsafe partial class VisualShaderNodeRemap : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeRemap.OpTypeEnum GetOpType()
+    public VisualShaderNodeRemap.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -9759,7 +9759,7 @@ public unsafe partial class VisualShaderNodeReroute : VisualShaderNode
     public VisualShaderNode.PortType PortType => GetPortType();
 
     private static nint __mb_get_port_type;
-    internal VisualShaderNode.PortType GetPortType()
+    public VisualShaderNode.PortType GetPortType()
     {
         var __mb = __mb_get_port_type;
         if (__mb == 0)
@@ -9785,7 +9785,7 @@ public unsafe partial class VisualShaderNodeResizableBase : VisualShaderNode
     }
 
     private static nint __mb_set_size;
-    internal void SetSize(Vector2 size)
+    public void SetSize(Vector2 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -9801,7 +9801,7 @@ public unsafe partial class VisualShaderNodeResizableBase : VisualShaderNode
     }
 
     private static nint __mb_get_size;
-    internal Vector2 GetSize()
+    public Vector2 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -9864,7 +9864,7 @@ public unsafe partial class VisualShaderNodeSample3D : VisualShaderNode
     }
 
     private static nint __mb_set_source;
-    internal void SetSource(VisualShaderNodeSample3D.SourceEnum value)
+    public void SetSource(VisualShaderNodeSample3D.SourceEnum value)
     {
         var __mb = __mb_set_source;
         if (__mb == 0)
@@ -9880,7 +9880,7 @@ public unsafe partial class VisualShaderNodeSample3D : VisualShaderNode
     }
 
     private static nint __mb_get_source;
-    internal VisualShaderNodeSample3D.SourceEnum GetSource()
+    public VisualShaderNodeSample3D.SourceEnum GetSource()
     {
         var __mb = __mb_get_source;
         if (__mb == 0)
@@ -9943,7 +9943,7 @@ public unsafe partial class VisualShaderNodeSmoothStep : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeSmoothStep.OpTypeEnum opType)
+    public void SetOpType(VisualShaderNodeSmoothStep.OpTypeEnum opType)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -9959,7 +9959,7 @@ public unsafe partial class VisualShaderNodeSmoothStep : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeSmoothStep.OpTypeEnum GetOpType()
+    public VisualShaderNodeSmoothStep.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -10002,7 +10002,7 @@ public unsafe partial class VisualShaderNodeStep : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeStep.OpTypeEnum opType)
+    public void SetOpType(VisualShaderNodeStep.OpTypeEnum opType)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -10018,7 +10018,7 @@ public unsafe partial class VisualShaderNodeStep : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeStep.OpTypeEnum GetOpType()
+    public VisualShaderNodeStep.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -10062,7 +10062,7 @@ public unsafe partial class VisualShaderNodeSwitch : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeSwitch.OpTypeEnum type)
+    public void SetOpType(VisualShaderNodeSwitch.OpTypeEnum type)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -10078,7 +10078,7 @@ public unsafe partial class VisualShaderNodeSwitch : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeSwitch.OpTypeEnum GetOpType()
+    public VisualShaderNodeSwitch.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -10142,7 +10142,7 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
     }
 
     private static nint __mb_set_source;
-    internal void SetSource(VisualShaderNodeTexture.SourceEnum value)
+    public void SetSource(VisualShaderNodeTexture.SourceEnum value)
     {
         var __mb = __mb_set_source;
         if (__mb == 0)
@@ -10158,7 +10158,7 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
     }
 
     private static nint __mb_get_source;
-    internal VisualShaderNodeTexture.SourceEnum GetSource()
+    public VisualShaderNodeTexture.SourceEnum GetSource()
     {
         var __mb = __mb_get_source;
         if (__mb == 0)
@@ -10173,7 +10173,7 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture2D? value)
+    public void SetTexture(Texture2D? value)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -10189,7 +10189,7 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
     }
 
     private static nint __mb_get_texture;
-    internal Texture2D? GetTexture()
+    public Texture2D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -10204,7 +10204,7 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
     }
 
     private static nint __mb_set_texture_type;
-    internal void SetTextureType(VisualShaderNodeTexture.TextureTypeEnum value)
+    public void SetTextureType(VisualShaderNodeTexture.TextureTypeEnum value)
     {
         var __mb = __mb_set_texture_type;
         if (__mb == 0)
@@ -10220,7 +10220,7 @@ public unsafe partial class VisualShaderNodeTexture : VisualShaderNode
     }
 
     private static nint __mb_get_texture_type;
-    internal VisualShaderNodeTexture.TextureTypeEnum GetTextureType()
+    public VisualShaderNodeTexture.TextureTypeEnum GetTextureType()
     {
         var __mb = __mb_get_texture_type;
         if (__mb == 0)
@@ -10251,7 +10251,7 @@ public unsafe partial class VisualShaderNodeTexture2DArray : VisualShaderNodeSam
     }
 
     private static nint __mb_set_texture_array;
-    internal void SetTextureArray(TextureLayered? value)
+    public void SetTextureArray(TextureLayered? value)
     {
         var __mb = __mb_set_texture_array;
         if (__mb == 0)
@@ -10267,7 +10267,7 @@ public unsafe partial class VisualShaderNodeTexture2DArray : VisualShaderNodeSam
     }
 
     private static nint __mb_get_texture_array;
-    internal TextureLayered? GetTextureArray()
+    public TextureLayered? GetTextureArray()
     {
         var __mb = __mb_get_texture_array;
         if (__mb == 0)
@@ -10318,7 +10318,7 @@ public unsafe partial class VisualShaderNodeTexture3D : VisualShaderNodeSample3D
     }
 
     private static nint __mb_set_texture;
-    internal void SetTexture(Texture3D? value)
+    public void SetTexture(Texture3D? value)
     {
         var __mb = __mb_set_texture;
         if (__mb == 0)
@@ -10334,7 +10334,7 @@ public unsafe partial class VisualShaderNodeTexture3D : VisualShaderNodeSample3D
     }
 
     private static nint __mb_get_texture;
-    internal Texture3D? GetTexture()
+    public Texture3D? GetTexture()
     {
         var __mb = __mb_get_texture;
         if (__mb == 0)
@@ -10440,7 +10440,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_texture_type;
-    internal void SetTextureType(VisualShaderNodeTextureParameter.TextureTypeEnum type)
+    public void SetTextureType(VisualShaderNodeTextureParameter.TextureTypeEnum type)
     {
         var __mb = __mb_set_texture_type;
         if (__mb == 0)
@@ -10456,7 +10456,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_get_texture_type;
-    internal VisualShaderNodeTextureParameter.TextureTypeEnum GetTextureType()
+    public VisualShaderNodeTextureParameter.TextureTypeEnum GetTextureType()
     {
         var __mb = __mb_get_texture_type;
         if (__mb == 0)
@@ -10471,7 +10471,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_color_default;
-    internal void SetColorDefault(VisualShaderNodeTextureParameter.ColorDefaultEnum color)
+    public void SetColorDefault(VisualShaderNodeTextureParameter.ColorDefaultEnum color)
     {
         var __mb = __mb_set_color_default;
         if (__mb == 0)
@@ -10487,7 +10487,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_get_color_default;
-    internal VisualShaderNodeTextureParameter.ColorDefaultEnum GetColorDefault()
+    public VisualShaderNodeTextureParameter.ColorDefaultEnum GetColorDefault()
     {
         var __mb = __mb_get_color_default;
         if (__mb == 0)
@@ -10502,7 +10502,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_texture_filter;
-    internal void SetTextureFilter(VisualShaderNodeTextureParameter.TextureFilterEnum filter)
+    public void SetTextureFilter(VisualShaderNodeTextureParameter.TextureFilterEnum filter)
     {
         var __mb = __mb_set_texture_filter;
         if (__mb == 0)
@@ -10518,7 +10518,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_get_texture_filter;
-    internal VisualShaderNodeTextureParameter.TextureFilterEnum GetTextureFilter()
+    public VisualShaderNodeTextureParameter.TextureFilterEnum GetTextureFilter()
     {
         var __mb = __mb_get_texture_filter;
         if (__mb == 0)
@@ -10533,7 +10533,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_texture_repeat;
-    internal void SetTextureRepeat(VisualShaderNodeTextureParameter.TextureRepeatEnum repeat)
+    public void SetTextureRepeat(VisualShaderNodeTextureParameter.TextureRepeatEnum repeat)
     {
         var __mb = __mb_set_texture_repeat;
         if (__mb == 0)
@@ -10549,7 +10549,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_get_texture_repeat;
-    internal VisualShaderNodeTextureParameter.TextureRepeatEnum GetTextureRepeat()
+    public VisualShaderNodeTextureParameter.TextureRepeatEnum GetTextureRepeat()
     {
         var __mb = __mb_get_texture_repeat;
         if (__mb == 0)
@@ -10564,7 +10564,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_set_texture_source;
-    internal void SetTextureSource(VisualShaderNodeTextureParameter.TextureSourceEnum source)
+    public void SetTextureSource(VisualShaderNodeTextureParameter.TextureSourceEnum source)
     {
         var __mb = __mb_set_texture_source;
         if (__mb == 0)
@@ -10580,7 +10580,7 @@ public unsafe partial class VisualShaderNodeTextureParameter : VisualShaderNodeP
     }
 
     private static nint __mb_get_texture_source;
-    internal VisualShaderNodeTextureParameter.TextureSourceEnum GetTextureSource()
+    public VisualShaderNodeTextureParameter.TextureSourceEnum GetTextureSource()
     {
         var __mb = __mb_get_texture_source;
         if (__mb == 0)
@@ -10651,7 +10651,7 @@ public unsafe partial class VisualShaderNodeTransformConstant : VisualShaderNode
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(Transform3D constant)
+    public void SetConstant(Transform3D constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -10667,7 +10667,7 @@ public unsafe partial class VisualShaderNodeTransformConstant : VisualShaderNode
     }
 
     private static nint __mb_get_constant;
-    internal Transform3D GetConstant()
+    public Transform3D GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -10715,7 +10715,7 @@ public unsafe partial class VisualShaderNodeTransformFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeTransformFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeTransformFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -10731,7 +10731,7 @@ public unsafe partial class VisualShaderNodeTransformFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeTransformFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeTransformFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -10776,7 +10776,7 @@ public unsafe partial class VisualShaderNodeTransformOp : VisualShaderNode
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeTransformOp.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeTransformOp.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -10792,7 +10792,7 @@ public unsafe partial class VisualShaderNodeTransformOp : VisualShaderNode
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeTransformOp.OperatorEnum GetOperator()
+    public VisualShaderNodeTransformOp.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -10829,7 +10829,7 @@ public unsafe partial class VisualShaderNodeTransformParameter : VisualShaderNod
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -10845,7 +10845,7 @@ public unsafe partial class VisualShaderNodeTransformParameter : VisualShaderNod
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -10860,7 +10860,7 @@ public unsafe partial class VisualShaderNodeTransformParameter : VisualShaderNod
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(Transform3D value)
+    public void SetDefaultValue(Transform3D value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -10876,7 +10876,7 @@ public unsafe partial class VisualShaderNodeTransformParameter : VisualShaderNod
     }
 
     private static nint __mb_get_default_value;
-    internal Transform3D GetDefaultValue()
+    public Transform3D GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -10916,7 +10916,7 @@ public unsafe partial class VisualShaderNodeTransformVecMult : VisualShaderNode
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeTransformVecMult.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeTransformVecMult.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -10932,7 +10932,7 @@ public unsafe partial class VisualShaderNodeTransformVecMult : VisualShaderNode
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeTransformVecMult.OperatorEnum GetOperator()
+    public VisualShaderNodeTransformVecMult.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -10963,7 +10963,7 @@ public unsafe partial class VisualShaderNodeUIntConstant : VisualShaderNodeConst
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(int constant)
+    public void SetConstant(int constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -10979,7 +10979,7 @@ public unsafe partial class VisualShaderNodeUIntConstant : VisualShaderNodeConst
     }
 
     private static nint __mb_get_constant;
-    internal int GetConstant()
+    public int GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -11017,7 +11017,7 @@ public unsafe partial class VisualShaderNodeUIntFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeUIntFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeUIntFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -11033,7 +11033,7 @@ public unsafe partial class VisualShaderNodeUIntFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeUIntFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeUIntFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -11081,7 +11081,7 @@ public unsafe partial class VisualShaderNodeUIntOp : VisualShaderNode
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeUIntOp.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeUIntOp.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -11097,7 +11097,7 @@ public unsafe partial class VisualShaderNodeUIntOp : VisualShaderNode
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeUIntOp.OperatorEnum GetOperator()
+    public VisualShaderNodeUIntOp.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -11134,7 +11134,7 @@ public unsafe partial class VisualShaderNodeUIntParameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -11150,7 +11150,7 @@ public unsafe partial class VisualShaderNodeUIntParameter : VisualShaderNodePara
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -11165,7 +11165,7 @@ public unsafe partial class VisualShaderNodeUIntParameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(int value)
+    public void SetDefaultValue(int value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -11181,7 +11181,7 @@ public unsafe partial class VisualShaderNodeUIntParameter : VisualShaderNodePara
     }
 
     private static nint __mb_get_default_value;
-    internal int GetDefaultValue()
+    public int GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -11219,7 +11219,7 @@ public unsafe partial class VisualShaderNodeUVFunc : VisualShaderNode
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeUVFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeUVFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -11235,7 +11235,7 @@ public unsafe partial class VisualShaderNodeUVFunc : VisualShaderNode
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeUVFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeUVFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -11277,7 +11277,7 @@ public unsafe partial class VisualShaderNodeVarying : VisualShaderNode
     }
 
     private static nint __mb_set_varying_name;
-    internal void SetVaryingName(string name)
+    public void SetVaryingName(string name)
     {
         var __mb = __mb_set_varying_name;
         if (__mb == 0)
@@ -11294,7 +11294,7 @@ public unsafe partial class VisualShaderNodeVarying : VisualShaderNode
     }
 
     private static nint __mb_get_varying_name;
-    internal string GetVaryingName()
+    public string GetVaryingName()
     {
         var __mb = __mb_get_varying_name;
         if (__mb == 0)
@@ -11309,7 +11309,7 @@ public unsafe partial class VisualShaderNodeVarying : VisualShaderNode
     }
 
     private static nint __mb_set_varying_type;
-    internal void SetVaryingType(VisualShader.VaryingType type)
+    public void SetVaryingType(VisualShader.VaryingType type)
     {
         var __mb = __mb_set_varying_type;
         if (__mb == 0)
@@ -11325,7 +11325,7 @@ public unsafe partial class VisualShaderNodeVarying : VisualShaderNode
     }
 
     private static nint __mb_get_varying_type;
-    internal VisualShader.VaryingType GetVaryingType()
+    public VisualShader.VaryingType GetVaryingType()
     {
         var __mb = __mb_get_varying_type;
         if (__mb == 0)
@@ -11376,7 +11376,7 @@ public unsafe partial class VisualShaderNodeVec2Constant : VisualShaderNodeConst
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(Vector2 constant)
+    public void SetConstant(Vector2 constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -11392,7 +11392,7 @@ public unsafe partial class VisualShaderNodeVec2Constant : VisualShaderNodeConst
     }
 
     private static nint __mb_get_constant;
-    internal Vector2 GetConstant()
+    public Vector2 GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -11429,7 +11429,7 @@ public unsafe partial class VisualShaderNodeVec2Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -11445,7 +11445,7 @@ public unsafe partial class VisualShaderNodeVec2Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -11460,7 +11460,7 @@ public unsafe partial class VisualShaderNodeVec2Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(Vector2 value)
+    public void SetDefaultValue(Vector2 value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -11476,7 +11476,7 @@ public unsafe partial class VisualShaderNodeVec2Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_get_default_value;
-    internal Vector2 GetDefaultValue()
+    public Vector2 GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -11507,7 +11507,7 @@ public unsafe partial class VisualShaderNodeVec3Constant : VisualShaderNodeConst
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(Vector3 constant)
+    public void SetConstant(Vector3 constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -11523,7 +11523,7 @@ public unsafe partial class VisualShaderNodeVec3Constant : VisualShaderNodeConst
     }
 
     private static nint __mb_get_constant;
-    internal Vector3 GetConstant()
+    public Vector3 GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -11560,7 +11560,7 @@ public unsafe partial class VisualShaderNodeVec3Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -11576,7 +11576,7 @@ public unsafe partial class VisualShaderNodeVec3Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -11591,7 +11591,7 @@ public unsafe partial class VisualShaderNodeVec3Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(Vector3 value)
+    public void SetDefaultValue(Vector3 value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -11607,7 +11607,7 @@ public unsafe partial class VisualShaderNodeVec3Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_get_default_value;
-    internal Vector3 GetDefaultValue()
+    public Vector3 GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -11638,7 +11638,7 @@ public unsafe partial class VisualShaderNodeVec4Constant : VisualShaderNodeConst
     }
 
     private static nint __mb_set_constant;
-    internal void SetConstant(Quaternion constant)
+    public void SetConstant(Quaternion constant)
     {
         var __mb = __mb_set_constant;
         if (__mb == 0)
@@ -11654,7 +11654,7 @@ public unsafe partial class VisualShaderNodeVec4Constant : VisualShaderNodeConst
     }
 
     private static nint __mb_get_constant;
-    internal Quaternion GetConstant()
+    public Quaternion GetConstant()
     {
         var __mb = __mb_get_constant;
         if (__mb == 0)
@@ -11691,7 +11691,7 @@ public unsafe partial class VisualShaderNodeVec4Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value_enabled;
-    internal void SetDefaultValueEnabled(bool enabled)
+    public void SetDefaultValueEnabled(bool enabled)
     {
         var __mb = __mb_set_default_value_enabled;
         if (__mb == 0)
@@ -11707,7 +11707,7 @@ public unsafe partial class VisualShaderNodeVec4Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_is_default_value_enabled;
-    internal bool IsDefaultValueEnabled()
+    public bool IsDefaultValueEnabled()
     {
         var __mb = __mb_is_default_value_enabled;
         if (__mb == 0)
@@ -11722,7 +11722,7 @@ public unsafe partial class VisualShaderNodeVec4Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_set_default_value;
-    internal void SetDefaultValue(Vector4 value)
+    public void SetDefaultValue(Vector4 value)
     {
         var __mb = __mb_set_default_value;
         if (__mb == 0)
@@ -11738,7 +11738,7 @@ public unsafe partial class VisualShaderNodeVec4Parameter : VisualShaderNodePara
     }
 
     private static nint __mb_get_default_value;
-    internal Vector4 GetDefaultValue()
+    public Vector4 GetDefaultValue()
     {
         var __mb = __mb_get_default_value;
         if (__mb == 0)
@@ -11772,7 +11772,7 @@ public unsafe partial class VisualShaderNodeVectorBase : VisualShaderNode
     }
 
     private static nint __mb_set_op_type;
-    internal void SetOpType(VisualShaderNodeVectorBase.OpTypeEnum type)
+    public void SetOpType(VisualShaderNodeVectorBase.OpTypeEnum type)
     {
         var __mb = __mb_set_op_type;
         if (__mb == 0)
@@ -11788,7 +11788,7 @@ public unsafe partial class VisualShaderNodeVectorBase : VisualShaderNode
     }
 
     private static nint __mb_get_op_type;
-    internal VisualShaderNodeVectorBase.OpTypeEnum GetOpType()
+    public VisualShaderNodeVectorBase.OpTypeEnum GetOpType()
     {
         var __mb = __mb_get_op_type;
         if (__mb == 0)
@@ -11887,7 +11887,7 @@ public unsafe partial class VisualShaderNodeVectorFunc : VisualShaderNodeVectorB
     }
 
     private static nint __mb_set_function;
-    internal void SetFunction(VisualShaderNodeVectorFunc.FunctionEnum func)
+    public void SetFunction(VisualShaderNodeVectorFunc.FunctionEnum func)
     {
         var __mb = __mb_set_function;
         if (__mb == 0)
@@ -11903,7 +11903,7 @@ public unsafe partial class VisualShaderNodeVectorFunc : VisualShaderNodeVectorB
     }
 
     private static nint __mb_get_function;
-    internal VisualShaderNodeVectorFunc.FunctionEnum GetFunction()
+    public VisualShaderNodeVectorFunc.FunctionEnum GetFunction()
     {
         var __mb = __mb_get_function;
         if (__mb == 0)
@@ -11961,7 +11961,7 @@ public unsafe partial class VisualShaderNodeVectorOp : VisualShaderNodeVectorBas
     }
 
     private static nint __mb_set_operator;
-    internal void SetOperator(VisualShaderNodeVectorOp.OperatorEnum op)
+    public void SetOperator(VisualShaderNodeVectorOp.OperatorEnum op)
     {
         var __mb = __mb_set_operator;
         if (__mb == 0)
@@ -11977,7 +11977,7 @@ public unsafe partial class VisualShaderNodeVectorOp : VisualShaderNodeVectorBas
     }
 
     private static nint __mb_get_operator;
-    internal VisualShaderNodeVectorOp.OperatorEnum GetOperator()
+    public VisualShaderNodeVectorOp.OperatorEnum GetOperator()
     {
         var __mb = __mb_get_operator;
         if (__mb == 0)
@@ -12055,7 +12055,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_set_probe_data;
-    internal void SetProbeData(VoxelGIData? data)
+    public void SetProbeData(VoxelGIData? data)
     {
         var __mb = __mb_set_probe_data;
         if (__mb == 0)
@@ -12071,7 +12071,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_get_probe_data;
-    internal VoxelGIData? GetProbeData()
+    public VoxelGIData? GetProbeData()
     {
         var __mb = __mb_get_probe_data;
         if (__mb == 0)
@@ -12086,7 +12086,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_set_subdiv;
-    internal void SetSubdiv(VoxelGI.SubdivEnum subdiv)
+    public void SetSubdiv(VoxelGI.SubdivEnum subdiv)
     {
         var __mb = __mb_set_subdiv;
         if (__mb == 0)
@@ -12102,7 +12102,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_get_subdiv;
-    internal VoxelGI.SubdivEnum GetSubdiv()
+    public VoxelGI.SubdivEnum GetSubdiv()
     {
         var __mb = __mb_get_subdiv;
         if (__mb == 0)
@@ -12117,7 +12117,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_set_size;
-    internal void SetSize(Vector3 size)
+    public void SetSize(Vector3 size)
     {
         var __mb = __mb_set_size;
         if (__mb == 0)
@@ -12133,7 +12133,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_get_size;
-    internal Vector3 GetSize()
+    public Vector3 GetSize()
     {
         var __mb = __mb_get_size;
         if (__mb == 0)
@@ -12148,7 +12148,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_set_camera_attributes;
-    internal void SetCameraAttributes(CameraAttributes? cameraAttributes)
+    public void SetCameraAttributes(CameraAttributes? cameraAttributes)
     {
         var __mb = __mb_set_camera_attributes;
         if (__mb == 0)
@@ -12164,7 +12164,7 @@ public unsafe partial class VoxelGI : VisualInstance3D
     }
 
     private static nint __mb_get_camera_attributes;
-    internal CameraAttributes? GetCameraAttributes()
+    public CameraAttributes? GetCameraAttributes()
     {
         var __mb = __mb_get_camera_attributes;
         if (__mb == 0)
@@ -12384,7 +12384,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_dynamic_range;
-    internal void SetDynamicRange(float dynamicRange)
+    public void SetDynamicRange(float dynamicRange)
     {
         var __mb = __mb_set_dynamic_range;
         if (__mb == 0)
@@ -12400,7 +12400,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_get_dynamic_range;
-    internal float GetDynamicRange()
+    public float GetDynamicRange()
     {
         var __mb = __mb_get_dynamic_range;
         if (__mb == 0)
@@ -12415,7 +12415,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_energy;
-    internal void SetEnergy(float energy)
+    public void SetEnergy(float energy)
     {
         var __mb = __mb_set_energy;
         if (__mb == 0)
@@ -12431,7 +12431,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_get_energy;
-    internal float GetEnergy()
+    public float GetEnergy()
     {
         var __mb = __mb_get_energy;
         if (__mb == 0)
@@ -12446,7 +12446,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_bias;
-    internal void SetBias(float bias)
+    public void SetBias(float bias)
     {
         var __mb = __mb_set_bias;
         if (__mb == 0)
@@ -12462,7 +12462,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_get_bias;
-    internal float GetBias()
+    public float GetBias()
     {
         var __mb = __mb_get_bias;
         if (__mb == 0)
@@ -12477,7 +12477,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_normal_bias;
-    internal void SetNormalBias(float bias)
+    public void SetNormalBias(float bias)
     {
         var __mb = __mb_set_normal_bias;
         if (__mb == 0)
@@ -12493,7 +12493,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_get_normal_bias;
-    internal float GetNormalBias()
+    public float GetNormalBias()
     {
         var __mb = __mb_get_normal_bias;
         if (__mb == 0)
@@ -12508,7 +12508,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_propagation;
-    internal void SetPropagation(float propagation)
+    public void SetPropagation(float propagation)
     {
         var __mb = __mb_set_propagation;
         if (__mb == 0)
@@ -12524,7 +12524,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_get_propagation;
-    internal float GetPropagation()
+    public float GetPropagation()
     {
         var __mb = __mb_get_propagation;
         if (__mb == 0)
@@ -12539,7 +12539,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_interior;
-    internal void SetInterior(bool interior)
+    public void SetInterior(bool interior)
     {
         var __mb = __mb_set_interior;
         if (__mb == 0)
@@ -12555,7 +12555,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_is_interior;
-    internal bool IsInterior()
+    public bool IsInterior()
     {
         var __mb = __mb_is_interior;
         if (__mb == 0)
@@ -12570,7 +12570,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_set_use_two_bounces;
-    internal void SetUseTwoBounces(bool enable)
+    public void SetUseTwoBounces(bool enable)
     {
         var __mb = __mb_set_use_two_bounces;
         if (__mb == 0)
@@ -12586,7 +12586,7 @@ public unsafe partial class VoxelGIData : Resource
     }
 
     private static nint __mb_is_using_two_bounces;
-    internal bool IsUsingTwoBounces()
+    public bool IsUsingTwoBounces()
     {
         var __mb = __mb_is_using_two_bounces;
         if (__mb == 0)

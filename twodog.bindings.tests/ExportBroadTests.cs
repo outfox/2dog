@@ -37,11 +37,11 @@ public class ExportBroadTests
         var node = new BroadNode();
         try
         {
-            using var got = node.Get("team");
+            using var got = node.Get("Team");
             Assert.Equal((long)Team.Red, got.AsInt64());
 
             using Variant v = (long)Team.Blue;
-            node.Set("team", v);
+            node.Set("Team", v);
             Assert.Equal(Team.Blue, node.Team);
         }
         finally
@@ -66,7 +66,7 @@ public class ExportBroadTests
                 using var dict = entry.AsGodotDictionary();
                 using Variant nameKey = "name";
                 using var name = dict[nameKey];
-                if (name.AsString() != "team") continue;
+                if (name.AsString() != "Team") continue;
                 using Variant hintKey = "hint";
                 using Variant hintStringKey = "hint_string";
                 using var h = dict[hintKey];
@@ -100,7 +100,7 @@ public class ExportBroadTests
                 using var dict = entry.AsGodotDictionary();
                 using Variant nameKey = "name";
                 using var name = dict[nameKey];
-                if (name.AsString() != "target") continue;
+                if (name.AsString() != "Target") continue;
                 using Variant classNameKey = "class_name";
                 using Variant hintKey = "hint";
                 using Variant hintStringKey = "hint_string";
@@ -129,12 +129,12 @@ public class ExportBroadTests
         try
         {
             using Variant s = "any value";
-            node.Set("payload", s);
+            node.Set("Payload", s);
             Assert.Equal("any value", node.Payload.AsString());
 
             using Variant n = 42L;
-            node.Set("payload", n);
-            using var got = node.Get("payload");
+            node.Set("Payload", n);
+            using var got = node.Get("Payload");
             Assert.Equal(42L, got.AsInt64());
         }
         finally
@@ -154,7 +154,7 @@ public class ExportBroadTests
             using Variant item = "sword";
             items.Add(item);
             using var itemsVariant = Variant.From(items);
-            node.Set("items", itemsVariant);
+            node.Set("Items", itemsVariant);
 
             Assert.NotNull(node.Items);
             Assert.Equal(1, node.Items!.Count);
@@ -166,12 +166,12 @@ public class ExportBroadTests
             using Variant value = 10L;
             stats[key] = value;
             using var statsVariant = Variant.From(stats);
-            node.Set("stats", statsVariant);
+            node.Set("Stats", statsVariant);
             Assert.Equal(1, node.Stats!.Count);
 
             // Null collection reads back as NIL, not a crash.
             node.Items = null;
-            using var nil = node.Get("items");
+            using var nil = node.Get("Items");
             Assert.Equal(VariantType.Nil, nil.VariantType);
         }
         finally
@@ -188,11 +188,11 @@ public class ExportBroadTests
         try
         {
             node.Group = "enemies"; // implicit string -> StringName
-            using var got = node.Get("group");
+            using var got = node.Get("Group");
             Assert.Equal("enemies", got.AsStringName());
 
             using Variant path = Variant.From((NodePath)"../target");
-            node.Set("target_path", path);
+            node.Set("TargetPath", path);
             Assert.Equal("../target", node.TargetPath!.ToString());
         }
         finally
