@@ -4,6 +4,7 @@ import {
   godotVersionPlugin,
   nativesVersionPlugin
 } from './plugins/version-markers'
+import { columnsPlugin } from './plugins/columns'
 
 export default defineConfig({
   srcDir: "content",
@@ -15,6 +16,8 @@ export default defineConfig({
       md.use(twodogVersionPlugin)
       md.use(godotVersionPlugin)
       md.use(nativesVersionPlugin)
+      // ::: columns / :::: column — side-by-side cards.
+      md.use(columnsPlugin)
     }
   },
 

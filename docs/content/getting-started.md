@@ -85,7 +85,7 @@ and the responsibility of each layer.
 Open the same project root in the Godot .NET editor:
 
 ```bash
-godot-mono --editor .
+godot-mono --editor MyGame
 ```
 
 Edit a scene or C# script as usual. The next `dotnet build`, `dotnet run`, or
