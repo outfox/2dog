@@ -50,12 +50,38 @@ public static unsafe class GdExtensionHost
             init->minimum_initialization_level = GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_CORE;
             init->initialize = (nint)(delegate* unmanaged<nint, int, void>)&OnInitialize;
             init->deinitialize = (nint)(delegate* unmanaged<nint, int, void>)&OnDeinitialize;
+
+            // Main-loop startup fires at the end of Main::start, after platform
+            // APIs (JavaScriptBridge, ...) registered their ClassDB entries -
+            // too late for the SCENE-init bind sweep, so sweep again there.
+            // The engine copies the struct's pointers; a stack local is fine.
+            var mainLoop = new GDExtensionMainLoopCallbacks
+            {
+                startup_func = (nint)(delegate* unmanaged<void>)&OnMainLoopStartup,
+            };
+            GdExtensionInterface.RegisterMainLoopCallbacks(library, (nint)(&mainLoop));
             return 1;
         }
         catch (Exception e)
         {
             Console.Error.WriteLine($"twodog.bindings: unhandled exception in init callback: {e}");
             return 0;
+        }
+    }
+
+    private static bool _editorLevelInitialized;
+
+    [UnmanagedCallersOnly]
+    private static void OnMainLoopStartup()
+    {
+        try
+        {
+            GeneratedBinds.ResolveScene();
+            if (_editorLevelInitialized) GeneratedBinds.ResolveEditor();
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"twodog.bindings: unhandled exception in main-loop startup handler: {e}");
         }
     }
 
@@ -82,7 +108,10 @@ public static unsafe class GdExtensionHost
                 SceneLevelInitialized = true;
             }
             if ((GDExtensionInitializationLevel)level == GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_EDITOR)
+            {
+                _editorLevelInitialized = true;
                 GeneratedBinds.ResolveEditor();
+            }
             LevelInitialized?.Invoke((GDExtensionInitializationLevel)level);
             // After user class registrations flushed: wire the C# script
             // language (scenes referencing res://*.cs scripts).
