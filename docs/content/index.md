@@ -32,7 +32,7 @@ hero:
       text: Read the Dogs
       link: /getting-started
     - theme: alt
-      text: Quickstart
+      text: Quickstart (Web)
       link: /web
     - theme: alt
       text: Fetch on Github
