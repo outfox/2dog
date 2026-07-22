@@ -123,6 +123,17 @@ public static unsafe class ClassRegistry
 
             var snClass = StringNames.Get(info.ClassName).Opaque;
             var snParent = StringNames.Get(info.ParentName).Opaque;
+
+            // ClassDB names are global and flat: two C# types with the same
+            // simple name cannot coexist, fail loudly instead of overwriting.
+            if (ByClassSn.TryGetValue(snClass, out var clash))
+            {
+                throw new InvalidOperationException(
+                    $"Cannot register '{type.FullName}' as ClassDB class '{info.ClassName}': " +
+                    $"'{clash.Type.FullName}' is already registered under that name. " +
+                    "Godot class names are global - rename one of the classes.");
+            }
+
             GdExtensionInterface.ClassdbRegisterExtensionClass6(
                 GdExtensionHost.Library, (nint)(&snClass), (nint)(&snParent), (nint)(&creation));
 

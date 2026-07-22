@@ -28,7 +28,7 @@ public sealed unsafe class MemberRegistry
     /// </summary>
     public void Property(string name, VariantType type,
         Func<GodotObject, Variant> getter, Action<GodotObject, Variant> setter,
-        long hint = 0, string hintString = "", long usage = PropertyUsageDefault)
+        long hint = 0, string hintString = "", long usage = PropertyUsageDefault, string className = "")
     {
         var getterName = "get_" + name;
         var setterName = "set_" + name;
@@ -52,14 +52,16 @@ public sealed unsafe class MemberRegistry
         var nameSn = StringNames.Get(name).Opaque;
         var getterSn = StringNames.Get(getterName).Opaque;
         var setterSn = StringNames.Get(setterName).Opaque;
-        var emptySn = StringNames.Get("").Opaque;
+        // class_name carries the concrete ClassDB type for object-typed
+        // properties (inspector filtering, GodotSharp parity).
+        var propClassSn = StringNames.Get(className).Opaque;
         var hintStr = NativeString.Create(hintString);
 
         var info = new GDExtensionPropertyInfo
         {
             type = (GDExtensionVariantType)(long)type,
             name = (nint)(&nameSn),
-            class_name = (nint)(&emptySn),
+            class_name = (nint)(&propClassSn),
             hint = (uint)hint,
             hint_string = (nint)(&hintStr),
             usage = (uint)usage,
@@ -70,25 +72,26 @@ public sealed unsafe class MemberRegistry
     }
 
     /// <summary>Registers a signal with typed arguments.</summary>
-    public void Signal(string name, params (string name, VariantType type)[] args)
+    public void Signal(string name, params (string name, VariantType type, string className)[] args)
     {
         var classSn = StringNames.Get(_info.ClassName).Opaque;
         var signalSn = StringNames.Get(name).Opaque;
-        var emptySn = StringNames.Get("").Opaque;
 
         var count = args.Length;
         var infos = stackalloc GDExtensionPropertyInfo[Math.Max(count, 1)];
         var argSns = stackalloc ulong[Math.Max(count, 1)];
+        var argClassSns = stackalloc ulong[Math.Max(count, 1)];
         var hintStrs = stackalloc ulong[Math.Max(count, 1)];
         for (var i = 0; i < count; i++)
         {
             argSns[i] = StringNames.Get(args[i].name).Opaque;
+            argClassSns[i] = StringNames.Get(args[i].className).Opaque;
             hintStrs[i] = NativeString.Create("");
             infos[i] = new GDExtensionPropertyInfo
             {
                 type = (GDExtensionVariantType)(long)args[i].type,
                 name = (nint)(argSns + i),
-                class_name = (nint)(&emptySn),
+                class_name = (nint)(argClassSns + i),
                 hint = 0,
                 hint_string = (nint)(hintStrs + i),
                 usage = PropertyUsageDefault,

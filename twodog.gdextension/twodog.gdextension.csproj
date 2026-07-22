@@ -18,7 +18,11 @@
 
     <ItemGroup>
         <ProjectReference Include="../twodog.bindings/twodog.bindings.csproj"/>
-        <!-- Build ordering only; the generator ships as an analyzer asset below. -->
+        <!-- Build ordering only; the generator ships as an analyzer asset below.
+             Analyzers do not flow across ProjectReference: package consumers get
+             the generator automatically, but projects referencing this csproj
+             directly must add their own reference with OutputItemType="Analyzer"
+             (see twodog.bindings.tests.csproj). -->
         <ProjectReference Include="../twodog.generators/twodog.generators.csproj"
                           ReferenceOutputAssembly="false"
                           PrivateAssets="all"/>

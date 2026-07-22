@@ -84,6 +84,44 @@ public class ExportBroadTests
     }
 
     [Fact]
+    public void ObjectExport_CarriesClassNameAndNodeTypeHint()
+    {
+        ClassRegistry.Register<ExportNode>();
+        var node = new ExportNode();
+        try
+        {
+            using var list = node.GetPropertyList();
+            string? className = null;
+            string? hintString = null;
+            long hint = -1;
+            for (var i = 0; i < list.Count; i++)
+            {
+                using var entry = list[i];
+                using var dict = entry.AsGodotDictionary();
+                using Variant nameKey = "name";
+                using var name = dict[nameKey];
+                if (name.AsString() != "target") continue;
+                using Variant classNameKey = "class_name";
+                using Variant hintKey = "hint";
+                using Variant hintStringKey = "hint_string";
+                using var cn = dict[classNameKey];
+                using var h = dict[hintKey];
+                using var hs = dict[hintStringKey];
+                className = cn.AsString();
+                hint = h.AsInt64();
+                hintString = hs.AsString();
+            }
+            Assert.Equal("Node", className);
+            Assert.Equal(34, hint); // PropertyHint.NodeType
+            Assert.Equal("Node", hintString);
+        }
+        finally
+        {
+            node.Free();
+        }
+    }
+
+    [Fact]
     public void VariantExport_HoldsAnyType()
     {
         EnsureRegistered();
