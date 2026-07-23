@@ -13,13 +13,17 @@ internal static class NativeLoader
 {
     internal static string? LoadedLibraryPath { get; private set; }
 
+    /// <summary>Module handle of the loaded libgodot; the ProcessExit sweep frees by
+    /// handle so same-named copies loaded by other ALCs (multi-instance) stay disjoint.</summary>
+    internal static nint LoadedLibraryHandle { get; private set; }
+
     public static nint Load(string variant)
     {
         var path = Resolve(variant) ?? throw new DllNotFoundException(
             $"Could not locate libgodot-gdext-{variant}. Reference a 2dog.gdextension.[rid] natives package, " +
             "or build locally with: uv run python build-godot.py --mono no --no-glue");
         LoadedLibraryPath = path;
-        return NativeLibrary.Load(path);
+        return LoadedLibraryHandle = NativeLibrary.Load(path);
     }
 
     /// <summary>Loads exactly the given library - no resolution, no fallback.</summary>
@@ -28,7 +32,7 @@ internal static class NativeLoader
         if (!File.Exists(path))
             throw new DllNotFoundException($"libgodot not found at '{path}'.");
         LoadedLibraryPath = path;
-        return NativeLibrary.Load(path);
+        return LoadedLibraryHandle = NativeLibrary.Load(path);
     }
 
     private static string? Resolve(string variant)
