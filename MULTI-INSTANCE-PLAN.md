@@ -184,8 +184,9 @@ create-parameter  –  upstream-worthy, not required for v1.
 - [ ] Convert one real twodog.bindings.tests collection as a pilot
 
 ### Phase 5  –  ship
-- [ ] Add the twodog.hosting* projects to 2dog.sln (deferred with CI wiring so
-      the branch stays inert for existing pipelines)
+- [x] Add the twodog.hosting* projects to 2dog.sln (Editor sln config maps them
+      to Debug, like other config-less projects; 2dog.tests.slnf untouched - it
+      filters the mono-stack test workflow)
 - [ ] Package `2dog.hosting` in CI like the other packages
 - [ ] Rewrite `docs/content/known-issues/single-instance.md`: single-ALC rule
       stays, concurrent instances now possible via 2dog.hosting (gdext stack)
