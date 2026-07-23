@@ -196,19 +196,16 @@ public sealed unsafe class Engine : IDisposable
         _sweepRegistered = true;
         AppDomain.CurrentDomain.ProcessExit += static (_, _) =>
         {
-            if (!OperatingSystem.IsWindows() || NativeLoader.LoadedLibraryPath is not { } path) return;
-            var name = Path.GetFileName(path);
-            var module = GetModuleHandleW(name);
+            // Free by recorded handle, not filename: with multiple instances
+            // (one ALC each) every sweep must unload exactly its own module.
+            var module = NativeLoader.LoadedLibraryHandle;
+            if (!OperatingSystem.IsWindows() || module == 0) return;
             var attempts = 0;
-            while (module != 0 && FreeLibrary(module) && ++attempts < 32)
+            while (FreeLibrary(module) && ++attempts < 32)
             {
-                module = GetModuleHandleW(name);
             }
         };
     }
-
-    [DllImport("kernel32", CharSet = CharSet.Unicode)]
-    private static extern nint GetModuleHandleW(string moduleName);
 
     [DllImport("kernel32")]
     [return: MarshalAs(UnmanagedType.Bool)]

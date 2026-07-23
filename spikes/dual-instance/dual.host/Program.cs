@@ -25,8 +25,12 @@ internal static class Program
         Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
 
         var stage = "a";
+        var sameNames = false;
         for (var i = 0; i < rawArgs.Length; i++)
+        {
             if (rawArgs[i] == "--stage" && i + 1 < rawArgs.Length) stage = rawArgs[i + 1];
+            if (rawArgs[i] == "--same-names") sameNames = true;
+        }
 
         var repoRoot = FindRepoRoot();
         var sourceDll = FindNonMonoLibgodot(repoRoot);
@@ -36,11 +40,15 @@ internal static class Program
         Console.WriteLine($"[host] libgodot: {sourceDll}");
         Console.WriteLine($"[host] scratch:  {scratch}");
 
-        // Distinct FILE NAMES are mandatory: each ALC's ProcessExit sweep
-        // resolves its module via GetModuleHandleW(bare filename); same-named
-        // copies would make both sweeps free the same module.
-        var dllA = Path.Combine(scratch, "libgodot-dual-A.dll");
-        var dllB = Path.Combine(scratch, "libgodot-dual-B.dll");
+        // Distinct file names were mandatory while the ProcessExit sweep
+        // resolved modules via GetModuleHandleW(bare filename). --same-names
+        // exercises the handle-based sweep: same file name, distinct dirs.
+        var dllA = sameNames
+            ? Path.Combine(Directory.CreateDirectory(Path.Combine(scratch, "A")).FullName, "libgodot-dual.dll")
+            : Path.Combine(scratch, "libgodot-dual-A.dll");
+        var dllB = sameNames
+            ? Path.Combine(Directory.CreateDirectory(Path.Combine(scratch, "B")).FullName, "libgodot-dual.dll")
+            : Path.Combine(scratch, "libgodot-dual-B.dll");
         File.Copy(sourceDll, dllA, overwrite: true);
         File.Copy(sourceDll, dllB, overwrite: true);
 
