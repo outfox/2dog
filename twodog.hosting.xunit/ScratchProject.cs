@@ -60,6 +60,43 @@ public static partial class ScratchProject
         return dir;
     }
 
+    /// <summary>Best-effort delete of a directory returned by <see cref="Create"/>.
+    /// Never throws - a straggler (e.g. a timed-out scenario) may still hold
+    /// files - but never silent either: leftover scratch dirs accumulate under
+    /// %TEMP%.</summary>
+    public static void Delete(string dir)
+    {
+        try
+        {
+            if (!Directory.Exists(dir)) return;
+            // The engine chdirs into its project dir during boot (CWD is
+            // process-global), and the process's current directory cannot be
+            // deleted on Windows - step out before removing it.
+            var full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(dir));
+            var cwd = Path.TrimEndingDirectorySeparator(Path.GetFullPath(Environment.CurrentDirectory));
+            if (cwd.Equals(full, StringComparison.OrdinalIgnoreCase)
+                || cwd.StartsWith(full + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                Environment.CurrentDirectory = Path.GetTempPath();
+            Directory.Delete(dir, recursive: true);
+            // Prune the per-pid parent once its last project is gone; quiet on
+            // failure (a sibling fixture may race a new Create into it).
+            if (Path.GetDirectoryName(full) is { } parent)
+            {
+                try
+                {
+                    Directory.Delete(parent, recursive: false);
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            Console.Error.WriteLine($"[2dog.hosting] warning: could not delete scratch project '{dir}': {e.Message}");
+        }
+    }
+
     private static void CopyTree(string from, string to)
     {
         Directory.CreateDirectory(to);

@@ -13,13 +13,13 @@ public sealed class EngineInstance : IDisposable
     // program signals boot (or exits). Insurance against the engine's CWD dance
     // and loader-lock pressure; pumping runs fully parallel.
     private static readonly SemaphoreSlim BootGate = new(1, 1);
-    private static readonly TimeSpan BootGateTimeout = TimeSpan.FromSeconds(120);
 
     private readonly TaskCompletionSource<int> _completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly TaskCompletionSource _booted = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly InstanceContext _ctx;
     private readonly Thread _thread;
     private readonly TimeSpan _shutdownTimeout;
+    private readonly TimeSpan _bootGateTimeout;
     private int _bootGateReleased;
 
     public string Tag { get; }
@@ -40,6 +40,7 @@ public sealed class EngineInstance : IDisposable
         Tag = options.Tag;
         NativePath = nativePath;
         _shutdownTimeout = options.ShutdownTimeout;
+        _bootGateTimeout = options.BootGateTimeout;
         _ctx = new InstanceContext(options, nativePath, SignalBooted);
         _thread = new Thread(() => ThreadBody(alc, programAssemblyPath, programTypeName))
         {
@@ -95,7 +96,7 @@ public sealed class EngineInstance : IDisposable
         {
             // Fail closed: proceeding without the gate would overlap boots
             // exactly when CWD and loader-lock serialization matter most.
-            if (!BootGate.Wait(BootGateTimeout))
+            if (!BootGate.Wait(_bootGateTimeout))
             {
                 _bootGateReleased = 1; // nothing acquired, nothing to release
                 throw new TimeoutException(

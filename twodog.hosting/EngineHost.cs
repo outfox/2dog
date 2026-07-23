@@ -25,6 +25,15 @@ public sealed class EngineHost : IDisposable
     // disposed instance's module stays mapped until ProcessExit.
     private static int _slotCounter = -1;
 
+    /// <summary>
+    /// False where in-process engine hosting is not validated: macOS dual-load
+    /// is untested and native unload is impossible there (dyld-pinned ObjC
+    /// images, spikes/dual-instance/FINDINGS.md) - deferred to
+    /// MULTI-INSTANCE-PLAN.md phase 5. <see cref="Start(InstanceOptions)"/>
+    /// fails closed; test fixtures skip via this flag.
+    /// </summary>
+    public static bool IsSupported => !OperatingSystem.IsMacOS();
+
     private readonly List<EngineInstance> _instances = [];
     private readonly Lock _gate = new();
     private bool _disposed;
@@ -44,6 +53,10 @@ public sealed class EngineHost : IDisposable
 
     public EngineInstance Start(InstanceOptions options)
     {
+        if (!IsSupported)
+            throw new PlatformNotSupportedException(
+                "In-process engine hosting is not supported on this platform yet (macOS is deferred to " +
+                "MULTI-INSTANCE-PLAN.md phase 5) - run one engine per process via twodog.Engine directly.");
         var programAssemblyPath = options.ProgramAssemblyPath
             ?? throw new ArgumentException($"{nameof(InstanceOptions.ProgramAssemblyPath)} is required (or use Start<TProgram>).");
         var programTypeName = options.ProgramTypeName
@@ -153,11 +166,15 @@ public sealed class EngineHost : IDisposable
     }
 
     /// <summary>
-    /// Pool: %LOCALAPPDATA%/2dog/native-pool/&lt;key&gt;/slot-&lt;n&gt;/&lt;name&gt;. Copies
-    /// persist across runs, keyed by source identity (path, size, mtime - NOT
-    /// content; an in-place rebuild changes size/mtime and therefore the key),
-    /// so steady-state cost is zero. Cross-process slot collisions are fine -
-    /// separate processes may map the same file.
+    /// Pool: %LOCALAPPDATA%/2dog/native-pool/&lt;key&gt;/slot-&lt;n&gt;/&lt;stem&gt;.slot-&lt;n&gt;&lt;ext&gt;.
+    /// Copies persist across runs, keyed by source identity (path, size, mtime -
+    /// NOT content; an in-place rebuild changes size/mtime and therefore the
+    /// key), so steady-state cost is zero for a stable instance count. Within a
+    /// process the pool only grows - one copy per Start, no eviction (slots are
+    /// never reused in-process, see _slotCounter) - so a long-lived host that
+    /// cycles instances accumulates copies unboundedly; instance recycling needs
+    /// a cap/cleanup first (MULTI-INSTANCE-PLAN.md). Cross-process slot
+    /// collisions are fine - separate processes may map the same file.
     /// </summary>
     private static string AcquireNativeCopy(string sourcePath)
     {
@@ -172,7 +189,11 @@ public sealed class EngineHost : IDisposable
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "2dog", "native-pool", identityKey, $"slot-{slot}");
         Directory.CreateDirectory(dir);
-        var dest = Path.Combine(dir, source.Name);
+        // Distinct base name per slot: Windows exit sweeps that resolve modules
+        // by file name (GetModuleHandleW) must never match a sibling copy or the
+        // original - spike constraint #1 (spikes/dual-instance/FINDINGS.md).
+        var dest = Path.Combine(dir,
+            $"{Path.GetFileNameWithoutExtension(source.Name)}.slot-{slot}{source.Extension}");
         // Length check evicts partial copies left by a crashed process.
         if (!File.Exists(dest) || new FileInfo(dest).Length != source.Length)
         {

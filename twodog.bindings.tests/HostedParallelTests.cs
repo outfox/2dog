@@ -1,5 +1,6 @@
 using Godot;
 using Godot.NativeInterop;
+using twodog.Hosting;
 using twodog.Hosting.Runtime;
 using twodog.Hosting.Xunit;
 using Environment = System.Environment;
@@ -21,6 +22,13 @@ public class HostedEngineFixture : EngineInstanceFixture
 {
     // Same native-variant selection convention as GodotBindingsFixture.
     protected override string Variant => Environment.GetEnvironmentVariable("TWODOG_VARIANT") ?? "debug";
+
+    /// <summary>In-process hosting is platform-gated (macOS is deferred, see
+    /// EngineHost.IsSupported); the fixture no-ops there and every hosted test
+    /// must call this first. Runs on all other CI legs.</summary>
+    public static void SkipUnlessHosted() =>
+        Assert.SkipWhen(!EngineHost.IsSupported,
+            "In-process engine hosting is deferred on this platform (MULTI-INSTANCE-PLAN.md phase 5).");
 }
 
 public sealed class HostedAlphaFixture : HostedEngineFixture
@@ -78,6 +86,7 @@ public sealed class HostedAlphaTests(HostedAlphaFixture fixture)
     [Fact]
     public void NodeLifecycleRoundtrips()
     {
+        HostedEngineFixture.SkipUnlessHosted();
         var report = fixture.Run<NodeLifecycleScenario>("alpha");
         Assert.Equal("delta=1;name=hosted_alpha;pos=1.5,-2.5;freed=True", report);
     }
@@ -85,6 +94,7 @@ public sealed class HostedAlphaTests(HostedAlphaFixture fixture)
     [Fact]
     public void RefCountedReleasesThroughDrain()
     {
+        HostedEngineFixture.SkipUnlessHosted();
         Assert.Equal("rc=1;released=1", fixture.Run<RefCountedLifetimeScenario>());
     }
 }
@@ -95,6 +105,7 @@ public sealed class HostedBetaTests(HostedBetaFixture fixture)
     [Fact]
     public void NodeLifecycleRoundtrips()
     {
+        HostedEngineFixture.SkipUnlessHosted();
         var report = fixture.Run<NodeLifecycleScenario>("beta");
         Assert.Equal("delta=1;name=hosted_beta;pos=1.5,-2.5;freed=True", report);
     }
@@ -102,6 +113,7 @@ public sealed class HostedBetaTests(HostedBetaFixture fixture)
     [Fact]
     public void RefCountedReleasesThroughDrain()
     {
+        HostedEngineFixture.SkipUnlessHosted();
         Assert.Equal("rc=1;released=1", fixture.Run<RefCountedLifetimeScenario>());
     }
 }

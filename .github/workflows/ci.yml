@@ -396,6 +396,10 @@ jobs:
         if: matrix.name != 'osx-arm64'
         run: dotnet restore twodog.hosting.tests
 
+      # bindings.tests includes the hosted parallel collections
+      # (HostedParallelTests); on macOS those self-skip and their fixtures
+      # no-op (EngineHost.IsSupported fails closed - dual-load is deferred to
+      # MULTI-INSTANCE-PLAN.md phase 5), so all three legs may run this.
       - name: Test (release variant)
         env:
           TWODOG_VARIANT: release

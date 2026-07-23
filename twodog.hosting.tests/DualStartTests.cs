@@ -56,35 +56,59 @@ public sealed class DualStartTests
     [Fact]
     public async Task TwoEnginesRunConcurrentlyInOneProcess()
     {
-        using var gate = new ManualResetEventSlim(false);
-        using var host = new EngineHost();
+        HostGuard.SkipUnlessSupported();
+        var dirA = ScratchProject.Create("app-A");
+        var dirB = ScratchProject.Create("app-B");
+        try
+        {
+            using var gate = new ManualResetEventSlim(false);
+            using var host = new EngineHost();
 
-        var a = host.Start<CountingProgram>(new()
-            { Tag = "app-A", ProjectDir = ScratchProject.Create("app-A"), Args = ["--headless"], State = gate });
-        var b = host.Start<CountingProgram>(new()
-            { Tag = "app-B", ProjectDir = ScratchProject.Create("app-B"), Args = ["--headless"], State = gate });
+            var a = host.Start<CountingProgram>(new()
+                { Tag = "app-A", ProjectDir = dirA, Args = ["--headless"], State = gate });
+            var b = host.Start<CountingProgram>(new()
+                { Tag = "app-B", ProjectDir = dirB, Args = ["--headless"], State = gate });
 
-        // Both booted => two live engines in this process right now.
-        await Task.WhenAll(a.Booted, b.Booted)
-            .WaitAsync(TimeSpan.FromMinutes(3), TestContext.Current.CancellationToken);
-        gate.Set();
+            // Both booted => two live engines in this process right now.
+            await Task.WhenAll(a.Booted, b.Booted)
+                .WaitAsync(TimeSpan.FromMinutes(3), TestContext.Current.CancellationToken);
+            gate.Set();
 
-        Assert.Equal(60, await a.Completion);
-        Assert.Equal(60, await b.Completion);
-        Assert.NotEqual(a.NativePath, b.NativePath);
+            Assert.Equal(60, await a.Completion);
+            Assert.Equal(60, await b.Completion);
+            Assert.NotEqual(a.NativePath, b.NativePath);
+        }
+        finally
+        {
+            // The using blocks above disposed the host (and thus the engines)
+            // on scope exit, so the scratch projects are deletable here.
+            ScratchProject.Delete(dirA);
+            ScratchProject.Delete(dirB);
+        }
     }
 
     [Fact]
     public async Task EnginesPumpFramesConcurrentlyInLockstep()
     {
-        using var barrier = new Barrier(2);
-        using var host = new EngineHost();
-        var a = host.Start<PacedProgram>(new()
-            { Tag = "paced-A", ProjectDir = ScratchProject.Create("paced-A"), Args = ["--headless"], State = barrier });
-        var b = host.Start<PacedProgram>(new()
-            { Tag = "paced-B", ProjectDir = ScratchProject.Create("paced-B"), Args = ["--headless"], State = barrier });
-        var token = TestContext.Current.CancellationToken;
-        Assert.Equal(PacedProgram.Frames, await a.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
-        Assert.Equal(PacedProgram.Frames, await b.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
+        HostGuard.SkipUnlessSupported();
+        var dirA = ScratchProject.Create("paced-A");
+        var dirB = ScratchProject.Create("paced-B");
+        try
+        {
+            using var barrier = new Barrier(2);
+            using var host = new EngineHost();
+            var a = host.Start<PacedProgram>(new()
+                { Tag = "paced-A", ProjectDir = dirA, Args = ["--headless"], State = barrier });
+            var b = host.Start<PacedProgram>(new()
+                { Tag = "paced-B", ProjectDir = dirB, Args = ["--headless"], State = barrier });
+            var token = TestContext.Current.CancellationToken;
+            Assert.Equal(PacedProgram.Frames, await a.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
+            Assert.Equal(PacedProgram.Frames, await b.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
+        }
+        finally
+        {
+            ScratchProject.Delete(dirA);
+            ScratchProject.Delete(dirB);
+        }
     }
 }
