@@ -102,5 +102,7 @@ public sealed class EngineWorkItem
     internal bool TryBeginExecution() => Interlocked.CompareExchange(ref _state, Running, Pending) == Pending;
 
     public void Complete(string result) => _completion.TrySetResult(result);
-    public void Fail(Exception reason) => _completion.TrySetException(reason);
+
+    /// <summary>Sanitized: instance-ALC exception types never cross to the host.</summary>
+    public void Fail(Exception reason) => _completion.TrySetException(ExceptionSanitizer.Sanitize(reason));
 }

@@ -28,6 +28,10 @@ internal sealed class InstanceAlc : AssemblyLoadContext
         _shared = new HashSet<string>(sharedAssemblies, StringComparer.OrdinalIgnoreCase) { HostingAssemblyName };
     }
 
+    /// <summary>Assemblies that must NEVER resolve from the default ALC: a
+    /// fallthrough would reunify the per-instance statics across the boundary.</summary>
+    internal static readonly string[] NeverShared = ["twodog.bindings", "twodog.gdextension", "twodog.hosting.runtime"];
+
     protected override Assembly? Load(AssemblyName assemblyName)
     {
         if (assemblyName.Name is { } name && _shared.Contains(name))
@@ -39,6 +43,13 @@ internal sealed class InstanceAlc : AssemblyLoadContext
         // The root component itself is not always listed in its own deps resolution.
         if (string.Equals(assemblyName.Name, Path.GetFileNameWithoutExtension(_rootAssemblyPath), StringComparison.OrdinalIgnoreCase))
             return LoadFromAssemblyPath(_rootAssemblyPath);
+
+        // Fail closed for the bindings stack: unresolved means misconfiguration,
+        // and default-ALC fallthrough would silently break isolation.
+        if (NeverShared.Contains(assemblyName.Name, StringComparer.OrdinalIgnoreCase))
+            throw new FileLoadException(
+                $"'{assemblyName.Name}' could not be resolved inside ALC '{Name}' and must not fall through to the " +
+                "default ALC (per-instance statics). Ensure the program assembly's deps.json covers it.", assemblyName.Name);
 
         return null; // System.* etc. fall through to the default ALC
     }

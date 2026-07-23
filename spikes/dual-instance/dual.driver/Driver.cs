@@ -18,7 +18,7 @@ namespace DualSpike;
 public static class Driver
 {
     public static string Run(string tag, string nativeDllPath, string projectDir, int frames, int churnPerFrame,
-                             Action? bootBarrier, Action? exitBarrier)
+                             bool headless, Action? bootBarrier, Action? exitBarrier)
     {
         var report = new StringBuilder();
         var checks = 0;
@@ -43,7 +43,11 @@ public static class Driver
             var alc = AssemblyLoadContext.GetLoadContext(typeof(Driver).Assembly);
             Log($"alc={alc?.Name} cwd={Directory.GetCurrentDirectory()}");
 
-            var engine = new Engine(tag, projectDir, "--headless") { NativePath = nativeDllPath };
+            // Windowed mode verifies the per-module window class fix: each
+            // instance's windows must dispatch into its OWN module's WndProc.
+            var engine = headless
+                ? new Engine(tag, projectDir, "--headless") { NativePath = nativeDllPath }
+                : new Engine(tag, projectDir) { NativePath = nativeDllPath };
             using var godot = engine.Start();
             Check(Engine.LoadedNativePath == nativeDllPath,
                 $"LoadedNativePath is this instance's copy ({Path.GetFileName(nativeDllPath)})");

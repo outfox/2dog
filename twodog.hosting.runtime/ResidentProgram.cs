@@ -30,7 +30,11 @@ public sealed class ResidentProgram : IEngineProgram
                 while (!ctx.QuitRequested)
                 {
                     if (godot.Iteration()) break;
-                    while (queue.TryTake(out var item)) Execute(session, item);
+                    // Bounded batch: an always-nonempty queue must not starve
+                    // frame pumping or the QuitRequested check.
+                    var batch = 8;
+                    while (batch-- > 0 && !ctx.QuitRequested && queue.TryTake(out var item))
+                        Execute(session, item);
                 }
             }
             finally

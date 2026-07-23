@@ -119,23 +119,36 @@ public sealed class EngineHost : IDisposable
     private static void ValidateSharedAssemblies(string[] shared, AssemblyDependencyResolver resolver)
     {
         if (shared.Length == 0) return;
-        string[] forbidden = ["twodog.bindings", "twodog.gdextension", "twodog.hosting.runtime"];
-        var pending = new Queue<string>(shared);
+        var pending = new Queue<(string Name, bool IsRoot)>(shared.Select(s => (s, true)));
         var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         while (pending.Count > 0)
         {
-            var name = pending.Dequeue();
+            var (name, isRoot) = pending.Dequeue();
             if (!visited.Add(name)) continue;
-            if (forbidden.Contains(name, StringComparer.OrdinalIgnoreCase))
+            if (InstanceAlc.NeverShared.Contains(name, StringComparer.OrdinalIgnoreCase))
                 throw new ArgumentException(
                     $"SharedAssemblies must be Godot-free: '{string.Join("' / '", shared)}' leads to '{name}', " +
                     "whose statics must stay per-instance.");
-            var path = resolver.ResolveAssemblyToPath(new AssemblyName(name));
-            if (path is null) continue; // framework/default-ALC assembly - no bindings reachable this way
+            var path = resolver.ResolveAssemblyToPath(new AssemblyName(name))
+                ?? AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(a => !a.IsDynamic && string.Equals(a.GetName().Name, name, StringComparison.OrdinalIgnoreCase)
+                                         && !string.IsNullOrEmpty(a.Location))?.Location;
+            if (path is null)
+            {
+                // Fail closed on the shared roots themselves: an assembly we
+                // cannot inspect cannot be proven Godot-free. Unresolvable
+                // TRANSITIVE refs are framework assemblies - skipping them is
+                // safe because the bindings stack itself always resolves.
+                if (isRoot)
+                    throw new ArgumentException(
+                        $"Shared assembly '{name}' cannot be located for validation (not in the program's deps.json " +
+                        "and not loaded in the default ALC) - refusing to share what cannot be verified.");
+                continue;
+            }
             using var pe = new PEReader(File.OpenRead(path));
             var metadata = pe.GetMetadataReader();
             foreach (var handle in metadata.AssemblyReferences)
-                pending.Enqueue(metadata.GetString(metadata.GetAssemblyReference(handle).Name));
+                pending.Enqueue((metadata.GetString(metadata.GetAssemblyReference(handle).Name), false));
         }
     }
 

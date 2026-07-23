@@ -91,26 +91,34 @@ public sealed unsafe class Engine : IDisposable
 
         if (_godotInstancePtr == 0)
             throw new InvalidOperationException($"{nameof(Engine)}: Error creating Godot instance.");
-        if (!GdExtensionHost.Loaded)
-            throw new InvalidOperationException(
-                $"{nameof(Engine)}: Missing GDExtension procs: {GdExtensionHost.MissingProcsDisplay}");
+        // Any failure past this point must destroy the live native instance:
+        // leaking it blocks every future Start in this context and makes the
+        // exit sweep leave the module mapped.
+        try
+        {
+            if (!GdExtensionHost.Loaded)
+                throw new InvalidOperationException(
+                    $"{nameof(Engine)}: Missing GDExtension procs: {GdExtensionHost.MissingProcsDisplay}");
 
-        var native = (Godot.GodotInstance?)InstanceBindings.GetOrCreate(_godotInstancePtr, adoptRef: false)
-                     ?? throw new InvalidOperationException($"{nameof(Engine)}: Failed to wrap GodotInstance.");
+            var native = (Godot.GodotInstance?)InstanceBindings.GetOrCreate(_godotInstancePtr, adoptRef: false)
+                         ?? throw new InvalidOperationException($"{nameof(Engine)}: Failed to wrap GodotInstance.");
 
-        if (!native.Start())
+            if (!native.Start())
+                throw new InvalidOperationException($"{nameof(Engine)}: Error starting Godot instance.");
+
+            // Async support: await Task.* continuations marshal back to this
+            // thread, pumped once per Iteration.
+            GodotSynchronizationContext.Install();
+
+            _ownsInstance = true;
+            _instance = new GodotInstance(native);
+            return _instance;
+        }
+        catch
         {
             Destroy();
-            throw new InvalidOperationException($"{nameof(Engine)}: Error starting Godot instance.");
+            throw;
         }
-
-        // Async support: await Task.* continuations marshal back to this
-        // thread, pumped once per Iteration.
-        GodotSynchronizationContext.Install();
-
-        _ownsInstance = true;
-        _instance = new GodotInstance(native);
-        return _instance;
     }
 
     /// <summary>
