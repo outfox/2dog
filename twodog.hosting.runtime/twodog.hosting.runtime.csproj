@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>twodog.Hosting.Runtime</RootNamespace>
+        <AssemblyName>twodog.hosting.runtime</AssemblyName>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <!-- Loaded per instance-ALC (references Godot types); never in the shared list. -->
+    <ItemGroup>
+        <ProjectReference Include="..\twodog.hosting\twodog.hosting.csproj" />
+        <ProjectReference Include="..\twodog.gdextension\twodog.gdextension.csproj" />
+    </ItemGroup>
+
+</Project>
