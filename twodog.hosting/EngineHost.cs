@@ -22,8 +22,7 @@ namespace twodog.Hosting;
 public sealed class EngineHost : IDisposable
 {
     // Process-wide: slots are never reused while the process lives, because a
-    // disposed instance's module stays mapped until ProcessExit. Slot 0 uses
-    // the original file, so single-instance keeps today's zero-copy behavior.
+    // disposed instance's module stays mapped until ProcessExit.
     private static int _slotCounter = -1;
 
     private readonly List<EngineInstance> _instances = [];
@@ -150,8 +149,10 @@ public sealed class EngineHost : IDisposable
     private static string AcquireNativeCopy(string sourcePath)
     {
         var slot = Interlocked.Increment(ref _slotCounter);
-        if (slot == 0) return sourcePath;
-
+        // Never hand out the original path, even for the first slot: something
+        // outside this host (a classic single-instance fixture, the mono stack)
+        // may already have the original mapped, and loading the same path again
+        // would silently share its module instead of creating a new instance.
         var source = new FileInfo(sourcePath);
         var identityKey = Convert.ToHexString(SHA256.HashData(
             Encoding.UTF8.GetBytes($"{source.FullName}|{source.Length}|{source.LastWriteTimeUtc.Ticks}")))[..16];
