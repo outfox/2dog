@@ -181,7 +181,10 @@ create-parameter  –  upstream-worthy, not required for v1.
 - [x] `EngineInstanceFixture` + scenario runner (`twodog.hosting.xunit` +
       `twodog.hosting.runtime`), parallel-collections pilot green
       (`twodog.hosting.tests`, parallelizeTestCollections=true, 7 tests)
-- [ ] Convert one real twodog.bindings.tests collection as a pilot
+- [x] Convert one real twodog.bindings.tests collection as a pilot
+      (HostedParallelTests: 2 hosted collections in parallel alongside the
+      exclusive classic collection, 184 tests green; required the pool to
+      always copy - the original path may alias a module loaded outside the host)
 
 ### Phase 5  –  ship
 - [x] Add the twodog.hosting* projects to 2dog.sln (Editor sln config maps them
