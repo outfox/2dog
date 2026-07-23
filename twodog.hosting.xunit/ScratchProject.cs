@@ -20,6 +20,12 @@ public static partial class ScratchProject
     /// </summary>
     public static string Create(string tag, string? sourceProjectDir = null)
     {
+        // The tag becomes a directory name (later deleted recursively) and an
+        // unquoted-ish project.godot value - constrain it hard.
+        if (string.IsNullOrEmpty(tag) || tag is "." or ".."
+            || !tag.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_' or '.'))
+            throw new ArgumentException($"Tag '{tag}' must be non-empty and [A-Za-z0-9._-] only.", nameof(tag));
+
         var dir = Path.Combine(Path.GetTempPath(), "2dog-hosting", Environment.ProcessId.ToString(), tag);
         Directory.CreateDirectory(dir);
 

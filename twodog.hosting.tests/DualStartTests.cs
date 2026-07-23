@@ -25,6 +25,31 @@ public sealed class CountingProgram : IEngineProgram
     }
 }
 
+/// <summary>Pumps in LOCKSTEP with its sibling: neither engine may advance to
+/// frame i+1 until both completed frame i. A regression that serializes engine
+/// lifetimes (one pumping only after the other finished) times out the barrier.</summary>
+public sealed class PacedProgram : IEngineProgram
+{
+    public const int Frames = 30;
+
+    public int Run(IInstanceContext ctx)
+    {
+        var barrier = (Barrier)(ctx.State ?? throw new InvalidOperationException("PacedProgram needs a Barrier as State."));
+        var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
+        using var godot = engine.Start();
+        ctx.SignalBooted();
+        var frames = 0;
+        for (var i = 0; i < Frames; i++)
+        {
+            if (godot.Iteration()) break;
+            frames++;
+            if (!barrier.SignalAndWait(TimeSpan.FromSeconds(30))) return -1;
+        }
+        engine.Dispose();
+        return frames;
+    }
+}
+
 /// <summary>The "two twodog.Engine instances in one app" story, via EngineHost.</summary>
 public sealed class DualStartTests
 {
@@ -47,5 +72,19 @@ public sealed class DualStartTests
         Assert.Equal(60, await a.Completion);
         Assert.Equal(60, await b.Completion);
         Assert.NotEqual(a.NativePath, b.NativePath);
+    }
+
+    [Fact]
+    public async Task EnginesPumpFramesConcurrentlyInLockstep()
+    {
+        using var barrier = new Barrier(2);
+        using var host = new EngineHost();
+        var a = host.Start<PacedProgram>(new()
+            { Tag = "paced-A", ProjectDir = ScratchProject.Create("paced-A"), Args = ["--headless"], State = barrier });
+        var b = host.Start<PacedProgram>(new()
+            { Tag = "paced-B", ProjectDir = ScratchProject.Create("paced-B"), Args = ["--headless"], State = barrier });
+        var token = TestContext.Current.CancellationToken;
+        Assert.Equal(PacedProgram.Frames, await a.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
+        Assert.Equal(PacedProgram.Frames, await b.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
     }
 }

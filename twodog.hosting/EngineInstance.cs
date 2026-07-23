@@ -46,6 +46,9 @@ public sealed class EngineInstance : IDisposable
             IsBackground = true,
             Name = $"2dog-{options.Tag}",
         };
+        // Windowed engines need OLE (drag-drop, IME) on their thread, which
+        // requires STA - same rule as [STAThread] on single-instance hosts.
+        if (OperatingSystem.IsWindows()) _thread.SetApartmentState(ApartmentState.STA);
     }
 
     /// <summary>Called by EngineHost only after the instance is registered, so
@@ -108,8 +111,10 @@ public sealed class EngineInstance : IDisposable
         }
         catch (Exception e)
         {
-            _booted.TrySetException(e);
-            _completion.TrySetException(e);
+            // Instance-ALC exception types must not cross to the host.
+            var sanitized = ExceptionSanitizer.Sanitize(e);
+            _booted.TrySetException(sanitized);
+            _completion.TrySetException(sanitized);
         }
         finally
         {

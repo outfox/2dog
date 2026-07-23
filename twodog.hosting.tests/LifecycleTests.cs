@@ -22,8 +22,9 @@ public sealed class HangingProgram : IEngineProgram
         // Signal first: holding the boot gate would stall every other test's
         // boot for the gate timeout. This program tests SHUTDOWN behavior only.
         ctx.SignalBooted();
-        // Deliberately ignores QuitRequested.
-        Thread.Sleep(TimeSpan.FromMinutes(5));
+        // Deliberately ignores QuitRequested until the test releases it, so
+        // the hang is bounded and cleanup after release is also verified.
+        (ctx.State as SemaphoreSlim)?.Wait(TimeSpan.FromMinutes(2));
         return 0;
     }
 }
@@ -72,18 +73,18 @@ public sealed class LifecycleTests
     }
 
     [Fact]
-    public async Task HangingProgramMakesDisposeThrowTimeout()
+    public async Task HangingProgramMakesDisposeThrowTimeoutThenCleansUpWhenReleased()
     {
+        using var release = new SemaphoreSlim(0);
         var host = new EngineHost();
         var instance = host.Start<HangingProgram>(new()
-            { Tag = "lc-hang", ProjectDir = TempProject, ShutdownTimeout = TimeSpan.FromSeconds(1) });
+            { Tag = "lc-hang", ProjectDir = TempProject, State = release, ShutdownTimeout = TimeSpan.FromSeconds(1) });
         await instance.Booted.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
         Assert.Throws<TimeoutException>(instance.Dispose);
-        // Host disposal aggregates the same timeout instead of hanging forever.
-        var aggregate = Assert.Throws<AggregateException>(host.Dispose);
-        Assert.IsType<TimeoutException>(aggregate.InnerExceptions.Single());
-        // The stuck background thread dies with the process; the exit sweep
-        // skips unloading while an engine runs (none here), so exit stays clean.
+        // Releasing the blocker lets the program exit - no thread outlives the test.
+        release.Release();
+        Assert.Equal(0, await instance.Completion.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken));
+        host.Dispose(); // clean now: no aggregate timeout
     }
 
     [Fact]

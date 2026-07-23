@@ -392,6 +392,10 @@ jobs:
       - name: Restore
         run: dotnet restore twodog.bindings.tests
 
+      - name: Restore hosting tests
+        if: matrix.name != 'osx-arm64'
+        run: dotnet restore twodog.hosting.tests
+
       - name: Test (release variant)
         env:
           TWODOG_VARIANT: release
@@ -406,6 +410,13 @@ jobs:
         env:
           TWODOG_VARIANT: editor
         run: dotnet test twodog.bindings.tests --no-restore
+
+      # Multi-instance hosting: lifecycle, boot-gate, queue, and dual-start
+      # tests (parallel collections). macOS dual-load is deferred - see
+      # MULTI-INSTANCE-PLAN.md phase 5.
+      - name: Test multi-instance hosting
+        if: matrix.name != 'osx-arm64'
+        run: dotnet test twodog.hosting.tests --no-restore
 
   # Publish the demo desktop host the way an end user does (Release, RID) and
   # run the result headless. Regression guard: the engine used to load the

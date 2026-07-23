@@ -18,6 +18,7 @@ internal static class Program
 {
     private static int _checks;
     private static int _failures;
+    private static bool _windowed;
 
     private static int Main(string[] rawArgs)
     {
@@ -30,6 +31,7 @@ internal static class Program
         {
             if (rawArgs[i] == "--stage" && i + 1 < rawArgs.Length) stage = rawArgs[i + 1];
             if (rawArgs[i] == "--same-names") sameNames = true;
+            if (rawArgs[i] == "--windowed") _windowed = true;
         }
 
         var repoRoot = FindRepoRoot();
@@ -167,7 +169,7 @@ internal static class Program
             var asm = alc.LoadFromAssemblyPath(driverDll);
             var run = asm.GetType("DualSpike.Driver")?.GetMethod("Run")
                       ?? throw new MissingMethodException("DualSpike.Driver.Run not found in " + driverDll);
-            return (string)run.Invoke(null, [tag, nativeDll, projectDir, frames, churn, bootBarrier, exitBarrier])!;
+            return (string)run.Invoke(null, [tag, nativeDll, projectDir, frames, churn, !_windowed, bootBarrier, exitBarrier])!;
         }
         catch (Exception e)
         {
