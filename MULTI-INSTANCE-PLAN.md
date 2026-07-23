@@ -193,6 +193,37 @@ create-parameter  –  upstream-worthy, not required for v1.
 - [ ] Linux validation (dlopen distinct paths  –  expected to work); macOS
       explicitly deferred (exit-abort preexists single-instance)
 
+### Phase 6  –  subprocess hosting as the default test model (review direction)
+
+Adopted from the 2026-07-23 review: ALCs isolate managed statics, but CWD, env
+vars, native crashes, signal/exception handlers, process exit, and stdio remain
+process-global and cannot be isolated in-process. Therefore:
+
+- [ ] Worker-process-per-engine mode with typed IPC (reuse the
+      IEngineProgram/IEngineScenario contracts; length-prefixed JSON or
+      StreamJsonRpc over stdio), surfaced through the same fixture API so test
+      authoring is identical in both modes
+- [ ] Make subprocess mode the DEFAULT for EngineInstanceFixture; in-process
+      becomes the explicit opt-in advanced mode with its process-global
+      constraints documented on the API
+- [ ] In-process mode remains first-class for apps that genuinely need multiple
+      engines in one address space (its actual raison d'etre)
+
+## 2026-07-23 code review  –  outcomes
+
+Findings 1-12 fixed in-tree (finding 13 = phase 5/6 work, tracked above):
+start/dispose race + disposed-host throw; bounded Dispose (ShutdownTimeout) +
+self-thread deadlock guard for OnMessage callbacks; eager absolute-path capture
+at Start; exit sweep skips unloading while the ALC's engine still runs; boot
+gate fails closed (TimeoutException); SharedAssemblies validated by metadata
+walk against the bindings stack; Booted faults when a program exits without
+signaling; work queue gained Close/cancel lifecycle (no forever-pending items);
+fixture cleans up on ctor failure and deletes scratch dirs (warning on
+failure); resident-resource semantics documented on Dispose; pool key renamed
+to identity key + partial-copy eviction + verified cross-process race handling;
+scratch projects copy recursively and FORCE the custom user dir. Covered by
+LifecycleTests/WorkQueueTests (failure paths run without booting engines).
+
 ## Open questions / risks
 
 - **Publish modes**: `AssemblyDependencyResolver` needs deps.json + real files  – 

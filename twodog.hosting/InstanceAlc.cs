@@ -19,11 +19,12 @@ internal sealed class InstanceAlc : AssemblyLoadContext
     private readonly string _rootAssemblyPath;
     private readonly HashSet<string> _shared;
 
-    public InstanceAlc(string name, string rootAssemblyPath, IEnumerable<string> sharedAssemblies)
+    public InstanceAlc(string name, string rootAssemblyPath, IEnumerable<string> sharedAssemblies,
+                       AssemblyDependencyResolver resolver)
         : base($"2dog-{name}", isCollectible: false)
     {
         _rootAssemblyPath = rootAssemblyPath;
-        _resolver = new AssemblyDependencyResolver(rootAssemblyPath);
+        _resolver = resolver; // EngineHost validated the shared list against it
         _shared = new HashSet<string>(sharedAssemblies, StringComparer.OrdinalIgnoreCase) { HostingAssemblyName };
     }
 
