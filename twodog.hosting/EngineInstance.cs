@@ -13,17 +13,22 @@ public sealed class EngineInstance : IDisposable
     // program signals boot (or exits). Insurance against the engine's CWD dance
     // and loader-lock pressure; pumping runs fully parallel.
     private static readonly SemaphoreSlim BootGate = new(1, 1);
+    private static readonly TimeSpan BootGateTimeout = TimeSpan.FromSeconds(120);
 
     private readonly TaskCompletionSource<int> _completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly TaskCompletionSource _booted = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly InstanceContext _ctx;
+    private readonly Thread _thread;
+    private readonly TimeSpan _shutdownTimeout;
+    private int _bootGateReleased;
 
     public string Tag { get; }
 
     /// <summary>This instance's pooled native copy.</summary>
     public string NativePath { get; }
 
-    /// <summary>Completes when the program calls SignalBooted (or faults if it dies first).</summary>
+    /// <summary>Completes when the program calls SignalBooted; faults if the
+    /// program throws or exits without ever signaling boot.</summary>
     public Task Booted => _booted.Task;
 
     /// <summary>The program's Run() result; faulted on unhandled exceptions.</summary>
@@ -34,34 +39,41 @@ public sealed class EngineInstance : IDisposable
     {
         Tag = options.Tag;
         NativePath = nativePath;
+        _shutdownTimeout = options.ShutdownTimeout;
         _ctx = new InstanceContext(options, nativePath, SignalBooted);
-
-        var thread = new Thread(() => ThreadBody(alc, programAssemblyPath, programTypeName))
+        _thread = new Thread(() => ThreadBody(alc, programAssemblyPath, programTypeName))
         {
             IsBackground = true,
             Name = $"2dog-{options.Tag}",
         };
-        thread.Start();
     }
+
+    /// <summary>Called by EngineHost only after the instance is registered, so
+    /// host disposal can never miss a started thread.</summary>
+    internal void Begin() => _thread.Start();
 
     public void RequestQuit() => _ctx.RequestQuit();
 
-    /// <summary>Requests quit and waits for the program to finish. Failures are
-    /// not thrown here - observe them via <see cref="Completion"/>.</summary>
+    /// <summary>
+    /// Requests quit and waits up to InstanceOptions.ShutdownTimeout for the
+    /// program to finish; throws TimeoutException if it does not exit in time
+    /// (program failures are not thrown here - observe <see cref="Completion"/>).
+    /// When called from the instance's own thread (e.g. inside an OnMessage
+    /// callback) it only requests quit - waiting would self-deadlock.
+    /// Note: the native module, the ALC, and the pool slot stay resident until
+    /// process exit regardless; Dispose releases the thread and the engine, not
+    /// those (instance recycling is future work, see MULTI-INSTANCE-PLAN.md).
+    /// </summary>
     public void Dispose()
     {
         RequestQuit();
-        try
-        {
-            _completion.Task.Wait();
-        }
-        catch
-        {
-            // Surfaced via Completion for callers who care.
-        }
+        if (Thread.CurrentThread == _thread) return;
+        // WaitAny (not Task.Wait) so a faulted Completion does not throw here.
+        if (Task.WaitAny([_completion.Task], _shutdownTimeout) == -1)
+            throw new TimeoutException(
+                $"Engine instance '{Tag}' did not shut down within {_shutdownTimeout}. " +
+                "Programs must poll IInstanceContext.QuitRequested from their pump loop.");
     }
-
-    private int _bootGateReleased;
 
     private void SignalBooted()
     {
@@ -76,15 +88,23 @@ public sealed class EngineInstance : IDisposable
 
     private void ThreadBody(InstanceAlc alc, string programAssemblyPath, string programTypeName)
     {
-        if (!BootGate.Wait(TimeSpan.FromSeconds(120)))
-            _bootGateReleased = 1; // timed out: nothing to release, boot unserialized
         try
         {
+            // Fail closed: proceeding without the gate would overlap boots
+            // exactly when CWD and loader-lock serialization matter most.
+            if (!BootGate.Wait(BootGateTimeout))
+            {
+                _bootGateReleased = 1; // nothing acquired, nothing to release
+                throw new TimeoutException(
+                    $"Instance '{Tag}' timed out waiting for the boot gate - a previous instance is stuck booting.");
+            }
             var program = (IEngineProgram)Activator.CreateInstance(ResolveType(alc, programAssemblyPath, programTypeName))!;
             var exit = program.Run(_ctx);
             _completion.TrySetResult(exit);
-            // Run-to-completion programs never SignalBooted; unblock awaiters.
-            _booted.TrySetResult();
+            // No-op if SignalBooted ran; otherwise the program exited without
+            // ever booting and Booted must not report success.
+            _booted.TrySetException(new InvalidOperationException(
+                $"Program of instance '{Tag}' exited (code {exit}) without signaling boot."));
         }
         catch (Exception e)
         {
@@ -116,7 +136,7 @@ public sealed class EngineInstance : IDisposable
         private volatile bool _quit;
 
         public string Tag => options.Tag;
-        public string ProjectDir { get; } = Path.GetFullPath(options.ProjectDir);
+        public string ProjectDir => options.ProjectDir; // pre-normalized by EngineHost.Start
         public string[] Args => options.Args;
         public string NativePath => nativePath;
         public bool QuitRequested => _quit;

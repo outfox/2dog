@@ -1,4 +1,8 @@
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
+using System.Runtime.Loader;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,6 +13,11 @@ namespace twodog.Hosting;
 /// physical copy of the native libgodot (OS loaders dedupe by path - one module
 /// per copy) and its own ALC for the managed bindings (statics are per-ALC).
 /// The host itself never loads Godot types.
+///
+/// Process-global caveats (cannot be isolated in-process): CWD (the engine
+/// chdirs during boot - pass absolute paths), environment variables, native
+/// crash blast radius, signal/exception handlers, stdio. For test isolation
+/// with none of these constraints, use one process per engine instead.
 /// </summary>
 public sealed class EngineHost : IDisposable
 {
@@ -19,6 +28,7 @@ public sealed class EngineHost : IDisposable
 
     private readonly List<EngineInstance> _instances = [];
     private readonly Lock _gate = new();
+    private bool _disposed;
 
     /// <summary>Starts an instance whose program type is referenced by the caller.
     /// Only the type's assembly path and name are used - the instance ALC loads
@@ -39,35 +49,103 @@ public sealed class EngineHost : IDisposable
             ?? throw new ArgumentException($"{nameof(InstanceOptions.ProgramAssemblyPath)} is required (or use Start<TProgram>).");
         var programTypeName = options.ProgramTypeName
             ?? throw new ArgumentException($"{nameof(InstanceOptions.ProgramTypeName)} is required (or use Start<TProgram>).");
+
+        // Normalize every path NOW, on the caller's thread: CWD is process-global
+        // and engine boots move it, so relative paths must not survive to any
+        // later point. (Absolute inputs are still the only fully safe choice.)
+        programAssemblyPath = Path.GetFullPath(programAssemblyPath);
+        options = options with
+        {
+            ProjectDir = Path.GetFullPath(options.ProjectDir),
+            ProgramAssemblyPath = programAssemblyPath,
+            NativeSourcePath = options.NativeSourcePath is { } native ? Path.GetFullPath(native) : null,
+        };
         if (!File.Exists(programAssemblyPath))
             throw new FileNotFoundException("Program assembly not found.", programAssemblyPath);
 
-        var source = options.NativeSourcePath ?? NativeResolver.Resolve(options.Variant);
+        var resolver = new AssemblyDependencyResolver(programAssemblyPath);
+        ValidateSharedAssemblies(options.SharedAssemblies, resolver);
+
+        var source = Path.GetFullPath(options.NativeSourcePath ?? NativeResolver.Resolve(options.Variant));
         var nativePath = AcquireNativeCopy(source);
-        var alc = new InstanceAlc(options.Tag, Path.GetFullPath(programAssemblyPath), options.SharedAssemblies);
-        var instance = new EngineInstance(options, alc, Path.GetFullPath(programAssemblyPath), programTypeName, nativePath);
-        lock (_gate) _instances.Add(instance);
+        var alc = new InstanceAlc(options.Tag, programAssemblyPath, options.SharedAssemblies, resolver);
+        var instance = new EngineInstance(options, alc, programAssemblyPath, programTypeName, nativePath);
+        lock (_gate)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            _instances.Add(instance);
+            // The thread only starts once the instance is registered, so
+            // Dispose can never race past an unrecorded live engine.
+            instance.Begin();
+        }
         return instance;
     }
 
-    /// <summary>Requests quit on all instances, then waits for each to finish.</summary>
+    /// <summary>Requests quit on all instances, then waits for each (bounded by
+    /// their ShutdownTimeout). Instance failures/timeouts are aggregated.
+    /// Native modules, ALCs, and pool slots stay resident until process exit -
+    /// see <see cref="EngineInstance.Dispose"/>.</summary>
     public void Dispose()
     {
         EngineInstance[] instances;
         lock (_gate)
         {
+            if (_disposed) return;
+            _disposed = true;
             instances = [.. _instances];
             _instances.Clear();
         }
         foreach (var instance in instances) instance.RequestQuit();
-        foreach (var instance in instances) instance.Dispose();
+        List<Exception>? errors = null;
+        foreach (var instance in instances)
+        {
+            try
+            {
+                instance.Dispose();
+            }
+            catch (Exception e)
+            {
+                (errors ??= []).Add(e);
+            }
+        }
+        if (errors is not null)
+            throw new AggregateException("One or more engine instances failed to shut down cleanly.", errors);
+    }
+
+    /// <summary>
+    /// Sharing an assembly that (transitively) references the bindings stack
+    /// would reunify the per-ALC statics the whole isolation model rests on -
+    /// reject it up front by walking assembly references.
+    /// </summary>
+    private static void ValidateSharedAssemblies(string[] shared, AssemblyDependencyResolver resolver)
+    {
+        if (shared.Length == 0) return;
+        string[] forbidden = ["twodog.bindings", "twodog.gdextension", "twodog.hosting.runtime"];
+        var pending = new Queue<string>(shared);
+        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        while (pending.Count > 0)
+        {
+            var name = pending.Dequeue();
+            if (!visited.Add(name)) continue;
+            if (forbidden.Contains(name, StringComparer.OrdinalIgnoreCase))
+                throw new ArgumentException(
+                    $"SharedAssemblies must be Godot-free: '{string.Join("' / '", shared)}' leads to '{name}', " +
+                    "whose statics must stay per-instance.");
+            var path = resolver.ResolveAssemblyToPath(new AssemblyName(name));
+            if (path is null) continue; // framework/default-ALC assembly - no bindings reachable this way
+            using var pe = new PEReader(File.OpenRead(path));
+            var metadata = pe.GetMetadataReader();
+            foreach (var handle in metadata.AssemblyReferences)
+                pending.Enqueue(metadata.GetString(metadata.GetAssemblyReference(handle).Name));
+        }
     }
 
     /// <summary>
     /// Pool: %LOCALAPPDATA%/2dog/native-pool/&lt;key&gt;/slot-&lt;n&gt;/&lt;name&gt;. Copies
-    /// persist across runs (keyed by source identity), so steady-state cost is
-    /// zero. Cross-process slot collisions are fine - separate processes may
-    /// map the same file.
+    /// persist across runs, keyed by source identity (path, size, mtime - NOT
+    /// content; an in-place rebuild changes size/mtime and therefore the key),
+    /// so steady-state cost is zero. Cross-process slot collisions are fine -
+    /// separate processes may map the same file.
     /// </summary>
     private static string AcquireNativeCopy(string sourcePath)
     {
@@ -75,25 +153,28 @@ public sealed class EngineHost : IDisposable
         if (slot == 0) return sourcePath;
 
         var source = new FileInfo(sourcePath);
-        var key = Convert.ToHexString(SHA256.HashData(
+        var identityKey = Convert.ToHexString(SHA256.HashData(
             Encoding.UTF8.GetBytes($"{source.FullName}|{source.Length}|{source.LastWriteTimeUtc.Ticks}")))[..16];
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "2dog", "native-pool", key, $"slot-{slot}");
+            "2dog", "native-pool", identityKey, $"slot-{slot}");
         Directory.CreateDirectory(dir);
         var dest = Path.Combine(dir, source.Name);
-        if (!File.Exists(dest))
+        // Length check evicts partial copies left by a crashed process.
+        if (!File.Exists(dest) || new FileInfo(dest).Length != source.Length)
         {
             var tmp = $"{dest}.{Environment.ProcessId}.tmp";
             File.Copy(sourcePath, tmp, overwrite: true);
             try
             {
-                File.Move(tmp, dest);
+                File.Move(tmp, dest, overwrite: false);
             }
-            catch (IOException)
+            catch (IOException) when (File.Exists(dest))
             {
-                File.Delete(tmp); // lost a cross-process race; dest exists now
+                File.Delete(tmp); // lost a cross-process race to a completed copy
             }
         }
+        if (new FileInfo(dest).Length != source.Length)
+            throw new IOException($"Native pool copy at '{dest}' does not match its source '{sourcePath}'.");
         return dest;
     }
 

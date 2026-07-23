@@ -7,7 +7,9 @@ public sealed record InstanceOptions
     public required string Tag { get; init; }
 
     /// <summary>Directory containing project.godot (instances sharing a project
-    /// contend on .godot/ and user:// - give each its own copy).</summary>
+    /// contend on .godot/ and user:// - give each its own copy). Prefer an
+    /// absolute path: CWD is process-global and engine boots move it; relative
+    /// paths are resolved once, at Start, against the then-current CWD.</summary>
     public string ProjectDir { get; init; } = ".";
 
     /// <summary>Extra engine args (e.g. "--headless").</summary>
@@ -36,4 +38,8 @@ public sealed record InstanceOptions
 
     /// <summary>Arbitrary CoreLib-only state exposed as <see cref="IInstanceContext.State"/>.</summary>
     public object? State { get; init; }
+
+    /// <summary>How long Dispose waits for the program to honor QuitRequested
+    /// before throwing TimeoutException.</summary>
+    public TimeSpan ShutdownTimeout { get; init; } = TimeSpan.FromSeconds(60);
 }

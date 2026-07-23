@@ -200,6 +200,10 @@ public sealed unsafe class Engine : IDisposable
             // (one ALC each) every sweep must unload exactly its own module.
             var module = NativeLoader.LoadedLibraryHandle;
             if (!OperatingSystem.IsWindows() || module == 0) return;
+            // Never unload while this ALC's engine still runs (a background
+            // engine thread at process exit): use-after-unload is a worse
+            // failure than the teardown fail-fast this sweep exists to avoid.
+            if (_godotInstancePtr != 0) return;
             var attempts = 0;
             while (FreeLibrary(module) && ++attempts < 32)
             {

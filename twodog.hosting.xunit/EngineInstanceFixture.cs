@@ -1,3 +1,4 @@
+using System.Runtime.ExceptionServices;
 using twodog.Hosting.Runtime;
 
 namespace twodog.Hosting.Xunit;
@@ -12,12 +13,16 @@ namespace twodog.Hosting.Xunit;
 /// implementations and execute them with <see cref="Run{TScenario}"/>.
 /// Scenarios run inside the instance's ALC on its engine thread; only the
 /// returned string crosses back - assert on that.
+///
+/// In-process limits apply (CWD, env vars, crash blast radius, handlers are
+/// process-global); tests needing full isolation belong in separate processes.
 /// </summary>
 public class EngineInstanceFixture : IDisposable
 {
     private readonly EngineHost _host = new();
     private readonly EngineWorkQueue _queue = new();
     private readonly EngineInstance _instance;
+    private readonly string _projectDir;
 
     /// <summary>Unique per fixture subclass; names the instance, thread, and user:// dir.</summary>
     protected virtual string Tag => GetType().Name;
@@ -32,37 +37,87 @@ public class EngineInstanceFixture : IDisposable
 
     public EngineInstanceFixture()
     {
-        _instance = _host.Start(new InstanceOptions
+        _projectDir = ScratchProject.Create(Tag, SourceProjectDir);
+        try
         {
-            Tag = Tag,
-            ProjectDir = ScratchProject.Create(Tag, SourceProjectDir),
-            Args = EngineArgs,
-            // The test assembly (where the fixture subclass lives) roots the
-            // instance ALC, so scenarios and their Godot deps resolve there.
-            ProgramAssemblyPath = GetType().Assembly.Location,
-            ProgramTypeName = $"{typeof(ResidentProgram).FullName}, {typeof(ResidentProgram).Assembly.GetName().Name}",
-            Variant = Variant,
-            State = _queue,
-        });
-        if (!_instance.Booted.Wait(BootTimeout))
-            throw new TimeoutException($"Engine instance '{Tag}' did not boot within {BootTimeout}.");
+            _instance = _host.Start(new InstanceOptions
+            {
+                Tag = Tag,
+                ProjectDir = _projectDir,
+                Args = EngineArgs,
+                // The test assembly (where the fixture subclass lives) roots the
+                // instance ALC, so scenarios and their Godot deps resolve there.
+                ProgramAssemblyPath = GetType().Assembly.Location,
+                ProgramTypeName = $"{typeof(ResidentProgram).FullName}, {typeof(ResidentProgram).Assembly.GetName().Name}",
+                Variant = Variant,
+                State = _queue,
+            });
+            if (Task.WaitAny([_instance.Booted], BootTimeout) == -1)
+                throw new TimeoutException($"Engine instance '{Tag}' did not boot within {BootTimeout}.");
+            _instance.Booted.GetAwaiter().GetResult(); // propagate boot failure with its real stack
+        }
+        catch (Exception boot)
+        {
+            // xUnit never disposes a fixture whose ctor threw - clean up here
+            // or leak the host, the instance thread, and the scratch dir.
+            try
+            {
+                _host.Dispose();
+                CleanupScratch();
+            }
+            catch (Exception cleanup)
+            {
+                throw new AggregateException(boot, cleanup);
+            }
+            ExceptionDispatchInfo.Throw(boot);
+            throw; // unreachable
+        }
     }
 
-    /// <summary>Executes a scenario on this instance's engine thread and returns its report.</summary>
+    /// <summary>Executes a scenario on this instance's engine thread and returns
+    /// its report. On timeout the item is canceled if it has not started; an
+    /// already-running scenario cannot be aborted and may still finish against
+    /// the engine - treat the instance as suspect after a timeout.</summary>
     public string Run<TScenario>(string? argument = null) where TScenario : IEngineScenario
     {
         var type = typeof(TScenario);
-        var task = _queue.Submit($"{type.FullName}, {type.Assembly.GetName().Name}", argument);
-        if (!task.Wait(ScenarioTimeout))
+        var item = _queue.Submit($"{type.FullName}, {type.Assembly.GetName().Name}", argument);
+        // WaitAny: a faulted task must surface via GetResult below, not as AggregateException here.
+        if (Task.WaitAny([item.Task], ScenarioTimeout) == -1)
+        {
+            item.TryCancel();
             throw new TimeoutException($"Scenario {type.Name} timed out after {ScenarioTimeout} on instance '{Tag}'.");
-        return task.Result;
+        }
+        return item.Task.GetAwaiter().GetResult();
     }
 
     public void Dispose()
     {
-        _host.Dispose();
-        // Make instance failures loud: xUnit reports fixture dispose exceptions.
-        if (_instance.Completion.IsFaulted) _instance.Completion.GetAwaiter().GetResult();
+        try
+        {
+            _host.Dispose();
+            // Make instance failures loud: xUnit reports fixture dispose exceptions.
+            if (_instance.Completion.IsFaulted) _instance.Completion.GetAwaiter().GetResult();
+        }
+        finally
+        {
+            CleanupScratch();
+        }
         GC.SuppressFinalize(this);
+    }
+
+    private void CleanupScratch()
+    {
+        // Best effort - a straggler (e.g. a timed-out scenario) may still hold
+        // files - but never silent: leftover scratch dirs accumulate under %TEMP%.
+        try
+        {
+            Directory.Delete(_projectDir, recursive: true);
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            Console.Error.WriteLine(
+                $"[2dog.hosting] warning: could not delete scratch project '{_projectDir}' for instance '{Tag}': {e.Message}");
+        }
     }
 }

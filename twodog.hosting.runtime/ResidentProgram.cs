@@ -19,23 +19,31 @@ public sealed class ResidentProgram : IEngineProgram
             ?? throw new InvalidOperationException(
                 $"{nameof(ResidentProgram)} requires an {nameof(EngineWorkQueue)} as InstanceOptions.State.");
 
-        var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
-        using var godot = engine.Start();
-        var session = new EngineSession(engine, godot);
-        ctx.SignalBooted();
         try
         {
-            while (!ctx.QuitRequested)
+            var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
+            using var godot = engine.Start();
+            var session = new EngineSession(engine, godot);
+            ctx.SignalBooted();
+            try
             {
-                if (godot.Iteration()) break;
-                while (queue.TryTake(out var item)) Execute(session, item);
+                while (!ctx.QuitRequested)
+                {
+                    if (godot.Iteration()) break;
+                    while (queue.TryTake(out var item)) Execute(session, item);
+                }
+            }
+            finally
+            {
+                engine.Dispose();
             }
         }
         finally
         {
-            engine.Dispose();
-            while (queue.TryTake(out var item))
-                item.Completion.TrySetException(new OperationCanceledException("Engine instance shut down."));
+            // Runs on boot failure too: fails everything still queued AND
+            // rejects submissions racing with this shutdown - no work item can
+            // be left forever-pending.
+            queue.Close(new OperationCanceledException($"Engine instance '{ctx.Tag}' shut down."));
         }
         return 0;
     }
@@ -45,11 +53,11 @@ public sealed class ResidentProgram : IEngineProgram
         try
         {
             var scenario = (IEngineScenario)Activator.CreateInstance(ResolveScenarioType(item.TypeName))!;
-            item.Completion.TrySetResult(scenario.Run(session, item.Argument));
+            item.Complete(scenario.Run(session, item.Argument));
         }
         catch (Exception e)
         {
-            item.Completion.TrySetException(e);
+            item.Fail(e);
         }
     }
 
