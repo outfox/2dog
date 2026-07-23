@@ -14,4 +14,9 @@
          default-ALC copy of this assembly, which is what gives its contract
          types consistent identity across every instance. -->
 
+    <ItemGroup>
+        <!-- Unit tests for internals (ExceptionSanitizer). -->
+        <InternalsVisibleTo Include="twodog.hosting.tests" />
+    </ItemGroup>
+
 </Project>

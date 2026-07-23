@@ -19,10 +19,10 @@ namespace twodog.Hosting.Xunit;
 /// </summary>
 public class EngineInstanceFixture : IDisposable
 {
-    private readonly EngineHost _host = new();
+    private readonly EngineHost? _host;
     private readonly EngineWorkQueue _queue = new();
-    private readonly EngineInstance _instance;
-    private readonly string _projectDir;
+    private readonly EngineInstance? _instance;
+    private readonly string? _projectDir;
 
     /// <summary>Unique per fixture subclass; names the instance, thread, and user:// dir.</summary>
     protected virtual string Tag => GetType().Name;
@@ -37,7 +37,12 @@ public class EngineInstanceFixture : IDisposable
 
     public EngineInstanceFixture()
     {
+        // Fail closed, quietly: xUnit constructs collection fixtures before any
+        // test-level skip is evaluated, so an unsupported platform must no-op
+        // here - the tests themselves skip via EngineHost.IsSupported.
+        if (!EngineHost.IsSupported) return;
         _projectDir = ScratchProject.Create(Tag, SourceProjectDir);
+        _host = new EngineHost();
         try
         {
             _instance = _host.Start(new InstanceOptions
@@ -80,6 +85,10 @@ public class EngineInstanceFixture : IDisposable
     /// the engine - treat the instance as suspect after a timeout.</summary>
     public string Run<TScenario>(string? argument = null) where TScenario : IEngineScenario
     {
+        if (_instance is null)
+            throw new PlatformNotSupportedException(
+                "Engine hosting is unsupported on this platform - tests using this fixture must skip first, " +
+                "e.g. Assert.SkipWhen(!EngineHost.IsSupported, ...).");
         var type = typeof(TScenario);
         var item = _queue.Submit($"{type.FullName}, {type.Assembly.GetName().Name}", argument);
         // WaitAny: a faulted task must surface via GetResult below, not as AggregateException here.
@@ -93,11 +102,12 @@ public class EngineInstanceFixture : IDisposable
 
     public void Dispose()
     {
+        if (_host is null) return; // unsupported platform: nothing was started
         try
         {
             _host.Dispose();
             // Make instance failures loud: xUnit reports fixture dispose exceptions.
-            if (_instance.Completion.IsFaulted) _instance.Completion.GetAwaiter().GetResult();
+            if (_instance!.Completion.IsFaulted) _instance.Completion.GetAwaiter().GetResult();
         }
         finally
         {
@@ -108,16 +118,6 @@ public class EngineInstanceFixture : IDisposable
 
     private void CleanupScratch()
     {
-        // Best effort - a straggler (e.g. a timed-out scenario) may still hold
-        // files - but never silent: leftover scratch dirs accumulate under %TEMP%.
-        try
-        {
-            Directory.Delete(_projectDir, recursive: true);
-        }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
-        {
-            Console.Error.WriteLine(
-                $"[2dog.hosting] warning: could not delete scratch project '{_projectDir}' for instance '{Tag}': {e.Message}");
-        }
+        if (_projectDir is not null) ScratchProject.Delete(_projectDir);
     }
 }

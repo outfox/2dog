@@ -42,4 +42,9 @@ public sealed record InstanceOptions
     /// <summary>How long Dispose waits for the program to honor QuitRequested
     /// before throwing TimeoutException.</summary>
     public TimeSpan ShutdownTimeout { get; init; } = TimeSpan.FromSeconds(60);
+
+    /// <summary>How long this instance waits its turn on the process-wide boot
+    /// gate (boots are serialized across instances) before failing closed -
+    /// i.e. how long a stuck prior boot may stall this one.</summary>
+    public TimeSpan BootGateTimeout { get; init; } = TimeSpan.FromSeconds(120);
 }

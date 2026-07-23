@@ -15,15 +15,15 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
     public string RepoRoot { get; }
 
     private readonly delegate* unmanaged<nint, void> _destroyGodotInstance;
-    private static string? _loadedLibraryPath;
+    private static nint _loadedLibraryHandle;
 
     public GodotBindingsFixture()
     {
         RepoRoot = FindRepoRoot();
         var dllPath = FindNonMonoLibgodot(RepoRoot);
-        _loadedLibraryPath = dllPath;
 
         var lib = NativeLibrary.Load(dllPath);
+        _loadedLibraryHandle = lib;
         var create = (delegate* unmanaged<int, nint*, nint, nint>)NativeLibrary.GetExport(lib, "libgodot_create_godot_instance");
         _destroyGodotInstance = (delegate* unmanaged<nint, void>)NativeLibrary.GetExport(lib, "libgodot_destroy_godot_instance");
 
@@ -56,14 +56,17 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
         // Unload libgodot before loader shutdown: leaving it mapped crashes
         // the process on Windows with 0xE0464645 (same mitigation as
         // twodog.engine/Engine.cs). Must not call any Godot API in here.
+        // Free by recorded handle, not file name: the hosted parallel fixtures
+        // in this same process map their own libgodot copies, and a name-based
+        // GetModuleHandleW sweep can match and unload a sibling's still-running
+        // module (spikes/dual-instance/FINDINGS.md constraint #1).
         AppDomain.CurrentDomain.ProcessExit += static (_, _) =>
         {
-            if (!OperatingSystem.IsWindows() || _loadedLibraryPath is null) return;
-            var module = GetModuleHandleW(Path.GetFileName(_loadedLibraryPath));
+            var module = _loadedLibraryHandle;
+            if (!OperatingSystem.IsWindows() || module == 0) return;
             var attempts = 0;
-            while (module != 0 && FreeLibrary(module) && ++attempts < 32)
+            while (FreeLibrary(module) && ++attempts < 32)
             {
-                module = GetModuleHandleW(Path.GetFileName(_loadedLibraryPath));
             }
         };
     }
@@ -86,9 +89,6 @@ public sealed unsafe class GodotBindingsFixture : IDisposable
         DisposalQueue.Drain();
         _destroyGodotInstance(InstancePtr);
     }
-
-    [DllImport("kernel32", CharSet = CharSet.Unicode)]
-    private static extern nint GetModuleHandleW(string moduleName);
 
     [DllImport("kernel32")]
     [return: MarshalAs(UnmanagedType.Bool)]
