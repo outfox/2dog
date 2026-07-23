@@ -1,6 +1,7 @@
 # Plan: multi-instance hosting (concurrent Godot engines in one process)
 
-Status: **planned, phase 0 (spike) complete** on branch `multi-instance`.
+Status: **phases 1, 2, 4 (core) complete** on branch `multi-instance`  – 
+`dotnet test twodog.hosting.tests` runs parallel engine collections green.
 Evidence base: `spikes/dual-instance/`  –  two concurrent gdext instances, all 4
 stages PASS incl. stress, zero library changes (see its `FINDINGS.md`).
 
@@ -154,32 +155,37 @@ create-parameter  –  upstream-worthy, not required for v1.
 
 ## Phases
 
-### Phase 1  –  sweep fix + pool primitives
-- [ ] Handle-based ProcessExit sweep in `twodog.gdextension` (change 1 above)
-- [ ] Rerun spike stages b–d against it (temporarily point the spike at
-      same-named copies in distinct dirs to prove the constraint is gone)
-- [ ] `NativesRevision` untouched (managed-only change); normal `TwoDogRevision` flow
+### Phase 1  –  sweep fix + pool primitives  –  DONE
+- [x] Handle-based ProcessExit sweep in `twodog.gdextension` (change 1 above)
+- [x] Rerun spike stages b/c against it (`--same-names` flag: same-named copies
+      in distinct dirs, exit 0  –  the filename constraint is gone)
+- [x] `NativesRevision` untouched (managed-only change); normal `TwoDogRevision` flow
 
-### Phase 2  –  `twodog.hosting`
-- [ ] Project + `EngineHost`/`EngineInstance`/`InstanceAlc`/native pool/contracts
-- [ ] Port the spike driver to a sample program consuming the public API
-      (`spikes/dual-instance` stays frozen as evidence; new sample under
-      `demo/` or `spikes/hosting.sample`)
-- [ ] Acceptance: spike stages a–d reproduced via `EngineHost` alone, exit 0
+### Phase 2  –  `twodog.hosting`  –  DONE (sample = test pilot)
+- [x] Project + `EngineHost`/`EngineInstance`/`InstanceAlc`/native pool/contracts
+- [x] Public-API consumer: `twodog.hosting.tests` (dual `Start<T>` app story +
+      resident fixtures) took the place of a standalone sample;
+      `spikes/dual-instance` stays frozen as evidence
 - [ ] Stress: N=4 instances, churn, repeated start/stop cycles (ALC leak size
       per cycle measured and documented)
 
 ### Phase 3  –  isolation polish
-- [ ] `user://` isolation for host-managed project copies (project.godot patch)
+- [x] `user://` isolation for host-managed project copies
+      (`ScratchProject.Create`: distinct config/name for generated projects,
+      custom_user_dir patch for copies)
 - [ ] Per-instance log capture if cheap (route engine output per instance  – 
       investigate fork logger hook; otherwise document interleaving)
 - [ ] CWD hazard documented in package README + docs site
 
-### Phase 4  –  test fixtures
-- [ ] `EngineInstanceFixture` + scenario runner, parallel collections demo
+### Phase 4  –  test fixtures  –  fixture DONE, adoption pending
+- [x] `EngineInstanceFixture` + scenario runner (`twodog.hosting.xunit` +
+      `twodog.hosting.runtime`), parallel-collections pilot green
+      (`twodog.hosting.tests`, parallelizeTestCollections=true, 7 tests)
 - [ ] Convert one real twodog.bindings.tests collection as a pilot
 
 ### Phase 5  –  ship
+- [ ] Add the twodog.hosting* projects to 2dog.sln (deferred with CI wiring so
+      the branch stays inert for existing pipelines)
 - [ ] Package `2dog.hosting` in CI like the other packages
 - [ ] Rewrite `docs/content/known-issues/single-instance.md`: single-ALC rule
       stays, concurrent instances now possible via 2dog.hosting (gdext stack)
