@@ -1,4 +1,4 @@
-# Let's Take `Godot` for Walkies 🦴
+# Let's Take `Godot` for Walkies :gd-bone@gold:
 
 This guide takes an existing or new Godot C# project through the same first
 journey: run it as a .NET application, meet the project layout, test it, and
@@ -10,7 +10,7 @@ You need:
 
 - .NET SDK 10.0 or later
 - A supported platform: `win-x64`, `linux-x64`, or `osx-arm64`
-- Godot .NET only when you want to edit scenes in the editor UI
+- The Godot 4.7.x .NET editor, only when you want to edit scenes visually
 
 2dog imports assets automatically during `dotnet build`, so installing the
 Godot editor is not a prerequisite for builds or CI.
@@ -23,13 +23,13 @@ fresh project.
 
 ::: code-group
 
-```bash [🐕 Existing Project]
+```bash [Existing Project]
 # Convert in place. Existing game content stays where it is.
 dnx 2dog convert path/to/MyGame
 cd path/to/MyGame
 ```
 
-```bash [🌱 Fresh Project]
+```bash [Fresh Project]
 # Register the template once, then create the project.
 dotnet new install 2dog
 dotnet new 2dog -n MyGame
@@ -66,8 +66,8 @@ inside it:
 
 ```text
 MyGame/                       Godot project and solution root
-├── project.godot
-├── MyGame.csproj             Scenes and C# game scripts
+├── project.godot             Scenes, scripts, assets, settings
+├── MyGame.csproj             Godot C# game assembly
 ├── MyGame.2dog/              Desktop host
 ├── MyGame.web/               Browser host
 └── MyGame.tests/             xUnit host
@@ -77,14 +77,15 @@ Each host folder contains `.gdignore`, so it remains invisible to the Godot
 editor, importer, and exporter. Your scenes, scripts, and assets stay at the
 root where Godot expects them.
 
-Read the recommended [Project Layout](/project-layout) for the complete tour and the responsibility of each layer.
+Read the recommended [Project Layout](/project-layout) for the complete tour
+and the responsibility of each layer.
 
 ## 4. Keep Using Godot
 
 Open the same project root in the Godot .NET editor:
 
 ```bash
-godot-mono --editor MyGame
+godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
 ```
 
 Edit a scene or C# script as usual. The next `dotnet build`, `dotnet run`, or
@@ -113,7 +114,7 @@ own scenes and assert game behavior.
 
 ## 6. Publish to the Browser
 
-Install the WebAssembly build tools once:
+Install the WebAssembly build tools and a static file server once:
 
 ```bash
 dotnet workload install wasm-tools
@@ -153,15 +154,6 @@ The mechanism underneath all of this is small but powerful: your .NET process
 owns Godot's lifecycle. [Core Concepts](/concepts) is the next stop when you
 want to see that code and understand the main loop.
 
-## Choose the Next Trail
-
-- Learn exactly [what conversion changes](/convert).
-- Understand the recommended [project layout](/project-layout).
-- Write a useful [scene test with xUnit](/testing).
-- Tune the [browser build and deployment](/web).
-- Learn about [native build variants](/build-configurations).
-- Look up [MSBuild configuration properties](/configuration).
-
 ## Package Version Note
 
 Package versions begin with the embedded Godot version. If you add
@@ -173,3 +165,12 @@ silently select a newer engine line:
 ```
 
 Generated and converted projects configure their package versions for you.
+
+## Choose the Next Trail
+
+- Learn exactly [what conversion changes](/convert).
+- Understand the recommended [project layout](/project-layout).
+- Write a useful [scene test with xUnit](/testing).
+- Tune the [browser build and deployment](/web).
+- Learn about [native build variants](/build-configurations).
+- Look up [MSBuild configuration properties](/configuration).
