@@ -51,9 +51,9 @@ godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
 ```
 
 
-## Exporting for the web
+## Exporting for the Web
 
-The generated .NET app can also be published to WASM (HTML5 / Web Browser)
+The generated .NET app can also be published to `browser-wasm` (HTML5 / Web Browser)
 
 ```bash
 dotnet workload install wasm-tools
@@ -107,7 +107,7 @@ Run the demo with `dotnet run --project demo/demo.2dog` and the tests with
 `dotnet test twodog.tests`.
 
 
-## Join us at the Dog Park:
+## Join us at the Dog Park
 
 We have a dedicated channel for 2dog on the ⤜outfox⤏ Discord:
 
