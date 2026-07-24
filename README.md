@@ -11,7 +11,7 @@
 
 ### 🦴 2dog is still Godot... just backward!
 
-2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications.
+2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications. In other words: Godot normally loads .NET, now .NET loads Godot.
 
 That enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
 
