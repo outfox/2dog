@@ -77,8 +77,7 @@ Each host folder contains `.gdignore`, so it remains invisible to the Godot
 editor, importer, and exporter. Your scenes, scripts, and assets stay at the
 root where Godot expects them.
 
-Read [The Recommended Project Layout](/project-layout) for the complete tour
-and the responsibility of each layer.
+Read the recommended [Project Layout](/project-layout) for the complete tour and the responsibility of each layer.
 
 ## 4. Keep Using Godot
 
@@ -157,7 +156,7 @@ want to see that code and understand the main loop.
 ## Choose the Next Trail
 
 - Learn exactly [what conversion changes](/convert).
-- Understand [the recommended project layout](/project-layout).
+- Understand the recommended [project layout](/project-layout).
 - Write a useful [scene test with xUnit](/testing).
 - Tune the [browser build and deployment](/web).
 - Learn about [native build variants](/build-configurations).

@@ -66,7 +66,7 @@ export default defineConfig({
         text: 'Start Here',
         items: [
           { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Recommended Project Layout', link: '/project-layout' },
+          { text: 'Project Layout', link: '/project-layout' },
           { text: 'Core Concepts', link: '/concepts' }
         ]
       },

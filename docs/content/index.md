@@ -93,4 +93,4 @@ dotnet run --project MyGame.2dog
 :::
 ::::
 
-Whichever trail you take, the project still opens in the regular Godot .NET editor afterwards. Authoring stays in Godot, while running, testing, and publishing can done from `dotnet` as much as you like.
+Authoring stays in Godot. Running, testing, and publishing can done from `dotnet` as much as you like, or as always from the editor.

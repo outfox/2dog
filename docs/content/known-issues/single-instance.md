@@ -59,3 +59,8 @@ signal/exception handlers, and stdio. `user://` collides across instances
 whose projects share `application/config/name`. On macOS in-process hosting
 is not yet supported; for full isolation, one process per engine remains the
 recommendation.
+
+For tests, `twodog.hosting.xunit` packages this as a collection fixture
+(`EngineInstanceFixture`), so xUnit collections can run **in parallel**, each
+against its own engine instance  –  see
+[Testing](../testing#parallel-collections-one-engine-per-collection).

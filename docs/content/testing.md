@@ -92,8 +92,10 @@ public class TestsAgainstEngineB(GodotHeadlessFixture godot) { /* ... */ }
 ```
 
 ::: warning
-`DisableParallelization = true` is required (it is already set on the shipped collections). Godot is
-not thread-safe, and parallel tests will crash.
+`DisableParallelization = true` is required for collections that share an engine this way (it is
+already set on the shipped collections). A single Godot instance is not thread-safe, and running
+tests against it in parallel will crash. Genuinely parallel collections need one engine instance
+per collection  –  see [Parallel collections](#parallel-collections-one-engine-per-collection).
 :::
 
 ### Custom collections
@@ -110,6 +112,83 @@ public class GodotOpenGl3Fixture() : GodotFixtureBase("--display-driver", "openg
 [CollectionDefinition(nameof(GodotOpenGl3Collection), DisableParallelization = true)]
 public class GodotOpenGl3Collection : ICollectionFixture<GodotOpenGl3Fixture>;
 ```
+
+### Parallel collections (one engine per collection)
+
+The single-instance rule is per native module and per assembly load context, not per process (see
+[Single Godot Instance](/known-issues/single-instance)). The `twodog.hosting` orchestrator uses this
+to run several engine instances concurrently, and `twodog.hosting.xunit` wraps it in a collection
+fixture: subclass `EngineInstanceFixture` once per collection and register it **without**
+`DisableParallelization`. The collections then run in parallel, each against its own isolated engine
+(its own native copy, load context, scratch project, and `user://` directory).
+
+Tests do not touch Godot types directly  –  each engine lives inside its instance's load context.
+Instead you write scenarios (`IEngineScenario`) that execute on the instance's engine thread; only
+the returned report string crosses back, and that is what you assert on:
+
+```csharp
+using Godot;
+using twodog.Hosting;         // EngineHost
+using twodog.Hosting.Runtime; // IEngineScenario, EngineSession
+using twodog.Hosting.Xunit;   // EngineInstanceFixture
+using Xunit;
+
+public sealed class AlphaEngineFixture : EngineInstanceFixture
+{
+    protected override string Tag => "alpha";
+}
+
+public sealed class BetaEngineFixture : EngineInstanceFixture
+{
+    protected override string Tag => "beta";
+}
+
+// Note: no DisableParallelization - these collections run at the same time.
+[CollectionDefinition(nameof(AlphaCollection))]
+public sealed class AlphaCollection : ICollectionFixture<AlphaEngineFixture>;
+
+[CollectionDefinition(nameof(BetaCollection))]
+public sealed class BetaCollection : ICollectionFixture<BetaEngineFixture>;
+
+public sealed class AddNodeScenario : IEngineScenario
+{
+    public string Run(EngineSession session, string? argument)
+    {
+        var root = session.Tree.Root!;
+        root.AddChild(new Node { Name = $"n_{argument}" });
+        session.PumpFrames(1);
+        return $"children={root.GetChildCount()}";
+    }
+}
+
+[Collection(nameof(AlphaCollection))]
+public sealed class AlphaTests(AlphaEngineFixture fixture)
+{
+    [Fact]
+    public void RunsAgainstItsOwnEngine()
+    {
+        Assert.SkipWhen(!EngineHost.IsSupported, "In-process hosting is unsupported on this platform.");
+        Assert.Contains("children=", fixture.Run<AddNodeScenario>("alpha"));
+    }
+}
+```
+
+The fixture has overridable knobs: `Tag` (names the instance, its thread, and its `user://` dir  –
+unique per collection), `SourceProjectDir` (a Godot project copied per instance; by default a
+minimal headless project is generated), `EngineArgs` (default `--headless`), `Variant`, and the
+boot/scenario timeouts.
+
+What remains process-global cannot be isolated in-process: the current working directory,
+environment variables, native crash blast radius, and signal/exception handlers. Tests that need
+full isolation still belong in separate processes. On macOS in-process hosting is not yet
+supported  –  `EngineHost.Start` fails closed there, so tests should skip first via
+`EngineHost.IsSupported` (the fixture itself no-ops on unsupported platforms).
+
+::: info Availability
+`twodog.hosting` and `twodog.hosting.xunit` are not published as NuGet packages yet  –  reference
+the projects from the [2dog repository](https://github.com/outfox/2dog). A runnable example lives
+in `demos/xunit/parallel_collections/`.
+:::
 
 ## Writing Tests
 

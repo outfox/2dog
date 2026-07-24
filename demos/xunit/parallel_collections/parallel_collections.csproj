@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>ParallelCollectionsDemo</RootNamespace>
+        <!-- No Godot script classes and no Godot project of its own: the source generators have nothing to do here. -->
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*"/>
+        <PackageReference Include="xunit.v3" Version="3.*"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.*"/>
+    </ItemGroup>
+
+    <!-- twodog.hosting(.xunit) is not packaged yet - in-repo consumers use project references. -->
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\twodog.hosting.xunit\twodog.hosting.xunit.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
+        <!-- Source Godot project copied per engine instance by CopiedProjectFixture. -->
+        <Content Include="project\**" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <!-- In this repo the native variant follows the build configuration
+         (consumers set TwoDogVariant explicitly; default is release) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+    </PropertyGroup>
+
+</Project>

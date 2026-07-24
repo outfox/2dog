@@ -1,4 +1,5 @@
-# The Recommended Project Layout
+
+# Project Layout
 
 2dog strongly recommends one layout: the directory containing `project.godot`
 is also the .NET solution root, and each way of running the game is a small

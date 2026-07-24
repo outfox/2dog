@@ -6,8 +6,8 @@ This section documents known limitations and their workarounds to help you work 
 
 ## Current Issues
 
-- **[Single Godot Instance](./single-instance)**  –  Only one Godot instance can run at a time (sequential restart is supported)
-- **[xUnit Test Discovery](./xunit-discovery)**  –  Using Godot types in `[MemberData]` crashes the test runner
-- **[GD.Print in Tests](./gd-print-output)**  –  `GD.Print` output is hidden by default in test runs
+- **[Single Godot Instance](./single-instance)**  –  Only one Godot instance can run at a time (sequential restart is supported, and multiple ALCs are experimental)
+- **[xUnit Test Discovery](./xunit-discovery)**  –  Using Godot types in `[MemberData]` crashes the test runner (Godot types cannot be resolved during discovery)
+- **[GD.Print in Tests](./gd-print-output)**  –  `GD.Print` output is hidden by default in test runs.
 
 If you encounter issues not listed here, please [open an issue on GitHub](https://github.com/outfox/2dog/issues).

@@ -1,0 +1,7 @@
+; Source project for CopiedProjectFixture: copied per engine instance, with a
+; forced per-instance user:// dir, so parallel instances never collide.
+config_version=5
+
+[application]
+config/name="Parallel Collections Demo"
+run/main_scene="res://main.tscn"
