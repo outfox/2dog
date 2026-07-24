@@ -1,6 +1,6 @@
 {
   "solution": {
-    "path": "../2dog.sln",
+    "path": "../2dog.slnx",
     "projects": [
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "platforms\\twodog.win-x64\\twodog.win-x64.debug.csproj",
@@ -21,7 +21,7 @@
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.debug.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
 
-      "platforms\\twodog.tools\\twodog.tools.csproj",
+      "platforms\\twodog.tools\\twodog.tools.csproj"
     ]
   }
 }

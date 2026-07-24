@@ -1,6 +1,6 @@
 {
   "solution": {
-    "path": "2dog.sln",
+    "path": "2dog.slnx",
     "projects": [
       "demo\\demo.2dog\\demo.2dog.csproj",
       "demo\\demo.csproj",
@@ -22,6 +22,10 @@
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "twodog\\twodog.csproj",
       "twodog.engine\\twodog.engine.csproj",
+      "twodog.hosting\\twodog.hosting.csproj",
+      "twodog.hosting.runtime\\twodog.hosting.runtime.csproj",
+      "twodog.hosting.tests\\twodog.hosting.tests.csproj",
+      "twodog.hosting.xunit\\twodog.hosting.xunit.csproj",
       "twodog.import\\twodog.import.csproj",
       "twodog.tests\\twodog.tests.csproj",
       "twodog.xunit\\twodog.xunit.csproj"

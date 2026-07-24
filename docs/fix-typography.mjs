@@ -10,11 +10,15 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join, extname } from 'path';
 
+// Unicode escapes on purpose: literal smart characters here would be rewritten
+// if this file is ever run through a typography pass, silently neutering the
+// patterns (which is exactly what happened once - ASCII quote classes match
+// plain apostrophes, "fix" nothing, and report success).
 const replacements = [
-  { pattern: /—/g, replacement: ' – ', name: 'em-dashes' },
-  { pattern: /[""]/g, replacement: '"', name: 'smart double quotes' },
-  { pattern: /['']/g, replacement: "'", name: 'smart single quotes' },
-  { pattern: /…/g, replacement: '...', name: 'ellipsis' },
+  { pattern: /\u2014/g, replacement: ' \u2013 ', name: 'em-dashes' },
+  { pattern: /[\u201C\u201D]/g, replacement: '"', name: 'smart double quotes' },
+  { pattern: /[\u2018\u2019]/g, replacement: "'", name: 'smart single quotes' },
+  { pattern: /\u2026/g, replacement: '...', name: 'ellipsis' },
 ];
 
 function findMarkdownFiles(dir, files = []) {
@@ -41,29 +45,42 @@ function findMarkdownFiles(dir, files = []) {
 }
 
 function fixTypography(filePath) {
-  let content = readFileSync(filePath, 'utf8');
-  let modified = false;
+  const original = readFileSync(filePath, 'utf8');
+  let content = original;
   const fixes = [];
-  
+
+  // Replace-and-compare instead of .test(): a /g regex's .test() advances
+  // lastIndex, silently skipping matches on subsequent files.
   for (const { pattern, replacement, name } of replacements) {
-    if (pattern.test(content)) {
-      content = content.replace(pattern, replacement);
-      modified = true;
+    const fixed = content.replace(pattern, replacement);
+    if (fixed !== content) {
+      content = fixed;
       fixes.push(name);
     }
   }
-  
-  if (modified) {
+
+  if (content !== original) {
     writeFileSync(filePath, content, 'utf8');
     console.log(`Fixed ${fixes.join(', ')} in: ${filePath}`);
+    return true;
   }
-  
-  return modified;
+
+  return false;
 }
 
-// Main execution
+// Main execution. Whole-tree scanning is explicit opt-in: the pre-commit hook
+// passes staged files, and an accidentally empty list must never rewrite
+// every markdown file in the repository.
 const args = process.argv.slice(2);
-const files = args.length > 0 ? args : findMarkdownFiles('.');
+let files;
+if (args.includes('--all')) {
+  files = findMarkdownFiles('.');
+} else if (args.length > 0) {
+  files = args;
+} else {
+  console.error('Usage: fix-typography.mjs <file.md>... | --all');
+  process.exit(2);
+}
 
 console.log('Fixing typography in markdown files...');
 
