@@ -107,7 +107,9 @@ Run the demo with `dotnet run --project demo/demo.2dog` and the tests with
 
 ## Join us at the Dog Park
 
-We've got a dedicated channel for 2dog on [![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
+We've got a dedicated channel for 2dog, say hello!
+
+[![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
 
 ---
 
