@@ -13,7 +13,7 @@ Godot normally loads .NET, now .NET loads Godot.
 
 2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications. Doing it like this enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
 
-The native engine builds are pre-built as a turn-key solution for CI and local development.
+The native engine builds are pre-built for speed and convenience.
 
 
 ## Getting Started
