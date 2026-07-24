@@ -22,8 +22,8 @@ export default defineConfig({
   },
 
   title: "2dog",
-  titleTemplate: ":title – C# Godot Games on the Web",
-  description: "Bring an existing C# Godot game to the web without rewriting it",
+  titleTemplate: ":title 🦴 Godot in .NET",
+  description: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.",
 
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
@@ -41,11 +41,11 @@ export default defineConfig({
     ['meta', { name: "twitter:title", content: "2dog – Your C# Godot game. Now on the web." }],
     ['meta', { name: "twitter:image", content: "https://2dog.dev/og-image.png" }],
     ['meta', { name: "twitter:image:alt", content: "2dog logo - a happy white dog" }],
-    ['meta', { name: "twitter:description", content: "Bring an existing C# Godot game to the web. Keep your scenes, scripts, and editor workflow." }],
+    ['meta', { name: "twitter:description", content: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow." }],
     ['meta', { property: "og:type", content: "website" }],
     ['meta', { property: "og:url", content: "https://2dog.dev" }],
     ['meta', { property: "og:title", content: "2dog – Your C# Godot game. Now on the web." }],
-    ['meta', { property: "og:description", content: "Bring an existing C# Godot game to the web. Keep your scenes, scripts, and editor workflow." }],
+    ['meta', { property: "og:description", content: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow." }],
     ['meta', { property: "og:image", content: "https://2dog.dev/og-image.png" }],
   ],
 
