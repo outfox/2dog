@@ -9,13 +9,11 @@
 [![Build Status](https://github.com/outfox/2dog/actions/workflows/build-natives.yml/badge.svg)](https://github.com/outfox/2dog/actions/workflows/build-natives.yml)
 [![CI](https://github.com/outfox/2dog/actions/workflows/ci.yml/badge.svg)](https://github.com/outfox/2dog/actions/workflows/ci.yml)
 
-> *"Godot, or to dog... is it even a question?"*
+### 🦴 2dog is still Godot... just backward!
 
 2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications.
 
 That enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
-
-### 🦴 2dog is still Godot... just backward!
 
 
 ## Getting Started
