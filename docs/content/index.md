@@ -35,7 +35,7 @@ hero:
       text: Quickstart (HTML5)
       link: /web
     - theme: alt
-      text: Fetch on Github
+      text: Fetch (Github)
       link: https://github.com/outfox/2dog
 
 features:
