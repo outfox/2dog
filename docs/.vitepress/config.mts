@@ -2,12 +2,20 @@ import { defineConfig } from 'vitepress'
 import {
   twodogVersionPlugin,
   godotVersionPlugin,
-  nativesVersionPlugin
+  nativesVersionPlugin,
+  twodogVersion
 } from './plugins/version-markers'
 import { columnsPlugin } from './plugins/columns'
+import { godotIconsPlugin, godotIconHtml } from './plugins/godot-icons'
+
+// Sidebar node glyphs; the section's --tree-color tints them (theme/custom.css).
+const gd = (name: string) => `${godotIconHtml(name)} `
 
 export default defineConfig({
   srcDir: "content",
+
+  // The Editor, Inverted: the audience's editor is dark; light is the editor's light theme.
+  appearance: 'dark',
 
   markdown: {
     config(md) {
@@ -18,6 +26,8 @@ export default defineConfig({
       md.use(nativesVersionPlugin)
       // ::: columns / :::: column — side-by-side cards.
       md.use(columnsPlugin)
+      // :gd-name: / :gd-name@tint: — Godot pictogram icons as CSS masks.
+      md.use(godotIconsPlugin)
     }
   },
 
@@ -26,8 +36,8 @@ export default defineConfig({
   description: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.",
 
   head: [
-    ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+    // JetBrains Mono is self-hosted (public/fonts, vendored from godot/thirdparty/fonts).
+    ['link', { rel: 'preload', href: '/fonts/JetBrainsMono_Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
     ['link', { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" }],
     ['link', { rel: "icon", type: "image/png", sizes: "96x96", href: "/favicon-96x96.png" }],
     ['link', { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" }],
@@ -52,7 +62,14 @@ export default defineConfig({
 
   themeConfig: {
     siteTitle: false,
-    logo: '/icon.svg',
+    // Named for screen readers; the light navbar gets a dark-bodied variant.
+    logo: { light: '/icon-light.svg', dark: '/icon.svg', alt: '2dog' },
+
+    search: {
+      provider: 'local'
+    },
+    // Real version for the home console; markdown pages use :2dog-version: markers instead.
+    twodogVersion,
     
     nav: [
       { text: 'Home', link: '/' },
@@ -63,53 +80,53 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Start Here',
+        text: 'Start here',
         items: [
-          { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Project Layout', link: '/project-layout' },
-          { text: 'Core Concepts', link: '/concepts' }
+          { text: gd('play') + 'Getting Started', link: '/getting-started' },
+          { text: gd('folder_open') + 'Project Layout', link: '/project-layout' },
+          { text: gd('lightbulb') + 'Core Concepts', link: '/concepts' }
         ]
       },
       {
         text: 'Build and Ship',
         items: [
-          { text: 'Converting a Godot Project', link: '/convert' },
-          { text: 'Creating a New Project', link: '/templates' },
-          { text: 'Web / Browser (WASM)', link: '/web' }
+          { text: gd('arrow_right_arrow_left') + 'Converting a Project', link: '/convert' },
+          { text: gd('sprout') + 'Creating a New Project', link: '/templates' },
+          { text: gd('globe') + 'Web / Browser (WASM)', link: '/web' }
         ]
       },
       {
         text: 'Develop',
         items: [
-          { text: 'Testing with xUnit', link: '/testing' },
-          { text: 'Resource Import', link: '/import-tool' }
+          { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' },
+          { text: gd('file_arrow_down') + 'Resource Import', link: '/import-tool' }
         ]
       },
       {
         text: 'Configure',
         items: [
-          { text: 'Choosing a Native Variant', link: '/build-configurations' },
-          { text: 'MSBuild Configuration', link: '/configuration' }
+          { text: gd('layers') + 'Choosing a Variant', link: '/build-configurations' },
+          { text: gd('wrench') + 'MSBuild Configuration', link: '/configuration' }
         ]
       },
       {
         text: 'Reference',
         items: [
-          { text: 'API Reference', link: '/api-reference' },
-          { text: 'FAQ', link: '/faq' }
+          { text: gd('book_open') + 'API Reference', link: '/api-reference' },
+          { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' }
         ]
       },
       {
         text: 'Troubleshooting',
         items: [
           {
-            text: 'Known Issues',
+            text: gd('bug') + 'Known Issues',
             link: '/known-issues/',
             collapsed: true,
             items: [
-              { text: 'Single Godot Instance', link: '/known-issues/single-instance' },
-              { text: 'xUnit Test Discovery', link: '/known-issues/xunit-discovery' },
-              { text: 'GD.Print in Tests', link: '/known-issues/gd-print-output' }
+              { text: gd('window') + 'Single Godot Instance', link: '/known-issues/single-instance' },
+              { text: gd('magnifying_glass') + 'xUnit Test Discovery', link: '/known-issues/xunit-discovery' },
+              { text: gd('window_terminal') + 'GD.Print in Tests', link: '/known-issues/gd-print-output' }
             ]
           }
         ]
@@ -123,8 +140,8 @@ export default defineConfig({
     ],
 
     footer: {
-      message: '<a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">2dog</a> is released under the MIT License.',
-      copyright: 'Copyright © 2025 <a href="https://github.com/outfox/2dog/graphs/contributors">its contributors</a>'
+      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>. <br/><b>@icons</b> made by <a href="https://www.voxy.space">voxy.space</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.',
+      copyright: '<b>2dog</b> is Copyright © 2025 <a href="https://github.com/outfox/2dog/graphs/contributors">its contributors</a>'
     },
   }
 })

@@ -15,6 +15,11 @@
             transform-origin: 280px 570px;
             animation: float 0.5s ease-in-out infinite;
         }
+        @media (prefers-reduced-motion: reduce) {
+            #doggy {
+                animation: none;
+            }
+        }
     </style>
     <g id="g17">
         <g id="doggy">

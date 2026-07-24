@@ -8,9 +8,9 @@
 
 | Variant | Godot Build Type | TOOLS_ENABLED | Use Case |
 |---------|------------------|---------------|----------|
-| **release** | `template_release` | ❌ No | Optimized runtime (games, apps) |
-| **debug** | `template_debug` | ❌ No | Development with debug symbols |
-| **editor** | `editor` | ✅ Yes | Editor APIs, [Tool] scripts |
+| **release** | `template_release` | :gd-cross@err: No | Optimized runtime (games, apps) |
+| **debug** | `template_debug` | :gd-cross@err: No | Development with debug symbols |
+| **editor** | `editor` | :gd-checkmark@ok: Yes | Editor APIs, [Tool] scripts |
 
 The variant is selected with the `TwoDogVariant` property alone  –  it is not
 derived from your .NET configuration automatically. All three variants ship

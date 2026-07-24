@@ -4,10 +4,10 @@
 // closing fence only requires at least as many colons as its opener:
 //
 //   :::: columns
-//   ::: column 🐕 Card Title
+//   ::: column :gd-bone@gold: Card Title
 //   Any markdown, including fenced code blocks.
 //   :::
-//   ::: column 🌱 Another Card
+//   ::: column :gd-sprout@gui: Another Card
 //   ...
 //   :::
 //   ::::
