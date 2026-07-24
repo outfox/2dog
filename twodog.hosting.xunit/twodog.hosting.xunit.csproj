@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>twodog.Hosting.Xunit</RootNamespace>
+        <AssemblyName>twodog.hosting.xunit</AssemblyName>
+        <IsPackable>false</IsPackable>
+        <!-- No Godot script classes and no Godot project: the source generators have nothing to do here. -->
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <!-- No xunit dependency needed: the fixture is a plain IDisposable consumed
+         via ICollectionFixture<T> in test projects. Referencing the runtime here
+         hands test projects the whole engine stack transitively. -->
+    <ItemGroup>
+        <ProjectReference Include="..\twodog.hosting\twodog.hosting.csproj" />
+        <ProjectReference Include="..\twodog.hosting.runtime\twodog.hosting.runtime.csproj" />
+    </ItemGroup>
+
+</Project>

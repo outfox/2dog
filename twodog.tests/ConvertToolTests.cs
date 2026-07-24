@@ -644,7 +644,7 @@ public class ConvertEndToEndTests
         // directory, so the pin must resolve with whatever SDK the CI runner
         // has (a bare version pin means latestPatch and only accepts the
         // 10.0.1xx band - broke on a runner with only 10.0.3xx).
-        const string existing = """{ "sdk": { "version": "10.0.100", "rollForward": "latestMajor" } }""";
+        const string existing = """{ "sdk": { "version": "10.0.302", "rollForward": "latestMajor" } }""";
         tmp.Write("global.json", existing);
 
         // The root global.json is the user's SDK policy: --force overwrites

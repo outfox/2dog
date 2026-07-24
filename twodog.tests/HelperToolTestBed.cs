@@ -16,7 +16,7 @@ internal static class HelperToolTestBed
         get
         {
             var dir = AppContext.BaseDirectory;
-            while (dir != null && !File.Exists(Path.Combine(dir, "2dog.sln")))
+            while (dir != null && !File.Exists(Path.Combine(dir, "2dog.slnx")))
                 dir = Path.GetDirectoryName(dir);
             Assert.SkipWhen(dir == null, "Repo root not found (packaged test run)");
             return dir!;

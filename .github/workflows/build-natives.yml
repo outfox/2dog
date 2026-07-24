@@ -75,6 +75,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      # The runner image's preinstalled SDKs may lag the global.json pin.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
