@@ -11,42 +11,19 @@
 
 > *"Godot, or to dog... is it even a question?"*
 
-**Bring your existing C# Godot game to the web. Keep your scenes, scripts, and
-Godot workflow.**
+2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications.
 
-2dog packages Godot as a library hosted by your .NET application. That
-inversion makes browser publishing, ordinary `dotnet` tooling, and first-class
-xUnit testing possible without rewriting your game.
+That makes browser publishing, ordinary `dotnet` tooling, and first-class xUnit testing possible while still being 100% Godot.
 
-## Same Game, New Tricks
 
-If you already build games with Godot and C#, most of your world stays exactly
-where it is:
+## Getting Started
 
-- Your Godot project remains a Godot project and still opens in the editor.
-- Your scenes, resources, C# scripts, signals, and exports keep working.
-- You still use the familiar GodotSharp API.
-- Asset import happens automatically during `dotnet build`.
+Full documentation at **[2dog.dev](https://2dog.dev)**.
 
-What changes is who holds the leash: your .NET process starts Godot, drives its
-main loop, and decides when it stops.
 
-That unlocks a few useful tricks:
+### Existing Project (Recommended)
 
-- 🌐 **C# games on the web**: publish a static WebAssembly site with `dotnet publish`.
-- 🧪 **Real test projects**: load scenes through xUnit and run headless in CI.
-- 🔄 **A .NET-owned lifecycle**: embed Godot in an app, server, tool, or custom host.
-- 🎮 **The full engine**: scenes, physics, rendering, audio, input, and the GodotSharp API.
-
-## Choose Your Starting Point
-
-Both routes produce the same strongly recommended layout: the Godot project is
-the solution root, with desktop, browser, and test hosts nested inside it.
-
-### Bring an Existing Project (Recommended)
-
-Convert in place. 2dog preserves your existing game content, and there is no
-tool installation step. A classic `.sln` is migrated to `.slnx` when present:
+2dog preserves your existing game content, and there is no tool installation step. You should make a backup, but most of its changes are optional additions, not modifications.
 
 ```bash
 dnx 2dog convert path/to/MyGame
@@ -54,10 +31,10 @@ cd path/to/MyGame
 dotnet run --project MyGame.2dog
 ```
 
+
 ### Start a New Project
 
-Register the project template once, then create the same complete layout from
-scratch:
+Install the project template once, then create the same complete layout from scratch:
 
 ```bash
 dotnet new install 2dog
@@ -66,17 +43,16 @@ cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-In either case, your original Godot workflow is still there whenever you need
-it:
+In either case, thge famliar Godot workflow still works:
 
 ```bash
-godot-mono --editor .
+godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
 ```
 
-## From Godot Project to Browser
 
-The generated web host publishes your C# game as a static site. Install the
-.NET WebAssembly tools once, then publish and serve the bundle:
+## Exporting for the web
+
+The generated .NET app can also be published to WASM (HTML5 / Web Browser)
 
 ```bash
 dotnet workload install wasm-tools
@@ -88,7 +64,10 @@ dotnet serve --directory MyGame.web/AppBundle
 See [Web / Browser](https://2dog.dev/web.html) for the development loop,
 deployment options, and current limitations.
 
-## One Project, Three Hosts
+
+## Project Structure
+
+2dog mainly adds subdirectories with additional "hosts" that can run your Godot project. These use `libgodot` instead of the normal export templates or editor executable.
 
 ```text
 MyGame/                       Godot project and solution root
@@ -99,49 +78,22 @@ MyGame/                       Godot project and solution root
 └── MyGame.tests/             Headless xUnit host
 ```
 
-The nested hosts carry `.gdignore`, so Godot ignores them. Your game project
+The nested hosts carry `.gdignore`, so Godot ignores them. The game project
 remains clean and editor-friendly while each host gets its own entry point and
 dependencies.
 
-Read [The Recommended Project Layout](https://2dog.dev/project-layout.html) for
-the complete mental model.
-
-## Pick Your Next Trick
-
-- [Get Started](https://2dog.dev/getting-started.html): convert or create, run, test, and publish.
-- [Converting a Godot Project](https://2dog.dev/convert.html): understand exactly what `2dog convert` changes.
-- [Web / Browser](https://2dog.dev/web.html): publish your C# Godot game as a static site.
-- [Testing with xUnit](https://2dog.dev/testing.html): load scenes and run Godot headlessly in CI.
-- [Core Concepts](https://2dog.dev/concepts.html): learn how .NET takes control of Godot.
-- [Configuration](https://2dog.dev/configuration.html): configure project paths and native variants.
-- [API Reference](https://2dog.dev/api-reference.html): work directly with `Engine` and `GodotInstance`.
-
-Full documentation lives at **[2dog.dev](https://2dog.dev)**.
 
 ## Requirements and Status
 
 - .NET SDK 10.0 or later
-- Godot .NET editor only when you want to edit scenes visually
+- Godot 4.7.x official .NET editor only when you want to edit scenes visually
 - Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`
-- Packages are available on NuGet
+- Packages are available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
-The `2dog` package contains the converter and project template.
-Applications reference the `2dog.engine` library; test projects add
-`2dog.xunit`. Generated and converted projects configure these packages for
-you.
-
-## One Dog at a Time
-
-Only one Godot instance can run in a process at a time. Sequential restart is
-supported: dispose the current instance before starting another. The supplied
-xUnit collections already serialize Godot fixtures correctly.
-
-See [Known Issues](https://2dog.dev/known-issues/) for details and workarounds.
 
 ## Teach 2dog New Tricks
 
-Want to work on 2dog itself? Clone with submodules, then build the native and
-.NET packages:
+Want to work on 2dog itself? Clone with submodules, then build the native and .NET packages:
 
 ```bash
 git clone --recursive https://github.com/outfox/2dog
@@ -152,7 +104,10 @@ uv run poe build-all
 Run the demo with `dotnet run --project demo/demo.2dog` and the tests with
 `dotnet test twodog.tests`.
 
-Questions, ideas, or particularly good sticks? Join the Dog Park:
+
+## Join us at the Dog Park:
+
+We have a dedicated channel for 2dog on the ⤜outfox⤏ Discord:
 
 [![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
 
