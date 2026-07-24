@@ -33,7 +33,7 @@ dotnet run --project MyGame.2dog
 ```
 
 
-### Start a New Project
+### New Project
 
 Install and use the project template:
 
