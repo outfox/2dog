@@ -64,6 +64,23 @@
       "defaultValue": "true"
     }
   },
+  "specialCustomOperations": {
+    "**/*.slnx": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": ["#if"],
+            "else": ["#else"],
+            "elseif": ["#elseif"],
+            "endif": ["#endif"],
+            "trim": true,
+            "wholeLine": true
+          }
+        }
+      ]
+    }
+  },
   "sources": [
     {
       "modifiers": [
@@ -90,7 +107,7 @@
   ],
   "primaryOutputs": [
     {
-      "path": "Company.Product1.sln"
+      "path": "Company.Product1.slnx"
     },
     {
       "path": "Company.Product1.csproj"
