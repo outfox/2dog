@@ -131,8 +131,4 @@ room for any other .NET code right beside it.
 :::
 ::::
 
-That one inversion is the whole trick. It unlocks browser publishing, normal
-.NET entry points, and first-class test runners  –  while scenes, nodes, signals,
-resources, and the Godot editor all stay exactly as you know them.
-
 [Explore the architecture →](/concepts)
