@@ -136,26 +136,3 @@ That one inversion is the whole trick. It unlocks browser publishing, normal
 resources, and the Godot editor all stay exactly as you know them.
 
 [Explore the architecture →](/concepts)
-
-
-## Your First Trail
-
-The introductory guide follows one continuous walk instead of dropping you
-into engine code:
-
-1. **Bring or create** a Godot C# project.
-2. **Run it** through its desktop .NET host.
-3. **Meet the layout** and learn which project owns what.
-4. **Test it** headlessly with xUnit.
-5. **Publish it** as a browser-ready static site.
-
-[Start the guided walk →](/getting-started)
-
-## Pick the Next Trick
-
-- **I want the browser build:** [publish a C# Godot game to the web](/web)  – 
-  one workload install, one `dotnet publish`.
-- **I want confidence first:** [load and test scenes with xUnit](/testing).
-- **I want the mental model:** [tour the recommended project layout](/project-layout).
-- **I want full control:** [learn the engine lifecycle and main loop](/concepts).
-- **Something growled:** [find a known issue or workaround](/known-issues/).
