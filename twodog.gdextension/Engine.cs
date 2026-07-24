@@ -91,26 +91,34 @@ public sealed unsafe class Engine : IDisposable
 
         if (_godotInstancePtr == 0)
             throw new InvalidOperationException($"{nameof(Engine)}: Error creating Godot instance.");
-        if (!GdExtensionHost.Loaded)
-            throw new InvalidOperationException(
-                $"{nameof(Engine)}: Missing GDExtension procs: {GdExtensionHost.MissingProcsDisplay}");
+        // Any failure past this point must destroy the live native instance:
+        // leaking it blocks every future Start in this context and makes the
+        // exit sweep leave the module mapped.
+        try
+        {
+            if (!GdExtensionHost.Loaded)
+                throw new InvalidOperationException(
+                    $"{nameof(Engine)}: Missing GDExtension procs: {GdExtensionHost.MissingProcsDisplay}");
 
-        var native = (Godot.GodotInstance?)InstanceBindings.GetOrCreate(_godotInstancePtr, adoptRef: false)
-                     ?? throw new InvalidOperationException($"{nameof(Engine)}: Failed to wrap GodotInstance.");
+            var native = (Godot.GodotInstance?)InstanceBindings.GetOrCreate(_godotInstancePtr, adoptRef: false)
+                         ?? throw new InvalidOperationException($"{nameof(Engine)}: Failed to wrap GodotInstance.");
 
-        if (!native.Start())
+            if (!native.Start())
+                throw new InvalidOperationException($"{nameof(Engine)}: Error starting Godot instance.");
+
+            // Async support: await Task.* continuations marshal back to this
+            // thread, pumped once per Iteration.
+            GodotSynchronizationContext.Install();
+
+            _ownsInstance = true;
+            _instance = new GodotInstance(native);
+            return _instance;
+        }
+        catch
         {
             Destroy();
-            throw new InvalidOperationException($"{nameof(Engine)}: Error starting Godot instance.");
+            throw;
         }
-
-        // Async support: await Task.* continuations marshal back to this
-        // thread, pumped once per Iteration.
-        GodotSynchronizationContext.Install();
-
-        _ownsInstance = true;
-        _instance = new GodotInstance(native);
-        return _instance;
     }
 
     /// <summary>
@@ -196,19 +204,20 @@ public sealed unsafe class Engine : IDisposable
         _sweepRegistered = true;
         AppDomain.CurrentDomain.ProcessExit += static (_, _) =>
         {
-            if (!OperatingSystem.IsWindows() || NativeLoader.LoadedLibraryPath is not { } path) return;
-            var name = Path.GetFileName(path);
-            var module = GetModuleHandleW(name);
+            // Free by recorded handle, not filename: with multiple instances
+            // (one ALC each) every sweep must unload exactly its own module.
+            var module = NativeLoader.LoadedLibraryHandle;
+            if (!OperatingSystem.IsWindows() || module == 0) return;
+            // Never unload while this ALC's engine still runs (a background
+            // engine thread at process exit): use-after-unload is a worse
+            // failure than the teardown fail-fast this sweep exists to avoid.
+            if (_godotInstancePtr != 0) return;
             var attempts = 0;
-            while (module != 0 && FreeLibrary(module) && ++attempts < 32)
+            while (FreeLibrary(module) && ++attempts < 32)
             {
-                module = GetModuleHandleW(name);
             }
         };
     }
-
-    [DllImport("kernel32", CharSet = CharSet.Unicode)]
-    private static extern nint GetModuleHandleW(string moduleName);
 
     [DllImport("kernel32")]
     [return: MarshalAs(UnmanagedType.Bool)]
