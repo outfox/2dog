@@ -59,9 +59,7 @@ features:
 
 ## Start Where Your Project Is
 
-Two trails lead in, and both end at the same place: a regular Godot project
-with desktop, browser, and test hosts nested inside it, invisible to the
-editor.
+2dog lives inside a regular Godot project and nests desktop, browser, and test hosts inside it. These are invisible (`.gdignored`) to the editor.
 
 :::: columns
 ::: column 🐕 I Already Have a Godot Game
@@ -95,4 +93,4 @@ dotnet run --project MyGame.2dog
 :::
 ::::
 
-Whichever trail you take, the project still opens in the regular Godot .NET editor afterwards  –  authoring stays in Godot, while running, testing, and publishing move to `dotnet`.
+Whichever trail you take, the project still opens in the regular Godot .NET editor afterwards. Authoring stays in Godot, while running, testing, and publishing move to `dotnet`.
