@@ -31,11 +31,15 @@ public sealed class HangingProgram : IEngineProgram
     }
 }
 
+/// <summary>Signals boot, then waits for the host's release (State semaphore)
+/// before posting: the host must finish wiring up (e.g. capture the instance
+/// handle its OnMessage callback uses) before the message can fire.</summary>
 public sealed class PostingProgram : IEngineProgram
 {
     public int Run(IInstanceContext ctx)
     {
         ctx.SignalBooted();
+        (ctx.State as SemaphoreSlim)?.Wait(TimeSpan.FromMinutes(2));
         ctx.Post("booted");
         while (!ctx.QuitRequested) Thread.Sleep(10);
         return 0;
@@ -122,12 +126,14 @@ public sealed class LifecycleTests
     {
         HostGuard.SkipUnlessSupported();
         using var host = new EngineHost();
+        using var release = new SemaphoreSlim(0);
         EngineInstance? instance = null;
         var posted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         instance = host.Start<PostingProgram>(new()
         {
             Tag = "lc-post",
             ProjectDir = TempProject,
+            State = release,
             OnMessage = _ =>
             {
                 // Runs on the engine thread: Dispose must degrade to RequestQuit
@@ -136,6 +142,9 @@ public sealed class LifecycleTests
                 posted.TrySetResult();
             },
         });
+        // Only release the message once the instance handle the callback needs
+        // is assigned - the program thread can outrun Start's return.
+        release.Release();
         await posted.Task.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
         Assert.Equal(0, await instance.Completion.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken));
     }
