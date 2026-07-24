@@ -1,6 +1,0 @@
-; Minimal Godot project for the twodog.bindings test fixture.
-config_version=5
-
-[application]
-config/name="twodog.bindings.tests"
-run/main_scene="res://main.tscn"
