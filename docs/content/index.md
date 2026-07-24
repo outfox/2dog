@@ -39,20 +39,20 @@ hero:
       link: https://github.com/outfox/2dog
 
 features:
-  - title: 🌐 Go from Godot to the Web
-    details: Just add 2dog and export for the web with dotnet publish.
+  - title: 🌐 C# on the Web
+    details: Just add <b>2dog</b> and export HTML5 and WASM for the web. No more waiting, Godot is home! 
     link: /convert
     linkText: Bring your project
-  - title: 🎮 It's still Godot
-    details: 2dog is a companion, not a replacement.
+  - title: 🎮 This is still Godot
+    details: 2dog is a companion instead of a replacement. You will still edit and run with stock Godot.
     link: /project-layout
     linkText: See what changes
-  - title: 🧪 Test the Whole Game
-    details: Load real scenes through xUnit and run Godot headlessly in local builds or CI.
+  - title: 🧪 Test like a Pro
+    details: Load scenes, scripts, resources in xUnit or NUnit. Run Godot tests headlessly in your IDE or CI.
     link: /testing
     linkText: Test a scene
-  - title: 🔄 Let .NET Hold the Leash
-    details: Your .NET process starts Godot, drives each frame, and decides when the engine stops.
+  - title: 🐕‍🦺 .NET holds the Leash
+    details: Your application process starts Godot, drives each frame, and decides when the engine stops.
     link: /concepts
     linkText: How that works
 ---
@@ -96,39 +96,3 @@ dotnet run --project MyGame.2dog
 ::::
 
 Whichever trail you take, the project still opens in the regular Godot .NET editor afterwards  –  authoring stays in Godot, while running, testing, and publishing move to `dotnet`.
-
-## Who Holds the Leash?
-
-Two process trees, one difference  –  who starts whom:
-
-:::: columns
-::: column 🤖 Stock: Godot as we know it
-
-The engine owns the process. Your C# scripts ride along inside the SceneTree
-and run when Godot calls them.
-
-```text
-Godot process
-└── GodotSharp SDK
-    └── SceneTree
-    └── Your Godot C# scripts
-```
-
-:::
-::: column 🐕‍🦺 With 2dog: .NET is your service (dog)
-
-Your .NET application owns the process and loads Godot as a library  –  with
-room for any other .NET code right beside it.
-
-```text
-.NET application or service
-├── 2dog Engine (libgodot)
-│   └── SceneTree
-│   └── Your Godot C# scripts
-└── More C# Code (whole .NET ecosystem - dream big!)
-```
-
-:::
-::::
-
-[Explore the architecture →](/concepts)
