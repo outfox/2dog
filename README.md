@@ -13,7 +13,7 @@
 
 2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications. In other words: Godot normally loads .NET, now .NET loads Godot.
 
-That enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
+Doing it like this enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
 
 
 ## Getting Started
@@ -23,7 +23,8 @@ Full documentation at **[2dog.dev](https://2dog.dev)**.
 
 ### Existing Project (Recommended)
 
-2dog preserves your existing game content, and there is no tool installation step. You should make a backup, but most of its changes are optional additions, not modifications.
+2dog preserves your existing game content, and there is no tool installation step. 
+Please make backups, but most of its changes are optional additions, not modifications.
 
 ```bash
 dnx 2dog convert path/to/MyGame
@@ -85,10 +86,11 @@ dependencies.
 
 ## Requirements and Status
 
-- .NET SDK 10.0 or later
+- .NET SDK 10.0 or later, with the `wasm-tools` workload
 - Godot 4.7.x official .NET editor only when you want to edit scenes visually
-- Supported platforms: `win-x64`, `linux-x64`, and `osx-arm64`
-- Packages are available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
+- Supported build platforms: `win-x64`, `linux-x64`, and `osx-arm64`
+- Supported RIDs: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
+- Packages available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
 
 ## Teach 2dog New Tricks
