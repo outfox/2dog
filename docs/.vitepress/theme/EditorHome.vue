@@ -324,11 +324,13 @@ const starts = [
             type="button"
             class="ed-menu-btn"
             :class="{ open: openMenu === m.label }"
+            aria-haspopup="true"
             :aria-expanded="openMenu === m.label"
+            :aria-controls="`ed-menu-${m.label}`"
             @click="toggleMenu(m.label)"
             @mouseenter="hoverMenu(m.label)"
           >{{ m.label }}</button>
-          <div v-if="openMenu === m.label" class="ed-menu-pop">
+          <div v-if="openMenu === m.label" :id="`ed-menu-${m.label}`" class="ed-menu-pop">
             <a v-for="it in m.items" :key="it.text" :href="menuHref(it.link)">{{ it.text }}</a>
           </div>
         </div>
@@ -860,11 +862,6 @@ const starts = [
   background: var(--ed-base);
 }
 
-/* Tablist is first in DOM (focus order) but renders at the bottom, Godot-style. */
-.ed-console-tabs {
-  order: 2;
-}
-
 /* The typing pun as a status-bar line: the authored moment, visible by default. */
 .ed-status-pun {
   flex: 1;
@@ -890,7 +887,9 @@ const starts = [
   visibility: hidden;
 }
 
+/* First in DOM (focus order) but rendered at the bottom via `order`, Godot-style. */
 .ed-console-tabs {
+  order: 2;
   display: flex;
   align-items: center;
   gap: 2px;
@@ -1099,14 +1098,6 @@ const starts = [
 
 .ln.ok {
   color: var(--ed-success);
-}
-
-.ln .prompt {
-  color: var(--ed-text-2);
-}
-
-.ln.pun {
-  color: var(--ed-text-1);
 }
 
 .ln-glyph {
