@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[node name="Main" type="Node"]
+
+[node name="Greeting" type="Label" parent="."]
+text = "hello from a copied project"
