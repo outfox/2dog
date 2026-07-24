@@ -23,7 +23,7 @@ head:
 hero:
   name: 2dog
   text: Start, control, embed Godot in .NET.
-  tagline: Keep your scenes, scripts, and editor workflow. 2dog lets .NET host Godot, then publishes your game as a static WebAssembly site.
+  tagline: Keep your scenes, scripts, and editor workflow. 2dog lets .NET host Godot.
   image:
     src: /logo-animated.svg
     alt: a happy white dog smiling over the soft logotype text '2dog'
@@ -40,11 +40,11 @@ hero:
 
 features:
   - title: 🌐 Go from Godot to the Web
-    details: Convert an existing C# project in place, then publish it as a static site with dotnet publish.
+    details: Just add 2dog and export for the web with dotnet publish.
     link: /convert
     linkText: Bring your project
-  - title: 🎮 Keep the Godot You Know
-    details: Your scenes, resources, C# scripts, signals, exports, and editor workflow stay familiar.
+  - title: 🎮 It's still Godot
+    details: 2dog is a companion, not a replacement.
     link: /project-layout
     linkText: See what changes
   - title: 🧪 Test the Whole Game
@@ -54,7 +54,7 @@ features:
   - title: 🔄 Let .NET Hold the Leash
     details: Your .NET process starts Godot, drives each frame, and decides when the engine stops.
     link: /concepts
-    linkText: Learn how it works
+    linkText: How that works
 ---
 
 ## Start Where Your Project Is
