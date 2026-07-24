@@ -13,7 +13,9 @@
 
 2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications.
 
-That makes browser publishing, ordinary `dotnet` tooling, and first-class xUnit testing possible while still being 100% Godot.
+That enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
+
+### 🦴 2dog is still Godot... just backward!
 
 
 ## Getting Started
