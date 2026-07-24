@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Runtime.Loader;
 
 namespace twodog.Hosting.Tests;
@@ -57,6 +58,25 @@ public sealed class ExceptionSanitizerTests
         Exception e = new InvalidOperationException("leaf");
         for (var i = 0; i < 40; i++) e = new InvalidOperationException($"level {i}", e);
         Assert.Same(e, ExceptionSanitizer.Sanitize(e));
+    }
+
+    [Fact]
+    public void CyclicExceptionGraphDoesNotOverflow()
+    {
+        // Real cycles need reflection to build, but Sanitize must survive
+        // arbitrary graphs - an overflow here would kill the host process.
+        var e = new InvalidOperationException("cyclic");
+        typeof(Exception).GetField("_innerException", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(e, e);
+        Assert.Same(e, ExceptionSanitizer.Sanitize(e));
+    }
+
+    [Fact]
+    public void DeeplyNestedAggregatesPassThroughWithoutOverflow()
+    {
+        Exception chain = new InvalidOperationException("leaf");
+        for (var i = 0; i < 10_000; i++) chain = new AggregateException(chain);
+        Assert.Same(chain, ExceptionSanitizer.Sanitize(chain));
     }
 
     private static Exception CreateForeign(string message)

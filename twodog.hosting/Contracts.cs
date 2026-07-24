@@ -23,6 +23,11 @@ public interface IInstanceContext
     /// <summary>This instance's native libgodot copy (pass as Engine.NativePath).</summary>
     string NativePath { get; }
 
+    /// <summary>Directory of the program assembly rooting this instance's ALC.
+    /// Pass as Engine.ProjectAssemblyDir so the engine looks for the project's
+    /// C# assembly next to the hosted program, not next to the outer host.</summary>
+    string ProgramAssemblyDir { get; }
+
     /// <summary>Cooperative shutdown flag; poll it from the pump loop.</summary>
     bool QuitRequested { get; }
 

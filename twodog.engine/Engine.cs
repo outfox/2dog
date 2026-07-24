@@ -98,6 +98,16 @@ public class Engine(string project, string? path = null, params string[] args) :
     /// </summary>
     public string? NativePath { get; init; }
 
+    /// <summary>
+    /// Directory the engine should prefer when loading the project's C# assembly
+    /// (exported as GODOT_PROJECT_ASSEMBLY_DIR). Defaults to AppContext.BaseDirectory,
+    /// which is only right when the game assembly ships with the outer host - hosted
+    /// programs living elsewhere set this (2dog.hosting passes the program assembly's
+    /// directory). The variable is process-global; multi-instance hosts serialize
+    /// boots, and the engine reads it during instance creation.
+    /// </summary>
+    public string? ProjectAssemblyDir { get; init; }
+
     /// <summary>Full path of the libgodot this load context actually loaded, when known.</summary>
     public static string? LoadedNativePath => LibGodotLoader.LoadedLibraryPath;
 
@@ -133,7 +143,7 @@ public class Engine(string project, string? path = null, params string[] args) :
         }
         else
         {
-            ConfigureGodotSharpDir();
+            ConfigureGodotSharpDir(ProjectAssemblyDir);
         }
 
         if (NativePath is { } nativePath)
@@ -203,9 +213,9 @@ public class Engine(string project, string? path = null, params string[] args) :
     /// .NET's SetEnvironmentVariable doesn't propagate to native getenv() on
     /// Linux/.NET 8+.
     /// </summary>
-    internal static void ConfigureGodotSharpDir()
+    internal static void ConfigureGodotSharpDir(string? projectAssemblyDir = null)
     {
-        var baseDir = AppContext.BaseDirectory
+        var baseDir = (projectAssemblyDir ?? AppContext.BaseDirectory)
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         if (!string.IsNullOrEmpty(baseDir))
             SetEnvironmentVariableForNative("GODOT_PROJECT_ASSEMBLY_DIR", baseDir);

@@ -67,6 +67,15 @@ public sealed class AlphaEngineTests(AlphaEngineFixture fixture)
         NativePathRegistry.Paths["alpha"] = path;
         NativePathRegistry.AssertDisjoint();
     }
+
+    [Fact]
+    public void EngineStackStateIsPerInstance()
+    {
+        HostGuard.SkipUnlessSupported();
+        var report = fixture.Run<EngineIsolationScenario>();
+        Assert.Contains("alcIsDefault=False", report);
+        Assert.Contains("name=2dog-alpha", report);
+    }
 }
 
 [Collection(nameof(BetaCollection))]
@@ -97,5 +106,14 @@ public sealed class BetaEngineTests(BetaEngineFixture fixture)
         var path = fixture.Run<NativePathScenario>();
         NativePathRegistry.Paths["beta"] = path;
         NativePathRegistry.AssertDisjoint();
+    }
+
+    [Fact]
+    public void EngineStackStateIsPerInstance()
+    {
+        HostGuard.SkipUnlessSupported();
+        var report = fixture.Run<EngineIsolationScenario>();
+        Assert.Contains("alcIsDefault=False", report);
+        Assert.Contains("name=2dog-beta", report);
     }
 }

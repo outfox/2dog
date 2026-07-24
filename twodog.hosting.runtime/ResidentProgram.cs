@@ -21,7 +21,13 @@ public sealed class ResidentProgram : IEngineProgram
 
         try
         {
-            var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
+            // Disposed while waiting to boot: never bring up an engine nobody observes.
+            if (ctx.QuitRequested) return 0;
+            var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args)
+            {
+                NativePath = ctx.NativePath,
+                ProjectAssemblyDir = ctx.ProgramAssemblyDir,
+            };
             using var godot = engine.Start();
             var session = new EngineSession(engine, godot);
             ctx.SignalBooted();

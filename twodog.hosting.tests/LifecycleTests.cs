@@ -70,6 +70,17 @@ public sealed class StuckBootProgram : IEngineProgram
     }
 }
 
+/// <summary>Proof-of-execution probe: sets the State event if it ever runs.</summary>
+public sealed class RanMarkerProgram : IEngineProgram
+{
+    public int Run(IInstanceContext ctx)
+    {
+        (ctx.State as ManualResetEventSlim)?.Set();
+        ctx.SignalBooted();
+        return 5;
+    }
+}
+
 public sealed class LifecycleTests
 {
     private static string TempProject => Path.GetTempPath();
@@ -230,6 +241,62 @@ public sealed class LifecycleTests
             ProgramAssemblyPath = Path.Combine(Path.GetTempPath(), "2dog-no-such-assembly.dll"),
             ProgramTypeName = "Some.Type",
         }));
+    }
+
+    [Fact]
+    public async Task DisposedWhileQueuedOnBootGateNeverStarts()
+    {
+        HostGuard.SkipUnlessSupported();
+        using var release = new SemaphoreSlim(0);
+        var inGate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        using var host = new EngineHost();
+        var stuck = host.Start<StuckBootProgram>(new()
+        {
+            Tag = "lc-orphan-stuck",
+            ProjectDir = TempProject,
+            State = release,
+            OnMessage = _ => inGate.TrySetResult(),
+        });
+        await inGate.Task.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+
+        using var ran = new ManualResetEventSlim(false);
+        var queued = host.Start<RanMarkerProgram>(new()
+            { Tag = "lc-orphan-queued", ProjectDir = TempProject, State = ran, ShutdownTimeout = TimeSpan.FromSeconds(10) });
+        // Dispose while the instance is queued behind the held gate: it must
+        // observe the quit promptly (no TimeoutException) and never run.
+        queued.Dispose();
+        await Assert.ThrowsAsync<OperationCanceledException>(() => queued.Completion);
+        await Assert.ThrowsAsync<OperationCanceledException>(() => queued.Booted);
+
+        release.Release();
+        await stuck.Completion.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+        Assert.False(ran.IsSet, "a disposed instance must never run its program");
+    }
+
+    [Fact]
+    public async Task HostDisposeWaitsForStuckInstancesConcurrently()
+    {
+        HostGuard.SkipUnlessSupported();
+        using var release = new SemaphoreSlim(0);
+        var timeout = TimeSpan.FromSeconds(5);
+        var host = new EngineHost();
+        var a = host.Start<HangingProgram>(new()
+            { Tag = "lc-par-a", ProjectDir = TempProject, State = release, ShutdownTimeout = timeout });
+        var b = host.Start<HangingProgram>(new()
+            { Tag = "lc-par-b", ProjectDir = TempProject, State = release, ShutdownTimeout = timeout });
+        await Task.WhenAll(a.Booted, b.Booted).WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        var aggregate = Assert.Throws<AggregateException>(host.Dispose);
+        stopwatch.Stop();
+        Assert.Equal(2, aggregate.InnerExceptions.Count);
+        Assert.All(aggregate.InnerExceptions, e => Assert.IsType<TimeoutException>(e));
+        // Serial waits would take >= 2x the timeout; concurrent waits stay well below.
+        Assert.True(stopwatch.Elapsed < timeout + timeout,
+            $"expected concurrent shutdown waits, took {stopwatch.Elapsed}");
+
+        release.Release(2);
+        await Task.WhenAll(a.Completion, b.Completion).WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
     }
 
     [Fact]

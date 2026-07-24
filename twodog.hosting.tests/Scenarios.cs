@@ -1,3 +1,4 @@
+using System.Runtime.Loader;
 using Godot;
 using twodog.Hosting.Runtime;
 
@@ -48,4 +49,17 @@ public sealed class ChurnScenario : IEngineScenario
 public sealed class NativePathScenario : IEngineScenario
 {
     public string Run(EngineSession session, string? argument) => twodog.Engine.LoadedNativePath ?? "null";
+}
+
+/// <summary>The isolation payoff, asserted on real engine-stack state: this
+/// instance's GodotSharp must live in its own ALC (not default), and its
+/// ProjectSettings must reflect its own scratch project.</summary>
+public sealed class EngineIsolationScenario : IEngineScenario
+{
+    public string Run(EngineSession session, string? argument)
+    {
+        var alc = AssemblyLoadContext.GetLoadContext(typeof(GodotObject).Assembly);
+        var name = ProjectSettings.GetSetting("application/config/name").AsString();
+        return $"alcIsDefault={alc == AssemblyLoadContext.Default};name={name}";
+    }
 }

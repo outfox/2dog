@@ -96,12 +96,28 @@ public sealed class EngineInstance : IDisposable
         {
             // Fail closed: proceeding without the gate would overlap boots
             // exactly when CWD and loader-lock serialization matter most.
-            if (!BootGate.Wait(_bootGateTimeout))
+            // Wait in slices so RequestQuit/Dispose issued while queued is
+            // observed - a disposed instance must never start its program.
+            var slice = TimeSpan.FromMilliseconds(50);
+            var waited = TimeSpan.Zero;
+            while (!BootGate.Wait(slice))
             {
-                _bootGateReleased = 1; // nothing acquired, nothing to release
-                throw new TimeoutException(
-                    $"Instance '{Tag}' timed out waiting for the boot gate - a previous instance is stuck booting.");
+                waited += slice;
+                if (_ctx.QuitRequested)
+                {
+                    _bootGateReleased = 1; // nothing acquired, nothing to release
+                    throw new OperationCanceledException(
+                        $"Instance '{Tag}' was disposed before it could start.");
+                }
+                if (waited >= _bootGateTimeout)
+                {
+                    _bootGateReleased = 1;
+                    throw new TimeoutException(
+                        $"Instance '{Tag}' timed out waiting for the boot gate - a previous instance is stuck booting.");
+                }
             }
+            if (_ctx.QuitRequested)
+                throw new OperationCanceledException($"Instance '{Tag}' was disposed before it could start.");
             var program = (IEngineProgram)Activator.CreateInstance(ResolveType(alc, programAssemblyPath, programTypeName))!;
             var exit = program.Run(_ctx);
             _completion.TrySetResult(exit);
@@ -145,6 +161,7 @@ public sealed class EngineInstance : IDisposable
         public string ProjectDir => options.ProjectDir; // pre-normalized by EngineHost.Start
         public string[] Args => options.Args;
         public string NativePath => nativePath;
+        public string ProgramAssemblyDir => Path.GetDirectoryName(options.ProgramAssemblyPath!)!;
         public bool QuitRequested => _quit;
         public object? State => options.State;
 

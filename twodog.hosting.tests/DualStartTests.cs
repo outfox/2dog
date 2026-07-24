@@ -35,18 +35,35 @@ public sealed class PacedProgram : IEngineProgram
     public int Run(IInstanceContext ctx)
     {
         var barrier = (Barrier)(ctx.State ?? throw new InvalidOperationException("PacedProgram needs a Barrier as State."));
-        var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
-        using var godot = engine.Start();
-        ctx.SignalBooted();
-        var frames = 0;
-        for (var i = 0; i < Frames; i++)
+        try
         {
-            if (godot.Iteration()) break;
-            frames++;
-            if (!barrier.SignalAndWait(TimeSpan.FromSeconds(30))) return -1;
+            var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
+            using var godot = engine.Start();
+            ctx.SignalBooted();
+            var frames = 0;
+            for (var i = 0; i < Frames; i++)
+            {
+                if (godot.Iteration()) break;
+                frames++;
+                if (!barrier.SignalAndWait(TimeSpan.FromSeconds(30))) return -1;
+            }
+            engine.Dispose();
+            return frames;
         }
-        engine.Dispose();
-        return frames;
+        catch
+        {
+            // Unblock the lockstep sibling immediately: a boot failure must
+            // surface as this instance's fault, not the sibling's 30s timeout.
+            try
+            {
+                barrier.RemoveParticipant();
+            }
+            catch (InvalidOperationException)
+            {
+                // Mid-phase state where removal is not allowed - keep the original failure.
+            }
+            throw;
+        }
     }
 }
 

@@ -25,6 +25,15 @@ public sealed class EngineHost : IDisposable
     private static int _slotCounter = -1;
 
     /// <summary>
+    /// Process-wide ceiling on Start calls. Instance resources are deliberately
+    /// non-reclaimable (the ALC, native module, thread stack, and pool copy stay
+    /// resident after Dispose), so cycling instances leaks - this cap turns that
+    /// documented constraint into an error instead of unbounded growth. Raise it
+    /// deliberately for hosts that genuinely need more concurrent engines.
+    /// </summary>
+    public static int MaxProcessInstances { get; set; } = 32;
+
+    /// <summary>
     /// False where in-process engine hosting is not validated: macOS dual-load
     /// is untested and native unload is impossible there (dyld-pinned ObjC
     /// images). <see cref="Start(InstanceOptions)"/> fails closed; test
@@ -63,18 +72,28 @@ public sealed class EngineHost : IDisposable
         // Normalize every path NOW, on the caller's thread: CWD is process-global
         // and engine boots move it, so relative paths must not survive to any
         // later point. (Absolute inputs are still the only fully safe choice.)
+        // Arrays are snapshotted so the validated shared list is the one used
+        // and Args cannot change while the instance is queued for boot.
         programAssemblyPath = Path.GetFullPath(programAssemblyPath);
         options = options with
         {
             ProjectDir = Path.GetFullPath(options.ProjectDir),
             ProgramAssemblyPath = programAssemblyPath,
             NativeSourcePath = options.NativeSourcePath is { } native ? Path.GetFullPath(native) : null,
+            Args = [.. options.Args],
+            SharedAssemblies = [.. options.SharedAssemblies],
         };
         if (!File.Exists(programAssemblyPath))
             throw new FileNotFoundException("Program assembly not found.", programAssemblyPath);
 
         var resolver = new AssemblyDependencyResolver(programAssemblyPath);
-        ValidateSharedAssemblies(options.SharedAssemblies, resolver);
+        Func<AssemblyName, string?> resolvePath = name =>
+            resolver.ResolveAssemblyToPath(name)
+            ?? AppDomain.CurrentDomain.GetAssemblies()
+                .FirstOrDefault(a => !a.IsDynamic && string.Equals(a.GetName().Name, name.Name, StringComparison.OrdinalIgnoreCase)
+                                     && !string.IsNullOrEmpty(a.Location))?.Location;
+        ValidateSharedAssemblies(options.SharedAssemblies, resolvePath);
+        PreloadSharedRoots(options.SharedAssemblies, resolvePath);
 
         var source = Path.GetFullPath(options.NativeSourcePath ?? NativeResolver.Resolve(options.Variant));
         var nativePath = AcquireNativeCopy(source);
@@ -106,28 +125,29 @@ public sealed class EngineHost : IDisposable
             _instances.Clear();
         }
         foreach (var instance in instances) instance.RequestQuit();
-        List<Exception>? errors = null;
-        foreach (var instance in instances)
+        // Quit is already broadcast: run the bounded per-instance waits
+        // concurrently, so worst-case teardown is the largest ShutdownTimeout
+        // rather than their sum.
+        var waits = instances.Select(instance => Task.Run(instance.Dispose)).ToArray();
+        try
         {
-            try
-            {
-                instance.Dispose();
-            }
-            catch (Exception e)
-            {
-                (errors ??= []).Add(e);
-            }
+            Task.WaitAll(waits);
         }
-        if (errors is not null)
-            throw new AggregateException("One or more engine instances failed to shut down cleanly.", errors);
+        catch (AggregateException e)
+        {
+            throw new AggregateException("One or more engine instances failed to shut down cleanly.",
+                e.Flatten().InnerExceptions);
+        }
     }
 
     /// <summary>
     /// Sharing an assembly that (transitively) references the engine stack
     /// would reunify the per-ALC statics the whole isolation model rests on -
-    /// reject it up front by walking assembly references.
+    /// reject it up front by walking assembly references. Fails closed: any
+    /// closure member that cannot be located for inspection is rejected unless
+    /// it is a framework assembly (framework code cannot reference user code).
     /// </summary>
-    private static void ValidateSharedAssemblies(string[] shared, AssemblyDependencyResolver resolver)
+    internal static void ValidateSharedAssemblies(string[] shared, Func<AssemblyName, string?> resolvePath)
     {
         if (shared.Length == 0) return;
         var pending = new Queue<(string Name, bool IsRoot)>(shared.Select(s => (s, true)));
@@ -140,26 +160,61 @@ public sealed class EngineHost : IDisposable
                 throw new ArgumentException(
                     $"SharedAssemblies must be Godot-free: '{string.Join("' / '", shared)}' leads to '{name}', " +
                     "whose statics must stay per-instance.");
-            var path = resolver.ResolveAssemblyToPath(new AssemblyName(name))
-                ?? AppDomain.CurrentDomain.GetAssemblies()
-                    .FirstOrDefault(a => !a.IsDynamic && string.Equals(a.GetName().Name, name, StringComparison.OrdinalIgnoreCase)
-                                         && !string.IsNullOrEmpty(a.Location))?.Location;
+            if (IsFrameworkAssembly(name)) continue; // cannot reference user code; skip the subtree
+            var path = resolvePath(new AssemblyName(name));
             if (path is null)
             {
-                // Fail closed on the shared roots themselves: an assembly we
-                // cannot inspect cannot be proven Godot-free. Unresolvable
-                // TRANSITIVE refs are framework assemblies - skipping them is
-                // safe because the engine stack itself always resolves.
-                if (isRoot)
-                    throw new ArgumentException(
-                        $"Shared assembly '{name}' cannot be located for validation (not in the program's deps.json " +
-                        "and not loaded in the default ALC) - refusing to share what cannot be verified.");
-                continue;
+                throw new ArgumentException(isRoot
+                    ? $"Shared assembly '{name}' cannot be located for validation (not in the program's deps.json " +
+                      "and not loaded in the default ALC) - refusing to share what cannot be verified."
+                    : $"The shared assembly closure of '{string.Join("' / '", shared)}' references '{name}', which " +
+                      "cannot be located for validation - refusing to share what could hide an engine-stack reference.");
             }
             using var pe = new PEReader(File.OpenRead(path));
             var metadata = pe.GetMetadataReader();
             foreach (var handle in metadata.AssemblyReferences)
                 pending.Enqueue((metadata.GetString(metadata.GetAssemblyReference(handle).Name), false));
+        }
+    }
+
+    /// <summary>CAS so a rejected Start does not burn a slot: raising
+    /// <see cref="MaxProcessInstances"/> afterwards makes the next Start work.</summary>
+    private static int AcquireSlot()
+    {
+        while (true)
+        {
+            var current = Volatile.Read(ref _slotCounter);
+            if (current + 1 >= MaxProcessInstances)
+                throw new InvalidOperationException(
+                    $"The process-wide engine instance limit was reached ({nameof(MaxProcessInstances)} = " +
+                    $"{MaxProcessInstances}). Instance slots are never reclaimed while the process lives (the ALC, " +
+                    "native module, thread, and pool copy stay resident after Dispose) - instance recycling is " +
+                    "unsupported. Use one process per batch, or raise the limit deliberately.");
+            if (Interlocked.CompareExchange(ref _slotCounter, current + 1, current) == current)
+                return current + 1;
+        }
+    }
+
+    private static bool IsFrameworkAssembly(string name) =>
+        name is "System" or "mscorlib" or "netstandard" or "WindowsBase"
+        || name.StartsWith("System.", StringComparison.OrdinalIgnoreCase)
+        || name.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// A shared assembly merely falls through to the default ALC at load time,
+    /// and the default binder may know nothing about a program-local file -
+    /// preload each validated root so the identity validation approved is the
+    /// one every instance actually shares (instead of a late FileNotFound).
+    /// </summary>
+    private static void PreloadSharedRoots(string[] shared, Func<AssemblyName, string?> resolvePath)
+    {
+        foreach (var name in shared)
+        {
+            if (AssemblyLoadContext.Default.Assemblies.Any(
+                    a => string.Equals(a.GetName().Name, name, StringComparison.OrdinalIgnoreCase)))
+                continue;
+            if (resolvePath(new AssemblyName(name)) is { } path)
+                AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.GetFullPath(path));
         }
     }
 
@@ -174,9 +229,11 @@ public sealed class EngineHost : IDisposable
     /// a cap/cleanup first. Cross-process slot collisions are fine - separate
     /// processes may map the same file.
     /// </summary>
-    private static string AcquireNativeCopy(string sourcePath)
+    private static string AcquireNativeCopy(string sourcePath) => AcquireNativeCopy(sourcePath, AcquireSlot());
+
+    /// <summary>Slot-explicit core, internal for tests (eviction/concurrency).</summary>
+    internal static string AcquireNativeCopy(string sourcePath, int slot)
     {
-        var slot = Interlocked.Increment(ref _slotCounter);
         // Never hand out the original path, even for the first slot: something
         // outside this host (a classic single-instance fixture) may already
         // have the original mapped, and loading the same path again would
@@ -199,9 +256,13 @@ public sealed class EngineHost : IDisposable
             File.Copy(sourcePath, tmp, overwrite: true);
             try
             {
+                // A stale partial must be evicted first: Move(overwrite: false)
+                // would otherwise fail on it and masquerade as a lost race.
+                // Partials are never mapped by a loader, so the delete is safe.
+                File.Delete(dest);
                 File.Move(tmp, dest, overwrite: false);
             }
-            catch (IOException) when (File.Exists(dest))
+            catch (IOException) when (File.Exists(dest) && new FileInfo(dest).Length == source.Length)
             {
                 File.Delete(tmp); // lost a cross-process race to a completed copy
             }
