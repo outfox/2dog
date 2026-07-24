@@ -61,6 +61,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.browser-wasm.debug",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.browser-wasm", "platforms\twodog.browser-wasm\twodog.browser-wasm.csproj", "{F9923A20-28AD-4200-A805-5BEA59AD3AE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.hosting", "twodog.hosting\twodog.hosting.csproj", "{A0000000-0000-0000-0000-000000000006}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.hosting.runtime", "twodog.hosting.runtime\twodog.hosting.runtime.csproj", "{A0000000-0000-0000-0000-000000000007}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.hosting.xunit", "twodog.hosting.xunit\twodog.hosting.xunit.csproj", "{A0000000-0000-0000-0000-000000000008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "twodog.hosting.tests", "twodog.hosting.tests\twodog.hosting.tests.csproj", "{A0000000-0000-0000-0000-000000000009}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -497,6 +505,78 @@ Global
 		{F9923A20-28AD-4200-A805-5BEA59AD3AE9}.Editor|x64.Build.0 = Debug|Any CPU
 		{F9923A20-28AD-4200-A805-5BEA59AD3AE9}.Editor|x86.ActiveCfg = Debug|Any CPU
 		{F9923A20-28AD-4200-A805-5BEA59AD3AE9}.Editor|x86.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Release|x64.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Release|x86.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Editor|x64.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Editor|x64.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Editor|x86.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000006}.Editor|x86.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Release|x64.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Release|x86.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Editor|x64.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Editor|x64.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Editor|x86.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000007}.Editor|x86.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Release|x64.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Release|x86.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Editor|x64.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Editor|x64.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Editor|x86.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000008}.Editor|x86.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Release|x64.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Release|x86.Build.0 = Release|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Editor|x64.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Editor|x64.Build.0 = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Editor|x86.ActiveCfg = Editor|Any CPU
+		{A0000000-0000-0000-0000-000000000009}.Editor|x86.Build.0 = Editor|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

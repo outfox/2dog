@@ -59,6 +59,18 @@ public class Engine(string project, string? path = null, params string[] args) :
         if (_godotInstancePtr != IntPtr.Zero) return;
 
         // No Godot call may be made after this point (we are in ProcessExit).
+        // Prefer the recorded handle: with hosted multi-instance (one module
+        // per AssemblyLoadContext) every sweep must free exactly its own module.
+        var handle = LibGodotLoader.LoadedLibraryHandle;
+        if (handle != 0)
+        {
+            var attempts = 0;
+            while (FreeLibrary(handle) && ++attempts < 32)
+            {
+            }
+            return;
+        }
+
         // The loaded module name is variant-specific (libgodot-editor.dll etc.);
         // when the resolver never ran, sweep all known names.
         string[] names = LibGodotLoader.LoadedLibraryFileName is { } loaded
@@ -77,6 +89,17 @@ public class Engine(string project, string? path = null, params string[] args) :
 
     public SceneTree Tree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
                              throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
+
+    /// <summary>
+    /// Hosted mode: exact libgodot file to load for this load context, bypassing variant
+    /// probing. Set by multi-instance hosts (2dog.hosting hands each instance its own pooled
+    /// copy); when set, Start() also routes GodotPlugins through this context instead of the
+    /// engine's hostfxr default-ALC load, keeping all managed engine state per-instance.
+    /// </summary>
+    public string? NativePath { get; init; }
+
+    /// <summary>Full path of the libgodot this load context actually loaded, when known.</summary>
+    public static string? LoadedNativePath => LibGodotLoader.LoadedLibraryPath;
 
 
     public void Dispose()
@@ -111,6 +134,15 @@ public class Engine(string project, string? path = null, params string[] args) :
         else
         {
             ConfigureGodotSharpDir();
+        }
+
+        if (NativePath is { } nativePath)
+        {
+            if (OperatingSystem.IsBrowser())
+                throw new PlatformNotSupportedException(
+                    $"{nameof(Engine)}: {nameof(NativePath)} is not applicable on browser (statically linked).");
+            var module = LibGodotLoader.LoadExact(nativePath);
+            HostedGodotPlugins.Register(module);
         }
 
         Console.WriteLine("Starting Godot instance...");
