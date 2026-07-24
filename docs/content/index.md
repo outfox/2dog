@@ -59,7 +59,7 @@ features:
 
 ## Start Where Your Project Is
 
-2dog lives inside a regular Godot project and nests desktop, browser, and test hosts inside it. These are invisible (`.gdignored`) to the editor.
+2dog sits in a regular Godot project and nests desktop, browser, and test hosts inside it. These are invisible to the editor (via `.gdignore`) to avoid conflicts, and can be easily edited or removed.
 
 :::: columns
 ::: column 🐕 I Already Have a Godot Game
