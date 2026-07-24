@@ -24,18 +24,6 @@
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
     </PropertyGroup>
 
-    <!-- GDExtension flavor (2dog.gdextension.<rid>): non-mono natives built
-         with extra_suffix=gdext_shared_library, packaged with a distinct
-         libgodot-gdext- prefix so both stacks can coexist in one project
-         tree without colliding. Opt in via <GdExtension>true</GdExtension>. -->
-    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' != 'web' And '$(GdExtension)' == 'true'">
-        <PackageId>2dog.gdextension.$(PlatformRID)$(PackageSuffix)</PackageId>
-        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).$(PlatformArch).gdext_shared_library.$(NativeLibExt)</NativeLibPath>
-        <OutputLibName>libgodot-gdext-$(VariantShortName).$(NativeLibExt)</OutputLibName>
-        <IsPackable>true</IsPackable>
-        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
-    </PropertyGroup>
-
     <!-- Web (browser-wasm) variants pack a whole payload directory instead of a
          single shared library: the emscripten static archive plus the JS glue
          and boot shell it must be linked/served with. The runtimes/<rid>/native
@@ -45,15 +33,6 @@
     <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
         <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
         <WebPayloadDir>$(GodotBinDir)web/$(BuildVariant)/</WebPayloadDir>
-        <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
-    </PropertyGroup>
-
-    <!-- GDExtension flavor of the web payload (2dog.gdextension.browser-wasm):
-         the non-mono static archive staged under godot/bin/web-gdext/. -->
-    <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web' And '$(GdExtension)' == 'true'">
-        <PackageId>2dog.gdextension.$(PlatformRID)$(PackageSuffix)</PackageId>
-        <WebPayloadDir>$(GodotBinDir)web-gdext/$(BuildVariant)/</WebPayloadDir>
-        <IsPackable>true</IsPackable>
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
     </PropertyGroup>
 

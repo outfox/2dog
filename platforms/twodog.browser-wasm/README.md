@@ -48,5 +48,5 @@ single-threaded engine build requires no COOP/COEP headers.
 ## Known limitations
 
 - Single-threaded (`System.Threading` use will fail); a threaded variant may come later
-- No external GDExtension side modules (the .NET runtime owns the main module); the GDExtension-stack sibling package is `2dog.gdextension.browser-wasm`
+- No external GDExtension side modules (the .NET runtime owns the main module)
 - Every publish relinks the wasm (minutes); iterate gameplay on desktop, publish web to verify

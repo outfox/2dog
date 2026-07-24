@@ -7,7 +7,7 @@
         Identity      - the runtime identifier (win-x64, linux-x64, osx-arm64)
         PackageId     - variant package id prefix (2dog.win-x64 -> .release/.debug/.editor)
         PackageVersion- version folder of the variant packages
-        LibPrefix     - output library prefix (libgodot / libgodot-gdext)
+        LibPrefix     - output library prefix (libgodot)
         Ext           - native library extension (dll / so / dylib)
         HostOs        - IsOSPlatform name gating host builds (Windows / Linux / OSX)
         RidPrefix     - RuntimeIdentifier prefix gating publishes (win / linux / osx)
