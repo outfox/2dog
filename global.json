@@ -1,7 +1,7 @@
 {
-  "$comment": "Pins the SDK band that has the wasm-tools workload installed (and thereby the Emscripten version matching <EmscriptenVersion> in Directory.Build.props). global.json resolves from the working directory, so this root pin is what lets the web hosts publish from the repo root; the .web folders carry the same pin for runs started inside them.",
+  "$comment": "Pins the SDK band that has the wasm-tools workload installed",
   "sdk": {
-    "version": "10.0.100",
+    "version": "10.0.302",
     "rollForward": "latestFeature"
   }
 }
