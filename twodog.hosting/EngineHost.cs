@@ -21,8 +21,17 @@ namespace twodog.Hosting;
 public sealed class EngineHost : IDisposable
 {
     // Process-wide: slots are never reused while the process lives, because a
-    // disposed instance's module stays mapped until ProcessExit.
+    // disposed instance's module stays mapped until ProcessExit. Exception:
+    // slots from failed Starts (whose copy was never mapped) recycle here.
     private static int _slotCounter = -1;
+    private static readonly List<int> _reusableSlots = [];
+    private static readonly Lock _slotGate = new();
+
+    /// <summary>Test hook: slots handed out and not recycled.</summary>
+    internal static int LiveSlotCount
+    {
+        get { lock (_slotGate) return _slotCounter + 1 - _reusableSlots.Count; }
+    }
 
     /// <summary>
     /// Process-wide ceiling on Start calls. Instance resources are deliberately
@@ -96,18 +105,34 @@ public sealed class EngineHost : IDisposable
         PreloadSharedRoots(options.SharedAssemblies, resolvePath);
 
         var source = Path.GetFullPath(options.NativeSourcePath ?? NativeResolver.Resolve(options.Variant));
-        var nativePath = AcquireNativeCopy(source);
         var alc = new InstanceAlc(options.Tag, programAssemblyPath, options.SharedAssemblies, resolver);
-        var instance = new EngineInstance(options, alc, programAssemblyPath, programTypeName, nativePath);
-        lock (_gate)
+        var slot = AcquireSlot();
+        EngineInstance? instance = null;
+        try
         {
-            ObjectDisposedException.ThrowIf(_disposed, this);
-            _instances.Add(instance);
-            // The thread only starts once the instance is registered, so
-            // Dispose can never race past an unrecorded live engine.
-            instance.Begin();
+            var nativePath = AcquireNativeCopy(source, slot);
+            instance = new EngineInstance(options, alc, programAssemblyPath, programTypeName, nativePath);
+            lock (_gate)
+            {
+                ObjectDisposedException.ThrowIf(_disposed, this);
+                _instances.Add(instance);
+                // The thread only starts once the instance is registered, so
+                // Dispose can never race past an unrecorded live engine.
+                instance.Begin();
+            }
+            return instance;
         }
-        return instance;
+        catch
+        {
+            // Nothing mapped the slot's pool copy (the module loads on the
+            // instance thread, which never started), so the slot is reusable.
+            lock (_gate)
+            {
+                if (instance is not null) _instances.Remove(instance);
+            }
+            ReleaseUnmappedSlot(slot);
+            throw;
+        }
     }
 
     /// <summary>Requests quit on all instances, then waits for each (bounded by
@@ -145,7 +170,9 @@ public sealed class EngineHost : IDisposable
     /// would reunify the per-ALC statics the whole isolation model rests on -
     /// reject it up front by walking assembly references. Fails closed: any
     /// closure member that cannot be located for inspection is rejected unless
-    /// it is a framework assembly (framework code cannot reference user code).
+    /// it carries a framework name (framework code cannot reference user code);
+    /// locatable assemblies are walked regardless of name, so a System.*/
+    /// Microsoft.* prefix cannot hide a user subtree from the walk.
     /// </summary>
     internal static void ValidateSharedAssemblies(string[] shared, Func<AssemblyName, string?> resolvePath)
     {
@@ -160,10 +187,10 @@ public sealed class EngineHost : IDisposable
                 throw new ArgumentException(
                     $"SharedAssemblies must be Godot-free: '{string.Join("' / '", shared)}' leads to '{name}', " +
                     "whose statics must stay per-instance.");
-            if (IsFrameworkAssembly(name)) continue; // cannot reference user code; skip the subtree
             var path = resolvePath(new AssemblyName(name));
             if (path is null)
             {
+                if (IsFrameworkAssembly(name)) continue; // genuine framework ref: cannot reference user code
                 throw new ArgumentException(isRoot
                     ? $"Shared assembly '{name}' cannot be located for validation (not in the program's deps.json " +
                       "and not loaded in the default ALC) - refusing to share what cannot be verified."
@@ -177,22 +204,36 @@ public sealed class EngineHost : IDisposable
         }
     }
 
-    /// <summary>CAS so a rejected Start does not burn a slot: raising
-    /// <see cref="MaxProcessInstances"/> afterwards makes the next Start work.</summary>
+    /// <summary>A rejected or failed Start does not burn a slot: the cap
+    /// counts live slots only (so raising <see cref="MaxProcessInstances"/>
+    /// afterwards makes the next Start work), and Start's failure paths return
+    /// their never-mapped slot for reuse.</summary>
     private static int AcquireSlot()
     {
-        while (true)
+        lock (_slotGate)
         {
-            var current = Volatile.Read(ref _slotCounter);
-            if (current + 1 >= MaxProcessInstances)
+            if (_slotCounter + 1 - _reusableSlots.Count >= MaxProcessInstances)
                 throw new InvalidOperationException(
                     $"The process-wide engine instance limit was reached ({nameof(MaxProcessInstances)} = " +
                     $"{MaxProcessInstances}). Instance slots are never reclaimed while the process lives (the ALC, " +
                     "native module, thread, and pool copy stay resident after Dispose) - instance recycling is " +
                     "unsupported. Use one process per batch, or raise the limit deliberately.");
-            if (Interlocked.CompareExchange(ref _slotCounter, current + 1, current) == current)
-                return current + 1;
+            if (_reusableSlots.Count > 0)
+            {
+                var recycled = _reusableSlots[^1];
+                _reusableSlots.RemoveAt(_reusableSlots.Count - 1);
+                return recycled;
+            }
+            return ++_slotCounter;
         }
+    }
+
+    /// <summary>Only valid for slots whose pool copy no loader ever mapped:
+    /// reuse hands out the same copy path, and a mapped path would silently
+    /// share its module instead of creating a new instance.</summary>
+    private static void ReleaseUnmappedSlot(int slot)
+    {
+        lock (_slotGate) _reusableSlots.Add(slot);
     }
 
     private static bool IsFrameworkAssembly(string name) =>
@@ -223,15 +264,13 @@ public sealed class EngineHost : IDisposable
     /// Copies persist across runs, keyed by source identity (path, size, mtime -
     /// NOT content; an in-place rebuild changes size/mtime and therefore the
     /// key), so steady-state cost is zero for a stable instance count. Within a
-    /// process the pool only grows - one copy per Start, no eviction (slots are
-    /// never reused in-process, see _slotCounter) - so a long-lived host that
-    /// cycles instances accumulates copies unboundedly; instance recycling needs
-    /// a cap/cleanup first. Cross-process slot collisions are fine - separate
-    /// processes may map the same file.
+    /// process the pool only grows - one copy per registered Start, no eviction
+    /// (mapped slots are never reused in-process, see _slotCounter) - so a
+    /// long-lived host that cycles instances accumulates copies unboundedly;
+    /// instance recycling needs a cap/cleanup first. Cross-process slot
+    /// collisions are fine - separate processes may map the same file.
+    /// Internal for tests (eviction/concurrency).
     /// </summary>
-    private static string AcquireNativeCopy(string sourcePath) => AcquireNativeCopy(sourcePath, AcquireSlot());
-
-    /// <summary>Slot-explicit core, internal for tests (eviction/concurrency).</summary>
     internal static string AcquireNativeCopy(string sourcePath, int slot)
     {
         // Never hand out the original path, even for the first slot: something

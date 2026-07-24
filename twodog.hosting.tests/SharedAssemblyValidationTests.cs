@@ -41,10 +41,23 @@ public sealed class SharedAssemblyValidationTests
     [Fact]
     public void FrameworkOnlyClosurePasses()
     {
-        // twodog.hosting references framework assemblies only; the walk skips
-        // those subtrees (framework code cannot reference user code).
+        // twodog.hosting references framework assemblies only; unlocatable
+        // framework-named references are skipped (framework code cannot
+        // reference user code).
         var root = typeof(EngineHost).Assembly;
         var rootName = root.GetName().Name!;
         EngineHost.ValidateSharedAssemblies([rootName], MapOnly((rootName, root.Location)));
+    }
+
+    [Fact]
+    public void EngineReferenceBehindAFrameworkNameIsStillRejected()
+    {
+        // The framework-name skip only applies to what cannot be located: a
+        // locatable assembly hiding behind a System.* name is walked like any
+        // other, so its engine-stack reference is detected.
+        var disguised = Path.Combine(AppContext.BaseDirectory, "twodog.dll");
+        var e = Assert.Throws<ArgumentException>(() =>
+            EngineHost.ValidateSharedAssemblies(["System.Sneaky"], MapOnly(("System.Sneaky", disguised))));
+        Assert.Contains("per-instance", e.Message);
     }
 }
