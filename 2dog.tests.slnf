@@ -1,6 +1,6 @@
 {
   "solution": {
-    "path": "2dog.sln",
+    "path": "2dog.slnx",
     "projects": [
       "demo\\demo.2dog\\demo.2dog.csproj",
       "demo\\demo.csproj",

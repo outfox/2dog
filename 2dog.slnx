@@ -1,0 +1,59 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Editor" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+  </Configurations>
+  <Folder Name="/platforms/">
+    <Project Path="platforms/twodog.tools/twodog.tools.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/platforms/browser-wasm/">
+    <Project Path="platforms/twodog.browser-wasm/twodog.browser-wasm.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.browser-wasm/twodog.browser-wasm.debug.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.browser-wasm/twodog.browser-wasm.release.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/platforms/linux-x64/">
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.csproj" />
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.debug.csproj" />
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.editor.csproj" />
+    <Project Path="platforms/twodog.linux-x64/twodog.linux-x64.release.csproj" />
+  </Folder>
+  <Folder Name="/platforms/osx-arm64/">
+    <Project Path="platforms/twodog.osx-arm64/twodog.osx-arm64.csproj" />
+    <Project Path="platforms/twodog.osx-arm64/twodog.osx-arm64.debug.csproj" />
+    <Project Path="platforms/twodog.osx-arm64/twodog.osx-arm64.editor.csproj" />
+    <Project Path="platforms/twodog.osx-arm64/twodog.osx-arm64.release.csproj" />
+  </Folder>
+  <Folder Name="/platforms/win-x64/">
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.csproj" />
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.debug.csproj" />
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.editor.csproj" />
+    <Project Path="platforms/twodog.win-x64/twodog.win-x64.release.csproj" />
+  </Folder>
+  <Project Path="demo/demo.2dog/demo.2dog.csproj" />
+  <Project Path="demo/demo.csproj" />
+  <Project Path="demo/demo.web/demo.web.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="twodog.engine/twodog.engine.csproj" />
+  <Project Path="twodog.hosting.runtime/twodog.hosting.runtime.csproj" />
+  <Project Path="twodog.hosting.tests/twodog.hosting.tests.csproj" />
+  <Project Path="twodog.hosting.xunit/twodog.hosting.xunit.csproj" />
+  <Project Path="twodog.hosting/twodog.hosting.csproj" />
+  <Project Path="twodog.import/twodog.import.csproj" />
+  <Project Path="twodog.tests/twodog.tests.csproj" />
+  <Project Path="twodog.xunit/twodog.xunit.csproj" />
+  <Project Path="twodog/twodog.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+  </Project>
+</Solution>
