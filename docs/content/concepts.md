@@ -120,7 +120,7 @@ using var godot = engine.Start();
 
 // This throws InvalidOperationException while the first instance is running
 using var engine2 = new Engine("app2", "./project2");
-var godot2 = engine2.Start(); // ❌ Error!
+var godot2 = engine2.Start(); // error: InvalidOperationException
 ```
 
 ```csharp
@@ -131,7 +131,7 @@ godot.Dispose();
 engine.Dispose();
 
 using var engine2 = new Engine("app2", "./project2");
-using var godot2 = engine2.Start(); // ✅ New engine instance
+using var godot2 = engine2.Start(); // ok: new engine instance
 ```
 
 For testing scenarios, use xUnit's collection fixtures  –  one shared instance per collection. See [Testing](./testing).

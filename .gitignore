@@ -264,11 +264,16 @@ _pkginfo.txt
 knowledge.md
 AGENTS.md
 CLAUDE.md
+PRODUCT.md
+DESIGN.md
+.codex/
 .claude/
 .agents/
 .codebuff/
 .devcontainer/
 plans
+.impeccable
+.github/hooks/impeccable.json
 
 
 # Others

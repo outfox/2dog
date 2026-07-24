@@ -1,4 +1,327 @@
-/* Two-column card layout (::: columns / :::: column, see plugins/columns.ts) */
+/**
+ * The Editor, Inverted — 2dog.dev wears the Godot editor's own interface grammar,
+ * visibly hosted inside a .NET process frame. Every color is taken from the Godot 4
+ * editor source in godot/ (editor_settings.cpp, editor_color_map.cpp). See DESIGN.md.
+ */
+
+/* JetBrains Mono: the code face the Godot editor ships, vendored from godot/thirdparty/fonts. */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono_Regular.woff2') format('woff2');
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- World tokens ---------- */
+
+:root {
+  /* Light: the editor's light theme — supported, deliberately secondary. */
+  --ed-base: #e7e7e7;
+  --ed-dark-1: #dcdcdc;
+  --ed-dark-2: #d0d0d0;
+  --ed-raise: #f2f2f2;
+  --ed-seam: #a8a8a8;
+  --ed-accent: #1c4fae;
+  --ed-accent-strong: #163f8c;
+  --ed-on-accent: #ffffff;
+  --ed-text-1: #2f373b;
+  --ed-text-2: #4c545a;
+  --ed-text-3: #5f676c;
+  --ed-node-2d: #3d64dd;
+  --ed-node-3d: #cd3838;
+  --ed-node-gui: #2fa139;
+  --ed-node-gold: #a06c1c;
+  --ed-node-anim: #a85de9;
+  --ed-warning: #7f4f00;
+  --ed-error: #c22929;
+  --ed-success: #176334;
+  --ed-console-bg: #dedede;
+  --ed-grid: rgba(0, 0, 0, 0.07);
+}
+
+.dark {
+  /* Dark: the editor as shipped. base_color #242424, accent Color(0.34, 0.62, 1.0). */
+  --ed-base: #242424;
+  --ed-dark-1: #1c1c1c;
+  --ed-dark-2: #161616;
+  --ed-raise: #2e2e2e;
+  --ed-seam: #0f0f0f;
+  --ed-accent: #579eff;
+  --ed-accent-strong: #7cb2ff;
+  --ed-on-accent: #16191d;
+  --ed-text-1: #cdced2;
+  --ed-text-2: #9da2a8;
+  --ed-text-3: #8f949a;
+  --ed-node-2d: #8da5f3;
+  --ed-node-3d: #fc7f7f;
+  --ed-node-gui: #8eef97;
+  --ed-node-gold: #ffca5f;
+  --ed-node-anim: #c38ef1;
+  --ed-warning: #ffdd65;
+  --ed-error: #ff5f5f;
+  --ed-success: #45ff8b;
+  --ed-console-bg: #161616;
+  --ed-grid: rgba(255, 255, 255, 0.045);
+}
+
+/* ---------- VitePress token override ---------- */
+
+:root {
+  --vp-font-family-base: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --vp-c-bg: var(--ed-base);
+  --vp-c-bg-alt: var(--ed-dark-1);
+  --vp-c-bg-soft: var(--ed-dark-1);
+  --vp-c-bg-elv: var(--ed-raise);
+
+  --vp-c-divider: var(--ed-seam);
+  --vp-c-gutter: var(--ed-seam);
+  --vp-c-border: var(--ed-seam);
+
+  --vp-c-text-1: var(--ed-text-1);
+  --vp-c-text-2: var(--ed-text-2);
+  --vp-c-text-3: var(--ed-text-3);
+
+  --vp-c-brand-1: var(--ed-accent);
+  --vp-c-brand-2: var(--ed-accent-strong);
+  --vp-c-brand-3: var(--ed-accent);
+  --vp-c-brand-soft: rgba(28, 79, 174, 0.12);
+
+  --vp-c-tip-1: var(--ed-success);
+  --vp-c-tip-2: var(--ed-success);
+  --vp-c-tip-soft: rgba(23, 99, 52, 0.1);
+  --vp-c-warning-1: var(--ed-warning);
+  --vp-c-warning-2: var(--ed-warning);
+  --vp-c-warning-soft: rgba(127, 79, 0, 0.1);
+  --vp-c-danger-1: var(--ed-error);
+  --vp-c-danger-2: var(--ed-error);
+  --vp-c-danger-soft: rgba(194, 41, 41, 0.1);
+
+  --vp-code-block-bg: var(--ed-dark-2);
+  --vp-code-tab-divider: var(--ed-seam);
+  --vp-code-tab-bg: var(--ed-dark-2);
+  --vp-code-tab-text-color: var(--ed-text-2);
+  --vp-code-tab-active-text-color: var(--ed-text-1);
+  --vp-code-tab-hover-text-color: var(--ed-text-1);
+  --vp-code-copy-code-bg: var(--ed-raise);
+  --vp-code-copy-code-hover-bg: var(--ed-raise);
+
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--ed-on-accent);
+  --vp-button-brand-bg: var(--ed-accent);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--ed-on-accent);
+  --vp-button-brand-hover-bg: var(--ed-accent-strong);
+  --vp-button-brand-active-bg: var(--ed-accent);
+  --vp-button-alt-border: var(--ed-seam);
+  --vp-button-alt-text: var(--ed-text-1);
+  --vp-button-alt-bg: var(--ed-raise);
+  --vp-button-alt-hover-border: var(--ed-accent);
+  --vp-button-alt-hover-bg: var(--ed-raise);
+
+  --vp-nav-bg-color: var(--ed-dark-2);
+  --vp-sidebar-bg-color: var(--ed-dark-1);
+
+  --vp-custom-block-info-border: var(--ed-seam);
+  --vp-custom-block-info-bg: var(--ed-console-bg);
+  --vp-custom-block-info-text: var(--ed-text-1);
+  --vp-custom-block-tip-border: var(--ed-seam);
+  --vp-custom-block-warning-border: var(--ed-seam);
+  --vp-custom-block-danger-border: var(--ed-seam);
+}
+
+.dark {
+  --vp-c-brand-soft: rgba(87, 158, 255, 0.14);
+  --vp-c-tip-soft: rgba(69, 255, 139, 0.1);
+  --vp-c-warning-soft: rgba(255, 221, 101, 0.1);
+  --vp-c-danger-soft: rgba(255, 95, 95, 0.1);
+}
+
+/* ---------- Godot pictogram icons ---------- */
+
+/* Rendered by plugins/godot-icons.ts (:gd-name@tint:) and by inline HTML in
+   config.mts / EditorHome.vue. Neutral SVGs from public/icons/node act as a
+   mask; the tint comes from theme tokens so both appearances color correctly. */
+.gd-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.gd-icon--2d { background-color: var(--ed-node-2d); }
+.gd-icon--3d { background-color: var(--ed-node-3d); }
+.gd-icon--gui { background-color: var(--ed-node-gui); }
+.gd-icon--gold { background-color: var(--ed-node-gold); }
+.gd-icon--anim { background-color: var(--ed-node-anim); }
+.gd-icon--ok { background-color: var(--ed-success); }
+.gd-icon--warn { background-color: var(--ed-warning); }
+.gd-icon--err { background-color: var(--ed-error); }
+.gd-icon--accent { background-color: var(--ed-accent); }
+.gd-icon--dim { background-color: var(--ed-text-3); }
+
+/* Editor buttons: flat paint, 1px seam, 3px corners. */
+.VPButton {
+  border-radius: 3px !important;
+  transition: background-color 0.1s ease-out, border-color 0.1s ease-out;
+}
+
+/* ---------- The host frame (site-wide nav) ---------- */
+
+.VPNavBar {
+  border-bottom: 1px solid var(--ed-seam);
+}
+
+.VPNavBar .title span {
+  font-family: var(--vp-font-family-mono);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+/* ---------- Sidebar as scene tree ---------- */
+
+.VPSidebar {
+  border-right: 1px solid var(--ed-seam);
+}
+
+.VPSidebarItem.level-0 > .item > .text {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ed-text-2);
+}
+
+/* Tree indent guides + per-section node glyphs in Godot's categorical icon colors. */
+.VPSidebarItem.level-0 > .items {
+  border-left: 1px solid var(--ed-seam);
+  margin-left: 5px;
+  padding-left: 10px;
+}
+
+/* Node glyphs come from config.mts item text (real pictograms, not squares);
+   each section tints its glyphs with the categorical color, Godot-tree style. */
+.VPSidebarItem .text .gd-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: -2px;
+  background-color: var(--tree-color, var(--ed-text-3));
+}
+
+/* Wrapped item titles hang under their text, not under the glyph. */
+.VPSidebarItem.level-1 .link .text,
+.VPSidebarItem.level-2 .link .text {
+  padding-left: 21px;
+  text-indent: -21px;
+}
+
+#VPSidebarNav > .group:nth-of-type(1) { --tree-color: var(--ed-node-gui); }
+#VPSidebarNav > .group:nth-of-type(2) { --tree-color: var(--ed-node-3d); }
+#VPSidebarNav > .group:nth-of-type(3) { --tree-color: var(--ed-node-2d); }
+#VPSidebarNav > .group:nth-of-type(4) { --tree-color: var(--ed-text-3); }
+#VPSidebarNav > .group:nth-of-type(5) { --tree-color: var(--ed-node-gold); }
+#VPSidebarNav > .group:nth-of-type(6) { --tree-color: var(--ed-warning); }
+
+.VPSidebarItem .link:hover .text {
+  color: var(--ed-accent);
+}
+
+/* Godot's tree paints the selected row as a full-width bar — the active page gets the same. */
+.VPSidebarItem.level-1.is-active > .item,
+.VPSidebarItem.level-2.is-active > .item {
+  background-color: var(--vp-c-brand-soft);
+  border-radius: 3px;
+}
+
+/* Right aside ("On this page") as a dock header, matching the scene-tree titles. */
+.VPDocAsideOutline .outline-title {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ed-text-2);
+}
+
+.VPDocAsideOutline .content {
+  border-left: 1px solid var(--ed-seam);
+}
+
+/* ---------- Custom blocks as editor messages ---------- */
+
+.custom-block {
+  border-radius: 3px;
+  border-width: 1px;
+}
+
+/* Info blocks ("Trail marker") are output-console lines. */
+.custom-block.info {
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.custom-block.info .custom-block-title {
+  font-family: var(--vp-font-family-mono);
+  font-weight: 400;
+  color: var(--ed-success);
+}
+
+.custom-block.info .custom-block-title::before {
+  content: '';
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-right: 7px;
+  vertical-align: -1.5px;
+  background-color: var(--ed-success);
+  -webkit-mask: url('/icons/node/paw_print.svg') no-repeat center / contain;
+  mask: url('/icons/node/paw_print.svg') no-repeat center / contain;
+}
+
+/* ---------- Code groups as script tabs ---------- */
+
+.vp-code-group .tabs {
+  border-bottom: 1px solid var(--ed-seam);
+}
+
+.vp-code-group .tabs label {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  border-radius: 3px 3px 0 0;
+}
+
+/* Every script tab carries the script glyph, exactly like the editor's script list. */
+.vp-code-group .tabs label::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  vertical-align: -1.5px;
+  background-color: currentColor;
+  -webkit-mask: url('/icons/node/script.svg') no-repeat center / contain;
+  mask: url('/icons/node/script.svg') no-repeat center / contain;
+}
+
+/* ---------- Local search: a genuinely floating window (shadow permitted) ---------- */
+
+.VPLocalSearchBox .shell {
+  border: 1px solid var(--ed-seam);
+  border-radius: 3px;
+}
+
+.VPLocalSearchBox .search-bar,
+.VPLocalSearchBox .result {
+  border-radius: 3px;
+}
+
+/* ---------- Two-column card layout → editor panels ---------- */
 
 .md-columns {
   display: grid;
@@ -10,15 +333,15 @@
 .md-column {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 3px;
   padding: 20px 24px 16px;
-  background-color: var(--vp-c-bg-soft);
-  transition: border-color 0.25s;
+  background-color: var(--ed-dark-1);
+  transition: border-color 0.1s ease-out;
 }
 
 .md-column:hover {
-  border-color: var(--vp-c-brand-1);
+  border-color: var(--ed-accent);
 }
 
 .md-column-title {
@@ -36,7 +359,7 @@
 
 .md-column [class*='language-'] {
   margin: 16px -8px;
-  background-color: var(--vp-c-bg);
+  background-color: var(--ed-dark-2);
 }
 
 .md-column [class*='language-'] code {
@@ -48,71 +371,4 @@
   margin-top: auto;
   padding-top: 8px;
   font-weight: 500;
-}
-
-/* Hero section customization */
-
-/* Reverse the hero layout - image on left, text on right */
-.VPHero .container {
-  flex-direction: row-reverse !important;
-}
-
-/* Make the hero image larger */
-.VPHero .image-container {
-  max-width: 420px !important;
-  width: 420px !important;
-}
-
-.VPHero .image-container .image-bg {
-  max-width: 420px !important;
-}
-
-.VPHero .VPImage.image-src {
-  max-width: 380px !important;
-  max-height: 380px !important;
-}
-
-/* Smooth floating animation - simple sine wave */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  45% {
-    transform: translateY(-7px);
-  }
-}
-
-.VPHero .image-container {
-  animation: float 4s ease-in-out infinite;
-  /* Permanent glow effect */
-  filter: drop-shadow(0 0 20px rgba(100, 108, 255, 0.4));
-}
-
-/* Responsive adjustments */
-@media (max-width: 959px) {
-  .VPHero .container {
-    flex-direction: column !important;
-  }
-  
-  .VPHero .image-container {
-    max-width: 320px !important;
-    width: 320px !important;
-  }
-  
-  .VPHero .VPImage.image-src {
-    max-width: 280px !important;
-    max-height: 280px !important;
-  }
-}
-
-@media (max-width: 639px) {
-  .VPHero .image-container {
-    max-width: 260px !important;
-    width: 260px !important;
-  }
-  
-  .VPHero .VPImage.image-src {
-    max-width: 220px !important;
-    max-height: 220px !important;
-  }
 }

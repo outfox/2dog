@@ -13,7 +13,7 @@ with a single `dotnet publish`.
 
 ::: code-group
 
-```bash [🤖 Existing Godot Project]
+```bash [Existing Godot Project]
 # One-time: the .NET wasm build tools (ships its own Emscripten)
 dotnet workload install wasm-tools
 
@@ -30,7 +30,7 @@ dotnet publish MyGame.web
 dotnet serve --directory MyGame.web/AppBundle
 ```
 
-```bash [🌱 Fresh Project]
+```bash [Fresh Project]
 # One-time: the .NET wasm build tools (ships its own Emscripten)
 dotnet workload install wasm-tools
 

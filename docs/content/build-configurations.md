@@ -1,4 +1,4 @@
-# Build Configurations
+# Build Variants
 
 2dog supports three build configurations, each using a different Godot native library variant optimized for specific use cases.
 
@@ -6,9 +6,9 @@
 
 | Configuration | Godot Build | TOOLS_ENABLED | GD Debugger | Use Case |
 |--------------|-------------|---------------|---------------|----------|
-| **Debug** | `template_debug` | ❌ No | ✅ Yes | Development, debugging |
-| **Release** | `template_release` | ❌ No | ❌ No | Production, optimized runtime |
-| **Editor** | `editor` | ✅ Yes | ✅ Yes | Asset import, editor tools |
+| **Debug** | `template_debug` | :gd-cross@err: No | :gd-checkmark@ok: Yes | Development, debugging |
+| **Release** | `template_release` | :gd-cross@err: No | :gd-cross@err: No | Production, optimized runtime |
+| **Editor** | `editor` | :gd-checkmark@ok: Yes | :gd-checkmark@ok: Yes | Asset import, editor tools |
 
 ## Debug Configuration
 
@@ -21,11 +21,11 @@ The Debug configuration uses Godot's `template_debug` build, which includes debu
 - Investigating crashes or issues
 
 ### Features
-- ✅ Debug symbols enabled
-- ✅ Assertions and error checking
-- ✅ Full GodotSharp API
-- ❌ No editor tools
-- ❌ No import pipeline
+- :gd-checkmark@ok: Debug symbols enabled
+- :gd-checkmark@ok: Assertions and error checking
+- :gd-checkmark@ok: Full GodotSharp API
+- :gd-cross@err: No editor tools
+- :gd-cross@err: No import pipeline
 
 ### Usage
 ```bash
@@ -45,12 +45,12 @@ The Release configuration uses Godot's `template_release` build, which is fully 
 - CI/CD production pipelines
 
 ### Features
-- ✅ Fully optimized
-- ✅ Minimal binary size
-- ✅ Full GodotSharp API
-- ❌ No debug symbols
-- ❌ No editor tools
-- ❌ No import pipeline
+- :gd-checkmark@ok: Fully optimized
+- :gd-checkmark@ok: Minimal binary size
+- :gd-checkmark@ok: Full GodotSharp API
+- :gd-cross@err: No debug symbols
+- :gd-cross@err: No editor tools
+- :gd-cross@err: No import pipeline
 
 ### Usage
 ```bash
@@ -72,15 +72,15 @@ The Editor configuration uses Godot's `editor` build, which includes the complet
 - Scene validation and manipulation
 
 ### Features
-- ✅ Debug symbols enabled
-- ✅ TOOLS_ENABLED flag
-- ✅ Resource import pipeline
-- ✅ Editor APIs (`EditorInterface`, `EditorPlugin`, etc.)
-- ✅ Import plugins (`ResourceImporterTexture`, etc.)
-- ✅ Scene tools and validation
-- ✅ Export tools and packaging APIs
-- ⚠️ Larger binary size
-- ⚠️ Slower than template builds
+- :gd-checkmark@ok: Debug symbols enabled
+- :gd-checkmark@ok: TOOLS_ENABLED flag
+- :gd-checkmark@ok: Resource import pipeline
+- :gd-checkmark@ok: Editor APIs (`EditorInterface`, `EditorPlugin`, etc.)
+- :gd-checkmark@ok: Import plugins (`ResourceImporterTexture`, etc.)
+- :gd-checkmark@ok: Scene tools and validation
+- :gd-checkmark@ok: Export tools and packaging APIs
+- :gd-triangle@warn: Larger binary size
+- :gd-triangle@warn: Slower than template builds
 
 ### Usage
 ```bash
