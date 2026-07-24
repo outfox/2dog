@@ -6,10 +6,10 @@ titleTemplate: :title - C# Godot Games on the Web
 head:
   - - meta
     - name: title
-      content: 2dog - C# Godot Games on the Web
+      content: 2dog 🦴 Godot in .NET
   - - meta
     - name: description
-      content: Bring an existing C# Godot game to the web. Keep your scenes, scripts, and Godot workflow.
+      content: 2dog is Godot running in .NET! Export for Web, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.
   - - meta
     - property: og:type
       content: website
@@ -18,11 +18,11 @@ head:
       content: https://2dog.dev
   - - meta
     - property: og:title
-      content: 2dog - C# Godot Games on the Web
+      content: 2dog 🦴 Godot in .NET
 
 hero:
   name: 2dog
-  text: Your C# Godot game. Now on the web.
+  text: Start, control, embed Godot in .NET.
   tagline: Keep your scenes, scripts, and editor workflow. 2dog lets .NET host Godot, then publishes your game as a static WebAssembly site.
   image:
     src: /logo-animated.svg
@@ -32,7 +32,7 @@ hero:
       text: Read the Dogs
       link: /getting-started
     - theme: alt
-      text: Quickstart (Web)
+      text: Quickstart (HTML5)
       link: /web
     - theme: alt
       text: Fetch on Github
