@@ -266,7 +266,7 @@ const starts = [
     title: 'I Have a Godot Game',
     //body: 'Just add 2dog! Scenes, scripts, and assets stay as they are.',
     code: [
-      { comment: true, text: '# just add 2dog! scenes, scripts, and assets stay as they are.' },
+      { comment: true, text: '# just add 2dog! scenes/scripts/assets stay as they are.' },
       { comment: true, text: '# no install needed, just use dnx (dotnet tool execute)' },
       { comment: false, text: 'dnx 2dog convert path/to/MyGame' },
       { comment: false, text: 'cd path/to/MyGame' },
@@ -281,7 +281,7 @@ const starts = [
     title: "I'm Starting Fresh",
     //body: 'Creates a sample scene plus every host, ready to run, test, and publish.',
     code: [
-      { comment: true, text: '# spawn a sample project with every host you can run, test, or publish.' },
+      { comment: true, text: '# spawn an empty project with every host you can run/test/publish.' },
       { comment: false, text: 'dotnet new install 2dog' },
       { comment: false, text: 'dotnet new 2dog -n MyGame' },
       { comment: false, text: 'cd MyGame' },
