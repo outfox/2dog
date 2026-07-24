@@ -93,6 +93,17 @@ onUnmounted(() => {
 /* Node glyphs: neutral pictograms from public/icons/node, tinted like Godot's tree. */
 const iconUrl = (name: string) => `url(${withBase(`/icons/node/${name}.svg`)})`
 
+/* Godot's runbar as titlebar chrome. Play is lit: the scene — the dog — is running. */
+const runbar = [
+  { icon: 'hammer' },
+  { icon: 'play', active: true },
+  { icon: 'pause' },
+  { icon: 'square' },
+  { icon: 'clapperboard' },
+  { icon: 'film_camera' },
+  { icon: 'film' },
+]
+
 const hosts = [
   { name: 'MyGame.2dog', role: 'Desktop host', color: 'var(--ed-node-2d)', icon: 'window', link: '/project-layout' },
   { name: 'MyGame.web', role: 'Browser host', color: 'var(--ed-node-gui)', icon: 'globe', link: '/web' },
@@ -285,8 +296,20 @@ const starts = [
     <div class="host-window">
       <!-- The .NET process owns this window; Godot runs inside it. -->
       <div class="host-titlebar">
-        <span class="host-proc">MyGame.2dog — .NET host process</span>
-        <span class="host-cmd" aria-hidden="true">dotnet run --project MyGame.2dog</span>
+        <span class="host-proc"><span
+          class="host-app-icon"
+          :style="{ '--gd-icon': iconUrl('gobot') }"
+          aria-hidden="true"
+        ></span>MyGame.tscn — 2dog</span>
+        <span class="host-runbar" aria-hidden="true">
+          <span
+            v-for="r in runbar"
+            :key="r.icon"
+            class="run-glyph"
+            :class="{ active: r.active }"
+            :style="{ '--gd-icon': iconUrl(r.icon) }"
+          ></span>
+        </span>
         <span class="host-controls" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
       </div>
 
@@ -506,9 +529,36 @@ const starts = [
   color: var(--ed-text-1);
 }
 
-.host-cmd {
+/* The window's app icon: gobot, wearing Godot blue. */
+.host-app-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  vertical-align: -2.5px;
+  background-color: var(--ed-accent);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* Godot's runbar, docked at the titlebar's right like the editor's own. */
+.host-runbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-left: auto;
-  color: var(--ed-text-2);
+}
+
+.run-glyph {
+  width: 14px;
+  height: 14px;
+  background-color: var(--ed-text-2);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.run-glyph.active {
+  background-color: var(--ed-accent);
 }
 
 .host-controls {
@@ -1138,7 +1188,7 @@ const starts = [
     grid-template-columns: 1fr;
   }
 
-  .host-cmd {
+  .host-runbar {
     display: none;
   }
 
