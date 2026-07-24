@@ -13,9 +13,7 @@
 
 Godot normally loads .NET, now .NET loads Godot.
 
-2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications.
-
-Doing it like this enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
+2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) hostable by .NET applications. Doing it like this enables browser publishing, ordinary `dotnet` tooling, and many automations like unit testing.
 
 
 ## Getting Started
@@ -37,7 +35,7 @@ dotnet run --project MyGame.2dog
 
 ### Start a New Project
 
-Install the project template once, then create the same complete layout from scratch:
+Install and use the project template:
 
 ```bash
 dotnet new install 2dog
@@ -46,7 +44,7 @@ cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-In either case, thge famliar Godot workflow still works:
+In either case, the familiar Godot workflow still works:
 
 ```bash
 godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
