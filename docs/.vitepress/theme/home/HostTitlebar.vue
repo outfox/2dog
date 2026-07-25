@@ -10,7 +10,7 @@ import { iconUrl } from './icons'
       class="host-app-icon"
       :style="{ '--gd-icon': iconUrl('gobot') }"
       aria-hidden="true"
-    ></span>main.tscn — Godot Engine</span>
+    ></span>main.tscn - 2dog - Godot Engine</span>
     <span class="host-controls" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
   </div>
 </template>
