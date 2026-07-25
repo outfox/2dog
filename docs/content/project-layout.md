@@ -135,3 +135,8 @@ An existing .NET application can host a Godot project from another path, but
 that is an advanced embedding scenario rather than the recommended starting
 point. Keep the standard layout unless an established repository structure or
 application boundary gives you a concrete reason not to.
+
+::: info Trail marker
+Laying out MSBuild projects that depend on native libraries can be hard.
+The [Parallel xUnit Collections Demo](https://github.com/outfox/2dog/tree/main/demos/xunit/parallel_collections) shows a minimalist way of doing this, including a tiny, almost dummy, Godot project stub.
+:::

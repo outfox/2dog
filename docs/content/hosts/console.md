@@ -11,11 +11,39 @@ dotnet run --project MyGame.console
 
 ## The Program
 
-There is no framework underneath this  –  only your `Main()`. The one piece of
-magic is `Engine.ResolveProjectDir()`, which reads the `<GodotProjectDir>`
+There is no framework underneath this  –  only your entry point. The one piece
+of magic is `Engine.ResolveProjectDir()`, which reads the `<GodotProjectDir>`
 recorded as assembly metadata at build time, so nothing hard-codes a path.
 
-```csharp
+Top-level statements are enough for most hosts. The generated project ships
+the explicit `Program` class instead, because that is the only place
+`[STAThread]` can go  –  which matters on Windows.
+
+::: code-group
+
+```csharp [Program.cs]
+using Godot;
+using Engine = twodog.Engine;
+
+// 'args' is the implicit parameter of the generated entry point, and reaches
+// Godot verbatim: --headless, --verbose, --quit-after N, ...
+// Start() runs the main scene configured in project.godot (run/main_scene),
+// exactly like launching godot.exe would.
+using var engine = new Engine("MyGame", Engine.ResolveProjectDir(), args);
+using var godot = engine.Start();
+
+if (engine.Tree.CurrentScene is { } scene)
+    GD.Print($"2dog is running '{scene.Name}'!");
+
+// Iteration() returns true when the engine wants to quit
+// (window closed, SceneTree.Quit(), --quit-after elapsed, ...).
+while (!godot.Iteration())
+{
+    // Your per-frame logic here
+}
+```
+
+```csharp [Program Class]
 using Godot;
 using Engine = twodog.Engine;
 
@@ -45,6 +73,29 @@ internal static class Program
     }
 }
 ```
+
+:::
+
+::: warning Top-level statements cannot be `[STAThread]`
+The attribute only goes on an explicit `Main`, and it cannot be repaired at
+runtime: by the time your first statement runs the main thread is already MTA,
+so `Thread.CurrentThread.TrySetApartmentState(ApartmentState.STA)` returns
+`false`.
+
+Headless runs do not care. A **windowed run on Windows** loses OLE drag & drop,
+and Godot says so at startup:
+
+```
+ERROR: Condition "RegisterDragDrop(window_data.hWnd, window_data.drop_target) != ((HRESULT)0L)" is true.
+   at: DisplayServerWindows::window_set_drop_files_callback (platform/windows/display_server_windows.cpp:2117)
+```
+
+Two ways out: switch to the `Program` class, or start the engine on a thread
+you create yourself with `SetApartmentState(ApartmentState.STA)` and join it 
+–  Godot is happy on a non-main thread on Windows. Linux and macOS are
+unaffected: `[STAThread]` is a Windows concern, and there the engine belongs
+on the main thread.
+:::
 
 ::: tip Prefer a callback to a loop?
 `engine.Run(perFrame)` iterates until quit and calls your delegate once per
