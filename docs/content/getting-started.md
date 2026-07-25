@@ -8,12 +8,20 @@ prepare it for the web. No engine internals or lifecycle code required yet.
 
 You need:
 
-- .NET SDK 10.0 or later
-- A supported platform: `win-x64`, `linux-x64`, or `osx-arm64`
-- The Godot 4.7.x .NET editor, only when you want to edit scenes visually
+- .NET SDK 10.0 or later, [official download](https://dotnet.microsoft.com/download) here.
+- A supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`
+- The Godot 4.7.x .NET editor, [official download](https://godotengine.org/download), usually needed for game development, but with 2dog it's *technically* optional. Which is the *best kind* of optional.
 
 2dog imports assets automatically during `dotnet build`, so installing the
 Godot editor is not a prerequisite for builds or CI.
+
+::: info Trail marker
+With 2dog, the same C# Godot project runs through desktop, test, and browser hosts.
+It doesn't not create a second game or port its scripts to another language.
+GDscript, Autoloads, Input Actions etc. retain their functionality.
+
+It's good old Godot.
+:::
 
 ## 1. Choose Your Starting Point
 
@@ -38,7 +46,7 @@ cd MyGame
 
 :::
 
-::: tip Existing project?
+::: tip Try before you bite?
 Run `dnx 2dog convert path/to/MyGame --dry-run` first if you want to inspect
 every planned action. The [conversion guide](/convert) documents exactly what
 the command creates and patches.
@@ -51,13 +59,9 @@ dotnet run --project MyGame.2dog
 ```
 
 ::: info Trail marker
-You should now see your configured Godot main scene. A fresh project shows the
-sample scene; a converted project runs the main scene already configured in
-`project.godot`.
-:::
-
 This is still your Godot game. The difference is that `MyGame.2dog` is now the
 process entry point and starts Godot as an embedded library.
+:::
 
 ## 3. Meet the Pack
 
@@ -135,24 +139,10 @@ dotnet serve --directory MyGame.web/AppBundle
 ```
 
 ::: info Trail marker
-The same C# Godot project now runs through desktop, test, and browser hosts.
-You did not create a second game or port its scripts to another language.
-:::
-
 The [Web / Browser guide](/web) covers the development loop, deployment,
 configuration, and current browser limitations.
+:::
 
-## What You Just Built
-
-- A regular Godot C# project that still opens in the editor
-- A desktop application hosted by .NET
-- A headless xUnit test project
-- A browser host that publishes a static WebAssembly site
-- An incremental asset-import step shared by those hosts
-
-The mechanism underneath all of this is small but powerful: your .NET process
-owns Godot's lifecycle. [Core Concepts](/concepts) is the next stop when you
-want to see that code and understand the main loop.
 
 ## Package Version Note
 
@@ -165,12 +155,3 @@ silently select a newer engine line:
 ```
 
 Generated and converted projects configure their package versions for you.
-
-## Choose the Next Trail
-
-- Learn exactly [what conversion changes](/convert).
-- Understand the recommended [project layout](/project-layout).
-- Write a useful [scene test with xUnit](/testing).
-- Tune the [browser build and deployment](/web).
-- Learn about [native build variants](/build-configurations).
-- Look up [MSBuild configuration properties](/configuration).
