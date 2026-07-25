@@ -4,7 +4,25 @@
  * editor source in godot/ (editor_settings.cpp, editor_color_map.cpp). See DESIGN.md.
  */
 
-/* JetBrains Mono: the code face the Godot editor ships, vendored from godot/thirdparty/fonts. */
+/* The editor's own faces, vendored from godot/thirdparty/fonts (OFL licenses sit
+   beside the files in public/fonts). Inter carries the UI; JetBrains Mono carries
+   code and console text. Weight ranges map 500→Regular and 600→Bold, Godot-style. */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter_Regular.woff2') format('woff2');
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter_Bold.woff2') format('woff2');
+  font-weight: 501 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'JetBrains Mono';
   src: url('/fonts/JetBrainsMono_Regular.woff2') format('woff2');
@@ -33,6 +51,9 @@
   --ed-node-gui: #2fa139;
   --ed-node-gold: #a06c1c;
   --ed-node-anim: #a85de9;
+  /* FileDialog/folder_icon_color, adapted: the dark formula brightens past white
+     on light grounds, so light uses the legible mid blue instead. */
+  --ed-folder: #2f62c4;
   --ed-warning: #7f4f00;
   --ed-error: #c22929;
   --ed-success: #176334;
@@ -58,6 +79,8 @@
   --ed-node-gui: #8eef97;
   --ed-node-gold: #ffca5f;
   --ed-node-anim: #c38ef1;
+  /* folder_icon_color: Color(1,1,1).lerp(accent, 0.7) — theme_classic.cpp */
+  --ed-folder: #89bbff;
   --ed-warning: #ffdd65;
   --ed-error: #ff5f5f;
   --ed-success: #45ff8b;

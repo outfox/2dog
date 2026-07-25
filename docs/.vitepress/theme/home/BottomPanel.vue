@@ -5,6 +5,7 @@
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { iconUrl } from './icons'
+import { plain } from './content'
 
 const { theme } = useData()
 const twodogVersion = computed(() => (theme.value as any).twodogVersion ?? '')
@@ -191,7 +192,7 @@ const starts = [
                 :style="{ '--gd-icon': iconUrl(s.icon) }"
                 aria-hidden="true"
               ></span>
-              {{ s.title }}
+              <span v-html="s.title"></span>
             </h2>
             <div class="ed-subwin-body">
               <div class="ed-shell-wrap">
@@ -204,11 +205,11 @@ const starts = [
                 <button
                   type="button"
                   class="ed-copy"
-                  :aria-label="`Copy commands: ${s.title}`"
+                  :aria-label="`Copy commands: ${plain(s.title)}`"
                   @click="copyCommands(s)"
                 >{{ copied === s.link ? 'Copied!' : 'Copy' }}</button>
               </div>
-              <a class="ed-subwin-link" :href="withBase(s.link)">{{ s.linkText }}</a>
+              <a class="ed-subwin-link" :href="withBase(s.link)" v-html="s.linkText"></a>
             </div>
           </article>
         </div>
@@ -262,8 +263,11 @@ const starts = [
   text-overflow: ellipsis;
 }
 
+/* minmax(0,…) so the track ignores the commands' min-content width: without it the
+   panel grows to the longest line and the window's overflow:hidden clips it away. */
 .ed-panels {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .ed-panels > * {
@@ -325,6 +329,7 @@ const starts = [
 .ed-subwin {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   border-radius: 3px;
   background: var(--ed-dark-1);
   overflow: hidden;
@@ -507,6 +512,12 @@ const starts = [
 }
 
 @media (max-width: 819px) {
+  /* Portrait: the two start paths stack. Side by side there is no column wide
+     enough for a command line, so both would read through a scrollbar. */
+  .ed-subwins {
+    grid-template-columns: 1fr;
+  }
+
   .ed-status-pun {
     display: none;
   }

@@ -5,7 +5,9 @@
 import { ref, computed, nextTick } from 'vue'
 import { withBase } from 'vitepress'
 import { iconUrl, edIconUrl, thIconUrl } from './icons'
+import { plain } from './content'
 
+/* name/detail/linkText accept inline HTML — see content.ts for the rule. */
 const features = [
   {
     icon: 'globe',
@@ -19,7 +21,7 @@ const features = [
     icon: 'joystick',
     tint: '3d',
     name: 'This is still Godot',
-    detail: 'A companion, not a replacement? 100% compatible, switch as you like.',
+    detail: "100%&nbsp;compatible, switch as you like.<br />2dog is a companion, not a replacement.",
     link: '/project-layout',
     linkText: 'See what changes',
   },
@@ -27,9 +29,9 @@ const features = [
     icon: 'test_tube',
     tint: 'gui',
     name: 'Test like a Pro',
-    detail: "Unit test scenes, scripts, or resources. In your IDE's standard test runner!",
+    detail: "Unit test scenes, scripts, or resources. All in your favourite IDE's test runner!",
     link: '/testing',
-    linkText: 'Test a scene',
+    linkText: 'Testing a scene',
   },
   {
     icon: 'curly_brackets',
@@ -89,10 +91,12 @@ const filterPlaceholder = computed(() =>
   inspectorTab.value === 'inspector' ? 'Filter Properties' : 'Filter Signals'
 )
 
+/* Match the words the reader sees, never the markup carrying them. */
 const featMatch = (f: (typeof features)[number]) =>
-  !filterQuery.value || `${f.name} ${f.detail} ${f.linkText}`.toLowerCase().includes(filterQuery.value)
+  !filterQuery.value ||
+  plain(`${f.name} ${f.detail} ${f.linkText}`).toLowerCase().includes(filterQuery.value)
 const sigMatch = (s: (typeof signals)[number]) =>
-  !filterQuery.value || `${s.sig} ${s.conn}`.toLowerCase().includes(filterQuery.value)
+  !filterQuery.value || plain(`${s.sig} ${s.conn}`).toLowerCase().includes(filterQuery.value)
 
 const visibleFeatures = computed(() => features.filter(featMatch))
 const visibleSignals = computed(() => signals.filter(sigMatch))
@@ -144,8 +148,8 @@ const scriptRowVisible = computed(
       <span class="node-drop" :style="{ '--gd-icon': thIconUrl('option_button_arrow') }"></span>
     </div>
 
-    <div class="ed-insp-filter">
-      <span class="filter-glyph" :style="{ '--gd-icon': thIconUrl('search') }" aria-hidden="true"></span>
+    <div class="ed-dock-filter ed-insp-filter">
+      <span class="ed-dock-filter-glyph" :style="{ '--gd-icon': thIconUrl('search') }" aria-hidden="true"></span>
       <input
         v-model="filterText"
         type="text"
@@ -172,12 +176,12 @@ const scriptRowVisible = computed(
                 :style="{ '--gd-icon': iconUrl(f.icon) }"
                 aria-hidden="true"
               ></span>
-              {{ f.name }}
+              <span v-html="f.name"></span>
             </h2>
-            <p class="ed-prop-detail">{{ f.detail }}</p>
+            <p class="ed-prop-detail" v-html="f.detail"></p>
             <a class="ed-section-link" :href="withBase(f.link)">
               <span class="tree-arrow" :style="{ '--gd-icon': edIconUrl('GuiTreeArrowRight') }" aria-hidden="true"></span>
-              {{ f.linkText }}
+              <span v-html="f.linkText"></span>
             </a>
           </section>
         </div>
@@ -206,11 +210,11 @@ const scriptRowVisible = computed(
           <li v-for="s in visibleSignals" :key="s.sig" class="ed-signal">
             <p class="ed-signal-name">
               <span class="sig-glyph" :style="{ '--gd-icon': edIconUrl('MemberSignal') }" aria-hidden="true"></span>
-              {{ s.sig }}
+              <span v-html="s.sig"></span>
             </p>
-            <a class="ed-signal-conn" :href="s.link" :aria-label="s.label">
+            <a class="ed-signal-conn" :href="s.link" :aria-label="plain(s.label)">
               <span class="slot-glyph" :style="{ '--gd-icon': edIconUrl('Slot') }" aria-hidden="true"></span>
-              {{ s.conn }}
+              <span v-html="s.conn"></span>
             </a>
           </li>
         </ul>
@@ -226,12 +230,12 @@ const scriptRowVisible = computed(
           <section v-for="f in features" :key="f.link" class="ed-prop">
             <div class="ed-cat">
               <span class="gd-icon" :style="{ '--gd-icon': iconUrl(f.icon) }"></span>
-              {{ f.name }}
+              <span v-html="f.name"></span>
             </div>
-            <p class="ed-prop-detail">{{ f.detail }}</p>
+            <p class="ed-prop-detail" v-html="f.detail"></p>
             <span class="ed-section-link">
               <span class="tree-arrow"></span>
-              {{ f.linkText }}
+              <span v-html="f.linkText"></span>
             </span>
           </section>
         </div>
@@ -265,8 +269,7 @@ const scriptRowVisible = computed(
 }
 
 .ed-insp-node-name {
-  font-family: var(--vp-font-family-mono);
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--ed-text-1);
 }
 
@@ -279,43 +282,10 @@ const scriptRowVisible = computed(
   mask: var(--gd-icon) no-repeat center / contain;
 }
 
-/* Filter Properties: a real LineEdit doing real filtering. */
+/* Filter Properties: the shared dock LineEdit (dock.css), inset from the panel edge. */
 .ed-insp-filter {
-  position: relative;
+  flex: none;
   margin: 6px 8px 0;
-}
-
-.filter-glyph {
-  position: absolute;
-  top: 50%;
-  left: 8px;
-  width: 13px;
-  height: 13px;
-  transform: translateY(-50%);
-  background-color: var(--ed-text-3);
-  -webkit-mask: var(--gd-icon) no-repeat center / contain;
-  mask: var(--gd-icon) no-repeat center / contain;
-  pointer-events: none;
-}
-
-.ed-insp-filter input {
-  width: 100%;
-  padding: 5px 9px 5px 27px;
-  border: 1px solid var(--ed-seam);
-  border-radius: 3px;
-  background: var(--ed-dark-2);
-  font-family: inherit;
-  font-size: 12.5px;
-  color: var(--ed-text-1);
-}
-
-.ed-insp-filter input::placeholder {
-  color: var(--ed-text-3);
-}
-
-.ed-insp-filter input:focus {
-  outline: 2px solid var(--ed-accent);
-  outline-offset: -1px;
 }
 
 /* One grid cell for all panels: the invisible ghost reserves the unfiltered height,
