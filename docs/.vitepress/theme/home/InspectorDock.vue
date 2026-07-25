@@ -43,32 +43,48 @@ const features = [
   },
 ]
 
-/* Signals tab: the project's real outward connections, in connection-dialog grammar.
-   Every row is a live link; the pun rides on a real destination. */
-const signals = [
+/* Signals tab: the project's real outward connections. Grouped under class
+   categories the way the dock groups by declaring class, each signal disclosing
+   its connection. Every connection row is a live link; the pun rides on a real
+   destination. `sig`/`conn` accept inline HTML — see content.ts. */
+const signalGroups = [
   {
-    sig: 'walkies_started()',
-    conn: 'DogPark::join()',
-    link: 'https://discord.gg/GAXdbZCNGT',
-    label: 'Join the Dog Park — the 2dog channel on the outfox Discord',
+    klass: 'MyGame',
+    icon: iconUrl('joystick'),
+    tint: 'var(--ed-accent)',
+    signals: [
+      {
+        sig: 'walkies_started()',
+        conn: 'DogPark :: join()',
+        link: 'https://discord.gg/GAXdbZCNGT',
+        label: 'Join the Dog Park — the 2dog channel on the outfox Discord',
+      },
+      {
+        sig: 'stick_thrown()',
+        conn: 'GitHub :: fetch("outfox/2dog")',
+        link: 'https://github.com/outfox/2dog',
+        label: '2dog source on GitHub',
+      },
+    ],
   },
   {
-    sig: 'stick_thrown()',
-    conn: 'GitHub::fetch("outfox/2dog")',
-    link: 'https://github.com/outfox/2dog',
-    label: '2dog source on GitHub',
-  },
-  {
-    sig: 'bug_sniffed(scent)',
-    conn: 'GitHub::open_issue(scent)',
-    link: 'https://github.com/outfox/2dog/issues',
-    label: 'Report an issue on GitHub',
-  },
-  {
-    sig: 'bone_buried(version)',
-    conn: 'NuGet::install("2dog")',
-    link: 'https://www.nuget.org/packages/2dog',
-    label: 'The 2dog package on NuGet',
+    klass: 'Node',
+    icon: edIconUrl('Node'),
+    tint: 'var(--ed-node-gui)',
+    signals: [
+      {
+        sig: 'bug_sniffed(scent)',
+        conn: 'GitHub :: open_issue(scent)',
+        link: 'https://github.com/outfox/2dog/issues',
+        label: 'Report an issue on GitHub',
+      },
+      {
+        sig: 'bone_buried(version)',
+        conn: 'NuGet :: install("2dog")',
+        link: 'https://www.nuget.org/packages/2dog',
+        label: 'The 2dog package on NuGet',
+      },
+    ],
   },
 ]
 
@@ -95,11 +111,24 @@ const filterPlaceholder = computed(() =>
 const featMatch = (f: (typeof features)[number]) =>
   !filterQuery.value ||
   plain(`${f.name} ${f.detail} ${f.linkText}`).toLowerCase().includes(filterQuery.value)
-const sigMatch = (s: (typeof signals)[number]) =>
+type Signal = (typeof signalGroups)[number]['signals'][number]
+const sigMatch = (s: Signal) =>
   !filterQuery.value || plain(`${s.sig} ${s.conn}`).toLowerCase().includes(filterQuery.value)
 
 const visibleFeatures = computed(() => features.filter(featMatch))
-const visibleSignals = computed(() => signals.filter(sigMatch))
+
+/* Naming a class keeps its whole group, as filtering a tree by section would. */
+const visibleSignalGroups = computed(() =>
+  signalGroups
+    .map((g) => ({
+      ...g,
+      signals: g.klass.toLowerCase().includes(filterQuery.value) ? g.signals : g.signals.filter(sigMatch),
+    }))
+    .filter((g) => g.signals.length > 0)
+)
+const signalHits = computed(() =>
+  visibleSignalGroups.value.reduce((n, g) => n + g.signals.length, 0)
+)
 const scriptRowVisible = computed(
   () => !filterQuery.value || 'script program.cs'.includes(filterQuery.value)
 )
@@ -206,25 +235,69 @@ const scriptRowVisible = computed(
         role="tabpanel"
         aria-labelledby="itab-signals"
       >
-        <ul class="ed-signals">
-          <li v-for="s in visibleSignals" :key="s.sig" class="ed-signal">
-            <p class="ed-signal-name">
-              <span class="sig-glyph" :style="{ '--gd-icon': edIconUrl('MemberSignal') }" aria-hidden="true"></span>
-              <span v-html="s.sig"></span>
-            </p>
-            <a class="ed-signal-conn" :href="s.link" :aria-label="plain(s.label)">
-              <span class="slot-glyph" :style="{ '--gd-icon': edIconUrl('Slot') }" aria-hidden="true"></span>
-              <span v-html="s.conn"></span>
-            </a>
-          </li>
-        </ul>
-        <p v-if="visibleSignals.length === 0" class="ed-filter-empty">
+        <div class="ed-sig-tree">
+          <section v-for="g in visibleSignalGroups" :key="g.klass">
+            <h3 class="ed-sig-cat">
+              <span
+                class="tree-arrow"
+                :style="{ '--gd-icon': edIconUrl('GuiTreeArrowDown') }"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="sig-class-glyph"
+                :style="{ '--gd-icon': g.icon, backgroundColor: g.tint }"
+                aria-hidden="true"
+              ></span>
+              {{ g.klass }}
+            </h3>
+            <div v-for="s in g.signals" :key="s.sig">
+              <p class="ed-sig-name">
+                <span
+                  class="tree-arrow"
+                  :style="{ '--gd-icon': edIconUrl('GuiTreeArrowDown') }"
+                  aria-hidden="true"
+                ></span>
+                <span class="sig-glyph" :style="{ '--gd-icon': edIconUrl('Signal') }" aria-hidden="true"></span>
+                <span v-html="s.sig"></span>
+              </p>
+              <a class="ed-sig-conn" :href="s.link" :aria-label="plain(s.label)">
+                <span class="slot-glyph" :style="{ '--gd-icon': edIconUrl('Slot') }" aria-hidden="true"></span>
+                <span v-html="s.conn"></span>
+              </a>
+            </div>
+          </section>
+        </div>
+        <p v-if="signalHits === 0" class="ed-filter-empty">
           No signal matches “{{ filterText.trim() }}” — sniffed everywhere.
         </p>
       </div>
 
-      <!-- Height ghost: the full unfiltered property list, invisible, reserving the
-           cell height. Spans instead of headings/links — it must never be reachable. -->
+      <!-- Height ghosts: the full unfiltered contents of both tabs, invisible, sharing
+           the cell so it reserves whichever is taller. Spans instead of headings and
+           links — they must never be reachable. -->
+      <div class="ed-insp-panel ghost" aria-hidden="true">
+        <div class="ed-sig-tree">
+          <section v-for="g in signalGroups" :key="g.klass">
+            <div class="ed-sig-cat">
+              <span class="tree-arrow"></span>
+              <span class="sig-class-glyph"></span>
+              {{ g.klass }}
+            </div>
+            <div v-for="s in g.signals" :key="s.sig">
+              <p class="ed-sig-name">
+                <span class="tree-arrow"></span>
+                <span class="sig-glyph"></span>
+                <span v-html="s.sig"></span>
+              </p>
+              <span class="ed-sig-conn">
+                <span class="slot-glyph"></span>
+                <span v-html="s.conn"></span>
+              </span>
+            </div>
+          </section>
+        </div>
+      </div>
+
       <div class="ed-insp-panel ghost" aria-hidden="true">
         <div class="ed-props">
           <section v-for="f in features" :key="f.link" class="ed-prop">
@@ -401,45 +474,65 @@ a.ed-script-value:focus-visible {
   color: var(--ed-text-2);
 }
 
-/* Signals: the project's outward connections, in the connections dialog's grammar. */
-.ed-signals {
-  list-style: none;
-  margin: 8px 4px 0;
-  padding: 0;
+/* Signals dock: a Tree, not the inspector's property list. Class categories carry a
+   full-width bar and a disclosure arrow; each signal discloses its connection one
+   level deeper. Three indent steps, 16px apart, like the editor's own tree. */
+.ed-sig-tree {
+  margin-top: 6px;
 }
 
-.ed-signal {
-  margin-bottom: 7px;
-}
-
-.ed-signal-name {
+/* Left-aligned, unlike the inspector's centred category strips — the dock's
+   sections are tree rows, and Godot draws them that way. */
+.ed-sig-cat {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+  margin: 5px 0 1px;
+  padding: 4px 8px;
+  background: var(--ed-raise);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ed-text-1);
+}
+
+.sig-class-glyph {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.ed-sig-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 0;
-  padding: 3px 8px;
+  padding: 2px 8px 2px 14px;
   font-family: var(--vp-font-family-mono);
   font-size: 12px;
   color: var(--ed-text-1);
 }
 
+/* Signal.svg ships #ff5f5f; the categorical red carries it into both themes. */
 .sig-glyph {
   flex: none;
   width: 13px;
   height: 13px;
-  background-color: var(--ed-node-anim);
+  background-color: var(--ed-node-3d);
   -webkit-mask: var(--gd-icon) no-repeat center / contain;
   mask: var(--gd-icon) no-repeat center / contain;
 }
 
-.ed-signal-conn {
+/* The connection, one step under its signal — blue because here it is a real link. */
+.ed-sig-conn {
   display: flex;
   align-items: center;
-  gap: 7px;
-  margin-left: 22px;
-  padding: 3px 9px;
-  border-left: 1px solid var(--ed-seam);
-  border-radius: 0 3px 3px 0;
+  gap: 6px;
+  margin: 0 4px 2px 30px;
+  padding: 2px 6px;
+  border-radius: 3px;
   font-family: var(--vp-font-family-mono);
   font-size: 11.5px;
   color: var(--ed-accent);
@@ -449,12 +542,19 @@ a.ed-script-value:focus-visible {
   text-overflow: ellipsis;
 }
 
-.ed-signal-conn:hover {
+/* The label is its own span (v-html), so it — not the flex row — must truncate. */
+.ed-sig-conn > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ed-sig-conn:hover {
   background: var(--ed-raise);
   color: var(--ed-accent-strong);
 }
 
-.ed-signal-conn:focus-visible {
+.ed-sig-conn:focus-visible {
   outline: 2px solid var(--ed-accent);
   outline-offset: -2px;
 }
@@ -488,16 +588,18 @@ a.ed-script-value:focus-visible {
     border-radius: 3px;
   }
 
-  .ed-signals {
+  .ed-sig-tree {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 12px;
+    align-items: start;
+    padding: 0 8px;
   }
 }
 
 @media (max-width: 819px) {
   .ed-props,
-  .ed-signals {
+  .ed-sig-tree {
     grid-template-columns: 1fr;
   }
 }
