@@ -13,7 +13,7 @@ const features = [
     icon: 'globe',
     tint: '2d',
     name: 'C# on the Web',
-    detail: 'C# Games in HTML5 and WASM!<br/>... no more waiting for Godot.',
+    detail: 'Export C# Games to HTML5 and WASM!<br/>... no more waiting for Godot.',
     link: '/convert',
     linkText: 'Bring your project',
   },

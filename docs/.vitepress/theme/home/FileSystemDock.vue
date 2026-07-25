@@ -69,8 +69,8 @@ const entries = [
     </div>
 
     <p class="ed-files-note">
-      Your files, exactly as they were. The hosts sit beside them as siblings,
-      <code>.gdignore</code>'d.
+      Your files, exactly as they were. The hosts sit beside them as
+      <code>.gdignore</code>'d siblings.
     </p>
   </section>
 </template>
