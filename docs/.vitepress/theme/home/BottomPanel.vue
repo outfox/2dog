@@ -111,11 +111,11 @@ const starts = [
     tint: 'gold',
     title: 'I Have a Godot Game',
     code: [
-      { comment: true, text: '# just add 2dog! scenes/scripts/assets stay as they are.' },
-      { comment: true, text: '# no install needed, just use dnx (dotnet tool execute)' },
+      { comment: true, text: "# no install needed, just use .NET 10's dotnet tool execute (dnx)" },
       { comment: false, text: 'dnx 2dog convert path/to/MyGame' },
       { comment: false, text: 'cd path/to/MyGame' },
       { comment: false, text: 'dotnet run --project MyGame.2dog' },
+      { comment: false, text: 'dotnet publish MyGame.web' },
     ],
     link: '/convert',
     linkText: 'What conversion adds →',
