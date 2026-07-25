@@ -1,12 +1,13 @@
 <!--
-THESIS: The docs are a Godot editor session visibly running inside a .NET host window — the ownership
-inversion rendered as chrome. Refuses the category default: gradient wordmark hero over three feature cards.
+THESIS: The docs are a Godot editor session, rendered faithfully enough to be recognized in a second —
+then the contents give the ownership inversion away: the hosts docked beside your own files, the Script
+row, the console transcript. Refuses the category default: gradient wordmark hero over feature cards.
 OWN-WORLD: Godot editor dark theme from source — #242424 ground, #1c1c1c/#161616 panels, 1px #0f0f0f seams,
 #579eff accent, node colors #8da5f3/#fc7f7f/#8eef97, Inter UI + JetBrains Mono machine text; docks, tree
 items, tabs, console lines — never web cards.
-STORY: A Godot C# dev recognizes their editor instantly, reads the title bar, and understands without a
-word that .NET owns the process; the console proves it with real commands; they click Read the Dogs.
-FIRST VIEWPORT: host title bar on top; Scene + FileSystem docks (real host projects; the game's files,
+STORY: A Godot C# dev recognizes their editor instantly, then notices three host projects docked beside
+their untouched game; the console and the real commands prove .NET drives it; they click Read the Dogs.
+FIRST VIEWPORT: window title bar on top; Scene + FileSystem docks (real host projects; the game's files,
 visibly untouched) left; center viewport with 2D toolbar, the running dog, headline, two actions;
 Inspector dock right (real tabs, working filter, Signals connections); output console below. Nothing
 renders outside the window.
