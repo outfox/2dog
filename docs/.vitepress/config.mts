@@ -14,6 +14,11 @@ const gd = (name: string) => `${godotIconHtml(name)} `
 export default defineConfig({
   srcDir: "content",
 
+  // The vendored icon sets ship their own README.md; without this VitePress
+  // renders it as a real page (/public/icons/godot-editor/README) and puts it
+  // in the search index.
+  srcExclude: ['public/**/*.md'],
+
   // The Editor, Inverted: the audience's editor is dark; light is the editor's light theme.
   appearance: 'dark',
 
@@ -36,7 +41,10 @@ export default defineConfig({
   description: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.",
 
   head: [
-    // JetBrains Mono is self-hosted (public/fonts, vendored from godot/thirdparty/fonts).
+    // Self-hosted (public/fonts, vendored from godot/thirdparty/fonts). Inter paints
+    // nearly every pixel of text, so it leads; discovered from CSS it would start a
+    // round-trip late and widen the font-display: swap window.
+    ['link', { rel: 'preload', href: '/fonts/Inter_Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
     ['link', { rel: 'preload', href: '/fonts/JetBrainsMono_Regular.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
     ['link', { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" }],
     ['link', { rel: "icon", type: "image/png", sizes: "96x96", href: "/favicon-96x96.png" }],
