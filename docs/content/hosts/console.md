@@ -15,13 +15,7 @@ There is no framework underneath this  –  only your entry point. The one piece
 of magic is `Engine.ResolveProjectDir()`, which reads the `<GodotProjectDir>`
 recorded as assembly metadata at build time, so nothing hard-codes a path.
 
-Shipping a window? Use the generated `Program` class  –  `[STAThread]` only
-goes on an explicit `Main`. Writing a headless tool, CI job, or server?
-Top-level statements lose nothing.
-
-::: code-group
-
-```csharp [Program.cs]
+```csharp
 using Godot;
 using Engine = twodog.Engine;
 
@@ -52,38 +46,17 @@ internal static class Program
 }
 ```
 
-```csharp [Top-level statements]
-using Godot;
-using Engine = twodog.Engine;
+::: warning Why not top-level statements?
+They would save every line of that boilerplate, but the `[STAThread]` attribute cannot go on
+a generated entry point. `TrySetApartmentState(ApartmentState.STA)` returns `false`, and a windowed run on Windows then loses OLE drag & drop, and says so:
 
-// 'args' is the implicit parameter of the generated entry point.
-using var engine = new Engine("MyGame", Engine.ResolveProjectDir(), args);
-using var godot = engine.Start();
-
-if (engine.Tree.CurrentScene is { } scene)
-    GD.Print($"2dog is running '{scene.Name}'!");
-
-while (!godot.Iteration())
-{
-    // Your per-frame logic here
-}
-```
-
-:::
-
-::: warning Top-level statements cannot be `[STAThread]`
-Nor can it be repaired at runtime: the main thread is already MTA before your
-first statement, so `TrySetApartmentState(ApartmentState.STA)` returns
-`false`. A windowed run on Windows loses OLE drag & drop and says so:
-
-```
+```log
 ERROR: Condition "RegisterDragDrop(...) != ((HRESULT)0L)" is true.
    at: DisplayServerWindows::window_set_drop_files_callback
 ```
 
-Want both? Start the engine on a thread you set to `ApartmentState.STA`  –
-Godot does not need the main thread on Windows. Linux and macOS are
-unaffected.
+Headless hosts never touch this. If a window is not in your future, top-level
+statements are fine.
 :::
 
 ::: tip Prefer a callback to a loop?
