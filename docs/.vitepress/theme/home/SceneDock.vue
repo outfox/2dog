@@ -8,9 +8,9 @@ import { plain } from './content'
 
 /* name/role accept inline HTML — see content.ts for the rule. */
 const hosts = [
-  { name: 'MyGame.2dog', role: 'Desktop host', color: 'var(--ed-node-2d)', icon: 'window', link: '/project-layout' },
-  { name: 'MyGame.web', role: 'Browser host', color: 'var(--ed-node-gui)', icon: 'globe', link: '/web' },
-  { name: 'MyGame.tests', role: 'xUnit host', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/testing' },
+  { name: 'MyGame.console', role: 'console', color: 'var(--ed-node-2d)', icon: 'window', link: '/hosts/console' },
+  { name: 'MyGame.web', role: 'browser', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/web' },
+  { name: 'MyGame.xunit', role: 'test suite', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/hosts/xunit' },
 ]
 
 /* Filter Nodes works for real, with Godot's rule: ancestors of matches stay visible. */

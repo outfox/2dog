@@ -274,8 +274,3 @@ dotnet publish -c Release
    - Import/editor tests: Editor configuration
 5. **Document configuration requirements** in your project README
 6. **Cache native libraries in CI/CD** to speed up builds
-
-## Next Steps
-
-- See [Configuration](./configuration) for detailed MSBuild property reference
-- Learn about [Testing](./testing) with different configurations
