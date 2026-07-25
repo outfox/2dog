@@ -268,6 +268,18 @@ body:has(.VPContent.is-home) .VPContent {
   color: var(--ed-accent);
 }
 
+/* Collapsible-group disclosure chevron. VitePress paints it at text-3, which on the
+   dock grounds — and especially inside an active row's tinted bar — reads as a smudge
+   at this stroke weight. One step up: 5.3:1 dark / 4.7:1 light on the active row. */
+.VPSidebar .VPSidebarItem .caret {
+  color: var(--ed-text-2);
+}
+
+.VPSidebar .VPSidebarItem .item:hover .caret,
+.VPSidebar .VPSidebarItem .caret:hover {
+  color: var(--ed-text-1);
+}
+
 /* Godot's tree paints the selected row as a full-width bar — the active page gets the same. */
 .VPSidebarItem.level-1.is-active > .item,
 .VPSidebarItem.level-2.is-active > .item {

@@ -166,7 +166,7 @@ const starts = [
         class="gd-icon gd-icon--dim ln-glyph"
         :style="{ '--gd-icon': iconUrl('paw_print') }"
         aria-hidden="true"
-      ></span> {{ punLine }}<span class="caret" aria-hidden="true"></span></p>
+      ></span> {{ punLine }}<span class="ed-caret" aria-hidden="true"></span></p>
       <a v-if="twodogVersion" class="ed-console-ver" href="https://github.com/outfox/2dog"><span
         class="gd-icon gd-icon--gold ln-glyph"
         :style="{ '--gd-icon': iconUrl('bone') }"
@@ -491,22 +491,24 @@ const starts = [
   vertical-align: -2px;
 }
 
-.caret {
+/* `ed-` prefixed like every class in this directory: these styles are global, and
+   a bare `.caret` would land on VitePress's own sidebar disclosure control. */
+.ed-caret {
   display: inline-block;
   width: 7px;
   height: 12px;
   margin-left: 2px;
   vertical-align: -2px;
   background: var(--ed-accent);
-  animation: caret-blink 1.1s steps(1) infinite;
+  animation: ed-caret-blink 1.1s steps(1) infinite;
 }
 
-@keyframes caret-blink {
+@keyframes ed-caret-blink {
   50% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .caret {
+  .ed-caret {
     animation: none;
   }
 }
