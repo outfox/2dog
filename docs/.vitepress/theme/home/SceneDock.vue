@@ -1,14 +1,30 @@
 <!-- Scene dock: your project and its 2dog hosts, as real links.
      Scene is this page; Import is a real tab — it leads to the import docs. -->
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { withBase } from 'vitepress'
 import { iconUrl, edIconUrl, thIconUrl } from './icons'
+import { plain } from './content'
 
+/* name/role accept inline HTML — see content.ts for the rule. */
 const hosts = [
   { name: 'MyGame.2dog', role: 'Desktop host', color: 'var(--ed-node-2d)', icon: 'window', link: '/project-layout' },
   { name: 'MyGame.web', role: 'Browser host', color: 'var(--ed-node-gui)', icon: 'globe', link: '/web' },
   { name: 'MyGame.tests', role: 'xUnit host', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/testing' },
 ]
+
+/* Filter Nodes works for real, with Godot's rule: ancestors of matches stay visible. */
+const nodeFilter = ref('')
+const nodeQuery = computed(() => nodeFilter.value.trim().toLowerCase())
+const hostMatch = (h: (typeof hosts)[number]) =>
+  !nodeQuery.value || plain(`${h.name} ${h.role}`).toLowerCase().includes(nodeQuery.value)
+const visibleHosts = computed(() => hosts.filter(hostMatch))
+const rootVisible = computed(
+  () =>
+    !nodeQuery.value ||
+    'mygame project.godot'.includes(nodeQuery.value) ||
+    visibleHosts.value.length > 0
+)
 </script>
 
 <template>
@@ -18,21 +34,21 @@ const hosts = [
       <a class="ed-dock-tab" :href="withBase('/import-tool')">Import</a>
       <span class="strip-glyph" :style="{ '--gd-icon': thIconUrl('tabs_menu') }" aria-hidden="true"></span>
     </div>
-    <div class="ed-dock-bar" aria-hidden="true">
-      <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('Add') }"></span>
-      <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('ToolConnect') }"></span>
-      <span class="bar-well"><span
-        class="bar-well-glyph"
-        :style="{ '--gd-icon': thIconUrl('search') }"
-      ></span>Filter Nodes</span>
+    <div class="ed-dock-bar">
+      <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('Add') }" aria-hidden="true"></span>
+      <span class="bar-glyph" :style="{ '--gd-icon': iconUrl('link') }" aria-hidden="true"></span>
+      <span class="ed-dock-filter">
+        <span class="ed-dock-filter-glyph" :style="{ '--gd-icon': thIconUrl('search') }" aria-hidden="true"></span>
+        <input v-model="nodeFilter" type="text" placeholder="Filter Nodes" aria-label="Filter Nodes" />
+      </span>
     </div>
-    <a class="ed-tree-root" :href="withBase('/project-layout')">
+    <a v-show="rootVisible" class="ed-tree-root" :href="withBase('/project-layout')">
       <span class="tree-arrow" :style="{ '--gd-icon': edIconUrl('GuiTreeArrowDown') }" aria-hidden="true"></span>
       <span class="node-glyph root" :style="{ '--gd-icon': iconUrl('joystick') }" aria-hidden="true"></span>MyGame
       <span class="ed-tree-note">project.godot</span>
     </a>
     <a
-      v-for="h in hosts"
+      v-for="h in visibleHosts"
       :key="h.name"
       class="ed-tree-item"
       :href="withBase(h.link)"
@@ -42,8 +58,8 @@ const hosts = [
         :style="{ backgroundColor: h.color, '--gd-icon': iconUrl(h.icon) }"
         aria-hidden="true"
       ></span>
-      <span class="ed-tree-name">{{ h.name }}</span>
-      <span class="ed-tree-note">{{ h.role }}</span>
+      <span class="ed-tree-name" v-html="h.name"></span>
+      <span class="ed-tree-note" v-html="h.role"></span>
     </a>
   </nav>
 </template>
@@ -91,7 +107,6 @@ const hosts = [
 }
 
 .ed-tree-name {
-  font-family: var(--vp-font-family-mono);
   font-size: 12.5px;
 }
 

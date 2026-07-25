@@ -40,7 +40,8 @@ const viewLocks = ['Lock', 'Group', 'SnapGrid']
         width="450"
         height="231"
       />
-      <h1 class="ed-headline">Start, control, embed Godot in&nbsp;.NET</h1>
+      <h1 class="ed-headline">Start, control, embed</h1>
+      <h1 class="ed-headline">Godot in&nbsp;.NET</h1>
       <p class="ed-tagline">
         Keep your scenes, scripts, and editor workflow.<br />
         Gain an entire ecosystem.
