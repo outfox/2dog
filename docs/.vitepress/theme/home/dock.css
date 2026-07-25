@@ -1,0 +1,155 @@
+/**
+ * Shared dock grammar for the editor-home components (see DESIGN.md "Home docks").
+ * Tab strips sit one step darker with the active tab flush to its panel; toolbars
+ * are quiet glyph rows; tree/node glyphs are mask-tinted from theme tokens.
+ */
+
+/* ---------- Dock tab strips ---------- */
+
+.ed-dock-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  padding: 3px 4px 0;
+  background: var(--ed-dark-2);
+}
+
+.ed-dock-tab {
+  padding: 5px 13px 6px;
+  border: none;
+  border-radius: 3px 3px 0 0;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--ed-text-2);
+}
+
+button.ed-dock-tab {
+  cursor: pointer;
+}
+
+a.ed-dock-tab {
+  text-decoration: none;
+}
+
+button.ed-dock-tab:hover,
+a.ed-dock-tab:hover {
+  color: var(--ed-text-1);
+}
+
+button.ed-dock-tab:focus-visible,
+a.ed-dock-tab:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: -2px;
+}
+
+.ed-dock-tab.active {
+  background: var(--ed-dark-1);
+  color: var(--ed-text-1);
+}
+
+.strip-glyph {
+  align-self: center;
+  margin-left: auto;
+  margin-right: 4px;
+  width: 13px;
+  height: 13px;
+  background-color: var(--ed-text-3);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* ---------- Dock toolbars ---------- */
+
+.ed-dock-bar {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--ed-seam);
+}
+
+.bar-glyph {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  background-color: var(--ed-text-2);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.bar-glyph.dim {
+  background-color: var(--ed-text-3);
+}
+
+.bar-glyph.active {
+  background-color: var(--ed-accent);
+}
+
+.bar-glyph.sm {
+  width: 12px;
+  height: 12px;
+}
+
+.bar-spacer {
+  flex: 1;
+}
+
+.bar-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--ed-seam);
+}
+
+/* Chrome filter wells (the inspector's live one styles its own input). */
+.bar-well {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px 8px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 3px;
+  background: var(--ed-dark-2);
+  font-size: 11.5px;
+  color: var(--ed-text-3);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.bar-well-glyph {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background-color: var(--ed-text-3);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* ---------- Tree and node glyphs ---------- */
+
+/* Godot's faint tree disclosure arrows (the icon carries its own 40% alpha). */
+.tree-arrow {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  align-self: center;
+  background-color: var(--ed-text-1);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.node-glyph {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  align-self: center;
+  background-color: var(--ed-text-2);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.node-glyph.root {
+  background-color: var(--ed-accent);
+}
