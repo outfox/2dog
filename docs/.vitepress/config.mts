@@ -83,8 +83,8 @@ export default defineConfig({
         text: 'Start here',
         items: [
           { text: gd('play') + 'Getting Started', link: '/getting-started' },
-          { text: gd('folder_open') + 'Project Layout', link: '/project-layout' },
-          { text: gd('lightbulb') + 'Core Concepts', link: '/concepts' }
+          { text: gd('lightbulb') + 'Core Concepts', link: '/concepts' },
+          { text: gd('folder_open') + 'Project Layout', link: '/project-layout' }
         ]
       },
       {
@@ -93,6 +93,15 @@ export default defineConfig({
           { text: gd('arrow_right_arrow_left') + 'Converting a Project', link: '/convert' },
           { text: gd('sprout') + 'Creating a New Project', link: '/templates' },
           { text: gd('globe') + 'Web / Browser (WASM)', link: '/web' }
+        ]
+      },
+      {
+        text: 'Hosts',
+        items: [
+          { text: gd('plug') + 'What Is a Host?', link: '/hosts/' },
+          { text: gd('desktop') + 'Console', link: '/hosts/console' },
+          { text: gd('globe') + 'Browser', link: '/hosts/web' },
+          { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
         ]
       },
       {

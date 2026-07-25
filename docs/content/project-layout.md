@@ -135,10 +135,3 @@ An existing .NET application can host a Godot project from another path, but
 that is an advanced embedding scenario rather than the recommended starting
 point. Keep the standard layout unless an established repository structure or
 application boundary gives you a concrete reason not to.
-
-## Next Steps
-
-- [Run, test, and publish the layout](/getting-started).
-- [Understand the inverted architecture](/concepts).
-- [Configure `GodotProjectDir` and native variants](/configuration).
-- [Publish the browser host](/web).
