@@ -6,17 +6,18 @@ OWN-WORLD: Godot editor dark theme from source — #242424 ground, #1c1c1c/#1616
 items, tabs, console lines — never web cards.
 STORY: A Godot C# dev recognizes their editor instantly, reads the title bar, and understands without a
 word that .NET owns the process; the console proves it with real commands; they click Read the Dogs.
-FIRST VIEWPORT: host title bar on top; scene-tree dock (real host projects, real links) left; center
-viewport with the running dog, headline, two actions; inspector dock (the four product claims as
-property categories) right; output console streaming pun log lines below. Nothing outside the window.
-FORM: Godot editor interface grammar — grounded candidate 4, seed 93cdfc31; staging: the editor's native
-dock layout (dealt "summoned definitions" staging not adopted).
+FIRST VIEWPORT: host title bar on top; Scene + FileSystem docks (real host projects; the game's files,
+visibly untouched) left; center viewport with 2D toolbar, the running dog, headline, two actions;
+Inspector dock right with real tab strip (Inspector | Signals), toolbar, node selector, a working
+property filter, category bars, and a Script row; output console below. Nothing outside the window.
+FORM: Godot editor interface grammar — grounded candidate 4, seed 93cdfc31; dock chrome matched against
+the shipping 4.7 editor (icon sets: public/icons/godot-editor + godot-theme, mask-tinted for both themes).
 -->
 <script setup lang="ts">
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useData, withBase } from 'vitepress'
 
-const { theme, isDark } = useData()
+const { theme } = useData()
 const twodogVersion = computed(() => (theme.value as any).twodogVersion ?? '')
 
 /* The retired hero carousel's pun inventory, evolved into console log material. */
@@ -90,10 +91,14 @@ onUnmounted(() => {
   document.removeEventListener('click', onDocClick)
 })
 
-/* Node glyphs: neutral pictograms from public/icons/node, tinted like Godot's tree. */
+/* Node glyphs: neutral pictograms from public/icons/node, tinted like Godot's tree.
+   Chrome glyphs come from the editor's own sets: godot-editor (editor icons) and
+   godot-theme (GUI furniture) — always mask-tinted so light theme recolors correctly. */
 const iconUrl = (name: string) => `url(${withBase(`/icons/node/${name}.svg`)})`
+const edIconUrl = (name: string) => `url(${withBase(`/icons/godot-editor/${name}.svg`)})`
+const thIconUrl = (name: string) => `url(${withBase(`/icons/godot-theme/${name}.svg`)})`
 
-/* Godot's runbar as titlebar chrome. Play is lit: the scene — the dog — is running. */
+/* Godot's runbar, riding the menu strip's right edge. Play is lit: the scene — the dog — is running. */
 const runbar = [
   { icon: 'hammer' },
   { icon: 'play', active: true },
@@ -104,10 +109,25 @@ const runbar = [
   { icon: 'film' },
 ]
 
+/* 2D viewport toolbar, exactly the editor's: select tool active, zoom at the right. */
+const viewTools = ['ToolSelect', 'ToolMove', 'ToolRotate', 'ToolScale', 'ToolPan']
+const viewLocks = ['Lock', 'Group', 'SnapGrid']
+
 const hosts = [
   { name: 'MyGame.2dog', role: 'Desktop host', color: 'var(--ed-node-2d)', icon: 'window', link: '/project-layout' },
   { name: 'MyGame.web', role: 'Browser host', color: 'var(--ed-node-gui)', icon: 'globe', link: '/web' },
   { name: 'MyGame.tests', role: 'xUnit host', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/testing' },
+]
+
+/* FileSystem dock: the game's own files, visibly untouched. The hosts are absent on
+   purpose — .gdignore keeps them out of the editor's sight, which IS the claim. */
+const files = [
+  { name: 'scenes', icon: 'Folder', folder: true },
+  { name: 'scripts', icon: 'Folder', folder: true },
+  { name: 'sprites', icon: 'Folder', folder: true },
+  { name: 'icon.svg', icon: 'Image' },
+  { name: 'main.tscn', icon: 'PackedScene' },
+  { name: 'project.godot', icon: 'GodotMonochrome' },
 ]
 
 /* Inspector dock: the four product claims as property categories of the running scene. */
@@ -145,6 +165,65 @@ const features = [
     linkText: 'How that works',
   },
 ]
+
+/* Signals tab: the project's real outward connections, in connection-dialog grammar.
+   Every row is a live link; the pun rides on a real destination. */
+const signals = [
+  {
+    sig: 'walkies_started()',
+    conn: 'DogPark::join()',
+    link: 'https://discord.gg/GAXdbZCNGT',
+    label: 'Join the Dog Park — the 2dog channel on the outfox Discord',
+  },
+  {
+    sig: 'stick_thrown()',
+    conn: 'GitHub::fetch("outfox/2dog")',
+    link: 'https://github.com/outfox/2dog',
+    label: '2dog source on GitHub',
+  },
+  {
+    sig: 'bug_sniffed(scent)',
+    conn: 'GitHub::open_issue(scent)',
+    link: 'https://github.com/outfox/2dog/issues',
+    label: 'Report an issue on GitHub',
+  },
+  {
+    sig: 'bone_buried(version)',
+    conn: 'NuGet::install("2dog")',
+    link: 'https://www.nuget.org/packages/2dog',
+    label: 'The 2dog package on NuGet',
+  },
+]
+
+/* Inspector | Signals: a real tab strip, like the dock's own. */
+const inspectorTab = ref<'inspector' | 'signals'>('inspector')
+
+function inspectorTabsKeydown(e: KeyboardEvent) {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+  e.preventDefault()
+  inspectorTab.value = inspectorTab.value === 'inspector' ? 'signals' : 'inspector'
+  void nextTick(() =>
+    document.getElementById(inspectorTab.value === 'inspector' ? 'itab-inspector' : 'itab-signals')?.focus()
+  )
+}
+
+/* Filter Properties works for real: it narrows whichever list the active tab shows. */
+const filterText = ref('')
+const filterQuery = computed(() => filterText.value.trim().toLowerCase())
+const filterPlaceholder = computed(() =>
+  inspectorTab.value === 'inspector' ? 'Filter Properties' : 'Filter Signals'
+)
+
+const featMatch = (f: (typeof features)[number]) =>
+  !filterQuery.value || `${f.name} ${f.detail} ${f.linkText}`.toLowerCase().includes(filterQuery.value)
+const sigMatch = (s: (typeof signals)[number]) =>
+  !filterQuery.value || `${s.sig} ${s.conn}`.toLowerCase().includes(filterQuery.value)
+
+const visibleFeatures = computed(() => features.filter(featMatch))
+const visibleSignals = computed(() => signals.filter(sigMatch))
+const scriptRowVisible = computed(
+  () => !filterQuery.value || 'script program.cs'.includes(filterQuery.value)
+)
 
 /* Editor menus: real dropdowns listing actual doc pages by name — the fiction, one interaction deeper. */
 const menus = [
@@ -264,7 +343,6 @@ const starts = [
     icon: 'arrow_right_arrow_left',
     tint: 'gold',
     title: 'I Have a Godot Game',
-    //body: 'Just add 2dog! Scenes, scripts, and assets stay as they are.',
     code: [
       { comment: true, text: '# just add 2dog! scenes/scripts/assets stay as they are.' },
       { comment: true, text: '# no install needed, just use dnx (dotnet tool execute)' },
@@ -279,7 +357,6 @@ const starts = [
     icon: 'tennis_ball',
     tint: 'gui',
     title: "I'm Starting Fresh",
-    //body: 'Creates a sample scene plus every host, ready to run, test, and publish.',
     code: [
       { comment: true, text: '# spawn an empty project with every host you can run/test/publish.' },
       { comment: false, text: 'dotnet new install 2dog' },
@@ -303,15 +380,6 @@ const starts = [
           :style="{ '--gd-icon': iconUrl('gobot') }"
           aria-hidden="true"
         ></span>MyGame.tscn — 2dog</span>
-        <span class="host-runbar" aria-hidden="true">
-          <span
-            v-for="r in runbar"
-            :key="r.icon"
-            class="run-glyph"
-            :class="{ active: r.active }"
-            :style="{ '--gd-icon': iconUrl(r.icon) }"
-          ></span>
-        </span>
         <span class="host-controls" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
       </div>
 
@@ -336,65 +404,239 @@ const starts = [
             <a v-for="it in m.items" :key="it.text" :href="menuHref(it.link)">{{ it.text }}</a>
           </div>
         </div>
-        <span class="ed-menubar-note" aria-hidden="true">(hosted by .NET — everything still works)</span>
+        <!-- Godot's runbar rides the menu strip; play is lit — the scene is running. -->
+        <span class="host-runbar" aria-hidden="true">
+          <span
+            v-for="r in runbar"
+            :key="r.icon"
+            class="run-glyph"
+            :class="{ active: r.active }"
+            :style="{ '--gd-icon': iconUrl(r.icon) }"
+          ></span>
+        </span>
       </nav>
 
       <div class="ed-body">
-        <nav class="ed-tree" aria-label="Project hosts">
-          <div class="ed-dock-title">Scene</div>
-          <a class="ed-tree-root" :href="withBase('/project-layout')">
-            <span class="node-glyph root" :style="{ '--gd-icon': iconUrl('joystick') }" aria-hidden="true"></span>MyGame
-            <span class="ed-tree-note">project.godot</span>
-          </a>
-          <a
-            v-for="h in hosts"
-            :key="h.name"
-            class="ed-tree-item"
-            :href="withBase(h.link)"
-          >
-            <span
-              class="node-glyph"
-              :style="{ backgroundColor: h.color, '--gd-icon': iconUrl(h.icon) }"
-              aria-hidden="true"
-            ></span>
-            <span class="ed-tree-name">{{ h.name }}</span>
-            <span class="ed-tree-note">{{ h.role }}</span>
-          </a>
-        </nav>
+        <!-- Left dock column: Scene above, FileSystem below, exactly like the shipping editor. -->
+        <div class="ed-left">
+          <nav class="ed-tree" aria-label="Scene: your project and its 2dog hosts">
+            <!-- Scene is this page; Import is a real tab — it leads to the import docs. -->
+            <div class="ed-dock-tabs">
+              <span class="ed-dock-tab active" aria-hidden="true">Scene</span>
+              <a class="ed-dock-tab" :href="withBase('/import-tool')">Import</a>
+              <span class="strip-glyph" :style="{ '--gd-icon': thIconUrl('tabs_menu') }" aria-hidden="true"></span>
+            </div>
+            <div class="ed-dock-bar" aria-hidden="true">
+              <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('Add') }"></span>
+              <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('ToolConnect') }"></span>
+              <span class="bar-well"><span
+                class="bar-well-glyph"
+                :style="{ '--gd-icon': thIconUrl('search') }"
+              ></span>Filter Nodes</span>
+            </div>
+            <a class="ed-tree-root" :href="withBase('/project-layout')">
+              <span class="tree-arrow" :style="{ '--gd-icon': edIconUrl('GuiTreeArrowDown') }" aria-hidden="true"></span>
+              <span class="node-glyph root" :style="{ '--gd-icon': iconUrl('joystick') }" aria-hidden="true"></span>MyGame
+              <span class="ed-tree-note">project.godot</span>
+            </a>
+            <a
+              v-for="h in hosts"
+              :key="h.name"
+              class="ed-tree-item"
+              :href="withBase(h.link)"
+            >
+              <span
+                class="node-glyph"
+                :style="{ backgroundColor: h.color, '--gd-icon': iconUrl(h.icon) }"
+                aria-hidden="true"
+              ></span>
+              <span class="ed-tree-name">{{ h.name }}</span>
+              <span class="ed-tree-note">{{ h.role }}</span>
+            </a>
+          </nav>
 
-        <div class="ed-viewport">
-          <img
-            class="ed-mascot"
-            :src="withBase('/logo-animated.svg')"
-            alt="2dog logotype: a happy white dog over the word 2dog"
-            width="300"
-            height="154"
-          />
-          <h1 class="ed-headline">Start, control, embed Godot in&nbsp;.NET.</h1>
-          <p class="ed-tagline">
-            Keep your scenes, scripts, and editor workflow.<br />
-            Gain an entire ecosystem.
-          </p>
-          <div class="ed-actions">
-            <a class="ed-btn brand" :href="withBase('/getting-started')">Read the Dogs</a>
-            <a class="ed-btn" href="https://github.com/outfox/2dog">Fetch on GitHub</a>
+          <!-- FileSystem shows the game exactly as the editor sees it: untouched. The hosts
+               are missing here because .gdignore hides them — which is the whole promise. -->
+          <section class="ed-files" aria-label="FileSystem: your game files, untouched by 2dog">
+            <div class="ed-dock-tabs" aria-hidden="true">
+              <span class="ed-dock-tab active">FileSystem</span>
+              <span class="strip-glyph" :style="{ '--gd-icon': thIconUrl('tabs_menu') }"></span>
+            </div>
+            <div class="ed-file-row root">
+              <span class="tree-arrow" :style="{ '--gd-icon': edIconUrl('GuiTreeArrowDown') }" aria-hidden="true"></span>
+              <span class="file-glyph folder" :style="{ '--gd-icon': thIconUrl('folder') }" aria-hidden="true"></span>res://
+            </div>
+            <div v-for="f in files" :key="f.name" class="ed-file-row">
+              <span
+                class="file-glyph"
+                :class="{ folder: f.folder }"
+                :style="{ '--gd-icon': f.folder ? thIconUrl('folder') : edIconUrl(f.icon) }"
+                aria-hidden="true"
+              ></span>{{ f.name }}
+            </div>
+            <p class="ed-files-note">
+              Your files, exactly as they were. The hosts sit beside them,
+              <code>.gdignore</code>'d — the editor never even sees them.
+            </p>
+          </section>
+        </div>
+
+        <div class="ed-center">
+          <!-- The 2D workspace toolbar: pure chrome, the select tool forever active. -->
+          <div class="ed-view-bar" aria-hidden="true">
+            <span
+              v-for="(t, i) in viewTools"
+              :key="t"
+              class="bar-glyph"
+              :class="{ active: i === 0 }"
+              :style="{ '--gd-icon': edIconUrl(t) }"
+            ></span>
+            <span class="bar-sep"></span>
+            <span
+              v-for="t in viewLocks"
+              :key="t"
+              class="bar-glyph"
+              :style="{ '--gd-icon': edIconUrl(t) }"
+            ></span>
+            <span class="ed-view-zoom">
+              <span class="bar-glyph sm" :style="{ '--gd-icon': thIconUrl('zoom_less') }"></span>
+              <span class="ed-zoom-pct">100 %</span>
+              <span class="bar-glyph sm" :style="{ '--gd-icon': thIconUrl('zoom_more') }"></span>
+            </span>
+          </div>
+
+          <div class="ed-viewport">
+            <img
+              class="ed-mascot"
+              :src="withBase('/logo-animated.svg')"
+              alt="2dog logotype: a happy white dog over the word 2dog"
+              width="300"
+              height="154"
+            />
+            <h1 class="ed-headline">Start, control, embed Godot in&nbsp;.NET</h1>
+            <p class="ed-tagline">
+              Keep your scenes, scripts, and editor workflow.<br />
+              Gain an entire ecosystem.
+            </p>
+            <div class="ed-actions">
+              <a class="ed-btn brand" :href="withBase('/getting-started')">Read the Dogs</a>
+              <a class="ed-btn" href="https://github.com/outfox/2dog">Fetch on GitHub</a>
+            </div>
           </div>
         </div>
 
         <aside class="ed-inspector" aria-label="Why 2dog">
-          <div class="ed-dock-title">Inspector</div>
-          <section v-for="f in features" :key="f.link" class="ed-prop">
-            <h2 class="ed-prop-title">
-              <span
-                :class="['gd-icon', `gd-icon--${f.tint}`]"
-                :style="{ '--gd-icon': iconUrl(f.icon) }"
-                aria-hidden="true"
-              ></span>
-              {{ f.name }}
-            </h2>
-            <p class="ed-prop-detail">{{ f.detail }}</p>
-            <a class="ed-prop-link" :href="withBase(f.link)">{{ f.linkText }} →</a>
-          </section>
+          <!-- The dock's real anatomy: tab strip, resource toolbar, node selector, filter. -->
+          <div class="ed-dock-tabs" role="tablist" aria-label="Inspector dock" @keydown="inspectorTabsKeydown">
+            <button
+              id="itab-inspector"
+              class="ed-dock-tab"
+              :class="{ active: inspectorTab === 'inspector' }"
+              role="tab"
+              aria-controls="ipanel-inspector"
+              :aria-selected="inspectorTab === 'inspector'"
+              :tabindex="inspectorTab === 'inspector' ? 0 : -1"
+              @click="inspectorTab = 'inspector'"
+            >Inspector</button>
+            <button
+              id="itab-signals"
+              class="ed-dock-tab"
+              :class="{ active: inspectorTab === 'signals' }"
+              role="tab"
+              aria-controls="ipanel-signals"
+              :aria-selected="inspectorTab === 'signals'"
+              :tabindex="inspectorTab === 'signals' ? 0 : -1"
+              @click="inspectorTab = 'signals'"
+            >Signals</button>
+            <span class="strip-glyph" :style="{ '--gd-icon': thIconUrl('tabs_menu') }" aria-hidden="true"></span>
+          </div>
+
+          <div class="ed-dock-bar" aria-hidden="true">
+            <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('New') }"></span>
+            <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('Load') }"></span>
+            <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('Save') }"></span>
+            <span class="bar-spacer"></span>
+            <span class="bar-glyph dim" :style="{ '--gd-icon': edIconUrl('Back') }"></span>
+            <span class="bar-glyph dim" :style="{ '--gd-icon': edIconUrl('Forward') }"></span>
+            <span class="bar-glyph" :style="{ '--gd-icon': edIconUrl('History') }"></span>
+          </div>
+
+          <div class="ed-insp-node" aria-hidden="true">
+            <span class="node-glyph root" :style="{ '--gd-icon': iconUrl('joystick') }"></span>
+            <span class="ed-insp-node-name">MyGame</span>
+            <span class="node-drop" :style="{ '--gd-icon': thIconUrl('option_button_arrow') }"></span>
+          </div>
+
+          <div class="ed-insp-filter">
+            <span class="filter-glyph" :style="{ '--gd-icon': thIconUrl('search') }" aria-hidden="true"></span>
+            <input
+              v-model="filterText"
+              type="text"
+              :placeholder="filterPlaceholder"
+              :aria-label="filterPlaceholder"
+            />
+          </div>
+
+          <div
+            id="ipanel-inspector"
+            v-show="inspectorTab === 'inspector'"
+            class="ed-insp-panel"
+            role="tabpanel"
+            aria-labelledby="itab-inspector"
+          >
+            <div class="ed-props">
+              <section v-for="f in visibleFeatures" :key="f.link" class="ed-prop">
+                <h2 class="ed-cat">
+                  <span
+                    :class="['gd-icon', `gd-icon--${f.tint}`]"
+                    :style="{ '--gd-icon': iconUrl(f.icon) }"
+                    aria-hidden="true"
+                  ></span>
+                  {{ f.name }}
+                </h2>
+                <p class="ed-prop-detail">{{ f.detail }}</p>
+                <a class="ed-section-link" :href="withBase(f.link)">
+                  <span class="tree-arrow" :style="{ '--gd-icon': edIconUrl('GuiTreeArrowRight') }" aria-hidden="true"></span>
+                  {{ f.linkText }}
+                </a>
+              </section>
+            </div>
+            <div v-show="scriptRowVisible" class="ed-script-row">
+              <span class="ed-script-label">Script</span>
+              <a
+                class="ed-script-value"
+                :href="withBase('/concepts')"
+                aria-label="Script: Program.cs — how the .NET host drives Godot"
+              >Program.cs</a>
+            </div>
+            <p v-if="visibleFeatures.length === 0 && !scriptRowVisible" class="ed-filter-empty">
+              No property matches “{{ filterText.trim() }}”. 
+            </p>
+          </div>
+
+          <div
+            id="ipanel-signals"
+            v-show="inspectorTab === 'signals'"
+            class="ed-insp-panel"
+            role="tabpanel"
+            aria-labelledby="itab-signals"
+          >
+            <ul class="ed-signals">
+              <li v-for="s in visibleSignals" :key="s.sig" class="ed-signal">
+                <p class="ed-signal-name">
+                  <span class="sig-glyph" :style="{ '--gd-icon': edIconUrl('MemberSignal') }" aria-hidden="true"></span>
+                  {{ s.sig }}
+                </p>
+                <a class="ed-signal-conn" :href="s.link" :aria-label="s.label">
+                  <span class="slot-glyph" :style="{ '--gd-icon': edIconUrl('Slot') }" aria-hidden="true"></span>
+                  {{ s.conn }}
+                </a>
+              </li>
+            </ul>
+            <p v-if="visibleSignals.length === 0" class="ed-filter-empty">
+              No signal matches “{{ filterText.trim() }}” — sniffed everywhere.
+            </p>
+          </div>
         </aside>
       </div>
 
@@ -456,7 +698,6 @@ const starts = [
                 {{ s.title }}
               </h2>
               <div class="ed-subwin-body">
-                <p>{{ s.body }}</p>
                 <div class="ed-shell-wrap">
                   <pre class="ed-shell"><code><span
                     v-for="(l, i) in s.code"
@@ -545,12 +786,13 @@ const starts = [
   mask: var(--gd-icon) no-repeat center / contain;
 }
 
-/* Godot's runbar, docked at the titlebar's right like the editor's own. */
+/* Godot's runbar, docked at the menu strip's right like the editor's own. */
 .host-runbar {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-left: auto;
+  padding-right: 6px;
 }
 
 .run-glyph {
@@ -568,6 +810,7 @@ const starts = [
 .host-controls {
   display: flex;
   gap: 10px;
+  margin-left: auto;
   color: var(--ed-text-2);
   font-style: normal;
 }
@@ -645,101 +888,167 @@ const starts = [
   outline-offset: -2px;
 }
 
-.ed-menubar-note {
-  margin-left: auto;
-  padding-right: 6px;
-  font-size: 11.5px;
-  color: var(--ed-text-2);
-}
-
 .ed-body {
   display: grid;
-  grid-template-columns: 232px 1fr 260px;
+  grid-template-columns: 236px 1fr 272px;
 }
 
-/* Inspector dock: the product claims as property categories, Godot's own right-dock placement. */
-.ed-inspector {
-  background: var(--ed-dark-1);
-  border-left: 1px solid var(--ed-seam);
-  padding: 8px 8px 12px;
-}
+/* ---------- Dock anatomy shared by Scene, FileSystem, and Inspector ---------- */
 
-.ed-prop-title {
+/* Tab strips: the strip sits one step darker; the active tab is the panel color,
+   connecting flush — Godot's own dock-tab construction. */
+.ed-dock-tabs {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  margin: 0;
-  padding: 5px 8px;
-  border-radius: 3px;
-  background: var(--ed-raise);
-  font-size: 12.5px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--ed-text-1);
+  align-items: stretch;
+  gap: 1px;
+  padding: 3px 4px 0;
+  background: var(--ed-dark-2);
 }
 
-.ed-prop-title .gd-icon {
-  flex: none;
-  width: 14px;
-  height: 14px;
-}
-
-.ed-prop-detail {
-  margin: 7px 8px 3px;
-  font-size: 12.5px;
-  line-height: 1.55;
+.ed-dock-tab {
+  padding: 5px 13px 6px;
+  border: none;
+  border-radius: 3px 3px 0 0;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.3;
   color: var(--ed-text-2);
 }
 
-.ed-prop-link {
-  display: block;
-  margin: 0 8px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ed-accent);
+button.ed-dock-tab {
+  cursor: pointer;
+}
+
+a.ed-dock-tab {
   text-decoration: none;
 }
 
-.ed-prop-link:hover {
-  color: var(--ed-accent-strong);
+button.ed-dock-tab:hover,
+a.ed-dock-tab:hover {
+  color: var(--ed-text-1);
 }
 
-.ed-prop-link:focus-visible {
+button.ed-dock-tab:focus-visible,
+a.ed-dock-tab:focus-visible {
   outline: 2px solid var(--ed-accent);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
-/* Scene-tree dock: the real host projects, as real links. */
-.ed-tree {
+.ed-dock-tab.active {
+  background: var(--ed-dark-1);
+  color: var(--ed-text-1);
+}
+
+.strip-glyph {
+  align-self: center;
+  margin-left: auto;
+  margin-right: 4px;
+  width: 13px;
+  height: 13px;
+  background-color: var(--ed-text-3);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* Dock toolbars: a quiet row of editor glyphs under the tabs. */
+.ed-dock-bar {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--ed-seam);
+}
+
+.bar-glyph {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  background-color: var(--ed-text-2);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.bar-glyph.dim {
+  background-color: var(--ed-text-3);
+}
+
+.bar-glyph.active {
+  background-color: var(--ed-accent);
+}
+
+.bar-glyph.sm {
+  width: 12px;
+  height: 12px;
+}
+
+.bar-spacer {
+  flex: 1;
+}
+
+.bar-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--ed-seam);
+}
+
+/* The Scene dock's filter box, rendered as chrome (the inspector's is the live one). */
+.bar-well {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px 8px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 3px;
+  background: var(--ed-dark-2);
+  font-size: 11.5px;
+  color: var(--ed-text-3);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.bar-well-glyph {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background-color: var(--ed-text-3);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* ---------- Left column: Scene + FileSystem docks ---------- */
+
+.ed-left {
+  display: flex;
+  flex-direction: column;
   background: var(--ed-dark-1);
   border-right: 1px solid var(--ed-seam);
-  padding: 8px 8px 12px;
 }
 
-.ed-dock-title {
-  font-family: var(--vp-font-family-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ed-text-2);
-  padding: 4px 8px 8px;
+.ed-tree {
+  padding-bottom: 10px;
 }
 
 .ed-tree-root,
 .ed-tree-item {
   display: flex;
   align-items: baseline;
-  gap: 8px;
-  padding: 5px 8px;
+  gap: 7px;
+  margin: 0 4px;
+  padding: 5px 6px;
   border-radius: 3px;
   font-size: 13px;
   color: var(--ed-text-1);
   text-decoration: none;
 }
 
+.ed-tree-root {
+  margin-top: 4px;
+}
+
 .ed-tree-item {
-  margin-left: 14px;
+  margin-left: 22px;
   border-left: 1px solid var(--ed-seam);
   border-radius: 0 3px 3px 0;
 }
@@ -750,10 +1059,27 @@ const starts = [
   color: var(--ed-accent);
 }
 
+.ed-tree-root:focus-visible,
+.ed-tree-item:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: -2px;
+}
+
+/* Godot's faint tree disclosure arrows (the icon carries its own 40% alpha). */
+.tree-arrow {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  align-self: center;
+  background-color: var(--ed-text-1);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
 .node-glyph {
   flex: none;
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   align-self: center;
   background-color: var(--ed-text-2);
   -webkit-mask: var(--gd-icon) no-repeat center / contain;
@@ -775,10 +1101,96 @@ const starts = [
   color: var(--ed-text-2);
 }
 
+/* FileSystem dock: plain rows — this dock's job is to show nothing changed. */
+.ed-files {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ed-seam);
+}
+
+.ed-file-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 4px;
+  padding: 3px 6px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  color: var(--ed-text-1);
+}
+
+.ed-file-row.root {
+  margin-top: 6px;
+}
+
+.ed-file-row:not(.root) {
+  margin-left: 22px;
+  border-left: 1px solid var(--ed-seam);
+}
+
+.file-glyph {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  background-color: var(--ed-text-2);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* Godot paints folders in the accent-tinted folder color. */
+.file-glyph.folder {
+  background-color: var(--ed-node-2d);
+}
+
+.ed-files-note {
+  margin: auto 8px 10px;
+  padding-top: 10px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ed-text-2);
+}
+
+.ed-files-note code {
+  font-family: var(--vp-font-family-mono);
+  font-size: 10.5px;
+}
+
+/* ---------- Center: 2D toolbar + viewport ---------- */
+
+.ed-center {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ed-view-bar {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 6px 12px;
+  background: var(--ed-base);
+  border-bottom: 1px solid var(--ed-seam);
+}
+
+.ed-view-zoom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.ed-zoom-pct {
+  font-family: var(--vp-font-family-mono);
+  font-size: 11px;
+  color: var(--ed-text-2);
+}
+
 /* Viewport: the 2D editor's grid, with the current scene running. */
 .ed-viewport {
+  flex: 1;
   position: relative;
-  padding: 40px 40px 44px;
+  padding: 36px 40px 44px;
   background:
     linear-gradient(var(--ed-grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--ed-grid) 1px, transparent 1px),
@@ -853,6 +1265,248 @@ const starts = [
 
 .ed-btn.brand:hover {
   background: var(--ed-accent-strong);
+}
+
+/* ---------- Inspector dock ---------- */
+
+.ed-inspector {
+  display: flex;
+  flex-direction: column;
+  background: var(--ed-dark-1);
+  border-left: 1px solid var(--ed-seam);
+  padding-bottom: 14px;
+}
+
+/* The node selector: which object these properties belong to. */
+.ed-insp-node {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 7px 8px 0;
+  padding: 4px 9px;
+  border-radius: 3px;
+  background: var(--ed-raise);
+}
+
+.ed-insp-node-name {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  color: var(--ed-text-1);
+}
+
+.node-drop {
+  margin-left: auto;
+  width: 12px;
+  height: 12px;
+  background-color: var(--ed-text-2);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* Filter Properties: a real LineEdit doing real filtering. */
+.ed-insp-filter {
+  position: relative;
+  margin: 6px 8px 0;
+}
+
+.filter-glyph {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  width: 13px;
+  height: 13px;
+  transform: translateY(-50%);
+  background-color: var(--ed-text-3);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+  pointer-events: none;
+}
+
+.ed-insp-filter input {
+  width: 100%;
+  padding: 5px 9px 5px 27px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 3px;
+  background: var(--ed-dark-2);
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--ed-text-1);
+}
+
+.ed-insp-filter input::placeholder {
+  color: var(--ed-text-3);
+}
+
+.ed-insp-filter input:focus {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: -1px;
+}
+
+.ed-insp-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Property categories: full-bleed centered strips, Godot's own category bars. */
+.ed-cat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding: 5px 8px;
+  background: var(--ed-raise);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ed-text-1);
+}
+
+.ed-cat .gd-icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.ed-prop-detail {
+  margin: 7px 14px 2px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ed-text-2);
+}
+
+/* The claim's link, dressed as a property section row (chevron and all). */
+.ed-section-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 1px 4px 0;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ed-accent);
+  text-decoration: none;
+}
+
+.ed-section-link:hover {
+  background: var(--ed-raise);
+  color: var(--ed-accent-strong);
+}
+
+.ed-section-link:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: -2px;
+}
+
+/* Script: the property every Godot dev reads last — here it's your host program. */
+.ed-script-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 12px 0;
+  font-size: 12.5px;
+  color: var(--ed-text-2);
+}
+
+.ed-script-value {
+  flex: 1;
+  padding: 3px 9px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 3px;
+  background: var(--ed-dark-2);
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  color: var(--ed-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ed-script-value:hover {
+  border-color: var(--ed-accent);
+  color: var(--ed-accent-strong);
+}
+
+.ed-script-value:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 1px;
+}
+
+.ed-filter-empty {
+  margin: 14px 14px 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ed-text-2);
+}
+
+/* Signals: the project's outward connections, in the connections dialog's grammar. */
+.ed-signals {
+  list-style: none;
+  margin: 8px 4px 0;
+  padding: 0;
+}
+
+.ed-signal {
+  margin-bottom: 7px;
+}
+
+.ed-signal-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 3px 8px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  color: var(--ed-text-1);
+}
+
+.sig-glyph {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  background-color: var(--ed-node-anim);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.ed-signal-conn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: 22px;
+  padding: 3px 9px;
+  border-left: 1px solid var(--ed-seam);
+  border-radius: 0 3px 3px 0;
+  font-family: var(--vp-font-family-mono);
+  font-size: 11.5px;
+  color: var(--ed-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ed-signal-conn:hover {
+  background: var(--ed-raise);
+  color: var(--ed-accent-strong);
+}
+
+.ed-signal-conn:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: -2px;
+}
+
+.slot-glyph {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  background-color: var(--ed-success);
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
 }
 
 /* Bottom panel, per the editor itself: content wells above, tab strip at the bottom,
@@ -970,16 +1624,9 @@ const starts = [
   padding: 12px 14px 12px;
 }
 
-.ed-subwin-body > p {
-  margin: 0;
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--ed-text-1);
-}
-
 .ed-shell-wrap {
   position: relative;
-  margin: 12px 0 0;
+  margin: 0;
 }
 
 .ed-shell {
@@ -1127,21 +1774,31 @@ const starts = [
 /* Narrow: the inspector redocks below the viewport, as Godot does when docks collapse. */
 @media (max-width: 1139px) {
   .ed-body {
-    grid-template-columns: 232px 1fr;
+    grid-template-columns: 236px 1fr;
   }
 
   .ed-inspector {
     grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 10px;
-    align-items: start;
     border-left: none;
     border-top: 1px solid var(--ed-seam);
   }
 
-  .ed-inspector .ed-dock-title {
-    grid-column: 1 / -1;
+  .ed-props {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 12px;
+    align-items: start;
+    padding: 0 8px;
+  }
+
+  .ed-cat {
+    border-radius: 3px;
+  }
+
+  .ed-signals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 12px;
   }
 }
 
@@ -1154,30 +1811,50 @@ const starts = [
     grid-template-columns: 1fr;
   }
 
+  .ed-left {
+    border-right: none;
+    border-bottom: 1px solid var(--ed-seam);
+  }
+
   .ed-tree {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 2px;
-    border-right: none;
-    border-bottom: 1px solid var(--ed-seam);
-    padding: 6px 8px;
+    padding: 0 4px 6px;
   }
 
-  .ed-dock-title {
-    padding: 4px 6px;
+  .ed-tree .ed-dock-tabs {
+    flex-basis: 100%;
+    margin: 0 -4px 4px;
+  }
+
+  .ed-tree .ed-dock-bar,
+  .ed-files,
+  .ed-view-bar {
+    display: none;
+  }
+
+  .ed-tree-root {
+    margin-top: 0;
   }
 
   .ed-tree-item {
     margin-left: 0;
     border-left: none;
+    border-radius: 3px;
+  }
+
+  .tree-arrow {
+    display: none;
   }
 
   .ed-tree-note {
     display: none;
   }
 
-  .ed-inspector {
+  .ed-props,
+  .ed-signals {
     grid-template-columns: 1fr;
   }
 
@@ -1187,10 +1864,6 @@ const starts = [
 
   .ed-menubar {
     flex-wrap: wrap;
-  }
-
-  .ed-menubar-note {
-    display: none;
   }
 
   .ed-status-pun {
