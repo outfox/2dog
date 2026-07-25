@@ -1,23 +1,29 @@
 <!-- Editor menus: real dropdowns in the editor's own anatomy — separator groups,
      right-aligned shortcut hints, and greyed filler rows for the full-menu illusion.
-     Real rows link to actual doc pages; disabled rows are chrome (hidden from SRs).
+     Real rows link to actual doc pages; disabled rows are inert but announced.
+     This strip is the home page's whole navigation — the site header stands down
+     there (custom.css) — so search and the appearance switch live here too.
      Godot's runbar rides the strip's right edge. -->
 <script setup lang="ts">
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
-import { withBase } from 'vitepress'
+import { computed, ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { useData, withBase } from 'vitepress'
 import { iconUrl, edIconUrl, brIconUrl } from './icons'
+
+const { isDark } = useData()
 
 type MenuItem = {
   text?: string
   link?: string
   shortcut?: string
   disabled?: boolean
-  action?: 'search'
+  action?: 'search' | 'theme'
   sep?: boolean
   icon?: string
 }
 
-const menus: { label: string; items: MenuItem[] }[] = [
+/* Computed so the theme row can name the appearance it switches to. Popups render
+   only while open, so this never reaches SSR and cannot mismatch on hydration. */
+const menus = computed<{ label: string; items: MenuItem[] }[]>(() => [
   {
     label: 'Scene',
     items: [
@@ -67,6 +73,11 @@ const menus: { label: string; items: MenuItem[] }[] = [
       { text: 'Web / Browser (WASM)', link: '/web' },
       { text: 'API Reference', link: '/api-reference' },
       { sep: true },
+      {
+        text: isDark.value ? 'Use Light Theme' : 'Use Dark Theme',
+        action: 'theme',
+        icon: iconUrl(isDark.value ? 'sun' : 'moon'),
+      },
       { text: 'Editor Settings...', disabled: true },
       { text: 'Editor Layout', disabled: true },
       { text: 'Take Screenshot', disabled: true, shortcut: 'Ctrl+F12' },
@@ -86,7 +97,7 @@ const menus: { label: string; items: MenuItem[] }[] = [
       { text: 'Copy System Info', disabled: true, icon: edIconUrl('ActionCopy') },
     ],
   },
-]
+])
 
 /* The runbar as chrome. Play is lit: the scene — the dog — is running. */
 const runbar = [
@@ -113,11 +124,24 @@ function hoverMenu(label: string) {
   if (openMenu.value && openMenu.value !== label) openMenu.value = label
 }
 
-/* Search Help genuinely opens the site search (its Ctrl+K works everywhere). */
+/* Search Help genuinely opens the site search (its Ctrl+K works everywhere). The
+   nav is hidden on this page, not unmounted, so its button is still clickable. */
 function searchHelp() {
   openMenu.value = null
   const btn = document.querySelector<HTMLElement>('.VPNavBarSearchButton, .DocSearch-Button')
   btn?.click()
+}
+
+/* The appearance switch lives here because the site header is hidden on the home
+   page — and the Editor menu is where a Godot user goes looking for it anyway. */
+function toggleTheme() {
+  isDark.value = !isDark.value
+  openMenu.value = null
+}
+
+function runAction(it: MenuItem) {
+  if (it.action === 'search') searchHelp()
+  else if (it.action === 'theme') toggleTheme()
 }
 
 function onDocClick(e: MouseEvent) {
@@ -181,9 +205,9 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
             <span v-if="it.icon" class="ed-menu-glyph" :style="{ '--gd-icon': it.icon }" aria-hidden="true"></span>
             {{ it.text }}<span v-if="it.shortcut" class="ed-menu-key" aria-hidden="true">{{ it.shortcut }}</span>
           </span>
-          <button v-else-if="it.action === 'search'" type="button" class="ed-menu-item" @click="searchHelp">
+          <button v-else-if="it.action" type="button" class="ed-menu-item" @click="runAction(it)">
             <span v-if="it.icon" class="ed-menu-glyph" :style="{ '--gd-icon': it.icon }" aria-hidden="true"></span>
-            {{ it.text }}<span class="ed-menu-key" aria-hidden="true">{{ it.shortcut }}</span>
+            {{ it.text }}<span v-if="it.shortcut" class="ed-menu-key" aria-hidden="true">{{ it.shortcut }}</span>
           </button>
           <a v-else class="ed-menu-item" :href="menuHref(it.link!)">
             <span v-if="it.icon" class="ed-menu-glyph" :style="{ '--gd-icon': it.icon }" aria-hidden="true"></span>
