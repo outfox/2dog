@@ -5,9 +5,11 @@
  *  - icons/node: neutral pictograms (brand content, tree/inspector glyphs)
  *  - icons/godot-editor: the editor's own icons (tools, docks, members)
  *  - icons/godot-theme: GUI furniture (arrows, search, folders, tab menus)
+ *  - icons/brand: vendored brand marks (simple-icons, CC0)
  */
 import { withBase } from 'vitepress'
 
 export const iconUrl = (name: string) => `url(${withBase(`/icons/node/${name}.svg`)})`
 export const edIconUrl = (name: string) => `url(${withBase(`/icons/godot-editor/${name}.svg`)})`
 export const thIconUrl = (name: string) => `url(${withBase(`/icons/godot-theme/${name}.svg`)})`
+export const brIconUrl = (name: string) => `url(${withBase(`/icons/brand/${name}.svg`)})`

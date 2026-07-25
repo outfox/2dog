@@ -1,4 +1,5 @@
-<!-- The .NET process owns this window; Godot runs inside it. -->
+<!-- The window frame the whole page lives in. The title is the editor's own, verbatim;
+     what proves .NET is holding the leash sits in the docks and the console below. -->
 <script setup lang="ts">
 import { iconUrl } from './icons'
 </script>
@@ -9,13 +10,13 @@ import { iconUrl } from './icons'
       class="host-app-icon"
       :style="{ '--gd-icon': iconUrl('gobot') }"
       aria-hidden="true"
-    ></span>MyGame.tscn — Godot Engine</span>
+    ></span>main.tscn — Godot Engine</span>
     <span class="host-controls" aria-hidden="true"><i>–</i><i>□</i><i>×</i></span>
   </div>
 </template>
 
 <style>
-/* Host title bar: the inversion, stated as chrome. */
+/* Window chrome: the deepest step, carrying the app icon and window controls. */
 .host-titlebar {
   display: flex;
   align-items: center;
@@ -23,7 +24,6 @@ import { iconUrl } from './icons'
   padding: 8px 14px;
   background: var(--ed-dark-2);
   border-bottom: 1px solid var(--ed-seam);
-  font-family: var(--vp-font-family-mono);
   font-size: 12px;
   color: var(--ed-text-1);
 }
