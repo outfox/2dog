@@ -129,7 +129,21 @@ export default defineConfig({
       {
         text: 'Reference',
         items: [
-          { text: gd('book_open') + 'API Reference', link: '/api-reference' },
+          {
+            text: gd('book_open') + 'API Reference',
+            link: '/api-reference',
+            collapsed: true,
+            items: [
+              { text: gd('script') + 'Engine', link: '/api/engine' },
+              { text: gd('arrows_clockwise') + 'GodotInstance', link: '/api/godot-instance' },
+              { text: gd('test_tube') + 'GodotFixtureBase', link: '/api/godot-fixture-base' },
+              { text: gd('test_tube') + 'GodotFixture', link: '/api/godot-fixture' },
+              { text: gd('test_tube') + 'GodotHeadlessFixture', link: '/api/godot-headless-fixture' },
+              { text: gd('layers') + 'GodotCollection', link: '/api/godot-collection' },
+              { text: gd('layers') + 'GodotHeadlessCollection', link: '/api/godot-headless-collection' },
+              { text: gd('file_arrow_down') + 'AssemblyPreloader', link: '/api/assembly-preloader' }
+            ]
+          },
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
           { text: gd('archive') + 'Misc', link: '/misc' },
           {
