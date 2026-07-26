@@ -13,8 +13,9 @@ dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
 
-Projects created by `dotnet new 2dog` (or [`2dog convert`](/convert)) already
-include a ready-made test project: `MyGame.tests/`, nested inside the Godot
+Projects scaffolded by the [`2dog` tool](/convert) already include a
+ready-made test project (add one later with `2dog add --tests`):
+`MyGame.tests/`, nested inside the Godot
 project (with a `.gdignore` so the Godot editor skips it) and pointing
 `<GodotProjectDir>` at the parent directory (`..`). Run it with
 `dotnet test MyGame.tests`.

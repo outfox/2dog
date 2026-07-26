@@ -1,146 +1,155 @@
-using System.Reflection;
-using twodog.cli;
+namespace twodog.cli;
 
-// Manual argument parsing, in the style of twodog.import: one verb, a handful
-// of flags, zero dependencies.
-
-var argv = new Queue<string>(args);
-
-if (argv.Count == 0)
+/// <summary>
+/// The 2dog command. With no host flags it prompts; with them it runs
+/// unattended. Both paths end in the same scaffolder.
+/// </summary>
+internal static class Program
 {
-    PrintUsage();
-    return 1;
-}
-
-var verb = argv.Dequeue();
-switch (verb)
-{
-    case "--help" or "-h" or "help":
-        PrintUsage();
-        return 0;
-
-    case "--version":
-        Console.WriteLine(ToolVersions.TwoDogVersion);
-        return 0;
-
-    case "convert":
-        break;
-
-    default:
-        Console.Error.WriteLine($"error: unknown command '{verb}'");
-        PrintUsage();
-        return 1;
-}
-
-var options = new ConvertOptions();
-while (argv.Count > 0)
-{
-    var arg = argv.Dequeue();
-    switch (arg)
+    private static int Main(string[] args)
     {
-        case "--name":
-            if (argv.Count == 0) return UsageError("--name requires a value");
-            options.NameOverride = argv.Dequeue();
-            break;
-        case "--no-web":
-            options.IncludeWeb = false;
-            break;
-        case "--no-tests":
-            options.IncludeTests = false;
-            break;
-        case "--dry-run":
-            options.DryRun = true;
-            break;
-        case "--force":
-            options.Force = true;
-            break;
-        case "--no-restore":
-            options.Restore = false;
-            break;
-        case "--verbose":
-            options.Verbose = true;
-            break;
-        case "--help" or "-h":
+        try
+        {
+            var cmd = CommandLine.Parse(args);
+            switch (cmd.Verb)
+            {
+                case Verb.Help:
+                    PrintUsage();
+                    return 0;
+                case Verb.Version:
+                    Console.WriteLine(ToolVersions.TwoDogVersion);
+                    return 0;
+                default:
+                    return Execute(cmd);
+            }
+        }
+        catch (UsageException ex)
+        {
+            Console.Error.WriteLine($"error: {ex.Message}");
             PrintUsage();
-            return 0;
-        default:
-            if (arg.StartsWith('-')) return UsageError($"unknown option '{arg}'");
-            if (options.ProjectPath != null) return UsageError("more than one project path given");
-            options.ProjectPath = arg;
-            break;
+            return 1;
+        }
+        catch (ToolException ex)
+        {
+            Console.Error.WriteLine($"error: {ex.Message}");
+            return 2;
+        }
     }
-}
 
-try
-{
-    return ConvertCommand.Run(options);
-}
-catch (ConvertException ex)
-{
-    Console.Error.WriteLine($"error: {ex.Message}");
-    return 2;
-}
-
-static int UsageError(string message)
-{
-    Console.Error.WriteLine($"error: {message}");
-    PrintUsage();
-    return 1;
-}
-
-static void PrintUsage()
-{
-    Console.WriteLine(
-        $"""
-         2dog {ToolVersions.TwoDogVersion} - https://2dog.dev
-
-         usage: 2dog convert [path] [options]
-
-         Converts an existing Godot project to 2dog in place. The Godot project
-         directory becomes the solution root; host projects are scaffolded as
-         nested subfolders that the Godot editor ignores (.gdignore). No
-         existing file is ever moved, renamed or deleted.
-
-           path              Godot project directory (default: current directory;
-                             must contain project.godot)
-           --name <name>     Override the derived project base name
-           --no-web          Skip the browser (WebAssembly) host project
-           --no-tests        Skip the xUnit test project
-           --dry-run         Print planned actions without changing anything
-           --force           Overwrite files that already exist (never deletes/moves)
-           --no-restore      Skip the final 'dotnet restore'
-           --verbose         Extra output
-         """);
-}
-
-namespace twodog.cli
-{
-    /// <summary>Versions baked in at build time from Directory.Build.props.</summary>
-    internal static class ToolVersions
+    private static int Execute(ParsedCommand cmd)
     {
-        private static string Metadata(string key) =>
-            typeof(ToolVersions).Assembly
-                .GetCustomAttributes<AssemblyMetadataAttribute>()
-                .FirstOrDefault(a => a.Key == key)?.Value
-            ?? throw new InvalidOperationException($"Assembly metadata '{key}' missing");
+        // Prompting is off as soon as the command line answers the questions
+        // itself, so scripted runs never block on a terminal.
+        var interactive = !cmd.NoInteractive && !cmd.Options.DryRun && Tui.CanPrompt;
+        var verb = ResolveVerb(cmd, interactive);
 
-        public static string TwoDogVersion => Metadata("TwoDogVersion");
-        public static string NativesVersion => Metadata("NativesVersion");
-        public static string GodotSdkVersion => Metadata("GodotSdkVersion");
+        if (interactive) Tui.Header();
+
+        if (verb == Verb.New) PrepareNewProject(cmd, interactive);
+        var project = ScaffoldCommand.Open(cmd.Options);
+
+        if (interactive) Tui.ShowProject(project);
+
+        cmd.Options.Hosts = interactive && !cmd.HostFlagsSeen
+            ? Tui.SelectHosts(project, HostSelection.Defaults(cmd.Excluded, project))
+            : HostSelection.FromFlags(cmd, project);
+
+        return ScaffoldCommand.Run(project, cmd.Options, interactive ? Tui.ConfirmPlan : null);
     }
 
-    internal sealed class ConvertOptions
+    /// <summary>
+    /// Bare `2dog` reads the directory: a Godot project there means "add
+    /// hosts", anything else means "create a project here".
+    /// </summary>
+    private static Verb ResolveVerb(ParsedCommand cmd, bool interactive)
     {
-        public string? ProjectPath;
-        public string? NameOverride;
-        public bool IncludeWeb = true;
-        public bool IncludeTests = true;
-        public bool DryRun;
-        public bool Force;
-        public bool Restore = true;
-        public bool Verbose;
+        if (cmd.Verb != Verb.Auto) return cmd.Verb;
+
+        var dir = Path.GetFullPath(cmd.Options.ProjectPath ?? ".");
+        if (File.Exists(Path.Combine(dir, "project.godot"))) return Verb.Add;
+
+        if (!interactive)
+            throw new ToolException($"no project.godot in {dir} - run '2dog new <Name>' to create a project, " +
+                                    "or point 2dog at a Godot project directory");
+
+        // The bare-command new-project case: the positional (if any) named the
+        // directory to work in, not the project.
+        cmd.OutputDir ??= cmd.Options.ProjectPath;
+        return Verb.New;
     }
 
-    /// <summary>A conversion error with a user-facing message (exit code 2).</summary>
-    internal sealed class ConvertException(string message) : Exception(message);
+    private static void PrepareNewProject(ParsedCommand cmd, bool interactive)
+    {
+        var outputDir = cmd.OutputDir;
+        var name = cmd.Options.NameOverride;
+
+        if (name == null)
+        {
+            if (!interactive) throw new UsageException("2dog new needs a project name");
+            var here = Path.GetFullPath(outputDir ?? ".");
+            name = Tui.AskProjectName(Path.GetFileName(here.TrimEnd(Path.DirectorySeparatorChar)));
+            outputDir ??= IsEmpty(here) ? "." : name;
+            outputDir = Tui.AskDirectory(outputDir);
+            Console.WriteLine();
+        }
+
+        cmd.Options.NameOverride = name;
+        cmd.Options.ProjectPath = outputDir ?? name;
+        cmd.Options.CreateProject = true;
+    }
+
+    /// <summary>A directory with nothing in it but dotfiles counts as empty.</summary>
+    private static bool IsEmpty(string dir) =>
+        !Directory.Exists(dir) ||
+        !Directory.EnumerateFileSystemEntries(dir).Any(e => !Path.GetFileName(e).StartsWith('.'));
+
+    private static void PrintUsage()
+    {
+        Console.WriteLine(
+            $"""
+             2dog {ToolVersions.TwoDogVersion} - https://2dog.dev
+
+             usage: 2dog [verb] [path] [options]
+
+             Scaffolds .NET host projects for a Godot project: the Godot project
+             directory is the solution root, hosts are nested subfolders the Godot
+             editor ignores (.gdignore). No existing file is ever moved, renamed or
+             deleted.
+
+             verbs
+               (none)            Add hosts to the Godot project here, or create a
+                                 project if there is none
+               new [Name] [dir]  Create a new Godot project with 2dog hosts
+               add [path]        Add hosts to an existing Godot project
+               convert [path]    Alias of add, for projects that have no hosts yet
+
+             Without any host option the tool asks interactively; run it again to
+             add more hosts, including a second host of the same kind.
+
+             hosts
+               --desktop [folder]  Desktop host (your own Main entry point)
+               --web [folder]      Browser (WebAssembly) host
+               --tests [folder]    xUnit test project
+               --no-desktop, --no-web, --no-tests
+                                   Leave a host out of the default set
+
+             options
+               -n, --name <name>   Project name (new) or base name override
+               -o, --output <dir>  Directory for a new project
+               -y, --yes           Do not prompt; take the flags and defaults
+               --non-interactive   Same as --yes
+               --dry-run           Print planned actions without changing anything
+               --force             Overwrite files that already exist (never deletes)
+               --no-restore        Skip the final 'dotnet restore'
+               --verbose           Extra output
+               --version           Print the tool version
+
+             examples
+               2dog                          # interactive, here
+               2dog new MyGame               # interactive host choice, new project
+               2dog new MyGame --desktop --tests
+               2dog add --desktop MyGame.editor
+               2dog convert path/to/project --no-web
+             """);
+    }
 }

@@ -1,22 +1,33 @@
-# Project Templates
+# Creating a New Project
 
-2dog provides `dotnet new` templates to quickly scaffold new projects with everything configured correctly.
+The fastest route needs nothing installed at all (.NET 10+ SDK):
+
+```bash
+dnx 2dog new MyGame
+cd MyGame
+dotnet run --project MyGame.2dog
+```
+
+`2dog new` asks which hosts you want and creates the Godot project around
+them; add `--desktop`, `--web`, `--tests` (or `--non-interactive`) to skip the
+prompts. The same content also ships as a `dotnet new` template, described
+below  –  both produce identical projects.
+
+(For an *existing* Godot project, use [`dnx 2dog`](/convert) instead: it
+produces the same layout around it, in place.)
 
 ## Installation
 
-For a new project, installing the template *is* installing 2dog: there is no
-SDK or tool to set up beyond it  –  projects created from the template reference
-the 2dog NuGet packages themselves. The template is bundled in the `2dog`
-NuGet package (which also carries the `2dog convert` dotnet tool), so
-installing the package registers it:
+The `dotnet new` template is bundled in the `2dog` NuGet package (which is also
+the dotnet tool), so installing the package registers it:
 
 ```bash
 dotnet new install 2dog
 ```
 
-(For an *existing* Godot project, there is nothing to install at all  – 
-[`dnx 2dog convert`](/convert) produces the same layout around it, in
-place.)
+For a new project, installing the template *is* installing 2dog: there is no
+SDK or tool to set up beyond it  –  projects created from the template reference
+the 2dog NuGet packages themselves.
 
 ### Local Installation (Development)
 

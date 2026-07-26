@@ -19,11 +19,11 @@ dotnet workload install wasm-tools
 
 # Convert in place - scaffolds the web host (and more) around
 # your existing Godot project
-dnx 2dog convert path/to/MyGame
+cd path/to/MyGame
+dnx 2dog convert -y
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
-cd path/to/MyGame
 dotnet publish MyGame.web
 
 # Serve the result - any static file server works
@@ -35,8 +35,7 @@ dotnet serve --directory MyGame.web/AppBundle
 dotnet workload install wasm-tools
 
 # Create a project - the web host is included by default
-dotnet new install 2dog
-dotnet new 2dog -n MyGame
+dnx 2dog new MyGame -y
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)

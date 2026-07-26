@@ -6,35 +6,33 @@ is the [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) package.
 
 This one package is both a dotnet tool and a `dotnet new` template package.
 
-## New project
-
-```bash
-dotnet new install 2dog
-dotnet new 2dog -n MyGame
-cd MyGame
-```
-
-## Convert an existing Godot project
+## Run it
 
 One-shot (no install, .NET 10+):
 
 ```bash
-dnx 2dog convert path/to/your/godot/project
+dnx 2dog             # in a Godot project: add hosts; elsewhere: create one
+dnx 2dog new MyGame  # a new Godot project with 2dog hosts
 ```
 
 Or install the `2dog` command globally:
 
 ```bash
 dotnet tool install -g 2dog
-2dog convert path/to/your/godot/project
+2dog
 ```
 
-## `2dog convert`
+With no host options the tool prompts: a checkbox list of hosts, editable
+folder names, the plan, and a confirmation. Naming any host option (or passing
+`--yes`) runs it unattended instead. The `dotnet new` template produces the
+same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
-Converts an existing Godot project to 2dog **in place**  –  no files are ever
-moved, renamed or deleted. The Godot project directory becomes the solution
-root, and host projects are scaffolded as nested subfolders that the Godot
-editor ignores (each carries a `.gdignore`):
+## What it does
+
+Creates the host projects **in place**  –  no file is ever moved, renamed or
+deleted. The Godot project directory becomes the solution root, and host
+projects are scaffolded as nested subfolders that the Godot editor ignores
+(each carries a `.gdignore`):
 
 ```
 MyGame/                      <- your existing Godot project (unchanged)
@@ -47,15 +45,28 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.tests/  (.gdignore) <- xUnit test project
 ```
 
-`dotnet new 2dog` produces the same layout from scratch.
+Run it again whenever you want another host  –  hosts that exist are recognized
+and left alone, and a kind you already have is added a second time under a
+free folder name (`2dog add --desktop MyGame.editor`).
+
+Commands:
+
+| Command | Effect |
+| --- | --- |
+| `2dog` | Add hosts here, or create a project if there is none |
+| `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
+| `2dog add [path]` | Add hosts to an existing Godot project |
+| `2dog convert [path]` | Alias of `add`, for projects that have no hosts yet |
 
 Options:
 
 | Option | Effect |
 | --- | --- |
-| `--name <BaseName>` | Override the derived project base name |
-| `--no-web` | Skip the browser (wasm) host |
-| `--no-tests` | Skip the xUnit test project |
+| `--desktop [folder]`, `--web [folder]`, `--tests [folder]` | Add a host, optionally in a named folder (repeatable) |
+| `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
+| `-n, --name <BaseName>` | Project name (`new`) or base name override |
+| `-o, --output <dir>` | Directory for a new project |
+| `-y, --yes`, `--non-interactive` | Do not prompt; take the flags and defaults |
 | `--dry-run` | Print planned actions without changing anything |
 | `--force` | Overwrite files that already exist (never deletes/moves) |
 | `--no-restore` | Skip the final `dotnet restore` |

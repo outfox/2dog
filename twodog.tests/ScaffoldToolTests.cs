@@ -2,11 +2,18 @@ using twodog.cli;
 
 namespace twodog.tests;
 
-// Coverage for the `2dog convert` tool (twodog/), which mutates users'
-// Godot projects in place. Pure filesystem tests on temp directories - no
-// Godot instance involved, so none of these join the "Godot" collection.
-// The end-to-end tests additionally shell out to `dotnet sln`, exactly like
-// a real conversion does.
+// Coverage for the `2dog` tool (twodog/), which creates Godot projects and
+// scaffolds host projects into existing ones. Pure filesystem tests on temp
+// directories - no Godot instance involved, so none of these join the "Godot"
+// collection. The end-to-end tests additionally shell out to `dotnet sln`,
+// exactly like a real run does. The interactive layer (Tui) only gathers the
+// values tested here, so it is deliberately not exercised.
+
+/// <summary>Host kinds by their folder suffix, for [InlineData].</summary>
+internal static class HostKinds
+{
+    public static HostKind Of(string suffix) => Hosts.All.Single(k => Hosts.Suffix(k) == suffix);
+}
 
 /// <summary>A throwaway directory acting as a fake Godot project root.</summary>
 internal sealed class TempProjectDir : IDisposable
@@ -104,8 +111,8 @@ public class DeriveBaseNameTests
     private static string Derive(TempProjectDir tmp, string projectGodot, string? nameOverride = null)
     {
         var path = tmp.Write("project.godot", projectGodot);
-        var options = new ConvertOptions { NameOverride = nameOverride };
-        return ConvertCommand.DeriveBaseName(options, tmp.Dir, new GodotProjectFile(path));
+        var options = new ScaffoldOptions { NameOverride = nameOverride };
+        return ScaffoldCommand.DeriveBaseName(options, tmp.Dir, new GodotProjectFile(path));
     }
 
     [Fact]
@@ -122,7 +129,7 @@ public class DeriveBaseNameTests
     {
         using var tmp = new TempProjectDir();
         tmp.Write("Bar.csproj", "<Project/>");
-        var ex = Assert.Throws<ConvertException>(() =>
+        var ex = Assert.Throws<ToolException>(() =>
             Derive(tmp, "[dotnet]\nproject/assembly_name=\"Foo\"\n"));
         Assert.Contains("Foo.csproj", ex.Message);
     }
@@ -141,7 +148,7 @@ public class DeriveBaseNameTests
         using var tmp = new TempProjectDir();
         tmp.Write("Foo.csproj", "<Project/>");
         tmp.Write("Bar.csproj", "<Project/>");
-        var ex = Assert.Throws<ConvertException>(() => Derive(tmp, "config_version=5\n"));
+        var ex = Assert.Throws<ToolException>(() => Derive(tmp, "config_version=5\n"));
         Assert.Contains("--name", ex.Message);
     }
 
@@ -171,7 +178,7 @@ public class DeriveBaseNameTests
     public void NameOverride_ConflictingWithAssemblyName_Throws()
     {
         using var tmp = new TempProjectDir();
-        Assert.Throws<ConvertException>(() =>
+        Assert.Throws<ToolException>(() =>
             Derive(tmp, "[dotnet]\nproject/assembly_name=\"Foo\"\n", "Bar"));
     }
 }
@@ -425,7 +432,7 @@ public class SolutionOpsTests
         using var tmp = new TempProjectDir();
         tmp.Write("A.sln", "");
         tmp.Write("B.sln", "");
-        Assert.Throws<ConvertException>(() => SolutionOps.Locate(tmp.Dir, "MyGame"));
+        Assert.Throws<ToolException>(() => SolutionOps.Locate(tmp.Dir, "MyGame"));
     }
 }
 
@@ -439,13 +446,15 @@ public class TemplateAssetsTests
         Assert.DoesNotContain("GODOT_SDK_VERSION", text);
     }
 
+    // Theories take the folder suffix rather than the HostKind itself: xUnit
+    // needs public test methods, and the tool's types are internal.
     [Theory]
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("tests")]
     public void HostFiles_SubstituteTokensInPathsAndContent(string suffix)
     {
-        var files = TemplateAssets.HostFiles(suffix, "MyGame").ToList();
+        var files = TemplateAssets.HostFiles(HostKinds.Of(suffix), "MyGame", $"MyGame.{suffix}").ToList();
         Assert.NotEmpty(files);
         Assert.Contains(files, f => f.RelativePath == $"MyGame.{suffix}/MyGame.{suffix}.csproj");
         Assert.Contains(files, f => f.RelativePath.EndsWith(".gdignore"));
@@ -456,6 +465,30 @@ public class TemplateAssetsTests
             AssertNoTokens(path);
             AssertNoTokens(content);
         }
+    }
+
+    [Theory]
+    [InlineData("2dog")]
+    [InlineData("web")]
+    [InlineData("tests")]
+    public void HostFiles_CustomFolder_RenamesFolderAndProject(string suffix)
+    {
+        // A second host of the same kind lives in a freely named folder; the
+        // csproj follows the folder, the game assembly reference does not.
+        var kind = HostKinds.Of(suffix);
+        var files = TemplateAssets.HostFiles(kind, "MyGame", "MyGame.extra").ToList();
+
+        Assert.Contains(files, f => f.RelativePath == "MyGame.extra/MyGame.extra.csproj");
+        foreach (var (path, content) in files)
+        {
+            Assert.StartsWith("MyGame.extra/", path);
+            AssertNoTokens(path);
+            AssertNoTokens(content);
+        }
+
+        var csproj = files.Single(f => f.RelativePath.EndsWith(".csproj")).Content;
+        Assert.Contains("../MyGame.csproj", csproj);
+        Assert.DoesNotContain($"MyGame.{Hosts.Suffix(kind)}", csproj);
     }
 
     [Fact]
@@ -533,8 +566,19 @@ public class ConvertEndToEndTests
         config/name="Space Miner"
         """;
 
-    private static ConvertOptions Options(string dir, bool dryRun = false, bool web = true, bool tests = true) =>
-        new() { ProjectPath = dir, DryRun = dryRun, IncludeWeb = web, IncludeTests = tests, Restore = false };
+    private static ScaffoldOptions Options(string dir, bool dryRun = false, bool web = true, bool tests = true)
+    {
+        var options = new ScaffoldOptions { ProjectPath = dir, DryRun = dryRun, Restore = false };
+        var excluded = new List<HostKind>();
+        if (!web) excluded.Add(HostKind.Web);
+        if (!tests) excluded.Add(HostKind.Tests);
+        options.Hosts = HostSelection.Defaults(excluded, ScaffoldCommand.Open(options));
+        return options;
+    }
+
+    /// <summary>Plans and applies a run the way the CLI does.</summary>
+    private static int Run(ScaffoldOptions options) =>
+        ScaffoldCommand.Run(ScaffoldCommand.Open(options), options);
 
     private static string Snapshot(string dir) =>
         string.Join("\n---\n", Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)
@@ -548,7 +592,7 @@ public class ConvertEndToEndTests
         tmp.Write("project.godot", GdScriptProject);
         var before = Snapshot(tmp.Dir);
 
-        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir, dryRun: true)));
+        Assert.Equal(0, Run(Options(tmp.Dir, dryRun: true)));
 
         Assert.Equal(before, Snapshot(tmp.Dir));
         Assert.Single(Directory.EnumerateFileSystemEntries(tmp.Dir, "*", SearchOption.AllDirectories));
@@ -561,7 +605,7 @@ public class ConvertEndToEndTests
         tmp.Write("project.godot", GdScriptProject);
         var originalProjectGodot = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "project.godot"));
 
-        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
+        Assert.Equal(0, Run(Options(tmp.Dir)));
 
         // Nested-always layout: Godot csproj + sln at root, hosts nested
         // behind .gdignore.
@@ -600,7 +644,7 @@ public class ConvertEndToEndTests
 
         // Re-run: byte-identical no-op.
         var snapshot = Snapshot(tmp.Dir);
-        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
+        Assert.Equal(0, Run(Options(tmp.Dir)));
         Assert.Equal(snapshot, Snapshot(tmp.Dir));
     }
 
@@ -622,7 +666,7 @@ public class ConvertEndToEndTests
             """;
         tmp.Write("export_presets.cfg", existing);
 
-        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
+        Assert.Equal(0, Run(Options(tmp.Dir)));
 
         var text = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "export_presets.cfg"));
         Assert.StartsWith(existing, text);
@@ -631,7 +675,7 @@ public class ConvertEndToEndTests
 
         // Re-run: the Web preset is detected, nothing appended twice.
         var snapshot = Snapshot(tmp.Dir);
-        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir)));
+        Assert.Equal(0, Run(Options(tmp.Dir)));
         Assert.Equal(snapshot, Snapshot(tmp.Dir));
     }
 
@@ -651,7 +695,7 @@ public class ConvertEndToEndTests
         // scaffolded files, but never this one.
         var options = Options(tmp.Dir);
         options.Force = true;
-        Assert.Equal(0, ConvertCommand.Run(options));
+        Assert.Equal(0, Run(options));
 
         Assert.Equal(existing, File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "global.json")));
     }
@@ -662,7 +706,7 @@ public class ConvertEndToEndTests
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
 
-        Assert.Equal(0, ConvertCommand.Run(Options(tmp.Dir, web: false, tests: false)));
+        Assert.Equal(0, Run(Options(tmp.Dir, web: false, tests: false)));
 
         Assert.True(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.2dog")));
         Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.web")));
@@ -674,5 +718,289 @@ public class ConvertEndToEndTests
         Assert.Contains("SpaceMiner.2dog/**", csproj);
         Assert.DoesNotContain("SpaceMiner.web", csproj);
         Assert.DoesNotContain("SpaceMiner.tests", csproj);
+    }
+}
+
+public class HostsTests
+{
+    [Fact]
+    public void AllocateFolder_UsesTheDefaultNameWhenFree()
+    {
+        Assert.Equal("MyGame.2dog", Hosts.AllocateFolder(HostKind.Desktop, "MyGame", []));
+        Assert.Equal("MyGame.tests", Hosts.AllocateFolder(HostKind.Tests, "MyGame", []));
+    }
+
+    [Fact]
+    public void AllocateFolder_NumbersPastTakenNames()
+    {
+        string[] taken = ["MyGame.2dog", "MyGame.2dog2"];
+        Assert.Equal("MyGame.2dog3", Hosts.AllocateFolder(HostKind.Desktop, "MyGame", taken));
+        // Matching is case-insensitive: folders collide on Windows regardless.
+        Assert.Equal("MyGame.web2", Hosts.AllocateFolder(HostKind.Web, "MyGame", ["mygame.web"]));
+    }
+}
+
+public class HostScanTests
+{
+    [Theory]
+    [InlineData("2dog")]
+    [InlineData("web")]
+    [InlineData("tests")]
+    public void Classify_RecognizesScaffoldedHosts_ByContentNotName(string suffix)
+    {
+        var kind = HostKinds.Of(suffix);
+        var csproj = TemplateAssets.HostFiles(kind, "MyGame", "some.folder")
+            .Single(f => f.RelativePath.EndsWith(".csproj")).Content;
+        Assert.Equal(kind, HostScan.Classify(csproj, "some.folder"));
+    }
+
+    [Fact]
+    public void Classify_IgnoresUnrelatedProjects()
+    {
+        Assert.Null(HostScan.Classify("<Project Sdk=\"Microsoft.NET.Sdk\"></Project>", "tools"));
+    }
+
+    [Fact]
+    public void Find_ListsEveryHostInTheProject()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", "config_version=5\n");
+        foreach (var (kind, folder) in new[]
+                 {
+                     (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
+                     (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests"),
+                 })
+        foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
+            tmp.Write(path, content);
+
+        // Neither one is a host: no csproj named after the folder, and a
+        // plain project that knows nothing about Godot.
+        tmp.Write("assets/readme.txt", "");
+        tmp.Write("tools/tools.csproj", "<Project Sdk=\"Microsoft.NET.Sdk\"></Project>");
+
+        var hosts = HostScan.Find(tmp.Dir);
+
+        Assert.Equal(
+            [("MyGame.2dog", HostKind.Desktop), ("MyGame.editor", HostKind.Desktop),
+             ("MyGame.tests", HostKind.Tests), ("MyGame.web", HostKind.Web)],
+            hosts.Select(h => (h.Folder, h.Kind)).Order().ToArray());
+    }
+}
+
+public class CommandLineTests
+{
+    [Fact]
+    public void NoArguments_MeanInteractiveAuto()
+    {
+        var cmd = CommandLine.Parse([]);
+        Assert.Equal(Verb.Auto, cmd.Verb);
+        Assert.False(cmd.HostFlagsSeen);
+        Assert.Null(cmd.Options.ProjectPath);
+    }
+
+    [Theory]
+    [InlineData("add")]
+    [InlineData("convert")]
+    public void AddAndConvert_AreTheSameVerb(string verb)
+    {
+        var cmd = CommandLine.Parse([verb, "some/path"]);
+        Assert.Equal(Verb.Add, cmd.Verb);
+        Assert.Equal("some/path", cmd.Options.ProjectPath);
+    }
+
+    [Fact]
+    public void HostFlags_TakeAnOptionalFolderName()
+    {
+        var cmd = CommandLine.Parse(["add", "--desktop", "--web", "MyGame.web2", "--tests"]);
+
+        Assert.True(cmd.HostFlagsSeen);
+        Assert.Equal(
+            [(HostKind.Desktop, null), (HostKind.Web, "MyGame.web2"), (HostKind.Tests, null)],
+            cmd.Requested.Select(r => (r.Kind, r.Folder)).ToArray());
+    }
+
+    [Fact]
+    public void HostFlags_DoNotSwallowAProjectPath()
+    {
+        var cmd = CommandLine.Parse(["add", "--web", "./MyGame"]);
+        Assert.Equal([(HostKind.Web, (string?)null)], cmd.Requested.Select(r => (r.Kind, r.Folder)).ToArray());
+        Assert.Equal("./MyGame", cmd.Options.ProjectPath);
+    }
+
+    [Fact]
+    public void RepeatedHostFlag_RequestsTwoHosts()
+    {
+        var cmd = CommandLine.Parse(["add", "--desktop", "One", "--desktop", "Two"]);
+        Assert.Equal(["One", "Two"], cmd.Requested.Select(r => r.Folder).ToArray());
+    }
+
+    [Fact]
+    public void NegativeHostFlags_CountAsAChoice()
+    {
+        var cmd = CommandLine.Parse(["convert", "--no-web", "--no-tests"]);
+        Assert.True(cmd.HostFlagsSeen);
+        Assert.Empty(cmd.Requested);
+        Assert.Equal([HostKind.Web, HostKind.Tests], cmd.Excluded.Order().ToArray());
+    }
+
+    [Fact]
+    public void New_TakesANameAndADirectory()
+    {
+        var cmd = CommandLine.Parse(["new", "MyGame", "games/mine", "--no-restore"]);
+        Assert.Equal(Verb.New, cmd.Verb);
+        Assert.Equal("MyGame", cmd.Options.NameOverride);
+        Assert.Equal("games/mine", cmd.OutputDir);
+        Assert.False(cmd.Options.Restore);
+    }
+
+    [Fact]
+    public void MalformedCommandLines_AreUsageErrors()
+    {
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["add", "--nope"]));
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["add", "one", "two"]));
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["--name"]));
+    }
+
+    [Fact]
+    public void HelpAndVersion_ShortCircuit()
+    {
+        Assert.Equal(Verb.Help, CommandLine.Parse(["help"]).Verb);
+        Assert.Equal(Verb.Help, CommandLine.Parse(["add", "--help"]).Verb);
+        Assert.Equal(Verb.Version, CommandLine.Parse(["--version"]).Verb);
+    }
+}
+
+public class HostSelectionTests
+{
+    private static ProjectContext Project(params (HostKind Kind, string Folder)[] existing) =>
+        new()
+        {
+            Dir = "/tmp/MyGame",
+            BaseName = "MyGame",
+            ExistingHosts = existing.Select(e => new ExistingHost(e.Kind, e.Folder)).ToList(),
+        };
+
+    [Fact]
+    public void Defaults_AreEveryKindTheProjectLacks()
+    {
+        var hosts = HostSelection.Defaults([], Project((HostKind.Desktop, "MyGame.2dog")));
+        Assert.Equal(
+            [(HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests")],
+            hosts.Select(h => (h.Kind, h.Folder)).ToArray());
+    }
+
+    [Fact]
+    public void Defaults_HonorExclusions()
+    {
+        var hosts = HostSelection.Defaults([HostKind.Web], Project());
+        Assert.Equal([HostKind.Desktop, HostKind.Tests], hosts.Select(h => h.Kind).ToArray());
+    }
+
+    [Fact]
+    public void FromFlags_AllocatesFreeFoldersForRepeatKinds()
+    {
+        var cmd = CommandLine.Parse(["add", "--desktop", "--desktop"]);
+        var hosts = HostSelection.FromFlags(cmd, Project((HostKind.Desktop, "MyGame.2dog")));
+        Assert.Equal(["MyGame.2dog2", "MyGame.2dog3"], hosts.Select(h => h.Folder).ToArray());
+    }
+
+    [Fact]
+    public void FromFlags_RejectsAFolderThatIsTaken()
+    {
+        var cmd = CommandLine.Parse(["add", "--tests", "MyGame.tests"]);
+        var ex = Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, Project((HostKind.Tests, "MyGame.tests"))));
+        Assert.Contains("already exists", ex.Message);
+    }
+
+    [Fact]
+    public void FromFlags_SanitizesGivenFolderNames()
+    {
+        var cmd = CommandLine.Parse(["add", "--web", "My Game!"]);
+        Assert.Equal("MyGame", HostSelection.FromFlags(cmd, Project()).Single().Folder);
+    }
+}
+
+// End-to-end runs of the two shapes the conversion tests above do not cover:
+// creating a project from scratch, and adding a second host of a kind that is
+// already present.
+public class ScaffoldEndToEndTests
+{
+    private static int Run(ScaffoldOptions options)
+    {
+        var project = ScaffoldCommand.Open(options);
+        if (options.Hosts.Count == 0) options.Hosts = HostSelection.Defaults([], project);
+        return ScaffoldCommand.Run(project, options);
+    }
+
+    private static ScaffoldOptions NewProject(string dir) =>
+        new() { ProjectPath = dir, NameOverride = "MyGame", CreateProject = true, Restore = false };
+
+    [Fact]
+    public void New_CreatesTheFullProjectLayout()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = System.IO.Path.Combine(tmp.Dir, "MyGame");
+
+        Assert.Equal(0, Run(NewProject(dir)));
+
+        foreach (var expected in new[]
+                 {
+                     "project.godot", "main.tscn", ".editorconfig", ".gitignore",
+                     "MyGame.csproj", "MyGame.slnx", "Directory.Build.targets", "TwoDogWebBoot.cs",
+                     "export_presets.cfg", "global.json",
+                     "MyGame.2dog/MyGame.2dog.csproj", "MyGame.web/MyGame.web.csproj",
+                     "MyGame.tests/MyGame.tests.csproj",
+                 })
+            Assert.True(File.Exists(System.IO.Path.Combine(dir, expected)), $"missing {expected}");
+
+        // The Godot editor resolves res://<assembly_name>.csproj, so the name
+        // in project.godot and the csproj file name must agree.
+        var projectGodot = File.ReadAllText(System.IO.Path.Combine(dir, "project.godot"));
+        Assert.Contains("project/assembly_name=\"MyGame\"", projectGodot);
+        Assert.Contains("config/name=\"MyGame\"", projectGodot);
+
+        // The solution matches `dotnet new 2dog`: three build types, with the
+        // web host mapped onto Debug for Editor and out of plain builds.
+        var slnx = File.ReadAllText(System.IO.Path.Combine(dir, "MyGame.slnx"));
+        Assert.Contains("<BuildType Name=\"Editor\" />", slnx);
+        Assert.Contains("<BuildType Solution=\"Editor|*\" Project=\"Debug\" />", slnx);
+        Assert.Contains("<Build Project=\"false\" />", slnx);
+
+        foreach (var file in Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories))
+        {
+            var text = File.ReadAllText(file);
+            Assert.DoesNotContain("Company.Product1", text);
+            Assert.DoesNotContain("TPLRAWNAME", text);
+        }
+    }
+
+    [Fact]
+    public void New_RefusesAnExistingGodotProject()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", "config_version=5\n");
+        Assert.Throws<ToolException>(() => Run(NewProject(tmp.Dir)));
+    }
+
+    [Fact]
+    public void Add_SecondHostOfTheSameKind_LandsBesideTheFirst()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = System.IO.Path.Combine(tmp.Dir, "MyGame");
+        Assert.Equal(0, Run(NewProject(dir)));
+
+        var options = new ScaffoldOptions { ProjectPath = dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop"]), project);
+        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+
+        var host = System.IO.Path.Combine(dir, "MyGame.2dog2");
+        Assert.True(File.Exists(System.IO.Path.Combine(host, "MyGame.2dog2.csproj")));
+        // It references the same game project and stays hidden from Godot ...
+        Assert.True(File.Exists(System.IO.Path.Combine(host, ".gdignore")));
+        Assert.Contains("../MyGame.csproj", File.ReadAllText(System.IO.Path.Combine(host, "MyGame.2dog2.csproj")));
+        // ... and the game project excludes the new folder from its globs.
+        Assert.Contains("MyGame.2dog2/**", File.ReadAllText(System.IO.Path.Combine(dir, "MyGame.csproj")));
+        Assert.True(SolutionOps.ContainsProject(System.IO.Path.Combine(dir, "MyGame.slnx"), "MyGame.2dog2.csproj"));
     }
 }

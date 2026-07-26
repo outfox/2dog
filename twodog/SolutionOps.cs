@@ -17,9 +17,10 @@ internal static class SolutionOps
     /// </summary>
     public static (string Path, bool Exists) Locate(string projectDir, string baseName)
     {
-        var solutions = Directory.EnumerateFiles(projectDir, "*.sln")
-            .Concat(Directory.EnumerateFiles(projectDir, "*.slnx"))
-            .ToList();
+        // The directory itself may still be part of the plan (`2dog new`).
+        var solutions = Directory.Exists(projectDir)
+            ? Directory.EnumerateFiles(projectDir, "*.sln").Concat(Directory.EnumerateFiles(projectDir, "*.slnx")).ToList()
+            : [];
 
         switch (solutions.Count)
         {
@@ -35,7 +36,7 @@ internal static class SolutionOps
             .ToList();
         if (containing.Count == 1) return (containing[0], true);
 
-        throw new ConvertException(
+        throw new ToolException(
             $"Multiple solutions found in {projectDir} ({string.Join(", ", solutions.Select(Path.GetFileName))}); " +
             "the Godot editor requires exactly one solution containing the game project at the project root. " +
             "Remove the extras and re-run.");
@@ -46,9 +47,17 @@ internal static class SolutionOps
         if (!solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("New 2dog solutions must use the .slnx format.", nameof(solutionPath));
 
+        // The Editor build type is 2dog's own configuration (editor-variant
+        // natives); declaring it here is what makes `dotnet build -c Editor`
+        // work across the solution, matching `dotnet new 2dog` output.
         File.WriteAllText(solutionPath,
             """
             <Solution>
+              <Configurations>
+                <BuildType Name="Debug" />
+                <BuildType Name="Editor" />
+                <BuildType Name="Release" />
+              </Configurations>
             </Solution>
             """ + Environment.NewLine);
     }
@@ -61,11 +70,11 @@ internal static class SolutionOps
 
         var slnxPath = Path.ChangeExtension(classicSolutionPath, ".slnx");
         if (File.Exists(slnxPath))
-            throw new ConvertException($"Cannot migrate {Path.GetFileName(classicSolutionPath)} because {Path.GetFileName(slnxPath)} already exists.");
+            throw new ToolException($"Cannot migrate {Path.GetFileName(classicSolutionPath)} because {Path.GetFileName(slnxPath)} already exists.");
 
         Run(Path.GetDirectoryName(classicSolutionPath)!, "sln", classicSolutionPath, "migrate");
         if (!File.Exists(slnxPath))
-            throw new ConvertException($"Migration did not create {Path.GetFileName(slnxPath)}.");
+            throw new ToolException($"Migration did not create {Path.GetFileName(slnxPath)}.");
 
         File.Delete(classicSolutionPath);
     }
@@ -112,17 +121,31 @@ internal static class SolutionOps
         if (!File.Exists(solutionPath)) return false;
 
         var text = File.ReadAllText(solutionPath);
-        var requestedPath = Regex.Escape(projectRelativePath.Replace('\\', '/'));
-        var pattern = $"(?m)^(?<indent>\\s*)<Project Path=\"{requestedPath}\"\\s*/>";
+        var path = projectRelativePath.Replace('\\', '/');
+        var escapedPath = Regex.Escape(path);
+
+        // Already expanded by an earlier run (or by hand): nothing to do.
+        if (Regex.IsMatch(text, $"<Project Path=\"{escapedPath}\"\\s*>.*?<Build Project=\"false\"\\s*/>.*?</Project>",
+                RegexOptions.IgnoreCase | RegexOptions.Singleline))
+            return true;
+
+        var pattern = $"(?m)^(?<indent>\\s*)<Project Path=\"{escapedPath}\"\\s*/>";
         var match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
         if (!match.Success) return false;
 
         var indent = match.Groups["indent"].Value;
         var newLine = text.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
-        var replacement = $"{indent}<Project Path=\"{projectRelativePath.Replace('\\', '/')}\">{newLine}" +
+        // The browser-wasm host has no Editor configuration of its own, so map
+        // the solution's Editor build type onto its Debug one - but only when
+        // the solution actually declares that build type.
+        var editorMap = text.Contains("<BuildType Name=\"Editor\"", StringComparison.OrdinalIgnoreCase)
+            ? $"{indent}  <BuildType Solution=\"Editor|*\" Project=\"Debug\" />{newLine}"
+            : "";
+        var replacement = $"{indent}<Project Path=\"{path}\">{newLine}" +
+                          editorMap +
                           $"{indent}  <Build Project=\"false\" />{newLine}" +
                           $"{indent}</Project>";
-        File.WriteAllText(solutionPath, Regex.Replace(text, pattern, replacement, RegexOptions.IgnoreCase));
+        File.WriteAllText(solutionPath, text[..match.Index] + replacement + text[(match.Index + match.Length)..]);
         return true;
     }
 
@@ -171,7 +194,7 @@ internal static class SolutionOps
     private static void Run(string workingDir, params string[] args)
     {
         if (!TryRun(workingDir, args))
-            throw new ConvertException($"'dotnet {string.Join(' ', args)}' failed (see output above)");
+            throw new ToolException($"'dotnet {string.Join(' ', args)}' failed (see output above)");
     }
 
     private static bool TryRun(string workingDir, params string[] args)

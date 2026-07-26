@@ -20,7 +20,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\demo\demo.csproj"/>
-        <!-- Unit tests for the `2dog convert` tool (internals via InternalsVisibleTo) -->
+        <!-- Unit tests for the `2dog` tool (internals via InternalsVisibleTo) -->
         <ProjectReference Include="..\twodog\twodog.csproj"/>
     </ItemGroup>
 
