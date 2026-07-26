@@ -105,7 +105,7 @@ cd 2dog
 uv run poe build-all
 ```
 
-Run the demo with `dotnet run --project demo/demo.2dog` and the tests with
+Run the showcase with `dotnet run --project demos/showcase/showcase.2dog` and the tests with
 `dotnet test twodog.tests`.
 
 

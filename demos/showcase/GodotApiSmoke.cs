@@ -94,7 +94,7 @@ public static class GodotApiSmoke
         Require(version.ContainsKey("major") && version.ContainsKey("string"), "engine version dictionary is incomplete");
         Require(!string.IsNullOrWhiteSpace(OS.GetName()), "OS singleton returned no platform name");
         Require(Time.GetTicksMsec() > 0, "Time singleton did not return a monotonic tick count");
-        Require((string)ProjectSettings.GetSetting("application/config/name") == "demo",
+        Require((string)ProjectSettings.GetSetting("application/config/name") == "showcase",
             "ProjectSettings did not expose the active Godot project");
         Require(!string.IsNullOrWhiteSpace(TranslationServer.GetLocale()), "TranslationServer returned no locale");
         Require(DisplayServer.GetName() is not null, "DisplayServer returned a null backend name");

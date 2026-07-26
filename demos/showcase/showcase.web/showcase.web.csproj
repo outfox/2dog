@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!--
-      Browser-wasm host demo.
+      Browser-wasm showcase host.
 
       All web wiring (static link of libgodot.a, emcc flags, boot shell
       deployment, automatic .pck export) comes from the 2dog.browser-wasm
@@ -8,7 +8,7 @@
       below; package consumers get the same thing automatically from
       PackageReference 2dog.engine + 2dog.browser-wasm (see the 2dog web template).
 
-      Publish:  dotnet publish demo/demo.web   (from the repo root; the root
+      Publish:  dotnet publish demos/showcase/showcase.web   (from the repo root; the root
                 global.json pins the wasm-capable SDK band. Defaults to
                 Release via Directory.Build.props; pass -c Debug to override.)
       Output:   AppBundle/ - serve with any static file server.
@@ -29,14 +29,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../../twodog.engine/twodog.engine.csproj"/>
-        <ProjectReference Include="../demo.csproj"/>
+        <ProjectReference Include="../../../twodog.engine/twodog.engine.csproj"/>
+        <ProjectReference Include="../showcase.csproj"/>
     </ItemGroup>
 
     <!-- Root the game assembly: scripts are resolved by reflection.
          (GodotSharp and twodog are rooted by the browser-wasm targets.) -->
     <ItemGroup>
-        <TrimmerRootAssembly Include="demo"/>
+        <TrimmerRootAssembly Include="showcase"/>
         <TrimmerRootAssembly Include="$(TargetName)"/>
     </ItemGroup>
 
@@ -45,11 +45,11 @@
          the host-OS desktop meta targets (TwoDogEditorLibGodotPath for the
          build-time .pck export), and the browser-wasm targets (all web
          wiring). Package consumers get these transitively. -->
-    <Import Project="../../twodog.engine/build/2dog.engine.targets"/>
-    <Import Project="../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
-    <Import Project="../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
-    <Import Project="../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
-    <Import Project="../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"/>
+    <Import Project="../../../twodog.engine/build/2dog.engine.targets"/>
+    <Import Project="../../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
+    <Import Project="../../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
+    <Import Project="../../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
+    <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"/>
 
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="AppBundle"/>

@@ -5,7 +5,7 @@ internal static class Program
 {
     private static int Main(string[] args)
     {
-        Console.WriteLine("2dog web demo starting...");
+        Console.WriteLine("2dog web showcase starting...");
 
         // The game assembly owns the source-generated plugins initializer;
         // register it before Start() (there is no GodotPlugins.dll on web).
@@ -13,7 +13,7 @@ internal static class Program
 
         // args come from the JS shell (GODOT_CONFIG.args plus the
         // '--main-pack godot.pck' the engine loader prepends).
-        var engine = new Engine("demo.web", null, args);
+        var engine = new Engine("showcase.web", null, args);
         engine.Start();
 
         try

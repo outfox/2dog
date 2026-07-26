@@ -5,9 +5,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <!-- The assembly keeps the folder name, but 'demo.2dog' is not a
-             valid C# namespace (digit-leading segment). -->
-        <RootNamespace>demo</RootNamespace>
+        <!-- The assembly keeps the folder name, but 'showcase.2dog' is not a
+              valid C# namespace (digit-leading segment). -->
+        <RootNamespace>showcase</RootNamespace>
         <!-- comctl32 v6 + long paths for Godot's Windows display server -->
         <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
@@ -30,6 +30,6 @@
         <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="../demo.csproj"/>
+        <ProjectReference Include="../showcase.csproj"/>
     </ItemGroup>
 </Project>

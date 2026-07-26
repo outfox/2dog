@@ -51,10 +51,10 @@ dotnet run --project twodog.import -- \
     --libgodot godot/bin/godot.windows.editor.x86_64.shared_library.dll \
     --api-dir godot/bin/GodotSharp/Api/Debug \
     --tools-dir godot/bin/GodotSharp/Tools \
-    ./demo
+    ./demos/showcase
 
 # Subprocess mode with an external Godot editor binary
-dotnet run --project twodog.import -- --editor <godot-binary> ./demo
+dotnet run --project twodog.import -- --editor <godot-binary> ./demos/showcase
 ```
 
 ### Arguments
@@ -70,7 +70,7 @@ dotnet run --project twodog.import -- --editor <godot-binary> ./demo
 
 The helper serializes concurrent imports of the same project with a lock file
 (`.godot/2dog.import.lock`), so parallel builds of multiple consumers (e.g.
-demo and tests) do not race.
+showcase and tests) do not race.
 
 ::: info
 Template builds (`template_debug`, `template_release`) cannot import; the
@@ -99,7 +99,7 @@ With the automatic MSBuild import, a plain `dotnet build` of a consuming
 project performs the import as part of the build, so CI pipelines do not
 need a dedicated import step. In this repository, a source build
 (`uv run poe build-godot` + `uv run poe build`) is enough: the first
-`dotnet build` of the demo hosts or the tests imports the demo Godot project
+`dotnet build` of the showcase hosts or the tests imports the showcase Godot project
 against the locally built editor libgodot from `godot/bin/`.
 
 To use an external Godot editor binary instead (for example one already

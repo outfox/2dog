@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <GodotProjectDir>../demo</GodotProjectDir>
+        <GodotProjectDir>../demos/showcase</GodotProjectDir>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\demo\demo.csproj"/>
+        <ProjectReference Include="..\demos\showcase\showcase.csproj"/>
         <ProjectReference Include="..\twodog.hosting.xunit\twodog.hosting.xunit.csproj"/>
         <!-- Unit tests for the `2dog` tool (internals via InternalsVisibleTo) -->
         <ProjectReference Include="..\twodog\twodog.csproj"/>

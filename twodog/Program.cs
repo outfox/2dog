@@ -1,7 +1,7 @@
 namespace twodog.cli;
 
 /// <summary>
-/// The 2dog command. With no host flags it prompts; with them it runs
+/// The 2dog command. With no host flags it prompts; with them, it runs
 /// unattended. Both paths end in the same scaffolder.
 /// </summary>
 internal static class Program
@@ -63,7 +63,7 @@ internal static class Program
     /// applying it.
     /// </summary>
     // internal for unit tests
-    internal static bool WantsPrompts(ParsedCommand cmd) => !cmd.NoInteractive && !cmd.HostFlagsSeen;
+    internal static bool WantsPrompts(ParsedCommand cmd) => cmd is {NoInteractive: false, HostFlagsSeen: false};
 
     /// <summary>
     /// Bare `2dog` reads the directory: a Godot project there means "add
@@ -108,8 +108,7 @@ internal static class Program
 
     /// <summary>A directory with nothing in it but dotfiles counts as empty.</summary>
     internal static bool IsEmpty(string dir) =>
-        !Directory.Exists(dir) ||
-        !Directory.EnumerateFileSystemEntries(dir).Any(e => !Path.GetFileName(e).StartsWith('.'));
+        !Directory.Exists(dir) || Directory.EnumerateFileSystemEntries(dir).All(e => Path.GetFileName(e).StartsWith('.'));
 
     private static void PrintUsage()
     {

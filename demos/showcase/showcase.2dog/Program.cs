@@ -15,7 +15,7 @@ internal static class Program
         _ = typeof(SpinningCube).Assembly;
 
         // Command-line arguments are forwarded to Godot (--headless, --quit-after, ...).
-        using var engine = new Engine("demo", Engine.ResolveProjectDir(), args);
+        using var engine = new Engine("showcase", Engine.ResolveProjectDir(), args);
         using var godotInstance = engine.Start();
         GD.Print("Hello from GodotSharp.");
         GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);

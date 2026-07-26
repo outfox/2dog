@@ -283,7 +283,7 @@ jobs:
           name: nuget-packages
           path: packages
 
-      # 2dog.tests.slnf excludes demo.web: its browser-wasm RuntimeIdentifier
+      # 2dog.tests.slnf excludes showcase.web: its browser-wasm RuntimeIdentifier
       # makes restore demand the (hefty) wasm-tools workload, which only the
       # web-smoke job needs — and installs.
       - name: Restore
@@ -298,7 +298,7 @@ jobs:
       - name: Test (Editor)
         run: dotnet test 2dog.tests.slnf -c Editor --no-restore
 
-  # Publish the demo desktop host the way an end user does (Release, RID) and
+  # Publish the showcase desktop host the way an end user does (Release, RID) and
   # run the result headless. Regression guard: the engine used to load the
   # game assembly only from .godot/mono/temp/bin/Debug, so any Release-only
   # build or publish silently bound no C# script classes (masked in the test
@@ -314,15 +314,15 @@ jobs:
           - name: linux-x64
             runner: blacksmith-4vcpu-ubuntu-2404
             rid: linux-x64
-            exe: demo.2dog
+            exe: showcase.2dog
           - name: win-x64
             runner: blacksmith-4vcpu-windows-2025
             rid: win-x64
-            exe: demo.2dog.exe
+            exe: showcase.2dog.exe
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
             rid: osx-arm64
-            exe: demo.2dog
+            exe: showcase.2dog
 
     timeout-minutes: 15
 
@@ -353,28 +353,28 @@ jobs:
       - name: Build import helper
         run: dotnet build twodog.import -c Release
 
-      - name: Publish demo desktop host (Release, RID)
-        run: dotnet publish demo/demo.2dog -c Release -r ${{ matrix.rid }}
+      - name: Publish showcase desktop host (Release, RID)
+        run: dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
 
       # RID-less publish is the most natural user command and takes its own
       # native-copy path in the platform targets (host-OS gated instead of
       # RID gated) - cover it separately.
-      - name: Publish demo desktop host (Release, no RID)
-        run: dotnet publish demo/demo.2dog -c Release
+      - name: Publish showcase desktop host (Release, no RID)
+        run: dotnet publish demos/showcase/showcase.2dog -c Release
 
       # The engine must load the game assembly from the publish output itself.
       # Delete the game project's own build outputs so a regression back to
       # .godot/mono/temp/bin probing cannot be masked by them.
       - name: Remove game project build outputs
         shell: bash
-        run: rm -rf demo/.godot/mono/temp/bin
+        run: rm -rf demos/showcase/.godot/mono/temp/bin
 
       - name: Run published host (headless, RID)
         id: run
         shell: bash
         run: |
           set +e
-          demo/demo.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
             --headless --quit-after 120 2>&1 | tee smoke.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -385,7 +385,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          demo/demo.2dog/bin/Release/net10.0/publish/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/Release/net10.0/publish/${{ matrix.exe }} \
             --headless --quit-after 120 2>&1 | tee smoke-norid.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -400,10 +400,10 @@ jobs:
         run: |
           # ReportCrash writes the .ips shortly after the abort
           for i in $(seq 1 12); do
-            ls ~/Library/Logs/DiagnosticReports/demo.2dog-*.ips > /dev/null 2>&1 && break
+            ls ~/Library/Logs/DiagnosticReports/showcase.2dog-*.ips > /dev/null 2>&1 && break
             sleep 5
           done
-          cat ~/Library/Logs/DiagnosticReports/demo.2dog-*.ips 2>/dev/null \
+          cat ~/Library/Logs/DiagnosticReports/showcase.2dog-*.ips 2>/dev/null \
             || echo "no crash report found"
 
       # Deterministic backtrace: rerun the aborting binary under lldb and dump
@@ -417,7 +417,7 @@ jobs:
             -o run \
             -o "bt all" \
             -o quit \
-            -- demo/demo.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+            -- demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
                --headless --quit-after 120 2>&1 | tail -150 || true
 
       - name: Assert scripts bound
@@ -447,7 +447,7 @@ jobs:
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
           exit $fail
 
-  # Publish the web demo end-to-end: statically links the web libgodot.a into
+  # Publish the web showcase end-to-end: statically links the web libgodot.a into
   # dotnet.native.wasm via the wasm-tools workload and asserts the app bundle
   # is complete. Consumers never install emsdk — the workload ships the
   # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
@@ -490,7 +490,7 @@ jobs:
       - name: Make Linux editor executable
         run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
 
-      # The publish exports the demo Godot project as godot.pck via the
+      # The publish exports the showcase Godot project as godot.pck via the
       # in-process import helper, discovered at twodog.import/bin/Release in
       # source checkouts (twodog.engine/build/2dog.engine.targets). Must come after the
       # godot-bin download: the helper references GodotSharp assemblies from
@@ -501,12 +501,12 @@ jobs:
       # Runs from the repo root on purpose: the root global.json pins the
       # wasm-capable SDK band, so the from-root publish flow the docs promise
       # stays covered.
-      - name: Publish demo.web
-        run: dotnet publish demo/demo.web -c Release
+      - name: Publish showcase.web
+        run: dotnet publish demos/showcase/showcase.web -c Release
 
       - name: Verify app bundle
         run: |
-          BUNDLE=demo/demo.web/AppBundle
+          BUNDLE=demos/showcase/showcase.web/AppBundle
           for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" "$BUNDLE/_framework/dotnet.js"; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing $f in the published app bundle"
@@ -529,7 +529,7 @@ jobs:
       # engine-module calls succeed.
       - name: Run browser API smoke
         run: |
-          BUNDLE=demo/demo.web/AppBundle
+          BUNDLE=demos/showcase/showcase.web/AppBundle
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           if [ -z "$CHROME" ]; then
             echo "::error::No Chrome/Chromium executable is available on the runner"
