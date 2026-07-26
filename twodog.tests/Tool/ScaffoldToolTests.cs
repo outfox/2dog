@@ -1,6 +1,6 @@
 using twodog.cli;
 
-namespace twodog.tests;
+namespace twodog.tests.ToolTests;
 
 // Coverage for the `2dog` tool (twodog/), which creates Godot projects and
 // scaffolds host projects into existing ones. Pure filesystem tests on temp

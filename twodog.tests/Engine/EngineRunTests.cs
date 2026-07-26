@@ -1,7 +1,7 @@
 using twodog;
 using twodog.fixture;
 
-namespace twodog.tests;
+namespace twodog.tests.EngineTests;
 
 // Direct Engine.Run() lifecycle tests. Like EngineRestartTests this
 // collection has NO fixture on purpose: Run() drives the engine to quit,

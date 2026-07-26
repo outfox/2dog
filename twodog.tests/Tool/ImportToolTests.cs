@@ -1,4 +1,4 @@
-namespace twodog.tests;
+namespace twodog.tests.ToolTests;
 
 using static HelperToolTestBed;
 

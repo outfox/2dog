@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 /// <summary>An exception type the tests can also instantiate from a second ALC
 /// (a reloaded copy of this test assembly) to stand in for instance-ALC-typed

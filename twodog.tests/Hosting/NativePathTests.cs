@@ -1,7 +1,7 @@
 using twodog.Hosting.Xunit;
 using Engine = twodog.Engine;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 /// <summary>Boots on its pooled copy, restarts with a DIFFERENT native path in
 /// the same load context, and reports whether the switch was rejected.</summary>

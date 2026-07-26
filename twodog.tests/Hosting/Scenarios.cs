@@ -2,7 +2,7 @@ using System.Runtime.Loader;
 using Godot;
 using twodog.Hosting.Runtime;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 // Scenarios execute inside the collection's instance ALC on its engine thread;
 // only the returned report string crosses back to the test.

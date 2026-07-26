@@ -1,7 +1,7 @@
 using twodog;
 using twodog.fixture;
 
-namespace twodog.tests;
+namespace twodog.tests.EngineTests;
 
 // Direct Engine lifecycle tests. This collection has NO fixture on purpose:
 // it manages the engine itself. Like all Godot collections it disables

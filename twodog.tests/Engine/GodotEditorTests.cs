@@ -3,7 +3,7 @@ using Godot;
 using twodog.fixture;
 using twodog.xunit;
 
-namespace twodog.tests;
+namespace twodog.tests.EngineTests;
 
 /// <summary>
 /// Tests that verify the Editor configuration works as promised.

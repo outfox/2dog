@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 /// <summary>In-process engine hosting is platform-gated and EngineHost.Start
 /// fails closed where unsupported (macOS dual-load is unvalidated), so every

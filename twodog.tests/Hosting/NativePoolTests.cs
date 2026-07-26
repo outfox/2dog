@@ -1,4 +1,4 @@
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 /// <summary>Direct tests of the slot-explicit pool core (internal). Each test
 /// uses its own random source file, so its pool key never collides with the

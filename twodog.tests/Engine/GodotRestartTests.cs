@@ -1,7 +1,7 @@
 using Godot;
 using twodog.fixture;
 
-namespace twodog.tests;
+namespace twodog.tests.EngineTests;
 
 // Engine restart across test collections.
 //

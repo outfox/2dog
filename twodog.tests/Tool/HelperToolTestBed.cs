@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace twodog.tests;
+namespace twodog.tests.ToolTests;
 
 /// <summary>
 /// Shared plumbing for tests that exercise the twodog.import helper as a

@@ -1,4 +1,4 @@
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 // Serialized: the test lowers the process-wide MaxProcessInstances, which must
 // not race other collections' Start calls.

@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Runtime.Loader;
 using twodog.Hosting.Xunit;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 // Failure-path programs: none of these boot an engine, so they are cheap and
 // do not consume boot time - they exercise the host lifecycle contract only.
