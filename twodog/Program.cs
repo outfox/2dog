@@ -6,7 +6,7 @@ namespace twodog.cli;
 /// </summary>
 internal static class Program
 {
-    private static int Main(string[] args)
+    internal static int Main(string[] args)
     {
         try
         {
@@ -69,7 +69,7 @@ internal static class Program
     /// Bare `2dog` reads the directory: a Godot project there means "add
     /// hosts", anything else means "create a project here".
     /// </summary>
-    private static Verb ResolveVerb(ParsedCommand cmd, bool interactive)
+    internal static Verb ResolveVerb(ParsedCommand cmd, bool interactive)
     {
         if (cmd.Verb != Verb.Auto) return cmd.Verb;
 
@@ -86,7 +86,7 @@ internal static class Program
         return Verb.New;
     }
 
-    private static void PrepareNewProject(ParsedCommand cmd, bool interactive)
+    internal static void PrepareNewProject(ParsedCommand cmd, bool interactive)
     {
         var outputDir = cmd.OutputDir;
         var name = cmd.Options.NameOverride;
@@ -107,7 +107,7 @@ internal static class Program
     }
 
     /// <summary>A directory with nothing in it but dotfiles counts as empty.</summary>
-    private static bool IsEmpty(string dir) =>
+    internal static bool IsEmpty(string dir) =>
         !Directory.Exists(dir) ||
         !Directory.EnumerateFileSystemEntries(dir).Any(e => !Path.GetFileName(e).StartsWith('.'));
 
