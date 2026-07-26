@@ -32,7 +32,7 @@
 *.cubemap filter=lfs diff=lfs merge=lfs -text
 *.fbx filter=lfs diff=lfs merge=lfs -text
 
-# Small images that must ship as real bytes: NuGet package icons and packed template favicons.
+# Files that must ship as real bytes, never LFS pointers: NuGet package icons and packed template content.
 /logo.png -filter -diff -merge
 /nuget/icon.png -filter -diff -merge
-/templates/twodog/Company.Product1.web/wwwroot/*.png -filter -diff -merge
+/templates/** -filter -diff -merge
