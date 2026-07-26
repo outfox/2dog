@@ -1,15 +1,15 @@
 ---
 layout: home
 title: 2dog
-titleTemplate: :title 🦴 Godot in .NET
+titleTemplate: :title 🦴 2dog
 
 head:
   - - meta
     - name: title
-      content: 2dog 🦴 Godot in .NET
+      content: 🦴 2dog is Godot, but backward!
   - - meta
     - name: description
-      content: 2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.
+      content: Make your Godot C# games run on the web, test in your IDE, and more!
   - - meta
     - property: og:type
       content: website
@@ -18,5 +18,5 @@ head:
       content: https://2dog.dev
   - - meta
     - property: og:title
-      content: 2dog 🦴 Godot in .NET
+      content: 🦴 2dog is Godot, but backward!
 ---
