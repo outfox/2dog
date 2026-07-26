@@ -82,9 +82,9 @@ public sealed class DualStartTests
             using var host = new EngineHost();
 
             var a = host.Start<CountingProgram>(new()
-                { Tag = "app-A", ProjectDir = dirA, Args = ["--headless"], State = gate });
+            { Tag = "app-A", ProjectDir = dirA, Args = ["--headless"], State = gate });
             var b = host.Start<CountingProgram>(new()
-                { Tag = "app-B", ProjectDir = dirB, Args = ["--headless"], State = gate });
+            { Tag = "app-B", ProjectDir = dirB, Args = ["--headless"], State = gate });
 
             // Both booted => two live engines in this process right now.
             await Task.WhenAll(a.Booted, b.Booted)
@@ -115,9 +115,9 @@ public sealed class DualStartTests
             using var barrier = new Barrier(2);
             using var host = new EngineHost();
             var a = host.Start<PacedProgram>(new()
-                { Tag = "paced-A", ProjectDir = dirA, Args = ["--headless"], State = barrier });
+            { Tag = "paced-A", ProjectDir = dirA, Args = ["--headless"], State = barrier });
             var b = host.Start<PacedProgram>(new()
-                { Tag = "paced-B", ProjectDir = dirB, Args = ["--headless"], State = barrier });
+            { Tag = "paced-B", ProjectDir = dirB, Args = ["--headless"], State = barrier });
             var token = TestContext.Current.CancellationToken;
             Assert.Equal(PacedProgram.Frames, await a.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));
             Assert.Equal(PacedProgram.Frames, await b.Completion.WaitAsync(TimeSpan.FromMinutes(3), token));

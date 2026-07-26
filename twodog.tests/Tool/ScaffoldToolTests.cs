@@ -804,8 +804,8 @@ public class HostScanTests
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
                      (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests"),
                  })
-        foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
-            tmp.Write(path, content);
+            foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
+                tmp.Write(path, content);
 
         // Neither one is a host: no csproj named after the folder, and a
         // plain project that knows nothing about Godot.

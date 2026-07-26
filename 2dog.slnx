@@ -47,7 +47,6 @@
   </Project>
   <Project Path="twodog.engine/twodog.engine.csproj" />
   <Project Path="twodog.hosting.runtime/twodog.hosting.runtime.csproj" />
-  <Project Path="twodog.hosting.tests/twodog.hosting.tests.csproj" />
   <Project Path="twodog.hosting.xunit/twodog.hosting.xunit.csproj" />
   <Project Path="twodog.hosting/twodog.hosting.csproj" />
   <Project Path="twodog.import/twodog.import.csproj" />

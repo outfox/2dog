@@ -18,7 +18,7 @@ public sealed class InstanceCapTests
         {
             using var host = new EngineHost();
             var e = Assert.Throws<InvalidOperationException>(() => host.Start<NoBootProgram>(new()
-                { Tag = "cap-reject", ProjectDir = Path.GetTempPath() }));
+            { Tag = "cap-reject", ProjectDir = Path.GetTempPath() }));
             Assert.Contains("recycling is unsupported", e.Message);
         }
         finally
@@ -37,7 +37,7 @@ public sealed class InstanceCapTests
         var host = new EngineHost();
         host.Dispose();
         Assert.Throws<ObjectDisposedException>(() => host.Start<NoBootProgram>(new()
-            { Tag = "cap-disposed", ProjectDir = Path.GetTempPath() }));
+        { Tag = "cap-disposed", ProjectDir = Path.GetTempPath() }));
         // The failed Start returned its slot (its pool copy was never mapped).
         Assert.Equal(before, EngineHost.LiveSlotCount);
     }
