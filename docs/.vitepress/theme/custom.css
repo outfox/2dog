@@ -260,9 +260,17 @@ body:has(.VPContent.is-home) .VPContent {
 #VPSidebarNav > .group:nth-of-type(1) { --tree-color: var(--ed-node-gui); }
 #VPSidebarNav > .group:nth-of-type(2) { --tree-color: var(--ed-node-3d); }
 #VPSidebarNav > .group:nth-of-type(3) { --tree-color: var(--ed-node-2d); }
-#VPSidebarNav > .group:nth-of-type(4) { --tree-color: var(--ed-text-3); }
+#VPSidebarNav > .group:nth-of-type(4) { --tree-color: var(--ed-warning); }
 #VPSidebarNav > .group:nth-of-type(5) { --tree-color: var(--ed-node-gold); }
-#VPSidebarNav > .group:nth-of-type(6) { --tree-color: var(--ed-warning); }
+#VPSidebarNav > .group:nth-of-type(6) { --tree-color: var(--ed-text-3); }
+
+#VPSidebarNav > .group:nth-of-type(4) .VPSidebarItem.level-0 > .item > .text {
+  color: var(--ed-warning);
+}
+
+#VPSidebarNav > .group:nth-of-type(6) .VPSidebarItem.level-0 > .item > .text {
+  color: var(--ed-text-3);
+}
 
 .VPSidebarItem .link:hover .text {
   color: var(--ed-accent);

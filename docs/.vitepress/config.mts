@@ -115,20 +115,6 @@ export default defineConfig({
       {
         text: 'Develop',
         items: [
-          { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' },
-          { text: gd('file_arrow_down') + 'Resource Import', link: '/import-tool' }
-        ]
-      },
-      {
-        text: 'Configure',
-        items: [
-          { text: gd('layers') + 'Choosing a Variant', link: '/build-configurations' },
-          { text: gd('wrench') + 'MSBuild Configuration', link: '/configuration' }
-        ]
-      },
-      {
-        text: 'Reference',
-        items: [
           {
             text: gd('book_open') + 'API Reference',
             link: '/api-reference',
@@ -163,6 +149,20 @@ export default defineConfig({
               }
             ]
           },
+          { text: gd('file_arrow_down') + 'Resource Import', link: '/import-tool' },
+          { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' }
+        ]
+      },
+      {
+        text: 'Configure',
+        items: [
+          { text: gd('layers') + 'Choosing a Variant', link: '/build-configurations' },
+          { text: gd('wrench') + 'MSBuild Configuration', link: '/configuration' }
+        ]
+      },
+      {
+        text: 'Other',
+        items: [
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
           { text: gd('archive') + 'Misc', link: '/misc' },
           {
