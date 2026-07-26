@@ -7,11 +7,12 @@ head:
   - - meta
     - name: title
       content: Godot in .NET 🦴 2dog is Godot, just backward!
+  - - meta
     - name: og:site_name
       content: 2dog 🦴 Run Godot in .NET
   - - meta
     - name: description
-      content: Make your Godot C# games run on the web, test in your IDE, and more!
+      content: Make your Godot C# games run on the web, test in your IDE, and embed it in .NET applications directly for automations, publishing, or remote control!
   - - meta
     - name: og:description
       content: Make your Godot C# games run on the web, test in your IDE, and more!
