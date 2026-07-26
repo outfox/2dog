@@ -349,7 +349,7 @@ internal static class ScaffoldCommand
             plan.Add(new PlannedAction($"create {relativePath}", () =>
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-                File.WriteAllText(target, content);
+                File.WriteAllBytes(target, content);
             }));
         }
     }

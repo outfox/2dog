@@ -99,7 +99,8 @@
         },
         {
           "copyOnly": [
-            "TwoDogWebBoot.cs"
+            "TwoDogWebBoot.cs",
+            "Company.Product1.web/wwwroot/favicon*"
           ]
         }
       ]

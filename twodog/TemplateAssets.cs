@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 
 namespace twodog.cli;
 
@@ -12,6 +13,11 @@ namespace twodog.cli;
 internal static class TemplateAssets
 {
     private const string SourceName = "Company.Product1";
+
+    public sealed record HostFile(string RelativePath, byte[] Content)
+    {
+        public string Text => Encoding.UTF8.GetString(Content);
+    }
 
     /// <summary>
     /// All embedded template resource names, normalized to forward slashes
@@ -32,6 +38,17 @@ internal static class TemplateAssets
         using var stream = assembly.GetManifestResourceStream(actual)!;
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
+    }
+
+    private static byte[] ReadRawBytes(string name)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var actual = Names.FirstOrDefault(n => Normalize(n) == name)
+                     ?? throw new InvalidOperationException($"Embedded template resource missing: {name}");
+        using var stream = assembly.GetManifestResourceStream(actual)!;
+        using var buffer = new MemoryStream();
+        stream.CopyTo(buffer);
+        return buffer.ToArray();
     }
 
     /// <summary>The template's Godot project csproj, tokens substituted.</summary>
@@ -68,7 +85,7 @@ internal static class TemplateAssets
     /// (so a project can hold several hosts of the same kind) and the usual
     /// rename/version tokens substituted.
     /// </summary>
-    public static IEnumerable<(string RelativePath, string Content)> HostFiles(HostKind kind, string baseName, string folder)
+    public static IEnumerable<HostFile> HostFiles(HostKind kind, string baseName, string folder)
     {
         var sourceFolder = $"{SourceName}.{Hosts.Suffix(kind)}";
         var prefix = $"tpl/{sourceFolder}/";
@@ -77,7 +94,10 @@ internal static class TemplateAssets
             // Substitute in file names too (e.g. Company.Product1.2dog.csproj
             // -> MyGame.tools.csproj for a desktop host folder "MyGame.tools").
             var relative = $"{folder}/{Rename(name[prefix.Length..], sourceFolder, folder, baseName)}";
-            yield return (relative, Rename(ReadRaw(name), sourceFolder, folder, baseName));
+            var content = Path.GetFileName(name).StartsWith("favicon", StringComparison.Ordinal)
+                ? ReadRawBytes(name)
+                : Encoding.UTF8.GetBytes(Rename(ReadRaw(name), sourceFolder, folder, baseName));
+            yield return new HostFile(relative, content);
         }
     }
 

@@ -31,6 +31,14 @@ internal sealed class TempProjectDir : IDisposable
         return path;
     }
 
+    public string Write(string relativePath, byte[] content)
+    {
+        var path = System.IO.Path.Combine(Dir, relativePath);
+        Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path)!);
+        File.WriteAllBytes(path, content);
+        return path;
+    }
+
     public void Dispose()
     {
         try { Directory.Delete(Dir, recursive: true); }
@@ -489,11 +497,11 @@ public class TemplateAssetsTests
         Assert.Contains(files, f => f.RelativePath == $"MyGame.{suffix}/MyGame.{suffix}.csproj");
         Assert.Contains(files, f => f.RelativePath.EndsWith(".gdignore"));
 
-        foreach (var (path, content) in files)
+        foreach (var file in files)
         {
-            Assert.StartsWith($"MyGame.{suffix}/", path);
-            AssertNoTokens(path);
-            AssertNoTokens(content);
+            Assert.StartsWith($"MyGame.{suffix}/", file.RelativePath);
+            AssertNoTokens(file.RelativePath);
+            AssertNoTokens(file.Text);
         }
     }
 
@@ -509,14 +517,14 @@ public class TemplateAssetsTests
         var files = TemplateAssets.HostFiles(kind, "MyGame", "MyGame.extra").ToList();
 
         Assert.Contains(files, f => f.RelativePath == "MyGame.extra/MyGame.extra.csproj");
-        foreach (var (path, content) in files)
+        foreach (var file in files)
         {
-            Assert.StartsWith("MyGame.extra/", path);
-            AssertNoTokens(path);
-            AssertNoTokens(content);
+            Assert.StartsWith("MyGame.extra/", file.RelativePath);
+            AssertNoTokens(file.RelativePath);
+            AssertNoTokens(file.Text);
         }
 
-        var csproj = files.Single(f => f.RelativePath.EndsWith(".csproj")).Content;
+        var csproj = files.Single(f => f.RelativePath.EndsWith(".csproj")).Text;
         Assert.Contains("../MyGame.csproj", csproj);
         Assert.DoesNotContain($"MyGame.{Hosts.Suffix(kind)}", csproj);
     }
@@ -536,6 +544,26 @@ public class TemplateAssetsTests
     {
         var source = TemplateAssets.WebBootSource();
         Assert.Contains("LIBGODOT_ENABLED", source);
+    }
+
+    [Fact]
+    public void WebHost_IncludesReferencedFavicons()
+    {
+        var files = TemplateAssets.HostFiles(HostKind.Web, "MyGame", "MyGame.web").ToList();
+        var index = files.Single(f => f.RelativePath.EndsWith("wwwroot/index.html")).Text;
+
+        foreach (var favicon in new[]
+                 {
+                     "favicon.ico", "favicon.svg", "favicon-16x16.png", "favicon-32x32.png", "favicon-96x96.png",
+                 })
+        {
+            var asset = files.Single(f => f.RelativePath.EndsWith($"wwwroot/{favicon}"));
+            Assert.Contains($"href=\"{favicon}\"", index);
+            if (favicon.EndsWith(".png"))
+                Assert.Equal([0x89, 0x50, 0x4e, 0x47], asset.Content[..4]);
+            else if (favicon.EndsWith(".ico"))
+                Assert.Equal([0x00, 0x00, 0x01, 0x00], asset.Content[..4]);
+        }
     }
 }
 
@@ -835,7 +863,7 @@ public class HostScanTests
     {
         var kind = HostKinds.Of(suffix);
         var csproj = TemplateAssets.HostFiles(kind, "MyGame", "some.folder")
-            .Single(f => f.RelativePath.EndsWith(".csproj")).Content;
+            .Single(f => f.RelativePath.EndsWith(".csproj")).Text;
         Assert.Equal(kind, HostScan.Classify(csproj, "some.folder"));
     }
 
