@@ -1,4 +1,4 @@
-# Adding 2dog to a Project
+# Adding 2dog to your Project
 
 Just add 2dog! The `2dog` tool adds 2dog to an existing Godot project  –  **in
 place**. Your project directory becomes the solution root, and the host

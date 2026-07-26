@@ -124,8 +124,8 @@ For a fresh project, the same tool creates the game and hosts together:
 dnx 2dog new MyGame
 ```
 
-Both routes intentionally converge on the same structure. See
-[Adding 2dog to a Project](/add) for patching behavior or
+Both routes give you a similar structure. See
+[Adding 2dog](/add) for patching behavior or
 [Project Templates](/templates) for every generated file and option.
 
 ## When to Use Another Layout

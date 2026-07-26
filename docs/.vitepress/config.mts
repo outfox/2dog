@@ -98,8 +98,8 @@ export default defineConfig({
       {
         text: 'Build and Ship',
         items: [
-          { text: gd('dog') + 'Adding 2dog to a Project', link: '/add' },
-          { text: gd('sprout') + 'Creating a New Project', link: '/templates' },
+          { text: gd('bone') + 'Existing Projects', link: '/add' },
+          { text: gd('sprout') + 'New Projects', link: '/templates' },
           { text: gd('globe') + 'Web / Browser (WASM)', link: '/web' }
         ]
       },
@@ -130,12 +130,7 @@ export default defineConfig({
         text: 'Reference',
         items: [
           { text: gd('book_open') + 'API Reference', link: '/api-reference' },
-          { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' }
-        ]
-      },
-      {
-        text: 'Troubleshooting',
-        items: [
+          { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
           {
             text: gd('bug') + 'Known Issues',
             link: '/known-issues/',
