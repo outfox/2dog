@@ -1,10 +1,10 @@
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
-[Collection<GodotHeadlessCollection>]
-public class GodotApiCoverageTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotApiCoverageTests(HeadlessFixture godot)
 {
     [Fact]
     public void CoreTypesAndNativeHelpers_RoundTripAcrossInterop() =>

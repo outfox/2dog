@@ -1,14 +1,14 @@
-# `twodog.xunit.GodotHeadlessCollection`
+# `twodog.Testing.Xunit.HeadlessCollection`
 
 Defines a non-parallel xUnit collection backed by
-[`GodotHeadlessFixture`](./godot-headless-fixture).
+[`HeadlessFixture`](./headless-fixture).
 
 ```csharp
-public class GodotHeadlessCollection : ICollectionFixture<GodotHeadlessFixture>
+public class HeadlessCollection : ICollectionFixture<HeadlessFixture>
 ```
 
 **Package:** `2dog.xunit`  
-**Namespace:** `twodog.xunit`
+**Namespace:** `twodog.Testing.Xunit`
 
 The package compiles this collection definition into your test assembly so
 xUnit can discover it. This is the usual collection for CI.
@@ -16,12 +16,12 @@ xUnit can discover it. This is the usual collection for CI.
 ## Usage
 
 ```csharp
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
-[Collection<GodotHeadlessCollection>]
-public class SceneTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class SceneTests(HeadlessFixture godot)
 {
     [Fact]
     public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);

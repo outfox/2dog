@@ -23,8 +23,7 @@ public static class AssemblyPreloader
     /// </summary>
     /// <param name="projectPath">Path to the Godot project directory</param>
     [UnconditionalSuppressMessage("Trimming", "IL2026",
-        Justification = "Test fixtures dynamically load game assemblies discovered at runtime; " +
-                        "fixtures are test-time only and never part of a trimmed/published app.")]
+        Justification = "Game assemblies are discovered and loaded dynamically before Godot starts.")]
     public static void PreloadGameAssemblies(string projectPath)
     {
         // On browser (wasm) all assemblies are part of the published bundle

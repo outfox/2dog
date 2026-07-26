@@ -1,13 +1,13 @@
-# `twodog.xunit.GodotCollection`
+# `twodog.Testing.Xunit.RenderingCollection`
 
-Defines a non-parallel xUnit collection backed by [`GodotFixture`](./godot-fixture).
+Defines a non-parallel xUnit collection backed by [`Fixture`](./fixture).
 
 ```csharp
-public class GodotCollection : ICollectionFixture<GodotFixture>
+public class RenderingCollection : ICollectionFixture<Fixture>
 ```
 
 **Package:** `2dog.xunit`  
-**Namespace:** `twodog.xunit`
+**Namespace:** `twodog.Testing.Xunit`
 
 The package compiles this collection definition into your test assembly so
 xUnit can discover it.
@@ -15,12 +15,12 @@ xUnit can discover it.
 ## Usage
 
 ```csharp
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
-[Collection<GodotCollection>]
-public class RenderingTests(GodotFixture godot)
+[Collection<RenderingCollection>]
+public class RenderingTests(Fixture godot)
 {
     [Fact]
     public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);

@@ -1,16 +1,16 @@
-# `twodog.fixture.GodotHeadlessFixture`
+# `twodog.Testing.HeadlessFixture`
 
 Starts a Godot test fixture with `--headless`.
 
 ```csharp
-public class GodotHeadlessFixture : GodotFixtureBase
+public class HeadlessFixture : FixtureBase
 ```
 
 **Package:** `2dog.engine`  
-**Namespace:** `twodog.fixture`
+**Namespace:** `twodog.Testing`
 
 This is the usual fixture for game-logic, scene, resource, and CI tests. Use
-[`GodotFixture`](./godot-fixture) when a test needs rendering or a window.
+[`Fixture`](./fixture) when a test needs rendering or a window.
 
 ## Inherited Properties
 
@@ -22,16 +22,16 @@ This is the usual fixture for game-logic, scene, resource, and CI tests. Use
 
 ## xUnit Collection
 
-[`GodotHeadlessCollection`](./godot-headless-collection) supplies this fixture
-to a non-parallel xUnit collection.
+[`HeadlessCollection`](./headless-collection) supplies this fixture to a
+non-parallel xUnit collection.
 
 ```csharp
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
-[Collection<GodotHeadlessCollection>]
-public class SceneTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class SceneTests(HeadlessFixture godot)
 {
     [Fact]
     public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);

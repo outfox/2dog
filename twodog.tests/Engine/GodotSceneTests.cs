@@ -1,11 +1,11 @@
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
-[Collection<GodotHeadlessCollection>]
-public class GodotSceneTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotSceneTests(HeadlessFixture godot)
 {
     [Fact]
     public void LoadScene_MainScene_ReturnsPackedScene()

@@ -1,11 +1,11 @@
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
-[Collection<GodotHeadlessCollection>]
-public class GodotEngineTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotEngineTests(HeadlessFixture godot)
 {
     [Fact]
     public void Tree_IsNotNull()

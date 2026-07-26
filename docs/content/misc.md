@@ -380,7 +380,7 @@ internal static class TestInitializer
 
 This has assembly-load side effects, slows IDE discovery, and relies on
 `ProcessExit` cleanup. It must live in the test project. Do not combine it with
-`GodotFixture` or `GodotHeadlessFixture`; both would try to start the one
+`Fixture` or `HeadlessFixture`; both would try to start the one
 allowed engine and produce `InvalidOperationException`. Use this workaround
 only when preserving individually discovered Godot-valued rows outweighs
 those costs. A little more ceremony keeps this dog from biting the test host.

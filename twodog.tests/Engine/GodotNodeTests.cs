@@ -1,11 +1,11 @@
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
-[Collection<GodotHeadlessCollection>]
-public class GodotNodeTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotNodeTests(HeadlessFixture godot)
 {
     [Fact]
     public void Node_SetName_ChangesName()

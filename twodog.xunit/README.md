@@ -2,14 +2,13 @@
 
 xUnit collection definitions for testing Godot applications with [2dog](https://github.com/outfox/2dog).
 
-The fixtures themselves (`GodotFixture`, `GodotHeadlessFixture`, `GodotFixtureBase`) ship in the
-**`2dog`** package, in the `twodog.fixture` namespace. This package adds the xUnit-specific glue on
-top of them.
+The fixtures themselves (`Fixture`, `HeadlessFixture`, and `FixtureBase`) ship in the
+**`2dog.engine`** package under `twodog.Testing`. This package adds the xUnit-specific glue.
 
 ## What it provides
 
-- **`GodotCollection`**  –  binds the full (rendering) `GodotFixture`
-- **`GodotHeadlessCollection`**  –  binds `GodotHeadlessFixture` (use this for CI)
+- **`RenderingCollection`** - binds the rendering-enabled `Fixture`
+- **`HeadlessCollection`** - binds `HeadlessFixture` (use this for CI)
 
 Both set `DisableParallelization = true`, which is required because Godot allows only one instance
 per process.
@@ -29,12 +28,12 @@ the collections directly.
 
 ```csharp
 using Godot;
-using twodog.fixture; // GodotHeadlessFixture
-using twodog.xunit;   // GodotHeadlessCollection
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
-[Collection<GodotHeadlessCollection>]
-public class MyTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class MyTests(HeadlessFixture godot)
 {
     [Fact]
     public void EngineStarts()
@@ -46,15 +45,15 @@ public class MyTests(GodotHeadlessFixture godot)
 
 ## Custom fixtures
 
-Need a different Godot configuration? Subclass `GodotFixtureBase` (from the `2dog` package) and
+Need a different Godot configuration? Subclass `FixtureBase` and
 write a one-line collection for it in your own test project:
 
 ```csharp
-using twodog.fixture;
+using twodog.Testing;
 using Xunit;
 
-public class GodotOpenGl3Fixture() : GodotFixtureBase("--display-driver", "opengl3");
+public class OpenGl3Fixture() : FixtureBase("--rendering-driver", "opengl3");
 
-[CollectionDefinition(nameof(GodotOpenGl3Collection), DisableParallelization = true)]
-public class GodotOpenGl3Collection : ICollectionFixture<GodotOpenGl3Fixture>;
+[CollectionDefinition(nameof(OpenGl3Collection), DisableParallelization = true)]
+public class OpenGl3Collection : ICollectionFixture<OpenGl3Fixture>;
 ```

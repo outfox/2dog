@@ -16,14 +16,14 @@ arguments, collections, filtering, and CI workflows.
 
 ```csharp
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
 namespace MyGame.Tests;
 
-[Collection<GodotHeadlessCollection>]
-public class BasicTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class BasicTests(HeadlessFixture godot)
 {
     [Fact]
     public void LoadMainScene_Succeeds()
@@ -47,8 +47,8 @@ The fixture exposes the same objects a console host keeps in local variables:
 | `godot.GodotInstance` | `engine.Start()` |
 | `godot.Tree` | `engine.Tree` |
 
-`GodotHeadlessFixture` passes `--headless`; `GodotFixture` enables rendering.
-Both derive from `GodotFixtureBase`.
+`HeadlessFixture` passes `--headless`; `Fixture` enables rendering. Both derive
+from `FixtureBase`.
 
 ## Project Differences
 
@@ -96,7 +96,7 @@ non-parallel collection, and all tests in that collection share its engine.
 The generated host also sets `"parallelizeTestCollections": false` in
 `xunit.runner.json`.
 
-`2dog.xunit` provides `GodotCollection` and `GodotHeadlessCollection` as
+`2dog.xunit` provides `RenderingCollection` and `HeadlessCollection` as
 compile-in source because xUnit discovers collection definitions only in the
 test assembly. Experimental parallel engines are covered in
 [Miscellaneous Advanced Notes](/misc#experimental-parallel-xunit-engines).

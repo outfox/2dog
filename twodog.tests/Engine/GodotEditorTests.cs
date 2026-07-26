@@ -1,7 +1,7 @@
 #if EDITOR
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
@@ -19,8 +19,8 @@ namespace twodog.tests.EngineTests;
 /// embedded libgodot mode (no full editor subsystem). Tests here verify
 /// managed type availability, not native instantiation.
 /// </summary>
-[Collection<GodotHeadlessCollection>]
-public class GodotEditorTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotEditorTests(HeadlessFixture godot)
 {
     // ── Type availability ────────────────────────────────────────────
 

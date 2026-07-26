@@ -1,11 +1,11 @@
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
-[Collection<GodotHeadlessCollection>]
-public class GodotSignalTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotSignalTests(HeadlessFixture godot)
 {
     [Fact]
     public void TreeEntered_Fires_WhenAddedToTree()

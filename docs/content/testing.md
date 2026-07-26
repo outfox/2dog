@@ -1,6 +1,6 @@
 # Testing with xUnit
 
-`2dog.engine` provides the fixtures in `twodog.fixture`. `2dog.xunit` adds
+`2dog.engine` provides the fixtures in `twodog.Testing`. `2dog.xunit` adds
 ready-made xUnit collections, so tests can start a real Godot engine without
 having to manage its lifetime themselves.
 
@@ -28,13 +28,13 @@ If you create one manually, copy the required project setup from
 
 ## Fixtures
 
-Both fixtures derive from `GodotFixtureBase`, which starts the engine in its
+Both fixtures derive from `FixtureBase`, which starts the engine in its
 constructor and exposes the objects most tests need:
 
 ```csharp
-public abstract class GodotFixtureBase : IDisposable
+public abstract class FixtureBase : IDisposable
 {
-    protected GodotFixtureBase(params string[] cmdLineArgs);
+    protected FixtureBase(params string[] cmdLineArgs);
 
     public Engine Engine { get; }
     public GodotInstance GodotInstance { get; }
@@ -42,24 +42,24 @@ public abstract class GodotFixtureBase : IDisposable
 }
 ```
 
-- `GodotFixture` starts Godot with rendering enabled.
-- `GodotHeadlessFixture` adds `--headless` and is the usual choice for CI.
+- `Fixture` starts Godot with rendering enabled.
+- `HeadlessFixture` adds `--headless` and is the usual choice for CI.
 
 ## Collections
 
 A Godot instance is not thread-safe. Put engine tests in a collection with
 `DisableParallelization = true`; tests in that collection share one fixture.
 
-`2dog.xunit` ships `GodotCollection` and `GodotHeadlessCollection`. Their
+`2dog.xunit` ships `RenderingCollection` and `HeadlessCollection`. Their
 collection definitions are compiled into your test assembly because xUnit
 does not discover definitions from an ordinary referenced DLL.
 
 ```csharp
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
-[Collection<GodotHeadlessCollection>]
-public class MyTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class MyTests(HeadlessFixture godot)
 {
     // Tests share godot.Engine, godot.GodotInstance, and godot.Tree.
 }
@@ -71,18 +71,18 @@ engine instance.
 
 ### Custom Collections
 
-For different Godot arguments, derive from `GodotFixtureBase` and define the
+For different Godot arguments, derive from `FixtureBase` and define the
 collection in your test project:
 
 ```csharp
-using twodog.fixture;
+using twodog.Testing;
 using Xunit;
 
-public class GodotOpenGl3Fixture()
-    : GodotFixtureBase("--rendering-driver", "opengl3");
+public class OpenGl3Fixture()
+    : FixtureBase("--rendering-driver", "opengl3");
 
-[CollectionDefinition(nameof(GodotOpenGl3Collection), DisableParallelization = true)]
-public class GodotOpenGl3Collection : ICollectionFixture<GodotOpenGl3Fixture>;
+[CollectionDefinition(nameof(OpenGl3Collection), DisableParallelization = true)]
+public class OpenGl3Collection : ICollectionFixture<OpenGl3Fixture>;
 ```
 
 See [Single Godot Instance](/known-issues/single-instance) for the engine
@@ -92,12 +92,12 @@ lifetime constraint.
 
 ```csharp
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
-[Collection<GodotHeadlessCollection>]
-public class SceneTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class SceneTests(HeadlessFixture godot)
 {
     [Fact]
     public void LoadScene_ValidPath_Succeeds()

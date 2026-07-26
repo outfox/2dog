@@ -1,16 +1,16 @@
-# `twodog.fixture.GodotFixture`
+# `twodog.Testing.Fixture`
 
 Starts a Godot test fixture with rendering enabled.
 
 ```csharp
-public class GodotFixture : GodotFixtureBase
+public class Fixture : FixtureBase
 ```
 
 **Package:** `2dog.engine`  
-**Namespace:** `twodog.fixture`
+**Namespace:** `twodog.Testing`
 
 Use this fixture for tests that need a display, rendered frames, or window
-behavior. For most CI tests, prefer [`GodotHeadlessFixture`](./godot-headless-fixture).
+behavior. For most CI tests, prefer [`HeadlessFixture`](./headless-fixture).
 
 ## Inherited Properties
 
@@ -22,16 +22,16 @@ behavior. For most CI tests, prefer [`GodotHeadlessFixture`](./godot-headless-fi
 
 ## xUnit Collection
 
-[`GodotCollection`](./godot-collection) supplies this fixture to a
+[`RenderingCollection`](./rendering-collection) supplies this fixture to a
 non-parallel xUnit collection.
 
 ```csharp
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 using Xunit;
 
-[Collection<GodotCollection>]
-public class RenderingTests(GodotFixture godot)
+[Collection<RenderingCollection>]
+public class RenderingTests(Fixture godot)
 {
     [Fact]
     public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);

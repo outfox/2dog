@@ -16,5 +16,7 @@
     <ItemGroup>
         <Compile Include="$(MSBuildThisFileDirectory)GodotCollection.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)GodotHeadlessCollection.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)RenderingCollection.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)HeadlessCollection.cs"/>
     </ItemGroup>
 </Project>

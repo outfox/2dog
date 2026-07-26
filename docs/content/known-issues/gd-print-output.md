@@ -23,8 +23,8 @@ Your messages will appear mixed into the test-host stream.
 For test logging, prefer xUnit's `ITestOutputHelper` over `GD.Print`:
 
 ```csharp
-[Collection<GodotHeadlessCollection>]
-public class MyTests(GodotHeadlessFixture godot, ITestOutputHelper output)
+[Collection<HeadlessCollection>]
+public class MyTests(HeadlessFixture godot, ITestOutputHelper output)
 {
     [Fact]
     public void MyTest()

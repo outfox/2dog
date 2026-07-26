@@ -1,11 +1,11 @@
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace Company.Product1.Tests;
 
-[Collection<GodotHeadlessCollection>]
-public class BasicTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class BasicTests(HeadlessFixture godot)
 {
     [Fact]
     public void LoadMainScene_Succeeds()

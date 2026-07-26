@@ -134,14 +134,33 @@ export default defineConfig({
             link: '/api-reference',
             collapsed: true,
             items: [
-              { text: gd('script') + 'Engine', link: '/api/engine' },
-              { text: gd('arrows_clockwise') + 'GodotInstance', link: '/api/godot-instance' },
-              { text: gd('test_tube') + 'GodotFixtureBase', link: '/api/godot-fixture-base' },
-              { text: gd('test_tube') + 'GodotFixture', link: '/api/godot-fixture' },
-              { text: gd('test_tube') + 'GodotHeadlessFixture', link: '/api/godot-headless-fixture' },
-              { text: gd('layers') + 'GodotCollection', link: '/api/godot-collection' },
-              { text: gd('layers') + 'GodotHeadlessCollection', link: '/api/godot-headless-collection' },
-              { text: gd('file_arrow_down') + 'AssemblyPreloader', link: '/api/assembly-preloader' }
+              {
+                text: 'twodog',
+                items: [
+                  { text: gd('script') + 'Engine', link: '/api/engine' }
+                ]
+              },
+              {
+                text: 'Godot',
+                items: [
+                  { text: gd('arrows_clockwise') + 'GodotInstance', link: '/api/godot-instance' }
+                ]
+              },
+              {
+                text: 'twodog.Testing',
+                items: [
+                  { text: gd('test_tube') + 'FixtureBase', link: '/api/fixture-base' },
+                  { text: gd('test_tube') + 'Fixture', link: '/api/fixture' },
+                  { text: gd('test_tube') + 'HeadlessFixture', link: '/api/headless-fixture' }
+                ]
+              },
+              {
+                text: 'twodog.Testing.Xunit',
+                items: [
+                  { text: gd('layers') + 'RenderingCollection', link: '/api/rendering-collection' },
+                  { text: gd('layers') + 'HeadlessCollection', link: '/api/headless-collection' }
+                ]
+              }
             ]
           },
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },

@@ -1,13 +1,13 @@
-# `twodog.fixture.GodotFixtureBase`
+# `twodog.Testing.FixtureBase`
 
-Base class for xUnit fixtures that own a Godot instance.
+Base class for test fixtures that own a Godot instance.
 
 ```csharp
-public abstract class GodotFixtureBase : IDisposable
+public abstract class FixtureBase : IDisposable
 ```
 
 **Package:** `2dog.engine`  
-**Namespace:** `twodog.fixture`
+**Namespace:** `twodog.Testing`
 
 The constructor resolves the Godot project directory, preloads game assemblies,
 and starts the engine. Derive from this class when the ready-made fixtures do
@@ -16,14 +16,14 @@ not pass the arguments your tests need.
 ## Constructor
 
 ```csharp
-protected GodotFixtureBase(params string[] cmdLineArgs)
+protected FixtureBase(params string[] cmdLineArgs)
 ```
 
 Passes each argument to Godot unchanged.
 
 ```csharp
-public class GodotOpenGl3Fixture()
-    : GodotFixtureBase("--rendering-driver", "opengl3");
+public class OpenGl3Fixture()
+    : FixtureBase("--rendering-driver", "opengl3");
 ```
 
 ## Properties
@@ -40,20 +40,20 @@ public class GodotOpenGl3Fixture()
 public void Dispose()
 ```
 
-Disposes `GodotInstance`, then `Engine`. Let xUnit call this through its
-collection-fixture lifetime.
+Disposes `GodotInstance`, then `Engine`. Let the test framework call this
+through its fixture lifetime.
 
-## Custom Collection
+## Custom xUnit Collection
 
 ```csharp
-using twodog.fixture;
+using twodog.Testing;
 using Xunit;
 
-public class GodotOpenGl3Fixture()
-    : GodotFixtureBase("--rendering-driver", "opengl3");
+public class OpenGl3Fixture()
+    : FixtureBase("--rendering-driver", "opengl3");
 
-[CollectionDefinition(nameof(GodotOpenGl3Collection), DisableParallelization = true)]
-public class GodotOpenGl3Collection : ICollectionFixture<GodotOpenGl3Fixture>;
+[CollectionDefinition(nameof(OpenGl3Collection), DisableParallelization = true)]
+public class OpenGl3Collection : ICollectionFixture<OpenGl3Fixture>;
 ```
 
 Godot is not thread-safe. Keep custom engine collections non-parallel.

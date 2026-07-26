@@ -1,29 +1,29 @@
 using Godot;
-using twodog.fixture;
+using twodog.Testing;
 
 namespace twodog.tests.EngineTests;
 
 // Engine restart across test collections.
 //
-// Each collection below gets its OWN GodotHeadlessFixture. All Godot
+// Each collection below gets its OWN HeadlessFixture. All Godot
 // collections in this assembly disable parallelization, so xUnit runs them
 // sequentially and disposes one collection's fixture before creating the
-// next. Together with the shared GodotHeadlessCollection used by the other
+// next. Together with the shared HeadlessCollection used by the other
 // test classes, this assembly therefore starts and destroys the engine
 // several times in one process - verifying that libgodot reinitialization
 // (destroy a GodotInstance, create a new one) works end to end.
 
 [CollectionDefinition(nameof(RestartCollectionA), DisableParallelization = true)]
-public class RestartCollectionA : ICollectionFixture<GodotHeadlessFixture>;
+public class RestartCollectionA : ICollectionFixture<HeadlessFixture>;
 
 [CollectionDefinition(nameof(RestartCollectionB), DisableParallelization = true)]
-public class RestartCollectionB : ICollectionFixture<GodotHeadlessFixture>;
+public class RestartCollectionB : ICollectionFixture<HeadlessFixture>;
 
 // The same smoke tests run in both collections, i.e. against two different
 // engine instances. They deliberately exercise the areas that are fragile
 // across a restart: engine singletons, StringName-backed calls, resource
 // loading, scene-tree manipulation, and main-loop iteration.
-public abstract class GodotRestartSmokeTests(GodotHeadlessFixture godot)
+public abstract class GodotRestartSmokeTests(HeadlessFixture godot)
 {
     [Fact]
     public void Tree_IsAlive()
@@ -85,7 +85,7 @@ public abstract class GodotRestartSmokeTests(GodotHeadlessFixture godot)
 }
 
 [Collection(nameof(RestartCollectionA))]
-public class GodotRestartATests(GodotHeadlessFixture godot) : GodotRestartSmokeTests(godot);
+public class GodotRestartATests(HeadlessFixture godot) : GodotRestartSmokeTests(godot);
 
 [Collection(nameof(RestartCollectionB))]
-public class GodotRestartBTests(GodotHeadlessFixture godot) : GodotRestartSmokeTests(godot);
+public class GodotRestartBTests(HeadlessFixture godot) : GodotRestartSmokeTests(godot);

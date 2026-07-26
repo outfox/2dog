@@ -12,7 +12,7 @@ public static class AssemblyPreloader
 
 ::: info Advanced API
 The supplied fixtures call this automatically. Use it only in a custom host
-that references game types directly and does not use `GodotFixtureBase`.
+that references game types directly and does not use `FixtureBase`.
 :::
 
 ## `PreloadGameAssemblies`

@@ -1,11 +1,11 @@
 using Godot;
-using twodog.fixture;
-using twodog.xunit;
+using twodog.Testing;
+using twodog.Testing.Xunit;
 
 namespace twodog.tests.EngineTests;
 
-[Collection<GodotHeadlessCollection>]
-public class GodotPhysicsTests(GodotHeadlessFixture godot)
+[Collection<HeadlessCollection>]
+public class GodotPhysicsTests(HeadlessFixture godot)
 {
     [Fact]
     public void PhysicsServer3D_Singleton_IsAvailable()
