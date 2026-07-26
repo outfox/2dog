@@ -38,9 +38,7 @@ internal static class Program
 
     private static int Execute(ParsedCommand cmd)
     {
-        // Prompting is off as soon as the command line answers the questions
-        // itself, so scripted runs never block on a terminal.
-        var interactive = !cmd.NoInteractive && !cmd.Options.DryRun && Tui.CanPrompt;
+        var interactive = WantsPrompts(cmd) && Tui.CanPrompt;
         var verb = ResolveVerb(cmd, interactive);
 
         if (interactive) Tui.Header();
@@ -50,12 +48,22 @@ internal static class Program
 
         if (interactive) Tui.ShowProject(project);
 
-        cmd.Options.Hosts = interactive && !cmd.HostFlagsSeen
+        cmd.Options.Hosts = interactive
             ? Tui.SelectHosts(project, HostSelection.Defaults(cmd.Excluded, project))
             : HostSelection.FromFlags(cmd, project);
 
         return ScaffoldCommand.Run(project, cmd.Options, interactive ? Tui.ConfirmPlan : null);
     }
+
+    /// <summary>
+    /// Prompting is off as soon as the command line answers the questions
+    /// itself - any host flag, or --yes - so scripted runs never block on a
+    /// terminal, not even at the final confirmation. --dry-run still asks:
+    /// it gathers the same choices and then prints the plan instead of
+    /// applying it.
+    /// </summary>
+    // internal for unit tests
+    internal static bool WantsPrompts(ParsedCommand cmd) => !cmd.NoInteractive && !cmd.HostFlagsSeen;
 
     /// <summary>
     /// Bare `2dog` reads the directory: a Godot project there means "add

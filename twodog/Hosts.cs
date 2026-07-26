@@ -73,12 +73,16 @@ internal static class Hosts
         return candidate;
     }
 
-    /// <summary>Reduce a name to a safe folder/assembly stem (dotnet-new style).</summary>
+    /// <summary>
+    /// Reduce a name to a safe folder/assembly stem (dotnet-new style). A stem
+    /// needs a letter or a digit: '.' and '..' survive the character filter and
+    /// would otherwise write outside the project once combined into a path.
+    /// </summary>
     public static string? SanitizeName(string? name)
     {
         if (name == null) return null;
         var chars = name.Where(c => char.IsLetterOrDigit(c) || c is '.' or '_' or '-').ToArray();
-        return chars.Length == 0 ? null : new string(chars);
+        return chars.Any(char.IsLetterOrDigit) ? new string(chars) : null;
     }
 }
 

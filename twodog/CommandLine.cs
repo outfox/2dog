@@ -180,9 +180,9 @@ internal static class HostSelection
             if (request.Folder is { } given)
             {
                 folder = Hosts.SanitizeName(given)
-                         ?? throw new ToolException($"'{given}' contains no usable characters for a folder name");
+                         ?? throw new ToolException($"'{given}' is not a usable folder name - it needs a letter or a digit");
                 if (taken.Contains(folder, StringComparer.OrdinalIgnoreCase))
-                    throw new ToolException($"a host folder named '{folder}' already exists - pick another name");
+                    throw new ToolException($"'{folder}' already exists in the project - pick another folder name");
             }
             else
             {
@@ -198,11 +198,21 @@ internal static class HostSelection
 
     /// <summary>
     /// What a run creates when no host was named: every kind the project does
-    /// not have yet, minus the excluded ones.
+    /// not have yet, minus the excluded ones. Which kinds are missing follows
+    /// from the recognized hosts; the folder names avoid every directory.
     /// </summary>
-    public static List<HostSpec> Defaults(ICollection<HostKind> excluded, ProjectContext project) =>
-        Hosts.All
-            .Where(kind => !excluded.Contains(kind) && project.ExistingHosts.All(h => h.Kind != kind))
-            .Select(kind => new HostSpec(kind, Hosts.DefaultFolder(kind, project.BaseName)))
-            .ToList();
+    public static List<HostSpec> Defaults(ICollection<HostKind> excluded, ProjectContext project)
+    {
+        var taken = new List<string>(project.TakenFolders);
+        var hosts = new List<HostSpec>();
+        foreach (var kind in Hosts.All)
+        {
+            if (excluded.Contains(kind) || project.ExistingHosts.Any(h => h.Kind == kind)) continue;
+            var folder = Hosts.AllocateFolder(kind, project.BaseName, taken);
+            taken.Add(folder);
+            hosts.Add(new HostSpec(kind, folder));
+        }
+
+        return hosts;
+    }
 }

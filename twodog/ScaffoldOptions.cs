@@ -45,10 +45,19 @@ internal sealed class ProjectContext
     public GodotProjectFile? Godot { get; init; }
 
     public List<ExistingHost> ExistingHosts { get; init; } = [];
+
+    /// <summary>Every immediate subdirectory of the project, host or not.</summary>
+    public List<string> ExistingFolders { get; init; } = [];
+
     public bool IsNew { get; init; }
 
-    /// <summary>Host folder names already in use, so new hosts can avoid them.</summary>
-    public IEnumerable<string> TakenFolders => ExistingHosts.Select(h => h.Folder);
+    /// <summary>
+    /// Folder names a new host must not use: the recognized hosts plus every
+    /// other directory in the project, so scaffolding never lands inside
+    /// content that has nothing to do with 2dog.
+    /// </summary>
+    public IEnumerable<string> TakenFolders =>
+        ExistingHosts.Select(h => h.Folder).Concat(ExistingFolders).Distinct(StringComparer.OrdinalIgnoreCase);
 }
 
 /// <summary>An error with a user-facing message (exit code 2).</summary>
