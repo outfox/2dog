@@ -1,7 +1,7 @@
 using twodog.Hosting.Xunit;
 using Engine = twodog.Engine;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 /// <summary>App-story program: boots its engine, waits for the shared release
 /// gate (so the test can hold both instances alive simultaneously), pumps 60

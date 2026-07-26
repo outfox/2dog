@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using twodog.Hosting.Xunit;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 // Two collections, each with its own engine instance, running IN PARALLEL
 // (xunit.runner.json: parallelizeTestCollections=true). This is the layout the

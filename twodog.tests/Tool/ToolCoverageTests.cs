@@ -1,6 +1,6 @@
 using twodog.cli;
 
-namespace twodog.tests;
+namespace twodog.tests.ToolTests;
 
 public class ProgramTests
 {

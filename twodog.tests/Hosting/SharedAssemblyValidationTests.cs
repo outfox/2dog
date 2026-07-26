@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace twodog.Hosting.Tests;
+namespace twodog.tests.HostingTests;
 
 /// <summary>Unit tests of the shared-assembly closure walk (internal), using a
 /// controlled resolver so the unresolvable cases are deterministic.</summary>

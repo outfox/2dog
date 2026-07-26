@@ -1,7 +1,7 @@
 using twodog.fixture;
 using twodog.xunit;
 
-namespace twodog.tests;
+namespace twodog.tests.EngineTests;
 
 [Collection<GodotHeadlessCollection>]
 public class GodotApiCoverageTests(GodotHeadlessFixture godot)
