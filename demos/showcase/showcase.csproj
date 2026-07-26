@@ -15,6 +15,6 @@
         <!-- Nested 2dog host projects: keep them out of this project's default
              compile/content globs (each also carries a .gdignore so the Godot
              editor skips them). -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**;showcase.winforms/**</DefaultItemExcludes>
     </PropertyGroup>
 </Project>

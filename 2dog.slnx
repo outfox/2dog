@@ -41,6 +41,7 @@
   </Folder>
   <Project Path="demos/showcase/showcase.2dog/showcase.2dog.csproj" />
   <Project Path="demos/showcase/showcase.csproj" />
+  <Project Path="demos/showcase/showcase.winforms/showcase.winforms.csproj" />
   <Project Path="demos/showcase/showcase.web/showcase.web.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
     <Build Project="false" />

@@ -12,7 +12,9 @@ decides where and how they run.
 | [xUnit](./xunit) | `MyGame.tests` | `dotnet test MyGame.tests` | Tests using a real engine and resources |
 
 [`2dog new`](/templates) generates a new project with these hosts;
-[`2dog add`](/add) adds them to an existing project.
+[`2dog add`](/add) adds them to an existing project. Beyond the templates,
+the repository demos include a [WinForms host](./winforms) that embeds the
+engine inside a GUI framework window.
 
 ## Shared Project Anatomy
 

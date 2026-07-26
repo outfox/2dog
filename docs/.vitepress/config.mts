@@ -109,7 +109,8 @@ export default defineConfig({
           { text: gd('plug') + 'What Is a Host?', link: '/hosts/' },
           { text: gd('desktop') + 'Console', link: '/hosts/console' },
           { text: gd('globe') + 'Browser', link: '/hosts/web' },
-          { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
+          { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' },
+          { text: gd('window') + 'WinForms', link: '/hosts/winforms' }
         ]
       },
       {

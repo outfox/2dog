@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.2dog", "showcase.2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.web", "showcase.web\showcase.web.csproj", "{C7D8E9F0-A1B2-4C3D-8E9F-0A1B2C3D4E5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.winforms", "showcase.winforms\showcase.winforms.csproj", "{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,11 @@ Global
 		{C7D8E9F0-A1B2-4C3D-8E9F-0A1B2C3D4E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C7D8E9F0-A1B2-4C3D-8E9F-0A1B2C3D4E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7D8E9F0-A1B2-4C3D-8E9F-0A1B2C3D4E5F}.Editor|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{D4E5F6A7-B8C9-4D0E-9F1A-2B3C4D5E6F70}.Editor|Any CPU.Build.0 = Editor|Any CPU
 	EndGlobalSection
 EndGlobal
