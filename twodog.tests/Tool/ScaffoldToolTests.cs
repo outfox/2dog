@@ -229,6 +229,36 @@ public class CsprojPatcherTests
     }
 
     [Fact]
+    public void UpgradesTargetFrameworkToNet10()
+    {
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj", Bare.Replace("net10.0", "net8.0"));
+
+        var first = CsprojPatcher.Patch(path, HostFolders);
+
+        Assert.NotNull(first.NewContent);
+        Assert.Contains("TargetFramework: net10.0", first.Added);
+        Assert.Contains("<TargetFramework>net10.0</TargetFramework>", first.NewContent);
+        Assert.DoesNotContain("net8.0", first.NewContent);
+
+        File.WriteAllText(path, first.NewContent);
+        var second = CsprojPatcher.Patch(path, HostFolders);
+        Assert.Null(second.NewContent);
+    }
+
+    [Fact]
+    public void AddsTargetFrameworkWhenMissing()
+    {
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj", $"<Project Sdk=\"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}\">\n</Project>");
+
+        var result = CsprojPatcher.Patch(path, HostFolders);
+
+        Assert.Contains("TargetFramework: net10.0", result.Added);
+        Assert.Contains("<TargetFramework>net10.0</TargetFramework>", result.NewContent);
+    }
+
+    [Fact]
     public void PropertyInConditionedGroup_CountsAsPresent()
     {
         using var tmp = new TempProjectDir();
@@ -646,6 +676,27 @@ public class ConvertEndToEndTests
         var snapshot = Snapshot(tmp.Dir);
         Assert.Equal(0, Run(Options(tmp.Dir)));
         Assert.Equal(snapshot, Snapshot(tmp.Dir));
+    }
+
+    [Fact]
+    public void Convert_ExistingNet8Project_UpgradesToNet10()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        tmp.Write("SpaceMiner.csproj",
+            $"""
+            <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
+                <PropertyGroup>
+                    <TargetFramework>net8.0</TargetFramework>
+                </PropertyGroup>
+            </Project>
+            """);
+
+        Assert.Equal(0, Run(Options(tmp.Dir, web: false, tests: false)));
+
+        var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
+        Assert.Contains("<TargetFramework>net10.0</TargetFramework>", csproj);
+        Assert.DoesNotContain("net8.0", csproj);
     }
 
     [Fact]

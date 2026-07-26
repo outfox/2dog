@@ -5,10 +5,12 @@ namespace twodog.cli;
 /// <summary>
 /// Minimal in-place patching of an existing Godot project csproj: appends one
 /// clearly-marked PropertyGroup containing only the properties 2dog needs
-/// that are not already present. Never removes or rewrites existing content.
+/// that are not already present. Existing target frameworks are upgraded in place.
 /// </summary>
 internal static class CsprojPatcher
 {
+    private const string TargetFramework = "net10.0";
+
     public sealed record Result(string? NewContent, List<string> Added, List<string> Warnings);
 
     public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders)
@@ -35,6 +37,19 @@ internal static class CsprojPatcher
             properties.FirstOrDefault(e => e.Name.LocalName == name)?.Value;
 
         var patch = new XElement(ns + "PropertyGroup");
+
+        var targetFrameworks = properties.Where(e => e.Name.LocalName == "TargetFramework").ToList();
+        if (targetFrameworks.Count == 0)
+        {
+            patch.Add(Element(ns, "TargetFramework", TargetFramework));
+            added.Add($"TargetFramework: {TargetFramework}");
+        }
+        else if (targetFrameworks.Any(e => e.Value != TargetFramework))
+        {
+            foreach (var targetFramework in targetFrameworks)
+                targetFramework.Value = TargetFramework;
+            added.Add($"TargetFramework: {TargetFramework}");
+        }
 
         if (Existing("EnableDynamicLoading") == null)
         {
@@ -66,7 +81,7 @@ internal static class CsprojPatcher
             added.Add($"DefaultItemExcludes: {string.Join(", ", missingFolders)}");
         }
 
-        if (!patch.HasElements) return new Result(null, added, warnings);
+        if (!patch.HasElements && added.Count == 0) return new Result(null, added, warnings);
 
         // Readable indentation: PreserveWhitespace + DisableFormatting keep
         // the rest of the file byte-identical, so the injected group carries
@@ -77,12 +92,13 @@ internal static class CsprojPatcher
             patch.Add(new XText("\n        "), child);
         patch.Add(new XText("\n    "));
 
-        root.Add(
-            new XText("    "),
-            new XComment(" added by 2dog convert: properties 2dog hosts need that were not already set "),
-            new XText("\n    "),
-            patch,
-            new XText("\n"));
+        if (patch.HasElements)
+            root.Add(
+                new XText("    "),
+                new XComment(" added by 2dog convert: properties 2dog hosts need that were not already set "),
+                new XText("\n    "),
+                patch,
+                new XText("\n"));
 
         // XDocument.ToString drops the XML declaration; put it back if the
         // file had one.
