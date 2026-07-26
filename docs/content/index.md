@@ -1,14 +1,17 @@
 ---
 layout: home
-title: 2dog
+title: 2dog 🦴 Running Godot in .NET
 titleTemplate: :title 🦴 2dog
 
 head:
   - - meta
     - name: title
-      content: 🦴 2dog is Godot, but backward!
+      content: Godot in .NET 🦴 (2dog is Godot, just backward!)
   - - meta
     - name: description
+      content: Make your Godot C# games run on the web, test in your IDE, and more!
+  - - meta
+    - name: og:description
       content: Make your Godot C# games run on the web, test in your IDE, and more!
   - - meta
     - property: og:type
@@ -18,5 +21,5 @@ head:
       content: https://2dog.dev
   - - meta
     - property: og:title
-      content: 🦴 2dog is Godot, but backward!
+      content: Godot in .NET 🦴 (2dog is Godot, just backward!)
 ---
