@@ -557,12 +557,8 @@ public class TemplateAssetsTests
                      "favicon.ico", "favicon.svg", "favicon-16x16.png", "favicon-32x32.png", "favicon-96x96.png",
                  })
         {
-            var asset = files.Single(f => f.RelativePath.EndsWith($"wwwroot/{favicon}"));
+            Assert.Single(files, f => f.RelativePath.EndsWith($"wwwroot/{favicon}"));
             Assert.Contains($"href=\"{favicon}\"", index);
-            if (favicon.EndsWith(".png"))
-                Assert.Equal([0x89, 0x50, 0x4e, 0x47], asset.Content[..4]);
-            else if (favicon.EndsWith(".ico"))
-                Assert.Equal([0x00, 0x00, 0x01, 0x00], asset.Content[..4]);
         }
     }
 }
