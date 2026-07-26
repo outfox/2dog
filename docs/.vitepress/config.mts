@@ -131,6 +131,7 @@ export default defineConfig({
         items: [
           { text: gd('book_open') + 'API Reference', link: '/api-reference' },
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
+          { text: gd('archive') + 'Misc', link: '/misc' },
           {
             text: gd('bug') + 'Known Issues',
             link: '/known-issues/',

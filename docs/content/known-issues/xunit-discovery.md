@@ -1,147 +1,62 @@
 # xUnit Test Discovery Crash with Godot Types
 
-Using Godot types in xUnit `[MemberData]` will crash the test runner during discovery
-(tracked as [issue #16](https://github.com/outfox/2dog/issues/16)).
-
-## The Problem
-
-When you use Godot types like `NodePath`, `StringName`, `Vector2`, `Color`, etc. in `[MemberData]`, the test runner crashes:
+Godot values in xUnit `[MemberData]` can crash the test host during discovery
+([issue #16](https://github.com/outfox/2dog/issues/16)):
 
 ```csharp
-[Collection<GodotHeadlessCollection>]
-public class BasicTests(GodotHeadlessFixture godot)
-{
-    public static IEnumerable<object[]> paths = [[new NodePath("/root")]];
+public static IEnumerable<object[]> Paths = [[new NodePath("/root")]];
 
-    [Theory]
-    [MemberData(nameof(paths))]
-    public void CanLog_NodePath(NodePath path)
-    {
-        GD.Print(path);
-    }
-}
-```
-
-Running `dotnet test` produces:
-
-```
-[xUnit.net 00:00:00.04]   Discovering: MyGame.tests
-The active test run was aborted. Reason: Test host process crashed
-```
-
-## Why This Happens
-
-xUnit enumerates `MemberData` during test discovery to display test cases. This instantiates Godot types (like `new NodePath("/root")`) before any test runs. Since the `GodotFixture` hasn't started the engine yet, GodotSharp tries to call into native code that doesn't exist, causing a crash.
-
-## Workaround 1: Disable Discovery Enumeration
-
-Add `DisableDiscoveryEnumeration = true` to your `MemberData` attribute:
-
-```csharp
 [Theory]
-[MemberData(nameof(paths), DisableDiscoveryEnumeration = true)]
-public void CanLog_NodePath(NodePath path)
+[MemberData(nameof(Paths))]
+public void CanLogNodePath(NodePath path)
 {
     GD.Print(path);
 }
 ```
 
-This prevents xUnit from enumerating the data during discovery, deferring instantiation until test execution when Godot is running.
+xUnit enumerates member data before fixtures run. Constructing types that call
+Godot native code at that point fails because the engine has not started.
 
-::: warning
-With `DisableDiscoveryEnumeration = true`, the test explorer will show a single entry for the theory instead of individual entries for each test case.
-:::
+## Workarounds
 
-## Workaround 2: Use Primitive Types
+### Workaround 1: Disable Discovery Enumeration
 
-Pass primitive types (strings, numbers) in `MemberData` and construct Godot objects inside the test:
+Defer member-data enumeration until test execution:
 
 ```csharp
-public static IEnumerable<object[]> paths = [["/root"], ["/root/Main"]];
-
 [Theory]
-[MemberData(nameof(paths))]
-public void CanLog_NodePath(string pathStr)
-{
-    var path = new NodePath(pathStr);
-    GD.Print(path);
-}
-```
-
-This approach keeps test cases visible in the test explorer while avoiding the discovery crash.
-
-## Advanced: ModuleInitializer Approach
-
-If you need Godot types directly in `MemberData` without `DisableDiscoveryEnumeration`, you can initialize Godot before test discovery using a module initializer. This ensures the engine is running before xUnit enumerates your test data.
-
-::: danger Warning
-ModuleInitializers run automatically when an assembly loads, which has hidden side effects and can cause subtle issues. The `DisableDiscoveryEnumeration` workaround above is simpler and recommended for most cases.
-:::
-
-Create a file in your test project (e.g., `TestInitializer.cs`):
-
-```csharp
-using System.Runtime.CompilerServices;
-using Godot;
-using twodog;
-
-namespace MyGame.Tests;
-
-internal static class TestInitializer
-{
-    private static Engine? _engine;
-    private static GodotInstance? _godot;
-
-    [ModuleInitializer]
-    internal static void Initialize()
-    {
-        // Prevent double-initialization
-        if (_engine != null) return;
-
-        // Resolves the <GodotProjectDir> baked into the test assembly
-        _engine = new Engine("tests", Engine.ResolveProjectDir(), "--headless");
-        _godot = _engine.Start();
-
-        // Clean up when the process exits
-        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-        {
-            _godot?.Dispose();
-            _engine?.Dispose();
-        };
-    }
-}
-```
-
-With this in place, Godot types can be used directly in `MemberData`:
-
-```csharp
-public static IEnumerable<object[]> paths = [[new NodePath("/root")]];
-
-[Theory]
-[MemberData(nameof(paths))]  // No DisableDiscoveryEnumeration needed
-public void CanLog_NodePath(NodePath path)
+[MemberData(nameof(Paths), DisableDiscoveryEnumeration = true)]
+public void CanLogNodePath(NodePath path)
 {
     GD.Print(path);
 }
 ```
 
-::: warning Caveats
-- **Slower discovery**: The engine starts during test discovery, slowing down IDE test explorers
-- **Cleanup via ProcessExit**: Less elegant than proper `IDisposable` patterns used by fixtures
-- **Must be in your test project**: Cannot be placed in the `2dog.engine` package since module initializers only run for the assembly they're defined in
-- **Conflicts with fixtures**: If you use both this approach and `GodotFixture`/`GodotHeadlessFixture`, you'll get an `InvalidOperationException` (only one Godot instance per process)
-:::
+The test explorer will show one theory entry rather than one entry per data
+row.
+
+### Workaround 2: Use Primitive Values
+
+For separately discoverable rows, pass primitive values and create the Godot
+value inside the test after its fixture has started:
+
+```csharp
+public static IEnumerable<object[]> Paths = [["/root"], ["/root/Main"]];
+
+[Theory]
+[MemberData(nameof(Paths))]
+public void CanLogNodePath(string value)
+{
+    var path = new NodePath(value);
+    GD.Print(path);
+}
+```
+
+Prefer this approach when practical.
 
 ## Affected Types
 
-Any GodotSharp type that makes native calls in its constructor is affected. Common examples:
-
-- `NodePath`
-- `StringName`
-- `Vector2`, `Vector3`, `Vector4`
-- `Color`
-- `Rid`
-- `Transform2D`, `Transform3D`
-- Any `GodotObject` subclass
-
-Primitive C# types (`string`, `int`, `float`, `bool`, arrays of primitives) are safe to use directly.
+Any GodotSharp type whose construction calls native code may be affected,
+including `NodePath`, `StringName`, `Rid`, `GodotObject` subclasses, and some
+math value types. Primitive C# values such as strings, numbers, booleans, and
+their arrays are safe for discovery.

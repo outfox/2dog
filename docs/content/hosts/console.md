@@ -1,19 +1,16 @@
 # Console Host
 
-`MyGame.console` is the everyday host: a .NET console application that starts
-the engine, runs your main scene in a window, and pumps frames until Godot
-asks to quit. It is what you develop against, what you publish for desktop
-players, and the shape every other host follows.
+`MyGame.2dog` is the everyday desktop host. It starts the engine, runs your
+main scene in a window, and pumps frames until Godot asks to quit.
 
 ```bash
-dotnet run --project MyGame.console
+dotnet run --project MyGame.2dog
 ```
 
-## The Program
+## Program
 
-There is no framework underneath this  –  only your entry point. The one piece
-of magic is `Engine.ResolveProjectDir()`, which reads the `<GodotProjectDir>`
-recorded as assembly metadata at build time, so nothing hard-codes a path.
+This is the canonical desktop entry point. `Engine.ResolveProjectDir()` reads
+the host's `<GodotProjectDir>` metadata, so no path is hard-coded.
 
 ```csharp
 using Godot;
@@ -21,152 +18,76 @@ using Engine = twodog.Engine;
 
 internal static class Program
 {
-    // STA matches how godot.exe runs its main thread on Windows: OLE (drag & drop,
-    // IME, native dialogs) fails to initialize on the MTA thread .NET uses by default.
-    // No effect on Linux/macOS.
     [STAThread]
     private static void Main(string[] args)
     {
-        // Start() runs the main scene configured in project.godot
-        // (run/main_scene), exactly like launching godot.exe would.
-        // args reach Godot verbatim: --headless, --verbose, --quit-after N, ...
         using var engine = new Engine("MyGame", Engine.ResolveProjectDir(), args);
         using var godot = engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)
             GD.Print($"2dog is running '{scene.Name}'!");
 
-        // Iteration() returns true when the engine wants to quit
-        // (window closed, SceneTree.Quit(), --quit-after elapsed, ...).
         while (!godot.Iteration())
         {
-            // Your per-frame logic here
+            // Your per-frame logic here.
         }
     }
 }
 ```
 
-::: warning Why not top-level statements?
-They would save every line of that boilerplate, but the `[STAThread]` attribute cannot go on
-a generated entry point. `TrySetApartmentState(ApartmentState.STA)` returns `false`, and a windowed run on Windows then loses OLE drag & drop, and says so:
+`Start()` runs `run/main_scene`, and `args` reach Godot unchanged. The `using`
+declarations dispose the instance and engine in the required order.
 
-```log
-ERROR: Condition "RegisterDragDrop(...) != ((HRESULT)0L)" is true.
-   at: DisplayServerWindows::window_set_drop_files_callback
-```
+On Windows, `[STAThread]` matches `godot.exe` and keeps OLE drag and drop, IME,
+and native dialogs working. Top-level statements cannot mark their generated
+entry point; they are suitable only for hosts that will always be headless.
 
-Headless hosts never touch this. If a window is not in your future, top-level
-statements are fine.
-:::
+Prefer a callback? `engine.Run(perFrame)` iterates until quit and calls your
+delegate once per frame.
 
-::: tip Prefer a callback to a loop?
-`engine.Run(perFrame)` iterates until quit and calls your delegate once per
-frame. On desktop both forms block until the engine shuts down.
-:::
+## Project Details
 
-## The Project
+The shared project file is documented in [Hosts](./). The generated desktop
+host adds:
 
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>MyGame.Console</RootNamespace>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
-    <ProjectReference Include="../MyGame.csproj"/>
-  </ItemGroup>
-
-  <!-- The Godot project is the parent directory; hosts nest inside it -->
-  <PropertyGroup>
-    <GodotProjectDir>..</GodotProjectDir>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
-    <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
-  </PropertyGroup>
-</Project>
-```
-
-| Piece | Why it is there |
+| Setting | Purpose |
 | --- | --- |
-| `2dog.engine` | The host API, plus the native platform package for your OS |
-| `ProjectReference` | The game assembly Godot binds scripts against  –  referenced, never duplicated |
-| `GodotProjectDir` | Locates `project.godot`; also enables [automatic import](/import-tool) at build time |
-| `TwoDogVariant` | Picks `libgodot-debug` / `-release` / `-editor`. Unset means `release` |
-| `TwoDogRemoveDuplicateGodotAnalyzers` | Host and `Godot.NET.Sdk` game project would otherwise load the same analyzers twice |
-| `app.manifest` | Windows: the comctl32 v6 context Godot's display server needs for native dialogs, plus long-path awareness. Ignored elsewhere |
+| `ApplicationManifest` | Enables Windows comctl32 v6 and long paths; ignored elsewhere |
+| `TwoDogVariant` | Selects the release, debug, or editor native engine |
+| `TwoDogRemoveDuplicateGodotAnalyzers` | Prevents the host and game project from loading the same analyzers twice |
 
-A `.gdignore` sits beside the csproj, keeping the Godot editor, importer, and
-exporter out of the host directory  –  see [Project Layout](/project-layout).
-
-## Build Configurations
-
-| Configuration | Variant | Native | Use it for |
+| Configuration | Variant | Native | Use |
 | --- | --- | --- | --- |
-| `Debug` | `debug` | `template_debug` | Development  –  assertions and engine error checks |
-| `Release` | `release` | `template_release` | Shipping  –  optimized, smallest |
-| `Editor` | `editor` | `editor` | `[Tool]` scripts and editor types (`TOOLS_ENABLED`) |
+| `Debug` | `debug` | `template_debug` | Development and engine checks |
+| `Release` | `release` | `template_release` | Optimized shipping build |
+| `Editor` | `editor` | `editor` | `[Tool]` scripts and editor types |
 
-The mapping is just the two `Condition` lines above; change them if your
-configurations differ. [Choosing a Variant](/build-configurations) covers what
-each one can and cannot do.
+See [Choosing a Variant](/build-configurations) for details. Setting
+`GodotProjectDir` also enables [automatic resource import](/import-tool).
 
-## Running Headless
+## Headless Runs
 
-A headless service, CI job, or batch tool is this host with an argument:
+Use ordinary Godot arguments after `--`:
 
 ```bash
-dotnet run --project MyGame.console -- --headless --quit-after 300
+dotnet run --project MyGame.2dog -- --headless --quit-after 300
 ```
 
-Or bake it in when the host is only ever headless:
+For a permanently headless host, pass the arguments in code:
 
 ```csharp
-using var engine = new Engine("MyGame", Engine.ResolveProjectDir(), "--headless", "--audio-driver", "Dummy");
-```
-
-## Driving the Frame Loop
-
-Because the loop is yours, per-frame work does not have to live in a Godot
-script. Anything reachable from `engine.Tree` is fair game, and nodes with
-`_Process` keep running exactly as before:
-
-```csharp
-var cubes = engine.Tree.CurrentScene
-    .GetNode<Node3D>("Flair/WhiteCubes")
-    .GetChildren().OfType<Node3D>().ToArray();
-
-while (!godot.Iteration())
-{
-    var delta = (float)engine.Tree.Root.GetProcessDeltaTime();
-    foreach (var cube in cubes)
-        cube.Rotate(Vector3.Up, 1.8f * delta);
-}
+using var engine = new Engine(
+    "MyGame", Engine.ResolveProjectDir(), "--headless", "--audio-driver", "Dummy");
 ```
 
 ## Publishing
 
 ```bash
-dotnet publish MyGame.console -c Release
+dotnet publish MyGame.2dog -c Release
 ```
 
-The output carries the selected `libgodot-<variant>`, the GodotSharp
-assemblies in the layout that variant expects, and your game assembly. Both
-RID-specific and RID-less publishes work.
+The output includes the selected native engine, GodotSharp assemblies, and
+your game assembly. RID-specific and RID-less publishes are supported.
 
-::: warning Publishing from a source checkout
-Building against the 2dog repository rather than the NuGet packages? Run
-`dotnet build twodog.import -c Release` once first, so the import helper is
-available to the publish.
-:::
-
-## Shutdown
-
-The `using` declarations dispose the instance and the engine in the right
-order at the end of `Main`. That is also what makes a *sequential restart*
-legal: once disposed, a new engine can start in the same process. Starting a
-second one first throws  –  see
-[Single Godot Instance](/known-issues/single-instance).
+A normal host supports one active engine at a time. Disposal allows a
+sequential restart; see [Single Godot Instance](/known-issues/single-instance).

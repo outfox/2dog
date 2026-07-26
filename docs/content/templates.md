@@ -1,6 +1,6 @@
 # Creating a New Project
 
-The fastest route needs nothing installed at all (.NET 10+ SDK):
+Create and run a complete 2dog project without installing a tool:
 
 ```bash
 dnx 2dog new MyGame
@@ -8,355 +8,104 @@ cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-`2dog new` asks which hosts you want and creates the Godot project around
-them; add `--desktop`, `--web`, `--tests` (or `--non-interactive`) to skip the
-prompts. The same content also ships as a `dotnet new` template, described
-below  –  both produce identical projects.
+`2dog new` asks which hosts to include. Pass `--desktop`, `--web`, `--tests`,
+or `--non-interactive` to skip the prompts.
 
-(For an *existing* Godot project, just add 2dog instead  –  [`dnx 2dog add`](/add)
-produces the same layout around it, in place.)
+Already have a Godot project? Use [`2dog add`](/add) instead. It creates the
+same layout around your existing content.
 
-## Installation
+## Using `dotnet new`
 
-The `dotnet new` template is bundled in the `2dog` NuGet package (which is also
-the dotnet tool), so installing the package registers it:
+The same project template ships in the `2dog` NuGet package:
 
 ```bash
 dotnet new install 2dog
-```
-
-For a new project, installing the template *is* installing 2dog: there is no
-SDK or tool to set up beyond it  –  projects created from the template reference
-the 2dog NuGet packages themselves.
-
-### Local Installation (Development)
-
-To use the templates during development from a local clone:
-
-```bash
-# From the 2dog repository root
-dotnet new install ./templates/twodog
-```
-
-## Creating Projects
-
-### Full Project (Default)
-
-Create a 2dog application with the full capability spectrum  –  desktop host,
-sample Godot project, xUnit tests, and a browser (WebAssembly) host:
-
-```bash
 dotnet new 2dog -n MyGame
 cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-The `MyGame/` directory **is** the Godot project  –  and the solution root. The
-host projects are nested inside it, each carrying a `.gdignore` file so the
-Godot editor, importer, and exporter skip them. This creates:
+The generated project references the required 2dog packages; there is no
+separate SDK to install.
 
-- `MyGame.csproj` + `project.godot` + `main.tscn` - Sample Godot project (Godot.NET.Sdk) with a simple scene
-- `MyGame.slnx` - The single solution, next to `project.godot`
-- `TwoDogWebBoot.cs` - Web bootstrap, compiled into the game assembly (`LIBGODOT_ENABLED`-guarded)
-- `MyGame.2dog/` - Desktop host with 2dog package references and a minimal `Program.cs`
-- `MyGame.tests/` - xUnit test project with 2dog.xunit fixtures and sample tests
-- `MyGame.web/` - Browser (wasm) host that publishes the game as a static site
-- `.editorconfig` - .NET coding conventions
-- `.gitignore` - Standard ignores for .NET and Godot
+## What You Get
 
-::: tip Web host prerequisites
-Publishing `MyGame.web` requires a .NET 10+ SDK with the wasm-tools workload
-(`dotnet workload install wasm-tools`)  –  see [Web / Browser](/web). The rest
-of the solution builds without it: the solution file gives the web host
-ActiveCfg-only entries, so "Build Solution" skips it and you build it
-explicitly with `dotnet publish` when you want a web bundle.
-:::
+```text
+MyGame/                     # Godot project root and solution root
+├── project.godot
+├── MyGame.csproj           # Godot.NET.Sdk game project
+├── MyGame.slnx
+├── main.tscn
+├── export_presets.cfg
+├── global.json             # included with the web host
+├── TwoDogWebBoot.cs
+├── MyGame.2dog/            # desktop host
+├── MyGame.web/             # browser host
+├── MyGame.tests/           # xUnit tests
+├── .editorconfig
+└── .gitignore
+```
 
-::: tip Already have a Godot project?
-Just add 2dog! [`2dog add`](/add) produces this same layout around
-your existing project, in place.
-:::
+Each host folder contains `.gdignore`, so the Godot editor, importer, and
+exporter skip it. The game project also excludes host sources from its compile
+globs.
 
-### Opting Out
+See [Hosts](/hosts/index) for the shared host contract and each generated host's
+anatomy. See [Project Layout](/project-layout) for how the nested projects fit
+together.
 
-Each optional project can be excluded:
+## Choose Hosts
+
+The full template includes desktop, browser, and test hosts. To leave optional
+hosts out:
 
 ```bash
-# Without the test project
 dotnet new 2dog -n MyGame --tests false
-
-# Without the web host
 dotnet new 2dog -n MyGame --web false
+dotnet new 2dog -n MyGame --tests false --web false
 ```
 
-## Template Structure
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `-n, --name` | required | Project name |
+| `--tests` | `true` | Include `MyGame.tests` with xUnit and `2dog.xunit` |
+| `--web` | `true` | Include the `MyGame.web` browser host |
+| `--skipRestore` | `false` | Skip automatic package restore |
+| `--twodogVersion` | current release | 2dog package version |
+| `--nativesVersion` | current release | Native platform package version |
+| `--godotVersion` | current release | `Godot.NET.Sdk` version |
 
-### Generated Files
+## Work with the Project
 
-The template creates a project structure like this:
-
-```
-MyGame/                     # Godot project root = solution root
-├── project.godot           # Godot project file
-├── MyGame.csproj           # Godot.NET.Sdk project (assembly_name=MyGame)
-├── MyGame.slnx             # Solution file
-├── main.tscn               # Main scene
-├── export_presets.cfg      # Export presets (Web preset for the wasm host)
-├── global.json             # Pins a wasm-capable SDK (--web false to omit)
-├── TwoDogWebBoot.cs        # Web bootstrap (compiled into the game assembly)
-├── MyGame.2dog/            # Desktop host
-│   ├── .gdignore           # Hides the folder from the Godot editor
-│   ├── MyGame.2dog.csproj
-│   └── Program.cs          # Entry point
-├── MyGame.tests/           # Test project (--tests false to omit)
-│   ├── .gdignore
-│   ├── MyGame.tests.csproj
-│   └── BasicTests.cs
-├── MyGame.web/             # Browser (wasm) host (--web false to omit)
-│   ├── .gdignore
-│   ├── MyGame.web.csproj
-│   ├── Program.cs
-│   ├── global.json         # Same pin, for dotnet runs started in here
-│   └── wwwroot/index.html
-├── .editorconfig           # Code style settings
-└── .gitignore              # Git ignores
-```
-
-Every nested host folder contains a `.gdignore` file, which makes the Godot
-editor, importer, and exporter treat it as invisible. In the other direction,
-the Godot project's csproj excludes the host folders from its default compile
-globs (`DefaultItemExcludes`), so the two project layers never swallow each
-other's sources.
-
-### Program.cs
-
-The generated `MyGame.2dog/Program.cs` is a minimal working application:
-
-```csharp
-using Godot;
-using Engine = twodog.Engine;
-
-internal static class Program
-{
-    // STA matches how godot.exe runs its main thread on Windows: OLE (drag & drop,
-    // IME, native dialogs) fails to initialize on the MTA thread .NET uses by default.
-    // No effect on Linux/macOS.
-    [STAThread]
-    private static void Main(string[] args)
-    {
-        // Create and start the Godot engine with your project. Start() runs the
-        // main scene configured in project.godot (run/main_scene), exactly like
-        // launching godot.exe would - no manual scene loading needed. Command-line
-        // arguments are forwarded to Godot (--headless, --quit-after, ...).
-        using var engine = new Engine("MyGame", Engine.ResolveProjectDir(), args);
-        using var godot = engine.Start();
-
-        if (engine.Tree.CurrentScene is { } scene)
-            GD.Print($"2dog is running '{scene.Name}'!");
-        else
-            GD.Print("2dog is running (no run/main_scene set in project.godot).");
-        Console.WriteLine("Close the window to quit.");
-
-        // Main game loop - Iteration() returns true when the engine wants to
-        // quit (window closed, SceneTree.Quit(), --quit-after N, ...).
-        while (!godot.Iteration())
-        {
-            // Your per-frame logic here
-        }
-
-        Console.WriteLine("Shutting down...");
-    }
-}
-```
-
-### Project File
-
-The generated host `.csproj` needs a single `2dog.engine` package reference  –  GodotSharp,
-source generators, and platform-specific native libraries are all included
-transitively  –  plus a project reference to the Godot project for your C#
-scripts:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <OutputType>Exe</OutputType>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
-        <!-- The assembly keeps the folder name, but 'MyGame.2dog' is
-             not a valid C# namespace (digit-leading segment). -->
-        <RootNamespace>MyGame</RootNamespace>
-        <!-- comctl32 v6 + long paths for Godot's Windows display server -->
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="../MyGame.csproj"/>
-    </ItemGroup>
-
-    <!-- Godot project location: the parent directory (the Godot project is the
-         solution root; hosts are nested inside it, hidden from the Godot
-         editor by their .gdignore) -->
-    <PropertyGroup>
-        <GodotProjectDir>..</GodotProjectDir>
-    </PropertyGroup>
-
-    <!-- Remove duplicate Godot.SourceGenerators that come from the Godot project
-         (2dog.engine package already embeds them) -->
-    <Target Name="RemoveDuplicateGodotAnalyzers" BeforeTargets="CoreCompile">
-        <ItemGroup>
-            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Identity)').Contains('Godot.SourceGenerators'))" />
-        </ItemGroup>
-    </Target>
-</Project>
-```
-
-### Sample Godot Project
-
-The project root **is** a minimal Godot project with:
-
-- **project.godot** - Configured for .NET/C# with proper assembly name
-- **MyGame.csproj** - The `Godot.NET.Sdk` project that owns your C# scripts
-- **main.tscn** - Simple scene with a centered label showing "Hello from 2dog!"
-
-You can replace these with your own Godot project files or edit them in the Godot editor.
-
-## Template Parameters
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `-n, --name` | string | (required) | Name of the project to create |
-| `--tests` | bool | `true` | Include a test project with xUnit and 2dog.xunit |
-| `--web` | bool | `true` | Include a browser (WebAssembly) host project |
-| `--skipRestore` | bool | `false` | Skip automatic NuGet package restore |
-| `--twodogVersion` | string | (current release) | Version of 2dog packages to reference |
-| `--nativesVersion` | string | (current release) | Version of native platform packages to reference |
-| `--godotVersion` | string | (current release) | Version of Godot.NET.Sdk to reference |
-
-### Examples
+From `MyGame/`:
 
 ```bash
-# Full project (app + Godot project + tests + web host)
-dotnet new 2dog -n CoolGame
-
-# Without tests or web host
-dotnet new 2dog -n CoolGame --tests false --web false
-
-# Skip automatic restore (useful for CI)
-dotnet new 2dog -n CoolGame --skipRestore
-```
-
-## Working with Generated Projects
-
-### Building and Running
-
-From the project root (`MyGame/`):
-
-```bash
-# Build the solution
 dotnet build
-
-# Run the desktop host
 dotnet run --project MyGame.2dog
-
-# Run with specific configuration
-dotnet build -c Release
 dotnet run --project MyGame.2dog -c Release
 ```
 
-### Running Tests
+Use the Godot editor normally; the project root is a regular Godot project.
+C# scripts belong in that root and compile into `MyGame.csproj`, which every
+host references.
 
-See the [Testing](/testing) guide for details on test fixtures and setup.
+For tests, see [Testing](/testing). For browser prerequisites, publishing,
+serving, and platform limits, see [Web / Browser](/web). Publishing requires:
 
 ```bash
-# Run all tests
-dotnet test
-
-# Run with specific configuration
-dotnet test -c Debug
+dotnet workload install wasm-tools
+dotnet publish MyGame.web
 ```
 
-### Customizing the Godot Project
+The rest of the solution builds without `wasm-tools`; browser publishing is an
+explicit step.
 
-The generated `MyGame/` root is a minimal Godot project. You can:
-
-1. **Edit in Godot Editor:**
-   ```bash
-   # Open the project in the (external) Godot editor
-   godot --editor --path MyGame
-   ```
-   The nested host folders are invisible to the editor thanks to their
-   `.gdignore` files.
-
-2. **Start from an existing project:**
-   Instead of copying files into the template output, run
-   [`2dog add`](/add) on your existing Godot project  –  it scaffolds
-   the same nested hosts around it, in place.
-
-3. **Add C# scripts:**
-   - Create `.cs` files anywhere in the Godot project (outside the host folders)
-   - They compile into the game assembly via `MyGame.csproj`
-   - The hosts already reference that project
-
-## Uninstalling Templates
+## Manage the Template
 
 ```bash
+dotnet new update
 dotnet new uninstall 2dog
 ```
 
-For local installations:
-
-```bash
-dotnet new uninstall ./templates/twodog
-```
-
-## Updating Templates
-
-```bash
-# Update to latest version
-dotnet new update
-```
-
-For local installations, uninstall and reinstall:
-
-```bash
-dotnet new uninstall ./templates/twodog
-dotnet new install ./templates/twodog
-```
-
-## Troubleshooting
-
-### Template Not Found
-
-**Problem:** `dotnet new 2dog` shows "No templates or subcommands found"
-
-**Solution:**
-1. Ensure the template is installed: `dotnet new list | grep 2dog`
-2. If not listed, install it: `dotnet new install 2dog` (or local path)
-
-### Wrong Package Versions
-
-**Problem:** Generated project references outdated package versions
-
-**Solution:**
-Update the package reference in the `.csproj` file:
-
-```bash
-dotnet add package 2dog.engine
-```
-
-Or edit the `.csproj` manually to use the latest version.
-
-## Template Customization
-
-If you're developing the templates themselves, see the [templates/README.md](https://github.com/outfox/2dog/tree/main/templates) in the repository for:
-
-- Template structure and configuration
-- Symbol replacements
-- Testing template changes
-- Packaging and publishing
+If `dotnet new 2dog` is not found, check `dotnet new list` and reinstall with
+`dotnet new install 2dog`.

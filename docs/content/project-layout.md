@@ -1,12 +1,8 @@
-
 # Project Layout
 
-2dog strongly recommends one layout: the directory containing `project.godot`
-is also the .NET solution root, and each way of running the game is a small
-nested host project.
-
-It keeps Godot's view of the project familiar while giving desktop, tests, and
-the browser independent .NET entry points.
+2dog recommends using the directory containing `project.godot` as the .NET
+solution root, with a small nested project for each host. Godot keeps its
+familiar layout while desktop, tests, and the browser get independent entry points.
 
 ## The Layout at a Glance
 
@@ -31,9 +27,8 @@ MyGame/                         Godot project and solution root
     └── wwwroot/                Browser shell and static files
 ```
 
-The exact scene and script folders are yours to organize. The important rule
-is that the game content stays with `project.godot`, while executable hosts
-live in ignored subdirectories.
+Organize scenes and scripts however you prefer. Keep game content beside
+`project.godot` and executable hosts in ignored subdirectories.
 
 ## One Game Assembly
 
@@ -44,16 +39,15 @@ live in ignored subdirectories.
 - The `Godot.NET.Sdk` configuration
 - Browser bootstrap code shared with the web host
 
-`project.godot` and its directory remain the home of scenes, resources, and
-assets. The host projects do not duplicate your game. They reference its
-assembly and content, then decide where and how it runs.
+Scenes, resources, and assets remain beside `project.godot`. Hosts reference
+the game assembly and content; they do not duplicate either.
 
 ## Three Ways to Run It
 
 ### Desktop Host
 
-`MyGame.2dog` is an ordinary .NET executable. It starts the embedded engine,
-points it at the parent Godot project, and drives the main loop.
+`MyGame.2dog` starts the embedded engine, points it at the parent Godot project,
+and drives the main loop.
 
 ```bash
 dotnet run --project MyGame.2dog
@@ -61,9 +55,8 @@ dotnet run --project MyGame.2dog
 
 ### Test Host
 
-`MyGame.tests` is an xUnit project. It starts one Godot instance through the
-supplied fixture, normally in headless mode, and lets tests load the real game
-assembly and resources.
+`MyGame.tests` starts Godot through an xUnit fixture, normally headless, and
+loads the real game assembly and resources.
 
 ```bash
 dotnet test MyGame.tests
@@ -81,9 +74,8 @@ dotnet publish MyGame.web
 
 ## Why the Hosts Are Nested
 
-The host projects need to find the Godot project, while the Godot editor must
-not mistake host source files for game scripts. Nesting solves the first part;
-`.gdignore` solves the second.
+Nesting lets hosts find the Godot project. `.gdignore` prevents the editor from
+mistaking host source files for game scripts.
 
 Every host points its `GodotProjectDir` property at the parent directory:
 
@@ -91,24 +83,21 @@ Every host points its `GodotProjectDir` property at the parent directory:
 <GodotProjectDir>..</GodotProjectDir>
 ```
 
-That path is embedded as assembly metadata and used at runtime. It also enables
-the automatic resource-import target during builds.
+The path is embedded as assembly metadata, used at runtime, and enables
+automatic resource import during builds. See [Resource Import](/import-tool).
 
-In the other direction, the game project excludes the host folders from its
-default .NET compile globs. The two layers can therefore share one repository
-without swallowing each other's source files.
+The game project excludes host folders from its default .NET compile globs, so
+the layers do not consume each other's source files.
 
 ## What the Godot Editor Sees
 
-Open `MyGame/` in Godot and it sees the same project content it always has:
+Open `MyGame/` in Godot as usual:
 
 ```bash
 godot-mono --editor MyGame
 ```
 
-The `.gdignore` files hide `MyGame.2dog`, `MyGame.tests`, and `MyGame.web` from
-the editor, importer, and exporter. You can continue authoring scenes and
-scripts normally.
+The hosts' `.gdignore` files hide them from the editor, importer, and exporter.
 
 ## How You Get This Layout
 
@@ -124,18 +113,15 @@ For a fresh project, the same tool creates the game and hosts together:
 dnx 2dog new MyGame
 ```
 
-Both routes give you a similar structure. See
-[Adding 2dog](/add) for patching behavior or
-[Project Templates](/templates) for every generated file and option.
+See [Adding 2dog](/add) for patching behavior or [Project Templates](/templates)
+for every generated file and option.
 
 ## When to Use Another Layout
 
-An existing .NET application can host a Godot project from another path, but
-that is an advanced embedding scenario rather than the recommended starting
-point. Keep the standard layout unless an established repository structure or
-application boundary gives you a concrete reason not to.
+An existing .NET application can host a Godot project elsewhere. Prefer the
+standard layout unless an established repository or application boundary gives
+you a concrete reason not to.
 
-::: info Trail marker
-Laying out MSBuild projects that depend on native libraries can be hard.
-The [Parallel xUnit Collections Demo](https://github.com/outfox/2dog/tree/main/demos/xunit/parallel_collections) shows a minimalist way of doing this, including a tiny, almost dummy, Godot project stub.
-:::
+For one minimal alternative, see the
+[Parallel xUnit Collections Demo](https://github.com/outfox/2dog/tree/main/demos/xunit/parallel_collections),
+which uses a small Godot project stub beside MSBuild projects with native dependencies.

@@ -1,8 +1,9 @@
 # API Reference
 
-## twodog.Engine
+## `twodog.Engine`
 
-The main entry point for embedding Godot in your application.
+`Engine` configures, starts, and owns an embedded Godot instance. It implements
+`IDisposable`.
 
 ### Constructor
 
@@ -10,93 +11,134 @@ The main entry point for embedding Godot in your application.
 public Engine(string project, string? path = null, params string[] args)
 ```
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `project` | `string` | Project name (used in logging and identification) |
-| `path` | `string?` | Path to the Godot project directory. Maps to `--path` argument |
-| `args` | `string[]` | Additional command-line arguments passed to Godot |
+| Parameter | Description |
+| --- | --- |
+| `project` | Project name passed as the first Godot argument |
+| `path` | Optional Godot project directory, passed through `--path` |
+| `args` | Additional Godot command-line arguments |
 
 ### Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `Tree` | `SceneTree` | The active scene tree. Throws if called before `Start()` |
+| Member | Type | Description |
+| --- | --- | --- |
+| `Tree` | `SceneTree` | Active scene tree; throws if Godot has not started |
+| `NativePath` | `string?` (`init`) | Exact desktop libgodot path to load instead of variant probing; not supported in the browser |
+| `ProjectAssemblyDir` | `string?` (`init`) | Preferred directory for the project's C# assembly; defaults to `AppContext.BaseDirectory` |
+| `LoadedNativePath` | `static string?` | Full path of the loaded libgodot, when known |
+
+`NativePath` and `ProjectAssemblyDir` are advanced hosting controls. Most
+applications should leave them unset.
 
 ### Methods
 
-#### Start()
+#### `Start`
 
 ```csharp
 public GodotInstance Start()
 ```
 
-Initializes and starts the Godot engine. Returns a `GodotInstance` for controlling the main loop.
+Starts Godot, including the project's `run/main_scene`, and returns the object
+that controls its main loop. Starting another instance before disposing the
+current engine throws `InvalidOperationException`; sequential restart is
+supported. See [Single Godot Instance](/known-issues/single-instance).
 
-::: danger
-Only one Godot instance may run at a time. Calling `Start()` while another
-instance is running throws `InvalidOperationException`. Dispose the previous
-`Engine` (and its `GodotInstance`) first  –  sequential restart in the same
-process is supported.
-:::
+#### `Run`
+
+```csharp
+public void Run(Action? perFrame = null)
+```
+
+Requires a successful `Start()`. On desktop, calls `perFrame` after each
+iteration that does not request exit, then blocks until Godot requests exit.
+In the browser, it registers the Emscripten main loop and returns immediately.
+
+#### `Dispose`
+
+```csharp
+public void Dispose()
+```
+
+Destroys the instance owned by this engine. A `using` statement is the
+recommended leash.
+
+#### `ResolveProjectDir`
+
+```csharp
+public static string ResolveProjectDir()
+```
+
+Returns the absolute `GodotProjectDir` embedded in loaded assembly metadata.
+Throws `InvalidOperationException` when no loaded assembly contains it.
+
+#### `RegisterWebPluginsInitializer`
+
+```csharp
+public static void RegisterWebPluginsInitializer(IntPtr initializer)
+```
+
+Registers the game assembly's source-generated plugins initializer. Browser
+hosts must call this before `Start()`; desktop calls throw
+`PlatformNotSupportedException`. The generated `TwoDogWebBoot.cs` exposes the
+required pointer. See [Browser Hosts](/hosts/web).
 
 ### Example
 
 ```csharp
-using twodog;
+using System;
+using Engine = twodog.Engine;
 
-// Basic usage
-using var engine = new Engine("myapp", "./project");
-using var godot = engine.Start();
+internal static class Program
+{
+    [STAThread]
+    private static void Main(string[] args)
+    {
+        using var engine = new Engine(
+            "myapp",
+            Engine.ResolveProjectDir(),
+            "--headless",
+            "--audio-driver",
+            "Dummy");
 
-// With additional arguments
-using var engine = new Engine("myapp", "./project", "--headless", "--verbose");
-using var godot = engine.Start();
+        using var godot = engine.Start();
+        engine.Run();
+    }
+}
 ```
 
-## Godot.GodotInstance
+The example uses one `engine` and one `godot` declaration, so it can be pasted
+into a console project without duplicate-local errors.
 
-Represents a running Godot instance. Returned by `Engine.Start()`.
+## `Godot.GodotInstance`
 
-### Methods
+`Engine.Start()` returns the running Godot instance.
 
-#### Iteration()
+### `Iteration`
 
 ```csharp
 public bool Iteration()
 ```
 
-Processes one frame of the Godot main loop (physics, rendering, input, etc.).
-
-**Returns:** `true` if Godot wants to quit, `false` to continue.
+Processes one main-loop frame. Returns `true` when Godot wants to quit.
 
 ```csharp
 while (!godot.Iteration())
 {
-    // Frame processed
+    // One frame has completed.
 }
-// Godot requested quit
 ```
 
-#### Dispose()
+### `Dispose`
 
-Shuts down the Godot instance. Called automatically when using `using` statements.
+Shuts down the instance. Dispose it before its owning `Engine`.
 
 ## Common Godot Arguments
 
-Pass these via the `args` parameter:
-
-| Argument | Description |
-|----------|-------------|
-| `--headless` | Run without rendering (for servers/CI) |
+| Argument | Purpose |
+| --- | --- |
+| `--headless` | Run without display or audio output |
 | `--verbose` | Enable verbose logging |
 | `--debug` | Enable debug mode |
-| `--rendering-driver` | Set renderer: `vulkan`, `opengl3`, `dummy` |
-| `--audio-driver` | Set audio: `PulseAudio`, `WASAPI`, `Dummy` |
+| `--rendering-driver <driver>` | Select a rendering driver, such as `opengl3` |
+| `--audio-driver <driver>` | Select an audio driver, such as `Dummy` |
 
-```csharp
-// Headless server
-new Engine("server", "./project", "--headless", "--audio-driver", "Dummy");
-
-// Force OpenGL
-new Engine("app", "./project", "--rendering-driver", "opengl3");
-```
+Arguments are passed to Godot verbatim through the constructor.

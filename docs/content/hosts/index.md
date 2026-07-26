@@ -1,45 +1,37 @@
 # Hosts
 
-A **host** is a small .NET program that owns the process, starts the embedded
-Godot engine, and drives the frame loop. This is the end of the leash .NET
-holds. Your game  –  scenes, resources, and the C# assembly next to
-`project.godot`  –  is untouched; the host only decides where and how it runs.
+A **host** is a small .NET program that owns the process, starts embedded
+Godot, and drives its frame loop. This is where .NET holds the leash: your
+scenes, resources, and game assembly stay in the Godot project, while the host
+decides where and how they run.
 
-| Host | Project | Run it with | Purpose |
+| Host | Project | Command | Purpose |
 | --- | --- | --- | --- |
-| [Console](./console) | `MyGame.console` | `dotnet run --project MyGame.console` | Windowed or headless desktop app  –  the everyday host |
-| [Browser](./web) | `MyGame.web` | `dotnet publish MyGame.web` | Static WebAssembly site, no server code |
-| [xUnit](./xunit) | `MyGame.xunit` | `dotnet test MyGame.xunit` | Tests against a real engine and real resources |
+| [Console](./console) | `MyGame.2dog` | `dotnet run --project MyGame.2dog` | Windowed or headless desktop app |
+| [Browser](./web) | `MyGame.web` | `dotnet publish MyGame.web` | Static WebAssembly site |
+| [xUnit](./xunit) | `MyGame.tests` | `dotnet test MyGame.tests` | Tests using a real engine and resources |
 
-All three are generated for you by [`2dog new`](/templates) or
-[`2dog add`](/add) in an existing project. Run the tool again whenever you want
-another one  –  including a second host of a kind you already have:
+[`2dog new`](/templates) generates a new project with these hosts;
+[`2dog add`](/add) adds them to an existing project.
 
-```bash
-2dog add --desktop MyGame.editor   # a second desktop host, beside the first
-```
+## Shared Project Anatomy
 
-More are coming, or can easily be added by you.
+Every host is an ordinary `Microsoft.NET.Sdk` project with:
 
-## What Every Host Has in Common
+- a package reference to its 2dog host package;
+- a `ProjectReference` to `MyGame.csproj`, the Godot C# assembly;
+- `<GodotProjectDir>`, which points to `project.godot` and is available to
+  `Engine.ResolveProjectDir()` at runtime;
+- a `.gdignore`, because hosts nest inside the Godot project;
+- a `TwoDogVariant` of `release`, `debug`, or `editor` where applicable.
 
-- An ordinary `Microsoft.NET.Sdk` project  –  no custom SDK, no launcher.
-- A `ProjectReference` to `MyGame.csproj`, the one Godot C# assembly.
-- `<GodotProjectDir>`, embedded as assembly metadata and read back at runtime
-  by `Engine.ResolveProjectDir()`.
-- A `.gdignore`, because hosts nest inside the Godot project
-  ([Project Layout](/project-layout)).
-- A `TwoDogVariant`: `release`, `debug`, or `editor`
-  ([Choosing a Variant](/build-configurations)).
-
-That is the whole contract  –  about ten lines of csproj:
+The desktop form is the baseline:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <!-- The directory containing project.godot; '..' in the standard layout -->
     <GodotProjectDir>..</GodotProjectDir>
   </PropertyGroup>
 
@@ -50,47 +42,27 @@ That is the whole contract  –  about ten lines of csproj:
 </Project>
 ```
 
-## The Engine Surface
+Browser and xUnit pages describe only their differences. See
+[Project Layout](/project-layout) for the full directory model and
+[Choosing a Variant](/build-configurations) for native variants.
 
-Hosts differ only in which of these they call, and what they do between
-frames. Full signatures in the [API Reference](/api-reference).
+## Engine Surface
 
-| Member | What it does |
+Full signatures are in the [API Reference](/api-reference).
+
+| Member | Purpose |
 | --- | --- |
-| `new Engine(name, path, args)` | Configures an engine. `args` reach Godot verbatim |
-| `Engine.ResolveProjectDir()` | Reads `GodotProjectDir` back from assembly metadata |
-| `engine.Start()` | Boots Godot, runs `run/main_scene`, returns a `GodotInstance` |
-| `engine.Tree` | The live `SceneTree`  –  your way into the whole GodotSharp API |
-| `instance.Iteration()` | Advances one frame; `true` means Godot wants to quit |
-| `engine.Run(perFrame)` | Drives the loop for you, with an optional per-frame callback |
-| `Engine.RegisterWebPluginsInitializer(ptr)` | Browser only  –  call before `Start()` |
+| `new Engine(name, path, args)` | Configure an engine; arguments reach Godot verbatim |
+| `Engine.ResolveProjectDir()` | Read `GodotProjectDir` from assembly metadata |
+| `engine.Start()` | Boot Godot and run `run/main_scene` |
+| `engine.Tree` | Access the live `SceneTree` and GodotSharp API |
+| `instance.Iteration()` | Advance one frame; `true` means Godot wants to quit |
+| `engine.Run(perFrame)` | Drive the loop with an optional callback |
+| `Engine.RegisterWebPluginsInitializer(ptr)` | Register browser plugins before `Start()` |
 
-## Writing Your Own Host
+A normal host supports one active engine at a time. Sequential restarts work
+after disposal; isolated load contexts are an experimental option. See
+[Single Godot Instance](/known-issues/single-instance).
 
-Anything that can call `Start()` is a host: a build tool, a headless
-simulation server, an asset pipeline step, a benchmark harness.
-
-```csharp
-using Godot;
-using Engine = twodog.Engine;
-
-using var engine = new Engine("tool", Engine.ResolveProjectDir(), "--headless");
-using var godot = engine.Start();
-
-GD.Print($"Loaded {engine.Tree.CurrentScene?.Name}");
-
-while (!godot.Iteration())
-{
-    // your work here
-}
-```
-
-Two rules apply to all of them:
-
-- **One instance at a time.** Starting a second engine before disposing the
-  first throws. Sequential restart works; concurrent engines need the
-  experimental hosting in [Single Godot Instance](/known-issues/single-instance).
-- **Mark `Main` with `[STAThread]` on Windows.** `godot.exe` runs its main
-  thread in a single-threaded apartment; on .NET's default MTA thread, OLE
-  features (drag & drop, IME, native dialogs) fail to initialize. No effect
-  elsewhere.
+Windowed Windows hosts should mark `Main` with `[STAThread]` so OLE features
+such as drag and drop, IME, and native dialogs initialize correctly.

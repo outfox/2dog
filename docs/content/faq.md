@@ -4,24 +4,24 @@
 
 They solve opposite problems:
 
-- **[godot-dotnet](https://github.com/godotengine/godot-dotnet)** is about using **.NET in Godot**  –  a new bindings layer for writing native extensions in .NET, eventually replacing GodotSharp.
-- **2dog** is about using **Godot in .NET**  –  your application is the host, and Godot runs inside it as a library.
+- **[godot-dotnet](https://github.com/godotengine/godot-dotnet)** puts .NET in Godot through a new bindings layer for native extensions.
+- **2dog** puts Godot in .NET: your application hosts the engine as a library.
 
-2dog is not a replacement for godot-dotnet (or for GodotSharp  –  it uses GodotSharp under the hood). What 2dog changes is the process structure:
+2dog uses GodotSharp; it changes the process structure:
 
 **Classic Godot with C# (godot-mono):**
 
 ```
-godot-mono            ← the engine is the process, it drives everything
+godot-mono            <- the engine process drives everything
 ├── loads GodotSharp
-│   └── runs your code (very indirectly)
+│   └── runs your code
 └── loads GDExtensions
 ```
 
 **2dog:**
 
 ```
-your .NET application  ← your code is the process, it drives the engine
+your .NET application  <- your process drives the engine
 └── loads libgodot
     ├── loads GodotSharp
     └── loads GDExtensions
@@ -29,28 +29,28 @@ your .NET application  ← your code is the process, it drives the engine
 
 ### When to use which
 
-**godot-dotnet:**
-- Write native extensions in .NET
-- Use .NET inside Godot
-
-**2dog:**
-- Use Godot inside .NET:
-  - Run unit tests in your IDE test runner or with `dotnet test`
-  - Package a Godot game as a .NET application
-  - Embed Godot in a .NET application
-- Add .NET code on top of an existing game  –  for testing, benchmarking, analysis, or augmentation
+Use godot-dotnet to write native extensions in .NET. Use 2dog to embed or
+package Godot in a .NET application, run tests with `dotnet test`, or add .NET
+testing and tooling around an existing game.
 
 ## Will 2dog use godot-dotnet in the future?
 
-Likely yes, once that integration is finished. As of mid-2026, godot-dotnet is still early-stage: it provides the basic plumbing to build something *like* GodotSharp, but does not yet offer what GodotSharp offers today. It's important and complex work worth following, but 2dog stays on GodotSharp until godot-dotnet is a practical replacement.
+Likely, when it becomes a practical GodotSharp replacement. As of mid-2026,
+godot-dotnet provides early plumbing but not GodotSharp's full capabilities, so
+2dog remains on GodotSharp.
 
 ## Is 2dog a replacement for GodotSharp?
 
-No. 2dog embeds GodotSharp (and Godot's C# source generators) and builds on top of it. Everything you know from Godot C# scripting  –  `GD`, `Node`, `[Export]`, signals  –  works the same; 2dog only inverts who is in charge of the process.
+No. 2dog embeds GodotSharp and Godot's C# source generators. `GD`, `Node`,
+`[Export]`, signals, and other C# APIs work as usual; only process ownership changes.
 
 ## Why is the library a separate package (`2dog.engine`) instead of part of `2dog`?
 
-NuGet forces the split. The `2dog` package is the dotnet tool and the `dotnet new` template in one (`DotnetTool` and `Template` package types), and a package marked as a dotnet tool cannot also be consumed as a `PackageReference`  –  referencing it fails with error `NU1213`  –  so it can't double as the library. The `PackAsTool` layout also conflicts with the library payload (`build/` targets, embedded API assemblies, import helper), and dotnet tool execution doesn't restore package dependencies, so the tool has to be self-contained. Hence one library package (`2dog.engine`) and one tool + template package (`2dog`), released in lockstep. The `2dog` package carries the template content both as `dotnet new` content and embedded in the tool, so `dotnet new 2dog` and the `2dog` tool scaffold identical output  –  see [Adding 2dog to a Project](/add).
+NuGet packages marked as dotnet tools cannot also be consumed through a
+`PackageReference`; doing so fails with `NU1213`. Therefore `2dog.engine` is the
+library, while `2dog` contains the self-contained tool and template. They are
+released together, and both scaffolding routes produce the same output. See
+[Adding 2dog to a Project](/add).
 
 ---
 

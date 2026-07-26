@@ -1,33 +1,19 @@
 # Build Variants
 
-2dog supports three build configurations, each using a different Godot native library variant optimized for specific use cases.
+2dog offers three native Godot variants. Pick the lightest one that has the
+features your host needs.
 
-## Overview
-
-| Configuration | Godot Build | TOOLS_ENABLED | GD Debugger | Use Case |
-|--------------|-------------|---------------|---------------|----------|
-| **Debug** | `template_debug` | :gd-cross@err: No | :gd-checkmark@ok: Yes | Development, debugging |
-| **Release** | `template_release` | :gd-cross@err: No | :gd-cross@err: No | Production, optimized runtime |
-| **Editor** | `editor` | :gd-checkmark@ok: Yes | :gd-checkmark@ok: Yes | Asset import, editor tools |
+| .NET configuration | Recommended variant | Godot build | `TOOLS_ENABLED` | Use |
+| --- | --- | --- | --- | --- |
+| **Debug** | `debug` | `template_debug` | No | Development, debugging, tests |
+| **Release** | `release` | `template_release` | No | Production and final validation |
+| **Editor** | `editor` | `editor` | Yes | Editor types and `[Tool]` scripts |
 
 ## Debug Configuration
 
-The Debug configuration uses Godot's `template_debug` build, which includes debug symbols and assertions but excludes editor-specific features.
+The `debug` variant includes assertions and debugging support, but not editor
+features.
 
-### When to Use
-- Day-to-day development
-- Debugging game logic
-- Running unit tests
-- Investigating crashes or issues
-
-### Features
-- :gd-checkmark@ok: Debug symbols enabled
-- :gd-checkmark@ok: Assertions and error checking
-- :gd-checkmark@ok: Full GodotSharp API
-- :gd-cross@err: No editor tools
-- :gd-cross@err: No import pipeline
-
-### Usage
 ```bash
 dotnet build -c Debug
 dotnet run -c Debug
@@ -36,23 +22,9 @@ dotnet test -c Debug
 
 ## Release Configuration
 
-The Release configuration uses Godot's `template_release` build, which is fully optimized for performance with minimal binary size.
+The `release` variant is the optimized production runtime and the default when
+`TwoDogVariant` is unset.
 
-### When to Use
-- Production builds
-- Performance testing
-- Final game/application distribution
-- CI/CD production pipelines
-
-### Features
-- :gd-checkmark@ok: Fully optimized
-- :gd-checkmark@ok: Minimal binary size
-- :gd-checkmark@ok: Full GodotSharp API
-- :gd-cross@err: No debug symbols
-- :gd-cross@err: No editor tools
-- :gd-cross@err: No import pipeline
-
-### Usage
 ```bash
 dotnet build -c Release
 dotnet run -c Release
@@ -61,216 +33,61 @@ dotnet publish -c Release
 
 ## Editor Configuration
 
-The Editor configuration uses Godot's `editor` build, which includes the complete editor toolchain with `TOOLS_ENABLED` enabled.
+The `editor` variant enables `TOOLS_ENABLED`, including editor types, import
+plugins, and `[Tool]` scripts.
 
-### When to Use
-- Building asset import tools
-- Creating custom Godot editor plugins
-- Processing game assets in CI/CD
-- Using Godot's import pipeline
-- Editor scripting and automation
-- Scene validation and manipulation
-
-### Features
-- :gd-checkmark@ok: Debug symbols enabled
-- :gd-checkmark@ok: TOOLS_ENABLED flag
-- :gd-checkmark@ok: Resource import pipeline
-- :gd-checkmark@ok: Editor APIs (`EditorInterface`, `EditorPlugin`, etc.)
-- :gd-checkmark@ok: Import plugins (`ResourceImporterTexture`, etc.)
-- :gd-checkmark@ok: Scene tools and validation
-- :gd-checkmark@ok: Export tools and packaging APIs
-- :gd-triangle@warn: Larger binary size
-- :gd-triangle@warn: Slower than template builds
-
-### Usage
 ```bash
 dotnet build -c Editor
 dotnet run -c Editor
 dotnet test -c Editor
 ```
 
-### Editor API Examples
-
-#### Tool Script
-```csharp
-using Godot;
-
-// [Tool] scripts run their _Ready and _Process in the editor.
-// Build with: dotnet build -c Editor
-[Tool]
-public partial class MyToolNode : Node
-{
-    [Export] public bool ReadyCalled { get; set; }
-
-    public override void _Ready()
-    {
-        ReadyCalled = true;
-    }
-}
-```
-
-#### Resource Import
-
-Godot's import pipeline (generating `.uid` files, processing assets) runs automatically as an incremental MSBuild step in any project that sets `<GodotProjectDir>`  –  see [Resource Import](./import-tool). It executes in a separate helper process against the editor-variant libgodot via the `libgodot_import_project` entry point. Editor runtime singletons like `EditorInterface` remain unavailable through the libgodot embedding API.
-
-::: warning Editor Runtime Limitations
-The Editor configuration provides **compile-time access** to editor types (`EditorInterface`, `EditorPlugin`, etc.) and enables `[Tool]` script execution. However, editor **runtime singletons** are not initialized in embedded libgodot mode. The import pipeline runs automatically at build time in a separate helper process (see [Resource Import](./import-tool)).
+::: warning Editor runtime limitations
+The variant provides compile-time access to editor APIs, but embedded libgodot
+does not initialize editor runtime singletons such as `EditorInterface`.
+Resource import runs separately and automatically at build time; see
+[Resource Import](./import-tool).
 :::
 
-## Configuration Comparison
+## Selecting a Variant
 
-### Binary Size
-
-Approximate sizes for Windows x64 builds:
-
-| Configuration | libgodot.dll Size |
-|--------------|------------------|
-| Release | ~67 MB |
-| Debug | ~82 MB |
-| Editor | ~159 MB |
-
-### Performance
-
-Relative performance (Release = 100%):
-
-| Configuration | Relative Performance |
-|--------------|---------------------|
-| Release | 100% (fastest) |
-| Debug | ~95% |
-| Editor | ~85% |
-
-::: warning Editor Build Performance
-Editor builds are significantly larger and slower due to the additional tooling. Only use Editor configuration when you specifically need TOOLS_ENABLED features.
-:::
-
-## Setting Up Multi-Configuration Projects
-
-### Selecting a Variant
-
-Referencing `2dog.engine` gives you the `release` natives. The variant is **not**
-derived from your .NET configuration automatically  –  to use `debug` or
-`editor` natives, set `TwoDogVariant`, typically conditioned on your
-configuration. All three variants ship with the platform meta package, so no
-extra package references are needed:
+The .NET configuration does not select the native variant automatically.
+`2dog.engine` defaults to `release`; map Debug and Editor explicitly with
+`TwoDogVariant`:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
+    <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+    <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
   </ItemGroup>
-
-  <!-- Debug natives (opt-in); Editor natives via a custom 'Editor' configuration -->
-  <PropertyGroup>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
-  </PropertyGroup>
 </Project>
 ```
 
-The build copies the selected variant into your output directory as
-`libgodot-<variant>.dll` (`.so`/`.dylib`) and the runtime loads it by that
-name, so switching variants can never silently run a stale native from a
-previous build.
+All three desktop variants come through the platform meta package, so this
+needs no extra package references. `TwoDogVariant` also controls the copied
+native library, GodotPlugins layout, and embedded runtime metadata.
 
-`TwoDogVariant` is the single configuration axis: the native selection, the
-GodotPlugins layout and the embedded variant metadata all follow it, so they
-can never disagree.
+Use the configuration in the usual way:
 
-## CI/CD Integration
-
-### GitHub Actions Example
-
-```yaml
-name: Build and Test
-
-on: [push, pull_request]
-
-jobs:
-  test-debug:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
-      
-      - name: Run Debug Tests
-        run: dotnet test -c Debug
-  
-  test-release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
-      
-      - name: Run Release Tests
-        run: dotnet test -c Release
-  
-  test-editor:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
-      
-      - name: Run Editor Tests
-        run: dotnet test -c Editor
-```
-
-## Troubleshooting
-
-### Wrong Build Type Error
-
-If you see:
-```
-Unable to find the .NET assemblies directory.
-Make sure the 'GodotSharp/Api/Debug' directory exists...
-```
-
-**Solution**: Ensure `TwoDogVariant` matches the native library variant you
-reference  –  `debug` for `2dog.<rid>.debug`, `editor` for `2dog.<rid>.editor`,
-`release` (the default) for the packages that come with `2dog.engine` itself. See
-[Selecting a Variant](#selecting-a-variant).
-
-### Editor APIs Not Available
-
-If editor types are missing at compile time:
-
-**Solution**: Use the `editor` native variant (`TwoDogVariant=editor`).
-Only editor builds include
-`TOOLS_ENABLED` features  –  and remember that editor runtime singletons are not
-initialized in embedded libgodot mode (see the warning above).
-
-### Performance Issues
-
-If your application runs slowly:
-
-**Solution**: Check if you're accidentally using Editor configuration for runtime:
 ```bash
-# For production, use Release
-dotnet build -c Release
+dotnet run -c Debug
 dotnet publish -c Release
+dotnet test -c Editor
 ```
 
-## Best Practices
+If Godot reports that it cannot find its .NET assemblies, confirm that
+`TwoDogVariant` is `release`, `debug`, or `editor`, then clean and rebuild:
 
-1. **Use Debug during development** for better error messages and debugging
-2. **Use Release for production** to maximize performance
-3. **Use Editor only when needed** for import tools or editor extensions
-4. **Match test configuration to use case**:
-   - General tests: Debug configuration
-   - Performance tests: Release configuration
-   - Import/editor tests: Editor configuration
-5. **Document configuration requirements** in your project README
-6. **Cache native libraries in CI/CD** to speed up builds
+```bash
+dotnet clean
+dotnet build -c Debug
+```
+
+See [Configuration](./configuration) for the property and package reference.

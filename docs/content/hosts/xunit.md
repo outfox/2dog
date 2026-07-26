@@ -1,27 +1,24 @@
 # xUnit Host
 
-`MyGame.xunit` starts a real Godot engine against your real project directory,
-with your real resources loaded  –  `GD.Load<PackedScene>` loads the scene you
-authored, `AddChild` puts it in a live `SceneTree`, `Iteration()` runs a real
-physics frame. The only structural difference from the other hosts is that the
-test runner owns the process, so the engine lifetime moves from a `Main()`
-into an xUnit **fixture**.
+`MyGame.tests` runs tests against a real Godot engine, project, and resources.
+Because xUnit owns the process, an xUnit fixture owns the engine lifetime.
 
 ```bash
-dotnet test MyGame.xunit
+dotnet test MyGame.tests
 ```
 
-::: info This page is the host project
-[Testing with xUnit](/testing) covers fixtures, custom engine arguments, and
-parallel collections. What follows is the host itself.
+::: info This page covers host anatomy
+[Testing with xUnit](/testing) is the canonical guide to fixtures, engine
+arguments, collections, filtering, and CI workflows.
 :::
 
-## A Test
+## Test Anatomy
 
 ```csharp
 using Godot;
-using twodog.fixture;  // GodotHeadlessFixture
-using twodog.xunit;    // GodotHeadlessCollection
+using twodog.fixture;
+using twodog.xunit;
+using Xunit;
 
 namespace MyGame.Tests;
 
@@ -42,116 +39,69 @@ public class BasicTests(GodotHeadlessFixture godot)
 }
 ```
 
-The fixture is the host program in disguise  –  it starts the engine in its
-constructor and exposes what a `Main()` would hold in local variables:
+The fixture exposes the same objects a console host keeps in local variables:
 
-| Fixture member | Console-host equivalent |
+| Fixture member | Console equivalent |
 | --- | --- |
-| `godot.Engine` | `var engine = new Engine(...)` |
-| `godot.GodotInstance` | `var godot = engine.Start()` |
+| `godot.Engine` | `new Engine(...)` |
+| `godot.GodotInstance` | `engine.Start()` |
 | `godot.Tree` | `engine.Tree` |
 
-`GodotHeadlessFixture` passes `--headless`; `GodotFixture` starts with
-rendering. Both derive from `GodotFixtureBase`, which you can subclass with
-any other Godot arguments.
+`GodotHeadlessFixture` passes `--headless`; `GodotFixture` enables rendering.
+Both derive from `GodotFixtureBase`.
 
-## Collections Are Not Optional
+## Project Differences
 
-Godot allows one instance at a time, so tests must run inside a collection
-with `DisableParallelization = true`, and every test in a collection shares
-that one engine. `2dog.xunit` ships `GodotCollection` and
-`GodotHeadlessCollection` ready to use  –  as **compile-in source**, because
-xUnit only discovers `[CollectionDefinition]` classes that live in the test
-assembly itself. Referencing the package is all it takes.
-
-::: warning Keep parallelization off
-The generated `xunit.runner.json` sets `"parallelizeTestCollections": false`.
-Several collections at once means several engines at once, which the
-single-instance rule forbids. Sequentially, each collection gets a fresh
-engine  –  the previous fixture is disposed before the next is created.
-:::
-
-Genuinely parallel engines are possible through the experimental
-`twodog.hosting` stack  –  see
-[Parallel collections](/testing#parallel-collections-one-engine-per-collection).
-
-## The Project
-
-The console host's csproj plus a test framework. The 2dog-specific parts are
-identical: `2dog.xunit` (which brings `2dog.engine` transitively),
-`GodotProjectDir`, the variant mapping, and a `.gdignore` beside the csproj.
+The shared host project is documented in [Hosts](./). The test host references
+`2dog.xunit`, xUnit, the test SDK, and `MyGame.csproj`. `2dog.xunit` brings in
+`2dog.engine`, fixtures, and collection definitions.
 
 ```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <RootNamespace>MyGame.Tests</RootNamespace>
-  </PropertyGroup>
+<ItemGroup>
+  <PackageReference Include="2dog.xunit" Version=":2dog-version:"/>
+  <PackageReference Include="xunit.v3" Version="3.*"/>
+  <PackageReference Include="xunit.runner.visualstudio" Version="3.*"/>
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*"/>
+  <PackageReference Include="coverlet.collector" Version="10.*"/>
+</ItemGroup>
 
-  <!-- Pulls in 2dog.engine (the fixtures) and the compile-in collections -->
-  <ItemGroup>
-    <PackageReference Include="2dog.xunit" Version=":2dog-version:"/>
-  </ItemGroup>
+<ItemGroup>
+  <ProjectReference Include="../MyGame.csproj"/>
+</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="xunit.v3" Version="3.*"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.*"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*"/>
-    <PackageReference Include="coverlet.collector" Version="10.*"/>
-  </ItemGroup>
+<PropertyGroup>
+  <GodotProjectDir>..</GodotProjectDir>
+  <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+  <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+  <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
-    <ProjectReference Include="../MyGame.csproj"/>
-  </ItemGroup>
+<PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+  <DefineConstants>$(DefineConstants);EDITOR</DefineConstants>
+</PropertyGroup>
 
-  <!-- The Godot project is the parent directory; hosts nest inside it -->
-  <PropertyGroup>
-    <GodotProjectDir>..</GodotProjectDir>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
-    <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
-  </PropertyGroup>
-
-  <!-- Editor configuration: editor types become available -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <DefineConstants>$(DefineConstants);EDITOR</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-    <PackageReference Include="GodotSharpEditor" Version=":godot-version:"/>
-  </ItemGroup>
-</Project>
+<ItemGroup Condition="'$(Configuration)' == 'Editor'">
+  <PackageReference Include="GodotSharpEditor" Version=":godot-version:.*"/>
+</ItemGroup>
 ```
 
-Because `GodotProjectDir` is set, [resource import](/import-tool) runs
-automatically when the test project builds  –  tests see freshly imported
-assets without a separate step.
+`GodotProjectDir` enables [automatic resource import](/import-tool), so tests
+see freshly imported assets. Debug, Release, and Editor configurations select
+the matching native variant; see [Choosing a Variant](/build-configurations).
 
-## Running
+## Single-Instance Safety
 
-```bash
-dotnet test MyGame.xunit                     # Debug: template_debug engine
-dotnet test MyGame.xunit -c Release          # template_release
-dotnet test MyGame.xunit -c Editor           # editor build, TOOLS_ENABLED
+A normal test host supports one active engine at a time. Tests must use a
+non-parallel collection, and all tests in that collection share its engine.
+The generated host also sets `"parallelizeTestCollections": false` in
+`xunit.runner.json`.
 
-dotnet test MyGame.xunit --filter "FullyQualifiedName~SceneTests"
-```
+`2dog.xunit` provides `GodotCollection` and `GodotHeadlessCollection` as
+compile-in source because xUnit discovers collection definitions only in the
+test assembly. Experimental parallel engines are covered in
+[Miscellaneous Advanced Notes](/misc#experimental-parallel-xunit-engines).
 
-| Configuration | Use it for |
-| --- | --- |
-| `Debug` | General unit tests and debugging |
-| `Release` | Performance work and final validation |
-| `Editor` | `[Tool]` scripts, `EditorInterface`, importer types |
-
-For CI, `GodotHeadlessCollection` plus `GODOT_AUDIO_DRIVER=Dummy`.
-
-## Traps Worth Knowing
-
-- **Godot types in `[MemberData]`** crash the runner during discovery  –  use
-  primitives or `DisableDiscoveryEnumeration = true`
-  ([details](/known-issues/xunit-discovery)).
-- **`GD.Print` output is hidden by default**
-  ([details](/known-issues/gd-print-output)).
-- **Nodes you add are not cleaned up for you.** The tree is shared across the
-  collection: `QueueFree()` what you create, or assert against your own subtree.
+Remember that nodes added to the shared tree are not cleaned up automatically;
+`QueueFree()` what you create. See the known issues for
+[Godot types in `MemberData`](/known-issues/xunit-discovery) and
+[`GD.Print` output](/known-issues/gd-print-output).

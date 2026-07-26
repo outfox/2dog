@@ -8,61 +8,52 @@ Traditional Godot applications have Godot control the process lifecycle:
 Godot Process → SceneTree → Your Scripts
 ```
 
-**2dog inverts this:**
+2dog inverts this:
 
 ```
 Your .NET Process → twodog.Engine → Godot (as library)
 ```
 
-You control when Godot starts, when frames iterate, and when it shuts down. Godot becomes a rendering/physics/audio library that you drive.
+Your .NET process controls startup, frames, and shutdown. Godot becomes a
+rendering, physics, and audio library that your application drives.
 
 ## libgodot Embedding
 
-2dog uses `libgodot`, a shared library build of Godot Engine. This allows:
+2dog uses `libgodot`, a shared-library build of Godot Engine. It runs inside
+your .NET process, supports direct P/Invoke calls to native APIs, and retains
+full access to GodotSharp managed bindings.
 
-- Godot to run as an embedded library within your .NET process
-- Direct P/Invoke calls to Godot's native APIs
-- Full access to GodotSharp managed bindings
-
-The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) ships in the platform NuGet packages (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`) that the `2dog.engine` package references automatically.
+The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) ships in
+the `2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64` NuGet package.
+`2dog.engine` references the appropriate packages automatically.
 
 ### Build Variants
 
-2dog supports three Godot build variants, each optimized for different use cases:
+Generated hosts map .NET configurations to Godot variants with
+`TwoDogVariant`. Other projects must configure this mapping explicitly.
 
 #### Template Builds (Runtime-Only)
 
-**Template Debug** (`template_debug`):
-- Debug symbols enabled for troubleshooting
-- Assertions and error checking enabled
-- No editor features
-- Suitable for: Development, debugging game logic
+**Template Debug** (`template_debug`) includes assertions and additional error
+checking, but no editor features. Use it for development.
 
-**Template Release** (`template_release`):
-- Fully optimized for performance
-- Minimal binary size
-- No debug symbols or editor features
-- Suitable for: Production games and applications
+**Template Release** (`template_release`) is optimized for production, without
+debug symbols or editor features.
 
 #### Editor Build (Development Tools)
 
-**Editor** (`editor`):
-- Full editor toolchain enabled (`TOOLS_ENABLED`)
-- Resource import pipeline available
-- Editor APIs: `EditorInterface`, `EditorPlugin`, `ImportPlugin`
-- Larger binary size, slower than templates
-- Suitable for: Asset import tools, editor extensions, build pipelines
+**Editor** (`editor`) enables `TOOLS_ENABLED`, the resource-import pipeline, and
+editor APIs such as `EditorInterface`, `EditorPlugin`, and `ImportPlugin`. It is
+larger and slower than template builds.
 
 ::: tip Choosing a Build Variant
-- **Building a game?** Use Debug during development, Release for production
-- **Need to import assets?** Nothing to choose  –  import runs automatically at
-  build time against the editor variant (see [Resource Import](./import-tool))
-- **Creating build tools?** Use Editor configuration
-- **Running in CI/CD?** Use Debug for tests, Release for final builds
+[Build Configurations](./build-configurations) is the complete guide to choosing
+and configuring variants. Resource import selects the editor variant
+automatically; see [Resource Import](./import-tool).
 :::
 
-Build with different variants:
 ```bash
+# Scaffolded projects use these mappings:
 dotnet build -c Debug    # template_debug
 dotnet build -c Release  # template_release
 dotnet build -c Editor   # editor with TOOLS_ENABLED
@@ -70,7 +61,7 @@ dotnet build -c Editor   # editor with TOOLS_ENABLED
 
 ## GodotSharp API Access
 
-Once the engine starts, you have full access to the GodotSharp API:
+After startup, the full GodotSharp API is available:
 
 ```csharp
 using var engine = new Engine("app", "./project");
@@ -91,54 +82,28 @@ var physics = PhysicsServer3D.Singleton;
 
 ## The Main Loop
 
-Unlike traditional Godot where `_Process` callbacks drive your code, you explicitly pump the main loop:
+Unlike traditional Godot, the host explicitly pumps the main loop:
 
 ```csharp
 while (!godot.Iteration())
 {
-    // Called every frame
-    // Godot processes physics, rendering, input, etc.
-    
-    // Your frame logic here
+    // Godot processes physics, rendering, input, and your frame logic here.
     if (someCondition)
         break; // Exit when you decide
 }
 ```
 
-`Iteration()` returns `true` when Godot wants to quit (e.g., window closed).
+`Iteration()` returns `true` when Godot wants to quit, such as when the window closes.
 
 ## Single Instance Limitation
 
-::: warning
-Only one Godot instance can exist per process **at a time**. This is a Godot limitation, not a 2dog limitation. Sequential restart  –  disposing the current instance and starting a new one  –  is supported.
-:::
-
-```csharp
-// This works
-using var engine = new Engine("app", "./project");
-using var godot = engine.Start();
-
-// This throws InvalidOperationException while the first instance is running
-using var engine2 = new Engine("app2", "./project2");
-var godot2 = engine2.Start(); // error: InvalidOperationException
-```
-
-```csharp
-// Sequential restart works
-var engine = new Engine("app", "./project");
-var godot = engine.Start();
-godot.Dispose();
-engine.Dispose();
-
-using var engine2 = new Engine("app2", "./project2");
-using var godot2 = engine2.Start(); // ok: new engine instance
-```
-
-For testing scenarios, use xUnit's collection fixtures  –  one shared instance per collection. See [Testing](./testing).
+Only one Godot instance can run per assembly load context at a time. Sequential
+restart is supported. See [Single Godot Instance](./known-issues/single-instance)
+for examples and the experimental isolated-hosting path.
 
 ## Resource Paths
 
-Godot's `res://` paths resolve relative to the project directory you specify:
+Godot resolves `res://` paths relative to the project directory passed to `Engine`:
 
 ```csharp
 // Project at ./my_project

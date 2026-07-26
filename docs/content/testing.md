@@ -1,29 +1,35 @@
 # Testing with xUnit
 
-The test fixtures (`GodotFixture`, `GodotHeadlessFixture`, `GodotFixtureBase`) ship in the **`2dog.engine`**
-package, in the `twodog.fixture` namespace. The **`2dog.xunit`** package adds ready-made xUnit
-collection definitions on top of them.
+`2dog.engine` provides the fixtures in `twodog.fixture`. `2dog.xunit` adds
+ready-made xUnit collections, so tests can start a real Godot engine without
+having to manage its lifetime themselves.
 
 ## Installation
 
 ```bash
-dotnet add package 2dog.xunit          # pulls in 2dog.engine (the fixtures) automatically
+dotnet add package 2dog.xunit
 dotnet add package xunit.v3
 dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
 
-Projects scaffolded by the [`2dog` tool](/add) already include a
-ready-made test project (add one later with `2dog add --tests`):
-`MyGame.tests/`, nested inside the Godot
-project (with a `.gdignore` so the Godot editor skips it) and pointing
-`<GodotProjectDir>` at the parent directory (`..`). Run it with
-`dotnet test MyGame.tests`.
+`2dog.xunit` brings in `2dog.engine` automatically. Projects created by the
+[`2dog` tool](/add) already include a test project; add one later with
+`2dog add --tests`. Run it with:
+
+```bash
+dotnet test MyGame.tests
+```
+
+The generated test project sits inside the Godot project, includes a
+`.gdignore`, and points `<GodotProjectDir>` at `..`.
+If you create one manually, copy the required project setup from
+[xUnit Host](/hosts/xunit#project-differences).
 
 ## Fixtures
 
-Both fixtures are thin subclasses of `GodotFixtureBase`, which starts the engine
-in its constructor and exposes the members you use in tests:
+Both fixtures derive from `GodotFixtureBase`, which starts the engine in its
+constructor and exposes the objects most tests need:
 
 ```csharp
 public abstract class GodotFixtureBase : IDisposable
@@ -36,178 +42,63 @@ public abstract class GodotFixtureBase : IDisposable
 }
 ```
 
-### GodotFixture
-
-Starts Godot with rendering enabled. Use for tests that need visual output.
-
-```csharp
-public class GodotFixture : GodotFixtureBase;
-```
-
-### GodotHeadlessFixture
-
-Starts Godot in headless mode (`--headless`). Use for CI/CD and tests that don't need rendering.
-
-```csharp
-public class GodotHeadlessFixture() : GodotFixtureBase("--headless");
-```
+- `GodotFixture` starts Godot with rendering enabled.
+- `GodotHeadlessFixture` adds `--headless` and is the usual choice for CI.
 
 ## Collections
 
-Because Godot allows only one instance at a time, Godot tests must run through
-xUnit collections with `DisableParallelization = true`. Tests within a
-collection share that collection's fixture (one engine instance).
+A Godot instance is not thread-safe. Put engine tests in a collection with
+`DisableParallelization = true`; tests in that collection share one fixture.
 
-`2dog.xunit` ships ready-made collections for you  –  `GodotCollection` (full rendering) and
-`GodotHeadlessCollection` (headless, recommended for CI). They are compiled directly into your test
-assembly  –  xUnit only discovers `[CollectionDefinition]` classes that live in the test assembly
-itself, so a definition shipped as a plain referenced DLL would be silently ignored. You therefore
-just reference the package and use them:
+`2dog.xunit` ships `GodotCollection` and `GodotHeadlessCollection`. Their
+collection definitions are compiled into your test assembly because xUnit
+does not discover definitions from an ordinary referenced DLL.
 
 ```csharp
+using twodog.fixture;
 using twodog.xunit;
 
 [Collection<GodotHeadlessCollection>]
-public class MyTests(GodotHeadlessFixture godot) { /* ... */ }
+public class MyTests(GodotHeadlessFixture godot)
+{
+    // Tests share godot.Engine, godot.GodotInstance, and godot.Tree.
+}
 ```
 
-### Multiple collections
+You may use several non-parallel Godot collections. xUnit disposes one
+collection fixture before starting the next, giving each collection a fresh
+engine instance.
 
-Since the engine can be restarted in the same process (Godot 4.7), you can
-also define **several** Godot collections. xUnit runs them sequentially and
-disposes one collection's fixture before creating the next, so each
-collection gets its own fresh engine instance:
+### Custom Collections
 
-```csharp
-[CollectionDefinition(nameof(MyGodotCollectionA), DisableParallelization = true)]
-public class MyGodotCollectionA : ICollectionFixture<GodotHeadlessFixture>;
-
-[CollectionDefinition(nameof(MyGodotCollectionB), DisableParallelization = true)]
-public class MyGodotCollectionB : ICollectionFixture<GodotHeadlessFixture>;
-
-[Collection(nameof(MyGodotCollectionA))]
-public class TestsAgainstEngineA(GodotHeadlessFixture godot) { /* ... */ }
-
-[Collection(nameof(MyGodotCollectionB))]
-public class TestsAgainstEngineB(GodotHeadlessFixture godot) { /* ... */ }
-```
-
-::: warning
-`DisableParallelization = true` is required for collections that share an engine this way (it is
-already set on the shipped collections). A single Godot instance is not thread-safe, and running
-tests against it in parallel will crash. Genuinely parallel collections need one engine instance
-per collection  –  see [Parallel collections](#parallel-collections-one-engine-per-collection).
-:::
-
-### Custom collections
-
-Need different Godot arguments? Subclass `GodotFixtureBase` and write a one-line collection in your
-own test project:
+For different Godot arguments, derive from `GodotFixtureBase` and define the
+collection in your test project:
 
 ```csharp
 using twodog.fixture;
 using Xunit;
 
-public class GodotOpenGl3Fixture() : GodotFixtureBase("--display-driver", "opengl3");
+public class GodotOpenGl3Fixture()
+    : GodotFixtureBase("--rendering-driver", "opengl3");
 
 [CollectionDefinition(nameof(GodotOpenGl3Collection), DisableParallelization = true)]
 public class GodotOpenGl3Collection : ICollectionFixture<GodotOpenGl3Fixture>;
 ```
 
-### Parallel collections (one engine per collection)
-
-The single-instance rule is per native module and per assembly load context, not per process (see
-[Single Godot Instance](/known-issues/single-instance)). The `twodog.hosting` orchestrator uses this
-to run several engine instances concurrently, and `twodog.hosting.xunit` wraps it in a collection
-fixture: subclass `EngineInstanceFixture` once per collection and register it **without**
-`DisableParallelization`. The collections then run in parallel, each against its own isolated engine
-(its own native copy, load context, scratch project, and `user://` directory).
-
-Tests do not touch Godot types directly  –  each engine lives inside its instance's load context.
-Instead you write scenarios (`IEngineScenario`) that execute on the instance's engine thread; only
-the returned report string crosses back, and that is what you assert on:
-
-```csharp
-using Godot;
-using twodog.Hosting;         // EngineHost
-using twodog.Hosting.Runtime; // IEngineScenario, EngineSession
-using twodog.Hosting.Xunit;   // EngineInstanceFixture
-using Xunit;
-
-public sealed class AlphaEngineFixture : EngineInstanceFixture
-{
-    protected override string Tag => "alpha";
-}
-
-public sealed class BetaEngineFixture : EngineInstanceFixture
-{
-    protected override string Tag => "beta";
-}
-
-// Note: no DisableParallelization - these collections run at the same time.
-[CollectionDefinition(nameof(AlphaCollection))]
-public sealed class AlphaCollection : ICollectionFixture<AlphaEngineFixture>;
-
-[CollectionDefinition(nameof(BetaCollection))]
-public sealed class BetaCollection : ICollectionFixture<BetaEngineFixture>;
-
-public sealed class AddNodeScenario : IEngineScenario
-{
-    public string Run(EngineSession session, string? argument)
-    {
-        var root = session.Tree.Root!;
-        root.AddChild(new Node { Name = $"n_{argument}" });
-        session.PumpFrames(1);
-        return $"children={root.GetChildCount()}";
-    }
-}
-
-[Collection(nameof(AlphaCollection))]
-public sealed class AlphaTests(AlphaEngineFixture fixture)
-{
-    [Fact]
-    public void RunsAgainstItsOwnEngine()
-    {
-        Assert.SkipWhen(!EngineHost.IsSupported, "In-process hosting is unsupported on this platform.");
-        Assert.Contains("children=", fixture.Run<AddNodeScenario>("alpha"));
-    }
-}
-```
-
-The fixture has overridable knobs: `Tag` (names the instance, its thread, and its `user://` dir  –
-unique per collection), `SourceProjectDir` (a Godot project copied per instance; by default a
-minimal headless project is generated), `EngineArgs` (default `--headless`), `Variant`, and the
-boot/scenario timeouts.
-
-What remains process-global cannot be isolated in-process: the current working directory,
-environment variables, native crash blast radius, and signal/exception handlers. Tests that need
-full isolation still belong in separate processes. On macOS in-process hosting is not yet
-supported  –  `EngineHost.Start` fails closed there, so tests should skip first via
-`EngineHost.IsSupported` (the fixture itself no-ops on unsupported platforms).
-
-::: info Availability
-`twodog.hosting` and `twodog.hosting.xunit` are not published as NuGet packages yet  –  reference
-the projects from the [2dog repository](https://github.com/outfox/2dog). A runnable example lives
-in `demos/xunit/parallel_collections/`.
-:::
+See [Single Godot Instance](/known-issues/single-instance) for the engine
+lifetime constraint.
 
 ## Writing Tests
 
-::: warning Godot Types in MemberData
-Using Godot types like `NodePath` or `StringName` in `[MemberData]` will crash the test runner during discovery. Use `DisableDiscoveryEnumeration = true` or pass primitive types instead. See [Known Issues](/known-issues/xunit-discovery) for details.
-:::
-
 ```csharp
+using Godot;
+using twodog.fixture;
+using twodog.xunit;
+using Xunit;
+
 [Collection<GodotHeadlessCollection>]
-public class SceneTests
+public class SceneTests(GodotHeadlessFixture godot)
 {
-    private readonly GodotHeadlessFixture _godot;
-
-    public SceneTests(GodotHeadlessFixture godot)
-    {
-        _godot = godot;
-    }
-
     [Fact]
     public void LoadScene_ValidPath_Succeeds()
     {
@@ -215,130 +106,46 @@ public class SceneTests
         Assert.NotNull(scene);
 
         var instance = scene.Instantiate();
-        _godot.Tree.Root.AddChild(instance);
+        godot.Tree.Root.AddChild(instance);
 
         Assert.True(instance.IsInsideTree());
-
         instance.QueueFree();
-    }
-
-    [Fact]
-    public void PhysicsServer_IsAvailable()
-    {
-        var physics = PhysicsServer3D.Singleton;
-        Assert.NotNull(physics);
     }
 }
 ```
+
+::: warning Godot types in MemberData
+Godot types such as `NodePath` and `StringName` can crash the runner during
+discovery. Pass primitive values or set `DisableDiscoveryEnumeration = true`.
+See [xUnit Test Discovery](/known-issues/xunit-discovery).
+:::
 
 ## Running Tests
 
 ```bash
-# Run all tests (default: Debug configuration)
 dotnet test
-
-# Run with specific configuration
-dotnet test -c Debug      # template_debug build
-dotnet test -c Release    # template_release build
-dotnet test -c Editor     # editor build with TOOLS_ENABLED
-
-# Run with output
+dotnet test -c Debug
+dotnet test -c Release
+dotnet test -c Editor
 dotnet test --logger "console;verbosity=detailed"
-
-# Run specific test
 dotnet test --filter "FullyQualifiedName~SceneTests"
 ```
 
-### Test Configurations
+| Configuration | Best for |
+| --- | --- |
+| **Debug** | General tests and debugging |
+| **Release** | Final runtime validation |
+| **Editor** | Tests that compile against editor APIs |
 
-Different build configurations are useful for different test scenarios:
+Asset import runs automatically when the test project builds; it does not
+require the Editor configuration. See [Resource Import](./import-tool) and
+[Build Variants](./build-configurations).
 
-| Configuration | Use Case |
-|--------------|----------|
-| **Debug** | General unit tests, debugging |
-| **Release** | Performance tests, final validation |
-| **Editor** | Tests that need editor APIs (`[Tool]` scripts, `EditorInterface`, importer types) |
-
-Asset import itself does not need a special configuration  –  it runs
-automatically when the test project builds (see
-[Resource Import](./import-tool)).
-
-Example: Testing editor API functionality:
-```csharp
-[Collection<GodotHeadlessCollection>]
-public class EditorApiTests(GodotHeadlessFixture godot)
-{
-    [Fact]
-    public void ImporterSingleton_IsAvailable()
-    {
-        // This test requires Editor configuration
-        // Build with: dotnet test -c Editor
-        var importer = ResourceImporterTexture.Singleton;
-        Assert.NotNull(importer);
-    }
-}
-```
-
-## CI/CD Configuration
-
-Example GitHub Actions workflow:
+For headless CI, select the headless collection and use a dummy audio driver:
 
 ```yaml
-- name: Run Tests
+- name: Run tests
   run: dotnet test --configuration Release
   env:
-    # Use dummy drivers for headless CI
     GODOT_AUDIO_DRIVER: Dummy
-```
-
-## Project Configuration
-
-For test projects using `ProjectReference` to twodog.engine (not the NuGet package), configure build types:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" />
-  </ItemGroup>
-  <!-- Fixtures come from the twodog.engine project above. Note: with a ProjectReference the 2dog.xunit
-       compile-in collections are NOT imported automatically  –  reference the 2dog.xunit NuGet
-       package instead, or define a collection locally (see "Custom collections"). -->
-
-  <!-- Configuration-specific native variants ('release' is the default) -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TwoDogVariant>debug</TwoDogVariant>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
-    <TwoDogVariant>editor</TwoDogVariant>
-  </PropertyGroup>
-
-  <!-- Required for ProjectReference builds -->
-  <Import Project="..\twodog.engine\build\2dog.engine.targets" />
-</Project>
-```
-
-### Platform-Specific Native Libraries
-
-When building from source, test projects need the appropriate platform variant:
-
-```xml
-<!-- Debug configuration: use debug variant -->
-<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Debug'">
-  <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.debug.csproj"/>
-</ItemGroup>
-
-<!-- Release configuration: use release variant -->
-<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Release'">
-  <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.release.csproj"/>
-</ItemGroup>
-
-<!-- Editor configuration: use editor variant -->
-<ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(Configuration)' == 'Editor'">
-  <ProjectReference Include="..\platforms\twodog.win-x64\twodog.win-x64.editor.csproj"/>
-</ItemGroup>
 ```
