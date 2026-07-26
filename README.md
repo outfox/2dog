@@ -27,22 +27,24 @@ Full documentation at **[2dog.dev](https://2dog.dev)**.
 Please make backups, but most of its changes are optional additions, not modifications.
 
 ```bash
-dnx 2dog convert path/to/MyGame
 cd path/to/MyGame
+dnx 2dog                      # pick the hosts you want, then confirm
 dotnet run --project MyGame.2dog
 ```
+
+Run `dnx 2dog` again any time to add another host.
 
 
 ### New Project
 
-Install and use the project template:
-
 ```bash
-dotnet new install 2dog
-dotnet new 2dog -n MyGame
+dnx 2dog new MyGame
 cd MyGame
 dotnet run --project MyGame.2dog
 ```
+
+The same content is also a `dotnet new` template
+(`dotnet new install 2dog && dotnet new 2dog -n MyGame`).
 
 In either case, the familiar Godot workflow still works:
 

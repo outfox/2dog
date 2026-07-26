@@ -16,7 +16,7 @@ internal static class CsprojPatcher
         var warnings = new List<string>();
         var added = new List<string>();
         var doc = XDocument.Load(csprojPath, LoadOptions.PreserveWhitespace);
-        var root = doc.Root ?? throw new ConvertException($"{csprojPath}: not a valid MSBuild project file");
+        var root = doc.Root ?? throw new ToolException($"{csprojPath}: not a valid MSBuild project file");
         var ns = root.Name.Namespace;
 
         var sdk = (string?)root.Attribute("Sdk");

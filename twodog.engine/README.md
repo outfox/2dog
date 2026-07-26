@@ -27,8 +27,7 @@ while (!godot.Iteration())
 To scaffold a complete new project (or convert an existing Godot project), use the [`2dog`](https://www.nuget.org/packages/2dog) tool/template package instead:
 
 ```bash
-dotnet new install 2dog
-dotnet new 2dog -n MyGodotApp
+dnx 2dog new MyGodotApp   # or `dnx 2dog` inside an existing Godot project
 ```
 
 ## What's Included

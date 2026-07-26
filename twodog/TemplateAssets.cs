@@ -51,20 +51,43 @@ internal static class TemplateAssets
     public static string RootBuildTargets() => ReadRaw("tpl/Directory.Build.targets");
 
     /// <summary>
-    /// Relative target path -> content for every file of a host subtree
-    /// ("2dog", "web" or "tests"), tokens substituted in paths and contents.
+    /// The Godot project files a brand-new project needs on top of the ones
+    /// above: relative path -> content, tokens substituted.
     /// </summary>
-    public static IEnumerable<(string RelativePath, string Content)> HostFiles(string suffix, string baseName)
+    public static IEnumerable<(string RelativePath, string Content)> NewProjectFiles(string baseName)
     {
-        var prefix = $"tpl/{SourceName}.{suffix}/";
+        yield return ("project.godot", Substitute(ReadRaw("tpl/project.godot"), baseName));
+        yield return ("main.tscn", ReadRaw("tpl/main.tscn"));
+        yield return (".editorconfig", ReadRaw("tpl/.editorconfig"));
+        yield return (".gitignore", ReadRaw("tpl/.gitignore"));
+    }
+
+    /// <summary>
+    /// Relative target path -> content for every file of a host subtree, with
+    /// the template's folder name replaced by the host's actual folder name
+    /// (so a project can hold several hosts of the same kind) and the usual
+    /// rename/version tokens substituted.
+    /// </summary>
+    public static IEnumerable<(string RelativePath, string Content)> HostFiles(HostKind kind, string baseName, string folder)
+    {
+        var sourceFolder = $"{SourceName}.{Hosts.Suffix(kind)}";
+        var prefix = $"tpl/{sourceFolder}/";
         foreach (var name in Names.Select(Normalize).Where(n => n.StartsWith(prefix, StringComparison.Ordinal)).Order())
         {
-            // Substitute the rename token in file names too (e.g.
-            // Company.Product1.2dog.csproj -> MyGame.2dog.csproj).
-            var relative = $"{baseName}.{suffix}/{name[prefix.Length..].Replace(SourceName, baseName)}";
-            yield return (relative, Substitute(ReadRaw(name), baseName));
+            // Substitute in file names too (e.g. Company.Product1.2dog.csproj
+            // -> MyGame.tools.csproj for a desktop host folder "MyGame.tools").
+            var relative = $"{folder}/{Rename(name[prefix.Length..], sourceFolder, folder, baseName)}";
+            yield return (relative, Rename(ReadRaw(name), sourceFolder, folder, baseName));
         }
     }
+
+    /// <summary>
+    /// Ordered literal replacement: the host folder token first (it starts
+    /// with the sourceName token, so the general rename must not run first),
+    /// then the project-wide tokens.
+    /// </summary>
+    private static string Rename(string text, string sourceFolder, string folder, string baseName) =>
+        Substitute(text.Replace(sourceFolder, folder), baseName);
 
     /// <summary>
     /// Ordered literal replacement of the template tokens. Both rename tokens

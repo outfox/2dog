@@ -1,6 +1,6 @@
 # Converting a Godot Project
 
-`2dog convert` turns an existing Godot project into a 2dog project  –  **in
+The `2dog` tool turns an existing Godot project into a 2dog project  –  **in
 place**. Your project directory becomes the solution root, and the 2dog host
 projects (desktop, web, tests) are scaffolded as nested subfolders that the
 Godot editor ignores. Existing game content stays in place. If the project has
@@ -17,25 +17,48 @@ converted project and a fresh one have identical layouts.
 One-shot, no install (.NET 10+ SDK):
 
 ```bash
-dnx 2dog convert path/to/your/godot/project
+cd path/to/your/godot/project
+dnx 2dog
 ```
 
 Or install the `2dog` command globally:
 
 ```bash
 dotnet tool install -g 2dog
-2dog convert path/to/your/godot/project
+2dog
 ```
 
-The path defaults to the current directory and must contain a
-`project.godot`. Use `--dry-run` first to see the planned actions without
-changing anything.
+Run without arguments, the tool looks at the current directory: with a
+`project.godot` it offers to add hosts, without one it offers to create a new
+project. It then asks which hosts you want and what to call their folders,
+shows the plan, and waits for your confirmation.
+
+```
+2dog 4.7.1  https://2dog.dev
+
+project  MyGame (/home/you/games/MyGame)
+
+Which hosts do you want?
+> [x] desktop   MyGame.2dog   your own Main(), runs the game on desktop
+  [x] browser   MyGame.web    WebAssembly host, published as a static bundle
+  [ ] tests     MyGame.tests  xUnit project driving a headless engine
+```
+
+Every prompt has a flag, so the same run works unattended:
+
+```bash
+dnx 2dog convert path/to/MyGame --no-web        # everything except the web host
+dnx 2dog convert path/to/MyGame --dry-run       # plan only, changes nothing
+```
+
+Naming any host option (or `--non-interactive`) turns the prompts off entirely,
+which is what you want in scripts and CI.
 
 ::: tip From stock Godot to the browser
 Convert-then-publish is the fastest route to a browser (WebAssembly) release:
 
 ```bash
-dnx 2dog convert path/to/MyGame
+dnx 2dog convert path/to/MyGame -y
 cd path/to/MyGame
 dotnet publish MyGame.web              # static site in MyGame.web/AppBundle/
 ```
@@ -44,17 +67,34 @@ One-time prerequisite: `dotnet workload install wasm-tools`. See
 [Web / Browser](/web) for the full story.
 :::
 
+## Commands
+
+| Command | Effect |
+| --- | --- |
+| `2dog` | Add hosts here, or create a project if there is none |
+| `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
+| `2dog add [path]` | Add hosts to an existing Godot project |
+| `2dog convert [path]` | Alias of `add`, for projects that have no hosts yet |
+
 ## Options
 
 | Option | Effect |
 | --- | --- |
-| `--name <BaseName>` | Override the derived project base name |
-| `--no-web` | Skip the browser (WebAssembly) host project |
-| `--no-tests` | Skip the xUnit test project |
+| `--desktop [folder]` | Add a desktop host, optionally in a named folder |
+| `--web [folder]` | Add a browser (WebAssembly) host |
+| `--tests [folder]` | Add an xUnit test project |
+| `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
+| `-n, --name <BaseName>` | Project name (`new`) or base name override |
+| `-o, --output <dir>` | Directory for a new project |
+| `-y, --yes` | Do not prompt; take the flags and defaults |
+| `--non-interactive` | Same as `--yes` |
 | `--dry-run` | Print planned actions without changing anything |
 | `--force` | Overwrite scaffolded files that already exist (never deletes/moves) |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--verbose` | Extra output |
+
+Host options are repeatable, and each takes an optional folder name. Without a
+name, the tool picks a free one (`MyGame.2dog`, then `MyGame.2dog2`, ...).
 
 ## Resulting layout
 
@@ -85,6 +125,23 @@ at or below its own directory). If your project already has a `global.json`,
 convert leaves it untouched  –  make sure it pins a wasm-capable SDK, or publish
 from inside `MyGame.web/`, whose own `global.json` wins there.
 
+## Adding hosts later
+
+The tool is incremental: run it again whenever you want another host. Hosts
+that already exist are recognized and left alone, and a kind you already have
+is simply added a second time under a free folder name.
+
+```bash
+2dog                              # pick from the checkboxes again
+2dog add --tests                  # -> MyGame.tests, or MyGame.tests2 if taken
+2dog add --desktop MyGame.editor  # a second desktop host, your folder name
+```
+
+A second desktop host is the usual way to ship a separate entry point  –  a
+level editor, a dedicated server, a benchmark runner  –  against the same game
+project. Each host folder gets its own `.gdignore`, is excluded from the Godot
+csproj's globs, and is added to the solution.
+
 ## What it does
 
 - **Creates or minimally patches the Godot csproj**: `EnableDynamicLoading`,
@@ -92,10 +149,10 @@ from inside `MyGame.web/`, whose own `global.json` wins there.
   for the nested host folders. An existing csproj gets a single marked
   `<PropertyGroup>` appended containing only the properties it was missing  – 
   your file is otherwise left as-is.
-- **Adds `TwoDogWebBoot.cs`** to the Godot project (even with `--no-web`: it is
-  `#if LIBGODOT_ENABLED`-guarded and inert until a web host uses it, so adding
-  web later just works).
-- **Adds a root `global.json`** (unless `--no-web`) pinning a .NET 10 SDK with
+- **Adds `TwoDogWebBoot.cs`** to the Godot project (even without a web host: it
+  is `#if LIBGODOT_ENABLED`-guarded and inert until a web host uses it, so
+  adding web later just works).
+- **Adds a root `global.json`** (with a web host) pinning a .NET 10 SDK with
   the wasm-tools workload, so the web host publishes from the project root. An
   existing `global.json` is never touched, not even with `--force`  –  it is
   your SDK policy, and a warning explains what it needs to pin.
@@ -116,9 +173,9 @@ from inside `MyGame.web/`, whose own `global.json` wins there.
   wasm-related restore failure is only a warning, with a pointer to
   `dotnet workload install wasm-tools`.
 
-Re-running `2dog convert` on an already-converted project is a no-op
-("Nothing to do"). Files that already exist are skipped and reported; pass
-`--force` to overwrite the scaffolded files with fresh template content.
+Asking for hosts that are all already there is a no-op ("Nothing to do").
+Files that already exist are skipped and reported; pass `--force` to overwrite
+the scaffolded files with fresh template content.
 
 ## What it never does
 
@@ -132,8 +189,8 @@ Re-running `2dog convert` on an already-converted project is a no-op
 
 ## Base name derivation
 
-The base name names the Godot csproj, the solution, and the host folders
-(`<Name>.2dog` etc.). It is derived in priority order:
+The base name names the Godot csproj, the solution, and the default host
+folders (`<Name>.2dog` etc.). It is derived in priority order:
 
 1. `[dotnet] project/assembly_name` in `project.godot` (authoritative: the
    Godot editor resolves `res://<assembly_name>.csproj` from it),
@@ -147,12 +204,11 @@ assembly, or the Godot editor won't find it.
 
 ## GDScript-only projects
 
-Projects without any csproj work too: `2dog convert` creates a
-`Godot.NET.Sdk` csproj and appends a `[dotnet]` section with
-`project/assembly_name` to `project.godot`, so the Godot editor picks the
-project up as a C# project. Your GDScript scenes and scripts keep running
-unchanged  –  the conversion just adds the .NET entry points (and the option to
-mix in C#) around them.
+Projects without any csproj work too: the tool creates a `Godot.NET.Sdk`
+csproj and appends a `[dotnet]` section with `project/assembly_name` to
+`project.godot`, so the Godot editor picks the project up as a C# project.
+Your GDScript scenes and scripts keep running unchanged  –  the conversion just
+adds the .NET entry points (and the option to mix in C#) around them.
 
 ## Requirements
 

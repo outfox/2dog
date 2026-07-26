@@ -11,8 +11,15 @@ holds. Your game  –  scenes, resources, and the C# assembly next to
 | [Browser](./web) | `MyGame.web` | `dotnet publish MyGame.web` | Static WebAssembly site, no server code |
 | [xUnit](./xunit) | `MyGame.xunit` | `dotnet test MyGame.xunit` | Tests against a real engine and real resources |
 
-All three are generated for you by [`dotnet new 2dog`](/templates) or
-[`2dog convert`](/convert). More are coming, or can easily be added by you.
+All three are generated for you by [`2dog new`](/templates) or
+[`2dog`](/convert) in an existing project. Run the tool again whenever you want
+another one  –  including a second host of a kind you already have:
+
+```bash
+2dog add --desktop MyGame.editor   # a second desktop host, beside the first
+```
+
+More are coming, or can easily be added by you.
 
 ## What Every Host Has in Common
 

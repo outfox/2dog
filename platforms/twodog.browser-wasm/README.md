@@ -22,7 +22,7 @@ bundle.
 - The Godot project needs a `Web` export preset, a solution file, and
   `LIBGODOT_ENABLED` + `AllowUnsafeBlocks` in its csproj
 - A `wwwroot/index.html` boot page (create a project with
-  `dotnet new 2dog --web` for a working setup out of the box)
+  `dnx 2dog new MyGame --web` for a working setup out of the box)
 
 ## Usage
 

@@ -105,7 +105,7 @@ The template uses `Company.Product1` as the source name, which gets replaced wit
 The template content in `twodog/` is the single source of truth and ships two ways, both inside the `2dog` tool+template package (`<PackageType>DotnetTool;Template</PackageType>`, packed from `twodog/twodog.csproj`):
 
 - Bundled as `dotnet new` template content under `content/twodog/`, so `dotnet new install 2dog` registers the template.
-- Embedded as resources into the `2dog` tool assembly, which scaffolds the same content via `2dog convert`.
+- Embedded as resources into the `2dog` tool assembly, which scaffolds the same content via `2dog new`, `2dog add` and `2dog convert`. The tool substitutes the rename tokens itself, including the host folder token (`Company.Product1.2dog` and friends), so hosts can live in freely named folders.
 
 When packing, the version placeholders in `template.json` are substituted automatically.
 

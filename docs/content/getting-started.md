@@ -33,18 +33,21 @@ fresh project.
 
 ```bash [Existing Project]
 # Convert in place. Existing game content stays where it is.
-dnx 2dog convert path/to/MyGame
 cd path/to/MyGame
+dnx 2dog
 ```
 
 ```bash [Fresh Project]
-# Register the template once, then create the project.
-dotnet new install 2dog
-dotnet new 2dog -n MyGame
+# Create the Godot project and its hosts in one go.
+dnx 2dog new MyGame
 cd MyGame
 ```
 
 :::
+
+The tool asks which hosts you want, shows you the plan, and does nothing until
+you confirm. Every question also has a flag  –  `dnx 2dog new MyGame --desktop
+--tests` skips straight past the prompts.
 
 ::: tip Try before you bite?
 Run `dnx 2dog convert path/to/MyGame --dry-run` first if you want to inspect
