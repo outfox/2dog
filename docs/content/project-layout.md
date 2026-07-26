@@ -125,7 +125,7 @@ dnx 2dog new MyGame
 ```
 
 Both routes intentionally converge on the same structure. See
-[Converting a Godot Project](/convert) for patching behavior or
+[Adding 2dog to a Project](/add) for patching behavior or
 [Project Templates](/templates) for every generated file and option.
 
 ## When to Use Another Layout

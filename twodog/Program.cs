@@ -156,7 +156,7 @@ internal static class Program
                2dog new MyGame               # interactive host choice, new project
                2dog new MyGame --desktop --tests
                2dog add --desktop MyGame.editor
-               2dog convert path/to/project --no-web
+               2dog add path/to/project --no-web
              """);
     }
 }

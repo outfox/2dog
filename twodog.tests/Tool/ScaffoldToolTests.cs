@@ -19,7 +19,7 @@ internal static class HostKinds
 internal sealed class TempProjectDir : IDisposable
 {
     public string Dir { get; } = System.IO.Path.Combine(
-        System.IO.Path.GetTempPath(), "2dog-convert-test-" + Guid.NewGuid().ToString("N"));
+        System.IO.Path.GetTempPath(), "2dog-add-test-" + Guid.NewGuid().ToString("N"));
 
     public TempProjectDir() => Directory.CreateDirectory(Dir);
 
@@ -604,11 +604,11 @@ public class ExportPresetOpsTests
     }
 }
 
-// Full conversions on a scratch GDScript-only project, including the
+// Full `2dog add` runs on a scratch GDScript-only project, including the
 // `dotnet sln` subprocess steps (restore is skipped). These prove the two
-// contractual behaviors: a fresh convert scaffolds the complete nested
+// contractual behaviors: a fresh add scaffolds the complete nested
 // layout, and a re-run changes nothing.
-public class ConvertEndToEndTests
+public class AddEndToEndTests
 {
     private const string GdScriptProject =
         """
@@ -653,7 +653,7 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
-    public void Convert_GdScriptOnlyProject_ScaffoldsFullLayout_AndReRunIsNoOp()
+    public void Add_GdScriptOnlyProject_ScaffoldsFullLayout_AndReRunIsNoOp()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
@@ -703,7 +703,7 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
-    public void Convert_ExistingNet8Project_UpgradesToNet10()
+    public void Add_ExistingNet8Project_UpgradesToNet10()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
@@ -724,7 +724,7 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
-    public void Convert_LeavesAnUnrelatedFolderThatLooksLikeAHostAlone()
+    public void Add_LeavesAnUnrelatedFolderThatLooksLikeAHostAlone()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
@@ -740,7 +740,7 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
-    public void Convert_ExistingExportPresets_AppendsWebPreset_WithoutRewriting()
+    public void Add_ExistingExportPresets_AppendsWebPreset_WithoutRewriting()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
@@ -771,11 +771,11 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
-    public void Convert_ExistingGlobalJson_IsNeverTouched()
+    public void Add_ExistingGlobalJson_IsNeverTouched()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
-        // latestMajor: the convert pipeline runs `dotnet sln` inside this
+        // latestMajor: the add pipeline runs `dotnet sln` inside this
         // directory, so the pin must resolve with whatever SDK the CI runner
         // has (a bare version pin means latestPatch and only accepts the
         // 10.0.1xx band - broke on a runner with only 10.0.3xx).
@@ -792,7 +792,7 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
-    public void Convert_NoWebNoTests_PrunesScaffoldingAndExcludes()
+    public void Add_NoWebNoTests_PrunesScaffoldingAndExcludes()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);

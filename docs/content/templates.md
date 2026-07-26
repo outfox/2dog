@@ -13,7 +13,7 @@ them; add `--desktop`, `--web`, `--tests` (or `--non-interactive`) to skip the
 prompts. The same content also ships as a `dotnet new` template, described
 below  –  both produce identical projects.
 
-(For an *existing* Godot project, use [`dnx 2dog`](/convert) instead: it
+(For an *existing* Godot project, just add 2dog instead  –  [`dnx 2dog add`](/add)
 produces the same layout around it, in place.)
 
 ## Installation
@@ -73,7 +73,7 @@ explicitly with `dotnet publish` when you want a web bundle.
 :::
 
 ::: tip Already have a Godot project?
-Use [`2dog convert`](/convert) instead  –  it produces this same layout around
+Just add 2dog! [`2dog add`](/add) produces this same layout around
 your existing project, in place.
 :::
 
@@ -295,7 +295,7 @@ The generated `MyGame/` root is a minimal Godot project. You can:
 
 2. **Start from an existing project:**
    Instead of copying files into the template output, run
-   [`2dog convert`](/convert) on your existing Godot project  –  it scaffolds
+   [`2dog add`](/add) on your existing Godot project  –  it scaffolds
    the same nested hosts around it, in place.
 
 3. **Add C# scripts:**

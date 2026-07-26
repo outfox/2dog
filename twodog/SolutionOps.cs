@@ -6,7 +6,7 @@ namespace twodog.cli;
 /// <summary>
 /// Solution handling: reuse the single solution at the Godot project root
 /// (Godot itself errors when more than one solution at res:// contains the
-/// game project, so a converter must never add a second), or create one.
+/// game project, so the tool must never add a second), or create one.
 /// </summary>
 internal static class SolutionOps
 {

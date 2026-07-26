@@ -13,7 +13,7 @@ dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
 
-Projects scaffolded by the [`2dog` tool](/convert) already include a
+Projects scaffolded by the [`2dog` tool](/add) already include a
 ready-made test project (add one later with `2dog add --tests`):
 `MyGame.tests/`, nested inside the Godot
 project (with a `.gdignore` so the Godot editor skips it) and pointing

@@ -95,7 +95,7 @@ internal static class CsprojPatcher
         if (patch.HasElements)
             root.Add(
                 new XText("    "),
-                new XComment(" added by 2dog convert: properties 2dog hosts need that were not already set "),
+                new XComment(" added by the 2dog tool: properties 2dog hosts need that were not already set "),
                 new XText("\n    "),
                 patch,
                 new XText("\n"));

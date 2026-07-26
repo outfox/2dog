@@ -12,7 +12,7 @@ holds. Your game  –  scenes, resources, and the C# assembly next to
 | [xUnit](./xunit) | `MyGame.xunit` | `dotnet test MyGame.xunit` | Tests against a real engine and real resources |
 
 All three are generated for you by [`2dog new`](/templates) or
-[`2dog`](/convert) in an existing project. Run the tool again whenever you want
+[`2dog add`](/add) in an existing project. Run the tool again whenever you want
 another one  –  including a second host of a kind you already have:
 
 ```bash

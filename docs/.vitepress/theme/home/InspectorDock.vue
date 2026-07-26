@@ -14,7 +14,7 @@ const features = [
     tint: '2d',
     name: 'Godot C# on the Web',
     detail: 'Finally... no more waiting for Godot.',
-    link: '/convert',
+    link: '/add',
     linkText: 'Bring your project',
   },
   {

@@ -25,14 +25,14 @@ It's good old Godot.
 
 ## 1. Choose Your Starting Point
 
-Both routes create the same recommended structure. Converting is the shortest
-path for an existing Godot C# developer; the template is there when you want a
-fresh project.
+Both routes create the same recommended structure. Adding 2dog in place is the
+shortest path for an existing Godot C# developer; the template is there when
+you want a fresh project.
 
 ::: code-group
 
 ```bash [Existing Project]
-# Convert in place. Existing game content stays where it is.
+# Just add 2dog! Existing game content stays where it is.
 cd path/to/MyGame
 dnx 2dog
 ```
@@ -50,8 +50,8 @@ you confirm. Every question also has a flag  –  `dnx 2dog new MyGame --desktop
 --tests` skips straight past the prompts.
 
 ::: tip Try before you bite?
-Run `dnx 2dog convert path/to/MyGame --dry-run` first if you want to inspect
-every planned action. The [conversion guide](/convert) documents exactly what
+Run `dnx 2dog add path/to/MyGame --dry-run` first if you want to inspect
+every planned action. [Adding 2dog to a Project](/add) documents exactly what
 the command creates and patches.
 :::
 
@@ -106,7 +106,7 @@ authoring and the .NET hosts for running, testing, and publishing.
 
 ## 5. Run the Tests
 
-Generated and converted projects include a headless xUnit host by default:
+Projects scaffolded by 2dog include a headless xUnit host by default:
 
 ```bash
 dotnet test MyGame.tests
@@ -157,4 +157,4 @@ silently select a newer engine line:
 <PackageReference Include="2dog.engine" Version=":godot-version:.*"/>
 ```
 
-Generated and converted projects configure their package versions for you.
+Projects scaffolded by 2dog configure their package versions for you.

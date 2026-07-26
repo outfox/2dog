@@ -112,13 +112,13 @@ const starts = [
     title: 'I Have a Godot Game',
     code: [
       { comment: true, text: "# no install needed, just use .NET 10's dotnet tool execute (dnx)" },
-      { comment: false, text: 'dnx 2dog convert MyGame' },
+      { comment: false, text: 'dnx 2dog add MyGame' },
       { comment: false, text: 'cd MyGame' },
       { comment: false, text: 'dotnet run --project MyGame.2dog' },
       { comment: false, text: 'dotnet publish MyGame.web' },
     ],
-    link: '/convert',
-    linkText: 'What conversion adds →',
+    link: '/add',
+    linkText: 'What 2dog adds →',
   },
   {
     icon: 'tennis_ball',

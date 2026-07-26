@@ -5,8 +5,8 @@ namespace twodog.cli;
 /// <summary>
 /// The one scaffolding engine behind every verb: it makes a Godot project
 /// directory hold the 2dog host projects it was asked for. `2dog new` creates
-/// the Godot project first and then runs the same path; `2dog add` and
-/// `2dog convert` run it against an existing one.
+/// the Godot project first and then runs the same path; `2dog add` (alias
+/// `convert`) runs it against an existing one.
 ///
 /// The whole run is planned first as a list of actions, then either printed
 /// (--dry-run) or applied - both paths walk the same plan. Hard invariant:
@@ -91,15 +91,15 @@ internal static class ScaffoldCommand
             .ToList();
         var wantsWeb = newHosts.Any(h => h.Kind == HostKind.Web) || existingHosts.Any(h => h.Kind == HostKind.Web);
 
-        // Root files that already exist are worth a word during a conversion
-        // ("your file was left alone"), but not when hosts are added to a
-        // project that 2dog already set up - there they are simply ours.
-        var converting = !project.IsNew && existingHosts.Count == 0;
+        // Root files that already exist are worth a word when 2dog is first
+        // added to a project ("your file was left alone"), but not when hosts
+        // are added to one 2dog already set up - there they are simply ours.
+        var retrofitting = !project.IsNew && existingHosts.Count == 0;
 
         PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders);
-        PlanRootBuildTargets(plan, warnings, projectDir, converting);
-        PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, converting);
-        PlanWebBoot(plan, skipped, options, projectDir, converting);
+        PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
+        PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
+        PlanWebBoot(plan, skipped, options, projectDir, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
         PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostFolders, newHosts);
@@ -252,7 +252,7 @@ internal static class ScaffoldCommand
     }
 
     private static void PlanRootGlobalJson(
-        List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool converting)
+        List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting)
     {
         if (!wantsWeb) return;
 
@@ -264,7 +264,7 @@ internal static class ScaffoldCommand
         var path = Path.Combine(projectDir, "global.json");
         if (File.Exists(path))
         {
-            if (converting)
+            if (retrofitting)
                 warnings.Add("global.json already exists - left untouched. Publishing the web host from the " +
                              "project root needs it to pin a .NET 10 SDK with the wasm-tools workload " +
                              "(publishing from inside the web host folder works regardless: its own global.json wins there).");
@@ -276,7 +276,7 @@ internal static class ScaffoldCommand
     }
 
     private static void PlanRootBuildTargets(
-        List<PlannedAction> plan, List<string> warnings, string projectDir, bool converting)
+        List<PlannedAction> plan, List<string> warnings, string projectDir, bool retrofitting)
     {
         // Directory.Build.targets is user-owned configuration when it already
         // exists, so scaffolding only creates the template's cleanup target for
@@ -284,7 +284,7 @@ internal static class ScaffoldCommand
         var path = Path.Combine(projectDir, "Directory.Build.targets");
         if (File.Exists(path))
         {
-            if (converting)
+            if (retrofitting)
                 warnings.Add("Directory.Build.targets already exists - left untouched. Add the TwoDogDeepClean target manually if you want clean to remove all configuration outputs.");
             return;
         }
@@ -294,7 +294,7 @@ internal static class ScaffoldCommand
     }
 
     private static void PlanWebBoot(
-        List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir, bool converting)
+        List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir, bool retrofitting)
     {
         // Written even without a web host: it is #if LIBGODOT_ENABLED-guarded
         // and matches the template content, so adding a web host later just
@@ -302,7 +302,7 @@ internal static class ScaffoldCommand
         var path = Path.Combine(projectDir, "TwoDogWebBoot.cs");
         if (File.Exists(path) && !options.Force)
         {
-            if (converting) skipped.Add("TwoDogWebBoot.cs");
+            if (retrofitting) skipped.Add("TwoDogWebBoot.cs");
             return;
         }
 

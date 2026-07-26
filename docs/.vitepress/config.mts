@@ -98,7 +98,7 @@ export default defineConfig({
       {
         text: 'Build and Ship',
         items: [
-          { text: gd('arrow_right_arrow_left') + 'Converting a Project', link: '/convert' },
+          { text: gd('dog') + 'Adding 2dog to a Project', link: '/add' },
           { text: gd('sprout') + 'Creating a New Project', link: '/templates' },
           { text: gd('globe') + 'Web / Browser (WASM)', link: '/web' }
         ]

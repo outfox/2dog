@@ -17,10 +17,10 @@ with a single `dotnet publish`.
 # One-time: the .NET wasm build tools (ships its own Emscripten)
 dotnet workload install wasm-tools
 
-# Convert in place - scaffolds the web host (and more) around
+# Add 2dog in place - scaffolds the web host (and more) around
 # your existing Godot project
 cd path/to/MyGame
-dnx 2dog convert -y
+dnx 2dog add -y
 
 # Publish the browser app (imports assets and exports the game
 # content automatically)
@@ -78,7 +78,7 @@ configured for Forward+ fall back automatically via Godot's standard
 
 ## Adding web to an existing 2dog project
 
-The template does this for you, and [`2dog convert`](/convert) retrofits it
+The template does this for you, and [`2dog add`](/add) retrofits it
 onto an existing Godot project; to wire it up manually you need:
 
 1. **In the Godot project:**
@@ -106,7 +106,7 @@ Because the host directory lives under `project.godot`, two extras keep the
 layers apart: a `.gdignore` file in the host directory so the Godot
 importer/exporter skips it, and the host folder in the Godot project csproj's
 `<DefaultItemExcludes>` (e.g. `MyGame.web/**`) so the .NET SDK's source glob
-doesn't swallow the host's sources. The template and `2dog convert` set up
+doesn't swallow the host's sources. The template and `2dog add` set up
 both.
 :::
 

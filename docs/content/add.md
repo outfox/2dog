@@ -1,0 +1,217 @@
+# Adding 2dog to a Project
+
+Just add 2dog! The `2dog` tool adds 2dog to an existing Godot project  –  **in
+place**. Your project directory becomes the solution root, and the host
+projects (desktop, web, tests) are scaffolded as nested subfolders that the
+Godot editor ignores. Existing game content stays where it is. If the project has
+a classic `.sln`, 2dog migrates it to `.slnx` and removes the old solution file.
+
+The command ships in the `2dog` package  –  the dotnet tool and the `dotnet new`
+template in one, separate from the `2dog.engine` library  –  see
+[the FAQ](/faq#why-is-the-library-a-separate-package-2dog-engine-instead-of-part-of-2dog)
+for why. It embeds the same template content as `dotnet new 2dog`, so a
+project you add 2dog to and a fresh one have identical layouts.
+
+## Usage
+
+One-shot, no install (.NET 10+ SDK):
+
+```bash
+cd path/to/your/godot/project
+dnx 2dog
+```
+
+Or install the `2dog` command globally:
+
+```bash
+dotnet tool install -g 2dog
+2dog
+```
+
+Run without arguments, the tool looks at the current directory: with a
+`project.godot` it offers to add hosts, without one it offers to create a new
+project. It then asks which hosts you want and what to call their folders,
+shows the plan, and waits for your confirmation.
+
+```
+2dog 4.7.1  https://2dog.dev
+
+project  MyGame (/home/you/games/MyGame)
+
+Which hosts do you want?
+> [x] desktop   MyGame.2dog   your own Main(), runs the game on desktop
+  [x] browser   MyGame.web    WebAssembly host, published as a static bundle
+  [ ] tests     MyGame.tests  xUnit project driving a headless engine
+```
+
+Every prompt has a flag, so the same run works unattended:
+
+```bash
+dnx 2dog add path/to/MyGame --no-web        # everything except the web host
+dnx 2dog add path/to/MyGame --dry-run       # plan only, changes nothing
+```
+
+Naming any host option (or `--non-interactive`) turns the prompts off entirely,
+which is what you want in scripts and CI.
+
+::: tip From stock Godot to the browser
+Add-then-publish is the fastest route to a browser (WebAssembly) release:
+
+```bash
+dnx 2dog add path/to/MyGame -y
+cd path/to/MyGame
+dotnet publish MyGame.web              # static site in MyGame.web/AppBundle/
+```
+
+One-time prerequisite: `dotnet workload install wasm-tools`. See
+[Web / Browser](/web) for the full story.
+:::
+
+## Commands
+
+| Command | Effect |
+| --- | --- |
+| `2dog` | Add hosts here, or create a project if there is none |
+| `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
+| `2dog add [path]` | Add hosts to an existing Godot project |
+| `2dog convert [path]` | Alias of `add`, for projects that have no hosts yet |
+
+## Options
+
+| Option | Effect |
+| --- | --- |
+| `--desktop [folder]` | Add a desktop host, optionally in a named folder |
+| `--web [folder]` | Add a browser (WebAssembly) host |
+| `--tests [folder]` | Add an xUnit test project |
+| `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
+| `-n, --name <BaseName>` | Project name (`new`) or base name override |
+| `-o, --output <dir>` | Directory for a new project |
+| `-y, --yes` | Do not prompt; take the flags and defaults |
+| `--non-interactive` | Same as `--yes` |
+| `--dry-run` | Print planned actions without changing anything |
+| `--force` | Overwrite scaffolded files that already exist (never deletes/moves) |
+| `--no-restore` | Skip the final `dotnet restore` |
+| `--verbose` | Extra output |
+
+Host options are repeatable, and each takes an optional folder name. Without a
+name, the tool picks a free one (`MyGame.2dog`, then `MyGame.2dog2`, ...).
+
+## Resulting layout
+
+```
+MyGame/                      <- your existing Godot project (unchanged)
+  project.godot
+  MyGame.csproj              <- created or minimally patched
+  MyGame.slnx                <- created, or an existing solution is migrated/reused
+  TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
+  export_presets.cfg         <- created, or a 'Web' export preset is appended
+  global.json                <- added (pins a wasm-capable SDK; skipped if you have one)
+  MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
+  MyGame.web/    (.gdignore) <- browser (WebAssembly) host
+  MyGame.tests/  (.gdignore) <- xUnit test project
+```
+
+Afterwards:
+
+```bash
+dotnet run --project MyGame.2dog           # desktop host
+dotnet test MyGame.tests                   # xUnit tests (headless Godot)
+dotnet publish MyGame.web                  # browser bundle (needs wasm-tools)
+```
+
+The root `global.json` pins a .NET 10 SDK with the wasm-tools workload, which
+is what lets the web host publish from the project root (`global.json` applies
+at or below its own directory). If your project already has a `global.json`,
+2dog leaves it untouched  –  make sure it pins a wasm-capable SDK, or publish
+from inside `MyGame.web/`, whose own `global.json` wins there.
+
+## Adding hosts later
+
+The tool is incremental: run it again whenever you want another host. Hosts
+that already exist are recognized and left alone, and a kind you already have
+is simply added a second time under a free folder name.
+
+```bash
+2dog                              # pick from the checkboxes again
+2dog add --tests                  # -> MyGame.tests, or MyGame.tests2 if taken
+2dog add --desktop MyGame.editor  # a second desktop host, your folder name
+```
+
+A second desktop host is the usual way to ship a separate entry point  –  a
+level editor, a dedicated server, a benchmark runner  –  against the same game
+project. Each host folder gets its own `.gdignore`, is excluded from the Godot
+csproj's globs, and is added to the solution.
+
+## What it does
+
+- **Creates or minimally patches the Godot csproj**: `EnableDynamicLoading`,
+  `AllowUnsafeBlocks`, the `LIBGODOT_ENABLED` define, and `DefaultItemExcludes`
+  for the nested host folders. An existing csproj gets a single marked
+  `<PropertyGroup>` appended containing only the properties it was missing  – 
+  your file is otherwise left as-is.
+- **Adds `TwoDogWebBoot.cs`** to the Godot project (even without a web host: it
+  is `#if LIBGODOT_ENABLED`-guarded and inert until a web host uses it, so
+  adding web later just works).
+- **Adds a root `global.json`** (with a web host) pinning a .NET 10 SDK with
+  the wasm-tools workload, so the web host publishes from the project root. An
+  existing `global.json` is never touched, not even with `--force`  –  it is
+  your SDK policy, and a warning explains what it needs to pin.
+- **Ensures a `Web` export preset exists**: the web host's publish exports
+  your project as a `.pck` via that preset, and the engine refuses to export
+  without an `export_presets.cfg`. A missing file is created from the
+  template; an existing file gets the `Web` preset appended under the next
+  free preset index  –  your presets are never touched.
+- **Scaffolds the nested host projects**, each with a `.gdignore` file so the
+  Godot editor, importer, and exporter skip them.
+- **Reuses or migrates your solution**: an existing `.slnx` at the project root
+  is used as-is (projects are added to it); a classic `.sln` is migrated to
+  `.slnx` and removed; with none, `<Name>.slnx` is created.
+  The web host gets ActiveCfg-only entries (no `.Build.0`), so "Build
+  Solution" works without the wasm-tools workload  –  the web host is built
+  explicitly via `dotnet publish`.
+- **Runs `dotnet restore`** at the end (skip with `--no-restore`). A
+  wasm-related restore failure is only a warning, with a pointer to
+  `dotnet workload install wasm-tools`.
+
+Asking for hosts that are all already there is a no-op ("Nothing to do").
+Files that already exist are skipped and reported; pass `--force` to overwrite
+the scaffolded files with fresh template content.
+
+## What it never does
+
+- Move, rename, or delete game content. The one intentional filesystem
+  migration is replacing a classic `.sln` with its `.slnx` equivalent.
+- Touch version control  –  no `.gitignore` edits, no staging, no commits.
+  Review the diff yourself and commit when happy.
+- Add a second solution: if multiple solutions at the project root contain
+  the Godot project, the tool errors instead of guessing  –  the same rule the
+  Godot editor enforces.
+
+## Base name derivation
+
+The base name names the Godot csproj, the solution, and the default host
+folders (`<Name>.2dog` etc.). It is derived in priority order:
+
+1. `[dotnet] project/assembly_name` in `project.godot` (authoritative: the
+   Godot editor resolves `res://<assembly_name>.csproj` from it),
+2. the name of the sole `.csproj` at the project root,
+3. `application/config/name`, sanitized to a valid file/assembly stem,
+4. the project folder name.
+
+`--name` overrides the derivation, but must not conflict with an existing
+`assembly_name` in `project.godot`  –  the csproj has to stay named after the
+assembly, or the Godot editor won't find it.
+
+## GDScript-only projects
+
+Projects without any csproj work too: the tool creates a `Godot.NET.Sdk`
+csproj and appends a `[dotnet]` section with `project/assembly_name` to
+`project.godot`, so the Godot editor picks the project up as a C# project.
+Your GDScript scenes and scripts keep running unchanged  –  2dog just adds
+the .NET entry points (and the option to mix in C#) around them.
+
+## Requirements
+
+- **.NET 10 SDK** (also what `dnx` needs for one-shot execution).
+- The **wasm-tools workload** only for publishing the web host
+  (`dotnet workload install wasm-tools`)  –  everything else builds without it.

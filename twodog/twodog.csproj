@@ -91,7 +91,7 @@
          so the committed file keeps its placeholder versions untouched.
          Note: the packed content includes the template sln (dotnet-new #if
          blocks) while the EmbeddedResource list above deliberately omits it -
-         `2dog convert` shells out to `dotnet sln` instead. -->
+         `2dog add` shells out to `dotnet sln` instead. -->
     <ItemGroup>
         <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/.template.config/template.json"
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>

@@ -42,7 +42,7 @@ const menus = computed<{ label: string; items: MenuItem[] }[]>(() => [
     label: 'Project',
     items: [
       { text: 'New Project...', link: '/templates', shortcut: 'Ctrl+N' },
-      { text: 'Convert Project...', link: '/convert', shortcut: 'Ctrl+Shift+C' },
+      { text: 'Add 2dog to Project...', link: '/add', shortcut: 'Ctrl+Shift+A' },
       { sep: true },
       { text: 'Getting Started', link: '/getting-started' },
       { text: 'MSBuild Configuration', link: '/configuration' },
