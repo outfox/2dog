@@ -649,6 +649,22 @@ public class ConvertEndToEndTests
     }
 
     [Fact]
+    public void Convert_LeavesAnUnrelatedFolderThatLooksLikeAHostAlone()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        tmp.Write("SpaceMiner.tests/notes.md", "hand-written GDScript test notes");
+
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+
+        Assert.Equal(
+            ["notes.md"],
+            Directory.EnumerateFileSystemEntries(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.tests"))
+                .Select(e => System.IO.Path.GetFileName(e)!).ToArray());
+        Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.tests2", "SpaceMiner.tests2.csproj")));
+    }
+
+    [Fact]
     public void Convert_ExistingExportPresets_AppendsWebPreset_WithoutRewriting()
     {
         using var tmp = new TempProjectDir();
@@ -738,6 +754,24 @@ public class HostsTests
         // Matching is case-insensitive: folders collide on Windows regardless.
         Assert.Equal("MyGame.web2", Hosts.AllocateFolder(HostKind.Web, "MyGame", ["mygame.web"]));
     }
+
+    [Theory]
+    [InlineData("My Game!", "MyGame")]
+    [InlineData("my-game_1.x", "my-game_1.x")]
+    public void SanitizeName_KeepsFolderSafeCharacters(string input, string expected) =>
+        Assert.Equal(expected, Hosts.SanitizeName(input));
+
+    // Names that survive the character filter but are pure path syntax would
+    // write outside the project root once combined into a path.
+    [Theory]
+    [InlineData("")]
+    [InlineData("!!")]
+    [InlineData(".")]
+    [InlineData("..")]
+    [InlineData("../..")]
+    [InlineData("._-")]
+    public void SanitizeName_RejectsNamesWithoutALetterOrDigit(string input) =>
+        Assert.Null(Hosts.SanitizeName(input));
 }
 
 public class HostScanTests
@@ -831,7 +865,7 @@ public class CommandLineTests
     public void RepeatedHostFlag_RequestsTwoHosts()
     {
         var cmd = CommandLine.Parse(["add", "--desktop", "One", "--desktop", "Two"]);
-        Assert.Equal(["One", "Two"], cmd.Requested.Select(r => r.Folder).ToArray());
+        Assert.Equal(["One", "Two"], cmd.Requested.Select(r => r.Folder!).ToArray());
     }
 
     [Fact]
@@ -868,6 +902,23 @@ public class CommandLineTests
         Assert.Equal(Verb.Help, CommandLine.Parse(["add", "--help"]).Verb);
         Assert.Equal(Verb.Version, CommandLine.Parse(["--version"]).Verb);
     }
+
+    // A command line that answers the questions itself never prompts - not for
+    // the host selection, and not for the final confirmation either.
+    [Theory]
+    [InlineData(true, "new", "MyGame")]
+    [InlineData(true, "add")]
+    [InlineData(false, "add", "--desktop")]
+    [InlineData(false, "add", "--desktop", "MyGame.editor")]
+    [InlineData(false, "convert", "--no-web")]
+    [InlineData(false, "new", "MyGame", "--tests")]
+    [InlineData(false, "add", "--yes")]
+    [InlineData(false, "add", "--non-interactive")]
+    // --dry-run answers nothing, so it still gathers choices - it just prints
+    // the plan instead of applying it.
+    [InlineData(true, "add", "--dry-run")]
+    public void Prompting_IsOffWheneverTheFlagsDecide(bool expected, params string[] args) =>
+        Assert.Equal(expected, Program.WantsPrompts(CommandLine.Parse(args)));
 }
 
 public class HostSelectionTests
@@ -878,7 +929,12 @@ public class HostSelectionTests
             Dir = "/tmp/MyGame",
             BaseName = "MyGame",
             ExistingHosts = existing.Select(e => new ExistingHost(e.Kind, e.Folder)).ToList(),
+            ExistingFolders = existing.Select(e => e.Folder).ToList(),
         };
+
+    /// <summary>A project whose only subdirectories are none of 2dog's doing.</summary>
+    private static ProjectContext ProjectWithFolders(params string[] folders) =>
+        new() { Dir = "/tmp/MyGame", BaseName = "MyGame", ExistingFolders = folders.ToList() };
 
     [Fact]
     public void Defaults_AreEveryKindTheProjectLacks()
@@ -917,6 +973,32 @@ public class HostSelectionTests
     {
         var cmd = CommandLine.Parse(["add", "--web", "My Game!"]);
         Assert.Equal("MyGame", HostSelection.FromFlags(cmd, Project()).Single().Folder);
+    }
+
+    // A directory that is not a 2dog host is still somebody's content: new
+    // hosts go around it rather than into it.
+    [Fact]
+    public void Defaults_AvoidDirectoriesThatAreNotHosts()
+    {
+        var hosts = HostSelection.Defaults([], ProjectWithFolders("MyGame.tests", "assets"));
+        Assert.Equal(
+            [(HostKind.Desktop, "MyGame.2dog"), (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests2")],
+            hosts.Select(h => (h.Kind, h.Folder)).ToArray());
+    }
+
+    [Fact]
+    public void FromFlags_AllocatesAroundDirectoriesThatAreNotHosts()
+    {
+        var cmd = CommandLine.Parse(["add", "--tests"]);
+        Assert.Equal("MyGame.tests2", HostSelection.FromFlags(cmd, ProjectWithFolders("MyGame.tests")).Single().Folder);
+    }
+
+    [Fact]
+    public void FromFlags_RejectsAFolderNameAnyDirectoryAlreadyUses()
+    {
+        var cmd = CommandLine.Parse(["add", "--tests", "docs"]);
+        var ex = Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, ProjectWithFolders("docs")));
+        Assert.Contains("already exists", ex.Message);
     }
 }
 

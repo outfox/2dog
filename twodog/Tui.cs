@@ -43,7 +43,7 @@ internal static class Tui
     {
         var prompt = new TextPrompt<string>("Project name:")
             .Validate(value => Hosts.SanitizeName(value) is null
-                ? ValidationResult.Error("[red]needs at least one letter, digit, '.', '_' or '-'[/]")
+                ? ValidationResult.Error("[red]needs at least one letter or digit[/]")
                 : ValidationResult.Success());
         if (Hosts.SanitizeName(suggestion) is { } valid) prompt.DefaultValue(valid);
         return Hosts.SanitizeName(AnsiConsole.Prompt(prompt))!;
@@ -113,7 +113,7 @@ internal static class Tui
     private static ValidationResult Validate(string value, List<string> taken)
     {
         var name = Hosts.SanitizeName(value);
-        if (name is null) return ValidationResult.Error("[red]needs at least one letter, digit, '.', '_' or '-'[/]");
+        if (name is null) return ValidationResult.Error("[red]needs at least one letter or digit[/]");
         if (name != value.Trim()) return ValidationResult.Error("[red]only letters, digits, '.', '_' and '-'[/]");
         return taken.Contains(name, StringComparer.OrdinalIgnoreCase)
             ? ValidationResult.Error("[red]that folder is already taken[/]")

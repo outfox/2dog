@@ -34,8 +34,16 @@ internal static class ScaffoldCommand
             if (File.Exists(projectGodot))
                 throw new ToolException($"{projectDir} already holds a Godot project - use '2dog add' to add hosts to it");
             var name = Hosts.SanitizeName(options.NameOverride)
-                       ?? throw new ToolException("a project name is required to create a new project");
-            return new ProjectContext { Dir = projectDir, BaseName = name, IsNew = true };
+                       ?? throw new ToolException(options.NameOverride is null
+                           ? "a project name is required to create a new project"
+                           : $"'{options.NameOverride}' is not a usable project name - it needs a letter or a digit");
+            return new ProjectContext
+            {
+                Dir = projectDir,
+                BaseName = name,
+                ExistingFolders = Subdirectories(projectDir),
+                IsNew = true,
+            };
         }
 
         if (!File.Exists(projectGodot))
@@ -49,8 +57,14 @@ internal static class ScaffoldCommand
             BaseName = DeriveBaseName(options, projectDir, godot),
             Godot = godot,
             ExistingHosts = HostScan.Find(projectDir),
+            ExistingFolders = Subdirectories(projectDir),
         };
     }
+
+    private static List<string> Subdirectories(string dir) =>
+        Directory.Exists(dir)
+            ? Directory.EnumerateDirectories(dir).Select(d => Path.GetFileName(d)).ToList()
+            : [];
 
     /// <summary>
     /// Runs a scaffold. <paramref name="confirm"/>, when given, is shown the
@@ -135,7 +149,8 @@ internal static class ScaffoldCommand
 
         if (options.NameOverride is { } forced)
         {
-            var name = Hosts.SanitizeName(forced) ?? throw new ToolException($"--name '{forced}' contains no usable characters");
+            var name = Hosts.SanitizeName(forced)
+                       ?? throw new ToolException($"--name '{forced}' is not a usable name - it needs a letter or a digit");
             if (godotProject.Get("dotnet", "project/assembly_name") is { } existing && existing != name)
                 throw new ToolException(
                     $"--name '{name}' conflicts with project.godot's assembly_name '{existing}'; " +
@@ -402,8 +417,12 @@ internal static class ScaffoldCommand
     {
         Console.WriteLine("\nDone. Next steps:");
 
-        if (project.Dir != Path.GetFullPath("."))
-            Console.WriteLine($"  cd {Path.GetRelativePath(".", project.Dir)}");
+        // Relative-path comparison, not string equality on the full paths: a
+        // trailing separator or a case-insensitive filesystem would otherwise
+        // suggest `cd` into the directory the user is already in.
+        var relative = Path.GetRelativePath(".", project.Dir);
+        if (relative is not ("." or ""))
+            Console.WriteLine($"  cd {relative}");
 
         foreach (var host in hosts)
             Console.WriteLine(host.Kind switch
