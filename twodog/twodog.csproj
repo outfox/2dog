@@ -34,6 +34,12 @@
         <PackageTags>dotnet-tool;dotnet-new;templates;godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
+    <!-- The interactive host picker. Spectre is the only dependency; keep it
+         that way so `dnx 2dog` stays a small download. -->
+    <ItemGroup>
+        <PackageReference Include="Spectre.Console" Version="0.57.2"/>
+    </ItemGroup>
+
     <!-- The versions the tool scaffolds with, baked in at build time -->
     <ItemGroup>
         <AssemblyMetadata Include="TwoDogVersion" Value="$(TwoDogVersion)"/>
@@ -61,6 +67,11 @@
         <EmbeddedResource Include="../templates/twodog/TwoDogWebBoot.cs" LogicalName="tpl/TwoDogWebBoot.cs"/>
         <EmbeddedResource Include="../templates/twodog/export_presets.cfg" LogicalName="tpl/export_presets.cfg"/>
         <EmbeddedResource Include="../templates/twodog/global.json" LogicalName="tpl/global.json"/>
+        <!-- Godot project files, for `2dog new` -->
+        <EmbeddedResource Include="../templates/twodog/project.godot" LogicalName="tpl/project.godot"/>
+        <EmbeddedResource Include="../templates/twodog/main.tscn" LogicalName="tpl/main.tscn"/>
+        <EmbeddedResource Include="../templates/twodog/.editorconfig" LogicalName="tpl/.editorconfig"/>
+        <EmbeddedResource Include="../templates/twodog/.gitignore" LogicalName="tpl/.gitignore"/>
     </ItemGroup>
 
     <!-- Unit tests in twodog.tests exercise the internal conversion pipeline -->

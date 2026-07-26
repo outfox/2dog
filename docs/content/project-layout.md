@@ -115,14 +115,13 @@ scripts normally.
 For an existing project, conversion adds the hosts around your current files:
 
 ```bash
-dnx 2dog convert path/to/MyGame
+cd path/to/MyGame && dnx 2dog
 ```
 
-For a fresh project, the template creates the game and hosts together:
+For a fresh project, the same tool creates the game and hosts together:
 
 ```bash
-dotnet new install 2dog
-dotnet new 2dog -n MyGame
+dnx 2dog new MyGame
 ```
 
 Both routes intentionally converge on the same structure. See
