@@ -123,7 +123,7 @@ public sealed class LifecycleTests
         using var release = new SemaphoreSlim(0);
         var host = new EngineHost();
         var instance = host.Start<HangingProgram>(new()
-            { Tag = "lc-hang", ProjectDir = TempProject, State = release, ShutdownTimeout = TimeSpan.FromSeconds(1) });
+        { Tag = "lc-hang", ProjectDir = TempProject, State = release, ShutdownTimeout = TimeSpan.FromSeconds(1) });
         await instance.Booted.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
         Assert.Throws<TimeoutException>(instance.Dispose);
         // Releasing the blocker lets the program exit - no thread outlives the test.
@@ -170,7 +170,7 @@ public sealed class LifecycleTests
         {
             Tag = "lc-shared",
             ProjectDir = TempProject,
-            SharedAssemblies = ["twodog.hosting.tests"],
+            SharedAssemblies = [typeof(LifecycleTests).Assembly.GetName().Name!],
         }));
         Assert.Contains("per-instance", e.Message);
     }
@@ -184,9 +184,9 @@ public sealed class LifecycleTests
         var sharedName = typeof(Assert).Assembly.GetName().Name!;
         using var host = new EngineHost();
         var shared = host.Start<SharedIdentityProbeProgram>(new()
-            { Tag = "lc-shared-ok", ProjectDir = TempProject, SharedAssemblies = [sharedName] });
+        { Tag = "lc-shared-ok", ProjectDir = TempProject, SharedAssemblies = [sharedName] });
         var isolated = host.Start<SharedIdentityProbeProgram>(new()
-            { Tag = "lc-isolated", ProjectDir = TempProject });
+        { Tag = "lc-isolated", ProjectDir = TempProject });
         Assert.Equal(1, await shared.Completion);   // shared: default-ALC identity
         Assert.Equal(0, await isolated.Completion); // default: per-instance copy
     }
@@ -211,7 +211,7 @@ public sealed class LifecycleTests
         HostGuard.SkipUnlessSupported();
         using var host = new EngineHost();
         var e = Assert.Throws<ArgumentException>(() => host.Start(new InstanceOptions
-            { Tag = "lc-val-noasm", ProjectDir = TempProject, ProgramTypeName = "Some.Type" }));
+        { Tag = "lc-val-noasm", ProjectDir = TempProject, ProgramTypeName = "Some.Type" }));
         Assert.Contains(nameof(InstanceOptions.ProgramAssemblyPath), e.Message);
     }
 
@@ -261,7 +261,7 @@ public sealed class LifecycleTests
 
         using var ran = new ManualResetEventSlim(false);
         var queued = host.Start<RanMarkerProgram>(new()
-            { Tag = "lc-orphan-queued", ProjectDir = TempProject, State = ran, ShutdownTimeout = TimeSpan.FromSeconds(10) });
+        { Tag = "lc-orphan-queued", ProjectDir = TempProject, State = ran, ShutdownTimeout = TimeSpan.FromSeconds(10) });
         // Dispose while the instance is queued behind the held gate: it must
         // observe the quit promptly (no TimeoutException) and never run.
         queued.Dispose();
@@ -281,9 +281,9 @@ public sealed class LifecycleTests
         var timeout = TimeSpan.FromSeconds(5);
         var host = new EngineHost();
         var a = host.Start<HangingProgram>(new()
-            { Tag = "lc-par-a", ProjectDir = TempProject, State = release, ShutdownTimeout = timeout });
+        { Tag = "lc-par-a", ProjectDir = TempProject, State = release, ShutdownTimeout = timeout });
         var b = host.Start<HangingProgram>(new()
-            { Tag = "lc-par-b", ProjectDir = TempProject, State = release, ShutdownTimeout = timeout });
+        { Tag = "lc-par-b", ProjectDir = TempProject, State = release, ShutdownTimeout = timeout });
         await Task.WhenAll(a.Booted, b.Booted).WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -317,7 +317,7 @@ public sealed class LifecycleTests
         await inGate.Task.WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
 
         var blocked = host.Start<NoBootProgram>(new()
-            { Tag = "lc-gate-blocked", ProjectDir = TempProject, BootGateTimeout = TimeSpan.FromMilliseconds(250) });
+        { Tag = "lc-gate-blocked", ProjectDir = TempProject, BootGateTimeout = TimeSpan.FromMilliseconds(250) });
         var e = await Assert.ThrowsAsync<TimeoutException>(() => blocked.Completion);
         Assert.Contains("boot gate", e.Message);
 

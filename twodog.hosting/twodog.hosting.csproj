@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <!-- Unit tests for internals (ExceptionSanitizer). -->
-        <InternalsVisibleTo Include="twodog.hosting.tests" />
+        <InternalsVisibleTo Include="twodog.tests" />
     </ItemGroup>
 
 </Project>

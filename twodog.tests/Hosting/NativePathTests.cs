@@ -45,7 +45,7 @@ public sealed class NativePathTests
         {
             using var host = new EngineHost();
             var instance = host.Start<NativeSwitchProgram>(new()
-                { Tag = "native-switch", ProjectDir = dir, Args = ["--headless"], State = other });
+            { Tag = "native-switch", ProjectDir = dir, Args = ["--headless"], State = other });
             Assert.Equal(0, await instance.Completion.WaitAsync(TimeSpan.FromMinutes(3), TestContext.Current.CancellationToken));
         }
         finally

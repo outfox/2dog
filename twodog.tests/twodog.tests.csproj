@@ -20,6 +20,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\demo\demo.csproj"/>
+        <ProjectReference Include="..\twodog.hosting.xunit\twodog.hosting.xunit.csproj"/>
         <!-- Unit tests for the `2dog` tool (internals via InternalsVisibleTo) -->
         <ProjectReference Include="..\twodog\twodog.csproj"/>
     </ItemGroup>
