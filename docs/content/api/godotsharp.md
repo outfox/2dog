@@ -7,7 +7,8 @@ description: "API stub for GodotSharp, which 2dog exposes."
 
 2dog exposes the full GodotSharp API that we've grown to love and expect.
 
-You can just code like you're used to. Of course you can also work with GDscript.
+You can just code like you're used to, both in your game-side code, and the host-side code. 
+Of course you can also work with GDscript (game-side only).
 
 :::info Official Docs
 I'm happy to wag my tail send you on an adventure to godotengine.org!
