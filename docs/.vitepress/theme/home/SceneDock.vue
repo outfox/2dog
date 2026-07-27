@@ -42,7 +42,7 @@ const rootVisible = computed(
         <input v-model="nodeFilter" type="text" placeholder="Filter Nodes" aria-label="Filter Nodes" />
       </span>
     </div>
-    <a v-show="rootVisible" class="ed-tree-root" :href="withBase('/project-layout')">
+    <a v-show="rootVisible" class="ed-tree-root" :href="withBase('/getting-started')">
       <span class="tree-arrow" :style="{ '--gd-icon': edIconUrl('GuiTreeArrowDown') }" aria-hidden="true"></span>
       <span class="node-glyph root" :style="{ '--gd-icon': iconUrl('joystick') }" aria-hidden="true"></span>MyGame
       <span class="ed-tree-note">project.godot</span>
