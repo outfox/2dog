@@ -1,10 +1,10 @@
 # Let's Take `Godot` for a Walk :gd-bone@gold:
 
-Embedding a new or existing Godot project into a .NET application.
+Let's embed a new or existing Godot project into a .NET application!
 
 ## Before You Grab the Leash
 
-You'll need:
+To get set up, you'll need:
 
 - [.NET SDK 10.0 or later](https://dotnet.microsoft.com/download)
 - A supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`

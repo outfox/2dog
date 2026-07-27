@@ -1,5 +1,7 @@
 # Core Concepts
 
+Teaching an old robot new tricks!
+
 ## Inverted Architecture
 
 Traditional Godot applications have Godot control the process lifecycle:

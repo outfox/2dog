@@ -49,6 +49,7 @@ Naming a host option, passing `--yes`, or passing `--non-interactive` disables
 the prompts.
 
 ::: tip From stock Godot to the browser
+
 ```bash
 dnx 2dog add path/to/MyGame -y
 cd path/to/MyGame
