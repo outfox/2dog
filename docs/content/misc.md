@@ -20,7 +20,7 @@ the tool picks a free name such as `MyGame.2dog`, then `MyGame.2dog2`:
 2dog add --desktop MyGame.editor
 ```
 
-A second desktop host can provide a level editor, dedicated server, or
+A second generic host can provide a level editor, dedicated server, or
 benchmark entry point against the same game assembly. Each host gets a
 `.gdignore`, a matching `DefaultItemExcludes` entry in the game project, and a
 solution entry. Asking only for hosts that already exist is a no-op unless a
@@ -188,7 +188,7 @@ selection is covered by [Configuration](/configuration#packages-and-versions).
 
 ## Advanced Desktop Frame Loop
 
-The [console host](/hosts/console) shows the normal loop. Because the host owns
+The [generic host](/hosts/generic) shows the normal loop. Because the host owns
 it, per-frame work may also operate directly on the live scene tree:
 
 ```csharp

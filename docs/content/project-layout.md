@@ -44,7 +44,7 @@ the game assembly and content; they do not duplicate either.
 
 ## Three Ways to Run It
 
-### Desktop Host
+### Generic Host
 
 `MyGame.2dog` starts the embedded engine, points it at the parent Godot project,
 and drives the main loop.

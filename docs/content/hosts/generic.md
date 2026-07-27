@@ -1,16 +1,22 @@
-# Console Host
+# Generic Host
 
-`MyGame.2dog` is the everyday desktop host. It starts the engine, runs your
-main scene in a window, and pumps frames until Godot asks to quit.
+`<YourGame>.2dog` is a generic .NET console application. It starts the engine, runs your
+main scene in a typical Godot game window, and pumps frames until Godot asks to quit. It acts practically the same as directly running your game with Godot.
 
 ```bash
-dotnet run --project MyGame.2dog
+dotnet run --project "<YourGame>.2dog"
 ```
+
+You can extend the generic host or change it into a different type of application with your IDE as needed. You can even add multiple hosts with the `2dog` dotnet tool by running it multiple times.
+
+:::info Trail Marker
+2dog provides some specialized hosts for your convenience, just check out the sibling docs in this category. Contributions are also welcome!
+:::
 
 ## Program
 
-This is the canonical desktop entry point. `Engine.ResolveProjectDir()` reads
-the host's `<GodotProjectDir>` metadata, so no path is hard-coded.
+This is the most basic entry point. `Engine.ResolveProjectDir()` reads
+the host's `<GodotProjectDir>` metadata, so no path is hard-coded. That's useful when you need to point this host at different projects, or move your project to a different directory.
 
 ```csharp
 using Godot;
@@ -87,7 +93,7 @@ dotnet publish MyGame.2dog -c Release
 ```
 
 The output includes the selected native engine, GodotSharp assemblies, and
-your game assembly. RID-specific and RID-less publishes are supported.
+your game assembly. RID-specific and RID-less publishes are supported, meaning you can "cross-compile". See also: [.NET RID Catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog).
 
-A normal host supports one active engine at a time. Disposal allows a
+A normal host supports one active engine at a time. Calling `.Dispose()` on the `Engine` object allows a
 sequential restart; see [Single Godot Instance](/known-issues/single-instance).

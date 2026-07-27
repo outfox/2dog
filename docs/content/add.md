@@ -72,7 +72,7 @@ Publishing requires `dotnet workload install wasm-tools`. See
 
 | Option | Effect |
 | --- | --- |
-| `--desktop [folder]` | Add a desktop host, optionally in a named folder |
+| `--desktop [folder]` | Add a generic host, optionally in a named folder |
 | `--web [folder]` | Add a browser (WebAssembly) host |
 | `--tests [folder]` | Add an xUnit test project |
 | `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |

@@ -146,4 +146,4 @@ internal static class Program
 | `--rendering-driver <driver>` | Select a rendering driver, such as `opengl3` |
 | `--audio-driver <driver>` | Select an audio driver, such as `Dummy` |
 
-See [Console Host](../hosts/console) for the full desktop-host pattern.
+See [Generic Host](../hosts/generic) for the full desktop-host pattern.

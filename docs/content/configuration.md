@@ -30,7 +30,7 @@ variant mapping and [Resource Import](./import-tool) for import properties.
 
 ## Packages and Versions
 
-Reference `2dog.engine` from desktop hosts:
+Reference `2dog.engine` from generic hosts:
 
 ```xml
 <PackageReference Include="2dog.engine" Version=":godot-version:.*"/>

@@ -7,7 +7,7 @@ decides where and how they run.
 
 | Host | Project | Command | Purpose |
 | --- | --- | --- | --- |
-| [Console](./console) | `MyGame.2dog` | `dotnet run --project MyGame.2dog` | Windowed or headless desktop app |
+| [Generic](./generic) | `MyGame.2dog` | `dotnet run --project MyGame.2dog` | Windowed or headless desktop app |
 | [Browser](./web) | `MyGame.web` | `dotnet publish MyGame.web` | Static WebAssembly site |
 | [xUnit](./xunit) | `MyGame.tests` | `dotnet test MyGame.tests` | Tests using a real engine and resources |
 

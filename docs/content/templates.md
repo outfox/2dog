@@ -39,7 +39,7 @@ MyGame/                     # Godot project root and solution root
 ├── export_presets.cfg
 ├── global.json             # included with the web host
 ├── TwoDogWebBoot.cs
-├── MyGame.2dog/            # desktop host
+├── MyGame.2dog/            # generic host
 ├── MyGame.web/             # browser host
 ├── MyGame.tests/           # xUnit tests
 ├── .editorconfig

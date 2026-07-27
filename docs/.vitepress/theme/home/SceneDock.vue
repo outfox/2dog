@@ -8,7 +8,7 @@ import { plain } from './content'
 
 /* name/role accept inline HTML — see content.ts for the rule. */
 const hosts = [
-  { name: 'MyGame.console', role: 'console', color: 'var(--ed-node-2d)', icon: 'window', link: '/hosts/console' },
+  { name: 'MyGame.2dog', role: 'generic', color: 'var(--ed-node-2d)', icon: 'margincontainer', link: '/hosts/generic' },
   { name: 'MyGame.web', role: 'browser', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/web' },
   { name: 'MyGame.xunit', role: 'test suite', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/hosts/xunit' },
 ]

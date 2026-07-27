@@ -1,9 +1,10 @@
 // Godot pictogram icons for the docs.
 //
 // The MIT-licensed icon set in content/public/icons ships every glyph in six
-// pre-tinted Godot category colors. The docs reference only the neutral node/
-// files and tint via CSS mask (.gd-icon in theme/custom.css), so icons follow
-// the light and dark token palettes instead of baked-in dark-theme colors.
+// pre-tinted Godot category colors. The docs reference the neutral node/,
+// godot-editor/, and godot-theme/ files and tint via CSS mask (.gd-icon in
+// theme/custom.css), so icons follow the light and dark token palettes
+// instead of baked-in dark-theme colors.
 //
 // Markdown usage (not replaced inside inline code or fenced blocks):
 //
@@ -19,16 +20,29 @@ import type MarkdownIt from 'markdown-it'
 import type { StateCore } from 'markdown-it/index.js'
 import type Token from 'markdown-it/lib/token.mjs'
 
-const iconsDir = resolve(
+const iconsRoot = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  '../../content/public/icons/node'
+  '../../content/public/icons'
 )
 
-const inventory = new Set(
-  readdirSync(iconsDir)
+// Keys are the lowercased file stem regardless of on-disk casing. On name
+// collisions the earlier folder wins: node over godot-editor over godot-theme.
+export const iconFolders = ['node', 'godot-editor', 'godot-theme']
+
+// Actual file stems (casing preserved) of every .svg in an icons subfolder.
+export function scanIconFolder(folder: string): string[] {
+  return readdirSync(resolve(iconsRoot, folder))
     .filter((f) => f.endsWith('.svg'))
     .map((f) => f.slice(0, -4))
-)
+}
+
+const inventory = new Map<string, string>()
+for (const folder of iconFolders) {
+  for (const stem of scanIconFolder(folder)) {
+    const key = stem.toLowerCase()
+    if (!inventory.has(key)) inventory.set(key, `/icons/${folder}/${stem}.svg`)
+  }
+}
 
 // Tint -> token mapping lives in theme/custom.css (.gd-icon--*).
 const tints = new Set(['2d', '3d', 'gui', 'gold', 'anim', 'ok', 'warn', 'err', 'accent', 'dim'])
@@ -36,14 +50,17 @@ const tints = new Set(['2d', '3d', 'gui', 'gold', 'anim', 'ok', 'warn', 'err', '
 const pattern = /:gd-([a-z0-9_]+)(?:@([a-z0-9]+))?:/g
 
 export function godotIconHtml(name: string, tint?: string): string {
-  if (!inventory.has(name)) {
-    throw new Error(`Unknown Godot icon ":gd-${name}:" — no ${name}.svg in content/public/icons/node`)
+  const url = inventory.get(name)
+  if (!url) {
+    throw new Error(
+      `Unknown Godot icon ":gd-${name}:" — no ${name}.svg in content/public/icons/{${iconFolders.join(',')}}`
+    )
   }
   if (tint && !tints.has(tint)) {
     throw new Error(`Unknown Godot icon tint "@${tint}" — expected one of: ${[...tints].join(', ')}`)
   }
   const cls = tint ? ` gd-icon--${tint}` : ''
-  return `<span class="gd-icon${cls}" style="--gd-icon:url('/icons/node/${name}.svg')" aria-hidden="true"></span>`
+  return `<span class="gd-icon${cls}" style="--gd-icon:url('${url}')" aria-hidden="true"></span>`
 }
 
 function splitTextToken(token: Token, state: StateCore): Token[] {

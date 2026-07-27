@@ -1,11 +1,10 @@
-# Let's Take `Godot` for Walkies :gd-bone@gold:
+# Let's Take `Godot` for a Walk :gd-bone@gold:
 
-Run a new or existing Godot C# project as a .NET application, test it, and
-publish it for the web. Engine internals can wait.
+Embedding a new or existing Godot project into a .NET application.
 
 ## Before You Grab the Leash
 
-You need:
+You'll need:
 
 - [.NET SDK 10.0 or later](https://dotnet.microsoft.com/download)
 - A supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`
@@ -38,20 +37,20 @@ cd MyGame
 :::
 
 The tool asks which hosts you want and shows its plan before making changes.
-Flags skip the prompts; for example, `dnx 2dog new MyGame --desktop --tests`.
+Flags skip the prompts; for example, `dnx 2dog new MyGame --desktop --tests --web`.
 
 ::: tip Try before you bite?
 Use `dnx 2dog add path/to/MyGame --dry-run` to inspect every planned action.
 [Adding 2dog to a Project](/add) documents what the command creates and patches.
 :::
 
-## 2. Run the Desktop Host
+## 2. Run the Generic Host
 
 ```bash
 dotnet run --project MyGame.2dog
 ```
 
-`MyGame.2dog` is the process entry point and starts Godot as an embedded library.
+`MyGame.2dog` is the process entry point and starts Godot as an embedded library. It runs as a generic .NET console application, which you may change and extend as you wish.
 
 ## 3. Meet the Pack
 
@@ -59,7 +58,7 @@ The Godot project is also the solution root. The generated layout starts like th
 
 ```text
 MyGame/              Godot project and solution root
-├── MyGame.2dog/     Desktop host
+├── MyGame.2dog/     Generic host
 ├── MyGame.tests/    xUnit host
 └── MyGame.web/      Browser host
 ```
@@ -92,9 +91,7 @@ Projects scaffolded by 2dog include a headless xUnit host by default:
 dotnet test MyGame.tests
 ```
 
-This starts Godot without a window and runs tests through the normal .NET test
-runner. See [Testing with xUnit](/testing) to load scenes and test game behavior,
-and [Single Godot Instance](/known-issues/single-instance) for the engine constraint.
+This starts Godot without a window and runs tests through the normal .NET test runner. See [Testing with xUnit](/testing) to load scenes and test game behavior, and [Single Godot Instance](/known-issues/single-instance) for parallelism constraints.
 
 ## 6. Publish to the Browser
 

@@ -39,7 +39,7 @@ public class BasicTests(HeadlessFixture godot)
 }
 ```
 
-The fixture exposes the same objects a console host keeps in local variables:
+The fixture exposes the same objects a generic host keeps in local variables:
 
 | Fixture member | Console equivalent |
 | --- | --- |

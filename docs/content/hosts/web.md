@@ -33,7 +33,7 @@ internal static class Program
 }
 ```
 
-This differs from the [console host](./console) in three ways:
+This differs from the [generic host](./generic) in three ways:
 
 1. Register `TwoDogWebBoot.PluginsInitializer()` before `Start()`. The browser
    cannot load `GodotPlugins.dll` from disk, so the game assembly exposes its

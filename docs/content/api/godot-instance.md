@@ -44,7 +44,7 @@ public void FocusIn()
 public void FocusOut()
 ```
 
-Notify Godot that the host has gained or lost focus. Ordinary desktop hosts let
+Notify Godot that the host has gained or lost focus. Ordinary generic hosts let
 Godot's display server handle focus and do not call these methods directly.
 
 ### `Pause` and `Resume`

@@ -96,7 +96,7 @@ assembly, and package targets root `GodotSharp` and `twodog`.
 A web publish relinks the whole wasm with Emscripten and can take **minutes**.
 For a shorter leash:
 
-- **Gameplay and assets**: run the desktop host
+- **Gameplay and assets**: run the generic host
   (`dotnet run --project MyGame.2dog`) against the same engine and code.
 - **Web verification**: `dotnet publish MyGame.web` from the project root
   (or `dotnet publish` inside `MyGame.web/`), then serve `AppBundle/`. The host
