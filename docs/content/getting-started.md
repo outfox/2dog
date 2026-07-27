@@ -1,6 +1,6 @@
 # Let's Take `Godot` for a Walk :gd-bone@gold:
 
-Let's embed a new or existing Godot project into a .NET application!
+Learn how to embed your new or existing Godot project into a .NET application!
 
 ## Before You Grab the Leash
 
@@ -18,7 +18,7 @@ autoloads, input actions, and the rest of Godot still work. Same dog, new leash.
 
 ## 1. Choose Your Starting Point
 
-Add hosts around an existing project, or start fresh:
+Add [hosts](./hosts) around an existing project, or start fresh:
 
 ::: code-group
 
