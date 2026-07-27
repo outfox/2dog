@@ -137,6 +137,8 @@ internal static class Program
                --desktop [folder]  Desktop host (your own Main entry point)
                --web [folder]      Browser (WebAssembly) host
                --tests [folder]    xUnit test project
+               --winforms [folder] WinForms host embedding the game window
+                                   (Windows-only; never part of the default set)
                --no-desktop, --no-web, --no-tests
                                    Leave a host out of the default set
 

@@ -13,6 +13,7 @@ importer, and exporter skip them:
 - **Desktop host** (`<Name>.2dog/`) - Minimal working 2dog application (Program.cs with Main)
 - **Test project** (`<Name>.tests/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
+- **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **TwoDogWebBoot.cs** - Web bootstrap compiled into the game assembly (`LIBGODOT_ENABLED`-guarded)
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
@@ -37,6 +38,9 @@ dotnet new 2dog -n MyGame --tests false
 
 # Without the web host (e.g. no .NET 10 SDK / wasm-tools on this machine)
 dotnet new 2dog -n MyGame --web false
+
+# With the Windows-only WinForms host (omitted by default)
+dotnet new 2dog -n MyGame --winforms true
 ```
 
 ### Uninstalling the Template
@@ -75,6 +79,12 @@ templates/
     │   ├── Program.cs
     │   ├── global.json            # Same SDK pin as the root, for runs started in here
     │   └── wwwroot/index.html
+    ├── Company.Product1.winforms/ # WinForms host (opt-in; --winforms true to include)
+    │   ├── .gdignore
+    │   ├── Company.Product1.winforms.csproj
+    │   ├── Program.cs
+    │   ├── MainForm.cs
+    │   └── app.manifest
     ├── .editorconfig
     └── .gitignore
 ```

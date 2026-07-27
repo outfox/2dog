@@ -490,6 +490,7 @@ public class TemplateAssetsTests
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("tests")]
+    [InlineData("winforms")]
     public void HostFiles_SubstituteTokensInPathsAndContent(string suffix)
     {
         var files = TemplateAssets.HostFiles(HostKinds.Of(suffix), "MyGame", $"MyGame.{suffix}").ToList();
@@ -509,6 +510,7 @@ public class TemplateAssetsTests
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("tests")]
+    [InlineData("winforms")]
     public void HostFiles_CustomFolder_RenamesFolderAndProject(string suffix)
     {
         // A second host of the same kind lives in a freely named folder; the
@@ -775,11 +777,12 @@ public class AddEndToEndTests
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
-        // latestMajor: the add pipeline runs `dotnet sln` inside this
-        // directory, so the pin must resolve with whatever SDK the CI runner
-        // has (a bare version pin means latestPatch and only accepts the
-        // 10.0.1xx band - broke on a runner with only 10.0.3xx).
-        const string existing = """{ "sdk": { "version": "10.0.302", "rollForward": "latestMajor" } }""";
+        // latestMajor from the lowest 10.0 band: the add pipeline runs
+        // `dotnet sln` inside this directory, so the pin must resolve with
+        // whatever SDK the runner has (a bare version pin means latestPatch
+        // and only accepts one band - broke on a runner with only 10.0.3xx,
+        // and a 10.0.302 floor broke on one with only 10.0.301).
+        const string existing = """{ "sdk": { "version": "10.0.100", "rollForward": "latestMajor" } }""";
         tmp.Write("global.json", existing);
 
         // The root global.json is the user's SDK policy: --force overwrites
@@ -789,6 +792,43 @@ public class AddEndToEndTests
         Assert.Equal(0, Run(options));
 
         Assert.Equal(existing, File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "global.json")));
+    }
+
+    [Fact]
+    public void Add_WinForms_ScaffoldsOnExplicitFlagOnly()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+
+        // The default set never contains the WinForms host ...
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+        Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.winforms")));
+
+        // ... but --winforms scaffolds it beside the others.
+        var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--winforms"]), project);
+        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+
+        var host = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.winforms");
+        foreach (var expected in new[]
+                 {
+                     "SpaceMiner.winforms.csproj", ".gdignore", "Program.cs", "MainForm.cs", "app.manifest",
+                 })
+            Assert.True(File.Exists(System.IO.Path.Combine(host, expected)), $"missing {expected}");
+
+        var csproj = File.ReadAllText(System.IO.Path.Combine(host, "SpaceMiner.winforms.csproj"));
+        Assert.Contains("<UseWindowsForms>true</UseWindowsForms>", csproj);
+        Assert.Contains("../SpaceMiner.csproj", csproj);
+
+        // The game project excludes the new folder, the sln picked it up, and
+        // a re-scan recognizes the host by content.
+        Assert.Contains("SpaceMiner.winforms/**",
+            File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj")));
+        Assert.True(SolutionOps.ContainsProject(
+            System.IO.Path.Combine(tmp.Dir, "SpaceMiner.slnx"), "SpaceMiner.winforms.csproj"));
+        Assert.Contains(HostScan.Find(tmp.Dir),
+            h => h is { Kind: HostKind.WinForms, Folder: "SpaceMiner.winforms" });
     }
 
     [Fact]
@@ -855,6 +895,7 @@ public class HostScanTests
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("tests")]
+    [InlineData("winforms")]
     public void Classify_RecognizesScaffoldedHosts_ByContentNotName(string suffix)
     {
         var kind = HostKinds.Of(suffix);
@@ -878,6 +919,7 @@ public class HostScanTests
                  {
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
                      (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests"),
+                     (HostKind.WinForms, "MyGame.winforms"),
                  })
             foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
                 tmp.Write(path, content);
@@ -891,7 +933,8 @@ public class HostScanTests
 
         Assert.Equal(
             [("MyGame.2dog", HostKind.Desktop), ("MyGame.editor", HostKind.Desktop),
-             ("MyGame.tests", HostKind.Tests), ("MyGame.web", HostKind.Web)],
+             ("MyGame.tests", HostKind.Tests), ("MyGame.web", HostKind.Web),
+             ("MyGame.winforms", HostKind.WinForms)],
             hosts.Select(h => (h.Folder, h.Kind)).Order().ToArray());
     }
 }
@@ -946,10 +989,10 @@ public class CommandLineTests
     [Fact]
     public void NegativeHostFlags_CountAsAChoice()
     {
-        var cmd = CommandLine.Parse(["convert", "--no-web", "--no-tests"]);
+        var cmd = CommandLine.Parse(["convert", "--no-web", "--no-tests", "--no-winforms"]);
         Assert.True(cmd.HostFlagsSeen);
         Assert.Empty(cmd.Requested);
-        Assert.Equal([HostKind.Web, HostKind.Tests], cmd.Excluded.Order().ToArray());
+        Assert.Equal([HostKind.Web, HostKind.Tests, HostKind.WinForms], cmd.Excluded.Order().ToArray());
     }
 
     [Fact]
@@ -1025,6 +1068,22 @@ public class HostSelectionTests
     {
         var hosts = HostSelection.Defaults([HostKind.Web], Project());
         Assert.Equal([HostKind.Desktop, HostKind.Tests], hosts.Select(h => h.Kind).ToArray());
+    }
+
+    // WinForms is Windows-only, so it is never part of the default set - it
+    // only ever comes from its flag or the interactive checkbox.
+    [Fact]
+    public void Defaults_NeverIncludeWinForms()
+    {
+        Assert.DoesNotContain(HostKind.WinForms, HostSelection.Defaults([], Project()).Select(h => h.Kind));
+    }
+
+    [Fact]
+    public void FromFlags_WinForms_AllocatesItsDefaultFolder()
+    {
+        var cmd = CommandLine.Parse(["add", "--winforms"]);
+        var host = HostSelection.FromFlags(cmd, Project()).Single();
+        Assert.Equal((HostKind.WinForms, "MyGame.winforms"), (host.Kind, host.Folder));
     }
 
     [Fact]

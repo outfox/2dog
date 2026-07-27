@@ -1,18 +1,31 @@
 ---
-title: WinForms Host (Demo)
-description: "A Windows-only repository demo that embeds the Godot engine inside a WinForms window - how it works and its limitations. A demo, not a template."
+title: WinForms Host
+description: "A Windows-only host that embeds the Godot engine inside a WinForms window, with a pause button driving the instance - how to add it and how it works."
 ---
 
-# WinForms Host (Demo)
+# WinForms Host
 
-The repository ships a Windows-only demo host,
-[`demos/showcase/showcase.winforms`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms),
-that embeds the engine inside a WinForms window. It is a repo demo, not a
-[`2dog new`](/templates) template.
+The WinForms host embeds the engine inside a WinForms window and drives it
+from the form's UI thread. Its UI is deliberately minimal: a panel the game
+renders into and a working Pause/Resume button, ready to be extended with your
+own controls.
+
+It is Windows-only at runtime, so it is never part of the default host set -
+add it explicitly:
 
 ```bash
-dotnet run --project demos/showcase/showcase.winforms
+2dog add --winforms                    # existing project
+dotnet new 2dog -n MyGame --winforms true  # new project
 ```
+
+Then run it (on Windows):
+
+```bash
+dotnet run --project MyGame.winforms
+```
+
+The repository's own instance is
+[`demos/showcase/showcase.winforms`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms).
 
 ## How It Works
 
@@ -24,7 +37,7 @@ Because 2dog hosts pass arguments to Godot verbatim, no engine or API changes
 are involved:
 
 ```csharp
-_engine = new Engine("showcase", Engine.ResolveProjectDir(),
+_engine = new Engine("MyGame", Engine.ResolveProjectDir(),
 [
     "--wid", Handle.ToInt64().ToString(CultureInfo.InvariantCulture),
     "--resolution", $"{panel.ClientSize.Width}x{panel.ClientSize.Height}",
@@ -45,16 +58,17 @@ Three consequences shape the host code:
 - **Teardown happens before the owner window dies.** The form disposes the
   instance and engine in `OnFormClosing`, while its own handle still exists.
 
-The demo's buttons drive the running game from WinForms: one flips the
-`SpinSpeed` of the showcase's `SpinningCube` scripts through their generated
-C# types, the other pauses and resumes the instance via
-`GodotInstance.Pause()`/`Resume()`.
+The Pause button pauses and resumes the running instance via
+`GodotInstance.Pause()`/`Resume()` straight from its click handler - the UI
+thread is the pump thread, so game state (including the scene tree via
+`engine.Tree`) is safe to touch from event handlers.
 
 ## Limitations
 
 - Windows only. The same `--wid` route works on X11, so an Avalonia host
   could cover Linux; macOS would need Godot's separate `embedded` display
-  server.
+  server. (The project still restores and builds on Linux/macOS thanks to
+  `EnableWindowsTargeting`; it just cannot run there.)
 - The embedded window always draws above the form's client area, so WinForms
   controls cannot overlap the game rectangle.
 - `--wid` marks the instance as embedded (`Engine.is_embedded_in_editor()`

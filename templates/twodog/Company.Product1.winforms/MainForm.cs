@@ -6,11 +6,9 @@ using Color = System.Drawing.Color;
 using Engine = twodog.Engine;
 using Panel = System.Windows.Forms.Panel;
 
-// Embeds the showcase inside a WinForms window via Godot's `--wid` embedding (the same mechanism the
+// Embeds the game inside a WinForms window via Godot's `--wid` embedding (the same mechanism the
 // Godot editor uses for its embedded game window): Godot creates its main window as a borderless popup
 // owned by this form, and the host drives its geometry and pumps frames from the UI thread.
-// This is the repo's instance of the WinForms host the 2dog tool scaffolds
-// (templates/twodog/Company.Product1.winforms) - keep the two in sync.
 internal sealed class MainForm : Form
 {
     private readonly string[] _extraArgs;
@@ -26,7 +24,7 @@ internal sealed class MainForm : Form
     {
         _extraArgs = extraArgs;
 
-        Text = "2dog showcase — WinForms host";
+        Text = "Company.Product1 — WinForms host";
         ClientSize = new Size(1152, 688);
         MinimumSize = new Size(480, 320);
 
@@ -50,7 +48,7 @@ internal sealed class MainForm : Form
 
         // `--wid` wants a top-level owner window, so pass the form's handle; geometry is fixed up
         // below because `--position` goes through Godot's virtual multi-monitor origin math.
-        _engine = new Engine("showcase", Engine.ResolveProjectDir(),
+        _engine = new Engine("Company.Product1", Engine.ResolveProjectDir(),
         [
             "--wid", Handle.ToInt64().ToString(CultureInfo.InvariantCulture),
             "--resolution", $"{_gamePanel.ClientSize.Width}x{_gamePanel.ClientSize.Height}",

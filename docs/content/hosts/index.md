@@ -13,9 +13,10 @@ Godot, and drives its frame loop.
 [`2dog new`](/templates) generates a new project with your selection of hosts;
 [`2dog add`](/add) adds them to an existing project.
 
-Beyond the templates, the repository demos include a [WinForms host](./winforms)
-that embeds the engine inside a GUI framework window. It's a good example how to
-modify the generic host to do something special.
+Besides the default set, both commands can add a Windows-only
+[WinForms host](./winforms) (`--winforms`) that embeds the engine inside a GUI
+framework window. It's a good example how to modify the generic host to do
+something special.
 
 ## Shared Project Anatomy
 

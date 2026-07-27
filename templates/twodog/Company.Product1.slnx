@@ -9,6 +9,9 @@
 #if (tests)
   <Project Path="TPLRAWNAME.tests/TPLRAWNAME.tests.csproj" />
 #endif
+#if (winforms)
+  <Project Path="TPLRAWNAME.winforms/TPLRAWNAME.winforms.csproj" />
+#endif
 #if (web)
   <Project Path="TPLRAWNAME.web/TPLRAWNAME.web.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />

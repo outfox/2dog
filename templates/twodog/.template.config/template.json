@@ -62,6 +62,12 @@
       "datatype": "bool",
       "description": "Include a browser (WebAssembly) host project. Requires a .NET 10+ SDK with the wasm-tools workload to build. Included by default; pass '--web false' to omit.",
       "defaultValue": "true"
+    },
+    "winforms": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a WinForms host project that embeds the game window inside a form (Windows-only at runtime). Omitted by default; pass '--winforms true' to include.",
+      "defaultValue": "false"
     }
   },
   "specialCustomOperations": {
@@ -98,6 +104,12 @@
           ]
         },
         {
+          "condition": "(!winforms)",
+          "exclude": [
+            "Company.Product1.winforms/**/*"
+          ]
+        },
+        {
           "copyOnly": [
             "TwoDogWebBoot.cs",
             "Company.Product1.web/wwwroot/favicon*"
@@ -123,6 +135,10 @@
     {
       "condition": "(web)",
       "path": "Company.Product1.web/Company.Product1.web.csproj"
+    },
+    {
+      "condition": "(winforms)",
+      "path": "Company.Product1.winforms/Company.Product1.winforms.csproj"
     }
   ],
   "postActions": [

@@ -88,6 +88,9 @@ internal static class CommandLine
                 case "--tests" or "--test":
                     cmd.Requested.Add(new HostRequest(HostKind.Tests, OptionalFolder(queue)));
                     break;
+                case "--winforms":
+                    cmd.Requested.Add(new HostRequest(HostKind.WinForms, OptionalFolder(queue)));
+                    break;
 
                 case "--no-desktop":
                     cmd.Excluded.Add(HostKind.Desktop);
@@ -97,6 +100,9 @@ internal static class CommandLine
                     break;
                 case "--no-tests":
                     cmd.Excluded.Add(HostKind.Tests);
+                    break;
+                case "--no-winforms":
+                    cmd.Excluded.Add(HostKind.WinForms);
                     break;
 
                 case "--dry-run":
@@ -197,9 +203,10 @@ internal static class HostSelection
     }
 
     /// <summary>
-    /// What a run creates when no host was named: every kind the project does
-    /// not have yet, minus the excluded ones. Which kinds are missing follows
-    /// from the recognized hosts; the folder names avoid every directory.
+    /// What a run creates when no host was named: every default-set kind the
+    /// project does not have yet, minus the excluded ones. Which kinds are
+    /// missing follows from the recognized hosts; the folder names avoid every
+    /// directory.
     /// </summary>
     public static List<HostSpec> Defaults(ICollection<HostKind> excluded, ProjectContext project)
     {
@@ -207,6 +214,7 @@ internal static class HostSelection
         var hosts = new List<HostSpec>();
         foreach (var kind in Hosts.All)
         {
+            if (!Hosts.InDefaultSet(kind)) continue;
             if (excluded.Contains(kind) || project.ExistingHosts.Any(h => h.Kind == kind)) continue;
             var folder = Hosts.AllocateFolder(kind, project.BaseName, taken);
             taken.Add(folder);

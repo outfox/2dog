@@ -6,6 +6,7 @@ internal enum HostKind
     Desktop,
     Web,
     Tests,
+    WinForms,
 }
 
 /// <summary>One host to create: its kind and the folder (and csproj) name it gets.</summary>
@@ -21,7 +22,15 @@ internal sealed record ExistingHost(HostKind Kind, string Folder);
 /// </summary>
 internal static class Hosts
 {
-    public static readonly IReadOnlyList<HostKind> All = [HostKind.Desktop, HostKind.Web, HostKind.Tests];
+    public static readonly IReadOnlyList<HostKind> All =
+        [HostKind.Desktop, HostKind.Web, HostKind.Tests, HostKind.WinForms];
+
+    /// <summary>
+    /// Whether a bare run without host flags creates this kind. WinForms is
+    /// opt-in: the host only runs on Windows, so it never joins the default
+    /// set - it is still offered interactively and via its flag.
+    /// </summary>
+    public static bool InDefaultSet(HostKind kind) => kind != HostKind.WinForms;
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -29,6 +38,7 @@ internal static class Hosts
         HostKind.Desktop => "2dog",
         HostKind.Web => "web",
         HostKind.Tests => "tests",
+        HostKind.WinForms => "winforms",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -37,6 +47,7 @@ internal static class Hosts
         HostKind.Desktop => "desktop",
         HostKind.Web => "browser",
         HostKind.Tests => "tests",
+        HostKind.WinForms => "winforms",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -45,6 +56,7 @@ internal static class Hosts
         HostKind.Desktop => "your own Main(), runs the game on desktop",
         HostKind.Web => "WebAssembly host, published as a static bundle",
         HostKind.Tests => "xUnit project driving a headless engine",
+        HostKind.WinForms => "game embedded in a WinForms window (Windows-only)",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -54,6 +66,7 @@ internal static class Hosts
         HostKind.Desktop => "--desktop",
         HostKind.Web => "--web",
         HostKind.Tests => "--tests",
+        HostKind.WinForms => "--winforms",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -131,6 +144,7 @@ internal static class HostScan
         if (csproj.Contains("browser-wasm", StringComparison.OrdinalIgnoreCase)) return HostKind.Web;
         if (csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("xunit.v3", StringComparison.OrdinalIgnoreCase)) return HostKind.Tests;
+        if (csproj.Contains("UseWindowsForms", StringComparison.OrdinalIgnoreCase)) return HostKind.WinForms;
         if (csproj.Contains("<OutputType>Exe</OutputType>", StringComparison.OrdinalIgnoreCase)) return HostKind.Desktop;
 
         // Wired to a Godot project but unrecognizable otherwise: fall back to

@@ -43,6 +43,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host
   MyGame.tests/  (.gdignore) <- xUnit test project
+  MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
 ```
 
 Run it again whenever you want another host  –  hosts that exist are recognized
@@ -62,7 +63,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--desktop [folder]`, `--web [folder]`, `--tests [folder]` | Add a host, optionally in a named folder (repeatable) |
+| `--desktop [folder]`, `--web [folder]`, `--tests [folder]`, `--winforms [folder]` | Add a host, optionally in a named folder (repeatable; winforms is Windows-only and never in the default set) |
 | `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `-o, --output <dir>` | Directory for a new project |

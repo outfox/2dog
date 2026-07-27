@@ -49,9 +49,9 @@ dotnet serve --directory MyGame.web/AppBundle
 Open the served page. Output from `Main()` appears in the DevTools console.
 
 ::: tip The web host is still your code
-`MyGame.web/Program.cs` is a normal 2dog host. It registers the game's plugin
-initializer, starts the engine, and calls `engine.Run()`. That hands the frame
-loop to the browser and returns immediately.
+`MyGame.web/Program.cs` is almost an entirely normal host. It registers the game's plugin
+initializer, starts the engine, and calls `engine.Run()`, which hands the frame loop to the 
+browser and returns immediately.
 :::
 
 ## How it works
@@ -96,31 +96,10 @@ Add `<TrimmerRootAssembly>` for NuGet packages reached through reflection, such
 as serializers or ECS libraries. The generated host already roots the game
 assembly, and package targets root `GodotSharp` and `twodog`.
 
-## The development loop
-
-A web publish relinks the whole wasm with Emscripten and can take **minutes**.
-For a shorter leash:
-
-- **Gameplay and assets**: run the generic host
-  (`dotnet run --project MyGame.2dog`) against the same engine and code.
-- **Web verification**: `dotnet publish MyGame.web` from the project root
-  (or `dotnet publish` inside `MyGame.web/`), then serve `AppBundle/`. The host
-  defaults to Release through `Directory.Build.props`; use `-c Debug` for an
-  unoptimized build.
-- Browsers cache the large wasm aggressively. Hard-refresh
-  (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>) after each publish.
-- Stop your static server before republishing: the publish replaces the
-  `AppBundle/` directory.
-
 ## Limitations
 
 - **Single-threaded**: the engine uses `threads=no`, and .NET is single-threaded.
   `System.Threading` will fail. In return, no COOP/COEP headers are needed, so
-  any static host works, including itch.io.
+  any static host works, including [itch.io](https://itch.io).
 - **No external GDExtension side modules**: .NET owns the wasm main module, so
   loadable native extensions cannot be dlopened.
-- **One `IL2104` trim warning** per publish is expected: GodotSharp is not
-  trim-annotated upstream and is preserved whole. Your assemblies are still
-  trimmed and fully analyzed.
-- The web host requires the **.NET 10.0+ SDK** and `wasm-tools`. Like every
-  other project, the game targets net10.0.

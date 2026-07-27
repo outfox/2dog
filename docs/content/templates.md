@@ -14,7 +14,7 @@ dotnet run --project MyGame.2dog
 ```
 
 `2dog new` asks which hosts to include. Pass `--desktop`, `--web`, `--tests`,
-or `--non-interactive` to skip the prompts.
+`--winforms`, or `--non-interactive` to skip the prompts.
 
 Already have a Godot project? Use [`2dog add`](/add) instead. It creates the
 same layout around your existing content.
@@ -62,12 +62,13 @@ together.
 ## Choose Hosts
 
 The full template includes desktop, browser, and test hosts. To leave optional
-hosts out:
+hosts out, or to opt into the Windows-only [WinForms host](/hosts/winforms):
 
 ```bash
 dotnet new 2dog -n MyGame --tests false
 dotnet new 2dog -n MyGame --web false
 dotnet new 2dog -n MyGame --tests false --web false
+dotnet new 2dog -n MyGame --winforms true
 ```
 
 | Parameter | Default | Description |
@@ -75,6 +76,7 @@ dotnet new 2dog -n MyGame --tests false --web false
 | `-n, --name` | required | Project name |
 | `--tests` | `true` | Include `MyGame.tests` with xUnit and `2dog.xunit` |
 | `--web` | `true` | Include the `MyGame.web` browser host |
+| `--winforms` | `false` | Include the `MyGame.winforms` WinForms host (Windows-only at runtime) |
 | `--skipRestore` | `false` | Skip automatic package restore |
 | `--twodogVersion` | current release | 2dog package version |
 | `--nativesVersion` | current release | Native platform package version |

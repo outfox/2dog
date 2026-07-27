@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <!-- WinExe hides the console; switch to Exe to see the engine's stdout diagnostics. -->
+        <OutputType>WinExe</OutputType>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'Company.Product1.winforms'
+             would differ from the other hosts for types shared with them. -->
+        <RootNamespace>Company.Product1</RootNamespace>
+        <!-- comctl32 v6 + long paths for Godot's Windows display server -->
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <!-- Match Godot's SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE); WinForms sets the
+             process-wide mode first, so keep the two identical. -->
+        <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+        <!-- Windows-only at runtime, but keeps dotnet restore/build working on Linux/macOS. -->
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
+    </ItemGroup>
+
+    <!-- Godot project location: the parent directory (the Godot project is the
+         solution root; hosts are nested inside it, hidden from the Godot
+         editor by their .gdignore) -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+</Project>

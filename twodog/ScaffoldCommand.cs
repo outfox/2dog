@@ -430,6 +430,7 @@ internal static class ScaffoldCommand
                 HostKind.Desktop => $"  dotnet run --project {host.Folder}".PadRight(42) + "# desktop host",
                 HostKind.Tests => $"  dotnet test {host.Folder}".PadRight(42) + "# xUnit tests (headless Godot)",
                 HostKind.Web => $"  dotnet publish {host.Folder}".PadRight(42) + "# browser bundle (needs wasm-tools workload)",
+                HostKind.WinForms => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinForms host (Windows only)",
                 _ => $"  {host.Folder}",
             });
 
