@@ -1,14 +1,16 @@
 # Hosts
 
 A **host** is a small .NET program that owns the process, starts embedded
-Godot, and drives its frame loop. This is where .NET holds the leash: your
-scenes, resources, and game assembly stay in the Godot project, while the host
-decides where and how they run.
+Godot, and drives its frame loop.
 
-[`2dog new`](/templates) generates a new project with these hosts;
-[`2dog add`](/add) adds them to an existing project. Beyond the templates,
-the repository demos include a [WinForms host](./winforms) that embeds the
-engine inside a GUI framework window.
+## Adding 2dog Hosts to your Game
+
+[`2dog new`](/templates) generates a new project with your selection of hosts;
+[`2dog add`](/add) adds them to an existing project.
+
+Beyond the templates, the repository demos include a [WinForms host](./winforms)
+that embeds the engine inside a GUI framework window. It's a good example how to
+modify the generic host to do something special.
 
 ## Shared Project Anatomy
 
@@ -21,7 +23,7 @@ Every host is an ordinary `Microsoft.NET.Sdk` project with:
 - a `.gdignore`, because hosts nest inside the Godot project;
 - a `TwoDogVariant` of `release`, `debug`, or `editor` where applicable.
 
-The desktop form is the baseline:
+The generic form is the baseline:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
