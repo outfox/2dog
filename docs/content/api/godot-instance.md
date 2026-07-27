@@ -5,7 +5,7 @@ description: "API reference for Godot.GodotInstance, the handle returned by Engi
 
 # `Godot.GodotInstance`
 
-Controls the running Godot instance returned by [`Engine.Start()`](./engine#start).
+Controls the running Godot instance returned by [`twodog.Engine.Start()`](./engine#start).
 
 ```csharp
 public class GodotInstance : IDisposable
@@ -14,7 +14,9 @@ public class GodotInstance : IDisposable
 **Package:** `2dog.engine`  
 **Namespace:** `Godot`
 
-Create this object through `Engine.Start()` rather than its low-level static
+This class is one of the few differences from stock Godot, where it's not exposed.
+
+Create this object through `twodog.Engine.Start()` rather than its low-level static
 factory methods.
 
 ## Methods

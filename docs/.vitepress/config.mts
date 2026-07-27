@@ -122,15 +122,16 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'twodog',
+                text: 'Godot',
                 items: [
-                  { text: gd('script') + 'Engine', link: '/api/engine' }
+                  { text: gd('arrows_clockwise') + 'GodotInstance', link: '/api/godot-instance' },
+                  { text: gd('gobot') + 'GodotSharp', link: '/api/godotsharp' }
                 ]
               },
               {
-                text: 'Godot',
+                text: 'twodog',
                 items: [
-                  { text: gd('arrows_clockwise') + 'GodotInstance', link: '/api/godot-instance' }
+                  { text: gd('script') + 'Engine', link: '/api/engine' }
                 ]
               },
               {
