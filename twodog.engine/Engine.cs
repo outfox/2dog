@@ -108,6 +108,13 @@ public class Engine(string project, string? path = null, params string[] args) :
     /// </summary>
     public string? ProjectAssemblyDir { get; init; }
 
+    /// <summary>
+    /// How long Start() waits for the process-wide boot lock that serializes
+    /// engine boots (they mutate the process CWD and environment). Only ever
+    /// exceeded when another boot in this process is stuck.
+    /// </summary>
+    public TimeSpan BootLockTimeout { get; init; } = TimeSpan.FromSeconds(120);
+
     /// <summary>Full path of the libgodot this load context actually loaded, when known.</summary>
     public static string? LoadedNativePath => LibGodotLoader.LoadedLibraryPath;
 
@@ -125,27 +132,44 @@ public class Engine(string project, string? path = null, params string[] args) :
 
     public GodotInstance Start()
     {
-        if (_godotInstancePtr != IntPtr.Zero)
-            throw new InvalidOperationException(
-                $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
-                "(a Godot limitation) - dispose the previous Engine before starting a new one.");
+        ThrowIfInstanceRunning();
 
         if (OperatingSystem.IsBrowser())
         {
             // No filesystem hosting on web: the game's plugins initializer
             // function pointer must have been registered up front (there is
-            // no GodotPlugins.dll to load).
+            // no GodotPlugins.dll to load). One statically linked instance per
+            // page - nothing to serialize, and wasm has no named mutexes.
             if (!WebHost.HasPluginsInitializer)
                 throw new InvalidOperationException(
                     $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
                     "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in the " +
                     "2dog template; requires the LIBGODOT_ENABLED define) before Start().");
-        }
-        else
-        {
-            ConfigureGodotSharpDir(ProjectAssemblyDir);
+            return StartCore();
         }
 
+        // Boot mutates process-global state: the environment variables written
+        // below are read during instance creation, and Godot's --path handling
+        // moves the process CWD. Engines in other load contexts run their own
+        // copy of this class, so the serialization must be OS-level.
+        using (ProcessBootLock.Acquire(BootLockTimeout))
+        {
+            ThrowIfInstanceRunning();
+            ConfigureGodotSharpDir(ProjectAssemblyDir);
+            return StartCore();
+        }
+    }
+
+    private void ThrowIfInstanceRunning()
+    {
+        if (_godotInstancePtr != IntPtr.Zero)
+            throw new InvalidOperationException(
+                $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
+                "(a Godot limitation) - dispose the previous Engine before starting a new one.");
+    }
+
+    private GodotInstance StartCore()
+    {
         if (NativePath is { } nativePath)
         {
             if (OperatingSystem.IsBrowser())
@@ -157,12 +181,14 @@ public class Engine(string project, string? path = null, params string[] args) :
 
         Console.WriteLine("Starting Godot instance...");
 
-        // Prepare arguments for Godot
+        // Prepare arguments for Godot. The project path goes out absolute:
+        // relative paths would resolve against the process CWD, which another
+        // engine's boot may have moved.
         List<string> godotArgs = [project];
         if (!string.IsNullOrEmpty(path))
         {
             godotArgs.Add("--path");
-            godotArgs.Add(path);
+            godotArgs.Add(Path.GetFullPath(path));
         }
 
         godotArgs.AddRange(args);
