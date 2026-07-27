@@ -1,15 +1,9 @@
 <Project>
     <!--
       Shared task for writing version defaults into the dotnet-new template's
-      template.json. Used by twodog/twodog.csproj (the 2dog tool+template
-      package): it stages a copy of template.json into obj/ at pack time and
-      substitutes the real versions into that copy; the committed file always
-      keeps its placeholder tokens and is never written to.
+      template.json. 
 
-      Replacement is keyed on the template symbol name (not the version
-      value), so it stays correct even when versions collide or
-      prefix-overlap, and is idempotent regardless of the file's current
-      state. All three symbols are rewritten in a single read/write pass.
+      Used by twodog/twodog.csproj (the 2dog tool+template package)
     -->
     <UsingTask TaskName="SetTemplateDefaults" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll"
@@ -49,19 +43,12 @@
 
     <!-- nuget.config declares godot/bin/GodotSharp/Tools/nupkgs as a local
          package source, but the folder only exists after a mono glue build
-         (build-godot.py generate_glue) - and it lives inside the gitignored
-         bin/ of the godot submodule, so it cannot be kept via .gitkeep.
-         Restore fails with NU1301 when a declared source is missing, so
-         create it before restore runs. MakeDir is idempotent and safe under
-         parallel restores. -->
+         (build-godot.py generate_glue) -->
     <Target Name="TwoDogEnsureLocalNugetSource" BeforeTargets="Restore;CollectPackageReferences">
         <MakeDir Directories="$(MSBuildThisFileDirectory)godot/bin/GodotSharp/Tools/nupkgs" />
     </Target>
 
-    <!-- Keep the repository clean across configuration changes. The SDK Clean
-         target removes the active configuration's outputs; this also removes
-         the shared bin/obj roots used by these projects. Web hosts add their
-         AppBundle cleanup separately. -->
+    <!-- Keep the repository clean across configuration changes. -->
     <Target Name="TwoDogDeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
         <RemoveDir Directories="$(BaseOutputPath)" />
