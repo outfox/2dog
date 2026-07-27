@@ -20,6 +20,15 @@ public class BootCwdIndependenceTests
     [Fact]
     public void BootedProjectMatchesRequestedPath_WhileCwdChurns()
     {
+        // Windows documents the process CWD as not thread-safe: concurrent
+        // SetCurrentDirectory while native code runs can fault inside OS path
+        // machinery (crashed win-x64 Release CI with an access violation).
+        // The churn scenario runs on Unix, where chdir/getcwd are atomic
+        // syscalls; the realistic Windows adversary - another engine's boot
+        // moving the CWD - is serialized away by the boot lock (BootLockTests).
+        Assert.SkipWhen(OperatingSystem.IsWindows(),
+            "concurrent SetCurrentDirectory is not thread-safe on Windows");
+
         var projectDir = Engine.ResolveProjectDir();
         AssemblyPreloader.PreloadGameAssemblies(projectDir);
 

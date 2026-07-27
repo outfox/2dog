@@ -29,7 +29,7 @@ public class BootLockTests
             mutex.ReleaseMutex();
         }) { IsBackground = true };
         holder.Start();
-        held.Wait();
+        held.Wait(TestContext.Current.CancellationToken);
 
         try
         {
