@@ -35,6 +35,9 @@ public class BootCwdIndependenceTests
             {
                 Environment.CurrentDirectory = decoy;
                 Environment.CurrentDirectory = temp;
+                // Stay adversarial without starving the booting thread on
+                // small CI runners.
+                Thread.Yield();
             }
         }) { IsBackground = true };
 

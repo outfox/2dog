@@ -14,15 +14,15 @@ public class BootLockTests
     [Fact]
     public void Start_TimesOutFailClosed_WhileAnotherBootHoldsTheLock()
     {
-        // The lock's name is a documented contract: one named local mutex per
-        // process, shared by every load context's copy of the engine assembly.
-        // A mutex is reentrant on its owning thread, so the contending holder
-        // must be a different thread - like a real concurrent boot.
+        // One named local mutex per process, shared by every load context's
+        // copy of the engine assembly. A mutex is reentrant on its owning
+        // thread, so the contending holder must be a different thread - like
+        // a real concurrent boot.
         using var held = new ManualResetEventSlim();
         using var release = new ManualResetEventSlim();
         var holder = new Thread(() =>
         {
-            using var mutex = new Mutex(initiallyOwned: false, $@"Local\2dog-engine-boot-{Environment.ProcessId}");
+            using var mutex = new Mutex(initiallyOwned: false, Engine.BootLockName);
             mutex.WaitOne();
             held.Set();
             release.Wait();

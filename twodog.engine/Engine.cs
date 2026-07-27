@@ -109,11 +109,27 @@ public class Engine(string project, string? path = null, params string[] args) :
     public string? ProjectAssemblyDir { get; init; }
 
     /// <summary>
+    /// Absolute project path, captured at construction: boot-time CWD churn
+    /// (another instance's boot or DirAccess moving the process CWD) must not
+    /// change which project a relative path resolves to.
+    /// </summary>
+    private readonly string? _projectPath =
+        string.IsNullOrEmpty(path) ? null : Path.GetFullPath(path);
+
+    /// <summary>
     /// How long Start() waits for the process-wide boot lock that serializes
-    /// engine boots (they mutate the process CWD and environment). Only ever
-    /// exceeded when another boot in this process is stuck.
+    /// engine boots (they mutate the process CWD and environment). Matches the
+    /// hosting layer's boot-gate timeout: generous enough for a debug-native
+    /// first boot on a loaded CI runner, so it is only ever exceeded when
+    /// another boot in this process is genuinely stuck.
     /// </summary>
     public TimeSpan BootLockTimeout { get; init; } = TimeSpan.FromSeconds(120);
+
+    /// <summary>
+    /// Name of the process-wide named mutex that serializes engine boots.
+    /// Public so hosts and tests can observe or contend on it deliberately.
+    /// </summary>
+    public static string BootLockName => ProcessBootLock.Name;
 
     /// <summary>Full path of the libgodot this load context actually loaded, when known.</summary>
     public static string? LoadedNativePath => LibGodotLoader.LoadedLibraryPath;
@@ -181,14 +197,13 @@ public class Engine(string project, string? path = null, params string[] args) :
 
         Console.WriteLine("Starting Godot instance...");
 
-        // Prepare arguments for Godot. The project path goes out absolute:
-        // relative paths would resolve against the process CWD, which another
-        // engine's boot may have moved.
+        // Prepare arguments for Godot. The project path was made absolute at
+        // construction, so CWD movement between then and now cannot redirect it.
         List<string> godotArgs = [project];
-        if (!string.IsNullOrEmpty(path))
+        if (_projectPath is { } projectPath)
         {
             godotArgs.Add("--path");
-            godotArgs.Add(Path.GetFullPath(path));
+            godotArgs.Add(projectPath);
         }
 
         godotArgs.AddRange(args);
