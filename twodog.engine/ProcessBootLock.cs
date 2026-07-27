@@ -20,6 +20,8 @@ internal static class ProcessBootLock
     /// <summary>
     /// Acquires the process-wide boot lock, or throws <see cref="TimeoutException"/>
     /// (message contains "boot lock") without touching any engine state.
+    /// The returned holder must be disposed on the acquiring thread: mutex
+    /// ownership is thread-affine and ReleaseMutex throws elsewhere.
     /// </summary>
     internal static IDisposable Acquire(TimeSpan timeout)
     {
