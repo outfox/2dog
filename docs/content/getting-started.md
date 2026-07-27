@@ -18,7 +18,7 @@ autoloads, input actions, and the rest of Godot still work. Same dog, new leash.
 
 ## 1. Choose Your Starting Point
 
-Add [hosts](./hosts) around an existing project, or start fresh:
+Add [hosts](/hosts/) around an existing project, or start fresh:
 
 ::: code-group
 
