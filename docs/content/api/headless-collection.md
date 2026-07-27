@@ -1,3 +1,8 @@
+---
+title: twodog.Testing.Xunit.HeadlessCollection
+description: "API reference for HeadlessCollection, the non-parallel xUnit collection backed by one shared HeadlessFixture."
+---
+
 # `twodog.Testing.Xunit.HeadlessCollection`
 
 Defines a non-parallel xUnit collection backed by

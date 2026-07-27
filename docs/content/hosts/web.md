@@ -1,3 +1,8 @@
+---
+title: Browser Host
+description: "The browser-wasm 2dog host: the HTML that embeds your game, program structure, host properties, and publishing the AppBundle directory as a static site."
+---
+
 # Browser Host
 
 `MyGame.web` is a `browser-wasm` host plus the HTML that embeds your game. Its

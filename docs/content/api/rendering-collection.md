@@ -1,3 +1,8 @@
+---
+title: twodog.Testing.Xunit.RenderingCollection
+description: "API reference for RenderingCollection, the non-parallel xUnit collection that shares one rendering Fixture across test classes."
+---
+
 # `twodog.Testing.Xunit.RenderingCollection`
 
 Defines a non-parallel xUnit collection backed by [`Fixture`](./fixture).

@@ -1,3 +1,8 @@
+---
+title: Resource Import
+description: "How 2dog imports Godot resources automatically during MSBuild: incremental imports driven by GodotProjectDir, the twodog.import helper, and troubleshooting."
+---
+
 # Resource Import
 
 Godot must import resources before a project can run. This generates C# script

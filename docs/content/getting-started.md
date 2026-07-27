@@ -1,3 +1,8 @@
+---
+title: Getting Started
+description: "Embed a new or existing Godot C# project in a .NET application: install the .NET 10 SDK, scaffold hosts with 2dog new or 2dog add, and run your game with dotnet run."
+---
+
 # Let's Take `Godot` for a Walk :gd-bone@gold:
 
 Learn how to embed your new or existing Godot project into a .NET application!

@@ -1,3 +1,8 @@
+---
+title: Godot.GodotInstance
+description: "API reference for Godot.GodotInstance, the handle returned by Engine.Start(): Iteration, IsStarted, focus and pause control, and disposal."
+---
+
 # `Godot.GodotInstance`
 
 Controls the running Godot instance returned by [`Engine.Start()`](./engine#start).

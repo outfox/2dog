@@ -1,3 +1,8 @@
+---
+title: WinForms Host (Demo)
+description: "A Windows-only repository demo that embeds the Godot engine inside a WinForms window - how it works and its limitations. A demo, not a template."
+---
+
 # WinForms Host (Demo)
 
 The repository ships a Windows-only demo host,

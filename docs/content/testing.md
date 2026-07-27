@@ -1,3 +1,8 @@
+---
+title: Testing with xUnit
+description: "Run xUnit tests against a real Godot engine with 2dog.xunit: installation, rendering and headless fixtures, shared collections, and writing and running tests."
+---
+
 # Testing with xUnit
 
 `2dog.engine` provides the fixtures in `twodog.Testing`. `2dog.xunit` adds

@@ -1,3 +1,8 @@
+---
+title: Adding 2dog to Existing Projects
+description: "The 2dog add command adds .NET hosts to an existing Godot project in place - usage, commands, options, what gets generated, safety, and requirements."
+---
+
 # Adding 2dog to Your Project
 
 The `2dog` tool adds .NET hosts to an existing Godot project **in place**.

@@ -5,8 +5,11 @@
     "vitepress": "^2.0.0-alpha.16"
   },
   "scripts": {
+    "predev": "node make-llms.mjs",
     "dev": "vitepress dev",
+    "prebuild": "node make-llms.mjs",
     "build": "vitepress build",
+    "postbuild": "node copy-md-mirror.mjs",
     "preview": "vitepress preview"
   }
 }

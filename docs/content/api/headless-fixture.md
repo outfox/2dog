@@ -1,3 +1,8 @@
+---
+title: twodog.Testing.HeadlessFixture
+description: "API reference for HeadlessFixture, the test fixture that starts Godot with --headless - used through HeadlessCollection in xUnit tests."
+---
+
 # `twodog.Testing.HeadlessFixture`
 
 Starts a Godot test fixture with `--headless`.

@@ -1,3 +1,8 @@
+---
+title: API Reference
+description: "Overview of the deliberately small 2dog API: twodog.Engine, Godot.GodotInstance, the twodog.Testing fixtures, xUnit collections, and object lifetimes at a glance."
+---
+
 # API Reference
 
 The 2dog API is deliberately small. Use `twodog.Engine` to own one Godot

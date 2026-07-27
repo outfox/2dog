@@ -1,3 +1,8 @@
+---
+title: Core Concepts
+description: "How 2dog inverts Godot ownership: your .NET host owns the process and drives embedded libgodot, with GodotSharp API access, the main loop, resource paths, and the single-instance rule."
+---
+
 # Core Concepts
 
 Teaching an old robot new tricks!

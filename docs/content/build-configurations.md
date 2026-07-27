@@ -1,3 +1,8 @@
+---
+title: Build Variants
+description: "Choosing between the debug, release, and editor native Godot variants in 2dog, and how the Debug, Release, and Editor .NET configurations map onto them."
+---
+
 # Build Variants
 
 2dog offers three native Godot variants. Pick the lightest one that has the

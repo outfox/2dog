@@ -1,3 +1,8 @@
+---
+title: Creating a New Project
+description: "Scaffold a complete 2dog project with 2dog new or dotnet new: pick desktop, web, and test hosts, then run your Godot C# game straight from the .NET CLI."
+---
+
 # Creating a New Project
 
 Create and run a complete 2dog project without installing a tool:

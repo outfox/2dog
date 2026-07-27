@@ -1,3 +1,8 @@
+---
+title: Project Layout
+description: "The recommended 2dog layout: the directory containing project.godot is the .NET solution root, with small nested host projects for desktop, browser, and tests that Godot ignores."
+---
+
 # Project Layout
 
 2dog recommends using the directory containing `project.godot` as the .NET

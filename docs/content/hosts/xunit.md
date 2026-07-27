@@ -1,3 +1,8 @@
+---
+title: xUnit Host
+description: "The 2dog test host: xUnit owns the process, so a fixture owns the Godot engine lifetime - test anatomy, project differences, and single-instance safety."
+---
+
 # xUnit Host
 
 `MyGame.tests` runs tests against a real Godot engine, project, and resources.

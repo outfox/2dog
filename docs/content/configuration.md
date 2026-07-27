@@ -1,3 +1,8 @@
+---
+title: MSBuild Configuration
+description: "2dog MSBuild properties for host projects: GodotProjectDir, TwoDogVariant, duplicate Godot analyzer removal, package versioning, and the GodotSharp directory."
+---
+
 # Configuration
 
 Set 2dog properties in your host project's `.csproj`.

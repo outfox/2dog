@@ -1,3 +1,8 @@
+---
+title: Web / Browser (WebAssembly)
+description: "Ship your Godot C# game to the browser with one dotnet publish: 2dog links the engine into the .NET WebAssembly runtime and outputs a static site with no server code."
+---
+
 # Web / Browser (WebAssembly)
 
 2dog runs your game **in the browser** with the same inversion as desktop. Your

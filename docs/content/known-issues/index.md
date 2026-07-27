@@ -1,3 +1,8 @@
+---
+title: Known Issues
+description: "Current 2dog limitations and their workarounds: one Godot instance per load context, xUnit discovery crashes with Godot types, and GD.Print visibility in tests."
+---
+
 # Known Issues
 
 2dog is early-stage software. These pages track current limitations and their

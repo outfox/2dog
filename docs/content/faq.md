@@ -1,3 +1,8 @@
+---
+title: FAQ
+description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, whether it replaces GodotSharp, and why the tool and engine ship as separate packages."
+---
+
 # FAQ
 
 ## How is 2dog different from godot-dotnet?

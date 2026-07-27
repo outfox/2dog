@@ -1,3 +1,8 @@
+---
+title: Misc
+description: "Low-level and contributor-facing 2dog details: tool edge cases, local template workflows, source-checkout native layout, advanced frame loops, and manual browser host wiring."
+---
+
 # Misc
 
 This page keeps low-level and contributor-facing details out of the main guides.

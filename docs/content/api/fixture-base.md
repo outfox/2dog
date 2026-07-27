@@ -1,3 +1,8 @@
+---
+title: twodog.Testing.FixtureBase
+description: "API reference for FixtureBase, the abstract base class for test fixtures that own a Godot instance - constructor, properties, disposal, and custom xUnit collections."
+---
+
 # `twodog.Testing.FixtureBase`
 
 Base class for test fixtures that own a Godot instance.

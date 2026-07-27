@@ -1,3 +1,8 @@
+---
+title: twodog.Engine
+description: "API reference for twodog.Engine, which configures, starts, and owns one embedded Godot instance: constructor, properties, Start, Run, Dispose, and common Godot arguments."
+---
+
 # `twodog.Engine`
 
 Configures, starts, and owns one embedded Godot instance.

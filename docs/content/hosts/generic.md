@@ -1,3 +1,8 @@
+---
+title: Generic Host
+description: "The generic 2dog console host: about 20 lines of Program.cs that start the engine, run your main scene, and pump frames - plus headless runs and desktop publishing."
+---
+
 # Generic Host
 
 `MyGame.2dog` is a generic .NET console application that fits literally in the palm of your hand - just 20 lines of code in `Program.cs` - very easy to extend.

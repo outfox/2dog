@@ -1,3 +1,8 @@
+---
+title: twodog.Testing.Fixture
+description: "API reference for Fixture, the test fixture that starts Godot with rendering enabled - used through RenderingCollection in xUnit tests."
+---
+
 # `twodog.Testing.Fixture`
 
 Starts a Godot test fixture with rendering enabled.

@@ -1,3 +1,8 @@
+---
+title: What's a Host?
+description: "A host is a small .NET program that owns the process, starts embedded Godot, and drives its frame loop - an overview of the hosts 2dog generates and how they relate."
+---
+
 # Hosts
 
 A **host** is a small .NET program that owns the process, starts embedded

@@ -1,3 +1,8 @@
+---
+title: twodog.fixture.AssemblyPreloader
+description: "API reference for AssemblyPreloader, which preloads game assemblies into the default AssemblyLoadContext before Godot starts."
+---
+
 # `twodog.fixture.AssemblyPreloader`
 
 Preloads game assemblies into the default `AssemblyLoadContext` before Godot
