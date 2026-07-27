@@ -50,12 +50,12 @@ internal static class Program
 `Start()` runs `run/main_scene`, and `args` reach Godot unchanged. The `using`
 declarations dispose the instance and engine in the required order.
 
-On Windows, `[STAThread]` matches `godot.exe` and keeps OLE drag and drop, IME,
-and native dialogs working. Top-level statements cannot mark their generated
-entry point; they are suitable only for hosts that will always be headless.
-
 Prefer a callback? `engine.Run(perFrame)` iterates until quit and calls your
 delegate once per frame.
+
+On Windows, `[STAThread]` matches `godot.exe` and keeps OLE drag and drop, IME,
+and native dialogs working. The modern [Top-level statements](https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/top-level-statements) cannot mark their generated entry point; they are suitable only for hosts that will always be headless, or you must manually instantiate the engine on a thread in a Single-Thraded Apartment (STA).
+
 
 ## Project Details
 
