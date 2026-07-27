@@ -5,12 +5,6 @@ Godot, and drives its frame loop. This is where .NET holds the leash: your
 scenes, resources, and game assembly stay in the Godot project, while the host
 decides where and how they run.
 
-| Host | Project | Command | Purpose |
-| --- | --- | --- | --- |
-| [Generic](./generic) | `MyGame.2dog` | `dotnet run --project MyGame.2dog` | Windowed or headless desktop app |
-| [Browser](./web) | `MyGame.web` | `dotnet publish MyGame.web` | Static WebAssembly site |
-| [xUnit](./xunit) | `MyGame.tests` | `dotnet test MyGame.tests` | Tests using a real engine and resources |
-
 [`2dog new`](/templates) generates a new project with these hosts;
 [`2dog add`](/add) adds them to an existing project. Beyond the templates,
 the repository demos include a [WinForms host](./winforms) that embeds the
@@ -43,10 +37,6 @@ The desktop form is the baseline:
   </ItemGroup>
 </Project>
 ```
-
-Browser and xUnit pages describe only their differences. See
-[Project Layout](/project-layout) for the full directory model and
-[Choosing a Variant](/build-configurations) for native variants.
 
 ## Engine Surface
 

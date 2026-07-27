@@ -1,13 +1,14 @@
 # Generic Host
 
-`<YourGame>.2dog` is a generic .NET console application. It starts the engine, runs your
-main scene in a typical Godot game window, and pumps frames until Godot asks to quit. It acts practically the same as directly running your game with Godot.
+`MyGame.2dog` is a generic .NET console application that fits literally in the palm of your hand - just 20 lines of code in `Program.cs` - very easy to extend.
+
+It starts the engine, runs your main scene in a typical Godot game window, and pumps frames until Godot asks to quit. It acts practically the same as directly running your game with Godot.
 
 ```bash
-dotnet run --project "<YourGame>.2dog"
+dotnet run --project "MyGame.2dog"
 ```
 
-You can extend the generic host or change it into a different type of application with your IDE as needed. You can even add multiple hosts with the `2dog` dotnet tool by running it multiple times.
+You can edit the generic host or change it into a different type of application with your IDE as needed. You can even add multiple hosts with the `2dog` dotnet tool by running it multiple times.
 
 :::info Trail Marker
 2dog provides some specialized hosts for your convenience, just check out the sibling docs in this category. Contributions are also welcome!
