@@ -47,7 +47,7 @@ const viewLocks = ['Lock', 'Group', 'SnapGrid']
         Gain an entire ecosystem.
       </p>
       <div class="ed-actions">
-        <a class="ed-btn brand" :href="withBase('/getting-started')">Read the Dogs</a>
+        <a class="ed-btn brand" :href="withBase('/getting-started')"><b>Read the Dogs</b></a>
         <a class="ed-btn" href="https://github.com/outfox/2dog">Fetch on GitHub</a>
       </div>
     </div>
