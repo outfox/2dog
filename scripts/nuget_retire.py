@@ -25,6 +25,7 @@ deprecate with an alternate):
 Usage:
   uv run poe nuget-retire                       # plan
   uv run poe nuget-retire unlist --api-key KEY  # or NUGET_UNLIST_KEY env var
+  uv run poe nuget-retire --packages "2dog.gdextension.*"     # wildcards ok
   uv run poe nuget-retire deprecate --packages 2dog.osx-x64   # smoke test
   uv run poe nuget-retire deprecate             # NUGET_COOKIE env var
 
@@ -37,6 +38,7 @@ devtools on a logged-in nuget.org page.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import os
 import re
@@ -48,14 +50,12 @@ import urllib.request
 
 GALLERY = "https://www.nuget.org"
 
-DEFAULT_PACKAGES = [
-    "2dog", "2dog.engine", "2dog.xunit", "2dog.cli", "2dog.Templates", "2dog.tools",
-    "2dog.win-x64", "2dog.win-x64.debug", "2dog.win-x64.editor", "2dog.win-x64.release",
-    "2dog.linux-x64", "2dog.linux-x64.debug", "2dog.linux-x64.editor", "2dog.linux-x64.release",
-    "2dog.osx-arm64", "2dog.osx-arm64.debug", "2dog.osx-arm64.editor", "2dog.osx-arm64.release",
-    "2dog.browser-wasm", "2dog.browser-wasm.debug", "2dog.browser-wasm.release",
-    "2dog.osx-x64",
-]
+# --packages entries may be fnmatch wildcards (* ? [..]). They expand against
+# nuget.org's autocomplete index, which only knows packages with at least one
+# *listed* version, so DEAD_PACKAGES ids are always merged into the candidates.
+# The default covers every 2dog package, including the 2dog.gdextension.* and
+# 2dog.bindings ids published from the gdextension branch.
+DEFAULT_PACKAGES = ["2dog", "2dog.*"]
 
 # Dead package ids -> the package that replaced them: ALL versions retire,
 # and deprecation points consumers at the replacement.
@@ -92,6 +92,30 @@ def version_sort_key(version: str):
     parts = [int(p) for p in numeric.split(".")]
     parts += [0] * (4 - len(parts))
     return tuple(parts), prerelease == "", prerelease
+
+
+def expand_packages(patterns: list[str]) -> list[str]:
+    """Expand wildcard patterns to package ids, preserving order and deduplicating."""
+    ids: dict[str, None] = {}
+    for pattern in patterns:
+        if not any(ch in pattern for ch in "*?["):
+            ids.setdefault(pattern)
+            continue
+        prefix = re.split(r"[*?\[]", pattern, maxsplit=1)[0].rstrip(".-")
+        status, _, body = http(
+            "GET", "https://azuresearch-usnc.nuget.org/autocomplete?"
+            + urllib.parse.urlencode({"q": prefix, "take": 1000,
+                                      "prerelease": "true", "semVerLevel": "2.0.0"}))
+        if status != 200:
+            raise RuntimeError(f"autocomplete for {pattern!r} returned HTTP {status}")
+        candidates = set(json.loads(body)["data"]) | set(DEAD_PACKAGES)
+        matches = [c for c in sorted(candidates)
+                   if fnmatch.fnmatchcase(c.lower(), pattern.lower())]
+        if not matches:
+            raise RuntimeError(f"pattern {pattern!r} matched no packages on nuget.org")
+        for match in matches:
+            ids.setdefault(match)
+    return list(ids)
 
 
 def published_versions(package_id: str) -> list[str]:
@@ -221,7 +245,8 @@ def main() -> int:
     parser.add_argument("--keep", type=int, default=2,
                         help="newest N versions of each package to keep active (default 2)")
     parser.add_argument("--packages", nargs="+", default=DEFAULT_PACKAGES, metavar="ID",
-                        help="package ids to process (default: all 2dog packages)")
+                        help="package ids or fnmatch wildcards to process "
+                             "(default: 2dog and 2dog.*)")
     parser.add_argument("--message",
                         default="Superseded 2dog iteration - use the latest version. https://2dog.dev",
                         help="deprecation custom message (shown on nuget.org)")
@@ -229,7 +254,7 @@ def main() -> int:
                         help="list every version to retire in the plan")
     args = parser.parse_args()
 
-    plan = build_plan(args.packages, args.keep)
+    plan = build_plan(expand_packages(args.packages), args.keep)
     show_plan(plan, args.verbose)
 
     if args.action == "unlist":
