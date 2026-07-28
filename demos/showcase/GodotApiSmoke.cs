@@ -12,6 +12,7 @@ public static class GodotApiSmoke
     public static void RunAll(SceneTree tree)
     {
         CoreTypesAndNativeHelpers(tree);
+        ErrorReportingAndTypedCollections();
         ImagesAndResources();
         EngineSingletons();
         LowLevelServers();
@@ -66,6 +67,19 @@ public static class GodotApiSmoke
         var callable = Callable.From<int, int>(value => value * 2);
         using var result = callable.Call(21);
         Require(result.AsInt32() == 42, "managed Callable invocation failed");
+    }
+
+    public static void ErrorReportingAndTypedCollections()
+    {
+        // Both calls go through the 7-pointer-arg native shape that had no wasm trampoline
+        // until twodog.WebTrampolines declared it (err_print_error / dictionary_set_typed).
+        GD.PushWarning("2dog smoke: expected warning, exercising err_print_error");
+
+        var typed = new Godot.Collections.Dictionary<string, int> { ["answer"] = 42 };
+        Require(typed["answer"] == 42, "typed Dictionary round-trip failed");
+
+        var values = new Godot.Collections.Array<int> { 3, 1, 2 };
+        Require(values.IndexOf(1) == 1, "typed Array IndexOf failed");
     }
 
     public static void ImagesAndResources()

@@ -11,6 +11,10 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
         GodotApiSmoke.CoreTypesAndNativeHelpers(godot.Tree);
 
     [Fact]
+    public void ErrorReportingAndTypedCollections_ReachTheirNativeShapes() =>
+        GodotApiSmoke.ErrorReportingAndTypedCollections();
+
+    [Fact]
     public void ImagesAndResources_ExerciseCodecsAndImporters() =>
         GodotApiSmoke.ImagesAndResources();
 

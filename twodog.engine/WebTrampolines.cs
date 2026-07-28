@@ -5,13 +5,12 @@ namespace twodog;
 
 /// <summary>
 /// Forces the mono wasm build to generate interpreter/AOT trampolines for
-/// function-pointer signatures containing <c>long</c>/<c>ulong</c> (and a few
-/// others), which are not generated automatically for
+/// function-pointer signatures, which are not generated automatically for
 /// <c>delegate* unmanaged</c> uses. Only the declarations matter; nothing
-/// instantiates these. Mirrors the fork's
-/// modules/mono/glue/GodotSharp/GodotSharp/SourceFiles/WebTrampolines.cs and
-/// must be updated alongside it when new long/ulong signatures appear.
-/// Includes twodog's own classdb_get_method_bind (IntPtr, IntPtr, long).
+/// instantiates these. Superset of the fork's
+/// modules/mono/glue/GodotSharp/GodotSharp/SourceFiles/WebTrampolines.cs:
+/// every distinct NativeFuncs signature shape plus twodog's own
+/// GDExtension-interface shapes. Verified by WebTrampolineCoverageTests.
 /// </summary>
 internal static class WebTrampolines
 {
@@ -47,6 +46,37 @@ internal static class WebTrampolines
     public delegate Godot.Error godotsharp_stack_info_vector_resize_sig(IntPtr _0, int _1);
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     public delegate Godot.Error godotsharp_internal_signal_awaiter_connect_sig(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3);
+
+    // Pointer/int32-only shapes, previously covered only by unrelated DllImport scans.
+    // Named by wasm signature cookie: return type first ('i' ptr/int32, 'v' void), then args.
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate IntPtr sig_i();
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_v();
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate IntPtr sig_ii(IntPtr _0);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_vi(IntPtr _0);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_vii(IntPtr _0, IntPtr _1);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate IntPtr sig_iii(IntPtr _0, IntPtr _1);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate IntPtr sig_iiii(IntPtr _0, IntPtr _1, IntPtr _2);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate IntPtr sig_iiiii(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_viii(IntPtr _0, IntPtr _1, IntPtr _2);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_viiii(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate IntPtr sig_iiiiii(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3, IntPtr _4);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_viiiii(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3, IntPtr _4);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_viiiiii(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3, IntPtr _4, IntPtr _5);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    public delegate void sig_viiiiiii(IntPtr _0, IntPtr _1, IntPtr _2, IntPtr _3, IntPtr _4, IntPtr _5, IntPtr _6);
 
     // twodog-specific: signatures used via GDExtension interface calli.
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
