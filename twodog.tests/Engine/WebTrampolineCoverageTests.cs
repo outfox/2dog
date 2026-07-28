@@ -47,6 +47,10 @@ public class WebTrampolineCoverageTests
     [Fact]
     public void ForkTrampolineSource_CoversEveryNativeFuncsShape()
     {
+        // CI test jobs check out no submodules; the twodog-assembly tests above guard what ships.
+        // Skip only when the whole submodule is absent so a moved/deleted file still fails.
+        Assert.SkipWhen(!File.Exists(Path.Combine(RepoRoot(), "godot", "version.py")),
+            "godot submodule is not checked out");
         var (declared, delegateCount, attributeCount) = ParseForkTrampolines();
         var missing = NeededCookies().Where(kv => !declared.Contains(kv.Key)).ToList();
         Assert.True(missing.Count == 0,
@@ -119,12 +123,13 @@ public class WebTrampolineCoverageTests
             $"Unmapped source type '{sourceTypeName}' in fork WebTrampolines.cs; extend this test's mapping."),
     };
 
-    private static (HashSet<string> Cookies, int Delegates, int Attributes) ParseForkTrampolines(
-        [CallerFilePath] string thisFile = "")
+    private static string RepoRoot([CallerFilePath] string thisFile = "") =>
+        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(thisFile)!, "..", ".."));
+
+    private static (HashSet<string> Cookies, int Delegates, int Attributes) ParseForkTrampolines()
     {
-        var path = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(thisFile)!,
-            "..", "..", "godot", "modules", "mono", "glue", "GodotSharp", "GodotSharp",
-            "SourceFiles", "WebTrampolines.cs"));
+        var path = Path.Combine(RepoRoot(), "godot", "modules", "mono", "glue", "GodotSharp", "GodotSharp",
+            "SourceFiles", "WebTrampolines.cs");
         var source = File.ReadAllText(path);
         var cookies = new HashSet<string>();
         var declarations = Regex.Matches(source, @"delegate\s+([\w.]+)\s+\w+\s*\(([^)]*)\);");
