@@ -115,8 +115,10 @@ public static void RegisterWebPluginsInitializer(IntPtr initializer)
 ```
 
 Registers the game assembly's generated plugin initializer in a browser host.
-The generated `TwoDogWebBoot.cs` calls this before `Start()`; normal application
-code does not need to call it. Desktop calls throw
+The web host's `Program.cs` calls this before `Start()` with the pointer from
+`TwoDogWebBoot.PluginsInitializer()` (the bootstrap file in the web host
+folder, compiled into the game assembly); normal application code does not
+need anything beyond that template line. Desktop calls throw
 `PlatformNotSupportedException`.
 
 ## Example

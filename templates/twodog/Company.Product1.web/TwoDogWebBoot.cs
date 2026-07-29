@@ -22,8 +22,9 @@ namespace GodotPlugins.Game
 /// plugins-initializer function pointer (internal to this assembly) so the
 /// host can hand it to <c>twodog.Engine.RegisterWebPluginsInitializer()</c>.
 /// Scripts are looked up in the assembly that contains the generated
-/// initializer, which is why this lives in the Godot project rather than the
-/// host.
+/// initializer, which is why this file compiles into the Godot project's
+/// assembly (via a Compile Include in the root csproj) even though it lives
+/// in the web host folder.
 /// </summary>
 public static class TwoDogWebBoot
 {

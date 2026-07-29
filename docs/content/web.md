@@ -43,8 +43,11 @@ Publish and serve either project the same way:
 
 ```bash
 dotnet publish MyGame.web
-dotnet serve --directory MyGame.web/AppBundle
+dotnet serve --directory MyGame.web/AppBundle -z -b
 ```
+
+(`-z -b` enables gzip/brotli response compression - see
+[Loading Performance](#loading-performance).)
 
 Open the served page. Output from `Main()` appears in the DevTools console.
 
@@ -91,10 +94,81 @@ All web host properties are optional:
 | `TwoDogExportPack` | `true` | Export the Godot project as a `.pck` during publish; set `false` to provide `wwwroot/godot.pck` yourself |
 | `TwoDogWebExportPreset` | `Web` | Export preset name in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack file name |
+| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` (exact wasm/pck byte sizes); the boot shell reads it to render a determinate progress bar |
+| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` and `*.symbols` from the bundle |
+| `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to every sizeable bundle file |
+| `WasmEmitSymbolMap` | `false` | `true` restores `dotnet.native.js.symbols` (~20 MB, downloaded at every boot) for symbolicated native stack traces |
+| `WasmInitialHeapSize` | `256MB` | Initial linear memory; growth stays enabled. Raise (e.g. `512MB`) for pck-heavy desktop-targeted games, lower toward `128MB` for low-end mobile |
 
 Add `<TrimmerRootAssembly>` for NuGet packages reached through reflection, such
 as serializers or ECS libraries. The generated host already roots the game
 assembly, and package targets root `GodotSharp` and `twodog`.
+
+## Loading Performance
+
+A publish is sized by three things: `godot.wasm` (the engine plus your
+trimmed .NET code, tens of MB), the `_framework/` runtime files (a few MB),
+and `godot.pck` (your content - see [Shrinking the pck](#shrinking-the-pck)).
+The shell downloads the wasm and pck in parallel and shows the 2dog splash
+with a progress bar fed by `twodog.sizes.json`.
+
+### Serve compressed
+
+Compression is the single biggest lever: brotli takes a typical `godot.wasm`
+from ~47 MB to ~13 MB on the wire. Every publish already writes `.br` and
+`.gz` siblings next to the payload files (`TwoDogWebPrecompress`).
+
+- **Dev**: `dotnet serve --directory MyGame.web/AppBundle -z -b` compresses
+  responses on the fly (the siblings are not needed for this).
+- **Static hosts / CDNs** (GitHub Pages, statichost.eu, Cloudflare, ...):
+  most negotiate gzip or brotli transparently. Probe yours:
+  `curl -sI -H 'Accept-Encoding: br, gzip' https://your.host/godot.wasm | grep -i content-encoding`
+- **itch.io**: upload uncompressed; its CDN gzips wasm and pck itself. The
+  `.br`/`.gz` siblings are dead weight in the zip - publish with
+  `-p:TwoDogWebPrecompress=false` for smaller uploads.
+- **Self-hosted**: point nginx (`gzip_static on; brotli_static on;`), Caddy
+  (`file_server { precompressed br gzip }`), or static-web-server at the
+  bundle and the siblings are served as-is with `Content-Encoding`.
+- **Hosts that compress nothing**: the shell has an opt-in fallback that
+  fetches `godot.pck.gz` and inflates it in the page (`DecompressionStream`).
+  Flip `TWODOG_PCK_GZ` to `true` in `wwwroot/index.html` (and swap the
+  `godot.pck` preload hint for `godot.pck.gz`). The wasm cannot be inflated
+  page-side today, so prefer a host that content-encodes.
+
+### Diagnosing slow startup
+
+The shell logs `2dog: first frame N ms after boot (X ms downloading, Y ms
+starting)` plus a size/time table of every large download, and emits
+`performance.mark`s (`2dog:boot`, `2dog:downloads-done`, `2dog:first-frame`)
+visible in the DevTools Performance panel.
+
+- A long *downloading* phase is bandwidth: serve compressed (above) and shrink
+  the pck (below). Test realistically with DevTools network throttling and
+  "Disable cache".
+- A long *starting* phase is wasm compilation, .NET startup, and your first
+  scene load - largely proportional to wasm size and first-scene content.
+- Localhost is disk-speed; a hang there is almost never the network.
+
+### Shrinking the pck
+
+List what the pack actually contains, largest first:
+
+```bash
+dotnet <path-to>/2dog.import.dll --list-pack MyGame.web/AppBundle/godot.pck
+```
+
+Usual offenders:
+
+- **Audio**: WAV imports default to uncompressed PCM. Import music and long
+  effects as Ogg Vorbis, or set the WAV import's compress mode.
+- **Textures**: enormous lossless sources; check per-texture import overrides
+  and consider lossy VRAM compression for large ones.
+- **Export filter**: `export_filter="all_resources"` plus stray files in the
+  project tree. Use the preset's exclude filter, and `.gdignore` folders that
+  are not game content.
+
+`dotnet/include_debug_symbols` in the Web preset does not matter here:
+pack-only web exports carry no assemblies (the host publish supplies them).
 
 ## Limitations
 

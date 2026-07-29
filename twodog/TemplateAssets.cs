@@ -56,7 +56,7 @@ internal static class TemplateAssets
         Substitute(ReadRaw("tpl/Company.Product1.csproj"), baseName);
 
     /// <summary>The web bootstrap source, copied verbatim (template copyOnly).</summary>
-    public static string WebBootSource() => ReadRaw("tpl/TwoDogWebBoot.cs");
+    public static string WebBootSource() => ReadRaw("tpl/Company.Product1.web/TwoDogWebBoot.cs");
 
     /// <summary>The template's export_presets.cfg (Web preset), verbatim - no tokens.</summary>
     public static string ExportPresets() => ReadRaw("tpl/export_presets.cfg");
@@ -89,7 +89,13 @@ internal static class TemplateAssets
     {
         var sourceFolder = $"{SourceName}.{Hosts.Suffix(kind)}";
         var prefix = $"tpl/{sourceFolder}/";
-        foreach (var name in Names.Select(Normalize).Where(n => n.StartsWith(prefix, StringComparison.Ordinal)).Order())
+        // TwoDogWebBoot.cs is excluded here: PlanWebBoot is its single writer
+        // (exactly one copy per project - two would be CS0101 in the game
+        // assembly when a project holds several web hosts).
+        foreach (var name in Names.Select(Normalize)
+                     .Where(n => n.StartsWith(prefix, StringComparison.Ordinal))
+                     .Where(n => !n.EndsWith("/TwoDogWebBoot.cs", StringComparison.Ordinal))
+                     .Order())
         {
             // Substitute in file names too (e.g. Company.Product1.2dog.csproj
             // -> MyGame.tools.csproj for a desktop host folder "MyGame.tools").

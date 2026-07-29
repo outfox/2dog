@@ -42,7 +42,10 @@ This differs from the [generic host](./generic) in three ways:
 
 1. Register `TwoDogWebBoot.PluginsInitializer()` before `Start()`. The browser
    cannot load `GodotPlugins.dll` from disk, so the game assembly exposes its
-   source-generated initializer directly.
+   source-generated initializer directly. `TwoDogWebBoot.cs` lives in this host
+   folder but compiles into the *game* assembly through a guarded
+   `Compile Include` in the game csproj - scripts are resolved from the
+   assembly holding the initializer.
 2. Pass `null` as the project path. At runtime, the page mounts the exported
    `godot.pck` through `--main-pack`; `GodotProjectDir` is still needed to
    export that pack at build time.
@@ -85,7 +88,9 @@ The host also contains:
 - `.gdignore`, which keeps Godot out of the host folder;
 - `Directory.Build.props`, which defaults browser builds to `Release`;
 - `global.json`, which pins a .NET 10 SDK;
-- `wwwroot/`, which contains the page shell and static files.
+- `wwwroot/`, which contains the page shell and static files;
+- `TwoDogWebBoot.cs`, the web bootstrap compiled by the game project (see
+  [Program](#program)); this host excludes it from its own compile globs.
 
 ## Host Properties
 
@@ -95,6 +100,13 @@ The host also contains:
 | `TwoDogExportPack` | `true` | Export the project during publish; `false` uses your `wwwroot/godot.pck` |
 | `TwoDogWebExportPreset` | `Web` | Export preset in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
+| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for the shell's progress bar |
+| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` / `*.symbols` from the bundle |
+| `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to payload files |
+
+Loading-performance knobs (`WasmInitialHeapSize`, `WasmEmitSymbolMap`,
+compression and serving guidance) are covered in
+[Web / Browser (WASM)](/web#loading-performance).
 
 Publishing requires a .NET 10 SDK with the wasm workload:
 

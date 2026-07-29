@@ -13,7 +13,7 @@ internal static class CsprojPatcher
 
     public sealed record Result(string? NewContent, List<string> Added, List<string> Warnings);
 
-    public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders)
+    public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders, string? webBootPath = null)
     {
         var warnings = new List<string>();
         var added = new List<string>();
@@ -81,7 +81,24 @@ internal static class CsprojPatcher
             added.Add($"DefaultItemExcludes: {string.Join(", ", missingFolders)}");
         }
 
-        if (!patch.HasElements && added.Count == 0) return new Result(null, added, warnings);
+        // The web bootstrap Compile Include: any existing Compile item ending
+        // in TwoDogWebBoot.cs counts as "already wired" (idempotence, and
+        // custom layouts the author chose are theirs to keep).
+        XElement? bootGroup = null;
+        var hasBootInclude = root.Descendants(ns + "Compile")
+            .Any(e => ((string?)e.Attribute("Include"))?
+                .EndsWith("TwoDogWebBoot.cs", StringComparison.OrdinalIgnoreCase) == true);
+        if (webBootPath != null && !hasBootInclude)
+        {
+            var compile = new XElement(ns + "Compile");
+            compile.SetAttributeValue("Include", webBootPath);
+            compile.SetAttributeValue("Condition", $"Exists('{webBootPath}')");
+            bootGroup = new XElement(ns + "ItemGroup",
+                new XText("\n        "), compile, new XText("\n    "));
+            added.Add($"Compile Include: {webBootPath}");
+        }
+
+        if (!patch.HasElements && bootGroup == null && added.Count == 0) return new Result(null, added, warnings);
 
         // Readable indentation: PreserveWhitespace + DisableFormatting keep
         // the rest of the file byte-identical, so the injected group carries
@@ -98,6 +115,14 @@ internal static class CsprojPatcher
                 new XComment(" added by the 2dog tool: properties 2dog hosts need that were not already set "),
                 new XText("\n    "),
                 patch,
+                new XText("\n"));
+
+        if (bootGroup != null)
+            root.Add(
+                new XText("    "),
+                new XComment(" added by the 2dog tool: compiles the web bootstrap (in the web host folder) into this game assembly "),
+                new XText("\n    "),
+                bootGroup,
                 new XText("\n"));
 
         // XDocument.ToString drops the XML declaration; put it back if the

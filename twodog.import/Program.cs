@@ -9,6 +9,7 @@ string? toolsDir = null;
 string? projectPath = null;
 string? exportPreset = null;
 string? exportOutput = null;
+string? listPackPath = null;
 var verbose = false;
 
 for (var i = 0; i < args.Length; i++)
@@ -33,6 +34,9 @@ for (var i = 0; i < args.Length; i++)
         case "--output" when i + 1 < args.Length:
             exportOutput = args[++i];
             break;
+        case "--list-pack" when i + 1 < args.Length:
+            listPackPath = args[++i];
+            break;
         case "--verbose":
             verbose = true;
             break;
@@ -45,6 +49,10 @@ for (var i = 0; i < args.Length; i++)
 editorPath ??= Environment.GetEnvironmentVariable("GODOT_EDITOR");
 projectPath = projectPath != null ? Path.GetFullPath(projectPath) : null;
 exportOutput = exportOutput != null ? Path.GetFullPath(exportOutput) : null;
+
+// Pure file-format work ("why is my pck 99 MiB?"): no engine, no project.
+if (listPackPath != null)
+    return ListPack(listPackPath);
 
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
     (editorPath == null && libgodotPath == null) ||
@@ -65,6 +73,7 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("                     content as a .pck using the named export preset");
     Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
+    Console.Error.WriteLine("  --list-pack <pck>  List a .pck's contents by size (no engine involved).");
     Console.Error.WriteLine("  --verbose          Pass --verbose to the engine.");
     Console.Error.WriteLine();
     Console.Error.WriteLine("  The project path must contain a project.godot file.");
@@ -199,6 +208,79 @@ static void SetEnv(string name, string value)
     Environment.SetEnvironmentVariable(name, value);
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         setenv(name, value, 1);
+}
+
+// GDPC directory layout, mirroring PackedSourcePCK::try_open_pack
+// (core/io/file_access_pack.cpp): magic, format version, engine version
+// triple, pack flags, file base; v3/v4 then carry a directory offset (plus a
+// 32-byte salt for encrypted sparse bundles), v2 sixteen reserved u32s; the
+// directory is count followed by (padded path, offset, size, md5, flags).
+static int ListPack(string path)
+{
+    if (!File.Exists(path))
+    {
+        Console.Error.WriteLine($"Pack not found: {path}");
+        return 1;
+    }
+
+    using var f = new BinaryReader(File.OpenRead(path));
+    if (f.ReadUInt32() != 0x43504447) // 'GDPC'
+    {
+        Console.Error.WriteLine($"{path}: not a Godot .pck (bad magic; embedded packs are not supported)");
+        return 1;
+    }
+
+    var formatVersion = f.ReadUInt32();
+    var major = f.ReadUInt32();
+    var minor = f.ReadUInt32();
+    f.ReadUInt32(); // patch
+    if (formatVersion is < 2 or > 4)
+    {
+        Console.Error.WriteLine($"{path}: unsupported pack format v{formatVersion}");
+        return 1;
+    }
+
+    var packFlags = f.ReadUInt32();
+    var encryptedDirectory = (packFlags & 1) != 0; // PACK_DIR_ENCRYPTED
+    var sparseBundle = (packFlags & 4) != 0;       // PACK_SPARSE_BUNDLE
+    if (encryptedDirectory)
+    {
+        Console.Error.WriteLine($"{path}: pack directory is encrypted; cannot list.");
+        return 1;
+    }
+
+    f.ReadUInt64(); // file base
+    if (formatVersion >= 3)
+    {
+        var directoryOffset = f.ReadUInt64();
+        if (sparseBundle && encryptedDirectory && formatVersion == 4) f.ReadBytes(32); // salt
+        f.BaseStream.Seek((long)directoryOffset, SeekOrigin.Begin);
+    }
+    else
+    {
+        for (var j = 0; j < 16; j++) f.ReadUInt32(); // reserved
+    }
+
+    var count = f.ReadUInt32();
+    var entries = new List<(string Path, ulong Size)>((int)count);
+    for (var j = 0; j < count; j++)
+    {
+        var pathLength = f.ReadInt32();
+        var filePath = Encoding.UTF8.GetString(f.ReadBytes(pathLength)).TrimEnd('\0');
+        f.ReadUInt64(); // offset
+        var size = f.ReadUInt64();
+        f.ReadBytes(16); // md5
+        var flags = f.ReadUInt32();
+        if ((flags & 2) != 0) continue; // PACK_FILE_REMOVAL
+        entries.Add((filePath, size));
+    }
+
+    var totalBytes = entries.Aggregate(0UL, (acc, e) => acc + e.Size);
+    Console.WriteLine($"{path}: pack format v{formatVersion} (Godot {major}.{minor}), " +
+                      $"{entries.Count} file(s), {totalBytes / 1048576.0:F1} MiB content");
+    foreach (var (filePath, size) in entries.OrderByDescending(e => e.Size))
+        Console.WriteLine($"{size,12:N0}  {filePath}");
+    return 0;
 }
 
 static FileStream? AcquireLock(string path, TimeSpan timeout)

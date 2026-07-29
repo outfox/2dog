@@ -507,13 +507,21 @@ jobs:
       - name: Verify app bundle
         run: |
           BUNDLE=demos/showcase/showcase.web/AppBundle
-          for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" "$BUNDLE/_framework/dotnet.js"; do
+          for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" "$BUNDLE/_framework/dotnet.js" \
+                   "$BUNDLE/twodog.sizes.json" "$BUNDLE/godot.wasm.br" "$BUNDLE/godot.wasm.gz" "$BUNDLE/godot.pck.gz"; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing $f in the published app bundle"
               ls -R "$BUNDLE" || true
               exit 1
             fi
           done
+          # Debug-only weight must stay out of release bundles: the symbol map
+          # alone is ~20 MB and dotnet.js downloads it at every boot.
+          STRAYS=$(find "$BUNDLE" -name '*.symbols' -o -name '*.js.map')
+          if [ -n "$STRAYS" ]; then
+            echo "::error::Debug artifacts leaked into the release bundle: $STRAYS"
+            exit 1
+          fi
           # godot.wasm contains the statically linked engine — sanity floor.
           SIZE=$(stat -c%s "$BUNDLE/godot.wasm")
           echo "godot.wasm size: $SIZE bytes"

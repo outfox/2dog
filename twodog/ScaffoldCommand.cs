@@ -91,15 +91,30 @@ internal static class ScaffoldCommand
             .ToList();
         var wantsWeb = newHosts.Any(h => h.Kind == HostKind.Web) || existingHosts.Any(h => h.Kind == HostKind.Web);
 
+        // The web bootstrap lives in the (first) web host folder and compiles
+        // into the game assembly via a Compile Include in the root csproj. A
+        // root-level TwoDogWebBoot.cs is the older layout - it still works via
+        // the root csproj's default globs, so it is left alone (the tool never
+        // moves or deletes) and no folder copy is planned next to it.
+        var legacyRootBoot = File.Exists(Path.Combine(projectDir, "TwoDogWebBoot.cs"));
+        var webBootFolder = legacyRootBoot
+            ? null
+            : existingHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
+              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder;
+        if (legacyRootBoot && wantsWeb)
+            warnings.Add("TwoDogWebBoot.cs sits at the project root (older layout) - left untouched, it still " +
+                         "works there. Newer layouts keep it in the web host folder with a guarded Compile " +
+                         "Include in the root csproj, so the Godot editor stops importing it as a script.");
+
         // Root files that already exist are worth a word when 2dog is first
         // added to a project ("your file was left alone"), but not when hosts
         // are added to one 2dog already set up - there they are simply ours.
         var retrofitting = !project.IsNew && existingHosts.Count == 0;
 
-        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders);
+        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder);
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
-        PlanWebBoot(plan, skipped, options, projectDir, retrofitting);
+        PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
         PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostFolders, newHosts);
@@ -212,14 +227,16 @@ internal static class ScaffoldCommand
 
     private static void PlanGodotCsproj(
         List<PlannedAction> plan, List<string> warnings, ProjectContext project,
-        string godotCsproj, List<string> hostFolders)
+        string godotCsproj, List<string> hostFolders, string? webBootFolder)
     {
         if (!File.Exists(godotCsproj))
         {
             // GDScript-only project (or a brand-new one): scaffold the csproj
             // and declare the assembly so the Godot editor finds it
             // (res://<name>.csproj).
-            var content = SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName), hostFolders);
+            var content = SetWebBootInclude(
+                SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName), hostFolders),
+                project.BaseName, webBootFolder);
             plan.Add(new PlannedAction(
                 $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})",
                 () => File.WriteAllText(godotCsproj, content)));
@@ -232,7 +249,8 @@ internal static class ScaffoldCommand
             return;
         }
 
-        var result = CsprojPatcher.Patch(godotCsproj, hostFolders);
+        var result = CsprojPatcher.Patch(godotCsproj, hostFolders,
+            webBootFolder is null ? null : $"{webBootFolder}/TwoDogWebBoot.cs");
         warnings.AddRange(result.Warnings);
         if (result.NewContent is { } newContent)
             plan.Add(new PlannedAction(
@@ -250,6 +268,17 @@ internal static class ScaffoldCommand
         return Regex.Replace(csproj, "<DefaultItemExcludes>.*?</DefaultItemExcludes>",
             $"<DefaultItemExcludes>{value}</DefaultItemExcludes>", RegexOptions.Singleline);
     }
+
+    /// <summary>
+    /// Rewrites the template csproj's guarded TwoDogWebBoot.cs Compile Include
+    /// (the template names &lt;Base&gt;.web) to the web host folder this project
+    /// actually gets. With no web host the template path is kept: the Exists
+    /// condition makes it inert, and dropping the file in later just works.
+    /// </summary>
+    internal static string SetWebBootInclude(string csproj, string baseName, string? webFolder) =>
+        webFolder is null
+            ? csproj
+            : csproj.Replace($"{baseName}.web/TwoDogWebBoot.cs", $"{webFolder}/TwoDogWebBoot.cs");
 
     private static void PlanRootGlobalJson(
         List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting)
@@ -294,20 +323,27 @@ internal static class ScaffoldCommand
     }
 
     private static void PlanWebBoot(
-        List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir, bool retrofitting)
+        List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir,
+        string? webBootFolder, bool retrofitting)
     {
-        // Written even without a web host: it is #if LIBGODOT_ENABLED-guarded
-        // and matches the template content, so adding a web host later just
-        // works.
-        var path = Path.Combine(projectDir, "TwoDogWebBoot.cs");
+        // null: no web host to boot, or a legacy root-level file the root
+        // csproj's default globs already compile (left alone).
+        if (webBootFolder is null) return;
+
+        var relative = $"{webBootFolder}/TwoDogWebBoot.cs";
+        var path = Path.Combine(projectDir, webBootFolder, "TwoDogWebBoot.cs");
         if (File.Exists(path) && !options.Force)
         {
-            if (retrofitting) skipped.Add("TwoDogWebBoot.cs");
+            if (retrofitting) skipped.Add(relative);
             return;
         }
 
-        plan.Add(new PlannedAction("create TwoDogWebBoot.cs (web bootstrap)",
-            () => File.WriteAllText(path, TemplateAssets.WebBootSource())));
+        // The web host folder may be created later in this same plan.
+        plan.Add(new PlannedAction($"create {relative} (web bootstrap)", () =>
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllText(path, TemplateAssets.WebBootSource());
+        }));
     }
 
     private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb)

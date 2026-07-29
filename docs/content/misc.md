@@ -60,8 +60,10 @@ Other project content is left unchanged. For a GDScript-only project, the tool
 creates a `Godot.NET.Sdk` project and adds `[dotnet] project/assembly_name` to
 `project.godot`.
 
-Web setup adds `TwoDogWebBoot.cs`, a `Web` export preset when absent, and a root
-`global.json` when none exists. An existing `export_presets.cfg` receives a new
+Web setup adds `TwoDogWebBoot.cs` inside the web host folder (with a guarded
+`Compile Include` in the game project, which compiles it), a `Web` export preset
+when absent, and a root `global.json` when none exists. A root-level
+`TwoDogWebBoot.cs` from older layouts keeps working and is left untouched. An existing `export_presets.cfg` receives a new
 preset at the next free index; existing presets are untouched. An existing
 `global.json` is never overwritten, including with `--force`.
 
@@ -223,7 +225,10 @@ The Godot game project needs:
 
 - `<DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>`
 - `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>`
-- `TwoDogWebBoot.cs` from the template, in the game assembly
+- `TwoDogWebBoot.cs` from the template, compiled into the game assembly (the
+  template keeps the file in the web host folder and compiles it via a
+  `Compile Include` in the game csproj; any location works as long as the game
+  assembly compiles it)
 - `export_presets.cfg` with a `Web` preset
 - a solution beside `project.godot`, required by GodotTools during export
 - a .NET 10 `global.json` whose SDK has `wasm-tools`

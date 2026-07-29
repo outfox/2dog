@@ -29,6 +29,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <!-- TwoDogWebBoot.cs is compiled by the GAME project (see the root
+             csproj's Compile Include), not by this host. -->
+        <Compile Remove="TwoDogWebBoot.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="../../../twodog.engine/twodog.engine.csproj"/>
         <ProjectReference Include="../showcase.csproj"/>
     </ItemGroup>

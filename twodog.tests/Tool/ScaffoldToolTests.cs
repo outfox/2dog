@@ -334,12 +334,54 @@ public class CsprojPatcherTests
     public void ScaffoldedGodotCsproj_NeedsNoPatch()
     {
         // Invariant: the csproj the tool itself scaffolds (GDScript-only
-        // conversions) must already contain everything the patcher would add.
+        // conversions) must already contain everything the patcher would add -
+        // including the guarded web bootstrap Compile Include.
         using var tmp = new TempProjectDir();
         var path = tmp.Write("MyGame.csproj", TemplateAssets.GodotCsproj("MyGame"));
-        var result = CsprojPatcher.Patch(path, HostFolders);
+        var result = CsprojPatcher.Patch(path, HostFolders, "MyGame.web/TwoDogWebBoot.cs");
         Assert.Null(result.NewContent);
         Assert.Empty(result.Warnings);
+    }
+
+    [Fact]
+    public void WebBootPath_AddsGuardedCompileInclude_Once()
+    {
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj", Bare);
+
+        var first = CsprojPatcher.Patch(path, HostFolders, "MyGame.web/TwoDogWebBoot.cs");
+        Assert.NotNull(first.NewContent);
+        Assert.Contains("Compile Include=\"MyGame.web/TwoDogWebBoot.cs\"", first.NewContent);
+        Assert.Contains("Exists('MyGame.web/TwoDogWebBoot.cs')", first.NewContent);
+
+        File.WriteAllText(path, first.NewContent!);
+        var second = CsprojPatcher.Patch(path, HostFolders, "MyGame.web/TwoDogWebBoot.cs");
+        Assert.Null(second.NewContent);
+    }
+
+    [Fact]
+    public void WebBootPath_RespectsAnAuthorsExistingInclude()
+    {
+        // Any Compile item already ending in TwoDogWebBoot.cs counts as wired,
+        // wherever the author chose to keep the file.
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj",
+            $"""
+            <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
+                <PropertyGroup>
+                    <TargetFramework>net10.0</TargetFramework>
+                    <EnableDynamicLoading>true</EnableDynamicLoading>
+                    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+                    <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+                    <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.tests/**</DefaultItemExcludes>
+                </PropertyGroup>
+                <ItemGroup>
+                    <Compile Include="boot/TwoDogWebBoot.cs"/>
+                </ItemGroup>
+            </Project>
+            """);
+        var result = CsprojPatcher.Patch(path, HostFolders, "MyGame.web/TwoDogWebBoot.cs");
+        Assert.Null(result.NewContent);
     }
 }
 
@@ -667,9 +709,10 @@ public class AddEndToEndTests
         // behind .gdignore.
         foreach (var expected in new[]
                  {
-                    "SpaceMiner.csproj", "SpaceMiner.slnx", "Directory.Build.targets", "TwoDogWebBoot.cs", "export_presets.cfg", "global.json",
+                    "SpaceMiner.csproj", "SpaceMiner.slnx", "Directory.Build.targets", "export_presets.cfg", "global.json",
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
                      "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore", "SpaceMiner.web/Directory.Build.props",
+                     "SpaceMiner.web/TwoDogWebBoot.cs",
                      "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
                  })
             Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, expected)), $"missing {expected}");
@@ -702,6 +745,64 @@ public class AddEndToEndTests
         var snapshot = Snapshot(tmp.Dir);
         Assert.Equal(0, Run(Options(tmp.Dir)));
         Assert.Equal(snapshot, Snapshot(tmp.Dir));
+    }
+
+    [Fact]
+    public void Add_ExistingCsproj_PutsWebBootInWebFolderAndPatchesInclude()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        tmp.Write("SpaceMiner.csproj",
+            $"""
+            <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
+                <PropertyGroup>
+                    <TargetFramework>net10.0</TargetFramework>
+                </PropertyGroup>
+            </Project>
+            """);
+
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+
+        Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.web", "TwoDogWebBoot.cs")));
+        Assert.False(File.Exists(System.IO.Path.Combine(tmp.Dir, "TwoDogWebBoot.cs")));
+        var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
+        Assert.Contains("Compile Include=\"SpaceMiner.web/TwoDogWebBoot.cs\"", csproj);
+        Assert.Contains("Exists('SpaceMiner.web/TwoDogWebBoot.cs')", csproj);
+    }
+
+    [Fact]
+    public void Add_LegacyRootWebBoot_IsLeftAloneAndGetsNoFolderCopy()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        tmp.Write("SpaceMiner.csproj",
+            $"""
+            <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
+                <PropertyGroup>
+                    <TargetFramework>net10.0</TargetFramework>
+                </PropertyGroup>
+            </Project>
+            """);
+        tmp.Write("TwoDogWebBoot.cs", "// legacy layout\n");
+
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+
+        // The root file (older layout, compiled by the default globs) is
+        // untouched, no folder copy appears, and no Include is patched in.
+        Assert.Equal("// legacy layout\n", File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "TwoDogWebBoot.cs")));
+        Assert.False(File.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.web", "TwoDogWebBoot.cs")));
+        Assert.DoesNotContain("TwoDogWebBoot", File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj")));
+    }
+
+    [Fact]
+    public void Add_WithoutWeb_CreatesNoWebBoot()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+
+        Assert.Equal(0, Run(Options(tmp.Dir, web: false)));
+
+        Assert.Empty(Directory.EnumerateFiles(tmp.Dir, "TwoDogWebBoot.cs", SearchOption.AllDirectories));
     }
 
     [Fact]
@@ -845,9 +946,12 @@ public class AddEndToEndTests
         // The root global.json (wasm SDK pin) only comes with the web host.
         Assert.False(File.Exists(System.IO.Path.Combine(tmp.Dir, "global.json")));
 
+        // DefaultItemExcludes lists only the hosts that exist; the guarded web
+        // bootstrap Compile Include stays (matching dotnet-new output - inert
+        // via its Exists condition until a web host appears).
         var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
         Assert.Contains("SpaceMiner.2dog/**", csproj);
-        Assert.DoesNotContain("SpaceMiner.web", csproj);
+        Assert.DoesNotContain("SpaceMiner.web/**", csproj);
         Assert.DoesNotContain("SpaceMiner.tests", csproj);
     }
 }
@@ -1162,10 +1266,10 @@ public class ScaffoldEndToEndTests
         foreach (var expected in new[]
                  {
                      "project.godot", "main.tscn", ".editorconfig", ".gitignore",
-                     "MyGame.csproj", "MyGame.slnx", "Directory.Build.targets", "TwoDogWebBoot.cs",
+                     "MyGame.csproj", "MyGame.slnx", "Directory.Build.targets",
                      "export_presets.cfg", "global.json",
                      "MyGame.2dog/MyGame.2dog.csproj", "MyGame.web/MyGame.web.csproj",
-                     "MyGame.tests/MyGame.tests.csproj",
+                     "MyGame.web/TwoDogWebBoot.cs", "MyGame.tests/MyGame.tests.csproj",
                  })
             Assert.True(File.Exists(System.IO.Path.Combine(dir, expected)), $"missing {expected}");
 
@@ -1199,6 +1303,46 @@ public class ScaffoldEndToEndTests
     }
 
     [Fact]
+    public void Add_SecondWebHost_KeepsASingleWebBoot()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = System.IO.Path.Combine(tmp.Dir, "MyGame");
+        Assert.Equal(0, Run(NewProject(dir)));
+
+        var options = new ScaffoldOptions { ProjectPath = dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web"]), project);
+        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+
+        // Exactly one bootstrap per project: two copies would collide (CS0101)
+        // in the game assembly the root csproj compiles them into.
+        Assert.True(File.Exists(System.IO.Path.Combine(dir, "MyGame.web2", "MyGame.web2.csproj")));
+        Assert.Equal(
+            [System.IO.Path.Combine(dir, "MyGame.web", "TwoDogWebBoot.cs")],
+            Directory.EnumerateFiles(dir, "TwoDogWebBoot.cs", SearchOption.AllDirectories).ToArray());
+        var csproj = File.ReadAllText(System.IO.Path.Combine(dir, "MyGame.csproj"));
+        Assert.Contains("MyGame.web/TwoDogWebBoot.cs", csproj);
+        Assert.DoesNotContain("MyGame.web2/TwoDogWebBoot.cs", csproj);
+    }
+
+    [Fact]
+    public void Add_CustomWebFolderName_RewritesTheBootInclude()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", "config_version=5\n\n[application]\n\nconfig/name=\"My Game\"\n");
+
+        var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web", "Browser"]), project);
+        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+
+        Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "Browser", "TwoDogWebBoot.cs")));
+        var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "MyGame.csproj"));
+        Assert.Contains("Compile Include=\"Browser/TwoDogWebBoot.cs\"", csproj);
+        Assert.DoesNotContain("MyGame.web/TwoDogWebBoot.cs", csproj);
+    }
+
+    [Fact]
     public void Add_SecondHostOfTheSameKind_LandsBesideTheFirst()
     {
         using var tmp = new TempProjectDir();
@@ -1218,5 +1362,26 @@ public class ScaffoldEndToEndTests
         // ... and the game project excludes the new folder from its globs.
         Assert.Contains("MyGame.2dog2/**", File.ReadAllText(System.IO.Path.Combine(dir, "MyGame.csproj")));
         Assert.True(SolutionOps.ContainsProject(System.IO.Path.Combine(dir, "MyGame.slnx"), "MyGame.2dog2.csproj"));
+    }
+}
+
+// The boot shell ships twice (dotnet-new template and showcase demo). They
+// must stay identical apart from the page title, or shell fixes silently land
+// in only one copy.
+public class WebShellDriftTests
+{
+    [Fact]
+    public void TemplateAndShowcaseShells_AreIdenticalModuloTitle()
+    {
+        var root = HelperToolTestBed.RepoRoot;
+        var template = File.ReadAllText(System.IO.Path.Combine(
+            root, "templates", "twodog", "Company.Product1.web", "wwwroot", "index.html"));
+        var showcase = File.ReadAllText(System.IO.Path.Combine(
+            root, "demos", "showcase", "showcase.web", "wwwroot", "index.html"));
+
+        static string Normalize(string html) => System.Text.RegularExpressions.Regex.Replace(
+            html.ReplaceLineEndings("\n"), "<title>.*?</title>", "<title/>");
+
+        Assert.Equal(Normalize(template), Normalize(showcase));
     }
 }

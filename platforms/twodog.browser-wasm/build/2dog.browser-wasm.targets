@@ -26,6 +26,19 @@
         TwoDogExportPack:       'false' disables the automatic pck export
         TwoDogWebExportPreset:  export preset name (default 'Web')
         TwoDogWebPackName:      deployed pck file name (default 'godot.pck')
+        TwoDogWebSizeManifest:  'false' skips twodog.sizes.json (exact wasm/pck
+                                sizes the boot shell's progress bar reads)
+        TwoDogWebStripMaps:     'false' keeps *.js.map / *.symbols in release
+                                bundles
+        TwoDogWebPrecompress:   'false' skips the .br/.gz sibling files
+                                (servers with precompressed-static support and
+                                the shell's gzip pck fallback consume them)
+        WasmEmitSymbolMap:      'true' restores the dotnet.native.js.symbols
+                                emission (~20 MB, downloaded at every boot;
+                                symbolicates native wasm stack traces)
+        WasmInitialHeapSize:    initial linear memory (default 256MB; growth
+                                stays enabled - raise for pck-heavy desktop
+                                games, lower toward 128MB for low-end mobile)
     -->
 
     <!-- Discover package version from this .targets location -->
@@ -60,8 +73,22 @@
         <WasmAppDir Condition="'$(WasmAppDir)' == ''">$(MSBuildProjectDirectory)/AppBundle</WasmAppDir>
 
         <WasmEnableSIMD Condition="'$(WasmEnableSIMD)' == ''">true</WasmEnableSIMD>
-        <WasmInitialHeapSize Condition="'$(WasmInitialHeapSize)' == ''">32MB</WasmInitialHeapSize>
+        <!-- 256MB: a floor, not a ceiling (ALLOW_MEMORY_GROWTH stays on). Too
+             low costs repeated memory.grow churn while Mono + Godot + the pck
+             load; 512MB upfront risks allocation failure in low-memory mobile
+             tabs. -->
+        <WasmInitialHeapSize Condition="'$(WasmInitialHeapSize)' == ''">256MB</WasmInitialHeapSize>
         <EmccStackSize Condition="'$(EmccStackSize)' == ''">5120KB</EmccStackSize>
+
+        <!-- The wasm SDK emits dotnet.native.js.symbols by default and
+             dotnet.js downloads it during every boot (~20 MB for a 2dog game;
+             it only symbolicates native stack traces). -->
+        <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == ''">false</WasmEmitSymbolMap>
+        <TwoDogWebStripMaps Condition="'$(TwoDogWebStripMaps)' == '' And '$(TwoDogWebVariant)' == 'release'">true</TwoDogWebStripMaps>
+        <TwoDogWebSizeManifest Condition="'$(TwoDogWebSizeManifest)' == ''">true</TwoDogWebSizeManifest>
+        <!-- Precompression needs core MSBuild for BrotliStream; wasm publishes
+             always run there (the wasm-tools workload requires the CLI). -->
+        <TwoDogWebPrecompress Condition="'$(TwoDogWebPrecompress)' == '' And '$(MSBuildRuntimeType)' == 'Core'">true</TwoDogWebPrecompress>
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
         <!-- partial: only assemblies that declare trim-compatibility
@@ -157,6 +184,16 @@
               DestinationFiles="$(WasmAppDir)/godot.wasm"
               Condition="Exists('$(WasmAppDir)/_framework/dotnet.native.wasm')"/>
         <Delete Files="$(WasmAppDir)/_framework/libgodot.wasm"/>
+
+        <!-- Debug-only artifacts: sourcemaps are fetched with devtools open,
+             *.symbols at every boot (belt-and-braces - WasmEmitSymbolMap
+             already defaults off). -->
+        <ItemGroup Condition="'$(TwoDogWebStripMaps)' == 'true'">
+            <_TwoDogWebDebugArtifacts Include="$(WasmAppDir)/_framework/*.js.map"/>
+            <_TwoDogWebDebugArtifacts Include="$(WasmAppDir)/_framework/*.symbols"/>
+        </ItemGroup>
+        <Delete Files="@(_TwoDogWebDebugArtifacts)" Condition="'$(TwoDogWebStripMaps)' == 'true'"/>
+
         <Message Importance="high" Text="TwoDog: web app bundle finalized at $(WasmAppDir)"/>
     </Target>
 
@@ -240,5 +277,99 @@
               DestinationFiles="$(WasmAppDir)/$(TwoDogWebPackName)"
               SkipUnchangedFiles="true"/>
         <Message Importance="high" Text="TwoDog: deployed $(TwoDogWebPackName) to the app bundle"/>
+    </Target>
+
+    <!-- ============================================ -->
+    <!-- Bundle post-processing: sizes + compression   -->
+    <!-- ============================================ -->
+
+    <!-- MSBuild property functions cannot stat files, hence inline tasks. -->
+    <UsingTask TaskName="TwoDogWriteSizeManifest" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <Files ParameterType="System.String" Required="true"/>
+            <OutputFile ParameterType="System.String" Required="true"/>
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                var entries = new System.Collections.Generic.List<string>();
+                foreach (var path in Files.Split(';'))
+                {
+                    if (path.Length == 0 || !File.Exists(path)) continue;
+                    entries.Add("\"" + Path.GetFileName(path).Replace("\"", "\\\"") + "\": "
+                        + new FileInfo(path).Length);
+                }
+                File.WriteAllText(OutputFile, "{" + string.Join(", ", entries) + "}\n");
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <UsingTask TaskName="TwoDogPrecompressBundle" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll"
+               Condition="'$(MSBuildRuntimeType)' == 'Core'">
+        <ParameterGroup>
+            <AppDir ParameterType="System.String" Required="true"/>
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.IO.Compression"/>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                // BrotliStream is absent from the netstandard reference set the
+                // inline-task compiler uses, but present in the core-MSBuild
+                // runtime - reach it via reflection. CompressionLevel.Optimal:
+                // brotli q11 (SmallestSize) takes minutes on a large wasm for
+                // a few percent extra.
+                var brotli = Type.GetType("System.IO.Compression.BrotliStream, System.IO.Compression.Brotli");
+                var exts = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                    { ".wasm", ".js", ".pck", ".dat", ".json" };
+                var written = 0;
+                foreach (var file in new DirectoryInfo(AppDir).EnumerateFiles("*", SearchOption.AllDirectories))
+                {
+                    if (!exts.Contains(file.Extension) || file.Length < 4096) continue;
+                    foreach (var suffix in new[] { ".br", ".gz" })
+                    {
+                        if (suffix == ".br" && brotli == null) continue;
+                        var sibling = file.FullName + suffix;
+                        if (File.Exists(sibling) && File.GetLastWriteTimeUtc(sibling) >= file.LastWriteTimeUtc)
+                            continue;
+                        using (var src = file.OpenRead())
+                        using (var dst = File.Create(sibling))
+                        using (var cmp = (Stream)(suffix == ".br"
+                                   ? Activator.CreateInstance(brotli, dst, CompressionLevel.Optimal)
+                                   : new GZipStream(dst, CompressionLevel.Optimal)))
+                            src.CopyTo(cmp);
+                        File.SetLastWriteTimeUtc(sibling, DateTime.UtcNow);
+                        written++;
+                    }
+                }
+                Log.LogMessage(MessageImportance.Normal, "TwoDog: wrote " + written + " precompressed sibling file(s)");
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <!-- Exact decompressed byte sizes for the boot shell's progress bar (the
+         Content-Length header is the compressed size under gzip/brotli).
+         Sidecar file rather than an index.html injection: wwwroot is
+         user-owned content. A missing manifest degrades the shell to an
+         indeterminate bar. -->
+    <Target Name="TwoDogWebWriteSizeManifest"
+            AfterTargets="TwoDogWebFinalizeBundle"
+            DependsOnTargets="TwoDogDeployPack"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebSizeManifest)' == 'true'">
+        <TwoDogWriteSizeManifest Files="$(WasmAppDir)/godot.wasm;$(WasmAppDir)/$(TwoDogWebPackName)"
+                                 OutputFile="$(WasmAppDir)/twodog.sizes.json"/>
+        <Message Importance="normal" Text="TwoDog: wrote twodog.sizes.json (shell progress totals)"/>
+    </Target>
+
+    <!-- .br/.gz siblings for every sizeable payload file. Servers with
+         precompressed-static support (nginx gzip_static/brotli_static, Caddy
+         precompressed, static-web-server) serve them transparently, and the
+         boot shell's opt-in pck fallback fetches godot.pck.gz directly on
+         hosts that compress nothing. Originals always remain, so plain static
+         servers are unaffected. -->
+    <Target Name="TwoDogWebPrecompressBundle"
+            AfterTargets="TwoDogWebWriteSizeManifest"
+            DependsOnTargets="TwoDogDeployPack"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebPrecompress)' == 'true' And '$(MSBuildRuntimeType)' == 'Core'">
+        <TwoDogPrecompressBundle AppDir="$(WasmAppDir)"/>
     </Target>
 </Project>
