@@ -81,18 +81,27 @@ internal static class CsprojPatcher
             added.Add($"DefaultItemExcludes: {string.Join(", ", missingFolders)}");
         }
 
-        // The web bootstrap Compile Include: any existing Compile item ending
-        // in TwoDogWebBoot.cs counts as "already wired" (idempotence, and
-        // custom layouts the author chose are theirs to keep).
+        // The web bootstrap Compile Include: an existing Compile item counts
+        // as "already wired" only when it names the requested path (re-run
+        // idempotence) or points at a file that actually exists (custom
+        // layouts the author chose). A stale Exists-guarded include from a
+        // no-web scaffold must NOT satisfy this - the guard is false, nothing
+        // would compile the bootstrap, and the web host fails at runtime.
         XElement? bootGroup = null;
+        var csprojDir = Path.GetDirectoryName(Path.GetFullPath(csprojPath))!;
         var hasBootInclude = root.Descendants(ns + "Compile")
-            .Any(e => ((string?)e.Attribute("Include"))?
-                .EndsWith("TwoDogWebBoot.cs", StringComparison.OrdinalIgnoreCase) == true);
+            .Select(e => (string?)e.Attribute("Include"))
+            .Where(include => include?.EndsWith("TwoDogWebBoot.cs", StringComparison.OrdinalIgnoreCase) == true)
+            .Any(include => string.Equals(include, webBootPath, StringComparison.OrdinalIgnoreCase)
+                            || File.Exists(Path.Combine(csprojDir, include!.Replace('/', Path.DirectorySeparatorChar))));
         if (webBootPath != null && !hasBootInclude)
         {
             var compile = new XElement(ns + "Compile");
             compile.SetAttributeValue("Include", webBootPath);
-            compile.SetAttributeValue("Condition", $"Exists('{webBootPath}')");
+            // %27 = escaped apostrophe, so a quoted host folder can't break
+            // the condition string.
+            compile.SetAttributeValue("Condition",
+                $"Exists('$(MSBuildThisFileDirectory){webBootPath.Replace("'", "%27")}')");
             bootGroup = new XElement(ns + "ItemGroup",
                 new XText("\n        "), compile, new XText("\n    "));
             added.Add($"Compile Include: {webBootPath}");

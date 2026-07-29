@@ -44,6 +44,15 @@ single-threaded engine build requires no COOP/COEP headers.
 | `TwoDogExportPack` | `true` | Export the Godot project as a `.pck` during publish |
 | `TwoDogWebExportPreset` | `Web` | Export preset name in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack file name |
+| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` (exact wasm/pck sizes) for the boot shell's progress bar |
+| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` / `*.symbols` from the bundle |
+| `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to payload files for servers with precompressed-static support |
+| `TwoDogWebPrecompressLevel` | `Optimal` | `CompressionLevel` for the siblings (`SmallestSize` for final deploys) |
+| `WasmEmitSymbolMap` | `false` | `true` restores `dotnet.native.js.symbols` (downloaded at boot; symbolicates native stack traces) |
+| `WasmInitialHeapSize` | `256MB` | Initial linear memory; growth stays enabled |
+
+See the [web guide](https://2dog.dev/web#loading-performance) for serving and
+loading-performance details.
 
 ## Known limitations
 

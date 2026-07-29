@@ -33,6 +33,9 @@
         TwoDogWebPrecompress:   'false' skips the .br/.gz sibling files
                                 (servers with precompressed-static support and
                                 the shell's gzip pck fallback consume them)
+        TwoDogWebPrecompressLevel: System.IO.Compression.CompressionLevel for
+                                the siblings (default 'Optimal'; 'SmallestSize'
+                                for final deploys)
         WasmEmitSymbolMap:      'true' restores the dotnet.native.js.symbols
                                 emission (~20 MB, downloaded at every boot;
                                 symbolicates native wasm stack traces)
@@ -89,6 +92,9 @@
         <!-- Precompression needs core MSBuild for BrotliStream; wasm publishes
              always run there (the wasm-tools workload requires the CLI). -->
         <TwoDogWebPrecompress Condition="'$(TwoDogWebPrecompress)' == '' And '$(MSBuildRuntimeType)' == 'Core'">true</TwoDogWebPrecompress>
+        <!-- Optimal keeps iterative publishes fast; SmallestSize compresses
+             harder at a much higher publish cost (worth it for final deploys). -->
+        <TwoDogWebPrecompressLevel Condition="'$(TwoDogWebPrecompressLevel)' == ''">Optimal</TwoDogWebPrecompressLevel>
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
         <!-- partial: only assemblies that declare trim-compatibility
@@ -296,8 +302,8 @@
                 foreach (var path in Files.Split(';'))
                 {
                     if (path.Length == 0 || !File.Exists(path)) continue;
-                    entries.Add("\"" + Path.GetFileName(path).Replace("\"", "\\\"") + "\": "
-                        + new FileInfo(path).Length);
+                    var name = Path.GetFileName(path).Replace("\\", "\\\\").Replace("\"", "\\\"");
+                    entries.Add("\"" + name + "\": " + new FileInfo(path).Length);
                 }
                 File.WriteAllText(OutputFile, "{" + string.Join(", ", entries) + "}\n");
             ]]></Code>
@@ -309,39 +315,50 @@
                Condition="'$(MSBuildRuntimeType)' == 'Core'">
         <ParameterGroup>
             <AppDir ParameterType="System.String" Required="true"/>
+            <Level ParameterType="System.String" Required="true"/>
         </ParameterGroup>
         <Task>
             <Using Namespace="System.IO.Compression"/>
+            <Using Namespace="System.Linq"/>
             <Code Type="Fragment" Language="cs"><![CDATA[
                 // BrotliStream is absent from the netstandard reference set the
                 // inline-task compiler uses, but present in the core-MSBuild
-                // runtime - reach it via reflection. CompressionLevel.Optimal:
-                // brotli q11 (SmallestSize) takes minutes on a large wasm for
-                // a few percent extra.
+                // runtime - reach it via reflection.
                 var brotli = Type.GetType("System.IO.Compression.BrotliStream, System.IO.Compression.Brotli");
+                if (brotli == null)
+                    Log.LogWarning("TwoDog: BrotliStream unavailable in this MSBuild runtime; writing only .gz siblings.");
+                var level = (CompressionLevel)Enum.Parse(typeof(CompressionLevel), Level, true);
                 var exts = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                    { ".wasm", ".js", ".pck", ".dat", ".json" };
+                    { ".wasm", ".js", ".pck", ".dat", ".json", ".html" };
                 var written = 0;
-                foreach (var file in new DirectoryInfo(AppDir).EnumerateFiles("*", SearchOption.AllDirectories))
+                // Materialized: the loop writes siblings into the tree being walked.
+                var files = new DirectoryInfo(AppDir).EnumerateFiles("*", SearchOption.AllDirectories)
+                    .Where(f => exts.Contains(f.Extension) && f.Length >= 4096).ToList();
+                foreach (var file in files)
                 {
-                    if (!exts.Contains(file.Extension) || file.Length < 4096) continue;
                     foreach (var suffix in new[] { ".br", ".gz" })
                     {
                         if (suffix == ".br" && brotli == null) continue;
                         var sibling = file.FullName + suffix;
                         if (File.Exists(sibling) && File.GetLastWriteTimeUtc(sibling) >= file.LastWriteTimeUtc)
                             continue;
+                        // Write-then-move: a cancelled build must not leave a
+                        // truncated sibling behind with a fresh timestamp (the
+                        // staleness check above would then skip it forever).
+                        var temp = sibling + ".tmp";
                         using (var src = file.OpenRead())
-                        using (var dst = File.Create(sibling))
+                        using (var dst = File.Create(temp))
                         using (var cmp = (Stream)(suffix == ".br"
-                                   ? Activator.CreateInstance(brotli, dst, CompressionLevel.Optimal)
-                                   : new GZipStream(dst, CompressionLevel.Optimal)))
+                                   ? Activator.CreateInstance(brotli, dst, level)
+                                   : new GZipStream(dst, level)))
                             src.CopyTo(cmp);
+                        File.Delete(sibling); // netstandard File.Move has no overwrite
+                        File.Move(temp, sibling);
                         File.SetLastWriteTimeUtc(sibling, DateTime.UtcNow);
                         written++;
                     }
                 }
-                Log.LogMessage(MessageImportance.Normal, "TwoDog: wrote " + written + " precompressed sibling file(s)");
+                Log.LogMessage(MessageImportance.High, "TwoDog: wrote " + written + " precompressed sibling file(s)");
             ]]></Code>
         </Task>
     </UsingTask>
@@ -370,6 +387,6 @@
             AfterTargets="TwoDogWebWriteSizeManifest"
             DependsOnTargets="TwoDogDeployPack"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebPrecompress)' == 'true' And '$(MSBuildRuntimeType)' == 'Core'">
-        <TwoDogPrecompressBundle AppDir="$(WasmAppDir)"/>
+        <TwoDogPrecompressBundle AppDir="$(WasmAppDir)" Level="$(TwoDogWebPrecompressLevel)"/>
     </Target>
 </Project>
