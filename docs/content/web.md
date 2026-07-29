@@ -95,7 +95,7 @@ All web host properties are optional:
 | `TwoDogWebExportPreset` | `Web` | Export preset name in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack file name |
 | `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` (exact wasm/pck byte sizes); the boot shell reads it to render a determinate progress bar |
-| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` and `*.symbols` from the bundle |
+| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` sourcemaps from the bundle |
 | `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to every sizeable bundle file |
 | `TwoDogWebPrecompressLevel` | `Optimal` | `CompressionLevel` for the siblings; `SmallestSize` compresses harder at higher publish cost |
 | `WasmEmitSymbolMap` | `false` | `true` restores `dotnet.native.js.symbols` (~20 MB, downloaded at every boot) for symbolicated native stack traces |
