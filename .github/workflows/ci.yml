@@ -243,6 +243,10 @@ jobs:
   test:
     name: Test (${{ matrix.name }})
     needs: [pack]
+    # Explicit result check: the implicit success() evaluates the transitive
+    # needs chain, and the (usually) skipped build-natives job would skip this
+    # job too — a green run with zero testing.
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -301,6 +305,8 @@ jobs:
   desktop-smoke:
     name: Desktop Smoke (${{ matrix.name }})
     needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -449,6 +455,8 @@ jobs:
   web-smoke:
     name: Web Smoke (browser-wasm publish)
     needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: blacksmith-8vcpu-ubuntu-2404
     timeout-minutes: 30
 
@@ -606,7 +614,13 @@ jobs:
     needs: [test, desktop-smoke, web-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
-    if: startsWith(github.ref, 'refs/tags/v')
+    # Explicit result checks (not the implicit success()) for the same
+    # transitive-skip reason as the test job — deploy must still require all
+    # three gates to have actually succeeded.
+    if: >-
+      ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') &&
+          needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
+          needs.web-smoke.result == 'success' }}
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing
