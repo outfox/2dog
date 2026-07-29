@@ -26,10 +26,15 @@ permissions:
   contents: write # push the bump commit and tag
   actions: write  # dispatch ci.yml on the new tag
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Bump, Tag, and Push
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 10
 
     steps:
       - name: Verify dispatched from main
