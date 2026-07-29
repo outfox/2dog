@@ -101,7 +101,7 @@ The host also contains:
 | `TwoDogWebExportPreset` | `Web` | Export preset in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
 | `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for the shell's progress bar |
-| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` / `*.symbols` from the bundle |
+| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` sourcemaps from the bundle |
 | `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to payload files |
 
 Loading-performance knobs (`WasmInitialHeapSize`, `WasmEmitSymbolMap`,

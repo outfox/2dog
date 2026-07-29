@@ -28,7 +28,7 @@
         TwoDogWebPackName:      deployed pck file name (default 'godot.pck')
         TwoDogWebSizeManifest:  'false' skips twodog.sizes.json (exact wasm/pck
                                 sizes the boot shell's progress bar reads)
-        TwoDogWebStripMaps:     'false' keeps *.js.map / *.symbols in release
+        TwoDogWebStripMaps:     'false' keeps *.js.map sourcemaps in release
                                 bundles
         TwoDogWebPrecompress:   'false' skips the .br/.gz sibling files
                                 (servers with precompressed-static support and
@@ -191,12 +191,13 @@
               Condition="Exists('$(WasmAppDir)/_framework/dotnet.native.wasm')"/>
         <Delete Files="$(WasmAppDir)/_framework/libgodot.wasm"/>
 
-        <!-- Debug-only artifacts: sourcemaps are fetched with devtools open,
-             *.symbols at every boot (belt-and-braces - WasmEmitSymbolMap
-             already defaults off). -->
+        <!-- Sourcemaps are only fetched with devtools open; safe to strip.
+             *.symbols must NOT be deleted here: dotnet.boot.js is a manifest
+             and mono_download_assets fails the whole boot on any listed asset
+             that 404s. Whether symbols exist is WasmEmitSymbolMap's job - it
+             keeps both the file and its manifest entry out on a fresh relink. -->
         <ItemGroup Condition="'$(TwoDogWebStripMaps)' == 'true'">
             <_TwoDogWebDebugArtifacts Include="$(WasmAppDir)/_framework/*.js.map"/>
-            <_TwoDogWebDebugArtifacts Include="$(WasmAppDir)/_framework/*.symbols"/>
         </ItemGroup>
         <Delete Files="@(_TwoDogWebDebugArtifacts)" Condition="'$(TwoDogWebStripMaps)' == 'true'"/>
 
