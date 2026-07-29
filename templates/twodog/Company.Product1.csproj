@@ -20,6 +20,6 @@
              resolved from the assembly holding the source-generated plugins
              initializer. Inert when the web host is absent. -->
         <Compile Include="Company.Product1.web/TwoDogWebBoot.cs"
-                 Condition="Exists('Company.Product1.web/TwoDogWebBoot.cs')"/>
+                 Condition="Exists('$(MSBuildThisFileDirectory)Company.Product1.web/TwoDogWebBoot.cs')"/>
     </ItemGroup>
 </Project>

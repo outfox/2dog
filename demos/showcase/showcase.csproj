@@ -23,6 +23,6 @@
              resolved from the assembly holding the source-generated plugins
              initializer. -->
         <Compile Include="showcase.web/TwoDogWebBoot.cs"
-                 Condition="Exists('showcase.web/TwoDogWebBoot.cs')"/>
+                 Condition="Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs')"/>
     </ItemGroup>
 </Project>

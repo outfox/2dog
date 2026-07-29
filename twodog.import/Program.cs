@@ -242,7 +242,6 @@ static int ListPack(string path)
 
     var packFlags = f.ReadUInt32();
     var encryptedDirectory = (packFlags & 1) != 0; // PACK_DIR_ENCRYPTED
-    var sparseBundle = (packFlags & 4) != 0;       // PACK_SPARSE_BUNDLE
     if (encryptedDirectory)
     {
         Console.Error.WriteLine($"{path}: pack directory is encrypted; cannot list.");
@@ -253,7 +252,11 @@ static int ListPack(string path)
     if (formatVersion >= 3)
     {
         var directoryOffset = f.ReadUInt64();
-        if (sparseBundle && encryptedDirectory && formatVersion == 4) f.ReadBytes(32); // salt
+        if (directoryOffset >= (ulong)f.BaseStream.Length)
+        {
+            Console.Error.WriteLine($"{path}: corrupt pack (directory offset beyond end of file)");
+            return 1;
+        }
         f.BaseStream.Seek((long)directoryOffset, SeekOrigin.Begin);
     }
     else
@@ -261,11 +264,26 @@ static int ListPack(string path)
         for (var j = 0; j < 16; j++) f.ReadUInt32(); // reserved
     }
 
+    // Bounds against the remaining stream: a corrupt directory should produce
+    // the tidy errors above, not an OOM or an unhandled reader exception.
+    var remaining = f.BaseStream.Length - f.BaseStream.Position;
     var count = f.ReadUInt32();
+    const int minEntryBytes = 4 + 8 + 8 + 16 + 4;
+    if (count > remaining / minEntryBytes)
+    {
+        Console.Error.WriteLine($"{path}: corrupt pack (file count {count} exceeds directory size)");
+        return 1;
+    }
+
     var entries = new List<(string Path, ulong Size)>((int)count);
     for (var j = 0; j < count; j++)
     {
         var pathLength = f.ReadInt32();
+        if (pathLength < 0 || pathLength > f.BaseStream.Length - f.BaseStream.Position)
+        {
+            Console.Error.WriteLine($"{path}: corrupt pack (bad path length in entry {j})");
+            return 1;
+        }
         var filePath = Encoding.UTF8.GetString(f.ReadBytes(pathLength)).TrimEnd('\0');
         f.ReadUInt64(); // offset
         var size = f.ReadUInt64();

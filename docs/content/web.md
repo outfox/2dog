@@ -97,6 +97,7 @@ All web host properties are optional:
 | `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` (exact wasm/pck byte sizes); the boot shell reads it to render a determinate progress bar |
 | `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` and `*.symbols` from the bundle |
 | `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to every sizeable bundle file |
+| `TwoDogWebPrecompressLevel` | `Optimal` | `CompressionLevel` for the siblings; `SmallestSize` compresses harder at higher publish cost |
 | `WasmEmitSymbolMap` | `false` | `true` restores `dotnet.native.js.symbols` (~20 MB, downloaded at every boot) for symbolicated native stack traces |
 | `WasmInitialHeapSize` | `256MB` | Initial linear memory; growth stays enabled. Raise (e.g. `512MB`) for pck-heavy desktop-targeted games, lower toward `128MB` for low-end mobile |
 
@@ -114,26 +115,29 @@ with a progress bar fed by `twodog.sizes.json`.
 
 ### Serve compressed
 
-Compression is the single biggest lever: brotli takes a typical `godot.wasm`
-from ~47 MB to ~13 MB on the wire. Every publish already writes `.br` and
-`.gz` siblings next to the payload files (`TwoDogWebPrecompress`).
+Compression is the single biggest lever for download time. Each publish
+writes `.br` and `.gz` siblings next to the payload files
+(`TwoDogWebPrecompress`; `TwoDogWebPrecompressLevel` defaults to `Optimal`,
+use `SmallestSize` for final deploys). The siblings roughly double the bundle
+on disk - opt out with `-p:TwoDogWebPrecompress=false` where that matters
+(upload-size-limited hosts, CI artifact uploads, deploy pipelines that ship
+the whole `AppBundle`).
 
 - **Dev**: `dotnet serve --directory MyGame.web/AppBundle -z -b` compresses
-  responses on the fly (the siblings are not needed for this).
+  responses on the fly (no siblings needed).
 - **Static hosts / CDNs** (GitHub Pages, statichost.eu, Cloudflare, ...):
   most negotiate gzip or brotli transparently. Probe yours:
   `curl -sI -H 'Accept-Encoding: br, gzip' https://your.host/godot.wasm | grep -i content-encoding`
-- **itch.io**: upload uncompressed; its CDN gzips wasm and pck itself. The
-  `.br`/`.gz` siblings are dead weight in the zip - publish with
-  `-p:TwoDogWebPrecompress=false` for smaller uploads.
-- **Self-hosted**: point nginx (`gzip_static on; brotli_static on;`), Caddy
-  (`file_server { precompressed br gzip }`), or static-web-server at the
-  bundle and the siblings are served as-is with `Content-Encoding`.
+- **itch.io**: upload uncompressed; its CDN gzips wasm and pck itself.
+  Publish with `-p:TwoDogWebPrecompress=false` for smaller uploads.
+- **Self-hosted**: nginx (`gzip_static on; brotli_static on;`), Caddy
+  (`file_server { precompressed br gzip }`), and static-web-server serve the
+  siblings as-is with `Content-Encoding`.
 - **Hosts that compress nothing**: the shell has an opt-in fallback that
-  fetches `godot.pck.gz` and inflates it in the page (`DecompressionStream`).
-  Flip `TWODOG_PCK_GZ` to `true` in `wwwroot/index.html` (and swap the
-  `godot.pck` preload hint for `godot.pck.gz`). The wasm cannot be inflated
-  page-side today, so prefer a host that content-encodes.
+  fetches the `.gz` siblings and inflates them in the page
+  (`DecompressionStream`). Flip `TWODOG_PCK_GZ` to `true` in
+  `wwwroot/index.html` (and swap the `godot.pck` preload hint for
+  `godot.pck.gz`).
 
 ### Diagnosing slow startup
 
@@ -169,6 +173,7 @@ Usual offenders:
 
 `dotnet/include_debug_symbols` in the Web preset does not matter here:
 pack-only web exports carry no assemblies (the host publish supplies them).
+The template preset sets it to `false` so the file does not imply otherwise.
 
 ## Limitations
 

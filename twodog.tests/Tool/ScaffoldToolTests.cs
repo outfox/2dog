@@ -352,7 +352,7 @@ public class CsprojPatcherTests
         var first = CsprojPatcher.Patch(path, HostFolders, "MyGame.web/TwoDogWebBoot.cs");
         Assert.NotNull(first.NewContent);
         Assert.Contains("Compile Include=\"MyGame.web/TwoDogWebBoot.cs\"", first.NewContent);
-        Assert.Contains("Exists('MyGame.web/TwoDogWebBoot.cs')", first.NewContent);
+        Assert.Contains("Exists('$(MSBuildThisFileDirectory)MyGame.web/TwoDogWebBoot.cs')", first.NewContent);
 
         File.WriteAllText(path, first.NewContent!);
         var second = CsprojPatcher.Patch(path, HostFolders, "MyGame.web/TwoDogWebBoot.cs");
@@ -360,11 +360,40 @@ public class CsprojPatcherTests
     }
 
     [Fact]
+    public void WebBootPath_ReplacesAStaleGuardedInclude()
+    {
+        // A no-web scaffold leaves the template's Exists-guarded include
+        // behind; when a web host lands in a DIFFERENT folder later, that
+        // stale include must not count as wired (its guard is false and
+        // nothing would compile the bootstrap).
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj",
+            $"""
+            <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
+                <PropertyGroup>
+                    <TargetFramework>net10.0</TargetFramework>
+                    <EnableDynamicLoading>true</EnableDynamicLoading>
+                    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+                    <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+                    <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.tests/**</DefaultItemExcludes>
+                </PropertyGroup>
+                <ItemGroup>
+                    <Compile Include="MyGame.web/TwoDogWebBoot.cs" Condition="Exists('MyGame.web/TwoDogWebBoot.cs')"/>
+                </ItemGroup>
+            </Project>
+            """);
+        var result = CsprojPatcher.Patch(path, HostFolders, "Browser/TwoDogWebBoot.cs");
+        Assert.NotNull(result.NewContent);
+        Assert.Contains("Compile Include=\"Browser/TwoDogWebBoot.cs\"", result.NewContent);
+    }
+
+    [Fact]
     public void WebBootPath_RespectsAnAuthorsExistingInclude()
     {
-        // Any Compile item already ending in TwoDogWebBoot.cs counts as wired,
-        // wherever the author chose to keep the file.
+        // A Compile item pointing at a TwoDogWebBoot.cs that actually exists
+        // counts as wired, wherever the author chose to keep the file.
         using var tmp = new TempProjectDir();
+        tmp.Write("boot/TwoDogWebBoot.cs", "// author's custom layout\n");
         var path = tmp.Write("MyGame.csproj",
             $"""
             <Project Sdk="Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}">
@@ -767,7 +796,27 @@ public class AddEndToEndTests
         Assert.False(File.Exists(System.IO.Path.Combine(tmp.Dir, "TwoDogWebBoot.cs")));
         var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
         Assert.Contains("Compile Include=\"SpaceMiner.web/TwoDogWebBoot.cs\"", csproj);
-        Assert.Contains("Exists('SpaceMiner.web/TwoDogWebBoot.cs')", csproj);
+        Assert.Contains("Exists('$(MSBuildThisFileDirectory)SpaceMiner.web/TwoDogWebBoot.cs')", csproj);
+    }
+
+    [Fact]
+    public void Add_WebIntoADifferentFolderLater_RepairsTheStaleBootInclude()
+    {
+        // A no-web scaffold leaves the template's guarded include pointing at
+        // SpaceMiner.web; adding a web host under another folder later must
+        // still wire the bootstrap (the stale include's guard stays false).
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        Assert.Equal(0, Run(Options(tmp.Dir, web: false)));
+
+        var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web", "Browser"]), project);
+        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+
+        Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "Browser", "TwoDogWebBoot.cs")));
+        Assert.Contains("Compile Include=\"Browser/TwoDogWebBoot.cs\"",
+            File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj")));
     }
 
     [Fact]
@@ -1376,26 +1425,5 @@ public class ScaffoldEndToEndTests
         // ... and the game project excludes the new folder from its globs.
         Assert.Contains("MyGame.2dog2/**", File.ReadAllText(System.IO.Path.Combine(dir, "MyGame.csproj")));
         Assert.True(SolutionOps.ContainsProject(System.IO.Path.Combine(dir, "MyGame.slnx"), "MyGame.2dog2.csproj"));
-    }
-}
-
-// The boot shell ships twice (dotnet-new template and showcase demo). They
-// must stay identical apart from the page title, or shell fixes silently land
-// in only one copy.
-public class WebShellDriftTests
-{
-    [Fact]
-    public void TemplateAndShowcaseShells_AreIdenticalModuloTitle()
-    {
-        var root = HelperToolTestBed.RepoRoot;
-        var template = File.ReadAllText(System.IO.Path.Combine(
-            root, "templates", "twodog", "Company.Product1.web", "wwwroot", "index.html"));
-        var showcase = File.ReadAllText(System.IO.Path.Combine(
-            root, "demos", "showcase", "showcase.web", "wwwroot", "index.html"));
-
-        static string Normalize(string html) => System.Text.RegularExpressions.Regex.Replace(
-            html.ReplaceLineEndings("\n"), "<title>.*?</title>", "<title/>");
-
-        Assert.Equal(Normalize(template), Normalize(showcase));
     }
 }

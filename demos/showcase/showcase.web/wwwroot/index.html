@@ -125,7 +125,7 @@
             </g>
         </svg>
         <progress id="status-progress"></progress>
-        <div id="status-notice"></div>
+        <div id="status-notice" role="alert"></div>
     </div>
 
     <script src="godot.js"></script>
@@ -198,12 +198,13 @@
             // The gz pack path re-points this at a merged reporter.
             let engineProgress = reportProgress;
 
-            function startWithGzPack(engine, fileSizes) {
+            function startWithGzPack(fileSizes, makeEngine) {
                 return fetch('godot.pck.gz').then((response) => {
                     if (!response.ok || !response.body) {
                         console.warn('2dog: godot.pck.gz unavailable, falling back to godot.pck');
-                        return engine.startGame({});
+                        return makeEngine('').startGame({});
                     }
+                    const engine = makeEngine('.gz');
                     // The engine only downloads the wasm here; this page fetches
                     // and inflates the pack, merging both into one progress bar
                     // (compressed pack bytes against its Content-Length).
@@ -243,6 +244,11 @@
                     text += ' (' + Math.round(total - tail) + ' ms downloading, ' + Math.round(tail) + ' ms starting)';
                 }
                 console.log(text);
+                // Detail table on demand (?2dog-timing). transferSize reads 0
+                // for memory-cache hits - measure with caching disabled.
+                if (!new URLSearchParams(location.search).has('2dog-timing')) {
+                    return;
+                }
                 const rows = performance.getEntriesByType('resource')
                     .filter((entry) => entry.transferSize > 100000)
                     .sort((a, b) => b.transferSize - a.transferSize)
@@ -271,22 +277,28 @@
                 .then((response) => (response.ok ? response.json() : {}))
                 .catch(() => ({}))
                 .then((fileSizes) => {
-                    GODOT_CONFIG['fileSizes'] = fileSizes;
-                    GODOT_CONFIG['onProgress'] = (current, total) => engineProgress(current, total);
-                    // Newer engines also inflate .gz siblings themselves
-                    // (godot.wasm.gz included); older ones ignore this key.
-                    GODOT_CONFIG['precompressedSuffix'] =
-                        TWODOG_PCK_GZ && typeof DecompressionStream !== 'undefined' ? '.gz' : '';
-                    const engine = new Engine(GODOT_CONFIG);
+                    // The suffix decides which files the engine fetches, so
+                    // the Engine is only constructed after the pack probe has
+                    // picked a path - a '.gz'-configured engine in the
+                    // fallback would re-request the sibling that just 404'd.
+                    const makeEngine = (suffix) => {
+                        GODOT_CONFIG['fileSizes'] = fileSizes;
+                        GODOT_CONFIG['onProgress'] = (current, total) => engineProgress(current, total);
+                        // Newer engines also inflate .gz siblings themselves
+                        // (godot.wasm.gz included); older ones ignore this key.
+                        GODOT_CONFIG['precompressedSuffix'] = suffix;
+                        return new Engine(GODOT_CONFIG);
+                    };
                     setStatusMode('progress');
                     const started = TWODOG_PCK_GZ && typeof DecompressionStream !== 'undefined'
-                        ? startWithGzPack(engine, fileSizes)
-                        : engine.startGame({});
-                    started.then(() => {
+                        ? startWithGzPack(fileSizes, makeEngine)
+                        : makeEngine('').startGame({});
+                    return started.then(() => {
                         reportTimings();
                         setStatusMode('hidden');
                     }, displayFailureNotice);
-                });
+                })
+                .catch(displayFailureNotice);
         }());
     </script>
 </body>
