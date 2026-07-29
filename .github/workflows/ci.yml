@@ -42,7 +42,10 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "Godot submodule hash: $HASH"
 
-          if gh release view "godot-$HASH" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          # TEMPORARY wiring test: probe a bogus tag so the caller invokes the
+          # callee; its preflight computes the real hash, finds the release,
+          # and skips. Revert this commit.
+          if gh release view "godot-$HASH-x" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "ready=true" >> $GITHUB_OUTPUT
           else
             echo "::notice::No natives release for godot submodule $HASH — building inline."
