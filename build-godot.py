@@ -426,6 +426,10 @@ def build_libgodot_web(args):
             "library_type=static_library",
             "extra_suffix=static_library",
             "threads=no",
+            # LTO is blocked for web+mono: modules/mono/config.py rejects it,
+            # and emscripten < 4.0.9 (the pinned 3.1.56 matches the .NET
+            # runtime pack) has no thin-LTO. Revisit when the runtime pack's
+            # emscripten moves to 4.x.
             "lto=none",
             "disable_crash_handler=yes",
             "dev_build=no",

@@ -39,9 +39,8 @@ MyGame/                      <- your existing Godot project (unchanged)
   project.godot
   MyGame.csproj              <- created or minimally patched
   MyGame.slnx                <- created, or an existing .sln is migrated
-  TwoDogWebBoot.cs           <- added (web bootstrap, guarded by LIBGODOT_ENABLED)
   MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
-  MyGame.web/    (.gdignore) <- browser (WebAssembly) host
+  MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
   MyGame.tests/  (.gdignore) <- xUnit test project
   MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
 ```

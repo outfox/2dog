@@ -17,4 +17,12 @@
              editor skips them). -->
         <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**;showcase.winforms/**</DefaultItemExcludes>
     </PropertyGroup>
+    <ItemGroup>
+        <!-- Web bootstrap: lives in the web host folder (out of the Godot
+             editor's sight) but must compile into THIS assembly - scripts are
+             resolved from the assembly holding the source-generated plugins
+             initializer. -->
+        <Compile Include="showcase.web/TwoDogWebBoot.cs"
+                 Condition="Exists('showcase.web/TwoDogWebBoot.cs')"/>
+    </ItemGroup>
 </Project>

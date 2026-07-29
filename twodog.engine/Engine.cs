@@ -159,8 +159,9 @@ public class Engine(string project, string? path = null, params string[] args) :
             if (!WebHost.HasPluginsInitializer)
                 throw new InvalidOperationException(
                     $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
-                    "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in the " +
-                    "2dog template; requires the LIBGODOT_ENABLED define) before Start().");
+                    "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in your web " +
+                    "host folder, from the 2dog template; it must compile into the game project, which " +
+                    "requires the LIBGODOT_ENABLED define) before Start().");
             return StartCore();
         }
 
