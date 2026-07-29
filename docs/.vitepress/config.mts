@@ -151,6 +151,7 @@ export default defineConfig({
               }
             ]
           },
+          { text: gd('window_terminal') + 'dnx 2dog', link: '/dnx-2dog' },
           { text: gd('file_arrow_down') + 'Resource Import', link: '/import-tool' },
           { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' }
         ]

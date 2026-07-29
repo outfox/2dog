@@ -96,23 +96,14 @@ Publishing requires `dotnet workload install wasm-tools`. See
 
 ## Versions
 
-`2dog version` prints the tool version together with the package versions a
-scaffold references - the `2dog`/`2dog.engine`/`2dog.xunit` line, the native
-binary packages (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`,
-`2dog.browser-wasm`, `2dog.tools`), and the embedded `Godot.NET.Sdk`:
-
-```text
-2dog 4.7.1.59 - https://2dog.dev
-
-tool + packages  4.7.1.59    2dog, 2dog.engine, 2dog.xunit
-native binaries  4.7.1.31    2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools
-Godot SDK        4.7.1       Godot.NET.Sdk, GodotSharp
-```
+`2dog version` prints the tool version together with the versions of every
+package a scaffold references; the [dnx 2dog reference](/dnx-2dog#versions-and-pinning)
+shows the output.
 
 ::: warning --version under dnx
 `dnx 2dog --version` never reaches the tool: `--version <VERSION>` is `dnx`'s
 own option and selects which version of the `2dog` package to download and run.
-Use `dnx 2dog version` to print versions, and `dnx 2dog@4.7.1.59` (or the
+Use `dnx 2dog version` to print versions, and `dnx 2dog@:2dog-version:` (or the
 `--version` option) to run a specific tool version.
 :::
 
