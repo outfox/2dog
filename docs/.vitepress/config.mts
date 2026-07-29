@@ -107,7 +107,7 @@ export default defineConfig({
         text: 'Hosts',
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
-          { text: gd('margincontainer') + '2dog (generic)', link: '/hosts/generic' },
+          { text: gd('margincontainer') + '2dog (generic host)', link: '/hosts/generic' },
           { text: gd('globe') + 'Browser', link: '/hosts/web' },
           { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' },
           { text: gd('window') + 'WinForms', link: '/hosts/winforms' }
@@ -116,6 +116,7 @@ export default defineConfig({
       {
         text: 'Develop',
         items: [
+          { text: gd('window_terminal') + '2dog (dotnet tool)', link: '/dnx-2dog' },
           {
             text: gd('book_open') + 'API Reference',
             link: '/api-reference',
@@ -151,7 +152,6 @@ export default defineConfig({
               }
             ]
           },
-          { text: gd('window_terminal') + 'dnx 2dog', link: '/dnx-2dog' },
           { text: gd('file_arrow_down') + 'Resource Import', link: '/import-tool' },
           { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' }
         ]
@@ -167,7 +167,6 @@ export default defineConfig({
         text: 'Other',
         items: [
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
-          { text: gd('archive') + 'Misc', link: '/misc' },
           {
             text: gd('bug') + 'Known Issues',
             link: '/known-issues/',
@@ -177,7 +176,8 @@ export default defineConfig({
               { text: gd('magnifying_glass') + 'xUnit Test Discovery', link: '/known-issues/xunit-discovery' },
               { text: gd('window_terminal') + 'GD.Print in Tests', link: '/known-issues/gd-print-output' }
             ]
-          }
+          },
+          { text: gd('archive') + 'Misc', link: '/misc' },
         ]
       }
     ],

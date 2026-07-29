@@ -3,7 +3,7 @@ title: dnx 2dog
 description: "Reference for the 2dog command-line tool - installation, commands, host flags, options, and version pinning."
 ---
 
-# dnx 2dog
+# `dotnet tool execute 2dog`
 
 `2dog` is the command-line tool that scaffolds .NET host projects around a
 Godot project: your project directory becomes the solution root, and desktop,
@@ -43,7 +43,7 @@ to add, show their plan, and wait for confirmation. Any host flag, `--yes`, or
 | `2dog add [path]` | Add hosts to an existing Godot project |
 | `2dog convert [path]` | Alias of `add` for a project with no hosts yet |
 | `2dog pack list <file.pck>` | List a `.pck`'s contents by size (no engine involved) |
-| `2dog version` | Print the tool version and the versions of every package it references |
+| `2dog version` | Print the tool and referenced package versions |
 | `2dog help` | Show usage |
 
 ## Inspecting packs
