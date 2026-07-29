@@ -9,31 +9,23 @@ on:
       - '*.md'
   # No pull_request trigger: push already runs on every branch, so a PR
   # would run CI twice. Caveat: PRs from forks get no CI without it.
-  workflow_run:
-    # Must match build-natives.yml's display name exactly.
-    workflows: ["2dog Build Natives"]
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }} # never cancel tag/deploy runs
+
 permissions:
-  contents: read # jobs that need more (check-natives, deploy) declare their own
+  contents: read # jobs that need more (build-natives, deploy) declare their own
 
 jobs:
-  # Check if native libraries are available before running the full pipeline.
-  # When they are missing, this job dispatches build-natives.yml itself
-  # (workflow_dispatch is exempt from GitHub's anti-recursion rule for
-  # GITHUB_TOKEN, same mechanism release.yml uses) and outputs ready=false so
-  # downstream jobs are skipped (green badge) instead of cancelled (red badge).
-  # On main, the workflow_run trigger above re-runs CI when the build finishes;
-  # PR and tag runs must be re-run manually once natives exist.
+  # Pure gate: compute the godot submodule hash and check whether a pre-built
+  # godot-<hash> natives release exists. When it is missing, the build-natives
+  # job below builds it inline, so every run self-heals in a single run graph.
   check-natives:
     name: Check Native Libraries
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    permissions:
-      contents: read
-      actions: write # dispatch build-natives.yml when natives are missing
+    timeout-minutes: 5
     outputs:
       ready: ${{ steps.check.outputs.ready }}
       hash: ${{ steps.check.outputs.hash }}
@@ -50,42 +42,45 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "Godot submodule hash: $HASH"
 
-          TAG="godot-$HASH"
-          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          if gh release view "godot-$HASH" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "ready=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          # The ref the natives should be built from: PR head branch for
-          # pull_request events, otherwise the pushed branch or tag.
-          REF="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-
-          # A build may already be running: push-triggered on main (submodule
-          # bump) or dispatched on this ref by an earlier run of this job.
-          BUILDING=$(gh run list -w build-natives.yml --json status,headBranch \
-            -q "[.[] | select((.status == \"in_progress\" or .status == \"queued\") and (.headBranch == \"main\" or .headBranch == \"$REF\"))] | length")
-          if [ "$BUILDING" -gt 0 ]; then
-            echo "::notice::Native build in progress — skipping CI. On main it re-triggers automatically when the build completes; re-run this workflow manually for PR/tag runs."
-            echo "ready=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          if gh workflow run build-natives.yml --repo "$GITHUB_REPOSITORY" --ref "$REF"; then
-            echo "::notice::No native build for godot submodule $HASH — dispatched the '2dog Build Natives' workflow on '$REF'. On main, CI re-triggers automatically when it completes; re-run this workflow manually for PR/tag runs."
-            echo "ready=false" >> $GITHUB_OUTPUT
           else
-            echo "::error::No native build for godot submodule $HASH and dispatching the native build failed (fork PR?). Run the '2dog Build Natives' workflow manually."
-            exit 1
+            echo "::notice::No natives release for godot submodule $HASH — building inline."
+            echo "ready=false" >> $GITHUB_OUTPUT
           fi
+
+  # Build missing natives inline via the reusable workflow. The concurrency
+  # group makes a second run that needs the same hash wait instead of building
+  # twice; when it proceeds, the callee's preflight finds the release and
+  # skips. Deliberately distinct from the callee release job's group
+  # (natives-release-*): sharing it would deadlock, since this caller job
+  # holds its group for the callee's entire duration.
+  build-natives:
+    name: Build Natives
+    needs: [check-natives]
+    if: needs.check-natives.outputs.ready != 'true'
+    permissions:
+      contents: write # callee's release job creates the godot-<hash> release
+    concurrency:
+      group: natives-build-${{ needs.check-natives.outputs.hash }}
+      cancel-in-progress: false
+    uses: ./.github/workflows/build-natives.yml
+    with:
+      create_release: true
 
   # Download pre-built native libraries, stage godot/bin, and pack all
   # NuGet packages for the test jobs. The game project is imported by the
   # test jobs themselves via the automatic MSBuild import step.
   pack:
     name: Pack NuGet Packages
-    needs: [check-natives]
-    if: needs.check-natives.outputs.ready == 'true'
+    needs: [check-natives, build-natives]
+    # Skip-tolerant gate, not always(): run when build-natives succeeded or was
+    # skipped (natives already existed), never after a failed natives build.
+    if: >-
+      !cancelled() && needs.check-natives.result == 'success' &&
+      (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped')
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -248,6 +243,10 @@ jobs:
   test:
     name: Test (${{ matrix.name }})
     needs: [pack]
+    # Explicit result check: the implicit success() evaluates the transitive
+    # needs chain, and the (usually) skipped build-natives job would skip this
+    # job too — a green run with zero testing.
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -306,6 +305,8 @@ jobs:
   desktop-smoke:
     name: Desktop Smoke (${{ matrix.name }})
     needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -454,6 +455,8 @@ jobs:
   web-smoke:
     name: Web Smoke (browser-wasm publish)
     needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: blacksmith-8vcpu-ubuntu-2404
     timeout-minutes: 30
 
@@ -610,7 +613,14 @@ jobs:
     # because it is the only check that runs a Release-only publish.
     needs: [test, desktop-smoke, web-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    if: startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 15
+    # Explicit result checks (not the implicit success()) for the same
+    # transitive-skip reason as the test job — deploy must still require all
+    # three gates to have actually succeeded.
+    if: >-
+      ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') &&
+          needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
+          needs.web-smoke.result == 'success' }}
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing

@@ -1,8 +1,20 @@
-# ci.yml's workflow_run trigger references this workflow by its display name.
-# If you rename it, update ci.yml or the CI re-trigger silently stops firing.
 name: 2dog Build Natives
 
+# Reusable workflow: ci.yml calls it when the godot-<hash> natives release is
+# missing; workflow_dispatch remains for manual force rebuilds. The inputs are
+# declared under both triggers — workflow_call and workflow_dispatch have
+# separate input schemas.
 on:
+  workflow_call:
+    inputs:
+      create_release:
+        description: 'Create GitHub release'
+        type: boolean
+        default: true
+      force:
+        description: 'Force rebuild even if release exists'
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       create_release:
@@ -13,11 +25,6 @@ on:
         description: 'Force rebuild even if release exists'
         type: boolean
         default: false
-  push:
-    branches: [main]
-    paths:
-      - 'godot'
-      - 'build-godot.py'
 
 permissions:
   contents: write
@@ -27,6 +34,7 @@ jobs:
   preflight:
     name: Preflight
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 5
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
       skip: ${{ steps.check-release.outputs.skip }}
@@ -48,7 +56,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="godot-${{ steps.hash.outputs.hash }}"
-          FORCE="${{ github.event.inputs.force }}"
+          # `inputs`, not `github.event.inputs`: in workflow_call mode the
+          # github.event* context belongs to the caller's triggering event.
+          FORCE="${{ inputs.force }}"
           if [ "$FORCE" != "true" ] && gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "Release $TAG already exists — skipping builds"
             echo "skip=true" >> $GITHUB_OUTPUT
@@ -63,6 +73,7 @@ jobs:
     needs: preflight
     if: needs.preflight.outputs.skip != 'true'
     runs-on: blacksmith-8vcpu-ubuntu-2404
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -159,6 +170,8 @@ jobs:
     needs: preflight
     if: needs.preflight.outputs.skip != 'true'
     runs-on: ${{ matrix.runner }}
+    # A cold SCons cache is far slower than the warm ~7 min wall time.
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
@@ -315,10 +328,21 @@ jobs:
   release:
     name: Create Release
     needs: [preflight, build-godotsharp, build-natives]
-    if: needs.preflight.outputs.skip != 'true' && (github.event_name != 'workflow_dispatch' || github.event.inputs.create_release == 'true')
+    # Gate on the `inputs` context only: github.event* belongs to the caller's
+    # event in workflow_call mode and would silently skip this job there.
+    if: needs.preflight.outputs.skip != 'true' && inputs.create_release
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 15
+    # Serialize the delete+create against concurrent creators of the same hash
+    # (including manual force dispatches).
+    concurrency:
+      group: natives-release-${{ needs.preflight.outputs.submodule-hash }}
+      cancel-in-progress: false
 
     steps:
+      # In workflow_call mode this downloads all artifacts of the *caller's*
+      # run. Safe only because `needs` orders this job strictly before ci.yml's
+      # pack job uploads its own artifacts.
       - name: Download all artifacts
         uses: actions/download-artifact@v8
         with:
@@ -347,6 +371,7 @@ jobs:
           gh release create "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
             --latest=false \
+            --prerelease \
             --title "Godot Native Libraries ($TAG)" \
             --notes "$(cat <<'EOF'
           ## Native Libraries for Godot submodule ${{ needs.preflight.outputs.submodule-hash }}
@@ -367,3 +392,18 @@ jobs:
           EOF
           )" \
             release-assets/*
+
+      # Keep only the newest 5 godot-* cache releases; --cleanup-tag also
+      # removes the side-effect git tag gh release create left behind.
+      # Accepted consequence: a long-lived branch whose hash was pruned
+      # rebuilds inline on its next push.
+      - name: Prune old native releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,createdAt \
+            -q '[.[] | select(.tagName | startswith("godot-"))] | sort_by(.createdAt) | reverse | .[5:] | .[].tagName' |
+          while read -r tag; do
+            echo "Pruning $tag"
+            gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+          done
