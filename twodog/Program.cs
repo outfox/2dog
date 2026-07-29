@@ -17,7 +17,7 @@ internal static class Program
                     PrintUsage();
                     return 0;
                 case Verb.Version:
-                    Console.WriteLine(ToolVersions.TwoDogVersion);
+                    PrintVersion();
                     return 0;
                 default:
                     return Execute(cmd);
@@ -110,6 +110,19 @@ internal static class Program
     internal static bool IsEmpty(string dir) =>
         !Directory.Exists(dir) || Directory.EnumerateFileSystemEntries(dir).All(e => Path.GetFileName(e).StartsWith('.'));
 
+    /// <summary>The tool version, then every package the scaffolded projects reference.</summary>
+    private static void PrintVersion()
+    {
+        Console.WriteLine(
+            $"""
+             2dog {ToolVersions.TwoDogVersion} - https://2dog.dev
+
+             tool + packages  {ToolVersions.TwoDogVersion,-10}  2dog, 2dog.engine, 2dog.xunit
+             native binaries  {ToolVersions.NativesVersion,-10}  2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools
+             Godot SDK        {ToolVersions.GodotSdkVersion,-10}  Godot.NET.Sdk, GodotSharp
+             """);
+    }
+
     private static void PrintUsage()
     {
         Console.WriteLine(
@@ -129,6 +142,7 @@ internal static class Program
                new [Name] [dir]  Create a new Godot project with 2dog hosts
                add [path]        Add hosts to an existing Godot project
                convert [path]    Alias of add, for projects that have no hosts yet
+               version           Print tool and package versions
 
              Without any host option the tool asks interactively; run it again to
              add more hosts, including a second host of the same kind.
@@ -151,7 +165,9 @@ internal static class Program
                --force             Overwrite files that already exist (never deletes)
                --no-restore        Skip the final 'dotnet restore'
                --verbose           Extra output
-               --version           Print the tool version
+               --version           Print tool and package versions; under dnx use
+                                   '2dog version' (dnx consumes --version itself,
+                                   to pin the tool version: 'dnx 2dog@<version>')
 
              examples
                2dog                          # interactive, here

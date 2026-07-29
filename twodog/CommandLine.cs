@@ -58,6 +58,10 @@ internal static class CommandLine
                     break;
                 case "help":
                     return new ParsedCommand { Verb = Verb.Help };
+                // A verb besides the flag: `dnx 2dog --version` never reaches the
+                // tool (dnx consumes --version itself), `dnx 2dog version` does.
+                case "version":
+                    return new ParsedCommand { Verb = Verb.Version };
             }
         }
 
@@ -71,6 +75,16 @@ internal static class CommandLine
                     return new ParsedCommand { Verb = Verb.Help };
                 case "--version":
                     return new ParsedCommand { Verb = Verb.Version };
+                // Which tool version runs is decided by the launcher before 2dog
+                // starts; point at the spellings that actually pin it.
+                case "--pin":
+                {
+                    var version = queue.Count > 0 && !queue.Peek().StartsWith('-') ? queue.Dequeue() : "<version>";
+                    throw new ToolException(
+                        "2dog cannot pin its own version - by the time it runs, the version is already chosen. " +
+                        $"Pin it where the tool is launched: 'dnx 2dog@{version}' " +
+                        $"or 'dotnet tool install -g 2dog --version {version}'.");
+                }
 
                 case "--name" or "-n":
                     cmd.Options.NameOverride = Value(queue, arg);

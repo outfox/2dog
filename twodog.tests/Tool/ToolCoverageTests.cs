@@ -9,6 +9,8 @@ public class ProgramTests
     {
         Assert.Equal(0, Program.Main(["help"]));
         Assert.Equal(0, Program.Main(["--version"]));
+        Assert.Equal(0, Program.Main(["version"]));
+        Assert.Equal(2, Program.Main(["--pin", "1.2.3"]));
         Assert.Equal(1, Program.Main(["--unknown"]));
         Assert.Equal(1, Program.Main(["new", "--desktop"]));
 

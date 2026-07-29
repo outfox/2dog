@@ -1019,6 +1019,20 @@ public class CommandLineTests
         Assert.Equal(Verb.Help, CommandLine.Parse(["help"]).Verb);
         Assert.Equal(Verb.Help, CommandLine.Parse(["add", "--help"]).Verb);
         Assert.Equal(Verb.Version, CommandLine.Parse(["--version"]).Verb);
+        Assert.Equal(Verb.Version, CommandLine.Parse(["version"]).Verb);
+    }
+
+    // --pin does not exist in the tool: pinning happens in the launcher (dnx /
+    // dotnet tool install) before 2dog runs, so the flag explains just that.
+    [Fact]
+    public void Pin_ExplainsLauncherPinning()
+    {
+        var ex = Assert.Throws<ToolException>(() => CommandLine.Parse(["--pin", "4.7.1.42"]));
+        Assert.Contains("dnx 2dog@4.7.1.42", ex.Message);
+        Assert.Contains("--version 4.7.1.42", ex.Message);
+
+        ex = Assert.Throws<ToolException>(() => CommandLine.Parse(["--pin"]));
+        Assert.Contains("dnx 2dog@<version>", ex.Message);
     }
 
     // A command line that answers the questions itself never prompts - not for
