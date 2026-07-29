@@ -19,14 +19,14 @@ Run it without installing anything (.NET 10+ SDK):
 
 ```bash
 cd path/to/your/godot/project
-dnx 2dog
+dnx 2dog add
 ```
 
 Or install the command globally:
 
 ```bash
 dotnet tool install -g 2dog
-2dog
+2dog add
 ```
 
 With a `project.godot` in the current directory, the tool asks which hosts to

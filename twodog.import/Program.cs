@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using twodog.pck;
 
 string? editorPath = null;
 string? libgodotPath = null;
@@ -51,8 +52,9 @@ projectPath = projectPath != null ? Path.GetFullPath(projectPath) : null;
 exportOutput = exportOutput != null ? Path.GetFullPath(exportOutput) : null;
 
 // Pure file-format work ("why is my pck 99 MiB?"): no engine, no project.
+// The GDPC reader itself lives in GdpcPack.cs, shared with the 2dog tool.
 if (listPackPath != null)
-    return ListPack(listPackPath);
+    return GdpcPack.ListToConsole(listPackPath);
 
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
     (editorPath == null && libgodotPath == null) ||
@@ -208,97 +210,6 @@ static void SetEnv(string name, string value)
     Environment.SetEnvironmentVariable(name, value);
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         setenv(name, value, 1);
-}
-
-// GDPC directory layout, mirroring PackedSourcePCK::try_open_pack
-// (core/io/file_access_pack.cpp): magic, format version, engine version
-// triple, pack flags, file base; v3/v4 then carry a directory offset (plus a
-// 32-byte salt for encrypted sparse bundles), v2 sixteen reserved u32s; the
-// directory is count followed by (padded path, offset, size, md5, flags).
-static int ListPack(string path)
-{
-    if (!File.Exists(path))
-    {
-        Console.Error.WriteLine($"Pack not found: {path}");
-        return 1;
-    }
-
-    using var f = new BinaryReader(File.OpenRead(path));
-    if (f.ReadUInt32() != 0x43504447) // 'GDPC'
-    {
-        Console.Error.WriteLine($"{path}: not a Godot .pck (bad magic; embedded packs are not supported)");
-        return 1;
-    }
-
-    var formatVersion = f.ReadUInt32();
-    var major = f.ReadUInt32();
-    var minor = f.ReadUInt32();
-    f.ReadUInt32(); // patch
-    if (formatVersion is < 2 or > 4)
-    {
-        Console.Error.WriteLine($"{path}: unsupported pack format v{formatVersion}");
-        return 1;
-    }
-
-    var packFlags = f.ReadUInt32();
-    var encryptedDirectory = (packFlags & 1) != 0; // PACK_DIR_ENCRYPTED
-    if (encryptedDirectory)
-    {
-        Console.Error.WriteLine($"{path}: pack directory is encrypted; cannot list.");
-        return 1;
-    }
-
-    f.ReadUInt64(); // file base
-    if (formatVersion >= 3)
-    {
-        var directoryOffset = f.ReadUInt64();
-        if (directoryOffset >= (ulong)f.BaseStream.Length)
-        {
-            Console.Error.WriteLine($"{path}: corrupt pack (directory offset beyond end of file)");
-            return 1;
-        }
-        f.BaseStream.Seek((long)directoryOffset, SeekOrigin.Begin);
-    }
-    else
-    {
-        for (var j = 0; j < 16; j++) f.ReadUInt32(); // reserved
-    }
-
-    // Bounds against the remaining stream: a corrupt directory should produce
-    // the tidy errors above, not an OOM or an unhandled reader exception.
-    var remaining = f.BaseStream.Length - f.BaseStream.Position;
-    var count = f.ReadUInt32();
-    const int minEntryBytes = 4 + 8 + 8 + 16 + 4;
-    if (count > remaining / minEntryBytes)
-    {
-        Console.Error.WriteLine($"{path}: corrupt pack (file count {count} exceeds directory size)");
-        return 1;
-    }
-
-    var entries = new List<(string Path, ulong Size)>((int)count);
-    for (var j = 0; j < count; j++)
-    {
-        var pathLength = f.ReadInt32();
-        if (pathLength < 0 || pathLength > f.BaseStream.Length - f.BaseStream.Position)
-        {
-            Console.Error.WriteLine($"{path}: corrupt pack (bad path length in entry {j})");
-            return 1;
-        }
-        var filePath = Encoding.UTF8.GetString(f.ReadBytes(pathLength)).TrimEnd('\0');
-        f.ReadUInt64(); // offset
-        var size = f.ReadUInt64();
-        f.ReadBytes(16); // md5
-        var flags = f.ReadUInt32();
-        if ((flags & 2) != 0) continue; // PACK_FILE_REMOVAL
-        entries.Add((filePath, size));
-    }
-
-    var totalBytes = entries.Aggregate(0UL, (acc, e) => acc + e.Size);
-    Console.WriteLine($"{path}: pack format v{formatVersion} (Godot {major}.{minor}), " +
-                      $"{entries.Count} file(s), {totalBytes / 1048576.0:F1} MiB content");
-    foreach (var (filePath, size) in entries.OrderByDescending(e => e.Size))
-        Console.WriteLine($"{size,12:N0}  {filePath}");
-    return 0;
 }
 
 static FileStream? AcquireLock(string path, TimeSpan timeout)

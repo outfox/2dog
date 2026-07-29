@@ -32,7 +32,7 @@ Add [hosts](/hosts/) around an existing project, or start fresh:
 ```bash [Existing Project]
 # Existing game content stays where it is.
 cd path/to/MyGame
-dnx 2dog
+dnx 2dog add
 ```
 
 ```bash [Fresh Project]

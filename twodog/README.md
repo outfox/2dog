@@ -11,7 +11,7 @@ This one package is both a dotnet tool and a `dotnet new` template package.
 One-shot (no install, .NET 10+):
 
 ```bash
-dnx 2dog             # in a Godot project: add hosts; elsewhere: create one
+dnx 2dog add         # add hosts to the Godot project here
 dnx 2dog new MyGame  # a new Godot project with 2dog hosts
 ```
 
@@ -19,7 +19,7 @@ Or install the `2dog` command globally:
 
 ```bash
 dotnet tool install -g 2dog
-2dog
+2dog add
 ```
 
 With no host options the tool prompts: a checkbox list of hosts, editable
@@ -53,10 +53,11 @@ Commands:
 
 | Command | Effect |
 | --- | --- |
-| `2dog` | Add hosts here, or create a project if there is none |
+| `2dog` | Print version info and usage |
 | `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
 | `2dog add [path]` | Add hosts to an existing Godot project |
 | `2dog convert [path]` | Alias of `add`, for projects that have no hosts yet |
+| `2dog pack list <file.pck>` | List a `.pck`'s contents by size (no engine involved) |
 
 Options:
 

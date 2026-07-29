@@ -7,6 +7,7 @@ public class ProgramTests
     [Fact]
     public void Main_HandlesHelpVersionAndUserErrors()
     {
+        Assert.Equal(0, Program.Main([]));
         Assert.Equal(0, Program.Main(["help"]));
         Assert.Equal(0, Program.Main(["--version"]));
         Assert.Equal(0, Program.Main(["version"]));
@@ -29,28 +30,15 @@ public class ProgramTests
         Assert.False(File.Exists(Path.Combine(tmp.Dir, "MyGame.csproj")));
     }
 
+    // Bare `2dog` shows version info + usage; anything more without a verb is
+    // an error (the old create-vs-add auto-detection is gone).
     [Fact]
-    public void ResolveVerb_AutoDetectsExistingProjectsAndRejectsUnattendedCreation()
+    public void VerblessArguments_AreUsageErrors()
     {
-        using var tmp = new TempProjectDir();
-        var cmd = CommandLine.Parse([tmp.Dir]);
-
-        Assert.Throws<ToolException>(() => Program.ResolveVerb(cmd, interactive: false));
-
-        tmp.Write("project.godot", "config_version=5\n");
-        Assert.Equal(Verb.Add, Program.ResolveVerb(cmd, interactive: false));
-        Assert.Equal(Verb.Add, Program.ResolveVerb(CommandLine.Parse(["add", tmp.Dir]), interactive: false));
-    }
-
-    [Fact]
-    public void ResolveVerb_InteractiveAutoTreatsThePositionalAsOutputDirectory()
-    {
-        using var tmp = new TempProjectDir();
-        var output = Path.Combine(tmp.Dir, "new-game");
-        var cmd = CommandLine.Parse([output]);
-
-        Assert.Equal(Verb.New, Program.ResolveVerb(cmd, interactive: true));
-        Assert.Equal(output, cmd.OutputDir);
+        Assert.Equal(Verb.None, CommandLine.Parse([]).Verb);
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["some/path"]));
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["--desktop"]));
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["--yes"]));
     }
 
     [Fact]

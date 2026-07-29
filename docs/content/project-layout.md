@@ -109,7 +109,7 @@ The hosts' `.gdignore` files hide them from the editor, importer, and exporter.
 For an existing project, conversion adds the hosts around your current files:
 
 ```bash
-cd path/to/MyGame && dnx 2dog
+cd path/to/MyGame && dnx 2dog add
 ```
 
 For a fresh project, the same tool creates the game and hosts together:

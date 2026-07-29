@@ -19,31 +19,43 @@ No installation needed - `dnx` (part of the .NET 10 SDK) downloads and runs
 the latest version:
 
 ```bash
-dnx 2dog
+dnx 2dog add
 ```
 
 Or install it as a global tool:
 
 ```bash
 dotnet tool install -g 2dog
-2dog
+2dog add
 ```
 
-Run without any host flags, the tool is interactive: it detects whether the
-directory holds a Godot project, asks which hosts to add, shows its plan, and
-waits for confirmation. Any host flag, `--yes`, or `--non-interactive` turns
-the prompts off for scripts and CI.
+Run without a verb, `2dog` prints its version info and usage. `2dog new` and
+`2dog add` are interactive when no host flags are given: they ask which hosts
+to add, show their plan, and wait for confirmation. Any host flag, `--yes`, or
+`--non-interactive` turns the prompts off for scripts and CI.
 
 ## Commands
 
 | Command | Effect |
 | --- | --- |
-| `2dog` | Add hosts to the Godot project here, or create a project if there is none |
+| `2dog` | Print version info and usage |
 | `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
 | `2dog add [path]` | Add hosts to an existing Godot project |
 | `2dog convert [path]` | Alias of `add` for a project with no hosts yet |
+| `2dog pack list <file.pck>` | List a `.pck`'s contents by size (no engine involved) |
 | `2dog version` | Print the tool version and the versions of every package it references |
 | `2dog help` | Show usage |
+
+## Inspecting packs
+
+`2dog pack list` parses a pack's directory straight from the file - no engine,
+no project - and prints every entry sorted by size. Useful to answer "why is my
+pck 99 MiB?" or to confirm an asset (say, a fallback font) actually made it
+into a [web publish](/web):
+
+```bash
+2dog pack list MyGame.web/AppBundle/godot.pck
+```
 
 ## Host flags
 

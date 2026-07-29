@@ -23,7 +23,7 @@
         <PackageId>2dog</PackageId>
         <PackageType>DotnetTool;Template</PackageType>
         <Version>$(TwoDogVersion)</Version>
-        <Description>2dog command-line tool and project templates. `dnx 2dog` interactively creates a Godot project with .NET hosts, or adds hosts (desktop, browser-wasm, xUnit, WinForms) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
+        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
@@ -38,6 +38,12 @@
          that way so `dnx 2dog` stays a small download. -->
     <ItemGroup>
         <PackageReference Include="Spectre.Console" Version="0.57.2"/>
+    </ItemGroup>
+
+    <!-- The GDPC pack reader behind `2dog pack list`, shared with the
+         twodog.import helper's list-pack mode. -->
+    <ItemGroup>
+        <Compile Include="../twodog.import/GdpcPack.cs" Link="GdpcPack.cs"/>
     </ItemGroup>
 
     <!-- The versions the tool scaffolds with, baked in at build time -->

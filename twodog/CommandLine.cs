@@ -2,10 +2,11 @@ namespace twodog.cli;
 
 internal enum Verb
 {
-    /// <summary>No verb given: create or add, depending on what is here.</summary>
-    Auto,
+    /// <summary>No arguments at all: print version info and usage.</summary>
+    None,
     New,
     Add,
+    Pack,
     Help,
     Version,
 }
@@ -16,11 +17,14 @@ internal sealed record HostRequest(HostKind Kind, string? Folder);
 /// <summary>The parsed command line.</summary>
 internal sealed class ParsedCommand
 {
-    public Verb Verb = Verb.Auto;
+    public Verb Verb = Verb.None;
     public ScaffoldOptions Options = new();
     public List<HostRequest> Requested = [];
     public HashSet<HostKind> Excluded = [];
     public string? OutputDir;
+
+    /// <summary>The .pck file a pack operation works on.</summary>
+    public string? PackFile;
 
     /// <summary>Never prompt: take the flags and the defaults as given.</summary>
     public bool NoInteractive;
@@ -54,6 +58,10 @@ internal static class CommandLine
                     break;
                 case "add" or "convert":
                     cmd.Verb = Verb.Add;
+                    queue.Dequeue();
+                    break;
+                case "pack":
+                    cmd.Verb = Verb.Pack;
                     queue.Dequeue();
                     break;
                 case "help":
@@ -144,13 +152,18 @@ internal static class CommandLine
             }
         }
 
+        // Verbless argument lines used to auto-detect create-vs-add; now they
+        // are errors, and a bare `2dog` prints version info and usage instead.
+        if (cmd.Verb == Verb.None && args.Length > 0)
+            throw new UsageException("a verb is required: new, add, convert, or pack");
+
         AssignPositionals(cmd, positionals);
         return cmd;
     }
 
     /// <summary>
-    /// `2dog new [Name] [directory]`; every other form takes a project
-    /// directory.
+    /// `2dog new [Name] [directory]`, `2dog pack <operation> <file.pck>`;
+    /// every other form takes a project directory.
     /// </summary>
     private static void AssignPositionals(ParsedCommand cmd, List<string> positionals)
     {
@@ -159,6 +172,17 @@ internal static class CommandLine
             if (positionals.Count > 2) throw new UsageException("2dog new takes at most a name and a directory");
             if (positionals.Count > 0) cmd.Options.NameOverride ??= positionals[0];
             if (positionals.Count > 1) cmd.OutputDir ??= positionals[1];
+            return;
+        }
+
+        if (cmd.Verb == Verb.Pack)
+        {
+            if (positionals.Count == 0) throw new UsageException("2dog pack needs an operation: list");
+            if (positionals[0] != "list")
+                throw new UsageException($"unknown pack operation '{positionals[0]}' (supported: list)");
+            if (positionals.Count < 2) throw new UsageException("2dog pack list needs a .pck file");
+            if (positionals.Count > 2) throw new UsageException("2dog pack list takes one .pck file");
+            cmd.PackFile = positionals[1];
             return;
         }
 

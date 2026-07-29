@@ -1095,10 +1095,10 @@ public class HostScanTests
 public class CommandLineTests
 {
     [Fact]
-    public void NoArguments_MeanInteractiveAuto()
+    public void NoArguments_MeanVersionInfoPlusUsage()
     {
         var cmd = CommandLine.Parse([]);
-        Assert.Equal(Verb.Auto, cmd.Verb);
+        Assert.Equal(Verb.None, cmd.Verb);
         Assert.False(cmd.HostFlagsSeen);
         Assert.Null(cmd.Options.ProjectPath);
     }

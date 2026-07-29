@@ -1,8 +1,9 @@
 namespace twodog.cli;
 
 /// <summary>
-/// The 2dog command. With no host flags it prompts; with them, it runs
-/// unattended. Both paths end in the same scaffolder.
+/// The 2dog command. Bare `2dog` prints version info and usage; the scaffolding
+/// verbs (new, add) prompt when no host flags are given and run unattended when
+/// they are. Both paths end in the same scaffolder.
 /// </summary>
 internal static class Program
 {
@@ -13,12 +14,19 @@ internal static class Program
             var cmd = CommandLine.Parse(args);
             switch (cmd.Verb)
             {
+                case Verb.None:
+                    PrintVersion();
+                    Console.WriteLine();
+                    PrintUsage(withHeader: false);
+                    return 0;
                 case Verb.Help:
                     PrintUsage();
                     return 0;
                 case Verb.Version:
                     PrintVersion();
                     return 0;
+                case Verb.Pack:
+                    return PackCommand.Run(cmd);
                 default:
                     return Execute(cmd);
             }
@@ -39,11 +47,10 @@ internal static class Program
     private static int Execute(ParsedCommand cmd)
     {
         var interactive = WantsPrompts(cmd) && Tui.CanPrompt;
-        var verb = ResolveVerb(cmd, interactive);
 
         if (interactive) Tui.Header();
 
-        if (verb == Verb.New) PrepareNewProject(cmd, interactive);
+        if (cmd.Verb == Verb.New) PrepareNewProject(cmd, interactive);
         var project = ScaffoldCommand.Open(cmd.Options);
 
         if (interactive) Tui.ShowProject(project);
@@ -64,27 +71,6 @@ internal static class Program
     /// </summary>
     // internal for unit tests
     internal static bool WantsPrompts(ParsedCommand cmd) => cmd is {NoInteractive: false, HostFlagsSeen: false};
-
-    /// <summary>
-    /// Bare `2dog` reads the directory: a Godot project there means "add
-    /// hosts", anything else means "create a project here".
-    /// </summary>
-    internal static Verb ResolveVerb(ParsedCommand cmd, bool interactive)
-    {
-        if (cmd.Verb != Verb.Auto) return cmd.Verb;
-
-        var dir = Path.GetFullPath(cmd.Options.ProjectPath ?? ".");
-        if (File.Exists(Path.Combine(dir, "project.godot"))) return Verb.Add;
-
-        if (!interactive)
-            throw new ToolException($"no project.godot in {dir} - run '2dog new <Name>' to create a project, " +
-                                    "or point 2dog at a Godot project directory");
-
-        // The bare-command new-project case: the positional (if any) named the
-        // directory to work in, not the project.
-        cmd.OutputDir ??= cmd.Options.ProjectPath;
-        return Verb.New;
-    }
 
     internal static void PrepareNewProject(ParsedCommand cmd, bool interactive)
     {
@@ -123,13 +109,13 @@ internal static class Program
              """);
     }
 
-    private static void PrintUsage()
+    private static void PrintUsage(bool withHeader = true)
     {
+        if (withHeader)
+            Console.WriteLine($"2dog {ToolVersions.TwoDogVersion} - https://2dog.dev{Environment.NewLine}");
         Console.WriteLine(
             $"""
-             2dog {ToolVersions.TwoDogVersion} - https://2dog.dev
-
-             usage: 2dog [verb] [path] [options]
+             usage: 2dog <verb> [path] [options]
 
              Scaffolds .NET host projects for a Godot project: the Godot project
              directory is the solution root, hosts are nested subfolders the Godot
@@ -137,15 +123,14 @@ internal static class Program
              deleted.
 
              verbs
-               (none)            Add hosts to the Godot project here, or create a
-                                 project if there is none
                new [Name] [dir]  Create a new Godot project with 2dog hosts
                add [path]        Add hosts to an existing Godot project
                convert [path]    Alias of add, for projects that have no hosts yet
+               pack list <pck>   List a .pck's contents by size (no engine needed)
                version           Print tool and package versions
 
-             Without any host option the tool asks interactively; run it again to
-             add more hosts, including a second host of the same kind.
+             Without any host option, new and add ask interactively; run add again
+             to add more hosts, including a second host of the same kind.
 
              hosts
                --desktop [folder]  Desktop host (your own Main entry point)
@@ -170,11 +155,12 @@ internal static class Program
                                    to pin the tool version: 'dnx 2dog@<version>')
 
              examples
-               2dog                          # interactive, here
+               2dog add                      # interactive, here
                2dog new MyGame               # interactive host choice, new project
                2dog new MyGame --desktop --tests
                2dog add --desktop MyGame.editor
                2dog add path/to/project --no-web
+               2dog pack list MyGame.web/AppBundle/godot.pck
              """);
     }
 }
