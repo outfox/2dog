@@ -7,7 +7,9 @@ package manager). Neither breaks existing consumers.
 
 Three actions share one plan (the newest --keep versions of every package
 stay active, everything older is retired; dead packages retire entirely and
-deprecate with an alternate):
+deprecate with an alternate). Versions that are already unlisted or already
+deprecated (per the nuget.org registration index) are skipped, so reruns
+only touch what still needs retiring:
 
   plan       print what would be retired (default; no credentials needed)
   unlist     DELETE /api/v2/package/{id}/{version} for every retired version.
@@ -39,6 +41,7 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import gzip
 import json
 import os
 import re
@@ -79,11 +82,20 @@ def http(method: str, url: str, headers: dict | None = None, body: bytes | None 
     request = urllib.request.Request(
         url, method=method, data=body,
         headers={"User-Agent": USER_AGENT, **(headers or {})})
+
+    def decode(response) -> str:
+        raw = response.read()
+        # The registration blobs are stored gzipped and served with
+        # Content-Encoding: gzip whether or not the client asked for it.
+        if response.headers.get("Content-Encoding") == "gzip":
+            raw = gzip.decompress(raw)
+        return raw.decode("utf-8", "replace")
+
     try:
         with urllib.request.urlopen(request) as response:
-            return response.status, dict(response.headers), response.read().decode("utf-8", "replace")
+            return response.status, dict(response.headers), decode(response)
     except urllib.error.HTTPError as error:
-        return error.code, dict(error.headers), error.read().decode("utf-8", "replace")
+        return error.code, dict(error.headers), decode(error)
 
 
 def version_sort_key(version: str):
@@ -127,16 +139,43 @@ def published_versions(package_id: str) -> list[str]:
     return sorted(json.loads(body)["versions"], key=version_sort_key)
 
 
+def version_status(package_id: str) -> dict[str, dict]:
+    """Normalized version -> {"listed": bool, "deprecated": bool} from the registration index."""
+    status, _, body = http(
+        "GET", f"https://api.nuget.org/v3/registration5-gz-semver2/{package_id.lower()}/index.json")
+    if status != 200:
+        raise RuntimeError(f"{package_id}: registration index returned HTTP {status}")
+    result: dict[str, dict] = {}
+    for page in json.loads(body)["items"]:
+        items = page.get("items")
+        if items is None:  # large packages get paged; leaves live in a separate blob
+            status, _, page_body = http("GET", page["@id"])
+            if status != 200:
+                raise RuntimeError(f"{package_id}: registration page returned HTTP {status}")
+            items = json.loads(page_body)["items"]
+        for leaf in items:
+            entry = leaf["catalogEntry"]
+            version = entry["version"].partition("+")[0].lower()
+            result[version] = {"listed": entry.get("listed", True),
+                               "deprecated": "deprecation" in entry}
+    return result
+
+
 def build_plan(package_ids: list[str], keep: int) -> list[dict]:
     plan = []
     for package_id in package_ids:
         versions = published_versions(package_id)
+        state = version_status(package_id)
         keep_count = 0 if package_id in DEAD_PACKAGES else min(keep, len(versions))
+        retire = versions[:len(versions) - keep_count]
+        # Versions already unlisted/deprecated need no further action.
         plan.append({
             "id": package_id,
             "alternate": DEAD_PACKAGES.get(package_id),
             "keep": versions[len(versions) - keep_count:],
-            "retire": versions[:len(versions) - keep_count],
+            "retire": retire,
+            "unlist": [v for v in retire if state.get(v, {}).get("listed", True)],
+            "deprecate": [v for v in retire if not state.get(v, {}).get("deprecated", False)],
         })
     return plan
 
@@ -144,18 +183,25 @@ def build_plan(package_ids: list[str], keep: int) -> list[dict]:
 def show_plan(plan: list[dict], verbose: bool) -> None:
     for entry in plan:
         note = f" [dead -> {entry['alternate']}]" if entry["alternate"] else ""
-        print(f"{entry['id']}{note}: retire {len(entry['retire'])}, keep {', '.join(entry['keep'])}")
-        if verbose and entry["retire"]:
-            print("    " + " ".join(entry["retire"]))
-    total = sum(len(e["retire"]) for e in plan)
-    print(f"\nTotal versions to retire: {total} "
+        already = len(entry["retire"]) - len(entry["unlist"]), len(entry["retire"]) - len(entry["deprecate"])
+        print(f"{entry['id']}{note}: retire {len(entry['retire'])} "
+              f"(unlist {len(entry['unlist'])}, deprecate {len(entry['deprecate'])}; "
+              f"{already[0]} already unlisted, {already[1]} already deprecated), "
+              f"keep {', '.join(entry['keep'])}")
+        if verbose:
+            for action in ("unlist", "deprecate"):
+                if entry[action]:
+                    print(f"    {action}: " + " ".join(entry[action]))
+    total_unlist = sum(len(e["unlist"]) for e in plan)
+    total_deprecate = sum(len(e["deprecate"]) for e in plan)
+    print(f"\nTotal versions to unlist: {total_unlist}, to deprecate: {total_deprecate} "
           "(unlist rate limit is 250/hour - the script waits on 429)")
 
 
 def unlist(plan: list[dict], api_key: str) -> int:
     done, failed = 0, []
     for entry in plan:
-        for version in entry["retire"]:
+        for version in entry["unlist"]:
             for attempt in range(12):
                 status, headers, _ = http(
                     "DELETE", f"{GALLERY}/api/v2/package/{entry['id']}/{version}",
@@ -185,7 +231,7 @@ def deprecate(plan: list[dict], cookie: str, message: str) -> int:
           file=sys.stderr)
     failures = 0
     for entry in plan:
-        if not entry["retire"]:
+        if not entry["deprecate"]:
             continue
 
         # The antiforgery form token comes from any Manage page of the package.
@@ -207,7 +253,7 @@ def deprecate(plan: list[dict], cookie: str, message: str) -> int:
         fields = [
             ("__RequestVerificationToken", token.group(1)),
             ("id", entry["id"]),
-            *(("versions", v) for v in entry["retire"]),
+            *(("versions", v) for v in entry["deprecate"]),
             ("isLegacy", "true"),
             ("hasCriticalBugs", "false"),
             ("isOther", "false"),
@@ -222,7 +268,7 @@ def deprecate(plan: list[dict], cookie: str, message: str) -> int:
                      "Content-Type": "application/x-www-form-urlencoded"},
             body=urllib.parse.urlencode(fields).encode())
         if status == 200:
-            print(f"deprecated {entry['id']}: {len(entry['retire'])} version(s)")
+            print(f"deprecated {entry['id']}: {len(entry['deprecate'])} version(s)")
         else:
             print(f"{entry['id']}: deprecation POST returned HTTP {status}: "
                   f"{body[:200]}", file=sys.stderr)
