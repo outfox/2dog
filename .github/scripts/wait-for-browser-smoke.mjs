@@ -170,7 +170,7 @@ async function run() {
             lastState = await evaluate(`(() => {
                 const notice = document.getElementById("status-notice");
                 return {
-                    smoke: document.documentElement.getAttribute("data-twodog-smoke"),
+                    smoke: document.documentElement?.getAttribute("data-twodog-smoke") ?? null,
                     readyState: document.readyState,
                     failureNotice: notice?.style.display === "block" ? notice.textContent : "",
                 };
