@@ -1,6 +1,7 @@
 /*.user
 /.idea
 
+.godot/
 *.old
 *.old.*
 
