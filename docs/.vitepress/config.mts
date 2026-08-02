@@ -37,9 +37,11 @@ export default defineConfig({
   },
 
   // Emits sitemap.xml into the build output for search engines (Google Search Console).
+  // lastUpdated derives per-page <lastmod> from git history; needs a full clone at build time.
   sitemap: {
     hostname: 'https://2dog.dev'
   },
+  lastUpdated: true,
 
   title: "2dog",
   titleTemplate: ":title 🦴 Godot in .NET",
