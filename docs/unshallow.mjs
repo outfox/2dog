@@ -1,13 +1,21 @@
 // CI builders (statichost.eu) clone shallow, which collapses every page's git lastmod
 // to the HEAD commit date. Fetch full history so the sitemap gets real per-page dates.
+// The builder clones via SSH but has no GitHub host key, so fetch over anonymous HTTPS.
 import { execSync } from 'node:child_process'
 
 const git = (args) => execSync(`git ${args}`, { encoding: 'utf8' }).trim()
 
+// git@github.com:owner/repo.git or ssh://git@github.com/owner/repo.git -> https://github.com/owner/repo.git
+function httpsUrl(remote) {
+  const ssh = remote.match(/^(?:ssh:\/\/)?git@([^:/]+)[:/](.+)$/)
+  return ssh ? `https://${ssh[1]}/${ssh[2]}` : remote
+}
+
 try {
   if (git('rev-parse --is-shallow-repository') === 'true') {
-    console.log('unshallow: shallow clone detected, fetching full history...')
-    git('fetch --unshallow --quiet')
+    const url = httpsUrl(git('remote get-url origin'))
+    console.log(`unshallow: shallow clone detected, fetching full history from ${url}...`)
+    git(`fetch --unshallow --quiet ${url}`)
     console.log('unshallow: done')
   } else {
     console.log('unshallow: repository already has full history')
