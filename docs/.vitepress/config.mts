@@ -36,6 +36,11 @@ export default defineConfig({
     }
   },
 
+  // Emits sitemap.xml into the build output for search engines (Google Search Console).
+  sitemap: {
+    hostname: 'https://2dog.dev'
+  },
+
   title: "2dog",
   titleTemplate: ":title 🦴 Godot in .NET",
   description: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.",
