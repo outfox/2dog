@@ -9,6 +9,7 @@
     "dev": "vitepress dev",
     "prebuild": "node make-llms.mjs",
     "build": "vitepress build",
+    "build-ci": "node unshallow.mjs && npm run build",
     "postbuild": "node copy-md-mirror.mjs",
     "preview": "vitepress preview"
   }
