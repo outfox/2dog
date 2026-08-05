@@ -13,7 +13,9 @@ internal static class Program
         // main scene configured in project.godot (run/main_scene), exactly like
         // launching godot.exe would - no manual scene loading needed. Command-line
         // arguments are forwarded to Godot (--headless, --quit-after, ...).
-        using var engine = new Engine("Company.Product1", Engine.ResolveProjectDir(), args);
+        // ResolveContent() runs from the raw project directory during development
+        // and from the exe-adjacent .pck that `dotnet publish` exports.
+        using var engine = new Engine("Company.Product1", Engine.ResolveContent(), args);
         using var godot = engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)

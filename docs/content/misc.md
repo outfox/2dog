@@ -63,9 +63,12 @@ creates a `Godot.NET.Sdk` project and adds `[dotnet] project/assembly_name` to
 Web setup adds `TwoDogWebBoot.cs` inside the web host folder (with a guarded
 `Compile Include` in the game project, which compiles it), a `Web` export preset
 when absent, and a root `global.json` when none exists. A root-level
-`TwoDogWebBoot.cs` from older layouts keeps working and is left untouched. An existing `export_presets.cfg` receives a new
-preset at the next free index; existing presets are untouched. An existing
-`global.json` is never overwritten, including with `--force`.
+`TwoDogWebBoot.cs` from older layouts keeps working and is left untouched. The
+desktop export presets (`Windows Desktop`, `Linux`, `macOS`) are added when
+missing - desktop publishes export the game pck through them. An existing
+`export_presets.cfg` receives new presets at the next free indices; existing
+presets are untouched. An existing `global.json` is never overwritten,
+including with `--force`.
 
 An existing root `.slnx` is reused. A classic `.sln` is converted to `.slnx`
 and removed. If several root solutions contain the Godot project, the tool

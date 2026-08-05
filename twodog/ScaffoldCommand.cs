@@ -348,24 +348,34 @@ internal static class ScaffoldCommand
 
     private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb)
     {
-        // The engine refuses `--export-pack` (which the web host's publish
-        // runs) without an export_presets.cfg at the project root.
+        // The engine refuses `--export-pack` without an export_presets.cfg at
+        // the project root; the web host's publish exports through the 'Web'
+        // preset and desktop publishes through the per-OS desktop presets.
         var path = Path.Combine(projectDir, ExportPresetOps.FileName);
         if (!File.Exists(path))
         {
             // Even without a web host, matching dotnet-new output: the template
-            // always ships the Web preset, so adding a web host later just
-            // works.
-            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} ('{ExportPresetOps.WebPresetName}' export preset)",
+            // always ships all presets, so adding a host later just works.
+            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web + desktop export presets)",
                 () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             return;
         }
 
-        if (!wantsWeb) return;
+        // Desktop presets are needed regardless of the host mix: every layout
+        // has a desktop host, and its publish exports the pck through them.
         var text = File.ReadAllText(path);
-        if (ExportPresetOps.HasPreset(text, ExportPresetOps.WebPresetName)) return;
-        plan.Add(new PlannedAction($"append '{ExportPresetOps.WebPresetName}' export preset to {ExportPresetOps.FileName}",
-            () => File.AppendAllText(path, ExportPresetOps.AppendText(text))));
+        var missing = ExportPresetOps.DesktopPresetNames
+            .Where(name => !ExportPresetOps.HasPreset(text, name));
+        if (wantsWeb && !ExportPresetOps.HasPreset(text, ExportPresetOps.WebPresetName))
+            missing = missing.Prepend(ExportPresetOps.WebPresetName);
+
+        foreach (var preset in missing)
+        {
+            // Re-read inside the action: earlier appends in the same plan must
+            // be visible so each preset gets the next free index.
+            plan.Add(new PlannedAction($"append '{preset}' export preset to {ExportPresetOps.FileName}",
+                () => File.AppendAllText(path, ExportPresetOps.AppendText(File.ReadAllText(path), preset))));
+        }
     }
 
     private static void PlanHosts(

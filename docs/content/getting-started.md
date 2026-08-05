@@ -100,7 +100,20 @@ dotnet test MyGame.tests
 
 This starts Godot without a window and runs tests through the normal .NET test runner. See [Testing with xUnit](/testing) to load scenes and test game behavior, and [Single Godot Instance](/known-issues/single-instance) for parallelism constraints.
 
-## 6. Publish to the Browser
+## 6. Publish to Desktop
+
+```bash
+dotnet publish MyGame.2dog -c Release            # host OS
+dotnet publish MyGame.2dog -c Release -r win-x64 # or a specific RID
+```
+
+The publish folder is a complete build: your host executable, the native
+engine, the .NET assemblies, and your game content exported as
+`MyGame.2dog.pck`. Copy the folder to another machine and run the executable.
+See the [Generic Host guide](/hosts/generic#publishing) for preset
+configuration and unsupported publish modes.
+
+## 7. Publish to the Browser
 
 Install the WebAssembly build tools and a static file server once:
 

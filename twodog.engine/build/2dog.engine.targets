@@ -21,6 +21,11 @@
           targets) AND the GodotPlugins layout. Also embedded as assembly
           metadata so twodog's DllImportResolver loads the matching
           libgodot-<variant> library at runtime.
+        - TwoDogExportPack: 'false' disables the automatic .pck export on
+          desktop publish (shared with the browser-wasm package's export).
+        - TwoDogDesktopExportPreset: export preset used for the desktop .pck;
+          defaults to the Godot-standard preset name for the publish target
+          ('Windows Desktop', 'Linux', or 'macOS').
     -->
 
     <!-- ============================================ -->
@@ -51,11 +56,20 @@
 
     <!-- One variant axis: native selection, API layout and assembly metadata
          all key from TwoDogVariant, so they can never disagree. -->
-    <Target Name="TwoDogValidateVariant" BeforeTargets="Build">
+    <Target Name="TwoDogValidateVariant" BeforeTargets="Build;Publish">
         <Error Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'editor'"
                Text="TwoDog: invalid TwoDogVariant '$(TwoDogVariant)'. Allowed values: release, debug, editor."/>
         <Warning Condition="'$(TwoDogBuildType)' != ''"
                  Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
+
+        <!-- Fail these at build time: they only break at runtime otherwise,
+             with an opaque 'Failed to load hostfxr' from the native engine.
+             NativeAOT ships no hostfxr, and both modes empty Assembly.Location,
+             which the GodotPlugins / libgodot probing relies on. -->
+        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishAot)' == 'true'"
+               Text="TwoDog: PublishAot (NativeAOT) is not supported for 2dog desktop hosts. The engine loads GodotPlugins and the game assembly through hostfxr and on-disk assemblies, which a native single-binary publish does not carry. Publish framework-dependent or self-contained instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
+        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true'"
+               Text="TwoDog: PublishSingleFile is not supported for 2dog desktop hosts. Assemblies embedded in a single-file bundle have no on-disk location, which the GodotPlugins / libgodot probing relies on. Publish as a normal folder instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
     </Target>
 
     <!-- Embed the variant as assembly metadata: twodog's DllImportResolver
@@ -286,6 +300,79 @@
         <MakeDir Directories="$(TwoDogGodotProjectFullPath)/.godot" Condition="'$(TwoDogExternalGodotEditor)' != '' Or '$(TwoDogCanUseImportHelper)' == 'true'"/>
         <Touch Files="$(TwoDogImportStampFile)" AlwaysCreate="true" Condition="'$(TwoDogExternalGodotEditor)' != '' Or '$(TwoDogCanUseImportHelper)' == 'true'"/>
         <Message Importance="high" Text="TwoDog: Imported Godot project $(TwoDogGodotProjectFullPath)" Condition="'$(TwoDogExternalGodotEditor)' != '' Or '$(TwoDogCanUseImportHelper)' == 'true'"/>
+    </Target>
+
+    <!-- ============================================ -->
+    <!-- Content pipeline: desktop publish .pck        -->
+    <!-- ============================================ -->
+    <!--
+      Publishing a desktop host exports the Godot project's content as
+      $(TargetName).pck next to the published executable - the exe-adjacent
+      name the engine auto-loads when the host passes a null project path
+      (twodog.Engine.ResolveContent()). Uses the same capability plumbing as
+      the automatic import above: the in-process helper against the desktop
+      editor-variant libgodot, or an explicitly configured external editor.
+      Runs only as part of Publish; ordinary builds keep running from the raw
+      project directory.
+    -->
+    <PropertyGroup>
+        <TwoDogExportPack Condition="'$(TwoDogExportPack)' == ''">true</TwoDogExportPack>
+    </PropertyGroup>
+
+    <!-- Own inputs item, not @(TwoDogImportInputs): that item is only
+         populated when TwoDogAutoImport is enabled, and an incremental target
+         with empty Inputs is silently skipped - publishing without a pck.
+         Same exclusions: .gdignore trees hold this very host's build outputs. -->
+    <ItemGroup Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <_TwoDogDesktopGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
+        <TwoDogDesktopExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
+                                   Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogDesktopGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
+    </ItemGroup>
+
+    <Target Name="TwoDogExportDesktopPack"
+            AfterTargets="Publish"
+            DependsOnTargets="TwoDogResolveContentCapability"
+            Inputs="@(TwoDogDesktopExportInputs)"
+            Outputs="$(PublishDir)$(TargetName).pck"
+            Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+
+        <PropertyGroup>
+            <!-- Godot's standard per-platform preset names, keyed on the
+                 publish RID; host OS when publishing RID-less. Contents only
+                 differ where preset options do (e.g. texture compression). -->
+            <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $(RuntimeIdentifier.StartsWith('win'))">Windows Desktop</TwoDogDesktopExportPreset>
+            <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $(RuntimeIdentifier.StartsWith('linux'))">Linux</TwoDogDesktopExportPreset>
+            <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $(RuntimeIdentifier.StartsWith('osx'))">macOS</TwoDogDesktopExportPreset>
+            <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('Windows'))">Windows Desktop</TwoDogDesktopExportPreset>
+            <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">Linux</TwoDogDesktopExportPreset>
+            <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">macOS</TwoDogDesktopExportPreset>
+
+            <_TwoDogDesktopPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(PublishDir)$(TargetName).pck'))))</_TwoDogDesktopPackFullPath>
+            <_TwoDogDesktopExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogDesktopExportPresetsPath>
+            <_TwoDogHasDesktopPreset>false</_TwoDogHasDesktopPreset>
+            <_TwoDogHasDesktopPreset Condition="Exists('$(_TwoDogDesktopExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogDesktopExportPresetsPath)').Contains('name=&quot;$(TwoDogDesktopExportPreset)&quot;'))">true</_TwoDogHasDesktopPreset>
+        </PropertyGroup>
+
+        <!-- Fail with an actionable message instead of the engine's exit-1
+             (whose stderr an IDE build may swallow entirely). -->
+        <Error Condition="'$(_TwoDogHasDesktopPreset)' != 'true'"
+               Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), re-run `2dog convert` (it scaffolds the desktop presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
+
+        <!-- (1) explicitly configured external editor -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != ''"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; &quot;$(_TwoDogDesktopPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              IgnoreStandardErrorWarningFormat="true"/>
+
+        <!-- (2) in-process export helper against the packaged editor libgodot -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; --output &quot;$(_TwoDogDesktopPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"
+              IgnoreStandardErrorWarningFormat="true"/>
+
+        <Error Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"
+               Text="TwoDog: desktop publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck."/>
+
+        <Message Importance="high" Text="TwoDog: exported $(TargetName).pck to the publish directory"/>
     </Target>
 
 </Project>

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using twodog.cli;
 
 namespace twodog.tests.ToolTests;
@@ -661,7 +662,7 @@ public class ExportPresetOpsTests
     [Fact]
     public void AppendText_RenumbersPastExistingPresets()
     {
-        var text = ExportPresetOps.AppendText(DesktopPreset);
+        var text = ExportPresetOps.AppendText(DesktopPreset, ExportPresetOps.WebPresetName);
         Assert.Contains("[preset.1]", text);
         Assert.Contains("[preset.1.options]", text);
         Assert.DoesNotContain("[preset.0]", text);
@@ -671,9 +672,24 @@ public class ExportPresetOpsTests
     [Fact]
     public void AppendText_OnEmptyFile_StartsAtZero()
     {
-        var text = ExportPresetOps.AppendText("");
+        var text = ExportPresetOps.AppendText("", ExportPresetOps.WebPresetName);
         Assert.Contains("[preset.0]", text);
         Assert.Contains("[preset.0.options]", text);
+    }
+
+    [Theory]
+    [InlineData("Windows Desktop")]
+    [InlineData("Linux")]
+    [InlineData("macOS")]
+    public void AppendText_ExtractsSingleDesktopPreset(string presetName)
+    {
+        var text = ExportPresetOps.AppendText(DesktopPreset, presetName);
+        Assert.Contains("[preset.1]", text);
+        Assert.Contains("[preset.1.options]", text);
+        Assert.True(ExportPresetOps.HasPreset(text, presetName));
+        // Only the requested preset: never the whole template file.
+        Assert.False(ExportPresetOps.HasPreset(text, ExportPresetOps.WebPresetName));
+        Assert.DoesNotContain("[preset.2]", text);
     }
 }
 
@@ -892,7 +908,7 @@ public class AddEndToEndTests
     }
 
     [Fact]
-    public void Add_ExistingExportPresets_AppendsWebPreset_WithoutRewriting()
+    public void Add_ExistingExportPresets_AppendsMissingPresets_WithoutRewriting()
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
@@ -911,12 +927,20 @@ public class AddEndToEndTests
 
         Assert.Equal(0, Run(Options(tmp.Dir)));
 
+        // Web plus the two missing desktop presets are appended; the
+        // pre-existing Windows Desktop preset is kept, never duplicated.
         var text = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "export_presets.cfg"));
         Assert.StartsWith(existing, text);
         Assert.Contains("[preset.1]", text);
+        Assert.Contains("[preset.2]", text);
+        Assert.Contains("[preset.3]", text);
+        Assert.DoesNotContain("[preset.4]", text);
         Assert.Contains("name=\"Web\"", text);
+        Assert.Contains("name=\"Linux\"", text);
+        Assert.Contains("name=\"macOS\"", text);
+        Assert.Single(Regex.Matches(text, "name=\"Windows Desktop\""));
 
-        // Re-run: the Web preset is detected, nothing appended twice.
+        // Re-run: every preset is detected, nothing appended twice.
         var snapshot = Snapshot(tmp.Dir);
         Assert.Equal(0, Run(Options(tmp.Dir)));
         Assert.Equal(snapshot, Snapshot(tmp.Dir));

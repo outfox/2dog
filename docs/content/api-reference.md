@@ -51,7 +51,7 @@ test assembly so xUnit can discover them.
 
 ```csharp
 using var engine = new twodog.Engine(
-    "MyGame", twodog.Engine.ResolveProjectDir(), args);
+    "MyGame", twodog.Engine.ResolveContent(), args);
 using var godot = engine.Start();
 
 while (!godot.Iteration())

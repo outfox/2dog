@@ -363,6 +363,21 @@ jobs:
       - name: Publish showcase desktop host (Release, no RID)
         run: dotnet publish demos/showcase/showcase.2dog -c Release
 
+      # Desktop publishes must export the game content as an exe-adjacent
+      # pck; the published host then boots from it (Engine.ResolveContent()
+      # returns null when the pck is present). Issue #43 regression guard.
+      - name: Verify exported pck
+        shell: bash
+        run: |
+          for pck in \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/showcase.2dog.pck" \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish/showcase.2dog.pck"; do
+            if [ ! -f "$pck" ]; then
+              echo "::error::Missing $pck - the desktop publish did not export the game pck"
+              exit 1
+            fi
+          done
+
       # The engine must load the game assembly from the publish output itself.
       # Delete the game project's own build outputs so a regression back to
       # .godot/mono/temp/bin probing cannot be masked by them.

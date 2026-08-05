@@ -21,8 +21,10 @@ You can edit the generic host or change it into a different type of application 
 
 ## Program
 
-This is the most basic entry point. `Engine.ResolveProjectDir()` reads
-the host's `<GodotProjectDir>` metadata, so no path is hard-coded. That's useful when you need to point this host at different projects, or move your project to a different directory.
+This is the most basic entry point. `Engine.ResolveContent()` runs from the
+raw project assets during development (via the host's `<GodotProjectDir>`
+metadata - no path is hard-coded) and from the exe-adjacent `.pck` that
+publishing exports, so the same host binary works in both layouts.
 
 ```csharp
 using Godot;
@@ -33,7 +35,7 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        using var engine = new Engine("MyGame", Engine.ResolveProjectDir(), args);
+        using var engine = new Engine("MyGame", Engine.ResolveContent(), args);
         using var godot = engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)
@@ -89,7 +91,7 @@ For a permanently headless host, pass the arguments in code:
 
 ```csharp
 using var engine = new Engine(
-    "MyGame", Engine.ResolveProjectDir(), "--headless", "--audio-driver", "Dummy");
+    "MyGame", Engine.ResolveContent(), "--headless", "--audio-driver", "Dummy");
 ```
 
 ## Publishing
@@ -98,8 +100,29 @@ using var engine = new Engine(
 dotnet publish MyGame.2dog -c Release
 ```
 
-The output includes the selected native engine, GodotSharp assemblies, and
-your game assembly. RID-specific and RID-less publishes are supported, meaning you can "cross-compile". See also: [.NET RID Catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog).
+The output includes the selected native engine, GodotSharp assemblies, your
+game assembly, and your game content exported as `MyGame.2dog.pck` next to the
+executable - the publish folder is a complete, relocatable build. The engine
+auto-loads the exe-adjacent pack when the host passes a `null` project path,
+which is what `Engine.ResolveContent()` does once the pack exists.
+RID-specific and RID-less publishes are supported, meaning you can
+"cross-compile". See also: [.NET RID Catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog).
+
+The pack is exported through the Godot export preset matching the publish
+target: `Windows Desktop`, `Linux`, or `macOS` (the host OS when publishing
+without a RID). Projects scaffolded or converted by 2dog ship these presets;
+for others, add them in the Godot editor (Project > Export > Add) or set
+`<TwoDogDesktopExportPreset>` to an existing preset name. Set
+`<TwoDogExportPack>false</TwoDogExportPack>` to skip the export - the publish
+output then runs only where the raw project directory exists.
+
+::: warning Unsupported publish modes
+`PublishAot` and `PublishSingleFile` fail the build by design: the engine
+loads GodotPlugins and the game assembly through hostfxr and on-disk
+assemblies, which those publish modes do not provide. Valid configurations are
+`Debug`, `Release`, and `Editor` - Godot-side names like `template_release`
+are not .NET configurations.
+:::
 
 A normal host supports one active engine at a time. Calling `.Dispose()` on the `Engine` object allows a
 sequential restart; see [Single Godot Instance](/known-issues/single-instance).

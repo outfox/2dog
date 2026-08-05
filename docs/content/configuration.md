@@ -14,6 +14,8 @@ Set 2dog properties in your host project's `.csproj`.
 | `GodotProjectDir` | None | Directory containing `project.godot`; enables automatic resource import and is embedded for `Engine.ResolveProjectDir()` |
 | `TwoDogVariant` | `release` | Native desktop variant: `release`, `debug`, or `editor` |
 | `TwoDogRemoveDuplicateGodotAnalyzers` | `false` | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project |
+| `TwoDogExportPack` | `true` | Desktop publishes export the game content as an exe-adjacent `.pck`; `false` skips it (also disables the web host's pack export) |
+| `TwoDogDesktopExportPreset` | RID-mapped | Export preset for the desktop pack; defaults to `Windows Desktop`, `Linux`, or `macOS` by publish target |
 
 The standard nested-host setup is:
 

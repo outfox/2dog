@@ -372,6 +372,25 @@ public class Engine(string project, string? path = null, params string[] args) :
             "path of the directory containing project.godot (relative to the .csproj).");
     }
 
+    /// <summary>
+    /// Resolves what to pass as the <see cref="Engine"/> path argument. Returns null when a
+    /// pack file named after the running executable sits next to it (a published build - the
+    /// engine auto-loads an exe-adjacent .pck; desktop publishes export one as
+    /// &lt;host&gt;.pck), otherwise the project directory from
+    /// <see cref="ResolveProjectDir"/> (a source build running from raw assets).
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when no exe-adjacent .pck exists and no loaded assembly has the
+    /// <c>GodotProjectDir</c> metadata attribute.
+    /// </exception>
+    public static string? ResolveContent()
+    {
+        if (System.Environment.ProcessPath is { Length: > 0 } exePath &&
+            File.Exists(Path.ChangeExtension(exePath, ".pck")))
+            return null;
+        return ResolveProjectDir();
+    }
+
     private static unsafe IntPtr CreateGodotInstance(string[] args)
     {
         // Manual UTF-8 argv marshalling: the P/Invoke must stay fully
