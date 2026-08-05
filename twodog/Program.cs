@@ -9,13 +9,17 @@ internal static class Program
 {
     internal static int Main(string[] args)
     {
+        // Windows consoles default to a legacy codepage that mangles the ✅/🔄 version marks.
+        if (OperatingSystem.IsWindows())
+            try { Console.OutputEncoding = System.Text.Encoding.UTF8; } catch { /* no console attached */ }
+
         try
         {
             var cmd = CommandLine.Parse(args);
             switch (cmd.Verb)
             {
                 case Verb.None:
-                    PrintVersion();
+                    PrintVersion(checkLatest: false);
                     Console.WriteLine();
                     PrintUsage(withHeader: false);
                     return 0;
@@ -23,7 +27,7 @@ internal static class Program
                     PrintUsage();
                     return 0;
                 case Verb.Version:
-                    PrintVersion();
+                    PrintVersion(checkLatest: true);
                     return 0;
                 case Verb.Pack:
                     return PackCommand.Run(cmd);
@@ -96,17 +100,29 @@ internal static class Program
     internal static bool IsEmpty(string dir) =>
         !Directory.Exists(dir) || Directory.EnumerateFileSystemEntries(dir).All(e => Path.GetFileName(e).StartsWith('.'));
 
-    /// <summary>The tool version, then every package the scaffolded projects reference.</summary>
-    private static void PrintVersion()
+    /// <summary>
+    /// The tool version, then every package the scaffolded projects reference.
+    /// checkLatest asks nuget.org (best effort) and marks each row via one package
+    /// per publish group: ✅ latest stable, 🔄 newer stable available, blank unknown.
+    /// </summary>
+    private static void PrintVersion(bool checkLatest)
     {
-        Console.WriteLine(
-            $"""
-             2dog {ToolVersions.TwoDogVersion} - https://2dog.dev
+        var rows = new (string Label, string Version, string Probe, string Packages)[]
+        {
+            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.xunit"),
+            ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools"),
+            ("Godot SDK", ToolVersions.GodotSdkVersion, "Godot.NET.Sdk", "Godot.NET.Sdk, GodotSharp"),
+        };
+        var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => r.Probe)) : null;
 
-             tool + packages  {ToolVersions.TwoDogVersion,-10}  2dog, 2dog.engine, 2dog.xunit
-             native binaries  {ToolVersions.NativesVersion,-10}  2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools
-             Godot SDK        {ToolVersions.GodotSdkVersion,-10}  Godot.NET.Sdk, GodotSharp
-             """);
+        Console.WriteLine($"2dog {ToolVersions.TwoDogVersion} - https://2dog.dev");
+        Console.WriteLine();
+        foreach (var (label, version, probe, packages) in rows)
+        {
+            // The mark and its blank stand-in are both two terminal cells wide, so columns never move.
+            var mark = latest == null ? null : NuGetLatest.Mark(version, latest[probe]);
+            Console.WriteLine($"{label,-15}  {version,-10} {mark ?? "  "}  {packages}");
+        }
     }
 
     private static void PrintUsage(bool withHeader = true)

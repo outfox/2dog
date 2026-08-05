@@ -92,10 +92,14 @@ references:
 ```text
 2dog :2dog-version: - https://2dog.dev
 
-tool + packages  :2dog-version:    2dog, 2dog.engine, 2dog.xunit
-native binaries  :natives-version:    2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools
-Godot SDK        :godot-version:       Godot.NET.Sdk, GodotSharp
+tool + packages  :2dog-version: ✅  2dog, 2dog.engine, 2dog.xunit
+native binaries  :natives-version: ✅  2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools
+Godot SDK        :godot-version: ✅  Godot.NET.Sdk, GodotSharp
 ```
+
+Each row is checked against nuget.org: ✅ means the version is the latest
+stable release, 🔄 means a newer stable release exists. When nuget.org cannot
+be reached the marks are simply left out.
 
 ::: warning --version under dnx
 `dnx 2dog --version` never reaches the tool: `--version <VERSION>` is `dnx`'s
