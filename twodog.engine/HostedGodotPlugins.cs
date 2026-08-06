@@ -8,12 +8,9 @@ using System.Runtime.Loader;
 namespace twodog;
 
 /// <summary>
-/// Hosted-mode GodotPlugins wiring. When <see cref="Engine.NativePath"/> gives this load
-/// context its own libgodot module, the engine must also use THIS context's GodotPlugins
-/// (and therefore GodotSharp) instead of the hostfxr default-ALC load, so the managed
-/// interop tables NativeFuncs.Initialize fills stay per-instance. The module's exported
-/// set_load_from_executable_fn (GD_MONO_LIBGODOT_ENABLED) is the per-module seam:
-/// GDMono::initialize consults the registered callback before falling back to hostfxr.
+/// Registers this load context's GodotPlugins with a libgodot module through its exported
+/// set_load_from_executable_fn, so GDMono initializes on the host's own runtime and never
+/// falls back to hostfxr (machine-wide; boots a second runtime under self-contained hosts).
 /// </summary>
 internal static unsafe class HostedGodotPlugins
 {
@@ -63,12 +60,13 @@ internal static unsafe class HostedGodotPlugins
         if (!string.IsNullOrEmpty(envDir) && File.Exists(Path.Combine(envDir, "GodotPlugins.dll")))
             return Path.Combine(envDir, "GodotPlugins.dll");
 
-        var assemblyDir = Path.GetDirectoryName(typeof(HostedGodotPlugins).Assembly.Location);
-        if (!string.IsNullOrEmpty(assemblyDir))
+        string?[] baseDirs = [Path.GetDirectoryName(typeof(HostedGodotPlugins).Assembly.Location), AppContext.BaseDirectory];
+        foreach (var baseDir in baseDirs)
         {
-            var flat = Path.Combine(assemblyDir, "GodotPlugins.dll");
+            if (string.IsNullOrEmpty(baseDir)) continue;
+            var flat = Path.Combine(baseDir, "GodotPlugins.dll");
             if (File.Exists(flat)) return flat;
-            var nested = Path.Combine(assemblyDir, "GodotSharp", "Api", "Debug", "GodotPlugins.dll");
+            var nested = Path.Combine(baseDir, "GodotSharp", "Api", "Debug", "GodotPlugins.dll");
             if (File.Exists(nested)) return nested;
         }
 

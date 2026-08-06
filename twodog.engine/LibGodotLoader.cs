@@ -54,6 +54,15 @@ internal static class LibGodotLoader
         return handle;
     }
 
+    /// <summary>Loads this context's libgodot via the normal variant probing if needed and
+    /// returns its OS handle; throws <see cref="DllNotFoundException"/> like the first
+    /// P/Invoke would.</summary>
+    internal static nint EnsureLoaded()
+    {
+        if (LoadedLibraryHandle != 0) return LoadedLibraryHandle;
+        return Resolve(LibGodot.LIBGODOT_LIBRARY_NAME, typeof(LibGodotLoader).Assembly, null);
+    }
+
     private static void Record(string fileName, string? path, nint handle)
     {
         LoadedLibraryFileName = fileName;

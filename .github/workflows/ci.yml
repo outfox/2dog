@@ -363,6 +363,15 @@ jobs:
       - name: Publish showcase desktop host (Release, no RID)
         run: dotnet publish demos/showcase/showcase.2dog -c Release
 
+      # Guards the second-runtime interop crash: self-contained hosts must not reach
+      # gd_mono's hostfxr fallback. Own output dir - the default is shared with the
+      # RID publish above.
+      - name: Publish showcase desktop host (Release, RID, self-contained)
+        run: >-
+          dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
+          -p:SelfContained=true
+          -o demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish-selfcontained
+
       # Desktop publishes must export the game content as an exe-adjacent
       # pck; the published host then boots from it (Engine.ResolveContent()
       # returns null when the pck is present). Issue #43 regression guard.
@@ -371,7 +380,8 @@ jobs:
         run: |
           for pck in \
             "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/showcase.2dog.pck" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish/showcase.2dog.pck"; do
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish/showcase.2dog.pck" \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish-selfcontained/showcase.2dog.pck"; do
             if [ ! -f "$pck" ]; then
               echo "::error::Missing $pck - the desktop publish did not export the game pck"
               exit 1
@@ -407,11 +417,22 @@ jobs:
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
+      - name: Run published host (headless, self-contained)
+        id: run_selfcontained
+        shell: bash
+        run: |
+          set +e
+          demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish-selfcontained/${{ matrix.exe }} \
+            --headless --quit-after 120 2>&1 | tee smoke-selfcontained.log
+          status=${PIPESTATUS[0]}
+          echo "Host exit code: $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
       # Surface the .ips crash report for the known macOS teardown abort
       # (libgodot exit-time static destructors; see the twodog.Engine static
       # ctor comment) so it can be root-caused in the fork.
       - name: Dump crash report (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_selfcontained.outputs.status != '0')
         shell: bash
         run: |
           # ReportCrash writes the .ips shortly after the abort
@@ -426,7 +447,7 @@ jobs:
       # all threads at the abort. This is the data source for fixing the
       # teardown crash in the fork.
       - name: Rerun under lldb for backtrace (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_selfcontained.outputs.status != '0')
         shell: bash
         run: |
           lldb -b \
@@ -461,6 +482,7 @@ jobs:
           }
           check smoke.log "${{ steps.run.outputs.status }}" "rid"
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
+          check smoke-selfcontained.log "${{ steps.run_selfcontained.outputs.status }}" "self-contained"
           exit $fail
 
   # Publish the web showcase end-to-end: statically links the web libgodot.a into

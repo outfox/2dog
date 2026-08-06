@@ -195,6 +195,12 @@ public class Engine(string project, string? path = null, params string[] args) :
             var module = LibGodotLoader.LoadExact(nativePath);
             HostedGodotPlugins.Register(module);
         }
+        else if (!OperatingSystem.IsBrowser())
+        {
+            // Register unconditionally: gd_mono's hostfxr fallback boots a second runtime under
+            // self-contained hosts and needs a machine-wide .NET install.
+            HostedGodotPlugins.Register(LibGodotLoader.EnsureLoaded());
+        }
 
         Console.WriteLine("Starting Godot instance...");
 
