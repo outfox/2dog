@@ -145,7 +145,8 @@ internal static class HostScan
         if (csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("xunit.v3", StringComparison.OrdinalIgnoreCase)) return HostKind.Tests;
         if (csproj.Contains("UseWindowsForms", StringComparison.OrdinalIgnoreCase)) return HostKind.WinForms;
-        if (csproj.Contains("<OutputType>Exe</OutputType>", StringComparison.OrdinalIgnoreCase)) return HostKind.Desktop;
+        if (csproj.Contains("<OutputType>Exe</OutputType>", StringComparison.OrdinalIgnoreCase)
+            || csproj.Contains("<OutputType>WinExe</OutputType>", StringComparison.OrdinalIgnoreCase)) return HostKind.Desktop;
 
         // Wired to a Godot project but unrecognizable otherwise: fall back to
         // the folder suffix rather than treating it as "not a host".
