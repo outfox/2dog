@@ -14,10 +14,8 @@ internal static class Program
         // instead of loading a second copy (type identity across contexts).
         _ = typeof(SpinningCube).Assembly;
 
-        // Command-line arguments are forwarded to Godot (--headless, --quit-after, ...).
-        // ResolveContent(): raw project directory in development, exe-adjacent
-        // .pck in publish output - so published runs prove the shipped layout.
-        using var engine = new Engine("showcase", Engine.ResolveContent(), args);
+        // Content is resolved from the source project or published .pck.
+        using var engine = new Engine("showcase", args: args);
         using var godotInstance = engine.Start();
         GD.Print("Hello from GodotSharp.");
         GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);

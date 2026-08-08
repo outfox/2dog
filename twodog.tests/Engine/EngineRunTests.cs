@@ -18,7 +18,7 @@ public class EngineRunTests
         var projectDir = Engine.ResolveProjectDir();
         AssemblyPreloader.PreloadGameAssemblies(projectDir);
 
-        using var engine = new Engine("run-loop", projectDir, "--headless");
+        using var engine = new Engine("run-loop", args: ["--headless"]);
         using var godot = engine.Start();
 
         var frames = 0;

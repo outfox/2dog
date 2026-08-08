@@ -5,26 +5,20 @@ description: "The generic 2dog console host: about 20 lines of Program.cs that s
 
 # Generic Host
 
-`MyGame.2dog` is a generic .NET console application that fits literally in the palm of your hand - just 20 lines of code in `Program.cs` - very easy to extend.
-
-It starts the engine, runs your main scene in a typical Godot game window, and pumps frames until Godot asks to quit. It acts practically the same as directly running your game with Godot.
+`MyGame.2dog` is a small .NET console application that starts your main scene
+and pumps frames until Godot asks to quit.
 
 ```bash
 dotnet run --project "MyGame.2dog"
 ```
 
-You can edit the generic host or change it into a different type of application with your IDE as needed. You can even add multiple hosts with the `2dog` dotnet tool by running it multiple times.
-
-:::info Trail Marker
-2dog provides some specialized hosts for your convenience, just check out the sibling docs in this category. Contributions are also welcome!
-:::
+Edit it like any other .NET application. Run `dnx 2dog add` again to add
+another host.
 
 ## Program
 
-This is the most basic entry point. `Engine.ResolveContent()` runs from the
-raw project assets during development (via the host's `<GodotProjectDir>`
-metadata - no path is hard-coded) and from the exe-adjacent `.pck` that
-publishing exports, so the same host binary works in both layouts.
+With no path, `Engine` finds the raw project during development and the
+exe-adjacent `.pck` after publish.
 
 ```csharp
 using Godot;
@@ -35,7 +29,7 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        using var engine = new Engine("MyGame", Engine.ResolveContent(), args);
+        using var engine = new Engine("MyGame", args: args);
         using var godot = engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)
@@ -55,8 +49,7 @@ declarations dispose the instance and engine in the required order.
 Prefer a callback? `engine.Run(perFrame)` iterates until quit and calls your
 delegate once per frame.
 
-On Windows, `[STAThread]` matches `godot.exe` and keeps OLE drag and drop, IME,
-and native dialogs working. The modern [Top-level statements](https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/top-level-statements) cannot mark their generated entry point; they are suitable only for hosts that will always be headless, or you must manually instantiate the engine on a thread in a Single-Thraded Apartment (STA).
+On Windows, `[STAThread]` keeps drag and drop, IME, and native dialogs working.
 
 
 ## Project Details
@@ -91,7 +84,7 @@ For a permanently headless host, pass the arguments in code:
 
 ```csharp
 using var engine = new Engine(
-    "MyGame", Engine.ResolveContent(), "--headless", "--audio-driver", "Dummy");
+    "MyGame", args: ["--headless", "--audio-driver", "Dummy"]);
 ```
 
 ## Publishing
@@ -102,11 +95,8 @@ dotnet publish MyGame.2dog -c Release
 
 The output includes the selected native engine, GodotSharp assemblies, your
 game assembly, and your game content exported as `MyGame.2dog.pck` next to the
-executable - the publish folder is a complete, relocatable build. The engine
-auto-loads the exe-adjacent pack when the host passes a `null` project path,
-which is what `Engine.ResolveContent()` does once the pack exists.
-RID-specific and RID-less publishes are supported, meaning you can
-"cross-compile". See also: [.NET RID Catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog).
+executable, producing a relocatable build. RID-specific and RID-less publishes
+are supported.
 
 The pack is exported through the Godot export preset matching the publish
 target: `Windows Desktop`, `Linux`, or `macOS` (the host OS when publishing

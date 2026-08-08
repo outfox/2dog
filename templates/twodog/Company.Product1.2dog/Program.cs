@@ -9,13 +9,9 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        // Create and start the Godot engine with your project. Start() runs the
-        // main scene configured in project.godot (run/main_scene), exactly like
-        // launching godot.exe would - no manual scene loading needed. Command-line
-        // arguments are forwarded to Godot (--headless, --quit-after, ...).
-        // ResolveContent() runs from the raw project directory during development
-        // and from the exe-adjacent .pck that `dotnet publish` exports.
-        using var engine = new Engine("Company.Product1", Engine.ResolveContent(), args);
+        // The default constructor finds raw project content during development
+        // and the exe-adjacent .pck after publish. Arguments are forwarded to Godot.
+        using var engine = new Engine("Company.Product1", args: args);
         using var godot = engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)
@@ -24,8 +20,7 @@ internal static class Program
             GD.Print("2dog is running (no run/main_scene set in project.godot).");
         Console.WriteLine("Close the window to quit.");
 
-        // Main game loop - Iteration() returns true when the engine wants to
-        // quit (window closed, SceneTree.Quit(), --quit-after N, ...).
+        // Iteration() returns true when Godot wants to quit.
         while (!godot.Iteration())
         {
             // Your per-frame logic here

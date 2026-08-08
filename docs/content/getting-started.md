@@ -5,11 +5,13 @@ description: "Embed a new or existing Godot C# project in a .NET application: in
 
 # Getting Started
 
-Let's take `Godot` for a walk! :gd-bone@gold:
-
 Learn how to embed your new or existing Godot project into a .NET application!
 
-## Before You Grab the Leash
+![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
+
+Let's take `Godot` for a walk! :gd-bone@gold:
+
+## Don't forget the Leash
 
 To get set up, you'll need:
 

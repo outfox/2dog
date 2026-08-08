@@ -2,41 +2,43 @@
 
 Embed the Godot engine in your .NET applications.
 
-2dog inverts the traditional Godot architecture: instead of Godot driving your application, **you** control Godot as an embedded library. This gives you full access to the GodotSharp API from a standard .NET project with familiar tooling.
+2dog lets a standard .NET application host Godot and use the GodotSharp API.
 
 ## Quick Start
 
-Add the engine to your project:
+Scaffold a host beside an existing `project.godot`:
 
 ```bash
-dotnet add package 2dog.engine
+dnx 2dog add
 ```
 
 ```csharp
 using twodog;
 
-using var engine = new Engine("MyGodotApp", "./project");
+using var engine = new Engine("MyGodotApp", args: args);
 using var godot = engine.Start();
 
 while (!godot.Iteration())
 {
-    // Your code runs here every frame
+    // Your code runs here every frame.
 }
 ```
 
-To scaffold a complete new project (or add 2dog to an existing Godot project), use the [`2dog`](https://www.nuget.org/packages/2dog) tool/template package instead:
+The generated host embeds its `GodotProjectDir`. The constructor uses that
+source directory during development and the adjacent `.pck` after publish.
+
+To create a new project instead:
 
 ```bash
-dnx 2dog new MyGodotApp   # or `dnx 2dog` inside an existing Godot project
+dnx 2dog new MyGodotApp
 ```
 
 ## What's Included
 
-- **twodog.dll** - Engine API for embedding Godot
-- **GodotSharp.dll** - Full Godot C# API bindings
-- **Godot.SourceGenerators** - Roslyn source generators for Godot node types
-- **GodotPlugins** - Runtime plugin loader
-- **Automatic asset import** - an incremental MSBuild step imports your Godot project (`.uid` files, textures, script UID cache) during build; no Godot editor installation needed
+- **twodog.dll** - engine hosting API
+- **GodotSharp.dll** - Godot C# bindings
+- **Godot.SourceGenerators** and **GodotPlugins** - script generation and loading
+- **Automatic asset import** - incremental import during build
 
 Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`); the GodotTools assemblies used by the automatic import come from `2dog.tools`.
 

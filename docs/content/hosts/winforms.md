@@ -37,7 +37,7 @@ Because 2dog hosts pass arguments to Godot verbatim, no engine or API changes
 are involved:
 
 ```csharp
-_engine = new Engine("MyGame", Engine.ResolveContent(),
+_engine = new Engine("MyGame", args:
 [
     "--wid", Handle.ToInt64().ToString(CultureInfo.InvariantCulture),
     "--resolution", $"{panel.ClientSize.Width}x{panel.ClientSize.Height}",

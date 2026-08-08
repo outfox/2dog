@@ -24,16 +24,15 @@ Full documentation at **[2dog.dev](https://2dog.dev)**.
 
 ### Existing Project (Recommended)
 
-2dog preserves your existing game content, and there is no tool installation step. 
-Please make backups, but most of its changes are optional additions, not modifications.
+2dog adds nested .NET hosts without moving your existing Godot project.
 
 ```bash
 cd path/to/MyGame
-dnx 2dog                      # pick the hosts you want, then confirm
+dnx 2dog add                  # pick the hosts you want, then confirm
 dotnet run --project MyGame.2dog
 ```
 
-Run `dnx 2dog` again any time to add another host.
+Run `dnx 2dog add` again to add another host.
 
 
 ### New Project
@@ -44,8 +43,8 @@ cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-The same content is also a `dotnet new` template
-(`dotnet new install 2dog && dotnet new 2dog -n MyGame`).
+The package also provides a `dotnet new` template:
+`dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
 In either case, the familiar Godot workflow still works:
 

@@ -50,8 +50,7 @@ test assembly so xUnit can discover them.
 ## Lifetime at a Glance
 
 ```csharp
-using var engine = new twodog.Engine(
-    "MyGame", twodog.Engine.ResolveContent(), args);
+using var engine = new twodog.Engine("MyGame", args: args);
 using var godot = engine.Start();
 
 while (!godot.Iteration())

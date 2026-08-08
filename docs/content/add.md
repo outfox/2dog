@@ -69,7 +69,7 @@ Publishing requires `dotnet workload install wasm-tools`. See
 
 | Command | Effect |
 | --- | --- |
-| `2dog` | Add hosts here, or create a project if there is none |
+| `2dog` | Print version information and usage |
 | `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
 | `2dog add [path]` | Add hosts to an existing Godot project |
 | `2dog convert [path]` | Alias of `add` for a project with no hosts yet |

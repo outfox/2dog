@@ -71,7 +71,7 @@ dotnet build -c Editor   # editor with TOOLS_ENABLED
 After startup, the full GodotSharp API is available:
 
 ```csharp
-using var engine = new Engine("app", "./project");
+using var engine = new Engine("MyGame", args: args);
 using var godot = engine.Start();
 
 // Access the scene tree
@@ -110,12 +110,10 @@ for examples and the experimental isolated-hosting path.
 
 ## Resource Paths
 
-Godot resolves `res://` paths relative to the project directory passed to `Engine`:
+`res://` addresses content in the active Godot project. A standard desktop
+host finds the source directory from `GodotProjectDir` metadata during
+development and uses the adjacent `.pck` after publish.
 
 ```csharp
-// Project at ./my_project
-new Engine("app", "./my_project");
-
-// res://scenes/main.tscn → ./my_project/scenes/main.tscn
 var scene = GD.Load<PackedScene>("res://scenes/main.tscn");
 ```

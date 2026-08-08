@@ -52,7 +52,7 @@ Full signatures are in the [API Reference](/api-reference).
 
 | Member | Purpose |
 | --- | --- |
-| `new Engine(name, path, args)` | Configure an engine; arguments reach Godot verbatim |
+| `new Engine(name, args: args)` | Configure a standard host and resolve its content automatically |
 | `Engine.ResolveContent()` | `null` when an exe-adjacent `.pck` exists (published), else the project directory |
 | `Engine.ResolveProjectDir()` | Read `GodotProjectDir` from assembly metadata |
 | `engine.Start()` | Boot Godot and run `run/main_scene` |

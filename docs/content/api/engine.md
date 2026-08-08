@@ -22,13 +22,14 @@ public Engine(string project, string? path = null, params string[] args)
 
 | Parameter | Description |
 | --- | --- |
-| `project` | Project name passed as Godot's first argument |
-| `path` | Directory containing `project.godot`; adds `--path` when set |
+| `project` | Label passed as Godot's first argument; this is not a content path |
+| `path` | Directory containing `project.godot`; omit it for automatic content resolution |
 | `args` | Additional Godot command-line arguments, passed unchanged |
 
-Use [`ResolveContent()`](#resolvecontent) for `path` in a standard 2dog host:
-it runs from the raw project directory during development and from the
-exe-adjacent `.pck` in publish output.
+When `path` is omitted or `null`, desktop hosts call
+[`ResolveContent()`](#resolvecontent). Browser hosts leave the path unset so
+Godot loads the web pack. Pass a path only for a nonstandard content location.
+Relative paths are resolved from the process working directory.
 
 ## Properties
 
@@ -105,11 +106,9 @@ Stops and destroys the instance owned by this engine. Dispose the
 public static string? ResolveContent()
 ```
 
-Returns `null` when a `.pck` named after the running executable sits next to
-it - the published layout, where the engine auto-loads that pack - and
-otherwise falls back to [`ResolveProjectDir()`](#resolveprojectdir). Pass the
-result as the constructor's `path` so the same host binary runs from raw
-project assets in development and from the exported pack when published.
+Returns `null` when a `.pck` named after the executable sits beside it, letting
+Godot load that pack. Otherwise, returns [`ResolveProjectDir()`](#resolveprojectdir).
+The desktop constructor calls this automatically when `path` is omitted.
 
 ### `ResolveProjectDir`
 
@@ -145,7 +144,7 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        using var engine = new Engine("MyGame", Engine.ResolveContent(), args);
+        using var engine = new Engine("MyGame", args: args);
         using var godot = engine.Start();
 
         while (!godot.Iteration())

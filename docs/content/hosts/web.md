@@ -29,7 +29,7 @@ internal static class Program
     {
         Engine.RegisterWebPluginsInitializer(TwoDogWebBoot.PluginsInitializer());
 
-        var engine = new Engine("MyGame", null, args);
+        var engine = new Engine("MyGame", args: args);
         engine.Start();
         GD.Print("2dog is running in the browser!");
         engine.Run();
@@ -46,9 +46,8 @@ This differs from the [generic host](./generic) in three ways:
    folder but compiles into the *game* assembly through a guarded
    `Compile Include` in the game csproj - scripts are resolved from the
    assembly holding the initializer.
-2. Pass `null` as the project path. At runtime, the page mounts the exported
-   `godot.pck` through `--main-pack`; `GodotProjectDir` is still needed to
-   export that pack at build time.
+2. Omit the project path. In the browser the constructor leaves it unset, and
+   the page mounts the exported `godot.pck` through `--main-pack`.
 3. Do not dispose the engine or call `Iteration()`. `Run()` hands the loop to
    Emscripten and returns immediately. Use `Run(perFrame)` for host-side frame
    work.

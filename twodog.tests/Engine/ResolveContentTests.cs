@@ -2,9 +2,12 @@ using twodog;
 
 namespace twodog.tests.EngineTests;
 
-// Pure path resolution - no engine boot, no collection needed. The tests
-// toggle the one input ResolveContent() keys on: a .pck named after the
-// running executable (xunit v3 runs the test project as its own exe).
+// These tests toggle the executable-adjacent .pck used by ResolveContent(),
+// so they must not overlap a test that constructs an engine without a path.
+[CollectionDefinition(nameof(ResolveContentCollection), DisableParallelization = true)]
+public class ResolveContentCollection;
+
+[Collection(nameof(ResolveContentCollection))]
 public class ResolveContentTests
 {
     [Fact]

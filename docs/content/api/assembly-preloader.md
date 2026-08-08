@@ -42,6 +42,6 @@ Discovery failures are written to the console instead of thrown.
 var projectDir = twodog.Engine.ResolveProjectDir();
 AssemblyPreloader.PreloadGameAssemblies(projectDir);
 
-using var engine = new twodog.Engine("MyGame", projectDir, "--headless");
+using var engine = new twodog.Engine("MyGame", args: ["--headless"]);
 using var godot = engine.Start();
 ```

@@ -13,7 +13,7 @@ internal static class Program
 
         // args come from the JS shell (GODOT_CONFIG.args plus the
         // '--main-pack godot.pck' the engine loader prepends).
-        var engine = new Engine("showcase.web", null, args);
+        var engine = new Engine("showcase.web", args: args);
         engine.Start();
 
         try

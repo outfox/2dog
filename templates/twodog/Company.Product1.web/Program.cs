@@ -14,7 +14,7 @@ internal static class Program
 
         // args come from the page's GODOT_CONFIG.args plus the
         // '--main-pack godot.pck' the engine loader prepends.
-        var engine = new Engine("TPLRAWNAME", null, args);
+        var engine = new Engine("TPLRAWNAME", args: args);
         engine.Start();
 
         GD.Print("2dog is running in the browser!");

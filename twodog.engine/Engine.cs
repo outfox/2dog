@@ -7,9 +7,13 @@ using Godot;
 
 namespace twodog;
 
-public class Engine(string project, string? path = null, params string[] args) : IDisposable
+/// <summary>Configures and owns an embedded Godot instance.</summary>
+public class Engine : IDisposable
 {
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
+    private readonly string _project;
+    private readonly string[] _args;
+    private readonly string? _projectPath;
 
     // Only the Engine that successfully started the (process-wide) Godot
     // instance may destroy it. This keeps `using var engine = ...; engine.Start()`
@@ -18,6 +22,23 @@ public class Engine(string project, string? path = null, params string[] args) :
     private bool _ownsInstance;
 
     private GodotInstance? _godotInstance;
+
+    /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
+    /// <param name="project">Label passed as Godot's first argument.</param>
+    /// <param name="path">
+    /// Project directory. When null, desktop resolves source or published content automatically;
+    /// browser hosts leave the path unset so Godot loads the web pack.
+    /// </param>
+    /// <param name="args">Additional arguments passed to Godot.</param>
+    public Engine(string project, string? path = null, params string[] args)
+    {
+        _project = project;
+        _args = args;
+
+        if (path is null && !System.OperatingSystem.IsBrowser())
+            path = ResolveContent();
+        _projectPath = string.IsNullOrEmpty(path) ? null : Path.GetFullPath(path);
+    }
 
     // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()
     // on Linux/.NET 8+. We must call setenv directly for Godot's native code to see it.
@@ -109,14 +130,6 @@ public class Engine(string project, string? path = null, params string[] args) :
     public string? ProjectAssemblyDir { get; init; }
 
     /// <summary>
-    /// Absolute project path, captured at construction: boot-time CWD churn
-    /// (another instance's boot or DirAccess moving the process CWD) must not
-    /// change which project a relative path resolves to.
-    /// </summary>
-    private readonly string? _projectPath =
-        string.IsNullOrEmpty(path) ? null : Path.GetFullPath(path);
-
-    /// <summary>
     /// How long Start() waits for the process-wide boot lock that serializes
     /// engine boots (they mutate the process CWD and environment). Matches the
     /// hosting layer's boot-gate timeout: generous enough for a debug-native
@@ -206,14 +219,14 @@ public class Engine(string project, string? path = null, params string[] args) :
 
         // Prepare arguments for Godot. The project path was made absolute at
         // construction, so CWD movement between then and now cannot redirect it.
-        List<string> godotArgs = [project];
+        List<string> godotArgs = [_project];
         if (_projectPath is { } projectPath)
         {
             godotArgs.Add("--path");
             godotArgs.Add(projectPath);
         }
 
-        godotArgs.AddRange(args);
+        godotArgs.AddRange(_args);
 
         // Create a Godot instance via P/Invoke (without starting)
         _godotInstancePtr = CreateGodotInstance(godotArgs.ToArray());

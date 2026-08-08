@@ -50,7 +50,7 @@ internal sealed class MainForm : Form
 
         // `--wid` wants a top-level owner window, so pass the form's handle; geometry is fixed up
         // below because `--position` goes through Godot's virtual multi-monitor origin math.
-        _engine = new Engine("showcase", Engine.ResolveContent(),
+        _engine = new Engine("showcase", args:
         [
             "--wid", Handle.ToInt64().ToString(CultureInfo.InvariantCulture),
             "--resolution", $"{_gamePanel.ClientSize.Width}x{_gamePanel.ClientSize.Height}",
