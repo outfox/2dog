@@ -14,6 +14,8 @@ Godot normally loads .NET, now .NET loads Godot.
 
 Pre-built native libraries are available for speed and convenience.
 
+Oh btw., this means you can [export Godot C# to the web](https://2dog.dev/web.html) using 2dog.
+
 
 ## Getting Started
 
