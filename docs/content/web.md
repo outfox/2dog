@@ -29,11 +29,11 @@ Then create a project or add 2dog to an existing Godot project:
 
 ```bash [Existing Godot Project]
 cd path/to/MyGame
-dnx 2dog add -y
+dnx 2dog add
 ```
 
 ```bash [Fresh Project]
-dnx 2dog new MyGame -y
+dnx 2dog new MyGame
 cd MyGame
 ```
 

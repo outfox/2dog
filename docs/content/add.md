@@ -56,9 +56,9 @@ the prompts.
 ::: tip From stock Godot to the browser
 
 ```bash
-dnx 2dog add path/to/MyGame -y
+dnx 2dog add path/to/MyGame # change or confirm options as needed
 cd path/to/MyGame
-dotnet publish MyGame.web  # static site in MyGame.web/AppBundle/
+dotnet publish MyGame.web   # static site in MyGame.web/AppBundle/
 ```
 
 Publishing requires `dotnet workload install wasm-tools`. See
