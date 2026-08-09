@@ -30,6 +30,9 @@ public class GodotControl : Control
     /// <summary>Latest CPU-presented frame; null in GPU mode (a composition visual renders).</summary>
     internal Bitmap? PresentedFrame { get; set; }
 
+    // Window sizing and input DIP-to-pixel conversion must agree on the scale; both read it here.
+    internal double RenderScaling => TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);

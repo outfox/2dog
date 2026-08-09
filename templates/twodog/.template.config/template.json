@@ -51,6 +51,13 @@
       "replaces": "GODOT_SDK_VERSION",
       "description": "Version of Godot.NET.Sdk and GodotSharp to reference."
     },
+    "avaloniaVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.0.0-avtpl",
+      "replaces": "AVALONIA_PKG_VERSION",
+      "description": "Version of Avalonia packages to reference."
+    },
     "tests": {
       "type": "parameter",
       "datatype": "bool",

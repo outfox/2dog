@@ -14,6 +14,7 @@ internal static class ToolVersions
     public static string TwoDogVersion => Metadata("TwoDogVersion");
     public static string NativesVersion => Metadata("NativesVersion");
     public static string GodotSdkVersion => Metadata("GodotSdkVersion");
+    public static string AvaloniaVersion => Metadata("AvaloniaVersion");
 }
 
 /// <summary>Everything a scaffold run needs, once flags and prompts agree.</summary>

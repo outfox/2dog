@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Godot;
 using AvaloniaKey = Avalonia.Input.Key;
@@ -66,7 +65,7 @@ internal sealed class GodotInputForwarder : IDisposable
         _control.Cursor = CursorMap.ToCursor(shape);
     }
 
-    private double Scaling => TopLevel.GetTopLevel(_control)?.RenderScaling ?? 1.0;
+    private double Scaling => _control.RenderScaling;
 
     private Vector2 ToViewport(Avalonia.Point p)
     {
@@ -87,7 +86,8 @@ internal sealed class GodotInputForwarder : IDisposable
     // Dispose synthesized events right after injection: Godot's buffered Ref keeps the native
     // object alive, while waiting for the finalizer would free the managed GCHandle on the
     // finalizer thread, racing the engine's weak/strong handle swaps under event fire-hose.
-    private static void Dispatch(InputEvent ev)
+    // Internal: the input-injection regression tests exercise this exact pattern.
+    internal static void Dispatch(InputEvent ev)
     {
         try
         {

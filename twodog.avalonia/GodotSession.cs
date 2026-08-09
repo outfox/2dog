@@ -28,6 +28,8 @@ public sealed class GodotSession : IDisposable
     private bool _disposed;
     private bool _pausedByUser;
     private bool _pausedByDetach;
+    private Rid _viewportTexture;
+    private GodotPresentationMode? _notifiedMode;
 
     public GodotSession(GodotSessionOptions options)
     {
@@ -45,6 +47,18 @@ public sealed class GodotSession : IDisposable
 
     public bool IsStarted => _instance is not null;
 
+    // The root viewport's texture RID is engine-lifetime stable (only its RD-level backing
+    // changes on resize); resolved once here and shared by both presenters.
+    internal Rid ViewportTexture
+    {
+        get
+        {
+            if (!_viewportTexture.IsValid)
+                _viewportTexture = RenderingServer.ViewportGetTexture(Engine.Tree.Root.GetViewportRid());
+            return _viewportTexture;
+        }
+    }
+
     /// <summary>
     /// Gameplay pause. Setting it sets <c>SceneTree.Paused</c> (stopping processing for
     /// pausable nodes) and sends the application-lifecycle pause notification.
@@ -57,6 +71,9 @@ public sealed class GodotSession : IDisposable
 
     /// <summary>What <see cref="GodotPresentationMode.Auto"/> resolved to for the attached control.</summary>
     public GodotPresentationMode? ActiveMode => _presenter?.Mode;
+
+    /// <summary><see cref="ActiveMode"/> changed: attach, detach, or an Auto upgrade/fallback.</summary>
+    public event EventHandler? ActiveModeChanged;
 
     public event EventHandler? Started;
 
@@ -125,6 +142,7 @@ public sealed class GodotSession : IDisposable
         _presenter = CreatePresenter(control);
         if (_pausedByDetach) SetPaused(detached: false);
         UpdatePumpSource();
+        NotifyActiveModeChanged();
     }
 
     internal void Detach(GodotControl control)
@@ -140,6 +158,7 @@ public sealed class GodotSession : IDisposable
             if (_options.PauseWhenDetached && _instance is not null) SetPaused(detached: true);
             UpdatePumpSource();
         }
+        NotifyActiveModeChanged();
     }
 
     internal void NotifyControlResized()
@@ -153,7 +172,7 @@ public sealed class GodotSession : IDisposable
     private void SyncEngineWindowSize()
     {
         if (_instance is null || _control is null) return;
-        var scale = TopLevel.GetTopLevel(_control)?.RenderScaling ?? 1.0;
+        var scale = _control.RenderScaling;
         var width = (int)Math.Round(_control.Bounds.Width * scale);
         var height = (int)Math.Round(_control.Bounds.Height * scale);
         if (width <= 0 || height <= 0) return;
@@ -190,6 +209,16 @@ public sealed class GodotSession : IDisposable
             _presenter.Dispose();
             _presenter = new CpuPresenter(_control, this);
         }
+        NotifyActiveModeChanged();
+    }
+
+    // Every presenter transition funnels through Attach/Detach/ReconcilePresenter; this
+    // collapses them into one edge-triggered notification.
+    private void NotifyActiveModeChanged()
+    {
+        if (ActiveMode == _notifiedMode) return;
+        _notifiedMode = ActiveMode;
+        ActiveModeChanged?.Invoke(this, EventArgs.Empty);
     }
 
     // The pump has two sources, both on the UI thread: the compositor's animation frames
@@ -197,7 +226,8 @@ public sealed class GodotSession : IDisposable
     // hidden and never blocks in present), and a timer while detached.
     private void UpdatePumpSource()
     {
-        if (_instance is null || _pumpStopped || _disposed) return;
+        // No _disposed term: Dispose() stops the pump and nulls the instance before returning.
+        if (_instance is null || _pumpStopped) return;
 
         if (_control is { } control && TopLevel.GetTopLevel(control) is { } topLevel)
         {
@@ -211,9 +241,9 @@ public sealed class GodotSession : IDisposable
         }
         else if (_detachedTimer is null)
         {
-            var fps = Math.Clamp(_options.DetachedFramesPerSecond, 1, 240);
             _detachedTimer = new DispatcherTimer(
-                TimeSpan.FromSeconds(1 / fps), DispatcherPriority.Background, (_, _) => PumpFrame());
+                TimeSpan.FromSeconds(1 / _options.DetachedFramesPerSecond), DispatcherPriority.Background,
+                (_, _) => PumpFrame());
             _detachedTimer.Start();
         }
     }
@@ -229,7 +259,7 @@ public sealed class GodotSession : IDisposable
 
     private void PumpFrame()
     {
-        if (_instance is null || _pumpStopped || _disposed) return;
+        if (_instance is null || _pumpStopped) return;
 
         if (_instance.Iteration())
         {

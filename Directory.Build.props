@@ -15,8 +15,8 @@
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Avalonia for the 2dog.avalonia package and its in-repo consumers. Mixed Avalonia
-             versions fail at runtime, so bump it in one place. (The dotnet-new template keeps
-             a literal copy - template code builds outside the repo on a stock SDK.) -->
+             versions fail at runtime, so bump it in one place. (The template consumes it via
+             its AVALONIA_PKG_VERSION token, substituted on pack and scaffold.) -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten
              the .NET browser-wasm runtime pack was built with (the web libgodot.a is
@@ -26,6 +26,13 @@
         <EmscriptenVersion>3.1.56</EmscriptenVersion>
         <!-- Allow running on any .NET 10+ runtime (10, 11, ...) -->
         <RollForward>LatestMajor</RollForward>
+    </PropertyGroup>
+
+    <!-- Fork build output consumed by twodog.engine, twodog.import, and twodog.avalonia.
+         Consumers append the API config flavor (Release/, Debug/) themselves. -->
+    <PropertyGroup>
+        <TwoDogGodotBinDir Condition="'$(TwoDogGodotBinDir)' == ''">$(MSBuildThisFileDirectory)godot/bin/</TwoDogGodotBinDir>
+        <TwoDogGodotSharpApiDir Condition="'$(TwoDogGodotSharpApiDir)' == ''">$(TwoDogGodotBinDir)GodotSharp/Api/</TwoDogGodotSharpApiDir>
     </PropertyGroup>
 
     <!-- Shared NuGet package metadata; packable projects only add what
