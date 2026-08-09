@@ -260,7 +260,7 @@ internal static class ScaffoldCommand
 
     /// <summary>
     /// Rewrites the template csproj's DefaultItemExcludes to the host folders
-    /// this project actually gets (the template lists the three default ones).
+    /// this project actually gets (the template lists every host folder).
     /// </summary>
     internal static string SetHostExcludes(string csproj, IReadOnlyList<string> hostFolders)
     {

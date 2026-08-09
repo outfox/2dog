@@ -31,6 +31,7 @@ internal sealed class GpuPresenter : IPresenter
     private RenderingDevice? _rd;
     private Rid _viewportTexture;
     private Task? _lastPresent;
+    private bool _disposed;
 
     public InitState State { get; private set; } = InitState.Initializing;
 
@@ -72,6 +73,9 @@ internal sealed class GpuPresenter : IPresenter
             var compositor = selfVisual.Compositor;
             var interop = await compositor.TryGetCompositionGpuInterop()
                           ?? throw new PlatformNotSupportedException("The compositor offers no GPU interop.");
+            // Disposed while awaiting (detach, presenter swap): the control may already belong
+            // to a successor - allocate nothing and leave its child visual alone.
+            if (_disposed) return;
 
             var factory = CreateFactory(interop);
             if (!interop.SupportedImageHandleTypes.Contains(factory.AvaloniaHandleType))
@@ -93,7 +97,7 @@ internal sealed class GpuPresenter : IPresenter
         catch (Exception)
         {
             State = InitState.Failed;
-            ReleaseResources();
+            if (!_disposed) ReleaseResources();
         }
     }
 
@@ -119,7 +123,18 @@ internal sealed class GpuPresenter : IPresenter
         if (State != InitState.Ready || !_session.IsStarted || _factory is null || _surface is null) return;
         // One image in flight: skip the frame while the compositor still owns the last update,
         // and skip when the writer-side sync cannot engage promptly (compositor mid-read).
-        if (_lastPresent is { IsCompleted: false }) return;
+        if (_lastPresent is { } present)
+        {
+            if (!present.IsCompleted) return;
+            if (!present.IsCompletedSuccessfully)
+            {
+                // The compositor rejected or lost the imported image (failed import, device
+                // loss); observe the fault and fail over instead of retrying every frame.
+                _ = present.Exception;
+                Fail();
+                return;
+            }
+        }
 
         _rd ??= RenderingServer.GetRenderingDevice();
         if (_rd is null) return;
@@ -130,13 +145,17 @@ internal sealed class GpuPresenter : IPresenter
         if ((_texture is null || _texture.Width != size.X || _texture.Height != size.Y)
             && !RecreateSharedTexture(_rd, size.X, size.Y))
         {
-            State = InitState.Failed;
-            ReleaseResources();
+            Fail();
             return;
         }
 
-        if (!_texture!.Acquire()) return;
+        switch (_texture!.Acquire())
+        {
+            case AcquireResult.Busy: return;
+            case AcquireResult.Failed: Fail(); return;
+        }
         Error err;
+        bool released;
         try
         {
             // The root viewport's texture RID is engine-lifetime stable; only the RD-level
@@ -148,7 +167,12 @@ internal sealed class GpuPresenter : IPresenter
         }
         finally
         {
-            _texture.Release();
+            released = _texture.Release();
+        }
+        if (!released)
+        {
+            Fail();
+            return;
         }
 
         if (err != Error.Ok || _imported is null) return;
@@ -187,6 +211,14 @@ internal sealed class GpuPresenter : IPresenter
             _visual.Size = new Vector2((float)_control.Bounds.Width, (float)_control.Bounds.Height);
     }
 
+    /// <summary>Terminal presenter failure: the session's reconcile pass observes
+    /// <see cref="Failed"/> on the next pump and swaps in the CPU fallback under Auto.</summary>
+    private void Fail()
+    {
+        State = InitState.Failed;
+        ReleaseResources();
+    }
+
     private void ReleaseResources()
     {
         ElementComposition.SetElementChildVisual(_control, null);
@@ -201,7 +233,12 @@ internal sealed class GpuPresenter : IPresenter
         _rd = null;
         _surface = null;
         _visual = null;
+        _lastPresent = null;
     }
 
-    public void Dispose() => ReleaseResources();
+    public void Dispose()
+    {
+        _disposed = true;
+        ReleaseResources();
+    }
 }

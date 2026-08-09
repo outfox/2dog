@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace twodog;
@@ -37,7 +38,13 @@ public sealed class GodotSessionOptions
 
     /// <summary>
     /// Pump rate while no control is attached (the compositor's animation frames drive the
-    /// pump only while a control is on screen).
+    /// pump only while a control is on screen). Clamped to 1-240; NaN is rejected.
     /// </summary>
-    public double DetachedFramesPerSecond { get; init; } = 30;
+    public double DetachedFramesPerSecond
+    {
+        get;
+        init => field = double.IsNaN(value)
+            ? throw new ArgumentException($"{nameof(DetachedFramesPerSecond)} must not be NaN.", nameof(value))
+            : value;
+    } = 30;
 }

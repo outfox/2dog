@@ -62,18 +62,43 @@ public class InputInjectionTests(HeadlessFixture godot)
         // Fire-hose synthesis: disposing each wrapper right after injection must never
         // race the engine's GCHandle bookkeeping (regression: fatal 0xC0000005 /
         // "Handle is not initialized" when wrappers were left to the finalizer).
-        for (var frame = 0; frame < 10; frame++)
+        // Delivery is observed via the root window's input signal. Input accumulation may
+        // merge same-frame motions, but it sums Relative and keeps the last Position, so
+        // both survive as invariants of the injected stream.
+        var relativeSum = Vector2.Zero;
+        var lastPosition = Vector2.Zero;
+        Window.WindowInputEventHandler onInput = ev =>
         {
-            for (var i = 0; i < 100; i++)
+            if (ev is InputEventMouseMotion motion)
             {
-                var pos = new Vector2(i, frame);
-                Inject(new InputEventMouseMotion
-                {
-                    Position = pos, GlobalPosition = pos,
-                    Relative = new Vector2(1, 0), ButtonMask = 0,
-                });
+                relativeSum += motion.Relative;
+                lastPosition = motion.Position;
             }
-            godot.GodotInstance.Iteration();
+        };
+
+        godot.Tree.Root.WindowInput += onInput;
+        try
+        {
+            for (var frame = 0; frame < 10; frame++)
+            {
+                for (var i = 0; i < 100; i++)
+                {
+                    var pos = new Vector2(i, frame);
+                    Inject(new InputEventMouseMotion
+                    {
+                        Position = pos, GlobalPosition = pos,
+                        Relative = new Vector2(1, 0), ButtonMask = 0,
+                    });
+                }
+                godot.GodotInstance.Iteration();
+            }
         }
+        finally
+        {
+            godot.Tree.Root.WindowInput -= onInput;
+        }
+
+        Assert.Equal(new Vector2(1000, 0), relativeSum);
+        Assert.Equal(new Vector2(99, 9), lastPosition);
     }
 }

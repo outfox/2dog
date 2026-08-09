@@ -17,27 +17,26 @@ namespace twodog.Presentation;
 [SupportedOSPlatform("windows")]
 internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 {
+    private readonly D3D11 _api;
     private ComPtr<ID3D11Device> _device;
-    private ComPtr<ID3D11DeviceContext> _context;
 
     public string AvaloniaHandleType => KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle;
 
     /// <summary>Creates the device on the adapter with the given LUID (the compositor's device).</summary>
     public D3D11SharedTextureFactory(byte[]? adapterLuid)
     {
-        var api = D3D11.GetApi(null, false);
+        _api = D3D11.GetApi(null, false);
         using var adapter = FindAdapter(adapterLuid);
 
         ID3D11Device* device = null;
-        ID3D11DeviceContext* context = null;
-        // A specific adapter requires DriverType Unknown per D3D11CreateDevice rules.
-        SilkMarshal.ThrowHResult(api.CreateDevice(
+        // A specific adapter requires DriverType Unknown per D3D11CreateDevice rules. No immediate
+        // context: this device only creates resources, and the keyed mutex synchronizes access.
+        SilkMarshal.ThrowHResult(_api.CreateDevice(
             (IDXGIAdapter*)adapter.Handle,
             adapter.Handle is null ? D3DDriverType.Hardware : D3DDriverType.Unknown,
             0, (uint)CreateDeviceFlag.BgraSupport, null, 0, D3D11.SdkVersion,
-            &device, null, &context));
+            &device, null, (ID3D11DeviceContext**)null));
         _device = device;
-        _context = context;
     }
 
     private static ComPtr<IDXGIAdapter1> FindAdapter(byte[]? luid)
@@ -45,7 +44,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         if (luid is not { Length: 8 }) return default;
         var target = BitConverter.ToInt64(luid, 0);
 
-        var dxgi = DXGI.GetApi(null, false);
+        using var dxgi = DXGI.GetApi(null, false);
         IDXGIFactory1* factory = null;
         SilkMarshal.ThrowHResult(dxgi.CreateDXGIFactory1(SilkMarshal.GuidPtrOf<IDXGIFactory1>(), (void**)&factory));
         try
@@ -120,10 +119,10 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
     public void Dispose()
     {
-        _context.Dispose();
-        _context = default;
         _device.Dispose();
         _device = default;
+        // Last: the API wrapper's native-library context must outlive objects created through it.
+        _api.Dispose();
     }
 
     private sealed class D3D11SharedTexture(
@@ -152,13 +151,21 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
         public SharedTextureSync Sync => SharedTextureSync.KeyedMutex;
 
-        public bool Acquire() => _mutex.Handle is not null && _mutex.Get().AcquireSync(0, 100) == 0;
-
-        public void Release()
+        public AcquireResult Acquire()
         {
-            if (_mutex.Handle is not null)
-                SilkMarshal.ThrowHResult(_mutex.Get().ReleaseSync(1));
+            if (_mutex.Handle is null) return AcquireResult.Failed;
+            return _mutex.Get().AcquireSync(0, 100) switch
+            {
+                0 => AcquireResult.Acquired,
+                // AcquireSync reports contention as WAIT_TIMEOUT (0x102, success severity; some
+                // layers wrap it as 0x80070102). Anything else - device removed, abandoned
+                // mutex - is terminal.
+                0x102 or unchecked((int)0x80070102) => AcquireResult.Busy,
+                _ => AcquireResult.Failed,
+            };
         }
+
+        public bool Release() => _mutex.Handle is not null && _mutex.Get().ReleaseSync(1) == 0;
 
         public void Dispose()
         {
