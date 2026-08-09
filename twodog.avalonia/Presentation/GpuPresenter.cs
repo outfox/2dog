@@ -34,6 +34,8 @@ internal sealed class GpuPresenter : IPresenter
     private InitState _state = InitState.Initializing;
     private bool _disposed;
 
+    public bool Ready => _state == InitState.Ready;
+
     public bool Failed => _state == InitState.Failed;
 
     /// <summary>This platform's sharing flavor: the engine share type it rides on plus the
@@ -181,7 +183,11 @@ internal sealed class GpuPresenter : IPresenter
             return;
         }
 
-        if (err != Error.Ok || _imported is null) return;
+        if (err != Error.Ok || _imported is null)
+        {
+            Fail();
+            return;
+        }
         _lastPresent = _texture.Present(_surface, _imported);
     }
 
@@ -194,10 +200,9 @@ internal sealed class GpuPresenter : IPresenter
 
         try
         {
-            var texture = _factory!.Create(rd, width, height);
-            _imported = _interop!.ImportImage(texture.Handle, texture.ImportProperties);
-            _texture = texture;
-            return true;
+            _texture = _factory!.Create(rd, width, height);
+            _imported = _interop!.ImportImage(_texture.Handle, _texture.ImportProperties);
+            return _imported is not null;
         }
         catch (Exception)
         {

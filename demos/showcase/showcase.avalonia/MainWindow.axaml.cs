@@ -16,6 +16,7 @@ public partial class MainWindow : Window
     private readonly string[] _extraArgs;
     private GodotSession? _session;
     private DispatcherTimer? _fpsTimer;
+    private GodotPresentationMode? _reportedMode;
 
     // Parameterless overload for the XAML runtime loader and previewer.
     public MainWindow() : this([]) { }
@@ -40,13 +41,15 @@ public partial class MainWindow : Window
             ExtraArgs = _extraArgs,
         });
         _session.QuitRequested += (_, _) => Close();
-        // Report which presentation path is engaged whenever it changes (Auto settles after
-        // Start()) - CI smoke greps for this. Detach on close carries no mode and is skipped.
-        _session.ActiveModeChanged += (_, _) =>
+        // Async GPU setup can still fail after ActiveMode changes; only report a ready presenter.
+        void ReportReadyMode()
         {
-            if (_session?.ActiveMode is { } mode)
-                Console.WriteLine($"2DOG_AVALONIA_MODE={mode}");
-        };
+            if (_session is not { IsPresentationReady: true, ActiveMode: { } mode } || mode == _reportedMode) return;
+            _reportedMode = mode;
+            Console.WriteLine($"2DOG_AVALONIA_MODE={mode}");
+        }
+        _session.ActiveModeChanged += (_, _) => ReportReadyMode();
+        _session.FrameAdvanced += (_, _) => ReportReadyMode();
         GodotView.Session = _session;
         _session.Start();
 

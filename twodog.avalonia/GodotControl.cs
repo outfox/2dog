@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -17,6 +18,7 @@ public class GodotControl : Control
 
     private bool _onTree;
     private bool _restoringSession;
+    private TopLevel? _topLevel;
 
     static GodotControl() => FocusableProperty.OverrideDefaultValue<GodotControl>(true);
 
@@ -46,7 +48,8 @@ public class GodotControl : Control
             }
             catch
             {
-                (change.NewValue as GodotSession)?.Detach(this);
+                try { (change.NewValue as GodotSession)?.Detach(this); }
+                catch { }
                 RestoreSession(oldSession);
                 throw;
             }
@@ -65,7 +68,12 @@ public class GodotControl : Control
         try
         {
             try { previous?.Attach(this); }
-            catch { previous = null; }
+            catch
+            {
+                try { previous?.Detach(this); }
+                catch { }
+                previous = null;
+            }
             SetCurrentValue(SessionProperty, previous);
         }
         finally
@@ -77,6 +85,8 @@ public class GodotControl : Control
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
+        _topLevel = TopLevel.GetTopLevel(this);
+        if (_topLevel is not null) _topLevel.ScalingChanged += OnScalingChanged;
         _onTree = true;
         Session?.Attach(this);
     }
@@ -84,9 +94,13 @@ public class GodotControl : Control
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         _onTree = false;
+        if (_topLevel is not null) _topLevel.ScalingChanged -= OnScalingChanged;
+        _topLevel = null;
         Session?.Detach(this);
         base.OnDetachedFromVisualTree(e);
     }
+
+    private void OnScalingChanged(object? sender, EventArgs e) => Session?.NotifyControlResized();
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {

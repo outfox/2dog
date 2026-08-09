@@ -31,6 +31,7 @@ public class GodotControlLifecycleTests
         window.Show();
 
         Assert.Equal(GodotPresentationMode.Cpu, session.ActiveMode);
+        Assert.False(session.IsPresentationReady);
         window.Close();
     });
 
@@ -60,6 +61,23 @@ public class GodotControlLifecycleTests
     });
 
     [Fact]
+    public void RejectedSessionChange_RestoresPreviousSession() => Dispatch(() =>
+    {
+        using var previous = new GodotSession(new GodotSessionOptions { Project = "test" });
+        using var rejected = new GodotSession(new GodotSessionOptions { Project = "test" });
+        var control = new GodotControl { Session = previous };
+        var otherControl = new GodotControl { Session = rejected };
+        var window = new Window { Content = new StackPanel { Children = { control, otherControl } } };
+        window.Show();
+
+        Assert.Throws<InvalidOperationException>(() => control.Session = rejected);
+        Assert.Same(previous, control.Session);
+        Assert.Equal(GodotPresentationMode.Cpu, previous.ActiveMode);
+        Assert.Equal(GodotPresentationMode.Cpu, rejected.ActiveMode);
+        window.Close();
+    });
+
+    [Fact]
     public void Dispose_WithoutStart_RaisesStopped() => Dispatch(() =>
     {
         var session = new GodotSession(new GodotSessionOptions { Project = "test" });
@@ -84,6 +102,7 @@ public class GodotControlLifecycleTests
         window.Show();
 
         Assert.Equal(GodotPresentationMode.Gpu, session.ActiveMode);
+        Assert.False(session.IsPresentationReady);
         window.Close();
     });
 }
