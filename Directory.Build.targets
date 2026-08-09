@@ -13,6 +13,7 @@
             <TwoDogVer ParameterType="System.String" Required="true" />
             <NativesVer ParameterType="System.String" Required="true" />
             <GodotVer ParameterType="System.String" Required="true" />
+            <AvaloniaVer ParameterType="System.String" Required="true" />
         </ParameterGroup>
         <Task>
             <Using Namespace="System.Text.RegularExpressions" />
@@ -25,6 +26,7 @@
                     ("twodogVersion", TwoDogVer),
                     ("nativesVersion", NativesVer),
                     ("godotVersion", GodotVer),
+                    ("avaloniaVersion", AvaloniaVer),
                 };
                 foreach (var (symbol, value) in substitutions)
                 {

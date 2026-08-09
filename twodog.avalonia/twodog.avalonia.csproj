@@ -26,7 +26,7 @@
          GodotSharp.dll from 2dog.engine's lib/net10.0/. -->
     <ItemGroup>
         <Reference Include="GodotSharp">
-            <HintPath>$(MSBuildProjectDirectory)/../godot/bin/GodotSharp/Api/Release/GodotSharp.dll</HintPath>
+            <HintPath>$(TwoDogGodotSharpApiDir)Release/GodotSharp.dll</HintPath>
         </Reference>
     </ItemGroup>
 

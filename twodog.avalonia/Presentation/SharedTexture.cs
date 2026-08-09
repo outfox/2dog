@@ -1,19 +1,10 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia.Platform;
+using Avalonia.Rendering.Composition;
 using Godot;
 
 namespace twodog.Presentation;
-
-/// <summary>How presented frames are synchronized with the compositor.</summary>
-internal enum SharedTextureSync
-{
-    /// <summary>Writer and compositor hand off through a D3D11 keyed mutex (keys 0/1).</summary>
-    KeyedMutex,
-
-    /// <summary>No explicit primitive: the engine's present stalls until the copy finished
-    /// on the GPU, and the import type is coherent (exported memory, IOSurface).</summary>
-    Automatic,
-}
 
 /// <summary>Outcome of <see cref="ISharedTexture.Acquire"/>.</summary>
 internal enum AcquireResult
@@ -40,7 +31,6 @@ internal interface ISharedTexture : IDisposable
     Rid Rid { get; }
     IPlatformHandle Handle { get; }
     PlatformGraphicsExternalImageProperties ImportProperties { get; }
-    SharedTextureSync Sync { get; }
 
     /// <summary>Before the engine copy; only <see cref="AcquireResult.Acquired"/> permits the
     /// copy and requires a matching <see cref="Release"/>.</summary>
@@ -49,6 +39,10 @@ internal interface ISharedTexture : IDisposable
     /// <summary>After the engine copy completed (the present call stalls until it has).
     /// False is a terminal sync failure; the presenter should fail over.</summary>
     bool Release();
+
+    /// <summary>Queues the compositor-side present of this texture's imported image on the
+    /// surface, engaging whatever synchronization flavor the texture implements.</summary>
+    Task Present(CompositionDrawingSurface surface, ICompositionImportedGpuImage image);
 }
 
 /// <summary>Creates the platform's shared-texture flavor; owns any device state shared
@@ -112,11 +106,14 @@ internal sealed class EngineExportedTextureFactory(
             TopLeftOrigin = true,
         };
 
-        public SharedTextureSync Sync => SharedTextureSync.Automatic;
-
         public AcquireResult Acquire() => AcquireResult.Acquired;
 
         public bool Release() => true;
+
+        // No explicit sync primitive: the engine's present stalls until the copy finished on
+        // the GPU, and the import type is coherent (exported memory, IOSurface).
+        public Task Present(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
+            surface.UpdateAsync(image);
 
         public void Dispose() => rd.FreeRid(rid);
     }

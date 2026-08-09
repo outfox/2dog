@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Avalonia.Platform;
 using Avalonia.Rendering.Composition;
@@ -18,7 +19,7 @@ namespace twodog.Presentation;
 /// </summary>
 internal sealed class GpuPresenter : IPresenter
 {
-    internal enum InitState { Initializing, Ready, Failed }
+    private enum InitState { Initializing, Ready, Failed }
 
     private readonly GodotControl _control;
     private readonly GodotSession _session;
@@ -29,30 +30,52 @@ internal sealed class GpuPresenter : IPresenter
     private CompositionSurfaceVisual? _visual;
     private ICompositionImportedGpuImage? _imported;
     private RenderingDevice? _rd;
-    private Rid _viewportTexture;
     private Task? _lastPresent;
+    private InitState _state = InitState.Initializing;
     private bool _disposed;
 
-    public InitState State { get; private set; } = InitState.Initializing;
+    public bool Failed => _state == InitState.Failed;
 
-    public bool Failed => State == InitState.Failed;
+    /// <summary>This platform's sharing flavor: the engine share type it rides on plus the
+    /// factory creating it - the single table both <see cref="IsSupported"/> and
+    /// initialization consume. Null when the platform has no zero-copy flavor yet.</summary>
+    private static (RenderingDevice.ExternalTextureShareHandleType ShareType,
+        Func<ICompositionGpuInterop, ISharedTextureFactory> CreateFactory)? PlatformSharing
+    {
+        get
+        {
+            if (OperatingSystem.IsWindows())
+                return (RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex, CreateD3D11Factory);
+            if (OperatingSystem.IsLinux())
+                return Exported(RenderingDevice.ExternalTextureShareHandleType.OpaqueFd,
+                    KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaquePosixFileDescriptor,
+                    needsMemorySize: true);
+            if (OperatingSystem.IsMacOS())
+                return Exported(RenderingDevice.ExternalTextureShareHandleType.Iosurface,
+                    KnownPlatformGraphicsExternalImageHandleTypes.IOSurfaceRef,
+                    needsMemorySize: false);
+            return null;
 
-    /// <summary>The engine share type this platform's compositor sharing rides on, or null
-    /// when the platform has no zero-copy flavor yet.</summary>
-    private static RenderingDevice.ExternalTextureShareHandleType? PlatformShareType =>
-        OperatingSystem.IsWindows() ? RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex
-        : OperatingSystem.IsLinux() ? RenderingDevice.ExternalTextureShareHandleType.OpaqueFd
-        : OperatingSystem.IsMacOS() ? RenderingDevice.ExternalTextureShareHandleType.Iosurface
-        : null;
+            static (RenderingDevice.ExternalTextureShareHandleType,
+                Func<ICompositionGpuInterop, ISharedTextureFactory>) Exported(
+                    RenderingDevice.ExternalTextureShareHandleType shareType, string handleType,
+                    bool needsMemorySize) =>
+                (shareType, _ => new EngineExportedTextureFactory(shareType, handleType, needsMemorySize));
+        }
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static ISharedTextureFactory CreateD3D11Factory(ICompositionGpuInterop interop) =>
+        new D3D11SharedTextureFactory(interop.DeviceLuid);
 
     /// <summary>Whether the running engine's natives can share textures on this platform.
     /// The engine must be started.</summary>
     public static bool IsSupported()
     {
-        if (PlatformShareType is not { } shareType) return false;
+        if (PlatformSharing is not { } sharing) return false;
         var rd = RenderingServer.GetRenderingDevice();
         if (rd is null) return false;
-        return (rd.ExternalTextureGetSupportedHandleTypes() & (1u << (int)shareType)) != 0;
+        return (rd.ExternalTextureGetSupportedHandleTypes() & (1u << (int)sharing.ShareType)) != 0;
     }
 
     public GpuPresenter(GodotControl control, GodotSession session)
@@ -77,7 +100,9 @@ internal sealed class GpuPresenter : IPresenter
             // to a successor - allocate nothing and leave its child visual alone.
             if (_disposed) return;
 
-            var factory = CreateFactory(interop);
+            var sharing = PlatformSharing
+                ?? throw new PlatformNotSupportedException("No zero-copy sharing flavor for this platform.");
+            var factory = sharing.CreateFactory(interop);
             if (!interop.SupportedImageHandleTypes.Contains(factory.AvaloniaHandleType))
             {
                 factory.Dispose();
@@ -92,35 +117,18 @@ internal sealed class GpuPresenter : IPresenter
             _visual.Surface = _surface;
             _visual.Size = new Vector2((float)_control.Bounds.Width, (float)_control.Bounds.Height);
             ElementComposition.SetElementChildVisual(_control, _visual);
-            State = InitState.Ready;
+            _state = InitState.Ready;
         }
         catch (Exception)
         {
-            State = InitState.Failed;
+            _state = InitState.Failed;
             if (!_disposed) ReleaseResources();
         }
     }
 
-    private static ISharedTextureFactory CreateFactory(ICompositionGpuInterop interop)
-    {
-        if (OperatingSystem.IsWindows())
-            return new D3D11SharedTextureFactory(interop.DeviceLuid);
-        if (OperatingSystem.IsLinux())
-            return new EngineExportedTextureFactory(
-                RenderingDevice.ExternalTextureShareHandleType.OpaqueFd,
-                KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaquePosixFileDescriptor,
-                needsMemorySize: true);
-        if (OperatingSystem.IsMacOS())
-            return new EngineExportedTextureFactory(
-                RenderingDevice.ExternalTextureShareHandleType.Iosurface,
-                KnownPlatformGraphicsExternalImageHandleTypes.IOSurfaceRef,
-                needsMemorySize: false);
-        throw new PlatformNotSupportedException("No zero-copy sharing flavor for this platform.");
-    }
-
     public void PresentFrame()
     {
-        if (State != InitState.Ready || !_session.IsStarted || _factory is null || _surface is null) return;
+        if (_state != InitState.Ready || !_session.IsStarted || _factory is null || _surface is null) return;
         // One image in flight: skip the frame while the compositor still owns the last update,
         // and skip when the writer-side sync cannot engage promptly (compositor mid-read).
         if (_lastPresent is { } present)
@@ -158,11 +166,9 @@ internal sealed class GpuPresenter : IPresenter
         bool released;
         try
         {
-            // The root viewport's texture RID is engine-lifetime stable; only the RD-level
-            // texture behind it changes (on resize), so that one is re-queried per frame.
-            if (!_viewportTexture.IsValid)
-                _viewportTexture = RenderingServer.ViewportGetTexture(_session.Engine.Tree.Root.GetViewportRid());
-            var viewportRd = RenderingServer.TextureGetRdTexture(_viewportTexture);
+            // Only the RD-level texture behind the (stable, session-cached) viewport texture
+            // changes on resize, so it is re-queried per frame.
+            var viewportRd = RenderingServer.TextureGetRdTexture(_session.ViewportTexture);
             err = _rd.ExternalTexturePresent(viewportRd, _texture.Rid);
         }
         finally
@@ -176,9 +182,7 @@ internal sealed class GpuPresenter : IPresenter
         }
 
         if (err != Error.Ok || _imported is null) return;
-        _lastPresent = _texture.Sync == SharedTextureSync.KeyedMutex
-            ? _surface.UpdateWithKeyedMutexAsync(_imported, 1, 0)
-            : _surface.UpdateAsync(_imported);
+        _lastPresent = _texture.Present(_surface, _imported);
     }
 
     private bool RecreateSharedTexture(RenderingDevice rd, int width, int height)
@@ -215,7 +219,7 @@ internal sealed class GpuPresenter : IPresenter
     /// <see cref="Failed"/> on the next pump and swaps in the CPU fallback under Auto.</summary>
     private void Fail()
     {
-        State = InitState.Failed;
+        _state = InitState.Failed;
         ReleaseResources();
     }
 
@@ -229,7 +233,6 @@ internal sealed class GpuPresenter : IPresenter
         _factory?.Dispose();
         _factory = null;
         _interop = null;
-        _viewportTexture = default;
         _rd = null;
         _surface = null;
         _visual = null;

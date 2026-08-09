@@ -5,23 +5,13 @@ using twodog.Testing.Xunit;
 namespace twodog.tests.AvaloniaTests;
 
 // Validates the injection pattern the Avalonia input forwarder relies on: synthesize a
-// Godot InputEvent, hand it to Input.ParseInputEvent, dispose the wrapper immediately
-// (the engine's buffered Ref keeps the native object alive), and observe the state after
-// the next iteration flushes the buffer.
+// Godot InputEvent, hand it to the forwarder's own Dispatch (Input.ParseInputEvent plus
+// immediate disposal - the engine's buffered Ref keeps the native object alive), and
+// observe the state after the next iteration flushes the buffer.
 [Collection<HeadlessCollection>]
 public class InputInjectionTests(HeadlessFixture godot)
 {
-    private void Inject(InputEvent ev)
-    {
-        try
-        {
-            Input.ParseInputEvent(ev);
-        }
-        finally
-        {
-            ev.Dispose();
-        }
-    }
+    private static void Inject(InputEvent ev) => GodotInputForwarder.Dispatch(ev);
 
     [Fact]
     public void KeyPress_IsObservable_AfterFlush()

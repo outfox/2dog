@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using Avalonia.Platform;
+using Avalonia.Rendering.Composition;
 using Godot;
 using Silk.NET.Core.Native;
 using Silk.NET.Direct3D11;
@@ -149,8 +151,6 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             TopLeftOrigin = true,
         };
 
-        public SharedTextureSync Sync => SharedTextureSync.KeyedMutex;
-
         public AcquireResult Acquire()
         {
             if (_mutex.Handle is null) return AcquireResult.Failed;
@@ -166,6 +166,11 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         }
 
         public bool Release() => _mutex.Handle is not null && _mutex.Get().ReleaseSync(1) == 0;
+
+        // The complement of the writer's protocol: the writer acquired 0 and released 1, so
+        // the compositor presents with (1, 0).
+        public Task Present(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
+            surface.UpdateWithKeyedMutexAsync(image, 1, 0);
 
         public void Dispose()
         {

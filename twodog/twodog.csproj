@@ -51,6 +51,7 @@
         <AssemblyMetadata Include="TwoDogVersion" Value="$(TwoDogVersion)"/>
         <AssemblyMetadata Include="NativesVersion" Value="$(NativesVersion)"/>
         <AssemblyMetadata Include="GodotSdkVersion" Value="$(GodotVersion)"/>
+        <AssemblyMetadata Include="AvaloniaVersion" Value="$(AvaloniaVersion)"/>
     </ItemGroup>
 
     <!-- Single source of truth: embed the dotnet-new template's host subtrees
@@ -121,8 +122,8 @@
 
     <!-- Stage a copy of the bundled template.json with the real versions from
          Directory.Build.props substituted in, and pack that copy in place of
-         the committed file - which always holds the 0.0.0-tpl / 0.0.0-ntpl
-         placeholders and is never written to. (godotVersion has no
+         the committed file - which always holds the 0.0.0-tpl / 0.0.0-ntpl /
+         0.0.0-avtpl placeholders and is never written to. (godotVersion has no
          placeholder; its committed default is the real version.)
          SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
     <Target Name="StageVersionedTemplateJson" BeforeTargets="_GetPackageFiles;GenerateNuspec">
@@ -131,7 +132,8 @@
         <SetTemplateDefaults FilePath="$(IntermediateOutputPath)template.json"
                              TwoDogVer="$(TwoDogVersion)"
                              NativesVer="$(NativesVersion)"
-                             GodotVer="$(GodotVersion)" />
+                             GodotVer="$(GodotVersion)"
+                             AvaloniaVer="$(AvaloniaVersion)" />
         <ItemGroup>
             <None Include="$(IntermediateOutputPath)template.json" Pack="true"
                   PackagePath="content/twodog/.template.config/template.json"/>

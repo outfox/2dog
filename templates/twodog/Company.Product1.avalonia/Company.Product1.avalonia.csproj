@@ -16,8 +16,8 @@
 
     <ItemGroup>
         <PackageReference Include="2dog.avalonia" Version="TWODOG_PKG_VERSION"/>
-        <PackageReference Include="Avalonia.Desktop" Version="12.1.1"/>
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="AVALONIA_PKG_VERSION"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="AVALONIA_PKG_VERSION"/>
     </ItemGroup>
 
     <ItemGroup>

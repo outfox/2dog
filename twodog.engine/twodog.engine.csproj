@@ -32,14 +32,10 @@
         <PackageTags>godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <GodotBinDir>$(MSBuildProjectDirectory)/../godot/bin/</GodotBinDir>
-    </PropertyGroup>
-
     <!-- GodotSharp from fork build (embedded in the 2dog.engine package, no external dependency) -->
     <ItemGroup>
         <Reference Include="GodotSharp">
-            <HintPath>$(GodotBinDir)GodotSharp/Api/Release/GodotSharp.dll</HintPath>
+            <HintPath>$(TwoDogGodotSharpApiDir)Release/GodotSharp.dll</HintPath>
         </Reference>
     </ItemGroup>
 
@@ -83,7 +79,7 @@
       as a Roslyn source generator for consuming projects.
     -->
     <PropertyGroup>
-        <GodotSharpApiDir>$(GodotBinDir)GodotSharp/Api/Release/</GodotSharpApiDir>
+        <GodotSharpApiDir>$(TwoDogGodotSharpApiDir)Release/</GodotSharpApiDir>
         <GodotSourceGenDir>$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
     </PropertyGroup>
     <ItemGroup>
@@ -106,7 +102,7 @@
     <PropertyGroup>
         <!-- GODOTSHARP_DIR env var (highest priority) for locating GodotPlugins -->
         <GodotPluginsSrcDir Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)/</GodotPluginsSrcDir>
-        <GodotPluginsSrcDir Condition="'$(GodotPluginsSrcDir)' == ''">$(GodotBinDir)GodotSharp/Api/Debug/</GodotPluginsSrcDir>
+        <GodotPluginsSrcDir Condition="'$(GodotPluginsSrcDir)' == ''">$(TwoDogGodotSharpApiDir)Debug/</GodotPluginsSrcDir>
     </PropertyGroup>
     <ItemGroup>
         <None Include="$(GodotPluginsSrcDir)GodotPlugins.dll" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never"/>

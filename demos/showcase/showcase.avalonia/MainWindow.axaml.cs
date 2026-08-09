@@ -40,12 +40,20 @@ public partial class MainWindow : Window
             ExtraArgs = _extraArgs,
         });
         _session.QuitRequested += (_, _) => Close();
+        // Report which presentation path is engaged whenever it changes (Auto settles after
+        // Start()) - CI smoke greps for this. Detach on close carries no mode and is skipped.
+        _session.ActiveModeChanged += (_, _) =>
+        {
+            if (_session?.ActiveMode is { } mode)
+                Console.WriteLine($"2DOG_AVALONIA_MODE={mode}");
+        };
         GodotView.Session = _session;
         _session.Start();
 
         // The blue cubes spin themselves via SpinningCube._Process (Godot side); the white
         // ones are plain MeshInstance3Ds this host drives per frame, like the desktop host.
         // Skipped while paused: the root's delta keeps ticking when the tree is paused.
+        var root = _session.Engine.Tree.Root;
         var whiteCubes = _session.Engine.Tree.CurrentScene
             .GetNode<Node3D>("Flair/WhiteCubes")
             .GetChildren().OfType<Node3D>().ToArray();
@@ -53,7 +61,7 @@ public partial class MainWindow : Window
         _session.FrameAdvanced += (_, _) =>
         {
             if (_session.IsPaused) return;
-            var delta = (float)_session.Engine.Tree.Root.GetProcessDeltaTime();
+            var delta = (float)root.GetProcessDeltaTime();
             foreach (var cube in whiteCubes)
                 cube.Rotate(whiteSpinAxis, 1.8f * delta);
         };
@@ -64,11 +72,6 @@ public partial class MainWindow : Window
         _fpsTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background,
             (_, _) => FpsLabel.Text = $"{GodotEngine.GetFramesPerSecond():0} fps ({_session?.ActiveMode})");
         _fpsTimer.Start();
-
-        // Once presentation settles, report which path engaged - CI smoke greps for this.
-        DispatcherTimer.RunOnce(
-            () => Console.WriteLine($"2DOG_AVALONIA_MODE={_session?.ActiveMode}"),
-            TimeSpan.FromSeconds(3));
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)

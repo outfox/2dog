@@ -45,6 +45,6 @@ public sealed class GodotSessionOptions
         get;
         init => field = double.IsNaN(value)
             ? throw new ArgumentException($"{nameof(DetachedFramesPerSecond)} must not be NaN.", nameof(value))
-            : value;
+            : Math.Clamp(value, 1, 240);
     } = 30;
 }

@@ -18,7 +18,6 @@ internal sealed class CpuPresenter : IPresenter
 {
     private readonly GodotControl _control;
     private readonly GodotSession _session;
-    private Rid _viewportTexture;
 
     // Two bitmaps ping-pong: Avalonia's render thread may still read the presented one
     // while the next frame is written.
@@ -39,11 +38,7 @@ internal sealed class CpuPresenter : IPresenter
     {
         if (!_session.IsStarted) return;
 
-        // The root viewport's texture RID is engine-lifetime stable (only its backing
-        // storage changes on resize); resolve it once instead of per frame.
-        if (!_viewportTexture.IsValid)
-            _viewportTexture = RenderingServer.ViewportGetTexture(_session.Engine.Tree.Root.GetViewportRid());
-        using var image = RenderingServer.Texture2DGet(_viewportTexture);
+        using var image = RenderingServer.Texture2DGet(_session.ViewportTexture);
         if (image is null) return;
 
         var width = image.GetWidth();
