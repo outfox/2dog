@@ -44,12 +44,28 @@ public sealed class GodotSession : IDisposable
         $"{nameof(GodotSession)}: Start() must be called first.");
 
     public bool IsStarted => _instance is not null;
-    public bool IsPaused => _pausedByUser;
+
+    /// <summary>
+    /// Gameplay pause. Setting it sets <c>SceneTree.Paused</c> (stopping processing for
+    /// pausable nodes) and sends the application-lifecycle pause notification.
+    /// </summary>
+    public bool IsPaused
+    {
+        get => _pausedByUser;
+        set => SetPaused(user: value);
+    }
 
     /// <summary>What <see cref="GodotPresentationMode.Auto"/> resolved to for the attached control.</summary>
     public GodotPresentationMode? ActiveMode => _presenter?.Mode;
 
     public event EventHandler? Started;
+
+    /// <summary>
+    /// Raised once per engine frame, right after <c>Iteration()</c> - the place for
+    /// host-driven scene updates (the UI thread is the pump thread, so the scene tree
+    /// is safe to touch). The Avalonia counterpart of <c>Engine.Run(perFrame)</c>.
+    /// </summary>
+    public event EventHandler? FrameAdvanced;
 
     /// <summary>The engine asked to quit. The host should close its window and Dispose().</summary>
     public event EventHandler? QuitRequested;
@@ -80,10 +96,6 @@ public sealed class GodotSession : IDisposable
         if (_control is null && _options.PauseWhenDetached) SetPaused(detached: true);
     }
 
-    public void Pause() => SetPaused(user: true);
-
-    public void Resume() => SetPaused(user: false);
-
     // Both pause reasons compose into one engine-facing state; the engine is only
     // notified on the combined transition.
     private void SetPaused(bool? user = null, bool? detached = null)
@@ -93,6 +105,12 @@ public sealed class GodotSession : IDisposable
         _pausedByDetach = detached ?? _pausedByDetach;
         var isPaused = _pausedByUser || _pausedByDetach;
         if (isPaused == wasPaused) return;
+
+        // SceneTree.Paused is the actual gameplay pause. GodotInstance.Pause/Resume only
+        // raises NOTIFICATION_APPLICATION_PAUSED/RESUMED - the mobile-style lifecycle
+        // signal, which the tree merely propagates to nodes; sent as well so game code
+        // listening for it (autosaves etc.) stays informed.
+        Engine.Tree.Paused = isPaused;
         if (isPaused) Instance.Pause();
         else Instance.Resume();
     }
@@ -227,6 +245,7 @@ public sealed class GodotSession : IDisposable
             return;
         }
 
+        FrameAdvanced?.Invoke(this, EventArgs.Empty);
         ReconcilePresenter();
         _presenter?.PresentFrame();
         _forwarder?.SyncCursor();
