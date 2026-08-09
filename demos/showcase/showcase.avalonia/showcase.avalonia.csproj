@@ -33,7 +33,8 @@
         <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
-        <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" Condition="'$(Configuration)' == 'Debug'"/>
+        <!-- No Avalonia.Diagnostics: the F12 DevTools left the open-source package line after 11.x. -->
+
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../showcase.csproj"/>
