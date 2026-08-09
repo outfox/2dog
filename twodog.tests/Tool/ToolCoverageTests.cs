@@ -75,7 +75,7 @@ public class CommandLineCoverageTests
     {
         var cmd = CommandLine.Parse(
             ["convert", "-n", "Game", "--2dog", "Desk", "--browser", "Web", "--test", "Tests",
-             "--winforms", "Forms", "--dry-run", "--force", "--verbose", "--no-input"]);
+             "--winforms", "Forms", "--avalonia", "Ava", "--dry-run", "--force", "--verbose", "--no-input"]);
 
         Assert.Equal(Verb.Add, cmd.Verb);
         Assert.Equal("Game", cmd.Options.NameOverride);
@@ -85,7 +85,7 @@ public class CommandLineCoverageTests
         Assert.True(cmd.NoInteractive);
         Assert.Equal(
             [(HostKind.Desktop, "Desk"), (HostKind.Web, "Web"), (HostKind.Tests, "Tests"),
-             (HostKind.WinForms, "Forms")],
+             (HostKind.WinForms, "Forms"), (HostKind.Avalonia, "Ava")],
             cmd.Requested.Select(r => (r.Kind, r.Folder!)).ToArray());
     }
 
@@ -125,6 +125,7 @@ public class HostsCoverageTests
     [InlineData("web", "browser", "WebAssembly host, published as a static bundle", "--web")]
     [InlineData("tests", "tests", "xUnit project driving a headless engine", "--tests")]
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]
+    [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]
     public void HostMetadata_IsComplete(string suffix, string label, string blurb, string flag)
     {
         var kind = HostKinds.Of(suffix);

@@ -23,7 +23,7 @@
         <PackageId>2dog</PackageId>
         <PackageType>DotnetTool;Template</PackageType>
         <Version>$(TwoDogVersion)</Version>
-        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
+        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms, Avalonia) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
@@ -69,6 +69,7 @@
         <EmbeddedResource Include="../templates/twodog/Company.Product1.web/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.web/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.tests/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.tests/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.winforms/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.winforms/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.avalonia/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.avalonia/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
         <EmbeddedResource Include="../templates/twodog/Directory.Build.targets" LogicalName="tpl/Directory.Build.targets"/>
         <EmbeddedResource Include="../templates/twodog/export_presets.cfg" LogicalName="tpl/export_presets.cfg"/>

@@ -477,6 +477,7 @@ internal static class ScaffoldCommand
                 HostKind.Tests => $"  dotnet test {host.Folder}".PadRight(42) + "# xUnit tests (headless Godot)",
                 HostKind.Web => $"  dotnet publish {host.Folder}".PadRight(42) + "# browser bundle (needs wasm-tools workload)",
                 HostKind.WinForms => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinForms host (Windows only)",
+                HostKind.Avalonia => $"  dotnet run --project {host.Folder}".PadRight(42) + "# Avalonia host (cross-platform GUI)",
                 _ => $"  {host.Folder}",
             });
 

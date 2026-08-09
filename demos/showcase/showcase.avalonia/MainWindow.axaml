@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:twodog="using:twodog"
+        x:Class="showcase.MainWindow"
+        Title="2dog showcase - Avalonia"
+        Width="1152" Height="720"
+        MinWidth="480" MinHeight="320"
+        WindowStartupLocation="CenterScreen">
+    <Panel>
+        <twodog:GodotControl x:Name="GodotView"/>
+        <!-- The point of this host: ordinary Avalonia controls floating OVER the game. -->
+        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16"
+                Background="#B0202028" CornerRadius="8" Padding="12">
+            <StackPanel Spacing="8" MinWidth="180">
+                <TextBlock x:Name="FpsLabel" Text="- fps" Foreground="White"/>
+                <Button x:Name="PauseButton" Content="Pause" IsEnabled="False"
+                        HorizontalAlignment="Stretch"/>
+                <Slider x:Name="SpeedSlider" Minimum="0" Maximum="3" Value="1"/>
+            </StackPanel>
+        </Border>
+    </Panel>
+</Window>

@@ -9,8 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="2dog.avalonia" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.xunit" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="Avalonia.Headless" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="coverlet.collector" Version="10.*"/>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*"/>

@@ -12,6 +12,9 @@
 #if (winforms)
   <Project Path="TPLRAWNAME.winforms/TPLRAWNAME.winforms.csproj" />
 #endif
+#if (avalonia)
+  <Project Path="TPLRAWNAME.avalonia/TPLRAWNAME.avalonia.csproj" />
+#endif
 #if (web)
   <Project Path="TPLRAWNAME.web/TPLRAWNAME.web.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
