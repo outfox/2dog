@@ -2,19 +2,18 @@
 using System;
 using Godot.NativeInterop;
 
-namespace GodotPlugins.Game
+namespace showcase.showcase.web;
+
+/// <summary>
+/// Extends the source-generated <c>GodotPlugins.Game.Main</c> (a partial
+/// class) to expose a pointer to its private plugins-initializer method.
+/// Self-contained on purpose: it works with the stock Godot.NET.Sdk
+/// source generators, no patched SDK required.
+/// </summary>
+internal static partial class Main
 {
-    /// <summary>
-    /// Extends the source-generated <c>GodotPlugins.Game.Main</c> (a partial
-    /// class) to expose a pointer to its private plugins-initializer method.
-    /// Self-contained on purpose: it works with the stock Godot.NET.Sdk
-    /// source generators, no patched SDK required.
-    /// </summary>
-    internal static partial class Main
-    {
-        internal static unsafe IntPtr TwoDogGetInitializePointer() =>
-            (IntPtr)(delegate* unmanaged<IntPtr, IntPtr, IntPtr, int, godot_bool>)&InitializeFromGameProject;
-    }
+    internal static unsafe IntPtr TwoDogGetInitializePointer() =>
+        (IntPtr)(delegate* unmanaged<IntPtr, IntPtr, IntPtr, int, godot_bool>)GodotPlugins.Game.Main.GetInitializePointer();
 }
 
 /// <summary>
@@ -27,6 +26,6 @@ namespace GodotPlugins.Game
 /// </summary>
 public static class TwoDogWebBoot
 {
-    public static IntPtr PluginsInitializer() => GodotPlugins.Game.Main.TwoDogGetInitializePointer();
+    public static IntPtr PluginsInitializer() => Main.TwoDogGetInitializePointer();
 }
 #endif

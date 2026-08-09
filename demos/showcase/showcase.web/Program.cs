@@ -1,5 +1,8 @@
 using Godot;
+using showcase.showcase.web;
 using Engine = twodog.Engine;
+
+namespace showcase.web;
 
 internal static class Program
 {

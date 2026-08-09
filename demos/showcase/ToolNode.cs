@@ -1,5 +1,7 @@
 using Godot;
 
+namespace showcase;
+
 [Tool]
 [GlobalClass]
 public partial class ToolNode : Node
