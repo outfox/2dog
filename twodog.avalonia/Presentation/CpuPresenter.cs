@@ -56,8 +56,10 @@ internal sealed class CpuPresenter : IPresenter
         if (_back is null || _back.PixelSize != pixelSize)
         {
             _back?.Dispose();
+            // Godot readback carries straight alpha; Unpremul has Avalonia premultiply on draw,
+            // so transparent viewports composite instead of rendering opaque.
             _back = new WriteableBitmap(pixelSize, new Vector(96, 96),
-                PixelFormats.Rgba8888, AlphaFormat.Opaque);
+                PixelFormats.Rgba8888, AlphaFormat.Unpremul);
         }
 
         var data = image.GetData();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Godot;
@@ -17,8 +18,9 @@ internal sealed class GodotInputForwarder : IDisposable
 {
     private readonly GodotControl _control;
     private readonly GodotSession _session;
-    private readonly HashSet<AvaloniaKey> _heldKeys = [];
+    private readonly Dictionary<AvaloniaKey, PhysicalKey> _heldKeys = [];
     private Vector2 _lastPos;
+    private bool _hasLastPos;
     private MouseButtonMask _buttonMask;
     private DisplayServer.CursorShape? _lastShape;
 
@@ -27,6 +29,7 @@ internal sealed class GodotInputForwarder : IDisposable
         _control = control;
         _session = session;
 
+        _control.PointerEntered += OnPointerEntered;
         _control.PointerMoved += OnPointerMoved;
         _control.PointerPressed += OnPointerPressed;
         _control.PointerReleased += OnPointerReleased;
@@ -39,6 +42,11 @@ internal sealed class GodotInputForwarder : IDisposable
 
     public void Dispose()
     {
+        // Detaching mid-gesture must not leave keys or buttons wedged in the still-running session.
+        ReleaseHeldKeys();
+        ReleaseHeldButtons();
+
+        _control.PointerEntered -= OnPointerEntered;
         _control.PointerMoved -= OnPointerMoved;
         _control.PointerPressed -= OnPointerPressed;
         _control.PointerReleased -= OnPointerReleased;
@@ -91,6 +99,13 @@ internal sealed class GodotInputForwarder : IDisposable
         }
     }
 
+    // (Re)entry establishes the relative-motion baseline so the first move never reports a jump.
+    private void OnPointerEntered(object? sender, PointerEventArgs e)
+    {
+        _lastPos = ToViewport(e.GetPosition(_control));
+        _hasLastPos = true;
+    }
+
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (!Ready) return;
@@ -99,11 +114,12 @@ internal sealed class GodotInputForwarder : IDisposable
         {
             Position = pos,
             GlobalPosition = pos,
-            Relative = pos - _lastPos,
+            Relative = _hasLastPos ? pos - _lastPos : Vector2.Zero,
             ButtonMask = _buttonMask,
         };
         ApplyModifiers(motion, e.KeyModifiers);
         _lastPos = pos;
+        _hasLastPos = true;
         Dispatch(motion);
     }
 
@@ -169,11 +185,13 @@ internal sealed class GodotInputForwarder : IDisposable
         Dispatch(ev);
     }
 
-    private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
+    private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e) => ReleaseHeldButtons();
+
+    // A drag left the control's world (popup opened, capture stolen, control detached): release
+    // every pressed button so the engine's state cannot wedge.
+    private void ReleaseHeldButtons()
     {
         if (!Ready || _buttonMask == 0) return;
-        // A drag left the control's world (popup opened, capture stolen): release every
-        // pressed button so the engine's state cannot wedge.
         foreach (var button in (ReadOnlySpan<MouseButton>)
                  [MouseButton.Left, MouseButton.Right, MouseButton.Middle, MouseButton.Xbutton1, MouseButton.Xbutton2])
         {
@@ -191,7 +209,7 @@ internal sealed class GodotInputForwarder : IDisposable
     {
         if (!Ready) return;
         // Avalonia repeats arrive as repeated KeyDown events; Godot wants them flagged as echo.
-        var echo = pressed ? !_heldKeys.Add(e.Key) : !_heldKeys.Remove(e.Key);
+        var echo = pressed ? !_heldKeys.TryAdd(e.Key, e.PhysicalKey) : !_heldKeys.Remove(e.Key);
         if (!pressed && echo) return;
 
         var keycode = KeyMap.ToKeycode(e.Key);
@@ -200,7 +218,7 @@ internal sealed class GodotInputForwarder : IDisposable
             Keycode = keycode,
             PhysicalKeycode = KeyMap.ToPhysicalKeycode(e.PhysicalKey),
             KeyLabel = keycode,
-            Unicode = e.KeySymbol is [var c, ..] ? c : 0,
+            Unicode = e.KeySymbol is { Length: > 0 } s && Rune.TryGetRuneAt(s, 0, out var rune) ? rune.Value : 0,
             Pressed = pressed,
             Echo = pressed && echo,
         };
@@ -209,11 +227,28 @@ internal sealed class GodotInputForwarder : IDisposable
         e.Handled = true;
     }
 
+    // The eventual KeyUp goes elsewhere once focus moves on: release everything still held.
+    private void ReleaseHeldKeys()
+    {
+        if (Ready)
+        {
+            foreach (var (key, physical) in _heldKeys)
+            {
+                var keycode = KeyMap.ToKeycode(key);
+                Dispatch(new InputEventKey
+                {
+                    Keycode = keycode,
+                    PhysicalKeycode = KeyMap.ToPhysicalKeycode(physical),
+                    KeyLabel = keycode,
+                    Pressed = false,
+                });
+            }
+        }
+        _heldKeys.Clear();
+    }
+
     // Deliberately no GodotInstance.FocusIn/FocusOut here: those are for cross-process
     // embedding and corrupt display-server state in-process; the engine's own window
     // keeps app focus.
-    private void OnLostFocus(object? sender, EventArgs e)
-    {
-        _heldKeys.Clear();
-    }
+    private void OnLostFocus(object? sender, EventArgs e) => ReleaseHeldKeys();
 }

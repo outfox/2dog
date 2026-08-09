@@ -15,7 +15,9 @@
                 <TextBlock x:Name="FpsLabel" Text="- fps" Foreground="White"/>
                 <Button x:Name="PauseButton" Content="Pause" IsEnabled="False"
                         HorizontalAlignment="Stretch"/>
-                <Slider x:Name="SpeedSlider" Minimum="0" Maximum="3" Value="1"/>
+                <TextBlock Text="Game speed" Foreground="White"/>
+                <Slider x:Name="SpeedSlider" Minimum="0" Maximum="3" Value="1"
+                        AutomationProperties.Name="Game speed"/>
             </StackPanel>
         </Border>
     </Panel>

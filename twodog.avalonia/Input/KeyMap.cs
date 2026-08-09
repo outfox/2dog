@@ -19,6 +19,9 @@ internal static class KeyMap
         AvaloniaKey.Escape => GodotKey.Escape,
         AvaloniaKey.Tab => GodotKey.Tab,
         AvaloniaKey.Back => GodotKey.Backspace,
+        AvaloniaKey.Clear or AvaloniaKey.OemClear => GodotKey.Clear,
+        // KanaMode aliases HangulMode (both 9); the JIS reading matches the physical table.
+        AvaloniaKey.KanaMode => GodotKey.JisKana,
         AvaloniaKey.Space => GodotKey.Space,
         AvaloniaKey.PageUp => GodotKey.Pageup,
         AvaloniaKey.PageDown => GodotKey.Pagedown,

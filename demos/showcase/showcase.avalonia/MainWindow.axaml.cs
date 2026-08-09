@@ -73,12 +73,14 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        base.OnClosing(e);
+        if (e.Cancel) return;
+
         // Tear down before the window dies: the engine must be gone before the
         // ProcessExit libgodot unload runs (see twodog.Engine).
         _fpsTimer?.Stop();
         _session?.Dispose();
         _session = null;
-        base.OnClosing(e);
     }
 
     private void OnPauseClicked(object? sender, RoutedEventArgs e)

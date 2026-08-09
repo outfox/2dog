@@ -69,11 +69,13 @@ internal sealed class MainWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        base.OnClosing(e);
+        if (e.Cancel) return;
+
         // Tear down before the window dies: the engine must be gone before the process
         // exits (2dog unloads libgodot during process exit on Windows).
         _session?.Dispose();
         _session = null;
-        base.OnClosing(e);
     }
 
     private void OnPauseClicked(object? sender, RoutedEventArgs e)

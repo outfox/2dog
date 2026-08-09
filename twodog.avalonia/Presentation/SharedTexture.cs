@@ -15,6 +15,19 @@ internal enum SharedTextureSync
     Automatic,
 }
 
+/// <summary>Outcome of <see cref="ISharedTexture.Acquire"/>.</summary>
+internal enum AcquireResult
+{
+    /// <summary>The writer owns the texture; copy, then <see cref="ISharedTexture.Release"/>.</summary>
+    Acquired,
+
+    /// <summary>Still contended (compositor mid-read); skip this frame and retry later.</summary>
+    Busy,
+
+    /// <summary>Terminal (device removed, abandoned mutex); the presenter should fail over.</summary>
+    Failed,
+}
+
 /// <summary>
 /// One shareable render target: an engine-side copy target (the RID handed to
 /// <c>external_texture_present</c>) plus the platform handle Avalonia's compositor imports.
@@ -29,11 +42,13 @@ internal interface ISharedTexture : IDisposable
     PlatformGraphicsExternalImageProperties ImportProperties { get; }
     SharedTextureSync Sync { get; }
 
-    /// <summary>Before the engine copy; false means skip this frame (still contended).</summary>
-    bool Acquire();
+    /// <summary>Before the engine copy; only <see cref="AcquireResult.Acquired"/> permits the
+    /// copy and requires a matching <see cref="Release"/>.</summary>
+    AcquireResult Acquire();
 
-    /// <summary>After the engine copy completed (the present call stalls until it has).</summary>
-    void Release();
+    /// <summary>After the engine copy completed (the present call stalls until it has).
+    /// False is a terminal sync failure; the presenter should fail over.</summary>
+    bool Release();
 }
 
 /// <summary>Creates the platform's shared-texture flavor; owns any device state shared
@@ -99,11 +114,9 @@ internal sealed class EngineExportedTextureFactory(
 
         public SharedTextureSync Sync => SharedTextureSync.Automatic;
 
-        public bool Acquire() => true;
+        public AcquireResult Acquire() => AcquireResult.Acquired;
 
-        public void Release()
-        {
-        }
+        public bool Release() => true;
 
         public void Dispose() => rd.FreeRid(rid);
     }

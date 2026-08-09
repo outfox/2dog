@@ -16,6 +16,7 @@ public class GodotControl : Control
         AvaloniaProperty.Register<GodotControl, GodotSession?>(nameof(Session));
 
     private bool _onTree;
+    private bool _restoringSession;
 
     static GodotControl() => FocusableProperty.OverrideDefaultValue<GodotControl>(true);
 
@@ -32,14 +33,41 @@ public class GodotControl : Control
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == SessionProperty && _onTree)
+        if (change.Property == SessionProperty && _onTree && !_restoringSession)
         {
-            (change.OldValue as GodotSession)?.Detach(this);
-            (change.NewValue as GodotSession)?.Attach(this);
+            var oldSession = change.OldValue as GodotSession;
+            oldSession?.Detach(this);
+            try
+            {
+                (change.NewValue as GodotSession)?.Attach(this);
+            }
+            catch
+            {
+                (change.NewValue as GodotSession)?.Detach(this);
+                RestoreSession(oldSession);
+                throw;
+            }
         }
         else if (change.Property == BoundsProperty && _onTree)
         {
             Session?.NotifyControlResized();
+        }
+    }
+
+    // A failed Attach must not leave Session pointing at a session this control never attached:
+    // restore the previous one, or clear when it cannot come back (already disposed).
+    private void RestoreSession(GodotSession? previous)
+    {
+        _restoringSession = true;
+        try
+        {
+            try { previous?.Attach(this); }
+            catch { previous = null; }
+            SetCurrentValue(SessionProperty, previous);
+        }
+        finally
+        {
+            _restoringSession = false;
         }
     }
 

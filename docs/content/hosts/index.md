@@ -18,7 +18,7 @@ Windows-only [WinForms host](./winforms) (`--winforms`) that embeds the
 engine's window inside a form, and a cross-platform
 [Avalonia host](./avalonia) (`--avalonia`) that composites the viewport
 through the `2dog.avalonia` package, letting Avalonia controls render on top
-of the game. The WinForms host is a good example how to modify the generic
+of the game. The WinForms host is a good example of how to modify the generic
 host to do something special.
 
 ## Shared Project Anatomy
