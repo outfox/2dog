@@ -117,7 +117,8 @@ export default defineConfig({
           { text: gd('margincontainer') + '2dog (generic host)', link: '/hosts/generic' },
           { text: gd('globe') + 'Browser', link: '/hosts/web' },
           { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' },
-          { text: gd('window') + 'WinForms', link: '/hosts/winforms' }
+          { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
+          { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' }
         ]
       },
       {

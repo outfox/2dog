@@ -113,6 +113,9 @@ internal static class CommandLine
                 case "--winforms":
                     cmd.Requested.Add(new HostRequest(HostKind.WinForms, OptionalFolder(queue)));
                     break;
+                case "--avalonia":
+                    cmd.Requested.Add(new HostRequest(HostKind.Avalonia, OptionalFolder(queue)));
+                    break;
 
                 case "--no-desktop":
                     cmd.Excluded.Add(HostKind.Desktop);
@@ -125,6 +128,9 @@ internal static class CommandLine
                     break;
                 case "--no-winforms":
                     cmd.Excluded.Add(HostKind.WinForms);
+                    break;
+                case "--no-avalonia":
+                    cmd.Excluded.Add(HostKind.Avalonia);
                     break;
 
                 case "--dry-run":

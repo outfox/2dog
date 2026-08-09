@@ -3,6 +3,7 @@
     "path": "2dog.slnx",
     "projects": [
       "demos\\showcase\\showcase.2dog\\showcase.2dog.csproj",
+      "demos\\showcase\\showcase.avalonia\\showcase.avalonia.csproj",
       "demos\\showcase\\showcase.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.debug.csproj",
@@ -21,6 +22,7 @@
       "platforms\\twodog.win-x64\\twodog.win-x64.editor.csproj",
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "twodog\\twodog.csproj",
+      "twodog.avalonia\\twodog.avalonia.csproj",
       "twodog.engine\\twodog.engine.csproj",
       "twodog.hosting\\twodog.hosting.csproj",
       "twodog.hosting.runtime\\twodog.hosting.runtime.csproj",

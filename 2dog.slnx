@@ -40,12 +40,14 @@
     <Project Path="platforms/twodog.win-x64/twodog.win-x64.release.csproj" />
   </Folder>
   <Project Path="demos/showcase/showcase.2dog/showcase.2dog.csproj" />
+  <Project Path="demos/showcase/showcase.avalonia/showcase.avalonia.csproj" />
   <Project Path="demos/showcase/showcase.csproj" />
   <Project Path="demos/showcase/showcase.winforms/showcase.winforms.csproj" />
   <Project Path="demos/showcase/showcase.web/showcase.web.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
     <Build Project="false" />
   </Project>
+  <Project Path="twodog.avalonia/twodog.avalonia.csproj" />
   <Project Path="twodog.engine/twodog.engine.csproj" />
   <Project Path="twodog.hosting.runtime/twodog.hosting.runtime.csproj" />
   <Project Path="twodog.hosting.xunit/twodog.hosting.xunit.csproj" />

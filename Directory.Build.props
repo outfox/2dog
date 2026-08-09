@@ -11,9 +11,13 @@
              skip-duplicate push would otherwise keep the old package);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
              (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>35</NativesRevision>
+        <NativesRevision>36</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
+        <!-- Avalonia for the 2dog.avalonia package and its in-repo consumers. Mixed Avalonia
+             versions fail at runtime, so bump it in one place. (The dotnet-new template keeps
+             a literal copy - template code builds outside the repo on a stock SDK.) -->
+        <AvaloniaVersion>11.3.19</AvaloniaVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten
              the .NET browser-wasm runtime pack was built with (the web libgodot.a is
              statically linked into dotnet.native.wasm, so the toolchains must agree).

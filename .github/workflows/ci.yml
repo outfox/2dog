@@ -220,6 +220,7 @@ jobs:
       - name: Pack twodog packages
         run: |
           dotnet pack twodog.engine
+          dotnet pack twodog.avalonia
           dotnet pack twodog.xunit
           dotnet pack twodog
 
@@ -675,7 +676,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.engine"; do
+          for pkg in "2dog" "2dog.engine" "2dog.avalonia"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

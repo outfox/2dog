@@ -109,7 +109,7 @@ internal static class Program
     {
         var rows = new (string Label, string Version, string Probe, string Packages)[]
         {
-            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.xunit"),
+            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.xunit"),
             ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools"),
             ("Godot SDK", ToolVersions.GodotSdkVersion, "Godot.NET.Sdk", "Godot.NET.Sdk, GodotSharp"),
         };
@@ -154,6 +154,8 @@ internal static class Program
                --tests [folder]    xUnit test project
                --winforms [folder] WinForms host embedding the game window
                                    (Windows-only; never part of the default set)
+               --avalonia [folder] Avalonia host embedding the game in a
+                                   cross-platform GUI (opt-in, like --winforms)
                --no-desktop, --no-web, --no-tests
                                    Leave a host out of the default set
 

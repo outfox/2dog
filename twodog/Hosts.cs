@@ -7,6 +7,7 @@ internal enum HostKind
     Web,
     Tests,
     WinForms,
+    Avalonia,
 }
 
 /// <summary>One host to create: its kind and the folder (and csproj) name it gets.</summary>
@@ -23,14 +24,16 @@ internal sealed record ExistingHost(HostKind Kind, string Folder);
 internal static class Hosts
 {
     public static readonly IReadOnlyList<HostKind> All =
-        [HostKind.Desktop, HostKind.Web, HostKind.Tests, HostKind.WinForms];
+        [HostKind.Desktop, HostKind.Web, HostKind.Tests, HostKind.WinForms, HostKind.Avalonia];
 
     /// <summary>
     /// Whether a bare run without host flags creates this kind. WinForms is
     /// opt-in: the host only runs on Windows, so it never joins the default
-    /// set - it is still offered interactively and via its flag.
+    /// set. Avalonia is opt-in too - cross-platform, but it pulls the whole
+    /// Avalonia UI framework plus the 2dog.avalonia package into the project.
+    /// Both are still offered interactively and via their flags.
     /// </summary>
-    public static bool InDefaultSet(HostKind kind) => kind != HostKind.WinForms;
+    public static bool InDefaultSet(HostKind kind) => kind is not (HostKind.WinForms or HostKind.Avalonia);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -39,6 +42,7 @@ internal static class Hosts
         HostKind.Web => "web",
         HostKind.Tests => "tests",
         HostKind.WinForms => "winforms",
+        HostKind.Avalonia => "avalonia",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -48,6 +52,7 @@ internal static class Hosts
         HostKind.Web => "browser",
         HostKind.Tests => "tests",
         HostKind.WinForms => "winforms",
+        HostKind.Avalonia => "avalonia",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -57,6 +62,7 @@ internal static class Hosts
         HostKind.Web => "WebAssembly host, published as a static bundle",
         HostKind.Tests => "xUnit project driving a headless engine",
         HostKind.WinForms => "game embedded in a WinForms window (Windows-only)",
+        HostKind.Avalonia => "game embedded in an Avalonia app (cross-platform GUI)",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -67,6 +73,7 @@ internal static class Hosts
         HostKind.Web => "--web",
         HostKind.Tests => "--tests",
         HostKind.WinForms => "--winforms",
+        HostKind.Avalonia => "--avalonia",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -138,6 +145,7 @@ internal static class HostScan
     {
         var isTwoDog = csproj.Contains("2dog.engine", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
+                       || csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<GodotProjectDir>", StringComparison.OrdinalIgnoreCase);
         if (!isTwoDog) return null;
 
@@ -145,6 +153,10 @@ internal static class HostScan
         if (csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("xunit.v3", StringComparison.OrdinalIgnoreCase)) return HostKind.Tests;
         if (csproj.Contains("UseWindowsForms", StringComparison.OrdinalIgnoreCase)) return HostKind.WinForms;
+        // Before the Desktop OutputType check: Avalonia hosts are Exe/WinExe too.
+        // 2dog.avalonia catches scaffolded hosts, Avalonia.Desktop hand-rolled ones.
+        if (csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
+            || csproj.Contains("Avalonia.Desktop", StringComparison.OrdinalIgnoreCase)) return HostKind.Avalonia;
         if (csproj.Contains("<OutputType>Exe</OutputType>", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("<OutputType>WinExe</OutputType>", StringComparison.OrdinalIgnoreCase)) return HostKind.Desktop;
 

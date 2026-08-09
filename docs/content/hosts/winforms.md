@@ -65,11 +65,12 @@ thread is the pump thread, so game state (including the scene tree via
 
 ## Limitations
 
-- Windows only. The same `--wid` route works on X11, so an Avalonia host
-  could cover Linux; macOS would need Godot's separate `embedded` display
-  server. (The project still restores and builds on Linux/macOS thanks to
-  `EnableWindowsTargeting`; it just cannot run there.)
+- Windows only. For a cross-platform GUI host, use the
+  [Avalonia host](/hosts/avalonia). (The project still restores and builds on
+  Linux/macOS thanks to `EnableWindowsTargeting`; it just cannot run there.)
 - The embedded window always draws above the form's client area, so WinForms
-  controls cannot overlap the game rectangle.
+  controls cannot overlap the game rectangle - the
+  [Avalonia host](/hosts/avalonia) composites instead, which lifts this
+  restriction.
 - `--wid` marks the instance as embedded (`Engine.is_embedded_in_editor()`
   returns `true` to scripts).
