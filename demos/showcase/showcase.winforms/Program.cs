@@ -1,3 +1,5 @@
+namespace showcase;
+
 internal static class Program
 {
     // Godot's display server needs the same STA main thread godot.exe uses; WinForms requires it anyway.

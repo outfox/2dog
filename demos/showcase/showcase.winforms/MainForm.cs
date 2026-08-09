@@ -11,6 +11,8 @@ using Panel = System.Windows.Forms.Panel;
 // owned by this form, and the host drives its geometry and pumps frames from the UI thread.
 // This is the repo's instance of the WinForms host the 2dog tool scaffolds
 // (templates/twodog/Company.Product1.winforms) - keep the two in sync.
+namespace showcase;
+
 internal sealed class MainForm : Form
 {
     private readonly string[] _extraArgs;

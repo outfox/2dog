@@ -1,6 +1,7 @@
 using System;
-using System.Linq;
 using Godot;
+
+namespace showcase;
 
 /// <summary>
 /// A deliberately broad GodotSharp smoke probe shared by desktop tests and

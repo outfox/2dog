@@ -1,6 +1,8 @@
 using Godot;
 using Engine = twodog.Engine;
 
+namespace showcase;
+
 internal static class Program
 {
     // STA matches how godot.exe runs its main thread on Windows: OLE (drag & drop,

@@ -3,6 +3,8 @@ using Godot;
 // Blue cubes: spun by the Godot project itself, once per _Process frame.
 // The red cubes do the same from GDScript (spinning_cube.gd); the white cubes
 // have no script - the 2dog host rotates them from its run loop.
+namespace showcase;
+
 [GlobalClass]
 public partial class SpinningCube : MeshInstance3D
 {
