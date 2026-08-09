@@ -1,8 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Godot;
 using twodog;
 using GodotEngine = Godot.Engine;
+using Window = Avalonia.Controls.Window;
 
 namespace showcase;
 
@@ -41,6 +43,21 @@ public partial class MainWindow : Window
         GodotView.Session = _session;
         _session.Start();
 
+        // The blue cubes spin themselves via SpinningCube._Process (Godot side); the white
+        // ones are plain MeshInstance3Ds this host drives per frame, like the desktop host.
+        // Skipped while paused: the root's delta keeps ticking when the tree is paused.
+        var whiteCubes = _session.Engine.Tree.CurrentScene
+            .GetNode<Node3D>("Flair/WhiteCubes")
+            .GetChildren().OfType<Node3D>().ToArray();
+        var whiteSpinAxis = new Vector3(1, 1, 0).Normalized();
+        _session.FrameAdvanced += (_, _) =>
+        {
+            if (_session.IsPaused) return;
+            var delta = (float)_session.Engine.Tree.Root.GetProcessDeltaTime();
+            foreach (var cube in whiteCubes)
+                cube.Rotate(whiteSpinAxis, 1.8f * delta);
+        };
+
         PauseButton.IsEnabled = true;
         // The UI thread is the pump thread, so engine state is safe to touch from
         // event handlers and timers, including the scene tree via _session.Engine.Tree.
@@ -62,8 +79,7 @@ public partial class MainWindow : Window
     private void OnPauseClicked(object? sender, RoutedEventArgs e)
     {
         if (_session is null) return;
-        if (_session.IsPaused) _session.Resume();
-        else _session.Pause();
+        _session.IsPaused = !_session.IsPaused;
         PauseButton.Content = _session.IsPaused ? "Resume" : "Pause";
     }
 

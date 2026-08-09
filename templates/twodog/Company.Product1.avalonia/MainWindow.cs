@@ -79,8 +79,7 @@ internal sealed class MainWindow : Window
     private void OnPauseClicked(object? sender, RoutedEventArgs e)
     {
         if (_session is null) return;
-        if (_session.IsPaused) _session.Resume();
-        else _session.Pause();
+        _session.IsPaused = !_session.IsPaused;
         _pauseButton.Content = _session.IsPaused ? "Resume" : "Pause";
     }
 }
