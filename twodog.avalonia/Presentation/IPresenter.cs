@@ -11,6 +11,9 @@ internal interface IPresenter : IDisposable
     /// <summary>The mode this presenter implements (what Auto resolved to).</summary>
     GodotPresentationMode Mode { get; }
 
+    /// <summary>Initialized and able to present frames.</summary>
+    bool Ready { get; }
+
     /// <summary>Permanently unable to present; the session may swap in a fallback.</summary>
     bool Failed { get; }
 

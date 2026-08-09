@@ -154,7 +154,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         public AcquireResult Acquire()
         {
             if (_mutex.Handle is null) return AcquireResult.Failed;
-            return _mutex.Get().AcquireSync(0, 100) switch
+            return _mutex.Get().AcquireSync(0, 0) switch
             {
                 0 => AcquireResult.Acquired,
                 // AcquireSync reports contention as WAIT_TIMEOUT (0x102, success severity; some

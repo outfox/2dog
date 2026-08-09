@@ -17,7 +17,7 @@ internal sealed class GodotInputForwarder : IDisposable
 {
     private readonly GodotControl _control;
     private readonly GodotSession _session;
-    private readonly Dictionary<AvaloniaKey, PhysicalKey> _heldKeys = [];
+    private readonly Dictionary<PhysicalKey, AvaloniaKey> _heldKeys = [];
     private Vector2 _lastPos;
     private bool _hasLastPos;
     private MouseButtonMask _buttonMask;
@@ -209,10 +209,20 @@ internal sealed class GodotInputForwarder : IDisposable
     {
         if (!Ready) return;
         // Avalonia repeats arrive as repeated KeyDown events; Godot wants them flagged as echo.
-        var echo = pressed ? !_heldKeys.TryAdd(e.Key, e.PhysicalKey) : !_heldKeys.Remove(e.Key);
-        if (!pressed && echo) return;
+        AvaloniaKey key;
+        bool echo;
+        if (pressed)
+        {
+            echo = !_heldKeys.TryAdd(e.PhysicalKey, e.Key);
+            key = echo ? _heldKeys[e.PhysicalKey] : e.Key;
+        }
+        else
+        {
+            echo = false;
+            if (!_heldKeys.Remove(e.PhysicalKey, out key)) return;
+        }
 
-        var keycode = KeyMap.ToKeycode(e.Key);
+        var keycode = KeyMap.ToKeycode(key);
         var ev = new InputEventKey
         {
             Keycode = keycode,
@@ -232,7 +242,7 @@ internal sealed class GodotInputForwarder : IDisposable
     {
         if (Ready)
         {
-            foreach (var (key, physical) in _heldKeys)
+            foreach (var (physical, key) in _heldKeys)
             {
                 var keycode = KeyMap.ToKeycode(key);
                 Dispatch(new InputEventKey

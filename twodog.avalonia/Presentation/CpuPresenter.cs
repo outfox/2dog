@@ -32,6 +32,8 @@ internal sealed class CpuPresenter : IPresenter
 
     public GodotPresentationMode Mode => GodotPresentationMode.Cpu;
 
+    public bool Ready => true;
+
     public bool Failed => false;
 
     public void PresentFrame()

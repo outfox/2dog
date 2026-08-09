@@ -16,10 +16,10 @@
          GDMono::get_expected_api_build_config() for editor builds). -->
     <ItemGroup>
         <Reference Include="GodotSharp">
-            <HintPath>$(TwoDogGodotSharpApiDir)Debug/GodotSharp.dll</HintPath>
+            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Debug/GodotSharp.dll</HintPath>
         </Reference>
         <Reference Include="GodotSharpEditor">
-            <HintPath>$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.dll</HintPath>
+            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Debug/GodotSharpEditor.dll</HintPath>
         </Reference>
     </ItemGroup>
 

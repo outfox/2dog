@@ -72,6 +72,9 @@ public sealed class GodotSession : IDisposable
     /// <summary>What <see cref="GodotPresentationMode.Auto"/> resolved to for the attached control.</summary>
     public GodotPresentationMode? ActiveMode => _presenter?.Mode;
 
+    /// <summary>Whether the active presenter has completed initialization and can present frames.</summary>
+    public bool IsPresentationReady => IsStarted && _presenter?.Ready == true;
+
     /// <summary><see cref="ActiveMode"/> changed: attach, detach, or an Auto upgrade/fallback.</summary>
     public event EventHandler? ActiveModeChanged;
 
