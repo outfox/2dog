@@ -2,12 +2,15 @@
 <!-- Mirrors godot.exe's manifest: Godot's Windows display server needs the
      comctl32 v6 activation context for native dialogs (without it the engine
      warns "Unable to initialize Windows common controls"), plus long path
-     awareness. DPI awareness comes from Avalonia's Win32 platform init, which
-     runs before the engine starts, so Godot's own call becomes a no-op. -->
+     awareness. DPI awareness MUST be declared here: the manifest wins before
+     either framework initializes, so Avalonia's and Godot's runtime DPI calls
+     both become no-ops (Godot's otherwise lands mid-run and desyncs Avalonia's
+     scale bookkeeping - content renders oversized and clipped). -->
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
     <application xmlns="urn:schemas-microsoft-com:asm.v3">
         <windowsSettings xmlns:ws2="http://schemas.microsoft.com/SMI/2016/WindowsSettings">
             <ws2:longPathAware>true</ws2:longPathAware>
+            <ws2:dpiAwareness>PerMonitorV2</ws2:dpiAwareness>
         </windowsSettings>
     </application>
     <dependency>

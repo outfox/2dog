@@ -115,10 +115,10 @@ export default defineConfig({
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
           { text: gd('margincontainer') + '2dog (generic host)', link: '/hosts/generic' },
+          { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
           { text: gd('globe') + 'Browser', link: '/hosts/web' },
-          { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' },
           { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
-          { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' }
+          { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
         ]
       },
       {

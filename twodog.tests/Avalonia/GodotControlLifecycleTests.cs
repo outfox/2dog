@@ -72,9 +72,8 @@ public class GodotControlLifecycleTests
     [Fact]
     public void GpuMode_AttachesOptimistically_BeforeStart() => Dispatch(() =>
     {
-        // Zero-copy is Windows-only for now: there the GPU presenter is created optimistically
-        // (support is only knowable once the engine runs); elsewhere attach gets a CPU
-        // placeholder and Start() would reject the mode.
+        // Support is only knowable once the engine runs; before Start() the GPU presenter
+        // attaches optimistically on every platform and reports its mode.
         using var session = new GodotSession(new GodotSessionOptions
         {
             Project = "test",
@@ -84,8 +83,7 @@ public class GodotControlLifecycleTests
         var window = new Window { Content = control };
         window.Show();
 
-        var expected = OperatingSystem.IsWindows() ? GodotPresentationMode.Gpu : GodotPresentationMode.Cpu;
-        Assert.Equal(expected, session.ActiveMode);
+        Assert.Equal(GodotPresentationMode.Gpu, session.ActiveMode);
         window.Close();
     });
 }

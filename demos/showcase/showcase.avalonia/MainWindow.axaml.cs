@@ -64,6 +64,11 @@ public partial class MainWindow : Window
         _fpsTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background,
             (_, _) => FpsLabel.Text = $"{GodotEngine.GetFramesPerSecond():0} fps ({_session?.ActiveMode})");
         _fpsTimer.Start();
+
+        // Once presentation settles, report which path engaged - CI smoke greps for this.
+        DispatcherTimer.RunOnce(
+            () => Console.WriteLine($"2DOG_AVALONIA_MODE={_session?.ActiveMode}"),
+            TimeSpan.FromSeconds(3));
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)

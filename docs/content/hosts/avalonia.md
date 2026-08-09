@@ -49,12 +49,13 @@ session.Start();
 ```
 
 - **Presentation.** Each frame, the control presents the engine's main
-  viewport into the Avalonia scene. On Windows this is **zero-copy**: the
-  engine copies the viewport into a D3D11 keyed-mutex shared texture on the
-  GPU, and Avalonia's compositor imports it directly via
-  `ICompositionGpuInterop`. Elsewhere (and on natives without texture
-  sharing) a CPU readback fallback runs instead
-  (`RenderingServer.Texture2DGet` into a `WriteableBitmap`).
+  viewport into the Avalonia scene. The primary path is **zero-copy**: the
+  engine copies the viewport into a shared GPU texture that Avalonia's
+  compositor imports directly via `ICompositionGpuInterop`  –  a host-created
+  D3D11 keyed-mutex texture on Windows, the engine's exported Vulkan memory
+  (opaque fd) on Linux, an IOSurface on macOS. Where the compositor cannot
+  import (or the natives lack texture sharing), a CPU readback fallback runs
+  instead (`RenderingServer.Texture2DGet` into a `WriteableBitmap`).
   `GodotSessionOptions.PresentationMode` selects; `Auto` (the default) picks
   the best available path.
 - **Input.** The engine's own window never sees the pointer: the control
@@ -70,11 +71,12 @@ session.Start();
 
 ## Limitations
 
-- Zero-copy GPU presentation is Windows-only so far; Linux and macOS use the
-  CPU readback path (a GPU→CPU→GPU copy per frame). The natives already
-  export shareable textures on all three platforms (Vulkan opaque fds,
-  IOSurfaces), so the remaining work is host-side.
+- Zero-copy presentation is implemented for all three desktop platforms but
+  verified end-to-end on Windows only so far; on Linux and macOS, `Auto`
+  falls back to the CPU readback path automatically wherever the compositor
+  cannot import the shared texture.
 - Full IME composition and `Input.MouseMode.Captured` (relative/locked mouse)
   are not supported yet.
-- Requires Avalonia 11.3.x; an application on Avalonia 12 cannot load the
-  current `2dog.avalonia` build.
+- Requires Avalonia 12.1+. On Windows, keep the scaffolded host's app-manifest
+  DPI declaration: without it the engine's own DPI-awareness call lands mid-run
+  and desyncs Avalonia's scaling (content renders oversized and clipped).

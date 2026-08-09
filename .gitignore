@@ -11,6 +11,7 @@ todo
 # Build Artifacts
 /packages
 /.packages
+/.packages-cc
 dist
 /build
 /builds

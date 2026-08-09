@@ -9,7 +9,7 @@
     <Panel>
         <twodog:GodotControl x:Name="GodotView"/>
         <!-- The point of this host: ordinary Avalonia controls floating OVER the game. -->
-        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16"
+        <Border x:Name="Overlay" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16"
                 Background="#B0202028" CornerRadius="8" Padding="12">
             <StackPanel Spacing="8" MinWidth="180">
                 <TextBlock x:Name="FpsLabel" Text="- fps" Foreground="White"/>

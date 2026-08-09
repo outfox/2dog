@@ -1,5 +1,7 @@
 using System;
 using System.Runtime.Versioning;
+using Avalonia.Platform;
+using Godot;
 using Silk.NET.Core.Native;
 using Silk.NET.Direct3D11;
 using Silk.NET.DXGI;
@@ -7,25 +9,21 @@ using Silk.NET.DXGI;
 namespace twodog.Presentation;
 
 /// <summary>
-/// Owns a D3D11 keyed-mutex shared texture: the host-side half of the Windows zero-copy
-/// path. The engine imports the KMT handle into its Vulkan device; Avalonia imports the
-/// same handle into its compositor. The keyed mutex is driven from here (CPU side) around
-/// the engine's copy - writer acquires key 0 and releases key 1.
+/// Import-style sharing for Windows: this side creates a D3D11 keyed-mutex shared texture on
+/// the compositor's adapter, the engine imports its KMT handle into Vulkan, and Avalonia
+/// imports the same handle. The keyed mutex is driven from the CPU around the engine's copy -
+/// writer acquires key 0 and releases key 1; the compositor presents with (1, 0).
 /// </summary>
 [SupportedOSPlatform("windows")]
-internal sealed unsafe class D3D11SharedTextureProvider : IDisposable
+internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 {
     private ComPtr<ID3D11Device> _device;
     private ComPtr<ID3D11DeviceContext> _context;
-    private ComPtr<ID3D11Texture2D> _texture;
-    private ComPtr<IDXGIKeyedMutex> _mutex;
 
-    public nint SharedHandle { get; private set; }
-    public int Width { get; private set; }
-    public int Height { get; private set; }
+    public string AvaloniaHandleType => KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle;
 
     /// <summary>Creates the device on the adapter with the given LUID (the compositor's device).</summary>
-    public D3D11SharedTextureProvider(byte[]? adapterLuid)
+    public D3D11SharedTextureFactory(byte[]? adapterLuid)
     {
         var api = D3D11.GetApi(null, false);
         using var adapter = FindAdapter(adapterLuid);
@@ -70,11 +68,8 @@ internal sealed unsafe class D3D11SharedTextureProvider : IDisposable
         return default;
     }
 
-    /// <summary>(Re)creates the shared texture; any previous one must be released by all importers first.</summary>
-    public void CreateTexture(int width, int height)
+    public ISharedTexture Create(RenderingDevice rd, int width, int height)
     {
-        ReleaseTexture();
-
         var desc = new Texture2DDesc
         {
             Width = (uint)width,
@@ -89,58 +84,89 @@ internal sealed unsafe class D3D11SharedTextureProvider : IDisposable
         };
         ID3D11Texture2D* texture = null;
         SilkMarshal.ThrowHResult(_device.Get().CreateTexture2D(&desc, null, &texture));
-        _texture = texture;
 
         IDXGIKeyedMutex* mutex = null;
         var mutexIid = IDXGIKeyedMutex.Guid;
         SilkMarshal.ThrowHResult(texture->QueryInterface(&mutexIid, (void**)&mutex));
-        _mutex = mutex;
 
         IDXGIResource* resource = null;
         var resourceIid = IDXGIResource.Guid;
         SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
+        nint shared;
         try
         {
-            void* shared = null;
-            SilkMarshal.ThrowHResult(resource->GetSharedHandle(&shared));
-            SharedHandle = (nint)shared;
+            void* handle = null;
+            SilkMarshal.ThrowHResult(resource->GetSharedHandle(&handle));
+            shared = (nint)handle;
         }
         finally
         {
             resource->Release();
         }
 
-        Width = width;
-        Height = height;
-    }
+        var rid = rd.ExternalTextureCreate(
+            RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex,
+            RenderingDevice.DataFormat.R8G8B8A8Unorm,
+            (uint)width, (uint)height, (ulong)shared);
+        if (!rid.IsValid)
+        {
+            mutex->Release();
+            texture->Release();
+            throw new NotSupportedException("The engine could not import the D3D11 shared texture.");
+        }
 
-    /// <summary>Acquire key 0 for writing; false on timeout (compositor still reading).</summary>
-    public bool Acquire(uint timeoutMs) =>
-        _mutex.Handle is not null && _mutex.Get().AcquireSync(0, timeoutMs) == 0;
-
-    /// <summary>Release with key 1: hands the texture to the compositor.</summary>
-    public void Release()
-    {
-        if (_mutex.Handle is not null)
-            SilkMarshal.ThrowHResult(_mutex.Get().ReleaseSync(1));
-    }
-
-    private void ReleaseTexture()
-    {
-        _mutex.Dispose();
-        _mutex = default;
-        _texture.Dispose();
-        _texture = default;
-        SharedHandle = 0;
-        Width = Height = 0;
+        return new D3D11SharedTexture(rd, rid, texture, mutex, shared, width, height);
     }
 
     public void Dispose()
     {
-        ReleaseTexture();
         _context.Dispose();
         _context = default;
         _device.Dispose();
         _device = default;
+    }
+
+    private sealed class D3D11SharedTexture(
+        RenderingDevice rd, Rid rid, ID3D11Texture2D* texture, IDXGIKeyedMutex* mutex,
+        nint sharedHandle, int width, int height) : ISharedTexture
+    {
+        private ComPtr<ID3D11Texture2D> _texture = texture;
+        private ComPtr<IDXGIKeyedMutex> _mutex = mutex;
+
+        public int Width => width;
+        public int Height => height;
+        public Rid Rid => rid;
+
+        public IPlatformHandle Handle { get; } = new PlatformHandle(sharedHandle,
+            KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle);
+
+        public PlatformGraphicsExternalImageProperties ImportProperties => new()
+        {
+            Width = width,
+            Height = height,
+            Format = PlatformGraphicsExternalImageFormat.R8G8B8A8UNorm,
+            // The engine writes rows top-down; without this the GL-backed compositor assumes
+            // a bottom-left origin and shows the viewport flipped.
+            TopLeftOrigin = true,
+        };
+
+        public SharedTextureSync Sync => SharedTextureSync.KeyedMutex;
+
+        public bool Acquire() => _mutex.Handle is not null && _mutex.Get().AcquireSync(0, 100) == 0;
+
+        public void Release()
+        {
+            if (_mutex.Handle is not null)
+                SilkMarshal.ThrowHResult(_mutex.Get().ReleaseSync(1));
+        }
+
+        public void Dispose()
+        {
+            rd.FreeRid(rid);
+            _mutex.Dispose();
+            _mutex = default;
+            _texture.Dispose();
+            _texture = default;
+        }
     }
 }

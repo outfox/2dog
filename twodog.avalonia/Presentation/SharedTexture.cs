@@ -1,0 +1,110 @@
+using System;
+using Avalonia.Platform;
+using Godot;
+
+namespace twodog.Presentation;
+
+/// <summary>How presented frames are synchronized with the compositor.</summary>
+internal enum SharedTextureSync
+{
+    /// <summary>Writer and compositor hand off through a D3D11 keyed mutex (keys 0/1).</summary>
+    KeyedMutex,
+
+    /// <summary>No explicit primitive: the engine's present stalls until the copy finished
+    /// on the GPU, and the import type is coherent (exported memory, IOSurface).</summary>
+    Automatic,
+}
+
+/// <summary>
+/// One shareable render target: an engine-side copy target (the RID handed to
+/// <c>external_texture_present</c>) plus the platform handle Avalonia's compositor imports.
+/// All calls happen on the UI thread.
+/// </summary>
+internal interface ISharedTexture : IDisposable
+{
+    int Width { get; }
+    int Height { get; }
+    Rid Rid { get; }
+    IPlatformHandle Handle { get; }
+    PlatformGraphicsExternalImageProperties ImportProperties { get; }
+    SharedTextureSync Sync { get; }
+
+    /// <summary>Before the engine copy; false means skip this frame (still contended).</summary>
+    bool Acquire();
+
+    /// <summary>After the engine copy completed (the present call stalls until it has).</summary>
+    void Release();
+}
+
+/// <summary>Creates the platform's shared-texture flavor; owns any device state shared
+/// between recreations (resizes).</summary>
+internal interface ISharedTextureFactory : IDisposable
+{
+    /// <summary>The <c>KnownPlatformGraphicsExternalImageHandleTypes</c> value the compositor
+    /// must support for this factory's textures.</summary>
+    string AvaloniaHandleType { get; }
+
+    ISharedTexture Create(RenderingDevice rd, int width, int height);
+}
+
+/// <summary>
+/// Export-style sharing (Linux Vulkan opaque fds, macOS IOSurfaces): the engine allocates
+/// the shareable texture and this side hands its exported handle to the compositor. The
+/// exported fd's ownership transfers to the compositor on import; an IOSurfaceRef stays
+/// valid while the RID lives (the compositor retains it on import).
+/// </summary>
+internal sealed class EngineExportedTextureFactory(
+    RenderingDevice.ExternalTextureShareHandleType shareType,
+    string avaloniaHandleType,
+    bool needsMemorySize) : ISharedTextureFactory
+{
+    public string AvaloniaHandleType => avaloniaHandleType;
+
+    public ISharedTexture Create(RenderingDevice rd, int width, int height)
+    {
+        var rid = rd.ExternalTextureCreate(shareType, RenderingDevice.DataFormat.R8G8B8A8Unorm,
+            (uint)width, (uint)height);
+        if (!rid.IsValid)
+            throw new NotSupportedException($"external texture creation failed ({shareType})");
+
+        return new EngineExportedTexture(rd, rid, width, height, avaloniaHandleType,
+            needsMemorySize ? rd.ExternalTextureGetMemorySize(rid) : 0);
+    }
+
+    public void Dispose()
+    {
+    }
+
+    private sealed class EngineExportedTexture(
+        RenderingDevice rd, Rid rid, int width, int height, string handleType, ulong memorySize)
+        : ISharedTexture
+    {
+        public int Width => width;
+        public int Height => height;
+        public Rid Rid => rid;
+
+        public IPlatformHandle Handle { get; } =
+            new PlatformHandle((nint)rd.ExternalTextureGetHandle(rid), handleType);
+
+        public PlatformGraphicsExternalImageProperties ImportProperties => new()
+        {
+            Width = width,
+            Height = height,
+            Format = PlatformGraphicsExternalImageFormat.R8G8B8A8UNorm,
+            MemorySize = memorySize,
+            // The engine writes rows top-down; without this GL-backed compositors assume a
+            // bottom-left origin and show the viewport flipped.
+            TopLeftOrigin = true,
+        };
+
+        public SharedTextureSync Sync => SharedTextureSync.Automatic;
+
+        public bool Acquire() => true;
+
+        public void Release()
+        {
+        }
+
+        public void Dispose() => rd.FreeRid(rid);
+    }
+}

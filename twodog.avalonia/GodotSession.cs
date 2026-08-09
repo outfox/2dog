@@ -79,14 +79,11 @@ public sealed class GodotSession : IDisposable
         ObjectDisposedException.ThrowIf(_disposed, this);
         if (_instance is not null)
             throw new InvalidOperationException($"{nameof(GodotSession)}: already started.");
-        if (_options.PresentationMode == GodotPresentationMode.Gpu && !OperatingSystem.IsWindows())
-            throw new PlatformNotSupportedException(
-                $"{nameof(GodotPresentationMode.Gpu)} presentation is currently Windows-only; use Auto or Cpu.");
 
         // The engine's own window stays unmapped; this control is its only face.
         _engine = new Engine(_options.Project, _options.Path, ["--hidden-window", .. _options.ExtraArgs]);
         _instance = _engine.Start();
-        _gpuSupported = OperatingSystem.IsWindows() && GpuPresenter.IsSupported();
+        _gpuSupported = GpuPresenter.IsSupported();
         Started?.Invoke(this, EventArgs.Empty);
 
         ReconcilePresenter();
@@ -167,16 +164,13 @@ public sealed class GodotSession : IDisposable
 
     private IPresenter CreatePresenter(GodotControl control)
     {
-        // Zero-copy GPU compositing is Windows-only for now; Gpu mode elsewhere is rejected
-        // in Start(). Under Auto, support is unknown before Start(); begin with CPU and let
-        // ReconcilePresenter upgrade once the engine is up.
-        if (OperatingSystem.IsWindows())
-        {
-            if (_options.PresentationMode == GodotPresentationMode.Gpu)
-                return new GpuPresenter(control, this);
-            if (_options.PresentationMode == GodotPresentationMode.Auto && _gpuSupported)
-                return new GpuPresenter(control, this);
-        }
+        // Under Auto, support is unknown before Start(); begin with CPU and let
+        // ReconcilePresenter upgrade once the engine is up. Gpu mode is optimistic and,
+        // where genuinely unsupported, ends in a Failed presenter without fallback.
+        if (_options.PresentationMode == GodotPresentationMode.Gpu)
+            return new GpuPresenter(control, this);
+        if (_options.PresentationMode == GodotPresentationMode.Auto && _gpuSupported)
+            return new GpuPresenter(control, this);
         return new CpuPresenter(control, this);
     }
 
@@ -184,7 +178,6 @@ public sealed class GodotSession : IDisposable
     // after Start(), and fall back to CPU when GPU initialization failed.
     private void ReconcilePresenter()
     {
-        if (!OperatingSystem.IsWindows()) return;
         if (_options.PresentationMode != GodotPresentationMode.Auto || _control is null || _presenter is null) return;
 
         if (_gpuSupported && _presenter is CpuPresenter)
