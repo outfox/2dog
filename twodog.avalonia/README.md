@@ -21,7 +21,7 @@ session.Start();
   otherwise a CPU readback fallback is used automatically (`GodotSessionOptions.PresentationMode`).
 - Dispose the session before the application exits (e.g. in `Window.OnClosing`).
 
-Requires the `2dog.engine` package (pulled in automatically) and Avalonia 12.1+.
+Requires the `2dog.engine` package (pulled in automatically) and Avalonia 12.1.1+.
 On Windows, declare DPI awareness in your app manifest (the scaffolded host does) so the
 engine's own DPI call cannot desync Avalonia's scaling mid-run.
 

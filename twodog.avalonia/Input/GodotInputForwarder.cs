@@ -28,7 +28,9 @@ internal sealed class GodotInputForwarder : IDisposable
     private readonly GodotControl _control;
     private readonly GodotSession _session;
     private readonly Dictionary<HeldKeyId, AvaloniaKey> _heldKeys = [];
-    private Vector2 _lastPos;
+    // Kept in DIPs and converted per use: RenderScaling can change between events (monitor
+    // move), and a baseline stored in old pixel space would skew the next relative delta.
+    private Avalonia.Point _lastPos;
     private bool _hasLastPos;
     private MouseButtonMask _buttonMask;
     private DisplayServer.CursorShape? _lastShape;
@@ -112,23 +114,24 @@ internal sealed class GodotInputForwarder : IDisposable
     // (Re)entry establishes the relative-motion baseline so the first move never reports a jump.
     private void OnPointerEntered(object? sender, PointerEventArgs e)
     {
-        _lastPos = ToViewport(e.GetPosition(_control));
+        _lastPos = e.GetPosition(_control);
         _hasLastPos = true;
     }
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (!Ready) return;
-        var pos = ToViewport(e.GetPosition(_control));
+        var dip = e.GetPosition(_control);
+        var pos = ToViewport(dip);
         var motion = new InputEventMouseMotion
         {
             Position = pos,
             GlobalPosition = pos,
-            Relative = _hasLastPos ? pos - _lastPos : Vector2.Zero,
+            Relative = _hasLastPos ? pos - ToViewport(_lastPos) : Vector2.Zero,
             ButtonMask = _buttonMask,
         };
         ApplyModifiers(motion, e.KeyModifiers);
-        _lastPos = pos;
+        _lastPos = dip;
         _hasLastPos = true;
         Dispatch(motion);
     }
@@ -207,7 +210,7 @@ internal sealed class GodotInputForwarder : IDisposable
         {
             if ((_buttonMask & KeyMap.ToMask(button)) == 0) continue;
             _buttonMask &= ~KeyMap.ToMask(button);
-            SendMouseButton(button, pressed: false, _lastPos, KeyModifiers.None, doubleClick: false, factor: 1);
+            SendMouseButton(button, pressed: false, ToViewport(_lastPos), KeyModifiers.None, doubleClick: false, factor: 1);
         }
     }
 
@@ -233,7 +236,7 @@ internal sealed class GodotInputForwarder : IDisposable
             if (!_heldKeys.Remove(id, out key)) return;
         }
 
-        var keycode = KeyMap.ToKeycode(key);
+        var keycode = KeyMap.ToKeycode(key, e.PhysicalKey);
         var ev = new InputEventKey
         {
             Keycode = keycode,
@@ -255,7 +258,7 @@ internal sealed class GodotInputForwarder : IDisposable
         {
             foreach (var (id, key) in _heldKeys)
             {
-                var keycode = KeyMap.ToKeycode(key);
+                var keycode = KeyMap.ToKeycode(key, id.Physical);
                 Dispatch(new InputEventKey
                 {
                     Keycode = keycode,

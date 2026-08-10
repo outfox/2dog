@@ -8,8 +8,9 @@ namespace twodog;
 internal static class KeyMap
 {
     /// <summary>Logical key (layout-dependent). OEM keys assume their US-layout meaning,
-    /// matching how Avalonia itself derives them from virtual-key codes.</summary>
-    public static GodotKey ToKeycode(AvaloniaKey key) => key switch
+    /// matching how Avalonia itself derives them from virtual-key codes. The physical key
+    /// disambiguates logical values Avalonia aliases (KanaMode/HangulMode).</summary>
+    public static GodotKey ToKeycode(AvaloniaKey key, PhysicalKey physical) => key switch
     {
         >= AvaloniaKey.A and <= AvaloniaKey.Z => GodotKey.A + (key - AvaloniaKey.A),
         >= AvaloniaKey.D0 and <= AvaloniaKey.D9 => GodotKey.Key0 + (key - AvaloniaKey.D0),
@@ -20,8 +21,10 @@ internal static class KeyMap
         AvaloniaKey.Tab => GodotKey.Tab,
         AvaloniaKey.Back => GodotKey.Backspace,
         AvaloniaKey.Clear or AvaloniaKey.OemClear => GodotKey.Clear,
-        // KanaMode aliases HangulMode (both 9); the JIS reading matches the physical table.
-        AvaloniaKey.KanaMode => GodotKey.JisKana,
+        // KanaMode aliases HangulMode (both 9); only an actual JIS kana key reads as such.
+        // Godot has no Hangul keycode, so the Korean toggle stays Unknown (its physical
+        // keycode still identifies it) instead of masquerading as kana.
+        AvaloniaKey.KanaMode when physical == PhysicalKey.KanaMode => GodotKey.JisKana,
         AvaloniaKey.Space => GodotKey.Space,
         AvaloniaKey.PageUp => GodotKey.Pageup,
         AvaloniaKey.PageDown => GodotKey.Pagedown,
@@ -38,7 +41,7 @@ internal static class KeyMap
         AvaloniaKey.CapsLock => GodotKey.Capslock,
         AvaloniaKey.NumLock => GodotKey.Numlock,
         AvaloniaKey.Scroll => GodotKey.Scrolllock,
-        AvaloniaKey.PrintScreen => GodotKey.Print,
+        AvaloniaKey.PrintScreen or AvaloniaKey.Print => GodotKey.Print,
         AvaloniaKey.LWin or AvaloniaKey.RWin => GodotKey.Meta,
         AvaloniaKey.Apps => GodotKey.Menu,
         AvaloniaKey.Sleep => GodotKey.Standby,
@@ -50,6 +53,9 @@ internal static class KeyMap
         AvaloniaKey.Subtract => GodotKey.KpSubtract,
         AvaloniaKey.Divide => GodotKey.KpDivide,
         AvaloniaKey.Decimal => GodotKey.KpPeriod,
+        // The keypad separator (locale-dependent comma/period); Godot's nearest keypad
+        // key, matching the physical NumPadComma mapping.
+        AvaloniaKey.Separator => GodotKey.KpPeriod,
         AvaloniaKey.BrowserBack => GodotKey.Back,
         AvaloniaKey.BrowserForward => GodotKey.Forward,
         AvaloniaKey.BrowserRefresh => GodotKey.Refresh,
