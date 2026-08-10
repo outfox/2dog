@@ -24,11 +24,6 @@ config/icon="res://icon.svg"
 
 [display]
 
-; canvas_items + expand: the root viewport stays at the window's native pixel size
-; (sharp), while canvas items scale uniformly from the base resolution. "expand" is
-; deliberate - "keep" allocates the viewport at the letterboxed size and paints the
-; bars only at screen attach, which an embedded host (2dog presenting the viewport
-; texture) never reaches: the smaller texture would be stretched over the control.
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
