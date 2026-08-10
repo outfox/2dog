@@ -33,6 +33,8 @@ internal sealed class GpuPresenter : IPresenter
     private Task? _lastPresent;
     private InitState _state = InitState.Initializing;
     private bool _disposed;
+    private int _presentCount;
+    private int _pendingSkips;
 
     // Zero-copy support varies per compositor and driver; the exact failure (unsupported
     // import, faulted present) is otherwise swallowed by the CPU fallback. Opt-in via
@@ -105,6 +107,8 @@ internal sealed class GpuPresenter : IPresenter
             var selfVisual = ElementComposition.GetElementVisual(_control)
                              ?? throw new InvalidOperationException("The control is not composited.");
             var compositor = selfVisual.Compositor;
+            // EGL backends miss the compositor-side import feature; see the shim.
+            await EglExternalObjectsShim.TryRepairAsync(compositor);
             var interop = await compositor.TryGetCompositionGpuInterop()
                           ?? throw new PlatformNotSupportedException("The compositor offers no GPU interop.");
             // Disposed while awaiting (detach, presenter swap): the control may already belong
@@ -147,7 +151,12 @@ internal sealed class GpuPresenter : IPresenter
         // and skip when the writer-side sync cannot engage promptly (compositor mid-read).
         if (_lastPresent is { } present)
         {
-            if (!present.IsCompleted) return;
+            if (!present.IsCompleted)
+            {
+                if (++_pendingSkips % 300 == 0) Log($"still waiting on present #{_presentCount} ({_pendingSkips} skips)");
+                return;
+            }
+            _pendingSkips = 0;
             if (!present.IsCompletedSuccessfully)
             {
                 // The compositor rejected or lost the imported image (failed import, device
@@ -204,6 +213,8 @@ internal sealed class GpuPresenter : IPresenter
             return;
         }
         _lastPresent = _texture.Present(_surface, _imported);
+        _presentCount++;
+        if (_presentCount <= 3 || _presentCount % 300 == 0) Log($"present #{_presentCount} queued");
     }
 
     private bool RecreateSharedTexture(RenderingDevice rd, int width, int height)
