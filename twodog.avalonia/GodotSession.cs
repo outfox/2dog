@@ -201,6 +201,12 @@ public sealed class GodotSession : IDisposable
     // both presentation paths) follows the window. DPI-appropriate content scaling is the
     // project's business: with the stretch settings (display/window/stretch/*) the canvas
     // scale follows the pixel size this sync maintains.
+    //
+    // The resize goes through the Window NODE, not DisplayServer.WindowSetSize: the node
+    // only learns of server-level resizes from WM size events, which the hidden window
+    // never receives - the node's stale size would keep the viewport (and the stretch
+    // pipeline) at the project's base resolution. Setting Window.Size updates the node,
+    // recomputes the viewport, and pushes the size to the display server itself.
     private void SyncEngineWindowSize()
     {
         if (_instance is null || _control is null) return;
@@ -210,7 +216,8 @@ public sealed class GodotSession : IDisposable
         if (width <= 0 || height <= 0) return;
 
         var target = new Vector2I(width, height);
-        if (DisplayServer.WindowGetSize() != target) DisplayServer.WindowSetSize(target);
+        var root = Engine.Tree.Root;
+        if (root.Size != target) root.Size = target;
     }
 
     private IPresenter CreatePresenter(GodotControl control)
