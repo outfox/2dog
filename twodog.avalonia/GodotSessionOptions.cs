@@ -37,6 +37,22 @@ public sealed class GodotSessionOptions
     public bool PauseWhenDetached { get; init; }
 
     /// <summary>
+    /// Upper bound for the engine frame rate, applied as Godot's <c>Engine.MaxFps</c> at
+    /// start. The compositor's animation frames drive the pump, but not every backend paces
+    /// them to the display (Avalonia's Wayland backend free-runs), so the engine's limiter
+    /// enforces this cap. 0 (the default) means auto: the highest refresh rate among the
+    /// connected screens. <see cref="double.PositiveInfinity"/> means uncapped.
+    /// NaN and negative values are rejected.
+    /// </summary>
+    public double MaxFramesPerSecond
+    {
+        get;
+        init => field = double.IsNaN(value) || value < 0
+            ? throw new ArgumentException($"{nameof(MaxFramesPerSecond)} must be 0 (auto) or positive.", nameof(value))
+            : value;
+    }
+
+    /// <summary>
     /// Pump rate while no control is attached (the compositor's animation frames drive the
     /// pump only while a control is on screen). Clamped to 1-240; NaN is rejected.
     /// </summary>

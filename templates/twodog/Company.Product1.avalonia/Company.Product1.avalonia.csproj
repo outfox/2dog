@@ -17,6 +17,9 @@
     <ItemGroup>
         <PackageReference Include="2dog.avalonia" Version="TWODOG_PKG_VERSION"/>
         <PackageReference Include="Avalonia.Desktop" Version="AVALONIA_PKG_VERSION"/>
+        <!-- Native Wayland backend (experimental, not part of UsePlatformDetect);
+             enabled via UseWaylandWithFallback so X11 remains the fallback. -->
+        <PackageReference Include="Avalonia.Wayland" Version="AVALONIA_PKG_VERSION"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="AVALONIA_PKG_VERSION"/>
     </ItemGroup>
 

@@ -34,6 +34,15 @@ internal sealed class GpuPresenter : IPresenter
     private InitState _state = InitState.Initializing;
     private bool _disposed;
 
+    // Zero-copy support varies per compositor and driver; the exact failure (unsupported
+    // import, faulted present) is otherwise swallowed by the CPU fallback. Opt-in via
+    // TWODOG_AVALONIA_DIAG=1 when triaging a platform.
+    private static readonly bool Diag = System.Environment.GetEnvironmentVariable("TWODOG_AVALONIA_DIAG") == "1";
+    private static void Log(string message)
+    {
+        if (Diag) Console.WriteLine($"2DOG_GPU: {message}");
+    }
+
     public bool Ready => _state == InitState.Ready;
 
     public bool Failed => _state == InitState.Failed;
@@ -102,6 +111,7 @@ internal sealed class GpuPresenter : IPresenter
             // to a successor - allocate nothing and leave its child visual alone.
             if (_disposed) return;
 
+            Log($"interop supported handle types: {string.Join(",", interop.SupportedImageHandleTypes)}");
             var sharing = PlatformSharing
                 ?? throw new PlatformNotSupportedException("No zero-copy sharing flavor for this platform.");
             var factory = sharing.CreateFactory(interop);
@@ -112,6 +122,7 @@ internal sealed class GpuPresenter : IPresenter
                     $"The compositor cannot import {factory.AvaloniaHandleType}.");
             }
 
+            Log($"interop ok; supported handle types: {string.Join(",", interop.SupportedImageHandleTypes)}");
             _factory = factory;
             _interop = interop;
             _surface = compositor.CreateDrawingSurface();
@@ -121,8 +132,9 @@ internal sealed class GpuPresenter : IPresenter
             ElementComposition.SetElementChildVisual(_control, _visual);
             _state = InitState.Ready;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Log($"init failed: {ex}");
             _state = InitState.Failed;
             if (!_disposed) ReleaseResources();
         }
@@ -140,6 +152,7 @@ internal sealed class GpuPresenter : IPresenter
             {
                 // The compositor rejected or lost the imported image (failed import, device
                 // loss); observe the fault and fail over instead of retrying every frame.
+                Log($"present task faulted: {present.Exception?.GetBaseException()}");
                 _ = present.Exception;
                 Fail();
                 return;
@@ -179,12 +192,14 @@ internal sealed class GpuPresenter : IPresenter
         }
         if (!released)
         {
+            Log("release failed");
             Fail();
             return;
         }
 
         if (err != Error.Ok || _imported is null)
         {
+            Log($"present failed: err={err} imported={_imported is not null}");
             Fail();
             return;
         }
@@ -202,10 +217,12 @@ internal sealed class GpuPresenter : IPresenter
         {
             _texture = _factory!.Create(rd, width, height);
             _imported = _interop!.ImportImage(_texture.Handle, _texture.ImportProperties);
+            Log($"created+imported {width}x{height} handle={_texture.Handle.Handle} memorySize={_texture.ImportProperties.MemorySize}");
             return _imported is not null;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Log($"create/import {width}x{height} failed: {ex}");
             _texture?.Dispose();
             _texture = null;
             return false;
