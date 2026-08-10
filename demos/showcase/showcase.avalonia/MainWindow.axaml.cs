@@ -53,6 +53,26 @@ public partial class MainWindow : Window
         GodotView.Session = _session;
         _session.Start();
 
+        // Host-created HUD on the Godot side: shows the render target following the control
+        // through resizes, and the canvas scale the project's stretch settings derive from
+        // it (display/window/stretch: canvas_items, expand). Anchored top-left like the
+        // scene's own labels, whose style it borrows.
+        var scene = _session.Engine.Tree.CurrentScene;
+        var hud = new Godot.Label { LabelSettings = scene.GetNode<Godot.Label>("QuitLabel").LabelSettings };
+        scene.AddChild(hud);
+        hud.SetAnchorsAndOffsetsPreset(Godot.Control.LayoutPreset.TopLeft,
+            Godot.Control.LayoutPresetMode.KeepSize, margin: 16);
+        Vector2I hudSize = default;
+        _session.FrameAdvanced += (_, _) =>
+        {
+            var size = DisplayServer.WindowGetSize();
+            if (size == hudSize) return;
+            hudSize = size;
+            var baseSize = _session.Engine.Tree.Root.ContentScaleSize;
+            var canvasScale = Math.Min((float)size.X / baseSize.X, (float)size.Y / baseSize.Y);
+            hud.Text = $"Render target: {size.X}x{size.Y} @ canvas scale {canvasScale:0.##}x";
+        };
+
         // The blue cubes spin themselves via SpinningCube._Process (Godot side); the white
         // ones are plain MeshInstance3Ds this host drives per frame, like the desktop host.
         // Skipped while paused: the root's delta keeps ticking when the tree is paused.
