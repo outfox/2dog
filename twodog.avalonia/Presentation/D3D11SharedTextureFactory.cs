@@ -169,7 +169,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
         // The complement of the writer's protocol: the writer acquired 0 and released 1, so
         // the compositor presents with (1, 0).
-        public Task Present(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
+        public Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
             surface.UpdateWithKeyedMutexAsync(image, 1, 0);
 
         public void Dispose()

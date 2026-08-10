@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.ExceptionServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -17,7 +18,8 @@ public class GodotControl : Control
         AvaloniaProperty.Register<GodotControl, GodotSession?>(nameof(Session));
 
     private bool _onTree;
-    private bool _restoringSession;
+    private bool _syncingSession;
+    private GodotSession? _attachedSession;
     private TopLevel? _topLevel;
 
     static GodotControl() => FocusableProperty.OverrideDefaultValue<GodotControl>(true);
@@ -38,21 +40,9 @@ public class GodotControl : Control
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == SessionProperty && _onTree && !_restoringSession)
+        if (change.Property == SessionProperty && _onTree)
         {
-            var oldSession = change.OldValue as GodotSession;
-            oldSession?.Detach(this);
-            try
-            {
-                (change.NewValue as GodotSession)?.Attach(this);
-            }
-            catch
-            {
-                try { (change.NewValue as GodotSession)?.Detach(this); }
-                catch { }
-                RestoreSession(oldSession);
-                throw;
-            }
+            SyncSession();
         }
         else if (change.Property == BoundsProperty && _onTree)
         {
@@ -60,26 +50,60 @@ public class GodotControl : Control
         }
     }
 
-    // A failed Attach must not leave Session pointing at a session this control never attached:
-    // restore the previous one, or clear when it cannot come back (already disposed).
-    private void RestoreSession(GodotSession? previous)
+    // Reconciles the actually-attached session with the Session property. Attach/Detach raise
+    // ActiveModeChanged, whose handlers may reassign Session reentrantly; the guard suppresses
+    // nested syncs and the loop applies whatever value the property settled on, so no
+    // assignment is silently discarded.
+    private void SyncSession()
     {
-        _restoringSession = true;
+        if (_syncingSession) return;
+        _syncingSession = true;
+        ExceptionDispatchInfo? failure = null;
         try
         {
-            try { previous?.Attach(this); }
-            catch
+            while (!ReferenceEquals(_attachedSession, Session))
             {
-                try { previous?.Detach(this); }
-                catch { }
-                previous = null;
+                var previous = _attachedSession;
+                var desired = Session;
+                previous?.Detach(this);
+                _attachedSession = null;
+                try
+                {
+                    desired?.Attach(this);
+                    _attachedSession = desired;
+                }
+                catch (Exception ex)
+                {
+                    // A failed Attach must not leave Session pointing at a session this
+                    // control never attached: restore the previous one, or clear when it
+                    // cannot come back (already disposed). The first failure is rethrown
+                    // once the state settles.
+                    failure ??= ExceptionDispatchInfo.Capture(ex);
+                    try { desired?.Detach(this); }
+                    catch { }
+                    try
+                    {
+                        previous?.Attach(this);
+                        _attachedSession = previous;
+                    }
+                    catch
+                    {
+                        try { previous?.Detach(this); }
+                        catch { }
+                    }
+                    // A handler may have reassigned Session during the rollback Attach; that
+                    // value wins (the loop attaches it next). Only write the restored value
+                    // while the property still holds the session that just failed.
+                    if (ReferenceEquals(Session, desired))
+                        SetCurrentValue(SessionProperty, _attachedSession);
+                }
             }
-            SetCurrentValue(SessionProperty, previous);
         }
         finally
         {
-            _restoringSession = false;
+            _syncingSession = false;
         }
+        failure?.Throw();
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -88,7 +112,7 @@ public class GodotControl : Control
         _topLevel = TopLevel.GetTopLevel(this);
         if (_topLevel is not null) _topLevel.ScalingChanged += OnScalingChanged;
         _onTree = true;
-        Session?.Attach(this);
+        SyncSession();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
@@ -96,7 +120,8 @@ public class GodotControl : Control
         _onTree = false;
         if (_topLevel is not null) _topLevel.ScalingChanged -= OnScalingChanged;
         _topLevel = null;
-        Session?.Detach(this);
+        _attachedSession?.Detach(this);
+        _attachedSession = null;
         base.OnDetachedFromVisualTree(e);
     }
 

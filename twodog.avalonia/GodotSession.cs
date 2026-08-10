@@ -24,6 +24,7 @@ public sealed class GodotSession : IDisposable
     private GodotInputForwarder? _forwarder;
     private DispatcherTimer? _detachedTimer;
     private bool _gpuSupported;
+    private bool _gpuFailed;
     private bool _pumpScheduled;
     private bool _pumpStopped;
     private bool _disposed;
@@ -33,6 +34,8 @@ public sealed class GodotSession : IDisposable
     private GodotPresentationMode? _notifiedMode;
     private bool _resizePending;
     private long _lastResizeTimestamp;
+    private long _iterationPeriod;
+    private long _nextIterationDue;
 
     // Engine window resizes reallocate the renderer's buffers - far too heavy for the event
     // rate of an interactive resize. Bounds changes only mark the size dirty; the pump applies
@@ -115,10 +118,15 @@ public sealed class GodotSession : IDisposable
         // the hidden engine window would only add a second, competing pacer (observed as the
         // pump capping at the engine window's refresh rate instead of the control's).
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
-        // With vsync off, the engine's own limiter (a smoothed sleep inside Iteration())
-        // paces the pump instead: backends whose animation frames aren't tied to the
-        // display (Avalonia's Wayland backend) would otherwise run the engine unbounded.
-        global::Godot.Engine.MaxFps = ResolveMaxFps();
+        // With vsync off the pump still needs a bound: backends whose animation frames
+        // aren't tied to the display (Avalonia's Wayland backend) would otherwise run the
+        // engine unbounded. Godot's own limiter is unusable here - it enforces the cap by
+        // sleeping inside Iteration(), stalling input, layout, and rendering on the UI
+        // thread - so PumpFrame gates iterations on a timestamp instead, and MaxFps is
+        // pinned to 0 lest a project-set cap reintroduce the sleep.
+        global::Godot.Engine.MaxFps = 0;
+        var maxFps = ResolveMaxFps();
+        _iterationPeriod = maxFps > 0 ? (long)(Stopwatch.Frequency / (double)maxFps) : 0;
         _gpuSupported = GpuPresenter.IsSupported();
         Started?.Invoke(this, EventArgs.Empty);
 
@@ -157,6 +165,9 @@ public sealed class GodotSession : IDisposable
                 $"{nameof(GodotSession)}: another {nameof(GodotControl)} is already attached.");
 
         _control = control;
+        // GPU failure is sticky per attachment; a fresh attachment (possibly a different
+        // TopLevel whose compositor does import shared textures) gets to try again.
+        _gpuFailed = false;
         _forwarder = new GodotInputForwarder(control, this);
         _presenter = CreatePresenter(control);
         if (_pausedByDetach) SetPaused(detached: false);
@@ -234,20 +245,21 @@ public sealed class GodotSession : IDisposable
 
     // Auto mode reacts to what the engine turned out to support: upgrade CPU to zero-copy
     // after Start(), and fall back to CPU when GPU initialization failed. A GPU failure is
-    // sticky - the engine natives may export shared textures while the compositor still
-    // cannot import them (empty interop support, device loss), and retrying every pumped
-    // frame would flicker between presenters forever.
+    // sticky for the current attachment - the engine natives may export shared textures
+    // while this control's compositor cannot import them (empty interop support, device
+    // loss), and retrying every pumped frame would flicker between presenters forever.
+    // The engine-side capability itself stays intact: a later attachment retries once.
     private void ReconcilePresenter()
     {
         if (_options.PresentationMode != GodotPresentationMode.Auto || _control is null || _presenter is null) return;
 
         if (_presenter.Failed)
         {
-            _gpuSupported = false;
+            _gpuFailed = true;
             _presenter.Dispose();
             _presenter = new CpuPresenter(_control, this);
         }
-        else if (_gpuSupported && _presenter is CpuPresenter)
+        else if (_gpuSupported && !_gpuFailed && _presenter is CpuPresenter)
         {
             _presenter.Dispose();
             _presenter = new GpuPresenter(_control, this);
@@ -293,7 +305,7 @@ public sealed class GodotSession : IDisposable
 
     // Auto means the highest current refresh rate among the connected screens - a pump
     // faster than every display is pure waste, while per-window rates are not knowable
-    // here. Infinity means uncapped (Godot's 0).
+    // here. Infinity means uncapped (0).
     private int ResolveMaxFps()
     {
         var fps = _options.MaxFramesPerSecond;
@@ -316,6 +328,17 @@ public sealed class GodotSession : IDisposable
     private void PumpFrame()
     {
         if (_instance is null || _pumpStopped) return;
+
+        // Nonblocking FPS cap: a tick arriving before the next iteration is due is skipped
+        // (the following animation frame or timer tick retries). The due time advances by
+        // one period per iteration so tick jitter averages out to the cap instead of
+        // halving it, and resnaps after a stall so no backlog bursts.
+        if (_iterationPeriod > 0)
+        {
+            var now = Stopwatch.GetTimestamp();
+            if (now < _nextIterationDue) return;
+            _nextIterationDue = Math.Max(_nextIterationDue, now - _iterationPeriod) + _iterationPeriod;
+        }
 
         ApplyPendingResize();
         if (_instance.Iteration())
