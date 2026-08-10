@@ -126,15 +126,18 @@ public sealed class GodotSession : IDisposable
         // every tick productive.
         global::Godot.Engine.MaxFps = ResolveMaxFps();
         _gpuSupported = GpuPresenter.IsSupported();
+        // A pause requested before Start() (IsPaused, detached start) is applied before
+        // Started fires: handlers then observe the settled state, may change it without
+        // duplicate engine notifications, and may even Dispose() - everything below
+        // guards on the instance, while ApplyPause here must not.
+        if (_control is null && _options.PauseWhenDetached) _pausedByDetach = true;
+        if (_pausedByUser || _pausedByDetach) ApplyPause(true);
         Started?.Invoke(this, EventArgs.Empty);
 
         ReconcilePresenter();
         SyncEngineWindowSize();
         _presenter?.Resize();
         UpdatePumpSource();
-        if (_control is null && _options.PauseWhenDetached) _pausedByDetach = true;
-        // A pause requested before Start() (IsPaused, detached start) is applied now.
-        if (_pausedByUser || _pausedByDetach) ApplyPause(true);
     }
 
     // Both pause reasons compose into one engine-facing state; the engine is only
