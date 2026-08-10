@@ -31,6 +31,9 @@
     <ItemGroup>
         <PackageReference Include="2dog.avalonia" Version="$(TwoDogVersion)"/>
         <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)"/>
+        <!-- Native Wayland backend (experimental, not part of UsePlatformDetect);
+             enabled via UseWaylandWithFallback so X11 remains the fallback. -->
+        <PackageReference Include="Avalonia.Wayland" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
         <!-- No Avalonia.Diagnostics: the F12 DevTools left the open-source package line after 11.x. -->
