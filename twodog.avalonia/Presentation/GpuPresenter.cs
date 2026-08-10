@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Avalonia.Platform;
 using Avalonia.Rendering.Composition;
 using Godot;
+using Dispatcher = Avalonia.Threading.Dispatcher;
 using Vector2 = System.Numerics.Vector2;
 
 namespace twodog.Presentation;
@@ -21,14 +23,19 @@ internal sealed class GpuPresenter : IPresenter
 {
     private enum InitState { Initializing, Ready, Failed }
 
+    // One engine copy target plus its compositor-side import; the presenter rotates through
+    // the factory's BufferCount of these so unsynchronized flavors never write the image the
+    // compositor still samples.
+    private readonly record struct SharedBuffer(ISharedTexture Texture, ICompositionImportedGpuImage Imported);
+
     private readonly GodotControl _control;
     private readonly GodotSession _session;
     private ISharedTextureFactory? _factory;
-    private ISharedTexture? _texture;
+    private SharedBuffer[] _buffers = [];
+    private int _nextBuffer;
     private ICompositionGpuInterop? _interop;
     private CompositionDrawingSurface? _surface;
     private CompositionSurfaceVisual? _visual;
-    private ICompositionImportedGpuImage? _imported;
     private RenderingDevice? _rd;
     private Task? _lastPresent;
     private InitState _state = InitState.Initializing;
@@ -125,8 +132,18 @@ internal sealed class GpuPresenter : IPresenter
                 throw new PlatformNotSupportedException(
                     $"The compositor cannot import {factory.AvaloniaHandleType}.");
             }
+            // Importable is not presentable: the first frame would fault (or never show)
+            // when the compositor lacks the synchronization flavor PresentAsync engages.
+            var sync = interop.GetSynchronizationCapabilities(factory.AvaloniaHandleType);
+            if ((sync & factory.RequiredSynchronization) == 0)
+            {
+                factory.Dispose();
+                throw new PlatformNotSupportedException(
+                    $"The compositor lacks {factory.RequiredSynchronization} synchronization " +
+                    $"for {factory.AvaloniaHandleType} (supports: {sync}).");
+            }
 
-            Log($"interop ok; supported handle types: {string.Join(",", interop.SupportedImageHandleTypes)}");
+            Log($"interop ok; supported handle types: {string.Join(",", interop.SupportedImageHandleTypes)}; sync: {sync}");
             _factory = factory;
             _interop = interop;
             _surface = compositor.CreateDrawingSurface();
@@ -182,14 +199,15 @@ internal sealed class GpuPresenter : IPresenter
         var size = DisplayServer.WindowGetSize();
         if (size.X <= 0 || size.Y <= 0) return;
 
-        if ((_texture is null || _texture.Width != size.X || _texture.Height != size.Y)
-            && !RecreateSharedTexture(_rd, size.X, size.Y))
+        if ((_buffers.Length == 0 || _buffers[0].Texture.Width != size.X || _buffers[0].Texture.Height != size.Y)
+            && !RecreateSharedBuffers(_rd, size.X, size.Y))
         {
             Fail();
             return;
         }
 
-        switch (_texture!.Acquire())
+        var (texture, imported) = _buffers[_nextBuffer];
+        switch (texture.Acquire())
         {
             case AcquireResult.Busy: return;
             case AcquireResult.Failed: Fail(); return;
@@ -201,11 +219,11 @@ internal sealed class GpuPresenter : IPresenter
             // Only the RD-level texture behind the (stable, session-cached) viewport texture
             // changes on resize, so it is re-queried per frame.
             var viewportRd = RenderingServer.TextureGetRdTexture(_session.ViewportTexture);
-            err = _rd.ExternalTexturePresent(viewportRd, _texture.Rid);
+            err = _rd.ExternalTexturePresent(viewportRd, texture.Rid);
         }
         finally
         {
-            released = _texture.Release();
+            released = texture.Release();
         }
         if (!released)
         {
@@ -214,37 +232,86 @@ internal sealed class GpuPresenter : IPresenter
             return;
         }
 
-        if (err != Error.Ok || _imported is null)
+        if (err != Error.Ok)
         {
-            Log($"present failed: err={err} imported={_imported is not null}");
+            Log($"present failed: err={err}");
             Fail();
             return;
         }
-        _lastPresent = _texture.PresentAsync(_surface, _imported);
+        try
+        {
+            _lastPresent = texture.PresentAsync(_surface, imported);
+        }
+        catch (Exception ex)
+        {
+            // A synchronous rejection (disposed surface, lost image) must fail over to the
+            // CPU path like an async fault, not escape into the UI thread's frame callback.
+            Log($"present threw: {ex}");
+            Fail();
+            return;
+        }
+        _nextBuffer = (_nextBuffer + 1) % _buffers.Length;
         _presentCount++;
         if (_presentCount <= 3 || _presentCount % 300 == 0) Log($"present #{_presentCount} queued");
     }
 
-    private bool RecreateSharedTexture(RenderingDevice rd, int width, int height)
+    private bool RecreateSharedBuffers(RenderingDevice rd, int width, int height)
     {
-        _ = _imported?.DisposeAsync();
-        _imported = null;
-        _texture?.Dispose();
-        _texture = null;
+        // The in-flight gate has already passed, so no pending update reads the old buffers;
+        // their compositor-side release is still asynchronous and merely observed.
+        DisposeBuffers(_buffers, engineAlive: true);
+        _buffers = [];
+        _nextBuffer = 0;
 
+        var buffers = new SharedBuffer[_factory!.BufferCount];
         try
         {
-            _texture = _factory!.Create(rd, width, height);
-            _imported = _interop!.ImportImage(_texture.Handle, _texture.ImportProperties);
-            Log($"created+imported {width}x{height} handle={_texture.Handle.Handle} memorySize={_texture.ImportProperties.MemorySize}");
-            return _imported is not null;
+            for (var i = 0; i < buffers.Length; i++)
+            {
+                var texture = _factory.Create(rd, width, height);
+                ICompositionImportedGpuImage imported;
+                try
+                {
+                    imported = _interop!.ImportImage(texture.Handle, texture.ImportProperties);
+                }
+                catch
+                {
+                    texture.Dispose();
+                    throw;
+                }
+                texture.HandleImported();
+                buffers[i] = new SharedBuffer(texture, imported);
+            }
+            _buffers = buffers;
+            Log($"created+imported {buffers.Length}x {width}x{height} memorySize={buffers[0].Texture.ImportProperties.MemorySize}");
+            return true;
         }
         catch (Exception ex)
         {
             Log($"create/import {width}x{height} failed: {ex}");
-            _texture?.Dispose();
-            _texture = null;
+            DisposeBuffers(buffers, engineAlive: true);
             return false;
+        }
+    }
+
+    // Imported-image releases are asynchronous; their faults are logged instead of left
+    // unobserved (an unobserved fault would surface as UnobservedTaskException noise).
+    private static void Observe(ValueTask dispose)
+    {
+        if (dispose.IsCompletedSuccessfully) return;
+        _ = dispose.AsTask().ContinueWith(
+            t => Log($"imported image release failed: {t.Exception?.GetBaseException()}"),
+            TaskContinuationOptions.OnlyOnFaulted);
+    }
+
+    private static void DisposeBuffers(SharedBuffer[] buffers, bool engineAlive)
+    {
+        foreach (var (texture, imported) in buffers)
+        {
+            if (imported is not null) Observe(imported.DisposeAsync());
+            // Engine-side RIDs die with the engine; freeing them afterwards would call into
+            // a torn-down RenderingDevice.
+            if (engineAlive) texture?.Dispose();
         }
     }
 
@@ -267,17 +334,51 @@ internal sealed class GpuPresenter : IPresenter
     private void ReleaseResources()
     {
         ElementComposition.SetElementChildVisual(_control, null);
-        _ = _imported?.DisposeAsync();
-        _imported = null;
-        _texture?.Dispose();
-        _texture = null;
-        _factory?.Dispose();
+        var buffers = _buffers;
+        var factory = _factory;
+        _buffers = [];
+        _nextBuffer = 0;
         _factory = null;
         _interop = null;
         _rd = null;
         _surface = null;
         _visual = null;
+        var present = _lastPresent;
         _lastPresent = null;
+
+        if (PendingCompositorWork(buffers, present) is not { } pending)
+        {
+            DisposeBuffers(buffers, engineAlive: _session.IsStarted);
+            factory?.Dispose();
+            return;
+        }
+        // An update or import is still in flight: destroying the imported images and their
+        // backing textures now could pull the GPU memory out from under the compositor.
+        // Defer until it settles, back on the UI thread (RenderingDevice affinity). The
+        // session may be disposed by then; DisposeBuffers skips dead engine-side RIDs.
+        var session = _session;
+        pending.ContinueWith(t =>
+        {
+            _ = t.Exception;
+            Dispatcher.UIThread.Post(() =>
+            {
+                DisposeBuffers(buffers, engineAlive: session.IsStarted);
+                factory?.Dispose();
+            });
+        }, TaskContinuationOptions.ExecuteSynchronously);
+    }
+
+    private static Task? PendingCompositorWork(SharedBuffer[] buffers, Task? present)
+    {
+        List<Task>? pending = null;
+        Add(present);
+        foreach (var buffer in buffers) Add(buffer.Imported?.ImportCompleted);
+        return pending is null ? null : Task.WhenAll(pending);
+
+        void Add(Task? task)
+        {
+            if (task is { IsCompleted: false }) (pending ??= []).Add(task);
+        }
     }
 
     public void Dispose()

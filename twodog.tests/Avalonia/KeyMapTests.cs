@@ -14,28 +14,28 @@ public class KeyMapTests
     public void Letters_MapContiguously()
     {
         for (var key = AvaloniaKey.A; key <= AvaloniaKey.Z; key++)
-            Assert.Equal(GodotKey.A + (key - AvaloniaKey.A), KeyMap.ToKeycode(key));
+            Assert.Equal(GodotKey.A + (key - AvaloniaKey.A), KeyMap.ToKeycode(key, PhysicalKey.None));
     }
 
     [Fact]
     public void Digits_MapContiguously()
     {
         for (var key = AvaloniaKey.D0; key <= AvaloniaKey.D9; key++)
-            Assert.Equal(GodotKey.Key0 + (key - AvaloniaKey.D0), KeyMap.ToKeycode(key));
+            Assert.Equal(GodotKey.Key0 + (key - AvaloniaKey.D0), KeyMap.ToKeycode(key, PhysicalKey.None));
     }
 
     [Fact]
     public void NumPad_MapsToKeypad()
     {
         for (var key = AvaloniaKey.NumPad0; key <= AvaloniaKey.NumPad9; key++)
-            Assert.Equal(GodotKey.Kp0 + (key - AvaloniaKey.NumPad0), KeyMap.ToKeycode(key));
+            Assert.Equal(GodotKey.Kp0 + (key - AvaloniaKey.NumPad0), KeyMap.ToKeycode(key, PhysicalKey.None));
     }
 
     [Fact]
     public void FunctionKeys_MapContiguously()
     {
         for (var key = AvaloniaKey.F1; key <= AvaloniaKey.F24; key++)
-            Assert.Equal(GodotKey.F1 + (key - AvaloniaKey.F1), KeyMap.ToKeycode(key));
+            Assert.Equal(GodotKey.F1 + (key - AvaloniaKey.F1), KeyMap.ToKeycode(key, PhysicalKey.None));
     }
 
     [Theory]
@@ -51,9 +51,19 @@ public class KeyMapTests
     [InlineData(AvaloniaKey.OemQuestion, GodotKey.Slash)]
     [InlineData(AvaloniaKey.PageUp, GodotKey.Pageup)]
     [InlineData(AvaloniaKey.PrintScreen, GodotKey.Print)]
+    [InlineData(AvaloniaKey.Print, GodotKey.Print)]
+    [InlineData(AvaloniaKey.Separator, GodotKey.KpPeriod)]
     [InlineData(AvaloniaKey.Cancel, GodotKey.Unknown)]
     public void Keycode_SpotChecks(AvaloniaKey avalonia, GodotKey expected) =>
-        Assert.Equal(expected, KeyMap.ToKeycode(avalonia));
+        Assert.Equal(expected, KeyMap.ToKeycode(avalonia, PhysicalKey.None));
+
+    [Fact]
+    public void KanaMode_OnlyJisKanaKey_ReadsAsKana()
+    {
+        // Avalonia aliases HangulMode to KanaMode; the physical key tells them apart.
+        Assert.Equal(GodotKey.JisKana, KeyMap.ToKeycode(AvaloniaKey.KanaMode, PhysicalKey.KanaMode));
+        Assert.Equal(GodotKey.Unknown, KeyMap.ToKeycode(AvaloniaKey.HangulMode, PhysicalKey.Lang1));
+    }
 
     [Theory]
     [InlineData(PhysicalKey.A, GodotKey.A)]

@@ -34,8 +34,6 @@ public sealed class GodotSession : IDisposable
     private GodotPresentationMode? _notifiedMode;
     private bool _resizePending;
     private long _lastResizeTimestamp;
-    private long _iterationPeriod;
-    private long _nextIterationDue;
 
     // Engine window resizes reallocate the renderer's buffers - far too heavy for the event
     // rate of an interactive resize. Bounds changes only mark the size dirty; the pump applies
@@ -72,7 +70,8 @@ public sealed class GodotSession : IDisposable
 
     /// <summary>
     /// Gameplay pause. Setting it sets <c>SceneTree.Paused</c> (stopping processing for
-    /// pausable nodes) and sends the application-lifecycle pause notification.
+    /// pausable nodes) and sends the application-lifecycle pause notification. May be set
+    /// before <see cref="Start"/>; the state is applied when the engine starts.
     /// </summary>
     public bool IsPaused
     {
@@ -118,15 +117,14 @@ public sealed class GodotSession : IDisposable
         // the hidden engine window would only add a second, competing pacer (observed as the
         // pump capping at the engine window's refresh rate instead of the control's).
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
-        // With vsync off the pump still needs a bound: backends whose animation frames
-        // aren't tied to the display (Avalonia's Wayland backend) would otherwise run the
-        // engine unbounded. Godot's own limiter is unusable here - it enforces the cap by
-        // sleeping inside Iteration(), stalling input, layout, and rendering on the UI
-        // thread - so PumpFrame gates iterations on a timestamp instead, and MaxFps is
-        // pinned to 0 lest a project-set cap reintroduce the sleep.
-        global::Godot.Engine.MaxFps = 0;
-        var maxFps = ResolveMaxFps();
-        _iterationPeriod = maxFps > 0 ? (long)(Stopwatch.Frequency / (double)maxFps) : 0;
+        // With vsync off, the engine's own limiter (a smoothed sleep inside Iteration())
+        // paces the pump instead: backends whose animation frames aren't tied to the
+        // display (Avalonia's Wayland backend) would otherwise run the engine unbounded.
+        // The sleep does block the UI thread, but a host-side nonblocking gate was tried
+        // and performed far worse: skipped ticks forfeit their compositor timeslot, so the
+        // rate lands well under the cap and paces irregularly. The engine sleep keeps
+        // every tick productive.
+        global::Godot.Engine.MaxFps = ResolveMaxFps();
         _gpuSupported = GpuPresenter.IsSupported();
         Started?.Invoke(this, EventArgs.Empty);
 
@@ -134,7 +132,9 @@ public sealed class GodotSession : IDisposable
         SyncEngineWindowSize();
         _presenter?.Resize();
         UpdatePumpSource();
-        if (_control is null && _options.PauseWhenDetached) SetPaused(detached: true);
+        if (_control is null && _options.PauseWhenDetached) _pausedByDetach = true;
+        // A pause requested before Start() (IsPaused, detached start) is applied now.
+        if (_pausedByUser || _pausedByDetach) ApplyPause(true);
     }
 
     // Both pause reasons compose into one engine-facing state; the engine is only
@@ -145,8 +145,13 @@ public sealed class GodotSession : IDisposable
         _pausedByUser = user ?? _pausedByUser;
         _pausedByDetach = detached ?? _pausedByDetach;
         var isPaused = _pausedByUser || _pausedByDetach;
-        if (isPaused == wasPaused) return;
+        // Before Start() the flags are only recorded; Start() applies the combined state.
+        if (_instance is null || isPaused == wasPaused) return;
+        ApplyPause(isPaused);
+    }
 
+    private void ApplyPause(bool isPaused)
+    {
         // SceneTree.Paused is the actual gameplay pause. GodotInstance.Pause/Resume only
         // raises NOTIFICATION_APPLICATION_PAUSED/RESUMED - the mobile-style lifecycle
         // signal, which the tree merely propagates to nodes; sent as well so game code
@@ -171,6 +176,13 @@ public sealed class GodotSession : IDisposable
         _forwarder = new GodotInputForwarder(control, this);
         _presenter = CreatePresenter(control);
         if (_pausedByDetach) SetPaused(detached: false);
+        // A running engine follows the new control's size immediately: bounds and scale can
+        // differ from the previous attachment's, and attaching fires no Bounds change.
+        if (_instance is not null)
+        {
+            SyncEngineWindowSize();
+            _presenter.Resize();
+        }
         UpdatePumpSource();
         NotifyActiveModeChanged();
     }
@@ -305,7 +317,7 @@ public sealed class GodotSession : IDisposable
 
     // Auto means the highest current refresh rate among the connected screens - a pump
     // faster than every display is pure waste, while per-window rates are not knowable
-    // here. Infinity means uncapped (0).
+    // here. Infinity means uncapped (Godot's 0).
     private int ResolveMaxFps()
     {
         var fps = _options.MaxFramesPerSecond;
@@ -329,29 +341,30 @@ public sealed class GodotSession : IDisposable
     {
         if (_instance is null || _pumpStopped) return;
 
-        // Nonblocking FPS cap: a tick arriving before the next iteration is due is skipped
-        // (the following animation frame or timer tick retries). The due time advances by
-        // one period per iteration so tick jitter averages out to the cap instead of
-        // halving it, and resnaps after a stall so no backlog bursts.
-        if (_iterationPeriod > 0)
+        try
         {
-            var now = Stopwatch.GetTimestamp();
-            if (now < _nextIterationDue) return;
-            _nextIterationDue = Math.Max(_nextIterationDue, now - _iterationPeriod) + _iterationPeriod;
-        }
+            ApplyPendingResize();
+            if (_instance.Iteration())
+            {
+                StopPump();
+                QuitRequested?.Invoke(this, EventArgs.Empty);
+                return;
+            }
 
-        ApplyPendingResize();
-        if (_instance.Iteration())
+            FrameAdvanced?.Invoke(this, EventArgs.Empty);
+            ReconcilePresenter();
+            _presenter?.PresentFrame();
+            _forwarder?.SyncCursor();
+        }
+        catch
         {
+            // A throw from here (engine callback, host FrameAdvanced handler, presenter)
+            // surfaces through the dispatcher's unhandled-exception path; without stopping
+            // first, the next animation frame would pump and rethrow forever. Leave the
+            // session quiescent so the host sees the failure once and can Dispose cleanly.
             StopPump();
-            QuitRequested?.Invoke(this, EventArgs.Empty);
-            return;
+            throw;
         }
-
-        FrameAdvanced?.Invoke(this, EventArgs.Empty);
-        ReconcilePresenter();
-        _presenter?.PresentFrame();
-        _forwarder?.SyncCursor();
     }
 
     private void StopPump()
@@ -364,6 +377,9 @@ public sealed class GodotSession : IDisposable
     public void Dispose()
     {
         if (_disposed) return;
+        // Teardown releases composition resources and the engine, both UI-thread affine -
+        // the same contract as Start() and Attach().
+        Dispatcher.UIThread.VerifyAccess();
         _disposed = true;
         StopPump();
         if (_control is { } control) Detach(control);

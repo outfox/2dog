@@ -24,21 +24,36 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
     public string AvaloniaHandleType => KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle;
 
+    public CompositionGpuImportedImageSynchronizationCapabilities RequiredSynchronization =>
+        CompositionGpuImportedImageSynchronizationCapabilities.KeyedMutex;
+
+    // The keyed mutex serializes the engine's writes against compositor reads on one texture.
+    public int BufferCount => 1;
+
     /// <summary>Creates the device on the adapter with the given LUID (the compositor's device).</summary>
     public D3D11SharedTextureFactory(byte[]? adapterLuid)
     {
         _api = D3D11.GetApi(null, false);
-        using var adapter = FindAdapter(adapterLuid);
+        try
+        {
+            using var adapter = FindAdapter(adapterLuid);
 
-        ID3D11Device* device = null;
-        // A specific adapter requires DriverType Unknown per D3D11CreateDevice rules. No immediate
-        // context: this device only creates resources, and the keyed mutex synchronizes access.
-        SilkMarshal.ThrowHResult(_api.CreateDevice(
-            (IDXGIAdapter*)adapter.Handle,
-            adapter.Handle is null ? D3DDriverType.Hardware : D3DDriverType.Unknown,
-            0, (uint)CreateDeviceFlag.BgraSupport, null, 0, D3D11.SdkVersion,
-            &device, null, (ID3D11DeviceContext**)null));
-        _device = device;
+            ID3D11Device* device = null;
+            // A specific adapter requires DriverType Unknown per D3D11CreateDevice rules. No immediate
+            // context: this device only creates resources, and the keyed mutex synchronizes access.
+            SilkMarshal.ThrowHResult(_api.CreateDevice(
+                (IDXGIAdapter*)adapter.Handle,
+                adapter.Handle is null ? D3DDriverType.Hardware : D3DDriverType.Unknown,
+                0, (uint)CreateDeviceFlag.BgraSupport, null, 0, D3D11.SdkVersion,
+                &device, null, (ID3D11DeviceContext**)null));
+            _device = device;
+        }
+        catch
+        {
+            // A failed constructor cannot be disposed; the native-library context must not leak.
+            _api.Dispose();
+            throw;
+        }
     }
 
     private static ComPtr<IDXGIAdapter1> FindAdapter(byte[]? luid)
@@ -86,37 +101,44 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         ID3D11Texture2D* texture = null;
         SilkMarshal.ThrowHResult(_device.Get().CreateTexture2D(&desc, null, &texture));
 
+        // Staged acquisition: any failure past this point must release what already exists,
+        // or the CPU-fallback path leaks the texture and mutex on every attempt.
         IDXGIKeyedMutex* mutex = null;
-        var mutexIid = IDXGIKeyedMutex.Guid;
-        SilkMarshal.ThrowHResult(texture->QueryInterface(&mutexIid, (void**)&mutex));
-
-        IDXGIResource* resource = null;
-        var resourceIid = IDXGIResource.Guid;
-        SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
-        nint shared;
         try
         {
-            void* handle = null;
-            SilkMarshal.ThrowHResult(resource->GetSharedHandle(&handle));
-            shared = (nint)handle;
-        }
-        finally
-        {
-            resource->Release();
-        }
+            var mutexIid = IDXGIKeyedMutex.Guid;
+            SilkMarshal.ThrowHResult(texture->QueryInterface(&mutexIid, (void**)&mutex));
 
-        var rid = rd.ExternalTextureCreate(
-            RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex,
-            RenderingDevice.DataFormat.R8G8B8A8Unorm,
-            (uint)width, (uint)height, (ulong)shared);
-        if (!rid.IsValid)
+            IDXGIResource* resource = null;
+            var resourceIid = IDXGIResource.Guid;
+            SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
+            nint shared;
+            try
+            {
+                void* handle = null;
+                SilkMarshal.ThrowHResult(resource->GetSharedHandle(&handle));
+                shared = (nint)handle;
+            }
+            finally
+            {
+                resource->Release();
+            }
+
+            var rid = rd.ExternalTextureCreate(
+                RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex,
+                RenderingDevice.DataFormat.R8G8B8A8Unorm,
+                (uint)width, (uint)height, (ulong)shared);
+            if (!rid.IsValid)
+                throw new NotSupportedException("The engine could not import the D3D11 shared texture.");
+
+            return new D3D11SharedTexture(rd, rid, texture, mutex, shared, width, height);
+        }
+        catch
         {
-            mutex->Release();
+            if (mutex is not null) mutex->Release();
             texture->Release();
-            throw new NotSupportedException("The engine could not import the D3D11 shared texture.");
+            throw;
         }
-
-        return new D3D11SharedTexture(rd, rid, texture, mutex, shared, width, height);
     }
 
     public void Dispose()
@@ -171,6 +193,11 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         // the compositor presents with (1, 0).
         public Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
             surface.UpdateWithKeyedMutexAsync(image, 1, 0);
+
+        // A KMT global shared handle is not an owned resource; nothing transfers on import.
+        public void HandleImported()
+        {
+        }
 
         public void Dispose()
         {

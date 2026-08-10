@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Platform;
 using Avalonia.Rendering.Composition;
@@ -43,6 +44,11 @@ internal interface ISharedTexture : IDisposable
     /// <summary>Queues the compositor-side present of this texture's imported image on the
     /// surface, engaging whatever synchronization flavor the texture implements.</summary>
     Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image);
+
+    /// <summary>The compositor accepted <see cref="Handle"/> (ImportImage returned): from
+    /// here on, ownership-transferring handle types (exported fds) belong to the compositor
+    /// and must not be released by <see cref="IDisposable.Dispose"/>.</summary>
+    void HandleImported();
 }
 
 /// <summary>Creates the platform's shared-texture flavor; owns any device state shared
@@ -52,6 +58,16 @@ internal interface ISharedTextureFactory : IDisposable
     /// <summary>The <c>KnownPlatformGraphicsExternalImageHandleTypes</c> value the compositor
     /// must support for this factory's textures.</summary>
     string AvaloniaHandleType { get; }
+
+    /// <summary>The synchronization flavors <see cref="ISharedTexture.PresentAsync"/> can
+    /// work with; the compositor must report at least one of them for
+    /// <see cref="AvaloniaHandleType"/>.</summary>
+    CompositionGpuImportedImageSynchronizationCapabilities RequiredSynchronization { get; }
+
+    /// <summary>How many textures the presenter rotates through. 1 when the texture carries
+    /// its own reader/writer synchronization (keyed mutex); more when nothing else stops the
+    /// compositor from sampling the image the engine is writing (exported memory).</summary>
+    int BufferCount { get; }
 
     ISharedTexture Create(RenderingDevice rd, int width, int height);
 }
@@ -69,6 +85,21 @@ internal sealed class EngineExportedTextureFactory(
 {
     public string AvaloniaHandleType => avaloniaHandleType;
 
+    // No sync primitive rides along with exported memory: the compositor may re-sample the
+    // last-presented image at any redraw. The presenter rotates three textures so the one
+    // being written is never the one still displayed (or the one a pending update reads).
+    //
+    // Automatic is what UpdateAsync nominally needs, but Avalonia's Vulkan compositor
+    // reports only Semaphores for exported fds while UpdateAsync still presents correctly
+    // there (Linux implicit sync; the rotation covers reader/writer overlap) - so either
+    // flavor is accepted, and only a compositor reporting neither fails initialization
+    // instead of faulting on its first frame.
+    public CompositionGpuImportedImageSynchronizationCapabilities RequiredSynchronization =>
+        CompositionGpuImportedImageSynchronizationCapabilities.Automatic |
+        CompositionGpuImportedImageSynchronizationCapabilities.Semaphores;
+
+    public int BufferCount => 3;
+
     public ISharedTexture Create(RenderingDevice rd, int width, int height)
     {
         var rid = rd.ExternalTextureCreate(shareType, RenderingDevice.DataFormat.R8G8B8A8Unorm,
@@ -77,7 +108,10 @@ internal sealed class EngineExportedTextureFactory(
             throw new NotSupportedException($"external texture creation failed ({shareType})");
 
         return new EngineExportedTexture(rd, rid, width, height, avaloniaHandleType,
-            needsMemorySize ? rd.ExternalTextureGetMemorySize(rid) : 0);
+            needsMemorySize ? rd.ExternalTextureGetMemorySize(rid) : 0,
+            // Only the exported opaque fd is an owned handle before import; an IOSurfaceRef
+            // is not transferred (the compositor retains it on import).
+            handleOwnedUntilImport: shareType == RenderingDevice.ExternalTextureShareHandleType.OpaqueFd);
     }
 
     public void Dispose()
@@ -85,9 +119,12 @@ internal sealed class EngineExportedTextureFactory(
     }
 
     private sealed class EngineExportedTexture(
-        RenderingDevice rd, Rid rid, int width, int height, string handleType, ulong memorySize)
+        RenderingDevice rd, Rid rid, int width, int height, string handleType, ulong memorySize,
+        bool handleOwnedUntilImport)
         : ISharedTexture
     {
+        private bool _handleImported;
+
         public int Width => width;
         public int Height => height;
         public Rid Rid => rid;
@@ -111,10 +148,22 @@ internal sealed class EngineExportedTextureFactory(
         public bool Release() => true;
 
         // No explicit sync primitive: the engine's present stalls until the copy finished on
-        // the GPU, and the import type is coherent (exported memory, IOSurface).
+        // the GPU, and the import type is coherent (exported memory, IOSurface). Reader/writer
+        // overlap is prevented by the factory's buffer rotation, not by this call.
         public Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
             surface.UpdateAsync(image);
 
-        public void Dispose() => rd.FreeRid(rid);
+        public void HandleImported() => _handleImported = true;
+
+        public void Dispose()
+        {
+            rd.FreeRid(rid);
+            // An exported opaque fd only transfers to the compositor on successful import;
+            // when the import never happened it must be closed here or it leaks.
+            if (handleOwnedUntilImport && !_handleImported) NativeClose((int)Handle.Handle);
+        }
+
+        [DllImport("libc", EntryPoint = "close")]
+        private static extern int NativeClose(int fd);
     }
 }

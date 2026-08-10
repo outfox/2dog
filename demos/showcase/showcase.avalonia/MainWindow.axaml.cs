@@ -32,6 +32,9 @@ public partial class MainWindow : Window
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
+        // The previewer instantiates this window through the parameterless constructor;
+        // design tooling must load only the XAML UI, never boot the engine.
+        if (Design.IsDesignMode) return;
         if (_session is not null) return;
 
         // Args are forwarded verbatim so CLI flags like --verbose or --quit-after work.

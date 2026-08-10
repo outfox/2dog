@@ -46,17 +46,26 @@ internal sealed class CpuPresenter : IPresenter
         var width = image.GetWidth();
         var height = image.GetHeight();
         if (width <= 0 || height <= 0) return;
-        if (image.GetFormat() != Image.Format.Rgba8)
+        var format = image.GetFormat();
+        if (format != Image.Format.Rgba8)
+        {
             image.Convert(Image.Format.Rgba8);
+            // HDR 2D viewports read back as linear half-float; quantizing alone leaves the
+            // linear values in an sRGB-interpreted bitmap, appearing far too dark. Convert
+            // like Godot's own capture path (MovieWriter) does.
+            if (format is Image.Format.Rgbah or Image.Format.Rgbaf) image.LinearToSrgb();
+        }
 
         var pixelSize = new PixelSize(width, height);
         if (_back is null || _back.PixelSize != pixelSize)
         {
             _back?.Dispose();
-            // Godot readback carries straight alpha; Unpremul has Avalonia premultiply on draw,
-            // so transparent viewports composite instead of rendering opaque.
+            // Godot renders 2D onto the transparent target with premultiplied math (mix
+            // blending onto transparent black), so the readback carries premultiplied
+            // alpha; Unpremul would have Avalonia multiply by alpha a second time,
+            // darkening semi-transparent content.
             _back = new WriteableBitmap(pixelSize, new Vector(96, 96),
-                PixelFormats.Rgba8888, AlphaFormat.Unpremul);
+                PixelFormats.Rgba8888, AlphaFormat.Premul);
         }
 
         var data = image.GetData();
