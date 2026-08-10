@@ -198,7 +198,9 @@ public sealed class GodotSession : IDisposable
     }
 
     // The engine's window follows the control's pixel size; the root viewport (and with it
-    // both presentation paths) follows the window.
+    // both presentation paths) follows the window. DPI-appropriate content scaling is the
+    // project's business: with the stretch settings (display/window/stretch/*) the canvas
+    // scale follows the pixel size this sync maintains.
     private void SyncEngineWindowSize()
     {
         if (_instance is null || _control is null) return;
