@@ -161,15 +161,23 @@ internal sealed class GpuPresenter : IPresenter
             {
                 // The compositor rejected or lost the imported image (failed import, device
                 // loss); observe the fault and fail over instead of retrying every frame.
-                Log($"present task faulted: {present.Exception?.GetBaseException()}");
-                _ = present.Exception;
+                var fault = present.Exception?.GetBaseException();
+                Log($"present task faulted: {fault}");
                 Fail();
                 return;
             }
         }
 
+        // The session is started, so a missing RenderingDevice is terminal (a renderer
+        // without one, e.g. GL Compatibility, can never share textures); failing here keeps
+        // a forced-GPU session from reporting Ready while presenting nothing.
         _rd ??= RenderingServer.GetRenderingDevice();
-        if (_rd is null) return;
+        if (_rd is null)
+        {
+            Log("no rendering device; this renderer cannot share textures");
+            Fail();
+            return;
+        }
 
         var size = DisplayServer.WindowGetSize();
         if (size.X <= 0 || size.Y <= 0) return;
@@ -212,7 +220,7 @@ internal sealed class GpuPresenter : IPresenter
             Fail();
             return;
         }
-        _lastPresent = _texture.Present(_surface, _imported);
+        _lastPresent = _texture.PresentAsync(_surface, _imported);
         _presentCount++;
         if (_presentCount <= 3 || _presentCount % 300 == 0) Log($"present #{_presentCount} queued");
     }

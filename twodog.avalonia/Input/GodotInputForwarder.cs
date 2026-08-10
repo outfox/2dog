@@ -15,9 +15,19 @@ namespace twodog;
 /// </summary>
 internal sealed class GodotInputForwarder : IDisposable
 {
+    // Held keys are identified by their physical key so a layout change mid-hold still
+    // releases them; keys with no physical identity (IME and synthetic keys report
+    // PhysicalKey.None) fall back to the logical key so they never share one slot.
+    private readonly record struct HeldKeyId(PhysicalKey Physical, AvaloniaKey Logical)
+    {
+        public static HeldKeyId From(KeyEventArgs e) => e.PhysicalKey == PhysicalKey.None
+            ? new HeldKeyId(PhysicalKey.None, e.Key)
+            : new HeldKeyId(e.PhysicalKey, AvaloniaKey.None);
+    }
+
     private readonly GodotControl _control;
     private readonly GodotSession _session;
-    private readonly Dictionary<PhysicalKey, AvaloniaKey> _heldKeys = [];
+    private readonly Dictionary<HeldKeyId, AvaloniaKey> _heldKeys = [];
     private Vector2 _lastPos;
     private bool _hasLastPos;
     private MouseButtonMask _buttonMask;
@@ -209,17 +219,18 @@ internal sealed class GodotInputForwarder : IDisposable
     {
         if (!Ready) return;
         // Avalonia repeats arrive as repeated KeyDown events; Godot wants them flagged as echo.
+        var id = HeldKeyId.From(e);
         AvaloniaKey key;
         bool echo;
         if (pressed)
         {
-            echo = !_heldKeys.TryAdd(e.PhysicalKey, e.Key);
-            key = echo ? _heldKeys[e.PhysicalKey] : e.Key;
+            echo = !_heldKeys.TryAdd(id, e.Key);
+            key = echo ? _heldKeys[id] : e.Key;
         }
         else
         {
             echo = false;
-            if (!_heldKeys.Remove(e.PhysicalKey, out key)) return;
+            if (!_heldKeys.Remove(id, out key)) return;
         }
 
         var keycode = KeyMap.ToKeycode(key);
@@ -242,13 +253,13 @@ internal sealed class GodotInputForwarder : IDisposable
     {
         if (Ready)
         {
-            foreach (var (physical, key) in _heldKeys)
+            foreach (var (id, key) in _heldKeys)
             {
                 var keycode = KeyMap.ToKeycode(key);
                 Dispatch(new InputEventKey
                 {
                     Keycode = keycode,
-                    PhysicalKeycode = KeyMap.ToPhysicalKeycode(physical),
+                    PhysicalKeycode = KeyMap.ToPhysicalKeycode(id.Physical),
                     KeyLabel = keycode,
                     Pressed = false,
                 });

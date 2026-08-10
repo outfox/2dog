@@ -42,7 +42,7 @@ internal interface ISharedTexture : IDisposable
 
     /// <summary>Queues the compositor-side present of this texture's imported image on the
     /// surface, engaging whatever synchronization flavor the texture implements.</summary>
-    Task Present(CompositionDrawingSurface surface, ICompositionImportedGpuImage image);
+    Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image);
 }
 
 /// <summary>Creates the platform's shared-texture flavor; owns any device state shared
@@ -112,7 +112,7 @@ internal sealed class EngineExportedTextureFactory(
 
         // No explicit sync primitive: the engine's present stalls until the copy finished on
         // the GPU, and the import type is coherent (exported memory, IOSurface).
-        public Task Present(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
+        public Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
             surface.UpdateAsync(image);
 
         public void Dispose() => rd.FreeRid(rid);
