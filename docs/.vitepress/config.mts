@@ -116,7 +116,7 @@ export default defineConfig({
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
           { text: gd('margincontainer') + '2dog (generic host)', link: '/hosts/generic' },
           { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
-          { text: gd('globe') + 'Browser (WASM)', link: '/hosts/web' },
+          { text: gd('globe') + 'Browser', link: '/hosts/web' },
           { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' },
           { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
           { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
