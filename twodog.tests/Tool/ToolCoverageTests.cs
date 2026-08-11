@@ -7,16 +7,27 @@ public class ProgramTests
     [Fact]
     public void Main_HandlesHelpVersionAndUserErrors()
     {
-        Assert.Equal(0, Program.Main([]));
-        Assert.Equal(0, Program.Main(["help"]));
-        Assert.Equal(0, Program.Main(["--version"]));
-        Assert.Equal(0, Program.Main(["version"]));
-        Assert.Equal(2, Program.Main(["--pin", "1.2.3"]));
-        Assert.Equal(1, Program.Main(["--unknown"]));
-        Assert.Equal(1, Program.Main(["new", "--desktop"]));
+        Assert.Equal(0, CliConsole.Run().ExitCode);
+        Assert.Equal(0, CliConsole.Run("help").ExitCode);
+        Assert.Equal(0, CliConsole.Run("--version").ExitCode);
+        Assert.Equal(0, CliConsole.Run("version").ExitCode);
+
+        var pin = CliConsole.Run("--pin", "1.2.3");
+        Assert.Equal(2, pin.ExitCode);
+        Assert.Contains("cannot pin its own version", pin.Stderr);
+
+        var unknown = CliConsole.Run("--unknown");
+        Assert.Equal(1, unknown.ExitCode);
+        Assert.Contains("unknown option '--unknown'", unknown.Stderr);
+
+        var nameless = CliConsole.Run("new", "--desktop");
+        Assert.Equal(1, nameless.ExitCode);
+        Assert.Contains("2dog new needs a project name", nameless.Stderr);
 
         var missing = Path.Combine(Path.GetTempPath(), "2dog-missing-" + Guid.NewGuid().ToString("N"));
-        Assert.Equal(2, Program.Main(["add", missing, "--desktop"]));
+        var noProject = CliConsole.Run("add", missing, "--desktop");
+        Assert.Equal(2, noProject.ExitCode);
+        Assert.Contains("no project.godot", noProject.Stderr);
     }
 
     [Fact]
@@ -25,7 +36,7 @@ public class ProgramTests
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", "[application]\nconfig/name=\"My Game\"\n");
 
-        Assert.Equal(0, Program.Main(["add", tmp.Dir, "--desktop", "--dry-run", "--no-restore"]));
+        Assert.Equal(0, CliConsole.Run("add", tmp.Dir, "--desktop", "--dry-run", "--no-restore").ExitCode);
 
         Assert.False(File.Exists(Path.Combine(tmp.Dir, "MyGame.csproj")));
     }
@@ -218,7 +229,12 @@ public class SolutionOpsCoverageTests
         var slnx = Path.Combine(tmp.Dir, "Empty.slnx");
         SolutionOps.CreateSolution(slnx);
 
-        SolutionOps.Restore(slnx, out var succeeded);
+        var succeeded = false;
+        CliConsole.Capture(() =>
+        {
+            SolutionOps.Restore(slnx, out succeeded);
+            return 0;
+        });
 
         Assert.True(succeeded);
     }
