@@ -101,6 +101,7 @@ internal static class TemplateAssets
             // -> MyGame.tools.csproj for a desktop host folder "MyGame.tools").
             var relative = $"{folder}/{Rename(name[prefix.Length..], sourceFolder, folder, baseName)}";
             var content = Path.GetFileName(name).StartsWith("favicon", StringComparison.Ordinal)
+                          || name.EndsWith(".min.js", StringComparison.Ordinal)
                 ? ReadRawBytes(name)
                 : Encoding.UTF8.GetBytes(Rename(ReadRaw(name), sourceFolder, folder, baseName));
             yield return new HostFile(relative, content);

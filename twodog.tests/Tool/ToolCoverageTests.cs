@@ -74,7 +74,7 @@ public class CommandLineCoverageTests
     public void Parse_RecognizesAliasesAndAllScalarOptions()
     {
         var cmd = CommandLine.Parse(
-            ["convert", "-n", "Game", "--2dog", "Desk", "--browser", "Web", "--test", "Tests",
+            ["convert", "-n", "Game", "--2dog", "Desk", "--browser", "Web", "--webxr", "Xr", "--test", "Tests",
              "--winforms", "Forms", "--avalonia", "Ava", "--dry-run", "--force", "--verbose", "--no-input"]);
 
         Assert.Equal(Verb.Add, cmd.Verb);
@@ -84,7 +84,7 @@ public class CommandLineCoverageTests
         Assert.True(cmd.Options.Verbose);
         Assert.True(cmd.NoInteractive);
         Assert.Equal(
-            [(HostKind.Desktop, "Desk"), (HostKind.Web, "Web"), (HostKind.Tests, "Tests"),
+            [(HostKind.Desktop, "Desk"), (HostKind.Web, "Web"), (HostKind.WebXr, "Xr"), (HostKind.Tests, "Tests"),
              (HostKind.WinForms, "Forms"), (HostKind.Avalonia, "Ava")],
             cmd.Requested.Select(r => (r.Kind, r.Folder!)).ToArray());
     }
@@ -123,6 +123,7 @@ public class HostsCoverageTests
     [Theory]
     [InlineData("2dog", "desktop", "your own Main(), runs the game on desktop", "--desktop")]
     [InlineData("web", "browser", "WebAssembly host, published as a static bundle", "--web")]
+    [InlineData("webxr", "webxr", "WebAssembly host with the WebXR Layers polyfill for VR", "--webxr")]
     [InlineData("tests", "tests", "xUnit project driving a headless engine", "--tests")]
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]
     [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]

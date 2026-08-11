@@ -68,6 +68,7 @@
     <ItemGroup>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.2dog/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.2dog/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.web/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.web/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.webxr/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.webxr/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.tests/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.tests/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.winforms/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.winforms/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.avalonia/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.avalonia/%(RecursiveDir)%(Filename)%(Extension)"/>

@@ -70,6 +70,12 @@
       "description": "Include a browser (WebAssembly) host project. Requires a .NET 10+ SDK with the wasm-tools workload to build. Included by default; pass '--web false' to omit.",
       "defaultValue": "true"
     },
+    "webxr": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a browser (WebAssembly) host project preconfigured for WebXR: its page ships the WebXR Layers polyfill Godot needs on browsers without native Layers support. Omitted by default; pass '--webxr true' to include.",
+      "defaultValue": "false"
+    },
     "winforms": {
       "type": "parameter",
       "datatype": "bool",
@@ -112,7 +118,18 @@
         {
           "condition": "(!web)",
           "exclude": [
-            "Company.Product1.web/**/*",
+            "Company.Product1.web/**/*"
+          ]
+        },
+        {
+          "condition": "(!webxr)",
+          "exclude": [
+            "Company.Product1.webxr/**/*"
+          ]
+        },
+        {
+          "condition": "(!web && !webxr)",
+          "exclude": [
             "global.json"
           ]
         },
@@ -131,7 +148,10 @@
         {
           "copyOnly": [
             "Company.Product1.web/TwoDogWebBoot.cs",
-            "Company.Product1.web/wwwroot/favicon*"
+            "Company.Product1.web/wwwroot/favicon*",
+            "Company.Product1.webxr/TwoDogWebBoot.cs",
+            "Company.Product1.webxr/wwwroot/favicon*",
+            "Company.Product1.webxr/wwwroot/*.min.js"
           ]
         }
       ]
@@ -154,6 +174,10 @@
     {
       "condition": "(web)",
       "path": "Company.Product1.web/Company.Product1.web.csproj"
+    },
+    {
+      "condition": "(webxr)",
+      "path": "Company.Product1.webxr/Company.Product1.webxr.csproj"
     },
     {
       "condition": "(winforms)",

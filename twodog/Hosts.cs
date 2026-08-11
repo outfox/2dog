@@ -5,6 +5,7 @@ internal enum HostKind
 {
     Desktop,
     Web,
+    WebXr,
     Tests,
     WinForms,
     Avalonia,
@@ -24,22 +25,24 @@ internal sealed record ExistingHost(HostKind Kind, string Folder);
 internal static class Hosts
 {
     public static readonly IReadOnlyList<HostKind> All =
-        [HostKind.Desktop, HostKind.Web, HostKind.Tests, HostKind.WinForms, HostKind.Avalonia];
+        [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.Avalonia];
 
     /// <summary>
     /// Whether a bare run without host flags creates this kind. WinForms is
     /// opt-in: the host only runs on Windows, so it never joins the default
     /// set. Avalonia is opt-in too - cross-platform, but it pulls the whole
     /// Avalonia UI framework plus the 2dog.avalonia package into the project.
-    /// Both are still offered interactively and via their flags.
+    /// WebXr is opt-in: XR games also need project-side setup (XR shaders,
+    /// session start). All are still offered interactively and via flags.
     /// </summary>
-    public static bool InDefaultSet(HostKind kind) => kind is not (HostKind.WinForms or HostKind.Avalonia);
+    public static bool InDefaultSet(HostKind kind) => kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.Avalonia);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
     {
         HostKind.Desktop => "2dog",
         HostKind.Web => "web",
+        HostKind.WebXr => "webxr",
         HostKind.Tests => "tests",
         HostKind.WinForms => "winforms",
         HostKind.Avalonia => "avalonia",
@@ -50,6 +53,7 @@ internal static class Hosts
     {
         HostKind.Desktop => "desktop",
         HostKind.Web => "browser",
+        HostKind.WebXr => "webxr",
         HostKind.Tests => "tests",
         HostKind.WinForms => "winforms",
         HostKind.Avalonia => "avalonia",
@@ -60,6 +64,7 @@ internal static class Hosts
     {
         HostKind.Desktop => "your own Main(), runs the game on desktop",
         HostKind.Web => "WebAssembly host, published as a static bundle",
+        HostKind.WebXr => "WebAssembly host with the WebXR Layers polyfill for VR",
         HostKind.Tests => "xUnit project driving a headless engine",
         HostKind.WinForms => "game embedded in a WinForms window (Windows-only)",
         HostKind.Avalonia => "game embedded in an Avalonia app (cross-platform GUI)",
@@ -71,6 +76,7 @@ internal static class Hosts
     {
         HostKind.Desktop => "--desktop",
         HostKind.Web => "--web",
+        HostKind.WebXr => "--webxr",
         HostKind.Tests => "--tests",
         HostKind.WinForms => "--winforms",
         HostKind.Avalonia => "--avalonia",
@@ -149,6 +155,9 @@ internal static class HostScan
                        || csproj.Contains("<GodotProjectDir>", StringComparison.OrdinalIgnoreCase);
         if (!isTwoDog) return null;
 
+        // Before the plain Web check: WebXR hosts are browser-wasm too, marked
+        // by the TwoDogWebXR property their scaffolded csproj carries.
+        if (csproj.Contains("<TwoDogWebXR>true</TwoDogWebXR>", StringComparison.OrdinalIgnoreCase)) return HostKind.WebXr;
         if (csproj.Contains("browser-wasm", StringComparison.OrdinalIgnoreCase)) return HostKind.Web;
         if (csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("xunit.v3", StringComparison.OrdinalIgnoreCase)) return HostKind.Tests;
