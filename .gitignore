@@ -261,22 +261,6 @@ _pkginfo.txt
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
 
-# IDE & agent litter
-.codebuffignore
-knowledge.md
-AGENTS.md
-CLAUDE.md
-PRODUCT.md
-DESIGN.md
-.codex/
-.claude/
-.agents/
-.codebuff/
-.devcontainer/
-plans
-.impeccable
-.github/hooks/impeccable.json
-
 
 # Others
 ClientBin/

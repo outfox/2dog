@@ -36,26 +36,8 @@ dotnet publish
 Serve the generated `AppBundle/` directory with any static file server. The
 single-threaded engine build requires no COOP/COEP headers.
 
-## Properties
+## Configuration and limitations
 
-| Property | Default | Description |
-| --- | --- | --- |
-| `TwoDogWebVariant` | `release` | `debug` selects the engine-assertions build (requires referencing `2dog.browser-wasm.debug`) |
-| `TwoDogExportPack` | `true` | Export the Godot project as a `.pck` during publish |
-| `TwoDogWebExportPreset` | `Web` | Export preset name in `export_presets.cfg` |
-| `TwoDogWebPackName` | `godot.pck` | Deployed pack file name |
-| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` (exact wasm/pck sizes) for the boot shell's progress bar |
-| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` sourcemaps from the bundle |
-| `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to payload files for servers with precompressed-static support |
-| `TwoDogWebPrecompressLevel` | `Optimal` | `CompressionLevel` for the siblings (`SmallestSize` for final deploys) |
-| `WasmEmitSymbolMap` | `false` | `true` restores `dotnet.native.js.symbols` (downloaded at boot; symbolicates native stack traces) |
-| `WasmInitialHeapSize` | `256MB` | Initial linear memory; growth stays enabled |
-
-See the [web guide](https://2dog.dev/web#loading-performance) for serving and
-loading-performance details.
-
-## Known limitations
-
-- Single-threaded (`System.Threading` use will fail); a threaded variant may come later
-- No external GDExtension side modules (the .NET runtime owns the main module)
-- Every publish relinks the wasm (minutes); iterate gameplay on desktop, publish web to verify
+See the [Browser Host documentation](https://2dog.dev/hosts/web) for the full
+property reference, loading-performance guidance, deployment behavior, and
+current browser limitations.
