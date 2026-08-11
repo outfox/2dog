@@ -3,11 +3,11 @@ title: Getting Started
 description: "Embed a new or existing Godot C# project in a .NET application: install the .NET 10 SDK, scaffold hosts with 2dog new or 2dog add, and run your game with dotnet run."
 ---
 
-# Getting Started
+# Getting Started (Quickstart)
 
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
-Let's take `Godot` for a walk! :gd-bone@gold:
+Let's take `Godot` for a walk! :gd-bone@gold: (just a quick lap around the block)
 
 ::: info Trail marker: *Same dog, new tricks!*
 Once you embed your Godot C# project into .NET applications via 2dog, the project can be run through desktop, test, browser, and other hosts.
@@ -134,7 +134,7 @@ The static site is written to `MyGame.web/AppBundle/`. Serve that directory
 with any static file server; for example:
 
 ```bash
-dotnet serve --directory MyGame.web/AppBundle -z -b
+dotnet serve --directory MyGame.web/AppBundle --tls --gzip --brotli
 ```
 
 ::: info Trail marker
