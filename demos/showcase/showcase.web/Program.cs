@@ -24,6 +24,14 @@ internal static class Program
             GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
             GodotApiSmoke.RunAll(engine.Tree);
+
+            // Web-only: the WebXR module must be compiled in, its JS library linked,
+            // and the interface registered on XRServer (desktop has no instance).
+            if (XRServer.FindInterface("WebXR") is null)
+            {
+                throw new InvalidOperationException("WebXR interface is not registered");
+            }
+
             JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'passed')");
             Console.WriteLine("2DOG_WASM_SMOKE_PASSED");
         }
