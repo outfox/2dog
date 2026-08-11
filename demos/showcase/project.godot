@@ -30,3 +30,7 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="showcase"
+
+[xr]
+
+shaders/enabled.web=true
