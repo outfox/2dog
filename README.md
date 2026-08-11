@@ -89,12 +89,12 @@ dependencies.
 ## Requirements and Status
 
 - .NET SDK 10.0 or later, with the `wasm-tools` workload
-- Godot 4.7.x official .NET editor only when you want to edit scenes visually
+- Godot 4.7.x official .NET editor (only when you want to edit scenes visually)
 - Supported build platforms: `win-x64`, `linux-x64`, and `osx-arm64`
-- Supported RIDs: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
+- Supported RIDs for published builds: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
 - Packages available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
-- 2dog is proudly made with assistance from LLMs
+2dog is proudly made by its human maintainers, contributors, and with assistance from LLMs.
 
 
 ## Teach 2dog New Tricks
