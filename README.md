@@ -94,7 +94,7 @@ dependencies.
 - Supported RIDs for published builds: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
 - Packages available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
-2dog is proudly made by its human maintainers and contributors with the assistance of LLMs.
+🦴♥️🤖 **2dog** is proudly made by its human maintainers and contributors with the assistance of LLMs.
 
 
 ## Teach 2dog New Tricks
