@@ -147,6 +147,9 @@ public class Engine : IDisposable
     /// <summary>Full path of the libgodot this load context actually loaded, when known.</summary>
     public static string? LoadedNativePath => LibGodotLoader.LoadedLibraryPath;
 
+    /// <summary>2dog package version (the engine assembly's version, e.g. 4.7.1.68).</summary>
+    public static Version Version { get; } = typeof(Engine).Assembly.GetName().Version ?? new Version(0, 0);
+
 
     public void Dispose()
     {
@@ -215,7 +218,7 @@ public class Engine : IDisposable
             HostedGodotPlugins.Register(LibGodotLoader.EnsureLoaded());
         }
 
-        Console.WriteLine("Starting Godot instance...");
+        Console.WriteLine($"{nameof(Engine)}: 2dog {Version}, starting Godot instance...");
 
         // Prepare arguments for Godot. The project path was made absolute at
         // construction, so CWD movement between then and now cannot redirect it.
