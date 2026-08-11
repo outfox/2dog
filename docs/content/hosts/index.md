@@ -8,18 +8,7 @@ description: "A host is a small .NET program that owns the process, starts embed
 A **host** is a small .NET program that owns the process, starts embedded
 Godot, and drives its frame loop.
 
-## Choose a Host
-
-| Host | Use it for | Main limitation |
-| --- | --- | --- |
-| [Generic](./generic) | A normal desktop game or custom .NET process | One active engine per process |
-| [Browser](./web) | A static WebAssembly site | Single-threaded; no native extension side modules |
-| [WebXR](./webxr) | Browser VR and AR | Browser WebXR support and a secure context are required |
-| [Avalonia](./avalonia) | Cross-platform .NET UI over a game viewport | Some input and GPU-sharing paths are platform-dependent |
-| [WinForms](./winforms) | Embedding Godot in a Windows form | Windows only; controls cannot overlap the game |
-| [xUnit](./xunit) | Tests against a real Godot engine | Tests sharing an engine cannot run in parallel |
-
-## Add a Host
+## Adding a Host
 
 [`2dog new`](/templates) generates a new project with your selection of hosts;
 [`2dog add`](/add) adds them to an existing project.
@@ -27,7 +16,7 @@ Godot, and drives its frame loop.
 The default set includes Generic, Browser, and xUnit hosts. WebXR, Avalonia,
 and WinForms are opt-in. Each host page shows the relevant command.
 
-## Shared Project Anatomy
+## Solution / Project Layouts
 
 Every host is an ordinary `Microsoft.NET.Sdk` project with:
 
@@ -57,18 +46,9 @@ The generic form is the baseline:
 
 ## Engine Surface
 
-Full signatures are in the [API Reference](/api-reference).
+The host applicatons interact with Godot by instantiating an object of type `twodog.Engine`.
 
-| Member | Purpose |
-| --- | --- |
-| `new Engine(name, args: args)` | Configure a standard host and resolve its content automatically |
-| `Engine.ResolveContent()` | `null` when an exe-adjacent `.pck` exists (published), else the project directory |
-| `Engine.ResolveProjectDir()` | Read `GodotProjectDir` from assembly metadata |
-| `engine.Start()` | Boot Godot and run `run/main_scene` |
-| `engine.Tree` | Access the live `SceneTree` and GodotSharp API |
-| `instance.Iteration()` | Advance one frame; `true` means Godot wants to quit |
-| `engine.Run(perFrame)` | Drive the loop with an optional callback |
-| `Engine.RegisterWebPluginsInitializer(ptr)` | Register browser plugins before `Start()` |
+Full signatures are in the [API Reference](/api-reference).
 
 A normal host supports one active engine at a time. Sequential restarts work
 after disposal; isolated load contexts are an experimental option. See
