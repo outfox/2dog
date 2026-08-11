@@ -5,11 +5,17 @@ description: "Embed a new or existing Godot C# project in a .NET application: in
 
 # Getting Started
 
-Let's take `Godot` for a walk! :gd-bone@gold:
-
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
-Learn how to embed your new or existing Godot project into a .NET application!
+Let's take `Godot` for a walk! :gd-bone@gold:
+
+::: info Trail marker: *Same dog, new tricks!*
+Once you embed your Godot C# project into .NET applications via 2dog, the project can be run through desktop, test, browser, and other hosts.
+
+The stock Godot editor and official export templates will still work, as well.
+
+2dog does not create a second game or port scripts to another language, it just runs a (slightly modified) version of `libgodot` in a .NET process. GDScript, C# Scripts (GodotSharp), autoloads, input actions, and the rest of Godot stay generally the same.
+:::
 
 ## Prerequisites
 
@@ -18,12 +24,6 @@ To get set up, you'll need:
 - [.NET SDK 10.0 or later](https://dotnet.microsoft.com/download)
 - A supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`
 - The [Godot 4.7.x .NET editor](https://godotengine.org/download) for normal game authoring (builds and CI do not require it)
-
-::: info Trail marker
-With 2dog, the same C# Godot project runs through desktop, test, and browser hosts.
-It does not create a second game or port scripts to another language. GDScript,
-autoloads, input actions, and the rest of Godot still work. *Same dog with new tricks!*
-:::
 
 ## 1. Choose Your Starting Point
 
