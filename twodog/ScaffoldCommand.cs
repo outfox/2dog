@@ -89,7 +89,8 @@ internal static class ScaffoldCommand
             .Concat(newHosts.Select(h => h.Folder))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var wantsWeb = newHosts.Any(h => h.Kind == HostKind.Web) || existingHosts.Any(h => h.Kind == HostKind.Web);
+        var wantsWeb = newHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr)
+                       || existingHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr);
 
         // The web bootstrap lives in the (first) web host folder and compiles
         // into the game assembly via a Compile Include in the root csproj. A
@@ -100,7 +101,9 @@ internal static class ScaffoldCommand
         var webBootFolder = legacyRootBoot
             ? null
             : existingHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
-              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder;
+              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
+              ?? existingHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder
+              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder;
         if (legacyRootBoot && wantsWeb)
             warnings.Add("TwoDogWebBoot.cs sits at the project root (older layout) - left untouched, it still " +
                          "works there. Newer layouts keep it in the web host folder with a guarded Compile " +
@@ -434,7 +437,7 @@ internal static class ScaffoldCommand
                 $"add {missing.Count} project(s) to {solutionName}",
                 () => SolutionOps.AddProjects(solutionPath, missing)));
 
-        foreach (var web in newHosts.Where(h => h.Kind == HostKind.Web))
+        foreach (var web in newHosts.Where(h => h.Kind is HostKind.Web or HostKind.WebXr))
         {
             // Separator-agnostic: SolutionOps matches either / or \\ in the solution.
             var webRelative = $"{web.Folder}/{web.Folder}.csproj";
@@ -476,6 +479,7 @@ internal static class ScaffoldCommand
                 HostKind.Desktop => $"  dotnet run --project {host.Folder}".PadRight(42) + "# desktop host",
                 HostKind.Tests => $"  dotnet test {host.Folder}".PadRight(42) + "# xUnit tests (headless Godot)",
                 HostKind.Web => $"  dotnet publish {host.Folder}".PadRight(42) + "# browser bundle (needs wasm-tools workload)",
+                HostKind.WebXr => $"  dotnet publish {host.Folder}".PadRight(42) + "# WebXR browser bundle (needs wasm-tools workload)",
                 HostKind.WinForms => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinForms host (Windows only)",
                 HostKind.Avalonia => $"  dotnet run --project {host.Folder}".PadRight(42) + "# Avalonia host (cross-platform GUI)",
                 _ => $"  {host.Folder}",

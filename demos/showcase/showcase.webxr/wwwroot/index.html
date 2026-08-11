@@ -128,6 +128,10 @@
         <div id="status-notice" role="alert"></div>
     </div>
 
+    <!-- Godot's WebXR support requires the WebXR Layers API, which most browsers
+         (including desktop Chrome and the Immersive Web Emulator) still lack. -->
+    <script src="webxr-layers-polyfill.min.js"></script>
+    <script>new WebXRLayersPolyfill();</script>
     <script src="godot.js"></script>
     <script>
         const GODOT_CONFIG = {

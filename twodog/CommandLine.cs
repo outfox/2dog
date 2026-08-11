@@ -107,6 +107,9 @@ internal static class CommandLine
                 case "--web" or "--browser":
                     cmd.Requested.Add(new HostRequest(HostKind.Web, OptionalFolder(queue)));
                     break;
+                case "--webxr":
+                    cmd.Requested.Add(new HostRequest(HostKind.WebXr, OptionalFolder(queue)));
+                    break;
                 case "--tests" or "--test":
                     cmd.Requested.Add(new HostRequest(HostKind.Tests, OptionalFolder(queue)));
                     break;
@@ -122,6 +125,9 @@ internal static class CommandLine
                     break;
                 case "--no-web":
                     cmd.Excluded.Add(HostKind.Web);
+                    break;
+                case "--no-webxr":
+                    cmd.Excluded.Add(HostKind.WebXr);
                     break;
                 case "--no-tests":
                     cmd.Excluded.Add(HostKind.Tests);

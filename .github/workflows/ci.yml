@@ -545,6 +545,11 @@ jobs:
       - name: Publish showcase.web
         run: dotnet publish demos/showcase/showcase.web -c Release
 
+      # The WebXR flavor differs only in its page shell (Layers polyfill); the
+      # engine link and pck export are shared, so this publish is incremental.
+      - name: Publish showcase.webxr
+        run: dotnet publish demos/showcase/showcase.webxr -c Release
+
       - name: Verify app bundle
         run: |
           BUNDLE=demos/showcase/showcase.web/AppBundle
@@ -578,65 +583,97 @@ jobs:
           fi
           echo "Web app bundle OK"
 
+      - name: Verify webxr app bundle
+        run: |
+          BUNDLE=demos/showcase/showcase.webxr/AppBundle
+          # Same shape as the web bundle, plus the vendored Layers polyfill the
+          # webxr shell loads before godot.js.
+          for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" \
+                   "$BUNDLE/webxr-layers-polyfill.min.js" "$BUNDLE/_framework/dotnet.js"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing $f in the published webxr app bundle"
+              ls -R "$BUNDLE" || true
+              exit 1
+            fi
+          done
+          if ! grep -q 'webxr-layers-polyfill.min.js' "$BUNDLE/index.html"; then
+            echo "::error::The webxr shell does not reference the Layers polyfill"
+            exit 1
+          fi
+          echo "WebXR app bundle OK"
+
       # Execute the linked app in a real browser. The game assembly runs the
       # shared GodotApiSmoke probe and marks the DOM only after native API,
       # resource, codec, server, scene, generated C# script, and GDScript-only
-      # engine-module calls succeed.
+      # engine-module calls succeed. The webxr flavor additionally asserts the
+      # WebXR interface is registered on XRServer (its Program.cs does).
       - name: Run browser API smoke
         run: |
-          BUNDLE=demos/showcase/showcase.web/AppBundle
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           if [ -z "$CHROME" ]; then
             echo "::error::No Chrome/Chromium executable is available on the runner"
             exit 1
           fi
 
-          python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
-          SERVER_PID=$!
           cleanup() {
             if [ -n "${CHROME_PID:-}" ]; then
               kill "$CHROME_PID" 2>/dev/null || true
             fi
-            kill "$SERVER_PID" 2>/dev/null || true
+            if [ -n "${SERVER_PID:-}" ]; then
+              kill "$SERVER_PID" 2>/dev/null || true
+            fi
           }
           trap cleanup EXIT
 
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
-              break
+          for FLAVOR in web webxr; do
+            BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
+
+            python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+            SERVER_PID=$!
+
+            for attempt in $(seq 1 30); do
+              if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
+                break
+              fi
+              sleep 1
+            done
+
+            "$CHROME" \
+              --headless=new \
+              --no-sandbox \
+              --use-gl=angle \
+              --use-angle=swiftshader-webgl \
+              --enable-unsafe-swiftshader \
+              --disable-dev-shm-usage \
+              --enable-logging=stderr \
+              --remote-debugging-address=127.0.0.1 \
+              --remote-debugging-port=9222 \
+              '--remote-allow-origins=*' \
+              "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-$FLAVOR" \
+              http://127.0.0.1:8000/index.html \
+              > /tmp/2dog-browser.log 2>&1 &
+            CHROME_PID=$!
+
+            set +e
+            timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
+              http://127.0.0.1:8000/index.html 120000 9222
+            SMOKE_STATUS=$?
+            set -e
+
+            cat /tmp/2dog-web-server.log
+            cat /tmp/2dog-browser.log
+
+            kill "$CHROME_PID" "$SERVER_PID" 2>/dev/null || true
+            CHROME_PID=""; SERVER_PID=""
+            # Let the debug and http ports free up before the next flavor binds them.
+            sleep 3
+
+            if [ "$SMOKE_STATUS" -ne 0 ]; then
+              echo "::error::The $FLAVOR browser app did not complete the Godot API smoke probe"
+              exit "$SMOKE_STATUS"
             fi
-            sleep 1
+            echo "$FLAVOR browser smoke passed"
           done
-
-          "$CHROME" \
-            --headless=new \
-            --no-sandbox \
-            --use-gl=angle \
-            --use-angle=swiftshader-webgl \
-            --enable-unsafe-swiftshader \
-            --disable-dev-shm-usage \
-            --enable-logging=stderr \
-            --remote-debugging-address=127.0.0.1 \
-            --remote-debugging-port=9222 \
-            '--remote-allow-origins=*' \
-            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome" \
-            http://127.0.0.1:8000/index.html \
-            > /tmp/2dog-browser.log 2>&1 &
-          CHROME_PID=$!
-
-          set +e
-          timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
-            http://127.0.0.1:8000/index.html 120000 9222
-          SMOKE_STATUS=$?
-          set -e
-
-          cat /tmp/2dog-web-server.log
-          cat /tmp/2dog-browser.log
-
-          if [ "$SMOKE_STATUS" -ne 0 ]; then
-            echo "::error::The browser app did not complete the Godot API smoke probe"
-            exit "$SMOKE_STATUS"
-          fi
 
           echo "Web runtime API smoke OK"
 

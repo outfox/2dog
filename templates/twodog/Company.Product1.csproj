@@ -12,7 +12,7 @@
         <!-- Nested 2dog host projects: keep them out of this project's default
              compile/content globs (each also carries a .gdignore so the Godot
              editor skips them). -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);Company.Product1.2dog/**;Company.Product1.web/**;Company.Product1.tests/**;Company.Product1.winforms/**;Company.Product1.avalonia/**</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);Company.Product1.2dog/**;Company.Product1.web/**;Company.Product1.webxr/**;Company.Product1.tests/**;Company.Product1.winforms/**;Company.Product1.avalonia/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
         <!-- Web bootstrap: lives in the web host folder (out of the Godot
@@ -21,5 +21,9 @@
              initializer. Inert when the web host is absent. -->
         <Compile Include="Company.Product1.web/TwoDogWebBoot.cs"
                  Condition="Exists('$(MSBuildThisFileDirectory)Company.Product1.web/TwoDogWebBoot.cs')"/>
+        <!-- The webxr host carries its own copy; compile it only when the plain
+             web host's is absent (one definition per assembly). -->
+        <Compile Include="Company.Product1.webxr/TwoDogWebBoot.cs"
+                 Condition="!Exists('$(MSBuildThisFileDirectory)Company.Product1.web/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)Company.Product1.webxr/TwoDogWebBoot.cs')"/>
     </ItemGroup>
 </Project>

@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!--
+      Browser (wasm) host with WebXR: like the plain web host, plus the page
+      loads the WebXR Layers polyfill Godot's WebXR interface needs on
+      browsers without native Layers support (desktop Chrome; the Meta Quest
+      browser has it natively).
+
+      Publish:  dotnet publish Company.Product1.webxr  (from the project root;
+                the root global.json pins a wasm-capable SDK. Defaults to
+                Release via Directory.Build.props; pass -c Debug to override.)
+      Output:   AppBundle/ - serve with any static file server (WebXR needs
+                a secure context: localhost or HTTPS).
+
+      Requires the wasm-tools workload:  dotnet workload install wasm-tools
+      In the game project, enable `xr/shaders/enabled` and start the session
+      from a user gesture - see https://2dog.dev/hosts/webxr for the pattern.
+    -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- Keep host namespaces uniform with the desktop host (whose
+             '.2dog' assembly name is not a valid namespace). -->
+        <RootNamespace>Company.Product1.WebXr</RootNamespace>
+        <!-- Marks this host as the WebXR flavor for the 2dog tool's host scan. -->
+        <TwoDogWebXR>true</TwoDogWebXR>
+    </PropertyGroup>
+    <!-- Godot project location: the parent directory (hosts are nested inside
+         the Godot project, hidden from the Godot editor by their .gdignore) -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- TwoDogWebBoot.cs is compiled by the GAME project (see the root
+             csproj's Compile Include), not by this host. -->
+        <Compile Remove="TwoDogWebBoot.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
+    </ItemGroup>
+
+    <!-- Root the game assembly: scripts are resolved by reflection. Add a
+         TrimmerRootAssembly for any NuGet package your game code reaches via
+         reflection (e.g. an ECS or serializer library). -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="TPLRAWNAME"/>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="AppBundle"/>
+    </Target>
+</Project>

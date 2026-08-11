@@ -151,6 +151,8 @@ internal static class Program
              hosts
                --desktop [folder]  Desktop host (your own Main entry point)
                --web [folder]      Browser (WebAssembly) host
+               --webxr [folder]    Browser host with the WebXR Layers polyfill
+                                   wired into its page (opt-in)
                --tests [folder]    xUnit test project
                --winforms [folder] WinForms host embedding the game window
                                    (Windows-only; never part of the default set)

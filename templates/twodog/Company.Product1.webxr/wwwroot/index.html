@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-    <title>2dog web showcase</title>
+    <title>TPLRAWNAME</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -128,6 +128,10 @@
         <div id="status-notice" role="alert"></div>
     </div>
 
+    <!-- Godot's WebXR support requires the WebXR Layers API, which most browsers
+         (including desktop Chrome and the Immersive Web Emulator) still lack. -->
+    <script src="webxr-layers-polyfill.min.js"></script>
+    <script>new WebXRLayersPolyfill();</script>
     <script src="godot.js"></script>
     <script>
         const GODOT_CONFIG = {

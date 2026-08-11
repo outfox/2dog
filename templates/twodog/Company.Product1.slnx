@@ -21,4 +21,10 @@
     <Build Project="false" />
   </Project>
 #endif
+#if (webxr)
+  <Project Path="TPLRAWNAME.webxr/TPLRAWNAME.webxr.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+#endif
 </Solution>

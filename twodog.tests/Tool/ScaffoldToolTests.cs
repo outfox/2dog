@@ -561,6 +561,7 @@ public class TemplateAssetsTests
     [Theory]
     [InlineData("2dog")]
     [InlineData("web")]
+    [InlineData("webxr")]
     [InlineData("tests")]
     [InlineData("winforms")]
     [InlineData("avalonia")]
@@ -582,6 +583,7 @@ public class TemplateAssetsTests
     [Theory]
     [InlineData("2dog")]
     [InlineData("web")]
+    [InlineData("webxr")]
     [InlineData("tests")]
     [InlineData("winforms")]
     [InlineData("avalonia")]
@@ -625,17 +627,31 @@ public class TemplateAssetsTests
     [Fact]
     public void WebHost_IncludesReferencedFavicons()
     {
-        var files = TemplateAssets.HostFiles(HostKind.Web, "MyGame", "MyGame.web").ToList();
+        foreach (var suffix in new[] { "web", "webxr" })
+        {
+            var files = TemplateAssets.HostFiles(HostKinds.Of(suffix), "MyGame", $"MyGame.{suffix}").ToList();
+            var index = files.Single(f => f.RelativePath.EndsWith("wwwroot/index.html")).Text;
+
+            foreach (var favicon in new[]
+                     {
+                         "favicon.ico", "favicon.svg", "favicon-16x16.png", "favicon-32x32.png", "favicon-96x96.png",
+                     })
+            {
+                Assert.Single(files, f => f.RelativePath.EndsWith($"wwwroot/{favicon}"));
+                Assert.Contains($"href=\"{favicon}\"", index);
+            }
+        }
+    }
+
+    [Fact]
+    public void WebXrHost_ShipsAndWiresTheLayersPolyfill()
+    {
+        var files = TemplateAssets.HostFiles(HostKind.WebXr, "MyGame", "MyGame.webxr").ToList();
         var index = files.Single(f => f.RelativePath.EndsWith("wwwroot/index.html")).Text;
 
-        foreach (var favicon in new[]
-                 {
-                     "favicon.ico", "favicon.svg", "favicon-16x16.png", "favicon-32x32.png", "favicon-96x96.png",
-                 })
-        {
-            Assert.Single(files, f => f.RelativePath.EndsWith($"wwwroot/{favicon}"));
-            Assert.Contains($"href=\"{favicon}\"", index);
-        }
+        Assert.Single(files, f => f.RelativePath.EndsWith("wwwroot/webxr-layers-polyfill.min.js"));
+        Assert.Contains("src=\"webxr-layers-polyfill.min.js\"", index);
+        Assert.Contains("new WebXRLayersPolyfill()", index);
     }
 }
 
@@ -978,6 +994,8 @@ public class AddEndToEndTests
         new[] { "Program.cs", "MainForm.cs", "app.manifest" })]
     [InlineData("--avalonia", "avalonia", "2dog.avalonia",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
+    [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",
+        new[] { "Program.cs", "wwwroot/index.html", "wwwroot/webxr-layers-polyfill.min.js" })]
     public void Add_OptInHost_ScaffoldsOnExplicitFlagOnly(
         string flag, string suffix, string csprojMarker, string[] extraFiles)
     {
@@ -1079,6 +1097,7 @@ public class HostScanTests
     [Theory]
     [InlineData("2dog")]
     [InlineData("web")]
+    [InlineData("webxr")]
     [InlineData("tests")]
     [InlineData("winforms")]
     [InlineData("avalonia")]
@@ -1104,7 +1123,7 @@ public class HostScanTests
         foreach (var (kind, folder) in new[]
                  {
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
-                     (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests"),
+                     (HostKind.Web, "MyGame.web"), (HostKind.WebXr, "MyGame.webxr"), (HostKind.Tests, "MyGame.tests"),
                      (HostKind.WinForms, "MyGame.winforms"), (HostKind.Avalonia, "MyGame.avalonia"),
                  })
             foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
@@ -1120,7 +1139,8 @@ public class HostScanTests
         Assert.Equal(
             [("MyGame.2dog", HostKind.Desktop), ("MyGame.avalonia", HostKind.Avalonia),
              ("MyGame.editor", HostKind.Desktop), ("MyGame.tests", HostKind.Tests),
-             ("MyGame.web", HostKind.Web), ("MyGame.winforms", HostKind.WinForms)],
+             ("MyGame.web", HostKind.Web), ("MyGame.webxr", HostKind.WebXr),
+             ("MyGame.winforms", HostKind.WinForms)],
             hosts.Select(h => (h.Folder, h.Kind)).Order().ToArray());
     }
 }
@@ -1175,10 +1195,10 @@ public class CommandLineTests
     [Fact]
     public void NegativeHostFlags_CountAsAChoice()
     {
-        var cmd = CommandLine.Parse(["convert", "--no-web", "--no-tests", "--no-winforms", "--no-avalonia"]);
+        var cmd = CommandLine.Parse(["convert", "--no-web", "--no-webxr", "--no-tests", "--no-winforms", "--no-avalonia"]);
         Assert.True(cmd.HostFlagsSeen);
         Assert.Empty(cmd.Requested);
-        Assert.Equal([HostKind.Web, HostKind.Tests, HostKind.WinForms, HostKind.Avalonia],
+        Assert.Equal([HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.Avalonia],
             cmd.Excluded.Order().ToArray());
     }
 
