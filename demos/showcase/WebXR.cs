@@ -17,6 +17,10 @@ public partial class WebXR : Button
             return;
         }
 
+        // Stereo rendering silently draws nothing when XR shaders are off; surface it.
+        // GetSettingWithOverride resolves feature-tag overrides like the renderer's GLOBAL_GET does.
+        GD.Print($"WebXR: xr/shaders/enabled = {ProjectSettings.GetSettingWithOverride("xr/shaders/enabled")}");
+
         _webxr.SessionSupported += OnSessionSupported;
         _webxr.SessionStarted += OnSessionStarted;
         _webxr.SessionEnded += OnSessionEnded;
