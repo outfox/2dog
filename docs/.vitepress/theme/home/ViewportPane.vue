@@ -44,7 +44,7 @@ const viewLocks = ['Lock', 'Group', 'SnapGrid']
       <h1 class="ed-headline">Godot in&nbsp;.NET</h1>
       <p class="ed-tagline">
         Keep your scenes, scripts, and editor workflow.<br />
-        Gain an entire ecosystem.
+        Gain the .NET ecosystem as a treat.
       </p>
       <div class="ed-actions">
         <a class="ed-btn brand" :href="withBase('/getting-started')"><b>Read the Dogs</b></a>
