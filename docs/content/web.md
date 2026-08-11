@@ -5,13 +5,14 @@ description: "Ship your Godot C# game to the browser with one dotnet publish: 2d
 
 # Web / Browser (WebAssembly)
 
-2dog runs your game **in the browser** with the same inversion as desktop. Your
-C# `Main()` hosts Godot and hands control to the page's render loop. The result
-is a static site with no server code or special headers. Good dog. Ship it
-anywhere.
+2dog exports your game **for the browser** using the same principle as running it as a desktop .NET app.
 
-2dog links the engine into the .NET WebAssembly runtime, so a C# game ships to
-the web with one `dotnet publish`.
+Your C# `Main()` (in `MyGame.web/Program.cs`) hosts Godot and hands control to the page's render loop. The result
+is a static site with no server code or special headers. 
+
+*Ship. Good dog!*
+
+2dog links the engine into the .NET WebAssembly runtime and creates the necessary host project. Your Godot C# game gets bundled for the web simpy via `dotnet publish`.
 
 ## Quickstart
 
