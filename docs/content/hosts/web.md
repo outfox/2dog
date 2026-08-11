@@ -154,6 +154,7 @@ needed. An XR game opts in with three pieces:
    [Immersive Web Emulator](https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik)
    do not implement natively (the Meta Quest browser does). Drop
    [webxr-layers-polyfill](https://github.com/immersive-web/webxr-layers-polyfill) into `wwwroot/`
+   (use 1.1.0 or newer - 1.0.3 allocates its layer textures with invalid WebGL formats)
    and load it before `godot.js` in your page:
 
    ```html
