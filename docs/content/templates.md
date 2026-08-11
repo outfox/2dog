@@ -13,8 +13,9 @@ cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-`2dog new` asks which hosts to include. Pass `--desktop`, `--web`, `--tests`,
-`--winforms`, `--avalonia`, or `--non-interactive` to skip the prompts.
+`2dog new` asks which hosts to include. Pass `--desktop`, `--web`, `--webxr`,
+`--tests`, `--winforms`, `--avalonia`, or `--non-interactive` to skip the
+prompts.
 
 Already have a Godot project? Use [`2dog add`](/add) instead. It creates the
 same layout around your existing content.
@@ -61,13 +62,15 @@ together.
 ## Choose Hosts
 
 The full template includes desktop, browser, and test hosts. To leave optional
-hosts out, or to opt into the Windows-only [WinForms host](/hosts/winforms) or
-the cross-platform [Avalonia host](/hosts/avalonia):
+hosts out, or to opt into the [WebXR host](/hosts/webxr), the Windows-only
+[WinForms host](/hosts/winforms), or the cross-platform
+[Avalonia host](/hosts/avalonia):
 
 ```bash
 dotnet new 2dog -n MyGame --tests false
 dotnet new 2dog -n MyGame --web false
 dotnet new 2dog -n MyGame --tests false --web false
+dotnet new 2dog -n MyGame --webxr true
 dotnet new 2dog -n MyGame --winforms true
 dotnet new 2dog -n MyGame --avalonia true
 ```
@@ -77,6 +80,7 @@ dotnet new 2dog -n MyGame --avalonia true
 | `-n, --name` | required | Project name |
 | `--tests` | `true` | Include `MyGame.tests` with xUnit and `2dog.xunit` |
 | `--web` | `true` | Include the `MyGame.web` browser host |
+| `--webxr` | `false` | Include the `MyGame.webxr` browser host with the [WebXR Layers polyfill](/hosts/webxr) for VR |
 | `--winforms` | `false` | Include the `MyGame.winforms` WinForms host (Windows-only at runtime) |
 | `--avalonia` | `false` | Include the `MyGame.avalonia` Avalonia host (cross-platform GUI; controls composite over the game) |
 | `--skipRestore` | `false` | Skip automatic package restore |
