@@ -24,19 +24,25 @@ internal static class Program
             GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
             GodotApiSmoke.RunAll(engine.Tree);
-            JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'passed')");
-            Console.WriteLine("2DOG_WASM_SMOKE_PASSED");
         }
         catch (Exception exception)
         {
             Console.Error.WriteLine($"2DOG_WASM_SMOKE_FAILED: {exception}");
             JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'failed')");
+            // Browser ownership transfers to the engine only at Run(); this
+            // pre-loop failure still owns the started instance.
+            engine.Dispose();
             throw;
         }
 
         // Hands the loop to emscripten and returns immediately; the engine
         // destroys itself when Godot requests quit. Do not dispose here.
         engine.Run();
+
+        // Marked only after Run() returns, so a failed loop installation
+        // cannot report a passing smoke.
+        JavaScriptBridge.Eval("document.documentElement.setAttribute('data-twodog-smoke', 'passed')");
+        Console.WriteLine("2DOG_WASM_SMOKE_PASSED");
 
         return 0;
     }

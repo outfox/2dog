@@ -586,16 +586,25 @@ jobs:
       - name: Verify webxr app bundle
         run: |
           BUNDLE=demos/showcase/showcase.webxr/AppBundle
-          # Same shape as the web bundle, plus the vendored Layers polyfill the
-          # webxr shell loads before godot.js.
+          # Same shape as the web bundle (same asset list, including the
+          # preload/size-manifest/precompression files the shell references),
+          # plus the vendored Layers polyfill loaded before godot.js.
           for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" \
-                   "$BUNDLE/webxr-layers-polyfill.min.js" "$BUNDLE/_framework/dotnet.js"; do
+                   "$BUNDLE/twodog.sizes.json" "$BUNDLE/godot.wasm.br" "$BUNDLE/godot.wasm.gz" "$BUNDLE/godot.pck.gz" \
+                   "$BUNDLE/webxr-layers-polyfill.min.js" \
+                   "$BUNDLE/_framework/dotnet.js" "$BUNDLE/_framework/dotnet.boot.js" \
+                   "$BUNDLE/_framework/dotnet.runtime.js" "$BUNDLE/_framework/dotnet.native.js"; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing $f in the published webxr app bundle"
               ls -R "$BUNDLE" || true
               exit 1
             fi
           done
+          STRAYS=$(find "$BUNDLE/_framework" -name '*.symbols' -o -name '*.js.map')
+          if [ -n "$STRAYS" ]; then
+            echo "::error::Debug artifacts leaked into the release webxr bundle: $STRAYS"
+            exit 1
+          fi
           if ! grep -q 'webxr-layers-polyfill.min.js' "$BUNDLE/index.html"; then
             echo "::error::The webxr shell does not reference the Layers polyfill"
             exit 1
@@ -628,6 +637,14 @@ jobs:
           for FLAVOR in web webxr; do
             BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
 
+            # The webxr shell records whether Layers polyfill construction
+            # completed; require it, so a polyfill that throws during init
+            # cannot ride the generic smoke marker to a pass.
+            EXTRA_ATTR=""
+            if [ "$FLAVOR" = "webxr" ]; then
+              EXTRA_ATTR="data-twodog-xr-layers=polyfilled"
+            fi
+
             python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
             SERVER_PID=$!
 
@@ -656,7 +673,7 @@ jobs:
 
             set +e
             timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
-              http://127.0.0.1:8000/index.html 120000 9222
+              http://127.0.0.1:8000/index.html 120000 9222 $EXTRA_ATTR
             SMOKE_STATUS=$?
             set -e
 

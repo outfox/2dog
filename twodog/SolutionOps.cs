@@ -199,22 +199,27 @@ internal static class SolutionOps
 
     private static bool TryRun(string workingDir, params string[] args)
     {
+        // On a real terminal, inherit the handles so the child dotnet keeps
+        // its TTY features (progress, color). With redirected stdio (which is
+        // how the test host runs), echo through Console instead, so hosts
+        // that swap Console.Out/Error (the tests) can capture the output.
+        var inherit = !Console.IsOutputRedirected && !Console.IsErrorRedirected;
         var psi = new ProcessStartInfo("dotnet")
         {
             WorkingDirectory = workingDir,
             UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
+            RedirectStandardOutput = !inherit,
+            RedirectStandardError = !inherit,
         };
         foreach (var arg in args) psi.ArgumentList.Add(arg);
         using var process = Process.Start(psi)!;
-        // Echo through Console instead of inheriting the handles: interactive
-        // runs still see everything, and hosts that swap Console.Out/Error
-        // (the tests) can capture it.
-        process.OutputDataReceived += (_, e) => { if (e.Data is not null) Console.Out.WriteLine(e.Data); };
-        process.ErrorDataReceived += (_, e) => { if (e.Data is not null) Console.Error.WriteLine(e.Data); };
-        process.BeginOutputReadLine();
-        process.BeginErrorReadLine();
+        if (!inherit)
+        {
+            process.OutputDataReceived += (_, e) => { if (e.Data is not null) Console.Out.WriteLine(e.Data); };
+            process.ErrorDataReceived += (_, e) => { if (e.Data is not null) Console.Error.WriteLine(e.Data); };
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+        }
         process.WaitForExit();
         return process.ExitCode == 0;
     }

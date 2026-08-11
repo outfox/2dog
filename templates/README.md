@@ -185,10 +185,19 @@ The template is defined in `.template.config/template.json`:
       "datatype": "bool",
       "description": "Include a browser (WebAssembly) host project",
       "defaultValue": "true"
+    },
+    "webxr": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a browser host preconfigured for WebXR",
+      "defaultValue": "false"
     }
   }
 }
 ```
+
+(Abridged - see the file for the full symbol list, including `winforms`,
+`avalonia`, and the version placeholders.)
 
 ## Testing Changes
 

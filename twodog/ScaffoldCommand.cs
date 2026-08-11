@@ -98,11 +98,14 @@ internal static class ScaffoldCommand
         // the root csproj's default globs, so it is left alone (the tool never
         // moves or deletes) and no folder copy is planned next to it.
         var legacyRootBoot = File.Exists(Path.Combine(projectDir, "TwoDogWebBoot.cs"));
+        // Every existing web-like host wins over new ones: a project that
+        // already boots from its webxr folder keeps that single active copy
+        // (and --force updates it) instead of gaining a second, dead one.
         var webBootFolder = legacyRootBoot
             ? null
             : existingHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
-              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
               ?? existingHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder
+              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
               ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder;
         if (legacyRootBoot && wantsWeb)
             warnings.Add("TwoDogWebBoot.cs sits at the project root (older layout) - left untouched, it still " +
