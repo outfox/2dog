@@ -24,5 +24,10 @@
              initializer. -->
         <Compile Include="showcase.web/TwoDogWebBoot.cs"
                  Condition="Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs')"/>
+        <!-- The webxr host carries its own copy; compile it only when the plain
+             web host's is absent (one definition per assembly) - mirroring the
+             template's game csproj. -->
+        <Compile Include="showcase.webxr/TwoDogWebBoot.cs"
+                 Condition="!Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)showcase.webxr/TwoDogWebBoot.cs')"/>
     </ItemGroup>
 </Project>

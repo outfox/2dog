@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2dog web showcase</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
@@ -11,8 +11,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico">
     <!-- Start the big downloads before godot.js even runs; the dotnet.* files
-         are otherwise only discovered mid-boot. (Swap the godot.pck hint for
-         godot.pck.gz when enabling TWODOG_PCK_GZ below.) -->
+         are otherwise only discovered mid-boot. (When enabling TWODOG_PCK_GZ
+         below, swap both hints to their .gz siblings: godot.pck.gz, and
+         godot.wasm.gz because precompressedSuffix makes the engine fetch
+         that one too.) -->
     <link rel="preload" href="godot.wasm" as="fetch" crossorigin="anonymous">
     <link rel="preload" href="godot.pck" as="fetch" crossorigin="anonymous">
     <link rel="modulepreload" href="_framework/dotnet.js">
@@ -41,6 +43,19 @@
 
         #canvas:focus {
             outline: none;
+        }
+
+        /* Painted above #status (which JavaScript would otherwise remove) so
+           the message is visible when scripts are disabled. */
+        noscript {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #242424;
+            font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
         }
 
         #status {
@@ -94,6 +109,8 @@
             overflow: hidden;
             padding: 1rem;
             text-align: center;
+            /* Failure notices carry meaningful newlines (missing-feature lists). */
+            white-space: pre-line;
             z-index: 1;
             display: none;
         }
@@ -124,7 +141,7 @@
                 <path fill="#f55" d="m 549.38,240.61 c -4.75,4.65 -17.39,5.57 -33.93,-3.41 -20.36,-11.05 -32.59,-25.5 -36.44,-30.51 34.89,-7.34 63.5,8.28 70.97,22.77 2.33,4.53 2.12,8.5 -0.6,11.15 z"/>
             </g>
         </svg>
-        <progress id="status-progress"></progress>
+        <progress id="status-progress" aria-label="Loading progress"></progress>
         <div id="status-notice" role="alert"></div>
     </div>
 
@@ -199,8 +216,10 @@
             let engineProgress = reportProgress;
 
             function startWithGzPack(fileSizes, makeEngine) {
-                return fetch('godot.pck.gz').then((response) => {
-                    if (!response.ok || !response.body) {
+                // A rejected probe (network error, service worker failure)
+                // falls back to the uncompressed pack exactly like a 404.
+                return fetch('godot.pck.gz').catch(() => null).then((response) => {
+                    if (!response || !response.ok || !response.body) {
                         console.warn('2dog: godot.pck.gz unavailable, falling back to godot.pck');
                         return makeEngine('').startGame({});
                     }

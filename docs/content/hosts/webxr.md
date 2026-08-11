@@ -11,9 +11,12 @@ before `godot.js`:
 
 ```html
 <script src="webxr-layers-polyfill.min.js"></script>
-<script>new WebXRLayersPolyfill();</script>
+<script>if (navigator.xr) new WebXRLayersPolyfill();</script>
 <script src="godot.js"></script>
 ```
+
+(The constructor throws on browsers without `navigator.xr`, where no XR session is possible anyway,
+hence the guard.)
 
 Godot renders WebXR through the [WebXR Layers API](https://www.w3.org/TR/webxrlayers-1/), which
 desktop Chrome and the
@@ -52,19 +55,22 @@ needed. The game project opts in with two pieces:
    button press qualifies - no HTML button is required:
 
    ```csharp
-   var webxr = (WebXRInterface)XRServer.FindInterface("WebXR");
+   // Desktop hosts register no "WebXR" interface: the pattern guard skips there.
+   if (XRServer.FindInterface("WebXR") is not WebXRInterface webxr)
+       return;
+
    webxr.SessionSupported += (mode, supported) => _enterVrButton.Visible = supported;
    webxr.SessionStarted += () => GetViewport().UseXR = true;
+   webxr.SessionEnded += () => GetViewport().UseXR = false; // back to the normal view
    webxr.IsSessionSupported("immersive-vr");
 
    // In the button's Pressed handler:
    webxr.SessionMode = "immersive-vr";
    webxr.RequestedReferenceSpaceTypes = "bounded-floor, local-floor, local";
    webxr.RequiredFeatures = "local-floor";
+   webxr.OptionalFeatures = "bounded-floor"; // room-scale where the device offers it
    webxr.Initialize();
    ```
-
-   On desktop hosts `FindInterface("WebXR")` returns `null` - guard and skip.
 
 The showcase's `main.tscn` + `WebXR.cs` demonstrate the full pattern, and its `showcase.webxr`
 host mirrors this one.

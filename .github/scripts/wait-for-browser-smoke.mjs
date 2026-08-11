@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 
-const [targetUrl, timeoutValue = "120000", portValue = "9222"] = process.argv.slice(2);
+const [targetUrl, timeoutValue = "120000", portValue = "9222", requiredAttribute] = process.argv.slice(2);
 
 if (!targetUrl) {
-    console.error("Usage: wait-for-browser-smoke.mjs <url> [timeout-ms] [debug-port]");
+    console.error("Usage: wait-for-browser-smoke.mjs <url> [timeout-ms] [debug-port] [attr=value]");
     process.exit(2);
 }
+
+// Optional extra gate: a documentElement attribute that must hold the given
+// value once the smoke marker appears (e.g. data-twodog-xr-layers=polyfilled).
+const [requiredAttributeName, requiredAttributeValue] = requiredAttribute
+    ? requiredAttribute.split("=", 2)
+    : [null, null];
 
 const timeoutMs = Number.parseInt(timeoutValue, 10);
 const debugPort = Number.parseInt(portValue, 10);
@@ -171,13 +177,20 @@ async function run() {
                 const notice = document.getElementById("status-notice");
                 return {
                     smoke: document.documentElement?.getAttribute("data-twodog-smoke") ?? null,
+                    required: ${JSON.stringify(requiredAttributeName)} === null ? null :
+                        (document.documentElement?.getAttribute(${JSON.stringify(requiredAttributeName)}) ?? null),
                     readyState: document.readyState,
                     failureNotice: notice?.style.display === "block" ? notice.textContent : "",
                 };
             })()`);
 
             if (lastState.smoke === "passed") {
-                console.log("Browser reported data-twodog-smoke=passed");
+                if (requiredAttributeName && lastState.required !== requiredAttributeValue) {
+                    throw new Error(`The smoke marker passed but ${requiredAttributeName} is ` +
+                        `${JSON.stringify(lastState.required)}, expected ${JSON.stringify(requiredAttributeValue)}`);
+                }
+                console.log(`Browser reported data-twodog-smoke=passed${
+                    requiredAttributeName ? ` and ${requiredAttributeName}=${requiredAttributeValue}` : ""}`);
                 return;
             }
 

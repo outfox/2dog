@@ -119,6 +119,8 @@ dotnet workload install wasm-tools
 
 Godot's [WebXR interface](https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_webxr.html)
 works from this host too - drop the
-[WebXR Layers polyfill](https://github.com/immersive-web/webxr-layers-polyfill) into `wwwroot/` and
-load it before `godot.js`. The [WebXR host](./webxr) ships that polyfill prewired and documents the
+[WebXR Layers polyfill](https://github.com/immersive-web/webxr-layers-polyfill) into `wwwroot/`,
+then load *and instantiate* it before `godot.js`
+(`<script>if (navigator.xr) new WebXRLayersPolyfill();</script>` - loading the script alone
+polyfills nothing). The [WebXR host](./webxr) ships that polyfill prewired and documents the
 game project's XR opt-in, the C# session pattern, and testing without a headset.

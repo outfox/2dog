@@ -156,8 +156,11 @@ internal static class HostScan
         if (!isTwoDog) return null;
 
         // Before the plain Web check: WebXR hosts are browser-wasm too, marked
-        // by the TwoDogWebXR property their scaffolded csproj carries.
-        if (csproj.Contains("<TwoDogWebXR>true</TwoDogWebXR>", StringComparison.OrdinalIgnoreCase)) return HostKind.WebXr;
+        // by the TwoDogWebXR property their scaffolded csproj carries. Tolerant
+        // of whitespace and attributes so hand-formatted csprojs still match.
+        if (System.Text.RegularExpressions.Regex.IsMatch(csproj,
+                @"<TwoDogWebXR(\s[^>]*)?>\s*true\s*</TwoDogWebXR\s*>",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return HostKind.WebXr;
         if (csproj.Contains("browser-wasm", StringComparison.OrdinalIgnoreCase)) return HostKind.Web;
         if (csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("xunit.v3", StringComparison.OrdinalIgnoreCase)) return HostKind.Tests;

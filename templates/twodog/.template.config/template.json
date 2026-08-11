@@ -73,7 +73,7 @@
     "webxr": {
       "type": "parameter",
       "datatype": "bool",
-      "description": "Include a browser (WebAssembly) host project preconfigured for WebXR: its page ships the WebXR Layers polyfill Godot needs on browsers without native Layers support. Omitted by default; pass '--webxr true' to include.",
+      "description": "Include a browser (WebAssembly) host project preconfigured for WebXR: its page ships the WebXR Layers polyfill Godot needs on browsers without native Layers support. Requires a .NET 10 SDK with the wasm-tools workload to build, like the web host. Omitted by default; pass '--webxr true' to include.",
       "defaultValue": "false"
     },
     "winforms": {
