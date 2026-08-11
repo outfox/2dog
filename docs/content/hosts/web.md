@@ -5,12 +5,15 @@ description: "The browser-wasm 2dog host: the HTML that embeds your game, progra
 
 # Browser Host
 
-`MyGame.web` is a `browser-wasm` host plus the HTML that embeds your game. Its
+`MyGame.web` is a `browser-wasm` host plus the HTML that embeds your game (you can edit it in the sub-folder `wwwroot`). Its
 published `MyGame.web/AppBundle/` directory is a static site.
+
 
 ```bash
 dotnet publish MyGame.web
 ```
+
+If you need multiple HTML variants, you can run `dnx 2dog add` multiple to and add and name more browser hosts, one for each deployment.
 
 ::: info This page covers host anatomy
 [Web / Browser (WASM)](/web) is the guide to publishing, serving, development,

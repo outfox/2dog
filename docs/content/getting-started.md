@@ -5,13 +5,13 @@ description: "Embed a new or existing Godot C# project in a .NET application: in
 
 # Getting Started
 
-Learn how to embed your new or existing Godot project into a .NET application!
+Let's take `Godot` for a walk! :gd-bone@gold:
 
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
-Let's take `Godot` for a walk! :gd-bone@gold:
+Learn how to embed your new or existing Godot project into a .NET application!
 
-## Don't forget the Leash
+## Prerequisites
 
 To get set up, you'll need:
 
@@ -22,7 +22,7 @@ To get set up, you'll need:
 ::: info Trail marker
 With 2dog, the same C# Godot project runs through desktop, test, and browser hosts.
 It does not create a second game or port scripts to another language. GDScript,
-autoloads, input actions, and the rest of Godot still work. Same dog, new leash.
+autoloads, input actions, and the rest of Godot still work. *Same dog with new tricks!*
 :::
 
 ## 1. Choose Your Starting Point
