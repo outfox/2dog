@@ -8,20 +8,24 @@ description: "A host is a small .NET program that owns the process, starts embed
 A **host** is a small .NET program that owns the process, starts embedded
 Godot, and drives its frame loop.
 
-## Adding 2dog Hosts to your Game
+## Choose a Host
+
+| Host | Use it for | Main limitation |
+| --- | --- | --- |
+| [Generic](./generic) | A normal desktop game or custom .NET process | One active engine per process |
+| [Browser](./web) | A static WebAssembly site | Single-threaded; no native extension side modules |
+| [WebXR](./webxr) | Browser VR and AR | Browser WebXR support and a secure context are required |
+| [Avalonia](./avalonia) | Cross-platform .NET UI over a game viewport | Some input and GPU-sharing paths are platform-dependent |
+| [WinForms](./winforms) | Embedding Godot in a Windows form | Windows only; controls cannot overlap the game |
+| [xUnit](./xunit) | Tests against a real Godot engine | Tests sharing an engine cannot run in parallel |
+
+## Add a Host
 
 [`2dog new`](/templates) generates a new project with your selection of hosts;
 [`2dog add`](/add) adds them to an existing project.
 
-Besides the default set, both commands can add a [WebXR host](./webxr)
-(`--webxr`) - the browser host with the WebXR Layers polyfill prewired for
-VR - and two GUI-embedding hosts: a Windows-only
-[WinForms host](./winforms) (`--winforms`) that embeds the engine's window
-inside a form, and a cross-platform
-[Avalonia host](./avalonia) (`--avalonia`) that composites the viewport
-through the `2dog.avalonia` package, letting Avalonia controls render on top
-of the game. The WinForms host is a good example of how to modify the generic
-host to do something special.
+The default set includes Generic, Browser, and xUnit hosts. WebXR, Avalonia,
+and WinForms are opt-in. Each host page shows the relevant command.
 
 ## Shared Project Anatomy
 

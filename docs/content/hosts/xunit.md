@@ -8,6 +8,8 @@ description: "The 2dog test host: xUnit owns the process, so a fixture owns the 
 `MyGame.tests` runs tests against a real Godot engine, project, and resources.
 Because xUnit owns the process, an xUnit fixture owns the engine lifetime.
 
+## Use It
+
 ```bash
 dotnet test MyGame.tests
 ```
@@ -17,7 +19,14 @@ dotnet test MyGame.tests
 arguments, collections, filtering, and CI workflows.
 :::
 
-## Test Anatomy
+## Capabilities
+
+- Tests scenes, resources, and game code against a real Godot engine.
+- Supports headless tests by default and rendered tests when needed.
+- Supports the same debug, release, and editor variants as the generic host.
+- Imports changed resources automatically before tests run.
+
+## How It Works
 
 ```csharp
 using Godot;
@@ -55,7 +64,7 @@ The fixture exposes the same objects a generic host keeps in local variables:
 `HeadlessFixture` passes `--headless`; `Fixture` enables rendering. Both derive
 from `FixtureBase`.
 
-## Project Differences
+## Project Setup
 
 The shared host project is documented in [Hosts](./). The test host references
 `2dog.xunit`, xUnit, the test SDK, and `MyGame.csproj`. `2dog.xunit` brings in
@@ -94,7 +103,7 @@ The shared host project is documented in [Hosts](./). The test host references
 see freshly imported assets. Debug, Release, and Editor configurations select
 the matching native variant; see [Choosing a Variant](/build-configurations).
 
-## Single-Instance Safety
+## Limitations
 
 A normal test host supports one active engine at a time. Tests must use a
 non-parallel collection, and all tests in that collection share its engine.

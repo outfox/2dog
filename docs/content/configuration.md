@@ -54,8 +54,8 @@ the `release`, `debug`, and `editor` native packages. The selected native is
 copied as `libgodot-<variant>.dll`, `.so`, or `.dylib` and loaded by that name.
 
 For xUnit, reference `2dog.xunit`; it brings in `2dog.engine`. Browser hosts
-also reference `2dog.browser-wasm`; see [Web / Browser](/web) for web-specific
-properties and packaging.
+also reference `2dog.browser-wasm`; see [Browser Host](/hosts/web#configuration)
+for web-specific properties and packaging.
 
 ## GodotSharp Directory
 

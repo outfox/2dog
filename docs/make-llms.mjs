@@ -43,15 +43,16 @@ const SECTIONS = [
     'add.md', 'templates.md', 'web.md',
   ]],
   ['Hosts', [
-    'hosts/index.md', 'hosts/generic.md', 'hosts/web.md', 'hosts/xunit.md', 'hosts/winforms.md',
+    'hosts/index.md', 'hosts/generic.md', 'hosts/avalonia.md', 'hosts/web.md',
+    'hosts/webxr.md', 'hosts/winforms.md', 'hosts/xunit.md',
   ]],
   ['API Reference', [
-    'api-reference.md', 'api/engine.md', 'api/godot-instance.md',
+    'api-reference.md', 'api/engine.md', 'api/godot-instance.md', 'api/godotsharp.md',
     'api/fixture-base.md', 'api/fixture.md', 'api/headless-fixture.md',
     'api/rendering-collection.md', 'api/headless-collection.md', 'api/assembly-preloader.md',
   ]],
   ['Develop and Configure', [
-    'import-tool.md', 'testing.md', 'build-configurations.md', 'configuration.md',
+    'dnx-2dog.md', 'import-tool.md', 'testing.md', 'build-configurations.md', 'configuration.md',
   ]],
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',

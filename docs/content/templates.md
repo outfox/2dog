@@ -102,8 +102,9 @@ Use the Godot editor normally; the project root is a regular Godot project.
 C# scripts belong in that root and compile into `MyGame.csproj`, which every
 host references.
 
-For tests, see [Testing](/testing). For browser prerequisites, publishing,
-serving, and platform limits, see [Web / Browser](/web). Publishing requires:
+For tests, see [Testing](/testing). The [Web / Browser guide](/web) covers
+browser prerequisites, building, and local serving; [Browser Host](/hosts/web)
+describes its configuration and platform limits. Browser builds require:
 
 ```bash
 dotnet workload install wasm-tools

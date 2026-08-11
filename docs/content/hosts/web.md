@@ -1,25 +1,38 @@
 ---
 title: Browser Host
-description: "The browser-wasm 2dog host: the HTML that embeds your game, program structure, host properties, and publishing the AppBundle directory as a static site."
+description: "The 2dog browser host packages a Godot C# game as a static WebAssembly site; learn its runtime model, configuration, performance controls, and limitations."
 ---
 
-# Browser Host (WASM / HTML5 / WebXR)
+# Browser Host
 
-`MyGame.web` is a `browser-wasm` host plus the HTML that embeds your game (you can edit it in the sub-folder `wwwroot`). Its
-published `MyGame.web/AppBundle/` directory is a static site.
+`MyGame.web` runs Godot and your C# game in a browser. Its editable `wwwroot`
+directory provides the page shell, and `AppBundle` is the resulting static site.
+It needs no server-side code or cross-origin isolation headers.
 
-```bash
-dotnet publish MyGame.web
-```
+## Use It
 
-If you need multiple HTML variants, you can run `dnx 2dog add` multiple to and add and name more browser hosts, one for each deployment.
+New projects include this host by default. Use `dnx 2dog add` to add one to an
+existing project. You can add and name multiple browser hosts when deployments
+need different HTML shells.
 
-::: info This page covers host anatomy
-[Web / Browser (WASM)](/web) is the guide to publishing, serving, development,
-and browser limits.
-:::
+See [Web / Browser (WASM)](/web) for the build and local `dotnet serve` workflow.
 
-## Program
+## Capabilities
+
+- Runs Godot C# through the .NET WebAssembly runtime and WebGL 2.
+- Publishes a self-contained static site for any ordinary static host.
+- Trims managed assemblies and precompresses large output files.
+- Supports Godot's WebXR interface; the [WebXR host](./webxr) adds the Layers
+  polyfill needed by browsers without native support.
+
+## How It Works
+
+During publish, `2dog.browser-wasm` links `libgodot.a` into the .NET WebAssembly
+main module, exports the Godot project as `godot.pck`, and assembles both with
+the .NET runtime and page shell in `AppBundle`.
+
+At runtime, the shell downloads the engine and pack in parallel, starts .NET,
+and calls the host's `Main()`:
 
 ```csharp
 using Godot;
@@ -40,26 +53,19 @@ internal static class Program
 }
 ```
 
-This differs from the [generic host](./generic) in three ways:
+The browser host differs from the [generic host](./generic) in three ways:
 
-1. Register `TwoDogWebBoot.PluginsInitializer()` before `Start()`. The browser
-   cannot load `GodotPlugins.dll` from disk, so the game assembly exposes its
-   source-generated initializer directly. `TwoDogWebBoot.cs` lives in this host
-   folder but compiles into the *game* assembly through a guarded
-   `Compile Include` in the game csproj - scripts are resolved from the
-   assembly holding the initializer.
-2. Omit the project path. In the browser the constructor leaves it unset, and
-   the page mounts the exported `godot.pck` through `--main-pack`.
-3. Do not dispose the engine or call `Iteration()`. `Run()` hands the loop to
-   Emscripten and returns immediately. Use `Run(perFrame)` for host-side frame
-   work.
+1. It registers the source-generated plugin initializer before `Start()`
+   because the browser cannot load `GodotPlugins.dll` from disk.
+2. It leaves the project path unset because the page mounts `godot.pck` through
+   `--main-pack`.
+3. It calls `Run()` instead of `Iteration()`. `Run()` hands the frame loop to
+   Emscripten and returns immediately; `Run(perFrame)` adds host-side frame work.
 
-Skipping initializer registration fails during `Start()`. Calling the browser
-registration API on desktop throws `PlatformNotSupportedException`.
+## Project Setup
 
-## Project Differences
-
-The shared host project is documented in [Hosts](./). The browser host adds:
+The browser host adds the `browser-wasm` runtime identifier and native package
+to the [shared host project](./):
 
 ```xml
 <PropertyGroup>
@@ -72,55 +78,110 @@ The shared host project is documented in [Hosts](./). The browser host adds:
   <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
   <PackageReference Include="2dog.browser-wasm" Version="[:natives-version:]"/>
   <ProjectReference Include="../MyGame.csproj"/>
-</ItemGroup>
-
-<ItemGroup>
   <TrimmerRootAssembly Include="MyGame"/>
   <TrimmerRootAssembly Include="$(TargetName)"/>
 </ItemGroup>
 ```
 
-`2dog.browser-wasm` links `libgodot.a`, exports the `.pck`, and assembles
-`AppBundle/`. The game and host assemblies are rooted because Godot resolves
-scripts through reflection and publishing trims unused code.
-
 The host also contains:
 
-- `.gdignore`, which keeps Godot out of the host folder;
+- `wwwroot/` for the page shell and static files;
+- `TwoDogWebBoot.cs`, compiled into the game assembly for plugin registration;
 - `Directory.Build.props`, which defaults browser builds to `Release`;
-- `global.json`, which pins a .NET 10 SDK;
-- `wwwroot/`, which contains the page shell and static files;
-- `TwoDogWebBoot.cs`, the web bootstrap compiled by the game project (see
-  [Program](#program)); this host excludes it from its own compile globs.
+- `global.json`, which pins the required .NET 10 SDK;
+- `.gdignore`, which keeps Godot out of the host directory.
 
-## Host Properties
+Add `<TrimmerRootAssembly>` for libraries reached only through reflection. The
+generated host already roots the game, host, `GodotSharp`, and `twodog`
+assemblies.
+
+## Configuration
+
+All properties are optional:
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `TwoDogWebVariant` | `release` | Use `debug` with an explicit `2dog.browser-wasm.debug` reference |
-| `TwoDogExportPack` | `true` | Export the project during publish; `false` uses your `wwwroot/godot.pck` |
-| `TwoDogWebExportPreset` | `Web` | Export preset in `export_presets.cfg` |
-| `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
-| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for the shell's progress bar |
-| `TwoDogWebStripMaps` | `true` for release | Delete `*.js.map` sourcemaps from the bundle |
-| `TwoDogWebPrecompress` | `true` | Write `.br`/`.gz` siblings next to payload files |
+| `TwoDogWebVariant` | `release` | Select the engine build; `debug` requires an explicit `2dog.browser-wasm.debug` reference |
+| `TwoDogExportPack` | `true` | Export the project; `false` uses `wwwroot/godot.pck` instead |
+| `TwoDogWebExportPreset` | `Web` | Select the preset in `export_presets.cfg` |
+| `TwoDogWebPackName` | `godot.pck` | Set the deployed pack name |
+| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for determinate loading progress |
+| `TwoDogWebStripMaps` | `true` for release | Remove `*.js.map` files from the bundle |
+| `TwoDogWebPrecompress` | `true` | Write `.br` and `.gz` siblings for sizeable files |
+| `TwoDogWebPrecompressLevel` | `Optimal` | Set sibling compression; `SmallestSize` trades publish time for size |
+| `WasmEmitSymbolMap` | `false` | Include native symbols for stack traces at about 20 MB per load |
+| `WasmInitialHeapSize` | `256MB` | Set initial linear memory; memory growth remains enabled |
 
-Loading-performance knobs (`WasmInitialHeapSize`, `WasmEmitSymbolMap`,
-compression and serving guidance) are covered in
-[Web / Browser (WASM)](/web#loading-performance).
+Raise `WasmInitialHeapSize` for content-heavy games or lower it toward `128MB`
+for low-end mobile devices after testing.
 
-Publishing requires a .NET 10 SDK with the wasm workload:
+## Loading Performance
+
+Startup size comes mainly from the engine and trimmed managed code in
+`godot.wasm`, the .NET runtime in `_framework/`, and your content in
+`godot.pck`. The shell downloads the engine and pack in parallel and reads
+`twodog.sizes.json` to show progress.
+
+### Compression
+
+Compression is the largest download-time improvement. By default, publish
+writes `.br` and `.gz` siblings. Disable them with
+`-p:TwoDogWebPrecompress=false` when an upload limit or deployment pipeline
+makes the doubled on-disk bundle undesirable.
+
+- `dotnet serve -z -b` compresses local responses on the fly.
+- Most static hosts and CDNs negotiate gzip or Brotli automatically.
+- itch.io compresses uploaded wasm and pack files, so precompressed siblings
+  are unnecessary.
+- nginx, Caddy, and similar servers can serve the generated siblings directly.
+- If a host cannot compress, set `TWODOG_PCK_GZ` to `true` in
+  `wwwroot/index.html` and preload `godot.pck.gz`; the shell inflates it with
+  `DecompressionStream`.
+
+Verify a deployment with:
 
 ```bash
-dotnet workload install wasm-tools
+curl -sI -H 'Accept-Encoding: br, gzip' https://your.host/godot.wasm
 ```
+
+Look for a `Content-Encoding` response header.
+
+### Diagnosing Startup
+
+The shell logs time spent downloading and starting, a size table for large
+files, and `2dog:boot`, `2dog:downloads-done`, and `2dog:first-frame`
+performance marks.
+
+- Slow downloads mean the output needs compression or a smaller pack.
+- Slow startup after download comes from wasm compilation, .NET startup, and
+  first-scene content.
+- Use DevTools network throttling with its cache disabled for realistic tests.
+
+List pack contents from largest to smallest with:
+
+```bash
+dotnet <path-to>/2dog.import.dll --list-pack MyGame.web/AppBundle/godot.pck
+```
+
+Large packs commonly contain PCM audio, oversized lossless textures, or files
+included by a broad export filter. Prefer Ogg Vorbis for long audio, review
+texture imports, and exclude non-game directories or mark them with `.gdignore`.
 
 ## WebXR
 
 Godot's [WebXR interface](https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_webxr.html)
-works from this host too - drop the
-[WebXR Layers polyfill](https://github.com/immersive-web/webxr-layers-polyfill) into `wwwroot/`,
-then load *and instantiate* it before `godot.js`
-(`<script>if (navigator.xr) new WebXRLayersPolyfill();</script>` - loading the script alone
-polyfills nothing). The [WebXR host](./webxr) ships that polyfill prewired and documents the
-game project's XR opt-in, the C# session pattern, and testing without a headset.
+is included. Browsers without the WebXR Layers API need the
+[WebXR Layers polyfill](https://github.com/immersive-web/webxr-layers-polyfill)
+loaded and instantiated before `godot.js`. The [WebXR host](./webxr) provides
+that setup.
+
+## Limitations
+
+- Godot and .NET are single-threaded in this host. `System.Threading` is not
+  supported.
+- The Compatibility renderer uses WebGL 2. Forward+ projects fall back through
+  Godot's `rendering_method.web` setting.
+- Native GDExtension side modules cannot be loaded because .NET owns the wasm
+  main module.
+- Browser platform policies still apply, including user gestures for audio,
+  fullscreen, and XR.

@@ -253,7 +253,7 @@ For a nested host, add `.gdignore` inside the host and add `MyGame.web/**` to
 the game project's `DefaultItemExcludes`. At runtime, register
 `TwoDogWebBoot.PluginsInitializer()` before `Start()`, pass `null` as the
 project path, and call `Run()` without disposing the engine. The full lifecycle
-is in [Browser Host](/hosts/web#program).
+is in [Browser Host](/hosts/web#how-it-works).
 
 ## Import Helper and Native API
 

@@ -62,7 +62,7 @@ dotnet publish MyGame.web   # static site in MyGame.web/AppBundle/
 ```
 
 Publishing requires `dotnet workload install wasm-tools`. See
-[Web / Browser](/web) for the complete publishing guide.
+[Web / Browser](/web) for the build and local serving guide.
 :::
 
 ## Commands

@@ -134,10 +134,11 @@ The static site is written to `MyGame.web/AppBundle/`. Serve that directory
 with any static file server; for example:
 
 ```bash
-dotnet serve --directory MyGame.web/AppBundle
+dotnet serve --directory MyGame.web/AppBundle -z -b
 ```
 
 ::: info Trail marker
-The [Web / Browser guide](/web) covers the development loop, deployment,
-configuration, and current browser limitations.
+The [Web / Browser guide](/web) covers building and local serving. See
+[Browser Host](/hosts/web) for deployment details, configuration, and current
+browser limitations.
 :::

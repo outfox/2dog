@@ -12,24 +12,27 @@ from the `2dog.avalonia` package. Unlike native window embedding (the
 an ordinary control - **Avalonia controls placed over it render on top of the
 running game**, translucency included.
 
-It pulls the Avalonia UI framework and the `2dog.avalonia` package into your
-project, so it is never part of the default host set - add it explicitly:
-
-```bash
-2dog add --avalonia                        # existing project
-dotnet new 2dog -n MyGame --avalonia true  # new project
-```
-
-Then run it:
-
-```bash
-dotnet run --project MyGame.avalonia
-```
-
 The repository's own instance is
 [`demos/showcase/showcase.avalonia`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.avalonia),
 which floats a translucent panel with a Pause button, a time-scale slider and
 an FPS readout over the showcase scene.
+
+## Use It
+
+The host is opt-in because it adds Avalonia and `2dog.avalonia` dependencies:
+
+```bash
+dnx 2dog add --avalonia
+dotnet new 2dog -n MyGame --avalonia true
+dotnet run --project MyGame.avalonia
+```
+
+## Capabilities
+
+- Runs on Windows, Linux, and macOS.
+- Lets Avalonia controls overlap the game, including translucent controls.
+- Maps Avalonia pointer, wheel, and keyboard events into Godot.
+- Exposes the scene tree to UI-thread event handlers.
 
 ## How It Works
 

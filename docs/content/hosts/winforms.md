@@ -10,22 +10,26 @@ from the form's UI thread. Its UI is deliberately minimal: a panel the game
 renders into and a working Pause/Resume button, ready to be extended with your
 own controls.
 
-It is Windows-only at runtime, so it is never part of the default host set -
-add it explicitly:
+## Use It
+
+The host is opt-in and runs only on Windows:
 
 ```bash
-2dog add --winforms                    # existing project
+dnx 2dog add --winforms
 dotnet new 2dog -n MyGame --winforms true  # new project
-```
-
-Then run it (on Windows):
-
-```bash
 dotnet run --project MyGame.winforms
 ```
 
 The repository's own instance is
 [`demos/showcase/showcase.winforms`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms).
+
+## Capabilities
+
+- Embeds Godot in a native WinForms window.
+- Interleaves Godot frames and WinForms events on one STA UI thread.
+- Lets event handlers safely access the scene tree.
+- Builds on non-Windows systems with `EnableWindowsTargeting`, although it
+  cannot run there.
 
 ## How It Works
 
@@ -66,8 +70,7 @@ thread is the pump thread, so game state (including the scene tree via
 ## Limitations
 
 - Windows only. For a cross-platform GUI host, use the
-  [Avalonia host](/hosts/avalonia). (The project still restores and builds on
-  Linux/macOS thanks to `EnableWindowsTargeting`; it just cannot run there.)
+  [Avalonia host](/hosts/avalonia).
 - The embedded window always draws above the form's client area, so WinForms
   controls cannot overlap the game rectangle - the
   [Avalonia host](/hosts/avalonia) composites instead, which lifts this
