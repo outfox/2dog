@@ -497,7 +497,11 @@ public class SolutionOpsTests
         using var tmp = new TempProjectDir();
         var sln = tmp.Write("MyGame.sln", WebSln("\\"));
 
-        SolutionOps.MigrateToSlnx(sln);
+        CliConsole.Capture(() =>
+        {
+            SolutionOps.MigrateToSlnx(sln);
+            return 0;
+        });
 
         var slnx = System.IO.Path.ChangeExtension(sln, ".slnx");
         Assert.False(File.Exists(sln));
@@ -737,9 +741,12 @@ public class AddEndToEndTests
         return options;
     }
 
-    /// <summary>Plans and applies a run the way the CLI does.</summary>
-    private static int Run(ScaffoldOptions options) =>
-        ScaffoldCommand.Run(ScaffoldCommand.Open(options), options);
+    /// <summary>Plans and applies a run the way the CLI does, with console
+    /// output captured so plan/progress lines stay out of the test log.</summary>
+    private static int Run(ScaffoldOptions options) => RunCaptured(options).ExitCode;
+
+    private static (int ExitCode, string Stdout, string Stderr) RunCaptured(ScaffoldOptions options) =>
+        CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options));
 
     private static string Snapshot(string dir) =>
         string.Join("\n---\n", Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)
@@ -868,7 +875,9 @@ public class AddEndToEndTests
             """);
         tmp.Write("TwoDogWebBoot.cs", "// legacy layout\n");
 
-        Assert.Equal(0, Run(Options(tmp.Dir)));
+        var run = RunCaptured(Options(tmp.Dir));
+        Assert.Equal(0, run.ExitCode);
+        Assert.Contains("TwoDogWebBoot.cs sits at the project root", run.Stdout);
 
         // The root file (older layout, compiled by the default globs) is
         // untouched, no folder copy appears, and no Include is patched in.
@@ -981,7 +990,9 @@ public class AddEndToEndTests
         // scaffolded files, but never this one.
         var options = Options(tmp.Dir);
         options.Force = true;
-        Assert.Equal(0, Run(options));
+        var run = RunCaptured(options);
+        Assert.Equal(0, run.ExitCode);
+        Assert.Contains("global.json already exists - left untouched", run.Stdout);
 
         Assert.Equal(existing, File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "global.json")));
     }
@@ -1372,12 +1383,12 @@ public class HostSelectionTests
 // already present.
 public class ScaffoldEndToEndTests
 {
-    private static int Run(ScaffoldOptions options)
+    private static int Run(ScaffoldOptions options) => CliConsole.Capture(() =>
     {
         var project = ScaffoldCommand.Open(options);
         if (options.Hosts.Count == 0) options.Hosts = HostSelection.Defaults([], project);
         return ScaffoldCommand.Run(project, options);
-    }
+    }).ExitCode;
 
     private static ScaffoldOptions NewProject(string dir) =>
         new() { ProjectPath = dir, NameOverride = "MyGame", CreateProject = true, Restore = false };

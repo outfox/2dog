@@ -118,13 +118,29 @@ public class PackToolTests
         Assert.Equal(Verb.Pack, CommandLine.Parse(["pack", "list", pck]).Verb);
         Assert.Equal(pck, CommandLine.Parse(["pack", "list", pck]).PackFile);
 
-        Assert.Equal(0, Program.Main(["pack", "list", pck]));
+        var listed = CliConsole.Run("pack", "list", pck);
+        Assert.Equal(0, listed.ExitCode);
+        Assert.Contains("res://scene.tscn", listed.Stdout);
 
         // Usage errors exit 1, unreadable packs exit 2 (ToolException).
-        Assert.Equal(1, Program.Main(["pack"]));
-        Assert.Equal(1, Program.Main(["pack", "list"]));
-        Assert.Equal(1, Program.Main(["pack", "extract", pck]));
-        Assert.Equal(1, Program.Main(["pack", "list", pck, "extra"]));
-        Assert.Equal(2, Program.Main(["pack", "list", Path.Combine(tmp.Dir, "missing.pck")]));
+        var noOperation = CliConsole.Run("pack");
+        Assert.Equal(1, noOperation.ExitCode);
+        Assert.Contains("2dog pack needs an operation", noOperation.Stderr);
+
+        var noFile = CliConsole.Run("pack", "list");
+        Assert.Equal(1, noFile.ExitCode);
+        Assert.Contains("2dog pack list needs a .pck file", noFile.Stderr);
+
+        var badOperation = CliConsole.Run("pack", "extract", pck);
+        Assert.Equal(1, badOperation.ExitCode);
+        Assert.Contains("unknown pack operation 'extract'", badOperation.Stderr);
+
+        var extraArgument = CliConsole.Run("pack", "list", pck, "extra");
+        Assert.Equal(1, extraArgument.ExitCode);
+        Assert.Contains("2dog pack list takes one .pck file", extraArgument.Stderr);
+
+        var missingPack = CliConsole.Run("pack", "list", Path.Combine(tmp.Dir, "missing.pck"));
+        Assert.Equal(2, missingPack.ExitCode);
+        Assert.Contains("Pack not found", missingPack.Stderr);
     }
 }

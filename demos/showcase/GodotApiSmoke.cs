@@ -74,7 +74,18 @@ public static class GodotApiSmoke
     {
         // Both calls go through the 7-pointer-arg native shape that had no wasm trampoline
         // until twodog.WebTrampolines declared it (err_print_error / dictionary_set_typed).
-        GD.PushWarning("2dog smoke: expected warning, exercising err_print_error");
+        // Printing is muted: the native call is what is under test, and the warning would
+        // otherwise land in every test and smoke log as noise.
+        var printErrors = Godot.Engine.PrintErrorMessages;
+        Godot.Engine.PrintErrorMessages = false;
+        try
+        {
+            GD.PushWarning("2dog smoke: expected warning, exercising err_print_error");
+        }
+        finally
+        {
+            Godot.Engine.PrintErrorMessages = printErrors;
+        }
 
         var typed = new Godot.Collections.Dictionary<string, int> { ["answer"] = 42 };
         Require(typed["answer"] == 42, "typed Dictionary round-trip failed");
