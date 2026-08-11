@@ -81,6 +81,7 @@ Publishing requires `dotnet workload install wasm-tools`. See
 | --- | --- |
 | `--desktop [folder]` | Add a generic host, optionally in a named folder |
 | `--web [folder]` | Add a browser (WebAssembly) host |
+| `--webxr [folder]` | Add a [WebXR host](/hosts/webxr) (browser host with the WebXR Layers polyfill; never part of the default set) |
 | `--tests [folder]` | Add an xUnit test project |
 | `--winforms [folder]` | Add a [WinForms host](/hosts/winforms) (Windows-only; never part of the default set) |
 | `--avalonia [folder]` | Add an [Avalonia host](/hosts/avalonia) (cross-platform GUI; never part of the default set) |

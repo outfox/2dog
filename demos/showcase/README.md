@@ -7,6 +7,7 @@ a `.gdignore`):
 - `showcase.csproj` / `project.godot` - the Godot project (scenes, resources, C# scripts)
 - `showcase.2dog/` - desktop host: `dotnet run --project demos/showcase/showcase.2dog`
 - `showcase.web/` - browser (wasm) host: `dotnet publish` from that folder (defaults to Release; needs the wasm-tools workload)
+- `showcase.webxr/` - WebXR browser host (its page ships the WebXR Layers polyfill): same publish flow; VR needs a secure context (localhost or HTTPS)
 - `showcase.winforms/` - Windows-only GUI embedding demo (`--wid`): `dotnet run --project demos/showcase/showcase.winforms`
 - `showcase.avalonia/` - cross-platform Avalonia embedding demo (controls composite over the game): `dotnet run --project demos/showcase/showcase.avalonia`
 

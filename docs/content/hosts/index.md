@@ -13,9 +13,11 @@ Godot, and drives its frame loop.
 [`2dog new`](/templates) generates a new project with your selection of hosts;
 [`2dog add`](/add) adds them to an existing project.
 
-Besides the default set, both commands can add two GUI-embedding hosts: a
-Windows-only [WinForms host](./winforms) (`--winforms`) that embeds the
-engine's window inside a form, and a cross-platform
+Besides the default set, both commands can add a [WebXR host](./webxr)
+(`--webxr`) - the browser host with the WebXR Layers polyfill prewired for
+VR - and two GUI-embedding hosts: a Windows-only
+[WinForms host](./winforms) (`--winforms`) that embeds the engine's window
+inside a form, and a cross-platform
 [Avalonia host](./avalonia) (`--avalonia`) that composites the viewport
 through the `2dog.avalonia` package, letting Avalonia controls render on top
 of the game. The WinForms host is a good example of how to modify the generic

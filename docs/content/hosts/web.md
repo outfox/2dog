@@ -118,51 +118,7 @@ dotnet workload install wasm-tools
 ## WebXR
 
 Godot's [WebXR interface](https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_webxr.html)
-is compiled into the web natives and registered on `XRServer` automatically - no host changes are
-needed. An XR game opts in with three pieces:
-
-1. **Project settings**: enable XR shaders in `project.godot`:
-
-   ```ini
-   [xr]
-   shaders/enabled.web=true
-   ```
-
-   (The `.web` feature-tag override avoids compiling the extra shader variants on desktop hosts.)
-   Add an `XROrigin3D` with an `XRCamera3D` to your scene.
-
-2. **A user gesture**: browsers only start XR sessions from a user gesture, and a Godot UI
-   button press qualifies - no HTML button is required:
-
-   ```csharp
-   var webxr = (WebXRInterface)XRServer.FindInterface("WebXR");
-   webxr.SessionSupported += (mode, supported) => _enterVrButton.Visible = supported;
-   webxr.SessionStarted += () => GetViewport().UseXR = true;
-   webxr.IsSessionSupported("immersive-vr");
-
-   // In the button's Pressed handler:
-   webxr.SessionMode = "immersive-vr";
-   webxr.RequestedReferenceSpaceTypes = "bounded-floor, local-floor, local";
-   webxr.RequiredFeatures = "local-floor";
-   webxr.Initialize();
-   ```
-
-   On desktop hosts `FindInterface("WebXR")` returns `null` - guard and skip.
-
-3. **The WebXR Layers polyfill**: Godot renders through the
-   [WebXR Layers API](https://www.w3.org/TR/webxrlayers-1/), which desktop Chrome and the
-   [Immersive Web Emulator](https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik)
-   do not implement natively (the Meta Quest browser does). Drop
-   [webxr-layers-polyfill](https://github.com/immersive-web/webxr-layers-polyfill) into `wwwroot/`
-   (use 1.1.0 or newer - 1.0.3 allocates its layer textures with invalid WebGL formats)
-   and load it before `godot.js` in your page:
-
-   ```html
-   <script src="webxr-layers-polyfill.min.js"></script>
-   <script>new WebXRLayersPolyfill();</script>
-   ```
-
-WebXR needs a secure context: `localhost` works for development; anything else requires HTTPS. To
-test on a headset against a dev machine, either serve over HTTPS or use
-`adb reverse tcp:8080 tcp:8080` on a Quest so the game stays on `localhost`. The showcase's
-`main.tscn` + `WebXR.cs` demonstrate the full pattern.
+works from this host too - drop the
+[WebXR Layers polyfill](https://github.com/immersive-web/webxr-layers-polyfill) into `wwwroot/` and
+load it before `godot.js`. The [WebXR host](./webxr) ships that polyfill prewired and documents the
+game project's XR opt-in, the C# session pattern, and testing without a headset.

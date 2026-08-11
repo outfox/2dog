@@ -13,6 +13,7 @@ importer, and exporter skip them:
 - **Desktop host** (`<Name>.2dog/`) - Minimal working 2dog application (Program.cs with Main)
 - **Test project** (`<Name>.tests/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
+- **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`LIBGODOT_ENABLED`-guarded `Compile Include` in the game csproj)
 - **.editorconfig** - Standard .NET coding conventions
@@ -38,6 +39,9 @@ dotnet new 2dog -n MyGame --tests false
 
 # Without the web host (e.g. no .NET 10 SDK / wasm-tools on this machine)
 dotnet new 2dog -n MyGame --web false
+
+# With the WebXR browser host (omitted by default)
+dotnet new 2dog -n MyGame --webxr true
 
 # With the Windows-only WinForms host (omitted by default)
 dotnet new 2dog -n MyGame --winforms true
@@ -79,6 +83,13 @@ templates/
     │   ├── TwoDogWebBoot.cs       # Web bootstrap (compiled into the game assembly)
     │   ├── global.json            # Same SDK pin as the root, for runs started in here
     │   └── wwwroot/index.html
+    ├── Company.Product1.webxr/    # WebXR browser host (opt-in; --webxr true to include)
+    │   ├── .gdignore
+    │   ├── Company.Product1.webxr.csproj
+    │   ├── Program.cs
+    │   ├── TwoDogWebBoot.cs
+    │   ├── global.json
+    │   └── wwwroot/               # index.html + vendored webxr-layers-polyfill.min.js
     ├── Company.Product1.winforms/ # WinForms host (opt-in; --winforms true to include)
     │   ├── .gdignore
     │   ├── Company.Product1.winforms.csproj
@@ -101,6 +112,7 @@ wasm-tools workload  –  the web host is built explicitly with `dotnet publish`
 |-----------|------|---------|-------------|
 | `--tests` | bool | true | Include a test project with xUnit (v3) and 2dog.xunit collection fixtures |
 | `--web` | bool | true | Include a browser (WebAssembly) host project (building it requires a .NET 10+ SDK with the wasm-tools workload) |
+| `--webxr` | bool | false | Include a browser host preconfigured for WebXR: its page ships the WebXR Layers polyfill (same wasm-tools requirement as `--web`) |
 | `--skipRestore` | bool | false | Skip automatic NuGet restore after creation |
 
 ## Symbol Replacements
@@ -148,7 +160,8 @@ The web host project (included by default) targets `net10.0` with
 `RuntimeIdentifier=browser-wasm`. Building/publishing it requires a .NET 10+
 SDK with the wasm-tools workload (`dotnet workload install wasm-tools`). The
 rest of the solution builds fine without it; create with `--web false` to omit
-the project entirely.
+the project entirely. The opt-in WebXR host (`--webxr true`) has the same
+requirements.
 
 ## Template Configuration
 
