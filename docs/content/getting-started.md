@@ -130,7 +130,7 @@ The static site is written to `MyGame.web/AppBundle/`. Serve that directory
 with any static file server; for example:
 
 ```bash
-dotnet serve --directory MyGame.web/AppBundle --tls --gzip --brotli
+dotnet serve --directory MyGame.web/AppBundle
 ```
 
 ::: info Trail marker
