@@ -84,4 +84,5 @@ while (!godot.Iteration())
 
 Only one Godot instance can run per assembly load context at a time. Sequential
 restart is supported. See [Single Godot Instance](./known-issues/single-instance)
-for examples and the experimental isolated-hosting path.
+for examples and an experimental isolated-hosting path to kind of get multiple engines
+after all.

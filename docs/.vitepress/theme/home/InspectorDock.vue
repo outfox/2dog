@@ -14,8 +14,8 @@ const features = [
     tint: '2d',
     name: 'Godot C# on the Web',
     detail: 'Finally... no more waiting for Godot.',
-    link: '/add',
-    linkText: 'Bring your project',
+    link: '/getting-started.html#_7-publish-to-the-browser',
+    linkText: 'Quickstart',
   },
   {
     icon: 'joystick',
@@ -23,15 +23,15 @@ const features = [
     name: '2dog is still Godot',
     detail: "It's a companion, not a replacement.",
     link: '/project-layout',
-    linkText: 'See what changes',
+    linkText: 'Godot or good dog?',
   },
   {
     icon: 'test_tube',
     tint: 'gui',
     name: 'Automation-Test like a Pro',
-    detail: "Test your scenes, scripts, and resources.",
+    detail: "Test scenes, scripts, and resources.",
     link: '/testing',
-    linkText: "Let's test a scene",
+    linkText: "Test Runners",
   },
   {
     icon: 'curly_brackets',
@@ -39,7 +39,7 @@ const features = [
     name: '.NET holds the Leash',
     detail: 'Your process controls Godot.',
     link: '/concepts',
-    linkText: 'How that works',
+    linkText: 'Concepts',
   },
 ]
 
