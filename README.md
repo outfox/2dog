@@ -94,7 +94,16 @@ dependencies.
 - Supported RIDs for published builds: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
 - Packages available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
-🦴♥️👾 **2dog** is proudly made by human maintainers, contributors, and with the assistance of LLMs.
+
+## Dogs and Robots are Nice
+
+🦴♥️👾 **2dog** is proudly made by human maintainers and contributors. We permit extensive use of LLMs:
+- Godot (libgodot) changesets are comprised of similar amounts of human-written vs. machine-written code
+- Code Commits/PRs are closely reviewed by both humans and machines (over 90%/90%) and digitally signed by humans
+- .NET Host applications are mostly human-written, while boilerplate assets (e.g. XAML) are mostly machine-written
+- Configurations, tools, smoke tests, CSS, MSBuild templates, and CI workflows are overwhelmingly maintained by LLMs
+- Documentation aims to be human-authored, but new feature docs are often generated and, later, gradually rewritten
+- Releases on NuGet use Trusted Publishing and may only be invoked via direct human interaction
 
 
 ## Teach 2dog New Tricks
