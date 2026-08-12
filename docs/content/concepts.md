@@ -24,27 +24,24 @@ Your .NET Process → twodog.Engine → Godot (as library)
 Your .NET process controls startup, frames, and shutdown. Godot becomes a
 rendering, physics, and audio library that your application drives.
 
-## libgodot Embedding
+## `libgodot` ... ?!
 
-2dog uses `libgodot`, a shared-library build of Godot Engine. It runs inside
-your .NET process, supports direct P/Invoke calls to native APIs, and retains
-full access to GodotSharp managed bindings.
+2dog uses `libgodot`, a shared-library build of Godot Engine. It is loaded by a .NET process, 
+supports direct P/Invoke calls to native APIs, and retains full access to GodotSharp managed bindings.
 
 The native library (`libgodot.dll`, `libgodot.so`, or `libgodot.dylib`) ships in
 the `2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64` NuGet package.
 `2dog.engine` references the appropriate packages automatically.
 
-### Build Variants
-
-Each platform package ships three native variants: `debug` (assertions and
+Each platform package ships three native variants of `libgodot`: `debug` (assertions and
 error checking), `release` (optimized for production), and `editor`
 (`TOOLS_ENABLED`, editor APIs, resource import). Generated hosts map the
 Debug, Release, and Editor .NET configurations onto them with `TwoDogVariant`;
 [Build Variants](./build-configurations) is the complete guide.
 
-## GodotSharp API Access
+## GodotSharp works as expected!
 
-After startup, the full GodotSharp API is available:
+After startup, the full GodotSharp API is accessible:
 
 ```csharp
 using var engine = new Engine("MyGame", args: args);
@@ -63,9 +60,9 @@ var viewport = tree.Root.GetViewport();
 var physics = PhysicsServer3D.Singleton;
 ```
 
-## The Main Loop
+## My Game has a Main Loop now?
 
-Unlike traditional Godot, the host explicitly pumps the main loop:
+Unlike traditional Godot, the host explicitly pumps Godot in its main loop:
 
 ```csharp
 while (!godot.Iteration())
@@ -78,18 +75,8 @@ while (!godot.Iteration())
 
 `Iteration()` returns `true` when Godot wants to quit, such as when the window closes.
 
-## Single Instance Limitation
+## Single Instance only, for now.
 
 Only one Godot instance can run per assembly load context at a time. Sequential
 restart is supported. See [Single Godot Instance](./known-issues/single-instance)
 for examples and the experimental isolated-hosting path.
-
-## Resource Paths
-
-`res://` addresses content in the active Godot project. A standard desktop
-host finds the source directory from `GodotProjectDir` metadata during
-development and uses the adjacent `.pck` after publish.
-
-```csharp
-var scene = GD.Load<PackedScene>("res://scenes/main.tscn");
-```
