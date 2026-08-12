@@ -5,9 +5,6 @@ description: "Embed a new or existing Godot C# project in a .NET application: in
 
 # Getting Started / Quickstart
 
-![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
-
-Let's take `Godot` for a walk! :gd-bone@gold: 
 
 ::: info Trail marker: *Same dog, new tricks!*
 Once you embed your Godot C# project into .NET applications via 2dog, the project can be run through desktop, test, browser, and other "host" applications.
@@ -26,7 +23,10 @@ To get set up, you'll need:
 - the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as
   usual, for scene and resource authoring (builds and CI do not require it).
 
-## 1. Starting Point
+![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
+
+
+## 1. Let's take Godot for a walk! :gd-bone@gold: 
 
 Add [hosts](/hosts/) around an existing project, or start fresh:
 
@@ -65,23 +65,10 @@ starts Godot as an embedded library. Change and extend it like any other .NET
 code  –  it's the simplest way to run 2dog, and the first place to look when
 troubleshooting.
 
-## 3. Meet the Pack
 
-Your Godot project stays the solution root. The generated layout looks like this:
+## 3. Keep Using Godot
 
-```text
-MyGame/              Godot project and solution root
-├── MyGame.2dog/     Generic host
-├── MyGame.tests/    xUnit host
-└── MyGame.web/      Browser host
-```
-
-Your scenes, scripts, and assets remain at the root. See [Project Layout](/project-layout)
-for the complete tree and each project's responsibilities.
-
-## 4. Keep Using Godot
-
-Open the same project root in the Godot .NET editor:
+Open your project in the Godot .NET editor, it should still work exactly as before:
 
 ```bash
 godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
@@ -93,10 +80,10 @@ for how it works and how to configure it.
 
 ::: info Trail marker
 You now have two compatible ways into the same project: the Godot editor for
-authoring and the .NET hosts for running, testing, and publishing.
+authoring and exporting, and the .NET hosts for running, testing, and publishing.
 :::
 
-## 5. Run the Tests
+## 4. Run some Tests
 
 Projects scaffolded by 2dog include a headless xUnit host by default:
 
@@ -106,7 +93,10 @@ dotnet test MyGame.tests
 
 This starts Godot without a window and runs tests through the normal .NET test runner. See [Testing with xUnit](/testing) to load scenes and test game behavior, and [Single Godot Instance](/known-issues/single-instance) for parallelism constraints.
 
-## 6. Publish to Desktop
+Start adding some Unit tests right away, we know you want to!
+
+
+## 5. Publish a Host
 
 ```bash
 dotnet publish MyGame.2dog -c Release            # host OS
@@ -119,7 +109,9 @@ engine, the .NET assemblies, and your game content exported as
 See the [Generic Host guide](/hosts/generic#publishing) for preset
 configuration and unsupported publish modes.
 
-## 7. Publish to the Browser
+
+
+## 6. Publish to the Browser
 
 Install the WebAssembly build tools and a static file server once:
 
