@@ -118,7 +118,7 @@ const starts = [
       { comment: false, text: 'dotnet publish MyGame.web' },
     ],
     link: '/add',
-    linkText: 'What 2dog adds →',
+    linkText: 'Just add 2dog →',
   },
   {
     icon: 'tennis_ball',
