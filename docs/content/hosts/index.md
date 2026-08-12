@@ -44,9 +44,3 @@ Every host is its own `Microsoft.NET.Sdk` project with:
 ## Engine Surface
 
 Hosts talk to Godot through one object: [`twodog.Engine`](/api/engine).
-
-
-## Windows
-
-Hosts intended to run on Windows should annotate their `Main()` with `[STAThread]` so OLE features
-such as drag and drop, IME, and native dialogs initialize correctly.

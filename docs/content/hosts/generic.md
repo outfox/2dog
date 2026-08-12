@@ -99,3 +99,9 @@ using var engine = new Engine(
   game and plugin assemblies from disk through hostfxr.
 - Publishing game content requires a matching Godot export preset. Generated
   projects include `Windows Desktop`, `Linux`, and `macOS` presets.
+
+
+## Windows
+
+Hosts intended to run on Windows should annotate their `Main()` with `[STAThread]` so OLE features
+such as drag and drop, IME, and native dialogs initialize correctly.
