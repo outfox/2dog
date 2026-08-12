@@ -17,6 +17,9 @@
         <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
         <!-- Windows-only at runtime, but keeps dotnet restore/build working on Linux/macOS. -->
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
+        <!-- Publish bundles the .NET runtime so the output runs without a .NET install;
+             opt out with -p:PublishSelfContained=false -->
+        <PublishSelfContained>true</PublishSelfContained>
     </PropertyGroup>
 
     <ItemGroup>

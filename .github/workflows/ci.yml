@@ -355,23 +355,29 @@ jobs:
       - name: Build import helper
         run: dotnet build twodog.import -c Release
 
+      # Desktop hosts publish self-contained by default (PublishSelfContained
+      # in the host csproj). Also guards the second-runtime interop crash:
+      # self-contained hosts must not reach gd_mono's hostfxr fallback.
       - name: Publish showcase desktop host (Release, RID)
         run: dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
 
-      # RID-less publish is the most natural user command and takes its own
-      # native-copy path in the platform targets (host-OS gated instead of
-      # RID gated) - cover it separately.
+      # RID-less publish is the most natural user command: the SDK infers the
+      # host RID for the self-contained default and publishes through an inner
+      # RID build. Own output dir - the default output is the same RID
+      # directory as the explicit-RID publish above.
       - name: Publish showcase desktop host (Release, no RID)
-        run: dotnet publish demos/showcase/showcase.2dog -c Release
-
-      # Guards the second-runtime interop crash: self-contained hosts must not reach
-      # gd_mono's hostfxr fallback. Own output dir - the default is shared with the
-      # RID publish above.
-      - name: Publish showcase desktop host (Release, RID, self-contained)
         run: >-
-          dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
-          -p:SelfContained=true
-          -o demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish-selfcontained
+          dotnet publish demos/showcase/showcase.2dog -c Release
+          -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid
+
+      # Framework-dependent opt-out: the only publish that stays truly RID-less,
+      # so it takes the host-OS gated native-copy path in the platform targets
+      # (instead of RID gated) and boots through the machine-wide runtime.
+      - name: Publish showcase desktop host (Release, framework-dependent)
+        run: >-
+          dotnet publish demos/showcase/showcase.2dog -c Release
+          -p:PublishSelfContained=false
+          -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd
 
       # Desktop publishes must export the game content as an exe-adjacent
       # pck; the published host then boots from it (Engine.ResolveContent()
@@ -381,8 +387,8 @@ jobs:
         run: |
           for pck in \
             "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/showcase.2dog.pck" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish/showcase.2dog.pck" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish-selfcontained/showcase.2dog.pck"; do
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid/showcase.2dog.pck" \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd/showcase.2dog.pck"; do
             if [ ! -f "$pck" ]; then
               echo "::error::Missing $pck - the desktop publish did not export the game pck"
               exit 1
@@ -412,19 +418,19 @@ jobs:
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/Release/net10.0/publish/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid/${{ matrix.exe }} \
             --headless --quit-after 120 2>&1 | tee smoke-norid.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
-      - name: Run published host (headless, self-contained)
-        id: run_selfcontained
+      - name: Run published host (headless, framework-dependent)
+        id: run_fdd
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish-selfcontained/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-selfcontained.log
+          demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd/${{ matrix.exe }} \
+            --headless --quit-after 120 2>&1 | tee smoke-fdd.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -433,7 +439,7 @@ jobs:
       # (libgodot exit-time static destructors; see the twodog.Engine static
       # ctor comment) so it can be root-caused in the fork.
       - name: Dump crash report (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_selfcontained.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0')
         shell: bash
         run: |
           # ReportCrash writes the .ips shortly after the abort
@@ -448,7 +454,7 @@ jobs:
       # all threads at the abort. This is the data source for fixing the
       # teardown crash in the fork.
       - name: Rerun under lldb for backtrace (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_selfcontained.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0')
         shell: bash
         run: |
           lldb -b \
@@ -483,7 +489,7 @@ jobs:
           }
           check smoke.log "${{ steps.run.outputs.status }}" "rid"
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
-          check smoke-selfcontained.log "${{ steps.run_selfcontained.outputs.status }}" "self-contained"
+          check smoke-fdd.log "${{ steps.run_fdd.outputs.status }}" "framework-dependent"
           exit $fail
 
   # Publish the web showcase end-to-end: statically links the web libgodot.a into

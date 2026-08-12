@@ -91,14 +91,29 @@ using var engine = new Engine(
     "MyGame", args: ["--headless", "--audio-driver", "Dummy"]);
 ```
 
+## Publishing
+
+```bash
+dotnet publish MyGame.2dog -c Release            # host OS
+dotnet publish MyGame.2dog -c Release -r win-x64 # or a specific RID
+```
+
+Publishes are self-contained by default (`PublishSelfContained` in the host
+project file): the output bundles the .NET runtime and runs on machines
+without a .NET installation. Pass `-p:PublishSelfContained=false` for a
+smaller framework-dependent build that requires the matching .NET runtime on
+the target machine.
+
+Publishing game content requires a matching Godot export preset. Generated
+projects include `Windows Desktop`, `Linux`, and `macOS` presets.
+
+`PublishAot` and `PublishSingleFile` are unsupported because Godot loads the
+game and plugin assemblies from disk through hostfxr.
+
 ## Limitations
 
 - A normal host supports one active engine at a time. Disposing it permits a
   sequential restart; see [Single Godot Instance](/known-issues/single-instance).
-- `PublishAot` and `PublishSingleFile` are unsupported because Godot loads the
-  game and plugin assemblies from disk through hostfxr.
-- Publishing game content requires a matching Godot export preset. Generated
-  projects include `Windows Desktop`, `Linux`, and `macOS` presets.
 
 
 ## Windows

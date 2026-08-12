@@ -104,10 +104,11 @@ dotnet publish MyGame.2dog -c Release -r win-x64 # or a specific RID
 ```
 
 The publish folder is a complete build: your host executable, the native
-engine, the .NET assemblies, and your game content exported as
-`MyGame.2dog.pck`. Copy the folder to another machine and run the executable.
-See the [Generic Host guide](/hosts/generic#publishing) for preset
-configuration and unsupported publish modes.
+engine, the .NET runtime and assemblies, and your game content exported as
+`MyGame.2dog.pck`. Copy the folder to another machine and run the executable  – 
+no .NET installation required. See the
+[Generic Host guide](/hosts/generic#publishing) for the framework-dependent
+opt-out, preset configuration, and unsupported publish modes.
 
 
 

@@ -12,6 +12,9 @@
         <RootNamespace>Company.Product1</RootNamespace>
         <!-- comctl32 v6 + long paths for Godot's Windows display server -->
         <ApplicationManifest>app.manifest</ApplicationManifest>
+        <!-- Publish bundles the .NET runtime so the output runs without a .NET install;
+             opt out with -p:PublishSelfContained=false -->
+        <PublishSelfContained>true</PublishSelfContained>
     </PropertyGroup>
 
     <ItemGroup>
