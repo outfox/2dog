@@ -18,16 +18,13 @@ and WinForms are opt-in. Each host page shows the relevant command.
 
 ## Solution / Project Layouts
 
-Every host is an ordinary `Microsoft.NET.Sdk` project with:
+Every host is its own `Microsoft.NET.Sdk` project with:
 
 - a package reference to its 2dog host package;
-- a `ProjectReference` to `MyGame.csproj`, the Godot C# assembly;
-- `<GodotProjectDir>`, which points to `project.godot` and is available to
-  `Engine.ResolveProjectDir()` at runtime;
-- a `.gdignore`, because hosts nest inside the Godot project;
-- a `TwoDogVariant` of `release`, `debug`, or `editor` where applicable.
+- `<ProjectReference>` to `MyGame.csproj`, your Godot C# assembly;
+- `<GodotProjectDir>`, which points to the location of `project.godot`
+- `.gdignore`, because hosts nest inside the Godot project;
 
-The generic form is the baseline:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -47,10 +44,9 @@ The generic form is the baseline:
 ## Engine Surface
 
 Hosts talk to Godot through one object: [`twodog.Engine`](/api/engine).
-Full signatures are in the [API Reference](/api-reference).
 
-A host runs one engine at a time; sequential restart after disposal works.
-See [Single Godot Instance](/known-issues/single-instance).
 
-Windowed Windows hosts should mark `Main` with `[STAThread]` so OLE features
+## Windows
+
+Hosts intended to run on Windows should annotate their `Main()` with `[STAThread]` so OLE features
 such as drag and drop, IME, and native dialogs initialize correctly.
