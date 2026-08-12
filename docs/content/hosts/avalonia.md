@@ -54,13 +54,11 @@ session.Start();
 - **Presentation.** Each frame, the control presents the engine's main
   viewport into the Avalonia scene. The primary path is **zero-copy**: the
   engine copies the viewport into a shared GPU texture that Avalonia's
-  compositor imports directly via `ICompositionGpuInterop`  –  a host-created
-  D3D11 keyed-mutex texture on Windows, the engine's exported Vulkan memory
-  (opaque fd) on Linux, an IOSurface on macOS. Where the compositor cannot
-  import (or the natives lack texture sharing), a CPU readback fallback runs
-  instead (`RenderingServer.Texture2DGet` into a `WriteableBitmap`).
-  `GodotSessionOptions.PresentationMode` selects; `Auto` (the default) picks
-  the best available path.
+  compositor imports directly (a D3D11 keyed-mutex texture on Windows,
+  exported Vulkan memory on Linux, an IOSurface on macOS). Where the
+  compositor cannot import the texture, a CPU readback fallback runs instead.
+  `GodotSessionOptions.PresentationMode` selects the path; `Auto` (the
+  default) picks the best one available.
 - **Input.** The engine's own window never sees the pointer: the control
   translates Avalonia pointer, wheel and keyboard events into Godot input
   events and injects them with `Input.ParseInputEvent`, DPI-scaled into

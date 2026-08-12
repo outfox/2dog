@@ -155,14 +155,9 @@ internal static class Program
 }
 ```
 
-## Common Godot Arguments
-
-| Argument | Purpose |
-| --- | --- |
-| `--headless` | Run without a window |
-| `--verbose` | Enable verbose logging |
-| `--debug` | Enable debug mode |
-| `--rendering-driver <driver>` | Select a rendering driver, such as `opengl3` |
-| `--audio-driver <driver>` | Select an audio driver, such as `Dummy` |
+`args` accepts ordinary
+[Godot command-line arguments](https://docs.godotengine.org/en/stable/tutorials/editor/command_line_tutorial.html)  – 
+`--headless`, `--verbose`, `--rendering-driver opengl3`, `--audio-driver Dummy`,
+and the rest  –  and passes them to the engine unchanged.
 
 See [Generic Host](../hosts/generic) for the full desktop-host pattern.

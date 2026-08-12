@@ -15,7 +15,29 @@ New projects include this host by default. Use `dnx 2dog add` to add one to an
 existing project. You can add and name multiple browser hosts when deployments
 need different HTML shells.
 
-See [Web / Browser (WASM)](/web) for the build and local `dotnet serve` workflow.
+## Build and Serve Locally
+
+Install the .NET WebAssembly build tools and a static file server once:
+
+```bash
+dotnet workload install wasm-tools
+dotnet tool install --global dotnet-serve
+```
+
+Publish the host, then serve its `AppBundle` directory:
+
+```bash
+dotnet publish MyGame.web
+dotnet serve --directory MyGame.web/AppBundle -z -b
+```
+
+Open the URL printed by `dotnet serve`; output from the host's `Main()` lands
+in the browser DevTools console. `-z -b` compresses responses with gzip and
+Brotli  –  the engine, .NET runtime, and pack are large files, and serving them
+uncompressed makes local startup unnecessarily slow.
+
+Publish again after changing game resources, host code, or files in `wwwroot`.
+Restart `dotnet serve` only when you change its options.
 
 ## Capabilities
 
@@ -160,7 +182,7 @@ performance marks.
 List pack contents from largest to smallest with:
 
 ```bash
-dotnet <path-to>/2dog.import.dll --list-pack MyGame.web/AppBundle/godot.pck
+2dog pack list MyGame.web/AppBundle/godot.pck
 ```
 
 Large packs commonly contain PCM audio, oversized lossless textures, or files

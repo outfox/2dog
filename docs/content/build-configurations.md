@@ -14,38 +14,10 @@ features your host needs.
 | **Release** | `release` | `template_release` | No | Production and final validation |
 | **Editor** | `editor` | `editor` | Yes | Editor types and `[Tool]` scripts |
 
-## Debug Configuration
-
-The `debug` variant includes assertions and debugging support, but not editor
-features.
-
-```bash
-dotnet build -c Debug
-dotnet run -c Debug
-dotnet test -c Debug
-```
-
-## Release Configuration
-
-The `release` variant is the optimized production runtime and the default when
-`TwoDogVariant` is unset.
-
-```bash
-dotnet build -c Release
-dotnet run -c Release
-dotnet publish -c Release
-```
-
-## Editor Configuration
-
-The `editor` variant enables `TOOLS_ENABLED`, including editor types, import
-plugins, and `[Tool]` scripts.
-
-```bash
-dotnet build -c Editor
-dotnet run -c Editor
-dotnet test -c Editor
-```
+`debug` includes assertions and debugging support; `release` is the optimized
+production runtime and the default when `TwoDogVariant` is unset; `editor`
+enables `TOOLS_ENABLED`, including editor types, import plugins, and `[Tool]`
+scripts.
 
 ::: warning Editor runtime limitations
 The variant provides compile-time access to editor APIs, but embedded libgodot

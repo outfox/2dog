@@ -56,15 +56,3 @@ copied as `libgodot-<variant>.dll`, `.so`, or `.dylib` and loaded by that name.
 For xUnit, reference `2dog.xunit`; it brings in `2dog.engine`. Browser hosts
 also reference `2dog.browser-wasm`; see [Browser Host](/hosts/web#configuration)
 for web-specific properties and packaging.
-
-## GodotSharp Directory
-
-At build time, `GODOTSHARP_DIR` can select a source directory containing
-`GodotPlugins.dll`. At runtime, `Engine.Start()` points it at the copied output
-layout.
-
-::: warning Editor runtime limitations
-`TwoDogVariant=editor` provides editor types and `[Tool]` support, but embedded
-libgodot does not initialize editor runtime singletons. Asset import runs in a
-separate helper process; see [Resource Import](./import-tool).
-:::

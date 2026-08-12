@@ -61,9 +61,6 @@ The fixture exposes the same objects a generic host keeps in local variables:
 | `godot.GodotInstance` | `engine.Start()` |
 | `godot.Tree` | `engine.Tree` |
 
-`HeadlessFixture` passes `--headless`; `Fixture` enables rendering. Both derive
-from `FixtureBase`.
-
 ## Project Setup
 
 The shared host project is documented in [Hosts](./). The test host references
@@ -101,18 +98,14 @@ The shared host project is documented in [Hosts](./). The test host references
 
 `GodotProjectDir` enables [automatic resource import](/import-tool), so tests
 see freshly imported assets. Debug, Release, and Editor configurations select
-the matching native variant; see [Choosing a Variant](/build-configurations).
+the matching native variant; see [Build Variants](/build-configurations).
 
 ## Limitations
 
-A normal test host supports one active engine at a time. Tests must use a
-non-parallel collection, and all tests in that collection share its engine.
-The generated host also sets `"parallelizeTestCollections": false` in
-`xunit.runner.json`.
-
-`2dog.xunit` provides `RenderingCollection` and `HeadlessCollection` as
-compile-in source because xUnit discovers collection definitions only in the
-test assembly.
+The generated host sets `"parallelizeTestCollections": false` in
+`xunit.runner.json`: one engine runs at a time, and every test in a collection
+shares it. [Testing with xUnit](/testing#collections) covers collections and
+the single-instance rule.
 
 Remember that nodes added to the shared tree are not cleaned up automatically;
 `QueueFree()` what you create. See the known issues for

@@ -21,7 +21,10 @@ The stock Godot editor and official export templates will still work, as well.
 
 To get set up, you'll need:
 
-[.NET SDK 10.0 or later](https://dotnet.microsoft.com/download), a supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`, and the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as usual, for scene and resource authoring (builds and CI do not require it.)
+- the [.NET SDK 10.0 or later](https://dotnet.microsoft.com/download);
+- a supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`;
+- the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as
+  usual, for scene and resource authoring (builds and CI do not require it).
 
 ## 1. Starting Point
 
@@ -57,7 +60,10 @@ Use `dnx 2dog add path/to/MyGame --dry-run` to inspect every planned action.
 dotnet run --project MyGame.2dog
 ```
 
-`MyGame.2dog` is the process entry point and starts Godot as an embedded library. It runs as a generic .NET console application, which you may change and extend as you wish. It's the simples use case for 2dog, and a good point to start when troubleshooting.
+`MyGame.2dog` is the process entry point: a plain .NET console application that
+starts Godot as an embedded library. Change and extend it like any other .NET
+code  –  it's the simplest way to run 2dog, and the first place to look when
+troubleshooting.
 
 ## 3. Meet the Pack
 
@@ -136,7 +142,6 @@ dotnet serve --directory MyGame.web/AppBundle --tls --gzip --brotli
 ```
 
 ::: info Trail marker
-The [Web / Browser guide](/web) covers building and local serving. See
-[Browser Host](/hosts/web) for deployment details, configuration, and current
-browser limitations.
+The [Browser Host guide](/hosts/web) covers building, local serving,
+deployment, configuration, and current browser limitations.
 :::

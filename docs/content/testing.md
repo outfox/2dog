@@ -129,22 +129,15 @@ See [xUnit Test Discovery](/known-issues/xunit-discovery).
 
 ```bash
 dotnet test
-dotnet test -c Debug
-dotnet test -c Release
-dotnet test -c Editor
+dotnet test -c Release                            # or Debug / Editor
 dotnet test --logger "console;verbosity=detailed"
 dotnet test --filter "FullyQualifiedName~SceneTests"
 ```
 
-| Configuration | Best for |
-| --- | --- |
-| **Debug** | General tests and debugging |
-| **Release** | Final runtime validation |
-| **Editor** | Tests that compile against editor APIs |
-
-Asset import runs automatically when the test project builds; it does not
-require the Editor configuration. See [Resource Import](./import-tool) and
-[Build Variants](./build-configurations).
+Each configuration selects the matching engine variant; see
+[Build Variants](./build-configurations). Asset import runs automatically when
+the test project builds and does not require the Editor configuration; see
+[Resource Import](./import-tool).
 
 For headless CI, select the headless collection and use a dummy audio driver:
 

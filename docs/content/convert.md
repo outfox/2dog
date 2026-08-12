@@ -11,4 +11,4 @@ head:
 # Adding 2dog to a Project
 
 This page has a new home: [Adding 2dog to a Project](/add). You are being
-redirected  –  `2dog convert` still works as an alias of `2dog add`.
+redirected – `2dog convert` still works as an alias of `2dog add`.

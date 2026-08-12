@@ -89,7 +89,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Get Started', link: '/getting-started' },
-      { text: 'Web', link: '/web' },
+      { text: 'Web', link: '/hosts/web' },
       { text: 'API', link: '/api-reference' }
     ],
 
@@ -106,8 +106,7 @@ export default defineConfig({
         text: 'Build and Ship',
         items: [
           { text: gd('bone') + 'Existing Projects', link: '/add' },
-          { text: gd('sprout') + 'New Projects', link: '/templates' },
-          { text: gd('globe') + 'Web / Browser (WASM)', link: '/web' }
+          { text: gd('sprout') + 'New Projects', link: '/templates' }
         ]
       },
       {
@@ -168,7 +167,7 @@ export default defineConfig({
       {
         text: 'Configure',
         items: [
-          { text: gd('layers') + 'Choosing a Variant', link: '/build-configurations' },
+          { text: gd('layers') + 'Build Variants', link: '/build-configurations' },
           { text: gd('wrench') + 'MSBuild Configuration', link: '/configuration' }
         ]
       },

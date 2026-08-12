@@ -51,7 +51,8 @@ dnx 2dog add path/to/MyGame --dry-run  # show the plan; change nothing
 ```
 
 Naming a host option, passing `--yes`, or passing `--non-interactive` disables
-the prompts.
+the prompts. The [dnx 2dog reference](/dnx-2dog) documents every command, host
+flag, and option, including the `--version`-under-`dnx` trap.
 
 ::: tip From stock Godot to the browser
 
@@ -62,51 +63,7 @@ dotnet publish MyGame.web   # static site in MyGame.web/AppBundle/
 ```
 
 Publishing requires `dotnet workload install wasm-tools`. See
-[Web / Browser](/web) for the build and local serving guide.
-:::
-
-## Commands
-
-| Command | Effect |
-| --- | --- |
-| `2dog` | Print version information and usage |
-| `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
-| `2dog add [path]` | Add hosts to an existing Godot project |
-| `2dog convert [path]` | Alias of `add` for a project with no hosts yet |
-| `2dog version` | Print the tool version and the versions of every package it references |
-
-## Options
-
-| Option | Effect |
-| --- | --- |
-| `--desktop [folder]` | Add a generic host, optionally in a named folder |
-| `--web [folder]` | Add a browser (WebAssembly) host |
-| `--webxr [folder]` | Add a [WebXR host](/hosts/webxr) (browser host with the WebXR Layers polyfill; never part of the default set) |
-| `--tests [folder]` | Add an xUnit test project |
-| `--winforms [folder]` | Add a [WinForms host](/hosts/winforms) (Windows-only; never part of the default set) |
-| `--avalonia [folder]` | Add an [Avalonia host](/hosts/avalonia) (cross-platform GUI; never part of the default set) |
-| `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
-| `-n, --name <BaseName>` | Project name (`new`) or base-name override |
-| `-o, --output <dir>` | Directory for a new project |
-| `-y, --yes` | Use the flags and defaults without prompting |
-| `--non-interactive` | Same as `--yes` |
-| `--dry-run` | Print planned actions without changing anything |
-| `--force` | Overwrite existing scaffolded files; never delete or move files |
-| `--no-restore` | Skip the final `dotnet restore` |
-| `--verbose` | Show extra output |
-| `--version` | Same as the `version` command |
-
-## Versions
-
-`2dog version` prints the tool version together with the versions of every
-package a scaffold references; the [dnx 2dog reference](/dnx-2dog#versions-and-pinning)
-shows the output.
-
-::: warning --version under dnx
-`dnx 2dog --version` never reaches the tool: `--version <VERSION>` is `dnx`'s
-own option and selects which version of the `2dog` package to download and run.
-Use `dnx 2dog version` to print versions, and `dnx 2dog@:2dog-version:` (or the
-`--version` option) to run a specific tool version.
+[Browser Host](/hosts/web) for the build and local serving guide.
 :::
 
 ## Result

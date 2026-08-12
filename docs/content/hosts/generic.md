@@ -72,14 +72,9 @@ host adds:
 | `TwoDogVariant` | Selects the release, debug, or editor native engine |
 | `TwoDogRemoveDuplicateGodotAnalyzers` | Prevents the host and game project from loading the same analyzers twice |
 
-| Configuration | Variant | Native | Use |
-| --- | --- | --- | --- |
-| `Debug` | `debug` | `template_debug` | Development and engine checks |
-| `Release` | `release` | `template_release` | Optimized shipping build |
-| `Editor` | `editor` | `editor` | `[Tool]` scripts and editor types |
-
-See [Choosing a Variant](/build-configurations) for details. Setting
-`GodotProjectDir` also enables [automatic resource import](/import-tool).
+See [Build Variants](/build-configurations) for the configuration-to-variant
+mapping. Setting `GodotProjectDir` also enables
+[automatic resource import](/import-tool).
 
 ### Headless Runs
 

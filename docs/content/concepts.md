@@ -36,35 +36,11 @@ the `2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64` NuGet package.
 
 ### Build Variants
 
-Generated hosts map .NET configurations to Godot variants with
-`TwoDogVariant`. Other projects must configure this mapping explicitly.
-
-#### Template Builds (Runtime-Only)
-
-**Template Debug** (`template_debug`) includes assertions and additional error
-checking, but no editor features. Use it for development.
-
-**Template Release** (`template_release`) is optimized for production, without
-debug symbols or editor features.
-
-#### Editor Build (Development Tools)
-
-**Editor** (`editor`) enables `TOOLS_ENABLED`, the resource-import pipeline, and
-editor APIs such as `EditorInterface`, `EditorPlugin`, and `ImportPlugin`. It is
-larger and slower than template builds.
-
-::: tip Choosing a Build Variant
-[Build Configurations](./build-configurations) is the complete guide to choosing
-and configuring variants. Resource import selects the editor variant
-automatically; see [Resource Import](./import-tool).
-:::
-
-```bash
-# Scaffolded projects use these mappings:
-dotnet build -c Debug    # template_debug
-dotnet build -c Release  # template_release
-dotnet build -c Editor   # editor with TOOLS_ENABLED
-```
+Each platform package ships three native variants: `debug` (assertions and
+error checking), `release` (optimized for production), and `editor`
+(`TOOLS_ENABLED`, editor APIs, resource import). Generated hosts map the
+Debug, Release, and Editor .NET configurations onto them with `TwoDogVariant`;
+[Build Variants](./build-configurations) is the complete guide.
 
 ## GodotSharp API Access
 

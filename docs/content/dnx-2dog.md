@@ -51,7 +51,7 @@ to add, show their plan, and wait for confirmation. Any host flag, `--yes`, or
 `2dog pack list` parses a pack's directory straight from the file - no engine,
 no project - and prints every entry sorted by size. Useful to answer "why is my
 pck 99 MiB?" or to confirm an asset (say, a fallback font) actually made it
-into a [web publish](/web):
+into a [web publish](/hosts/web):
 
 ```bash
 2dog pack list MyGame.web/AppBundle/godot.pck

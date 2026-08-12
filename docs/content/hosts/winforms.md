@@ -34,7 +34,7 @@ The repository's own instance is
 ## How It Works
 
 Godot 4.7 supports embedding out of the box via the `--wid <window_id>`
-argument  –  the same mechanism the Godot editor uses for its embedded game
+argument – the same mechanism the Godot editor uses for its embedded game
 window. Given a native window handle, the engine creates its main window as a
 borderless popup owned by that handle instead of a regular top-level window.
 Because 2dog hosts pass arguments to Godot verbatim, no engine or API changes
@@ -53,7 +53,7 @@ Three consequences shape the host code:
 
 - **The host owns geometry.** The embedded popup lives in screen coordinates
   and Godot refuses `window_set_size` for it, so the form drives the window
-  with raw `SetWindowPos` from `Resize` and `LocationChanged` handlers  – 
+  with raw `SetWindowPos` from `Resize` and `LocationChanged` handlers –
   exactly how the editor drives its embedded game window.
 - **The host owns the frame loop.** A classic WinForms game loop pumps
   `Iteration()` from `Application.Idle` whenever the message queue is empty,

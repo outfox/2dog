@@ -67,11 +67,7 @@ hosts out, or to opt into the [WebXR host](/hosts/webxr), the Windows-only
 [Avalonia host](/hosts/avalonia):
 
 ```bash
-dotnet new 2dog -n MyGame --tests false
-dotnet new 2dog -n MyGame --web false
 dotnet new 2dog -n MyGame --tests false --web false
-dotnet new 2dog -n MyGame --webxr true
-dotnet new 2dog -n MyGame --winforms true
 dotnet new 2dog -n MyGame --avalonia true
 ```
 
@@ -102,9 +98,9 @@ Use the Godot editor normally; the project root is a regular Godot project.
 C# scripts belong in that root and compile into `MyGame.csproj`, which every
 host references.
 
-For tests, see [Testing](/testing). The [Web / Browser guide](/web) covers
-browser prerequisites, building, and local serving; [Browser Host](/hosts/web)
-describes its configuration and platform limits. Browser builds require:
+For tests, see [Testing](/testing). The [Browser Host guide](/hosts/web)
+covers prerequisites, building, local serving, configuration, and platform
+limits. Browser builds require:
 
 ```bash
 dotnet workload install wasm-tools

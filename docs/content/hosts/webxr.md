@@ -19,7 +19,7 @@ dotnet new 2dog -n MyGame --webxr true
 ```
 
 Its build and local serving workflow is the same as the browser host; see
-[Web / Browser (WASM)](/web).
+[Build and Serve Locally](./web#build-and-serve-locally).
 
 ## Capabilities
 

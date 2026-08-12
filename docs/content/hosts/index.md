@@ -46,13 +46,11 @@ The generic form is the baseline:
 
 ## Engine Surface
 
-The host applicatons interact with Godot by instantiating an object of type `twodog.Engine`.
-
+Hosts talk to Godot through one object: [`twodog.Engine`](/api/engine).
 Full signatures are in the [API Reference](/api-reference).
 
-A normal host supports one active engine at a time. Sequential restarts work
-after disposal; isolated load contexts are an experimental option. See
-[Single Godot Instance](/known-issues/single-instance).
+A host runs one engine at a time; sequential restart after disposal works.
+See [Single Godot Instance](/known-issues/single-instance).
 
 Windowed Windows hosts should mark `Main` with `[STAThread]` so OLE features
 such as drag and drop, IME, and native dialogs initialize correctly.
