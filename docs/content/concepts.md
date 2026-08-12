@@ -44,7 +44,7 @@ error checking), `release` (optimized for production), and `editor`
 Debug, Release, and Editor .NET configurations onto them with `TwoDogVariant`;
 [Build Variants](./build-configurations) is the complete guide.
 
-## GodotSharp works as expected!
+## GodotSharp ... !
 
 After startup, the full GodotSharp API is accessible:
 
@@ -65,7 +65,7 @@ var viewport = tree.Root.GetViewport();
 var physics = PhysicsServer3D.Singleton;
 ```
 
-## My Game has a Main Loop now?
+## I have a Main Loop now?
 
 Unlike traditional Godot, the host explicitly pumps Godot in its main loop:
 
@@ -80,7 +80,7 @@ while (!godot.Iteration())
 
 `Iteration()` returns `true` when Godot wants to quit, such as when the window closes.
 
-## Single Instance only, for now.
+## Single Instance only (for now.)
 
 Only one Godot instance can run per assembly load context at a time. Sequential
 restart is supported. See [Single Godot Instance](./known-issues/single-instance)
