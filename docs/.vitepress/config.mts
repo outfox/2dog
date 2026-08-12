@@ -186,7 +186,6 @@ export default defineConfig({
               { text: gd('window_terminal') + 'GD.Print in Tests', link: '/known-issues/gd-print-output' }
             ]
           },
-          { text: gd('archive') + 'Misc', link: '/misc' },
         ]
       }
     ],

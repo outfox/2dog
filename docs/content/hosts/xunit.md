@@ -112,8 +112,7 @@ The generated host also sets `"parallelizeTestCollections": false` in
 
 `2dog.xunit` provides `RenderingCollection` and `HeadlessCollection` as
 compile-in source because xUnit discovers collection definitions only in the
-test assembly. Experimental parallel engines are covered in
-[Miscellaneous Advanced Notes](/misc#experimental-parallel-xunit-engines).
+test assembly.
 
 Remember that nodes added to the shared tree are not cleaned up automatically;
 `QueueFree()` what you create. See the known issues for

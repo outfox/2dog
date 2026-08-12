@@ -59,7 +59,7 @@ const SECTIONS = [
     'known-issues/xunit-discovery.md', 'known-issues/gd-print-output.md',
   ]],
   ['Optional', [
-    'faq.md', 'misc.md',
+    'faq.md',
   ]],
 ];
 

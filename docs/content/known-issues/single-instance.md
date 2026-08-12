@@ -33,7 +33,3 @@ using var nextGodot = nextEngine.Start();
 This allows xUnit collections to use fresh engines sequentially in one test
 process. Collections that share an engine must disable parallelization; see
 [Testing](../testing).
-
-Isolated assembly load contexts can host concurrent engines, but the current
-path is experimental and retains process-wide limits. See
-[Miscellaneous Advanced Notes](/misc#experimental-parallel-xunit-engines).

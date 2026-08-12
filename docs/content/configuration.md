@@ -61,8 +61,7 @@ for web-specific properties and packaging.
 
 At build time, `GODOTSHARP_DIR` can select a source directory containing
 `GodotPlugins.dll`. At runtime, `Engine.Start()` points it at the copied output
-layout. See [Miscellaneous Advanced Notes](/misc#source-checkout-and-native-layout)
-for source-checkout layouts.
+layout.
 
 ::: warning Editor runtime limitations
 `TwoDogVariant=editor` provides editor types and `[Tool]` support, but embedded
