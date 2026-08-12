@@ -99,7 +99,7 @@ dependencies.
 
 🦴♥️👾 **2dog** is proudly made by human maintainers and contributors. We permit extensive use of LLMs:
 - Forked `libgodot` features/fixes consist of similar amounts of human-written and machine-written code
-- Commits/PRs are closely reviewed by both humans and machines (over 90%/90%) and signed by humans
+- Commits/PRs are reviewed & gated by both humans and machines (over 90%/90%) and signed by humans
 - .NET Host applications are mostly human-written, while boilerplate assets (e.g. XAML) are mostly machine-written
 - Configurations, tools, smoke tests, CSS, MSBuild XML, and CI workflows are overwhelmingly LLM-maintained
 - Documentation aims to be human-authored, but new feature docs are generated and later gradually rewritten
