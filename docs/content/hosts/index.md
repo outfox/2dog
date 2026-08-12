@@ -6,7 +6,7 @@ description: "A host is a small .NET program that owns the process, starts embed
 # Hosts
 
 A **host** is a small .NET program that owns the process, starts embedded
-Godot, and drives its frame loop.
+Godot, and drives its Main Loop.
 
 ## Adding a Host
 
