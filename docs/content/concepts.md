@@ -12,13 +12,18 @@ Teaching an old robot new tricks!
 Traditional Godot applications have Godot control the process lifecycle:
 
 ```
-Godot Process → SceneTree → Your Scripts
+Godot Process
+→ GodotSharp (.NET)
+→ SceneTree → Scripts
 ```
 
-2dog inverts this:
+2dog rolls over:
 
 ```
-Your .NET Process → twodog.Engine → Godot (as library)
+.NET Process 
+→ twodog.Engine → Godot (as library) 
+→ GodotSharp
+→ SceneTree → Scripts
 ```
 
 Your .NET process controls startup, frames, and shutdown. Godot becomes a
