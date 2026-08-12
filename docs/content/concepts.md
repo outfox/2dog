@@ -7,7 +7,7 @@ description: "How 2dog inverts Godot ownership: your .NET host owns the process 
 
 Teaching an old robot new tricks!
 
-## Inverted Architecture
+## 2dog is Godot, backward!
 
 Traditional Godot applications have Godot control the process lifecycle:
 
