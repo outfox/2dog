@@ -145,7 +145,7 @@ aws s3 sync MyGame.web/AppBundle s3://your-game-bucket
 # etc, etc.
 ```
 
-::: info Need to ship on itch.io?
+::: info Trail Marker: Customizing Web Builds
 The [Browser Host guide](/hosts/web) covers building, local serving,
 deployment, configuration, and current browser limitations.
 :::
