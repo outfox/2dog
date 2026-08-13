@@ -128,13 +128,24 @@ dotnet publish MyGame.web
 ```
 
 The static site is written to `MyGame.web/AppBundle/`. Serve that directory
-with any static file server; for example:
+with any static file server (or upload it to itch.io, S3, etc.)
+
+For example:
 
 ```bash
+# serve locally
 dotnet serve --directory MyGame.web/AppBundle
+
+# release to itch.io
+butler push MyGame.web/AppBundle user/game:channel
+
+# upload to AWS
+aws s3 sync MyGame.web/AppBundle s3://your-game-bucket
+
+# etc, etc.
 ```
 
-::: info Trail marker
+::: info Need to ship on itch.io?
 The [Browser Host guide](/hosts/web) covers building, local serving,
 deployment, configuration, and current browser limitations.
 :::
