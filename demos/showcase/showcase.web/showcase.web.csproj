@@ -34,9 +34,16 @@
         <Compile Remove="TwoDogWebBoot.cs"/>
     </ItemGroup>
 
+    <!-- Engine reference: source checkout by default; pass -p:Official=true to
+         consume the published NuGet packages instead (same shape as the 2dog
+         web template). The game project stays a ProjectReference either way. -->
     <ItemGroup>
-        <ProjectReference Include="../../../twodog.engine/twodog.engine.csproj"/>
+        <ProjectReference Include="../../../twodog.engine/twodog.engine.csproj" Condition="'$(Official)' != 'true'"/>
         <ProjectReference Include="../showcase.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Official)' == 'true'">
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[$(NativesVersion)]"/>
     </ItemGroup>
 
     <!-- Root the game assembly: scripts are resolved by reflection.
@@ -50,12 +57,13 @@
          2dog.engine.targets (GodotProjectDir plumbing, import helper discovery),
          the host-OS desktop meta targets (TwoDogEditorLibGodotPath for the
          build-time .pck export), and the browser-wasm targets (all web
-         wiring). Package consumers get these transitively. -->
-    <Import Project="../../../twodog.engine/build/2dog.engine.targets"/>
-    <Import Project="../../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
-    <Import Project="../../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
-    <Import Project="../../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
-    <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"/>
+         wiring). With -p:Official=true these come from the packages
+         transitively instead. -->
+    <Import Project="../../../twodog.engine/build/2dog.engine.targets" Condition="'$(Official)' != 'true'"/>
+    <Import Project="../../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('Windows'))"/>
+    <Import Project="../../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('Linux'))"/>
+    <Import Project="../../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('OSX'))"/>
+    <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets" Condition="'$(Official)' != 'true'"/>
 
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="AppBundle"/>

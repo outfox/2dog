@@ -13,3 +13,10 @@ a `.gdignore`):
 
 The test suite (`twodog.tests/`, at the repository root) runs against this
 project. Assets are imported automatically during build.
+
+The web hosts reference the engine from the source checkout (ProjectReference
+plus in-repo targets imports). Pass `-p:Official=true` to build against the
+published NuGet packages instead (`2dog.engine` + `2dog.browser-wasm`, exactly
+like a project scaffolded from the 2dog template), e.g.:
+
+    dotnet publish demos/showcase/showcase.web -p:Official=true
