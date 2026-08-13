@@ -111,7 +111,9 @@ public sealed class GodotSession : IDisposable
             throw new InvalidOperationException($"{nameof(GodotSession)}: already started.");
 
         // The engine's own window stays unmapped; this control is its only face.
-        _engine = new Engine(_options.Project, _options.Path, ["--hidden-window", .. _options.ExtraArgs]);
+        // Injected before ExtraArgs so an explicit user --gpu-luid parses later and wins.
+        _engine = new Engine(_options.Project, _options.Path,
+            ["--hidden-window", .. GpuAffinityArgs(), .. _options.ExtraArgs]);
         _instance = _engine.Start();
         // Presentation happens through Avalonia's compositor, which paces the pump; vsync on
         // the hidden engine window would only add a second, competing pacer (observed as the
@@ -138,6 +140,23 @@ public sealed class GodotSession : IDisposable
         SyncEngineWindowSize();
         _presenter?.Resize();
         UpdatePumpSource();
+    }
+
+    // Shared textures cannot cross adapters, and on hybrid GPUs Godot's discrete-first
+    // pick lands off the compositor's (default) adapter - steer it there via --gpu-luid.
+    // Best effort: no resolvable LUID passes nothing, no matching Vulkan device only
+    // warns before automatic selection.
+    private string[] GpuAffinityArgs()
+    {
+        if (!OperatingSystem.IsWindows()) return [];
+        // Cpu mode never shares textures; an explicit device choice is the user's.
+        if (_options.PresentationMode == GodotPresentationMode.Cpu) return [];
+        foreach (var arg in _options.ExtraArgs)
+        {
+            if (arg is "--gpu-index" or "--gpu-luid") return [];
+        }
+        if (DefaultAdapter.TryGetLuid() is not { } luid) return [];
+        return ["--gpu-luid", luid.ToString("x")];
     }
 
     // Both pause reasons compose into one engine-facing state; the engine is only

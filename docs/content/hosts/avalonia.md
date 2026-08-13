@@ -58,7 +58,11 @@ session.Start();
   exported Vulkan memory on Linux, an IOSurface on macOS). Where the
   compositor cannot import the texture, a CPU readback fallback runs instead.
   `GodotSessionOptions.PresentationMode` selects the path; `Auto` (the
-  default) picks the best one available.
+  default) picks the best one available. Shared textures cannot cross GPU
+  adapters, so on Windows the session steers the engine onto the compositor's
+  adapter (Godot's `--gpu-luid`) - on hybrid-GPU laptops this means the
+  integrated GPU. Pass your own `--gpu-index`/`--gpu-luid` in `ExtraArgs` to
+  override.
 - **Input.** The engine's own window never sees the pointer: the control
   translates Avalonia pointer, wheel and keyboard events into Godot input
   events and injects them with `Input.ParseInputEvent`, DPI-scaled into
