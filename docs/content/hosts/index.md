@@ -14,7 +14,7 @@ Godot, and drives its Main Loop.
 [`2dog add`](/add) adds them to an existing project.
 
 The default set includes Generic, Browser, and xUnit hosts. WebXR, Avalonia,
-and WinForms are opt-in. Each host page shows the relevant command.
+WinForms, and WinUI 3 are opt-in. Each host page shows the relevant command.
 
 ## Solution / Project Layouts
 

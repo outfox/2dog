@@ -156,6 +156,9 @@ internal static class Program
                --tests [folder]    xUnit test project
                --winforms [folder] WinForms host embedding the game window
                                    (Windows-only; never part of the default set)
+               --winui [folder]    WinUI 3 host embedding the game window
+                                   (Windows-only, like --winforms; builds only
+                                   on Windows)
                --avalonia [folder] Avalonia host embedding the game in a
                                    cross-platform GUI (opt-in, like --winforms)
                --no-desktop, --no-web, --no-tests

@@ -62,15 +62,17 @@ Three consequences shape the host code:
 - **Teardown happens before the owner window dies.** The form disposes the
   instance and engine in `OnFormClosing`, while its own handle still exists.
 
-The Pause button pauses and resumes the running instance via
-`GodotInstance.Pause()`/`Resume()` straight from its click handler - the UI
-thread is the pump thread, so game state (including the scene tree via
-`engine.Tree`) is safe to touch from event handlers.
+The Pause button toggles `SceneTree.Paused` (the actual gameplay pause) and
+sends the `GodotInstance.Pause()`/`Resume()` application-lifecycle
+notification straight from its click handler - the UI thread is the pump
+thread, so game state (including the scene tree via `engine.Tree`) is safe to
+touch from event handlers.
 
 ## Limitations
 
 - Windows only. For a cross-platform GUI host, use the
-  [Avalonia host](/hosts/avalonia).
+  [Avalonia host](/hosts/avalonia); for the same embedding under the Windows
+  App SDK, use the [WinUI 3 host](/hosts/winui).
 - The embedded window always draws above the form's client area, so WinForms
   controls cannot overlap the game rectangle - the
   [Avalonia host](/hosts/avalonia) composites instead, which lifts this

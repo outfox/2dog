@@ -58,6 +58,13 @@
       "replaces": "AVALONIA_PKG_VERSION",
       "description": "Version of Avalonia packages to reference."
     },
+    "winAppSdkVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.0.0-watpl",
+      "replaces": "WINAPPSDK_PKG_VERSION",
+      "description": "Version of the Microsoft.WindowsAppSDK package to reference."
+    },
     "tests": {
       "type": "parameter",
       "datatype": "bool",
@@ -80,6 +87,12 @@
       "type": "parameter",
       "datatype": "bool",
       "description": "Include a WinForms host project that embeds the game window inside a form (Windows-only at runtime). Omitted by default; pass '--winforms true' to include.",
+      "defaultValue": "false"
+    },
+    "winui": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a WinUI 3 host project that embeds the game window inside a Windows App SDK window (Windows-only, builds only on Windows). Omitted by default; pass '--winui true' to include.",
       "defaultValue": "false"
     },
     "avalonia": {
@@ -140,6 +153,12 @@
           ]
         },
         {
+          "condition": "(!winui)",
+          "exclude": [
+            "Company.Product1.winui/**/*"
+          ]
+        },
+        {
           "condition": "(!avalonia)",
           "exclude": [
             "Company.Product1.avalonia/**/*"
@@ -182,6 +201,10 @@
     {
       "condition": "(winforms)",
       "path": "Company.Product1.winforms/Company.Product1.winforms.csproj"
+    },
+    {
+      "condition": "(winui)",
+      "path": "Company.Product1.winui/Company.Product1.winui.csproj"
     },
     {
       "condition": "(avalonia)",

@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <!-- WinUI 3 needs a versioned Windows TFM; its tooling only builds on Windows. -->
+        <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+        <!-- WinExe hides the console; switch to Exe to see the engine's stdout diagnostics. -->
+        <OutputType>WinExe</OutputType>
+        <UseWinUI>true</UseWinUI>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'showcase.winui' is not a
+              valid C# namespace for types shared with the other hosts. -->
+        <RootNamespace>showcase</RootNamespace>
+        <!-- comctl32 v6 + long paths for Godot's Windows display server; PerMonitorV2 is
+             XAML's expected DPI mode (Godot 4 handles per-monitor DPI fine). -->
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <!-- Unpackaged app that carries its own Windows App SDK runtime: `dotnet run` works
+             without MSIX packaging or the Windows App Runtime installer. -->
+        <WindowsPackageType>None</WindowsPackageType>
+        <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+        <!-- Self-contained Windows App SDK needs a concrete RID; 2dog natives ship win-x64. -->
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+        <!-- Publish bundles the .NET runtime so the output runs without a .NET install;
+             opt out with -p:PublishSelfContained=false -->
+        <PublishSelfContained>true</PublishSelfContained>
+    </PropertyGroup>
+    <!-- Godot project location: the parent directory (the Godot project is
+         the solution root; hosts are nested inside it, hidden from the Godot
+         editor by their .gdignore) -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+    </PropertyGroup>
+
+    <!-- In this repo the native variant follows the build configuration
+         (consumers set TwoDogVariant explicitly; default is release) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="$(WindowsAppSdkVersion)"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../showcase.csproj"/>
+    </ItemGroup>
+</Project>

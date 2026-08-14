@@ -15,6 +15,7 @@ importer, and exporter skip them:
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
+- **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
 - **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`LIBGODOT_ENABLED`-guarded `Compile Include` in the game csproj)
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
@@ -95,6 +96,13 @@ templates/
     │   ├── Company.Product1.winforms.csproj
     │   ├── Program.cs
     │   ├── MainForm.cs
+    │   └── app.manifest
+    ├── Company.Product1.winui/    # WinUI 3 host (opt-in; --winui true to include)
+    │   ├── .gdignore
+    │   ├── Company.Product1.winui.csproj
+    │   ├── Program.cs
+    │   ├── App.cs
+    │   ├── MainWindow.cs
     │   └── app.manifest
     ├── .editorconfig
     └── .gitignore
@@ -197,7 +205,7 @@ The template is defined in `.template.config/template.json`:
 ```
 
 (Abridged - see the file for the full symbol list, including `winforms`,
-`avalonia`, and the version placeholders.)
+`winui`, `avalonia`, and the version placeholders.)
 
 ## Testing Changes
 

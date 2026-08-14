@@ -118,6 +118,7 @@ export default defineConfig({
           { text: gd('globe') + 'Browser', link: '/hosts/web' },
           { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' },
           { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
+          { text: gd('window') + 'WinUI 3', link: '/hosts/winui' },
           { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
         ]
       },

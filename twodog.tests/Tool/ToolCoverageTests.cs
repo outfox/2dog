@@ -86,7 +86,7 @@ public class CommandLineCoverageTests
     {
         var cmd = CommandLine.Parse(
             ["convert", "-n", "Game", "--2dog", "Desk", "--browser", "Web", "--webxr", "Xr", "--test", "Tests",
-             "--winforms", "Forms", "--avalonia", "Ava", "--dry-run", "--force", "--verbose", "--no-input"]);
+             "--winforms", "Forms", "--winui", "Wui", "--avalonia", "Ava", "--dry-run", "--force", "--verbose", "--no-input"]);
 
         Assert.Equal(Verb.Add, cmd.Verb);
         Assert.Equal("Game", cmd.Options.NameOverride);
@@ -96,7 +96,7 @@ public class CommandLineCoverageTests
         Assert.True(cmd.NoInteractive);
         Assert.Equal(
             [(HostKind.Desktop, "Desk"), (HostKind.Web, "Web"), (HostKind.WebXr, "Xr"), (HostKind.Tests, "Tests"),
-             (HostKind.WinForms, "Forms"), (HostKind.Avalonia, "Ava")],
+             (HostKind.WinForms, "Forms"), (HostKind.WinUi, "Wui"), (HostKind.Avalonia, "Ava")],
             cmd.Requested.Select(r => (r.Kind, r.Folder!)).ToArray());
     }
 
@@ -137,6 +137,7 @@ public class HostsCoverageTests
     [InlineData("webxr", "webxr", "WebAssembly host with the WebXR Layers polyfill for VR", "--webxr")]
     [InlineData("tests", "tests", "xUnit project driving a headless engine", "--tests")]
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]
+    [InlineData("winui", "winui", "game embedded in a WinUI 3 window (Windows-only)", "--winui")]
     [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]
     public void HostMetadata_IsComplete(string suffix, string label, string blurb, string flag)
     {

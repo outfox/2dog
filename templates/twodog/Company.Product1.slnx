@@ -12,6 +12,11 @@
 #if (winforms)
   <Project Path="TPLRAWNAME.winforms/TPLRAWNAME.winforms.csproj" />
 #endif
+#if (winui)
+  <Project Path="TPLRAWNAME.winui/TPLRAWNAME.winui.csproj">
+    <Build Project="false" />
+  </Project>
+#endif
 #if (avalonia)
   <Project Path="TPLRAWNAME.avalonia/TPLRAWNAME.avalonia.csproj" />
 #endif

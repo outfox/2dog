@@ -99,11 +99,15 @@ internal sealed class MainForm : Form
     // including the scene tree via _engine.Tree.
     private void OnPauseClicked(object? sender, EventArgs e)
     {
-        if (_paused)
-            _instance!.Resume();
-        else
-            _instance!.Pause();
         _paused = !_paused;
+        // SceneTree.Paused is the actual gameplay pause. GodotInstance.Pause/Resume only raises
+        // the mobile-style application-lifecycle notification, which the tree merely propagates
+        // to nodes; sent as well so game code listening for it (autosaves etc.) stays informed.
+        _engine!.Tree.Paused = _paused;
+        if (_paused)
+            _instance!.Pause();
+        else
+            _instance!.Resume();
         _pauseButton.Text = _paused ? "Resume" : "Pause";
     }
 

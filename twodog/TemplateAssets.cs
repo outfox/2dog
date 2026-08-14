@@ -128,5 +128,6 @@ internal static class TemplateAssets
         .Replace("TWODOG_PKG_VERSION", ToolVersions.TwoDogVersion)
         .Replace("NATIVES_PKG_VERSION", ToolVersions.NativesVersion)
         .Replace("GODOT_SDK_VERSION", ToolVersions.GodotSdkVersion)
-        .Replace("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion);
+        .Replace("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion)
+        .Replace("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion);
 }

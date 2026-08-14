@@ -14,6 +14,7 @@
             <NativesVer ParameterType="System.String" Required="true" />
             <GodotVer ParameterType="System.String" Required="true" />
             <AvaloniaVer ParameterType="System.String" Required="true" />
+            <WinAppSdkVer ParameterType="System.String" Required="true" />
         </ParameterGroup>
         <Task>
             <Using Namespace="System.Text.RegularExpressions" />
@@ -27,6 +28,7 @@
                     ("nativesVersion", NativesVer),
                     ("godotVersion", GodotVer),
                     ("avaloniaVersion", AvaloniaVer),
+                    ("winAppSdkVersion", WinAppSdkVer),
                 };
                 foreach (var (symbol, value) in substitutions)
                 {

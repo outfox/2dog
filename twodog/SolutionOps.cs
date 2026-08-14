@@ -100,15 +100,17 @@ internal static class SolutionOps
         FindBuildLines(File.ReadAllText(solutionPath), projectRelativePath, out _) > 0;
 
     /// <summary>
-    /// Excludes the web host from plain solution builds in a classic .sln by
+    /// Excludes a host from plain solution builds in a classic .sln by
     /// removing its ".Build.0" lines (ActiveCfg stays): building the
-    /// browser-wasm host requires the wasm-tools workload, so it is built
-    /// explicitly via `dotnet publish` instead of by "Build Solution".
+    /// browser-wasm hosts requires the wasm-tools workload and the WinUI host
+    /// only builds on Windows, so they are built explicitly instead of by
+    /// "Build Solution".
     /// </summary>
-    public static bool ExcludeFromSolutionBuild(string solutionPath, string projectRelativePath)
+    public static bool ExcludeFromSolutionBuild(string solutionPath, string projectRelativePath,
+        bool mapEditorToDebug = true)
     {
         if (solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
-            return ExcludeSlnxProjectFromBuild(solutionPath, projectRelativePath);
+            return ExcludeSlnxProjectFromBuild(solutionPath, projectRelativePath, mapEditorToDebug);
         if (!solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase)) return false;
         var text = File.ReadAllText(solutionPath);
         if (FindBuildLines(text, projectRelativePath, out var updated) == 0) return false;
@@ -116,7 +118,8 @@ internal static class SolutionOps
         return true;
     }
 
-    private static bool ExcludeSlnxProjectFromBuild(string solutionPath, string projectRelativePath)
+    private static bool ExcludeSlnxProjectFromBuild(string solutionPath, string projectRelativePath,
+        bool mapEditorToDebug)
     {
         if (!File.Exists(solutionPath)) return false;
 
@@ -138,7 +141,8 @@ internal static class SolutionOps
         // The browser-wasm host has no Editor configuration of its own, so map
         // the solution's Editor build type onto its Debug one - but only when
         // the solution actually declares that build type.
-        var editorMap = text.Contains("<BuildType Name=\"Editor\"", StringComparison.OrdinalIgnoreCase)
+        var editorMap = mapEditorToDebug
+                        && text.Contains("<BuildType Name=\"Editor\"", StringComparison.OrdinalIgnoreCase)
             ? $"{indent}  <BuildType Solution=\"Editor|*\" Project=\"Debug\" />{newLine}"
             : "";
         var replacement = $"{indent}<Project Path=\"{path}\">{newLine}" +

@@ -18,6 +18,9 @@
              versions fail at runtime, so bump it in one place. (The template consumes it via
              its AVALONIA_PKG_VERSION token, substituted on pack and scaffold.) -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>
+        <!-- Windows App SDK for the WinUI 3 host demo. (The template consumes it via its
+             WINAPPSDK_PKG_VERSION token, substituted on pack and scaffold.) -->
+        <WindowsAppSdkVersion>2.4.0</WindowsAppSdkVersion>
         <!-- Emscripten version for browser-wasm natives. Must match the emscripten
              the .NET browser-wasm runtime pack was built with (the web libgodot.a is
              statically linked into dotnet.native.wasm, so the toolchains must agree).

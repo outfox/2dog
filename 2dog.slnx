@@ -43,6 +43,10 @@
   <Project Path="demos/showcase/showcase.avalonia/showcase.avalonia.csproj" />
   <Project Path="demos/showcase/showcase.csproj" />
   <Project Path="demos/showcase/showcase.winforms/showcase.winforms.csproj" />
+  <Project Path="demos/showcase/showcase.winui/showcase.winui.csproj">
+    <!-- WinUI 3 tooling only builds on Windows; build the project directly instead. -->
+    <Build Project="false" />
+  </Project>
   <Project Path="demos/showcase/showcase.web/showcase.web.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
     <Build Project="false" />

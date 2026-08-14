@@ -7,7 +7,7 @@ description: "Reference for the 2dog command-line tool - installation, commands,
 
 `2dog` is the command-line tool that scaffolds .NET host projects around a
 Godot project: your project directory becomes the solution root, and desktop,
-browser, WebXR, test, WinForms, and Avalonia hosts live in nested folders
+browser, WebXR, test, WinForms, WinUI 3, and Avalonia hosts live in nested folders
 Godot ignores. It never moves, renames, or deletes existing files.
 
 The tool and the matching `dotnet new` template ship together in the
@@ -69,6 +69,7 @@ second host of the same kind.
 | `--webxr [folder]` | [WebXR host](/hosts/webxr) (browser host with the WebXR Layers polyfill; never part of the default set) |
 | `--tests [folder]` | [xUnit test project](/hosts/xunit) |
 | `--winforms [folder]` | [WinForms host](/hosts/winforms) (Windows-only; never part of the default set) |
+| `--winui [folder]` | [WinUI 3 host](/hosts/winui) (Windows-only, builds only on Windows; never part of the default set) |
 | `--avalonia [folder]` | [Avalonia host](/hosts/avalonia) (cross-platform GUI; never part of the default set) |
 | `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 

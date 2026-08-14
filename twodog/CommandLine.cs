@@ -116,6 +116,9 @@ internal static class CommandLine
                 case "--winforms":
                     cmd.Requested.Add(new HostRequest(HostKind.WinForms, OptionalFolder(queue)));
                     break;
+                case "--winui":
+                    cmd.Requested.Add(new HostRequest(HostKind.WinUi, OptionalFolder(queue)));
+                    break;
                 case "--avalonia":
                     cmd.Requested.Add(new HostRequest(HostKind.Avalonia, OptionalFolder(queue)));
                     break;
@@ -134,6 +137,9 @@ internal static class CommandLine
                     break;
                 case "--no-winforms":
                     cmd.Excluded.Add(HostKind.WinForms);
+                    break;
+                case "--no-winui":
+                    cmd.Excluded.Add(HostKind.WinUi);
                     break;
                 case "--no-avalonia":
                     cmd.Excluded.Add(HostKind.Avalonia);

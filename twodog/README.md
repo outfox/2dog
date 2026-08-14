@@ -44,6 +44,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
   MyGame.tests/  (.gdignore) <- xUnit test project
   MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
+  MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
   MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)
 ```
 
@@ -65,7 +66,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--desktop [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--avalonia [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, and avalonia are opt-in and never in the default set) |
+| `--desktop [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, winui, and avalonia are opt-in and never in the default set) |
 | `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `-o, --output <dir>` | Directory for a new project |

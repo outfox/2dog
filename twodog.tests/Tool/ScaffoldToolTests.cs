@@ -568,6 +568,7 @@ public class TemplateAssetsTests
     [InlineData("webxr")]
     [InlineData("tests")]
     [InlineData("winforms")]
+    [InlineData("winui")]
     [InlineData("avalonia")]
     public void HostFiles_SubstituteTokensInPathsAndContent(string suffix)
     {
@@ -590,6 +591,7 @@ public class TemplateAssetsTests
     [InlineData("webxr")]
     [InlineData("tests")]
     [InlineData("winforms")]
+    [InlineData("winui")]
     [InlineData("avalonia")]
     public void HostFiles_CustomFolder_RenamesFolderAndProject(string suffix)
     {
@@ -1003,6 +1005,8 @@ public class AddEndToEndTests
     [Theory]
     [InlineData("--winforms", "winforms", "<UseWindowsForms>true</UseWindowsForms>",
         new[] { "Program.cs", "MainForm.cs", "app.manifest" })]
+    [InlineData("--winui", "winui", "<UseWinUI>true</UseWinUI>",
+        new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
     [InlineData("--avalonia", "avalonia", "2dog.avalonia",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
     [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",
@@ -1111,6 +1115,7 @@ public class HostScanTests
     [InlineData("webxr")]
     [InlineData("tests")]
     [InlineData("winforms")]
+    [InlineData("winui")]
     [InlineData("avalonia")]
     public void Classify_RecognizesScaffoldedHosts_ByContentNotName(string suffix)
     {
@@ -1135,7 +1140,8 @@ public class HostScanTests
                  {
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
                      (HostKind.Web, "MyGame.web"), (HostKind.WebXr, "MyGame.webxr"), (HostKind.Tests, "MyGame.tests"),
-                     (HostKind.WinForms, "MyGame.winforms"), (HostKind.Avalonia, "MyGame.avalonia"),
+                     (HostKind.WinForms, "MyGame.winforms"), (HostKind.WinUi, "MyGame.winui"),
+                     (HostKind.Avalonia, "MyGame.avalonia"),
                  })
             foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
                 tmp.Write(path, content);
@@ -1151,7 +1157,7 @@ public class HostScanTests
             [("MyGame.2dog", HostKind.Desktop), ("MyGame.avalonia", HostKind.Avalonia),
              ("MyGame.editor", HostKind.Desktop), ("MyGame.tests", HostKind.Tests),
              ("MyGame.web", HostKind.Web), ("MyGame.webxr", HostKind.WebXr),
-             ("MyGame.winforms", HostKind.WinForms)],
+             ("MyGame.winforms", HostKind.WinForms), ("MyGame.winui", HostKind.WinUi)],
             hosts.Select(h => (h.Folder, h.Kind)).Order().ToArray());
     }
 }
@@ -1206,10 +1212,11 @@ public class CommandLineTests
     [Fact]
     public void NegativeHostFlags_CountAsAChoice()
     {
-        var cmd = CommandLine.Parse(["convert", "--no-web", "--no-webxr", "--no-tests", "--no-winforms", "--no-avalonia"]);
+        var cmd = CommandLine.Parse(
+            ["convert", "--no-web", "--no-webxr", "--no-tests", "--no-winforms", "--no-winui", "--no-avalonia"]);
         Assert.True(cmd.HostFlagsSeen);
         Assert.Empty(cmd.Requested);
-        Assert.Equal([HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.Avalonia],
+        Assert.Equal([HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia],
             cmd.Excluded.Order().ToArray());
     }
 
@@ -1302,13 +1309,14 @@ public class HostSelectionTests
         Assert.Equal([HostKind.Desktop, HostKind.Tests], hosts.Select(h => h.Kind).ToArray());
     }
 
-    // WinForms (Windows-only) and Avalonia (heavy dependency set) are never part
-    // of the default set - they only come from their flags or the interactive checkbox.
+    // WinForms and WinUI (Windows-only) and Avalonia (heavy dependency set) are never
+    // part of the default set - they only come from their flags or the interactive checkbox.
     [Fact]
     public void Defaults_NeverIncludeOptInHosts()
     {
         var kinds = HostSelection.Defaults([], Project()).Select(h => h.Kind).ToArray();
         Assert.DoesNotContain(HostKind.WinForms, kinds);
+        Assert.DoesNotContain(HostKind.WinUi, kinds);
         Assert.DoesNotContain(HostKind.Avalonia, kinds);
     }
 
@@ -1318,6 +1326,14 @@ public class HostSelectionTests
         var cmd = CommandLine.Parse(["add", "--winforms"]);
         var host = HostSelection.FromFlags(cmd, Project()).Single();
         Assert.Equal((HostKind.WinForms, "MyGame.winforms"), (host.Kind, host.Folder));
+    }
+
+    [Fact]
+    public void FromFlags_WinUi_AllocatesItsDefaultFolder()
+    {
+        var cmd = CommandLine.Parse(["add", "--winui"]);
+        var host = HostSelection.FromFlags(cmd, Project()).Single();
+        Assert.Equal((HostKind.WinUi, "MyGame.winui"), (host.Kind, host.Folder));
     }
 
     [Fact]

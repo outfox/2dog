@@ -440,17 +440,22 @@ internal static class ScaffoldCommand
                 $"add {missing.Count} project(s) to {solutionName}",
                 () => SolutionOps.AddProjects(solutionPath, missing)));
 
-        foreach (var web in newHosts.Where(h => h.Kind is HostKind.Web or HostKind.WebXr))
+        foreach (var host in newHosts.Where(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.WinUi))
         {
             // Separator-agnostic: SolutionOps matches either / or \\ in the solution.
-            var webRelative = $"{web.Folder}/{web.Folder}.csproj";
+            var relative = $"{host.Folder}/{host.Folder}.csproj";
+            var (why, note) = host.Kind is HostKind.WinUi
+                ? ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems")
+                : ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload");
             plan.Add(new PlannedAction(
-                $"exclude {web.Folder} from plain solution builds (needs wasm-tools; built via dotnet publish)",
+                $"exclude {host.Folder} from plain solution builds ({why})",
                 () =>
                 {
-                    if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, webRelative))
-                        Console.WriteLine($"note: could not adjust {solutionName} build configs for {web.Folder}; " +
-                                          "solution-wide builds will include it (requires the wasm-tools workload).");
+                    // The wasm hosts have no Editor configuration; the WinUI host does.
+                    if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, relative,
+                            mapEditorToDebug: host.Kind is not HostKind.WinUi))
+                        Console.WriteLine($"note: could not adjust {solutionName} build configs for {host.Folder}; " +
+                                          $"solution-wide builds will include it ({note}).");
                 }));
         }
 
@@ -484,6 +489,7 @@ internal static class ScaffoldCommand
                 HostKind.Web => $"  dotnet publish {host.Folder}".PadRight(42) + "# browser bundle (needs wasm-tools workload)",
                 HostKind.WebXr => $"  dotnet publish {host.Folder}".PadRight(42) + "# WebXR browser bundle (needs wasm-tools workload)",
                 HostKind.WinForms => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinForms host (Windows only)",
+                HostKind.WinUi => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinUI 3 host (Windows only)",
                 HostKind.Avalonia => $"  dotnet run --project {host.Folder}".PadRight(42) + "# Avalonia host (cross-platform GUI)",
                 _ => $"  {host.Folder}",
             });
