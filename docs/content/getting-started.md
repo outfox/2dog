@@ -28,7 +28,7 @@ To get set up, you'll need:
 
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
-### 2dog works by adding small [host](/hosts/) projects next to an existing or new project:
+### 2dog works by adding small [host](/hosts/) projects to a Godot project:
 
 ::: code-group
 
