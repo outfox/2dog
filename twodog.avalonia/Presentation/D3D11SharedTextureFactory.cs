@@ -12,17 +12,25 @@ namespace twodog.Presentation;
 
 /// <summary>
 /// Import-style sharing for Windows: this side creates a D3D11 keyed-mutex shared texture on
-/// the compositor's adapter, the engine imports its KMT handle into Vulkan, and Avalonia
-/// imports the same handle. The keyed mutex is driven from the CPU around the engine's copy -
-/// writer acquires key 0 and releases key 1; the compositor presents with (1, 0).
+/// the compositor's adapter, the engine imports its shared handle into Vulkan, and Avalonia
+/// imports the same handle. NT handles are preferred (some drivers, e.g. 2020-era Intel,
+/// import only those); legacy KMT global shared handles remain the fallback. The keyed mutex
+/// is driven from the CPU around the engine's copy - writer acquires key 0 and releases
+/// key 1; the compositor presents with (1, 0).
 /// </summary>
 [SupportedOSPlatform("windows")]
 internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 {
+    private const uint SharedResourceRead = 0x80000000;
+    private const uint SharedResourceWrite = 0x00000001;
+
     private readonly D3D11 _api;
+    private readonly bool _ntHandle;
     private ComPtr<ID3D11Device> _device;
 
-    public string AvaloniaHandleType => KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle;
+    public string AvaloniaHandleType => _ntHandle
+        ? KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle
+        : KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle;
 
     public CompositionGpuImportedImageSynchronizationCapabilities RequiredSynchronization =>
         CompositionGpuImportedImageSynchronizationCapabilities.KeyedMutex;
@@ -31,8 +39,9 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
     public int BufferCount => 1;
 
     /// <summary>Creates the device on the adapter with the given LUID (the compositor's device).</summary>
-    public D3D11SharedTextureFactory(byte[]? adapterLuid)
+    public D3D11SharedTextureFactory(byte[]? adapterLuid, bool ntHandle)
     {
+        _ntHandle = ntHandle;
         _api = D3D11.GetApi(null, false);
         try
         {
@@ -96,7 +105,9 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             SampleDesc = new SampleDesc(1, 0),
             Usage = Usage.Default,
             BindFlags = (uint)(BindFlag.RenderTarget | BindFlag.ShaderResource),
-            MiscFlags = (uint)ResourceMiscFlag.SharedKeyedmutex,
+            MiscFlags = (uint)(_ntHandle
+                ? ResourceMiscFlag.SharedKeyedmutex | ResourceMiscFlag.SharedNthandle
+                : ResourceMiscFlag.SharedKeyedmutex),
         };
         ID3D11Texture2D* texture = null;
         SilkMarshal.ThrowHResult(_device.Get().CreateTexture2D(&desc, null, &texture));
@@ -109,29 +120,28 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             var mutexIid = IDXGIKeyedMutex.Guid;
             SilkMarshal.ThrowHResult(texture->QueryInterface(&mutexIid, (void**)&mutex));
 
-            IDXGIResource* resource = null;
-            var resourceIid = IDXGIResource.Guid;
-            SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
-            nint shared;
+            var shared = _ntHandle ? CreateNtHandle(texture) : GetKmtHandle(texture);
             try
             {
-                void* handle = null;
-                SilkMarshal.ThrowHResult(resource->GetSharedHandle(&handle));
-                shared = (nint)handle;
+                var rid = rd.ExternalTextureCreate(
+                    _ntHandle
+                        ? RenderingDevice.ExternalTextureShareHandleType.D3D11NtKeyedMutex
+                        : RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex,
+                    RenderingDevice.DataFormat.R8G8B8A8Unorm,
+                    (uint)width, (uint)height, (ulong)shared);
+                if (!rid.IsValid)
+                    throw new NotSupportedException("The engine could not import the D3D11 shared texture.");
+
+                return new D3D11SharedTexture(rd, rid, texture, mutex, shared, width, height,
+                    AvaloniaHandleType, ownsHandle: _ntHandle);
             }
-            finally
+            catch
             {
-                resource->Release();
+                // Neither the engine's Vulkan import nor Avalonia's takes NT handle
+                // ownership; without this close each failed attempt leaks the handle.
+                if (_ntHandle) CloseHandle(shared);
+                throw;
             }
-
-            var rid = rd.ExternalTextureCreate(
-                RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex,
-                RenderingDevice.DataFormat.R8G8B8A8Unorm,
-                (uint)width, (uint)height, (ulong)shared);
-            if (!rid.IsValid)
-                throw new NotSupportedException("The engine could not import the D3D11 shared texture.");
-
-            return new D3D11SharedTexture(rd, rid, texture, mutex, shared, width, height);
         }
         catch
         {
@@ -140,6 +150,46 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             throw;
         }
     }
+
+    /// <summary>The legacy KMT global shared handle - not an owned resource.</summary>
+    private static nint GetKmtHandle(ID3D11Texture2D* texture)
+    {
+        IDXGIResource* resource = null;
+        var resourceIid = IDXGIResource.Guid;
+        SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
+        try
+        {
+            void* handle = null;
+            SilkMarshal.ThrowHResult(resource->GetSharedHandle(&handle));
+            return (nint)handle;
+        }
+        finally
+        {
+            resource->Release();
+        }
+    }
+
+    /// <summary>An owned NT handle the caller must eventually close.</summary>
+    private static nint CreateNtHandle(ID3D11Texture2D* texture)
+    {
+        IDXGIResource1* resource = null;
+        var resourceIid = IDXGIResource1.Guid;
+        SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
+        try
+        {
+            void* handle = null;
+            SilkMarshal.ThrowHResult(resource->CreateSharedHandle(
+                null, SharedResourceRead | SharedResourceWrite, (char*)null, &handle));
+            return (nint)handle;
+        }
+        finally
+        {
+            resource->Release();
+        }
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32", SetLastError = true)]
+    private static extern bool CloseHandle(nint handle);
 
     public void Dispose()
     {
@@ -151,7 +201,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
     private sealed class D3D11SharedTexture(
         RenderingDevice rd, Rid rid, ID3D11Texture2D* texture, IDXGIKeyedMutex* mutex,
-        nint sharedHandle, int width, int height) : ISharedTexture
+        nint sharedHandle, int width, int height, string handleType, bool ownsHandle) : ISharedTexture
     {
         private ComPtr<ID3D11Texture2D> _texture = texture;
         private ComPtr<IDXGIKeyedMutex> _mutex = mutex;
@@ -160,8 +210,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         public int Height => height;
         public Rid Rid => rid;
 
-        public IPlatformHandle Handle { get; } = new PlatformHandle(sharedHandle,
-            KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureGlobalSharedHandle);
+        public IPlatformHandle Handle { get; } = new PlatformHandle(sharedHandle, handleType);
 
         public PlatformGraphicsExternalImageProperties ImportProperties => new()
         {
@@ -194,7 +243,9 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         public Task PresentAsync(CompositionDrawingSurface surface, ICompositionImportedGpuImage image) =>
             surface.UpdateWithKeyedMutexAsync(image, 1, 0);
 
-        // A KMT global shared handle is not an owned resource; nothing transfers on import.
+        // Nothing transfers on import: a KMT global shared handle is not an owned resource,
+        // and neither the engine's Vulkan import nor Avalonia's OpenSharedResource1 consumes
+        // an NT handle - it stays this side's to close.
         public void HandleImported()
         {
         }
@@ -206,6 +257,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             _mutex = default;
             _texture.Dispose();
             _texture = default;
+            if (ownsHandle) CloseHandle(sharedHandle);
         }
     }
 }

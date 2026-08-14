@@ -54,8 +54,10 @@ session.Start();
 - **Presentation.** Each frame, the control presents the engine's main
   viewport into the Avalonia scene. The primary path is **zero-copy**: the
   engine copies the viewport into a shared GPU texture that Avalonia's
-  compositor imports directly (a D3D11 keyed-mutex texture on Windows,
-  exported Vulkan memory on Linux, an IOSurface on macOS). Where the
+  compositor imports directly (a D3D11 keyed-mutex texture on Windows -
+  shared via an NT handle where the driver supports importing one, falling
+  back to a legacy KMT global shared handle - exported Vulkan memory on
+  Linux, an IOSurface on macOS). Where the
   compositor cannot import the texture, a CPU readback fallback runs instead.
   `GodotSessionOptions.PresentationMode` selects the path; `Auto` (the
   default) picks the best one available. Shared textures cannot cross GPU

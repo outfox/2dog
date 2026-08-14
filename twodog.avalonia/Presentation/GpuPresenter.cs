@@ -56,16 +56,19 @@ internal sealed class GpuPresenter : IPresenter
 
     public bool Failed => _state == InitState.Failed;
 
-    /// <summary>This platform's sharing flavor: the engine share type it rides on plus the
-    /// factory creating it - the single table both <see cref="IsSupported"/> and
-    /// initialization consume. Null when the platform has no zero-copy flavor yet.</summary>
-    private static (RenderingDevice.ExternalTextureShareHandleType ShareType,
-        Func<ICompositionGpuInterop, ISharedTextureFactory> CreateFactory)? PlatformSharing
+    /// <summary>This platform's sharing flavors: the engine share types it can ride on plus
+    /// the factory creating one - the single table both <see cref="IsSupported"/> and
+    /// initialization consume. The factory receives the engine's supported-types mask and
+    /// picks the concrete flavor. Null when the platform has no zero-copy flavor yet.</summary>
+    private static (RenderingDevice.ExternalTextureShareHandleType[] ShareTypes,
+        Func<ICompositionGpuInterop, uint, ISharedTextureFactory> CreateFactory)? PlatformSharing
     {
         get
         {
             if (OperatingSystem.IsWindows())
-                return (RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex, CreateD3D11Factory);
+                return ([RenderingDevice.ExternalTextureShareHandleType.D3D11NtKeyedMutex,
+                        RenderingDevice.ExternalTextureShareHandleType.D3D11KmtKeyedMutex],
+                    CreateD3D11Factory);
             if (OperatingSystem.IsLinux())
                 return Exported(RenderingDevice.ExternalTextureShareHandleType.OpaqueFd,
                     KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaquePosixFileDescriptor,
@@ -76,17 +79,23 @@ internal sealed class GpuPresenter : IPresenter
                     needsMemorySize: false);
             return null;
 
-            static (RenderingDevice.ExternalTextureShareHandleType,
-                Func<ICompositionGpuInterop, ISharedTextureFactory>) Exported(
+            static (RenderingDevice.ExternalTextureShareHandleType[],
+                Func<ICompositionGpuInterop, uint, ISharedTextureFactory>) Exported(
                     RenderingDevice.ExternalTextureShareHandleType shareType, string handleType,
                     bool needsMemorySize) =>
-                (shareType, _ => new EngineExportedTextureFactory(shareType, handleType, needsMemorySize));
+                ([shareType], (_, _) => new EngineExportedTextureFactory(shareType, handleType, needsMemorySize));
         }
     }
 
     [SupportedOSPlatform("windows")]
-    private static ISharedTextureFactory CreateD3D11Factory(ICompositionGpuInterop interop) =>
-        new D3D11SharedTextureFactory(interop.DeviceLuid);
+    private static ISharedTextureFactory CreateD3D11Factory(ICompositionGpuInterop interop, uint engineTypes)
+    {
+        // NT handles are preferred: some drivers (2020-era Intel) import only NT, never KMT.
+        var nt = (engineTypes & (1u << (int)RenderingDevice.ExternalTextureShareHandleType.D3D11NtKeyedMutex)) != 0
+                 && interop.SupportedImageHandleTypes.Contains(
+                     KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle);
+        return new D3D11SharedTextureFactory(interop.DeviceLuid, nt);
+    }
 
     /// <summary>Whether the running engine's natives can share textures on this platform.
     /// The engine must be started.</summary>
@@ -95,7 +104,8 @@ internal sealed class GpuPresenter : IPresenter
         if (PlatformSharing is not { } sharing) return false;
         var rd = RenderingServer.GetRenderingDevice();
         if (rd is null) return false;
-        return (rd.ExternalTextureGetSupportedHandleTypes() & (1u << (int)sharing.ShareType)) != 0;
+        var engineTypes = rd.ExternalTextureGetSupportedHandleTypes();
+        return sharing.ShareTypes.Any(t => (engineTypes & (1u << (int)t)) != 0);
     }
 
     public GpuPresenter(GodotControl control, GodotSession session)
@@ -125,7 +135,12 @@ internal sealed class GpuPresenter : IPresenter
             Log($"interop supported handle types: {string.Join(",", interop.SupportedImageHandleTypes)}");
             var sharing = PlatformSharing
                 ?? throw new PlatformNotSupportedException("No zero-copy sharing flavor for this platform.");
-            var factory = sharing.CreateFactory(interop);
+            // Forced-Gpu mode may initialize before Start(); the engine mask is then unknown
+            // and the factory's optimistic pick is re-checked by texture creation itself.
+            var engineTypes = _session.IsStarted && RenderingServer.GetRenderingDevice() is { } engineRd
+                ? engineRd.ExternalTextureGetSupportedHandleTypes()
+                : ~0u;
+            var factory = sharing.CreateFactory(interop, engineTypes);
             if (!interop.SupportedImageHandleTypes.Contains(factory.AvaloniaHandleType))
             {
                 factory.Dispose();
