@@ -26,15 +26,36 @@ sequence = [
     { cmd = "uv run build-godot.py" },
 ]
 
-[tool.poe.tasks.build]
-help = "dotnet build: Platform packages, twodog library, and NuGet packages"
+[tool.poe.tasks.build-managed]
+help = "dotnet pack: managed twodog packages (engine, avalonia, xunit, tool) and restore"
 sequence = [
-    { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
     { cmd = "dotnet pack twodog.engine" },
     { cmd = "dotnet pack twodog.avalonia" },
     { cmd = "dotnet pack twodog.xunit" },
     { cmd = "dotnet pack twodog" },
     { cmd = "dotnet restore" },
+]
+
+[tool.poe.tasks.build]
+help = "dotnet build: Platform packages (all platforms), twodog library, and NuGet packages"
+sequence = [
+    { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
+    { ref = "build-managed" },
+]
+
+[tool.poe.tasks.build-godot-local]
+help = "Fast incremental libgodot build for the host platform only (skips editor executable and mono glue; needs one prior full build-godot)"
+cmd = "uv run build-godot.py --no-editor --no-glue"
+
+# Note: build-local still force-packs all platform packages. Non-host packages
+# without natives pack as tiny empty stubs in seconds - and those stubs are what
+# keeps the final `dotnet restore` from downloading the real (25-77 MB) natives
+# for other platforms from nuget.org, since 2dog.engine references all platforms.
+[tool.poe.tasks.build-local]
+help = "Fast partial build: incremental host-only libgodot (skips editor/glue), then the normal package build"
+sequence = [
+    { ref = "build-godot-local" },
+    { ref = "build" },
 ]
 
 [tool.poe.tasks.nuget-retire]
