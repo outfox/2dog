@@ -6,7 +6,8 @@ description: "The generic 2dog console host starts Godot, runs your main scene, 
 # Generic Host
 
 `MyGame.2dog` is a small .NET console application that starts your main scene
-and pumps frames until Godot asks to quit.
+and pumps frames until Godot asks to quit. Most 2dog hosts have features and limitations
+in common with the generic host.
 
 ## Use It
 
@@ -90,6 +91,22 @@ For a permanently headless host, pass the arguments in code:
 using var engine = new Engine(
     "MyGame", args: ["--headless", "--audio-driver", "Dummy"]);
 ```
+
+### GPU Selection
+
+Godot defaults to the discrete GPU. On hybrid-GPU systems, a windowing or UI
+library sharing the process (Avalonia, for example) may pick a different
+adapter, and GPU resources cannot be shared across adapters. The 2dog engine
+adds `--gpu-luid` so a host can steer Godot onto a specific adapter by its OS
+identity:
+
+```bash
+dotnet run --project MyGame.2dog -- --gpu-luid 1af3e
+```
+
+The value is the adapter LUID in hexadecimal (Windows). When no device
+matches, Godot falls back to automatic selection; an explicit `--gpu-index`
+takes precedence. The [Avalonia host](./avalonia) passes it automatically.
 
 ## Publishing
 
