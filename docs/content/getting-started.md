@@ -23,12 +23,12 @@ To get set up, you'll need:
 - the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as
   usual, for scene and resource authoring (builds and CI do not require it).
 
-![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
-
 
 ## 1. Let's take Godot for a walk! :gd-bone@gold: 
 
-Add [hosts](/hosts/) around an existing project, or start fresh:
+![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
+
+### 2dog works by adding small [host](/hosts/) projects next to an existing or new project:
 
 ::: code-group
 
