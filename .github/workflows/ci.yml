@@ -289,14 +289,32 @@ jobs:
       - name: Restore
         run: dotnet restore 2dog.tests.slnf
 
+      # Blame flags target the flaky linux SIGSEGV: the wedged engine shutdown
+      # trips the 45s hang dump (below EngineInstance's 60s ShutdownTimeout)
+      # naming the test and its stuck stacks; crash dumps cover a direct segv.
       - name: Test (Debug)
-        run: dotnet test 2dog.tests.slnf -c Debug --no-restore
+        run: >
+          dotnet test 2dog.tests.slnf -c Debug --no-restore
+          --blame-crash --blame-crash-dump-type full --blame-hang-timeout 45s --blame-hang-dump-type full
 
       - name: Test (Release)
-        run: dotnet test 2dog.tests.slnf -c Release --no-restore
+        run: >
+          dotnet test 2dog.tests.slnf -c Release --no-restore
+          --blame-crash --blame-crash-dump-type full --blame-hang-timeout 45s --blame-hang-dump-type full
 
       - name: Test (Editor)
-        run: dotnet test 2dog.tests.slnf -c Editor --no-restore
+        run: >
+          dotnet test 2dog.tests.slnf -c Editor --no-restore
+          --blame-crash --blame-crash-dump-type full --blame-hang-timeout 45s --blame-hang-dump-type full
+
+      - name: Upload test dumps and blame sequence
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-dumps-${{ matrix.name }}
+          path: '**/TestResults/**'
+          if-no-files-found: ignore
+          retention-days: 7
 
   # Publish the showcase desktop host the way an end user does (Release, RID) and
   # run the result headless. Regression guard: the engine used to load the
