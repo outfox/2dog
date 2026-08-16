@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 namespace twodog.cli;
 
 /// <summary>
@@ -20,7 +22,7 @@ internal static class Program
             {
                 case Verb.None:
                     PrintVersion(checkLatest: false);
-                    Console.WriteLine();
+                    Out.Blank();
                     PrintUsage(withHeader: false);
                     return 0;
                 case Verb.Help:
@@ -37,13 +39,13 @@ internal static class Program
         }
         catch (UsageException ex)
         {
-            Console.Error.WriteLine($"error: {ex.Message}");
+            Out.ErrorLine(ex.Message);
             PrintUsage();
             return 1;
         }
         catch (ToolException ex)
         {
-            Console.Error.WriteLine($"error: {ex.Message}");
+            Out.ErrorLine(ex.Message);
             return 2;
         }
     }
@@ -55,7 +57,19 @@ internal static class Program
         if (interactive) Tui.Header();
 
         if (cmd.Verb == Verb.New) PrepareNewProject(cmd, interactive);
-        var project = ScaffoldCommand.Open(cmd.Options);
+
+        ProjectContext project;
+        try
+        {
+            project = ScaffoldCommand.Open(cmd.Options);
+        }
+        catch (SpacedNameException ex) when (interactive && ex.CanOfferRename)
+        {
+            // Declining falls through to the checklist error.
+            if (Tui.OfferRename(ex) is not { } newName) throw;
+            cmd.Options.RenameTo = newName;
+            project = ScaffoldCommand.Open(cmd.Options);
+        }
 
         if (interactive) Tui.ShowProject(project);
 
@@ -88,11 +102,14 @@ internal static class Program
             name = Tui.AskProjectName(Path.GetFileName(here.TrimEnd(Path.DirectorySeparatorChar)));
             outputDir ??= IsEmpty(here) ? "." : name;
             outputDir = Tui.AskDirectory(outputDir);
-            Console.WriteLine();
+            Out.Blank();
         }
 
         cmd.Options.NameOverride = name;
-        cmd.Options.ProjectPath = outputDir ?? name;
+        // Default directory: the sanitized name, so `2dog new "My Game"` does
+        // not pair a MyGame.csproj with a "My Game" folder. An explicit -o is
+        // the user's choice and stays as given.
+        cmd.Options.ProjectPath = outputDir ?? Hosts.SanitizeName(name) ?? name;
         cmd.Options.CreateProject = true;
     }
 
@@ -115,28 +132,29 @@ internal static class Program
         };
         var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => r.Probe)) : null;
 
-        Console.WriteLine($"2dog {ToolVersions.TwoDogVersion} - https://2dog.dev");
-        Console.WriteLine();
-        foreach (var (label, version, probe, packages) in rows)
-        {
-            // The mark and its blank stand-in are both two terminal cells wide, so columns never move.
-            var mark = latest == null ? null : NuGetLatest.Mark(version, latest[probe]);
-            Console.WriteLine($"{label,-15}  {version,-10} {mark ?? "  "}  {packages}");
-        }
+        Out.Header();
+        Out.VersionTable(rows
+            .Select(r => (r.Label, r.Version, latest == null ? null : NuGetLatest.Mark(r.Version, latest[r.Probe]), r.Packages))
+            .ToList());
     }
 
     private static void PrintUsage(bool withHeader = true)
     {
         if (withHeader)
-            Console.WriteLine($"2dog {ToolVersions.TwoDogVersion} - https://2dog.dev{Environment.NewLine}");
-        Console.WriteLine(
+            Out.Header();
+
+        // The body is printed verbatim (it is full of literal brackets); only
+        // the section header lines get emphasis.
+        var sections = new HashSet<string> { "verbs", "hosts", "options", "examples" };
+        var usage =
             $"""
              usage: 2dog <verb> [path] [options]
 
              Scaffolds .NET host projects for a Godot project: the Godot project
              directory is the solution root, hosts are nested subfolders the Godot
              editor ignores (.gdignore). No existing file is ever moved, renamed or
-             deleted.
+             deleted, except for two announced opt-ins: the .sln-to-.slnx
+             migration, and the --rename fix for names containing spaces.
 
              verbs
                new [Name] [dir]  Create a new Godot project with 2dog hosts
@@ -166,6 +184,12 @@ internal static class Program
 
              options
                -n, --name <name>   Project name (new) or base name override
+                                   (names are reduced to letters, digits,
+                                   '.', '_' and '-'; adjustments are announced)
+               --rename <NewName>  Fix a project whose .NET name contains
+                                   spaces (breaks publish): renames the csproj,
+                                   sets assembly_name, repoints the solution.
+                                   add/convert only, before any hosts exist
                -o, --output <dir>  Directory for a new project
                -y, --yes           Do not prompt; take the flags and defaults
                --non-interactive   Same as --yes
@@ -184,6 +208,13 @@ internal static class Program
                2dog add --desktop MyGame.editor
                2dog add path/to/project --no-web
                2dog pack list MyGame.web/AppBundle/godot.pck
-             """);
+             """;
+        foreach (var line in usage.Split('\n'))
+        {
+            var text = line.TrimEnd('\r');
+            if (sections.Contains(text)) Out.Line($"[bold]{text}[/]");
+            else if (text.StartsWith("usage:")) Out.Line($"[bold]usage:[/]{Markup.Escape(text["usage:".Length..])}");
+            else Out.Plain(text);
+        }
     }
 }

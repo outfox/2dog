@@ -8,7 +8,10 @@ description: "Reference for the 2dog command-line tool - installation, commands,
 `2dog` is the command-line tool that scaffolds .NET host projects around a
 Godot project: your project directory becomes the solution root, and desktop,
 browser, WebXR, test, WinForms, WinUI 3, and Avalonia hosts live in nested folders
-Godot ignores. It never moves, renames, or deletes existing files.
+Godot ignores. It never moves, renames, or deletes existing files, with two
+announced exceptions you opt into: the `.sln` → `.slnx` migration, and the
+[`--rename` fix](/add#project-names-with-spaces) for project names containing
+spaces.
 
 The tool and the matching `dotnet new` template ship together in the
 [`2dog` NuGet package](https://www.nuget.org/packages/2dog/).
@@ -77,7 +80,8 @@ second host of the same kind.
 
 | Option | Effect |
 | --- | --- |
-| `-n, --name <BaseName>` | Project name (`new`) or base-name override |
+| `-n, --name <BaseName>` | Project name (`new`) or base-name override. Names are reduced to letters, digits, `.`, `_` and `-`; an adjustment is announced |
+| `--rename <NewName>` | Fix a project whose .NET name contains spaces ([breaks publish](/add#project-names-with-spaces)): renames the csproj, sets `assembly_name`, repoints the solution. `add`/`convert` only, before any hosts exist |
 | `-o, --output <dir>` | Directory for a new project |
 | `-y, --yes` | Use the flags and defaults without prompting |
 | `--non-interactive` | Same as `--yes` |

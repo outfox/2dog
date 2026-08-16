@@ -93,6 +93,28 @@ internal static class SolutionOps
         File.Exists(solutionPath) &&
         File.ReadAllText(solutionPath).Contains(projectFileName, StringComparison.OrdinalIgnoreCase);
 
+    /// <summary>
+    /// Points a solution's entries for the root game project at a renamed
+    /// csproj (part of the --rename fix for spaced project names). Textual on
+    /// purpose: the game csproj sits at the solution root, so its reference is
+    /// just the file name. Returns whether anything was rewritten.
+    /// </summary>
+    public static bool RenameProject(string solutionPath, string oldBaseName, string newBaseName)
+    {
+        if (!File.Exists(solutionPath)) return false;
+
+        var text = File.ReadAllText(solutionPath);
+        var updated = text.Replace($"\"{oldBaseName}.csproj\"", $"\"{newBaseName}.csproj\"",
+            StringComparison.OrdinalIgnoreCase);
+        // Classic .sln also names the project: Project("{guid}") = "Old Name", "Old Name.csproj", ...
+        if (solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+            updated = Regex.Replace(updated, $"= \"{Regex.Escape(oldBaseName)}\",", $"= \"{newBaseName}\",");
+
+        if (updated == text) return false;
+        File.WriteAllText(solutionPath, updated);
+        return true;
+    }
+
     /// <summary>Whether a classic .sln still has ".Build.0" entries for the project.</summary>
     public static bool HasSolutionBuildEntries(string solutionPath, string projectRelativePath) =>
         solutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) &&

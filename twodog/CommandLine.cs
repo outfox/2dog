@@ -97,6 +97,9 @@ internal static class CommandLine
                 case "--name" or "-n":
                     cmd.Options.NameOverride = Value(queue, arg);
                     break;
+                case "--rename":
+                    cmd.Options.RenameTo = Value(queue, arg);
+                    break;
                 case "--output" or "-o":
                     cmd.OutputDir = Value(queue, arg);
                     break;
@@ -174,6 +177,8 @@ internal static class CommandLine
         // are errors, and a bare `2dog` prints version info and usage instead.
         if (cmd.Verb == Verb.None && args.Length > 0)
             throw new UsageException("a verb is required: new, add, convert, or pack");
+        if (cmd.Verb == Verb.New && cmd.Options.RenameTo != null)
+            throw new UsageException("--rename applies to add/convert only - 2dog new already picks a clean name");
 
         AssignPositionals(cmd, positionals);
         return cmd;

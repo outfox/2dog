@@ -96,12 +96,37 @@ It does not:
 - overwrite an existing `global.json`, even with `--force`;
 - guess when multiple root solutions contain the Godot project.
 
-One deliberate migration can occur: a classic `.sln` is converted to `.slnx`
-and removed. An existing root `.slnx` is reused.
+Two deliberate exceptions can occur, both announced in the plan: a classic
+`.sln` is converted to `.slnx` and removed (an existing root `.slnx` is
+reused), and [`--rename`](#project-names-with-spaces) moves the game csproj to
+a space-free name when you ask it to.
 
 The tool runs `dotnet restore` unless you pass `--no-restore`. A wasm-related
 restore failure is reported as a warning with the command to install
 `wasm-tools`.
+
+## Project names with spaces
+
+Godot happily names a C# project after the Godot project - `Fast Dragon.csproj`
+for a project called "Fast Dragon". But whitespace in a project's .NET name
+[silently breaks publishing](/known-issues/spaced-project-names) any host that
+references it: the game's NuGet packages are dropped from the published output,
+and the app fails at runtime with `FileNotFoundException` for the first missing
+assembly. `2dog add` therefore refuses to scaffold hosts against such a name.
+
+The fix is a rename of the *.NET identity only* - the Godot display name
+(`config/name`) keeps its spaces. Interactively, `2dog add` offers the rename;
+scripted, pass it explicitly:
+
+```bash
+2dog add --rename FastDragon
+```
+
+This renames the csproj, sets `[dotnet] project/assembly_name` in
+`project.godot`, and repoints the solution, then scaffolds as usual. It is
+only available while the project has no 2dog hosts yet; afterwards the error
+message lists the manual steps instead (each host's `ProjectReference`,
+`TrimmerRootAssembly`, and `RootNamespace` also carry the name).
 
 ## Requirements
 

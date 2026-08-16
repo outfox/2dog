@@ -11,8 +11,9 @@ namespace twodog.cli;
 /// The whole run is planned first as a list of actions, then either printed
 /// (--dry-run) or applied - both paths walk the same plan. Hard invariant:
 /// the tool only ever creates new files or edits *.csproj / project.godot /
-/// *.sln in place; it never moves, renames or deletes anything, and has no
-/// VCS awareness.
+/// *.sln in place, and has no VCS awareness. It never moves, renames or
+/// deletes anything, with two announced exceptions the user opts into:
+/// the .sln-to-.slnx migration, and the --rename fix for spaced names.
 /// </summary>
 internal static class ScaffoldCommand
 {
@@ -37,6 +38,9 @@ internal static class ScaffoldCommand
                        ?? throw new ToolException(options.NameOverride is null
                            ? "a project name is required to create a new project"
                            : $"'{options.NameOverride}' is not a usable project name - it needs a letter or a digit");
+            if (name != options.NameOverride)
+                Out.Note($"project name adjusted: '{options.NameOverride}' -> '{name}' " +
+                         "(spaces would break .NET publish; only letters, digits, '.', '_' and '-' survive)");
             return new ProjectContext
             {
                 Dir = projectDir,
@@ -51,14 +55,112 @@ internal static class ScaffoldCommand
                                     "or run '2dog new <Name>' to create one");
 
         var godot = new GodotProjectFile(projectGodot);
+        var existingHosts = HostScan.Find(projectDir);
+        var rename = ResolveSpacedName(options, projectDir, godot, existingHosts);
         return new ProjectContext
         {
             Dir = projectDir,
-            BaseName = DeriveBaseName(options, projectDir, godot),
+            BaseName = rename?.NewName ?? DeriveBaseName(options, projectDir, godot),
             Godot = godot,
-            ExistingHosts = HostScan.Find(projectDir),
+            ExistingHosts = existingHosts,
             ExistingFolders = Subdirectories(projectDir),
+            Rename = rename,
         };
+    }
+
+    /// <summary>
+    /// The project's .NET restore identity when it contains whitespace, else
+    /// null: [dotnet] assembly_name is authoritative, otherwise a sole root
+    /// csproj names the project. Whitespace there makes `dotnet publish` of a
+    /// referencing host silently drop the game's transitive NuGet packages
+    /// (dotnet/sdk parses the assets file's dependency strings up to the
+    /// first whitespace), so scaffolding hosts against such a name is refused.
+    /// </summary>
+    internal static string? SpacedIdentity(string projectDir, GodotProjectFile godotProject)
+    {
+        var name = godotProject.Get("dotnet", "project/assembly_name");
+        if (name == null)
+        {
+            var rootCsprojs = Directory.EnumerateFiles(projectDir, "*.csproj")
+                .Select(Path.GetFileNameWithoutExtension)
+                .Cast<string>()
+                .ToList();
+            if (rootCsprojs.Count == 1) name = rootCsprojs[0];
+        }
+
+        return name != null && name.Any(char.IsWhiteSpace) ? name : null;
+    }
+
+    /// <summary>
+    /// Refuses to scaffold against a whitespace-containing .NET name, and
+    /// resolves --rename into the operation that fixes it. The automated fix
+    /// is only offered while no hosts exist yet: afterwards every host csproj
+    /// carries the old name too, and the tool won't rewrite user code.
+    /// </summary>
+    internal static RenameOperation? ResolveSpacedName(
+        ScaffoldOptions options, string projectDir, GodotProjectFile godotProject, List<ExistingHost> existingHosts)
+    {
+        var spaced = SpacedIdentity(projectDir, godotProject);
+        if (spaced == null)
+        {
+            if (options.RenameTo != null)
+                throw new ToolException("--rename is only for projects whose .NET name contains whitespace; " +
+                                        "this project's name is fine. Use --name to override the base name.");
+            return null;
+        }
+
+        var suggested = Hosts.SanitizeName(spaced);
+        if (existingHosts.Count > 0)
+        {
+            var message = SpacedNameMessage(spaced, suggested, existingHosts);
+            if (options.RenameTo != null)
+                message = "--rename only works before any 2dog hosts exist - this project already has " +
+                          $"{existingHosts.Count} host(s) whose csprojs carry the old name.\n" + message;
+            throw new ToolException(message);
+        }
+
+        if (options.RenameTo is null)
+            throw new SpacedNameException(SpacedNameMessage(spaced, suggested, existingHosts),
+                spaced, suggested, canOfferRename: true);
+
+        var newName = Hosts.SanitizeName(options.RenameTo);
+        if (newName is null || newName != options.RenameTo.Trim())
+            throw new ToolException($"--rename '{options.RenameTo}' is not a usable name - " +
+                                    "only letters, digits, '.', '_' and '-'");
+        if (options.NameOverride != null && options.NameOverride != newName)
+            throw new ToolException($"--name '{options.NameOverride}' conflicts with --rename '{newName}' - " +
+                                    "--rename already sets the project's name");
+        if (File.Exists(Path.Combine(projectDir, newName + ".csproj")))
+            throw new ToolException($"cannot rename to '{newName}': {newName}.csproj already exists");
+
+        return new RenameOperation(spaced, newName,
+            CsprojExists: File.Exists(Path.Combine(projectDir, spaced + ".csproj")));
+    }
+
+    /// <summary>The refusal message: why, the manual checklist, and the way out.</summary>
+    private static string SpacedNameMessage(string spaced, string? suggested, List<ExistingHost> existingHosts)
+    {
+        suggested ??= "MyGame";
+        var steps = new List<string>
+        {
+            "close the Godot editor",
+            $"rename '{spaced}.csproj' to '{suggested}.csproj'",
+            $"set [dotnet] project/assembly_name=\"{suggested}\" in project.godot",
+            $"point any solution entry at {suggested}.csproj",
+        };
+        if (existingHosts.Count > 0)
+            steps.Add($"in each host csproj, update the ProjectReference to ../{suggested}.csproj " +
+                      "and any TrimmerRootAssembly/RootNamespace using the old name");
+        steps.Add("re-run 2dog add");
+
+        var message =
+            $"project name '{spaced}' contains whitespace - .NET publish silently drops such a project's NuGet " +
+            "packages from hosts that reference it (dotnet/sdk bug), so 2dog refuses to scaffold against it.\n" +
+            "Fix the .NET identity by hand (Godot's display name may keep its spaces):\n" +
+            string.Join("\n", steps.Select((s, i) => $"  {i + 1}. {s}"));
+        if (existingHosts.Count == 0)
+            message += $"\nOr let 2dog do it: 2dog add --rename {suggested}";
+        return message;
     }
 
     private static List<string> Subdirectories(string dir) =>
@@ -117,7 +219,17 @@ internal static class ScaffoldCommand
         // are added to one 2dog already set up - there they are simply ours.
         var retrofitting = !project.IsNew && existingHosts.Count == 0;
 
-        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder);
+        // The rename runs first: the riskiest step (a file move the Godot
+        // editor may block) fails before anything else is touched, and every
+        // later action already sees the new name.
+        string? renamedFrom = null;
+        if (project.Rename is { } rename)
+        {
+            PlanRename(plan, project, rename, projectDir);
+            if (rename.CsprojExists) renamedFrom = Path.Combine(projectDir, rename.OldName + ".csproj");
+        }
+
+        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder, renamedFrom);
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
@@ -126,33 +238,34 @@ internal static class ScaffoldCommand
         PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostFolders, newHosts);
 
         foreach (var warning in warnings)
-            Console.WriteLine($"warning: {warning}");
+            Out.Warning(warning);
         foreach (var skip in skipped)
-            Console.WriteLine($"skip: {skip} (exists; use --force to overwrite)");
+            Out.Skip($"{skip} (exists; use --force to overwrite)");
 
         if (plan.Count == 0)
         {
-            Console.WriteLine("Nothing to do - the project already has everything that was asked for.");
+            Out.Line("[green]Nothing to do[/] - the project already has everything that was asked for.");
             return 0;
         }
 
         if (options.DryRun)
         {
             foreach (var action in plan)
-                Console.WriteLine("would: " + action.Description);
-            Console.WriteLine($"\nDry run: {plan.Count} action(s) planned, nothing changed.");
+                Out.Would(action.Description);
+            Out.Blank();
+            Out.Line($"Dry run: [bold]{plan.Count}[/] action(s) planned, nothing changed.");
             return 0;
         }
 
         if (confirm != null && !confirm(plan.Select(a => a.Description).ToList()))
         {
-            Console.WriteLine("Cancelled - nothing changed.");
+            Out.Line("[yellow]Cancelled[/] - nothing changed.");
             return 0;
         }
 
         foreach (var action in plan)
         {
-            Console.WriteLine(action.Description);
+            Out.Action(action.Description);
             action.Apply();
         }
 
@@ -233,9 +346,13 @@ internal static class ScaffoldCommand
 
     private static void PlanGodotCsproj(
         List<PlannedAction> plan, List<string> warnings, ProjectContext project,
-        string godotCsproj, List<string> hostFolders, string? webBootFolder)
+        string godotCsproj, List<string> hostFolders, string? webBootFolder, string? renamedFrom = null)
     {
-        if (!File.Exists(godotCsproj))
+        // With a rename planned, the user's csproj still sits at the old path
+        // at plan time; the patch below must read it from there (and keeps
+        // writing to the new path, where the earlier rename action put it).
+        var readPath = renamedFrom ?? godotCsproj;
+        if (!File.Exists(readPath))
         {
             // GDScript-only project (or a brand-new one): scaffold the csproj
             // and declare the assembly so the Godot editor finds it
@@ -247,21 +364,64 @@ internal static class ScaffoldCommand
                 $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})",
                 () => File.WriteAllText(godotCsproj, content)));
 
-            // A new project's project.godot already declares [dotnet].
-            if (project.Godot is { } godot && !godot.HasSection("dotnet"))
+            // A new project's project.godot already declares [dotnet]; a
+            // planned rename owns the assembly_name write itself.
+            if (project.Godot is { } godot && !godot.HasSection("dotnet") && project.Rename is null)
                 plan.Add(new PlannedAction(
                     $"append [dotnet] assembly_name=\"{project.BaseName}\" to project.godot",
                     () => godot.AppendDotnetSection(project.BaseName)));
             return;
         }
 
-        var result = CsprojPatcher.Patch(godotCsproj, hostFolders,
+        var result = CsprojPatcher.Patch(readPath, hostFolders,
             webBootFolder is null ? null : $"{webBootFolder}/TwoDogWebBoot.cs");
         warnings.AddRange(result.Warnings);
         if (result.NewContent is { } newContent)
             plan.Add(new PlannedAction(
                 $"patch {Path.GetFileName(godotCsproj)} ({string.Join("; ", result.Added)})",
                 () => File.WriteAllText(godotCsproj, newContent)));
+    }
+
+    /// <summary>
+    /// The spaced-name fix (--rename): move the csproj, set assembly_name,
+    /// repoint the solution. Sequential announced actions with no rollback -
+    /// same stance as the sln-to-slnx migration; a failure names its step and
+    /// earlier steps stand.
+    /// </summary>
+    private static void PlanRename(
+        List<PlannedAction> plan, ProjectContext project, RenameOperation rename, string projectDir)
+    {
+        var oldCsproj = Path.Combine(projectDir, rename.OldName + ".csproj");
+        var newCsproj = Path.Combine(projectDir, rename.NewName + ".csproj");
+
+        if (rename.CsprojExists)
+            plan.Add(new PlannedAction($"rename {rename.OldName}.csproj to {rename.NewName}.csproj", () =>
+            {
+                try
+                {
+                    File.Move(oldCsproj, newCsproj);
+                }
+                catch (IOException ex)
+                {
+                    throw new ToolException($"could not rename {rename.OldName}.csproj: {ex.Message} - " +
+                                            "close the Godot editor and any IDE holding the project, then re-run.");
+                }
+            }));
+
+        plan.Add(new PlannedAction($"set [dotnet] assembly_name=\"{rename.NewName}\" in project.godot",
+            () => project.Godot!.SetAssemblyName(rename.NewName)));
+
+        foreach (var solution in Directory.EnumerateFiles(projectDir, "*.sln")
+                     .Concat(Directory.EnumerateFiles(projectDir, "*.slnx"))
+                     .Where(s => SolutionOps.ContainsProject(s, rename.OldName + ".csproj")))
+            plan.Add(new PlannedAction(
+                $"point {Path.GetFileName(solution)} at {rename.NewName}.csproj",
+                () =>
+                {
+                    if (!SolutionOps.RenameProject(solution, rename.OldName, rename.NewName))
+                        Out.Note($"{Path.GetFileName(solution)} no longer references " +
+                                 $"{rename.OldName}.csproj - nothing to update.");
+                }));
     }
 
     /// <summary>
@@ -454,8 +614,8 @@ internal static class ScaffoldCommand
                     // The wasm hosts have no Editor configuration; the WinUI host does.
                     if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, relative,
                             mapEditorToDebug: host.Kind is not HostKind.WinUi))
-                        Console.WriteLine($"note: could not adjust {solutionName} build configs for {host.Folder}; " +
-                                          $"solution-wide builds will include it ({note}).");
+                        Out.Note($"could not adjust {solutionName} build configs for {host.Folder}; " +
+                                 $"solution-wide builds will include it ({note}).");
                 }));
         }
 
@@ -465,35 +625,33 @@ internal static class ScaffoldCommand
             {
                 SolutionOps.Restore(solutionPath, out var succeeded);
                 if (!succeeded)
-                    Console.WriteLine("warning: dotnet restore failed - if the web host is the culprit, install " +
-                                      "the wasm-tools workload (dotnet workload install wasm-tools) and restore again.");
+                    Out.Warning("dotnet restore failed - if the web host is the culprit, install " +
+                                "the wasm-tools workload (dotnet workload install wasm-tools) and restore again.");
             }));
     }
 
     private static void PrintNextSteps(ProjectContext project, IReadOnlyList<HostSpec> hosts)
     {
-        Console.WriteLine("\nDone. Next steps:");
-
         // Relative-path comparison, not string equality on the full paths: a
         // trailing separator or a case-insensitive filesystem would otherwise
         // suggest `cd` into the directory the user is already in.
         var relative = Path.GetRelativePath(".", project.Dir);
-        if (relative is not ("." or ""))
-            Console.WriteLine($"  cd {relative}");
+        var cd = relative is "." or "" ? null : $"cd {QuoteIfNeeded(relative)}";
 
-        foreach (var host in hosts)
-            Console.WriteLine(host.Kind switch
-            {
-                HostKind.Desktop => $"  dotnet run --project {host.Folder}".PadRight(42) + "# desktop host",
-                HostKind.Tests => $"  dotnet test {host.Folder}".PadRight(42) + "# xUnit tests (headless Godot)",
-                HostKind.Web => $"  dotnet publish {host.Folder}".PadRight(42) + "# browser bundle (needs wasm-tools workload)",
-                HostKind.WebXr => $"  dotnet publish {host.Folder}".PadRight(42) + "# WebXR browser bundle (needs wasm-tools workload)",
-                HostKind.WinForms => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinForms host (Windows only)",
-                HostKind.WinUi => $"  dotnet run --project {host.Folder}".PadRight(42) + "# WinUI 3 host (Windows only)",
-                HostKind.Avalonia => $"  dotnet run --project {host.Folder}".PadRight(42) + "# Avalonia host (cross-platform GUI)",
-                _ => $"  {host.Folder}",
-            });
+        var rows = hosts.Select(host => host.Kind switch
+        {
+            HostKind.Desktop => ($"dotnet run --project {host.Folder}", "desktop host"),
+            HostKind.Tests => ($"dotnet test {host.Folder}", "xUnit tests (headless Godot)"),
+            HostKind.Web => ($"dotnet publish {host.Folder}", "browser bundle (needs wasm-tools workload)"),
+            HostKind.WebXr => ($"dotnet publish {host.Folder}", "WebXR browser bundle (needs wasm-tools workload)"),
+            HostKind.WinForms => ($"dotnet run --project {host.Folder}", "WinForms host (Windows only)"),
+            HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
+            HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
+            _ => (host.Folder, ""),
+        }).ToList();
 
-        Console.WriteLine("\nDocs: https://2dog.dev");
+        Out.NextSteps(cd, rows);
     }
+
+    private static string QuoteIfNeeded(string path) => path.Contains(' ') ? $"\"{path}\"" : path;
 }

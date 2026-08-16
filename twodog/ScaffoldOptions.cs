@@ -27,6 +27,13 @@ internal sealed class ScaffoldOptions
     /// <summary>Base name: the project name for `new`, an override otherwise.</summary>
     public string? NameOverride;
 
+    /// <summary>
+    /// New .NET name for a project whose current name contains whitespace
+    /// (--rename): whitespace in the restore identity makes `dotnet publish`
+    /// silently drop the game's NuGet dependencies from referencing hosts.
+    /// </summary>
+    public string? RenameTo;
+
     /// <summary>The hosts to create in this run, resolved from flags or prompts.</summary>
     public List<HostSpec> Hosts = [];
 
@@ -53,6 +60,9 @@ internal sealed class ProjectContext
 
     public bool IsNew { get; init; }
 
+    /// <summary>The pending spaced-name fix, when --rename asked for one.</summary>
+    public RenameOperation? Rename { get; init; }
+
     /// <summary>
     /// Folder names a new host must not use: the recognized hosts plus every
     /// other directory in the project, so scaffolding never lands inside
@@ -62,5 +72,22 @@ internal sealed class ProjectContext
         ExistingHosts.Select(h => h.Folder).Concat(ExistingFolders).Distinct(StringComparer.OrdinalIgnoreCase);
 }
 
+/// <summary>The rename a spaced-name fix performs, resolved before planning.</summary>
+internal sealed record RenameOperation(string OldName, string NewName, bool CsprojExists);
+
 /// <summary>An error with a user-facing message (exit code 2).</summary>
-internal sealed class ToolException(string message) : Exception(message);
+internal class ToolException(string message) : Exception(message);
+
+/// <summary>
+/// A project whose .NET name contains whitespace (which breaks publish, see
+/// --rename). Carries what the interactive layer needs to offer the fix.
+/// </summary>
+internal sealed class SpacedNameException(string message, string oldName, string? suggested, bool canOfferRename)
+    : ToolException(message)
+{
+    public string OldName { get; } = oldName;
+    public string? Suggested { get; } = suggested;
+
+    /// <summary>Whether the automated --rename fix applies (no hosts exist yet).</summary>
+    public bool CanOfferRename { get; } = canOfferRename;
+}

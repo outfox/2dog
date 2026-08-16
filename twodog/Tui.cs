@@ -16,37 +16,58 @@ internal static class Tui
     public static bool CanPrompt =>
         !Console.IsInputRedirected && AnsiConsole.Profile.Capabilities.Interactive;
 
-    public static void Header()
-    {
-        AnsiConsole.MarkupLine($"[bold]2dog[/] [grey]{ToolVersions.TwoDogVersion}[/]  [grey]https://2dog.dev[/]");
-        AnsiConsole.WriteLine();
-    }
+    public static void Header() => Out.Header();
 
     public static void ShowProject(ProjectContext project)
     {
         var what = project.IsNew ? "new project" : "project";
-        AnsiConsole.MarkupLine($"[grey]{what}[/]  [bold]{Markup.Escape(project.BaseName)}[/] " +
-                               $"[grey]({Markup.Escape(project.Dir)})[/]");
+        Out.Line($"[grey]{what}[/]  [bold]{Markup.Escape(project.BaseName)}[/] " +
+                 $"[grey]({Markup.Escape(project.Dir)})[/]");
 
         if (project.ExistingHosts.Count > 0)
         {
             var hosts = project.ExistingHosts
                 .Select(h => $"{Markup.Escape(h.Folder)} [grey]({Hosts.Label(h.Kind)})[/]");
-            AnsiConsole.MarkupLine($"[grey]hosts[/]    {string.Join("[grey],[/] ", hosts)}");
+            Out.Line($"[grey]hosts[/]    {string.Join("[grey],[/] ", hosts)}");
         }
 
-        AnsiConsole.WriteLine();
+        Out.Blank();
     }
 
-    /// <summary>The project name for a new project.</summary>
+    /// <summary>The project name for a new project. No silent rewriting: an
+    /// answer sanitization would alter is rejected, like the folder prompts.</summary>
     public static string AskProjectName(string? suggestion)
     {
         var prompt = new TextPrompt<string>("Project name:")
-            .Validate(value => Hosts.SanitizeName(value) is null
-                ? ValidationResult.Error("[red]needs at least one letter or digit[/]")
-                : ValidationResult.Success());
+            .Validate(value => Hosts.SanitizeName(value) is { } name && name == value.Trim()
+                ? ValidationResult.Success()
+                : ValidationResult.Error("[red]only letters, digits, '.', '_' and '-'[/]"));
         if (Hosts.SanitizeName(suggestion) is { } valid) prompt.DefaultValue(valid);
-        return Hosts.SanitizeName(AnsiConsole.Prompt(prompt))!;
+        return AnsiConsole.Prompt(prompt).Trim();
+    }
+
+    /// <summary>
+    /// The interactive way out of the spaced-name refusal: explain, confirm,
+    /// and gather the new name. Null when the user declines (the caller then
+    /// surfaces the manual checklist).
+    /// </summary>
+    public static string? OfferRename(SpacedNameException problem)
+    {
+        Out.Line($"[yellow]![/] The project's .NET name [bold]{Markup.Escape(problem.OldName)}[/] contains spaces.");
+        Out.Line("[grey]  .NET publish silently drops such a project's NuGet packages from hosts that[/]");
+        Out.Line("[grey]  reference it (dotnet/sdk bug), so the name must change before hosts are added.[/]");
+        Out.Blank();
+        if (!AnsiConsole.Confirm("Rename the project's .NET identity? (the Godot display name keeps its spaces)"))
+            return null;
+
+        var prompt = new TextPrompt<string>("New name:")
+            .Validate(value => Hosts.SanitizeName(value) is { } name && name == value.Trim()
+                ? ValidationResult.Success()
+                : ValidationResult.Error("[red]only letters, digits, '.', '_' and '-'[/]"));
+        if (problem.Suggested is { } suggested) prompt.DefaultValue(suggested);
+        var answer = AnsiConsole.Prompt(prompt).Trim();
+        AnsiConsole.WriteLine();
+        return answer;
     }
 
     /// <summary>Where a new project is created (relative paths are fine).</summary>
@@ -130,10 +151,7 @@ internal static class Tui
     /// <summary>Shows the plan and asks whether to apply it.</summary>
     public static bool ConfirmPlan(IReadOnlyList<string> descriptions)
     {
-        AnsiConsole.MarkupLine("[grey]plan[/]");
-        foreach (var description in descriptions)
-            AnsiConsole.MarkupLine($"  [grey]-[/] {Markup.Escape(description)}");
-        AnsiConsole.WriteLine();
+        Out.Plan(descriptions);
         return AnsiConsole.Confirm($"Apply {descriptions.Count} change(s)?");
     }
 
