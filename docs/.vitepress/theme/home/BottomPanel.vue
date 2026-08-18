@@ -141,27 +141,31 @@ const starts = [
   <div class="ed-bottom">
     <!-- Tablist first in DOM for focus order; CSS `order` keeps it visually at the
          bottom, where Godot puts its bottom-panel tab strip. -->
-    <div class="ed-console-tabs" role="tablist" aria-label="Bottom panel" @keydown="tabsKeydown">
-      <button
-        id="tab-start"
-        class="ed-console-tab"
-        :class="{ active: activeTab === 'start' }"
-        role="tab"
-        aria-controls="panel-start"
-        :aria-selected="activeTab === 'start'"
-        :tabindex="activeTab === 'start' ? 0 : -1"
-        @click="activeTab = 'start'"
-      >Quickstart</button>
-      <button
-        id="tab-output"
-        class="ed-console-tab"
-        :class="{ active: activeTab === 'output' }"
-        role="tab"
-        aria-controls="panel-output"
-        :aria-selected="activeTab === 'output'"
-        :tabindex="activeTab === 'output' ? 0 : -1"
-        @click="activeTab = 'output'"
-      >Output</button>
+    <div class="ed-console-tabs">
+      <!-- A tablist may only own tabs, so the strip's pun and version link live
+           outside this element as flex siblings. -->
+      <div class="ed-console-tablist" role="tablist" aria-label="Bottom panel" @keydown="tabsKeydown">
+        <button
+          id="tab-start"
+          class="ed-console-tab"
+          :class="{ active: activeTab === 'start' }"
+          role="tab"
+          aria-controls="panel-start"
+          :aria-selected="activeTab === 'start'"
+          :tabindex="activeTab === 'start' ? 0 : -1"
+          @click="activeTab = 'start'"
+        >Quickstart</button>
+        <button
+          id="tab-output"
+          class="ed-console-tab"
+          :class="{ active: activeTab === 'output' }"
+          role="tab"
+          aria-controls="panel-output"
+          :aria-selected="activeTab === 'output'"
+          :tabindex="activeTab === 'output' ? 0 : -1"
+          @click="activeTab = 'output'"
+        >Output</button>
+      </div>
       <p class="ed-status-pun" aria-live="off"><span
         class="gd-icon gd-icon--dim ln-glyph"
         :style="{ '--gd-icon': iconUrl('paw_print') }"
@@ -285,6 +289,12 @@ const starts = [
   align-items: center;
   gap: 2px;
   padding: 3px 8px;
+}
+
+.ed-console-tablist {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .ed-console-tab {

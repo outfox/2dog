@@ -27,7 +27,8 @@ import './home/dock.css'
 </script>
 
 <template>
-  <section class="editor-home" aria-label="2dog: start, control, and embed Godot in .NET">
+  <!-- <main>: the home layout renders no other main landmark (VPDoc's is doc-pages only). -->
+  <main class="editor-home" aria-label="2dog: start, control, and embed Godot in .NET">
     <div class="host-window">
       <HostTitlebar />
       <EditorMenubar />
@@ -45,7 +46,7 @@ import './home/dock.css'
 
       <BottomPanel />
     </div>
-  </section>
+  </main>
 </template>
 
 <style>

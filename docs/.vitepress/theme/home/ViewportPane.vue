@@ -33,12 +33,14 @@ const viewLocks = ['Lock', 'Group', 'SnapGrid']
     </div>
 
     <div class="ed-viewport">
+      <!-- The page's LCP element; without the hint the browser fetches it at low priority. -->
       <img
         class="ed-mascot"
         :src="withBase('/logo-animated.svg')"
         alt="2dog logotype: a happy white dog over the word 2dog"
         width="450"
         height="231"
+        fetchpriority="high"
       />
       <h1 class="ed-headline">Start, control, embed</h1>
       <h1 class="ed-headline">Godot in&nbsp;.NET</h1>
