@@ -138,7 +138,9 @@ const starts = [
 </script>
 
 <template>
-  <div class="ed-bottom">
+  <!-- data-nosnippet: the fake Output transcript reads like page content to Google
+       and has been served as the site's search snippet — never let it be quoted. -->
+  <div class="ed-bottom" data-nosnippet>
     <!-- Tablist first in DOM for focus order; CSS `order` keeps it visually at the
          bottom, where Godot puts its bottom-panel tab strip. -->
     <div class="ed-console-tabs">
@@ -523,19 +525,4 @@ const starts = [
   }
 }
 
-@media (max-width: 819px) {
-  /* Portrait: the two start paths stack. Side by side there is no column wide
-     enough for a command line, so both would read through a scrollbar. */
-  .ed-subwins {
-    grid-template-columns: 1fr;
-  }
-
-  .ed-status-pun {
-    display: none;
-  }
-
-  .ed-shell code {
-    font-size: 11.5px;
-  }
-}
 </style>

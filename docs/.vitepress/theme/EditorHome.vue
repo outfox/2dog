@@ -84,18 +84,30 @@ import './home/dock.css'
   }
 }
 
+/* Portrait: the editor frame stands down. No window chrome, no docks, no bottom
+   panel — just the viewport scene running edge to edge, with the site footer below. */
 @media (max-width: 819px) {
   .editor-home {
-    padding: 20px 16px 4px;
+    padding: 0;
+    max-width: none;
+  }
+
+  .host-window {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .host-titlebar,
+  .ed-menubar,
+  .ed-left,
+  .ed-inspector,
+  .ed-bottom {
+    display: none;
   }
 
   .ed-body {
     grid-template-columns: 1fr;
-  }
-
-  .ed-left {
-    border-right: none;
-    border-bottom: 1px solid var(--ed-seam);
   }
 }
 </style>

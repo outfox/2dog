@@ -44,7 +44,7 @@ export default defineConfig({
   lastUpdated: true,
 
   title: "2dog",
-  titleTemplate: ":title 🦴 Godot in .NET",
+  titleTemplate: ":title 🦴 2dog",
   description: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.",
 
   head: [

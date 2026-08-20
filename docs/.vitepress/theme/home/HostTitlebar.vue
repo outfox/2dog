@@ -5,7 +5,10 @@ import { iconUrl } from './icons'
 </script>
 
 <template>
-  <div class="host-titlebar">
+  <!-- data-nosnippet across the chrome: Google must never quote the editor prop
+       text (menus, docks, fake console) as the search snippet — the viewport hero
+       and the meta description are the page's words. -->
+  <div class="host-titlebar" data-nosnippet>
     <span class="host-proc"><span
       class="host-app-icon"
       :style="{ '--gd-icon': iconUrl('gobot') }"

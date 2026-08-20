@@ -180,10 +180,13 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
 
 <template>
   <nav ref="menubarEl" class="ed-menubar" aria-label="Documentation menus">
+    <!-- data-nosnippet (here on the divs — Google ignores it on <nav>): menu prop
+         text must never become the search snippet. -->
     <div
       v-for="m in menus"
       :key="m.label"
       class="ed-menu"
+      data-nosnippet
       @keydown="menuKeydown($event, m.label)"
     >
       <button
@@ -364,13 +367,4 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   background-color: var(--ed-accent);
 }
 
-@media (max-width: 819px) {
-  .ed-menubar {
-    flex-wrap: wrap;
-  }
-
-  .host-runbar {
-    display: none;
-  }
-}
 </style>

@@ -30,6 +30,10 @@ const rootVisible = computed(
 
 <template>
   <nav class="ed-tree" aria-label="Scene: your project and its 2dog hosts">
+    <!-- data-nosnippet needs a div (Google ignores it on <nav>): the host-project
+         prop names must never become the search snippet. Layout-neutral — .ed-tree
+         is a plain block and no rule targets its direct children. -->
+    <div data-nosnippet>
     <div class="ed-dock-tabs">
       <span class="ed-dock-tab active" aria-hidden="true">Scene</span>
       <a class="ed-dock-tab" :href="withBase('/import-tool')">Import</a>
@@ -62,6 +66,7 @@ const rootVisible = computed(
       <span class="ed-tree-name" v-html="h.name"></span>
       <span class="ed-tree-note" v-html="h.role"></span>
     </a>
+    </div>
   </nav>
 </template>
 
@@ -117,38 +122,4 @@ const rootVisible = computed(
   color: var(--ed-text-2);
 }
 
-/* Narrow: the tree flattens into a chip row under its tab strip. */
-@media (max-width: 819px) {
-  .ed-tree {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px;
-    padding: 0 4px 6px;
-  }
-
-  .ed-tree .ed-dock-tabs {
-    flex-basis: 100%;
-    margin: 0 -4px 4px;
-  }
-
-  .ed-tree .ed-dock-bar {
-    display: none;
-  }
-
-  .ed-tree-root {
-    margin-top: 0;
-  }
-
-  .ed-tree-item {
-    margin-left: 0;
-    border-left: none;
-    border-radius: 3px;
-  }
-
-  .ed-tree .tree-arrow,
-  .ed-tree-note {
-    display: none;
-  }
-}
 </style>

@@ -20,7 +20,7 @@ const entries = [
 </script>
 
 <template>
-  <section class="ed-files" aria-label="FileSystem: your game files, untouched by 2dog">
+  <section class="ed-files" data-nosnippet aria-label="FileSystem: your game files, untouched by 2dog">
     <div class="ed-dock-tabs" aria-hidden="true">
       <span class="ed-dock-tab active">FileSystem</span>
       <span class="strip-glyph" :style="{ '--gd-icon': thIconUrl('tabs_menu') }"></span>
@@ -198,9 +198,4 @@ a.ed-file-row.is-open:hover {
   font-size: 10.5px;
 }
 
-@media (max-width: 819px) {
-  .ed-files {
-    display: none;
-  }
-}
 </style>

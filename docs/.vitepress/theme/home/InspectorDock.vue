@@ -136,7 +136,10 @@ const scriptRowVisible = computed(
 
 <template>
   <aside class="ed-inspector" aria-label="Why 2dog">
-    <div class="ed-dock-tabs" role="tablist" aria-label="Inspector dock" @keydown="inspectorTabsKeydown">
+    <!-- data-nosnippet on the text-bearing divs (Google ignores it on <aside>, and a
+         wrapper would break the column's flex): dock text must never become the
+         search snippet. -->
+    <div class="ed-dock-tabs" data-nosnippet role="tablist" aria-label="Inspector dock" @keydown="inspectorTabsKeydown">
       <button
         id="itab-inspector"
         class="ed-dock-tab"
@@ -171,7 +174,7 @@ const scriptRowVisible = computed(
     </div>
 
     <!-- The node selector: which object these properties belong to. -->
-    <div class="ed-insp-node" aria-hidden="true">
+    <div class="ed-insp-node" data-nosnippet aria-hidden="true">
       <span class="node-glyph root" :style="{ '--gd-icon': iconUrl('joystick') }"></span>
       <span class="ed-insp-node-name">MyGame</span>
       <span class="node-drop" :style="{ '--gd-icon': thIconUrl('option_button_arrow') }"></span>
@@ -189,7 +192,7 @@ const scriptRowVisible = computed(
 
     <!-- All panels share one grid cell; the ghost reserves the unfiltered height,
          so tab switches and filtering never resize the host window. -->
-    <div class="ed-insp-panels">
+    <div class="ed-insp-panels" data-nosnippet>
       <div
         id="ipanel-inspector"
         v-show="inspectorTab === 'inspector'"
@@ -597,10 +600,4 @@ a.ed-script-value:focus-visible {
   }
 }
 
-@media (max-width: 819px) {
-  .ed-props,
-  .ed-sig-tree {
-    grid-template-columns: 1fr;
-  }
-}
 </style>
