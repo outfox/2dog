@@ -114,7 +114,17 @@ public sealed class GodotSession : IDisposable
         // Injected before ExtraArgs so an explicit user --gpu-luid parses later and wins.
         _engine = new Engine(_options.Project, _options.Path,
             ["--hidden-window", .. GpuAffinityArgs(), .. _options.ExtraArgs]);
-        _instance = _engine.Start();
+        // On macOS the engine's OS layer takes over the process's NSApplication (delegate,
+        // main menu) as if it owned the process; hand it back to Avalonia right after boot.
+        var appGuard = OperatingSystem.IsMacOS() ? MacOSApplicationGuard.Capture() : null;
+        try
+        {
+            _instance = _engine.Start();
+        }
+        finally
+        {
+            appGuard?.Restore();
+        }
         // Presentation happens through Avalonia's compositor, which paces the pump; vsync on
         // the hidden engine window would only add a second, competing pacer (observed as the
         // pump capping at the engine window's refresh rate instead of the control's).

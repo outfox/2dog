@@ -74,9 +74,8 @@ internal sealed class GpuPresenter : IPresenter
                     KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaquePosixFileDescriptor,
                     needsMemorySize: true);
             if (OperatingSystem.IsMacOS())
-                return Exported(RenderingDevice.ExternalTextureShareHandleType.Iosurface,
-                    KnownPlatformGraphicsExternalImageHandleTypes.IOSurfaceRef,
-                    needsMemorySize: false);
+                return ([RenderingDevice.ExternalTextureShareHandleType.Iosurface],
+                    (interop, _) => new IOSurfaceSharedTextureFactory(interop));
             return null;
 
             static (RenderingDevice.ExternalTextureShareHandleType[],

@@ -78,8 +78,9 @@ session.Start();
 
 ## Limitations
 
-- Zero-copy presentation is implemented for all three desktop platforms but
-  verified end-to-end on Windows only so far; on Linux and macOS, `Auto`
+- Zero-copy presentation is implemented for all three desktop platforms and
+  verified end-to-end on Windows and macOS (Metal, IOSurface + MTLSharedEvent
+  timeline sync); on Linux it is not verified yet. Under `Auto` the session
   falls back to the CPU readback path automatically wherever the compositor
   cannot import the shared texture.
 - Full IME composition and `Input.MouseMode.Captured` (relative/locked mouse)
