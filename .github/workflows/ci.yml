@@ -289,23 +289,16 @@ jobs:
       - name: Restore
         run: dotnet restore 2dog.tests.slnf
 
-      # Blame flags target the flaky linux SIGSEGV: the wedged engine shutdown
-      # trips the 45s hang dump (below EngineInstance's 60s ShutdownTimeout)
-      # naming the test and its stuck stacks; crash dumps cover a direct segv.
+      # The watchdog dumps the xunit v3 child (and 2dog.import grandchildren) on a hang;
+      # vstest's own --blame-hang only ever dumped its testhost. Crash dumps cover a segv.
       - name: Test (Debug)
-        run: >
-          dotnet test 2dog.tests.slnf -c Debug --no-restore
-          --blame-crash --blame-crash-dump-type full --blame-hang-timeout 45s --blame-hang-dump-type full
+        run: bash .github/scripts/test-with-watchdog.sh Debug
 
       - name: Test (Release)
-        run: >
-          dotnet test 2dog.tests.slnf -c Release --no-restore
-          --blame-crash --blame-crash-dump-type full --blame-hang-timeout 45s --blame-hang-dump-type full
+        run: bash .github/scripts/test-with-watchdog.sh Release
 
       - name: Test (Editor)
-        run: >
-          dotnet test 2dog.tests.slnf -c Editor --no-restore
-          --blame-crash --blame-crash-dump-type full --blame-hang-timeout 45s --blame-hang-dump-type full
+        run: bash .github/scripts/test-with-watchdog.sh Editor
 
       - name: Upload test dumps and blame sequence
         if: failure()
