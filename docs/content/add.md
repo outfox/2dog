@@ -33,7 +33,7 @@ With a `project.godot` in the current directory, the tool asks which hosts to
 add, shows its plan, and waits for confirmation:
 
 ```text
-2dog 4.7.1  https://2dog.dev
+2dog 4.7.2  https://2dog.dev
 
 project  MyGame (/home/you/games/MyGame)
 

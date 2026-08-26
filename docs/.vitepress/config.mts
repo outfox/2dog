@@ -3,7 +3,8 @@ import {
   twodogVersionPlugin,
   godotVersionPlugin,
   nativesVersionPlugin,
-  twodogVersion
+  twodogVersion,
+  godotVersion
 } from './plugins/version-markers'
 import { columnsPlugin } from './plugins/columns'
 import { godotIconsPlugin, godotIconHtml } from './plugins/godot-icons'
@@ -85,6 +86,7 @@ export default defineConfig({
     },
     // Real version for the home console; markdown pages use :2dog-version: markers instead.
     twodogVersion,
+    godotVersion,
     
     nav: [
       { text: 'Home', link: '/' },

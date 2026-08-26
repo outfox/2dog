@@ -71,7 +71,7 @@ troubleshooting.
 Open your project in the Godot .NET editor, it should still work exactly as before:
 
 ```bash
-godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
+godot-mono --editor . # or Godot_v4.7.2-stable_mono_win64.exe, etc.
 ```
 
 Edit scenes and C# scripts as usual. Builds detect changed project inputs and

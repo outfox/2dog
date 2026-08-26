@@ -49,7 +49,7 @@ The package also provides a `dotnet new` template:
 In either case, the familiar Godot workflow still works:
 
 ```bash
-godot-mono --editor . # or Godot_v4.7.1-stable_mono_win64.exe, etc.
+godot-mono --editor . # or Godot_v4.7.2-stable_mono_win64.exe, etc.
 ```
 
 

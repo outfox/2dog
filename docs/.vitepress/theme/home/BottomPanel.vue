@@ -9,6 +9,7 @@ import { plain } from './content'
 
 const { theme } = useData()
 const twodogVersion = computed(() => (theme.value as any).twodogVersion ?? '')
+const godotVersion = computed(() => (theme.value as any).godotVersion ?? '')
 
 /* The retired hero carousel's pun inventory, evolved into console log material. */
 const puns: string[] = [
@@ -232,7 +233,7 @@ const starts = [
         <div class="ed-console-lines">
           <p class="ln sys">Starting Godot instance...</p>
           <p class="ln">Engine: Godot instance created successfully!</p>
-          <p class="ln sys">Godot Engine (2dog) v4.7.1.stable.mono.2dog.7200b53af (2026-07-22 21:45:57 UTC) - https://2dog.dev</p>
+          <p class="ln sys">Godot Engine (2dog) v{{ godotVersion }}.stable.mono.2dog.69c545edf (2026-08-26 11:55:01 UTC) - https://2dog.dev</p>
           <p class="ln sys">Vulkan 1.4.341 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 3080</p>
           <p class="ln" aria-hidden="true">&nbsp;</p>
           <p class="ln">Engine: Godot started successfully!</p>

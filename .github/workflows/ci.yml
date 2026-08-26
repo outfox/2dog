@@ -118,7 +118,7 @@ jobs:
       - name: Verify NativesVersion is not already published from different natives
         run: |
           NATIVES_VERSION="$(dotnet msbuild twodog.engine/twodog.engine.csproj -getProperty:NativesVersion | tr -d '[:space:]')"
-          # NuGet normalizes away a trailing .0 fourth segment (4.7.0.0 -> 4.7.0).
+          # NuGet normalizes away a trailing .0 fourth segment (4.7.2.0 -> 4.7.2).
           NORMALIZED="$(echo "$NATIVES_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)\.0$/\1/')"
           CURRENT_COMMIT="$(git rev-parse HEAD:godot)"
           echo "NativesVersion: $NORMALIZED, godot submodule: $CURRENT_COMMIT"
