@@ -95,6 +95,34 @@
         </ItemGroup>
     </Target>
 
+    <!-- The game project's Godot.NET.Sdk pulls stock GodotSharp from nuget.org; 2dog.engine ships the fork's
+         GodotSharp.dll (different native ABI). With equal versions MSBuild picks between them "arbitrarily",
+         and on version skew the higher one wins - which may be stock, crashing on the first native call.
+         Fail on skew, then drop the stock package's compile/copy-local assets so the fork copy is the only candidate. -->
+    <Target Name="TwoDogEnforceForkGodotSharp" AfterTargets="ResolvePackageAssets">
+        <ItemGroup>
+            <_TwoDogStockGodotSharp Include="@(ResolvedCompileFileDefinitions);@(RuntimeCopyLocalItems)"
+                                    Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
+            <_TwoDogForkGodotSharp Include="@(ResolvedCompileFileDefinitions)"
+                                   Condition="'%(NuGetPackageId)' == '2dog.engine' And '%(Filename)%(Extension)' == 'GodotSharp.dll'"/>
+        </ItemGroup>
+        <PropertyGroup>
+            <_TwoDogStockGodotSharpVersion Condition="'@(_TwoDogStockGodotSharp)' != ''">%(_TwoDogStockGodotSharp.NuGetPackageVersion)</_TwoDogStockGodotSharpVersion>
+            <_TwoDogEngineVersion Condition="'@(_TwoDogForkGodotSharp)' != ''">%(_TwoDogForkGodotSharp.NuGetPackageVersion)</_TwoDogEngineVersion>
+            <!-- 2dog.engine is versioned <godot>.<revision>; a prerelease suffix (-local.N) is not part of the Godot version -->
+            <_TwoDogEngineGodotVersion Condition="'$(_TwoDogEngineVersion)' != ''">$([System.Text.RegularExpressions.Regex]::Match('$(_TwoDogEngineVersion)', '^\d+\.\d+\.\d+').Value)</_TwoDogEngineGodotVersion>
+        </PropertyGroup>
+
+        <Error Condition="'$(_TwoDogStockGodotSharpVersion)' != '' And '$(_TwoDogEngineGodotVersion)' != '' And '$(_TwoDogStockGodotSharpVersion)' != '$(_TwoDogEngineGodotVersion)'"
+               Text="TwoDog: the Godot project references GodotSharp $(_TwoDogStockGodotSharpVersion) (via Godot.NET.Sdk) but 2dog.engine $(_TwoDogEngineVersion) is built for Godot $(_TwoDogEngineGodotVersion). Mixed versions crash at runtime. Set the Godot project's Sdk to &quot;Godot.NET.Sdk/$(_TwoDogEngineGodotVersion)&quot; or update the 2dog.engine package to a $(_TwoDogStockGodotSharpVersion).* release."/>
+
+        <ItemGroup Condition="'@(_TwoDogForkGodotSharp)' != ''">
+            <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
+            <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
+            <_ReferenceDocumentationFiles Remove="@(_ReferenceDocumentationFiles)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
+        </ItemGroup>
+    </Target>
+
     <!-- ============================================ -->
     <!-- GodotPlugins Configuration                   -->
     <!-- ============================================ -->
