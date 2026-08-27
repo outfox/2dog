@@ -10,6 +10,12 @@ config="$1"
 limit="${2:-120}"
 pattern='twodog\.tests\.dll|2dog\.import\.dll|testhost'
 
+# Engine fixtures write Godot's verbose log here (native output never reaches the vstest log);
+# the workflow uploads TestResults on failure. Godot on Windows needs a native path.
+log_dir="$PWD/twodog.tests/TestResults/godot-$config"
+if command -v cygpath >/dev/null 2>&1; then log_dir="$(cygpath -w "$log_dir")"; fi
+export TWODOG_GODOT_LOG_DIR="$log_dir"
+
 if [[ "${RUNNER_OS:-}" == "Windows" ]]; then
   exec dotnet test 2dog.tests.slnf -c "$config" --no-restore \
     --blame-crash --blame-crash-dump-type full \

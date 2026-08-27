@@ -169,8 +169,10 @@ public static class GodotApiSmoke
             var label = instance.GetNodeOrNull<Label>("CenterContainer/TargetLabel");
             Require(label is not null && !string.IsNullOrWhiteSpace(label.Text), "scene Label was not instantiated");
 
-            var cube = instance.GetNodeOrNull<SpinningCube>("Flair/BlueCubes/BlueCube1");
-            Require(cube is not null, "generated C# script type was not attached to the scene");
+            const string cubePath = "Flair/BlueCubes/BlueCube1";
+            var cube = instance.GetNodeOrNull<SpinningCube>(cubePath);
+            Require(cube is not null, "generated C# script type was not attached to the scene: "
+                                      + DescribeScriptBinding(instance.GetNodeOrNull(cubePath)!));
             Require(GodotObject.IsInstanceValid(cube), "generated C# script instance is invalid");
         }
         finally
@@ -204,6 +206,23 @@ public static class GodotApiSmoke
         }
 
         Require(false, failure);
+    }
+
+    // Distinguishes a missing node, a script that failed to bind, and a managed type loaded twice
+    // (different AssemblyLoadContext), which is otherwise invisible in a null GetNodeOrNull<T>.
+    private static string DescribeScriptBinding(Node node)
+    {
+        if (node is null) return "node not found";
+
+        var expected = typeof(SpinningCube);
+        var actual = node.GetType();
+        using var scriptValue = node.GetScript();
+        var script = scriptValue.AsGodotObject() as Script;
+        var scriptInfo = script is null ? "no script"
+            : $"script '{script.ResourcePath}' (can instantiate: {script.CanInstantiate()})";
+        var typeInfo = $"node type {actual.FullName} from {actual.Assembly.Location} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(actual.Assembly)?.Name}'";
+        var expectedInfo = $"expected {expected.FullName} from {expected.Assembly.Location} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(expected.Assembly)?.Name}'";
+        return $"{scriptInfo}; {typeInfo}; {expectedInfo}";
     }
 
     private static void Require(bool condition, string message)

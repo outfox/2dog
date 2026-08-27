@@ -18,9 +18,29 @@ public abstract class FixtureBase : IDisposable
         global::twodog.fixture.AssemblyPreloader.PreloadGameAssemblies(projectPath);
 
         Console.WriteLine("Godot project: " + projectPath);
-        Engine = new Engine("twodog.tests", projectPath, cmdLineArgs);
+        Engine = new Engine("twodog.tests", projectPath, WithLogFile(cmdLineArgs));
         GodotInstance = Engine.Start();
         Console.WriteLine("Godot initialized successfully.");
+    }
+
+    private static int _fixtureCount;
+
+    /// <summary>
+    /// Test hosts swallow the engine's native stdout/stderr, so a CI failure leaves no engine-side
+    /// trace. With TWODOG_GODOT_LOG_DIR set, each fixture instance writes Godot's verbose log to
+    /// its own file there (one engine instance per fixture; several fixtures per process).
+    /// </summary>
+    private static string[] WithLogFile(string[] cmdLineArgs)
+    {
+        var logDir = System.Environment.GetEnvironmentVariable("TWODOG_GODOT_LOG_DIR");
+        if (string.IsNullOrEmpty(logDir)) return cmdLineArgs;
+
+        System.IO.Directory.CreateDirectory(logDir);
+        var index = System.Threading.Interlocked.Increment(ref _fixtureCount);
+        var logFile = System.IO.Path.Combine(logDir,
+            $"godot-{System.Environment.ProcessId}-{index}.log");
+        Console.WriteLine("Godot log: " + logFile);
+        return [.. cmdLineArgs, "--verbose", "--log-file", logFile];
     }
 
     /// <summary>The engine owned by this fixture.</summary>
