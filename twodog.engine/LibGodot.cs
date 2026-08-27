@@ -37,12 +37,8 @@ internal static unsafe partial class LibGodot
     // StringName size (from godot-cpp)
     private const int STRING_NAME_SIZE = 8;
 
-    // NOTE: All interop below deliberately uses the platform-default unmanaged
-    // calling convention (no [Cdecl] modopts / UnmanagedCallConv) and blittable
-    // parameter types only. On desktop x64 the default IS cdecl, and on
-    // browser-wasm both modopt-annotated signatures and non-blittable
-    // marshalling (e.g. string[] as LPArray) break the build-time
-    // pinvoke/trampoline generation.
+    // Platform-default calling convention and blittable parameters only: on browser-wasm, Cdecl modopts and
+    // non-blittable marshalling (e.g. string[] as LPArray) break build-time pinvoke/trampoline generation.
 
     // GDExtension interface function pointers
     private static delegate* unmanaged<nint, ulong> objectGetInstanceId;

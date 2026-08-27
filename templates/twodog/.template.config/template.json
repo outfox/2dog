@@ -65,6 +65,13 @@
       "replaces": "WINAPPSDK_PKG_VERSION",
       "description": "Version of the Microsoft.WindowsAppSDK package to reference."
     },
+    "aspNetCoreVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.0.0-aspntpl",
+      "replaces": "ASPNETCORE_PKG_VERSION",
+      "description": "Version of the ASP.NET Core (Blazor) packages to reference."
+    },
     "tests": {
       "type": "parameter",
       "datatype": "bool",
@@ -99,6 +106,12 @@
       "type": "parameter",
       "datatype": "bool",
       "description": "Include an Avalonia host project that composites the game inside a cross-platform GUI window (Avalonia controls render on top of the game). Omitted by default; pass '--avalonia true' to include.",
+      "defaultValue": "false"
+    },
+    "blazor": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a Blazor Web App host: an ASP.NET Core server plus a Blazor WebAssembly client whose page embeds the game through 2dog.blazor's GodotView. Requires a .NET 10 SDK with the wasm-tools workload to build, like the web host. Omitted by default; pass '--blazor true' to include.",
       "defaultValue": "false"
     }
   },
@@ -141,7 +154,7 @@
           ]
         },
         {
-          "condition": "(!web && !webxr)",
+          "condition": "(!web && !webxr && !blazor)",
           "exclude": [
             "global.json"
           ]
@@ -165,12 +178,20 @@
           ]
         },
         {
+          "condition": "(!blazor)",
+          "exclude": [
+            "Company.Product1.blazor/**/*"
+          ]
+        },
+        {
           "copyOnly": [
             "Company.Product1.web/TwoDogWebBoot.cs",
             "Company.Product1.web/wwwroot/favicon*",
             "Company.Product1.webxr/TwoDogWebBoot.cs",
             "Company.Product1.webxr/wwwroot/favicon*",
-            "Company.Product1.webxr/wwwroot/*.min.js"
+            "Company.Product1.webxr/wwwroot/*.min.js",
+            "Company.Product1.blazor/TwoDogWebBoot.cs",
+            "Company.Product1.blazor/wwwroot/favicon*"
           ]
         }
       ]
@@ -209,6 +230,14 @@
     {
       "condition": "(avalonia)",
       "path": "Company.Product1.avalonia/Company.Product1.avalonia.csproj"
+    },
+    {
+      "condition": "(blazor)",
+      "path": "Company.Product1.blazor/Company.Product1.blazor.csproj"
+    },
+    {
+      "condition": "(blazor)",
+      "path": "Company.Product1.blazor/Client/Company.Product1.blazor.Client.csproj"
     }
   ],
   "postActions": [

@@ -1,44 +1,15 @@
 <Project>
-    <!--
-      TwoDog MSBuild Targets
-
-      Handles copying GodotPlugins assemblies to output directory.
-      GodotSharp and Godot.SourceGenerators are bundled in the 2dog.engine package
-      (lib/net10.0/ and analyzers/dotnet/cs/ respectively).
-
-      Native libraries are provided by separate platform-specific packages:
-        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-arm64: template_release builds
-        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-arm64.debug: template_debug builds
-        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-arm64.editor: editor builds
-
-      When you install the 2dog.engine package from NuGet, the release variant platform
-      packages above are referenced automatically. For debug/editor variants you
-      can reference the corresponding platform packages explicitly.
-
-      Configurable Properties (in consuming project):
-        - TwoDogVariant: 'release' (default), 'debug', or 'editor'
-          Selects the native libgodot variant (via the platform meta package
-          targets) AND the GodotPlugins layout. Also embedded as assembly
-          metadata so twodog's DllImportResolver loads the matching
-          libgodot-<variant> library at runtime.
-        - TwoDogExportPack: 'false' disables the automatic .pck export on
-          desktop publish (shared with the browser-wasm package's export).
-        - TwoDogDesktopExportPreset: export preset used for the desktop .pck;
-          defaults to the Godot-standard preset name for the publish target
-          ('Windows Desktop', 'Linux', or 'macOS').
-    -->
+    <!-- 2dog.engine consumer targets: GodotPlugins copy, variant metadata, automatic import and desktop pck export.
+         Consumer knobs: TwoDogVariant (release|debug|editor), TwoDogExportPack, TwoDogDesktopExportPreset. -->
 
     <!-- ============================================ -->
     <!-- GodotProjectDir Assembly Metadata             -->
     <!-- ============================================ -->
-    <!-- Embed GodotProjectDir as assembly metadata so twodog can resolve the
-         Godot project directory at runtime (via Engine.ResolveProjectDir()).
-         Consumers just need <GodotProjectDir> in their .csproj. -->
+    <!-- Embed GodotProjectDir as assembly metadata for Engine.ResolveProjectDir(). -->
     <ItemGroup Condition="'$(GodotProjectDir)' != ''">
         <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
             <_Parameter1>GodotProjectDir</_Parameter1>
-            <!-- We use the single-parameter overload of GetFullPath with Combine to be .NET Framework-compatible -->
-            <!-- This is important for VS users, where processes are still hosted in .NET Fx -->
+            <!-- Single-parameter GetFullPath + Combine: .NET Framework-compatible for VS's in-proc MSBuild. -->
             <_Parameter2>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))))</_Parameter2>
         </AssemblyAttribute>
     </ItemGroup>
@@ -54,28 +25,23 @@
         <TwoDogPackageRoot Condition="'$(TwoDogPackageRoot)' == ''">$(MSBuildThisFileDirectory)../</TwoDogPackageRoot>
     </PropertyGroup>
 
-    <!-- One variant axis: native selection, API layout and assembly metadata
-         all key from TwoDogVariant, so they can never disagree. -->
+    <!-- Native selection, API layout and assembly metadata all key from TwoDogVariant, so they never disagree. -->
     <Target Name="TwoDogValidateVariant" BeforeTargets="Build;Publish">
         <Error Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'editor'"
                Text="TwoDog: invalid TwoDogVariant '$(TwoDogVariant)'. Allowed values: release, debug, editor."/>
         <Warning Condition="'$(TwoDogBuildType)' != ''"
                  Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
 
-        <!-- Fail these at build time: they only break at runtime otherwise,
-             with an opaque 'Failed to load hostfxr' from the native engine.
-             NativeAOT ships no hostfxr, and both modes empty Assembly.Location,
-             which the GodotPlugins / libgodot probing relies on. -->
+        <!-- NativeAOT ships no hostfxr and both modes empty Assembly.Location (used by GodotPlugins/libgodot probing);
+             fail here instead of at runtime with an opaque 'Failed to load hostfxr'. -->
         <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishAot)' == 'true'"
                Text="TwoDog: PublishAot (NativeAOT) is not supported for 2dog desktop hosts. The engine loads GodotPlugins and the game assembly through hostfxr and on-disk assemblies, which a native single-binary publish does not carry. Publish framework-dependent or self-contained instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
         <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true'"
                Text="TwoDog: PublishSingleFile is not supported for 2dog desktop hosts. Assemblies embedded in a single-file bundle have no on-disk location, which the GodotPlugins / libgodot probing relies on. Publish as a normal folder instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
     </Target>
 
-    <!-- Embed the variant as assembly metadata: twodog's DllImportResolver
-         reads it at runtime to load the matching libgodot-<variant> native.
-         A stale or mismatched native then fails loudly at load instead of
-         producing an opaque hostfxr initialization error. -->
+    <!-- twodog's DllImportResolver reads this to load libgodot-<variant>; a mismatched native then fails at
+         load instead of with an opaque hostfxr error. -->
     <ItemGroup>
         <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
             <_Parameter1>TwoDogVariant</_Parameter1>
@@ -83,9 +49,8 @@
         </AssemblyAttribute>
     </ItemGroup>
 
-    <!-- Hosts that reference both a Godot.NET.Sdk game project and 2dog.engine
-         would otherwise receive Godot.SourceGenerators twice. Keep this opt-in:
-         the game project itself must retain its generator. -->
+    <!-- Hosts referencing both a Godot.NET.Sdk game project and 2dog.engine get Godot.SourceGenerators twice.
+         Opt-in: the game project itself must keep its generator. -->
     <Target Name="TwoDogRemoveDuplicateGodotAnalyzers"
             BeforeTargets="CoreCompile"
             Condition="'$(TwoDogRemoveDuplicateGodotAnalyzers)' == 'true'">
@@ -95,10 +60,8 @@
         </ItemGroup>
     </Target>
 
-    <!-- The game project's Godot.NET.Sdk pulls stock GodotSharp from nuget.org; 2dog.engine ships the fork's
-         GodotSharp.dll (different native ABI). With equal versions MSBuild picks between them "arbitrarily",
-         and on version skew the higher one wins - which may be stock, crashing on the first native call.
-         Fail on skew, then drop the stock package's compile/copy-local assets so the fork copy is the only candidate. -->
+    <!-- Godot.NET.Sdk pulls stock GodotSharp (different native ABI); on equal versions MSBuild picks arbitrarily and on
+         skew the higher wins. Fail on skew, then drop the stock assets so the fork copy is the only candidate. -->
     <Target Name="TwoDogEnforceForkGodotSharp" AfterTargets="ResolvePackageAssets">
         <ItemGroup>
             <_TwoDogStockGodotSharp Include="@(ResolvedCompileFileDefinitions);@(RuntimeCopyLocalItems)"
@@ -109,8 +72,9 @@
         <PropertyGroup>
             <_TwoDogStockGodotSharpVersion Condition="'@(_TwoDogStockGodotSharp)' != ''">%(_TwoDogStockGodotSharp.NuGetPackageVersion)</_TwoDogStockGodotSharpVersion>
             <_TwoDogEngineVersion Condition="'@(_TwoDogForkGodotSharp)' != ''">%(_TwoDogForkGodotSharp.NuGetPackageVersion)</_TwoDogEngineVersion>
-            <!-- 2dog.engine is versioned <godot>.<revision>; a prerelease suffix (-local.N) is not part of the Godot version -->
+            <!-- 2dog.engine is versioned <godot>.<revision>; a prerelease suffix (-local.N) is not part of it -->
             <_TwoDogEngineGodotVersion Condition="'$(_TwoDogEngineVersion)' != ''">$([System.Text.RegularExpressions.Regex]::Match('$(_TwoDogEngineVersion)', '^\d+\.\d+\.\d+').Value)</_TwoDogEngineGodotVersion>
+            <_TwoDogForkApiGodotSharp Condition="'$(TwoDogGodotSharpApiDir)' != ''">$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</_TwoDogForkApiGodotSharp>
         </PropertyGroup>
 
         <Error Condition="'$(_TwoDogStockGodotSharpVersion)' != '' And '$(_TwoDogEngineGodotVersion)' != '' And '$(_TwoDogStockGodotSharpVersion)' != '$(_TwoDogEngineGodotVersion)'"
@@ -121,18 +85,26 @@
             <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
             <_ReferenceDocumentationFiles Remove="@(_ReferenceDocumentationFiles)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
         </ItemGroup>
+
+        <!-- Source checkout (ProjectReference to twodog.engine, TwoDogGodotSharpApiDir from the repo props): on equal
+             file versions the stock runtime copy could win over the fork's, so swap it for the fork API copy
+             explicitly. Compiling against the stock surface is harmless (same API). -->
+        <ItemGroup Condition="'@(_TwoDogForkGodotSharp)' == '' And '@(_TwoDogStockGodotSharp)' != '' And '$(_TwoDogForkApiGodotSharp)' != '' And Exists('$(_TwoDogForkApiGodotSharp)')">
+            <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
+            <RuntimeCopyLocalItems Include="$(_TwoDogForkApiGodotSharp)">
+                <NuGetPackageId>2dog.engine</NuGetPackageId>
+                <NuGetPackageVersion>$(TwoDogVersion)</NuGetPackageVersion>
+                <AssetType>runtime</AssetType>
+                <CopyLocal>true</CopyLocal>
+                <Private>true</Private>
+            </RuntimeCopyLocalItems>
+        </ItemGroup>
     </Target>
 
     <!-- ============================================ -->
     <!-- GodotPlugins Configuration                   -->
     <!-- ============================================ -->
     <PropertyGroup>
-        <!--
-          GodotPlugins placement depends on build type:
-          - Editor builds (TOOLS_ENABLED): Nested GodotSharp/Api/Debug/ structure
-          - Template builds (LIBGODOT_HOSTFXR): Flat structure in output dir
-        -->
-
         <!-- 1. GODOTSHARP_DIR env var (highest priority) -->
         <TwoDogGodotApiSourcePath Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)</TwoDogGodotApiSourcePath>
 
@@ -144,13 +116,8 @@
         <TwoDogGodotApiSourcePath_ProjectRef>$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Api/Debug/</TwoDogGodotApiSourcePath_ProjectRef>
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_ProjectRef)')">$(TwoDogGodotApiSourcePath_ProjectRef)</TwoDogGodotApiSourcePath>
 
-        <!--
-          Destination path depends on the variant:
-          - editor (TOOLS_ENABLED): GodotSharp/Api/Debug/ subdirectory
-          - release/debug templates (LIBGODOT_HOSTFXR without TOOLS_ENABLED):
-            flat in the output directory (the native resolves the API
-            assemblies dir as exe_dir)
-        -->
+        <!-- editor (TOOLS_ENABLED) expects GodotSharp/Api/Debug/; template natives resolve the API dir as exe_dir,
+             so release/debug lay GodotPlugins flat in the output directory. -->
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogVariant)' == 'editor'">GodotSharp/Api/Debug/</TwoDogGodotApiDestSubdir>
         <TwoDogGodotApiDestSubdir Condition="'$(TwoDogGodotApiDestSubdir)' == ''"></TwoDogGodotApiDestSubdir>
     </PropertyGroup>
@@ -158,10 +125,8 @@
     <!-- ============================================ -->
     <!-- Target: Copy GodotPlugins to Output          -->
     <!-- ============================================ -->
-    <!-- TwoDogSkipGodotApiCopy: set 'true' to suppress the GodotPlugins file
-         copies entirely (browser-wasm publishes set this - on web there is no
-         GodotPlugins.dll on disk; plugin init flows through a registered
-         function pointer instead). -->
+    <!-- TwoDogSkipGodotApiCopy=true suppresses the copies (browser-wasm: no GodotPlugins.dll on disk, plugin init
+         flows through a registered function pointer). -->
     <Target Name="TwoDogCopyGodotApi"
             AfterTargets="Build"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
@@ -212,34 +177,13 @@
     <!-- ============================================ -->
     <!-- Automatic Godot Project Import               -->
     <!-- ============================================ -->
-    <!--
-      Runs the Godot editor's headless import pipeline against
-      $(GodotProjectDir) when its source files changed. Generates .uid files
-      for C# scripts, imports textures/meshes, and builds the .godot/ cache
-      (script UID cache); without it the engine logs a startup error.
-
-      Uses the 2dog import helper (tools/net10.0/2dog.import.dll) against the
-      editor-variant libgodot from the 2dog.<rid>.editor package; no external
-      Godot editor installation required. An explicitly configured external
-      editor ($(GodotEditor) property or GODOT_EDITOR env var) takes precedence.
-
-      Properties:
-        TwoDogAutoImport:      'true' (default) / 'false' to disable
-        TwoDogRequireImport:   'true' turns the missing-capability warning into an error
-        TwoDogForceImport:     'true' forces the import to run even if up-to-date
-        TwoDogImportStampFile: override the stamp file location
-        TwoDogImportExcludes:  extra semicolon-separated glob excludes for the
-                               import inputs (dirs with a .gdignore are always
-                               excluded, mirroring the Godot importer)
-        GodotEditor:           path to an external Godot editor binary
-    -->
+    <!-- Headless import of $(GodotProjectDir) when its sources changed, via 2dog.import against the editor libgodot
+         (or $(GodotEditor)/GODOT_EDITOR). Knobs: TwoDogAutoImport/RequireImport/ForceImport/ImportStampFile/ImportExcludes. -->
     <PropertyGroup>
         <TwoDogAutoImport Condition="'$(TwoDogAutoImport)' == ''">true</TwoDogAutoImport>
         <TwoDogGodotProjectFullPath Condition="'$(GodotProjectDir)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))))</TwoDogGodotProjectFullPath>
-        <!-- Stamp lives inside the game project's .godot/ dir: it is shared by
-             all consuming projects (one import per game project, not one per
-             consumer), and deleting .godot/ - the standard "force reimport"
-             gesture - invalidates it. -->
+        <!-- Stamp lives in the game project's .godot/: one import per game project (not per consumer), and deleting
+             .godot/ - the standard "force reimport" gesture - invalidates it. -->
         <TwoDogImportStampFile Condition="'$(TwoDogImportStampFile)' == '' And '$(TwoDogGodotProjectFullPath)' != ''">$(TwoDogGodotProjectFullPath)/.godot/2dog.import.stamp</TwoDogImportStampFile>
         <!-- Import helper: package layout first, then source-checkout build output -->
         <TwoDogImportHelperPath Condition="'$(TwoDogImportHelperPath)' == '' And Exists('$(MSBuildThisFileDirectory)../tools/net10.0/2dog.import.dll')">$(MSBuildThisFileDirectory)../tools/net10.0/2dog.import.dll</TwoDogImportHelperPath>
@@ -250,27 +194,15 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TwoDogGodotProjectFullPath)' != '' And '$(TwoDogAutoImport)' == 'true'">
-        <!-- .uid files are excluded (purely generated). *.import files are
-             intentionally INCLUDED: they are user-editable import settings
-             whose changes must retrigger the import. Safe because the stamp
-             is touched after the import completes, so files (re)generated
-             during the run are always older than the stamp.
-
-             Directories carrying a .gdignore (e.g. nested 2dog host projects)
-             are invisible to the Godot editor/importer, so their churn must
-             not invalidate the import stamp either. TwoDogImportExcludes:
-             extra semicolon-separated glob excludes supplied by the user. -->
+        <!-- *.import stays included (user-editable settings; safe since the stamp is touched after the run).
+             .gdignore trees (e.g. nested hosts) are invisible to the importer, so their churn is excluded too. -->
         <_TwoDogGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
         <TwoDogImportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
                             Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.uid;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
     </ItemGroup>
 
-    <!-- Shared capability resolution for the content pipeline: consumed by
-         the auto-import below and by the 2dog.browser-wasm export target
-         (via DependsOnTargets). Runs at execution time: the platform and
-         tools package targets that provide these properties may be imported
-         after this file, so evaluation-time references here would be
-         import-order dependent; execution time is not. -->
+    <!-- Shared by the auto-import and the browser-wasm export. A target, not evaluation-time: the platform/tools
+         package targets providing these properties may be imported after this file. -->
     <Target Name="TwoDogResolveContentCapability">
         <PropertyGroup>
             <TwoDogExternalGodotEditor Condition="'$(TwoDogExternalGodotEditor)' == ''">$(GodotEditor)</TwoDogExternalGodotEditor>
@@ -302,10 +234,8 @@
             Outputs="$(TwoDogImportStampFile)"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogAutoImport)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
-        <!-- IgnoreStandardErrorWarningFormat: Godot prints non-fatal
-             "ERROR:"/"WARNING:"-formatted lines during imports, which Exec
-             would otherwise promote to build errors even on exit code 0.
-             Success is judged by the exit code alone. -->
+        <!-- IgnoreStandardErrorWarningFormat: Godot prints non-fatal "ERROR:" lines during imports, which Exec
+             would otherwise promote to build errors on exit code 0. -->
 
         <!-- (1) explicitly configured external editor -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != ''"
@@ -333,24 +263,14 @@
     <!-- ============================================ -->
     <!-- Content pipeline: desktop publish .pck        -->
     <!-- ============================================ -->
-    <!--
-      Publishing a desktop host exports the Godot project's content as
-      $(TargetName).pck next to the published executable - the exe-adjacent
-      name the engine auto-loads when the host passes a null project path
-      (twodog.Engine.ResolveContent()). Uses the same capability plumbing as
-      the automatic import above: the in-process helper against the desktop
-      editor-variant libgodot, or an explicitly configured external editor.
-      Runs only as part of Publish; ordinary builds keep running from the raw
-      project directory.
-    -->
+    <!-- Desktop publish exports $(TargetName).pck next to the exe - the name Engine.ResolveContent() auto-loads.
+         Publish only; ordinary builds keep running from the raw project directory. -->
     <PropertyGroup>
         <TwoDogExportPack Condition="'$(TwoDogExportPack)' == ''">true</TwoDogExportPack>
     </PropertyGroup>
 
-    <!-- Own inputs item, not @(TwoDogImportInputs): that item is only
-         populated when TwoDogAutoImport is enabled, and an incremental target
-         with empty Inputs is silently skipped - publishing without a pck.
-         Same exclusions: .gdignore trees hold this very host's build outputs. -->
+    <!-- Own inputs item: @(TwoDogImportInputs) is empty when auto-import is off, and an incremental target with
+         empty Inputs is silently skipped - publishing without a pck. -->
     <ItemGroup Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">
         <_TwoDogDesktopGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
         <TwoDogDesktopExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
@@ -365,9 +285,7 @@
             Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
         <PropertyGroup>
-            <!-- Godot's standard per-platform preset names, keyed on the
-                 publish RID; host OS when publishing RID-less. Contents only
-                 differ where preset options do (e.g. texture compression). -->
+            <!-- Godot's standard preset names keyed on the publish RID; host OS when publishing RID-less. -->
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $(RuntimeIdentifier.StartsWith('win'))">Windows Desktop</TwoDogDesktopExportPreset>
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $(RuntimeIdentifier.StartsWith('linux'))">Linux</TwoDogDesktopExportPreset>
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $(RuntimeIdentifier.StartsWith('osx'))">macOS</TwoDogDesktopExportPreset>
@@ -381,8 +299,7 @@
             <_TwoDogHasDesktopPreset Condition="Exists('$(_TwoDogDesktopExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogDesktopExportPresetsPath)').Contains('name=&quot;$(TwoDogDesktopExportPreset)&quot;'))">true</_TwoDogHasDesktopPreset>
         </PropertyGroup>
 
-        <!-- Fail with an actionable message instead of the engine's exit-1
-             (whose stderr an IDE build may swallow entirely). -->
+        <!-- Actionable message instead of the engine's exit-1 (whose stderr an IDE build may swallow). -->
         <Error Condition="'$(_TwoDogHasDesktopPreset)' != 'true'"
                Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), re-run `2dog convert` (it scaffolds the desktop presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
 

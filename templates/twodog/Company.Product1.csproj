@@ -4,26 +4,25 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
-        <!-- Compiles the TwoDogWebBoot.cs bootstrap used by web (browser-wasm)
-             hosts; harmless on desktop. It takes a function pointer to the
-             source-generated plugins initializer, hence unsafe. -->
+        <!-- TwoDogWebBoot.cs (web hosts) takes a function pointer to the source-generated plugins initializer;
+             harmless on desktop -->
         <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <!-- Nested 2dog host projects: keep them out of this project's default
-             compile/content globs (each also carries a .gdignore so the Godot
-             editor skips them). -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);Company.Product1.2dog/**;Company.Product1.web/**;Company.Product1.webxr/**;Company.Product1.tests/**;Company.Product1.winforms/**;Company.Product1.winui/**;Company.Product1.avalonia/**</DefaultItemExcludes>
+        <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
+             from the Godot editor) -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);Company.Product1.2dog/**;Company.Product1.web/**;Company.Product1.webxr/**;Company.Product1.tests/**;Company.Product1.winforms/**;Company.Product1.winui/**;Company.Product1.avalonia/**;Company.Product1.blazor/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
-        <!-- Web bootstrap: lives in the web host folder (out of the Godot
-             editor's sight) but must compile into THIS assembly - scripts are
-             resolved from the assembly holding the source-generated plugins
-             initializer. Inert when the web host is absent. -->
+        <!-- Web bootstrap lives in the web host folder but must compile into THIS assembly: scripts resolve
+             from the assembly holding the source-generated plugins initializer. Inert without a web host -->
         <Compile Include="Company.Product1.web/TwoDogWebBoot.cs"
                  Condition="Exists('$(MSBuildThisFileDirectory)Company.Product1.web/TwoDogWebBoot.cs')"/>
         <!-- The webxr host carries its own copy; compile it only when the plain
              web host's is absent (one definition per assembly). -->
         <Compile Include="Company.Product1.webxr/TwoDogWebBoot.cs"
                  Condition="!Exists('$(MSBuildThisFileDirectory)Company.Product1.web/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)Company.Product1.webxr/TwoDogWebBoot.cs')"/>
+        <!-- Same for the blazor host, last in line. -->
+        <Compile Include="Company.Product1.blazor/TwoDogWebBoot.cs"
+                 Condition="!Exists('$(MSBuildThisFileDirectory)Company.Product1.web/TwoDogWebBoot.cs') And !Exists('$(MSBuildThisFileDirectory)Company.Product1.webxr/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)Company.Product1.blazor/TwoDogWebBoot.cs')"/>
     </ItemGroup>
 </Project>

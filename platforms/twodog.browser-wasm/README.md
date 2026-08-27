@@ -23,6 +23,9 @@ bundle.
   `LIBGODOT_ENABLED` + `AllowUnsafeBlocks` in its csproj
 - A `wwwroot/index.html` boot page (create a project with
   `dnx 2dog new MyGame --web` for a working setup out of the box)
+- Or a Blazor WebAssembly project: the package detects the Blazor SDK and
+  leaves layout and boot to Blazor; `2dog.blazor`'s `GodotView` starts the
+  engine (`dnx 2dog new MyGame --blazor`)
 
 ## Usage
 

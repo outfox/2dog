@@ -11,10 +11,8 @@
         <PlatformArch Condition="'$(PlatformArch)' == ''">x86_64</PlatformArch>
         <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).$(PlatformArch).shared_library.$(NativeLibExt)</NativeLibPath>
 
-        <!-- Output library name: libgodot-<variant>.<ext>. The variant suffix
-             makes each native uniquely named so all three variants can coexist
-             in one project and a variant mismatch fails loudly at load time
-             (twodog's DllImportResolver picks the file by TwoDogVariant). -->
+        <!-- libgodot-<variant>.<ext>: variants coexist in one project and the DllImportResolver (keyed on
+             TwoDogVariant) fails loudly on a mismatch -->
         <VariantShortName Condition="'$(BuildVariant)' == 'template_release'">release</VariantShortName>
         <VariantShortName Condition="'$(BuildVariant)' == 'template_debug'">debug</VariantShortName>
         <VariantShortName Condition="'$(BuildVariant)' == 'editor'">editor</VariantShortName>
@@ -24,12 +22,8 @@
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
     </PropertyGroup>
 
-    <!-- Web (browser-wasm) variants pack a whole payload directory instead of a
-         single shared library: the emscripten static archive plus the JS glue
-         and boot shell it must be linked/served with. The runtimes/<rid>/native
-         convention buys nothing here (the .a is consumed by an explicit
-         NativeLibrary item at publish time, never by the runtime host), so the
-         payload lives under a dedicated godot-web/ folder. -->
+    <!-- Web variants pack a payload directory (static archive + JS glue + boot shell) under godot-web/; the runtime
+         host never loads it, so the runtimes/<rid>/native convention does not apply. -->
     <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
         <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
         <WebPayloadDir>$(GodotBinDir)web/$(BuildVariant)/</WebPayloadDir>
@@ -59,20 +53,14 @@
               CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
-    <!-- Include MSBuild targets in the package -->
-    <!-- Only meta packages (no PackageSuffix) should include targets.
-         Variant packages (.release, .debug, .editor) are DLL-only; meta packages own copy logic. -->
+    <!-- Only meta packages (no PackageSuffix) ship targets; variant packages are DLL-only -->
     <ItemGroup Condition="'$(PackageSuffix)' == ''">
         <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')"/>
         <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')"/>
     </ItemGroup>
 
-    <!-- Record the godot submodule commit these natives were built from in the
-         package's repository metadata. The CI pack job reads it back from
-         nuget.org to refuse republishing a NativesVersion whose binaries came
-         from a different submodule commit (the deploy job's skip-duplicate push
-         would otherwise silently keep the stale natives). Uses the committed pointer
-         (HEAD:godot), matching how CI keys its native build cache. -->
+    <!-- Stamp the committed submodule pointer (HEAD:godot) into repository metadata; CI reads it back from nuget.org
+         to refuse republishing a NativesVersion built from another commit (skip-duplicate keeps stale natives). -->
     <Target Name="StampGodotSubmoduleCommit" BeforeTargets="GenerateNuspec">
         <Exec Command="git rev-parse HEAD:godot"
               WorkingDirectory="$(MSBuildThisFileDirectory)../"

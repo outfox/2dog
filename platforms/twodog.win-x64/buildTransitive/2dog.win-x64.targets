@@ -1,10 +1,5 @@
 <Project>
-    <!--
-      TwoDog Windows x64 Meta Package Transitive Targets
-
-      This file is imported by projects that transitively reference 2dog.win-x64.
-      It imports the main targets from the build folder.
-    -->
+    <!-- Imported by projects that transitively reference 2dog.win-x64; forwards to the build folder targets -->
     <Import Project="$(MSBuildThisFileDirectory)../build/2dog.win-x64.targets"
             Condition="Exists('$(MSBuildThisFileDirectory)../build/2dog.win-x64.targets')"/>
 </Project>

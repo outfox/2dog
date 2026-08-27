@@ -15,9 +15,8 @@
         <PackageReference Include="2dog.xunit" Version="TWODOG_PKG_VERSION"/>
     </ItemGroup>
 
-    <!-- Native library packages arrive transitively: 2dog exact-pins the platform
-         packages it was built against, and their buildTransitive targets handle
-         copying the native library. No direct natives reference needed. -->
+    <!-- Native library packages arrive transitively: 2dog pins the platform packages it was built against and
+         their targets copy the native library -->
 
     <!-- Test framework packages -->
     <ItemGroup>

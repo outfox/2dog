@@ -3,9 +3,8 @@ using twodog.pck;
 namespace twodog.cli;
 
 /// <summary>
-/// The pack verb: file-format operations on Godot .pck bundles. Runs entirely
-/// on the GDPC reader shared with the twodog.import helper - no engine, no
-/// project, so it works on any pack lying around (an AppBundle, a download).
+/// The pack verb: file-format operations on Godot .pck bundles. Runs on the GDPC reader shared with twodog.import -
+/// no engine, no project, so it works on any pack lying around.
 /// </summary>
 internal static class PackCommand
 {

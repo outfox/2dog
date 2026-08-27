@@ -1,0 +1,93 @@
+:root {
+    color-scheme: dark;
+    font-family: "Segoe UI", "Noto Sans", "Droid Sans", Arial, sans-serif;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    background: #1b1b1b;
+    color: #e0e0e0;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    height: 100vh;
+}
+
+.panel {
+    padding: 1.25rem;
+    background: #242424;
+    border-right: 1px solid #3a3a3a;
+    overflow: auto;
+}
+
+.panel h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.panel dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.panel dt {
+    color: #9a9a9a;
+}
+
+.panel dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.panel label {
+    display: block;
+    margin: 0.75rem 0;
+}
+
+.panel input[type="range"] {
+    width: 100%;
+}
+
+.panel button {
+    margin: 0.25rem 0.25rem 0.25rem 0;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #5a5a5a;
+    border-radius: 0.3rem;
+    background: #333;
+    color: inherit;
+    cursor: pointer;
+}
+
+.panel button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.status {
+    font-size: 0.85rem;
+    color: #9a9a9a;
+}
+
+.viewport {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    background: black;
+}
+
+.hud {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    background: rgba(0, 0, 0, 0.55);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+}

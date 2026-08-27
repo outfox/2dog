@@ -4,11 +4,8 @@ using System.Text;
 namespace twodog.cli;
 
 /// <summary>
-/// Access to the dotnet-new template content embedded in this assembly
-/// (LogicalName "tpl/..."), with the template's literal rename/version tokens
-/// substituted at read time. The embedded files come from templates/twodog,
-/// the same single source of truth that is packed as this package's
-/// dotnet-new template content.
+/// Access to the dotnet-new template content embedded in this assembly (LogicalName "tpl/...", sourced from
+/// templates/twodog), with the template's literal rename/version tokens substituted at read time.
 /// </summary>
 internal static class TemplateAssets
 {
@@ -20,8 +17,8 @@ internal static class TemplateAssets
     }
 
     /// <summary>
-    /// All embedded template resource names, normalized to forward slashes
-    /// (MSBuild's %(RecursiveDir) yields the host OS separator at build time).
+    /// All embedded template resource names, normalized to forward slashes (%(RecursiveDir) yields the host OS
+    /// separator at build time).
     /// </summary>
     private static readonly IReadOnlyList<string> Names =
         Assembly.GetExecutingAssembly().GetManifestResourceNames()
@@ -68,8 +65,7 @@ internal static class TemplateAssets
     public static string RootBuildTargets() => ReadRaw("tpl/Directory.Build.targets");
 
     /// <summary>
-    /// The Godot project files a brand-new project needs on top of the ones
-    /// above: relative path -> content, tokens substituted.
+    /// The Godot project files a brand-new project needs on top of the ones above: relative path -> content.
     /// </summary>
     public static IEnumerable<(string RelativePath, string Content)> NewProjectFiles(string baseName)
     {
@@ -80,18 +76,15 @@ internal static class TemplateAssets
     }
 
     /// <summary>
-    /// Relative target path -> content for every file of a host subtree, with
-    /// the template's folder name replaced by the host's actual folder name
-    /// (so a project can hold several hosts of the same kind) and the usual
-    /// rename/version tokens substituted.
+    /// Relative target path -> content for every file of a host subtree, with the template's folder name replaced
+    /// by the host's actual folder name and the usual rename/version tokens substituted.
     /// </summary>
     public static IEnumerable<HostFile> HostFiles(HostKind kind, string baseName, string folder)
     {
         var sourceFolder = $"{SourceName}.{Hosts.Suffix(kind)}";
         var prefix = $"tpl/{sourceFolder}/";
-        // TwoDogWebBoot.cs is excluded here: PlanWebBoot is its single writer
-        // (exactly one copy per project - two would be CS0101 in the game
-        // assembly when a project holds several web hosts).
+        // TwoDogWebBoot.cs is excluded: PlanWebBoot is its single writer (one copy per project - two would be
+        // CS0101 in the game assembly with several web hosts).
         foreach (var name in Names.Select(Normalize)
                      .Where(n => n.StartsWith(prefix, StringComparison.Ordinal))
                      .Where(n => !n.EndsWith("/TwoDogWebBoot.cs", StringComparison.Ordinal))
@@ -109,18 +102,15 @@ internal static class TemplateAssets
     }
 
     /// <summary>
-    /// Ordered literal replacement: the host folder token first (it starts
-    /// with the sourceName token, so the general rename must not run first),
-    /// then the project-wide tokens.
+    /// Ordered literal replacement: the host folder token first (it starts with the sourceName token, so the
+    /// general rename must not run first), then the project-wide tokens.
     /// </summary>
     private static string Rename(string text, string sourceFolder, string folder, string baseName) =>
         Substitute(text.Replace(sourceFolder, folder), baseName);
 
     /// <summary>
-    /// Ordered literal replacement of the template tokens. Both rename tokens
-    /// resolve to the same base name (the template engine splits them across
-    /// files; the sourceName token also matches path fragments, which is
-    /// exactly what we substitute in HostFiles paths).
+    /// Ordered literal replacement of the template tokens. Both rename tokens resolve to the same base name; the
+    /// sourceName token also matches path fragments, which HostFiles relies on.
     /// </summary>
     public static string Substitute(string text, string baseName) => text
         .Replace(SourceName, baseName)
@@ -129,5 +119,6 @@ internal static class TemplateAssets
         .Replace("NATIVES_PKG_VERSION", ToolVersions.NativesVersion)
         .Replace("GODOT_SDK_VERSION", ToolVersions.GodotSdkVersion)
         .Replace("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion)
-        .Replace("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion);
+        .Replace("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion)
+        .Replace("ASPNETCORE_PKG_VERSION", ToolVersions.AspNetCoreVersion);
 }

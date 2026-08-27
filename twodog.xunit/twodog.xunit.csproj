@@ -4,13 +4,8 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsTestProject>false</IsTestProject>
-        <!--
-          This package ships its collection definitions as compile-in source
-          (build/2dog.xunit.targets) instead of as a referenced assembly, because xUnit only
-          discovers [CollectionDefinition] classes that live in the *test* assembly. Disable
-          default items so that source is NOT also baked into 2dog.xunit.dll, which would create
-          duplicate type definitions in consuming projects.
-        -->
+        <!-- The collection definitions ship as compile-in source (build/2dog.xunit.targets); keep them out of
+             2dog.xunit.dll or consumers would get duplicate types. -->
         <EnableDefaultItems>false</EnableDefaultItems>
     </PropertyGroup>
 
@@ -22,34 +17,19 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
-        <!--
-          Build-only package: the collection definitions ship as compile-in source (see below), so
-          there is no meaningful assembly to distribute. Omit the (empty) build output and silence
-          NU5128 (the package declares dependencies but has no lib/ assembly).
-        -->
+        <!-- Build-only package: no meaningful assembly, so omit build output and silence NU5128 (deps, no lib/). -->
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <NoWarn>$(NoWarn);NU5128</NoWarn>
     </PropertyGroup>
 
-    <!--
-      Dependencies flow to consumers as package dependencies:
-        - 2dog.engine               provides the fixtures (twodog.Testing namespace)
-        - xunit.v3.extensibility.core  provides ICollectionFixture<>/CollectionDefinition for the
-                                    compiled-in source. We reference the extensibility core (not the
-                                    full xunit.v3 metapackage) because this is a library, not a
-                                    runnable test project — the metapackage requires OutputType=Exe.
-    -->
+    <!-- 2dog.engine provides the fixtures; xunit.v3.extensibility.core (not the metapackage, which requires
+         OutputType=Exe) provides ICollectionFixture<>/CollectionDefinition for the compiled-in source. -->
     <ItemGroup>
         <ProjectReference Include="..\twodog.engine\twodog.engine.csproj"/>
         <PackageReference Include="xunit.v3.extensibility.core" Version="3.*"/>
     </ItemGroup>
 
-    <!--
-      Ship the collection definitions as compile-in source plus the targets that injects them.
-      All three live under build/ so the package layout matches the repo layout and the targets
-      can locate the .cs files via $(MSBuildThisFileDirectory). They are intentionally excluded
-      from this project's own compilation (see EnableDefaultItems above).
-    -->
+    <!-- Compile-in source plus the targets that injects it, all under build/ so $(MSBuildThisFileDirectory) works. -->
     <ItemGroup>
         <None Include="build\GodotCollection.cs"         Pack="true" PackagePath="build\"/>
         <None Include="build\GodotHeadlessCollection.cs" Pack="true" PackagePath="build\"/>

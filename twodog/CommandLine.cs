@@ -37,9 +37,8 @@ internal sealed class ParsedCommand
 internal sealed class UsageException(string message) : Exception(message);
 
 /// <summary>
-/// Manual argument parsing, in the style of twodog.import: a couple of verbs,
-/// a handful of flags, no parser dependency. Every interactive choice has a
-/// flag here, and giving any host flag is what turns the prompts off.
+/// Manual argument parsing (no parser dependency): a couple of verbs, a handful of flags. Every interactive
+/// choice has a flag here, and giving any host flag is what turns the prompts off.
 /// </summary>
 internal static class CommandLine
 {
@@ -125,6 +124,9 @@ internal static class CommandLine
                 case "--avalonia":
                     cmd.Requested.Add(new HostRequest(HostKind.Avalonia, OptionalFolder(queue)));
                     break;
+                case "--blazor":
+                    cmd.Requested.Add(new HostRequest(HostKind.Blazor, OptionalFolder(queue)));
+                    break;
 
                 case "--no-desktop":
                     cmd.Excluded.Add(HostKind.Desktop);
@@ -146,6 +148,9 @@ internal static class CommandLine
                     break;
                 case "--no-avalonia":
                     cmd.Excluded.Add(HostKind.Avalonia);
+                    break;
+                case "--no-blazor":
+                    cmd.Excluded.Add(HostKind.Blazor);
                     break;
 
                 case "--dry-run":
@@ -185,8 +190,7 @@ internal static class CommandLine
     }
 
     /// <summary>
-    /// `2dog new [Name] [directory]`, `2dog pack <operation> <file.pck>`;
-    /// every other form takes a project directory.
+    /// `2dog new [Name] [directory]`, `2dog pack <operation> <file.pck>`; every other form takes a project directory.
     /// </summary>
     private static void AssignPositionals(ParsedCommand cmd, List<string> positionals)
     {
@@ -219,8 +223,8 @@ internal static class CommandLine
             : throw new UsageException($"{flag} requires a value");
 
     /// <summary>
-    /// The optional folder name after a host flag. Path-like tokens are left
-    /// alone so `2dog add --web ./MyGame` still reads as a project path.
+    /// The optional folder name after a host flag. Path-like tokens are left alone so `2dog add --web ./MyGame`
+    /// still reads as a project path.
     /// </summary>
     private static string? OptionalFolder(Queue<string> queue)
     {
@@ -264,10 +268,8 @@ internal static class HostSelection
     }
 
     /// <summary>
-    /// What a run creates when no host was named: every default-set kind the
-    /// project does not have yet, minus the excluded ones. Which kinds are
-    /// missing follows from the recognized hosts; the folder names avoid every
-    /// directory.
+    /// What a run creates when no host was named: every default-set kind the project does not have yet, minus the
+    /// excluded ones. Missing kinds follow from the recognized hosts; folder names avoid every directory.
     /// </summary>
     public static List<HostSpec> Defaults(ICollection<HostKind> excluded, ProjectContext project)
     {

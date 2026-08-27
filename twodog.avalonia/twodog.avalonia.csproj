@@ -21,17 +21,15 @@
         <PackageTags>godot;2dog;avalonia;game-engine</PackageTags>
     </PropertyGroup>
 
-    <!-- GodotSharp from the fork build: plain References do not flow across ProjectReference,
-         so the engine's reference is repeated here. Deliberately NOT packed - consumers get
-         GodotSharp.dll from 2dog.engine's lib/net10.0/. -->
+    <!-- Plain References do not flow across ProjectReference, so the engine's is repeated. Not packed: consumers
+         get GodotSharp.dll from 2dog.engine's lib/net10.0/. -->
     <ItemGroup>
         <Reference Include="GodotSharp">
             <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</HintPath>
         </Reference>
     </ItemGroup>
 
-    <!-- The ProjectReference packs as a dependency on the 2dog.engine package at the same
-         version (twodog.xunit precedent). Only the Avalonia core metapackage is referenced;
+    <!-- The ProjectReference packs as a same-version 2dog.engine dependency. Only Avalonia core is referenced;
          backend selection (Avalonia.Desktop) belongs to the application. -->
     <ItemGroup>
         <ProjectReference Include="..\twodog.engine\twodog.engine.csproj"/>

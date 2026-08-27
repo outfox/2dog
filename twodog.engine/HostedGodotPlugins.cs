@@ -8,9 +8,8 @@ using System.Runtime.Loader;
 namespace twodog;
 
 /// <summary>
-/// Registers this load context's GodotPlugins with a libgodot module through its exported
-/// set_load_from_executable_fn, so GDMono initializes on the host's own runtime and never
-/// falls back to hostfxr (machine-wide; boots a second runtime under self-contained hosts).
+/// Registers this load context's GodotPlugins with libgodot via set_load_from_executable_fn, so GDMono uses the
+/// host's runtime and never falls back to hostfxr (which boots a second runtime under self-contained hosts).
 /// </summary>
 internal static unsafe class HostedGodotPlugins
 {
@@ -53,9 +52,8 @@ internal static unsafe class HostedGodotPlugins
 
     private static string FindGodotPluginsPath()
     {
-        // Same discovery order as Engine.ConfigureGodotSharpDir: release/debug variants ship the
-        // API flat next to twodog.dll; the editor variant nests it under GodotSharp/Api/Debug
-        // (upstream editor convention - the Debug folder name is fixed regardless of build config).
+        // Same order as Engine.ConfigureGodotSharpDir: flat next to twodog.dll (release/debug), then the editor's
+        // GodotSharp/Api/Debug (folder name fixed upstream regardless of build config).
         var envDir = Environment.GetEnvironmentVariable("GODOTSHARP_DIR");
         if (!string.IsNullOrEmpty(envDir) && File.Exists(Path.Combine(envDir, "GodotPlugins.dll")))
             return Path.Combine(envDir, "GodotPlugins.dll");

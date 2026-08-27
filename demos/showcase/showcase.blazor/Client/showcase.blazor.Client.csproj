@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+    <!-- Blazor WebAssembly client of the showcase.blazor host: the Godot engine is linked into this project's
+         dotnet.native.wasm (2dog.browser-wasm) and started by 2dog.blazor's GodotView on the home page. Built and
+         served through the parent server project. -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <!-- Godot project location: two levels up (the host folder nests inside the Godot project, hidden from the
+         editor by its .gdignore) -->
+    <PropertyGroup>
+        <GodotProjectDir>../..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCoreVersion)"/>
+    </ItemGroup>
+
+    <!-- Engine from the source checkout by default; -p:Official=true consumes the published NuGet packages.
+         PrivateAssets=all keeps Godot, the engine and their build targets out of the server project, which only
+         serves this client and must not act as a 2dog host itself. 2dog.blazor does flow: the server serves its
+         static web assets (_content/2dog.blazor/*) and it carries no engine dependency. -->
+    <ItemGroup>
+        <ProjectReference Include="../../../../twodog.engine/twodog.engine.csproj" Condition="'$(Official)' != 'true'" PrivateAssets="all"/>
+        <ProjectReference Include="../../../../twodog.blazor/twodog.blazor.csproj" Condition="'$(Official)' != 'true'"/>
+        <ProjectReference Include="../../showcase.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Official)' == 'true'">
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" PrivateAssets="all"/>
+        <PackageReference Include="2dog.blazor" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[$(NativesVersion)]" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <!-- Root the game assembly: scripts are resolved by reflection.
+         (GodotSharp and twodog are rooted by the browser-wasm targets.) -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="showcase"/>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+
+    <!-- Source-checkout stand-ins for the package targets: 2dog.engine, the host-OS desktop meta targets (editor
+         libgodot for the .pck export) and browser-wasm (all web wiring); Official=true gets these transitively -->
+    <Import Project="../../../../twodog.engine/build/2dog.engine.targets" Condition="'$(Official)' != 'true'"/>
+    <Import Project="../../../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('Windows'))"/>
+    <Import Project="../../../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('Linux'))"/>
+    <Import Project="../../../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('OSX'))"/>
+    <Import Project="../../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets" Condition="'$(Official)' != 'true'"/>
+</Project>

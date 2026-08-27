@@ -44,7 +44,7 @@ const SECTIONS = [
   ]],
   ['Hosts', [
     'hosts/index.md', 'hosts/generic.md', 'hosts/avalonia.md', 'hosts/web.md',
-    'hosts/webxr.md', 'hosts/winforms.md', 'hosts/winui.md', 'hosts/xunit.md',
+    'hosts/webxr.md', 'hosts/blazor.md', 'hosts/winforms.md', 'hosts/winui.md', 'hosts/xunit.md',
   ]],
   ['API Reference', [
     'api-reference.md', 'api/engine.md', 'api/godot-instance.md', 'api/godotsharp.md',

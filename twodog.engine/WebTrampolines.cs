@@ -4,13 +4,8 @@ using System.Runtime.InteropServices;
 namespace twodog;
 
 /// <summary>
-/// Forces the mono wasm build to generate interpreter/AOT trampolines for
-/// function-pointer signatures, which are not generated automatically for
-/// <c>delegate* unmanaged</c> uses. Only the declarations matter; nothing
-/// instantiates these. Superset of the fork's
-/// modules/mono/glue/GodotSharp/GodotSharp/SourceFiles/WebTrampolines.cs:
-/// every distinct NativeFuncs signature shape plus twodog's own
-/// GDExtension-interface shapes. Verified by WebTrampolineCoverageTests.
+/// Declarations that force mono wasm to generate trampolines for every <c>delegate* unmanaged</c> signature shape
+/// (NativeFuncs + twodog's GDExtension shapes). Superset of the fork's copy; see WebTrampolineCoverageTests.
 /// </summary>
 internal static class WebTrampolines
 {

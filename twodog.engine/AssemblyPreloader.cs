@@ -9,26 +9,21 @@ using System.Runtime.Loader;
 namespace twodog.fixture;
 
 /// <summary>
-/// Handles pre-loading game assemblies into the Default AssemblyLoadContext before Godot starts.
-/// This prevents type identity issues where the same type exists in multiple load contexts.
-/// Public so that hosts that construct <see cref="Engine"/> directly (without the test
-/// fixtures) and also reference game types can apply the same guard.
+/// Pre-loads game assemblies into the Default AssemblyLoadContext before Godot starts, avoiding type-identity
+/// splits across load contexts. Public so hosts constructing <see cref="Engine"/> directly can apply the same guard.
 /// </summary>
 public static class AssemblyPreloader
 {
     /// <summary>
-    /// Discovers and pre-loads game assemblies referenced by the test project.
-    /// Must be called BEFORE Engine.Start() to ensure assemblies load into Default context
-    /// rather than Godot's PluginLoadContext.
+    /// Discovers and pre-loads the project's game assemblies. Must be called before Engine.Start() so they
+    /// land in the Default context rather than Godot's PluginLoadContext.
     /// </summary>
     /// <param name="projectPath">Path to the Godot project directory</param>
     [UnconditionalSuppressMessage("Trimming", "IL2026",
         Justification = "Game assemblies are discovered and loaded dynamically before Godot starts.")]
     public static void PreloadGameAssemblies(string projectPath)
     {
-        // On browser (wasm) all assemblies are part of the published bundle
-        // and live in the single default AssemblyLoadContext already; there
-        // is no .godot/mono/temp/bin on disk to probe.
+        // On browser (wasm) the bundle already lives in the single default ALC; nothing on disk to probe.
         if (OperatingSystem.IsBrowser()) return;
 
         try
@@ -69,9 +64,8 @@ public static class AssemblyPreloader
     }
 
     /// <summary>
-    /// Finds all compiled game assemblies in the Godot project's output directory.
-    /// Searches through different build configurations (Debug/Release/Editor).
-    /// Returns assemblies sorted alphabetically for deterministic loading order.
+    /// Finds compiled game assemblies across the project's Debug/Release/Editor outputs, sorted for
+    /// deterministic load order.
     /// </summary>
     private static IEnumerable<string> FindGameAssemblies(string projectPath)
     {

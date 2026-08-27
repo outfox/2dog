@@ -3,9 +3,8 @@ using System.Xml.Linq;
 namespace twodog.cli;
 
 /// <summary>
-/// Minimal in-place patching of an existing Godot project csproj: appends one
-/// clearly-marked PropertyGroup containing only the properties 2dog needs
-/// that are not already present. Existing target frameworks are upgraded in place.
+/// Minimal in-place patching of an existing Godot project csproj: appends one clearly-marked PropertyGroup with the
+/// 2dog properties not already present. Existing target frameworks are upgraded in place.
 /// </summary>
 internal static class CsprojPatcher
 {
@@ -27,10 +26,8 @@ internal static class CsprojPatcher
         else if (SdkVersion(sdk) is { } version && CompareVersions(version, ToolVersions.GodotSdkVersion) < 0)
             warnings.Add($"{Path.GetFileName(csprojPath)} uses Godot.NET.Sdk/{version}, older than the {ToolVersions.GodotSdkVersion} this tool targets; not changed - consider upgrading.");
 
-        // Deliberately includes conditioned PropertyGroups: a property the
-        // project sets anywhere (even per-configuration) is treated as "the
-        // author made a choice" and left alone rather than overridden with an
-        // unconditional duplicate.
+        // Deliberately includes conditioned PropertyGroups: a property set anywhere (even per-configuration) is
+        // the author's choice and is left alone rather than overridden with an unconditional duplicate.
         var properties = root.Descendants(ns + "PropertyGroup").Elements().ToList();
 
         string? Existing(string name) =>
@@ -81,12 +78,8 @@ internal static class CsprojPatcher
             added.Add($"DefaultItemExcludes: {string.Join(", ", missingFolders)}");
         }
 
-        // The web bootstrap Compile Include: an existing Compile item counts
-        // as "already wired" only when it names the requested path (re-run
-        // idempotence) or points at a file that actually exists (custom
-        // layouts the author chose). A stale Exists-guarded include from a
-        // no-web scaffold must NOT satisfy this - the guard is false, nothing
-        // would compile the bootstrap, and the web host fails at runtime.
+        // An existing Compile item counts as "already wired" only when it names the requested path or an existing
+        // file; a stale Exists-guarded include from a no-web scaffold must NOT count (the bootstrap would not compile).
         XElement? bootGroup = null;
         var csprojDir = Path.GetDirectoryName(Path.GetFullPath(csprojPath))!;
         var hasBootInclude = root.Descendants(ns + "Compile")
@@ -109,9 +102,8 @@ internal static class CsprojPatcher
 
         if (!patch.HasElements && bootGroup == null && added.Count == 0) return new Result(null, added, warnings);
 
-        // Readable indentation: PreserveWhitespace + DisableFormatting keep
-        // the rest of the file byte-identical, so the injected group carries
-        // its own whitespace.
+        // PreserveWhitespace + DisableFormatting keep the rest of the file byte-identical, so the injected group
+        // carries its own whitespace.
         var children = patch.Elements().ToList();
         patch.RemoveNodes();
         foreach (var child in children)

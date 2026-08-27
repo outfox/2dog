@@ -23,6 +23,7 @@
       "platforms\\twodog.win-x64\\twodog.win-x64.release.csproj",
       "twodog\\twodog.csproj",
       "twodog.avalonia\\twodog.avalonia.csproj",
+      "twodog.blazor\\twodog.blazor.csproj",
       "twodog.engine\\twodog.engine.csproj",
       "twodog.hosting\\twodog.hosting.csproj",
       "twodog.hosting.runtime\\twodog.hosting.runtime.csproj",

@@ -32,4 +32,14 @@
     <Build Project="false" />
   </Project>
 #endif
+#if (blazor)
+  <Project Path="TPLRAWNAME.blazor/TPLRAWNAME.blazor.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="TPLRAWNAME.blazor/Client/TPLRAWNAME.blazor.Client.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+#endif
 </Solution>

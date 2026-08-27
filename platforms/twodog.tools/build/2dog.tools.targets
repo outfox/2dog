@@ -1,10 +1,6 @@
 <Project>
-    <!--
-      Exports the location of the GodotSharp editor tooling assemblies
-      (GodotTools) shipped in this package. Consumed by the 2dog package's
-      automatic import target (TwoDogImportGodotProject), which passes it to
-      the import helper as GODOT_TOOLS_DIR.
-    -->
+    <!-- Location of the GodotTools assemblies in this package; 2dog.engine's TwoDogImportGodotProject passes it to the
+         import helper as GODOT_TOOLS_DIR. -->
     <PropertyGroup>
         <TwoDogGodotToolsDir Condition="'$(TwoDogGodotToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../tools/GodotSharp/Tools/GodotTools.dll')">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../tools/GodotSharp/Tools/'))</TwoDogGodotToolsDir>
     </PropertyGroup>

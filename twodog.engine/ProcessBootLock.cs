@@ -4,13 +4,8 @@ using System.Threading;
 namespace twodog;
 
 /// <summary>
-/// Serializes engine boots across the whole process. Boot mutates process-global
-/// state (the CWD via Godot's --path chdir, the GODOT_PROJECT_ASSEMBLY_DIR /
-/// GODOTSHARP_DIR environment variables read during instance creation), and
-/// multi-instance hosts run each engine in an isolated AssemblyLoadContext with
-/// its own copy of this assembly - a plain static lock would be per-context.
-/// A named local mutex has OS-level identity, so every copy contends on the
-/// same lock; the process id keeps unrelated processes unserialized.
+/// Serializes engine boots (they mutate CWD and env vars) across the whole process. A static lock would be
+/// per-ALC under multi-instance hosts; a named local mutex keyed by process id has OS-level identity.
 /// </summary>
 internal static class ProcessBootLock
 {
@@ -18,10 +13,8 @@ internal static class ProcessBootLock
     internal static string Name => $@"Local\2dog-engine-boot-{Environment.ProcessId}";
 
     /// <summary>
-    /// Acquires the process-wide boot lock, or throws <see cref="TimeoutException"/>
-    /// (message contains "boot lock") without touching any engine state.
-    /// The returned holder must be disposed on the acquiring thread: mutex
-    /// ownership is thread-affine and ReleaseMutex throws elsewhere.
+    /// Acquires the boot lock or throws <see cref="TimeoutException"/> (message contains "boot lock"). Dispose the
+    /// holder on the acquiring thread: mutex ownership is thread-affine.
     /// </summary>
     internal static IDisposable Acquire(TimeSpan timeout)
     {

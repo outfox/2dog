@@ -1,17 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <!--
-      Browser (wasm) host: your C# code hosts the Godot engine in the browser.
-
-      Publish:  dotnet publish Company.Product1.web   (from the project root;
-                the root global.json pins a wasm-capable SDK. Defaults to
-                Release via Directory.Build.props; pass -c Debug to override.)
-      Output:   AppBundle/ - serve with any static file server.
-
-      Requires the wasm-tools workload:  dotnet workload install wasm-tools
-      The 2dog.browser-wasm package statically links the Godot engine into
-      dotnet.native.wasm during publish and exports the Godot project's
-      content as godot.pck (using the desktop editor packages on this machine).
-    -->
+    <!-- Browser (wasm) host; requires `dotnet workload install wasm-tools`. Publish from the project root:
+         dotnet publish Company.Product1.web -> AppBundle/ (engine linked in, content exported as godot.pck) -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <OutputType>Exe</OutputType>
@@ -44,9 +33,8 @@
         <ProjectReference Include="../TPLRAWNAME.csproj"/>
     </ItemGroup>
 
-    <!-- Root the game assembly: scripts are resolved by reflection. Add a
-         TrimmerRootAssembly for any NuGet package your game code reaches via
-         reflection (e.g. an ECS or serializer library). -->
+    <!-- Scripts are resolved by reflection: root the game assembly, and any NuGet package your game reaches
+         via reflection (e.g. an ECS or serializer library) -->
     <ItemGroup>
         <TrimmerRootAssembly Include="TPLRAWNAME"/>
         <TrimmerRootAssembly Include="$(TargetName)"/>

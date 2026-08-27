@@ -10,6 +10,7 @@ internal enum HostKind
     WinForms,
     WinUi,
     Avalonia,
+    Blazor,
 }
 
 /// <summary>One host to create: its kind and the folder (and csproj) name it gets.</summary>
@@ -19,24 +20,21 @@ internal sealed record HostSpec(HostKind Kind, string Folder);
 internal sealed record ExistingHost(HostKind Kind, string Folder);
 
 /// <summary>
-/// Static facts about host kinds plus the naming rules that let a project hold
-/// several hosts of the same kind: the template subtree a kind is scaffolded
-/// from is fixed, the folder name is not.
+/// Static facts about host kinds plus the naming rules that let a project hold several hosts of the same kind:
+/// the template subtree a kind is scaffolded from is fixed, the folder name is not.
 /// </summary>
 internal static class Hosts
 {
     public static readonly IReadOnlyList<HostKind> All =
-        [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia];
+        [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor];
 
     /// <summary>
-    /// Whether a bare run without host flags creates this kind. WinForms and
-    /// WinUI are opt-in: those hosts only run on Windows (WinUI only even
-    /// builds there), so they never join the default set. Avalonia is opt-in too - cross-platform, but it pulls the whole
-    /// Avalonia UI framework plus the 2dog.avalonia package into the project.
-    /// WebXr is opt-in: XR games also need project-side setup (XR shaders,
-    /// session start). All are still offered interactively and via flags.
+    /// Whether a bare run without host flags creates this kind. Opt-in: WinForms/WinUI (Windows-only), Avalonia
+    /// (pulls in the whole UI framework), WebXr (needs project-side XR setup), Blazor (a server + client pair).
+    /// All remain available via flags/prompts.
     /// </summary>
-    public static bool InDefaultSet(HostKind kind) => kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia);
+    public static bool InDefaultSet(HostKind kind) =>
+        kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Blazor);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -48,6 +46,7 @@ internal static class Hosts
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
+        HostKind.Blazor => "blazor",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -60,6 +59,7 @@ internal static class Hosts
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
+        HostKind.Blazor => "blazor",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -72,6 +72,7 @@ internal static class Hosts
         HostKind.WinForms => "game embedded in a WinForms window (Windows-only)",
         HostKind.WinUi => "game embedded in a WinUI 3 window (Windows-only)",
         HostKind.Avalonia => "game embedded in an Avalonia app (cross-platform GUI)",
+        HostKind.Blazor => "game embedded in a Blazor Web App page (WebAssembly)",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -85,15 +86,21 @@ internal static class Hosts
         HostKind.WinForms => "--winforms",
         HostKind.WinUi => "--winui",
         HostKind.Avalonia => "--avalonia",
+        HostKind.Blazor => "--blazor",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
+
+    /// <summary>
+    /// The Blazor host is a pair: the server csproj named after the folder plus the WebAssembly client project
+    /// nested in Client/ (the one that links Godot). Relative to the project root, forward slashes.
+    /// </summary>
+    public static string BlazorClientProject(string folder) => $"{folder}/Client/{folder}.Client.csproj";
 
     public static string DefaultFolder(HostKind kind, string baseName) => $"{baseName}.{Suffix(kind)}";
 
     /// <summary>
-    /// A folder name for a new host of this kind that no existing folder (nor
-    /// any folder already planned in this run) uses: the default name, then
-    /// the default with 2, 3, ... appended.
+    /// A folder name for a new host of this kind unused by existing or already-planned folders: the default name,
+    /// then the default with 2, 3, ... appended.
     /// </summary>
     public static string AllocateFolder(HostKind kind, string baseName, IEnumerable<string> taken)
     {
@@ -105,9 +112,8 @@ internal static class Hosts
     }
 
     /// <summary>
-    /// Reduce a name to a safe folder/assembly stem (dotnet-new style). A stem
-    /// needs a letter or a digit: '.' and '..' survive the character filter and
-    /// would otherwise write outside the project once combined into a path.
+    /// Reduce a name to a safe folder/assembly stem (dotnet-new style). A stem needs a letter or digit: '.' and '..'
+    /// survive the character filter and would otherwise write outside the project.
     /// </summary>
     public static string? SanitizeName(string? name)
     {
@@ -121,9 +127,8 @@ internal static class Hosts
 internal static class HostScan
 {
     /// <summary>
-    /// Every immediate subdirectory that looks like a 2dog host, i.e. holds a
-    /// csproj named after the folder that references the engine. Ordered by
-    /// folder name so output is stable.
+    /// Every immediate subdirectory holding a csproj named after the folder that references the engine.
+    /// Ordered by folder name so output is stable.
     /// </summary>
     public static List<ExistingHost> Find(string projectDir)
     {
@@ -148,21 +153,24 @@ internal static class HostScan
     }
 
     /// <summary>
-    /// The kind of host a csproj is, or null when it is not a 2dog host.
-    /// Content decides first (the folder name is only a hint, since hosts may
-    /// be named freely); the checks run most-specific first.
+    /// The kind of host a csproj is, or null when it is not a 2dog host. Content decides (the folder name is only
+    /// a hint, hosts may be named freely); the checks run most-specific first.
     /// </summary>
     internal static HostKind? Classify(string csproj, string folder)
     {
         var isTwoDog = csproj.Contains("2dog.engine", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
+                       || csproj.Contains("<TwoDogBlazor", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<GodotProjectDir>", StringComparison.OrdinalIgnoreCase);
         if (!isTwoDog) return null;
 
-        // Before the plain Web check: WebXR hosts are browser-wasm too, marked
-        // by the TwoDogWebXR property their scaffolded csproj carries. Tolerant
-        // of whitespace and attributes so hand-formatted csprojs still match.
+        // Before the plain Web check: Blazor (server csproj marked TwoDogBlazor; its client is browser-wasm) and
+        // WebXR hosts (browser-wasm too, marked by the TwoDogWebXR property). Tolerant of whitespace and
+        // attributes so hand-formatted csprojs still match.
+        if (System.Text.RegularExpressions.Regex.IsMatch(csproj,
+                @"<TwoDogBlazor(\s[^>]*)?>\s*true\s*</TwoDogBlazor\s*>",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return HostKind.Blazor;
         if (System.Text.RegularExpressions.Regex.IsMatch(csproj,
                 @"<TwoDogWebXR(\s[^>]*)?>\s*true\s*</TwoDogWebXR\s*>",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return HostKind.WebXr;

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+    <!-- Blazor Web App showcase host: this ASP.NET Core server serves the Blazor WebAssembly client in Client/,
+         which links the Godot engine into its runtime and shows the game through 2dog.blazor's GodotView.
+         Run:     `dotnet run` in this folder (needs the wasm-tools workload)
+         Publish: `dotnet publish -c Release` in this folder -> bin/Release/net10.0/publish/ -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- Marks this host as the Blazor flavor for the 2dog tool's host scan. -->
+        <TwoDogBlazor>true</TwoDogBlazor>
+        <!-- The nested client project and the game-owned web boot file must stay out of this project's globs. -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);Client/**;TwoDogWebBoot.cs</DefaultItemExcludes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCoreVersion)"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="Client/showcase.blazor.Client.csproj"/>
+    </ItemGroup>
+</Project>

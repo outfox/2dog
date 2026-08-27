@@ -2,30 +2,25 @@
     <PropertyGroup>
         <!-- Godot engine version. Must match the godot submodule (godot/version.py). -->
         <GodotVersion>4.7.2</GodotVersion>
-        <!-- Global 2dog iteration, shared across ALL supported Godot lines.
-             Bump every 2dog release; never reset when GodotVersion changes:
-             e.g. 4.6.2.31 and 4.7.0.31 are the same 2dog iteration. -->
+        <!-- Global 2dog iteration shared across all Godot lines (4.6.2.31 and 4.7.0.31 are the same iteration).
+             Bump every release; never reset when GodotVersion changes. -->
         <TwoDogRevision>76</TwoDogRevision>
-        <!-- Native package revision. Bump when the godot submodule changes OR
-             when the natives package layout/metadata changes (the deploy job's
-             skip-duplicate push would otherwise keep the old package);
-             reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0
-             (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>1</NativesRevision>
+        <!-- Bump when the godot submodule or the natives package layout changes (deploy skips duplicates);
+             reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0 (4.7.0.0 publishes as 4.7.0). -->
+        <NativesRevision>2</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
-        <!-- Avalonia for the 2dog.avalonia package and its in-repo consumers. Mixed Avalonia
-             versions fail at runtime, so bump it in one place. (The template consumes it via
-             its AVALONIA_PKG_VERSION token, substituted on pack and scaffold.) -->
+        <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
+             AVALONIA_PKG_VERSION token, substituted on pack and scaffold. -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>
         <!-- Windows App SDK for the WinUI 3 host demo. (The template consumes it via its
              WINAPPSDK_PKG_VERSION token, substituted on pack and scaffold.) -->
         <WindowsAppSdkVersion>2.4.0</WindowsAppSdkVersion>
-        <!-- Emscripten version for browser-wasm natives. Must match the emscripten
-             the .NET browser-wasm runtime pack was built with (the web libgodot.a is
-             statically linked into dotnet.native.wasm, so the toolchains must agree).
-             Source of truth: microsoft.net.workload.emscripten.current manifest of the
-             SDK band used by web hosts (net10.0). -->
+        <!-- ASP.NET Core (Blazor) packages for 2dog.blazor and the Blazor host. (The template consumes it via its
+             ASPNETCORE_PKG_VERSION token, substituted on pack and scaffold.) -->
+        <AspNetCoreVersion>10.0.11</AspNetCoreVersion>
+        <!-- Must match the emscripten of the .NET browser-wasm runtime pack (libgodot.a links into dotnet.native.wasm).
+             Source of truth: microsoft.net.workload.emscripten.current manifest of the net10.0 SDK band. -->
         <EmscriptenVersion>3.1.56</EmscriptenVersion>
         <!-- Allow running on any .NET 10+ runtime (10, 11, ...) -->
         <RollForward>LatestMajor</RollForward>

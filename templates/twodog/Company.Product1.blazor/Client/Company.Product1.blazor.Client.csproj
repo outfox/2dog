@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+    <!-- Blazor WebAssembly client of the Blazor host: the Godot engine is linked into this project's
+         dotnet.native.wasm (2dog.browser-wasm) and started by 2dog.blazor's GodotView on the home page. Built and
+         served through the parent server project; content is exported as godot.pck (using the desktop editor
+         packages on this machine). -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>Company.Product1.Blazor.Client</RootNamespace>
+    </PropertyGroup>
+    <!-- Godot project location: two levels up (the host folder nests inside the Godot project, hidden from the
+         editor by its .gdignore) -->
+    <PropertyGroup>
+        <GodotProjectDir>../..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <!-- PrivateAssets=all keeps Godot, the engine and their build targets out of the server project, which only
+         serves this client and must not act as a 2dog host itself. 2dog.blazor does flow: the server serves its
+         static web assets (_content/2dog.blazor/*) and it carries no engine dependency. -->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="ASPNETCORE_PKG_VERSION"/>
+        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION" PrivateAssets="all"/>
+        <PackageReference Include="2dog.blazor" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]" PrivateAssets="all"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../../TPLRAWNAME.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <!-- Scripts are resolved by reflection: root the game assembly, and any NuGet package your game reaches
+         via reflection (e.g. an ECS or serializer library) -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="TPLRAWNAME"/>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+</Project>

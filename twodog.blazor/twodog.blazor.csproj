@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <!-- Public types share the engine's 'twodog' namespace, like 2dog.avalonia. -->
+        <RootNamespace>twodog</RootNamespace>
+    </PropertyGroup>
+
+    <!-- NuGet Package Metadata -->
+    <PropertyGroup>
+        <PackageId>2dog.blazor</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>Embed a Godot viewport in a Blazor WebAssembly page with 2dog. GodotView owns a canvas and starts the statically linked engine inside the .NET runtime Blazor already booted, so Razor code calls Godot directly - no JavaScript interop layer.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>true</IsPackable>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageTags>godot;2dog;blazor;webassembly;game-engine</PackageTags>
+    </PropertyGroup>
+
+    <!-- Plain References do not flow across ProjectReference, so the engine's is repeated. Not packed: consumers
+         get GodotSharp.dll from 2dog.engine's lib/net10.0/. -->
+    <ItemGroup>
+        <Reference Include="GodotSharp">
+            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <!-- PrivateAssets=all: the package must NOT depend on 2dog.engine. A Blazor Web App server references this
+         package (transitively, to serve _content/2dog.blazor/*), and 2dog.engine's build targets and native
+         packages must stay out of that server. The wasm client references 2dog.engine itself. -->
+    <ItemGroup>
+        <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(AspNetCoreVersion)"/>
+        <!-- The component only ever runs in the browser; platform analyzers should assume that. -->
+        <SupportedPlatform Include="browser"/>
+    </ItemGroup>
+
+    <!-- Package icon and readme -->
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="twodog.tests"/>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,39 @@
+@page "/"
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+<PageTitle>2dog showcase (Blazor)</PageTitle>
+
+<div class="layout">
+    <aside class="panel">
+        <h1>2dog &middot; Blazor</h1>
+        <p class="status">@_status</p>
+
+        <dl>
+            <dt>Engine</dt>
+            <dd>@_engineVersion</dd>
+            <dt>Scene</dt>
+            <dd>@_sceneName</dd>
+            <dt>FPS</dt>
+            <dd>@_fps</dd>
+            <dt>Frames</dt>
+            <dd>@_frames</dd>
+        </dl>
+
+        <label>
+            Blue cube spin: @_spinSpeed.ToString("0.0") rad/s
+            <input type="range" min="0" max="10" step="0.1" value="@_spinSpeed"
+                   @oninput="OnSpinSpeed" disabled="@(!IsRunning)"/>
+        </label>
+
+        <button @onclick="TogglePause" disabled="@(!IsRunning)">@(_paused ? "Resume" : "Pause")</button>
+        <button @onclick="() => _view?.Quit()" disabled="@(!IsRunning)">Quit engine</button>
+    </aside>
+
+    <main class="viewport">
+        <GodotView @ref="_view" Project="showcase" PluginsInitializer="TwoDogWebBoot.PluginsInitializer()"
+                   OnFrame="OnFrame" Started="OnStarted" Exited="OnExited" Failed="OnFailed"
+                   style="width: 100%; height: 100%;">
+            <div class="hud">@_fps fps</div>
+        </GodotView>
+    </main>
+</div>

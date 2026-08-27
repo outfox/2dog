@@ -7,27 +7,25 @@
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-        <!-- Compiles the TwoDogWebBoot.cs bootstrap used by web (browser-wasm)
-             hosts; harmless on desktop. It takes a function pointer to the
-             source-generated plugins initializer, hence unsafe. -->
+        <!-- TwoDogWebBoot.cs (web hosts) takes a function pointer to the source-generated plugins initializer;
+             harmless on desktop -->
         <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <!-- Nested 2dog host projects: keep them out of this project's default
-             compile/content globs (each also carries a .gdignore so the Godot
-             editor skips them). -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**;showcase.webxr/**;showcase.winforms/**;showcase.winui/**;showcase.avalonia/**</DefaultItemExcludes>
+        <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
+             from the Godot editor) -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**;showcase.webxr/**;showcase.blazor/**;showcase.winforms/**;showcase.winui/**;showcase.avalonia/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
-        <!-- Web bootstrap: lives in the web host folder (out of the Godot
-             editor's sight) but must compile into THIS assembly - scripts are
-             resolved from the assembly holding the source-generated plugins
-             initializer. -->
+        <!-- Web bootstrap lives in the web host folder but must compile into THIS assembly: scripts resolve
+             from the assembly holding the source-generated plugins initializer -->
         <Compile Include="showcase.web/TwoDogWebBoot.cs"
                  Condition="Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs')"/>
-        <!-- The webxr host carries its own copy; compile it only when the plain
-             web host's is absent (one definition per assembly) - mirroring the
-             template's game csproj. -->
+        <!-- The webxr host carries its own copy; compile it only when the web host's is absent (one definition
+             per assembly) -->
         <Compile Include="showcase.webxr/TwoDogWebBoot.cs"
                  Condition="!Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)showcase.webxr/TwoDogWebBoot.cs')"/>
+        <!-- Same for the blazor host, last in line -->
+        <Compile Include="showcase.blazor/TwoDogWebBoot.cs"
+                 Condition="!Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs') And !Exists('$(MSBuildThisFileDirectory)showcase.webxr/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)showcase.blazor/TwoDogWebBoot.cs')"/>
     </ItemGroup>
 </Project>

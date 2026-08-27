@@ -31,9 +31,8 @@
         <ProjectReference Include="../TPLRAWNAME.csproj"/>
     </ItemGroup>
 
-    <!-- Godot project location: the parent directory (the Godot project is the
-         solution root; hosts are nested inside it, hidden from the Godot
-         editor by their .gdignore) -->
+    <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
+         their .gdignore -->
     <PropertyGroup>
         <GodotProjectDir>..</GodotProjectDir>
         <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>

@@ -3,13 +3,8 @@ using Spectre.Console;
 namespace twodog.cli;
 
 /// <summary>
-/// The one Spectre gateway for non-interactive output (prompts live in Tui).
-/// Spectre's static AnsiConsole binds to the writer it sees first, but the
-/// tests swap Console.Out/Error for StringWriters per test - so these
-/// consoles write through a forwarder that resolves the *current*
-/// Console.Out/Error at every write, exactly like Console.WriteLine does.
-/// Under a test host stdio is redirected, so markup degrades to plain text
-/// there, keeping the asserted `error:`/`warning:` prefixes byte-identical.
+/// The one Spectre gateway for non-interactive output (prompts live in Tui). Writes through a forwarder resolving
+/// the *current* Console.Out/Error per write, since tests swap them per test; redirected stdio degrades to plain text.
 /// </summary>
 internal static class Out
 {
@@ -17,11 +12,8 @@ internal static class Out
     private static readonly Lazy<IAnsiConsole> Stderr = new(() => Create(stdErr: true));
 
     /// <summary>
-    /// Renders everything as unwrapped plain text. The test assembly sets
-    /// this in a module initializer: a test host can have an attached
-    /// terminal (whose ANSI support and narrow width would leak into the
-    /// captured strings) while Console.Out points at a StringWriter, and
-    /// that swap is undetectable from here.
+    /// Renders everything as unwrapped plain text. Set by the test assembly's module initializer: a test host may
+    /// have an attached terminal (ANSI, narrow width) while Console.Out is a StringWriter, undetectable from here.
     /// </summary>
     internal static bool ForcePlain;
 
@@ -37,9 +29,8 @@ internal static class Out
         });
 
     /// <summary>
-    /// Spectre output over the process's current Console.Out/Error. Terminal
-    /// facts come from the real console, not from whichever writer happens to
-    /// be installed.
+    /// Spectre output over the process's current Console.Out/Error. Terminal facts come from the real console,
+    /// not from whichever writer happens to be installed.
     /// </summary>
     private sealed class ForwardingOutput(bool stdErr) : IAnsiConsoleOutput
     {
@@ -93,9 +84,8 @@ internal static class Out
         Blank();
     }
 
-    /// <summary>A left-titled grey divider between output sections. On a
-    /// terminal it spans the window; redirected it stays a short fixed line
-    /// (the redirected width is huge so that lines never wrap).</summary>
+    /// <summary>A left-titled grey divider between output sections. On a terminal it spans the window; redirected
+    /// it stays a short fixed line (the redirected width is huge so lines never wrap).</summary>
     public static void Rule(string title)
     {
         if (Console.Profile.Out.IsTerminal)

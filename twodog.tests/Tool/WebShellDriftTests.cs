@@ -1,7 +1,7 @@
 namespace twodog.tests.ToolTests;
 
-// The web host ships four times (web/webxr dotnet-new templates and the two
-// showcase demo hosts). Each template must stay identical to its showcase
+// The web host ships several times (web/webxr/blazor dotnet-new templates and
+// their showcase demo hosts). Each template must stay identical to its showcase
 // mirror apart from the page title, and the webxr flavor must not drift from
 // the web flavor: the shell differs only by the WebXR Layers polyfill block,
 // TwoDogWebBoot.cs is byte-identical, and the template Program.cs differs
@@ -59,19 +59,38 @@ public class WebShellDriftTests
     }
 
     // The game csproj compiles whichever host folder's TwoDogWebBoot.cs is
-    // present (the web copy wins when both exist), so the two copies must not
-    // diverge - a webxr-only project would silently boot differently.
+    // present (web wins over webxr over blazor), so the copies must not
+    // diverge - a webxr- or blazor-only project would silently boot differently.
     [Theory]
-    [InlineData("templates", "twodog", "Company.Product1")]
-    [InlineData("demos", "showcase", "showcase")]
-    public void WebAndWebXrBootFiles_AreIdentical(params string[] parts)
+    [InlineData("webxr", "templates", "twodog", "Company.Product1")]
+    [InlineData("webxr", "demos", "showcase", "showcase")]
+    [InlineData("blazor", "templates", "twodog", "Company.Product1")]
+    [InlineData("blazor", "demos", "showcase", "showcase")]
+    public void WebFlavorBootFiles_AreIdentical(string suffix, params string[] parts)
     {
         var root = parts[..^1];
         var baseName = parts[^1];
         var web = HostFile("TwoDogWebBoot.cs", [.. root, $"{baseName}.web"]);
-        var webxr = HostFile("TwoDogWebBoot.cs", [.. root, $"{baseName}.webxr"]);
+        var flavor = HostFile("TwoDogWebBoot.cs", [.. root, $"{baseName}.{suffix}"]);
 
-        Assert.Equal(web.ReplaceLineEndings("\n"), webxr.ReplaceLineEndings("\n"));
+        Assert.Equal(web.ReplaceLineEndings("\n"), flavor.ReplaceLineEndings("\n"));
+    }
+
+    // The Blazor host ships twice (template + showcase); everything but the
+    // app-specific page must match once the root namespace is aligned.
+    [Theory]
+    [InlineData("Components/App.razor")]
+    [InlineData("Components/Routes.razor")]
+    [InlineData("Program.cs")]
+    [InlineData("wwwroot/app.css")]
+    [InlineData("Client/Program.cs")]
+    public void TemplateAndShowcaseBlazorHosts_ShareTheirShell(string file)
+    {
+        var template = HostFile(file, "templates", "twodog", "Company.Product1.blazor")
+            .Replace("Company.Product1.Blazor", "showcase.blazor");
+        var showcase = HostFile(file, "demos", "showcase", "showcase.blazor");
+
+        Assert.Equal(template.ReplaceLineEndings("\n"), showcase.ReplaceLineEndings("\n"));
     }
 
     // The showcase Programs deliberately differ (the webxr flavor asserts the

@@ -3,15 +3,13 @@ using Spectre.Console;
 namespace twodog.cli;
 
 /// <summary>
-/// The interactive half of the tool: it only ever gathers the same values the
-/// flags carry, so every prompt here has a command-line equivalent and can be
-/// skipped entirely.
+/// The interactive half of the tool: it only gathers the same values the flags carry, so every prompt has a
+/// command-line equivalent and can be skipped entirely.
 /// </summary>
 internal static class Tui
 {
     /// <summary>
-    /// Whether prompting is possible at all. Redirected input (pipes, CI) or a
-    /// non-interactive terminal falls back to flags and defaults.
+    /// Whether prompting is possible at all; redirected input or a non-interactive terminal falls back to flags.
     /// </summary>
     public static bool CanPrompt =>
         !Console.IsInputRedirected && AnsiConsole.Profile.Capabilities.Interactive;
@@ -47,9 +45,8 @@ internal static class Tui
     }
 
     /// <summary>
-    /// The interactive way out of the spaced-name refusal: explain, confirm,
-    /// and gather the new name. Null when the user declines (the caller then
-    /// surfaces the manual checklist).
+    /// The interactive way out of the spaced-name refusal: explain, confirm, gather the new name. Null when the
+    /// user declines (the caller then surfaces the manual checklist).
     /// </summary>
     public static string? OfferRename(SpacedNameException problem)
     {
@@ -79,9 +76,8 @@ internal static class Tui
                 : ValidationResult.Success()));
 
     /// <summary>
-    /// The checkbox list of hosts. Kinds the project already has start
-    /// unchecked and are pre-named so that checking one adds a second host of
-    /// that kind rather than colliding with the first.
+    /// The checkbox list of hosts. Kinds the project already has start unchecked and pre-named so checking one adds
+    /// a second host of that kind rather than colliding with the first.
     /// </summary>
     public static List<HostSpec> SelectHosts(ProjectContext project, IReadOnlyList<HostSpec> preselected)
     {

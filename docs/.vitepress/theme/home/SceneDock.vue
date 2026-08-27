@@ -11,6 +11,7 @@ const hosts = [
   { name: 'MyGame.2dog', role: 'generic', color: 'var(--ed-node-2d)', icon: 'margincontainer', link: '/hosts/generic' },
   { name: 'MyGame.web', role: 'browser', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/web' },
   { name: 'MyGame.webxr', role: 'webxr', color: 'var(--ed-node-3d)', icon: 'vr_headset', link: '/hosts/webxr' },
+  { name: 'MyGame.blazor', role: 'blazor', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/blazor' },
   { name: 'MyGame.xunit', role: 'test suite', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/hosts/xunit' },
 ]
 

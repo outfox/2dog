@@ -3,27 +3,19 @@ using System.Text.RegularExpressions;
 namespace twodog.cli;
 
 /// <summary>
-/// The one scaffolding engine behind every verb: it makes a Godot project
-/// directory hold the 2dog host projects it was asked for. `2dog new` creates
-/// the Godot project first and then runs the same path; `2dog add` (alias
-/// `convert`) runs it against an existing one.
-///
-/// The whole run is planned first as a list of actions, then either printed
-/// (--dry-run) or applied - both paths walk the same plan. Hard invariant:
-/// the tool only ever creates new files or edits *.csproj / project.godot /
-/// *.sln in place, and has no VCS awareness. It never moves, renames or
-/// deletes anything, with two announced exceptions the user opts into:
-/// the .sln-to-.slnx migration, and the --rename fix for spaced names.
+/// The one scaffolding engine behind `new` and `add`: plans a list of actions, then prints (--dry-run) or applies it.
 /// </summary>
+/// <remarks>
+/// Invariant: only creates files or edits *.csproj / project.godot / *.sln in place; never moves, renames or deletes,
+/// except the opt-in .sln-to-.slnx migration and the --rename fix for spaced names.
+/// </remarks>
 internal static class ScaffoldCommand
 {
     private sealed record PlannedAction(string Description, Action Apply);
 
     /// <summary>
-    /// Resolves what the run operates on: the project directory, its base
-    /// name and the hosts it already has. Validating this up front is what
-    /// lets the interactive layer offer a sensible host selection before any
-    /// action is planned.
+    /// Resolves what the run operates on: the project directory, its base name and the hosts it already has.
+    /// Validated up front so the interactive layer can offer a sensible host selection before planning.
     /// </summary>
     public static ProjectContext Open(ScaffoldOptions options)
     {
@@ -69,12 +61,8 @@ internal static class ScaffoldCommand
     }
 
     /// <summary>
-    /// The project's .NET restore identity when it contains whitespace, else
-    /// null: [dotnet] assembly_name is authoritative, otherwise a sole root
-    /// csproj names the project. Whitespace there makes `dotnet publish` of a
-    /// referencing host silently drop the game's transitive NuGet packages
-    /// (dotnet/sdk parses the assets file's dependency strings up to the
-    /// first whitespace), so scaffolding hosts against such a name is refused.
+    /// The project's .NET restore identity ([dotnet] assembly_name, else the sole root csproj) when it contains
+    /// whitespace, else null. Whitespace makes `dotnet publish` of a host silently drop the game's NuGet deps.
     /// </summary>
     internal static string? SpacedIdentity(string projectDir, GodotProjectFile godotProject)
     {
@@ -92,10 +80,8 @@ internal static class ScaffoldCommand
     }
 
     /// <summary>
-    /// Refuses to scaffold against a whitespace-containing .NET name, and
-    /// resolves --rename into the operation that fixes it. The automated fix
-    /// is only offered while no hosts exist yet: afterwards every host csproj
-    /// carries the old name too, and the tool won't rewrite user code.
+    /// Refuses to scaffold against a whitespace-containing .NET name and resolves --rename into the fix. The fix
+    /// is only offered while no hosts exist: afterwards every host csproj carries the old name too.
     /// </summary>
     internal static RenameOperation? ResolveSpacedName(
         ScaffoldOptions options, string projectDir, GodotProjectFile godotProject, List<ExistingHost> existingHosts)
@@ -169,8 +155,7 @@ internal static class ScaffoldCommand
             : [];
 
     /// <summary>
-    /// Runs a scaffold. <paramref name="confirm"/>, when given, is shown the
-    /// planned action descriptions and decides whether they are applied.
+    /// Runs a scaffold. <paramref name="confirm"/>, when given, sees the planned actions and decides whether to apply.
     /// </summary>
     public static int Run(ProjectContext project, ScaffoldOptions options, Func<IReadOnlyList<string>, bool>? confirm = null)
     {
@@ -191,37 +176,40 @@ internal static class ScaffoldCommand
             .Concat(newHosts.Select(h => h.Folder))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var wantsWeb = newHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr)
-                       || existingHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr);
+        var wantsWeb = newHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor)
+                       || existingHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor);
+        // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
+        var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
+            .Concat(existingHosts.Concat(newHosts.Select(h => new ExistingHost(h.Kind, h.Folder)))
+                .Where(h => h.Kind == HostKind.Blazor)
+                .Select(h => Path.Combine(projectDir, Hosts.BlazorClientProject(h.Folder))))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
-        // The web bootstrap lives in the (first) web host folder and compiles
-        // into the game assembly via a Compile Include in the root csproj. A
-        // root-level TwoDogWebBoot.cs is the older layout - it still works via
-        // the root csproj's default globs, so it is left alone (the tool never
-        // moves or deletes) and no folder copy is planned next to it.
+        // The web bootstrap lives in the first web host folder, compiled via a root csproj Compile Include. A
+        // root-level TwoDogWebBoot.cs (older layout) still works via default globs, so it is left alone.
         var legacyRootBoot = File.Exists(Path.Combine(projectDir, "TwoDogWebBoot.cs"));
-        // Every existing web-like host wins over new ones: a project that
-        // already boots from its webxr folder keeps that single active copy
-        // (and --force updates it) instead of gaining a second, dead one.
+        // Existing web-like hosts win over new ones: a project booting from its webxr folder keeps that single
+        // active copy (--force updates it) instead of gaining a second, dead one.
         var webBootFolder = legacyRootBoot
             ? null
             : existingHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
               ?? existingHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder
+              ?? existingHosts.FirstOrDefault(h => h.Kind == HostKind.Blazor)?.Folder
               ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
-              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder;
+              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder
+              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Blazor)?.Folder;
         if (legacyRootBoot && wantsWeb)
             warnings.Add("TwoDogWebBoot.cs sits at the project root (older layout) - left untouched, it still " +
                          "works there. Newer layouts keep it in the web host folder with a guarded Compile " +
                          "Include in the root csproj, so the Godot editor stops importing it as a script.");
 
-        // Root files that already exist are worth a word when 2dog is first
-        // added to a project ("your file was left alone"), but not when hosts
-        // are added to one 2dog already set up - there they are simply ours.
+        // Existing root files are worth a word when 2dog is first added ("your file was left alone"), but not
+        // when adding hosts to a project 2dog already set up.
         var retrofitting = !project.IsNew && existingHosts.Count == 0;
 
-        // The rename runs first: the riskiest step (a file move the Godot
-        // editor may block) fails before anything else is touched, and every
-        // later action already sees the new name.
+        // The rename runs first: the riskiest step (a file move the editor may block) fails before anything else
+        // is touched, and every later action sees the new name.
         string? renamedFrom = null;
         if (project.Rename is { } rename)
         {
@@ -235,7 +223,7 @@ internal static class ScaffoldCommand
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
-        PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostFolders, newHosts);
+        PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts);
 
         foreach (var warning in warnings)
             Out.Warning(warning);
@@ -348,15 +336,13 @@ internal static class ScaffoldCommand
         List<PlannedAction> plan, List<string> warnings, ProjectContext project,
         string godotCsproj, List<string> hostFolders, string? webBootFolder, string? renamedFrom = null)
     {
-        // With a rename planned, the user's csproj still sits at the old path
-        // at plan time; the patch below must read it from there (and keeps
-        // writing to the new path, where the earlier rename action put it).
+        // With a rename planned the csproj still sits at the old path at plan time: read from there, write to the
+        // new path where the earlier rename action put it.
         var readPath = renamedFrom ?? godotCsproj;
         if (!File.Exists(readPath))
         {
-            // GDScript-only project (or a brand-new one): scaffold the csproj
-            // and declare the assembly so the Godot editor finds it
-            // (res://<name>.csproj).
+            // GDScript-only or brand-new project: scaffold the csproj and declare the assembly so the editor finds
+            // it (res://<name>.csproj).
             var content = SetWebBootInclude(
                 SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName), hostFolders),
                 project.BaseName, webBootFolder);
@@ -383,10 +369,8 @@ internal static class ScaffoldCommand
     }
 
     /// <summary>
-    /// The spaced-name fix (--rename): move the csproj, set assembly_name,
-    /// repoint the solution. Sequential announced actions with no rollback -
-    /// same stance as the sln-to-slnx migration; a failure names its step and
-    /// earlier steps stand.
+    /// The spaced-name fix (--rename): move the csproj, set assembly_name, repoint the solution. Sequential
+    /// announced actions with no rollback; a failure names its step and earlier steps stand.
     /// </summary>
     private static void PlanRename(
         List<PlannedAction> plan, ProjectContext project, RenameOperation rename, string projectDir)
@@ -425,8 +409,8 @@ internal static class ScaffoldCommand
     }
 
     /// <summary>
-    /// Rewrites the template csproj's DefaultItemExcludes to the host folders
-    /// this project actually gets (the template lists every host folder).
+    /// Rewrites the template csproj's DefaultItemExcludes (which lists every host folder) to the host folders this
+    /// project actually gets.
     /// </summary>
     internal static string SetHostExcludes(string csproj, IReadOnlyList<string> hostFolders)
     {
@@ -436,10 +420,8 @@ internal static class ScaffoldCommand
     }
 
     /// <summary>
-    /// Rewrites the template csproj's guarded TwoDogWebBoot.cs Compile Include
-    /// (the template names &lt;Base&gt;.web) to the web host folder this project
-    /// actually gets. With no web host the template path is kept: the Exists
-    /// condition makes it inert, and dropping the file in later just works.
+    /// Rewrites the guarded TwoDogWebBoot.cs Compile Include (template: &lt;Base&gt;.web) to the actual web host
+    /// folder. With no web host the template path is kept: the Exists condition makes it inert.
     /// </summary>
     internal static string SetWebBootInclude(string csproj, string baseName, string? webFolder) =>
         webFolder is null
@@ -451,11 +433,8 @@ internal static class ScaffoldCommand
     {
         if (!wantsWeb) return;
 
-        // global.json applies at or below its own directory, so a pin at the
-        // project root is what lets the web host publish from there (the pin
-        // inside the .web folder only covers dotnet runs started inside it).
-        // An existing global.json is the user's own SDK policy - never touch
-        // it, not even with --force.
+        // global.json applies at or below its directory, so a root pin is what lets the web host publish from
+        // there. An existing global.json is the user's SDK policy - never touch it, not even with --force.
         var path = Path.Combine(projectDir, "global.json");
         if (File.Exists(path))
         {
@@ -473,9 +452,8 @@ internal static class ScaffoldCommand
     private static void PlanRootBuildTargets(
         List<PlannedAction> plan, List<string> warnings, string projectDir, bool retrofitting)
     {
-        // Directory.Build.targets is user-owned configuration when it already
-        // exists, so scaffolding only creates the template's cleanup target for
-        // projects that do not have one yet.
+        // An existing Directory.Build.targets is user-owned; the template's cleanup target is only created for
+        // projects without one.
         var path = Path.Combine(projectDir, "Directory.Build.targets");
         if (File.Exists(path))
         {
@@ -514,9 +492,8 @@ internal static class ScaffoldCommand
 
     private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb)
     {
-        // The engine refuses `--export-pack` without an export_presets.cfg at
-        // the project root; the web host's publish exports through the 'Web'
-        // preset and desktop publishes through the per-OS desktop presets.
+        // The engine refuses `--export-pack` without a root export_presets.cfg; web publish uses the 'Web' preset,
+        // desktop publishes the per-OS presets.
         var path = Path.Combine(projectDir, ExportPresetOps.FileName);
         if (!File.Exists(path))
         {
@@ -568,7 +545,7 @@ internal static class ScaffoldCommand
 
     private static void PlanSolution(
         List<PlannedAction> plan, ScaffoldOptions options, string projectDir, string baseName,
-        string godotCsproj, IReadOnlyList<string> allHostFolders, IReadOnlyList<HostSpec> newHosts)
+        string godotCsproj, IReadOnlyList<string> allHostProjects, IReadOnlyList<HostSpec> newHosts)
     {
         var (solutionPath, exists) = SolutionOps.Locate(projectDir, baseName);
         if (!exists)
@@ -591,7 +568,7 @@ internal static class ScaffoldCommand
                 () => SolutionOps.CreateSolution(solutionPath)));
 
         var allProjects = new List<string> { godotCsproj };
-        allProjects.AddRange(allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj")));
+        allProjects.AddRange(allHostProjects);
         var missing = allProjects
             .Where(p => !exists || !SolutionOps.ContainsProject(solutionPath, Path.GetFileName(p)))
             .ToList();
@@ -600,22 +577,29 @@ internal static class ScaffoldCommand
                 $"add {missing.Count} project(s) to {solutionName}",
                 () => SolutionOps.AddProjects(solutionPath, missing)));
 
-        foreach (var host in newHosts.Where(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.WinUi))
+        foreach (var host in newHosts.Where(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.WinUi or HostKind.Blazor))
         {
-            // Separator-agnostic: SolutionOps matches either / or \\ in the solution.
-            var relative = $"{host.Folder}/{host.Folder}.csproj";
-            var (why, note) = host.Kind is HostKind.WinUi
-                ? ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems")
-                : ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload");
+            // Separator-agnostic: SolutionOps matches either / or \\ in the solution. The Blazor server builds
+            // its wasm client, so both projects leave the solution build.
+            string[] relatives = host.Kind is HostKind.Blazor
+                ? [$"{host.Folder}/{host.Folder}.csproj", Hosts.BlazorClientProject(host.Folder)]
+                : [$"{host.Folder}/{host.Folder}.csproj"];
+            var (why, note) = host.Kind switch
+            {
+                HostKind.WinUi => ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems"),
+                HostKind.Blazor => ("needs wasm-tools; built via dotnet run", "requires the wasm-tools workload"),
+                _ => ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload"),
+            };
             plan.Add(new PlannedAction(
                 $"exclude {host.Folder} from plain solution builds ({why})",
                 () =>
                 {
                     // The wasm hosts have no Editor configuration; the WinUI host does.
-                    if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, relative,
-                            mapEditorToDebug: host.Kind is not HostKind.WinUi))
-                        Out.Note($"could not adjust {solutionName} build configs for {host.Folder}; " +
-                                 $"solution-wide builds will include it ({note}).");
+                    foreach (var relative in relatives)
+                        if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, relative,
+                                mapEditorToDebug: host.Kind is not HostKind.WinUi))
+                            Out.Note($"could not adjust {solutionName} build configs for {relative}; " +
+                                     $"solution-wide builds will include it ({note}).");
                 }));
         }
 
@@ -632,9 +616,8 @@ internal static class ScaffoldCommand
 
     private static void PrintNextSteps(ProjectContext project, IReadOnlyList<HostSpec> hosts)
     {
-        // Relative-path comparison, not string equality on the full paths: a
-        // trailing separator or a case-insensitive filesystem would otherwise
-        // suggest `cd` into the directory the user is already in.
+        // Relative-path comparison, not full-path equality: a trailing separator or case-insensitive filesystem
+        // would otherwise suggest `cd` into the directory the user is already in.
         var relative = Path.GetRelativePath(".", project.Dir);
         var cd = relative is "." or "" ? null : $"cd {QuoteIfNeeded(relative)}";
 
@@ -647,6 +630,7 @@ internal static class ScaffoldCommand
             HostKind.WinForms => ($"dotnet run --project {host.Folder}", "WinForms host (Windows only)"),
             HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
             HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
+            HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
             _ => (host.Folder, ""),
         }).ToList();
 

@@ -4,16 +4,14 @@ using System.Text.RegularExpressions;
 namespace twodog.cli;
 
 /// <summary>
-/// Solution handling: reuse the single solution at the Godot project root
-/// (Godot itself errors when more than one solution at res:// contains the
-/// game project, so the tool must never add a second), or create one.
+/// Solution handling: reuse the single solution at the Godot project root (Godot errors when more than one solution
+/// at res:// contains the game project, so never add a second), or create one.
 /// </summary>
 internal static class SolutionOps
 {
     /// <summary>
-    /// The solution to use: an existing root sln/slnx (preferring one that
-    /// references the Godot csproj), or the path a new one should be created
-    /// at. Throws on ambiguity.
+    /// The solution to use: an existing root sln/slnx (preferring one referencing the Godot csproj), or the path
+    /// a new one should be created at. Throws on ambiguity.
     /// </summary>
     public static (string Path, bool Exists) Locate(string projectDir, string baseName)
     {
@@ -47,8 +45,7 @@ internal static class SolutionOps
         if (!solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("New 2dog solutions must use the .slnx format.", nameof(solutionPath));
 
-        // The Editor build type is 2dog's own configuration (editor-variant
-        // natives); declaring it here is what makes `dotnet build -c Editor`
+        // Editor is 2dog's own build type (editor-variant natives); declaring it makes `dotnet build -c Editor`
         // work across the solution, matching `dotnet new 2dog` output.
         File.WriteAllText(solutionPath,
             """
@@ -94,10 +91,8 @@ internal static class SolutionOps
         File.ReadAllText(solutionPath).Contains(projectFileName, StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
-    /// Points a solution's entries for the root game project at a renamed
-    /// csproj (part of the --rename fix for spaced project names). Textual on
-    /// purpose: the game csproj sits at the solution root, so its reference is
-    /// just the file name. Returns whether anything was rewritten.
+    /// Points a solution's root game project entries at a renamed csproj (--rename fix). Textual on purpose: the
+    /// game csproj sits at the solution root, so its reference is just the file name. Returns whether rewritten.
     /// </summary>
     public static bool RenameProject(string solutionPath, string oldBaseName, string newBaseName)
     {
@@ -122,11 +117,8 @@ internal static class SolutionOps
         FindBuildLines(File.ReadAllText(solutionPath), projectRelativePath, out _) > 0;
 
     /// <summary>
-    /// Excludes a host from plain solution builds in a classic .sln by
-    /// removing its ".Build.0" lines (ActiveCfg stays): building the
-    /// browser-wasm hosts requires the wasm-tools workload and the WinUI host
-    /// only builds on Windows, so they are built explicitly instead of by
-    /// "Build Solution".
+    /// Excludes a host from plain solution builds in a classic .sln by removing its ".Build.0" lines (ActiveCfg
+    /// stays): browser-wasm needs the wasm-tools workload and WinUI only builds on Windows.
     /// </summary>
     public static bool ExcludeFromSolutionBuild(string solutionPath, string projectRelativePath,
         bool mapEditorToDebug = true)
@@ -160,9 +152,8 @@ internal static class SolutionOps
 
         var indent = match.Groups["indent"].Value;
         var newLine = text.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
-        // The browser-wasm host has no Editor configuration of its own, so map
-        // the solution's Editor build type onto its Debug one - but only when
-        // the solution actually declares that build type.
+        // The browser-wasm host has no Editor configuration, so map the solution's Editor build type onto Debug -
+        // only when the solution actually declares that build type.
         var editorMap = mapEditorToDebug
                         && text.Contains("<BuildType Name=\"Editor\"", StringComparison.OrdinalIgnoreCase)
             ? $"{indent}  <BuildType Solution=\"Editor|*\" Project=\"Debug\" />{newLine}"
@@ -176,17 +167,14 @@ internal static class SolutionOps
     }
 
     /// <summary>
-    /// Counts the project's ".Build.0" lines in classic sln text; when found,
-    /// yields the text with those lines removed.
+    /// Counts the project's ".Build.0" lines in classic sln text; when found, yields the text with them removed.
     /// </summary>
     private static int FindBuildLines(string text, string projectRelativePath, out string? updated)
     {
         updated = null;
 
         // Project("{type-guid}") = "name", "rel\path.csproj", "{project-guid}"
-        // The classic sln format specifies backslash separators, but tolerate
-        // either in the file: `dotnet sln add` implementations have differed
-        // across SDK versions and platforms.
+        // Tolerate either separator: `dotnet sln add` has differed across SDK versions and platforms.
         if (!TryFindProjectGuid(text, projectRelativePath, out var guid)) return 0;
         var pattern = $@"^\s*\{{{Regex.Escape(guid)}\}}\.[^\r\n]*\.Build\.0\s*=[^\r\n]*\r?\n";
         var count = Regex.Matches(text, pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase).Count;
@@ -225,10 +213,8 @@ internal static class SolutionOps
 
     private static bool TryRun(string workingDir, params string[] args)
     {
-        // On a real terminal, inherit the handles so the child dotnet keeps
-        // its TTY features (progress, color). With redirected stdio (which is
-        // how the test host runs), echo through Console instead, so hosts
-        // that swap Console.Out/Error (the tests) can capture the output.
+        // On a real terminal inherit the handles so child dotnet keeps TTY features; with redirected stdio (test
+        // host) echo through Console so hosts that swap Console.Out/Error can capture the output.
         var inherit = !Console.IsOutputRedirected && !Console.IsErrorRedirected;
         var psi = new ProcessStartInfo("dotnet")
         {

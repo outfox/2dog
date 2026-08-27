@@ -46,6 +46,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
   MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)
+  MyGame.blazor/ (.gdignore) <- Blazor Web App host (opt-in: --blazor; server + Client/ WebAssembly page)
 ```
 
 Run it again whenever you want another host  –  hosts that exist are recognized
@@ -66,7 +67,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--desktop [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, winui, and avalonia are opt-in and never in the default set) |
+| `--desktop [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, winui, avalonia, and blazor are opt-in and never in the default set) |
 | `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `-o, --output <dir>` | Directory for a new project |

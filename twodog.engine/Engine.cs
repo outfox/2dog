@@ -15,20 +15,15 @@ public class Engine : IDisposable
     private readonly string[] _args;
     private readonly string? _projectPath;
 
-    // Only the Engine that successfully started the (process-wide) Godot
-    // instance may destroy it. This keeps `using var engine = ...; engine.Start()`
-    // patterns safe: disposing an Engine whose Start() failed or was never
-    // called must not tear down an instance started by another Engine.
+    // Only the Engine that started the process-wide instance may destroy it: disposing one whose Start()
+    // failed or never ran must not tear down another Engine's instance.
     private bool _ownsInstance;
 
     private GodotInstance? _godotInstance;
 
     /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
     /// <param name="project">Label passed as Godot's first argument.</param>
-    /// <param name="path">
-    /// Project directory. When null, desktop resolves source or published content automatically;
-    /// browser hosts leave the path unset so Godot loads the web pack.
-    /// </param>
+    /// <param name="path">Project directory; null = desktop auto-resolves content, browser loads the web pack.</param>
     /// <param name="args">Additional arguments passed to Godot.</param>
     public Engine(string project, string? path = null, params string[] args)
     {
@@ -53,22 +48,8 @@ public class Engine : IDisposable
 
     static Engine()
     {
-        // On Windows, unload libgodot before the OS starts process teardown.
-        // If libgodot is still loaded when the process exits, its static
-        // destructors run inside LdrShutdownProcess (DLL_PROCESS_DETACH, under
-        // loader lock) and the Windows input stack fail-fasts in
-        // CoreMessaging.dll (exit code 0xE0464645). godot.exe never hits this
-        // because an executable's static destructors run during normal CRT
-        // exit, before loader shutdown - unloading here restores that timing.
-        //
-        // macOS has a similar teardown problem with different symptoms: after
-        // a clean shutdown, libgodot's exit-time static destructors abort with
-        // "std::__1::system_error: mutex lock failed: Invalid argument"
-        // (SIGABRT). The unload trick cannot be ported: libgodot contains
-        // Objective-C classes, and dyld permanently pins such images - dlclose
-        // never unloads them (verified: identical crash with a dlclose sweep).
-        // Needs a fix in the fork's destructor chain instead; the desktop
-        // smoke CI tolerates the known abort on macOS until then.
+        // Windows: unload libgodot before loader shutdown, else its static destructors run under loader lock and
+        // CoreMessaging.dll fail-fasts (0xE0464645). macOS aborts similarly but dyld pins ObjC images (fork TODO).
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             AppDomain.CurrentDomain.ProcessExit += (_, _) => UnloadLibGodot();
     }
@@ -79,9 +60,8 @@ public class Engine : IDisposable
         // exit is safe because the display server was never destroyed.
         if (_godotInstancePtr != IntPtr.Zero) return;
 
-        // No Godot call may be made after this point (we are in ProcessExit).
-        // Prefer the recorded handle: with hosted multi-instance (one module
-        // per AssemblyLoadContext) every sweep must free exactly its own module.
+        // No Godot calls past this point (ProcessExit). Prefer the recorded handle: with hosted multi-instance
+        // every sweep must free exactly its own module.
         var handle = LibGodotLoader.LoadedLibraryHandle;
         if (handle != 0)
         {
@@ -112,35 +92,25 @@ public class Engine : IDisposable
                              throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
 
     /// <summary>
-    /// Hosted mode: exact libgodot file to load for this load context, bypassing variant
-    /// probing. Set by multi-instance hosts (2dog.hosting hands each instance its own pooled
-    /// copy); when set, Start() also routes GodotPlugins through this context instead of the
-    /// engine's hostfxr default-ALC load, keeping all managed engine state per-instance.
+    /// Hosted mode: exact libgodot file for this load context, bypassing variant probing. When set, Start() also
+    /// routes GodotPlugins through this context instead of the engine's hostfxr default-ALC load.
     /// </summary>
     public string? NativePath { get; init; }
 
     /// <summary>
-    /// Directory the engine should prefer when loading the project's C# assembly
-    /// (exported as GODOT_PROJECT_ASSEMBLY_DIR). Defaults to AppContext.BaseDirectory,
-    /// which is only right when the game assembly ships with the outer host - hosted
-    /// programs living elsewhere set this (2dog.hosting passes the program assembly's
-    /// directory). The variable is process-global; multi-instance hosts serialize
-    /// boots, and the engine reads it during instance creation.
+    /// Preferred directory for the project's C# assembly (exported as GODOT_PROJECT_ASSEMBLY_DIR). Defaults to
+    /// AppContext.BaseDirectory; hosted programs living elsewhere set it. Process-global, read during boot.
     /// </summary>
     public string? ProjectAssemblyDir { get; init; }
 
     /// <summary>
-    /// How long Start() waits for the process-wide boot lock that serializes
-    /// engine boots (they mutate the process CWD and environment). Matches the
-    /// hosting layer's boot-gate timeout: generous enough for a debug-native
-    /// first boot on a loaded CI runner, so it is only ever exceeded when
-    /// another boot in this process is genuinely stuck.
+    /// How long Start() waits for the process-wide boot lock. Matches the hosting layer's boot-gate timeout:
+    /// generous enough for a debug-native first boot on a loaded CI runner, exceeded only when a boot is stuck.
     /// </summary>
     public TimeSpan BootLockTimeout { get; init; } = TimeSpan.FromSeconds(120);
 
     /// <summary>
-    /// Name of the process-wide named mutex that serializes engine boots.
-    /// Public so hosts and tests can observe or contend on it deliberately.
+    /// Name of the process-wide mutex serializing engine boots; public so hosts and tests can contend on it.
     /// </summary>
     public static string BootLockName => ProcessBootLock.Name;
 
@@ -154,9 +124,7 @@ public class Engine : IDisposable
     public void Dispose()
     {
         if (!_ownsInstance || _godotInstancePtr == IntPtr.Zero) return;
-        // On web, emscripten owns the main loop after Run(); the instance is
-        // destroyed by the engine's own quit flow (WebHost.ExitCallback), not
-        // by the host disposing on the way out of Main().
+        // On web emscripten owns the loop after Run(); WebHost.ExitCallback destroys the instance, not Dispose().
         if (OperatingSystem.IsBrowser() && WebHost.MainLoopActive) return;
         _ownsInstance = false;
         Destroy();
@@ -168,10 +136,8 @@ public class Engine : IDisposable
 
         if (OperatingSystem.IsBrowser())
         {
-            // No filesystem hosting on web: the game's plugins initializer
-            // function pointer must have been registered up front (there is
-            // no GodotPlugins.dll to load). One statically linked instance per
-            // page - nothing to serialize, and wasm has no named mutexes.
+            // Web has no GodotPlugins.dll on disk: the initializer must be registered up front. One statically
+            // linked instance per page, so no boot lock needed (wasm has no named mutexes anyway).
             if (!WebHost.HasPluginsInitializer)
                 throw new InvalidOperationException(
                     $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
@@ -181,10 +147,8 @@ public class Engine : IDisposable
             return StartCore();
         }
 
-        // Boot mutates process-global state: the environment variables written
-        // below are read during instance creation, and Godot's --path handling
-        // moves the process CWD. Engines in other load contexts run their own
-        // copy of this class, so the serialization must be OS-level.
+        // Boot mutates process-global state (env vars read during instance creation, CWD via --path). Other load
+        // contexts run their own copy of this class, so serialization must be OS-level.
         using (ProcessBootLock.Acquire(BootLockTimeout))
         {
             ThrowIfInstanceRunning();
@@ -263,19 +227,8 @@ public class Engine : IDisposable
     }
 
     /// <summary>
-    /// Points GODOTSHARP_DIR at the directory containing GodotPlugins.dll.
-    /// When the host process is not in the output directory (e.g. dotnet test
-    /// uses /usr/share/dotnet/dotnet), Godot's exe_dir fallback won't work.
-    /// Checks the flat layout (template variants) first, then the nested
-    /// GodotSharp/Api/Debug/ layout (editor variant). Also points
-    /// GODOT_PROJECT_ASSEMBLY_DIR at the host's base directory: the host
-    /// references the game project, so its output carries a game assembly
-    /// matching the host's build configuration - libgodot prefers it over
-    /// .godot/mono/temp/bin/&lt;config&gt;, which does not exist for
-    /// configurations the game project was never built with directly
-    /// (e.g. a Release-only publish). Must use native setenv on Unix because
-    /// .NET's SetEnvironmentVariable doesn't propagate to native getenv() on
-    /// Linux/.NET 8+.
+    /// Points GODOTSHARP_DIR at GodotPlugins.dll (flat template layout, then editor's GodotSharp/Api/Debug) and
+    /// GODOT_PROJECT_ASSEMBLY_DIR at the host output, whose game assembly matches the host config.
     /// </summary>
     internal static void ConfigureGodotSharpDir(string? projectAssemblyDir = null)
     {
@@ -307,14 +260,8 @@ public class Engine : IDisposable
     }
 
     /// <summary>
-    /// Registers the game's GodotPlugins initializer for browser (wasm) hosts.
-    /// Pass a pointer to the source-generated
-    /// <c>GodotPlugins.Game.Main.InitializeFromGameProject</c> in the game
-    /// assembly, exposed by the template's <c>TwoDogWebBoot.cs</c> when the
-    /// game project is compiled with the <c>LIBGODOT_ENABLED</c> define.
-    /// Must be called before
-    /// <see cref="Start"/>. No-op requirement on desktop (throws there to
-    /// catch misuse early).
+    /// Registers the game's <c>GodotPlugins.Game.Main.InitializeFromGameProject</c> pointer for browser hosts
+    /// (exposed by the template's <c>TwoDogWebBoot.cs</c>). Call before <see cref="Start"/>; throws on desktop.
     /// </summary>
     public static void RegisterWebPluginsInitializer(IntPtr initializer)
     {
@@ -325,15 +272,31 @@ public class Engine : IDisposable
     }
 
     /// <summary>
-    /// Runs the engine main loop.
-    /// Desktop: blocks, iterating the engine until it requests quit, then
-    /// returns (the caller still owns disposal).
-    /// Browser: hands the loop to emscripten and returns immediately; the
-    /// engine keeps running via per-frame callbacks and destroys itself on
-    /// quit. Do not Dispose() after Run() on the browser.
+    /// Browser only: whether Godot quitting also exits the wasm runtime (default true, the standalone web host).
+    /// Hosts that share the runtime with other managed code (Blazor) set false: the instance is still destroyed
+    /// and <see cref="Exited"/> raised, the page keeps running. A second instance cannot be started on the same
+    /// page either way.
     /// </summary>
-    /// <param name="perFrame">Optional callback invoked once per frame before
-    /// the engine iteration.</param>
+    public static bool WebExitRuntimeOnQuit
+    {
+        get => !OperatingSystem.IsBrowser() || WebHost.ExitRuntimeOnQuit;
+        set
+        {
+            if (!OperatingSystem.IsBrowser())
+                throw new PlatformNotSupportedException(
+                    $"{nameof(WebExitRuntimeOnQuit)} is only meaningful on browser (wasm) hosts.");
+            WebHost.ExitRuntimeOnQuit = value;
+        }
+    }
+
+    /// <summary>Browser only: raised after Godot quit and the instance was destroyed (see <see cref="Run"/>).</summary>
+    public event Action? Exited;
+
+    /// <summary>
+    /// Runs the main loop. Desktop: blocks until quit, caller still disposes. Browser: hands the loop to
+    /// emscripten and returns immediately; the engine destroys itself on quit - do not Dispose() afterwards.
+    /// </summary>
+    /// <param name="perFrame">Optional callback invoked once per frame before the engine iteration.</param>
     public void Run(Action? perFrame = null)
     {
         if (_godotInstance == null || _godotInstancePtr == IntPtr.Zero)
@@ -345,6 +308,8 @@ public class Engine : IDisposable
             {
                 _ownsInstance = false;
                 Destroy();
+                _godotInstance = null;
+                Exited?.Invoke();
             });
             return;
         }
@@ -363,10 +328,8 @@ public class Engine : IDisposable
     }
 
     /// <summary>
-    /// Resolves the Godot project directory from <c>[AssemblyMetadata("GodotProjectDir", "...")]</c>
-    /// on loaded assemblies. This attribute is emitted automatically at build time when the
-    /// consuming project sets the <c>&lt;GodotProjectDir&gt;</c> MSBuild property and references
-    /// the 2dog NuGet package.
+    /// Resolves the Godot project directory from <c>[AssemblyMetadata("GodotProjectDir", "...")]</c> on loaded
+    /// assemblies; the 2dog package emits it from the <c>&lt;GodotProjectDir&gt;</c> MSBuild property.
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// Thrown when no loaded assembly has the <c>GodotProjectDir</c> metadata attribute.
@@ -395,16 +358,10 @@ public class Engine : IDisposable
     }
 
     /// <summary>
-    /// Resolves what to pass as the <see cref="Engine"/> path argument. Returns null when a
-    /// pack file named after the running executable sits next to it (a published build - the
-    /// engine auto-loads an exe-adjacent .pck; desktop publishes export one as
-    /// &lt;host&gt;.pck), otherwise the project directory from
-    /// <see cref="ResolveProjectDir"/> (a source build running from raw assets).
+    /// Resolves the <see cref="Engine"/> path argument: null when an exe-adjacent &lt;host&gt;.pck exists (published
+    /// build, auto-loaded by the engine), otherwise <see cref="ResolveProjectDir"/> (source build).
     /// </summary>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when no exe-adjacent .pck exists and no loaded assembly has the
-    /// <c>GodotProjectDir</c> metadata attribute.
-    /// </exception>
+    /// <exception cref="InvalidOperationException">No exe-adjacent .pck and no GodotProjectDir metadata.</exception>
     public static string? ResolveContent()
     {
         if (System.Environment.ProcessPath is { Length: > 0 } exePath &&

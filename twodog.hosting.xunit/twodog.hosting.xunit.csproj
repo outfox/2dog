@@ -11,9 +11,8 @@
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
 
-    <!-- No xunit dependency needed: the fixture is a plain IDisposable consumed
-         via ICollectionFixture<T> in test projects. Referencing the runtime here
-         hands test projects the whole engine stack transitively. -->
+    <!-- No xunit dependency: the fixture is a plain IDisposable used via ICollectionFixture<T>. Referencing the
+         runtime here hands test projects the whole engine stack transitively. -->
     <ItemGroup>
         <ProjectReference Include="..\twodog.hosting\twodog.hosting.csproj" />
         <ProjectReference Include="..\twodog.hosting.runtime\twodog.hosting.runtime.csproj" />

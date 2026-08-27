@@ -10,9 +10,8 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-    <!-- Deliberately references NOTHING Godot: instance ALCs fall through to the
-         default-ALC copy of this assembly, which is what gives its contract
-         types consistent identity across every instance. -->
+    <!-- References NOTHING Godot: instance ALCs fall through to the default-ALC copy, giving the contract types
+         one identity across every instance. -->
 
     <ItemGroup>
         <!-- Unit tests for internals (ExceptionSanitizer). -->

@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <!-- Meta package for the browser-wasm (web) target. Ships the release
-         payload dependency plus the MSBuild targets that wire the static
-         libgodot into a consumer's `dotnet publish -r browser-wasm`.
-         The .debug variant is opt-in by explicit reference.
-         Not gated on a host OS: the payload is built with emscripten and can
-         be packed from any machine that has it staged in godot/bin/web/. -->
+    <!-- browser-wasm meta package: release payload + targets linking static libgodot into `dotnet publish`. .debug is
+         opt-in. Gated on the staged payload, not a host OS (emscripten output packs from anywhere). -->
     <PropertyGroup Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(GodotBinDir)web/template_release/libgodot/libgodot.a')">
         <IsPackable>false</IsPackable>
         <ExcludeFromBuild>true</ExcludeFromBuild>

@@ -221,6 +221,7 @@ jobs:
         run: |
           dotnet pack twodog.engine
           dotnet pack twodog.avalonia
+          dotnet pack twodog.blazor
           dotnet pack twodog.xunit
           dotnet pack twodog
 
@@ -567,6 +568,12 @@ jobs:
       - name: Publish showcase.webxr
         run: dotnet publish demos/showcase/showcase.webxr -c Release
 
+      # The Blazor flavor is a Blazor Web App (server + wasm client); the client
+      # links the engine into Blazor's own dotnet.native.wasm and 2dog.blazor's
+      # GodotView starts Godot in-process. Shares the pck export.
+      - name: Publish showcase.blazor
+        run: dotnet publish demos/showcase/showcase.blazor -c Release
+
       - name: Verify app bundle
         run: |
           BUNDLE=demos/showcase/showcase.web/AppBundle
@@ -627,6 +634,34 @@ jobs:
             exit 1
           fi
           echo "WebXR app bundle OK"
+
+      - name: Verify blazor publish
+        run: |
+          PUB=demos/showcase/showcase.blazor/bin/Release/net10.0/publish
+          WWW=$PUB/wwwroot
+          # Blazor fingerprints its framework files; match by pattern.
+          for pattern in "$PUB/showcase.blazor.dll" "$WWW/godot.pck" "$WWW/godot.audio.worklet.js" \
+                         "$WWW/godot.audio.position.worklet.js" "$WWW/_content/2dog.blazor/2dog.blazor.js" \
+                         "$WWW/_framework/blazor.web*.js" "$WWW/_framework/dotnet.native*.wasm"; do
+            if ! ls $pattern > /dev/null 2>&1; then
+              echo "::error::Missing $pattern in the published blazor host"
+              ls -R "$PUB" || true
+              exit 1
+            fi
+          done
+          # No plain-shell leftovers: the Blazor SDK owns the bundle.
+          if [ -e "$WWW/godot.wasm" ] || [ -e "$WWW/godot.js" ] || [ -d demos/showcase/showcase.blazor/Client/AppBundle ]; then
+            echo "::error::The blazor client produced plain-shell artifacts (godot.wasm/godot.js/AppBundle)"
+            exit 1
+          fi
+          # The engine is linked into Blazor's runtime - sanity floor on the largest dotnet.native wasm.
+          SIZE=$(ls -S $WWW/_framework/dotnet.native*.wasm | head -1 | xargs stat -c%s)
+          echo "dotnet.native.wasm size: $SIZE bytes"
+          if [ "$SIZE" -lt 20000000 ]; then
+            echo "::error::dotnet.native.wasm is suspiciously small ($SIZE bytes) - engine may be missing from the link"
+            exit 1
+          fi
+          echo "Blazor publish OK"
 
       # Execute the linked app in a real browser. The game assembly runs the
       # shared GodotApiSmoke probe and marks the DOM only after native API,
@@ -711,6 +746,61 @@ jobs:
 
           echo "Web runtime API smoke OK"
 
+      # Same probe through the Blazor host: the published ASP.NET Core server
+      # serves the client, whose home page runs GodotApiSmoke after GodotView
+      # started the engine and marks the DOM.
+      - name: Run Blazor browser smoke
+        run: |
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+
+          PUB=demos/showcase/showcase.blazor/bin/Release/net10.0/publish
+          # The content root must be the publish folder: static web assets resolve relative to it.
+          ASPNETCORE_ENVIRONMENT=Production dotnet "$PUB/showcase.blazor.dll" --urls http://127.0.0.1:8000 \
+            --contentroot "$(pwd)/$PUB" > /tmp/2dog-blazor-server.log 2>&1 &
+          SERVER_PID=$!
+
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8000/ > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --use-gl=angle \
+            --use-angle=swiftshader-webgl \
+            --enable-unsafe-swiftshader \
+            --disable-dev-shm-usage \
+            --enable-logging=stderr \
+            --remote-debugging-address=127.0.0.1 \
+            --remote-debugging-port=9222 \
+            '--remote-allow-origins=*' \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-blazor" \
+            http://127.0.0.1:8000/ \
+            > /tmp/2dog-blazor-browser.log 2>&1 &
+          CHROME_PID=$!
+
+          set +e
+          timeout 130s node .github/scripts/wait-for-browser-smoke.mjs http://127.0.0.1:8000/ 120000 9222
+          SMOKE_STATUS=$?
+          set -e
+
+          cat /tmp/2dog-blazor-server.log
+          cat /tmp/2dog-blazor-browser.log
+
+          if [ "$SMOKE_STATUS" -ne 0 ]; then
+            echo "::error::The blazor host did not complete the Godot API smoke probe"
+            exit "$SMOKE_STATUS"
+          fi
+          echo "Blazor browser smoke passed"
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).
@@ -747,7 +837,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.engine" "2dog.avalonia"; do
+          for pkg in "2dog" "2dog.engine" "2dog.avalonia" "2dog.blazor"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

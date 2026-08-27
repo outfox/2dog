@@ -5,11 +5,8 @@
         <_TwoDogParentProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</_TwoDogParentProps>
     </PropertyGroup>
     <Import Project="$(_TwoDogParentProps)" Condition="'$(_TwoDogParentProps)' != ''"/>
-    <!-- Browser bundles are only useful optimized: default this host to
-         Release so plain `dotnet build` / `dotnet publish` do the right
-         thing (pass -c Debug to override). Configuration must be set this
-         early - the SDK derives DEBUG/Optimize from it before the csproj
-         body is read. -->
+    <!-- Browser bundles are only useful optimized: default to Release (pass -c Debug to override). Must be set
+         this early - the SDK derives DEBUG/Optimize from Configuration before the csproj body is read -->
     <PropertyGroup>
         <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
     </PropertyGroup>

@@ -3,14 +3,13 @@ using System.Text.Json;
 namespace twodog.cli;
 
 /// <summary>
-/// Best-effort nuget.org lookup behind the up-to-date marks of `2dog version`.
-/// Any failure (offline, timeout, bad payload) just leaves rows unmarked.
+/// Best-effort nuget.org lookup behind the up-to-date marks of `2dog version`; any failure leaves rows unmarked.
 /// </summary>
 internal static class NuGetLatest
 {
     private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(2.5);
 
-    /// <summary>✅ when current is the newest stable on nuget.org, 🔄 when a newer stable exists, null when unknown.</summary>
+    /// <summary>✅ when current is the newest stable on nuget.org, 🔄 when a newer one exists, null if unknown.</summary>
     public static string? Mark(string current, string? latestStable)
     {
         if (latestStable == null) return null;

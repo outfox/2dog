@@ -14,8 +14,8 @@ dotnet run --project MyGame.2dog
 ```
 
 `2dog new` asks which hosts to include. Pass `--desktop`, `--web`, `--webxr`,
-`--tests`, `--winforms`, `--winui`, `--avalonia`, or `--non-interactive` to skip the
-prompts.
+`--tests`, `--winforms`, `--winui`, `--avalonia`, `--blazor`, or `--non-interactive`
+to skip the prompts.
 
 Already have a Godot project? Use [`2dog add`](/add) instead. It creates the
 same layout around your existing content.
@@ -62,9 +62,9 @@ together.
 ## Choose Hosts
 
 The full template includes desktop, browser, and test hosts. To leave optional
-hosts out, or to opt into the [WebXR host](/hosts/webxr), the Windows-only
-[WinForms](/hosts/winforms) and [WinUI 3](/hosts/winui) hosts, or the
-cross-platform [Avalonia host](/hosts/avalonia):
+hosts out, or to opt into the [WebXR](/hosts/webxr) or [Blazor](/hosts/blazor)
+hosts, the Windows-only [WinForms](/hosts/winforms) and [WinUI 3](/hosts/winui)
+hosts, or the cross-platform [Avalonia host](/hosts/avalonia):
 
 ```bash
 dotnet new 2dog -n MyGame --tests false --web false
@@ -80,6 +80,7 @@ dotnet new 2dog -n MyGame --avalonia true
 | `--winforms` | `false` | Include the `MyGame.winforms` WinForms host (Windows-only at runtime) |
 | `--winui` | `false` | Include the `MyGame.winui` WinUI 3 host (Windows-only; builds only on Windows) |
 | `--avalonia` | `false` | Include the `MyGame.avalonia` Avalonia host (cross-platform GUI; controls composite over the game) |
+| `--blazor` | `false` | Include the `MyGame.blazor` [Blazor Web App host](/hosts/blazor) (server + WebAssembly client page embedding the game) |
 | `--skipRestore` | `false` | Skip automatic package restore |
 | `--twodogVersion` | current release | 2dog package version |
 | `--nativesVersion` | current release | Native platform package version |

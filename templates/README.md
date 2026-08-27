@@ -14,6 +14,7 @@ importer, and exporter skip them:
 - **Test project** (`<Name>.tests/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
+- **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
 - **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`LIBGODOT_ENABLED`-guarded `Compile Include` in the game csproj)
@@ -43,6 +44,9 @@ dotnet new 2dog -n MyGame --web false
 
 # With the WebXR browser host (omitted by default)
 dotnet new 2dog -n MyGame --webxr true
+
+# With the Blazor Web App host (omitted by default)
+dotnet new 2dog -n MyGame --blazor true
 
 # With the Windows-only WinForms host (omitted by default)
 dotnet new 2dog -n MyGame --winforms true
@@ -91,6 +95,18 @@ templates/
     │   ├── TwoDogWebBoot.cs
     │   ├── global.json
     │   └── wwwroot/               # index.html + vendored webxr-layers-polyfill.min.js
+    ├── Company.Product1.blazor/   # Blazor Web App host (opt-in; --blazor true to include)
+    │   ├── .gdignore
+    │   ├── Company.Product1.blazor.csproj   # ASP.NET Core server
+    │   ├── Program.cs
+    │   ├── Components/            # App.razor, Routes.razor, Error page
+    │   ├── wwwroot/               # app.css, favicon
+    │   ├── TwoDogWebBoot.cs
+    │   ├── global.json
+    │   └── Client/                # Blazor WebAssembly client (links Godot, hosts GodotView)
+    │       ├── Company.Product1.blazor.Client.csproj
+    │       ├── Program.cs
+    │       └── Pages/Home.razor
     ├── Company.Product1.winforms/ # WinForms host (opt-in; --winforms true to include)
     │   ├── .gdignore
     │   ├── Company.Product1.winforms.csproj
@@ -121,6 +137,7 @@ wasm-tools workload  –  the web host is built explicitly with `dotnet publish`
 | `--tests` | bool | true | Include a test project with xUnit (v3) and 2dog.xunit collection fixtures |
 | `--web` | bool | true | Include a browser (WebAssembly) host project (building it requires a .NET 10+ SDK with the wasm-tools workload) |
 | `--webxr` | bool | false | Include a browser host preconfigured for WebXR: its page ships the WebXR Layers polyfill (same wasm-tools requirement as `--web`) |
+| `--blazor` | bool | false | Include a Blazor Web App host (server + WebAssembly client embedding the game; same wasm-tools requirement as `--web`) |
 | `--skipRestore` | bool | false | Skip automatic NuGet restore after creation |
 
 ## Symbol Replacements
@@ -168,8 +185,8 @@ The web host project (included by default) targets `net10.0` with
 `RuntimeIdentifier=browser-wasm`. Building/publishing it requires a .NET 10+
 SDK with the wasm-tools workload (`dotnet workload install wasm-tools`). The
 rest of the solution builds fine without it; create with `--web false` to omit
-the project entirely. The opt-in WebXR host (`--webxr true`) has the same
-requirements.
+the project entirely. The opt-in WebXR (`--webxr true`) and Blazor
+(`--blazor true`) hosts have the same requirements.
 
 ## Template Configuration
 
@@ -205,7 +222,7 @@ The template is defined in `.template.config/template.json`:
 ```
 
 (Abridged - see the file for the full symbol list, including `winforms`,
-`winui`, `avalonia`, and the version placeholders.)
+`winui`, `avalonia`, `blazor`, and the version placeholders.)
 
 ## Testing Changes
 

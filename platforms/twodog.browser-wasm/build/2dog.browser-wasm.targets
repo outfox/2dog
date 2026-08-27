@@ -1,48 +1,6 @@
 <Project>
-    <!--
-      TwoDog Browser (wasm) Meta Package Targets
-
-      Statically links the Godot engine (libgodot.a) into the consumer's
-      `dotnet publish -r browser-wasm` via the wasm-tools workload, deploys the
-      Godot web boot shell next to the app bundle, and exports the game
-      project's content as a .pck during publish (running the export on the
-      HOST desktop via the 2dog import helper).
-
-      Everything is inert unless RuntimeIdentifier == browser-wasm.
-
-      Requirements in the consuming (host) project:
-        - net10.0+ TargetFramework, OutputType Exe, wasm-tools workload
-        - PackageReference 2dog (brings twodog + GodotSharp + desktop editor
-          packages used for import/export at build time)
-        - <GodotProjectDir> pointing at the Godot project
-        - a wwwroot/index.html boot page (see the 2dog web template)
-        - the game project compiled with LIBGODOT_ENABLED + AllowUnsafeBlocks
-          and its plugins initializer registered before Engine.Start()
-
-      Configurable properties:
-        TwoDogWebVariant:       'release' (default) or 'debug' (needs the
-                                2dog.browser-wasm.debug package referenced)
-        TwoDogWebNativeDir:     override the payload location entirely
-        TwoDogExportPack:       'false' disables the automatic pck export
-        TwoDogWebExportPreset:  export preset name (default 'Web')
-        TwoDogWebPackName:      deployed pck file name (default 'godot.pck')
-        TwoDogWebSizeManifest:  'false' skips twodog.sizes.json (exact wasm/pck
-                                sizes the boot shell's progress bar reads)
-        TwoDogWebStripMaps:     'false' keeps *.js.map sourcemaps in release
-                                bundles
-        TwoDogWebPrecompress:   'false' skips the .br/.gz sibling files
-                                (servers with precompressed-static support and
-                                the shell's gzip pck fallback consume them)
-        TwoDogWebPrecompressLevel: System.IO.Compression.CompressionLevel for
-                                the siblings (default 'Optimal'; 'SmallestSize'
-                                for final deploys)
-        WasmEmitSymbolMap:      'true' restores the dotnet.native.js.symbols
-                                emission (~20 MB, downloaded at every boot;
-                                symbolicates native wasm stack traces)
-        WasmInitialHeapSize:    initial linear memory (default 256MB; growth
-                                stays enabled - raise for pck-heavy desktop
-                                games, lower toward 128MB for low-end mobile)
-    -->
+    <!-- browser-wasm meta package: statically links libgodot.a into `dotnet publish -r browser-wasm`, deploys the
+         boot shell and exports the game .pck on the host desktop. Inert unless RuntimeIdentifier == browser-wasm. -->
 
     <!-- Discover package version from this .targets location -->
     <PropertyGroup>
@@ -50,8 +8,7 @@
         <TwoDogWebPackageVersion Condition="'$(TwoDogWebPackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogWebTargetsDir)'))))</TwoDogWebPackageVersion>
     </PropertyGroup>
 
-    <!-- Variant selection: Debug configuration prefers the debug payload when
-         its package is restored; everything else uses release. -->
+    <!-- Debug configuration prefers the debug payload when its package is restored; everything else uses release -->
     <PropertyGroup>
         <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebDebugPackageDir>
         <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebReleasePackageDir>
@@ -70,68 +27,63 @@
 
     <!-- Wasm build configuration -->
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+        <!-- Blazor WebAssembly SDK projects (2dog.blazor hosts): the SDK owns bundle layout, boot and compression,
+             and the runtime stays dotnet.native.wasm (Blazor boots it, 2dog.blazor starts Godot inside it) -->
+        <TwoDogWebBlazor Condition="'$(TwoDogWebBlazor)' == '' And '$(UsingMicrosoftNETSdkBlazorWebAssembly)' == 'true'">true</TwoDogWebBlazor>
+        <TwoDogWebBlazor Condition="'$(TwoDogWebBlazor)' == ''">false</TwoDogWebBlazor>
+
         <WasmBuildNative>true</WasmBuildNative>
-        <!-- Fixed path: PublishDir is empty at static evaluation time, which
-             would silently split the bundle and the post-publish steps. -->
-        <WasmAppDir Condition="'$(WasmAppDir)' == ''">$(MSBuildProjectDirectory)/AppBundle</WasmAppDir>
+        <!-- Fixed path: PublishDir is empty at static evaluation time and would silently split bundle and
+             post-publish steps -->
+        <WasmAppDir Condition="'$(WasmAppDir)' == '' And '$(TwoDogWebBlazor)' != 'true'">$(MSBuildProjectDirectory)/AppBundle</WasmAppDir>
 
         <WasmEnableSIMD Condition="'$(WasmEnableSIMD)' == ''">true</WasmEnableSIMD>
-        <!-- 256MB: a floor, not a ceiling (ALLOW_MEMORY_GROWTH stays on). Too
-             low costs repeated memory.grow churn while Mono + Godot + the pck
-             load; 512MB upfront risks allocation failure in low-memory mobile
-             tabs. -->
+        <!-- 256MB is a floor (ALLOW_MEMORY_GROWTH stays on): lower churns memory.grow during boot, 512MB risks
+             allocation failure in low-memory mobile tabs -->
         <WasmInitialHeapSize Condition="'$(WasmInitialHeapSize)' == ''">256MB</WasmInitialHeapSize>
         <EmccStackSize Condition="'$(EmccStackSize)' == ''">5120KB</EmccStackSize>
 
-        <!-- The wasm SDK emits dotnet.native.js.symbols by default and
-             dotnet.js downloads it during every boot (~20 MB for a 2dog game;
-             it only symbolicates native stack traces). -->
+        <!-- dotnet.js downloads dotnet.native.js.symbols (~20 MB) on every boot; it only symbolicates native stack
+             traces -->
         <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == ''">false</WasmEmitSymbolMap>
-        <TwoDogWebStripMaps Condition="'$(TwoDogWebStripMaps)' == '' And '$(TwoDogWebVariant)' == 'release'">true</TwoDogWebStripMaps>
-        <TwoDogWebSizeManifest Condition="'$(TwoDogWebSizeManifest)' == ''">true</TwoDogWebSizeManifest>
-        <!-- Precompression needs core MSBuild for BrotliStream; wasm publishes
-             always run there (the wasm-tools workload requires the CLI). -->
-        <TwoDogWebPrecompress Condition="'$(TwoDogWebPrecompress)' == '' And '$(MSBuildRuntimeType)' == 'Core'">true</TwoDogWebPrecompress>
-        <!-- Optimal keeps iterative publishes fast; SmallestSize compresses
-             harder at a much higher publish cost (worth it for final deploys). -->
+        <!-- Bundle post-processing is for the plain shell; Blazor strips, fingerprints and compresses itself -->
+        <TwoDogWebStripMaps Condition="'$(TwoDogWebStripMaps)' == '' And '$(TwoDogWebVariant)' == 'release' And '$(TwoDogWebBlazor)' != 'true'">true</TwoDogWebStripMaps>
+        <TwoDogWebSizeManifest Condition="'$(TwoDogWebSizeManifest)' == '' And '$(TwoDogWebBlazor)' != 'true'">true</TwoDogWebSizeManifest>
+        <!-- Precompression needs core MSBuild for BrotliStream; wasm publishes always run there (wasm-tools needs
+             the CLI) -->
+        <TwoDogWebPrecompress Condition="'$(TwoDogWebPrecompress)' == '' And '$(MSBuildRuntimeType)' == 'Core' And '$(TwoDogWebBlazor)' != 'true'">true</TwoDogWebPrecompress>
+        <!-- Optimal keeps iterative publishes fast; SmallestSize compresses harder at a much higher cost (final
+             deploys) -->
         <TwoDogWebPrecompressLevel Condition="'$(TwoDogWebPrecompressLevel)' == ''">Optimal</TwoDogWebPrecompressLevel>
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
-        <!-- partial: only assemblies that declare trim-compatibility
-             (<IsTrimmable>true</IsTrimmable> - the BCL, twodog, GodotSharp,
-             the game project) are member-trimmed; everything else is kept
-             whole. GodotSharp is trim-annotated in the 2dog fork; its script
-             bridge annotations assume the assemblies containing scripts are
-             rooted, which the TrimmerRootAssembly items below and in the
-             generated web hosts guarantee. GodotSharp itself stays rooted
-             too: the engine reaches its interop surface at runtime, not
-             statically. -->
+        <!-- partial: only IsTrimmable assemblies are member-trimmed. GodotSharp's trim annotations assume script
+             assemblies are rooted (TrimmerRootAssembly below + generated web hosts); GodotSharp is used at runtime. -->
         <TrimMode Condition="'$(TrimMode)' == ''">partial</TrimMode>
 
-        <!-- No GodotPlugins.dll on web: plugin init flows through the game's
-             registered function pointer (see twodog.Engine.RegisterWebPluginsInitializer). -->
+        <!-- No GodotPlugins.dll on web: plugin init flows through the game's registered function pointer
+             (twodog.Engine.RegisterWebPluginsInitializer) -->
         <TwoDogSkipGodotApiCopy>true</TwoDogSkipGodotApiCopy>
 
         <TwoDogExportPack Condition="'$(TwoDogExportPack)' == ''">true</TwoDogExportPack>
         <TwoDogWebExportPreset Condition="'$(TwoDogWebExportPreset)' == ''">Web</TwoDogWebExportPreset>
-        <!-- The Godot engine JS derives all file names from the 'executable'
-             config value; the default shell uses 'godot'. -->
+        <!-- The Godot engine JS derives all file names from the 'executable' config value; the default shell uses
+             'godot' -->
         <TwoDogWebPackName Condition="'$(TwoDogWebPackName)' == ''">godot.pck</TwoDogWebPackName>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
-        <!-- Statically link Godot: every [LibraryImport("libgodot")] becomes a
-             direct call into the archive. -->
+        <!-- Static link: every [LibraryImport("libgodot")] becomes a direct call into the archive -->
         <DirectPInvoke Include="libgodot"/>
         <NativeLibrary Include="$(TwoDogWebNativeDir)libgodot/libgodot.a"/>
 
-        <!-- GodotSharp is reached via reflection from scripts; twodog carries
-             the WebTrampolines signature declarations the wasm build scans. -->
+        <!-- GodotSharp is reached via reflection from scripts; twodog carries the WebTrampolines signatures the
+             wasm build scans -->
         <TrimmerRootAssembly Include="GodotSharp"/>
         <TrimmerRootAssembly Include="twodog"/>
 
-        <!-- Some scenarios need marshal-ilgen while runtime marshalling is
-             not disabled (see dotnet/android#7276; applies to wasm too). -->
+        <!-- marshal-ilgen is needed while runtime marshalling is not disabled (dotnet/android#7276; applies to wasm
+             too) -->
         <_MonoComponent Include="marshal-ilgen"/>
 
         <EmccExportedFunction Include="_malloc;_free"/>
@@ -141,8 +93,8 @@
         <_TwoDogGodotPreJs Include="$(TwoDogWebNativeDir)libgodot/pre_js/**/*.js"/>
         <_TwoDogGodotPostJs Include="$(TwoDogWebNativeDir)libgodot/post_js/**/*.js"/>
 
-        <!-- Godot-required emcc link flags (mirrors the engine's own web link;
-             recorded in $(TwoDogWebNativeDir)libgodot/config.json). -->
+        <!-- Godot-required emcc link flags (mirrors the engine's web link; recorded in
+             $(TwoDogWebNativeDir)libgodot/config.json) -->
         <TwoDogGodotEmccExtraLDFlag Include="-sMAX_WEBGL_VERSION=2"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sOFFSCREEN_FRAMEBUFFER=1"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sGL_ENABLE_GET_PROC_ADDRESS=0"/>
@@ -159,12 +111,19 @@
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotPreJs->'--pre-js &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotPostJs->'--post-js &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
 
-        <!-- Deploy the Godot boot shell and the consumer's static page. -->
-        <WasmExtraFilesToDeploy Include="$(TwoDogWebNativeDir)shell/godot.js"/>
-        <WasmExtraFilesToDeploy Include="$(TwoDogWebNativeDir)shell/godot.audio.worklet.js"/>
-        <WasmExtraFilesToDeploy Include="$(TwoDogWebNativeDir)shell/godot.audio.position.worklet.js"/>
-        <WasmExtraFilesToDeploy Include="$(MSBuildProjectDirectory)/wwwroot/**" Condition="Exists('$(MSBuildProjectDirectory)/wwwroot')"/>
+        <!-- Deploy the Godot boot shell and the consumer's static page -->
+        <WasmExtraFilesToDeploy Include="$(TwoDogWebNativeDir)shell/godot.js" Condition="'$(TwoDogWebBlazor)' != 'true'"/>
+        <WasmExtraFilesToDeploy Include="$(TwoDogWebNativeDir)shell/godot.audio.worklet.js" Condition="'$(TwoDogWebBlazor)' != 'true'"/>
+        <WasmExtraFilesToDeploy Include="$(TwoDogWebNativeDir)shell/godot.audio.position.worklet.js" Condition="'$(TwoDogWebBlazor)' != 'true'"/>
+        <WasmExtraFilesToDeploy Include="$(MSBuildProjectDirectory)/wwwroot/**" Condition="'$(TwoDogWebBlazor)' != 'true' And Exists('$(MSBuildProjectDirectory)/wwwroot')"/>
     </ItemGroup>
+
+    <!-- Blazor: no shell (2dog.blazor boots Godot from its component). The audio worklets Godot fetches by name and
+         the exported pck become static web assets at the site root (2dog.blazor points Module.locateFile there),
+         staged under obj/: a Content item outside wwwroot is not served by the development server. -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' == 'true'">
+        <_TwoDogBlazorAssetRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)', 'twodog-web', 'wwwroot'))</_TwoDogBlazorAssetRoot>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
         <EmccExtraLDFlags>$(EmccExtraLDFlags) @(TwoDogGodotEmccExtraLDFlag->'%(Identity)', ' ')</EmccExtraLDFlags>
@@ -177,25 +136,18 @@
                Text="TwoDog: web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.$(TwoDogWebVariant) package v$(TwoDogWebPackageVersion) and the source checkout (godot/bin/web/$(_TwoDogWebBuildVariant)/). Restore the 2dog.browser-wasm package or build the web natives."/>
     </Target>
 
-    <!-- The Godot engine JS expects the wasm at <executable>.wasm; the engine
-         preloader fetches it and hands it to dotnet.js (mono_bridge), so it
-         must live outside _framework under the executable name. Also prunes
-         the stray copy of the static archive the wasm SDK deploys as a native
-         asset. Hooks after bundle generation (an AfterTargets="Publish" hook
-         runs before the nested wasm publish has generated the bundle). -->
+    <!-- The engine preloader fetches <executable>.wasm (outside _framework) and hands it to dotnet.js; also prunes the
+         stray archive copy. Hooks after bundle generation: AfterTargets="Publish" precedes the nested wasm publish. -->
     <Target Name="TwoDogWebFinalizeBundle"
             AfterTargets="_WasmGenerateAppBundle"
-            Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' != 'true'">
         <Move SourceFiles="$(WasmAppDir)/_framework/dotnet.native.wasm"
               DestinationFiles="$(WasmAppDir)/godot.wasm"
               Condition="Exists('$(WasmAppDir)/_framework/dotnet.native.wasm')"/>
         <Delete Files="$(WasmAppDir)/_framework/libgodot.wasm"/>
 
-        <!-- Sourcemaps are only fetched with devtools open; safe to strip.
-             *.symbols must NOT be deleted here: dotnet.boot.js is a manifest
-             and mono_download_assets fails the whole boot on any listed asset
-             that 404s. Whether symbols exist is WasmEmitSymbolMap's job - it
-             keeps both the file and its manifest entry out on a fresh relink. -->
+        <!-- Sourcemaps are only fetched with devtools open. Never delete *.symbols here: dotnet.boot.js is a manifest
+             and any 404 fails the boot; WasmEmitSymbolMap keeps file and manifest entry out on a fresh relink. -->
         <ItemGroup Condition="'$(TwoDogWebStripMaps)' == 'true'">
             <_TwoDogWebDebugArtifacts Include="$(WasmAppDir)/_framework/*.js.map"/>
         </ItemGroup>
@@ -204,32 +156,16 @@
         <Message Importance="high" Text="TwoDog: web app bundle finalized at $(WasmAppDir)"/>
     </Target>
 
-    <!-- ============================================ -->
-    <!-- Content pipeline: export the game .pck        -->
-    <!-- ============================================ -->
-    <!-- Runs on the HOST desktop during publish, using the same capability
-         plumbing as the 2dog package's automatic import target
-         (TwoDogImportGodotProject in 2dog.targets): the in-process helper
-         against the desktop editor-variant libgodot, or an explicitly
-         configured external editor. Incremental over the game project
-         sources. -->
+    <!-- Content pipeline: export the game .pck on the HOST desktop during publish, sharing TwoDogImportGodotProject's
+         capability plumbing (in-process helper against the editor libgodot, or an external editor). Incremental. -->
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
-        <!-- BaseIntermediateOutputPath (not IntermediateOutputPath): defined
-             early by Microsoft.Common.props, so the path is stable whether
-             these targets are imported from the package (after common
-             targets) or from a source-checkout project body (before). -->
+        <!-- BaseIntermediateOutputPath is defined early by Microsoft.Common.props, so the path is stable whether
+             imported from the package (after common targets) or from a source-checkout project body (before) -->
         <_TwoDogWebPackPath>$(BaseIntermediateOutputPath)twodog-web/$(TwoDogWebPackName)</_TwoDogWebPackPath>
     </PropertyGroup>
 
-    <!-- Export incrementality inputs: the export must NOT borrow
-         @(TwoDogImportInputs) - that item is only populated when
-         TwoDogAutoImport is enabled, and an incremental target with empty
-         Inputs is silently skipped, shipping a bundle without the pck.
-
-         Directories carrying a .gdignore are skipped by the Godot export
-         (and hold this very host's own build outputs when the web host is
-         nested inside the Godot project - including the exported pck itself,
-         which must never count as an input). -->
+    <!-- Do NOT borrow @(TwoDogImportInputs): empty Inputs silently skip the export. .gdignore dirs are skipped by the
+         export and hold this host's own outputs (including the exported pck) when nested in the Godot project. -->
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">
         <_TwoDogWebGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
         <TwoDogWebExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
@@ -244,8 +180,7 @@
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
-        <!-- Editor/helper/tools capability comes from the shared
-             TwoDogResolveContentCapability target (2dog.engine.targets). -->
+        <!-- Editor/helper/tools capability comes from TwoDogResolveContentCapability (2dog.engine.targets) -->
         <PropertyGroup>
             <_TwoDogWebPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogWebPackPath)'))))</_TwoDogWebPackFullPath>
             <_TwoDogExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogExportPresetsPath>
@@ -253,8 +188,7 @@
             <_TwoDogHasWebPreset Condition="Exists('$(_TwoDogExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogExportPresetsPath)').Contains('name=&quot;$(TwoDogWebExportPreset)&quot;'))">true</_TwoDogHasWebPreset>
         </PropertyGroup>
 
-        <!-- Fail with an actionable message instead of the engine's exit-1
-             (whose stderr an IDE build may swallow entirely). -->
+        <!-- Actionable message instead of the engine's exit-1 (whose stderr an IDE build may swallow) -->
         <Error Condition="'$(_TwoDogHasWebPreset)' != 'true'"
                Text="TwoDog: web publish exports the game pck via the '$(TwoDogWebExportPreset)' export preset, which '$(_TwoDogExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add &gt; Web), re-run `2dog convert` (it scaffolds one), or point &lt;TwoDogWebExportPreset&gt; at an existing preset."/>
 
@@ -275,22 +209,64 @@
                Text="TwoDog: web publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;host-rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to provide the pck yourself (wwwroot/$(TwoDogWebPackName))."/>
     </Target>
 
-    <!-- Deploy the exported pck into the app bundle. Separate from the export
-         so an up-to-date (skipped) export still deploys. -->
+    <!-- Separate from the export so an up-to-date (skipped) export still deploys -->
     <Target Name="TwoDogDeployPack"
             AfterTargets="TwoDogWebFinalizeBundle"
-            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogExportPack)' == 'true' And Exists('$(_TwoDogWebPackPath)')">
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' != 'true' And '$(TwoDogExportPack)' == 'true' And Exists('$(_TwoDogWebPackPath)')">
         <Copy SourceFiles="$(_TwoDogWebPackPath)"
               DestinationFiles="$(WasmAppDir)/$(TwoDogWebPackName)"
               SkipUnchangedFiles="true"/>
         <Message Importance="high" Text="TwoDog: deployed $(TwoDogWebPackName) to the app bundle"/>
     </Target>
 
-    <!-- ============================================ -->
-    <!-- Bundle post-processing: sizes + compression   -->
-    <!-- ============================================ -->
+    <!-- Blazor: define the worklets and the exported pck as computed static web assets (served at the site root in
+         development, published to wwwroot). Exports before asset discovery, which runs early in the build; the
+         AfterTargets=Build run of the export is then a no-op. -->
+    <Target Name="TwoDogBlazorDefineAssets"
+            BeforeTargets="ResolveStaticWebAssetsInputs"
+            DependsOnTargets="TwoDogExportGamePack"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' == 'true' And '$(DesignTimeBuild)' != 'true'">
+        <PropertyGroup>
+            <_TwoDogBlazorPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogWebPackPath)'))))</_TwoDogBlazorPackFullPath>
+            <_TwoDogBlazorWantsPack>false</_TwoDogBlazorWantsPack>
+            <_TwoDogBlazorWantsPack Condition="'$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">true</_TwoDogBlazorWantsPack>
+        </PropertyGroup>
+        <Error Condition="'$(_TwoDogBlazorWantsPack)' == 'true' And !Exists('$(_TwoDogBlazorPackFullPath)')"
+               Text="TwoDog: the exported pck '$(_TwoDogBlazorPackFullPath)' is missing after the export step."/>
 
-    <!-- MSBuild property functions cannot stat files, hence inline tasks. -->
+        <ItemGroup>
+            <_TwoDogBlazorAssetSource Include="$(TwoDogWebNativeDir)shell/godot.audio.worklet.js;$(TwoDogWebNativeDir)shell/godot.audio.position.worklet.js"/>
+            <_TwoDogBlazorAssetSource Include="$(_TwoDogBlazorPackFullPath)" Condition="'$(_TwoDogBlazorWantsPack)' == 'true'"/>
+        </ItemGroup>
+        <Copy SourceFiles="@(_TwoDogBlazorAssetSource)" DestinationFolder="$(_TwoDogBlazorAssetRoot)" SkipUnchangedFiles="true"/>
+        <ItemGroup>
+            <_TwoDogBlazorAssetCandidate Include="@(_TwoDogBlazorAssetSource->'$(_TwoDogBlazorAssetRoot)%(Filename)%(Extension)')"/>
+        </ItemGroup>
+
+        <DefineStaticWebAssets CandidateAssets="@(_TwoDogBlazorAssetCandidate)"
+                               SourceType="Computed"
+                               SourceId="$(PackageId)"
+                               ContentRoot="$(_TwoDogBlazorAssetRoot)"
+                               BasePath="$(StaticWebAssetBasePath)"
+                               RelativePathPattern="**"
+                               AssetKind="All"
+                               AssetMode="All"
+                               AssetRole="Primary"
+                               AssetMergeSource="$(StaticWebAssetMergeTarget)"
+                               CopyToOutputDirectory="Never"
+                               CopyToPublishDirectory="PreserveNewest">
+            <Output TaskParameter="Assets" ItemName="StaticWebAsset"/>
+            <Output TaskParameter="Assets" ItemName="_TwoDogBlazorStaticWebAsset"/>
+        </DefineStaticWebAssets>
+        <DefineStaticWebAssetEndpoints CandidateAssets="@(_TwoDogBlazorStaticWebAsset)"
+                                       ExistingEndpoints="@(StaticWebAssetEndpoint)"
+                                       ContentTypeMappings="@(StaticWebAssetContentTypeMapping)">
+            <Output TaskParameter="Endpoints" ItemName="StaticWebAssetEndpoint"/>
+        </DefineStaticWebAssetEndpoints>
+        <Message Importance="high" Text="TwoDog: Blazor static web assets: @(_TwoDogBlazorAssetCandidate->'%(Filename)%(Extension)', ', ')"/>
+    </Target>
+
+    <!-- Bundle post-processing (sizes + compression): property functions cannot stat files, hence inline tasks -->
     <UsingTask TaskName="TwoDogWriteSizeManifest" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
         <ParameterGroup>
@@ -322,9 +298,8 @@
             <Using Namespace="System.IO.Compression"/>
             <Using Namespace="System.Linq"/>
             <Code Type="Fragment" Language="cs"><![CDATA[
-                // BrotliStream is absent from the netstandard reference set the
-                // inline-task compiler uses, but present in the core-MSBuild
-                // runtime - reach it via reflection.
+                // BrotliStream is absent from the inline-task compiler's netstandard reference set but present in the
+                // core-MSBuild runtime - reach it via reflection.
                 var brotli = Type.GetType("System.IO.Compression.BrotliStream, System.IO.Compression.Brotli");
                 if (brotli == null)
                     Log.LogWarning("TwoDog: BrotliStream unavailable in this MSBuild runtime; writing only .gz siblings.");
@@ -343,9 +318,8 @@
                         var sibling = file.FullName + suffix;
                         if (File.Exists(sibling) && File.GetLastWriteTimeUtc(sibling) >= file.LastWriteTimeUtc)
                             continue;
-                        // Write-then-move: a cancelled build must not leave a
-                        // truncated sibling behind with a fresh timestamp (the
-                        // staleness check above would then skip it forever).
+                        // Write-then-move: a cancelled build must not leave a truncated sibling with a fresh timestamp
+                        // (the staleness check above would then skip it forever).
                         var temp = sibling + ".tmp";
                         using (var src = file.OpenRead())
                         using (var dst = File.Create(temp))
@@ -364,11 +338,8 @@
         </Task>
     </UsingTask>
 
-    <!-- Exact decompressed byte sizes for the boot shell's progress bar (the
-         Content-Length header is the compressed size under gzip/brotli).
-         Sidecar file rather than an index.html injection: wwwroot is
-         user-owned content. A missing manifest degrades the shell to an
-         indeterminate bar. -->
+    <!-- Decompressed sizes for the shell's progress bar (Content-Length is the compressed size). Sidecar rather than an
+         index.html injection since wwwroot is user-owned; a missing manifest degrades to an indeterminate bar. -->
     <Target Name="TwoDogWebWriteSizeManifest"
             AfterTargets="TwoDogWebFinalizeBundle"
             DependsOnTargets="TwoDogDeployPack"
@@ -378,12 +349,8 @@
         <Message Importance="normal" Text="TwoDog: wrote twodog.sizes.json (shell progress totals)"/>
     </Target>
 
-    <!-- .br/.gz siblings for every sizeable payload file. Servers with
-         precompressed-static support (nginx gzip_static/brotli_static, Caddy
-         precompressed, static-web-server) serve them transparently, and the
-         boot shell's opt-in pck fallback fetches godot.pck.gz directly on
-         hosts that compress nothing. Originals always remain, so plain static
-         servers are unaffected. -->
+    <!-- .br/.gz siblings: served transparently by precompressed-static servers (nginx, Caddy, static-web-server)
+         and fetched by the shell's opt-in pck fallback on hosts that compress nothing. Originals always remain. -->
     <Target Name="TwoDogWebPrecompressBundle"
             AfterTargets="TwoDogWebWriteSizeManifest"
             DependsOnTargets="TwoDogDeployPack"

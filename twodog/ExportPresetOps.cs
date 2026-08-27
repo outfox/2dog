@@ -3,12 +3,8 @@ using System.Text.RegularExpressions;
 namespace twodog.cli;
 
 /// <summary>
-/// export_presets.cfg handling: publishes export the game pck via export
-/// presets - 'Web' for the browser host, the per-OS desktop preset names for
-/// desktop hosts - and the engine refuses to export a project without an
-/// export_presets.cfg at its root. Fresh templates ship the file; conversions
-/// must produce it too. Append-only, like project.godot: an existing file is
-/// never rewritten - a missing preset is appended under the next free index.
+/// export_presets.cfg handling: publishes export the pck via presets ('Web', per-OS desktop names) and the engine
+/// refuses to export without the file. Append-only: a missing preset is appended under the next free index.
 /// </summary>
 internal static class ExportPresetOps
 {
@@ -23,9 +19,8 @@ internal static class ExportPresetOps
         Regex.IsMatch(cfgText, $@"^name=""{Regex.Escape(presetName)}""\s*$", RegexOptions.Multiline);
 
     /// <summary>
-    /// The template's section for the named preset, renumbered past every
-    /// [preset.N] already in the file, ready to append (leading separator
-    /// included).
+    /// The template's section for the named preset, renumbered past every [preset.N] already in the file, ready to
+    /// append (leading separator included).
     /// </summary>
     public static string AppendText(string existingCfgText, string presetName)
     {
@@ -40,8 +35,7 @@ internal static class ExportPresetOps
     }
 
     /// <summary>
-    /// Extracts the named preset's section (its [preset.N] and
-    /// [preset.N.options] blocks) from the template's export_presets.cfg.
+    /// Extracts the named preset's [preset.N] and [preset.N.options] blocks from the template's export_presets.cfg.
     /// </summary>
     private static (string Section, int Index) TemplateSection(string presetName)
     {

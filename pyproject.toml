@@ -31,6 +31,7 @@ help = "dotnet pack: managed twodog packages (engine, avalonia, xunit, tool) and
 sequence = [
     { cmd = "dotnet pack twodog.engine" },
     { cmd = "dotnet pack twodog.avalonia" },
+    { cmd = "dotnet pack twodog.blazor" },
     { cmd = "dotnet pack twodog.xunit" },
     { cmd = "dotnet pack twodog" },
     { cmd = "dotnet restore" },

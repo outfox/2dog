@@ -8,9 +8,7 @@
 
     <!-- Programming & Linkage Characteristics -->
     <PropertyGroup>
-        <!-- The assembly keeps the historical name twodog.dll; the project file is
-             named after the package id. Consumers and the browser-wasm trimmer
-             roots reference the assembly by this name. -->
+        <!-- Historical assembly name; consumers and the browser-wasm trimmer roots reference it as twodog. -->
         <AssemblyName>twodog</AssemblyName>
         <RootNamespace>twodog</RootNamespace>
         <Nullable>enable</Nullable>
@@ -39,23 +37,8 @@
         </Reference>
     </ItemGroup>
 
-    <!--
-      Platform-specific native library packages.
-      These are dependencies of the 2dog.engine package, so consumers get them automatically.
-      At build time, only the matching platform's MSBuild targets copy the native library.
-
-      For debug/editor variants, reference the corresponding platform package explicitly
-      (e.g., 2dog.win-x64.debug or 2dog.win-x64.editor) in your application project.
-    -->
-    <!--
-      All platform packages are always declared as dependencies so that the packed
-      2dog.engine.nupkg includes them regardless of which OS the pack runs on.
-      NuGet consumers get all three; at build time only the matching platform's
-      targets actually copy a native library.
-    -->
-    <!-- Exact-pinned ([x]) so the natives version is decided in ONE place: a given
-         2dog.engine version always resolves the natives it was built against, and consumers
-         (including the templates) never reference natives packages directly. -->
+    <!-- All platform natives are dependencies regardless of pack OS; only the matching platform's targets copy.
+         Exact-pinned ([x]) so a given 2dog.engine always resolves the natives it was built against. -->
     <ItemGroup>
         <PackageReference Include="2dog.win-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
         <PackageReference Include="2dog.linux-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
@@ -70,14 +53,8 @@
         <None Include="buildTransitive\2dog.engine.targets" Pack="true" PackagePath="buildTransitive\"/>
     </ItemGroup>
 
-    <!--
-      Embed GodotSharp assemblies and source generators in the package.
-      GodotSharp.dll goes in lib/net10.0/ alongside twodog.dll so consumers
-      get it as a transitive compile reference without needing a separate
-      GodotSharp NuGet dependency.
-      Godot.SourceGenerators.dll goes in analyzers/dotnet/cs/ so it runs
-      as a Roslyn source generator for consuming projects.
-    -->
+    <!-- GodotSharp.dll ships in lib/net10.0/ (transitive compile reference, no GodotSharp NuGet dependency);
+         Godot.SourceGenerators.dll in analyzers/dotnet/cs/ runs as a source generator for consumers. -->
     <PropertyGroup>
         <GodotSharpApiDir>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/</GodotSharpApiDir>
         <GodotSourceGenDir>$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
@@ -94,11 +71,7 @@
         <None Include="README.md" Pack="true" PackagePath="README.md"/>
     </ItemGroup>
 
-    <!--
-      Include GodotPlugins assemblies in the package.
-      GodotPlugins needs to be copied to the output directory at runtime,
-      so it goes in build/api/ rather than lib/net10.0/.
-    -->
+    <!-- GodotPlugins is copied to the output directory by the targets, so it lives in build/api/, not lib/. -->
     <PropertyGroup>
         <!-- GODOTSHARP_DIR env var (highest priority) for locating GodotPlugins -->
         <GodotPluginsSrcDir Condition="'$(GODOTSHARP_DIR)' != '' And Exists('$(GODOTSHARP_DIR)/GodotPlugins.dll')">$(GODOTSHARP_DIR)/</GodotPluginsSrcDir>
@@ -110,17 +83,11 @@
         <None Include="$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json" Pack="true" PackagePath="build\api\" CopyToOutputDirectory="Never" Condition="Exists('$(GodotPluginsSrcDir)GodotPlugins.runtimeconfig.json')"/>
     </ItemGroup>
 
-    <!--
-      Import helper: published into tools/net10.0/ and invoked by the
-      TwoDogImportGodotProject target (see build/2dog.engine.targets) as
-      `dotnet exec tools/net10.0/2dog.import.dll`. Carries GodotSharp and
-      GodotSharpEditor copy-local so GodotPlugins' Assembly.Load calls
-      resolve in the helper process.
-    -->
+    <!-- Import helper published into tools/net10.0/ for TwoDogImportGodotProject (`dotnet exec 2dog.import.dll`);
+         carries GodotSharp/GodotSharpEditor copy-local so GodotPlugins' Assembly.Load resolves. -->
     <Target Name="TwoDogPublishImportHelperForPack" BeforeTargets="_GetPackageFiles;GenerateNuspec">
-        <!-- Restore must run as a separate MSBuild invocation: the assets file
-             it writes is read during project evaluation, and the differing
-             global properties below force a fresh evaluation for Publish. -->
+        <!-- Separate Restore invocation: its assets file is read at evaluation, and the differing global
+             properties force a fresh evaluation for Publish. -->
         <MSBuild Projects="../twodog.import/twodog.import.csproj"
                  Targets="Restore"
                  Properties="Configuration=Release"/>
@@ -133,21 +100,5 @@
                   Pack="true" PackagePath="tools\net10.0\" Visible="false"/>
         </ItemGroup>
     </Target>
-
-    <!--
-      Native libraries are NOT embedded in this package.
-      They are provided by separate platform-specific packages:
-        - 2dog.win-x64 / 2dog.linux-x64 / 2dog.osx-arm64: template_release builds
-        - 2dog.win-x64.debug / 2dog.linux-x64.debug / 2dog.osx-arm64.debug: template_debug builds
-        - 2dog.win-x64.editor / 2dog.linux-x64.editor / 2dog.osx-arm64.editor: editor builds
-  
-      When you install the 2dog.engine NuGet package, the release variant platform packages
-      are added as normal dependencies, so you usually only need to reference 2dog.engine.
-  
-      For local development of the twodog library itself:
-        - Debug: Use template_debug build (debugging enabled)
-        - Editor: Use editor build (full editor features, TOOLS_ENABLED)
-        - Release: Use template_release build (optimized)
-    -->
 
 </Project>

@@ -7,22 +7,15 @@ using System.Runtime.InteropServices;
 namespace twodog;
 
 /// <summary>
-/// Resolves the logical <c>libgodot</c> P/Invoke name to the variant-specific
-/// native library (<c>libgodot-release</c>, <c>libgodot-debug</c>, or
-/// <c>libgodot-editor</c>). The variant is declared via
-/// <c>[AssemblyMetadata("TwoDogVariant", ...)]</c>, which the 2dog package
-/// targets emit into consuming assemblies from the <c>&lt;TwoDogVariant&gt;</c>
-/// MSBuild property. Distinct per-variant file names make a variant mismatch a
-/// loud, actionable load error instead of a silent wrong-library load (or an
-/// opaque hostfxr failure from a stale copy).
+/// Resolves the logical <c>libgodot</c> P/Invoke name to <c>libgodot-{release|debug|editor}</c>, chosen via
+/// <c>[AssemblyMetadata("TwoDogVariant", ...)]</c>. Distinct names turn a variant mismatch into a loud load error.
 /// </summary>
 internal static class LibGodotLoader
 {
     private static readonly string[] KnownVariants = ["release", "debug", "editor"];
 
     /// <summary>
-    /// File name of the libgodot actually loaded (e.g. "libgodot-editor.dll").
-    /// Used to unload the module by name at process exit on Windows.
+    /// File name of the libgodot actually loaded; used to unload it by name at process exit on Windows.
     /// </summary>
     internal static string? LoadedLibraryFileName { get; private set; }
 
@@ -34,9 +27,8 @@ internal static class LibGodotLoader
     internal static nint LoadedLibraryHandle { get; private set; }
 
     /// <summary>
-    /// Hosted mode: loads exactly this file as THIS context's libgodot, bypassing variant
-    /// probing. Statics are per-AssemblyLoadContext, so every hosted engine instance gets its
-    /// own module. Must run before the first libgodot P/Invoke in the context.
+    /// Hosted mode: loads exactly this file as this context's libgodot (statics are per-ALC, so each instance gets
+    /// its own module). Must run before the first libgodot P/Invoke in the context.
     /// </summary>
     internal static nint LoadExact(string path)
     {
@@ -54,9 +46,10 @@ internal static class LibGodotLoader
         return handle;
     }
 
-    /// <summary>Loads this context's libgodot via the normal variant probing if needed and
-    /// returns its OS handle; throws <see cref="DllNotFoundException"/> like the first
-    /// P/Invoke would.</summary>
+    /// <summary>
+    /// Loads this context's libgodot via variant probing if needed and returns its OS handle; throws
+    /// <see cref="DllNotFoundException"/> like the first P/Invoke would.
+    /// </summary>
     internal static nint EnsureLoaded()
     {
         if (LoadedLibraryHandle != 0) return LoadedLibraryHandle;
@@ -76,10 +69,8 @@ internal static class LibGodotLoader
     {
         // Browser-wasm links libgodot statically; there is nothing to resolve.
         if (OperatingSystem.IsBrowser()) return;
-        // Register for the twodog assembly ONLY. GodotSharp's own libgodot
-        // bridge imports are covered by the resolver GodotPlugins registers
-        // for it during InitializeFromEngine (with the engine's real module
-        // handle) - claiming that slot here breaks GodotPlugins init.
+        // twodog assembly only: GodotPlugins registers GodotSharp's own resolver during InitializeFromEngine, and
+        // claiming that slot here breaks its init.
         NativeLibrary.SetDllImportResolver(typeof(LibGodotLoader).Assembly, Resolve);
     }
 
@@ -144,9 +135,7 @@ internal static class LibGodotLoader
 
     private static string? ResolveVariant()
     {
-        // The entry assembly's declaration wins; under non-standard hosts
-        // (dotnet test) the entry assembly has no metadata, so fall back to
-        // scanning loaded assemblies (same discovery as Engine.ResolveProjectDir).
+        // Entry assembly wins; under dotnet test it has no metadata, so fall back to scanning loaded assemblies.
         if (Assembly.GetEntryAssembly() is { } entry && MetadataVariant(entry) is { } declared)
             return declared;
 

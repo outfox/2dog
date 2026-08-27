@@ -1,25 +1,4 @@
 <Project>
-    <!--
-      TwoDog Transitive Targets
-      
-      This file is imported by projects that transitively reference 2dog.engine.
-      It imports the main targets to ensure GodotSharp API assemblies
-      are properly copied for all consuming projects.
-      
-      Native libraries are provided by separate platform-specific packages
-      (2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64). Each meta package pins
-      all three variant packages (.release, .debug, .editor), so every variant
-      is available from the package cache without extra references.
-
-      Set TwoDogVariant to select the native variant and API assembly layout:
-        - 'release' (default): template_release native, flat GodotPlugins
-        - 'debug': template_debug native, flat GodotPlugins
-        - 'editor': editor native (TOOLS_ENABLED), nested GodotSharp/Api/Debug/
-
-      Example:
-        <PropertyGroup>
-          <TwoDogVariant>editor</TwoDogVariant>
-        </PropertyGroup>
-    -->
+    <!-- Transitive consumers of 2dog.engine get the full targets too, so GodotPlugins is copied for every host. -->
     <Import Project="$(MSBuildThisFileDirectory)../build/2dog.engine.targets"/>
 </Project>

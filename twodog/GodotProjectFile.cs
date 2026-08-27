@@ -1,10 +1,8 @@
 namespace twodog.cli;
 
 /// <summary>
-/// Minimal line-oriented reader/patcher for project.godot. Append-only, with
-/// one explicit exception: <see cref="SetAssemblyName"/> (behind the --rename
-/// fix for spaced project names) replaces or inserts the single
-/// project/assembly_name line and leaves every other byte untouched.
+/// Minimal line-oriented reader/patcher for project.godot. Append-only, except <see cref="SetAssemblyName"/>
+/// (the --rename fix) which replaces or inserts the single project/assembly_name line.
 /// </summary>
 internal sealed class GodotProjectFile
 {
@@ -43,10 +41,8 @@ internal sealed class GodotProjectFile
         _lines.Any(l => l.Trim() == $"[{section}]");
 
     /// <summary>
-    /// The text to append for a missing [dotnet] section. Sections in
-    /// project.godot are sorted alphabetically by the editor, but appending
-    /// is valid config syntax and survives the next editor save (which
-    /// re-sorts) - we only ever append, never reorder existing content.
+    /// The text to append for a missing [dotnet] section. The editor sorts sections alphabetically on its next save;
+    /// appending is valid syntax and survives that - we only ever append, never reorder.
     /// </summary>
     public static string DotnetSectionText(string assemblyName) =>
         $"""
@@ -64,9 +60,8 @@ internal sealed class GodotProjectFile
     }
 
     /// <summary>
-    /// Sets [dotnet] project/assembly_name, replacing an existing value in
-    /// place (all other bytes untouched), inserting the key into an existing
-    /// [dotnet] section, or appending the whole section.
+    /// Sets [dotnet] project/assembly_name: replaces an existing value in place, inserts the key into an existing
+    /// [dotnet] section, or appends the whole section.
     /// </summary>
     public void SetAssemblyName(string assemblyName)
     {

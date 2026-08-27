@@ -1,0 +1,7 @@
+{
+  "$comment": "Same pin as the project root global.json (nearest wins, so this keeps a publish started inside this directory working even if the root pin is edited or removed). The pin resolves a .NET 10 SDK (rollForward stays within the 10.0 feature band) with the wasm-tools workload installed.",
+  "sdk": {
+    "version": "10.0.100",
+    "rollForward": "latestFeature"
+  }
+}

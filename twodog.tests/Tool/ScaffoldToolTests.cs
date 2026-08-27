@@ -570,6 +570,7 @@ public class TemplateAssetsTests
     [InlineData("winforms")]
     [InlineData("winui")]
     [InlineData("avalonia")]
+    [InlineData("blazor")]
     public void HostFiles_SubstituteTokensInPathsAndContent(string suffix)
     {
         var files = TemplateAssets.HostFiles(HostKinds.Of(suffix), "MyGame", $"MyGame.{suffix}").ToList();
@@ -593,6 +594,7 @@ public class TemplateAssetsTests
     [InlineData("winforms")]
     [InlineData("winui")]
     [InlineData("avalonia")]
+    [InlineData("blazor")]
     public void HostFiles_CustomFolder_RenamesFolderAndProject(string suffix)
     {
         // A second host of the same kind lives in a freely named folder; the
@@ -608,9 +610,10 @@ public class TemplateAssetsTests
             AssertNoTokens(file.Text);
         }
 
-        var csproj = files.Single(f => f.RelativePath.EndsWith(".csproj")).Text;
-        Assert.Contains("../MyGame.csproj", csproj);
-        Assert.DoesNotContain($"MyGame.{Hosts.Suffix(kind)}", csproj);
+        // The Blazor host is a server + client pair: the game reference sits in the client.
+        var csprojs = files.Where(f => f.RelativePath.EndsWith(".csproj")).Select(f => f.Text).ToList();
+        Assert.Contains(csprojs, c => c.Contains("../MyGame.csproj"));
+        Assert.All(csprojs, c => Assert.DoesNotContain($"MyGame.{Hosts.Suffix(kind)}", c));
     }
 
     [Fact]
@@ -1011,6 +1014,8 @@ public class AddEndToEndTests
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
     [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",
         new[] { "Program.cs", "wwwroot/index.html", "wwwroot/webxr-layers-polyfill.min.js" })]
+    [InlineData("--blazor", "blazor", "<TwoDogBlazor>true</TwoDogBlazor>",
+        new[] { "Program.cs", "Components/App.razor", "Client/SpaceMiner.blazor.Client.csproj", "Client/Pages/Home.razor" })]
     public void Add_OptInHost_ScaffoldsOnExplicitFlagOnly(
         string flag, string suffix, string csprojMarker, string[] extraFiles)
     {
@@ -1034,7 +1039,11 @@ public class AddEndToEndTests
 
         var csproj = File.ReadAllText(System.IO.Path.Combine(host, $"SpaceMiner.{suffix}.csproj"));
         Assert.Contains(csprojMarker, csproj);
-        Assert.Contains("../SpaceMiner.csproj", csproj);
+        // The Blazor host's game reference lives in its nested client project.
+        var gameReferencingCsproj = kind is HostKind.Blazor
+            ? File.ReadAllText(System.IO.Path.Combine(host, "Client", $"SpaceMiner.{suffix}.Client.csproj"))
+            : csproj;
+        Assert.Contains("../SpaceMiner.csproj", gameReferencingCsproj);
 
         // The game project excludes the new folder, the sln picked it up, and
         // a re-scan recognizes the host by content.
@@ -1117,11 +1126,12 @@ public class HostScanTests
     [InlineData("winforms")]
     [InlineData("winui")]
     [InlineData("avalonia")]
+    [InlineData("blazor")]
     public void Classify_RecognizesScaffoldedHosts_ByContentNotName(string suffix)
     {
         var kind = HostKinds.Of(suffix);
         var csproj = TemplateAssets.HostFiles(kind, "MyGame", "some.folder")
-            .Single(f => f.RelativePath.EndsWith(".csproj")).Text;
+            .Single(f => f.RelativePath == "some.folder/some.folder.csproj").Text;
         Assert.Equal(kind, HostScan.Classify(csproj, "some.folder"));
     }
 
@@ -1141,7 +1151,7 @@ public class HostScanTests
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
                      (HostKind.Web, "MyGame.web"), (HostKind.WebXr, "MyGame.webxr"), (HostKind.Tests, "MyGame.tests"),
                      (HostKind.WinForms, "MyGame.winforms"), (HostKind.WinUi, "MyGame.winui"),
-                     (HostKind.Avalonia, "MyGame.avalonia"),
+                     (HostKind.Avalonia, "MyGame.avalonia"), (HostKind.Blazor, "MyGame.blazor"),
                  })
             foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
                 tmp.Write(path, content);
@@ -1155,6 +1165,7 @@ public class HostScanTests
 
         Assert.Equal(
             [("MyGame.2dog", HostKind.Desktop), ("MyGame.avalonia", HostKind.Avalonia),
+             ("MyGame.blazor", HostKind.Blazor),
              ("MyGame.editor", HostKind.Desktop), ("MyGame.tests", HostKind.Tests),
              ("MyGame.web", HostKind.Web), ("MyGame.webxr", HostKind.WebXr),
              ("MyGame.winforms", HostKind.WinForms), ("MyGame.winui", HostKind.WinUi)],
@@ -1213,10 +1224,10 @@ public class CommandLineTests
     public void NegativeHostFlags_CountAsAChoice()
     {
         var cmd = CommandLine.Parse(
-            ["convert", "--no-web", "--no-webxr", "--no-tests", "--no-winforms", "--no-winui", "--no-avalonia"]);
+            ["convert", "--no-web", "--no-webxr", "--no-tests", "--no-winforms", "--no-winui", "--no-avalonia", "--no-blazor"]);
         Assert.True(cmd.HostFlagsSeen);
         Assert.Empty(cmd.Requested);
-        Assert.Equal([HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia],
+        Assert.Equal([HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor],
             cmd.Excluded.Order().ToArray());
     }
 

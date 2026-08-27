@@ -1,0 +1,49 @@
+@page "/"
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+<PageTitle>TPLRAWNAME</PageTitle>
+
+<div class="layout">
+    <aside class="panel">
+        <h1>TPLRAWNAME</h1>
+        <p class="status">@_status</p>
+
+        <dl>
+            <dt>FPS</dt>
+            <dd>@_fps</dd>
+        </dl>
+
+        <button @onclick="() => _view?.Quit()" disabled="@(_view?.IsRunning != true)">Quit engine</button>
+    </aside>
+
+    <main class="viewport">
+        <GodotView @ref="_view" Project="TPLRAWNAME" PluginsInitializer="TwoDogWebBoot.PluginsInitializer()"
+                   OnFrame="OnFrame" Started="OnStarted" Exited="OnExited" Failed="OnFailed"
+                   style="width: 100%; height: 100%;">
+            <div class="hud">@_fps fps</div>
+        </GodotView>
+    </main>
+</div>
+
+@code {
+    private GodotView? _view;
+    private string _status = "Starting Godot...";
+    private string _fps = "-";
+    private long _frames;
+
+    // Blazor and Godot share one runtime: reach the scene tree directly.
+    private void OnStarted(twodog.Engine engine) =>
+        _status = $"Running: {engine.Tree.CurrentScene?.Name}";
+
+    private void OnFrame()
+    {
+        // The panel re-renders at a few Hz; the engine keeps rendering every frame regardless.
+        if (++_frames % 30 != 0) return;
+        _fps = Godot.Engine.GetFramesPerSecond().ToString("0");
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void OnExited() => _status = "Godot quit. Reload the page to start it again.";
+
+    private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";
+}

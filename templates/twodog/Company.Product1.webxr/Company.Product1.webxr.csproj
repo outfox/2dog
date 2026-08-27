@@ -1,20 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <!--
-      Browser (wasm) host with WebXR: like the plain web host, plus the page
-      loads the WebXR Layers polyfill Godot's WebXR interface needs on
-      browsers without native Layers support (desktop Chrome; the Meta Quest
-      browser has it natively).
-
-      Publish:  dotnet publish Company.Product1.webxr  (from the project root;
-                the root global.json pins a wasm-capable SDK. Defaults to
-                Release via Directory.Build.props; pass -c Debug to override.)
-      Output:   AppBundle/ - serve with any static file server (WebXR needs
-                a secure context: localhost or HTTPS).
-
-      Requires the wasm-tools workload:  dotnet workload install wasm-tools
-      In the game project, enable `xr/shaders/enabled` and start the session
-      from a user gesture - see https://2dog.dev/hosts/webxr for the pattern.
-    -->
+    <!-- Browser (wasm) host with WebXR: the web host plus the WebXR Layers polyfill; serve over localhost or HTTPS.
+         Requires wasm-tools; enable xr/shaders/enabled in the game - see https://2dog.dev/hosts/webxr -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <OutputType>Exe</OutputType>
@@ -49,9 +35,8 @@
         <ProjectReference Include="../TPLRAWNAME.csproj"/>
     </ItemGroup>
 
-    <!-- Root the game assembly: scripts are resolved by reflection. Add a
-         TrimmerRootAssembly for any NuGet package your game code reaches via
-         reflection (e.g. an ECS or serializer library). -->
+    <!-- Scripts are resolved by reflection: root the game assembly, and any NuGet package your game reaches
+         via reflection (e.g. an ECS or serializer library) -->
     <ItemGroup>
         <TrimmerRootAssembly Include="TPLRAWNAME"/>
         <TrimmerRootAssembly Include="$(TargetName)"/>

@@ -13,8 +13,8 @@ Godot, and drives its Main Loop.
 [`2dog new`](/templates) generates a new project with your selection of hosts;
 [`2dog add`](/add) adds them to an existing project.
 
-The default set includes Generic, Browser, and xUnit hosts. WebXR, Avalonia,
-WinForms, and WinUI 3 are opt-in. Each host page shows the relevant command.
+The default set includes Generic, Browser, and xUnit hosts. WebXR, Blazor,
+Avalonia, WinForms, and WinUI 3 are opt-in. Each host page shows the relevant command.
 
 ## Solution / Project Layouts
 

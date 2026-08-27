@@ -9,21 +9,15 @@
         <RootNamespace>twodog.cli</RootNamespace>
     </PropertyGroup>
 
-    <!-- dotnet tool AND dotnet-new template package in one: `dnx 2dog`
-         (one-shot), `dotnet tool install -g 2dog` -> the `2dog` command, and
-         `dotnet new install 2dog` -> the `2dog` template.
-         The combined DotnetTool;Template package type requires the .NET 10 SDK
-         to pack (older SDKs stomp PackageType to plain DotnetTool when
-         PackAsTool is set; see dotnet/sdk#48039).
-         A DotnetTool-typed package can never be a PackageReference (NU1213),
-         which is why the engine library ships separately as 2dog.engine. -->
+    <!-- dotnet tool AND dotnet-new template in one package; packing needs the .NET 10 SDK (dotnet/sdk#48039).
+         A DotnetTool package can never be a PackageReference (NU1213), hence the separate 2dog.engine. -->
     <PropertyGroup>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>2dog</ToolCommandName>
         <PackageId>2dog</PackageId>
         <PackageType>DotnetTool;Template</PackageType>
         <Version>$(TwoDogVersion)</Version>
-        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms, WinUI 3, Avalonia) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
+        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms, WinUI 3, Avalonia, Blazor) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
@@ -34,14 +28,12 @@
         <PackageTags>dotnet-tool;dotnet-new;templates;godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
-    <!-- The interactive host picker. Spectre is the only dependency; keep it
-         that way so `dnx 2dog` stays a small download. -->
+    <!-- Interactive host picker. Keep Spectre the only dependency so `dnx 2dog` stays a small download. -->
     <ItemGroup>
         <PackageReference Include="Spectre.Console" Version="0.57.2"/>
     </ItemGroup>
 
-    <!-- The GDPC pack reader behind `2dog pack list`, shared with the
-         twodog.import helper's list-pack mode. -->
+    <!-- GDPC pack reader behind `2dog pack list`, shared with twodog.import's list-pack mode. -->
     <ItemGroup>
         <Compile Include="../twodog.import/GdpcPack.cs" Link="GdpcPack.cs"/>
     </ItemGroup>
@@ -53,17 +45,13 @@
         <AssemblyMetadata Include="GodotSdkVersion" Value="$(GodotVersion)"/>
         <AssemblyMetadata Include="AvaloniaVersion" Value="$(AvaloniaVersion)"/>
         <AssemblyMetadata Include="WindowsAppSdkVersion" Value="$(WindowsAppSdkVersion)"/>
+        <AssemblyMetadata Include="AspNetCoreVersion" Value="$(AspNetCoreVersion)"/>
     </ItemGroup>
 
-    <!-- Single source of truth: embed the dotnet-new template's host subtrees
-         verbatim (rename/version tokens intact; substituted at runtime).
-         The template sln is NOT embedded - it contains dotnet-new #if blocks;
-         solution handling shells out to `dotnet sln` instead. -->
+    <!-- Embed the template's host subtrees verbatim (tokens substituted at runtime). The sln is NOT embedded
+         (dotnet-new #if blocks); `2dog add` shells out to `dotnet sln` instead. -->
     <PropertyGroup>
-        <!-- Build artifacts appear in the template host folders when someone
-             builds/publishes them locally; embedding those would scaffold the
-             junk into user projects (VerifyEmbeddedTemplateTracked only fails
-             the pack, not a plain build). -->
+        <!-- Local builds leave artifacts in the template folders; VerifyEmbeddedTemplateTracked only guards pack. -->
         <_TwoDogCliTplExcludes>../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/**/TestResults/**</_TwoDogCliTplExcludes>
     </PropertyGroup>
     <ItemGroup>
@@ -74,6 +62,7 @@
         <EmbeddedResource Include="../templates/twodog/Company.Product1.winforms/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.winforms/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.winui/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.winui/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.avalonia/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.avalonia/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.blazor/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.blazor/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
         <EmbeddedResource Include="../templates/twodog/Directory.Build.targets" LogicalName="tpl/Directory.Build.targets"/>
         <EmbeddedResource Include="../templates/twodog/export_presets.cfg" LogicalName="tpl/export_presets.cfg"/>
@@ -96,23 +85,15 @@
         <None Include="README.md" Pack="true" PackagePath="README.md"/>
     </ItemGroup>
 
-    <!-- dotnet new template content bundled in this package (the Template half
-         of the package type). template.json is excluded: a versioned copy is
-         staged into obj/ and packed instead (StageVersionedTemplateJson below),
-         so the committed file keeps its placeholder versions untouched.
-         Note: the packed content includes the template sln (dotnet-new #if
-         blocks) while the EmbeddedResource list above deliberately omits it -
-         `2dog add` shells out to `dotnet sln` instead. -->
+    <!-- The Template half of the package. template.json is replaced by a versioned copy staged into obj/
+         (StageVersionedTemplateJson), so the committed file keeps its placeholders. -->
     <ItemGroup>
         <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/.template.config/template.json"
                  Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
     </ItemGroup>
 
-    <!-- Template files matched by a .gitignore never reach a CI checkout, so
-         they silently vanish from the packed template content and the embedded
-         resources even though local packs still see them. Shipped 4.7.0.36
-         without export_presets.cfg that way, breaking every generated web
-         publish. -->
+    <!-- Gitignored template files never reach a CI checkout and silently vanish from the pack (4.7.0.36 shipped
+         without export_presets.cfg that way). -->
     <Target Name="VerifyEmbeddedTemplateTracked" BeforeTargets="GenerateNuspec">
         <Exec Command="git -C &quot;$(MSBuildProjectDirectory)/../&quot; ls-files --others templates/twodog/"
               ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="low">
@@ -123,12 +104,8 @@
                Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-packed 2dog package: $(_TwoDogCliTemplateUntracked)"/>
     </Target>
 
-    <!-- Stage a copy of the bundled template.json with the real versions from
-         Directory.Build.props substituted in, and pack that copy in place of
-         the committed file - which always holds the 0.0.0-tpl / 0.0.0-ntpl /
-         0.0.0-avtpl placeholders and is never written to. (godotVersion has no
-         placeholder; its committed default is the real version.)
-         SetTemplateDefaults is defined in the repo-root Directory.Build.targets. -->
+    <!-- Pack a copy of template.json with real versions substituted; the committed file keeps its 0.0.0-*tpl
+         placeholders. SetTemplateDefaults lives in the repo-root Directory.Build.targets. -->
     <Target Name="StageVersionedTemplateJson" BeforeTargets="_GetPackageFiles;GenerateNuspec">
         <Copy SourceFiles="../templates/twodog/.template.config/template.json"
               DestinationFiles="$(IntermediateOutputPath)template.json"/>
@@ -137,7 +114,8 @@
                              NativesVer="$(NativesVersion)"
                              GodotVer="$(GodotVersion)"
                              AvaloniaVer="$(AvaloniaVersion)"
-                             WinAppSdkVer="$(WindowsAppSdkVersion)" />
+                             WinAppSdkVer="$(WindowsAppSdkVersion)"
+                             AspNetCoreVer="$(AspNetCoreVersion)" />
         <ItemGroup>
             <None Include="$(IntermediateOutputPath)template.json" Pack="true"
                   PackagePath="content/twodog/.template.config/template.json"/>

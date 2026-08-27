@@ -46,6 +46,8 @@ Restart `dotnet serve` only when you change its options.
 - Trims managed assemblies and precompresses large output files.
 - Supports Godot's WebXR interface; the [WebXR host](./webxr) adds the Layers
   polyfill needed by browsers without native support.
+- The same engine link powers the [Blazor host](./blazor), where a Razor
+  component owns the canvas and calls Godot directly.
 
 ## How It Works
 

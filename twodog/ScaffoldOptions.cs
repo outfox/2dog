@@ -16,6 +16,7 @@ internal static class ToolVersions
     public static string GodotSdkVersion => Metadata("GodotSdkVersion");
     public static string AvaloniaVersion => Metadata("AvaloniaVersion");
     public static string WindowsAppSdkVersion => Metadata("WindowsAppSdkVersion");
+    public static string AspNetCoreVersion => Metadata("AspNetCoreVersion");
 }
 
 /// <summary>Everything a scaffold run needs, once flags and prompts agree.</summary>
@@ -28,9 +29,8 @@ internal sealed class ScaffoldOptions
     public string? NameOverride;
 
     /// <summary>
-    /// New .NET name for a project whose current name contains whitespace
-    /// (--rename): whitespace in the restore identity makes `dotnet publish`
-    /// silently drop the game's NuGet dependencies from referencing hosts.
+    /// New .NET name for a project whose current name contains whitespace (--rename): whitespace in the restore
+    /// identity makes `dotnet publish` silently drop the game's NuGet dependencies from hosts.
     /// </summary>
     public string? RenameTo;
 
@@ -64,9 +64,8 @@ internal sealed class ProjectContext
     public RenameOperation? Rename { get; init; }
 
     /// <summary>
-    /// Folder names a new host must not use: the recognized hosts plus every
-    /// other directory in the project, so scaffolding never lands inside
-    /// content that has nothing to do with 2dog.
+    /// Folder names a new host must not use: the recognized hosts plus every other directory in the project, so
+    /// scaffolding never lands inside unrelated content.
     /// </summary>
     public IEnumerable<string> TakenFolders =>
         ExistingHosts.Select(h => h.Folder).Concat(ExistingFolders).Distinct(StringComparer.OrdinalIgnoreCase);
@@ -79,8 +78,8 @@ internal sealed record RenameOperation(string OldName, string NewName, bool Cspr
 internal class ToolException(string message) : Exception(message);
 
 /// <summary>
-/// A project whose .NET name contains whitespace (which breaks publish, see
-/// --rename). Carries what the interactive layer needs to offer the fix.
+/// A project whose .NET name contains whitespace (breaks publish, see --rename); what the interactive layer needs
+/// to offer the fix.
 /// </summary>
 internal sealed class SpacedNameException(string message, string oldName, string? suggested, bool canOfferRename)
     : ToolException(message)

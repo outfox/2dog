@@ -1,28 +1,18 @@
 <Project>
     <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-    <!--
-      Shared properties for all twodog platform packages.
-      Each platform project only needs to define:
-      - PlatformRID: Runtime identifier (win-x64, linux-x64, osx-arm64)
-      - PlatformOS: OS name in Godot binaries (windows, linuxbsd, macos)
-      - BuildVariant: Build type (template_release, template_debug, editor)
-      - NativeLibExt: Native library extension (dll, so, dylib)
-      - PackageSuffix: Optional suffix for package ID (.debug, .editor, or empty)
-    -->
+    <!-- Shared by all platform packages. Each csproj defines PlatformRID, PlatformOS (windows/linuxbsd/macos),
+         BuildVariant (template_release/template_debug/editor), NativeLibExt and optional PackageSuffix. -->
 
-    <!-- Common SDK settings -->
+    <!-- Packaging-only projects: no sources, no lib/ folder (NU5128/CS2008), per-project obj/bin since csprojs
+         share a folder -->
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-        <!-- Suppress NU5128: native libraries don't need lib/ folder -->
-        <!-- Suppress CS2008: No source files specified (these are packaging-only projects) -->
         <NoWarn>$(NoWarn);NU5128;CS2008</NoWarn>
-        <!-- Use unique obj/bin folders per project to avoid conflicts when multiple csproj files share a folder -->
         <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
         <BaseOutputPath>bin/$(MSBuildProjectName)/</BaseOutputPath>
-        <!-- Disable auto-generated assembly info since these are packaging-only projects -->
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 

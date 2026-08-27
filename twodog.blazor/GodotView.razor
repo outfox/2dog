@@ -1,0 +1,13 @@
+@namespace twodog
+
+<div class="@Class" style="position: relative; overflow: hidden; @Style" @attributes="AdditionalAttributes">
+    <canvas @ref="_canvas" id="@_canvasId" tabindex="0"
+            style="display: block; width: 100%; height: 100%; outline: none; touch-action: none;"></canvas>
+    @if (Error is not null)
+    {
+        <div style="position: absolute; inset: 0; display: grid; place-items: center; color: #e0e0e0; background: #242424; padding: 1rem; text-align: center;">
+            <div><strong>Godot failed to start.</strong><br/>@Error.Message</div>
+        </div>
+    }
+    @ChildContent
+</div>

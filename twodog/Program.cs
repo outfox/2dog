@@ -3,9 +3,8 @@ using Spectre.Console;
 namespace twodog.cli;
 
 /// <summary>
-/// The 2dog command. Bare `2dog` prints version info and usage; the scaffolding
-/// verbs (new, add) prompt when no host flags are given and run unattended when
-/// they are. Both paths end in the same scaffolder.
+/// The 2dog command. Bare `2dog` prints version info and usage; the scaffolding verbs (new, add) prompt when no
+/// host flags are given and run unattended when they are. Both paths end in the same scaffolder.
 /// </summary>
 internal static class Program
 {
@@ -81,13 +80,9 @@ internal static class Program
     }
 
     /// <summary>
-    /// Prompting is off as soon as the command line answers the questions
-    /// itself - any host flag, or --yes - so scripted runs never block on a
-    /// terminal, not even at the final confirmation. --dry-run still asks:
-    /// it gathers the same choices and then prints the plan instead of
-    /// applying it.
+    /// Prompting is off once the command line answers the questions itself (any host flag, or --yes), so scripted
+    /// runs never block, not even at the final confirmation. --dry-run still asks, then prints the plan.
     /// </summary>
-    // internal for unit tests
     internal static bool WantsPrompts(ParsedCommand cmd) => cmd is {NoInteractive: false, HostFlagsSeen: false};
 
     internal static void PrepareNewProject(ParsedCommand cmd, bool interactive)
@@ -106,9 +101,8 @@ internal static class Program
         }
 
         cmd.Options.NameOverride = name;
-        // Default directory: the sanitized name, so `2dog new "My Game"` does
-        // not pair a MyGame.csproj with a "My Game" folder. An explicit -o is
-        // the user's choice and stays as given.
+        // Default directory: the sanitized name, so `2dog new "My Game"` does not pair MyGame.csproj with a
+        // "My Game" folder. An explicit -o stays as given.
         cmd.Options.ProjectPath = outputDir ?? Hosts.SanitizeName(name) ?? name;
         cmd.Options.CreateProject = true;
     }
@@ -118,15 +112,14 @@ internal static class Program
         !Directory.Exists(dir) || Directory.EnumerateFileSystemEntries(dir).All(e => Path.GetFileName(e).StartsWith('.'));
 
     /// <summary>
-    /// The tool version, then every package the scaffolded projects reference.
-    /// checkLatest asks nuget.org (best effort) and marks each row via one package
-    /// per publish group: ✅ latest stable, 🔄 newer stable available, blank unknown.
+    /// The tool version, then every package the scaffolded projects reference. checkLatest asks nuget.org (best
+    /// effort) and marks one package per publish group: ✅ latest stable, 🔄 newer stable available, blank unknown.
     /// </summary>
     private static void PrintVersion(bool checkLatest)
     {
         var rows = new (string Label, string Version, string Probe, string Packages)[]
         {
-            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.xunit"),
+            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit"),
             ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools"),
             ("Godot SDK", ToolVersions.GodotSdkVersion, "Godot.NET.Sdk", "Godot.NET.Sdk, GodotSharp"),
         };
@@ -179,6 +172,9 @@ internal static class Program
                                    on Windows)
                --avalonia [folder] Avalonia host embedding the game in a
                                    cross-platform GUI (opt-in, like --winforms)
+               --blazor [folder]   Blazor Web App host: ASP.NET Core server plus
+                                   a WebAssembly client page embedding the game
+                                   (opt-in; needs wasm-tools)
                --no-desktop, --no-web, --no-tests
                                    Leave a host out of the default set
 

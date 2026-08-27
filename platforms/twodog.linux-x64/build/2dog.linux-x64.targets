@@ -1,25 +1,14 @@
 <Project>
-    <!--
-      TwoDog Linux x64 Meta Package Targets
-
-      Parameter block for the shared native resolver
-      (2dog.native-resolver.targets, shipped alongside this file): declares
-      where this package's natives live and how they are named. The shared
-      targets resolve the $(TwoDogVariant) native - NuGet package first,
-      local godot/bin fallback - and copy it to output/publish as
-      libgodot-<variant>.so.
-    -->
+    <!-- Linux x64 meta package: parameters for the shared resolver (2dog.native-resolver.targets), which finds the
+         $(TwoDogVariant) native (NuGet first, godot/bin fallback) and copies it as libgodot-<variant>.so. -->
     <PropertyGroup>
         <_TwoDogLinuxX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogLinuxX64TargetsDir>
         <TwoDogLinuxX64PackageVersion Condition="'$(TwoDogLinuxX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogLinuxX64TargetsDir)'))))</TwoDogLinuxX64PackageVersion>
         <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
     </PropertyGroup>
 
-    <!-- Export the editor libgodot location for the build machine. Consumed by
-         the 2dog.engine package's automatic import target
-         (TwoDogImportGodotProject), which runs the import helper against it.
-         Host-OS guarded (not RID): the import runs on the machine doing the
-         build. -->
+    <!-- Editor libgodot location for 2dog.engine's TwoDogImportGodotProject; host-OS guarded (not RID) because the
+         import runs on the build machine. -->
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
         <_TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-editor.so</_TwoDogLinuxX64EditorPackage>
         <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(_TwoDogLinuxX64EditorPackage)')">$(_TwoDogLinuxX64EditorPackage)</TwoDogEditorLibGodotPath>

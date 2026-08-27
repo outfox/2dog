@@ -1,28 +1,6 @@
 <Project>
-    <!--
-      Shared native resolver for the 2dog desktop platform meta packages.
-
-      Each platform package's build/<id>.targets declares a
-      TwoDogNativeResolver item describing its natives:
-        Identity      - the runtime identifier (win-x64, linux-x64, osx-arm64)
-        PackageId     - variant package id prefix (2dog.win-x64 -> .release/.debug/.editor)
-        PackageVersion- version folder of the variant packages
-        LibPrefix     - output library prefix (libgodot)
-        Ext           - native library extension (dll / so / dylib)
-        HostOs        - IsOSPlatform name gating host builds (Windows / Linux / OSX)
-        RidPrefix     - RuntimeIdentifier prefix gating publishes (win / linux / osx)
-        LocalBin      - godot/bin fallback directory (source checkouts)
-        LocalRelease / LocalDebug / LocalEditor - fallback file names per variant
-
-      The targets below resolve the $(TwoDogVariant) native per item - NuGet
-      package first, local godot/bin second - and copy it to the output and
-      publish directories as <LibPrefix>-<variant>.<Ext>. The runtime loads
-      the native by that variant-qualified name, so a mismatched or stale
-      native fails loudly instead of half-working.
-
-      Every desktop platform package ships an identical copy of this file;
-      the _TwoDogNativeResolverImported guard makes the first import win.
-    -->
+    <!-- Shared desktop resolver: per TwoDogNativeResolver item, find the $(TwoDogVariant) native (NuGet variant
+         package first, godot/bin second) and copy it as <LibPrefix>-<variant>.<Ext>. Same copy in every package. -->
     <PropertyGroup>
         <_TwoDogNativeResolverImported>true</_TwoDogNativeResolverImported>
     </PropertyGroup>
@@ -39,9 +17,7 @@
                 <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'debug'">%(LocalDebug)</LocalFile>
                 <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'editor'">%(LocalEditor)</LocalFile>
                 <OutName>%(LibPrefix)-$(_TwoDogNativeVariant).%(Ext)</OutName>
-                <!-- Defined-but-empty so the conditional fills below can read
-                     it on every item (unqualified metadata reads error on
-                     items that never defined the metadata). -->
+                <!-- Defined-but-empty: unqualified metadata reads below error on items lacking the metadata -->
                 <Resolved></Resolved>
             </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>
@@ -76,10 +52,8 @@
                  Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
     </Target>
 
-    <!-- A RID-less publish targets the build host, so an empty
-         RuntimeIdentifier counts when the host OS matches - otherwise the
-         publish folder ships without the native and the app dies with
-         DllNotFoundException. -->
+    <!-- A RID-less publish targets the build host, so an empty RuntimeIdentifier counts when the host OS matches;
+         otherwise the publish folder ships without the native (DllNotFoundException). -->
     <Target Name="TwoDogPublishNativeLibs"
             AfterTargets="Publish"
             DependsOnTargets="TwoDogResolveNativeLibs"

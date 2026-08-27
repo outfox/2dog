@@ -9,13 +9,8 @@ internal readonly record struct PckEntry(string Path, ulong Size);
 internal sealed class PckFormatException(string message) : Exception(message);
 
 /// <summary>
-/// Reader for the GDPC directory layout, mirroring PackedSourcePCK::try_open_pack
-/// (core/io/file_access_pack.cpp): magic, format version, engine version triple,
-/// pack flags, file base; v3/v4 then carry a directory offset (plus a 32-byte
-/// salt for encrypted sparse bundles), v2 sixteen reserved u32s; the directory
-/// is count followed by (padded path, offset, size, md5, flags). Pure
-/// file-format work, no engine involved; shared between the twodog.import
-/// helper (--list-pack) and the 2dog tool (pack list).
+/// Engine-free reader for the GDPC directory, mirroring PackedSourcePCK::try_open_pack (core/io/file_access_pack.cpp).
+/// Shared between the twodog.import helper (--list-pack) and the 2dog tool (pack list).
 /// </summary>
 internal static class GdpcPack
 {
@@ -58,9 +53,7 @@ internal static class GdpcPack
             for (var j = 0; j < 16; j++) f.ReadUInt32(); // reserved
         }
 
-        // Bounds against the remaining stream: a corrupt directory should
-        // produce the tidy errors here, not an OOM or an unhandled reader
-        // exception.
+        // Bound against the remaining stream so a corrupt directory yields tidy errors, not OOM.
         var remaining = f.BaseStream.Length - f.BaseStream.Position;
         var count = f.ReadUInt32();
         const int minEntryBytes = 4 + 8 + 8 + 16 + 4;

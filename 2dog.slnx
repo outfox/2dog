@@ -55,7 +55,16 @@
     <BuildType Solution="Editor|*" Project="Debug" />
     <Build Project="false" />
   </Project>
+  <Project Path="demos/showcase/showcase.blazor/showcase.blazor.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="demos/showcase/showcase.blazor/Client/showcase.blazor.Client.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
   <Project Path="twodog.avalonia/twodog.avalonia.csproj" />
+  <Project Path="twodog.blazor/twodog.blazor.csproj" />
   <Project Path="twodog.engine/twodog.engine.csproj" />
   <Project Path="twodog.hosting.runtime/twodog.hosting.runtime.csproj" />
   <Project Path="twodog.hosting.xunit/twodog.hosting.xunit.csproj" />
