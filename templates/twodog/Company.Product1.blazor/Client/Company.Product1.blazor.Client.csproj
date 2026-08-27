@@ -20,10 +20,12 @@
 
     <!-- PrivateAssets=all keeps Godot, the engine and their build targets out of the server project, which only
          serves this client and must not act as a 2dog host itself. 2dog.blazor does flow: the server serves its
-         static web assets (_content/2dog.blazor/*) and it carries no engine dependency. -->
+         static web assets (_content/2dog.blazor/*) and it carries no engine dependency.
+         Publish=true on 2dog.engine: the SDK reads PrivateAssets=all as Publish=false, which would drop GodotSharp.dll
+         and twodog.dll from the publish set while the browser-wasm targets still root them (ILLink IL1035). -->
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="ASPNETCORE_PKG_VERSION"/>
-        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION" PrivateAssets="all"/>
+        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION" PrivateAssets="all" Publish="true"/>
         <PackageReference Include="2dog.blazor" Version="TWODOG_PKG_VERSION"/>
         <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]" PrivateAssets="all"/>
     </ItemGroup>
