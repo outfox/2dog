@@ -14,9 +14,10 @@ public partial class Home : ComponentBase
     private string _sceneName = "-";
     private string _fps = "-";
     private long _frames;
-    private float _spinSpeed = 1.5f;
+    private float _spinSpeed = 1.8f; // radians per second
     private bool _paused;
-    private readonly List<SpinningCube> _cubes = [];
+    private Node3D[] _whiteCubes = [];
+    private static readonly Vector3 WhiteSpinAxis = new Vector3(1, 1, 0).Normalized();
 
     private bool IsRunning => _view?.IsRunning == true;
 
@@ -27,11 +28,10 @@ public partial class Home : ComponentBase
         _engineVersion = $"Godot {Godot.Engine.GetVersionInfo()["string"]} / 2dog {Engine.Version}";
         _sceneName = tree.CurrentScene?.Name ?? "-";
 
-        foreach (var node in tree.CurrentScene?.FindChildren("*", nameof(SpinningCube), recursive: true, owned: false) ?? [])
-            if (node is SpinningCube cube)
-                _cubes.Add(cube);
-        if (_cubes.Count > 0)
-            _spinSpeed = _cubes[0].SpinSpeed;
+        // The blue cubes spin themselves via SpinningCube._Process (Godot side), the red ones via GDScript;
+        // the white ones are plain MeshInstance3Ds this host drives from its frame callback.
+        _whiteCubes = tree.CurrentScene?.GetNodeOrNull<Node3D>("Flair/WhiteCubes")?
+            .GetChildren().OfType<Node3D>().ToArray() ?? [];
 
         RunSmoke(tree);
     }
@@ -55,6 +55,12 @@ public partial class Home : ComponentBase
     private void OnFrame()
     {
         _frames++;
+        if (!_paused)
+        {
+            var delta = (float)(_view?.Tree?.Root.GetProcessDeltaTime() ?? 0);
+            foreach (var cube in _whiteCubes)
+                cube.Rotate(WhiteSpinAxis, _spinSpeed * delta);
+        }
         // The panel re-renders at a few Hz; the engine keeps rendering every frame regardless.
         if (_frames % 30 != 0) return;
         _fps = Godot.Engine.GetFramesPerSecond().ToString("0");
@@ -64,7 +70,7 @@ public partial class Home : ComponentBase
     private void OnExited()
     {
         _status = "Godot quit. Reload the page to start it again.";
-        _cubes.Clear();
+        _whiteCubes = [];
     }
 
     private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";
@@ -74,8 +80,6 @@ public partial class Home : ComponentBase
         if (!float.TryParse(e.Value?.ToString(), System.Globalization.CultureInfo.InvariantCulture, out var speed))
             return;
         _spinSpeed = speed;
-        foreach (var cube in _cubes)
-            cube.SpinSpeed = speed;
     }
 
     private void TogglePause()

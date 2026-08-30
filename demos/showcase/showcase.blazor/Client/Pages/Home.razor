@@ -20,7 +20,7 @@
         </dl>
 
         <label>
-            Blue cube spin: @_spinSpeed.ToString("0.0") rad/s
+            White cube spin (driven by this page): @_spinSpeed.ToString("0.0") rad/s
             <input type="range" min="0" max="10" step="0.1" value="@_spinSpeed"
                    @oninput="OnSpinSpeed" disabled="@(!IsRunning)"/>
         </label>
