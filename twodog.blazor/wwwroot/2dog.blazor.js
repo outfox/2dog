@@ -48,13 +48,16 @@ export async function prepare(canvas, options) {
     // Godot fetches its audio worklets through Module.locateFile, which the .NET loader aims at _framework/;
     // the 2dog build publishes them at the site root, where Blazor may have fingerprinted them - import.meta.resolve
     // applies the page's import map (a plain fetch would miss it).
-    const previousLocateFile = Module.locateFile;
-    Module.locateFile = (path, directory) => {
-        if (path.startsWith('godot.')) {
-            return import.meta.resolve(resolveUrl(path));
-        }
-        return previousLocateFile ? previousLocateFile(path, directory) : `${directory ?? ''}${path}`;
-    };
+    if (!Module.__twodogLocateFile) {
+        const previousLocateFile = Module.locateFile;
+        Module.locateFile = (path, directory) => {
+            if (path.startsWith('godot.')) {
+                return import.meta.resolve(resolveUrl(path));
+            }
+            return previousLocateFile ? previousLocateFile(path, directory) : `${directory ?? ''}${path}`;
+        };
+        Module.__twodogLocateFile = true;
+    }
 
     if (!fsReady) {
         await Module.initFS(['/userfs']);
@@ -70,6 +73,7 @@ export async function prepare(canvas, options) {
     if (canvas.tabIndex < 0) {
         canvas.tabIndex = 0;
     }
+    release(canvas);
     if (options.resize === 0) {
         observeContainer(canvas);
     }

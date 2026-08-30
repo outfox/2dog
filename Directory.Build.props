@@ -4,10 +4,10 @@
         <GodotVersion>4.7.2</GodotVersion>
         <!-- Global 2dog iteration shared across all Godot lines (4.6.2.31 and 4.7.0.31 are the same iteration).
              Bump every release; never reset when GodotVersion changes. -->
-        <TwoDogRevision>78</TwoDogRevision>
+        <TwoDogRevision>79</TwoDogRevision>
         <!-- Bump when the godot submodule or the natives package layout changes (deploy skips duplicates);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0 (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>2</NativesRevision>
+        <NativesRevision>3</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its

@@ -2,6 +2,8 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Godot.Bridge;
+using Godot.NativeInterop;
 
 namespace twodog;
 
@@ -13,6 +15,7 @@ namespace twodog;
 internal static unsafe partial class WebHost
 {
     private static nint _pluginsInitializer;
+    private static int _bootCount;
     private static Action? _perFrame;
     private static Action? _onShutdown;
     private static bool _shutdownComplete;
@@ -53,7 +56,41 @@ internal static unsafe partial class WebHost
     private static extern void godot_js_os_finish_async(nint callback);
 
     [UnmanagedCallersOnly]
-    private static nint LoadFromExecutable() => _pluginsInitializer;
+    private static nint LoadFromExecutable() =>
+        (nint)(delegate* unmanaged<nint, nint, nint, int, godot_bool>)&InitializeFromGameProject;
+
+    /// <summary>
+    /// GDMono's plugins initializer for every engine lifetime. The game's source-generated initializer runs once
+    /// (its DllImportResolver registration cannot repeat); later lifetimes redo what it does per engine - reset the
+    /// script bridge (which replays the script lookups), refresh the native callbacks, export the managed ones.
+    /// </summary>
+    [UnmanagedCallersOnly]
+    private static godot_bool InitializeFromGameProject(nint godotDllHandle, nint outManagedCallbacks,
+        nint unmanagedCallbacks, int unmanagedCallbacksSize)
+    {
+        try
+        {
+            if (_bootCount == 0)
+            {
+                var initialize = (delegate* unmanaged<nint, nint, nint, int, godot_bool>)_pluginsInitializer;
+                var ok = initialize(godotDllHandle, outManagedCallbacks, unmanagedCallbacks, unmanagedCallbacksSize);
+                if (ok.ToBool())
+                    _bootCount++;
+                return ok;
+            }
+
+            ScriptManagerBridge.ResetForEngineReinitialization();
+            NativeFuncs.Initialize(unmanagedCallbacks, unmanagedCallbacksSize);
+            ManagedCallbacks.Create(outManagedCallbacks);
+            _bootCount++;
+            return godot_bool.True;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine(e);
+            return godot_bool.False;
+        }
+    }
 
     /// <summary>
     /// Stores the game's godot_plugins_initialize pointer (<c>GodotPlugins.Game.Main.InitializeFromGameProject</c>)

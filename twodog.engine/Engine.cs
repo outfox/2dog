@@ -274,8 +274,8 @@ public class Engine : IDisposable
     /// <summary>
     /// Browser only: whether Godot quitting also exits the wasm runtime (default true, the standalone web host).
     /// Hosts that share the runtime with other managed code (Blazor) set false: the instance is still destroyed
-    /// and <see cref="Exited"/> raised, the page keeps running. A second instance cannot be started on the same
-    /// page either way.
+    /// and <see cref="Exited"/> raised, the page keeps running and a new <see cref="Engine"/> may be started -
+    /// on a fresh canvas element (a browser reuses one WebGL context per element).
     /// </summary>
     public static bool WebExitRuntimeOnQuit
     {
@@ -289,7 +289,7 @@ public class Engine : IDisposable
         }
     }
 
-    /// <summary>Browser only: raised after Godot quit and the instance was destroyed (see <see cref="Run"/>).</summary>
+    /// <summary>Browser only: raised after Godot quit and the instance was destroyed; a new engine may start then.</summary>
     public event Action? Exited;
 
     /// <summary>

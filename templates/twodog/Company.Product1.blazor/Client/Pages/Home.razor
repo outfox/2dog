@@ -13,6 +13,7 @@
             <dd>@_fps</dd>
         </dl>
 
+        <button @onclick="() => _view!.StartAsync()" disabled="@(_view is null || _view.IsRunning)">Start engine</button>
         <button @onclick="() => _view?.Quit()" disabled="@(_view?.IsRunning != true)">Quit engine</button>
     </aside>
 
@@ -43,7 +44,7 @@
         _ = InvokeAsync(StateHasChanged);
     }
 
-    private void OnExited() => _status = "Godot quit. Reload the page to start it again.";
+    private void OnExited() => _status = "Godot quit.";
 
     private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";
 }

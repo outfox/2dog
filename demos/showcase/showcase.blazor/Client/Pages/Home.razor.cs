@@ -27,6 +27,8 @@ public partial class Home : ComponentBase
         _status = "Running";
         _engineVersion = $"Godot {Godot.Engine.GetVersionInfo()["string"]} / 2dog {Engine.Version}";
         _sceneName = tree.CurrentScene?.Name ?? "-";
+        // CI's restart probe reads this to tell the second lifetime's smoke pass from the first.
+        JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-lifetime', '{_view?.Lifetime ?? 0}')");
 
         // The blue cubes spin themselves via SpinningCube._Process (Godot side), the red ones via GDScript;
         // the white ones are plain MeshInstance3Ds this host drives from its frame callback.
@@ -69,8 +71,9 @@ public partial class Home : ComponentBase
 
     private void OnExited()
     {
-        _status = "Godot quit. Reload the page to start it again.";
+        _status = "Godot quit.";
         _whiteCubes = [];
+        _paused = false;
     }
 
     private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";

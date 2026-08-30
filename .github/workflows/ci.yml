@@ -801,6 +801,18 @@ jobs:
           fi
           echo "Blazor browser smoke passed"
 
+          # Second engine lifetime in the same page: Quit, then Start again on a fresh canvas.
+          set +e
+          timeout 130s node .github/scripts/browser-restart-smoke.mjs http://127.0.0.1:8000/ 120000 9222
+          RESTART_STATUS=$?
+          set -e
+          if [ "$RESTART_STATUS" -ne 0 ]; then
+            cat /tmp/2dog-blazor-browser.log
+            echo "::error::The blazor host could not restart the engine in the same page"
+            exit "$RESTART_STATUS"
+          fi
+          echo "Blazor engine restart smoke passed"
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).

@@ -1,7 +1,8 @@
 @namespace twodog
 
 <div class="@Class" style="position: relative; overflow: hidden; @Style" @attributes="AdditionalAttributes">
-    <canvas @ref="_canvas" id="@_canvasId" tabindex="0"
+    @* Keyed per engine lifetime: Godot needs a fresh canvas element (and WebGL context) after a restart. *@
+    <canvas @key="_lifetime" @ref="_canvas" id="@CanvasId" tabindex="0"
             style="display: block; width: 100%; height: 100%; outline: none; touch-action: none;"></canvas>
     @if (Error is not null)
     {

@@ -18,15 +18,20 @@ public enum GodotCanvasResize
 /// <summary>
 /// Hosts the Godot engine on a canvas inside a Blazor WebAssembly page. Godot is statically linked into the
 /// runtime Blazor booted, so the engine runs on the page's thread and Razor code reaches Godot objects directly
-/// (via <see cref="Engine"/> / <see cref="Tree"/>). One engine per page: after <see cref="Quit"/> or disposal a new
-/// view cannot start another instance until the page reloads.
+/// (via <see cref="Engine"/> / <see cref="Tree"/>). One engine at a time: after <see cref="Quit"/> completes
+/// (<see cref="Exited"/>), <see cref="StartAsync"/> starts a new one on a fresh canvas element.
 /// </summary>
 public partial class GodotView : ComponentBase, IAsyncDisposable
 {
-    private readonly string _canvasId = $"twodog-canvas-{Guid.NewGuid():N}";
+    private readonly string _viewId = Guid.NewGuid().ToString("N");
+    private int _lifetime;
+    private TaskCompletionSource? _canvasRendered;
     private ElementReference _canvas;
     private IJSObjectReference? _module;
     private bool _disposed;
+    private bool _starting;
+
+    private string CanvasId => $"twodog-canvas-{_viewId}-{_lifetime}";
 
     [Inject] private IJSRuntime Js { get; set; } = default!;
 
@@ -52,6 +57,9 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
 
     /// <summary>Locale reported to Godot; null = the browser's language.</summary>
     [Parameter] public string? Locale { get; set; }
+
+    /// <summary>Start the engine after the first render (default); false leaves it to <see cref="StartAsync"/>.</summary>
+    [Parameter] public bool AutoStart { get; set; } = true;
 
     [Parameter] public string? Class { get; set; }
     [Parameter] public string? Style { get; set; }
@@ -82,24 +90,43 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
 
     public bool IsRunning => Engine is not null;
 
+    /// <summary>Number of engines this view has started (informational).</summary>
+    public int Lifetime => _lifetime;
+
+    /// <summary><see cref="StartAsync"/> would start an engine now.</summary>
+    public bool CanStart => !IsRunning && !_starting && !_disposed;
+
     public Exception? Error { get; private set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // The fresh canvas of a restart is in the DOM once this render completed.
+        _canvasRendered?.TrySetResult();
         // Server-side prerendering never gets here (no OnAfterRender there), but guard the platform anyway.
-        if (!firstRender || !OperatingSystem.IsBrowser() || _disposed) return;
+        if (!firstRender || !OperatingSystem.IsBrowser() || _disposed || !AutoStart) return;
         await StartAsync();
     }
 
-    private async Task StartAsync()
+    /// <summary>Starts the engine; a no-op while one is running or starting. Works again after <see cref="Exited"/>.</summary>
+    public async Task StartAsync()
     {
+        if (IsRunning || _starting || _disposed) return;
+        _starting = true;
+        Error = null;
+        StateHasChanged();
         try
         {
+            if (_canvasRendered is { } rendered)
+            {
+                await rendered.Task;
+                _canvasRendered = null;
+            }
+
             if (PluginsInitializer == IntPtr.Zero)
                 throw new ArgumentException($"{nameof(GodotView)}: {nameof(PluginsInitializer)} is required " +
                                             "(pass TwoDogWebBoot.PluginsInitializer() from your game project).");
 
-            _module = await Js.InvokeAsync<IJSObjectReference>("import", "./_content/2dog.blazor/2dog.blazor.js");
+            _module ??= await Js.InvokeAsync<IJSObjectReference>("import", "./_content/2dog.blazor/2dog.blazor.js");
 
             // The pack is copied into the wasm file system under its own name; Godot opens it from there.
             var packName = Path.GetFileName(PackUrl);
@@ -113,6 +140,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             });
             if (_disposed) return;
 
+            if (_lifetime == 0) _lifetime = 1;
             Engine.RegisterWebPluginsInitializer(PluginsInitializer);
             // Blazor keeps running after Godot quits; only the instance goes away.
             Engine.WebExitRuntimeOnQuit = false;
@@ -138,11 +166,18 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             StateHasChanged();
             await Failed.InvokeAsync(e);
         }
+        finally
+        {
+            _starting = false;
+        }
     }
 
     private void OnEngineExited()
     {
         Engine = null;
+        // Godot keeps one WebGL context per canvas element; the next lifetime gets a new element.
+        _lifetime++;
+        _canvasRendered = new TaskCompletionSource();
         _ = InvokeAsync(async () =>
         {
             StateHasChanged();
