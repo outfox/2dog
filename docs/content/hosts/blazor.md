@@ -92,13 +92,16 @@ client takes over.
 | --- | --- |
 | `Started` | The engine runs and its scene tree is available. |
 | `OnFrame` | Called once per engine frame after the iteration; keep it cheap. |
+| `AutoStart` / `StartAsync()` | Start after the first render (default), or later from your own code/button. |
 | `Quit()` / `Exited` | Asks Godot to quit; after its asynchronous teardown the instance is destroyed and `Exited` fires. Blazor keeps running. |
+| `CanStart` / `Lifetime` | Whether `StartAsync()` would start now; how many engines the view started. |
 | `Failed` / `Error` | Starting the engine failed; the view shows the message. |
 | `Resize` | `Container` (default: the canvas follows its element), `Project` (the project's window size), `FullWindow`. |
 
-Godot's web platform keeps engine state in module globals, so **one engine per
-page load**: after `Quit()` or disposing the view, reload the page to start
-again. Navigating away from the page disposes the view and quits the engine.
+One engine runs at a time. After `Quit()` completes, `StartAsync()` starts a
+new engine: `GodotView` renders a fresh `<canvas>` for it, because a browser
+hands out one WebGL context per canvas element for the element's whole life.
+Navigating away from the page disposes the view and quits the engine.
 
 ## Project Setup
 
@@ -153,6 +156,6 @@ are off.
   packages, add `GodotView` to a page); the template ships the Web App layout.
 - Godot and .NET are single-threaded in this host, and Blazor renders on the
   same thread: long engine frames delay UI updates and vice versa.
-- One engine instance per page load (see [Lifecycle](#lifecycle)).
+- One engine instance at a time (see [Lifecycle](#lifecycle)).
 - The browser host's [limitations](./web#limitations) apply: no dynamic
   GDExtensions, WebGL 2 only.

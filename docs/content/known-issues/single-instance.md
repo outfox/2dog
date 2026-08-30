@@ -16,7 +16,10 @@ using var engine2 = new Engine("MyGame");
 using var godot2 = engine2.Start(); // Throws InvalidOperationException.
 ```
 
-Sequential restart is supported in packages based on Godot 4.7 and later.
+Sequential restart is supported in packages based on Godot 4.7 and later,
+including the browser: the [Blazor host](/hosts/blazor) restarts on a fresh
+canvas, and a web host that keeps the runtime alive
+(`Engine.WebExitRuntimeOnQuit = false`) can start a new engine after `Exited`.
 Dispose both the running instance and its engine before starting another:
 
 ```csharp
