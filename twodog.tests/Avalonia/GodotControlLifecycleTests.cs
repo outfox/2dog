@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Headless;
 using twodog;
 
+[assembly: AvaloniaTestApplication(typeof(twodog.tests.AvaloniaTests.HeadlessTestApp))]
+
 namespace twodog.tests.AvaloniaTests;
 
 public class HeadlessTestApp : Application
@@ -16,9 +18,11 @@ public class HeadlessTestApp : Application
 // Start()), so these run engine-free and in parallel.
 public class GodotControlLifecycleTests
 {
+    // One headless Avalonia app per test assembly, never disposed: Avalonia's platform state is process-wide,
+    // and starting/tearing down a session per test raced other collections (NRE in HeadlessUnitTestSession.Dispose).
     private static void Dispatch(Action action)
     {
-        using var session = HeadlessUnitTestSession.StartNew(typeof(HeadlessTestApp));
+        var session = HeadlessUnitTestSession.GetOrStartForAssembly(typeof(HeadlessTestApp).Assembly);
         session.Dispatch(action, CancellationToken.None).GetAwaiter().GetResult();
     }
 
