@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace twodog.cli;
@@ -69,7 +68,8 @@ internal static class SolutionOps
         if (File.Exists(slnxPath))
             throw new ToolException($"Cannot migrate {Path.GetFileName(classicSolutionPath)} because {Path.GetFileName(slnxPath)} already exists.");
 
-        Run(Path.GetDirectoryName(classicSolutionPath)!, "sln", classicSolutionPath, "migrate");
+        Run(Path.GetDirectoryName(classicSolutionPath)!, $"migrating {Path.GetFileName(classicSolutionPath)}",
+            "sln", classicSolutionPath, "migrate");
         if (!File.Exists(slnxPath))
             throw new ToolException($"Migration did not create {Path.GetFileName(slnxPath)}.");
 
@@ -82,7 +82,7 @@ internal static class SolutionOps
         // and skipped) and handles both .sln and .slnx.
         var args = new List<string> { "sln", solutionPath, "add" };
         args.AddRange(projectPaths);
-        Run(Path.GetDirectoryName(solutionPath)!, args.ToArray());
+        Run(Path.GetDirectoryName(solutionPath)!, $"updating {Path.GetFileName(solutionPath)}", args.ToArray());
     }
 
     /// <summary>Whether the solution already references the given project file name.</summary>
@@ -138,33 +138,59 @@ internal static class SolutionOps
         if (!File.Exists(solutionPath)) return false;
 
         var text = File.ReadAllText(solutionPath);
-        var path = projectRelativePath.Replace('\\', '/');
-        var escapedPath = Regex.Escape(path);
-
-        // Already expanded by an earlier run (or by hand): nothing to do.
-        if (Regex.IsMatch(text, $"<Project Path=\"{escapedPath}\"\\s*>.*?<Build Project=\"false\"\\s*/>.*?</Project>",
-                RegexOptions.IgnoreCase | RegexOptions.Singleline))
-            return true;
-
-        var pattern = $"(?m)^(?<indent>\\s*)<Project Path=\"{escapedPath}\"\\s*/>";
-        var match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
-        if (!match.Success) return false;
-
-        var indent = match.Groups["indent"].Value;
+        var path = SlnxPathPattern(projectRelativePath);
         var newLine = text.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
         // The browser-wasm host has no Editor configuration, so map the solution's Editor build type onto Debug -
         // only when the solution actually declares that build type.
-        var editorMap = mapEditorToDebug
-                        && text.Contains("<BuildType Name=\"Editor\"", StringComparison.OrdinalIgnoreCase)
-            ? $"{indent}  <BuildType Solution=\"Editor|*\" Project=\"Debug\" />{newLine}"
-            : "";
-        var replacement = $"{indent}<Project Path=\"{path}\">{newLine}" +
-                          editorMap +
-                          $"{indent}  <Build Project=\"false\" />{newLine}" +
-                          $"{indent}</Project>";
-        File.WriteAllText(solutionPath, text[..match.Index] + replacement + text[(match.Index + match.Length)..]);
+        var wantsMap = mapEditorToDebug && text.Contains("<BuildType Name=\"Editor\"", StringComparison.OrdinalIgnoreCase);
+
+        // Already expanded by an earlier run (or by hand): nothing to do.
+        if (IsExcludedSlnx(text, path)) return true;
+
+        // Self-closing entry: expand it.
+        var selfClosing = Regex.Match(text, $"(?m)^(?<indent>\\s*)<Project Path=\"{path}\"\\s*/>", RegexOptions.IgnoreCase);
+        if (selfClosing.Success)
+        {
+            var indent = selfClosing.Groups["indent"].Value;
+            var actual = Regex.Match(selfClosing.Value, "Path=\"(?<p>[^\"]+)\"").Groups["p"].Value;
+            var editorMap = wantsMap ? $"{indent}  <BuildType Solution=\"Editor|*\" Project=\"Debug\" />{newLine}" : "";
+            var replacement = $"{indent}<Project Path=\"{actual}\">{newLine}" + editorMap +
+                              $"{indent}  <Build Project=\"false\" />{newLine}" +
+                              $"{indent}</Project>";
+            File.WriteAllText(solutionPath, text[..selfClosing.Index] + replacement + text[(selfClosing.Index + selfClosing.Length)..]);
+            return true;
+        }
+
+        // Expanded entry without the exclusion (dotnet sln add writes the Editor mapping itself): insert it.
+        var block = Regex.Match(text, $"(?m)^(?<indent>\\s*)<Project Path=\"{path}\"\\s*>(?<body>.*?)^(?<close>\\s*)</Project>",
+            RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        if (!block.Success) return false;
+        var blockIndent = block.Groups["indent"].Value;
+        var insert = "";
+        if (wantsMap && !block.Groups["body"].Value.Contains("<BuildType", StringComparison.OrdinalIgnoreCase))
+            insert += $"{blockIndent}  <BuildType Solution=\"Editor|*\" Project=\"Debug\" />{newLine}";
+        insert += $"{blockIndent}  <Build Project=\"false\" />{newLine}";
+        var at = block.Groups["close"].Index;
+        File.WriteAllText(solutionPath, text[..at] + insert + text[at..]);
         return true;
     }
+
+    /// <summary>Whether the solution already keeps the project out of plain builds (either format).</summary>
+    public static bool IsExcludedFromSolutionBuild(string solutionPath, string projectRelativePath)
+    {
+        if (!File.Exists(solutionPath)) return false;
+        if (!solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+            return !HasSolutionBuildEntries(solutionPath, projectRelativePath);
+        return IsExcludedSlnx(File.ReadAllText(solutionPath), SlnxPathPattern(projectRelativePath));
+    }
+
+    private static bool IsExcludedSlnx(string text, string pathPattern) =>
+        Regex.IsMatch(text, $"<Project Path=\"{pathPattern}\"\\s*>.*?<Build Project=\"false\"\\s*/>.*?</Project>",
+            RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+    /// <summary>The project path as a regex accepting either separator (dotnet sln writes both over time).</summary>
+    private static string SlnxPathPattern(string projectRelativePath) =>
+        string.Join("[\\\\/]", projectRelativePath.Split('/', '\\').Select(Regex.Escape));
 
     /// <summary>
     /// Counts the project's ".Build.0" lines in classic sln text; when found, yields the text with them removed.
@@ -200,39 +226,18 @@ internal static class SolutionOps
         return false;
     }
 
-    public static void Restore(string solutionPath, out bool succeeded)
-    {
-        succeeded = TryRun(Path.GetDirectoryName(solutionPath)!, "restore", Path.GetFileName(solutionPath));
-    }
+    /// <summary>Restores the solution; the caller decides what a failure means.</summary>
+    public static ProcessResult Restore(string solutionPath) =>
+        ProcessRunner.Default.Run(ProcessRunner.Dotnet(Path.GetDirectoryName(solutionPath)!,
+            $"restoring {Path.GetFileName(solutionPath)}", TimeSpan.FromMinutes(10),
+            "restore", Path.GetFileName(solutionPath)), Cancellation.Token);
 
-    private static void Run(string workingDir, params string[] args)
+    private static void Run(string workingDir, string label, params string[] args)
     {
-        if (!TryRun(workingDir, args))
-            throw new ToolException($"'dotnet {string.Join(' ', args)}' failed (see output above)");
-    }
-
-    private static bool TryRun(string workingDir, params string[] args)
-    {
-        // On a real terminal inherit the handles so child dotnet keeps TTY features; with redirected stdio (test
-        // host) echo through Console so hosts that swap Console.Out/Error can capture the output.
-        var inherit = !Console.IsOutputRedirected && !Console.IsErrorRedirected;
-        var psi = new ProcessStartInfo("dotnet")
-        {
-            WorkingDirectory = workingDir,
-            UseShellExecute = false,
-            RedirectStandardOutput = !inherit,
-            RedirectStandardError = !inherit,
-        };
-        foreach (var arg in args) psi.ArgumentList.Add(arg);
-        using var process = Process.Start(psi)!;
-        if (!inherit)
-        {
-            process.OutputDataReceived += (_, e) => { if (e.Data is not null) Console.Out.WriteLine(e.Data); };
-            process.ErrorDataReceived += (_, e) => { if (e.Data is not null) Console.Error.WriteLine(e.Data); };
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-        }
-        process.WaitForExit();
-        return process.ExitCode == 0;
+        var result = ProcessRunner.Default.Run(
+            ProcessRunner.Dotnet(workingDir, label, TimeSpan.FromMinutes(2), args), Cancellation.Token);
+        if (result.Ok) return;
+        ProcessRunner.ReportFailure(result);
+        throw new ToolException($"'{result.CommandLine}' failed ({result.Outcome})");
     }
 }

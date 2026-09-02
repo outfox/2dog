@@ -6,12 +6,11 @@ namespace twodog.cli;
 /// The one scaffolding engine behind `new` and `add`: plans a list of actions, then prints (--dry-run) or applies it.
 /// </summary>
 /// <remarks>
-/// Invariant: only creates files or edits *.csproj / project.godot / *.sln in place; never moves, renames or deletes,
-/// except the opt-in .sln-to-.slnx migration and the --rename fix for spaced names.
+/// Invariant: only creates files or edits *.csproj / project.godot / *.sln(x) / Directory.Build.props in place; never
+/// moves, renames or deletes, except the opt-in .sln-to-.slnx migration and the --rename fix for spaced names.
 /// </remarks>
 internal static class ScaffoldCommand
 {
-    private sealed record PlannedAction(string Description, Action Apply);
 
     /// <summary>
     /// Resolves what the run operates on: the project directory, its base name and the hosts it already has.
@@ -19,7 +18,8 @@ internal static class ScaffoldCommand
     /// </summary>
     public static ProjectContext Open(ScaffoldOptions options)
     {
-        var projectDir = Path.GetFullPath(options.ProjectPath ?? ".");
+        // No trailing separator: paths are compared and printed relative to this.
+        var projectDir = Path.TrimEndingDirectorySeparator(Path.GetFullPath(options.ProjectPath ?? "."));
         var projectGodot = Path.Combine(projectDir, "project.godot");
 
         if (options.CreateProject)
@@ -156,8 +156,9 @@ internal static class ScaffoldCommand
 
     /// <summary>
     /// Runs a scaffold. <paramref name="confirm"/>, when given, sees the planned actions and decides whether to apply.
+    /// Actions apply in order with no rollback: a failure names its step, earlier steps stand, later ones never run.
     /// </summary>
-    public static int Run(ProjectContext project, ScaffoldOptions options, Func<IReadOnlyList<string>, bool>? confirm = null)
+    public static ScaffoldResult Run(ProjectContext project, ScaffoldOptions options, Func<IReadOnlyList<ActionReport>, bool>? confirm = null)
     {
         var projectDir = project.Dir;
         var baseName = project.BaseName;
@@ -176,8 +177,7 @@ internal static class ScaffoldCommand
             .Concat(newHosts.Select(h => h.Folder))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var wantsWeb = newHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor)
-                       || existingHosts.Any(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor);
+        var wantsWeb = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
         // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
         var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
             .Concat(existingHosts.Concat(newHosts.Select(h => new ExistingHost(h.Kind, h.Folder)))
@@ -219,46 +219,102 @@ internal static class ScaffoldCommand
 
         PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder, renamedFrom);
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
+        PlanRootBuildProps(plan, projectDir);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb);
+        PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
-        PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts);
+        PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts, existingHosts);
 
+        return Apply(plan, warnings, skipped, options.DryRun, confirm,
+            () => NextStepRows(newHosts), () => PrintNextSteps(project, newHosts));
+    }
+
+    /// <summary>
+    /// Prints warnings and skips, then prints (--dry-run), confirms and applies a plan in order with no rollback:
+    /// a failure names its step, earlier steps stand, later ones never run. Shared with `2dog update`.
+    /// </summary>
+    internal static ScaffoldResult Apply(
+        List<PlannedAction> plan, IReadOnlyList<string> warnings, IReadOnlyList<string> skipped, bool dryRun,
+        Func<IReadOnlyList<ActionReport>, bool>? confirm,
+        Func<List<(string Command, string Comment)>>? nextSteps = null, Action? onApplied = null)
+    {
         foreach (var warning in warnings)
             Out.Warning(warning);
         foreach (var skip in skipped)
             Out.Skip($"{skip} (exists; use --force to overwrite)");
 
+        var reports = plan.Select(a => new ActionReport(a.Description, a.Kind, ActionStatus.Planned)).ToList();
+        ScaffoldResult Result(bool cancelled = false, (string, Exception)? failure = null) => new()
+        {
+            Actions = reports,
+            Skipped = skipped,
+            Warnings = warnings,
+            NextSteps = failure is null && !dryRun && !cancelled ? nextSteps?.Invoke() ?? [] : [],
+            DryRun = dryRun,
+            Cancelled = cancelled,
+            Failure = failure,
+        };
+
         if (plan.Count == 0)
         {
-            Out.Line("[green]Nothing to do[/] - the project already has everything that was asked for.");
-            return 0;
+            Out.Info("[green]Nothing to do[/] - the project already has everything that was asked for.");
+            return Result();
         }
 
-        if (options.DryRun)
+        if (dryRun)
         {
             foreach (var action in plan)
                 Out.Would(action.Description);
             Out.Blank();
-            Out.Line($"Dry run: [bold]{plan.Count}[/] action(s) planned, nothing changed.");
-            return 0;
+            Out.Info($"Dry run: [bold]{plan.Count}[/] action(s) planned, nothing changed.");
+            return Result();
         }
 
-        if (confirm != null && !confirm(plan.Select(a => a.Description).ToList()))
+        if (confirm != null && !confirm(reports))
         {
-            Out.Line("[yellow]Cancelled[/] - nothing changed.");
-            return 0;
+            Out.Info("[yellow]Cancelled[/] - nothing changed.");
+            return Result(cancelled: true);
         }
 
-        foreach (var action in plan)
+        for (var i = 0; i < plan.Count; i++)
         {
-            Out.Action(action.Description);
-            action.Apply();
+            Out.Action(plan[i].Description);
+            try
+            {
+                plan[i].Apply();
+                reports[i] = reports[i] with { Status = ActionStatus.Applied };
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                reports[i] = reports[i] with { Status = ActionStatus.Failed };
+                for (var j = i + 1; j < plan.Count; j++)
+                    reports[j] = reports[j] with { Status = ActionStatus.NotRun };
+                ReportFailure(reports, i, ex);
+                return Result(failure: (plan[i].Description, ex));
+            }
         }
 
-        PrintNextSteps(project, newHosts);
-        return 0;
+        onApplied?.Invoke();
+        return Result();
+    }
+
+    private static void ReportFailure(List<ActionReport> reports, int failed, Exception ex)
+    {
+        var (message, hint) = FriendlyError.Describe(ex);
+        Out.ErrorLine($"step {failed + 1}/{reports.Count} failed: {reports[failed].Description}: {message}");
+        if (hint != null) Out.Hint(hint);
+        Out.Verbose(ex.ToString());
+
+        var applied = reports.Where(r => r.Status == ActionStatus.Applied).Select(r => r.Description).ToList();
+        if (applied.Count > 0)
+            Out.Note($"{applied.Count} earlier step(s) stand: {string.Join("; ", applied)}");
+        var remaining = reports.Count - failed - 1;
+        if (remaining > 0)
+            Out.Note($"{remaining} later step(s) did not run");
+        Out.Hint("fix the cause and re-run the same command - existing files are skipped, --force overwrites; " +
+                 "run '2dog doctor' to check the project");
     }
 
     // internal for unit tests
@@ -313,7 +369,7 @@ internal static class ScaffoldCommand
         List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir, string baseName)
     {
         if (!Directory.Exists(projectDir))
-            plan.Add(new PlannedAction($"create directory {projectDir}", () => Directory.CreateDirectory(projectDir)));
+            plan.Add(new PlannedAction($"create directory {projectDir}", ActionKind.CreateDir, () => Directory.CreateDirectory(projectDir)));
 
         foreach (var (relativePath, content) in TemplateAssets.NewProjectFiles(baseName))
         {
@@ -324,7 +380,7 @@ internal static class ScaffoldCommand
                 continue;
             }
 
-            plan.Add(new PlannedAction($"create {relativePath}", () =>
+            plan.Add(new PlannedAction($"create {relativePath}", ActionKind.CreateFile, () =>
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
                 File.WriteAllText(target, content);
@@ -347,14 +403,14 @@ internal static class ScaffoldCommand
                 SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName), hostFolders),
                 project.BaseName, webBootFolder);
             plan.Add(new PlannedAction(
-                $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})",
+                $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})", ActionKind.CreateFile,
                 () => File.WriteAllText(godotCsproj, content)));
 
             // A new project's project.godot already declares [dotnet]; a
             // planned rename owns the assembly_name write itself.
             if (project.Godot is { } godot && !godot.HasSection("dotnet") && project.Rename is null)
                 plan.Add(new PlannedAction(
-                    $"append [dotnet] assembly_name=\"{project.BaseName}\" to project.godot",
+                    $"append [dotnet] assembly_name=\"{project.BaseName}\" to project.godot", ActionKind.GodotConfig,
                     () => godot.AppendDotnetSection(project.BaseName)));
             return;
         }
@@ -364,7 +420,7 @@ internal static class ScaffoldCommand
         warnings.AddRange(result.Warnings);
         if (result.NewContent is { } newContent)
             plan.Add(new PlannedAction(
-                $"patch {Path.GetFileName(godotCsproj)} ({string.Join("; ", result.Added)})",
+                $"patch {Path.GetFileName(godotCsproj)} ({string.Join("; ", result.Added)})", ActionKind.Patch,
                 () => File.WriteAllText(godotCsproj, newContent)));
     }
 
@@ -379,7 +435,7 @@ internal static class ScaffoldCommand
         var newCsproj = Path.Combine(projectDir, rename.NewName + ".csproj");
 
         if (rename.CsprojExists)
-            plan.Add(new PlannedAction($"rename {rename.OldName}.csproj to {rename.NewName}.csproj", () =>
+            plan.Add(new PlannedAction($"rename {rename.OldName}.csproj to {rename.NewName}.csproj", ActionKind.Rename, () =>
             {
                 try
                 {
@@ -387,19 +443,20 @@ internal static class ScaffoldCommand
                 }
                 catch (IOException ex)
                 {
-                    throw new ToolException($"could not rename {rename.OldName}.csproj: {ex.Message} - " +
-                                            "close the Godot editor and any IDE holding the project, then re-run.");
+                    var (message, hint) = FriendlyError.Describe(ex);
+                    throw new ToolException($"could not rename {rename.OldName}.csproj: {message}" +
+                                            (hint is null ? "" : $" - {hint}"));
                 }
             }));
 
-        plan.Add(new PlannedAction($"set [dotnet] assembly_name=\"{rename.NewName}\" in project.godot",
+        plan.Add(new PlannedAction($"set [dotnet] assembly_name=\"{rename.NewName}\" in project.godot", ActionKind.GodotConfig,
             () => project.Godot!.SetAssemblyName(rename.NewName)));
 
         foreach (var solution in Directory.EnumerateFiles(projectDir, "*.sln")
                      .Concat(Directory.EnumerateFiles(projectDir, "*.slnx"))
                      .Where(s => SolutionOps.ContainsProject(s, rename.OldName + ".csproj")))
             plan.Add(new PlannedAction(
-                $"point {Path.GetFileName(solution)} at {rename.NewName}.csproj",
+                $"point {Path.GetFileName(solution)} at {rename.NewName}.csproj", ActionKind.Solution,
                 () =>
                 {
                     if (!SolutionOps.RenameProject(solution, rename.OldName, rename.NewName))
@@ -445,7 +502,7 @@ internal static class ScaffoldCommand
             return;
         }
 
-        plan.Add(new PlannedAction("create global.json (pins a wasm-capable SDK for the whole project)",
+        plan.Add(new PlannedAction("create global.json (pins a wasm-capable SDK for the whole project)", ActionKind.CreateFile,
             () => File.WriteAllText(path, TemplateAssets.RootGlobalJson())));
     }
 
@@ -462,8 +519,27 @@ internal static class ScaffoldCommand
             return;
         }
 
-        plan.Add(new PlannedAction("create Directory.Build.targets (shared clean target)",
+        plan.Add(new PlannedAction("create Directory.Build.targets (shared clean target)", ActionKind.CreateFile,
             () => File.WriteAllText(path, TemplateAssets.RootBuildTargets())));
+    }
+
+    /// <summary>
+    /// The version properties every host csproj references live in the root Directory.Build.props: created from the
+    /// template, or appended as one labelled block to a user-owned file (an announced in-place edit).
+    /// </summary>
+    internal static void PlanRootBuildProps(List<PlannedAction> plan, string projectDir)
+    {
+        var path = Path.Combine(projectDir, PropsPatcher.FileName);
+        if (!File.Exists(path))
+        {
+            plan.Add(new PlannedAction($"create {PropsPatcher.FileName} (2dog package versions)", ActionKind.CreateFile,
+                () => File.WriteAllText(path, TemplateAssets.RootBuildProps())));
+            return;
+        }
+
+        if (PropsPatcher.AppendBlock(path) is not { } patched) return;
+        plan.Add(new PlannedAction($"append the 2dog version block to your {PropsPatcher.FileName}", ActionKind.Patch,
+            () => File.WriteAllText(path, patched)));
     }
 
     private static void PlanWebBoot(
@@ -483,11 +559,22 @@ internal static class ScaffoldCommand
         }
 
         // The web host folder may be created later in this same plan.
-        plan.Add(new PlannedAction($"create {relative} (web bootstrap)", () =>
+        plan.Add(new PlannedAction($"create {relative} (web bootstrap)", ActionKind.CreateFile, () =>
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);
             File.WriteAllText(path, TemplateAssets.WebBootSource());
         }));
+    }
+
+    /// <summary>The WebXR host renders nothing without [xr] shaders/enabled.web=true in project.godot.</summary>
+    private static void PlanXrShaders(List<PlannedAction> plan, ProjectContext project, IReadOnlyList<HostSpec> newHosts)
+    {
+        if (newHosts.All(h => h.Kind != HostKind.WebXr)) return;
+        if (project.Godot?.Get("xr", "shaders/enabled.web") == "true") return;
+        var path = Path.Combine(project.Dir, "project.godot");
+        // A new project's project.godot is created earlier in this same plan, so it is opened at apply time.
+        plan.Add(new PlannedAction("set [xr] shaders/enabled.web=true in project.godot (WebXR)", ActionKind.GodotConfig,
+            () => (project.Godot ?? new GodotProjectFile(path)).Set("xr", "shaders/enabled.web", "true", raw: true)));
     }
 
     private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb)
@@ -499,7 +586,7 @@ internal static class ScaffoldCommand
         {
             // Even without a web host, matching dotnet-new output: the template
             // always ships all presets, so adding a host later just works.
-            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web + desktop export presets)",
+            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web + desktop export presets)", ActionKind.CreateFile,
                 () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             return;
         }
@@ -516,7 +603,7 @@ internal static class ScaffoldCommand
         {
             // Re-read inside the action: earlier appends in the same plan must
             // be visible so each preset gets the next free index.
-            plan.Add(new PlannedAction($"append '{preset}' export preset to {ExportPresetOps.FileName}",
+            plan.Add(new PlannedAction($"append '{preset}' export preset to {ExportPresetOps.FileName}", ActionKind.Patch,
                 () => File.AppendAllText(path, ExportPresetOps.AppendText(File.ReadAllText(path), preset))));
         }
     }
@@ -535,7 +622,7 @@ internal static class ScaffoldCommand
                 continue;
             }
 
-            plan.Add(new PlannedAction($"create {relativePath}", () =>
+            plan.Add(new PlannedAction($"create {relativePath}", ActionKind.CreateFile, () =>
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
                 File.WriteAllBytes(target, content);
@@ -545,7 +632,8 @@ internal static class ScaffoldCommand
 
     private static void PlanSolution(
         List<PlannedAction> plan, ScaffoldOptions options, string projectDir, string baseName,
-        string godotCsproj, IReadOnlyList<string> allHostProjects, IReadOnlyList<HostSpec> newHosts)
+        string godotCsproj, IReadOnlyList<string> allHostProjects, IReadOnlyList<HostSpec> newHosts,
+        IReadOnlyList<ExistingHost> existingHosts)
     {
         var (solutionPath, exists) = SolutionOps.Locate(projectDir, baseName);
         if (!exists)
@@ -558,13 +646,13 @@ internal static class ScaffoldCommand
         {
             var classicSolutionPath = solutionPath;
             solutionPath = Path.ChangeExtension(classicSolutionPath, ".slnx");
-            plan.Add(new PlannedAction($"migrate {Path.GetFileName(classicSolutionPath)} to {Path.GetFileName(solutionPath)}",
+            plan.Add(new PlannedAction($"migrate {Path.GetFileName(classicSolutionPath)} to {Path.GetFileName(solutionPath)}", ActionKind.Solution,
                 () => SolutionOps.MigrateToSlnx(classicSolutionPath)));
         }
         var solutionName = Path.GetFileName(solutionPath);
 
         if (!exists)
-            plan.Add(new PlannedAction($"create {solutionName}",
+            plan.Add(new PlannedAction($"create {solutionName}", ActionKind.Solution,
                 () => SolutionOps.CreateSolution(solutionPath)));
 
         var allProjects = new List<string> { godotCsproj };
@@ -574,10 +662,15 @@ internal static class ScaffoldCommand
             .ToList();
         if (missing.Count > 0)
             plan.Add(new PlannedAction(
-                $"add {missing.Count} project(s) to {solutionName}",
+                $"add {missing.Count} project(s) to {solutionName}", ActionKind.Solution,
                 () => SolutionOps.AddProjects(solutionPath, missing)));
 
-        foreach (var host in newHosts.Where(h => h.Kind is HostKind.Web or HostKind.WebXr or HostKind.WinUi or HostKind.Blazor))
+        // Existing hosts too: `dotnet sln add` rewrites the file, and older runs could not adjust every layout.
+        var toExclude = newHosts.Where(h => Hosts.ExcludedFromSolutionBuild(h.Kind))
+            .Concat(existingHosts.Where(h => Hosts.ExcludedFromSolutionBuild(h.Kind))
+                .Where(h => exists && !SolutionOps.IsExcludedFromSolutionBuild(solutionPath, $"{h.Folder}/{h.Folder}.csproj"))
+                .Select(h => new HostSpec(h.Kind, h.Folder)));
+        foreach (var host in toExclude)
         {
             // Separator-agnostic: SolutionOps matches either / or \\ in the solution. The Blazor server builds
             // its wasm client, so both projects leave the solution build.
@@ -591,7 +684,7 @@ internal static class ScaffoldCommand
                 _ => ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload"),
             };
             plan.Add(new PlannedAction(
-                $"exclude {host.Folder} from plain solution builds ({why})",
+                $"exclude {host.Folder} from plain solution builds ({why})", ActionKind.Solution,
                 () =>
                 {
                     // The wasm hosts have no Editor configuration; the WinUI host does.
@@ -605,12 +698,18 @@ internal static class ScaffoldCommand
 
         // Only restore when the run actually changes something.
         if (options.Restore && plan.Count > 0)
-            plan.Add(new PlannedAction($"dotnet restore {solutionName}", () =>
+            plan.Add(new PlannedAction($"dotnet restore {solutionName}", ActionKind.Restore, () =>
             {
-                SolutionOps.Restore(solutionPath, out var succeeded);
-                if (!succeeded)
-                    Out.Warning("dotnet restore failed - if the web host is the culprit, install " +
-                                "the wasm-tools workload (dotnet workload install wasm-tools) and restore again.");
+                var result = SolutionOps.Restore(solutionPath);
+                if (result.Ok)
+                {
+                    Out.Verbose($"restored in {result.Elapsed.TotalSeconds:0.0} s");
+                    return;
+                }
+
+                ProcessRunner.ReportFailure(result);
+                Out.Warning("dotnet restore failed - if the web host is the culprit, install " +
+                            "the wasm-tools workload (dotnet workload install wasm-tools) and restore again.");
             }));
     }
 
@@ -620,8 +719,11 @@ internal static class ScaffoldCommand
         // would otherwise suggest `cd` into the directory the user is already in.
         var relative = Path.GetRelativePath(".", project.Dir);
         var cd = relative is "." or "" ? null : $"cd {QuoteIfNeeded(relative)}";
+        Out.NextSteps(cd, NextStepRows(hosts));
+    }
 
-        var rows = hosts.Select(host => host.Kind switch
+    private static List<(string Command, string Comment)> NextStepRows(IReadOnlyList<HostSpec> hosts) =>
+        hosts.Select(host => host.Kind switch
         {
             HostKind.Desktop => ($"dotnet run --project {host.Folder}", "desktop host"),
             HostKind.Tests => ($"dotnet test {host.Folder}", "xUnit tests (headless Godot)"),
@@ -633,9 +735,6 @@ internal static class ScaffoldCommand
             HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
             _ => (host.Folder, ""),
         }).ToList();
-
-        Out.NextSteps(cd, rows);
-    }
 
     private static string QuoteIfNeeded(string path) => path.Contains(' ') ? $"\"{path}\"" : path;
 }

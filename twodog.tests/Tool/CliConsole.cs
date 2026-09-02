@@ -50,6 +50,8 @@ internal static class CliConsole
             finally
             {
                 Current.Value = null;
+                // A run may have switched the output mode (--quiet, --json); the next test starts from the pinned default.
+                Out.PinConsoleFacts(ConsoleFacts.Redirected);
             }
         }
     }

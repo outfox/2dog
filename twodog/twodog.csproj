@@ -7,6 +7,8 @@
         <RollForward>LatestMajor</RollForward>
         <AssemblyName>2dog</AssemblyName>
         <RootNamespace>twodog.cli</RootNamespace>
+        <!-- System.CommandLine ships localized resource assemblies; the tool's own text is English only -->
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <!-- dotnet tool AND dotnet-new template in one package; packing needs the .NET 10 SDK (dotnet/sdk#48039).
@@ -17,7 +19,7 @@
         <PackageId>2dog</PackageId>
         <PackageType>DotnetTool;Template</PackageType>
         <Version>$(TwoDogVersion)</Version>
-        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms, WinUI 3, Avalonia, Blazor) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
+        <Description>2dog command-line tool and project templates. `dnx 2dog new MyGame` interactively creates a Godot project with .NET hosts; `2dog add` adds hosts (desktop, browser-wasm, xUnit, WinForms, WinUI 3, Avalonia, Blazor) to an existing one; every prompt has a flag, so `2dog new MyGame --desktop --tests` runs unattended. `2dog doctor` checks the project and the machine, applies safe fixes and explains build failures; `2dog update` brings the 2dog packages to the tool's versions. `2dog pack list` inspects an exported .pck. `dotnet new install 2dog` provides the `dotnet new 2dog` project template. The engine library itself is the 2dog.engine package.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
@@ -28,9 +30,11 @@
         <PackageTags>dotnet-tool;dotnet-new;templates;godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
-    <!-- Interactive host picker. Keep Spectre the only dependency so `dnx 2dog` stays a small download. -->
+    <!-- Interactive host picker (Spectre) and the command tree (System.CommandLine, zero further deps): the only two
+         dependencies, so `dnx 2dog` stays a small download. -->
     <ItemGroup>
         <PackageReference Include="Spectre.Console" Version="0.57.2"/>
+        <PackageReference Include="System.CommandLine" Version="2.0.11"/>
     </ItemGroup>
 
     <!-- GDPC pack reader behind `2dog pack list`, shared with twodog.import's list-pack mode. -->
@@ -38,7 +42,11 @@
         <Compile Include="../twodog.import/GdpcPack.cs" Link="GdpcPack.cs"/>
     </ItemGroup>
 
-    <!-- The versions the tool scaffolds with, baked in at build time -->
+    <!-- The versions the tool scaffolds with, baked in at build time; an empty one would only surface at runtime -->
+    <Target Name="TwoDogRequireVersions" BeforeTargets="CoreCompile">
+        <Error Condition="'$(TwoDogVersion)' == '' Or '$(NativesVersion)' == '' Or '$(GodotVersion)' == ''"
+               Text="TwoDogVersion, NativesVersion and GodotVersion must be set (see the repo-root Directory.Build.props)"/>
+    </Target>
     <ItemGroup>
         <AssemblyMetadata Include="TwoDogVersion" Value="$(TwoDogVersion)"/>
         <AssemblyMetadata Include="NativesVersion" Value="$(NativesVersion)"/>
@@ -65,6 +73,7 @@
         <EmbeddedResource Include="../templates/twodog/Company.Product1.blazor/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.blazor/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
         <EmbeddedResource Include="../templates/twodog/Directory.Build.targets" LogicalName="tpl/Directory.Build.targets"/>
+        <EmbeddedResource Include="../templates/twodog/Directory.Build.props" LogicalName="tpl/Directory.Build.props"/>
         <EmbeddedResource Include="../templates/twodog/export_presets.cfg" LogicalName="tpl/export_presets.cfg"/>
         <EmbeddedResource Include="../templates/twodog/global.json" LogicalName="tpl/global.json"/>
         <!-- Godot project files, for `2dog new` -->

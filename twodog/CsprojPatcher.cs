@@ -12,18 +12,19 @@ internal static class CsprojPatcher
 
     public sealed record Result(string? NewContent, List<string> Added, List<string> Warnings);
 
-    public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders, string? webBootPath = null)
+    public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders, string? webBootPath = null,
+        bool upgradeTargetFramework = true)
     {
         var warnings = new List<string>();
         var added = new List<string>();
-        var doc = XDocument.Load(csprojPath, LoadOptions.PreserveWhitespace);
+        var doc = MsBuildXml.Load(csprojPath);
         var root = doc.Root ?? throw new ToolException($"{csprojPath}: not a valid MSBuild project file");
         var ns = root.Name.Namespace;
 
         var sdk = (string?)root.Attribute("Sdk");
         if (sdk == null || !sdk.StartsWith("Godot.NET.Sdk", StringComparison.OrdinalIgnoreCase))
             warnings.Add($"{Path.GetFileName(csprojPath)} does not use Godot.NET.Sdk (Sdk=\"{sdk}\"); patching anyway - review the result.");
-        else if (SdkVersion(sdk) is { } version && CompareVersions(version, ToolVersions.GodotSdkVersion) < 0)
+        else if (VersionRewriter.GodotSdkVersion($"Sdk=\"{sdk}\"") is { } version && CompareVersions(version, ToolVersions.GodotSdkVersion) < 0)
             warnings.Add($"{Path.GetFileName(csprojPath)} uses Godot.NET.Sdk/{version}, older than the {ToolVersions.GodotSdkVersion} this tool targets; not changed - consider upgrading.");
 
         // Deliberately includes conditioned PropertyGroups: a property set anywhere (even per-configuration) is
@@ -41,7 +42,7 @@ internal static class CsprojPatcher
             patch.Add(Element(ns, "TargetFramework", TargetFramework));
             added.Add($"TargetFramework: {TargetFramework}");
         }
-        else if (targetFrameworks.Any(e => e.Value != TargetFramework))
+        else if (upgradeTargetFramework && targetFrameworks.Any(e => e.Value != TargetFramework))
         {
             foreach (var targetFramework in targetFrameworks)
                 targetFramework.Value = TargetFramework;
@@ -102,21 +103,9 @@ internal static class CsprojPatcher
 
         if (!patch.HasElements && bootGroup == null && added.Count == 0) return new Result(null, added, warnings);
 
-        // PreserveWhitespace + DisableFormatting keep the rest of the file byte-identical, so the injected group
-        // carries its own whitespace.
-        var children = patch.Elements().ToList();
-        patch.RemoveNodes();
-        foreach (var child in children)
-            patch.Add(new XText("\n        "), child);
-        patch.Add(new XText("\n    "));
-
         if (patch.HasElements)
-            root.Add(
-                new XText("    "),
-                new XComment(" added by the 2dog tool: properties 2dog hosts need that were not already set "),
-                new XText("\n    "),
-                patch,
-                new XText("\n"));
+            MsBuildXml.AppendPropertyGroup(doc, "added by the 2dog tool: properties 2dog hosts need that were not already set",
+                patch.Elements().ToList());
 
         if (bootGroup != null)
             root.Add(
@@ -126,21 +115,10 @@ internal static class CsprojPatcher
                 bootGroup,
                 new XText("\n"));
 
-        // XDocument.ToString drops the XML declaration; put it back if the
-        // file had one.
-        var text = doc.ToString(SaveOptions.DisableFormatting);
-        if (doc.Declaration != null)
-            text = doc.Declaration + Environment.NewLine + text;
-        return new Result(text, added, warnings);
+        return new Result(MsBuildXml.Serialize(doc), added, warnings);
     }
 
     private static XElement Element(XNamespace ns, string name, string value) => new(ns + name, value);
-
-    private static string? SdkVersion(string sdk)
-    {
-        var slash = sdk.IndexOf('/');
-        return slash < 0 ? null : sdk[(slash + 1)..];
-    }
 
     private static int CompareVersions(string a, string b) =>
         Version.TryParse(a, out var va) && Version.TryParse(b, out var vb) ? va.CompareTo(vb) : 0;

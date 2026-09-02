@@ -751,7 +751,7 @@ public class AddEndToEndTests
     private static int Run(ScaffoldOptions options) => RunCaptured(options).ExitCode;
 
     private static (int ExitCode, string Stdout, string Stderr) RunCaptured(ScaffoldOptions options) =>
-        CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options));
+        CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options).ExitCode);
 
     private static string Snapshot(string dir) =>
         string.Join("\n---\n", Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)
@@ -858,7 +858,7 @@ public class AddEndToEndTests
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web", "Browser"]), project);
-        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+        Assert.Equal(0, ScaffoldCommand.Run(project, options).ExitCode);
 
         Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "Browser", "TwoDogWebBoot.cs")));
         Assert.Contains("Compile Include=\"Browser/TwoDogWebBoot.cs\"",
@@ -882,7 +882,7 @@ public class AddEndToEndTests
 
         var run = RunCaptured(Options(tmp.Dir));
         Assert.Equal(0, run.ExitCode);
-        Assert.Contains("TwoDogWebBoot.cs sits at the project root", run.Stdout);
+        Assert.Contains("TwoDogWebBoot.cs sits at the project root", run.Stderr);
 
         // The root file (older layout, compiled by the default globs) is
         // untouched, no folder copy appears, and no Include is patched in.
@@ -997,7 +997,7 @@ public class AddEndToEndTests
         options.Force = true;
         var run = RunCaptured(options);
         Assert.Equal(0, run.ExitCode);
-        Assert.Contains("global.json already exists - left untouched", run.Stdout);
+        Assert.Contains("global.json already exists - left untouched", run.Stderr);
 
         Assert.Equal(existing, File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "global.json")));
     }
@@ -1031,7 +1031,7 @@ public class AddEndToEndTests
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", flag]), project);
-        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+        Assert.Equal(0, ScaffoldCommand.Run(project, options).ExitCode);
 
         var host = System.IO.Path.Combine(tmp.Dir, $"SpaceMiner.{suffix}");
         foreach (var expected in (string[])[$"SpaceMiner.{suffix}.csproj", ".gdignore", .. extraFiles])
@@ -1263,11 +1263,11 @@ public class CommandLineTests
     [Fact]
     public void Pin_ExplainsLauncherPinning()
     {
-        var ex = Assert.Throws<ToolException>(() => CommandLine.Parse(["--pin", "4.7.1.42"]));
+        var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--pin", "4.7.1.42"]));
         Assert.Contains("dnx 2dog@4.7.1.42", ex.Message);
         Assert.Contains("--version 4.7.1.42", ex.Message);
 
-        ex = Assert.Throws<ToolException>(() => CommandLine.Parse(["--pin"]));
+        ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--pin"]));
         Assert.Contains("dnx 2dog@<version>", ex.Message);
     }
 
@@ -1414,7 +1414,7 @@ public class ScaffoldEndToEndTests
     {
         var project = ScaffoldCommand.Open(options);
         if (options.Hosts.Count == 0) options.Hosts = HostSelection.Defaults([], project);
-        return ScaffoldCommand.Run(project, options);
+        return ScaffoldCommand.Run(project, options).ExitCode;
     }).ExitCode;
 
     private static ScaffoldOptions NewProject(string dir) =>
@@ -1477,7 +1477,7 @@ public class ScaffoldEndToEndTests
         var options = new ScaffoldOptions { ProjectPath = dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web"]), project);
-        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+        Assert.Equal(0, ScaffoldCommand.Run(project, options).ExitCode);
 
         // Exactly one bootstrap per project: two copies would collide (CS0101)
         // in the game assembly the root csproj compiles them into.
@@ -1499,7 +1499,7 @@ public class ScaffoldEndToEndTests
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web", "Browser"]), project);
-        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+        Assert.Equal(0, ScaffoldCommand.Run(project, options).ExitCode);
 
         Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "Browser", "TwoDogWebBoot.cs")));
         var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "MyGame.csproj"));
@@ -1517,7 +1517,7 @@ public class ScaffoldEndToEndTests
         var options = new ScaffoldOptions { ProjectPath = dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop"]), project);
-        Assert.Equal(0, ScaffoldCommand.Run(project, options));
+        Assert.Equal(0, ScaffoldCommand.Run(project, options).ExitCode);
 
         var host = System.IO.Path.Combine(dir, "MyGame.2dog2");
         Assert.True(File.Exists(System.IO.Path.Combine(host, "MyGame.2dog2.csproj")));

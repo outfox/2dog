@@ -43,6 +43,7 @@ MyGame/                     # Godot project root and solution root
 ├── MyGame.slnx
 ├── main.tscn
 ├── export_presets.cfg
+├── Directory.Build.props   # the package versions every host references
 ├── global.json             # included with the web host
 ├── MyGame.2dog/            # generic host
 ├── MyGame.web/             # browser host (holds TwoDogWebBoot.cs)

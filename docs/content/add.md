@@ -89,7 +89,9 @@ skipped and reported, and a run with nothing to add is a no-op. Use
 `--dry-run` before changing anything and `--force` only when you intend to
 replace scaffolded files.
 
-It does not:
+It creates files and edits `*.csproj`, `project.godot`, the solution and
+`Directory.Build.props` in place (a user-owned `Directory.Build.props` gets the
+2dog version block appended once, announced in the plan). It does not:
 
 - move, rename, or delete game content;
 - touch version control, `.gitignore`, staging, or commits;
@@ -101,9 +103,10 @@ Two deliberate exceptions can occur, both announced in the plan: a classic
 reused), and [`--rename`](#project-names-with-spaces) moves the game csproj to
 a space-free name when you ask it to.
 
-The tool runs `dotnet restore` unless you pass `--no-restore`. A wasm-related
-restore failure is reported as a warning with the command to install
-`wasm-tools`.
+The tool runs `dotnet restore` unless you pass `--no-restore`. A failed
+restore is reported with its last lines and the command to install
+`wasm-tools` when that is the cause. Afterwards, [`2dog doctor`](/doctor)
+checks the result and fixes what it safely can.
 
 ## Project names with spaces
 

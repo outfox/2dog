@@ -8,13 +8,16 @@ namespace twodog.cli;
 /// </summary>
 internal static class PackCommand
 {
-    public static int Run(ParsedCommand cmd)
+    public static int Run(ParsedCommand cmd, Report report)
     {
         // The parser only lets `list` through; further operations dispatch here.
         try
         {
-            GdpcPack.Print(cmd.PackFile!, GdpcPack.Read(cmd.PackFile!), Console.Out);
-            return 0;
+            var listing = GdpcPack.Read(cmd.PackFile!);
+            report.Pack = new ReportPack(cmd.PackFile!, listing.FormatVersion, $"{listing.Major}.{listing.Minor}",
+                listing.TotalBytes, listing.Entries.Select(e => new ReportPackEntry(e.Path, e.Size)).ToList());
+            if (!Out.Mode.Json) GdpcPack.Print(cmd.PackFile!, listing, Out.Writer);
+            return ExitCodes.Ok;
         }
         catch (PckFormatException ex)
         {

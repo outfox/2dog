@@ -2,6 +2,13 @@ using System.Text.Json;
 
 namespace twodog.cli;
 
+/// <summary>How a version compares to the newest stable on nuget.org.</summary>
+public enum VersionMark
+{
+    UpToDate,
+    Outdated,
+}
+
 /// <summary>
 /// Best-effort nuget.org lookup behind the up-to-date marks of `2dog version`; any failure leaves rows unmarked.
 /// </summary>
@@ -9,13 +16,13 @@ internal static class NuGetLatest
 {
     private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(2.5);
 
-    /// <summary>✅ when current is the newest stable on nuget.org, 🔄 when a newer one exists, null if unknown.</summary>
-    public static string? Mark(string current, string? latestStable)
+    /// <summary>UpToDate when current is the newest stable on nuget.org (or ahead of it), null if unknown.</summary>
+    public static VersionMark? Mark(string current, string? latestStable)
     {
         if (latestStable == null) return null;
         if (Version.TryParse(current, out var c) && Version.TryParse(latestStable, out var l))
-            return c >= l ? "✅" : "🔄";
-        return latestStable == current ? "✅" : null;
+            return c >= l ? VersionMark.UpToDate : VersionMark.Outdated;
+        return latestStable == current ? VersionMark.UpToDate : null;
     }
 
     /// <summary>Latest stable version per package id; null entries where the lookup failed.</summary>

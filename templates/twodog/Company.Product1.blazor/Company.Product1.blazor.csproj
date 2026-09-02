@@ -19,7 +19,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="ASPNETCORE_PKG_VERSION"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(TwoDogAspNetCoreVersion)"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="Client/Company.Product1.blazor.Client.csproj"/>

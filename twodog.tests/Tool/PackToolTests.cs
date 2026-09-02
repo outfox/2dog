@@ -11,7 +11,7 @@ namespace twodog.tests.ToolTests;
 public class PackToolTests
 {
     /// <summary>A minimal GDPC pack: v2 uses the reserved block, v3/v4 a directory offset.</summary>
-    private static byte[] BuildPck(uint formatVersion, uint packFlags,
+    internal static byte[] BuildPck(uint formatVersion, uint packFlags,
         params (string Path, ulong Size, uint Flags)[] entries)
     {
         using var ms = new MemoryStream();
