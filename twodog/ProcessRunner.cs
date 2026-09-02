@@ -17,18 +17,20 @@ internal sealed record ProcessResult(
     int ExitCode,
     IReadOnlyList<string> Output,
     TimeSpan Elapsed,
-    bool TimedOut,
-    bool Cancelled)
+    bool TimedOut)
 {
-    public bool Ok => ExitCode == 0 && !TimedOut && !Cancelled;
+    public bool Ok => ExitCode == 0 && !TimedOut;
 
     public IEnumerable<string> Tail(int lines) => Output.Skip(Math.Max(0, Output.Count - lines));
 
-    /// <summary>How it ended, for messages: "exit 1", "timed out", "cancelled".</summary>
-    public string Outcome => TimedOut ? "timed out" : Cancelled ? "cancelled" : $"exit {ExitCode}";
+    /// <summary>How it ended, for messages: "exit 1", "timed out".</summary>
+    public string Outcome => TimedOut ? "timed out" : $"exit {ExitCode}";
 }
 
-/// <summary>Runs subprocesses; doctor tests inject a fake.</summary>
+/// <summary>
+/// Runs subprocesses; doctor tests inject a fake. A result is always a finished (or timed-out) run: cancellation
+/// surfaces as OperationCanceledException so every command ends in the cancelled exit code, not a failure report.
+/// </summary>
 internal interface IProcessRunner
 {
     ProcessResult Run(ProcessRequest request, CancellationToken cancellationToken = default);
@@ -44,10 +46,16 @@ internal sealed class ProcessRunner : IProcessRunner
 
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(10);
 
-    public ProcessResult Run(ProcessRequest request, CancellationToken cancellationToken = default) =>
-        request.Label is { } label
+    /// <summary>How long a killed child gets to disappear before the runner stops waiting for it.</summary>
+    private static readonly TimeSpan KillGrace = TimeSpan.FromSeconds(5);
+
+    public ProcessResult Run(ProcessRequest request, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return request.Label is { } label
             ? Out.Status(label, () => RunCore(request, cancellationToken))
             : RunCore(request, cancellationToken);
+    }
 
     /// <summary>The dotnet muxer with the given arguments, in a directory.</summary>
     public static ProcessRequest Dotnet(string workingDir, string? label, TimeSpan? timeout, params string[] args) =>
@@ -96,15 +104,27 @@ internal sealed class ProcessRunner : IProcessRunner
         process.BeginErrorReadLine();
 
         using var registration = cancellationToken.Register(() => TryKill(process));
-        var timedOut = !process.WaitForExit((int)(request.Timeout ?? DefaultTimeout).TotalMilliseconds);
-        if (timedOut) TryKill(process);
-        // The parameterless wait drains the async readers, so the tail is complete.
-        process.WaitForExit();
+        var exited = process.WaitForExit((int)(request.Timeout ?? DefaultTimeout).TotalMilliseconds);
+        var cancelled = cancellationToken.IsCancellationRequested;
+        var timedOut = !exited && !cancelled;
+        if (exited)
+        {
+            // The parameterless wait drains the async readers, so the tail is complete.
+            process.WaitForExit();
+        }
+        else
+        {
+            // Killed (timeout or Ctrl+C): wait a bounded time, never forever on a child that refuses to die.
+            TryKill(process);
+            process.WaitForExit((int)KillGrace.TotalMilliseconds);
+        }
+
         watch.Stop();
+        if (cancelled) throw new OperationCanceledException(cancellationToken);
 
         lock (output)
-            return new ProcessResult(commandLine, process.ExitCode, output.ToList(), watch.Elapsed, timedOut,
-                cancellationToken.IsCancellationRequested);
+            return new ProcessResult(commandLine, process.HasExited ? process.ExitCode : -1, output.ToList(),
+                watch.Elapsed, timedOut);
     }
 
     private static void TryKill(Process process)

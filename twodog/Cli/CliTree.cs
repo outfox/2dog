@@ -266,20 +266,38 @@ internal static class CliTree
     public static IEnumerable<string> VerbNames =>
         Root.Subcommands.SelectMany(c => c.Aliases.Prepend(c.Name));
 
-    /// <summary>The verb path the leading tokens name (root first) and how many tokens that consumed.</summary>
+    /// <summary>
+    /// The verb path the leading tokens name (root first) and the index of the first token past it. Options valid at
+    /// each level are stepped over on the way (`2dog --json add`), with their detached value when they take one.
+    /// </summary>
     public static (List<Command> Path, int Consumed) Resolve(IReadOnlyList<string> args)
     {
         var path = new List<Command> { Root };
         var i = 0;
-        while (i < args.Count
-               && path[^1].Subcommands.FirstOrDefault(c => c.Name == args[i] || c.Aliases.Contains(args[i])) is { } sub)
+        for (; i < args.Count; i++)
         {
-            path.Add(sub);
-            i++;
+            var arg = args[i];
+            if (SubcommandOf(path[^1], arg) is { } sub)
+            {
+                path.Add(sub);
+                continue;
+            }
+
+            if (arg == "--" || arg.Length < 2 || !arg.StartsWith('-')) break;
+            var name = arg.Split(['=', ':'], 2)[0];
+            var option = OptionsOf(path).FirstOrDefault(o => NamesOf(o).Contains(name, StringComparer.Ordinal));
+            if (option is null) break;
+            // Same rule as the parser: a following token is the option's value unless it is a flag or a verb.
+            if (name == arg && option.Arity.MaximumNumberOfValues > 0 && i + 1 < args.Count
+                && !args[i + 1].StartsWith('-') && SubcommandOf(path[^1], args[i + 1]) is null)
+                i++;
         }
 
         return (path, i);
     }
+
+    private static Command? SubcommandOf(Command command, string token) =>
+        command.Subcommands.FirstOrDefault(c => c.Name == token || c.Aliases.Contains(token));
 
     /// <summary>The options a command accepts: its own plus the recursive ones of its ancestors.</summary>
     public static IEnumerable<Option> OptionsOf(IReadOnlyList<Command> path) =>

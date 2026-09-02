@@ -31,21 +31,29 @@ internal static class Out
     /// <summary>A plain stdout writer for output produced outside Spectre (the pack listing).</summary>
     public static TextWriter Writer => StdoutWriter;
 
-    /// <summary>Everything a run reported, for the --json envelope.</summary>
-    public static List<string> Warnings { get; } = [];
-    public static List<string> Notes { get; } = [];
-    public static List<string> Errors { get; } = [];
-    public static List<string> Hints { get; } = [];
+    /// <summary>
+    /// Everything a run reported, for the --json envelope. Flow-local: tests run several commands in parallel in one
+    /// process, and one run's Configure must not clear what another is still collecting.
+    /// </summary>
+    public static List<string> Warnings => Collected.Warnings;
+    public static List<string> Notes => Collected.Notes;
+    public static List<string> Errors => Collected.Errors;
+    public static List<string> Hints => Collected.Hints;
+
+    private sealed class Collectors
+    {
+        public readonly List<string> Warnings = [], Notes = [], Errors = [], Hints = [];
+    }
+
+    private static readonly AsyncLocal<Collectors?> CollectedSlot = new();
+    private static Collectors Collected => CollectedSlot.Value ??= new Collectors();
 
     public static void Configure(OutputMode mode)
     {
         Mode = mode;
         _stdout = Create(stdErr: false);
         _stderr = Create(stdErr: true);
-        Warnings.Clear();
-        Notes.Clear();
-        Errors.Clear();
-        Hints.Clear();
+        CollectedSlot.Value = new Collectors();
     }
 
     /// <summary>
@@ -72,6 +80,8 @@ internal static class Out
                 : ColorSystemSupport.Detect,
             Interactive = Mode.CanPrompt ? InteractionSupport.Detect : InteractionSupport.No,
             Out = new ForwardingOutput(stdErr),
+            // Spectre's CI enrichers (GITHUB_ACTIONS, TF_BUILD, ...) would force ANSI back on; OutputMode owns that.
+            Enrichment = new ProfileEnrichment { UseDefaultEnrichers = false },
         });
     }
 
@@ -238,10 +248,13 @@ internal static class Out
     /// <summary>Set once a prompt or spinner has drawn: only then is there a cursor state worth restoring.</summary>
     internal static bool TerminalDirty { get; set; }
 
-    /// <summary>Shows the cursor and resets styling, in case a prompt or spinner was interrupted mid-way.</summary>
+    /// <summary>
+    /// Shows the cursor and resets styling, in case a prompt or spinner was interrupted mid-way. Never under --json:
+    /// stdout must stay one JSON document (nothing prompts or animates there anyway).
+    /// </summary>
     public static void RestoreTerminal()
     {
-        if (!TerminalDirty) return;
+        if (!TerminalDirty || Mode.Json) return;
         if (Console.Profile.Capabilities.Ansi) Console.Profile.Out.Writer.Write("\e[?25h\e[0m");
         if (Error.Profile.Capabilities.Ansi) Error.Profile.Out.Writer.Write("\e[?25h\e[0m");
     }

@@ -15,7 +15,7 @@ internal sealed class FakeProcessRunner(Func<ProcessRequest, ProcessResult> answ
     }
 
     public static ProcessResult Result(ProcessRequest request, int exitCode, params string[] output) =>
-        new(ProcessRunner.Describe(request), exitCode, output, TimeSpan.Zero, false, false);
+        new(ProcessRunner.Describe(request), exitCode, output, TimeSpan.Zero, false);
 }
 
 /// <summary>A Windows x64 machine with nothing set, backed by the real file system for existence checks.</summary>

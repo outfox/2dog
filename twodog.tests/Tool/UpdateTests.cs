@@ -115,6 +115,61 @@ public class UpdateTests
     }
 
     [Fact]
+    public void Update_KeepsANewerCompanionVersion()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--avalonia", "--no-restore").ExitCode);
+        var csproj = Path.Combine(dir, "Game.avalonia", "Game.avalonia.csproj");
+        File.WriteAllText(csproj, File.ReadAllText(csproj).Replace("Version=\"$(TwoDogAvaloniaVersion)\"", "Version=\"99.0.0\""));
+
+        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, run.ExitCode);
+        Assert.Contains($"TwoDogAvaloniaVersion {ToolVersions.AvaloniaVersion} -> 99.0.0", run.Stdout);
+        Assert.Equal("99.0.0", PropsPatcher.Read(Path.Combine(dir, "Directory.Build.props"))["TwoDogAvaloniaVersion"]);
+        var text = File.ReadAllText(csproj);
+        Assert.Contains("Version=\"$(TwoDogAvaloniaVersion)\"", text);
+        Assert.DoesNotContain("99.0.0", text);
+
+        var again = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, again.ExitCode);
+        Assert.Contains("Nothing to do", again.Stdout);
+    }
+
+    [Fact]
+    public void Update_FailsWhenTheRestoreFails()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = AgedProject(tmp);
+        var runner = new FakeProcessRunner(r => r.FileName == "git"
+            ? FakeProcessRunner.Result(r, 0)
+            : FakeProcessRunner.Result(r, 1, "error NU1102: Unable to find package 2dog.engine"));
+
+        var run = WithRunner(runner, () => CliConsole.Run("update", dir));
+        Assert.Equal(ExitCodes.Error, run.ExitCode);
+        Assert.Contains("dotnet restore failed", run.Stderr);
+        Assert.Contains("NU1102", run.Stderr);
+        Assert.True(File.Exists(Path.Combine(dir, "Directory.Build.props")));
+    }
+
+    [Fact]
+    public void Update_WritesAUtf16PropsFileInItsOwnEncoding()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--no-restore").ExitCode);
+        var props = Path.Combine(dir, "Directory.Build.props");
+        var aged = File.ReadAllText(props).Replace($"<TwoDogVersion>{ToolVersions.TwoDogVersion}<", "<TwoDogVersion>4.7.1.10<");
+        File.WriteAllText(props, "<?xml version=\"1.0\" encoding=\"utf-16\"?>\n" + aged, System.Text.Encoding.Unicode);
+
+        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, run.ExitCode);
+        Assert.Equal(new byte[] { 0xFF, 0xFE }, File.ReadAllBytes(props).Take(2).ToArray());
+        Assert.Equal(ToolVersions.TwoDogVersion, PropsPatcher.Read(props)["TwoDogVersion"]);
+        Assert.StartsWith("<?xml version=\"1.0\" encoding=\"utf-16\"?>", File.ReadAllText(props));
+    }
+
+    [Fact]
     public void Update_AcrossGodotLines_WarnsAboutTheEditor()
     {
         using var tmp = new TempProjectDir();
@@ -176,6 +231,33 @@ public class UpdateTests
         Assert.Equal("4.7.1", VersionRewriter.GodotSdkVersion("<Project Sdk=\"Godot.NET.Sdk/4.7.1\">"));
         Assert.Null(VersionRewriter.SetGodotSdkVersion("<Project Sdk=\"Godot.NET.Sdk/4.7.2\">", "4.7.2"));
         Assert.Equal("<Project Sdk=\"Godot.NET.Sdk/4.7.2\">", VersionRewriter.SetGodotSdkVersion("<Project Sdk=\"Godot.NET.Sdk/4.7.1\">", "4.7.2"));
+    }
+
+    [Fact]
+    public void VersionRewriter_TreatsARangeAsFloating()
+    {
+        Assert.True(new PackageRef("2dog.browser-wasm", "[4.7.1.1]").IsPinned);
+        Assert.False(new PackageRef("2dog.browser-wasm", "[4.7.1,5.0.0)").IsPinned);
+        Assert.False(new PackageRef("2dog.browser-wasm", "4.7.1.1").IsPinned);
+        Assert.True(new PackageRef("2dog.browser-wasm", "[$(TwoDogNativesVersion)]").IsPinned);
+        Assert.False(new PackageRef("2dog.browser-wasm", "$(TwoDogNativesVersion)").IsPinned);
+    }
+
+    [Fact]
+    public void VersionRewriter_ReadsSingleQuotedAndSpacedAttributes()
+    {
+        const string game = "<Project Sdk = 'Godot.NET.Sdk/4.7.1'>\n</Project>\n";
+        Assert.Equal("4.7.1", VersionRewriter.GodotSdkVersion(game));
+        Assert.Equal("<Project Sdk = 'Godot.NET.Sdk/4.7.2'>\n</Project>\n", VersionRewriter.SetGodotSdkVersion(game, "4.7.2"));
+
+        using var tmp = new TempProjectDir();
+        var csproj = tmp.Write("x.csproj",
+            "<Project Sdk='Microsoft.NET.Sdk'>\n  <ItemGroup>\n    <PackageReference Include='2dog.engine' Version = '4.7.1.10' />\n" +
+            "    <PackageReference Include='2dog.browser-wasm' Version='[4.7.1.1]'/>\n  </ItemGroup>\n</Project>\n");
+        var (text, changes) = VersionRewriter.Migrate(csproj);
+        Assert.Equal(["2dog.engine 4.7.1.10 -> $(TwoDogVersion)", "2dog.browser-wasm [4.7.1.1] -> [$(TwoDogNativesVersion)]"], changes);
+        Assert.Contains("Version = '$(TwoDogVersion)'", text);
+        Assert.Contains("Version='[$(TwoDogNativesVersion)]'", text);
     }
 
     [Fact]

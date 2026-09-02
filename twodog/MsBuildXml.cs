@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -49,5 +50,38 @@ internal static class MsBuildXml
         if (doc.Declaration == null) return text;
         var newline = text.Contains("\r\n", StringComparison.Ordinal) ? "\r\n" : "\n";
         return doc.Declaration + newline + text;
+    }
+
+    private static readonly Regex DeclaredEncoding =
+        new(@"^\s*<\?xml[^>]*\bencoding\s*=\s*(?<q>[""'])(?<name>[^""']+)\k<q>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    /// <summary>
+    /// Writes edited MSBuild text back in the file's own encoding: the one its declaration names, else UTF-8 with
+    /// the BOM the file had. File.WriteAllText would emit UTF-8 under a utf-16 declaration, which MSBuild rejects.
+    /// </summary>
+    public static void Write(string path, string text) => File.WriteAllText(path, text, EncodingOf(path, text));
+
+    internal static Encoding EncodingOf(string path, string text)
+    {
+        var declared = DeclaredEncoding.Match(text);
+        if (declared.Success)
+        {
+            try
+            {
+                var encoding = Encoding.GetEncoding(declared.Groups["name"].Value);
+                if (encoding.CodePage != 65001) return encoding;
+            }
+            catch (ArgumentException) { /* unknown name: MSBuild would not read it either; fall through to UTF-8 */ }
+        }
+
+        return new UTF8Encoding(HasUtf8Bom(path));
+    }
+
+    private static bool HasUtf8Bom(string path)
+    {
+        if (!File.Exists(path)) return false;
+        using var stream = File.OpenRead(path);
+        Span<byte> head = stackalloc byte[3];
+        return stream.Read(head) == 3 && head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF;
     }
 }

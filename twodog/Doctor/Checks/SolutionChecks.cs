@@ -43,12 +43,16 @@ internal static class SolutionChecks
         if (p.Solution is not { } solution)
         {
             yield return new Finding("sln.multiple", c, Severity.Fail,
-                $"several solutions at the root ({string.Join(", ", p.Solutions.Select(Path.GetFileName))}) and none names the game project",
+                $"several solutions at the root ({string.Join(", ", p.Solutions.Select(Path.GetFileName))}) and "
+                + (p.GameSolutions.Count > 1 ? "more than one names" : "none names") + " the game project",
                 "the Godot editor requires exactly one solution containing the game project", "remove the extras");
             yield break;
         }
 
         var name = Path.GetFileName(solution);
+        // --fix-all migrates a .sln before the later solution fixes run; they follow it to the .slnx.
+        string Current() => File.Exists(solution) ? solution : Path.ChangeExtension(solution, ".slnx");
+
         if (p.Solutions.Count > 1)
             yield return new Finding("sln.multiple", c, Severity.Warn,
                 $"{p.Solutions.Count} solutions at the root; {name} is the one naming the game project", null, "remove the extras");
@@ -64,14 +68,14 @@ internal static class SolutionChecks
         if (p.GameCsprojPath != null && missing.Contains(p.GameCsprojPath))
             yield return new Finding("sln.contains-game", c, Severity.Fail, $"{name} does not list {p.GameCsprojName}",
                 "the Godot editor requires it", null, name,
-                new Fix("sln:add", FixClass.Safe, $"add {missing.Count} project(s) to {name}", () => SolutionOps.AddProjects(solution, missing)));
+                new Fix("sln:add", FixClass.Safe, $"add {missing.Count} project(s) to {name}", () => SolutionOps.AddProjects(Current(), missing)));
         else if (p.GameCsprojPath != null)
             yield return Finding.Pass("sln.contains-game", c, $"{name}");
 
         var missingHosts = missing.Where(m => m != p.GameCsprojPath).Select(m => Path.GetFileName(m)).ToList();
         if (missingHosts.Count > 0)
             yield return new Finding("sln.contains-hosts", c, Severity.Warn, $"{name} does not list {string.Join(", ", missingHosts)}", null, null, name,
-                new Fix("sln:add", FixClass.Safe, $"add {missing.Count} project(s) to {name}", () => SolutionOps.AddProjects(solution, missing)));
+                new Fix("sln:add", FixClass.Safe, $"add {missing.Count} project(s) to {name}", () => SolutionOps.AddProjects(Current(), missing)));
         else
             yield return Finding.Pass("sln.contains-hosts", c, $"{projects.Count} projects");
 
@@ -94,7 +98,7 @@ internal static class SolutionChecks
                 {
                     // The wasm hosts have no Editor configuration; the WinUI host does.
                     foreach (var (relative, kind) in included)
-                        SolutionOps.ExcludeFromSolutionBuild(solution, relative, mapEditorToDebug: kind is not HostKind.WinUi);
+                        SolutionOps.ExcludeFromSolutionBuild(Current(), relative, mapEditorToDebug: kind is not HostKind.WinUi);
                 }));
         else if (excludable.Count > 0)
             yield return Finding.Pass("sln.build-exclusions", c, "build exclusions");

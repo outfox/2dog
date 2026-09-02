@@ -5,6 +5,7 @@ namespace twodog.tests.ToolTests;
 
 // Failures end in an `error:` line and a stable exit code, never a stack trace (unless --verbose asks for one),
 // and a plan that breaks half-way says what stands and what never ran.
+[Collection("doctor statics")] // DoctorCommand.Runner/Environment are process-wide seams: never swap them in parallel.
 public class ErrorHandlingTests
 {
     [Fact]
@@ -79,6 +80,33 @@ public class ErrorHandlingTests
                      ToolVersions.AvaloniaVersion, ToolVersions.WindowsAppSdkVersion, ToolVersions.AspNetCoreVersion,
                  })
             Assert.True(Version.TryParse(value, out _), $"'{value}' is not a version");
+    }
+
+    // A cancelled subprocess (Ctrl+C during `doctor --build`) ends the run with the cancelled code, not with 3 or 2.
+    [Fact]
+    public void CancelledSubprocess_EndsInTheCancelledExitCode()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", "[application]\nconfig/name=\"Game\"\n\n[dotnet]\nproject/assembly_name=\"Game\"\n");
+        tmp.Write("Game.csproj", "<Project Sdk=\"Godot.NET.Sdk/4.7.2\">\n  <PropertyGroup>\n    <TargetFramework>net10.0</TargetFramework>\n  </PropertyGroup>\n</Project>\n");
+
+        var previousRunner = DoctorCommand.Runner;
+        var previousEnv = DoctorCommand.Environment;
+        DoctorCommand.Runner = new FakeProcessRunner(r => r.Args.Contains("build")
+            ? throw new OperationCanceledException()
+            : FakeProcessRunner.Result(r, 0));
+        DoctorCommand.Environment = new FakeEnvironment();
+        try
+        {
+            var run = CliConsole.Run("doctor", tmp.Dir, "--offline", "--build");
+            Assert.Equal(ExitCodes.Cancelled, run.ExitCode);
+            Assert.Contains("error: cancelled", run.Stderr);
+        }
+        finally
+        {
+            DoctorCommand.Runner = previousRunner;
+            DoctorCommand.Environment = previousEnv;
+        }
     }
 
     [Fact]

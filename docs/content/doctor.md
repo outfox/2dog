@@ -115,11 +115,13 @@ no `--to`. It plans, shows the plan (`--dry-run` stops there), then:
    `Directory.Build.props` block (projects created by older tools);
 2. sets `TwoDogVersion`, `TwoDogNativesVersion` and `TwoDogGodotVersion` in
    that block, and raises the companion versions (Avalonia, Windows App SDK,
-   ASP.NET Core) when the tool's are newer;
+   ASP.NET Core) when the tool's are newer - a companion the project already
+   has at a newer version keeps it;
 3. sets the game project's `Godot.NET.Sdk` version to match;
 4. refreshes the tool-owned `TwoDogWebBoot.cs` when it drifted;
 5. runs `dotnet restore` (skip with `--no-restore`; a failure is explained like
-   a build failure).
+   a build failure and the update exits with code 2, the files already
+   rewritten).
 
 It never downgrades: a project ahead of the tool stops with the advice to run
 the newest tool. Crossing a Godot line (4.7 to 4.8) is applied but announced:
@@ -141,7 +143,7 @@ The ids below are what `--ignore` and the JSON report use. Run
 | game csproj | `game.sdk`, `game.sdk-mismatch`, `game.target-framework`, `game.properties`, `game.default-item-excludes`, `game.webboot-include`, `game.webboot-duplicate` |
 | hosts | `host.gdignore`, `host.project-reference`, `host.godot-project-dir`, `host.variant`, `host.buildtype-deprecated`, `host.publish-aot`, `host.duplicate-analyzers`, `host.app-manifest`, `host.web-props-shim`, `host.web-global-json`, `host.webboot-drift`, `host.trimmer-root`, `host.blazor-client`, `host.windows-only` |
 | solution | `sln.exists`, `sln.multiple`, `sln.legacy-format`, `sln.contains-game`, `sln.contains-hosts`, `sln.build-exclusions` |
-| versions | `ver.managed-elsewhere`, `ver.literal-versions`, `ver.twodog-consistent`, `ver.twodog-outdated`, `ver.twodog-newer`, `ver.natives`, `ver.godot-line-consistent`, `ver.godotsharp-editor`, `ver.companions`, `ver.tool-latest` |
+| versions | `ver.managed-elsewhere`, `ver.props-invalid`, `ver.literal-versions`, `ver.twodog-consistent`, `ver.twodog-outdated`, `ver.twodog-newer`, `ver.natives`, `ver.godot-line-consistent`, `ver.godotsharp-editor`, `ver.companions`, `ver.tool-latest` |
 | presets | `preset.file`, `preset.web`, `preset.desktop` |
 | godot settings | `godot.features-line`, `godot.xr-shaders`, `godot.import-stamp` |
 

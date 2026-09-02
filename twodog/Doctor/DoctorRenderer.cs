@@ -111,5 +111,6 @@ internal static class DoctorRenderer
     /// <summary>What fits after the glyph and label on this terminal (redirected output never wraps).</summary>
     private static int SummaryWidth => Math.Clamp(Out.Console.Profile.Width - LabelWidth - 4, 40, 200);
 
-    internal static string Plural(int n, string word) => n == 1 ? $"{n} {word}" : $"{n} {word}s";
+    internal static string Plural(int n, string word) =>
+        n == 1 ? $"{n} {word}" : word.EndsWith('x') || word.EndsWith('s') ? $"{n} {word}es" : $"{n} {word}s";
 }

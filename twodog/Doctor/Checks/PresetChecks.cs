@@ -19,8 +19,8 @@ internal static class PresetChecks
 
         if (p.ExportPresetsText is not { } text)
         {
-            yield return new Finding("preset.file", c, Severity.Warn, $"{ExportPresetOps.FileName} missing",
-                "publishes export the game pck through it (the build stops without it)", null, ExportPresetOps.FileName,
+            yield return new Finding("preset.file", c, Severity.Fail, $"{ExportPresetOps.FileName} missing",
+                "publishes export the game pck through it (the publish stops without it)", null, ExportPresetOps.FileName,
                 new Fix("presets:create", FixClass.Safe, $"create {ExportPresetOps.FileName} (web + desktop export presets)",
                     () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             yield break;

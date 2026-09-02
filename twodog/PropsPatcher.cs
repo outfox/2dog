@@ -27,11 +27,17 @@ internal static class PropsPatcher
         doc.Root?.Elements().FirstOrDefault(e =>
             e.Name.LocalName == "PropertyGroup" && (string?)e.Attribute("Label") == Label);
 
-    /// <summary>The values the block currently holds (name -> value), empty when there is no block.</summary>
+    /// <summary>
+    /// The values the block currently holds (name -> value), empty when there is no block. MSBuild property names
+    /// are case-insensitive and the last definition wins, so duplicates read the way MSBuild evaluates them.
+    /// </summary>
     public static Dictionary<string, string> Read(string propsPath)
     {
         var doc = MsBuildXml.Load(propsPath);
-        return FindGroup(doc)?.Elements().ToDictionary(e => e.Name.LocalName, e => e.Value.Trim()) ?? [];
+        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var element in FindGroup(doc)?.Elements() ?? [])
+            values[element.Name.LocalName] = element.Value.Trim();
+        return values;
     }
 
     /// <summary>

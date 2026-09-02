@@ -5,6 +5,7 @@ namespace twodog.tests.ToolTests;
 
 // `2dog doctor`: a fresh scaffold is clean, every breaker is found by id, safe fixes repair and are idempotent,
 // announced fixes wait for --fix-all, and the exit code says whether findings remain.
+[Collection("doctor statics")] // DoctorCommand.Runner/Environment are process-wide seams: never swap them in parallel.
 public class DoctorTests : IDisposable
 {
     private readonly TempProjectDir _tmp = new();
@@ -325,6 +326,91 @@ public class DoctorTests : IDisposable
     }
 
     [Fact]
+    public void HostCsproj_MissingBothProperties_IsOneFix()
+    {
+        var dir = Scaffold("--desktop");
+        Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "");
+        Edit(dir, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>", "");
+
+        var broken = Doctor(dir, null, "--json");
+        Assert.NotNull(Issue(broken.Stdout, "host.godot-project-dir"));
+        Assert.NotNull(Issue(broken.Stdout, "host.duplicate-analyzers"));
+
+        Assert.Equal(0, Doctor(dir, null, "--fix").ExitCode);
+        var after = Doctor(dir, null, "--json");
+        Assert.Null(Issue(after.Stdout, "host.godot-project-dir"));
+        Assert.Null(Issue(after.Stdout, "host.duplicate-analyzers"));
+        var csproj = File.ReadAllText(Path.Combine(dir, "Game.2dog", "Game.2dog.csproj"));
+        Assert.Equal(2, csproj.Split("added by 2dog doctor").Length);
+    }
+
+    [Fact]
+    public void FixAll_ComposesTheTargetFrameworkUpgrade_WithSafePatches()
+    {
+        var dir = Scaffold("--desktop", "--tests");
+        Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>", "<TargetFramework>net8.0</TargetFramework>");
+        Edit(dir, "Game.csproj", ";Game.tests/**", "");
+
+        var broken = Doctor(dir, null, "--json");
+        Assert.Equal("announced", Finding(broken.Stdout, "game.target-framework")!.Value.GetProperty("fix").GetProperty("class").GetString());
+        Assert.Equal("safe", Finding(broken.Stdout, "game.default-item-excludes")!.Value.GetProperty("fix").GetProperty("class").GetString());
+
+        Assert.Equal(0, Doctor(dir, null, "--fix-all").ExitCode);
+        var csproj = File.ReadAllText(Path.Combine(dir, "Game.csproj"));
+        Assert.Contains("<TargetFramework>net10.0</TargetFramework>", csproj);
+        Assert.DoesNotContain("net8.0", csproj);
+        Assert.Contains("Game.tests/**", csproj);
+        var after = Doctor(dir, null, "--json");
+        Assert.Null(Issue(after.Stdout, "game.target-framework"));
+        Assert.Null(Issue(after.Stdout, "game.default-item-excludes"));
+    }
+
+    [Fact]
+    public void LoadProblems_CoverTraversalAssemblyNames_AndUnreadableFiles()
+    {
+        var dir = Scaffold("--desktop");
+        Edit(dir, "project.godot", "project/assembly_name=\"Game\"", "project/assembly_name=\"../Game\"");
+        var model = ProjectModel.Load(dir);
+        Assert.Contains(model.LoadProblems, p => p.Contains("assembly_name '../Game'"));
+        Assert.Equal("Game", model.BaseName);
+        Assert.Equal("fail", Finding(Doctor(dir, null, "--json").Stdout, "layout.load-problems")!.Value.GetProperty("severity").GetString());
+
+        var game = Path.Combine(dir, "Game.csproj");
+        void AssertUnreadable()
+        {
+            var locked = ProjectModel.Load(dir);
+            Assert.Contains(locked.LoadProblems, p => p.StartsWith("Game.csproj:"));
+            Assert.Null(locked.GameCsprojText);
+        }
+
+        if (OperatingSystem.IsWindows())
+        {
+            using var handle = File.Open(game, FileMode.Open, FileAccess.Read, FileShare.None);
+            AssertUnreadable();
+        }
+        else
+        {
+            if (Environment.IsPrivilegedProcess) return;
+            var mode = File.GetUnixFileMode(game);
+            File.SetUnixFileMode(game, UnixFileMode.None);
+            try { AssertUnreadable(); }
+            finally { File.SetUnixFileMode(game, mode); }
+        }
+    }
+
+    [Fact]
+    public void AmbiguousSolutions_AreNotSilentlyPicked()
+    {
+        var dir = Scaffold("--desktop");
+        File.Copy(Path.Combine(dir, "Game.slnx"), Path.Combine(dir, "Other.slnx"));
+
+        var model = ProjectModel.Load(dir);
+        Assert.Equal(2, model.GameSolutions.Count);
+        Assert.Null(model.Solution);
+        Assert.Equal("fail", Finding(Doctor(dir, null, "--json").Stdout, "sln.multiple")!.Value.GetProperty("severity").GetString());
+    }
+
+    [Fact]
     public void Showcase_HasNoErrors()
     {
         var showcase = Path.Combine(HelperToolTestBed.RepoRoot, "demos", "showcase");
@@ -385,6 +471,14 @@ public class DotnetInfoTests
         Assert.Equal((null, "latestPatch"), DotnetInfo.ParseGlobalJson("{}"));
         Assert.Equal((null, "latestPatch"), DotnetInfo.ParseGlobalJson("not json"));
     }
+
+    [Fact]
+    public void ParseGlobalJson_ToleratesWrongShapes()
+    {
+        Assert.Equal((null, "latestPatch"), DotnetInfo.ParseGlobalJson("[]"));
+        Assert.Equal((null, "latestPatch"), DotnetInfo.ParseGlobalJson("{ \"sdk\": \"10.0.100\" }"));
+        Assert.Equal((null, "latestPatch"), DotnetInfo.ParseGlobalJson("{ \"sdk\": { \"version\": 10, \"rollForward\": false } }"));
+    }
 }
 
 public class BuildLogAnalyzerTests
@@ -397,6 +491,7 @@ public class BuildLogAnalyzerTests
             ["build.variant-invalid"] = "error : TwoDog: invalid TwoDogVariant 'fast'. Allowed values: release, debug, editor.",
             ["build.publish-aot"] = "error : TwoDog: PublishAot (NativeAOT) is not supported for 2dog desktop hosts.",
             ["build.no-import-capability"] = "warning : TwoDog: Godot project 'x' needs a resource import, but no import capability was found (editor libgodot='', helper='', tools='').",
+            ["build.import-required"] = "error : TwoDog: import required (TwoDogRequireImport=true) but no import capability is available (editor libgodot='', helper='', tools='').",
             ["build.web-payload-missing"] = "error : TwoDog: web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.release package v4.7.2.3 and the source checkout.",
             ["build.native-missing"] = "warning : 2dog: could not locate libgodot-debug.dll for 2dog.win-x64. Searched NuGet: x - local: y.",
             ["build.nu1213"] = "error NU1213: The package 2dog 4.7.2.79 has a package type DotnetTool that is incompatible with this project.",
@@ -410,6 +505,18 @@ public class BuildLogAnalyzerTests
             var diagnosis = BuildLogAnalyzer.Analyze(line);
             Assert.Contains(diagnosis.Matches, m => m.Signature.Id == id);
         }
+    }
+
+    [Fact]
+    public void RequiredImport_IsAFailure_WhereTheSkippedImportIsAWarning()
+    {
+        var skipped = BuildLogAnalyzer.Analyze("warning : TwoDog: Godot project 'x' needs a resource import, but no import capability was found (editor libgodot='', helper='', tools='').");
+        Assert.Contains(skipped.Matches, m => m.Signature.Id == "build.no-import-capability" && m.Signature.Severity == Severity.Warn);
+        Assert.False(skipped.HasProblems);
+
+        var required = BuildLogAnalyzer.Analyze("error : TwoDog: import required (TwoDogRequireImport=true) but no import capability is available (editor libgodot='', helper='', tools='').");
+        Assert.Contains(required.Matches, m => m.Signature.Id == "build.import-required" && m.Signature.Severity == Severity.Fail);
+        Assert.True(required.HasProblems);
     }
 
     [Fact]

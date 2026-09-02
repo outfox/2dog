@@ -224,6 +224,21 @@ public class CsprojPatcherTests
         Assert.Contains("<TargetFramework>net10.0</TargetFramework>", result.NewContent);
     }
 
+    // Doctor derives its safe fix from the non-upgrading pass, so a missing TFM must stay an announced change.
+    [Fact]
+    public void MissingTargetFramework_IsAddedOnlyWhenUpgrading()
+    {
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj", Bare.Replace("<TargetFramework>net10.0</TargetFramework>", ""));
+        var safe = CsprojPatcher.Patch(path, HostFolders, upgradeTargetFramework: false);
+        Assert.DoesNotContain(safe.Added, a => a.StartsWith("TargetFramework", StringComparison.Ordinal));
+        Assert.DoesNotContain("TargetFramework", safe.NewContent);
+
+        var full = CsprojPatcher.Patch(path, HostFolders);
+        Assert.Contains("TargetFramework: net10.0", full.Added);
+        Assert.Contains("<TargetFramework>net10.0</TargetFramework>", full.NewContent);
+    }
+
     [Fact]
     public void RePatch_IsIdempotent()
     {
@@ -1053,6 +1068,55 @@ public class AddEndToEndTests
             System.IO.Path.Combine(tmp.Dir, "SpaceMiner.slnx"), $"SpaceMiner.{suffix}.csproj"));
         Assert.Contains(HostScan.Find(tmp.Dir),
             h => h.Kind == kind && h.Folder == $"SpaceMiner.{suffix}");
+    }
+
+    [Fact]
+    public void Add_ExistingWebHostWithoutASolution_ExcludesItFromTheNewSolution()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+        var slnx = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.slnx");
+        File.Delete(slnx);
+
+        // Nothing new to scaffold: the run only recreates the solution, and the existing web host must leave
+        // plain builds of it just like a freshly created one.
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+        Assert.True(SolutionOps.ContainsProject(slnx, "SpaceMiner.web.csproj"));
+        Assert.True(SolutionOps.IsExcludedFromSolutionBuild(slnx, "SpaceMiner.web/SpaceMiner.web.csproj"));
+
+        var snapshot = Snapshot(tmp.Dir);
+        Assert.Equal(0, Run(Options(tmp.Dir)));
+        Assert.Equal(snapshot, Snapshot(tmp.Dir));
+    }
+
+    [Fact]
+    public void Add_ReExcludesABlazorClient_TheSolutionLetBackIn()
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        var options = Options(tmp.Dir, web: false, tests: false);
+        options.Hosts = [new HostSpec(HostKind.Blazor, "SpaceMiner.blazor")];
+        Assert.Equal(0, Run(options));
+
+        var slnx = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.slnx");
+        const string server = "SpaceMiner.blazor/SpaceMiner.blazor.csproj";
+        const string client = "SpaceMiner.blazor/Client/SpaceMiner.blazor.Client.csproj";
+        Assert.True(SolutionOps.IsExcludedFromSolutionBuild(slnx, client));
+
+        // Drop the client's exclusion only; the server keeps its own.
+        var text = File.ReadAllText(slnx);
+        var block = Regex.Match(text,
+            "<Project Path=\"SpaceMiner\\.blazor[\\\\/]Client[\\\\/]SpaceMiner\\.blazor\\.Client\\.csproj\">.*?</Project>",
+            RegexOptions.Singleline);
+        Assert.True(block.Success);
+        File.WriteAllText(slnx, text.Replace(block.Value, Regex.Replace(block.Value, "\\s*<Build Project=\"false\" />", "")));
+        Assert.False(SolutionOps.IsExcludedFromSolutionBuild(slnx, client));
+        Assert.True(SolutionOps.IsExcludedFromSolutionBuild(slnx, server));
+
+        Assert.Equal(0, Run(Options(tmp.Dir, web: false, tests: false)));
+        Assert.True(SolutionOps.IsExcludedFromSolutionBuild(slnx, client));
+        Assert.True(SolutionOps.IsExcludedFromSolutionBuild(slnx, server));
     }
 
     [Fact]

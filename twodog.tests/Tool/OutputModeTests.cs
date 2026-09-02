@@ -123,6 +123,26 @@ public class OutputModeTests
         Assert.DoesNotMatch("\x1b", run.Stderr);
     }
 
+    /// <summary>Spectre's built-in CI enrichers force ANSI on under GITHUB_ACTIONS; the gateway must not let them.</summary>
+    [Fact]
+    public void CiEnvironment_DoesNotForceEscapeSequences()
+    {
+        var previous = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
+        Environment.SetEnvironmentVariable("GITHUB_ACTIONS", "true");
+        try
+        {
+            Out.PinConsoleFacts(ConsoleFacts.Redirected);
+            var run = CliConsole.Run("--help");
+            Assert.DoesNotMatch("\x1b", run.Stdout);
+            Assert.DoesNotMatch("\x1b", run.Stderr);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("GITHUB_ACTIONS", previous);
+            Out.PinConsoleFacts(ConsoleFacts.Redirected);
+        }
+    }
+
     [Fact]
     public void Quiet_KeepsResultsAndProblems_DropsNarration()
     {
@@ -224,7 +244,7 @@ public class OutGuardTests
     {
         CliConsole.Capture(() =>
         {
-            // Contains, not Equal: the collectors are process-wide and tests in other collections print too.
+            // Contains, not Equal: the collectors are flow-local, but this flow prints its own header first.
             Out.Note("n");
             Out.Warning("w");
             Out.ErrorLine("e");

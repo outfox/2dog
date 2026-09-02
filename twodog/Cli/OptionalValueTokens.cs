@@ -41,5 +41,5 @@ internal static class OptionalValueTokens
     /// read as the project path.
     /// </summary>
     internal static bool IsFolderToken(string token) =>
-        !token.StartsWith('-') && !token.Contains('/') && !token.Contains('\\') && token != ".";
+        !token.StartsWith('-') && !token.Contains('/') && !token.Contains('\\') && token is not ("." or "..");
 }

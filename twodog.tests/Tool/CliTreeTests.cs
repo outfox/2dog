@@ -100,6 +100,43 @@ public class CliTreeTests
         Assert.Empty(cmd.Requested);
     }
 
+    // Global options are accepted before the verb: `2dog --json add` runs add, it does not print the usage.
+    // (The verb is a string: internal enums cannot be theory parameters of a public method.)
+    [Theory]
+    [InlineData("Add", "--json", "add")]
+    [InlineData("New", "-y", "new", "X")]
+    [InlineData("Doctor", "--verbose", "doctor")]
+    [InlineData("Pack", "pack", "--quiet", "list", "x.pck")]
+    public void GlobalOptions_MayComeBeforeTheVerb(string expected, params string[] args)
+    {
+        var cmd = CommandLine.Parse(args);
+        Assert.Equal(expected, cmd.Verb.ToString());
+        if (args[0] != "-y") return;
+        Assert.True(cmd.NoInteractive);
+        Assert.Equal("X", cmd.Options.NameOverride);
+    }
+
+    [Fact]
+    public void Pin_BeforeTheVerb_IsStillTheUsageError()
+    {
+        var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--pin", "convert"]));
+        Assert.Contains("cannot pin its own version", ex.Message);
+    }
+
+    [Fact]
+    public void VerbOptions_BeforeTheVerb_AreRejectedAtTheRoot()
+    {
+        var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--dry-run", "add"]));
+        Assert.Contains("unknown option '--dry-run' here - a verb comes first", ex.Message);
+    }
+
+    [Fact]
+    public void DoubleDash_BeforeAnyVerb_AsksForOne()
+    {
+        var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--quiet", "--", "add"]));
+        Assert.StartsWith("a verb is required before '--'", ex.Message);
+    }
+
     [Theory]
     [InlineData("--name=Foo")]
     [InlineData("--name:Foo")]
@@ -272,6 +309,7 @@ public class OptionalValueTokensTests
     [InlineData("Folder", true)]
     [InlineData("My.Game.web2", true)]
     [InlineData(".", false)]
+    [InlineData("..", false)]
     [InlineData("./x", false)]
     [InlineData("a\\b", false)]
     [InlineData("-x", false)]

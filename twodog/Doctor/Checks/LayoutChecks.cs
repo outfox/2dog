@@ -45,10 +45,11 @@ internal static class LayoutChecks
                 new Fix("godot:assembly-name", FixClass.Safe, $"append [dotnet] assembly_name=\"{name}\" to project.godot",
                     () => godot.AppendDotnetSection(name)));
         }
-        else if (assemblyName != null && p.RootCsprojs.Count > 0 && !p.RootCsprojs.Contains(assemblyName))
+        else if (assemblyName != null && !p.RootCsprojs.Contains(assemblyName))
         {
+            var found = p.RootCsprojs.Count > 0 ? string.Join(", ", p.RootCsprojs) : "no csproj at the root";
             yield return new Finding("layout.assembly-name", c, Severity.Fail,
-                $"project.godot names the assembly '{assemblyName}' but no {assemblyName}.csproj exists (found: {string.Join(", ", p.RootCsprojs)})",
+                $"project.godot names the assembly '{assemblyName}' but no {assemblyName}.csproj exists (found: {found})",
                 "the Godot editor requires res://<assembly_name>.csproj", "rename the csproj or fix assembly_name", "project.godot");
         }
         else if (assemblyName != null)
@@ -81,11 +82,21 @@ internal static class LayoutChecks
         if (p.Hosts.Count > 0)
         {
             var targets = Path.Combine(p.Dir, "Directory.Build.targets");
-            yield return p.HasRootBuildTargets
-                ? Finding.Pass("layout.root-build-targets", c, "Directory.Build.targets")
-                : InheritedFromAbove(p.Dir, "Directory.Build.targets")
-                    ? new Finding("layout.root-build-targets", c, Severity.Info, "Directory.Build.targets comes from a parent directory")
-                : new Finding("layout.root-build-targets", c, Severity.Warn, "Directory.Build.targets missing (TwoDogDeepClean target)",
+            var inherited = FindAbove(p.Dir, "Directory.Build.targets");
+            // A root file may import the parent's, so a target defined in either counts.
+            var deepClean = (p.HasRootBuildTargets && Mentions(targets, "TwoDogDeepClean"))
+                            || (inherited != null && Mentions(inherited, "TwoDogDeepClean"));
+            if (p.HasRootBuildTargets)
+                yield return deepClean
+                    ? Finding.Pass("layout.root-build-targets", c, "Directory.Build.targets")
+                    : new Finding("layout.root-build-targets", c, Severity.Warn, "Directory.Build.targets does not define the TwoDogDeepClean target",
+                        "clean would leave per-configuration outputs behind",
+                        "add the target from the template (2dog never edits your Directory.Build.targets)", "Directory.Build.targets");
+            else if (inherited != null)
+                yield return new Finding("layout.root-build-targets", c, Severity.Info,
+                    deepClean ? "Directory.Build.targets comes from a parent directory" : "Directory.Build.targets comes from a parent directory (no TwoDogDeepClean target there)");
+            else
+                yield return new Finding("layout.root-build-targets", c, Severity.Warn, "Directory.Build.targets missing (TwoDogDeepClean target)",
                     "clean would leave per-configuration outputs behind", null, "Directory.Build.targets",
                     new Fix("create:Directory.Build.targets", FixClass.Safe, "create Directory.Build.targets (shared clean target)",
                         () => File.WriteAllText(targets, TemplateAssets.RootBuildTargets())));
@@ -102,22 +113,44 @@ internal static class LayoutChecks
         if (p.HasWebLikeHost)
         {
             var globalJson = Path.Combine(p.Dir, "global.json");
-            yield return p.RootGlobalJsonText != null
-                ? Finding.Pass("layout.root-global-json", c, "global.json")
-                : InheritedFromAbove(p.Dir, "global.json")
-                    ? new Finding("layout.root-global-json", c, Severity.Info, "global.json comes from a parent directory")
-                : new Finding("layout.root-global-json", c, Severity.Warn, "global.json missing at the project root",
+            if (p.RootGlobalJsonText is { } json)
+            {
+                // The pin is user-owned: a pre-10 pin that cannot roll forward to a major is reported, never edited.
+                var (pin, roll) = DotnetInfo.ParseGlobalJson(json);
+                var tooOld = pin != null && pin.Major < 10 && roll.ToLowerInvariant() is not ("latestmajor" or "major");
+                yield return tooOld
+                    ? new Finding("layout.root-global-json", c, Severity.Warn, $"global.json pins SDK {pin} ({roll}); browser hosts need a .NET 10 SDK",
+                        "publishing a browser host from the project root would use that SDK, which has no net10.0 wasm-tools",
+                        "pin a 10.0 SDK (2dog never edits global.json)", "global.json")
+                    : Finding.Pass("layout.root-global-json", c, pin != null ? $"global.json {pin}" : "global.json");
+            }
+            else if (FindAbove(p.Dir, "global.json") != null)
+            {
+                yield return new Finding("layout.root-global-json", c, Severity.Info, "global.json comes from a parent directory");
+            }
+            else
+            {
+                yield return new Finding("layout.root-global-json", c, Severity.Warn, "global.json missing at the project root",
                     "publishing a browser host from the project root needs the SDK 10 pin (its own folder has one)", null, "global.json",
                     new Fix("create:global.json", FixClass.Safe, "create global.json (pins a wasm-capable SDK)",
                         () => File.WriteAllText(globalJson, TemplateAssets.RootGlobalJson())));
+            }
         }
     }
 
     /// <summary>A monorepo may keep the file above the project; MSBuild and the SDK resolver find it there.</summary>
-    private static bool InheritedFromAbove(string dir, string fileName)
+    private static string? FindAbove(string dir, string fileName)
     {
         for (var parent = Directory.GetParent(dir); parent != null; parent = parent.Parent)
-            if (File.Exists(Path.Combine(parent.FullName, fileName))) return true;
-        return false;
+            if (File.Exists(Path.Combine(parent.FullName, fileName))) return Path.Combine(parent.FullName, fileName);
+        return null;
+    }
+
+    /// <summary>Whether the file names the token; an unreadable file raises no finding of its own here.</summary>
+    private static bool Mentions(string path, string token)
+    {
+        try { return File.ReadAllText(path).Contains(token, StringComparison.Ordinal); }
+        catch (IOException) { return true; }
+        catch (UnauthorizedAccessException) { return true; }
     }
 }

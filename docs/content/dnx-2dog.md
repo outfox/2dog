@@ -103,6 +103,8 @@ second host of the same kind.
 | `-h, --help` | Show help; after a verb, the help for that verb |
 
 Options take their value attached or separate: `--name Foo`, `--name=Foo`.
+The global ones (`-y`, `--help`, `--version` and the output options below) may
+also come before the verb: `2dog --json add`.
 A `--` ends option parsing, so a path starting with a dash still works.
 Mistyped options and verbs get a suggestion (`unknown option '--dekstop' (did
 you mean --desktop?)`).
