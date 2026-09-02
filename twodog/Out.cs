@@ -54,6 +54,7 @@ internal static class Out
         _stdout = Create(stdErr: false);
         _stderr = Create(stdErr: true);
         CollectedSlot.Value = new Collectors();
+        TerminalDirty = false;
     }
 
     /// <summary>
@@ -257,6 +258,8 @@ internal static class Out
         if (!TerminalDirty || Mode.Json) return;
         if (Console.Profile.Capabilities.Ansi) Console.Profile.Out.Writer.Write("\e[?25h\e[0m");
         if (Error.Profile.Capabilities.Ansi) Error.Profile.Out.Writer.Write("\e[?25h\e[0m");
+        // Restored once: a later in-process run that draws nothing has nothing to undo.
+        TerminalDirty = false;
     }
 
     public static void Plan(IReadOnlyList<ActionReport> plan)
