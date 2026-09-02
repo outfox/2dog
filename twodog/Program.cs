@@ -13,7 +13,7 @@ internal static class Program
             try { Console.OutputEncoding = System.Text.Encoding.UTF8; } catch { /* no console attached */ }
 
         // Resolved from the raw arguments so that even a usage error renders in the requested mode.
-        Out.Configure(OutputMode.Resolve(args, Environment.GetEnvironmentVariable, Out.Facts));
+        Out.Configure(OutputMode.Resolve(args, Out.Env, Out.Facts));
         Cancellation.Install();
 
         var report = new Report();
