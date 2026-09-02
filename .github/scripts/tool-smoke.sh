@@ -4,7 +4,13 @@
 # Expects: packages/ (nuget-packages artifact) and godot/ (godot-bin artifact) in the checkout, the .NET 10 SDK.
 set -euo pipefail
 
-root="$(cd "$(dirname "$0")/../.." && pwd)"
+# The assertions grep for plain prefixes; runners that force colour (FORCE_COLOR) would wrap them in escapes.
+echo "colour env: $(env | grep -iE '^(FORCE_COLOR|CLICOLOR|CLICOLOR_FORCE|NO_COLOR|TERM)=' | tr '\n' ' ' || true)"
+unset FORCE_COLOR CLICOLOR_FORCE
+export NO_COLOR=1
+
+# Native path on Windows (Git Bash would hand NuGet /c/... which it reads as C:\c\...).
+root="$(cd "$(dirname "$0")/../.." && (pwd -W 2>/dev/null || pwd))"
 version="$(dotnet msbuild "$root/twodog/twodog.csproj" -getProperty:TwoDogVersion)"
 work="${RUNNER_TEMP:-/tmp}/2dog-tool-smoke"
 rm -rf "$work"

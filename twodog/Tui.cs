@@ -14,11 +14,17 @@ internal static class Tui
     public static bool CanPrompt => Out.Mode.CanPrompt && Out.Console.Profile.Capabilities.Interactive;
 
     /// <summary>Runs a prompt on the stdout console; Ctrl+C cancels it instead of killing the process mid-draw.</summary>
-    private static T Ask<T>(IPrompt<T> prompt) =>
-        Out.Console.PromptAsync(prompt, Cancellation.Token).GetAwaiter().GetResult();
+    private static T Ask<T>(IPrompt<T> prompt)
+    {
+        Out.TerminalDirty = true;
+        return Out.Console.PromptAsync(prompt, Cancellation.Token).GetAwaiter().GetResult();
+    }
 
-    private static bool Confirm(string text, bool defaultValue = true) =>
-        Out.Console.ConfirmAsync(text, defaultValue, Cancellation.Token).GetAwaiter().GetResult();
+    private static bool Confirm(string text, bool defaultValue = true)
+    {
+        Out.TerminalDirty = true;
+        return Out.Console.ConfirmAsync(text, defaultValue, Cancellation.Token).GetAwaiter().GetResult();
+    }
 
     public static void Header() => Out.Header();
 

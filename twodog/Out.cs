@@ -22,6 +22,9 @@ internal static class Out
     /// <summary>Console facts as captured at startup, or as pinned by tests.</summary>
     public static ConsoleFacts Facts => _pinnedFacts ?? ConsoleFacts.Capture();
 
+    /// <summary>The environment the mode is resolved from; tests pin an empty one so a runner's colour settings cannot leak in.</summary>
+    public static Func<string, string?> Env { get; private set; } = Environment.GetEnvironmentVariable;
+
     public static IAnsiConsole Console => _stdout;
     public static IAnsiConsole Error => _stderr;
 
@@ -52,7 +55,8 @@ internal static class Out
     internal static void PinConsoleFacts(ConsoleFacts facts)
     {
         _pinnedFacts = facts;
-        Configure(OutputMode.Resolve([], _ => null, facts));
+        Env = _ => null;
+        Configure(OutputMode.Resolve([], Env, facts));
     }
 
     private static IAnsiConsole Create(bool stdErr)
@@ -222,14 +226,22 @@ internal static class Out
     public static T Status<T>(string label, Func<T> work)
     {
         if (Mode.Animate)
+        {
+            TerminalDirty = true;
             return Error.Status().Start(Markup.Escape(label), _ => work());
+        }
+
         Verbose($"{label}...");
         return work();
     }
 
+    /// <summary>Set once a prompt or spinner has drawn: only then is there a cursor state worth restoring.</summary>
+    internal static bool TerminalDirty { get; set; }
+
     /// <summary>Shows the cursor and resets styling, in case a prompt or spinner was interrupted mid-way.</summary>
     public static void RestoreTerminal()
     {
+        if (!TerminalDirty) return;
         if (Console.Profile.Capabilities.Ansi) Console.Profile.Out.Writer.Write("\e[?25h\e[0m");
         if (Error.Profile.Capabilities.Ansi) Error.Profile.Out.Writer.Write("\e[?25h\e[0m");
     }
