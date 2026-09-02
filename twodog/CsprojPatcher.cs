@@ -4,7 +4,8 @@ namespace twodog.cli;
 
 /// <summary>
 /// Minimal in-place patching of an existing Godot project csproj: appends one clearly-marked PropertyGroup with the
-/// 2dog properties not already present. Existing target frameworks are upgraded in place.
+/// 2dog properties not already present. Target frameworks are upgraded in place (or added) only when asked, since
+/// that changes what the project compiles against.
 /// </summary>
 internal static class CsprojPatcher
 {
@@ -37,7 +38,7 @@ internal static class CsprojPatcher
         var patch = new XElement(ns + "PropertyGroup");
 
         var targetFrameworks = properties.Where(e => e.Name.LocalName == "TargetFramework").ToList();
-        if (targetFrameworks.Count == 0)
+        if (targetFrameworks.Count == 0 && upgradeTargetFramework)
         {
             patch.Add(Element(ns, "TargetFramework", TargetFramework));
             added.Add($"TargetFramework: {TargetFramework}");

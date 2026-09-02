@@ -67,6 +67,40 @@ public class PropsPatcherTests
     }
 
     [Fact]
+    public void Read_TakesTheLastOfDuplicateProperties_LikeMsBuild()
+    {
+        using var tmp = new TempProjectDir();
+        var props = tmp.Write("Directory.Build.props",
+            "<Project>\n  <PropertyGroup Label=\"2dog\">\n    <TwoDogVersion>4.7.1.10</TwoDogVersion>\n" +
+            "    <twodogversion>4.7.2.5</twodogversion>\n  </PropertyGroup>\n</Project>\n");
+
+        var values = PropsPatcher.Read(props);
+        Assert.Single(values);
+        Assert.Equal("4.7.2.5", values["TwoDogVersion"]);
+    }
+
+    [Fact]
+    public void Write_KeepsTheFilesOwnEncoding()
+    {
+        using var tmp = new TempProjectDir();
+        var utf16 = Path.Combine(tmp.Dir, "utf16.props");
+        File.WriteAllText(utf16, "<?xml version=\"1.0\" encoding=\"utf-16\"?>\n<Project>\n</Project>\n", System.Text.Encoding.Unicode);
+        MsBuildXml.Write(utf16, "<?xml version=\"1.0\" encoding=\"utf-16\"?>\n<Project>\n  <PropertyGroup />\n</Project>\n");
+        Assert.Equal(new byte[] { 0xFF, 0xFE }, File.ReadAllBytes(utf16).Take(2).ToArray());
+        Assert.NotNull(MsBuildXml.Load(utf16).Root);
+
+        var bom = Path.Combine(tmp.Dir, "bom.props");
+        File.WriteAllText(bom, "<Project>\n</Project>\n", new System.Text.UTF8Encoding(true));
+        MsBuildXml.Write(bom, "<Project>\n  <PropertyGroup />\n</Project>\n");
+        Assert.Equal(new byte[] { 0xEF, 0xBB, 0xBF }, File.ReadAllBytes(bom).Take(3).ToArray());
+
+        var plain = Path.Combine(tmp.Dir, "plain.props");
+        File.WriteAllText(plain, "<Project>\n</Project>\n");
+        MsBuildXml.Write(plain, "<Project>\n  <PropertyGroup />\n</Project>\n");
+        Assert.Equal((byte)'<', File.ReadAllBytes(plain)[0]);
+    }
+
+    [Fact]
     public void SetValues_RewritesOnlyTheBlock()
     {
         using var tmp = new TempProjectDir();

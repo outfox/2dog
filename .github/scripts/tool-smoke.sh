@@ -4,7 +4,7 @@
 # Expects: packages/ (nuget-packages artifact) and godot/ (godot-bin artifact) in the checkout, the .NET 10 SDK.
 set -euo pipefail
 
-# The assertions grep for plain prefixes; runners that force colour (FORCE_COLOR) would wrap them in escapes.
+# The assertions grep for plain prefixes; keep colour off whatever the runner exports (and log what it does).
 echo "colour env: $(env | grep -iE '^(FORCE_COLOR|CLICOLOR|CLICOLOR_FORCE|NO_COLOR|TERM)=' | tr '\n' ' ' || true)"
 unset FORCE_COLOR CLICOLOR_FORCE
 export NO_COLOR=1

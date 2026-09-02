@@ -44,10 +44,14 @@ internal static class DoctorRunner
         return findings.Where(f => !ctx.Options.Ignore.Contains(f.Id)).ToList();
     }
 
-    /// <summary>The distinct fixes among the findings (one per key, any severity), in finding order.</summary>
+    /// <summary>
+    /// The distinct fixes among the findings (one per key, any severity): safe ones first, then announced, each in
+    /// finding order. Safe fixes never depend on announced ones; the reverse happens (sln:add before sln:migrate).
+    /// </summary>
     public static List<Fix> Fixes(IEnumerable<Finding> findings) =>
         findings.Select(f => f.Fix).OfType<Fix>().Where(f => f.Class != FixClass.Manual)
-            .GroupBy(f => f.Key).Select(g => g.First()).ToList();
+            .GroupBy(f => f.Key).Select(g => g.First())
+            .OrderBy(f => f.Class == FixClass.Announced ? 1 : 0).ToList();
 
     /// <summary>The fixes a policy applies: safe ones, plus the announced ones under --fix-all.</summary>
     public static List<Fix> Select(IEnumerable<Finding> findings, bool includeAnnounced) =>

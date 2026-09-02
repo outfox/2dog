@@ -404,7 +404,7 @@ internal static class ScaffoldCommand
                 project.BaseName, webBootFolder);
             plan.Add(new PlannedAction(
                 $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})", ActionKind.CreateFile,
-                () => File.WriteAllText(godotCsproj, content)));
+                () => MsBuildXml.Write(godotCsproj, content)));
 
             // A new project's project.godot already declares [dotnet]; a
             // planned rename owns the assembly_name write itself.
@@ -421,7 +421,7 @@ internal static class ScaffoldCommand
         if (result.NewContent is { } newContent)
             plan.Add(new PlannedAction(
                 $"patch {Path.GetFileName(godotCsproj)} ({string.Join("; ", result.Added)})", ActionKind.Patch,
-                () => File.WriteAllText(godotCsproj, newContent)));
+                () => MsBuildXml.Write(godotCsproj, newContent)));
     }
 
     /// <summary>
@@ -539,7 +539,7 @@ internal static class ScaffoldCommand
 
         if (PropsPatcher.AppendBlock(path) is not { } patched) return;
         plan.Add(new PlannedAction($"append the 2dog version block to your {PropsPatcher.FileName}", ActionKind.Patch,
-            () => File.WriteAllText(path, patched)));
+            () => MsBuildXml.Write(path, patched)));
     }
 
     private static void PlanWebBoot(
@@ -665,18 +665,15 @@ internal static class ScaffoldCommand
                 $"add {missing.Count} project(s) to {solutionName}", ActionKind.Solution,
                 () => SolutionOps.AddProjects(solutionPath, missing)));
 
-        // Existing hosts too: `dotnet sln add` rewrites the file, and older runs could not adjust every layout.
+        // Existing hosts too: a solution created above has no exclusions yet, `dotnet sln add` rewrites the file,
+        // and older runs could not adjust every layout.
         var toExclude = newHosts.Where(h => Hosts.ExcludedFromSolutionBuild(h.Kind))
             .Concat(existingHosts.Where(h => Hosts.ExcludedFromSolutionBuild(h.Kind))
-                .Where(h => exists && !SolutionOps.IsExcludedFromSolutionBuild(solutionPath, $"{h.Folder}/{h.Folder}.csproj"))
-                .Select(h => new HostSpec(h.Kind, h.Folder)));
+                .Select(h => new HostSpec(h.Kind, h.Folder))
+                .Where(h => !exists || SolutionProjects(h).Any(p => !SolutionOps.IsExcludedFromSolutionBuild(solutionPath, p))));
         foreach (var host in toExclude)
         {
-            // Separator-agnostic: SolutionOps matches either / or \\ in the solution. The Blazor server builds
-            // its wasm client, so both projects leave the solution build.
-            string[] relatives = host.Kind is HostKind.Blazor
-                ? [$"{host.Folder}/{host.Folder}.csproj", Hosts.BlazorClientProject(host.Folder)]
-                : [$"{host.Folder}/{host.Folder}.csproj"];
+            var relatives = SolutionProjects(host);
             var (why, note) = host.Kind switch
             {
                 HostKind.WinUi => ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems"),
@@ -712,6 +709,14 @@ internal static class ScaffoldCommand
                             "the wasm-tools workload (dotnet workload install wasm-tools) and restore again.");
             }));
     }
+
+    /// <summary>
+    /// The solution entries a host owns, separator-agnostic (SolutionOps matches / or \ in the file). The Blazor
+    /// server builds its wasm client, so both projects leave plain solution builds together.
+    /// </summary>
+    private static string[] SolutionProjects(HostSpec host) => host.Kind is HostKind.Blazor
+        ? [$"{host.Folder}/{host.Folder}.csproj", Hosts.BlazorClientProject(host.Folder)]
+        : [$"{host.Folder}/{host.Folder}.csproj"];
 
     private static void PrintNextSteps(ProjectContext project, IReadOnlyList<HostSpec> hosts)
     {

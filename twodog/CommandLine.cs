@@ -72,7 +72,9 @@ internal static class CommandLine
         var (path, consumed) = CliTree.Resolve(args);
         var command = path[^1];
         var verb = CliTree.VerbOf(command);
-        RejectUnknownOptions(args, consumed, path, verb);
+        if (verb is null && consumed < args.Length && args[consumed] == "--")
+            throw new UsageException($"a verb is required before '--': {VerbList}");
+        RejectUnknownOptions(args, path, verb);
 
         var result = CliTree.Root.Parse(OptionalValueTokens.Normalize(args), CliTree.Configuration);
         if (Present(result, CliTree.HelpOption)) return new ParsedCommand { Verb = Verb.Help, HelpVerb = verb };
@@ -126,13 +128,13 @@ internal static class CommandLine
 
     /// <summary>
     /// Unknown --options must be rejected up front: System.CommandLine would otherwise treat them as positional
-    /// arguments (a project path) and never complain.
+    /// arguments (a project path) and never complain. Verb tokens carry no dash, so the whole line is walked.
     /// </summary>
-    private static void RejectUnknownOptions(string[] args, int from, List<Command> path, Verb? verb)
+    private static void RejectUnknownOptions(string[] args, List<Command> path, Verb? verb)
     {
         var options = CliTree.OptionsOf(path).ToList();
         var valid = options.SelectMany(CliTree.NamesOf).ToHashSet(StringComparer.Ordinal);
-        for (var i = from; i < args.Length; i++)
+        for (var i = 0; i < args.Length; i++)
         {
             var arg = args[i];
             if (arg == "--") return;

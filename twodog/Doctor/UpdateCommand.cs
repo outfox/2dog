@@ -31,7 +31,7 @@ internal static class UpdateCommand
         var warnings = new List<string>();
         PlanMigrations(plan, model);
         ScaffoldCommand.PlanRootBuildProps(plan, project.Dir);
-        PlanPropsValues(plan, project.Dir, current);
+        PlanPropsValues(plan, model, current);
         PlanGodotSdk(plan, model, warnings);
         PlanWebBootRefresh(plan, model);
 
@@ -72,6 +72,7 @@ internal static class UpdateCommand
                                     "update is easy to review, or pass --allow-dirty");
     }
 
+    /// <summary>The engine, natives and Godot line follow the tool; a newer companion is kept instead (see Targets).</summary>
     private static void RefuseDowngrade(Dictionary<string, Version> current)
     {
         foreach (var (name, value) in PropsPatcher.ToolValues.Take(3))
@@ -90,27 +91,39 @@ internal static class UpdateCommand
             if (newText == null) continue;
             var relative = Path.GetRelativePath(model.Dir, csproj).Replace('\\', '/');
             plan.Add(new PlannedAction($"switch {relative} to the shared version properties ({changes.Count} reference(s))",
-                ActionKind.Patch, () => File.WriteAllText(csproj, newText)));
+                ActionKind.Patch, () => MsBuildXml.Write(csproj, newText)));
         }
     }
 
-    /// <summary>The block follows the tool; companions only ever move up.</summary>
-    private static void PlanPropsValues(List<PlannedAction> plan, string projectDir, Dictionary<string, Version> current)
-    {
-        var path = Path.Combine(projectDir, PropsPatcher.FileName);
-        var values = PropsPatcher.ToolValues
-            .Where(v => !(current.TryGetValue(v.Name, out var have) && Version.TryParse(v.Value, out var tool) && have > tool))
+    /// <summary>
+    /// The values the block should hold: the tool's, except that a companion (Avalonia, Windows App SDK, ASP.NET
+    /// Core) the project already has at a newer version keeps it - a migrated literal must never go backwards.
+    /// </summary>
+    internal static List<(string Name, string Value)> Targets(Dictionary<string, Version> current) =>
+        PropsPatcher.ToolValues
+            .Select(v => current.TryGetValue(v.Name, out var have) && Version.TryParse(v.Value, out var tool) && have > tool
+                ? (v.Name, have.ToString())
+                : v)
             .ToList();
+
+    private static void PlanPropsValues(List<PlannedAction> plan, ProjectModel model, Dictionary<string, Version> current)
+    {
+        var path = Path.Combine(model.Dir, PropsPatcher.FileName);
+        var values = Targets(current);
+        // Without a block yet, the plan lists the move away from the literal versions the hosts carry today.
+        var block = model.PropsValues.Count > 0
+            ? model.PropsValues
+            : current.ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
         var changes = values
-            .Where(v => !current.TryGetValue(v.Name, out var have) || have.ToString() != v.Value)
-            .Select(v => current.TryGetValue(v.Name, out var have) ? $"{v.Name} {have} -> {v.Value}" : $"{v.Name} {v.Value}")
+            .Where(v => !block.TryGetValue(v.Name, out var have) || have != v.Value)
+            .Select(v => block.TryGetValue(v.Name, out var have) ? $"{v.Name} {have} -> {v.Value}" : $"{v.Name} {v.Value}")
             .ToList();
         if (changes.Count == 0) return;
 
         // The file may be created by an earlier step of this same plan, so the patch runs at apply time.
         plan.Add(new PlannedAction($"set {PropsPatcher.FileName}: {string.Join(", ", changes)}", ActionKind.Patch, () =>
         {
-            if (PropsPatcher.SetValues(path, values) is { } text) File.WriteAllText(path, text);
+            if (PropsPatcher.SetValues(path, values) is { } text) MsBuildXml.Write(path, text);
         }));
     }
 
@@ -122,7 +135,7 @@ internal static class UpdateCommand
         if (newText == null) return;
 
         plan.Add(new PlannedAction($"set {model.GameCsprojName} Sdk to Godot.NET.Sdk/{ToolVersions.GodotSdkVersion} (was {current})",
-            ActionKind.Patch, () => File.WriteAllText(game, newText)));
+            ActionKind.Patch, () => MsBuildXml.Write(game, newText)));
 
         if (Version.TryParse(current, out var was) && Version.TryParse(ToolVersions.GodotSdkVersion, out var now)
             && (was.Major != now.Major || was.Minor != now.Minor))
@@ -152,6 +165,7 @@ internal static class UpdateCommand
             "restore", target), Cancellation.Token);
         if (result.Ok) return;
         ProcessRunner.ReportFailure(result);
-        Out.Warning("dotnet restore failed - the version files are updated; fix the restore and run 'dotnet restore' again");
+        // Thrown, not warned: the new versions do not resolve, so the update failed even though the files are written.
+        throw new ToolException("dotnet restore failed - the version files are updated; fix the restore and run 'dotnet restore' again");
     }
 }

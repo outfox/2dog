@@ -60,9 +60,15 @@ internal static class GameCsprojChecks
             yield break;
         }
 
-        var safeFix = safe.NewContent is { } safeText
-            ? new Fix($"patch:{name}", FixClass.Safe, $"patch {name} ({string.Join("; ", safe.Added)})",
-                () => File.WriteAllText(csproj, safeText))
+        // Patches are recomputed when applied, so the safe and the announced one compose in either order.
+        void ApplyPatch(bool upgradeTargetFramework)
+        {
+            if (CsprojPatcher.Patch(csproj, hostFolders, bootPath, upgradeTargetFramework).NewContent is { } content)
+                MsBuildXml.Write(csproj, content);
+        }
+
+        var safeFix = safe.NewContent != null
+            ? new Fix($"patch:{name}", FixClass.Safe, $"patch {name} ({string.Join("; ", safe.Added)})", () => ApplyPatch(false))
             : null;
 
         var tfm = full.Added.FirstOrDefault(a => a.StartsWith("TargetFramework", StringComparison.Ordinal));
@@ -70,7 +76,7 @@ internal static class GameCsprojChecks
             yield return new Finding("game.target-framework", c, Severity.Warn, $"{name} does not target net10.0",
                 "2dog packages are net10.0", null, name,
                 new Fix($"patch:{name}:tfm", FixClass.Announced, $"upgrade {name} to net10.0 (patches the csproj: {string.Join("; ", full.Added)})",
-                    () => File.WriteAllText(csproj, full.NewContent!)));
+                    () => ApplyPatch(true)));
         else
             yield return Finding.Pass("game.target-framework", c, "net10.0");
 
@@ -78,7 +84,17 @@ internal static class GameCsprojChecks
         if (properties.Count > 0)
             yield return new Finding("game.properties", c, Severity.Warn, $"{name} lacks {string.Join(", ", properties)}",
                 "hosts load the game assembly dynamically and the web bootstrap needs unsafe code", null, name, safeFix);
-        else
+
+        // The patcher only adds what is absent; a property set to anything but true is the author's edit to undo.
+        var disabled = new[] { "EnableDynamicLoading", "AllowUnsafeBlocks" }
+            .Where(property => p.GameCsproj.Descendants().Where(e => e.Name.LocalName == property).Select(e => e.Value.Trim())
+                .Any(v => !v.Contains("$(") && !v.Equals("true", StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+        if (disabled.Count > 0)
+            yield return new Finding("game.properties", c, Severity.Warn, $"{name} sets {string.Join(", ", disabled)} to something other than true",
+                "hosts load the game assembly dynamically and the web bootstrap needs unsafe code", $"set {string.Join(" and ", disabled)} to true", name);
+
+        if (properties.Count == 0 && disabled.Count == 0)
             yield return Finding.Pass("game.properties", c, "properties");
 
         if (safe.Added.FirstOrDefault(a => a.StartsWith("DefaultItemExcludes", StringComparison.Ordinal)) is { } excludes)

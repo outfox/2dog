@@ -184,8 +184,9 @@ internal static class SolutionOps
         return IsExcludedSlnx(File.ReadAllText(solutionPath), SlnxPathPattern(projectRelativePath));
     }
 
+    // The body must stay inside this project's block: a lazy .*? would run on into the next block's exclusion.
     private static bool IsExcludedSlnx(string text, string pathPattern) =>
-        Regex.IsMatch(text, $"<Project Path=\"{pathPattern}\"\\s*>.*?<Build Project=\"false\"\\s*/>.*?</Project>",
+        Regex.IsMatch(text, $"<Project Path=\"{pathPattern}\"\\s*>(?:(?!</Project>).)*?<Build Project=\"false\"\\s*/>",
             RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
     /// <summary>The project path as a regex accepting either separator (dotnet sln writes both over time).</summary>

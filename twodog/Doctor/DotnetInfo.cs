@@ -61,9 +61,13 @@ internal static class DotnetInfo
         try
         {
             using var doc = JsonDocument.Parse(json, new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true });
-            if (!doc.RootElement.TryGetProperty("sdk", out var sdk)) return (null, "latestPatch");
-            var version = sdk.TryGetProperty("version", out var v) && Version.TryParse(v.GetString()?.Split('-')[0], out var parsed) ? parsed : null;
-            var roll = sdk.TryGetProperty("rollForward", out var r) ? r.GetString() ?? "latestPatch" : "latestPatch";
+            // Shape is validated before every access: TryGetProperty/GetString throw on a non-object or non-string.
+            if (doc.RootElement.ValueKind != JsonValueKind.Object || !doc.RootElement.TryGetProperty("sdk", out var sdk)
+                || sdk.ValueKind != JsonValueKind.Object)
+                return (null, "latestPatch");
+            var version = sdk.TryGetProperty("version", out var v) && v.ValueKind == JsonValueKind.String
+                          && Version.TryParse(v.GetString()!.Split('-')[0], out var parsed) ? parsed : null;
+            var roll = sdk.TryGetProperty("rollForward", out var r) && r.ValueKind == JsonValueKind.String ? r.GetString()! : "latestPatch";
             return (version, roll);
         }
         catch (JsonException)

@@ -9,7 +9,8 @@ internal sealed record PackageRef(string Id, string RawVersion)
     /// <summary>The version without exact-pin brackets, when it is a literal; null for properties and wildcards.</summary>
     public Version? Parsed => Version.TryParse(RawVersion.Trim('[', ']'), out var v) ? v : null;
 
-    public bool IsPinned => RawVersion.StartsWith('[');
+    /// <summary>An exact pin, "[4.7.1.1]" or "[$(TwoDogNativesVersion)]": a range such as "[4.7.1,5.0.0]" still floats.</summary>
+    public bool IsPinned => RawVersion.StartsWith('[') && RawVersion.EndsWith(']') && !RawVersion.Contains(',');
     public bool IsProperty => RawVersion.Contains("$(", StringComparison.Ordinal);
     public bool IsLiteral => Parsed != null;
 
@@ -69,9 +70,10 @@ internal static class VersionRewriter
     public static List<PackageRef> Literals(string csprojText) =>
         References(csprojText).Where(r => r.IsManagedLiteral).ToList();
 
+    // Either XML quote style, any whitespace around '=': the file is edited as text, so both must be recognized.
     private static readonly Regex PackageReferenceTag = new(@"<PackageReference\b[^>]*>", RegexOptions.Compiled);
-    private static readonly Regex IncludeAttribute = new(@"\bInclude\s*=\s*""(?<id>[^""]*)""", RegexOptions.Compiled);
-    private static readonly Regex VersionAttribute = new(@"\bVersion\s*=\s*""(?<version>[^""]*)""", RegexOptions.Compiled);
+    private static readonly Regex IncludeAttribute = new(@"\bInclude\s*=\s*(?<q>[""'])(?<id>[^""']*)\k<q>", RegexOptions.Compiled);
+    private static readonly Regex VersionAttribute = new(@"\bVersion\s*=\s*(?<q>[""'])(?<version>[^""']*)\k<q>", RegexOptions.Compiled);
 
     /// <summary>
     /// The csproj with every managed literal version replaced by its property reference, plus what changed; null
@@ -98,17 +100,22 @@ internal static class VersionRewriter
         return (changes.Count == 0 ? null : text, changes);
     }
 
-    private static readonly Regex SdkAttribute = new(@"Sdk=""Godot\.NET\.Sdk/(?<version>[^""]+)""", RegexOptions.Compiled);
+    private static readonly Regex SdkAttribute =
+        new(@"\bSdk\s*=\s*(?<q>[""'])Godot\.NET\.Sdk/(?<version>[^""']+)\k<q>", RegexOptions.Compiled);
 
     /// <summary>The Godot.NET.Sdk version a game csproj declares, or null.</summary>
     public static string? GodotSdkVersion(string csprojText) =>
         SdkAttribute.Match(csprojText) is { Success: true } m ? m.Groups["version"].Value : null;
 
-    /// <summary>The game csproj text with its Godot.NET.Sdk version replaced, or null when it already matches.</summary>
+    /// <summary>
+    /// The game csproj text with its Godot.NET.Sdk version replaced, or null when it already matches. Only the
+    /// version characters change, so quoting and spacing around the attribute survive.
+    /// </summary>
     public static string? SetGodotSdkVersion(string csprojText, string version)
     {
-        var current = GodotSdkVersion(csprojText);
-        if (current == null || current == version) return null;
-        return SdkAttribute.Replace(csprojText, $"Sdk=\"Godot.NET.Sdk/{version}\"", 1);
+        var match = SdkAttribute.Match(csprojText);
+        if (!match.Success || match.Groups["version"].Value == version) return null;
+        var group = match.Groups["version"];
+        return csprojText[..group.Index] + version + csprojText[(group.Index + group.Length)..];
     }
 }

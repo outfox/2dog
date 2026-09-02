@@ -58,8 +58,11 @@ internal sealed class ProjectModel
     /// <summary>Problems hit while loading (unparseable files); reported once, checks skip what they cannot read.</summary>
     public List<string> LoadProblems { get; init; } = [];
 
-    /// <summary>The single solution at the root, when there is exactly one (or one containing the game project).</summary>
+    /// <summary>The single solution at the root, when there is exactly one (or exactly one naming the game project).</summary>
     public string? Solution { get; init; }
+
+    /// <summary>The root solutions naming the game project; more than one is the ambiguity sln.multiple reports.</summary>
+    public List<string> GameSolutions { get; init; } = [];
 
     public bool HasWebLikeHost => Hosts.Any(h => h.IsWebLike);
     public string? GameCsprojName => GameCsprojPath is null ? null : Path.GetFileName(GameCsprojPath);
@@ -77,13 +80,13 @@ internal sealed class ProjectModel
         if (File.Exists(projectGodot))
         {
             try { godot = new GodotProjectFile(projectGodot); }
-            catch (IOException ex) { problems.Add($"project.godot: {ex.Message}"); }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { problems.Add($"project.godot: {ex.Message}"); }
         }
 
         var rootCsprojs = Directory.Exists(dir)
             ? Directory.EnumerateFiles(dir, "*.csproj").Select(Path.GetFileNameWithoutExtension).OfType<string>().Order().ToList()
             : [];
-        var assemblyName = godot?.Get("dotnet", "project/assembly_name");
+        var assemblyName = BareAssemblyName(godot?.Get("dotnet", "project/assembly_name"), problems);
         var baseName = assemblyName
                        ?? (rootCsprojs.Count == 1 ? rootCsprojs[0] : null)
                        ?? twodog.cli.Hosts.SanitizeName(godot?.Get("application", "config/name"))
@@ -94,16 +97,16 @@ internal sealed class ProjectModel
         if (baseName != null && File.Exists(Path.Combine(dir, baseName + ".csproj")))
         {
             gamePath = Path.Combine(dir, baseName + ".csproj");
-            gameText = File.ReadAllText(gamePath);
-            gameDoc = TryParse(gameText, gamePath, problems);
+            gameText = TryRead(dir, gamePath, problems);
+            gameDoc = gameText is null ? null : TryParse(gameText, gamePath, problems);
         }
 
         var hosts = new List<HostModel>();
         foreach (var existing in HostScan.Find(dir))
         {
             var csproj = Path.Combine(dir, existing.Folder, existing.Folder + ".csproj");
-            var text = File.ReadAllText(csproj);
-            var doc = TryParse(text, csproj, problems);
+            var text = TryRead(dir, csproj, problems);
+            var doc = text is null ? null : TryParse(text, csproj, problems);
             string? clientPath = null, clientText = null;
             if (existing.Kind == HostKind.Blazor)
             {
@@ -111,7 +114,7 @@ internal sealed class ProjectModel
                 if (File.Exists(candidate))
                 {
                     clientPath = candidate;
-                    clientText = File.ReadAllText(candidate);
+                    clientText = TryRead(dir, candidate, problems);
                 }
             }
 
@@ -136,13 +139,17 @@ internal sealed class ProjectModel
         if (File.Exists(propsPath))
         {
             try { propsValues = PropsPatcher.Read(propsPath); }
-            catch (System.Xml.XmlException ex) { problems.Add($"{PropsPatcher.FileName}: {ex.Message}"); }
+            catch (Exception ex) when (ex is System.Xml.XmlException or IOException or UnauthorizedAccessException)
+            {
+                problems.Add($"{PropsPatcher.FileName}: {ex.Message}");
+            }
         }
 
-        var solution = solutions.Count == 1 ? solutions[0]
-            : solutions.Count > 1 && baseName != null
-                ? solutions.FirstOrDefault(s => File.ReadAllText(s).Contains($"{baseName}.csproj", StringComparison.OrdinalIgnoreCase))
-                : null;
+        var solutionTexts = solutions.ToDictionary(s => s, s => TryRead(dir, s, problems));
+        var gameSolutions = baseName is null
+            ? []
+            : solutions.Where(s => solutionTexts[s]?.Contains($"{baseName}.csproj", StringComparison.OrdinalIgnoreCase) == true).ToList();
+        var solution = solutions.Count == 1 ? solutions[0] : gameSolutions.Count == 1 ? gameSolutions[0] : null;
 
         return new ProjectModel
         {
@@ -156,9 +163,10 @@ internal sealed class ProjectModel
             Hosts = hosts,
             Solutions = solutions,
             Solution = solution,
-            SolutionText = solution is null ? null : File.ReadAllText(solution),
-            ExportPresetsText = ReadIfExists(Path.Combine(dir, ExportPresetOps.FileName)),
-            RootGlobalJsonText = ReadIfExists(Path.Combine(dir, "global.json")),
+            GameSolutions = gameSolutions,
+            SolutionText = solution is null ? null : solutionTexts[solution],
+            ExportPresetsText = TryRead(dir, Path.Combine(dir, ExportPresetOps.FileName), problems),
+            RootGlobalJsonText = TryRead(dir, Path.Combine(dir, "global.json"), problems),
             HasRootBuildTargets = File.Exists(Path.Combine(dir, "Directory.Build.targets")),
             HasRootBuildProps = File.Exists(propsPath),
             PropsValues = propsValues,
@@ -167,7 +175,31 @@ internal sealed class ProjectModel
         };
     }
 
-    private static string? ReadIfExists(string path) => File.Exists(path) ? File.ReadAllText(path) : null;
+    /// <summary>The file's text, or null when it is absent or unreadable (recorded as a load problem).</summary>
+    private static string? TryRead(string dir, string path, List<string> problems)
+    {
+        if (!File.Exists(path)) return null;
+        try
+        {
+            return File.ReadAllText(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            problems.Add($"{Path.GetRelativePath(dir, path).Replace('\\', '/')}: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>Godot resolves res://&lt;assembly_name&gt;.csproj, so anything but a bare file name is rejected.</summary>
+    private static string? BareAssemblyName(string? name, List<string> problems)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return null;
+        var bare = name is not ("." or "..") && name.IndexOfAny(new[] { '/', '\\', ':' }) < 0
+                   && name.IndexOfAny(Path.GetInvalidFileNameChars()) < 0 && !Path.IsPathRooted(name);
+        if (bare) return name;
+        problems.Add($"project.godot: assembly_name '{name}' is not a plain file name");
+        return null;
+    }
 
     private static XDocument? TryParse(string text, string path, List<string> problems)
     {

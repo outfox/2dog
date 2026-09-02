@@ -16,7 +16,7 @@ and explains build failures it recognizes (`2dog doctor --build`, or
 | --- | --- | --- |
 | `1` | Usage error | The `error:` line names the problem and suggests the closest option or verb; `2dog <verb> --help` lists what the verb accepts |
 | `2` | Tool error | Project state (no `project.godot`, a name with spaces, invalid XML), a failed `dotnet` call, or a plan that stopped half-way. The `error:`/`hint:` lines say which; `--verbose` adds the stack trace and every subprocess line |
-| `3` | Doctor findings remain | Read the report; `--fix` applies the safe fixes, `--ignore <id>` drops one you accept |
+| `3` | Doctor findings remain, or the `--build` failed | Read the report; `--fix` applies the safe fixes, `--ignore <id>` drops one you accept. After `--build`, the build section names the matched failure and the full log |
 | `130` | Cancelled | Ctrl+C during a prompt or a subprocess; nothing after the cancelled step ran |
 
 ## A plan stopped half-way

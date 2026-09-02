@@ -60,7 +60,7 @@ public class ProcessRunnerTests
     public void Run_TimesOut_AndKillsTheChild()
     {
         var request = ProcessRunner.Dotnet(Path.GetTempPath(), null, TimeSpan.FromMilliseconds(1), "--info");
-        var result = ProcessRunner.Default.Run(request);
+        var result = ProcessRunner.Default.Run(request, TestContext.Current.CancellationToken);
         Assert.True(result.TimedOut);
         Assert.False(result.Ok);
         Assert.Equal("timed out", result.Outcome);
@@ -71,9 +71,18 @@ public class ProcessRunnerTests
     {
         using var cts = new CancellationTokenSource();
         cts.Cancel();
-        var result = ProcessRunner.Default.Run(Dotnet("--info"), cts.Token);
-        Assert.True(result.Cancelled);
-        Assert.False(result.Ok);
+        Assert.Throws<OperationCanceledException>(() => ProcessRunner.Default.Run(Dotnet("--info"), cts.Token));
+    }
+
+    // Ctrl+C mid-run kills the child and surfaces as cancellation, never as a timed-out or failed result.
+    [Fact]
+    public void Run_CancelledMidWay_ThrowsInsteadOfReportingATimeout()
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(200));
+        var request = ProcessRunner.Dotnet(Path.GetTempPath(), null, TimeSpan.FromMinutes(2), "--info");
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        Assert.Throws<OperationCanceledException>(() => ProcessRunner.Default.Run(request, cts.Token));
+        Assert.True(watch.Elapsed < TimeSpan.FromSeconds(60), "the runner must not wait out the request timeout");
     }
 
     [Fact]

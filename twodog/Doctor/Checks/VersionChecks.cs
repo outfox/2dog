@@ -6,6 +6,7 @@ internal static class VersionChecks
     public static readonly CheckInfo[] Checks =
     [
         new("ver.managed-elsewhere", Category.Versions, "versions expressed through your own properties are noted, not judged"),
+        new("ver.props-invalid", Category.Versions, "the TwoDog* versions in Directory.Build.props are readable versions"),
         new("ver.literal-versions", Category.Versions, "host csprojs use the shared version properties, not literals"),
         new("ver.twodog-consistent", Category.Versions, "every 2dog package uses the same version"),
         new("ver.twodog-outdated", Category.Versions, "the 2dog packages are at this tool's version"),
@@ -21,17 +22,30 @@ internal static class VersionChecks
     {
         const Category c = Category.Versions;
         var p = ctx.Project;
-        var refs = p.Hosts.SelectMany(h => h.Packages.Select(r => (Host: h, Ref: r))).ToList();
+        // Every host csproj plus the Blazor client nested inside its host (In names the folder for messages).
+        var refs = p.Hosts.SelectMany(h => h.Packages.Select(r => (In: h.Folder, Ref: r)))
+            .Concat(p.Hosts.Where(h => h.ClientText != null)
+                .SelectMany(h => ClientReferences(h.ClientText!).Select(r => (In: $"{h.Folder}/Client", Ref: r))))
+            .ToList();
 
         var foreign = refs.Where(x => x.Ref.IsProperty && !x.Ref.RawVersion.Contains("$(TwoDog")).Select(x => x.Ref.RawVersion).Distinct().ToList();
         if (foreign.Count > 0)
             yield return new Finding("ver.managed-elsewhere", c, Severity.Info,
                 $"versions come from your own properties ({string.Join(", ", foreign.Take(3))}) - not checked");
 
+        var malformed = new[] { "TwoDogVersion", "TwoDogNativesVersion", "TwoDogGodotVersion" }
+            .Where(n => p.PropsValues.TryGetValue(n, out var v) && !v.Contains("$(") && !Version.TryParse(v.Trim('[', ']').Split('-')[0], out _))
+            .Select(n => $"{n}='{p.PropsValues[n]}'").ToList();
+        if (malformed.Count > 0)
+            yield return new Finding("ver.props-invalid", c, Severity.Fail,
+                $"{PropsPatcher.FileName} has unreadable version(s): {string.Join(", ", malformed)}",
+                "restore fails on them and the version checks cannot read them",
+                $"fix the value in {PropsPatcher.FileName} (2dog update rewrites the block)", PropsPatcher.FileName);
+
         var literals = refs.Where(x => x.Ref.IsManagedLiteral).ToList();
         if (literals.Count > 0)
             yield return new Finding("ver.literal-versions", c, Severity.Warn,
-                $"{literals.Count} literal package version(s) in {literals.Select(x => x.Host.Folder).Distinct().Count()} host csproj(s)",
+                $"{literals.Count} literal package version(s) in {literals.Select(x => x.In).Distinct().Count()} host csproj(s)",
                 "2dog update moves them into Directory.Build.props, so one edit updates every host", "2dog update");
 
         var twoDog = literals.Where(x => VersionRewriter.IsTwoDogPackage(x.Ref.Id)).Select(x => x.Ref.Parsed).OfType<Version>()
@@ -56,8 +70,9 @@ internal static class VersionChecks
             if (natives.Major != engine.Major || natives.Minor != engine.Minor || natives.Build != engine.Build)
                 yield return new Finding("ver.natives", c, Severity.Fail, $"natives {natives} are not on the engine's Godot line ({engine})",
                     "the browser payload and the engine must come from the same Godot build", "2dog update");
-            else if (literals.Any(x => x.Ref.Id.Equals("2dog.browser-wasm", StringComparison.OrdinalIgnoreCase) && !x.Ref.IsPinned))
-                yield return new Finding("ver.natives", c, Severity.Warn, "2dog.browser-wasm is not exact-pinned ([version])",
+            else if (refs.Any(x => x.Ref.Id.Equals("2dog.browser-wasm", StringComparison.OrdinalIgnoreCase) && !x.Ref.IsPinned
+                                   && (!x.Ref.IsProperty || x.Ref.RawVersion.Contains("$(TwoDog"))))
+                yield return new Finding("ver.natives", c, Severity.Warn, "2dog.browser-wasm is not exact-pinned ([version] or [$(TwoDogNativesVersion)])",
                     "a floating reference can drift away from the engine's build", "2dog update");
             else if (engine == tool && EnvironmentChecks.Normalize(natives) != EnvironmentChecks.Normalize(toolNatives))
                 yield return new Finding("ver.natives", c, Severity.Warn, $"natives {natives} -> {ToolVersions.NativesVersion} available", null, "2dog update");
@@ -76,12 +91,12 @@ internal static class VersionChecks
                 yield return Finding.Pass("ver.godot-line-consistent", c, $"Godot.NET.Sdk {sdk}");
         }
 
-        foreach (var (host, r) in literals.Where(x => x.Ref.Id.Equals("GodotSharpEditor", StringComparison.OrdinalIgnoreCase)))
+        foreach (var (folder, r) in literals.Where(x => x.Ref.Id.Equals("GodotSharpEditor", StringComparison.OrdinalIgnoreCase)))
         {
             var gameSdk = p.GameCsprojText is { } text ? VersionRewriter.GodotSdkVersion(text) : null;
             if (gameSdk != null && r.RawVersion != gameSdk)
                 yield return new Finding("ver.godotsharp-editor", c, Severity.Warn,
-                    $"{host.Folder} references GodotSharpEditor {r.RawVersion} but the game uses Godot.NET.Sdk/{gameSdk}", null, "2dog update");
+                    $"{folder} references GodotSharpEditor {r.RawVersion} but the game uses Godot.NET.Sdk/{gameSdk}", null, "2dog update");
         }
 
         foreach (var host in p.Hosts)
@@ -95,5 +110,12 @@ internal static class VersionChecks
 
         if (ctx.LatestTool is { } newest && Version.TryParse(newest, out var newestVersion) && newestVersion > tool)
             yield return new Finding("ver.tool-latest", c, Severity.Info, $"a newer 2dog tool exists: {newest}", null, $"dnx 2dog@{newest} doctor");
+    }
+
+    /// <summary>The client csproj's references; an unparseable client is reported by the load problems, not here.</summary>
+    private static List<PackageRef> ClientReferences(string text)
+    {
+        try { return VersionRewriter.References(text); }
+        catch (System.Xml.XmlException) { return []; }
     }
 }
