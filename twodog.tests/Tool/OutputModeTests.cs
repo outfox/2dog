@@ -258,6 +258,18 @@ public class OutGuardTests
     }
 
     [Fact]
+    public void TerminalDirty_IsClearedByARestore_AndByANewRun()
+    {
+        Out.TerminalDirty = true;
+        Out.RestoreTerminal();
+        Assert.False(Out.TerminalDirty);
+
+        Out.TerminalDirty = true;
+        CliConsole.Run("--help");
+        Assert.False(Out.TerminalDirty);
+    }
+
+    [Fact]
     public void Verbose_IsSilentUnlessAsked()
     {
         var silent = CliConsole.Capture(() =>
