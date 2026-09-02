@@ -79,7 +79,10 @@ public class ProcessRunnerTests
     public void Run_CancelledMidWay_ThrowsInsteadOfReportingATimeout()
     {
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(200));
-        var request = ProcessRunner.Dotnet(Path.GetTempPath(), null, TimeSpan.FromMinutes(2), "--info");
+        // A child that certainly outlives the cancel (dotnet --info finishes in ~100 ms on fast runners).
+        var request = OperatingSystem.IsWindows()
+            ? new ProcessRequest("ping", ["-n", "30", "127.0.0.1"], Path.GetTempPath(), TimeSpan.FromMinutes(2))
+            : new ProcessRequest("sleep", ["30"], Path.GetTempPath(), TimeSpan.FromMinutes(2));
         var watch = System.Diagnostics.Stopwatch.StartNew();
         Assert.Throws<OperationCanceledException>(() => ProcessRunner.Default.Run(request, cts.Token));
         Assert.True(watch.Elapsed < TimeSpan.FromSeconds(60), "the runner must not wait out the request timeout");
