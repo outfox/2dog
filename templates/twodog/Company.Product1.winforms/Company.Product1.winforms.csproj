@@ -23,7 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION"/>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -41,7 +41,6 @@ internal sealed class ScaffoldOptions
     public bool DryRun;
     public bool Force;
     public bool Restore = true;
-    public bool Verbose;
 }
 
 /// <summary>The project a run operates on, resolved before anything is planned.</summary>
@@ -89,4 +88,45 @@ internal sealed class SpacedNameException(string message, string oldName, string
 
     /// <summary>Whether the automated --rename fix applies (no hosts exist yet).</summary>
     public bool CanOfferRename { get; } = canOfferRename;
+}
+
+/// <summary>One step of a plan: what it does, of which kind, and the code that does it.</summary>
+internal sealed record PlannedAction(string Description, ActionKind Kind, Action Apply);
+
+/// <summary>What kind of change a planned action makes; the JSON report and the plan summary group by it.</summary>
+internal enum ActionKind
+{
+    CreateDir,
+    CreateFile,
+    Patch,
+    GodotConfig,
+    Rename,
+    Solution,
+    Restore,
+}
+
+internal enum ActionStatus
+{
+    Planned,
+    Applied,
+    Failed,
+    NotRun,
+}
+
+internal sealed record ActionReport(string Description, ActionKind Kind, ActionStatus Status);
+
+/// <summary>The outcome of a scaffold run, for the exit code and the --json report.</summary>
+internal sealed class ScaffoldResult
+{
+    public required IReadOnlyList<ActionReport> Actions { get; init; }
+    public IReadOnlyList<string> Skipped { get; init; } = [];
+    public IReadOnlyList<string> Warnings { get; init; } = [];
+    public IReadOnlyList<(string Command, string Comment)> NextSteps { get; init; } = [];
+    public bool DryRun { get; init; }
+    public bool Cancelled { get; init; }
+
+    /// <summary>The step that failed and why; earlier steps stand, later ones never ran.</summary>
+    public (string Description, Exception Error)? Failure { get; init; }
+
+    public int ExitCode => Failure is null ? ExitCodes.Ok : ExitCodes.Error;
 }

@@ -64,6 +64,9 @@ internal static class TemplateAssets
     /// <summary>The template's root MSBuild cleanup target, verbatim.</summary>
     public static string RootBuildTargets() => ReadRaw("tpl/Directory.Build.targets");
 
+    /// <summary>The template's root Directory.Build.props: the 2dog version properties, tokens substituted.</summary>
+    public static string RootBuildProps() => Substitute(ReadRaw("tpl/Directory.Build.props"), SourceName);
+
     /// <summary>
     /// The Godot project files a brand-new project needs on top of the ones above: relative path -> content.
     /// </summary>

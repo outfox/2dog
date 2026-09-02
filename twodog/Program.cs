@@ -1,5 +1,3 @@
-using Spectre.Console;
-
 namespace twodog.cli;
 
 /// <summary>
@@ -10,48 +8,87 @@ internal static class Program
 {
     internal static int Main(string[] args)
     {
-        // Windows consoles default to a legacy codepage that mangles the ✅/🔄 version marks.
+        // Windows consoles default to a legacy codepage that mangles the UTF-8 version marks.
         if (OperatingSystem.IsWindows())
             try { Console.OutputEncoding = System.Text.Encoding.UTF8; } catch { /* no console attached */ }
 
+        // Resolved from the raw arguments so that even a usage error renders in the requested mode.
+        Out.Configure(OutputMode.Resolve(args, Environment.GetEnvironmentVariable, Out.Facts));
+        Cancellation.Install();
+
+        var report = new Report();
+        var exitCode = Run(args, report);
+        Out.RestoreTerminal();
+        if (Out.Mode.Json) JsonReport.Print(report, exitCode);
+        return exitCode;
+    }
+
+    /// <summary>Dispatches the verb and maps every failure onto its exit code and an `error:` line.</summary>
+    private static int Run(string[] args, Report report)
+    {
         try
         {
             var cmd = CommandLine.Parse(args);
+            report.Command = cmd.Verb == Verb.None ? null : cmd.Verb.ToString().ToLowerInvariant();
             switch (cmd.Verb)
             {
                 case Verb.None:
-                    PrintVersion(checkLatest: false);
+                    PrintVersion(checkLatest: false, report);
                     Out.Blank();
-                    PrintUsage(withHeader: false);
-                    return 0;
+                    Usage.Print(null, withHeader: false);
+                    return ExitCodes.Ok;
                 case Verb.Help:
-                    PrintUsage();
-                    return 0;
+                    Usage.Print(cmd.HelpVerb);
+                    return ExitCodes.Ok;
                 case Verb.Version:
-                    PrintVersion(checkLatest: true);
-                    return 0;
+                    PrintVersion(checkLatest: true, report);
+                    return ExitCodes.Ok;
+                case Verb.Doctor:
+                    return DoctorCommand.Run(cmd, report);
+                case Verb.Update:
+                    return UpdateCommand.Run(cmd, report);
                 case Verb.Pack:
-                    return PackCommand.Run(cmd);
+                    return PackCommand.Run(cmd, report);
                 default:
-                    return Execute(cmd);
+                    return Execute(cmd, report);
             }
+        }
+        catch (OperationCanceledException)
+        {
+            Out.ErrorLine("cancelled");
+            return ExitCodes.Cancelled;
         }
         catch (UsageException ex)
         {
             Out.ErrorLine(ex.Message);
-            PrintUsage();
-            return 1;
+            Out.Hint(Usage.Hint(ex.Verb));
+            return ExitCodes.Usage;
         }
         catch (ToolException ex)
         {
             Out.ErrorLine(ex.Message);
-            return 2;
+            Out.Verbose(ex.ToString());
+            return ExitCodes.Error;
+        }
+        catch (Exception ex)
+        {
+            var (message, hint) = FriendlyError.Describe(ex);
+            Out.ErrorLine(message);
+            if (hint != null) Out.Hint(hint);
+            Out.Verbose(ex.ToString());
+            return ExitCodes.Error;
         }
     }
 
-    private static int Execute(ParsedCommand cmd)
+    private static int Execute(ParsedCommand cmd, Report report)
     {
-        var interactive = WantsPrompts(cmd) && Tui.CanPrompt;
+        foreach (var note in cmd.Notes) Out.Note(note);
+
+        var wantsPrompts = WantsPrompts(cmd);
+        var interactive = wantsPrompts && Tui.CanPrompt;
+        // Prompts wanted but impossible (piped, CI): the defaults apply, said out loud.
+        if (wantsPrompts && !interactive && (cmd.Verb == Verb.Add || cmd.Options.NameOverride != null))
+            Out.Note("no terminal to ask on - applying the default host set (pass --yes or name hosts to make this explicit)");
 
         if (interactive) Tui.Header();
 
@@ -70,20 +107,37 @@ internal static class Program
             project = ScaffoldCommand.Open(cmd.Options);
         }
 
+        // A new project into a directory that already has files: fine, but not silently.
+        if (cmd.Verb == Verb.New && Directory.Exists(project.Dir) && !IsEmpty(project.Dir))
+        {
+            if (interactive && !Tui.ConfirmNonEmptyDirectory(project.Dir))
+            {
+                Out.Info("[yellow]Cancelled[/] - nothing changed.");
+                return ExitCodes.Ok;
+            }
+
+            if (!interactive)
+                Out.Warning($"{project.Dir} is not empty - the project is created alongside its files " +
+                            "(existing files are skipped, --force overwrites)");
+        }
+
         if (interactive) Tui.ShowProject(project);
 
         cmd.Options.Hosts = interactive
             ? Tui.SelectHosts(project, HostSelection.Defaults(cmd.Excluded, project))
             : HostSelection.FromFlags(cmd, project);
 
-        return ScaffoldCommand.Run(project, cmd.Options, interactive ? Tui.ConfirmPlan : null);
+        var result = ScaffoldCommand.Run(project, cmd.Options, interactive ? Tui.ConfirmPlan : null);
+        JsonReport.Describe(report, project, cmd.Options.Hosts, result);
+        return result.ExitCode;
     }
 
     /// <summary>
     /// Prompting is off once the command line answers the questions itself (any host flag, or --yes), so scripted
     /// runs never block, not even at the final confirmation. --dry-run still asks, then prints the plan.
     /// </summary>
-    internal static bool WantsPrompts(ParsedCommand cmd) => cmd is {NoInteractive: false, HostFlagsSeen: false};
+    internal static bool WantsPrompts(ParsedCommand cmd) =>
+        cmd is { NoInteractive: false, HostFlagsSeen: false } && !Out.Mode.Json;
 
     internal static void PrepareNewProject(ParsedCommand cmd, bool interactive)
     {
@@ -92,7 +146,7 @@ internal static class Program
 
         if (name == null)
         {
-            if (!interactive) throw new UsageException("2dog new needs a project name");
+            if (!interactive) throw new UsageException("2dog new needs a project name", Verb.New);
             var here = Path.GetFullPath(outputDir ?? ".");
             name = Tui.AskProjectName(Path.GetFileName(here.TrimEnd(Path.DirectorySeparatorChar)));
             outputDir ??= IsEmpty(here) ? "." : name;
@@ -113,9 +167,9 @@ internal static class Program
 
     /// <summary>
     /// The tool version, then every package the scaffolded projects reference. checkLatest asks nuget.org (best
-    /// effort) and marks one package per publish group: ✅ latest stable, 🔄 newer stable available, blank unknown.
+    /// effort) and marks one package per publish group: latest stable, newer stable available, or unknown.
     /// </summary>
-    private static void PrintVersion(bool checkLatest)
+    private static void PrintVersion(bool checkLatest, Report report)
     {
         var rows = new (string Label, string Version, string Probe, string Packages)[]
         {
@@ -124,93 +178,17 @@ internal static class Program
             ("Godot SDK", ToolVersions.GodotSdkVersion, "Godot.NET.Sdk", "Godot.NET.Sdk, GodotSharp"),
         };
         var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => r.Probe)) : null;
+        var marked = rows
+            .Select(r => (r.Label, r.Version, Latest: latest?[r.Probe], r.Packages))
+            .Select(r => (r.Label, r.Version, r.Latest, Mark: NuGetLatest.Mark(r.Version, r.Latest), r.Packages))
+            .ToList();
+
+        report.Versions = marked
+            .Select(r => new ReportVersion(r.Label, r.Version, r.Packages, r.Latest,
+                r.Mark switch { VersionMark.UpToDate => true, VersionMark.Outdated => false, _ => null }))
+            .ToList();
 
         Out.Header();
-        Out.VersionTable(rows
-            .Select(r => (r.Label, r.Version, latest == null ? null : NuGetLatest.Mark(r.Version, latest[r.Probe]), r.Packages))
-            .ToList());
-    }
-
-    private static void PrintUsage(bool withHeader = true)
-    {
-        if (withHeader)
-            Out.Header();
-
-        // The body is printed verbatim (it is full of literal brackets); only
-        // the section header lines get emphasis.
-        var sections = new HashSet<string> { "verbs", "hosts", "options", "examples" };
-        var usage =
-            $"""
-             usage: 2dog <verb> [path] [options]
-
-             Scaffolds .NET host projects for a Godot project: the Godot project
-             directory is the solution root, hosts are nested subfolders the Godot
-             editor ignores (.gdignore). No existing file is ever moved, renamed or
-             deleted, except for two announced opt-ins: the .sln-to-.slnx
-             migration, and the --rename fix for names containing spaces.
-
-             verbs
-               new [Name] [dir]  Create a new Godot project with 2dog hosts
-               add [path]        Add hosts to an existing Godot project
-               convert [path]    Alias of add, for projects that have no hosts yet
-               pack list <pck>   List a .pck's contents by size (no engine needed)
-               version           Print tool and package versions
-
-             Without any host option, new and add ask interactively; run add again
-             to add more hosts, including a second host of the same kind.
-
-             hosts
-               --desktop [folder]  Desktop host (your own Main entry point)
-               --web [folder]      Browser (WebAssembly) host
-               --webxr [folder]    Browser host with the WebXR Layers polyfill
-                                   wired into its page (opt-in)
-               --tests [folder]    xUnit test project
-               --winforms [folder] WinForms host embedding the game window
-                                   (Windows-only; never part of the default set)
-               --winui [folder]    WinUI 3 host embedding the game window
-                                   (Windows-only, like --winforms; builds only
-                                   on Windows)
-               --avalonia [folder] Avalonia host embedding the game in a
-                                   cross-platform GUI (opt-in, like --winforms)
-               --blazor [folder]   Blazor Web App host: ASP.NET Core server plus
-                                   a WebAssembly client page embedding the game
-                                   (opt-in; needs wasm-tools)
-               --no-desktop, --no-web, --no-tests
-                                   Leave a host out of the default set
-
-             options
-               -n, --name <name>   Project name (new) or base name override
-                                   (names are reduced to letters, digits,
-                                   '.', '_' and '-'; adjustments are announced)
-               --rename <NewName>  Fix a project whose .NET name contains
-                                   spaces (breaks publish): renames the csproj,
-                                   sets assembly_name, repoints the solution.
-                                   add/convert only, before any hosts exist
-               -o, --output <dir>  Directory for a new project
-               -y, --yes           Do not prompt; take the flags and defaults
-               --non-interactive   Same as --yes
-               --dry-run           Print planned actions without changing anything
-               --force             Overwrite files that already exist (never deletes)
-               --no-restore        Skip the final 'dotnet restore'
-               --verbose           Extra output
-               --version           Print tool and package versions; under dnx use
-                                   '2dog version' (dnx consumes --version itself,
-                                   to pin the tool version: 'dnx 2dog@<version>')
-
-             examples
-               2dog add                      # interactive, here
-               2dog new MyGame               # interactive host choice, new project
-               2dog new MyGame --desktop --tests
-               2dog add --desktop MyGame.editor
-               2dog add path/to/project --no-web
-               2dog pack list MyGame.web/AppBundle/godot.pck
-             """;
-        foreach (var line in usage.Split('\n'))
-        {
-            var text = line.TrimEnd('\r');
-            if (sections.Contains(text)) Out.Line($"[bold]{text}[/]");
-            else if (text.StartsWith("usage:")) Out.Line($"[bold]usage:[/]{Markup.Escape(text["usage:".Length..])}");
-            else Out.Plain(text);
-        }
+        Out.VersionTable(marked.Select(r => (r.Label, r.Version, r.Mark, r.Packages)).ToList());
     }
 }

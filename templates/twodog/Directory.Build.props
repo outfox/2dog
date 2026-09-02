@@ -1,0 +1,18 @@
+<Project>
+    <!-- Keep a Directory.Build.props above the project in effect (this file would otherwise shadow it). -->
+    <PropertyGroup>
+        <_TwoDogParentProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</_TwoDogParentProps>
+    </PropertyGroup>
+    <Import Project="$(_TwoDogParentProps)" Condition="'$(_TwoDogParentProps)' != ''"/>
+
+    <!-- The package versions every host references. `2dog update` rewrites this block, `2dog doctor` checks it;
+         the game project's Godot.NET.Sdk version stays in its csproj (SDK resolution runs before this file). -->
+    <PropertyGroup Label="2dog">
+        <TwoDogVersion>TWODOG_PKG_VERSION</TwoDogVersion>
+        <TwoDogNativesVersion>NATIVES_PKG_VERSION</TwoDogNativesVersion>
+        <TwoDogGodotVersion>GODOT_SDK_VERSION</TwoDogGodotVersion>
+        <TwoDogAvaloniaVersion>AVALONIA_PKG_VERSION</TwoDogAvaloniaVersion>
+        <TwoDogWindowsAppSdkVersion>WINAPPSDK_PKG_VERSION</TwoDogWindowsAppSdkVersion>
+        <TwoDogAspNetCoreVersion>ASPNETCORE_PKG_VERSION</TwoDogAspNetCoreVersion>
+    </PropertyGroup>
+</Project>

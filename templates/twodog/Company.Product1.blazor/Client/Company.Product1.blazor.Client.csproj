@@ -24,10 +24,10 @@
          Publish=true on 2dog.engine: the SDK reads PrivateAssets=all as Publish=false, which would drop GodotSharp.dll
          and twodog.dll from the publish set while the browser-wasm targets still root them (ILLink IL1035). -->
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="ASPNETCORE_PKG_VERSION"/>
-        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION" PrivateAssets="all" Publish="true"/>
-        <PackageReference Include="2dog.blazor" Version="TWODOG_PKG_VERSION"/>
-        <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(TwoDogAspNetCoreVersion)"/>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" PrivateAssets="all" Publish="true"/>
+        <PackageReference Include="2dog.blazor" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]" PrivateAssets="all"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../../TPLRAWNAME.csproj" PrivateAssets="all"/>

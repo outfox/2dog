@@ -13,6 +13,14 @@ internal enum HostKind
     Blazor,
 }
 
+/// <summary>Picker groups: created by default, opt-in, or opt-in and Windows-only.</summary>
+internal enum HostGroup
+{
+    Default,
+    OptIn,
+    WindowsOnly,
+}
+
 /// <summary>One host to create: its kind and the folder (and csproj) name it gets.</summary>
 internal sealed record HostSpec(HostKind Kind, string Folder);
 
@@ -90,6 +98,49 @@ internal static class Hosts
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
+    /// <summary>Alternative spellings of the flag, accepted but not advertised.</summary>
+    public static IEnumerable<string> FlagAliases(HostKind kind) => kind switch
+    {
+        HostKind.Desktop => ["--2dog"],
+        HostKind.Web => ["--browser"],
+        HostKind.Tests => ["--test"],
+        _ => [],
+    };
+
+    /// <summary>The flag that leaves this kind out of the default set: the host flag, negated.</summary>
+    public static string NoFlag(HostKind kind) => "--no-" + Flag(kind)[2..];
+
+    /// <summary>Browser-side hosts: they carry TwoDogWebBoot.cs, need wasm-tools, and publish a pck.</summary>
+    public static bool IsWebLike(HostKind kind) => kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor;
+
+    /// <summary>
+    /// Kinds kept out of plain solution builds: the browser ones need wasm-tools, WinUI builds only on Windows.
+    /// </summary>
+    public static bool ExcludedFromSolutionBuild(HostKind kind) => IsWebLike(kind) || kind == HostKind.WinUi;
+
+    /// <summary>The help row for the host flag: what the host is plus availability notes.</summary>
+    public static string HelpText(HostKind kind) => kind switch
+    {
+        HostKind.Desktop => "Desktop host (your own Main entry point)",
+        HostKind.Web => "Browser (WebAssembly) host",
+        HostKind.WebXr => "Browser host with the WebXR Layers polyfill wired into its page (opt-in)",
+        HostKind.Tests => "xUnit test project",
+        HostKind.WinForms => "WinForms host embedding the game window (Windows-only; never part of the default set)",
+        HostKind.WinUi => "WinUI 3 host embedding the game window (Windows-only, like --winforms; builds only on Windows)",
+        HostKind.Avalonia => "Avalonia host embedding the game in a cross-platform GUI (opt-in, like --winforms)",
+        HostKind.Blazor => "Blazor Web App host: ASP.NET Core server plus a WebAssembly client page embedding the " +
+                           "game (opt-in; needs wasm-tools)",
+        _ => throw new ArgumentOutOfRangeException(nameof(kind)),
+    };
+
+    /// <summary>How the interactive picker groups the kinds.</summary>
+    public static HostGroup Group(HostKind kind) => kind switch
+    {
+        HostKind.WinForms or HostKind.WinUi => HostGroup.WindowsOnly,
+        _ when InDefaultSet(kind) => HostGroup.Default,
+        _ => HostGroup.OptIn,
+    };
+
     /// <summary>
     /// The Blazor host is a pair: the server csproj named after the folder plus the WebAssembly client project
     /// nested in Client/ (the one that links Godot). Relative to the project root, forward slashes.
@@ -154,9 +205,56 @@ internal static class HostScan
 
     /// <summary>
     /// The kind of host a csproj is, or null when it is not a 2dog host. Content decides (the folder name is only
-    /// a hint, hosts may be named freely); the checks run most-specific first.
+    /// a hint, hosts may be named freely); the checks run most-specific first. Parsed as XML when possible so
+    /// namespaces, attributes and comments cannot fool the substring matcher, which stays as the fallback.
     /// </summary>
     internal static HostKind? Classify(string csproj, string folder)
+    {
+        System.Xml.Linq.XDocument doc;
+        try
+        {
+            doc = System.Xml.Linq.XDocument.Parse(csproj);
+        }
+        catch (System.Xml.XmlException)
+        {
+            return ClassifyText(csproj, folder);
+        }
+
+        if (doc.Root is not { } root) return ClassifyText(csproj, folder);
+
+        var packages = root.Descendants()
+            .Where(e => e.Name.LocalName == "PackageReference")
+            .Select(e => (string?)e.Attribute("Include") ?? "")
+            .ToList();
+        bool Package(string id) => packages.Any(p => p.Equals(id, StringComparison.OrdinalIgnoreCase));
+        string? Property(string name) => MsBuildXml.Property(root, name);
+        bool PropertyTrue(string name) => Property(name)?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
+        var sdk = (string?)root.Attribute("Sdk") ?? "";
+
+        var isTwoDog = Package("2dog.engine") || Package("2dog.xunit") || Package("2dog.avalonia")
+                       || Property("TwoDogBlazor") != null || Property("GodotProjectDir") != null;
+        if (!isTwoDog) return null;
+
+        if (PropertyTrue("TwoDogBlazor")) return HostKind.Blazor;
+        if (PropertyTrue("TwoDogWebXR")) return HostKind.WebXr;
+        if ((Property("RuntimeIdentifier") ?? "").Contains("browser-wasm", StringComparison.OrdinalIgnoreCase)
+            || (Property("RuntimeIdentifiers") ?? "").Contains("browser-wasm", StringComparison.OrdinalIgnoreCase)
+            || sdk.Contains("BlazorWebAssembly", StringComparison.OrdinalIgnoreCase)) return HostKind.Web;
+        if (Package("2dog.xunit") || packages.Any(p => p.StartsWith("xunit", StringComparison.OrdinalIgnoreCase)))
+            return HostKind.Tests;
+        if (PropertyTrue("UseWindowsForms")) return HostKind.WinForms;
+        if (PropertyTrue("UseWinUI")) return HostKind.WinUi;
+        // Before the Desktop OutputType check: Avalonia hosts are Exe/WinExe too.
+        if (Package("2dog.avalonia") || Package("Avalonia.Desktop")) return HostKind.Avalonia;
+        if (Property("OutputType") is { } outputType
+            && (outputType.Equals("Exe", StringComparison.OrdinalIgnoreCase)
+                || outputType.Equals("WinExe", StringComparison.OrdinalIgnoreCase))) return HostKind.Desktop;
+
+        return BySuffix(folder);
+    }
+
+    /// <summary>Substring classification for csprojs that do not parse as XML.</summary>
+    internal static HostKind? ClassifyText(string csproj, string folder)
     {
         var isTwoDog = csproj.Contains("2dog.engine", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
@@ -186,10 +284,12 @@ internal static class HostScan
         if (csproj.Contains("<OutputType>Exe</OutputType>", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("<OutputType>WinExe</OutputType>", StringComparison.OrdinalIgnoreCase)) return HostKind.Desktop;
 
-        // Wired to a Godot project but unrecognizable otherwise: fall back to
-        // the folder suffix rather than treating it as "not a host".
-        return Hosts.All.FirstOrDefault(
+        return BySuffix(folder);
+    }
+
+    /// <summary>Wired to a Godot project but unrecognizable otherwise: the folder suffix decides, default desktop.</summary>
+    private static HostKind BySuffix(string folder) =>
+        Hosts.All.FirstOrDefault(
             k => folder.EndsWith("." + Hosts.Suffix(k), StringComparison.OrdinalIgnoreCase),
             HostKind.Desktop);
-    }
 }

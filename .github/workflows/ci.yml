@@ -813,6 +813,51 @@ jobs:
           fi
           echo "Blazor engine restart smoke passed"
 
+  # The packed `2dog` tool, installed from the artifacts the way a user gets
+  # it: scaffolds into a path with a space, builds and tests the result
+  # against the same artifacts, and runs `2dog doctor` on it.
+  tool-smoke:
+    name: Tool Smoke (${{ matrix.name }})
+    needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+          - name: win-x64
+            runner: blacksmith-4vcpu-windows-2025
+
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      - name: Run tool smoke
+        shell: bash
+        run: bash .github/scripts/tool-smoke.sh
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).
@@ -821,8 +866,9 @@ jobs:
     name: Deploy to NuGet
     # web-smoke gates deploy because the 2dog.browser-wasm packages it
     # exercises are among the packages being published; desktop-smoke gates it
-    # because it is the only check that runs a Release-only publish.
-    needs: [test, desktop-smoke, web-smoke]
+    # because it is the only check that runs a Release-only publish; tool-smoke
+    # because it installs the packed `2dog` tool the way users get it.
+    needs: [test, desktop-smoke, web-smoke, tool-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -831,7 +877,7 @@ jobs:
     if: >-
       ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') &&
           needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
-          needs.web-smoke.result == 'success' }}
+          needs.web-smoke.result == 'success' && needs.tool-smoke.result == 'success' }}
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing

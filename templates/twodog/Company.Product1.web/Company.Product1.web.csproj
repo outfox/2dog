@@ -26,8 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="TWODOG_PKG_VERSION"/>
-        <PackageReference Include="2dog.browser-wasm" Version="[NATIVES_PKG_VERSION]"/>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../TPLRAWNAME.csproj"/>

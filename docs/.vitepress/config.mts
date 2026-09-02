@@ -129,6 +129,7 @@ export default defineConfig({
         text: 'Develop',
         items: [
           { text: gd('window_terminal') + '2dog (dotnet tool)', link: '/dnx-2dog' },
+          { text: gd('wrench') + 'Doctor and Update', link: '/doctor' },
           {
             text: gd('book_open') + 'API Reference',
             link: '/api-reference',
@@ -179,6 +180,7 @@ export default defineConfig({
         text: 'Other',
         items: [
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
+          { text: gd('bug') + 'Troubleshooting', link: '/troubleshooting' },
           {
             text: gd('bug') + 'Known Issues',
             link: '/known-issues/',

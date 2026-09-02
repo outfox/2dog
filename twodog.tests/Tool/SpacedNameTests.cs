@@ -272,7 +272,7 @@ public class RenameEndToEndTests
         var project = ScaffoldCommand.Open(options);
         var excluded = Hosts.All.Where(k => k != HostKind.Desktop).ToList();
         options.Hosts = HostSelection.Defaults(excluded, project);
-        return CliConsole.Capture(() => ScaffoldCommand.Run(project, options));
+        return CliConsole.Capture(() => ScaffoldCommand.Run(project, options).ExitCode);
     }
 
     [Fact]
@@ -334,7 +334,7 @@ public class RenameEndToEndTests
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, RenameTo = "FastDragon", Restore = false };
         var project = ScaffoldCommand.Open(options);
         options.Hosts = [];
-        Assert.Equal(0, CliConsole.Capture(() => ScaffoldCommand.Run(project, options)).ExitCode);
+        Assert.Equal(0, CliConsole.Capture(() => ScaffoldCommand.Run(project, options).ExitCode).ExitCode);
 
         Assert.True(File.Exists(Path.Combine(tmp.Dir, "FastDragon.csproj")));
         var text = File.ReadAllText(Path.Combine(tmp.Dir, "project.godot"));
@@ -381,14 +381,14 @@ public class NewNameAnnouncementTests
         };
 
         ProjectContext? project = null;
-        var (_, stdout, _) = CliConsole.Capture(() =>
+        var (_, _, stderr) = CliConsole.Capture(() =>
         {
             project = ScaffoldCommand.Open(options);
             return 0;
         });
 
         Assert.Equal("MyGame", project!.BaseName);
-        Assert.Contains("project name adjusted: 'My Game!' -> 'MyGame'", stdout);
+        Assert.Contains("project name adjusted: 'My Game!' -> 'MyGame'", stderr);
     }
 
     [Fact]

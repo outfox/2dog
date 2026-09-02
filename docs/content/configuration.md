@@ -45,8 +45,27 @@ Reference `2dog.engine` from generic hosts:
 
 Package versions begin with the embedded Godot version. Pin manual references
 to your project's Godot line, as above, so NuGet does not silently select a
-newer engine line. Projects scaffolded by 2dog configure package versions for
-you.
+newer engine line. Projects scaffolded by 2dog keep every version in one block
+of the root `Directory.Build.props` and reference it from the hosts:
+
+```xml
+<PropertyGroup Label="2dog">
+  <TwoDogVersion>:2dog-version:</TwoDogVersion>
+  <TwoDogNativesVersion>:natives-version:</TwoDogNativesVersion>
+  <TwoDogGodotVersion>:godot-version:</TwoDogGodotVersion>
+  <!-- TwoDogAvaloniaVersion, TwoDogWindowsAppSdkVersion, TwoDogAspNetCoreVersion -->
+</PropertyGroup>
+```
+
+```xml
+<PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+<PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]"/>
+```
+
+[`2dog update`](/doctor#updating-a-project) rewrites that block (and the game
+project's `Godot.NET.Sdk` version, which cannot come from a property);
+[`2dog doctor`](/doctor) reports literals left in host csprojs and versions on
+different Godot lines.
 
 `2dog.engine` selects the platform meta package for the current OS:
 `2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64`. Each meta package pins

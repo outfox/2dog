@@ -4,7 +4,7 @@ namespace twodog.tests.ToolTests;
 
 // The pure halves of the `2dog version` nuget.org check: picking the latest
 // stable out of a flat-container version list, and turning current-vs-latest
-// into the ✅/🔄 mark. The HTTP path is best-effort by design and not tested.
+// into the up-to-date mark. The HTTP path is best-effort by design and not tested.
 public class NuGetLatestTests
 {
     [Fact]
@@ -28,12 +28,12 @@ public class NuGetLatestTests
     }
 
     [Theory]
-    [InlineData("4.7.1.65", "4.7.1.65", "✅")] // exactly the newest published
-    [InlineData("4.7.1.66", "4.7.1.65", "✅")] // ahead of nuget.org: nothing newer to fetch
-    [InlineData("4.7.1.35", "4.7.1.65", "🔄")]
-    [InlineData("4.7.1", "4.9.1", "🔄")]
+    [InlineData("4.7.1.65", "4.7.1.65", VersionMark.UpToDate)] // exactly the newest published
+    [InlineData("4.7.1.66", "4.7.1.65", VersionMark.UpToDate)] // ahead of nuget.org: nothing newer to fetch
+    [InlineData("4.7.1.35", "4.7.1.65", VersionMark.Outdated)]
+    [InlineData("4.7.1", "4.9.1", VersionMark.Outdated)]
     [InlineData("4.7.1.65", null, null)] // lookup failed
-    public void Mark_ComparesCurrentAgainstLatestStable(string current, string? latest, string? expected)
+    public void Mark_ComparesCurrentAgainstLatestStable(string current, string? latest, VersionMark? expected)
     {
         Assert.Equal(expected, NuGetLatest.Mark(current, latest));
     }

@@ -13,7 +13,7 @@ public class ProgramTests
         Assert.Equal(0, CliConsole.Run("version").ExitCode);
 
         var pin = CliConsole.Run("--pin", "1.2.3");
-        Assert.Equal(2, pin.ExitCode);
+        Assert.Equal(1, pin.ExitCode);
         Assert.Contains("cannot pin its own version", pin.Stderr);
 
         var unknown = CliConsole.Run("--unknown");
@@ -92,7 +92,6 @@ public class CommandLineCoverageTests
         Assert.Equal("Game", cmd.Options.NameOverride);
         Assert.True(cmd.Options.DryRun);
         Assert.True(cmd.Options.Force);
-        Assert.True(cmd.Options.Verbose);
         Assert.True(cmd.NoInteractive);
         Assert.Equal(
             [(HostKind.Desktop, "Desk"), (HostKind.Web, "Web"), (HostKind.WebXr, "Xr"), (HostKind.Tests, "Tests"),
@@ -231,14 +230,15 @@ public class SolutionOpsCoverageTests
         var slnx = Path.Combine(tmp.Dir, "Empty.slnx");
         SolutionOps.CreateSolution(slnx);
 
-        var succeeded = false;
+        ProcessResult? result = null;
         CliConsole.Capture(() =>
         {
-            SolutionOps.Restore(slnx, out succeeded);
+            result = SolutionOps.Restore(slnx);
             return 0;
         });
 
-        Assert.True(succeeded);
+        Assert.True(result!.Ok);
+        Assert.Contains("restore", result.CommandLine);
     }
 }
 
@@ -272,11 +272,14 @@ public class ScaffoldCoverageTests
         var project = ScaffoldCommand.Open(options);
         IReadOnlyList<string>? descriptions = null;
 
-        Assert.Equal(0, ScaffoldCommand.Run(project, options, plan =>
+        var result = ScaffoldCommand.Run(project, options, plan =>
         {
-            descriptions = plan;
+            descriptions = plan.Select(a => a.Description).ToList();
             return false;
-        }));
+        });
+        Assert.Equal(0, result.ExitCode);
+        Assert.True(result.Cancelled);
+        Assert.All(result.Actions, a => Assert.Equal(ActionStatus.Planned, a.Status));
 
         Assert.NotNull(descriptions);
         Assert.Contains(descriptions, d => d.Contains("Game.desktop"));

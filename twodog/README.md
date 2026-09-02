@@ -1,8 +1,10 @@
 # 2dog
 
 Command-line tool and project templates for [2dog](https://2dog.dev)  –  run
-Godot as a library from your own .NET entry point. The engine library itself
-is the [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) package.
+Godot as a library from your own .NET entry point. It scaffolds host projects,
+checks and repairs them (`2dog doctor`), and updates them (`2dog update`). The
+engine library itself is the [`2dog.engine`](https://www.nuget.org/packages/2dog.engine)
+package.
 
 This one package is both a dotnet tool and a `dotnet new` template package.
 
@@ -13,6 +15,8 @@ One-shot (no install, .NET 10+):
 ```bash
 dnx 2dog add         # add hosts to the Godot project here
 dnx 2dog new MyGame  # a new Godot project with 2dog hosts
+dnx 2dog doctor      # check the project and this machine, fix what it can
+dnx 2dog update      # bring the 2dog packages to this tool's versions
 ```
 
 Or install the `2dog` command globally:
@@ -29,16 +33,19 @@ same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
 ## What it does
 
-Creates the host projects **in place**  –  no file is ever moved, renamed or
-deleted. The Godot project directory becomes the solution root, and host
-projects are scaffolded as nested subfolders that the Godot editor ignores
-(each carries a `.gdignore`):
+Creates the host projects **in place**: it creates files and edits `*.csproj`,
+`project.godot`, the solution and `Directory.Build.props`; no file is ever
+moved, renamed or deleted (two announced opt-ins aside: the `.sln` to `.slnx`
+migration and `--rename`). The Godot project directory becomes the solution
+root, and host projects are scaffolded as nested subfolders that the Godot
+editor ignores (each carries a `.gdignore`):
 
 ```
 MyGame/                      <- your existing Godot project (unchanged)
   project.godot
   MyGame.csproj              <- created or minimally patched
   MyGame.slnx                <- created, or an existing .sln is migrated
+  Directory.Build.props      <- the package versions every host references
   MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
@@ -61,7 +68,11 @@ Commands:
 | `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
 | `2dog add [path]` | Add hosts to an existing Godot project |
 | `2dog convert [path]` | Alias of `add`, for projects that have no hosts yet |
+| `2dog doctor [path]` | Check the project and this machine; `--fix` applies the safe fixes; `--build` / `--log` explain build failures |
+| `2dog update [path]` | Update the project's 2dog packages to this tool's versions (never downgrades) |
 | `2dog pack list <file.pck>` | List a `.pck`'s contents by size (no engine involved) |
+| `2dog version` | Print the tool and package versions |
+| `2dog help [verb]` | Usage, or the help for one verb |
 
 Options:
 
@@ -70,12 +81,20 @@ Options:
 | `--desktop [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, winui, avalonia, and blazor are opt-in and never in the default set) |
 | `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
+| `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |
 | `-o, --output <dir>` | Directory for a new project |
 | `-y, --yes`, `--non-interactive` | Do not prompt; take the flags and defaults |
 | `--dry-run` | Print planned actions without changing anything |
 | `--force` | Overwrite files that already exist (never deletes/moves) |
 | `--no-restore` | Skip the final `dotnet restore` |
-| `--verbose` | Extra output |
+| `--allow-dirty` | `update`: proceed with uncommitted git changes |
+| `--fix`, `--fix-all`, `--build [target]`, `-c, --configuration <Cfg>`, `--log <file>`, `--ignore <id>`, `--strict`, `--offline`, `--list-checks` | `doctor` options; see `2dog doctor --help` |
+| `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |
+| `-h, --help`, `--version` | Help (per verb after a verb), versions |
+
+Exit codes: `0` ok, `1` usage error, `2` tool error, `3` doctor findings remain,
+`130` cancelled. The report goes to stdout, diagnostics to stderr; nothing
+prompts in a pipe or in CI. Full reference: https://2dog.dev/dnx-2dog
 
 ## Using the library directly
 
