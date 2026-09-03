@@ -128,7 +128,35 @@ export default defineConfig({
       {
         text: 'Develop',
         items: [
-          { text: gd('window_terminal') + '2dog (dotnet tool)', link: '/dnx-2dog' },
+          {
+            text: gd('window_terminal') + '2dog (dotnet tool)',
+            link: '/dnx-2dog',
+            collapsed: true,
+            items: [
+              {
+                text: 'Scaffold',
+                items: [
+                  { text: gd('sprout') + 'new', link: '/cli/new' },
+                  { text: gd('bone') + 'add', link: '/cli/add' }
+                ]
+              },
+              {
+                text: 'Maintain',
+                items: [
+                  { text: gd('wrench') + 'doctor', link: '/cli/doctor' },
+                  { text: gd('arrows_clockwise') + 'update', link: '/cli/update' }
+                ]
+              },
+              {
+                text: 'Inspect',
+                items: [
+                  { text: gd('box') + 'pack', link: '/cli/pack' },
+                  { text: gd('tag') + 'version', link: '/cli/version' },
+                  { text: gd('help') + 'help', link: '/cli/help' }
+                ]
+              }
+            ]
+          },
           { text: gd('wrench') + 'Doctor and Update', link: '/doctor' },
           {
             text: gd('book_open') + 'API Reference',

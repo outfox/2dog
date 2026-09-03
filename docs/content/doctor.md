@@ -52,27 +52,7 @@ In a terminal, doctor ends with a checklist: safe fixes pre-checked, announced
 ones unchecked. In a pipe or with `--yes` it prints the commands instead.
 After applying fixes it checks again.
 
-## Options
-
-- `--fix` applies the safe fixes; `--fix-all` applies the announced ones too.
-- `--build [target]` runs `dotnet build` (of the solution, or a host folder or
-  project) and explains the failures 2dog recognizes; `-c` picks the
-  configuration.
-- `--log <file>` explains an existing build, restore or runtime log; `-` reads
-  stdin.
-- `--ignore <id>` drops a finding by its check id; `--list-checks` prints the
-  ids.
-- `--strict` makes warnings fail the run.
-- `--offline` skips the nuget.org check for a newer tool.
-- `--json` writes the whole report to stdout; `-v` lists passed checks too.
-
-Exit codes: `0` when only informational items remain, `3` while errors remain
-(or warnings under `--strict`), `2` when doctor could not run at all.
-
-```bash
-2dog doctor --json --strict | jq '.doctor.summary'
-dotnet build 2>&1 | 2dog doctor --log -
-```
+Every option, exit code and check id: [`2dog doctor`](/cli/doctor).
 
 ## Updating a project
 
@@ -88,7 +68,4 @@ ASP.NET Core) when the tool's are newer, refreshes `TwoDogWebBoot.cs`, and runs
 `dotnet restore`. It always targets the running tool's versions and never
 downgrades. Crossing a Godot line (4.7 to 4.8) is announced: install the
 matching editor, open the project once, then run `2dog doctor --build`.
-
-- `--dry-run` shows the plan and stops.
-- `--no-restore` skips the restore.
-- `--allow-dirty` proceeds on a dirty git tree, which update otherwise refuses.
+Options: [`2dog update`](/cli/update).

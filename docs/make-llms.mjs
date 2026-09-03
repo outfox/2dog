@@ -52,7 +52,8 @@ const SECTIONS = [
     'api/rendering-collection.md', 'api/headless-collection.md', 'api/assembly-preloader.md',
   ]],
   ['Develop and Configure', [
-    'dnx-2dog.md', 'import-tool.md', 'testing.md', 'build-configurations.md', 'configuration.md',
+    'dnx-2dog.md', 'cli/new.md', 'cli/add.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md',
+    'cli/version.md', 'cli/help.md', 'import-tool.md', 'testing.md', 'build-configurations.md', 'configuration.md',
   ]],
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',
