@@ -1030,7 +1030,7 @@ public class AddEndToEndTests
     [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",
         new[] { "Program.cs", "wwwroot/index.html", "wwwroot/webxr-layers-polyfill.min.js" })]
     [InlineData("--blazor", "blazor", "<TwoDogBlazor>true</TwoDogBlazor>",
-        new[] { "Program.cs", "Components/App.razor", "Client/SpaceMiner.blazor.Client.csproj", "Client/Pages/Home.razor" })]
+        new[] { "Program.cs", "Properties/launchSettings.json", "Components/App.razor", "Client/SpaceMiner.blazor.Client.csproj", "Client/Pages/Home.razor" })]
     public void Add_OptInHost_ScaffoldsOnExplicitFlagOnly(
         string flag, string suffix, string csprojMarker, string[] extraFiles)
     {

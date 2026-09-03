@@ -112,6 +112,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.webboot-drift` | the tool-owned TwoDogWebBoot.cs matches this tool's copy |
 | `host.trimmer-root` | browser hosts root the game assembly for the trimmer |
 | `host.blazor-client` | the Blazor client project exists and publishes 2dog.engine |
+| `host.blazor-launch-settings` | Blazor hosts carry a Development launchSettings.json |
 | `host.windows-only` | Windows-only hosts are noted on other platforms |
 
 ### Solution

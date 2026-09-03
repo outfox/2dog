@@ -20,6 +20,7 @@ internal static class HostChecks
         new("host.webboot-drift", Category.Hosts, "the tool-owned TwoDogWebBoot.cs matches this tool's copy"),
         new("host.trimmer-root", Category.Hosts, "browser hosts root the game assembly for the trimmer"),
         new("host.blazor-client", Category.Hosts, "the Blazor client project exists and publishes 2dog.engine"),
+        new("host.blazor-launch-settings", Category.Hosts, "Blazor hosts carry a Development launchSettings.json"),
         new("host.windows-only", Category.Hosts, "Windows-only hosts are noted on other platforms"),
     ];
 
@@ -151,6 +152,15 @@ internal static class HostChecks
                 else if (!System.Text.RegularExpressions.Regex.IsMatch(client, @"Include=""2dog\.engine""(?=[^>]*PrivateAssets=""all"")(?=[^>]*Publish=""true"")"))
                     yield return Issue(new Finding("host.blazor-client", c, Severity.Warn, $"{host.Folder}/Client: 2dog.engine needs PrivateAssets=\"all\" Publish=\"true\"",
                         "without Publish=\"true\" the trimmer fails with IL1035", "set both attributes on the 2dog.engine PackageReference"));
+
+                // Without the Development profile `dotnet run` starts as Production, where static web assets are off and
+                // the framework's blazor.web.js is not served (the page dies with a FileNotFoundException).
+                if (!File.Exists(Path.Combine(dir, "Properties", "launchSettings.json")))
+                    yield return Issue(new Finding("host.blazor-launch-settings", c, Severity.Warn, $"{host.Folder}/Properties/launchSettings.json missing",
+                        "`dotnet run` then starts as Production, which serves no static web assets (blazor.web.js not found)", null,
+                        $"{host.Folder}/Properties/launchSettings.json",
+                        new Fix($"create:{host.Folder}/Properties/launchSettings.json", FixClass.Safe, $"create {host.Folder}/Properties/launchSettings.json",
+                            () => WriteTemplateFile(p, host, "Properties/launchSettings.json"))));
             }
 
             if (host.Kind is HostKind.WinForms or HostKind.WinUi && !ctx.Env.IsWindows)
@@ -174,7 +184,9 @@ internal static class HostChecks
     {
         var file = TemplateAssets.HostFiles(host.Kind, p.BaseName ?? host.Folder, host.Folder)
             .First(f => f.RelativePath == $"{host.Folder}/{fileName}");
-        File.WriteAllBytes(Path.Combine(p.Dir, file.RelativePath), file.Content);
+        var path = Path.Combine(p.Dir, file.RelativePath);
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllBytes(path, file.Content);
     }
 
     /// <summary>Appends a marked PropertyGroup with the given properties; whitespace elsewhere survives.</summary>

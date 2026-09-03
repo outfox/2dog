@@ -122,6 +122,7 @@ public class DoctorTests : IDisposable
     public static IEnumerable<object[]> SafeBreakers() =>
     [
         ["host.gdignore", "fail", (Action<string>)(d => File.Delete(Path.Combine(d, "Game.web", ".gdignore")))],
+        ["host.blazor-launch-settings", "warn", (Action<string>)(d => File.Delete(Path.Combine(d, "Game.blazor", "Properties", "launchSettings.json")))],
         ["preset.desktop", "warn", (Action<string>)(d => Edit(d, "export_presets.cfg", "name=\"Linux\"", "name=\"Linux-old\""))],
         ["preset.web", "fail", (Action<string>)(d => Edit(d, "export_presets.cfg", "name=\"Web\"", "name=\"Web-old\""))],
         ["host.buildtype-deprecated", "warn", (Action<string>)(d => Edit(d, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><TwoDogBuildType>debug</TwoDogBuildType>"))],
@@ -145,7 +146,7 @@ public class DoctorTests : IDisposable
     [MemberData(nameof(SafeBreakers))]
     public void SafeBreaker_IsFound_FixedAndIdempotent(string id, string severity, Action<string> breaker)
     {
-        var dir = Scaffold("--desktop", "--web", "--webxr", "--tests");
+        var dir = Scaffold("--desktop", "--web", "--webxr", "--blazor", "--tests");
         breaker(dir);
 
         var broken = Doctor(dir, null, "--json");
