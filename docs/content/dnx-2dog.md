@@ -18,7 +18,7 @@ The tool and the matching `dotnet new` template ship together in the
 ## Installation
 
 ```bash
-dnx 2dog add                  # .NET 10 SDK: downloads and runs the latest version
+dnx 2dog add                  # run latest from nuget
 dotnet tool install -g 2dog   # or install it globally
 ```
 
