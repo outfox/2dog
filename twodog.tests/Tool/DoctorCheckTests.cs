@@ -235,10 +235,26 @@ public class DoctorCheckTests : IDisposable
         File.WriteAllText(targets, "<Project>\n</Project>\n");
         Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
 
-        File.WriteAllText(targets, "<Project>\n  <Import Project=\"$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))\" />\n</Project>\n");
-        var findings = Findings(Doctor(dir, "--json").Stdout, "layout.root-build-targets");
-        Assert.NotEmpty(findings);
-        Assert.All(findings, f => Assert.Equal("pass", f.GetProperty("severity").GetString()));
+        // An unrelated file of the same name is not the parent; neither is a malformed file a definition.
+        File.WriteAllText(targets, "<Project>\n  <Import Project=\"tools/Directory.Build.targets\" />\n</Project>\n");
+        Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
+        File.WriteAllText(targets, "<Project>\n  <Target Name=\"TwoDogDeepClean\">\n</Project>\n");
+        Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
+
+        // The template's own chaining style: the lookup carried by a property, and a literal parent path.
+        foreach (var chained in new[]
+                 {
+                     "<Project>\n  <Import Project=\"$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))\" />\n</Project>\n",
+                     "<Project>\n  <PropertyGroup>\n    <_Parent>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))</_Parent>\n  </PropertyGroup>\n"
+                     + "  <Import Project=\"$(_Parent)\" Condition=\"'$(_Parent)' != ''\" />\n</Project>\n",
+                     "<Project>\n  <Import Project=\"$(MSBuildThisFileDirectory)../Directory.Build.targets\" />\n</Project>\n",
+                 })
+        {
+            File.WriteAllText(targets, chained);
+            var findings = Findings(Doctor(dir, "--json").Stdout, "layout.root-build-targets");
+            Assert.NotEmpty(findings);
+            Assert.All(findings, f => Assert.Equal("pass", f.GetProperty("severity").GetString()));
+        }
     }
 
     [Fact]

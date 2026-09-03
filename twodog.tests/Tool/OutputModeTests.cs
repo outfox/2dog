@@ -1,3 +1,4 @@
+using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 using twodog.cli;
 
@@ -137,6 +138,25 @@ public class OutputModeTests
         Assert.DoesNotMatch("\x1b", run.Stdout);
         Assert.DoesNotMatch("\x1b", run.Stderr);
     }
+
+    /// <summary>A second copy of this assembly in a foreign load context must not re-pin the shared gateway.</summary>
+    [Fact]
+    public void ForeignCopyOfTheTestAssembly_LeavesTheModeAlone()
+    {
+        CliConsole.Capture(() =>
+        {
+            Out.Configure(OutputMode.Resolve(["-v"], _ => null, ConsoleFacts.Redirected));
+            var alc = new AssemblyLoadContext("out-foreign-copy", isCollectible: true);
+            var copy = alc.LoadFromAssemblyPath(typeof(OutputModeTests).Assembly.Location);
+            // Running any method of the copy runs its module initializers first.
+            copy.GetType(typeof(OutputModeTests).FullName!, throwOnError: true)!
+                .GetMethod(nameof(Touch))!.Invoke(null, null);
+            Assert.True(Out.Mode.Verbose);
+            return 0;
+        });
+    }
+
+    public static void Touch() { }
 
     [Fact]
     public void Quiet_KeepsResultsAndProblems_DropsNarration()

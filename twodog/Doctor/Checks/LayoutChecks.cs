@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -89,7 +90,7 @@ internal static class LayoutChecks
             // MSBuild imports only the nearest file: a root file hides the parent's unless it imports it explicitly.
             var inheritedDeepClean = inherited != null && DefinesTarget(inherited, "TwoDogDeepClean");
             var deepClean = p.HasRootBuildTargets
-                ? DefinesTarget(targets, "TwoDogDeepClean") || (inheritedDeepClean && ImportsFileAbove(targets))
+                ? DefinesTarget(targets, "TwoDogDeepClean") || (inheritedDeepClean && ImportsParent(targets, inherited!))
                 : inheritedDeepClean;
             if (p.HasRootBuildTargets)
                 yield return deepClean
@@ -155,15 +156,44 @@ internal static class LayoutChecks
     private static bool DefinesTarget(string path, string name) => Inspect(path, doc => doc.Descendants()
         .Any(e => e.Name.LocalName == "Target" && string.Equals((string?)e.Attribute("Name"), name, StringComparison.OrdinalIgnoreCase)));
 
-    /// <summary>Whether the file chains to a Directory.Build.targets above it through an Import.</summary>
-    private static bool ImportsFileAbove(string path) => Inspect(path, doc => doc.Descendants()
-        .Any(e => e.Name.LocalName == "Import"
-                  && ((string?)e.Attribute("Project") ?? "").Contains("Directory.Build.targets", StringComparison.OrdinalIgnoreCase)));
+    private static readonly Regex PropertyReference = new(@"\$\((?<name>[A-Za-z_]\w*)\)", RegexOptions.Compiled);
 
-    /// <summary>A file that cannot be read or parsed raises no finding of its own here (the build reports it).</summary>
+    private static readonly Regex FileAboveLookup =
+        new(@"GetPathOfFileAbove\(\s*['""]Directory\.Build\.targets['""]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    /// <summary>
+    /// Whether the file imports that parent: an Import whose path (after expanding $(MSBuildThisFileDirectory) and
+    /// the file's own properties) resolves to it, or a GetPathOfFileAbove lookup for the same file name, which
+    /// resolves to the nearest one above - the parent. Other expressions cannot be evaluated here and do not count.
+    /// </summary>
+    private static bool ImportsParent(string path, string parent) => Inspect(path, doc =>
+    {
+        var dir = Path.GetDirectoryName(path)!;
+        var properties = doc.Descendants().Where(e => e.Parent?.Name.LocalName == "PropertyGroup")
+            .GroupBy(e => e.Name.LocalName, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.Last().Value.Trim(), StringComparer.OrdinalIgnoreCase);
+        properties["MSBuildThisFileDirectory"] = dir + Path.DirectorySeparatorChar;
+
+        return doc.Descendants().Where(e => e.Name.LocalName == "Import")
+            .Select(e => PropertyReference.Replace((string?)e.Attribute("Project") ?? "",
+                m => properties.GetValueOrDefault(m.Groups["name"].Value, m.Value)))
+            .Any(project => FileAboveLookup.IsMatch(project) || (!project.Contains("$(") && ResolvesTo(project, dir, parent)));
+    });
+
+    private static bool ResolvesTo(string project, string dir, string target)
+    {
+        try
+        {
+            return HostChecks.SamePath(Path.Combine(dir, project.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar)), target);
+        }
+        catch (ArgumentException) { return false; }
+    }
+
+    /// <summary>An unreadable file raises no finding of its own here; a malformed one counts as defining nothing.</summary>
     private static bool Inspect(string path, Func<XDocument, bool> test)
     {
         try { return test(XDocument.Load(path)); }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or XmlException) { return true; }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return true; }
+        catch (XmlException) { return false; }
     }
 }

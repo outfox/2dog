@@ -166,7 +166,7 @@ internal static class HostChecks
                 yield return Finding.Pass(id, c, title);
     }
 
-    private static bool SamePath(string a, string b) =>
+    internal static bool SamePath(string a, string b) =>
         string.Equals(Path.TrimEndingDirectorySeparator(Path.GetFullPath(a)), Path.TrimEndingDirectorySeparator(Path.GetFullPath(b)),
             OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 
