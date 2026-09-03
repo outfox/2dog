@@ -59,7 +59,8 @@ declarations dispose the instance and engine in the required order.
 Prefer a callback? `engine.Run(perFrame)` iterates until quit and calls your
 delegate once per frame.
 
-On Windows, `[STAThread]` keeps drag and drop, IME, and native dialogs working.
+On Windows, annotate `Main()` with `[STAThread]`: OLE features such as drag and drop,
+IME, and native dialogs need it to initialize.
 
 
 ## Project Setup
@@ -131,9 +132,3 @@ game and plugin assemblies from disk through hostfxr.
 
 - A normal host supports one active engine at a time. Disposing it permits a
   sequential restart; see [Single Godot Instance](/known-issues/single-instance).
-
-
-## Windows
-
-Hosts intended to run on Windows should annotate their `Main()` with `[STAThread]` so OLE features
-such as drag and drop, IME, and native dialogs initialize correctly.

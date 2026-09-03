@@ -57,11 +57,11 @@ public void CanLogNodePath(string value)
 }
 ```
 
-Prefer this approach when practical.
+Prefer this one.
 
 ## Affected Types
 
-Any GodotSharp type whose construction calls native code may be affected,
-including `NodePath`, `StringName`, `Rid`, `GodotObject` subclasses, and some
-math value types. Primitive C# values such as strings, numbers, booleans, and
+Any GodotSharp type whose constructor calls native code is affected:
+`NodePath`, `StringName`, `Rid`, `GodotObject` subclasses, and some math
+value types. Primitive C# values such as strings, numbers, booleans, and
 their arrays are safe for discovery.
