@@ -13,7 +13,7 @@ cd MyGame
 dotnet run --project MyGame.2dog
 ```
 
-`2dog new` asks which hosts to include. Pass `--desktop`, `--web`, `--webxr`,
+[`2dog new`](/cli/new) asks which hosts to include. Pass `--desktop`, `--web`, `--webxr`,
 `--tests`, `--winforms`, `--winui`, `--avalonia`, `--blazor`, or `--non-interactive`
 to skip the prompts.
 
