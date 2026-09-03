@@ -5,7 +5,7 @@ titleTemplate: false
 description: "2dog runs Godot inside .NET: export your C# game to the browser, test it with xUnit, and embed the engine in any .NET application - while keeping your scenes, scripts, and Godot workflow."
 
 # og:site_name must use property= (OpenGraph ignores name=). The former name:title,
-# name:description, and name:og:description entries were dead — nothing consumes
+# name:description, and name:og:description entries were dead – nothing consumes
 # name="title" or name="og:description", and VitePress drops a head description in
 # favor of the frontmatter description above; og:type/og:url duplicated config.mts.
 head:

@@ -68,7 +68,7 @@ point the consumer at the local feed:
 
 ```bash
 dotnet pack twodog.engine -c Release -p:TwoDogVersion=:2dog-version:-local.1
-# consumer nuget.config: add P:\2dog\packages as a source, reference -local.1
+# consumer nuget.config: add the repo's packages/ folder as a source, reference -local.1
 ```
 
 ## The Godot editor holds a file

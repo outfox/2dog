@@ -62,7 +62,7 @@ dotnet run --project MyGame.2dog
 
 `MyGame.2dog` is the process entry point: a plain .NET console application that
 starts Godot as an embedded library. Change and extend it like any other .NET
-code  –  it's the simplest way to run 2dog, and the first place to look when
+code – it's the simplest way to run 2dog, and the first place to look when
 troubleshooting.
 
 
@@ -105,7 +105,7 @@ dotnet publish MyGame.2dog -c Release -r win-x64 # or a specific RID
 
 The publish folder is a complete build: your host executable, the native
 engine, the .NET runtime and assemblies, and your game content exported as
-`MyGame.2dog.pck`. Copy the folder to another machine and run the executable  – 
+`MyGame.2dog.pck`. Copy the folder to another machine and run the executable – 
 no .NET installation required. See the
 [Generic Host guide](/hosts/generic#publishing) for the framework-dependent
 opt-out, preset configuration, and unsupported publish modes.

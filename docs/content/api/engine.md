@@ -156,8 +156,8 @@ internal static class Program
 ```
 
 `args` accepts ordinary
-[Godot command-line arguments](https://docs.godotengine.org/en/stable/tutorials/editor/command_line_tutorial.html)  – 
+[Godot command-line arguments](https://docs.godotengine.org/en/stable/tutorials/editor/command_line_tutorial.html) – 
 `--headless`, `--verbose`, `--rendering-driver opengl3`, `--audio-driver Dummy`,
-and the rest  –  and passes them to the engine unchanged.
+and the rest – and passes them to the engine unchanged.
 
 See [Generic Host](../hosts/generic) for the full desktop-host pattern.

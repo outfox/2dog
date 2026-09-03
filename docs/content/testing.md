@@ -28,8 +28,6 @@ dotnet test MyGame.tests
 
 The generated test project sits inside the Godot project, includes a
 `.gdignore`, and points `<GodotProjectDir>` at `..`.
-If you create one manually, copy the required project setup from
-[xUnit Host](/hosts/xunit#project-differences).
 
 ## Fixtures
 
