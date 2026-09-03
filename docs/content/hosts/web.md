@@ -33,7 +33,7 @@ dotnet serve --directory MyGame.web/AppBundle -z -b
 
 Open the URL printed by `dotnet serve`; output from the host's `Main()` lands
 in the browser DevTools console. `-z -b` compresses responses with gzip and
-Brotli  –  the engine, .NET runtime, and pack are large files, and serving them
+Brotli – the engine, .NET runtime, and pack are large files, and serving them
 uncompressed makes local startup unnecessarily slow.
 
 Publish again after changing game resources, host code, or files in `wwwroot`.

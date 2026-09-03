@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Fix typography in markdown files:
- * - Replace em-dashes (—) with en-dashes surrounded by spaces ( – )
+ * - Replace em-dashes (—) with en-dashes surrounded by single spaces ( – )
+ * - Collapse runs of spaces around an en-dash to single spaces
  * - Replace smart double quotes ("") with straight quotes (")
  * - Replace smart single quotes ('') with straight quotes (')
  * - Replace ellipsis (…) with three periods (...)
@@ -15,7 +16,8 @@ import { join, extname } from 'path';
 // patterns (which is exactly what happened once - ASCII quote classes match
 // plain apostrophes, "fix" nothing, and report success).
 const replacements = [
-  { pattern: /\u2014/g, replacement: ' \u2013 ', name: 'em-dashes' },
+  { pattern: / *\u2014 */g, replacement: ' \u2013 ', name: 'em-dashes' },
+  { pattern: / {2,}\u2013 *| *\u2013 {2,}/g, replacement: ' \u2013 ', name: 'double-spaced en-dashes' },
   { pattern: /[\u201C\u201D]/g, replacement: '"', name: 'smart double quotes' },
   { pattern: /[\u2018\u2019]/g, replacement: "'", name: 'smart single quotes' },
   { pattern: /\u2026/g, replacement: '...', name: 'ellipsis' },
