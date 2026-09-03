@@ -34,7 +34,8 @@ internal static class TemplateAssets
                      ?? throw new InvalidOperationException($"Embedded template resource missing: {name}");
         using var stream = assembly.GetManifestResourceStream(actual)!;
         using var reader = new StreamReader(stream);
-        return reader.ReadToEnd();
+        // Text comes out with the platform's line breaks: the resource carries those of the checkout it was packed on.
+        return reader.ReadToEnd().ReplaceLineEndings();
     }
 
     private static byte[] ReadRawBytes(string name)

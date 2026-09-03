@@ -24,6 +24,12 @@ Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 desktop, browser and tests, minus the `--no-<host>` ones. Existing hosts are
 recognized and skipped.
 
+The new hosts are built for the running tool's versions, so the game project's
+`Godot.NET.Sdk` and an existing 2dog version block in `Directory.Build.props`
+are raised to them in the same run (never lowered), as `2dog update` would. A
+move across Godot lines is called out: install the matching editor and open
+the project once.
+
 ## Options
 
 | Option | Effect |

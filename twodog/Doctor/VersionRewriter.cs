@@ -107,6 +107,21 @@ internal static class VersionRewriter
     public static string? GodotSdkVersion(string csprojText) =>
         SdkAttribute.Match(csprojText) is { Success: true } m ? m.Groups["version"].Value : null;
 
+    /// <summary>Whether a Godot.NET.Sdk version is older than the one this tool targets (unparsable = no).</summary>
+    public static bool IsOlderGodotSdk(string version) =>
+        Version.TryParse(version, out var v) && Version.TryParse(ToolVersions.GodotSdkVersion, out var tool) && v < tool;
+
+    /// <summary>
+    /// The warning a Godot.NET.Sdk move across Godot lines (major.minor) deserves: the matching editor must be
+    /// installed and the project opened once. Null when the line stays.
+    /// </summary>
+    public static string? GodotLineChangeWarning(string? from, string to) =>
+        Version.TryParse(from, out var was) && Version.TryParse(to, out var now) && (was.Major != now.Major || was.Minor != now.Minor)
+            ? $"this moves the project from Godot {was.Major}.{was.Minor} to {now.Major}.{now.Minor}: install the " +
+              $"matching Godot {now.Major}.{now.Minor} .NET editor, open the project once so it updates " +
+              "config/features, then run '2dog doctor --build'"
+            : null;
+
     /// <summary>
     /// The game csproj text with its Godot.NET.Sdk version replaced, or null when it already matches. Only the
     /// version characters change, so quoting and spacing around the attribute survive.

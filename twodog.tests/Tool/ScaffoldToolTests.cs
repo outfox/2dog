@@ -327,12 +327,38 @@ public class CsprojPatcherTests
     }
 
     [Fact]
-    public void OlderGodotSdk_Warns()
+    public void OlderGodotSdk_Warns_OrIsRaisedToTheToolsWhenAsked()
     {
         using var tmp = new TempProjectDir();
         var path = tmp.Write("MyGame.csproj", "<Project Sdk=\"Godot.NET.Sdk/4.2.0\">\n</Project>");
         var result = CsprojPatcher.Patch(path, HostFolders);
         Assert.Contains(result.Warnings, w => w.Contains("older"));
+        Assert.Contains("Godot.NET.Sdk/4.2.0", result.NewContent);
+
+        var raised = CsprojPatcher.Patch(path, HostFolders, upgradeGodotSdk: true);
+        Assert.Contains($"Godot.NET.Sdk: 4.2.0 -> {ToolVersions.GodotSdkVersion}", raised.Added);
+        Assert.Contains($"<Project Sdk=\"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}\">", raised.NewContent);
+        Assert.DoesNotContain(raised.Warnings, w => w.Contains("older"));
+        // A move across Godot lines needs the matching editor: said once, in the warnings.
+        Assert.Contains(raised.Warnings, w => w.Contains("moves the project from Godot 4.2"));
+
+        // Same line, only the patch level differs: raised silently.
+        var patchLevel = new Version(ToolVersions.GodotSdkVersion);
+        var older = new Version(patchLevel.Major, patchLevel.Minor, Math.Max(patchLevel.Build - 1, 0));
+        tmp.Write("MyGame.csproj", $"<Project Sdk=\"Godot.NET.Sdk/{older}\">\n</Project>");
+        var sameLine = CsprojPatcher.Patch(path, HostFolders, upgradeGodotSdk: true);
+        Assert.Contains($"Godot.NET.Sdk: {older} -> {ToolVersions.GodotSdkVersion}", sameLine.Added);
+        Assert.Empty(sameLine.Warnings);
+    }
+
+    [Fact]
+    public void NewerGodotSdk_IsLeftAlone()
+    {
+        using var tmp = new TempProjectDir();
+        var path = tmp.Write("MyGame.csproj", "<Project Sdk=\"Godot.NET.Sdk/9.0.0\">\n</Project>");
+        var result = CsprojPatcher.Patch(path, HostFolders, upgradeGodotSdk: true);
+        Assert.Contains("Godot.NET.Sdk/9.0.0", result.NewContent);
+        Assert.DoesNotContain(result.Added, a => a.StartsWith("Godot.NET.Sdk", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -646,6 +672,8 @@ public class TemplateAssetsTests
     {
         var source = TemplateAssets.WebBootSource();
         Assert.Contains("LIBGODOT_ENABLED", source);
+        // Platform line breaks whatever the pack host used, so tool-written files compare equal to the resource.
+        Assert.Equal(source.ReplaceLineEndings(), source);
     }
 
     [Fact]
@@ -858,6 +886,38 @@ public class AddEndToEndTests
         var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
         Assert.Contains("Compile Include=\"SpaceMiner.web/TwoDogWebBoot.cs\"", csproj);
         Assert.Contains("Exists('$(MSBuildThisFileDirectory)SpaceMiner.web/TwoDogWebBoot.cs')", csproj);
+    }
+
+    [Fact]
+    public void Add_OlderProject_BringsTheSdkAndTheVersionBlockToTheTool()
+    {
+        // A project set up by an older tool: its hosts reference the version block, the game csproj names the
+        // Godot.NET.Sdk. Adding a host must leave everything on the running tool's versions, or it does not build.
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        Assert.Equal(0, Run(Options(tmp.Dir, web: false)));
+
+        var csprojPath = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj");
+        var propsPath = System.IO.Path.Combine(tmp.Dir, "Directory.Build.props");
+        var sdk = new Version(ToolVersions.GodotSdkVersion);
+        var olderSdk = new Version(sdk.Major, sdk.Minor, Math.Max(sdk.Build - 1, 0)).ToString();
+        File.WriteAllText(csprojPath, File.ReadAllText(csprojPath).Replace($"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", $"Godot.NET.Sdk/{olderSdk}"));
+        File.WriteAllText(propsPath, File.ReadAllText(propsPath)
+            .Replace($"<TwoDogVersion>{ToolVersions.TwoDogVersion}</TwoDogVersion>", "<TwoDogVersion>4.7.0.1</TwoDogVersion>")
+            .Replace($"<TwoDogGodotVersion>{ToolVersions.GodotSdkVersion}</TwoDogGodotVersion>", $"<TwoDogGodotVersion>{olderSdk}</TwoDogGodotVersion>"));
+
+        var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--web"]), project);
+        var run = CliConsole.Capture(() => ScaffoldCommand.Run(project, options).ExitCode);
+        Assert.Equal(0, run.ExitCode);
+
+        Assert.Contains($"<Project Sdk=\"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}\">", File.ReadAllText(csprojPath));
+        var block = PropsPatcher.Read(propsPath);
+        Assert.Equal(ToolVersions.TwoDogVersion, block["TwoDogVersion"]);
+        Assert.Equal(ToolVersions.GodotSdkVersion, block["TwoDogGodotVersion"]);
+        Assert.Contains($"Godot.NET.Sdk: {olderSdk} -> {ToolVersions.GodotSdkVersion}", run.Stdout);
+        Assert.Contains("TwoDogVersion 4.7.0.1 ->", run.Stdout);
     }
 
     [Fact]

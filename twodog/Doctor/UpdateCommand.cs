@@ -106,7 +106,8 @@ internal static class UpdateCommand
                 : v)
             .ToList();
 
-    private static void PlanPropsValues(List<PlannedAction> plan, ProjectModel model, Dictionary<string, Version> current)
+    /// <summary>Shared with `2dog add`: an existing block follows the tool there too, so new hosts resolve.</summary>
+    internal static void PlanPropsValues(List<PlannedAction> plan, ProjectModel model, Dictionary<string, Version> current)
     {
         var path = Path.Combine(model.Dir, PropsPatcher.FileName);
         var values = Targets(current);
@@ -137,11 +138,8 @@ internal static class UpdateCommand
         plan.Add(new PlannedAction($"set {model.GameCsprojName} Sdk to Godot.NET.Sdk/{ToolVersions.GodotSdkVersion} (was {current})",
             ActionKind.Patch, () => MsBuildXml.Write(game, newText)));
 
-        if (Version.TryParse(current, out var was) && Version.TryParse(ToolVersions.GodotSdkVersion, out var now)
-            && (was.Major != now.Major || was.Minor != now.Minor))
-            warnings.Add($"this moves the project from Godot {was.Major}.{was.Minor} to {now.Major}.{now.Minor}: install the " +
-                         $"matching Godot {now.Major}.{now.Minor} .NET editor, open the project once so it updates " +
-                         "config/features, then run '2dog doctor --build'");
+        if (VersionRewriter.GodotLineChangeWarning(current, ToolVersions.GodotSdkVersion) is { } warning)
+            warnings.Add(warning);
     }
 
     /// <summary>TwoDogWebBoot.cs is tool-owned: a newer tool may need a newer bootstrap.</summary>

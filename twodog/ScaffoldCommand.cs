@@ -220,6 +220,7 @@ internal static class ScaffoldCommand
         PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder, renamedFrom);
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
         PlanRootBuildProps(plan, projectDir);
+        PlanPropsValues(plan, projectDir);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb);
@@ -415,8 +416,9 @@ internal static class ScaffoldCommand
             return;
         }
 
+        // The Godot.NET.Sdk follows the tool (never downgraded): the hosts being added are built for that Godot line.
         var result = CsprojPatcher.Patch(readPath, hostFolders,
-            webBootFolder is null ? null : $"{webBootFolder}/TwoDogWebBoot.cs");
+            webBootFolder is null ? null : $"{webBootFolder}/TwoDogWebBoot.cs", upgradeGodotSdk: true);
         warnings.AddRange(result.Warnings);
         if (result.NewContent is { } newContent)
             plan.Add(new PlannedAction(
@@ -540,6 +542,18 @@ internal static class ScaffoldCommand
         if (PropsPatcher.AppendBlock(path) is not { } patched) return;
         plan.Add(new PlannedAction($"append the 2dog version block to your {PropsPatcher.FileName}", ActionKind.Patch,
             () => MsBuildXml.Write(path, patched)));
+    }
+
+    /// <summary>
+    /// An existing version block follows the tool, as `2dog update` does (never downgrading): the hosts being
+    /// added reference its properties and are built for the tool's versions.
+    /// </summary>
+    private static void PlanPropsValues(List<PlannedAction> plan, string projectDir)
+    {
+        if (!File.Exists(Path.Combine(projectDir, PropsPatcher.FileName))) return;
+        var model = ProjectModel.Load(projectDir);
+        if (model.PropsValues.Count == 0) return;
+        UpdateCommand.PlanPropsValues(plan, model, ProjectVersions.Current(model));
     }
 
     private static void PlanWebBoot(

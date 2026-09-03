@@ -92,7 +92,10 @@ replace scaffolded files.
 
 It creates files and edits `*.csproj`, `project.godot`, the solution and
 `Directory.Build.props` in place (a user-owned `Directory.Build.props` gets the
-2dog version block appended once, announced in the plan). It does not:
+2dog version block appended once, announced in the plan). An older
+`Godot.NET.Sdk` in the game project and older values in an existing version
+block are raised to the tool's versions, never lowered, so the added hosts
+build. It does not:
 
 - move, rename, or delete game content;
 - touch version control, `.gitignore`, staging, or commits;

@@ -4,8 +4,8 @@ namespace twodog.cli;
 
 /// <summary>
 /// Minimal in-place patching of an existing Godot project csproj: appends one clearly-marked PropertyGroup with the
-/// 2dog properties not already present. Target frameworks are upgraded in place (or added) only when asked, since
-/// that changes what the project compiles against.
+/// 2dog properties not already present. Target frameworks are upgraded in place (or added) and an older
+/// Godot.NET.Sdk is raised to the tool's only when asked, since both change what the project compiles against.
 /// </summary>
 internal static class CsprojPatcher
 {
@@ -14,7 +14,7 @@ internal static class CsprojPatcher
     public sealed record Result(string? NewContent, List<string> Added, List<string> Warnings);
 
     public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders, string? webBootPath = null,
-        bool upgradeTargetFramework = true)
+        bool upgradeTargetFramework = true, bool upgradeGodotSdk = false)
     {
         var warnings = new List<string>();
         var added = new List<string>();
@@ -25,8 +25,19 @@ internal static class CsprojPatcher
         var sdk = (string?)root.Attribute("Sdk");
         if (sdk == null || !sdk.StartsWith("Godot.NET.Sdk", StringComparison.OrdinalIgnoreCase))
             warnings.Add($"{Path.GetFileName(csprojPath)} does not use Godot.NET.Sdk (Sdk=\"{sdk}\"); patching anyway - review the result.");
-        else if (VersionRewriter.GodotSdkVersion($"Sdk=\"{sdk}\"") is { } version && CompareVersions(version, ToolVersions.GodotSdkVersion) < 0)
-            warnings.Add($"{Path.GetFileName(csprojPath)} uses Godot.NET.Sdk/{version}, older than the {ToolVersions.GodotSdkVersion} this tool targets; not changed - consider upgrading.");
+        else if (VersionRewriter.GodotSdkVersion($"Sdk=\"{sdk}\"") is { } version && VersionRewriter.IsOlderGodotSdk(version))
+        {
+            if (upgradeGodotSdk)
+            {
+                // The 2dog packages are built for one Godot line: the hosts being added would not build against an older SDK.
+                root.SetAttributeValue("Sdk", $"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}");
+                added.Add($"Godot.NET.Sdk: {version} -> {ToolVersions.GodotSdkVersion}");
+                if (VersionRewriter.GodotLineChangeWarning(version, ToolVersions.GodotSdkVersion) is { } warning)
+                    warnings.Add(warning);
+            }
+            else
+                warnings.Add($"{Path.GetFileName(csprojPath)} uses Godot.NET.Sdk/{version}, older than the {ToolVersions.GodotSdkVersion} this tool targets; not changed - consider upgrading.");
+        }
 
         // Deliberately includes conditioned PropertyGroups: a property set anywhere (even per-configuration) is
         // the author's choice and is left alone rather than overridden with an unconditional duplicate.
@@ -120,7 +131,4 @@ internal static class CsprojPatcher
     }
 
     private static XElement Element(XNamespace ns, string name, string value) => new(ns + name, value);
-
-    private static int CompareVersions(string a, string b) =>
-        Version.TryParse(a, out var va) && Version.TryParse(b, out var vb) ? va.CompareTo(vb) : 0;
 }
