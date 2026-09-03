@@ -10,6 +10,7 @@ namespace twodog.cli;
 internal static class Out
 {
     private static ConsoleFacts? _pinnedFacts;
+    private static Dictionary<string, string>? _pinnedEnvironment;
     private static IAnsiConsole _stdout = null!;
     private static IAnsiConsole _stderr = null!;
     private static readonly TextWriter StdoutWriter = new ForwardingWriter(stdErr: false);
@@ -59,12 +60,14 @@ internal static class Out
 
     /// <summary>
     /// Tests pin the console facts: a test host may have an attached terminal (ANSI, narrow width) while Console.Out
-    /// is a StringWriter, which is undetectable from here.
+    /// is a StringWriter, which is undetectable from here. The environment is pinned with them (empty unless given),
+    /// so neither the mode nor Spectre's own detection reads the runner's variables.
     /// </summary>
-    internal static void PinConsoleFacts(ConsoleFacts facts)
+    internal static void PinConsoleFacts(ConsoleFacts facts, Dictionary<string, string>? environment = null)
     {
         _pinnedFacts = facts;
-        Env = _ => null;
+        var pinned = _pinnedEnvironment = environment ?? [];
+        Env = name => pinned.GetValueOrDefault(name);
         Configure(OutputMode.Resolve([], Env, facts));
     }
 
@@ -83,6 +86,7 @@ internal static class Out
             Out = new ForwardingOutput(stdErr),
             // Spectre's CI enrichers (GITHUB_ACTIONS, TF_BUILD, ...) would force ANSI back on; OutputMode owns that.
             Enrichment = new ProfileEnrichment { UseDefaultEnrichers = false },
+            EnvironmentVariables = _pinnedEnvironment,
         });
     }
 

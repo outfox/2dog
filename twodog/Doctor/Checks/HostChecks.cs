@@ -99,8 +99,9 @@ internal static class HostChecks
             if (referencesGame && analyzers.Count == 0)
                 yield return Issue(new Finding("host.duplicate-analyzers", c, Severity.Warn, $"{csproj} lacks TwoDogRemoveDuplicateGodotAnalyzers",
                     "the game's Godot source generators run twice otherwise (duplicate-type warnings)", null, csproj, propertiesFix));
-            else if (referencesGame && !analyzers.Any(v => v.Contains("$(") || v.Equals("true", StringComparison.OrdinalIgnoreCase)))
-                yield return Issue(new Finding("host.duplicate-analyzers", c, Severity.Warn, $"{csproj} sets TwoDogRemoveDuplicateGodotAnalyzers to '{analyzers[0]}'",
+            // Every definition must be true: a per-configuration false lets the duplicates back into that configuration.
+            else if (referencesGame && analyzers.FirstOrDefault(v => !v.Contains("$(") && !v.Equals("true", StringComparison.OrdinalIgnoreCase)) is { } off)
+                yield return Issue(new Finding("host.duplicate-analyzers", c, Severity.Warn, $"{csproj} sets TwoDogRemoveDuplicateGodotAnalyzers to '{off}'",
                     "the game's Godot source generators run twice unless it is true (duplicate-type warnings)", "set it to true", csproj));
 
             if (host.Property("ApplicationManifest") is { } manifest && !manifest.Contains("$(") && !File.Exists(Path.Combine(dir, manifest)))

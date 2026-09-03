@@ -1349,8 +1349,15 @@ public class CommandLineTests
     // --dry-run answers nothing, so it still gathers choices - it just prints
     // the plan instead of applying it.
     [InlineData(true, "add", "--dry-run")]
-    public void Prompting_IsOffWheneverTheFlagsDecide(bool expected, params string[] args) =>
-        Assert.Equal(expected, Program.WantsPrompts(CommandLine.Parse(args)));
+    public void Prompting_IsOffWheneverTheFlagsDecide(bool expected, params string[] args)
+    {
+        // Under the capture lock: the answer reads the process-global mode, which a parallel --json run switches.
+        CliConsole.Capture(() =>
+        {
+            Assert.Equal(expected, Program.WantsPrompts(CommandLine.Parse(args)));
+            return 0;
+        });
+    }
 }
 
 public class HostSelectionTests

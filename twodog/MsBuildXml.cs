@@ -8,6 +8,9 @@ namespace twodog.cli;
 /// <summary>Round-trips MSBuild files edited as XDocuments: whitespace, newline flavour and declaration all survive.</summary>
 internal static class MsBuildXml
 {
+    // Legacy declarations (windows-1252, ...) resolve only with the code-page provider, for reading and writing alike.
+    static MsBuildXml() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
     public static XDocument Load(string path) => XDocument.Load(path, LoadOptions.PreserveWhitespace);
 
     /// <summary>The trimmed value of the first element with that local name, anywhere in the document, or null.</summary>
@@ -56,8 +59,9 @@ internal static class MsBuildXml
         new(@"^\s*<\?xml[^>]*\bencoding\s*=\s*(?<q>[""'])(?<name>[^""']+)\k<q>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     /// <summary>
-    /// Writes edited MSBuild text back in the file's own encoding: the one its declaration names, else UTF-8 with
-    /// the BOM the file had. File.WriteAllText would emit UTF-8 under a utf-16 declaration, which MSBuild rejects.
+    /// Writes edited MSBuild text back in the file's own encoding: the one its declaration names, else the one its
+    /// byte order mark announces, else UTF-8 without a BOM. File.WriteAllText would emit UTF-8 under a utf-16
+    /// declaration, which MSBuild rejects.
     /// </summary>
     public static void Write(string path, string text) => File.WriteAllText(path, text, EncodingOf(path, text));
 
@@ -71,17 +75,25 @@ internal static class MsBuildXml
                 var encoding = Encoding.GetEncoding(declared.Groups["name"].Value);
                 if (encoding.CodePage != 65001) return encoding;
             }
-            catch (ArgumentException) { /* unknown name: MSBuild would not read it either; fall through to UTF-8 */ }
+            catch (ArgumentException) { /* unknown name: MSBuild would not read it either; fall through */ }
         }
 
-        return new UTF8Encoding(HasUtf8Bom(path));
+        return ByteOrderMark(path) ?? new UTF8Encoding(false);
     }
 
-    private static bool HasUtf8Bom(string path)
+    /// <summary>The encoding a file's byte order mark announces, or null when it has none (or does not exist).</summary>
+    private static Encoding? ByteOrderMark(string path)
     {
-        if (!File.Exists(path)) return false;
-        using var stream = File.OpenRead(path);
-        Span<byte> head = stackalloc byte[3];
-        return stream.Read(head) == 3 && head[0] == 0xEF && head[1] == 0xBB && head[2] == 0xBF;
+        if (!File.Exists(path)) return null;
+        Span<byte> head = stackalloc byte[4];
+        int read;
+        using (var stream = File.OpenRead(path)) read = stream.Read(head);
+        head = head[..read];
+        if (head.StartsWith((ReadOnlySpan<byte>)[0xEF, 0xBB, 0xBF])) return new UTF8Encoding(true);
+        if (head.StartsWith((ReadOnlySpan<byte>)[0xFF, 0xFE, 0x00, 0x00])) return new UTF32Encoding(false, true);
+        if (head.StartsWith((ReadOnlySpan<byte>)[0xFF, 0xFE])) return new UnicodeEncoding(false, true);
+        if (head.StartsWith((ReadOnlySpan<byte>)[0xFE, 0xFF])) return new UnicodeEncoding(true, true);
+        if (head.StartsWith((ReadOnlySpan<byte>)[0x00, 0x00, 0xFE, 0xFF])) return new UTF32Encoding(true, true);
+        return null;
     }
 }
