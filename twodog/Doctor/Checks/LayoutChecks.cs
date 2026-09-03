@@ -174,9 +174,18 @@ internal static class LayoutChecks
             .ToDictionary(g => g.Key, g => g.Last().Value.Trim(), StringComparer.OrdinalIgnoreCase);
         properties["MSBuildThisFileDirectory"] = dir + Path.DirectorySeparatorChar;
 
+        // Property values reference other properties in turn; a cycle leaves the reference in place, unevaluated.
+        var expanding = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        string Expand(string text) => PropertyReference.Replace(text, m =>
+        {
+            var name = m.Groups["name"].Value;
+            if (!properties.TryGetValue(name, out var value) || !expanding.Add(name)) return m.Value;
+            try { return Expand(value); }
+            finally { expanding.Remove(name); }
+        });
+
         return doc.Descendants().Where(e => e.Name.LocalName == "Import")
-            .Select(e => PropertyReference.Replace((string?)e.Attribute("Project") ?? "",
-                m => properties.GetValueOrDefault(m.Groups["name"].Value, m.Value)))
+            .Select(e => Expand((string?)e.Attribute("Project") ?? ""))
             .Any(project => FileAboveLookup.IsMatch(project) || (!project.Contains("$(") && ResolvesTo(project, dir, parent)));
     });
 

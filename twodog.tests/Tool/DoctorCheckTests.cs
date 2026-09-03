@@ -241,13 +241,20 @@ public class DoctorCheckTests : IDisposable
         File.WriteAllText(targets, "<Project>\n  <Target Name=\"TwoDogDeepClean\">\n</Project>\n");
         Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
 
-        // The template's own chaining style: the lookup carried by a property, and a literal parent path.
+        // A property cycle cannot be evaluated: it is not the import, and it must not hang the check.
+        File.WriteAllText(targets, "<Project>\n  <PropertyGroup>\n    <_A>$(_B)</_A>\n    <_B>$(_A)Directory.Build.targets</_B>\n  </PropertyGroup>\n"
+            + "  <Import Project=\"$(_A)\" />\n</Project>\n");
+        Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
+
+        // The template's own chaining style: the lookup carried by a property, a literal parent path, nested properties.
         foreach (var chained in new[]
                  {
                      "<Project>\n  <Import Project=\"$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))\" />\n</Project>\n",
                      "<Project>\n  <PropertyGroup>\n    <_Parent>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))</_Parent>\n  </PropertyGroup>\n"
                      + "  <Import Project=\"$(_Parent)\" Condition=\"'$(_Parent)' != ''\" />\n</Project>\n",
                      "<Project>\n  <Import Project=\"$(MSBuildThisFileDirectory)../Directory.Build.targets\" />\n</Project>\n",
+                     "<Project>\n  <PropertyGroup>\n    <_Root>$(MSBuildThisFileDirectory)../</_Root>\n    <_Parent>$(_Root)Directory.Build.targets</_Parent>\n  </PropertyGroup>\n"
+                     + "  <Import Project=\"$(_Parent)\" />\n</Project>\n",
                  })
         {
             File.WriteAllText(targets, chained);
