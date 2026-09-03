@@ -5,7 +5,7 @@ description: "Why GD.Print output is hidden during dotnet test, how to make it v
 
 # GD.Print Output Not Visible in Tests
 
-`GD.Print` output may appear to be missing during tests.
+`GD.Print` prints nothing under `dotnet test`. The output exists; the runner hides it.
 
 ## Why This Happens
 
@@ -21,11 +21,11 @@ Enable detailed console logging:
 dotnet test --logger "console;verbosity=detailed"
 ```
 
-Your messages will appear mixed into the test-host stream.
+Your messages show up, mixed into the test-host stream with engine and fixture logs.
 
-## Recommendation: Use ITestOutputHelper
+## Use ITestOutputHelper instead
 
-For test logging, prefer xUnit's `ITestOutputHelper` over `GD.Print`:
+For anything a test wants to say, use xUnit's `ITestOutputHelper`:
 
 ```csharp
 [Collection<HeadlessCollection>]
@@ -42,6 +42,6 @@ public class MyTests(HeadlessFixture godot, ITestOutputHelper output)
 }
 ```
 
-`ITestOutputHelper` associates output with the test, includes it in failure
-results, and works with IDE test explorers without mixing in engine logs. Keep
-`GD.Print` for runtime debugging rather than test logging.
+The output then belongs to that test: it lands in the failure report and in
+the IDE test explorer, with no engine noise around it. `GD.Print` stays what it
+is, a runtime debugging aid.
