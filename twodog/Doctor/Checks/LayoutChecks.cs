@@ -1,3 +1,6 @@
+using System.Xml;
+using System.Xml.Linq;
+
 namespace twodog.cli;
 
 /// <summary>The project's shape: root files, names, the legacy layouts.</summary>
@@ -83,9 +86,11 @@ internal static class LayoutChecks
         {
             var targets = Path.Combine(p.Dir, "Directory.Build.targets");
             var inherited = FindAbove(p.Dir, "Directory.Build.targets");
-            // A root file may import the parent's, so a target defined in either counts.
-            var deepClean = (p.HasRootBuildTargets && Mentions(targets, "TwoDogDeepClean"))
-                            || (inherited != null && Mentions(inherited, "TwoDogDeepClean"));
+            // MSBuild imports only the nearest file: a root file hides the parent's unless it imports it explicitly.
+            var inheritedDeepClean = inherited != null && DefinesTarget(inherited, "TwoDogDeepClean");
+            var deepClean = p.HasRootBuildTargets
+                ? DefinesTarget(targets, "TwoDogDeepClean") || (inheritedDeepClean && ImportsFileAbove(targets))
+                : inheritedDeepClean;
             if (p.HasRootBuildTargets)
                 yield return deepClean
                     ? Finding.Pass("layout.root-build-targets", c, "Directory.Build.targets")
@@ -146,11 +151,19 @@ internal static class LayoutChecks
         return null;
     }
 
-    /// <summary>Whether the file names the token; an unreadable file raises no finding of its own here.</summary>
-    private static bool Mentions(string path, string token)
+    /// <summary>Whether the file declares a Target of that name (a comment naming it does not count).</summary>
+    private static bool DefinesTarget(string path, string name) => Inspect(path, doc => doc.Descendants()
+        .Any(e => e.Name.LocalName == "Target" && string.Equals((string?)e.Attribute("Name"), name, StringComparison.OrdinalIgnoreCase)));
+
+    /// <summary>Whether the file chains to a Directory.Build.targets above it through an Import.</summary>
+    private static bool ImportsFileAbove(string path) => Inspect(path, doc => doc.Descendants()
+        .Any(e => e.Name.LocalName == "Import"
+                  && ((string?)e.Attribute("Project") ?? "").Contains("Directory.Build.targets", StringComparison.OrdinalIgnoreCase)));
+
+    /// <summary>A file that cannot be read or parsed raises no finding of its own here (the build reports it).</summary>
+    private static bool Inspect(string path, Func<XDocument, bool> test)
     {
-        try { return File.ReadAllText(path).Contains(token, StringComparison.Ordinal); }
-        catch (IOException) { return true; }
-        catch (UnauthorizedAccessException) { return true; }
+        try { return test(XDocument.Load(path)); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or XmlException) { return true; }
     }
 }

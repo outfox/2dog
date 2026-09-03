@@ -33,7 +33,7 @@ internal static class VersionChecks
             yield return new Finding("ver.managed-elsewhere", c, Severity.Info,
                 $"versions come from your own properties ({string.Join(", ", foreign.Take(3))}) - not checked");
 
-        var malformed = new[] { "TwoDogVersion", "TwoDogNativesVersion", "TwoDogGodotVersion" }
+        var malformed = PropsPatcher.ToolValues.Select(v => v.Name)
             .Where(n => p.PropsValues.TryGetValue(n, out var v) && !v.Contains("$(") && !Version.TryParse(v.Trim('[', ']').Split('-')[0], out _))
             .Select(n => $"{n}='{p.PropsValues[n]}'").ToList();
         if (malformed.Count > 0)
@@ -112,7 +112,7 @@ internal static class VersionChecks
             yield return new Finding("ver.tool-latest", c, Severity.Info, $"a newer 2dog tool exists: {newest}", null, $"dnx 2dog@{newest} doctor");
     }
 
-    /// <summary>The client csproj's references; an unparseable client is reported by the load problems, not here.</summary>
+    /// <summary>The client csproj's references; an unparseable client is a load problem (ProjectModel parses it), not reported here.</summary>
     private static List<PackageRef> ClientReferences(string text)
     {
         try { return VersionRewriter.References(text); }

@@ -80,6 +80,33 @@ public class PropsPatcherTests
     }
 
     [Fact]
+    public void Read_SpellsThePropertiesTheToolsWay_WhateverTheFileUses()
+    {
+        using var tmp = new TempProjectDir();
+        var props = tmp.Write("Directory.Build.props",
+            "<Project>\n  <PropertyGroup Label=\"2dog\">\n    <twodogversion>9.9.9.9</twodogversion>\n  </PropertyGroup>\n</Project>\n");
+
+        Assert.Equal("TwoDogVersion", PropsPatcher.Read(props).Keys.Single());
+        // The downgrade guard and the version checks look the value up by its canonical name.
+        Assert.Equal(new Version(9, 9, 9, 9), ProjectVersions.Current(ProjectModel.Load(tmp.Dir))["TwoDogVersion"]);
+    }
+
+    [Fact]
+    public void SetValues_ReachesEveryDuplicate_SoTheWinningDefinitionCannotStayStale()
+    {
+        using var tmp = new TempProjectDir();
+        var props = tmp.Write("Directory.Build.props",
+            "<Project>\n  <PropertyGroup Label=\"2dog\">\n    <TwoDogVersion>4.7.1.10</TwoDogVersion>\n" +
+            "    <twodogversion>4.7.1.11</twodogversion>\n  </PropertyGroup>\n</Project>\n");
+
+        var updated = PropsPatcher.SetValues(props, [("TwoDogVersion", "4.7.2.5")]);
+        Assert.NotNull(updated);
+        Assert.Contains("<TwoDogVersion>4.7.2.5</TwoDogVersion>", updated);
+        Assert.Contains("<twodogversion>4.7.2.5</twodogversion>", updated);
+        Assert.DoesNotContain("4.7.1.1", updated);
+    }
+
+    [Fact]
     public void Write_KeepsTheFilesOwnEncoding()
     {
         using var tmp = new TempProjectDir();
@@ -98,6 +125,21 @@ public class PropsPatcherTests
         File.WriteAllText(plain, "<Project>\n</Project>\n");
         MsBuildXml.Write(plain, "<Project>\n  <PropertyGroup />\n</Project>\n");
         Assert.Equal((byte)'<', File.ReadAllBytes(plain)[0]);
+
+        // No declaration: the byte order mark alone says UTF-16, and it must survive.
+        var utf16Bom = Path.Combine(tmp.Dir, "utf16-bom.props");
+        File.WriteAllText(utf16Bom, "<Project>\n</Project>\n", System.Text.Encoding.Unicode);
+        MsBuildXml.Write(utf16Bom, "<Project>\n  <PropertyGroup />\n</Project>\n");
+        Assert.Equal(new byte[] { 0xFF, 0xFE }, File.ReadAllBytes(utf16Bom).Take(2).ToArray());
+        Assert.NotNull(MsBuildXml.Load(utf16Bom).Root);
+
+        // A legacy code page resolves only through the provider the tool registers; the bytes must match the declaration.
+        var legacy = Path.Combine(tmp.Dir, "legacy.props");
+        var declared = "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n<Project>\n  <!-- caf\u00e9 -->\n</Project>\n";
+        File.WriteAllText(legacy, declared, System.Text.Encoding.Latin1);
+        MsBuildXml.Write(legacy, declared.Replace("<Project>\n", "<Project>\n  <PropertyGroup />\n"));
+        Assert.Contains((byte)0xE9, File.ReadAllBytes(legacy));
+        Assert.Contains("caf\u00e9", MsBuildXml.Load(legacy).ToString());
     }
 
     [Fact]

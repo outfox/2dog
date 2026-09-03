@@ -127,20 +127,15 @@ public class OutputModeTests
     [Fact]
     public void CiEnvironment_DoesNotForceEscapeSequences()
     {
-        var previous = Environment.GetEnvironmentVariable("GITHUB_ACTIONS");
-        Environment.SetEnvironmentVariable("GITHUB_ACTIONS", "true");
-        try
+        // Pinned, not set process-wide, and under the capture lock: other collections run in parallel and Out is global.
+        var run = CliConsole.Capture(() =>
         {
-            Out.PinConsoleFacts(ConsoleFacts.Redirected);
-            var run = CliConsole.Run("--help");
-            Assert.DoesNotMatch("\x1b", run.Stdout);
-            Assert.DoesNotMatch("\x1b", run.Stderr);
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable("GITHUB_ACTIONS", previous);
-            Out.PinConsoleFacts(ConsoleFacts.Redirected);
-        }
+            Out.PinConsoleFacts(ConsoleFacts.Redirected, new Dictionary<string, string> { ["GITHUB_ACTIONS"] = "true" });
+            Assert.True(Out.Mode.Ci);
+            return Program.Main(["--help"]);
+        });
+        Assert.DoesNotMatch("\x1b", run.Stdout);
+        Assert.DoesNotMatch("\x1b", run.Stderr);
     }
 
     [Fact]
@@ -198,13 +193,13 @@ public class OutputModeTests
         {
             Out.VersionTable([("tool", "1.0", VersionMark.UpToDate, "a"), ("natives", "1.0", VersionMark.Outdated, "b")]);
             Out.Rule("done");
+            Assert.Equal("ascii", Out.Glyph("utf8", "ascii"));
             return 0;
         });
         Assert.Contains("ok", run.Stdout);
         Assert.Contains("new", run.Stdout);
         Assert.Contains("-- done --", run.Stdout);
         Assert.DoesNotContain("✅", run.Stdout);
-        Assert.Equal("ascii", Out.Glyph("utf8", "ascii"));
     }
 }
 
@@ -260,13 +255,18 @@ public class OutGuardTests
     [Fact]
     public void TerminalDirty_IsClearedByARestore_AndByANewRun()
     {
-        Out.TerminalDirty = true;
-        Out.RestoreTerminal();
-        Assert.False(Out.TerminalDirty);
+        // Under the capture lock: a parallel run's mode switch (--json) must not change what a restore does.
+        CliConsole.Capture(() =>
+        {
+            Out.TerminalDirty = true;
+            Out.RestoreTerminal();
+            Assert.False(Out.TerminalDirty);
 
-        Out.TerminalDirty = true;
-        CliConsole.Run("--help");
-        Assert.False(Out.TerminalDirty);
+            Out.TerminalDirty = true;
+            Program.Main(["--help"]);
+            Assert.False(Out.TerminalDirty);
+            return 0;
+        });
     }
 
     [Fact]

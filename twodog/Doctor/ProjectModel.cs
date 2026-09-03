@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace twodog.cli;
@@ -52,7 +53,7 @@ internal sealed class ProjectModel
     public string? RootGlobalJsonText { get; init; }
     public bool HasRootBuildTargets { get; init; }
     public bool HasRootBuildProps { get; init; }
-    public Dictionary<string, string> PropsValues { get; init; } = [];
+    public Dictionary<string, string> PropsValues { get; init; } = new(StringComparer.OrdinalIgnoreCase);
     public bool LegacyRootWebBoot { get; init; }
 
     /// <summary>Problems hit while loading (unparseable files); reported once, checks skip what they cannot read.</summary>
@@ -115,6 +116,8 @@ internal sealed class ProjectModel
                 {
                     clientPath = candidate;
                     clientText = TryRead(dir, candidate, problems);
+                    // The checks read the text; parsing here is what turns a malformed client into a load problem.
+                    if (clientText != null) TryParse(clientText, candidate, problems);
                 }
             }
 
@@ -135,7 +138,7 @@ internal sealed class ProjectModel
             ? Directory.EnumerateFiles(dir, "*.sln").Concat(Directory.EnumerateFiles(dir, "*.slnx")).Order().ToList()
             : [];
         var propsPath = Path.Combine(dir, PropsPatcher.FileName);
-        var propsValues = new Dictionary<string, string>();
+        var propsValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         if (File.Exists(propsPath))
         {
             try { propsValues = PropsPatcher.Read(propsPath); }
@@ -148,7 +151,7 @@ internal sealed class ProjectModel
         var solutionTexts = solutions.ToDictionary(s => s, s => TryRead(dir, s, problems));
         var gameSolutions = baseName is null
             ? []
-            : solutions.Where(s => solutionTexts[s]?.Contains($"{baseName}.csproj", StringComparison.OrdinalIgnoreCase) == true).ToList();
+            : solutions.Where(s => solutionTexts[s] is { } text && NamesProject(text, $"{baseName}.csproj")).ToList();
         var solution = solutions.Count == 1 ? solutions[0] : gameSolutions.Count == 1 ? gameSolutions[0] : null;
 
         return new ProjectModel
@@ -175,16 +178,26 @@ internal sealed class ProjectModel
         };
     }
 
+    /// <summary>Whether a solution lists that project file as a whole path segment (Game.csproj is not OtherGame.csproj).</summary>
+    internal static bool NamesProject(string solutionText, string csprojName) =>
+        Regex.IsMatch(solutionText, $@"(?<=^|[\s""'=,/\\]){Regex.Escape(csprojName)}(?=$|[\s""',<])",
+            RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
     /// <summary>The file's text, or null when it is absent or unreadable (recorded as a load problem).</summary>
     private static string? TryRead(string dir, string path, List<string> problems)
     {
-        if (!File.Exists(path)) return null;
+        // Read first: File.Exists answers false for a file the process cannot stat, which would hide the error.
         try
         {
             return File.ReadAllText(path);
         }
+        catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
+        {
+            return null;
+        }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
+            if (Directory.Exists(path)) return null;
             problems.Add($"{Path.GetRelativePath(dir, path).Replace('\\', '/')}: {ex.Message}");
             return null;
         }

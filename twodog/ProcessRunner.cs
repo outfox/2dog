@@ -104,27 +104,24 @@ internal sealed class ProcessRunner : IProcessRunner
         process.BeginErrorReadLine();
 
         using var registration = cancellationToken.Register(() => TryKill(process));
-        var exited = process.WaitForExit((int)(request.Timeout ?? DefaultTimeout).TotalMilliseconds);
-        var cancelled = cancellationToken.IsCancellationRequested;
-        var timedOut = !exited && !cancelled;
-        if (exited)
-        {
-            // The parameterless wait drains the async readers, so the tail is complete.
-            process.WaitForExit();
-        }
-        else
+        var timedOut = !process.WaitForExit((int)(request.Timeout ?? DefaultTimeout).TotalMilliseconds);
+        var exited = !timedOut;
+        if (timedOut)
         {
             // Killed (timeout or Ctrl+C): wait a bounded time, never forever on a child that refuses to die.
             TryKill(process);
-            process.WaitForExit((int)KillGrace.TotalMilliseconds);
+            exited = process.WaitForExit((int)KillGrace.TotalMilliseconds);
         }
 
+        // The parameterless wait drains the async readers, so the tail is complete (a timed wait does not).
+        if (exited) process.WaitForExit();
+
         watch.Stop();
-        if (cancelled) throw new OperationCanceledException(cancellationToken);
+        // Read after the grace period too: a Ctrl+C during it is a cancellation, not a timeout.
+        if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(cancellationToken);
 
         lock (output)
-            return new ProcessResult(commandLine, process.HasExited ? process.ExitCode : -1, output.ToList(),
-                watch.Elapsed, timedOut);
+            return new ProcessResult(commandLine, exited ? process.ExitCode : -1, output.ToList(), watch.Elapsed, timedOut);
     }
 
     private static void TryKill(Process process)

@@ -126,7 +126,8 @@ internal static class ProjectVersions
 {
     public static Dictionary<string, Version> Current(ProjectModel project)
     {
-        var current = new Dictionary<string, Version>();
+        // MSBuild property names are case-insensitive; a lookup by the canonical name must find a lower-cased block.
+        var current = new Dictionary<string, Version>(StringComparer.OrdinalIgnoreCase);
         void Note(string property, PackageRef reference)
         {
             if (reference.Parsed is { } v && (!current.TryGetValue(property, out var have) || v > have))

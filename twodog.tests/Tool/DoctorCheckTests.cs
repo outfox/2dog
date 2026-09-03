@@ -131,6 +131,27 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
+    public void MalformedCompanionVersion_Fails()
+    {
+        var dir = Scaffold("--desktop");
+        Edit(dir, "Directory.Build.props", $"<TwoDogAvaloniaVersion>{ToolVersions.AvaloniaVersion}</TwoDogAvaloniaVersion>",
+            "<TwoDogAvaloniaVersion>latest</TwoDogAvaloniaVersion>");
+
+        var issue = Issue(Doctor(dir, "--json").Stdout, "ver.props-invalid", "fail", fixable: false);
+        Assert.Contains("TwoDogAvaloniaVersion='latest'", issue.GetProperty("title").GetString());
+    }
+
+    [Fact]
+    public void MalformedBlazorClient_IsALoadProblem()
+    {
+        var dir = Scaffold("--blazor");
+        File.WriteAllText(Path.Combine(dir, Hosts.BlazorClientProject("Game.blazor")), "<Project>\n  <PropertyGroup>\n</Project>\n");
+
+        var issue = Issue(Doctor(dir, "--json").Stdout, "layout.load-problems", "fail", fixable: false);
+        Assert.Contains("Game.blazor.Client.csproj is not valid XML", issue.GetProperty("title").GetString());
+    }
+
+    [Fact]
     public void UnpinnedBrowserWasmProperty_Warns()
     {
         var dir = Scaffold("--web");
@@ -145,6 +166,18 @@ public class DoctorCheckTests : IDisposable
         var dir = Scaffold("--desktop");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>",
             "<TwoDogRemoveDuplicateGodotAnalyzers>false</TwoDogRemoveDuplicateGodotAnalyzers>");
+
+        var issue = Issue(Doctor(dir, "--json").Stdout, "host.duplicate-analyzers", "warn", fixable: false);
+        Assert.Contains("'false'", issue.GetProperty("title").GetString());
+    }
+
+    [Fact]
+    public void AnalyzersFalseForOneConfiguration_Warns()
+    {
+        var dir = Scaffold("--desktop");
+        Edit(dir, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>",
+            "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>\n" +
+            "    <TwoDogRemoveDuplicateGodotAnalyzers Condition=\"'$(Configuration)' == 'Release'\">false</TwoDogRemoveDuplicateGodotAnalyzers>");
 
         var issue = Issue(Doctor(dir, "--json").Stdout, "host.duplicate-analyzers", "warn", fixable: false);
         Assert.Contains("'false'", issue.GetProperty("title").GetString());
@@ -181,6 +214,31 @@ public class DoctorCheckTests : IDisposable
 
         var issue = Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
         Assert.Contains("TwoDogDeepClean", issue.GetProperty("title").GetString());
+    }
+
+    [Fact]
+    public void TargetsOnlyMentioningTheDeepCleanTarget_Warns()
+    {
+        var dir = Scaffold("--desktop");
+        File.WriteAllText(Path.Combine(dir, "Directory.Build.targets"), "<Project>\n  <!-- TwoDogDeepClean lives elsewhere -->\n</Project>\n");
+
+        Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
+    }
+
+    [Fact]
+    public void RootTargets_HideAParentsDeepClean_UnlessTheyImportIt()
+    {
+        var dir = Scaffold("--desktop");
+        File.WriteAllText(Path.Combine(_tmp.Dir, "Directory.Build.targets"), TemplateAssets.RootBuildTargets());
+        var targets = Path.Combine(dir, "Directory.Build.targets");
+
+        File.WriteAllText(targets, "<Project>\n</Project>\n");
+        Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
+
+        File.WriteAllText(targets, "<Project>\n  <Import Project=\"$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))\" />\n</Project>\n");
+        var findings = Findings(Doctor(dir, "--json").Stdout, "layout.root-build-targets");
+        Assert.NotEmpty(findings);
+        Assert.All(findings, f => Assert.Equal("pass", f.GetProperty("severity").GetString()));
     }
 
     [Fact]

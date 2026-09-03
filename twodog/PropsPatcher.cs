@@ -29,16 +29,20 @@ internal static class PropsPatcher
 
     /// <summary>
     /// The values the block currently holds (name -> value), empty when there is no block. MSBuild property names
-    /// are case-insensitive and the last definition wins, so duplicates read the way MSBuild evaluates them.
+    /// are case-insensitive and the last definition wins, so duplicates read the way MSBuild evaluates them, and
+    /// the tool's own properties are keyed by their canonical spelling whatever case the file uses.
     /// </summary>
     public static Dictionary<string, string> Read(string propsPath)
     {
         var doc = MsBuildXml.Load(propsPath);
         var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (var element in FindGroup(doc)?.Elements() ?? [])
-            values[element.Name.LocalName] = element.Value.Trim();
+            values[CanonicalName(element.Name.LocalName)] = element.Value.Trim();
         return values;
     }
+
+    private static string CanonicalName(string name) =>
+        ToolValues.FirstOrDefault(v => v.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).Name ?? name;
 
     /// <summary>
     /// The file's text with the 2dog block appended, or null when it already has one. Everything else stays
@@ -67,8 +71,8 @@ internal static class PropsPatcher
         var changed = false;
         foreach (var (name, value) in values)
         {
-            var element = group.Elements().FirstOrDefault(e => e.Name.LocalName == name);
-            if (element == null)
+            var matches = group.Elements().Where(e => e.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (matches.Count == 0)
             {
                 var last = group.Elements().LastOrDefault();
                 var indent = last?.PreviousNode is XText text ? text.Value : "\n        ";
@@ -76,10 +80,14 @@ internal static class PropsPatcher
                 else group.Add(new XText(indent), new XElement(ns + name, value), new XText("\n    "));
                 changed = true;
             }
-            else if (element.Value.Trim() != value)
+            else
             {
-                element.Value = value;
-                changed = true;
+                // MSBuild takes the last definition whatever its case: every duplicate gets the value, so none stays stale.
+                foreach (var element in matches.Where(e => e.Value.Trim() != value))
+                {
+                    element.Value = value;
+                    changed = true;
+                }
             }
         }
 

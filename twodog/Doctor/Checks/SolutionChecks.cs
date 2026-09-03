@@ -64,7 +64,7 @@ internal static class SolutionChecks
                     () => SolutionOps.MigrateToSlnx(solution)));
 
         var text = p.SolutionText ?? "";
-        var missing = projects.Where(pr => !text.Contains(Path.GetFileName(pr), StringComparison.OrdinalIgnoreCase)).ToList();
+        var missing = projects.Where(pr => !ProjectModel.NamesProject(text, Path.GetFileName(pr))).ToList();
         if (p.GameCsprojPath != null && missing.Contains(p.GameCsprojPath))
             yield return new Finding("sln.contains-game", c, Severity.Fail, $"{name} does not list {p.GameCsprojName}",
                 "the Godot editor requires it", null, name,

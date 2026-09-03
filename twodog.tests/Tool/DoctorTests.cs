@@ -411,6 +411,17 @@ public class DoctorTests : IDisposable
     }
 
     [Fact]
+    public void ASolutionNamingASimilarProject_IsNotTheGamesSolution()
+    {
+        var dir = Scaffold("--desktop");
+        File.WriteAllText(Path.Combine(dir, "Other.slnx"), "<Solution>\n  <Project Path=\"OtherGame.csproj\" />\n</Solution>\n");
+
+        var model = ProjectModel.Load(dir);
+        Assert.Single(model.GameSolutions);
+        Assert.Equal("Game.slnx", Path.GetFileName(model.Solution));
+    }
+
+    [Fact]
     public void Showcase_HasNoErrors()
     {
         var showcase = Path.Combine(HelperToolTestBed.RepoRoot, "demos", "showcase");
