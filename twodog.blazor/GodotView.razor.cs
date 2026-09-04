@@ -25,13 +25,16 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
 {
     private readonly string _viewId = Guid.NewGuid().ToString("N");
     private int _lifetime;
+    // Keys the canvas element. Bumped only after an exit: changing it mid-lifetime would make the next render
+    // replace the canvas Godot draws into (the first lifetime went black that way, its counter also being the key).
+    private int _canvasGeneration;
     private TaskCompletionSource? _canvasRendered;
     private ElementReference _canvas;
     private IJSObjectReference? _module;
     private bool _disposed;
     private bool _starting;
 
-    private string CanvasId => $"twodog-canvas-{_viewId}-{_lifetime}";
+    private string CanvasId => $"twodog-canvas-{_viewId}-{_canvasGeneration}";
 
     [Inject] private IJSRuntime Js { get; set; } = default!;
 
@@ -140,7 +143,6 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             });
             if (_disposed) return;
 
-            if (_lifetime == 0) _lifetime = 1;
             Engine.RegisterWebPluginsInitializer(PluginsInitializer);
             // Blazor keeps running after Godot quits; only the instance goes away.
             Engine.WebExitRuntimeOnQuit = false;
@@ -152,6 +154,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             engine.Exited += OnEngineExited;
             engine.Start();
             Engine = engine;
+            _lifetime++;
             // Hands the loop to emscripten and returns; the engine destroys itself on quit.
             engine.Run(() => OnFrame?.Invoke());
 
@@ -176,7 +179,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     {
         Engine = null;
         // Godot keeps one WebGL context per canvas element; the next lifetime gets a new element.
-        _lifetime++;
+        _canvasGeneration++;
         _canvasRendered = new TaskCompletionSource();
         _ = InvokeAsync(async () =>
         {

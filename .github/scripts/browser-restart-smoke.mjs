@@ -46,10 +46,20 @@ const evaluate = async (expression) => {
     if (result.result?.exceptionDetails) throw new Error(result.result.exceptionDetails.text);
     return result.result?.result?.value;
 };
+// canvasLive: the canvas in the DOM is the one Godot draws into - its backing store follows its CSS box (the
+// GodotView's ResizeObserver does that), while a canvas a re-render swapped in keeps the 300x150 default.
 const state = () => evaluate(`JSON.stringify({
     smoke: document.documentElement.getAttribute("data-twodog-smoke"),
     lifetime: document.documentElement.getAttribute("data-twodog-lifetime"),
     status: document.querySelector(".status")?.textContent ?? null,
+    canvases: document.querySelectorAll("canvas").length,
+    canvasLive: (() => {
+        const canvas = document.querySelector("canvas");
+        if (!canvas || canvas.clientWidth === 0) return false;
+        const scale = window.devicePixelRatio || 1;
+        return canvas.width === Math.max(1, Math.floor(canvas.clientWidth * scale))
+            && canvas.height === Math.max(1, Math.floor(canvas.clientHeight * scale));
+    })(),
 })`).then(JSON.parse);
 const click = (label) => evaluate(`(() => {
     const button = [...document.querySelectorAll("button")].find((b) => b.textContent.trim() === ${JSON.stringify(label)});
@@ -73,15 +83,20 @@ const waitFor = async (what, predicate) => {
 
 try {
     await send("Runtime.enable");
-    await waitFor("first lifetime", (s) => s.smoke === "passed" && s.lifetime === "1");
+    const running = (s) => s.smoke === "passed" && s.canvases === 1 && s.canvasLive;
+    await waitFor("first lifetime", (s) => running(s) && s.lifetime === "1");
     await sleep(1000);
+    // The lifetime's canvas must survive the page's own re-renders (the FPS panel re-renders a few times a second).
+    await waitFor("first lifetime settled", (s) => running(s) && s.lifetime === "1");
     const quit = await click("Quit engine");
     if (quit !== "clicked") throw new Error(`Quit engine button: ${quit}`);
     await waitFor("engine quit", (s) => s.status?.startsWith("Godot quit"));
     await sleep(500);
     const start = await click("Start engine");
     if (start !== "clicked") throw new Error(`Start engine button: ${start}`);
-    await waitFor("second lifetime", (s) => s.smoke === "passed" && s.lifetime === "2" && s.status === "Running");
+    await waitFor("second lifetime", (s) => running(s) && s.lifetime === "2" && s.status === "Running");
+    await sleep(1000);
+    await waitFor("second lifetime settled", (s) => running(s) && s.lifetime === "2" && s.status === "Running");
     console.log("Engine restart smoke passed");
     ws.close();
     process.exit(0);

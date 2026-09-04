@@ -101,7 +101,10 @@ client takes over.
 One engine runs at a time. After `Quit()` completes, `StartAsync()` starts a
 new engine: `GodotView` renders a fresh `<canvas>` for it, because a browser
 hands out one WebGL context per canvas element for the element's whole life.
-Navigating away from the page disposes the view and quits the engine.
+The game assembly is not reloaded: Godot objects kept in static fields are
+disposed with the first engine, see
+[Single Godot Instance](/known-issues/single-instance). Navigating away from
+the page disposes the view and quits the engine.
 
 ## Project Setup
 

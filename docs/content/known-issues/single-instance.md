@@ -36,3 +36,17 @@ using var nextGodot = nextEngine.Start();
 This allows xUnit collections to use fresh engines sequentially in one test
 process. Collections that share an engine must disable parallelization; see
 [Testing](../testing).
+
+A restart does not reload the game assembly: static fields keep their values
+across engines, while every Godot object the previous engine created was
+disposed when it shut down. A static that holds a Godot object - a `Resource`
+such as `FastNoiseLite`, a `Node`, a `PackedScene` - therefore throws
+`ObjectDisposedException` in the next engine. Create such objects per instance
+(in `_Ready`, or lazily behind `GodotObject.IsInstanceValid`), or reset them
+from `Exited`:
+
+```csharp
+private static FastNoiseLite? _noise;
+private static FastNoiseLite Noise =>
+    GodotObject.IsInstanceValid(_noise) ? _noise : _noise = new FastNoiseLite();
+```
