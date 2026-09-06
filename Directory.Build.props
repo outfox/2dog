@@ -7,7 +7,7 @@
         <TwoDogRevision>81</TwoDogRevision>
         <!-- Bump when the godot submodule or the natives package layout changes (deploy skips duplicates);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0 (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>3</NativesRevision>
+        <NativesRevision>4</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
