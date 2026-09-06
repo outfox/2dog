@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 
@@ -42,6 +43,7 @@ public class Engine : IDisposable, IAsyncDisposable
     private bool _teardownStarted;
     private bool _exitNotified;
     private int _ownerThreadId;
+    private SynchronizationContext? _hostSynchronizationContext;
 
     /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
     /// <param name="project">Label passed as Godot's first argument.</param>
@@ -225,6 +227,7 @@ public class Engine : IDisposable, IAsyncDisposable
             if (_state != LifecycleState.Created)
                 throw new InvalidOperationException($"{nameof(Engine)}: Start() may only be called once.");
             _ownerThreadId = System.Environment.CurrentManagedThreadId;
+            _hostSynchronizationContext = SynchronizationContext.Current;
             _state = LifecycleState.Starting;
 
             try
@@ -604,6 +607,7 @@ public class Engine : IDisposable, IAsyncDisposable
             }
             catch (Exception e)
             {
+                RestoreHostSynchronizationContext();
                 _completion.TrySetException(e);
                 throw;
             }
@@ -626,6 +630,7 @@ public class Engine : IDisposable, IAsyncDisposable
             if (_exitNotified || _completion.Task.IsCompleted) return;
             _exitNotified = true;
         }
+        RestoreHostSynchronizationContext();
         try
         {
             if (!_startedLifetime || Exited is not { } exited) return;
@@ -645,6 +650,15 @@ public class Engine : IDisposable, IAsyncDisposable
         {
             _completion.TrySetResult();
         }
+    }
+
+    private void RestoreHostSynchronizationContext()
+    {
+        // Godot installs a context backed by its frame loop. Once that loop is gone,
+        // host awaits and exit callbacks must not keep posting to its abandoned queue.
+        if (_ownerThreadId == System.Environment.CurrentManagedThreadId &&
+            SynchronizationContext.Current is GodotSynchronizationContext)
+            SynchronizationContext.SetSynchronizationContext(_hostSynchronizationContext);
     }
 
     /// <summary>
