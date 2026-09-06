@@ -121,20 +121,25 @@ public class EngineRestartTests
         var projectDir = Engine.ResolveProjectDir();
         AssemblyPreloader.PreloadGameAssemblies(projectDir);
         using var engine = new Engine("exit-order", projectDir, "--headless");
+        var hostContext = SynchronizationContext.Current;
         engine.Start();
         var notifications = 0;
         var completedInsideHandler = false;
+        SynchronizationContext? exitContext = null;
         Task? reentrantDisposal = null;
         engine.Exited += () =>
         {
             notifications++;
             completedInsideHandler = engine.Completion.IsCompleted;
+            exitContext = SynchronizationContext.Current;
             reentrantDisposal = engine.DisposeAsync().AsTask();
         };
         engine.Exited += () => notifications++;
 
         engine.Dispose();
 
+        Assert.Same(hostContext, SynchronizationContext.Current);
+        Assert.Same(hostContext, exitContext);
         Assert.False(completedInsideHandler);
         Assert.Equal(2, notifications);
         Assert.True(engine.Completion.IsCompletedSuccessfully);
