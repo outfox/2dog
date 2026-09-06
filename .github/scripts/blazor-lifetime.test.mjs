@@ -1,6 +1,18 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import test from 'node:test';
+import test, { beforeEach, afterEach } from 'node:test';
+
+const globalNames = ['document', 'window', 'ResizeObserver', 'Blazor', 'fetch'];
+let savedGlobals;
+beforeEach(() => {
+    savedGlobals = new Map(globalNames.map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
+});
+afterEach(() => {
+    for (const [name, descriptor] of savedGlobals) {
+        if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+        else delete globalThis[name];
+    }
+});
 
 const source = await readFile(new URL('../../twodog.blazor/wwwroot/2dog.blazor.js', import.meta.url), 'utf8');
 let generation = 0;

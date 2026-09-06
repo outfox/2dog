@@ -74,7 +74,8 @@ public Task Completion { get; }
 ```
 
 Completes when this `Engine` reaches a terminal state. If `Start()` succeeded,
-that means the owned native instance has been destroyed.
+that means the owned native instance has been destroyed and synchronous `Exited`
+handlers have returned. Asynchronous work started by those handlers is not awaited.
 
 ### `Exited`
 

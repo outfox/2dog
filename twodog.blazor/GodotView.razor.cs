@@ -116,7 +116,9 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     }
 
     /// <summary>Starts the engine; a no-op while one is running or starting. Works again after <see cref="Exited"/>.</summary>
-    public async Task StartAsync()
+    public Task StartAsync() => InvokeAsync(StartCoreAsync);
+
+    private async Task StartCoreAsync()
     {
         Engine? startedEngine = null;
         Exception? failure = null;
@@ -168,7 +170,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             Engine = engine;
             try
             {
-                engine.Exited += () => _ = CompleteExitAsync(engine);
+                engine.Exited += () => _ = InvokeAsync(() => CompleteExitAsync(engine));
                 engine.Start();
                 _lifetime++;
                 // Hands the loop to emscripten and returns; the engine destroys itself on quit.
@@ -384,7 +386,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Focuses the canvas so keyboard input reaches Godot.</summary>
     public ValueTask FocusAsync() => _canvas.FocusAsync();
 
-    public ValueTask DisposeAsync() => new(_disposeTask ??= DisposeCoreAsync());
+    public ValueTask DisposeAsync() => new(_disposeTask ??= InvokeAsync(DisposeCoreAsync));
 
     private async Task DisposeCoreAsync()
     {
