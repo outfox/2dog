@@ -3,6 +3,7 @@
 # actually run tests. vstest's --blame-hang only dumps its own testhost, but xunit v3 executes the
 # assembly in a child process and HelperToolTestBed spawns 2dog.import grandchildren; on a hang
 # those are the stacks that matter, so we createdump each of them before killing the tree.
+# On macOS, createdump can itself hang; retain test output and a process snapshot instead.
 # Usage: test-with-watchdog.sh <Configuration> [timeout-seconds]
 set -euo pipefail
 
@@ -34,19 +35,28 @@ if [[ "${RUNNER_OS:-}" == "Linux" ]]; then
   sudo sysctl -q -w kernel.yama.ptrace_scope=0 || true
 fi
 
-dotnet test 2dog.tests.slnf -c "$config" --no-restore \
-  --blame-crash --blame-crash-dump-type full &
+if [[ "${RUNNER_OS:-}" == "macOS" ]]; then
+  dotnet test 2dog.tests.slnf -c "$config" --no-restore \
+    --blame --logger 'console;verbosity=normal' &
+else
+  dotnet test 2dog.tests.slnf -c "$config" --no-restore \
+    --blame-crash --blame-crash-dump-type full &
+fi
 test_pid=$!
 
 elapsed=0
 while kill -0 "$test_pid" 2>/dev/null; do
   if (( elapsed >= limit )); then
-    echo "::error::Test run ($config) exceeded ${limit}s; dumping test processes to $dumps"
+    echo "::error::Test run ($config) exceeded ${limit}s; collecting diagnostics in $dumps"
     mkdir -p "$dumps"
-    for pid in $(pgrep -f "$pattern" || true); do
-      echo "--- pid $pid: $(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || ps -o command= -p "$pid")"
-      "$createdump" --full -f "$dumps/hang_${pid}.dmp" "$pid" || echo "createdump failed for $pid"
-    done
+    if [[ "${RUNNER_OS:-}" == "macOS" ]]; then
+      ps -axo pid,ppid,state,etime,command > "$dumps/processes.txt" || true
+    else
+      for pid in $(pgrep -f "$pattern" || true); do
+        echo "--- pid $pid: $(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || ps -o command= -p "$pid")"
+        "$createdump" --full -f "$dumps/hang_${pid}.dmp" "$pid" || echo "createdump failed for $pid"
+      done
+    fi
     pkill -TERM -P "$test_pid" || true
     kill -TERM "$test_pid" || true
     sleep 5
