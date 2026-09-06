@@ -12,7 +12,7 @@ internal static class Program
         // The default constructor finds raw project content during development
         // and the exe-adjacent .pck after publish. Arguments are forwarded to Godot.
         using var engine = new Engine("Company.Product1", args: args);
-        using var godot = engine.Start();
+        engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)
             GD.Print($"2dog is running '{scene.Name}'!");
@@ -21,7 +21,7 @@ internal static class Program
         Console.WriteLine("Close the window to quit.");
 
         // Iteration() returns true when Godot wants to quit.
-        while (!godot.Iteration())
+        while (!engine.Iteration())
         {
             // Your per-frame logic here
         }

@@ -23,29 +23,23 @@ public sealed class ResidentProgram : IEngineProgram
         {
             // Disposed while waiting to boot: never bring up an engine nobody observes.
             if (ctx.QuitRequested) return 0;
-            var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args)
+            using var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args)
             {
                 NativePath = ctx.NativePath,
                 ProjectAssemblyDir = ctx.ProgramAssemblyDir,
             };
-            using var godot = engine.Start();
+            var godot = engine.Start();
             var session = new EngineSession(engine, godot);
             ctx.SignalBooted();
-            try
+            while (true)
             {
-                while (!ctx.QuitRequested)
-                {
-                    if (godot.Iteration()) break;
-                    // Bounded batch: an always-nonempty queue must not starve
-                    // frame pumping or the QuitRequested check.
-                    var batch = 8;
-                    while (batch-- > 0 && !ctx.QuitRequested && queue.TryTake(out var item))
-                        Execute(session, item);
-                }
-            }
-            finally
-            {
-                engine.Dispose();
+                if (ctx.QuitRequested) engine.RequestQuit();
+                if (engine.Iteration()) break;
+                // Bounded batch: an always-nonempty queue must not starve
+                // frame pumping or the QuitRequested check.
+                var batch = 8;
+                while (batch-- > 0 && !ctx.QuitRequested && queue.TryTake(out var item))
+                    Execute(session, item);
             }
         }
         finally

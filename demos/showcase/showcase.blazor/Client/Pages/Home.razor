@@ -28,6 +28,7 @@
         <button @onclick="TogglePause" disabled="@(!IsRunning)">@(_paused ? "Resume" : "Pause")</button>
         <button @onclick="() => _view!.StartAsync()" disabled="@(_view is null || IsRunning)">Start engine</button>
         <button @onclick="() => _view?.Quit()" disabled="@(!IsRunning)">Quit engine</button>
+        <button @onclick="RestartEngine" disabled="@(!IsRunning)">Restart engine</button>
     </aside>
 
     <main class="viewport">

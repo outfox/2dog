@@ -15,19 +15,21 @@ namespace twodog;
 internal static unsafe partial class WebHost
 {
     private static nint _pluginsInitializer;
-    private static int _bootCount;
+    private static bool _pluginsInitialized;
+    private static Func<bool>? _iterate;
     private static Action? _perFrame;
     private static Action? _onShutdown;
     private static bool _shutdownComplete;
+    private static bool _shutdownStarted;
 
-    /// <summary>True while emscripten owns the main loop; Engine.Dispose() is a no-op then.</summary>
+    /// <summary>True while emscripten owns the frame loop or asynchronous shutdown.</summary>
     internal static bool MainLoopActive { get; private set; }
 
     /// <summary>
     /// Whether quitting Godot also exits the wasm runtime (the standalone web host). Hosts sharing the runtime
     /// with other managed code (Blazor) keep it alive; the instance is still destroyed.
     /// </summary>
-    internal static bool ExitRuntimeOnQuit { get; set; } = true;
+    internal static bool ExitRuntimeOnQuit { get; set; }
 
     // Exported by the mono module (GD_MONO_LIBGODOT_ENABLED); GDMono init calls the registered callback for the
     // godot_plugins_initialize pointer instead of loading GodotPlugins.dll.
@@ -38,6 +40,8 @@ internal static unsafe partial class WebHost
     // (redraw/max_fps handling + main_loop_iterate), returns non-zero on quit.
     [LibraryImport("libgodot")]
     private static partial byte libgodot_web_iteration();
+
+    internal static bool Iteration() => libgodot_web_iteration() != 0;
 
     // Emscripten runtime functions, resolved statically against the main
     // module by the wasm pinvoke table ("*" convention).
@@ -57,32 +61,22 @@ internal static unsafe partial class WebHost
 
     [UnmanagedCallersOnly]
     private static nint LoadFromExecutable() =>
-        (nint)(delegate* unmanaged<nint, nint, nint, int, godot_bool>)&InitializeFromGameProject;
+        (nint)(delegate* unmanaged<nint, nint, nint, int, godot_bool>)&InitializePlugins;
 
-    /// <summary>
-    /// GDMono's plugins initializer for every engine lifetime. The game's source-generated initializer runs once
-    /// (its DllImportResolver registration cannot repeat); later lifetimes redo what it does per engine - reset the
-    /// script bridge (which replays the script lookups), refresh the native callbacks, export the managed ones.
-    /// </summary>
     [UnmanagedCallersOnly]
-    private static godot_bool InitializeFromGameProject(nint godotDllHandle, nint outManagedCallbacks,
+    private static godot_bool InitializePlugins(nint godotDllHandle, nint outManagedCallbacks,
         nint unmanagedCallbacks, int unmanagedCallbacksSize)
     {
         try
         {
-            if (_bootCount == 0)
-            {
-                var initialize = (delegate* unmanaged<nint, nint, nint, int, godot_bool>)_pluginsInitializer;
-                var ok = initialize(godotDllHandle, outManagedCallbacks, unmanagedCallbacks, unmanagedCallbacksSize);
-                if (ok.ToBool())
-                    _bootCount++;
-                return ok;
-            }
-
-            ScriptManagerBridge.ResetForEngineReinitialization();
-            NativeFuncs.Initialize(unmanagedCallbacks, unmanagedCallbacksSize);
-            ManagedCallbacks.Create(outManagedCallbacks);
-            _bootCount++;
+            var initialize = (delegate* unmanaged<nint, nint, nint, int, godot_bool>)_pluginsInitializer;
+            var ok = initialize(godotDllHandle, outManagedCallbacks, unmanagedCallbacks, unmanagedCallbacksSize);
+            if (!ok.ToBool()) return ok;
+            // The game may compile against stock GodotSharp and run against the fork.
+            // Keep the fork-only reset here, after the initializer refreshes native callbacks,
+            // matching GodotPlugins on desktop without duplicating the generated initializer.
+            if (_pluginsInitialized) ScriptManagerBridge.ResetForEngineReinitialization();
+            _pluginsInitialized = true;
             return godot_bool.True;
         }
         catch (Exception e)
@@ -110,26 +104,72 @@ internal static unsafe partial class WebHost
     /// Hands the main loop to emscripten and returns immediately; on quit the async teardown runs and
     /// <paramref name="onShutdown"/> destroys the instance.
     /// </summary>
-    internal static void RunMainLoop(Action? perFrame, Action onShutdown)
+    internal static void RunMainLoop(Func<bool> iterate, Action? perFrame, Action onShutdown)
     {
         if (MainLoopActive)
             throw new InvalidOperationException($"{nameof(WebHost)}: main loop is already running.");
+        _iterate = iterate;
         _perFrame = perFrame;
         _onShutdown = onShutdown;
         MainLoopActive = true;
 
-        emscripten_set_main_loop((nint)(delegate* unmanaged<void>)&MainLoopCallback, -1, 0);
+        try
+        {
+            emscripten_set_main_loop((nint)(delegate* unmanaged<void>)&MainLoopCallback, -1, 0);
 
-        // Run the first frame immediately (mirrors the reference host in
-        // Godot's LibGodotMain.cs); the engine may already request quit here.
-        RunFrame();
+            // Run the first frame immediately (mirrors the reference host in
+            // Godot's LibGodotMain.cs); the engine may already request quit here.
+            RunFrame();
+        }
+        catch
+        {
+            ResetMainLoop();
+            throw;
+        }
+    }
+
+    /// <summary>Stops the frame loop, if present, and begins the shared asynchronous teardown.</summary>
+    internal static void BeginShutdown(Action onShutdown)
+    {
+        if (_shutdownStarted) return;
+        _onShutdown = onShutdown;
+        MainLoopActive = true;
+        try
+        {
+            SetupExit();
+        }
+        catch
+        {
+            ResetMainLoop();
+            throw;
+        }
+    }
+
+    internal static void ResetMainLoop()
+    {
+        if (MainLoopActive) emscripten_cancel_main_loop();
+        MainLoopActive = false;
+        _shutdownComplete = false;
+        _shutdownStarted = false;
+        _iterate = null;
+        _perFrame = null;
+        _onShutdown = null;
     }
 
     [UnmanagedCallersOnly]
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void MainLoopCallback()
     {
-        RunFrame();
+        try
+        {
+            RunFrame();
+        }
+        catch (Exception e)
+        {
+            // Never unwind managed exceptions through Emscripten's native frame callback.
+            Console.Error.WriteLine(e);
+            SetupExit();
+        }
     }
 
     /// <summary>
@@ -138,7 +178,7 @@ internal static unsafe partial class WebHost
     /// </summary>
     private static void RunFrame()
     {
-        if (libgodot_web_iteration() != 0)
+        if (_iterate!())
         {
             SetupExit();
             return;
@@ -161,6 +201,8 @@ internal static unsafe partial class WebHost
 
     private static void SetupExit()
     {
+        if (_shutdownStarted) return;
+        _shutdownStarted = true;
         // Swap the frame callback for the exit poller and start Godot's async teardown (IDBFS flush etc.); the
         // poller destroys the instance once it completes.
         emscripten_cancel_main_loop();
@@ -184,18 +226,24 @@ internal static unsafe partial class WebHost
             return; // Still waiting for async teardown.
         }
 
+        var onShutdown = _onShutdown;
+        var exitRuntime = ExitRuntimeOnQuit;
+        emscripten_cancel_main_loop();
         MainLoopActive = false;
         _shutdownComplete = false;
+        _shutdownStarted = false;
+        _iterate = null;
+        _perFrame = null;
+        _onShutdown = null;
         try
         {
-            _onShutdown?.Invoke();
+            onShutdown?.Invoke();
         }
         catch (Exception e)
         {
             Console.Error.WriteLine(e);
         }
-        emscripten_cancel_main_loop();
-        if (ExitRuntimeOnQuit)
+        if (exitRuntime)
             emscripten_force_exit(0);
     }
 }

@@ -23,7 +23,10 @@ public enum GodotCanvasResize
 /// </summary>
 public partial class GodotView : ComponentBase, IAsyncDisposable
 {
+    private static readonly SemaphoreSlim EngineLease = new(1, 1);
     private readonly string _viewId = Guid.NewGuid().ToString("N");
+    private readonly SemaphoreSlim _lifecycle = new(1, 1);
+    private readonly CancellationTokenSource _disposeCancellation = new();
     private int _lifetime;
     // Keys the canvas element. Bumped only after an exit: changing it mid-lifetime would make the next render
     // replace the canvas Godot draws into (the first lifetime went black that way, its counter also being the key).
@@ -33,6 +36,8 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     private IJSObjectReference? _module;
     private bool _disposed;
     private bool _starting;
+    private bool _hasEngineLease;
+    private Task? _disposeTask;
 
     private string CanvasId => $"twodog-canvas-{_viewId}-{_canvasGeneration}";
 
@@ -113,15 +118,19 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Starts the engine; a no-op while one is running or starting. Works again after <see cref="Exited"/>.</summary>
     public async Task StartAsync()
     {
-        if (IsRunning || _starting || _disposed) return;
-        _starting = true;
-        Error = null;
-        StateHasChanged();
+        Engine? startedEngine = null;
+        Exception? failure = null;
+        await _lifecycle.WaitAsync();
         try
         {
+            if (IsRunning || _disposed) return;
+            _starting = true;
+            Error = null;
+            StateHasChanged();
+
             if (_canvasRendered is { } rendered)
             {
-                await rendered.Task;
+                await rendered.Task.WaitAsync(_disposeCancellation.Token);
                 _canvasRendered = null;
             }
 
@@ -129,11 +138,16 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
                 throw new ArgumentException($"{nameof(GodotView)}: {nameof(PluginsInitializer)} is required " +
                                             "(pass TwoDogWebBoot.PluginsInitializer() from your game project).");
 
-            _module ??= await Js.InvokeAsync<IJSObjectReference>("import", "./_content/2dog.blazor/2dog.blazor.js");
+            await EngineLease.WaitAsync(_disposeCancellation.Token);
+            _hasEngineLease = true;
+            if (_disposed) return;
+
+            _module ??= await Js.InvokeAsync<IJSObjectReference>("import", _disposeCancellation.Token,
+                "./_content/2dog.blazor/2dog.blazor.js");
 
             // The pack is copied into the wasm file system under its own name; Godot opens it from there.
             var packName = Path.GetFileName(PackUrl);
-            await _module.InvokeVoidAsync("prepare", _canvas, new
+            await _module.InvokeVoidAsync("prepare", _disposeCancellation.Token, _canvas, new
             {
                 packUrl = PackUrl,
                 packName,
@@ -151,69 +165,239 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             if (Args is not null) args.AddRange(Args);
 
             var engine = new Engine(Project, args: args.ToArray());
-            engine.Exited += OnEngineExited;
-            engine.Start();
             Engine = engine;
-            _lifetime++;
-            // Hands the loop to emscripten and returns; the engine destroys itself on quit.
-            engine.Run(() => OnFrame?.Invoke());
-
-            await Started.InvokeAsync(engine);
+            try
+            {
+                engine.Exited += () => _ = CompleteExitAsync(engine);
+                engine.Start();
+                _lifetime++;
+                // Hands the loop to emscripten and returns; the engine destroys itself on quit.
+                engine.Run(() => { if (!_disposed) OnFrame?.Invoke(); });
+                startedEngine = engine;
+            }
+            catch
+            {
+                await StopEngineAsync(engine);
+                throw;
+            }
+        }
+        catch (OperationCanceledException) when (_disposed)
+        {
+            await CleanupStartAttemptAsync();
         }
         catch (Exception e)
         {
             // An exception escaping OnAfterRenderAsync takes the whole Blazor app down; report instead.
             Console.Error.WriteLine($"{nameof(GodotView)}: {e}");
             Error = e;
-            Engine = null;
-            StateHasChanged();
-            await Failed.InvokeAsync(e);
+            failure = e;
+            try
+            {
+                await CleanupStartAttemptAsync();
+            }
+            catch (Exception cleanupError)
+            {
+                Console.Error.WriteLine($"{nameof(GodotView)}: startup cleanup failed: {cleanupError}");
+                failure = new AggregateException(e, cleanupError);
+                Error = failure;
+            }
         }
         finally
         {
             _starting = false;
+            if (_disposed)
+            {
+                try
+                {
+                    await CleanupStartAttemptAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine($"{nameof(GodotView)}: disposal cleanup failed: {e}");
+                }
+            }
+            _lifecycle.Release();
+        }
+
+        if (startedEngine is not null && !_disposed && ReferenceEquals(Engine, startedEngine))
+        {
+            try
+            {
+                await Started.InvokeAsync(startedEngine);
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"{nameof(GodotView)}: {nameof(Started)} callback failed: {e}");
+                failure = e;
+                Error = e;
+                await _lifecycle.WaitAsync();
+                try
+                {
+                    if (ReferenceEquals(Engine, startedEngine))
+                        await StopEngineAsync(startedEngine);
+                }
+                catch (Exception cleanupError)
+                {
+                    Console.Error.WriteLine($"{nameof(GodotView)}: callback cleanup failed: {cleanupError}");
+                    failure = new AggregateException(e, cleanupError);
+                    Error = failure;
+                }
+                finally
+                {
+                    _lifecycle.Release();
+                }
+            }
+        }
+
+        if (failure is not null && !_disposed)
+        {
+            StateHasChanged();
+            await Failed.InvokeAsync(failure);
         }
     }
 
-    private void OnEngineExited()
+    private async Task CleanupStartAttemptAsync()
     {
-        Engine = null;
+        if (Engine is { } engine)
+        {
+            await StopEngineAsync(engine);
+            return;
+        }
+
+        try
+        {
+            await CleanupJsAsync();
+        }
+        finally
+        {
+            ReleaseEngineLease();
+        }
+    }
+
+    private async Task<bool> StopEngineAsync(Engine? engine)
+    {
+        var stoppedCurrent = false;
+        if (engine is not null)
+        {
+            try
+            {
+                await engine.DisposeAsync();
+            }
+            finally
+            {
+                if (ReferenceEquals(Engine, engine))
+                {
+                    stoppedCurrent = true;
+                    Engine = null;
+                    try
+                    {
+                        await CleanupJsAsync();
+                    }
+                    finally
+                    {
+                        ReleaseEngineLease();
+                    }
+                }
+            }
+        }
+
+        if (!stoppedCurrent || _disposed) return false;
+
         // Godot keeps one WebGL context per canvas element; the next lifetime gets a new element.
         _canvasGeneration++;
-        _canvasRendered = new TaskCompletionSource();
-        _ = InvokeAsync(async () =>
+        _canvasRendered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        StateHasChanged();
+        return true;
+    }
+
+    private async Task CleanupJsAsync()
+    {
+        if (_module is null) return;
+        var module = _module;
+        _module = null;
+        try
         {
-            StateHasChanged();
-            await Exited.InvokeAsync();
-        });
+            await module.InvokeVoidAsync("release", _canvas);
+        }
+        catch (JSDisconnectedException)
+        {
+            // Page is going away.
+        }
+        catch (JSException e)
+        {
+            Console.Error.WriteLine($"{nameof(GodotView)}: JavaScript release failed: {e.Message}");
+        }
+
+        try
+        {
+            await module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+            // Page is going away.
+        }
+        catch (JSException e)
+        {
+            Console.Error.WriteLine($"{nameof(GodotView)}: JavaScript module disposal failed: {e.Message}");
+        }
+    }
+
+    private void ReleaseEngineLease()
+    {
+        if (!_hasEngineLease) return;
+        _hasEngineLease = false;
+        EngineLease.Release();
     }
 
     /// <summary>Asks Godot to quit (like closing its window); teardown completes asynchronously, then <see cref="Exited"/> fires.</summary>
     public void Quit()
     {
         if (!IsRunning) return;
-        Engine!.Tree.Quit();
+        Engine!.RequestQuit();
+    }
+
+    private async Task CompleteExitAsync(Engine engine)
+    {
+        var notifyExited = false;
+        try
+        {
+            await _lifecycle.WaitAsync();
+            try
+            {
+                if (!ReferenceEquals(Engine, engine)) return;
+                notifyExited = await StopEngineAsync(engine);
+            }
+            finally
+            {
+                _lifecycle.Release();
+            }
+
+            if (notifyExited)
+                await Exited.InvokeAsync();
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"{nameof(GodotView)}: exit handling failed: {e}");
+        }
     }
 
     /// <summary>Focuses the canvas so keyboard input reaches Godot.</summary>
     public ValueTask FocusAsync() => _canvas.FocusAsync();
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync() => new(_disposeTask ??= DisposeCoreAsync());
+
+    private async Task DisposeCoreAsync()
     {
-        if (_disposed) return;
         _disposed = true;
-        Quit();
-        if (_module is not null)
+        _disposeCancellation.Cancel();
+        await _lifecycle.WaitAsync();
+        try
         {
-            try
-            {
-                await _module.InvokeVoidAsync("release", _canvas);
-                await _module.DisposeAsync();
-            }
-            catch (JSDisconnectedException)
-            {
-                // Page is going away.
-            }
+            await CleanupStartAttemptAsync();
+        }
+        finally
+        {
+            _lifecycle.Release();
         }
     }
 }

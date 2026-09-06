@@ -36,7 +36,7 @@ public class OpenGl3Fixture()
 | Property | Type | Description |
 | --- | --- | --- |
 | `Engine` | `twodog.Engine` | Engine owned by the fixture |
-| `GodotInstance` | `Godot.GodotInstance` | Running native instance |
+| `GodotInstance` | `Godot.GodotInstance` | Borrowed compatibility handle |
 | `Tree` | `Godot.SceneTree` | Active scene tree |
 
 ## `Dispose`
@@ -45,8 +45,8 @@ public class OpenGl3Fixture()
 public void Dispose()
 ```
 
-Disposes `GodotInstance`, then `Engine`. Let the test framework call this
-through its fixture lifetime.
+Disposes the owning `Engine`. Let the test framework call this through its
+fixture lifetime.
 
 ## Custom xUnit Collection
 

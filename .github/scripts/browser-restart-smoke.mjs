@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Drives the Blazor showcase through a second engine lifetime: waits for the first smoke pass, clicks
-// "Quit engine", waits for the quit to complete, clicks "Start engine", then waits for the smoke marker of
-// lifetime 2. Usage: browser-restart-smoke.mjs <url> [timeout-ms] [debug-port]
+// Drives the Blazor showcase through quit/start and restart-from-exit-callback lifetimes.
+// Fails on browser/runtime errors as well as a failed or missing smoke marker.
+// Usage: browser-restart-smoke.mjs <url> [timeout-ms] [debug-port]
 
 const [targetUrl, timeoutValue = "120000", portValue = "9222"] = process.argv.slice(2);
 if (!targetUrl) {
@@ -11,6 +11,11 @@ if (!targetUrl) {
 const timeoutMs = Number.parseInt(timeoutValue, 10);
 const debugPort = Number.parseInt(portValue, 10);
 const deadline = Date.now() + timeoutMs;
+// Bound stalled DevTools calls too: a hung wasm frame may never answer Runtime.evaluate.
+setTimeout(() => {
+    console.error('Engine restart smoke timed out');
+    process.exit(1);
+}, timeoutMs).unref();
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const targets = await (await fetch(`http://127.0.0.1:${debugPort}/json/list`)).json();
@@ -23,6 +28,7 @@ if (!page?.webSocketDebuggerUrl) {
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 await new Promise((resolve, reject) => { ws.addEventListener("open", resolve); ws.addEventListener("error", reject); });
 let nextId = 0;
+let browserFailure = null;
 const pending = new Map();
 ws.addEventListener("message", (message) => {
     const data = JSON.parse(message.data);
@@ -31,9 +37,12 @@ ws.addEventListener("message", (message) => {
         pending.delete(data.id);
     } else if (data.method === "Runtime.consoleAPICalled") {
         const text = data.params.args.map((a) => a.value ?? a.description ?? "").join(" ");
+        if (data.params.type === "error" || /(^|\n)ERROR:/.test(text)) browserFailure ??= text;
         if (/error|exception|2DOG|Engine:|destroyed/i.test(text)) console.log(`[browser:${data.params.type}] ${text.slice(0, 300)}`);
     } else if (data.method === "Runtime.exceptionThrown") {
-        console.error(`[browser:exception] ${data.params.exceptionDetails.exception?.description ?? data.params.exceptionDetails.text}`);
+        const text = data.params.exceptionDetails.exception?.description ?? data.params.exceptionDetails.text;
+        browserFailure ??= text;
+        console.error(`[browser:exception] ${text}`);
     }
 });
 const send = (method, params = {}) => new Promise((resolve) => {
@@ -72,6 +81,10 @@ const waitFor = async (what, predicate) => {
     let last = null;
     while (Date.now() < deadline) {
         last = await state();
+        if (browserFailure) throw new Error(`Browser runtime error: ${browserFailure}`);
+        if (last.smoke === 'failed' || last.status?.startsWith('Failed:')) {
+            throw new Error(`Browser reported failure: ${JSON.stringify(last)}`);
+        }
         if (predicate(last)) {
             console.log(`${what}: ${JSON.stringify(last)}`);
             return last;
@@ -97,6 +110,11 @@ try {
     await waitFor("second lifetime", (s) => running(s) && s.lifetime === "2" && s.status === "Running");
     await sleep(1000);
     await waitFor("second lifetime settled", (s) => running(s) && s.lifetime === "2" && s.status === "Running");
+    const restart = await click("Restart engine");
+    if (restart !== "clicked") throw new Error(`Restart engine button: ${restart}`);
+    await waitFor("callback restart", (s) => running(s) && s.lifetime === "3" && s.status === "Running");
+    await sleep(1000);
+    await waitFor("callback restart settled", (s) => running(s) && s.lifetime === "3" && s.status === "Running");
     console.log("Engine restart smoke passed");
     ws.close();
     process.exit(0);

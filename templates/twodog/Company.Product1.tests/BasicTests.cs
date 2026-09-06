@@ -29,7 +29,7 @@ public class BasicTests(HeadlessFixture godot)
     {
         // Arrange & Act
         godot.Tree.Root.PhysicsInterpolationMode = Node.PhysicsInterpolationModeEnum.Off;
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
 
         // Assert - if we get here without crashing, test passes
         Assert.True(true);

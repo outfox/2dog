@@ -64,14 +64,22 @@ using Engine = twodog.Engine;
 
 internal static class Program
 {
-    private static int Main(string[] args)
+    private static async Task<int> Main(string[] args)
     {
         Engine.RegisterWebPluginsInitializer(TwoDogWebBoot.PluginsInitializer());
 
         var engine = new Engine("MyGame", args: args);
-        engine.Start();
-        GD.Print("2dog is running in the browser!");
-        engine.Run();
+        try
+        {
+            engine.Start();
+            GD.Print("2dog is running in the browser!");
+            engine.Run();
+        }
+        catch
+        {
+            await engine.DisposeAsync();
+            throw;
+        }
         return 0;
     }
 }
@@ -85,6 +93,15 @@ The browser host differs from the [generic host](./generic) in three ways:
    `--main-pack`.
 3. It calls `Run()` instead of `Iteration()`. `Run()` hands the frame loop to
    Emscripten and returns immediately; `Run(perFrame)` adds host-side frame work.
+
+`Engine` owns the instance returned by `Start()`. Call `RequestQuit()` to stop
+it. Browser teardown is asynchronous: await `Completion` or `DisposeAsync()`;
+`Exited` fires after teardown. These lifecycle members are also available on
+desktop, where `Dispose()` completes teardown synchronously. The runtime stays
+alive by default; start again only after completion, with a new `Engine` and
+fresh canvas configuration. Return from `Main()` after installing the loop:
+the page shell awaits it before hiding the loading overlay. Await teardown
+from later host callbacks, rather than keeping `Main()` pending until quit.
 
 ## Project Setup
 

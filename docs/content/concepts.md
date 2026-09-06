@@ -50,7 +50,7 @@ After startup, the full GodotSharp API is accessible:
 
 ```csharp
 using var engine = new Engine("MyGame", args: args);
-using var godot = engine.Start();
+GodotInstance godot = engine.Start(); // Borrowed compatibility handle.
 
 // Access the scene tree
 SceneTree tree = engine.Tree;
@@ -70,7 +70,7 @@ var physics = PhysicsServer3D.Singleton;
 Unlike traditional Godot, the host explicitly pumps Godot in its main loop:
 
 ```csharp
-while (!godot.Iteration())
+while (!engine.Iteration())
 {
     // Godot processes physics, rendering, input, and your frame logic here.
     if (someCondition)
@@ -78,11 +78,15 @@ while (!godot.Iteration())
 }
 ```
 
-`Iteration()` returns `true` when Godot wants to quit, such as when the window closes.
+`Engine` owns the running instance. `Iteration()` returns `true` when Godot
+wants to quit, such as when the window closes; `RequestQuit()` asks it to stop.
+After teardown, `Completion` completes and `Exited` fires on every platform.
+Desktop disposal is synchronous; browser disposal is asynchronous.
 
 ## Single Instance only (for now.)
 
-Only one Godot instance can run per assembly load context at a time. Sequential
-restart is supported. See [Single Godot Instance](./known-issues/single-instance)
+Only one Godot instance can run per assembly load context at a time. For a
+sequential restart, wait for completion and create a new `Engine`. See
+[Single Godot Instance](./known-issues/single-instance)
 for examples and an experimental isolated-hosting path to kind of get multiple engines
 after all.

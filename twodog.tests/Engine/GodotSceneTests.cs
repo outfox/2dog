@@ -51,7 +51,7 @@ public class GodotSceneTests(HeadlessFixture godot)
         Assert.IsType<Label>(label);
 
         instance.QueueFree();
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class GodotSceneTests(HeadlessFixture godot)
         Assert.False(string.IsNullOrEmpty(label.Text));
 
         instance.QueueFree();
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class GodotSceneTests(HeadlessFixture godot)
         Assert.True(instance.IsInsideTree());
 
         instance.QueueFree();
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
     }
 
     [Fact]

@@ -3,23 +3,44 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Godot;
 
 namespace twodog;
 
 /// <summary>Configures and owns an embedded Godot instance.</summary>
-public class Engine : IDisposable
+public class Engine : IDisposable, IAsyncDisposable
 {
+    private enum LifecycleState
+    {
+        Created,
+        Starting,
+        Running,
+        Stopping,
+        Stopped,
+        Disposed
+    }
+
+    private static readonly object ProcessSync = new();
     private static IntPtr _godotInstancePtr = IntPtr.Zero;
+    private static bool _destroyingInstance;
     private readonly string _project;
     private readonly string[] _args;
     private readonly string? _projectPath;
 
     // Only the Engine that started the process-wide instance may destroy it: disposing one whose Start()
     // failed or never ran must not tear down another Engine's instance.
-    private bool _ownsInstance;
-
+    private readonly object _sync = new();
+    private readonly TaskCompletionSource _completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private LifecycleState _state;
+    private IntPtr _ownedInstancePtr;
     private GodotInstance? _godotInstance;
+    private bool _startedLifetime;
+    private bool _disposeRequested;
+    private bool _iterationActive;
+    private bool _runActive;
+    private bool _teardownStarted;
+    private int _ownerThreadId;
 
     /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
     /// <param name="project">Label passed as Godot's first argument.</param>
@@ -58,7 +79,10 @@ public class Engine : IDisposable
     {
         // A running instance still needs the library; its teardown at process
         // exit is safe because the display server was never destroyed.
-        if (_godotInstancePtr != IntPtr.Zero) return;
+        lock (ProcessSync)
+        {
+            if (_godotInstancePtr != IntPtr.Zero) return;
+        }
 
         // No Godot calls past this point (ProcessExit). Prefer the recorded handle: with hosted multi-instance
         // every sweep must free exactly its own module.
@@ -88,8 +112,15 @@ public class Engine : IDisposable
         }
     }
 
-    public SceneTree Tree => Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
-                             throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
+    public SceneTree Tree
+    {
+        get
+        {
+            EnsureRunning();
+            return Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
+                   throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
+        }
+    }
 
     /// <summary>
     /// Hosted mode: exact libgodot file for this load context, bypassing variant probing. When set, Start() also
@@ -120,49 +151,140 @@ public class Engine : IDisposable
     /// <summary>2dog package version (the engine assembly's version, e.g. 4.7.1.68).</summary>
     public static Version Version { get; } = typeof(Engine).Assembly.GetName().Version ?? new Version(0, 0);
 
+    /// <summary>Completes when this engine reaches a terminal state, after native destruction when it started.</summary>
+    public Task Completion => _completion.Task;
+
+    /// <summary>Raised after this engine's native instance has been destroyed.</summary>
+    public event Action? Exited;
 
     public void Dispose()
     {
-        if (!_ownsInstance || _godotInstancePtr == IntPtr.Zero) return;
-        // On web emscripten owns the loop after Run(); WebHost.ExitCallback destroys the instance, not Dispose().
-        if (OperatingSystem.IsBrowser() && WebHost.MainLoopActive) return;
-        _ownsInstance = false;
-        Destroy();
+        BeginDispose();
+        GC.SuppressFinalize(this);
     }
 
-    public GodotInstance Start()
+    public async ValueTask DisposeAsync()
     {
-        ThrowIfInstanceRunning();
+        BeginDispose();
+        await Completion.ConfigureAwait(false);
+        GC.SuppressFinalize(this);
+    }
 
+    private void BeginDispose()
+    {
+        bool destroy;
+        lock (_sync)
+        {
+            if (_state == LifecycleState.Disposed || _disposeRequested) return;
+            EnsureOwnerThread();
+            _disposeRequested = true;
+            // Game callbacks can dispose their host during Start() or Iteration().
+            // Never free the native engine while its stack is still executing.
+            if (_state == LifecycleState.Starting || _iterationActive || _teardownStarted) return;
+            destroy = _state is LifecycleState.Running or LifecycleState.Stopping;
+            _state = destroy ? LifecycleState.Stopping : LifecycleState.Disposed;
+        }
+
+        if (!destroy)
+        {
+            CompleteExit();
+            return;
+        }
+
+        BeginStartedInstanceDisposal();
+    }
+
+    private void BeginStartedInstanceDisposal()
+    {
         if (OperatingSystem.IsBrowser())
         {
-            // Web has no GodotPlugins.dll on disk: the initializer must be registered up front. One statically
-            // linked instance per page, so no boot lock needed (wasm has no named mutexes anyway).
-            if (!WebHost.HasPluginsInitializer)
-                throw new InvalidOperationException(
-                    $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
-                    "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in your web " +
-                    "host folder, from the 2dog template; it must compile into the game project, which " +
-                    "requires the LIBGODOT_ENABLED define) before Start().");
-            return StartCore();
+            try
+            {
+                WebHost.BeginShutdown(DestroyOwnedInstance);
+            }
+            catch
+            {
+                WebHost.ResetMainLoop();
+                DestroyOwnedInstance();
+                throw;
+            }
+            return;
         }
 
-        // Boot mutates process-global state (env vars read during instance creation, CWD via --path). Other load
-        // contexts run their own copy of this class, so serialization must be OS-level.
-        using (ProcessBootLock.Acquire(BootLockTimeout))
+        DestroyOwnedInstance();
+    }
+
+    /// <summary>Starts Godot and returns a borrowed wrapper owned by this Engine.</summary>
+    public GodotInstance Start()
+    {
+        GodotInstance instance;
+        bool disposeAfterStart;
+        lock (_sync)
         {
-            ThrowIfInstanceRunning();
-            ConfigureGodotSharpDir(ProjectAssemblyDir);
-            return StartCore();
+            if (_state != LifecycleState.Created)
+                throw new InvalidOperationException($"{nameof(Engine)}: Start() may only be called once.");
+            _ownerThreadId = System.Environment.CurrentManagedThreadId;
+            _state = LifecycleState.Starting;
+
+            try
+            {
+                if (OperatingSystem.IsBrowser())
+                {
+                    if (!WebHost.HasPluginsInitializer)
+                        throw new InvalidOperationException(
+                            $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
+                            "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in your web " +
+                            "host folder, from the 2dog template; it must compile into the game project, which " +
+                            "requires the LIBGODOT_ENABLED define) before Start().");
+                    ThrowIfInstanceRunning();
+                    instance = StartCore();
+                }
+                else
+                {
+                    using (ProcessBootLock.Acquire(BootLockTimeout))
+                    {
+                        ThrowIfInstanceRunning();
+                        ConfigureGodotSharpDir(ProjectAssemblyDir);
+                        instance = StartCore();
+                    }
+                }
+            }
+            catch
+            {
+                if (OperatingSystem.IsBrowser() && _ownedInstancePtr != IntPtr.Zero)
+                {
+                    _state = LifecycleState.Stopping;
+                    WebHost.BeginShutdown(DestroyOwnedInstance);
+                }
+                else
+                {
+                    DestroyOwnedInstance();
+                }
+                throw;
+            }
+
+            disposeAfterStart = _disposeRequested;
+            _state = disposeAfterStart ? LifecycleState.Disposed : LifecycleState.Running;
         }
+
+        if (disposeAfterStart)
+        {
+            BeginStartedInstanceDisposal();
+            throw new ObjectDisposedException(nameof(Engine), "The engine was disposed while Start() was in progress.");
+        }
+
+        return instance;
     }
 
     private void ThrowIfInstanceRunning()
     {
-        if (_godotInstancePtr != IntPtr.Zero)
-            throw new InvalidOperationException(
-                $"{nameof(Engine)}: A Godot instance is already running. Only one instance may exist at a time " +
-                "(a Godot limitation) - dispose the previous Engine before starting a new one.");
+        lock (ProcessSync)
+        {
+            if (_godotInstancePtr != IntPtr.Zero || _destroyingInstance)
+                throw new InvalidOperationException(
+                    $"{nameof(Engine)}: A Godot instance is already running or shutting down. Only one instance " +
+                    "may exist at a time - await the previous Engine.Completion before starting a new one.");
+        }
     }
 
     private GodotInstance StartCore()
@@ -196,33 +318,47 @@ public class Engine : IDisposable
         godotArgs.AddRange(_args);
 
         // Create a Godot instance via P/Invoke (without starting)
-        _godotInstancePtr = CreateGodotInstance(godotArgs.ToArray());
+        var instancePtr = CreateGodotInstance(godotArgs.ToArray());
 
-        if (_godotInstancePtr == IntPtr.Zero)
+        if (instancePtr == IntPtr.Zero)
             throw new NullReferenceException($"{nameof(Engine)}: Error creating Godot instance, returned IntPtr.Zero");
+
+        var instanceConflict = false;
+        lock (ProcessSync)
+        {
+            instanceConflict = _godotInstancePtr != IntPtr.Zero || _destroyingInstance;
+            if (!instanceConflict) _godotInstancePtr = instancePtr;
+        }
+        if (instanceConflict)
+        {
+            LibGodot.libgodot_destroy_godot_instance(instancePtr);
+            throw new InvalidOperationException($"{nameof(Engine)}: A Godot instance is already running or shutting down.");
+        }
+        lock (_sync) _ownedInstancePtr = instancePtr;
 
         Console.WriteLine($"{nameof(Engine)}: Godot instance created successfully!");
 
         // Call start() using our minimal binding
-        if (!LibGodot.CallGodotInstanceStart(_godotInstancePtr))
+        if (!LibGodot.CallGodotInstanceStart(instancePtr))
         {
             Console.Error.WriteLine("Error starting Godot instance");
-            Destroy();
             throw new Exception($"{nameof(Engine)}: Error starting Godot instance");
         }
 
         // Get the GodotInstance object from the native pointer
-        var godotInstance = LibGodot.GetGodotInstanceFromPtr(_godotInstancePtr);
+        var godotInstance = LibGodot.GetGodotInstanceFromPtr(instancePtr);
         if (godotInstance == null)
         {
             Console.Error.WriteLine($"{nameof(Engine)}: Failed to get GodotInstance from pointer");
-            Destroy();
             throw new NullReferenceException($"{nameof(Engine)}: Failed to get GodotInstance from pointer.");
         }
 
         Console.WriteLine($"{nameof(Engine)}: Godot started successfully!");
-        _ownsInstance = true;
-        _godotInstance = godotInstance;
+        lock (_sync)
+        {
+            _godotInstance = godotInstance;
+            _startedLifetime = true;
+        }
         return godotInstance;
     }
 
@@ -272,8 +408,8 @@ public class Engine : IDisposable
     }
 
     /// <summary>
-    /// Browser only: whether Godot quitting also exits the wasm runtime (default true, the standalone web host).
-    /// Hosts that share the runtime with other managed code (Blazor) set false: the instance is still destroyed
+    /// Browser only: whether Godot quitting also exits the wasm runtime (default false).
+    /// Keeping the runtime alive supports sequential restarts: the instance is still destroyed
     /// and <see cref="Exited"/> raised, the page keeps running and a new <see cref="Engine"/> may be started -
     /// on a fresh canvas element (a browser reuses one WebGL context per element).
     /// </summary>
@@ -289,42 +425,214 @@ public class Engine : IDisposable
         }
     }
 
-    /// <summary>Browser only: raised after Godot quit and the instance was destroyed; a new engine may start then.</summary>
-    public event Action? Exited;
-
     /// <summary>
-    /// Runs the main loop. Desktop: blocks until quit, caller still disposes. Browser: hands the loop to
-    /// emscripten and returns immediately; the engine destroys itself on quit - do not Dispose() afterwards.
+    /// Runs the main loop. Desktop: blocks until quit; dispose afterward. Browser: hands the loop to
+    /// emscripten and returns immediately; async teardown destroys the instance on quit.
     /// </summary>
-    /// <param name="perFrame">Optional callback invoked once per frame before the engine iteration.</param>
+    /// <param name="perFrame">Optional callback invoked once per frame after the engine iteration.</param>
     public void Run(Action? perFrame = null)
     {
-        if (_godotInstance == null || _godotInstancePtr == IntPtr.Zero)
-            throw new InvalidOperationException($"{nameof(Engine)}: Start() must succeed before Run().");
+        EnsureRunning();
+        if (_runActive || _iterationActive)
+            throw new InvalidOperationException($"{nameof(Engine)}: The main loop is already running.");
+        _runActive = true;
 
         if (OperatingSystem.IsBrowser())
         {
-            WebHost.RunMainLoop(perFrame, () =>
+            try
             {
-                _ownsInstance = false;
-                Destroy();
-                _godotInstance = null;
-                Exited?.Invoke();
-            });
+                WebHost.RunMainLoop(IterateCore, perFrame, DestroyOwnedInstance);
+            }
+            catch
+            {
+                _runActive = false;
+                throw;
+            }
             return;
         }
 
-        while (!_godotInstance.Iteration())
+        try
         {
-            perFrame?.Invoke();
+            while (!_disposeRequested && !IterateCore())
+                perFrame?.Invoke();
+        }
+        finally
+        {
+            _runActive = false;
         }
     }
 
-    private static void Destroy()
+    /// <summary>Runs one engine frame. A true result means Godot requested exit; dispose this Engine afterward.</summary>
+    public bool Iteration()
     {
-        LibGodot.libgodot_destroy_godot_instance(_godotInstancePtr);
-        Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
-        _godotInstancePtr = IntPtr.Zero;
+        if (_runActive)
+            throw new InvalidOperationException($"{nameof(Engine)}: Run() already owns the frame loop.");
+        return IterateCore();
+    }
+
+    private bool IterateCore()
+    {
+        GodotInstance instance;
+        lock (_sync)
+        {
+            EnsureActiveStateLocked();
+            if (_iterationActive)
+                throw new InvalidOperationException($"{nameof(Engine)}: Iteration() cannot be called from an engine frame.");
+            instance = _godotInstance!;
+        }
+        EnsureOwnedInstance();
+
+        _iterationActive = true;
+        try
+        {
+            var quit = OperatingSystem.IsBrowser() ? WebHost.Iteration() : instance.Iteration();
+            return quit || _disposeRequested;
+        }
+        finally
+        {
+            _iterationActive = false;
+            if (_disposeRequested)
+                BeginStartedInstanceDisposal();
+        }
+    }
+
+    /// <summary>Requests a graceful quit. Repeated requests are harmless.</summary>
+    public void RequestQuit()
+    {
+        lock (_sync)
+        {
+            if (_state is LifecycleState.Stopping or LifecycleState.Stopped or LifecycleState.Disposed) return;
+            EnsureActiveStateLocked();
+            _state = LifecycleState.Stopping;
+        }
+
+        try
+        {
+            RequestQuitCore();
+        }
+        catch
+        {
+            lock (_sync)
+            {
+                if (_state == LifecycleState.Stopping) _state = LifecycleState.Running;
+            }
+            throw;
+        }
+    }
+
+    private void RequestQuitCore() => TreeForOwnedInstance().Quit();
+
+    private SceneTree TreeForOwnedInstance()
+    {
+        IntPtr owned;
+        lock (_sync)
+            owned = _ownedInstancePtr;
+        if (owned == IntPtr.Zero || owned != GetCurrentInstancePtr())
+            throw new InvalidOperationException($"{nameof(Engine)}: This engine no longer owns the running instance.");
+        return Godot.Engine.Singleton.GetMainLoop() as SceneTree ??
+               throw new NullReferenceException($"{nameof(Engine)}: Failed to get SceneTree.");
+    }
+
+    private void EnsureRunning()
+    {
+        lock (_sync) EnsureActiveStateLocked();
+        EnsureOwnedInstance();
+    }
+
+    private void EnsureActiveStateLocked()
+    {
+        EnsureOwnerThread();
+        if (_state is not (LifecycleState.Running or LifecycleState.Stopping) ||
+            _ownedInstancePtr == IntPtr.Zero || _godotInstance is null)
+            throw new InvalidOperationException(
+                $"{nameof(Engine)}: Start() must succeed and this engine must own the active instance.");
+    }
+
+    private void EnsureOwnerThread()
+    {
+        if (_ownerThreadId != 0 && !Completion.IsCompleted &&
+            _ownerThreadId != System.Environment.CurrentManagedThreadId)
+            throw new InvalidOperationException($"{nameof(Engine)}: Lifecycle calls must run on the thread that called Start().");
+    }
+
+    private void EnsureOwnedInstance()
+    {
+        IntPtr owned;
+        lock (_sync) owned = _ownedInstancePtr;
+        if (owned == IntPtr.Zero || owned != GetCurrentInstancePtr())
+            throw new InvalidOperationException($"{nameof(Engine)}: This engine no longer owns the active instance.");
+    }
+
+    private static IntPtr GetCurrentInstancePtr()
+    {
+        lock (ProcessSync) return _godotInstancePtr;
+    }
+
+    private void DestroyOwnedInstance()
+    {
+        IntPtr instancePtr;
+        lock (_sync)
+        {
+            if (_teardownStarted) return;
+            _teardownStarted = true;
+            instancePtr = _ownedInstancePtr;
+            _ownedInstancePtr = IntPtr.Zero;
+            _godotInstance = null;
+            _state = _disposeRequested ? LifecycleState.Disposed : LifecycleState.Stopped;
+        }
+
+        var destroy = false;
+        if (instancePtr != IntPtr.Zero)
+        {
+            lock (ProcessSync)
+            {
+                if (_godotInstancePtr == instancePtr)
+                {
+                    _destroyingInstance = true;
+                    destroy = true;
+                }
+            }
+        }
+
+        if (destroy)
+        {
+            try
+            {
+                LibGodot.libgodot_destroy_godot_instance(instancePtr);
+                Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
+            }
+            catch (Exception e)
+            {
+                _completion.TrySetException(e);
+                throw;
+            }
+            finally
+            {
+                lock (ProcessSync)
+                {
+                    if (_godotInstancePtr == instancePtr) _godotInstancePtr = IntPtr.Zero;
+                    _destroyingInstance = false;
+                }
+            }
+        }
+        CompleteExit();
+    }
+
+    private void CompleteExit()
+    {
+        if (!_completion.TrySetResult()) return;
+        if (!_startedLifetime || Exited is not { } exited) return;
+        foreach (Action handler in exited.GetInvocationList())
+        {
+            try
+            {
+                handler();
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"{nameof(Engine)}: {nameof(Exited)} handler failed: {e}");
+            }
+        }
     }
 
     /// <summary>

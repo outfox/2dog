@@ -366,7 +366,7 @@ public sealed class GodotSession : IDisposable
         try
         {
             ApplyPendingResize();
-            if (_instance.Iteration())
+            if (Engine.Iteration())
             {
                 StopPump();
                 QuitRequested?.Invoke(this, EventArgs.Empty);
@@ -408,7 +408,6 @@ public sealed class GodotSession : IDisposable
 
         // Dispose before process exit: on Windows the engine must be gone before the
         // ProcessExit libgodot unload runs (see Engine's static constructor).
-        _instance?.Dispose();
         _instance = null;
         _engine?.Dispose();
         _engine = null;
