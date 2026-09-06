@@ -123,7 +123,8 @@ internal static unsafe partial class WebHost
         }
         catch
         {
-            ResetMainLoop();
+            // Iteration can request disposal before throwing. Keep its exit poller alive.
+            if (!_shutdownStarted) ResetMainLoop();
             throw;
         }
     }

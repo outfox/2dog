@@ -116,6 +116,33 @@ public class EngineRestartTests
     }
 
     [Fact]
+    public async Task Completion_FollowsExitedHandlers_AndReentrantDisposalNotifiesOnce()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+        using var engine = new Engine("exit-order", projectDir, "--headless");
+        engine.Start();
+        var notifications = 0;
+        var completedInsideHandler = false;
+        Task? reentrantDisposal = null;
+        engine.Exited += () =>
+        {
+            notifications++;
+            completedInsideHandler = engine.Completion.IsCompleted;
+            reentrantDisposal = engine.DisposeAsync().AsTask();
+        };
+        engine.Exited += () => notifications++;
+
+        engine.Dispose();
+
+        Assert.False(completedInsideHandler);
+        Assert.Equal(2, notifications);
+        Assert.True(engine.Completion.IsCompletedSuccessfully);
+        Assert.NotNull(reentrantDisposal);
+        await reentrantDisposal.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
     public async Task Dispose_WithoutStartCompletesWithoutExited()
     {
         var engine = new Engine("never-started", Engine.ResolveProjectDir(), "--headless");

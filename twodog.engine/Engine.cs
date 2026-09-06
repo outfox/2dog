@@ -40,6 +40,7 @@ public class Engine : IDisposable, IAsyncDisposable
     private bool _iterationActive;
     private bool _runActive;
     private bool _teardownStarted;
+    private bool _exitNotified;
     private int _ownerThreadId;
 
     /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
@@ -151,7 +152,7 @@ public class Engine : IDisposable, IAsyncDisposable
     /// <summary>2dog package version (the engine assembly's version, e.g. 4.7.1.68).</summary>
     public static Version Version { get; } = typeof(Engine).Assembly.GetName().Version ?? new Version(0, 0);
 
-    /// <summary>Completes when this engine reaches a terminal state, after native destruction when it started.</summary>
+    /// <summary>Completes after native destruction and synchronous Exited handlers when this engine started.</summary>
     public Task Completion => _completion.Task;
 
     /// <summary>Raised after this engine's native instance has been destroyed.</summary>
@@ -254,7 +255,7 @@ public class Engine : IDisposable, IAsyncDisposable
                 if (OperatingSystem.IsBrowser() && _ownedInstancePtr != IntPtr.Zero)
                 {
                     _state = LifecycleState.Stopping;
-                    WebHost.BeginShutdown(DestroyOwnedInstance);
+                    BeginStartedInstanceDisposal();
                 }
                 else
                 {
@@ -620,18 +621,29 @@ public class Engine : IDisposable, IAsyncDisposable
 
     private void CompleteExit()
     {
-        if (!_completion.TrySetResult()) return;
-        if (!_startedLifetime || Exited is not { } exited) return;
-        foreach (Action handler in exited.GetInvocationList())
+        lock (_sync)
         {
-            try
+            if (_exitNotified || _completion.Task.IsCompleted) return;
+            _exitNotified = true;
+        }
+        try
+        {
+            if (!_startedLifetime || Exited is not { } exited) return;
+            foreach (Action handler in exited.GetInvocationList())
             {
-                handler();
+                try
+                {
+                    handler();
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine($"{nameof(Engine)}: {nameof(Exited)} handler failed: {e}");
+                }
             }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine($"{nameof(Engine)}: {nameof(Exited)} handler failed: {e}");
-            }
+        }
+        finally
+        {
+            _completion.TrySetResult();
         }
     }
 
