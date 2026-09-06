@@ -17,11 +17,11 @@ public class InputInjectionTests(HeadlessFixture godot)
     public void KeyPress_IsObservable_AfterFlush()
     {
         Inject(new InputEventKey { Keycode = Key.F13, PhysicalKeycode = Key.F13, Pressed = true });
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
         Assert.True(Input.IsKeyPressed(Key.F13));
 
         Inject(new InputEventKey { Keycode = Key.F13, PhysicalKeycode = Key.F13, Pressed = false });
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
         Assert.False(Input.IsKeyPressed(Key.F13));
     }
 
@@ -34,7 +34,7 @@ public class InputInjectionTests(HeadlessFixture godot)
             ButtonIndex = MouseButton.Left, Pressed = true,
             Position = pos, GlobalPosition = pos, ButtonMask = MouseButtonMask.Left,
         });
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
         Assert.True(Input.IsMouseButtonPressed(MouseButton.Left));
 
         Inject(new InputEventMouseButton
@@ -42,7 +42,7 @@ public class InputInjectionTests(HeadlessFixture godot)
             ButtonIndex = MouseButton.Left, Pressed = false,
             Position = pos, GlobalPosition = pos,
         });
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
         Assert.False(Input.IsMouseButtonPressed(MouseButton.Left));
     }
 
@@ -80,7 +80,7 @@ public class InputInjectionTests(HeadlessFixture godot)
                         Relative = new Vector2(1, 0), ButtonMask = 0,
                     });
                 }
-                godot.GodotInstance.Iteration();
+                godot.Engine.Iteration();
             }
         }
         finally

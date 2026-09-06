@@ -40,12 +40,12 @@ internal static class Program
     private static void Main(string[] args)
     {
         using var engine = new Engine("MyGame", args: args);
-        using var godot = engine.Start();
+        engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)
             GD.Print($"2dog is running '{scene.Name}'!");
 
-        while (!godot.Iteration())
+        while (!engine.Iteration())
         {
             // Your per-frame logic here.
         }
@@ -53,8 +53,11 @@ internal static class Program
 }
 ```
 
-`Start()` runs `run/main_scene`, and `args` reach Godot unchanged. The `using`
-declarations dispose the instance and engine in the required order.
+`Engine` owns the instance. `Start()` runs `run/main_scene`, returns a borrowed
+`GodotInstance` compatibility handle, and passes `args` to Godot unchanged.
+Pump frames with `Engine.Iteration()`, and call `Engine.RequestQuit()` to request
+a graceful exit. `Completion` completes and `Exited` fires after teardown on
+every platform. On desktop, disposing `Engine` completes teardown synchronously.
 
 Prefer a callback? `engine.Run(perFrame)` iterates until quit and calls your
 delegate once per frame.
@@ -130,5 +133,6 @@ game and plugin assemblies from disk through hostfxr.
 
 ## Limitations
 
-- A normal host supports one active engine at a time. Disposing it permits a
-  sequential restart; see [Single Godot Instance](/known-issues/single-instance).
+- A normal host supports one active engine at a time. After completion, create
+  a new `Engine` for a sequential restart; see
+  [Single Godot Instance](/known-issues/single-instance).

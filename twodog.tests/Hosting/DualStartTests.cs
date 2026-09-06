@@ -10,17 +10,16 @@ public sealed class CountingProgram : IEngineProgram
 {
     public int Run(IInstanceContext ctx)
     {
-        var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
-        using var godot = engine.Start();
+        using var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
+        engine.Start();
         ctx.SignalBooted();
         (ctx.State as ManualResetEventSlim)?.Wait(TimeSpan.FromSeconds(30));
         var frames = 0;
         for (var i = 0; i < 60; i++)
         {
-            if (godot.Iteration()) break;
+            if (engine.Iteration()) break;
             frames++;
         }
-        engine.Dispose();
         return frames;
     }
 }
@@ -37,17 +36,16 @@ public sealed class PacedProgram : IEngineProgram
         var barrier = (Barrier)(ctx.State ?? throw new InvalidOperationException("PacedProgram needs a Barrier as State."));
         try
         {
-            var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
-            using var godot = engine.Start();
+            using var engine = new Engine(ctx.Tag, ctx.ProjectDir, ctx.Args) { NativePath = ctx.NativePath };
+            engine.Start();
             ctx.SignalBooted();
             var frames = 0;
             for (var i = 0; i < Frames; i++)
             {
-                if (godot.Iteration()) break;
+                if (engine.Iteration()) break;
                 frames++;
                 if (!barrier.SignalAndWait(TimeSpan.FromSeconds(30))) return -1;
             }
-            engine.Dispose();
             return frames;
         }
         catch

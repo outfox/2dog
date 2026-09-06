@@ -83,10 +83,10 @@ internal sealed class MainForm : Form
     // Application's preprocessing; harmless, since the loop yields as soon as anything is queued.
     private void OnApplicationIdle(object? sender, EventArgs e)
     {
-        while (_instance is { } instance && !PeekMessage(out _, 0, 0, 0, 0))
+        while (_instance is not null && _engine is { } engine && !PeekMessage(out _, 0, 0, 0, 0))
         {
             // Iteration() returns true when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...).
-            if (instance.Iteration())
+            if (engine.Iteration())
             {
                 ShutdownEngine();
                 Close();
@@ -123,7 +123,6 @@ internal sealed class MainForm : Form
     {
         Application.Idle -= OnApplicationIdle;
         _pauseButton.Enabled = false;
-        _instance?.Dispose();
         _instance = null;
         _engine?.Dispose();
         _engine = null;

@@ -749,6 +749,9 @@ jobs:
       # Same probe through the Blazor host: the published ASP.NET Core server
       # serves the client, whose home page runs GodotApiSmoke after GodotView
       # started the engine and marks the DOM.
+      - name: Test Blazor preparation cancellation
+        run: node --test .github/scripts/blazor-lifetime.test.mjs
+
       - name: Run Blazor browser smoke
         run: |
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)

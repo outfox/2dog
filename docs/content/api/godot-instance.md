@@ -1,11 +1,11 @@
 ---
 title: Godot.GodotInstance
-description: "API reference for Godot.GodotInstance, the handle returned by Engine.Start(): Iteration, IsStarted, focus and pause control, and disposal."
+description: "API reference for Godot.GodotInstance, the borrowed compatibility handle returned by Engine.Start()."
 ---
 
 # `Godot.GodotInstance`
 
-Controls the running Godot instance returned by [`twodog.Engine.Start()`](./engine#start).
+Borrowed compatibility handle returned by [`twodog.Engine.Start()`](./engine#start).
 
 ```csharp
 public class GodotInstance : IDisposable
@@ -15,11 +15,12 @@ public class GodotInstance : IDisposable
 **Namespace:** `Godot`
 
 This class is one of the few differences from stock Godot, where it's not exposed.
+Its `Engine` owns the native instance and its lifecycle.
 
 Create this object through `twodog.Engine.Start()` rather than its low-level static
 factory methods.
 
-## Methods
+## Compatibility Methods
 
 ### `Iteration`
 
@@ -27,10 +28,11 @@ factory methods.
 public bool Iteration()
 ```
 
-Processes one main-loop frame. Returns `true` when Godot wants to quit.
+Processes one main-loop frame. Returns `true` when Godot wants to quit. New host
+code should call `Engine.Iteration()`.
 
 ```csharp
-while (!godot.Iteration())
+while (!engine.Iteration())
 {
     // One frame has completed.
 }
@@ -64,15 +66,8 @@ public void Resume()
 Notify Godot that the host application has paused or resumed. These lifecycle
 hooks are useful when another application framework owns the outer window.
 
-### `Dispose`
-
-```csharp
-public void Dispose()
-```
-
-Shuts down the native instance. Dispose it before its owning `Engine`.
-
 ::: warning Choose one loop owner
-Call `Iteration()` yourself or call `Engine.Run()`. Do not use both for the same
-instance.
+Call `Engine.Iteration()` yourself or call `Engine.Run()`. Do not use both for
+the same instance. Use `Engine.RequestQuit()`, `Completion`, `Exited`, and engine
+disposal for lifecycle control; do not dispose this borrowed handle.
 :::

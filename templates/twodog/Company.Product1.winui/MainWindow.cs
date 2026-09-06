@@ -107,10 +107,10 @@ internal sealed class MainWindow : Window
     {
         DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
         {
-            if (_instance is not { } instance)
+            if (_instance is null || _engine is not { } engine)
                 return;
             // Iteration() returns true when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...).
-            if (instance.Iteration())
+            if (engine.Iteration())
             {
                 ShutdownEngine();
                 Close();
@@ -157,7 +157,6 @@ internal sealed class MainWindow : Window
     private void ShutdownEngine()
     {
         _pauseButton.IsEnabled = false;
-        _instance?.Dispose();
         _instance = null;
         _engine?.Dispose();
         _engine = null;

@@ -93,13 +93,15 @@ client takes over.
 | `Started` | The engine runs and its scene tree is available. |
 | `OnFrame` | Called once per engine frame after the iteration; keep it cheap. |
 | `AutoStart` / `StartAsync()` | Start after the first render (default), or later from your own code/button. |
-| `Quit()` / `Exited` | Asks Godot to quit; after its asynchronous teardown the instance is destroyed and `Exited` fires. Blazor keeps running. |
+| `Quit()` / `Exited` | Calls `Engine.RequestQuit()`; after asynchronous teardown `Engine.Completion` completes and `Exited` fires. Blazor keeps running. |
 | `CanStart` / `Lifetime` | Whether `StartAsync()` would start now; how many engines the view started. |
 | `Failed` / `Error` | Starting the engine failed; the view shows the message. |
 | `Resize` | `Container` (default: the canvas follows its element), `Project` (the project's window size), `FullWindow`. |
 
-One engine runs at a time. After `Quit()` completes, `StartAsync()` starts a
-new engine: `GodotView` renders a fresh `<canvas>` for it, because a browser
+`GodotView` owns its `Engine`; the `GodotInstance` returned by `Start()` is only
+a borrowed compatibility handle. Disposing the view awaits browser teardown.
+One engine runs at a time. After the current engine's completion, `StartAsync()`
+creates a new engine and renders a fresh `<canvas>` for it, because a browser
 hands out one WebGL context per canvas element for the element's whole life.
 The game assembly is not reloaded: Godot objects kept in static fields are
 disposed with the first engine, see

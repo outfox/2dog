@@ -10,28 +10,35 @@ a second instance throws `InvalidOperationException`:
 
 ```csharp
 using var engine1 = new Engine("MyGame");
-using var godot1 = engine1.Start();
+engine1.Start();
 
 using var engine2 = new Engine("MyGame");
-using var godot2 = engine2.Start(); // Throws InvalidOperationException.
+engine2.Start(); // Throws InvalidOperationException.
 ```
 
 Sequential restart is supported in packages based on Godot 4.7 and later,
 including the browser: the [Blazor host](/hosts/blazor) restarts on a fresh
-canvas, and a web host that keeps the runtime alive
-(`Engine.WebExitRuntimeOnQuit = false`) can start a new engine after `Exited`.
-Dispose both the running instance and its engine before starting another:
+canvas, and web hosts keep the runtime alive by default
+(`Engine.WebExitRuntimeOnQuit = false`). Any host can start a new engine after
+`Completion` completes and `Exited` fires. `Engine` owns its instance; the
+`GodotInstance` returned by `Start()` is a borrowed compatibility handle.
+
+On desktop, dispose the current engine before creating another:
 
 ```csharp
-var engine = new Engine("MyGame");
-var godot = engine.Start();
-
-godot.Dispose();
-engine.Dispose();
+using (var engine = new Engine("MyGame"))
+{
+    engine.Start();
+    engine.Run();
+} // Synchronous teardown.
 
 using var nextEngine = new Engine("MyGame");
-using var nextGodot = nextEngine.Start();
+nextEngine.Start();
 ```
+
+In a browser, call `RequestQuit()` while `Run()` pumps frames and await
+`Completion`, or call `DisposeAsync()`
+before creating the new `Engine`; browser teardown is asynchronous.
 
 This allows xUnit collections to use fresh engines sequentially in one test
 process. Collections that share an engine must disable parallelization; see

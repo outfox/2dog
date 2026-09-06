@@ -20,7 +20,7 @@ instance, or use the fixture classes when xUnit owns the process.
 
 | Type | Use it to |
 | --- | --- |
-| [`GodotInstance`](./api/godot-instance) | Pump or control the instance returned by `Engine.Start()` |
+| [`GodotInstance`](./api/godot-instance) | Access the borrowed compatibility handle returned by `Engine.Start()` |
 
 2dog adds `GodotInstance` to the GodotSharp API. Use the
 [Godot class reference](https://docs.godotengine.org/en/latest/classes/) for
@@ -51,13 +51,16 @@ test assembly so xUnit can discover them.
 
 ```csharp
 using var engine = new twodog.Engine("MyGame", args: args);
-using var godot = engine.Start();
+engine.Start();
 
-while (!godot.Iteration())
+while (!engine.Iteration())
 {
     // One frame has completed.
 }
 ```
 
-Dispose `GodotInstance` before its owning `Engine`. Only one classic instance
-can run in a process at a time; see [Single Godot Instance](./known-issues/single-instance).
+`Engine` owns the instance. Use `RequestQuit()` for graceful shutdown;
+`Completion` completes and `Exited` fires after teardown on every platform.
+Desktop `Dispose()` is synchronous; browser callers await `DisposeAsync()` or
+`Completion`. Start a new `Engine` only after completion. See
+[Single Godot Instance](./known-issues/single-instance).

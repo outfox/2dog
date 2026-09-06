@@ -16,6 +16,7 @@ public partial class Home : ComponentBase
     private long _frames;
     private float _spinSpeed = 1.8f; // radians per second
     private bool _paused;
+    private bool _restartOnExit;
     private Node3D[] _whiteCubes = [];
     private static readonly Vector3 WhiteSpinAxis = new Vector3(1, 1, 0).Normalized();
 
@@ -69,11 +70,21 @@ public partial class Home : ComponentBase
         _ = InvokeAsync(StateHasChanged);
     }
 
-    private void OnExited()
+    private async Task OnExited()
     {
         _status = "Godot quit.";
         _whiteCubes = [];
         _paused = false;
+        if (!_restartOnExit || _view is null) return;
+        _restartOnExit = false;
+        await _view.StartAsync();
+    }
+
+    private void RestartEngine()
+    {
+        if (_view is null) return;
+        _restartOnExit = true;
+        _view.Quit();
     }
 
     private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";

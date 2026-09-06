@@ -51,13 +51,12 @@ public abstract class FixtureBase : IDisposable
     /// <summary>The active scene tree.</summary>
     public SceneTree Tree => Engine.Tree;
 
-    /// <summary>Disposes the Godot instance and its owning engine.</summary>
+    /// <summary>Disposes the owning engine.</summary>
     public void Dispose()
     {
         GC.SuppressFinalize(this);
 
         Console.WriteLine("Shutting down Godot...");
-        GodotInstance.Dispose();
         Engine.Dispose();
         Console.WriteLine("Godot shut down successfully.");
     }

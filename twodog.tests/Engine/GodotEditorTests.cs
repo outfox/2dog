@@ -148,7 +148,7 @@ public class GodotEditorTests(HeadlessFixture godot)
         Assert.True(readyCalled);
 
         node.QueueFree();
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
     }
 
     [Fact]
@@ -159,13 +159,13 @@ public class GodotEditorTests(HeadlessFixture godot)
         godot.Tree.Root.AddChild(node);
 
         for (var i = 0; i < 5; i++)
-            godot.GodotInstance.Iteration();
+            godot.Engine.Iteration();
 
         var count = (int)node.Get("ProcessCount");
         Assert.True(count >= 5);
 
         node.QueueFree();
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
     }
 }
 #endif

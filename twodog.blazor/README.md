@@ -22,3 +22,8 @@ JavaScript interop layer between them.
 The view needs the `2dog.engine` and `2dog.browser-wasm` packages in the Blazor
 WebAssembly project; 2dog's Blazor host template wires everything up
 (`dnx 2dog add --blazor`). See https://2dog.dev/hosts/blazor.
+
+`GodotView` owns its `Engine`, and the engine owns the Godot instance. Quitting
+uses `Engine.RequestQuit()`; browser teardown is asynchronous, with
+`Completion` and `Exited` signaling its end. A restart creates a new `Engine`
+only after completion.

@@ -8,7 +8,7 @@ description: "API reference for twodog.Engine, which configures, starts, and own
 Configures, starts, and owns one embedded Godot instance.
 
 ```csharp
-public class Engine : IDisposable
+public class Engine : IDisposable, IAsyncDisposable
 ```
 
 **Package:** `2dog.engine`  
@@ -67,6 +67,24 @@ public static string? LoadedNativePath { get; }
 
 Returns the full path of the loaded desktop `libgodot`, when known.
 
+### `Completion`
+
+```csharp
+public Task Completion { get; }
+```
+
+Completes when this `Engine` reaches a terminal state. If `Start()` succeeded,
+that means the owned native instance has been destroyed.
+
+### `Exited`
+
+```csharp
+public event Action? Exited;
+```
+
+Fires once after a successfully started instance is destroyed. `Completion`
+also completes for an `Engine` disposed before it starts, but `Exited` does not fire.
+
 ## Methods
 
 ### `Start`
@@ -75,9 +93,28 @@ Returns the full path of the loaded desktop `libgodot`, when known.
 public GodotInstance Start()
 ```
 
-Starts Godot and the project's `run/main_scene`, then returns its running
-instance. Starting a second classic instance before disposing the first throws
+Starts Godot and the project's `run/main_scene`, then returns a borrowed
+`GodotInstance` compatibility handle. `Engine` owns the instance; do not dispose
+the handle. Starting another instance before completion throws
 `InvalidOperationException`.
+
+### `Iteration`
+
+```csharp
+public bool Iteration()
+```
+
+Processes one main-loop frame. Returns `true` when Godot requests exit.
+Dispose the engine after the pump stops. Calling `Iteration()` recursively,
+or while `Run()` owns the pump, throws `InvalidOperationException`.
+
+### `RequestQuit`
+
+```csharp
+public void RequestQuit()
+```
+
+Requests a graceful quit. Repeated requests are harmless.
 
 ### `Run`
 
@@ -97,8 +134,34 @@ Runs the main loop after `Start()`.
 public void Dispose()
 ```
 
-Stops and destroys the instance owned by this engine. Dispose the
-[`GodotInstance`](./godot-instance) first.
+Stops and destroys the owned instance synchronously on desktop. In a browser,
+`Dispose()` requests shutdown and returns before teardown; use `DisposeAsync()`
+or await `Completion`.
+
+### `DisposeAsync`
+
+```csharp
+public ValueTask DisposeAsync()
+```
+
+Requests shutdown and waits for teardown. Prefer this in browser hosts.
+
+Lifecycle calls and Godot object access belong on the thread that called
+`Start()`. Calls from another thread are rejected; dispatch them to the host's
+engine thread. Disposal from a game callback is deferred until the native
+frame returns. Do not synchronously wait for `Completion` inside that callback.
+
+### `WebExitRuntimeOnQuit`
+
+```csharp
+public static bool WebExitRuntimeOnQuit { get; set; }
+```
+
+Defaults to `false` in a browser: quitting destroys Godot and keeps .NET alive
+so any host can start another engine. Standalone pages may set it to `true`
+to terminate the entire WebAssembly runtime on quit. Blazor keeps it `false`.
+Browser restarts require a fresh canvas and host configuration before `Start()`;
+`GodotView` handles those browser resources automatically.
 
 ### `ResolveContent`
 
@@ -145,9 +208,9 @@ internal static class Program
     private static void Main(string[] args)
     {
         using var engine = new Engine("MyGame", args: args);
-        using var godot = engine.Start();
+        engine.Start();
 
-        while (!godot.Iteration())
+        while (!engine.Iteration())
         {
             // One frame has completed.
         }

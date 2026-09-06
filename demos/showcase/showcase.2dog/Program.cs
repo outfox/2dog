@@ -18,7 +18,7 @@ internal static class Program
 
         // Content is resolved from the source project or published .pck.
         using var engine = new Engine("showcase", args: args);
-        using var godotInstance = engine.Start();
+        engine.Start();
         GD.Print("Hello from GodotSharp.");
         GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
@@ -39,7 +39,7 @@ internal static class Program
 
         // Iteration() returns true when the engine wants to quit (window
         // closed, SceneTree.Quit(), --quit-after N, ...).
-        while (!godotInstance.Iteration())
+        while (!engine.Iteration())
         {
             var delta = (float)engine.Tree.Root.GetProcessDeltaTime();
             foreach (var cube in whiteCubes)

@@ -17,7 +17,7 @@ internal interface IPresenter : IDisposable
     /// <summary>Permanently unable to present; the session may swap in a fallback.</summary>
     bool Failed { get; }
 
-    /// <summary>Called once per engine frame, after <c>GodotInstance.Iteration()</c>.</summary>
+    /// <summary>Called once per engine frame, after <c>Engine.Iteration()</c>.</summary>
     void PresentFrame();
 
     /// <summary>Called when the control's size or scaling changed (the session has already

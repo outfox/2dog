@@ -2,7 +2,8 @@
 // Mirrors what Godot's engine.js does before callMain: file system init, pack preload, canvas/config handoff.
 
 const observers = new WeakMap();
-let fsReady = false;
+const preparations = new WeakMap();
+let fsInitialization;
 
 function runtimeModule() {
     const runtime = globalThis.Blazor?.runtime
@@ -45,6 +46,9 @@ function observeContainer(canvas) {
  */
 export async function prepare(canvas, options) {
     const Module = runtimeModule();
+    release(canvas);
+    const controller = new AbortController();
+    preparations.set(canvas, controller);
     // Godot fetches its audio worklets through Module.locateFile, which the .NET loader aims at _framework/;
     // the 2dog build publishes them at the site root, where Blazor may have fingerprinted them - import.meta.resolve
     // applies the page's import map (a plain fetch would miss it).
@@ -59,21 +63,32 @@ export async function prepare(canvas, options) {
         Module.__twodogLocateFile = true;
     }
 
-    if (!fsReady) {
-        await Module.initFS(['/userfs']);
-        fsReady = true;
+    try {
+        // An interop cancellation can release the lease while initFS is still running.
+        // The next view must join that initialization instead of mounting IDBFS twice.
+        await (fsInitialization ??= Module.initFS(['/userfs']).catch((error) => {
+            fsInitialization = undefined;
+            throw error;
+        }));
+        controller.signal.throwIfAborted();
+        const response = await fetch(resolveUrl(options.packUrl), { signal: controller.signal });
+        if (!response.ok) {
+            throw new Error(`2dog.blazor: could not load the game pack '${options.packUrl}' (HTTP ${response.status}).`);
+        }
+        const pack = await response.arrayBuffer();
+        // Cancelling .NET JS interop does not cancel this JavaScript promise. A released
+        // view must never reconfigure the runtime after another view acquires the lease.
+        controller.signal.throwIfAborted();
+        Module.copyToFS(options.packName, pack);
+    } finally {
+        if (preparations.get(canvas) === controller) {
+            preparations.delete(canvas);
+        }
     }
-
-    const response = await fetch(resolveUrl(options.packUrl));
-    if (!response.ok) {
-        throw new Error(`2dog.blazor: could not load the game pack '${options.packUrl}' (HTTP ${response.status}).`);
-    }
-    Module.copyToFS(options.packName, await response.arrayBuffer());
 
     if (canvas.tabIndex < 0) {
         canvas.tabIndex = 0;
     }
-    release(canvas);
     if (options.resize === 0) {
         observeContainer(canvas);
     }
@@ -95,6 +110,8 @@ export async function prepare(canvas, options) {
 }
 
 export function release(canvas) {
+    preparations.get(canvas)?.abort();
+    preparations.delete(canvas);
     observers.get(canvas)?.disconnect();
     observers.delete(canvas);
 }

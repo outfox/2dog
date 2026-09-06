@@ -87,6 +87,6 @@ public class GodotPhysicsTests(HeadlessFixture godot)
         Assert.True(body.IsInsideTree());
 
         body.QueueFree();
-        godot.GodotInstance.Iteration();
+        godot.Engine.Iteration();
     }
 }

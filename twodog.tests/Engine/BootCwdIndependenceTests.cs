@@ -56,7 +56,7 @@ public class BootCwdIndependenceTests
             for (var i = 0; i < 3; i++)
             {
                 using var engine = new Engine($"cwd-independence-{i}", projectDir, "--headless");
-                using var godot = engine.Start();
+                engine.Start();
                 var name = (string)ProjectSettings.GetSetting("application/config/name");
                 Assert.Equal("showcase", name);
             }
