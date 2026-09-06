@@ -216,7 +216,9 @@ public class EngineRestartTests
         var projectDir = Engine.ResolveProjectDir();
         AssemblyPreloader.PreloadGameAssemblies(projectDir);
 
-        using (var failed = new Engine("failed-setup", projectDir, "--rendering-driver"))
+        // Keep AppKit out of worker-thread tests, including failed startup.
+        // The malformed option must remain last so its argument is still missing.
+        using (var failed = new Engine("failed-setup", projectDir, "--headless", "--rendering-driver"))
             Assert.ThrowsAny<Exception>(() => failed.Start());
 
         using var recovered = new Engine("after-failed-setup", projectDir, "--headless");
@@ -230,8 +232,9 @@ public class EngineRestartTests
         var projectDir = Engine.ResolveProjectDir();
         AssemblyPreloader.PreloadGameAssemblies(projectDir);
 
+        // Select the headless macOS OS before setup validates the invalid driver.
         using (var failed = new Engine(
-                   "failed-second-phase", projectDir, "--display-driver", "definitely-missing"))
+                   "failed-second-phase", projectDir, "--headless", "--display-driver", "definitely-missing"))
             Assert.ThrowsAny<Exception>(() => failed.Start());
 
         using var recovered = new Engine("after-failed-second-phase", projectDir, "--headless");
