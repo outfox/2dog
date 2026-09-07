@@ -5,6 +5,9 @@
         <IsTrimmable>true</IsTrimmable>
         <IsPackable>false</IsPackable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+        <!-- Compile the repository demo against the fork, including its trim annotations.
+             A host's 2dog.engine dependency does not flow back into this game project. -->
+        <DisableImplicitGodotSharpReferences>true</DisableImplicitGodotSharpReferences>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <!-- TwoDogWebBoot.cs (web hosts) takes a function pointer to the source-generated plugins initializer;
@@ -15,6 +18,14 @@
              from the Godot editor) -->
         <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**;showcase.webxr/**;showcase.blazor/**;showcase.winforms/**;showcase.winui/**;showcase.avalonia/**</DefaultItemExcludes>
     </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="GodotSharp">
+            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))$(GodotApiConfiguration)/GodotSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="GodotSharpEditor" Condition="'$(Configuration)' == 'Debug'">
+            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))$(GodotApiConfiguration)/GodotSharpEditor.dll</HintPath>
+        </Reference>
+    </ItemGroup>
     <ItemGroup>
         <!-- Web bootstrap lives in the web host folder but must compile into THIS assembly: scripts resolve
              from the assembly holding the source-generated plugins initializer -->

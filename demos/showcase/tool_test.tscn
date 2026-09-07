@@ -1,6 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ckwb1dqqe3fcj"]
 
-[ext_resource type="Script" path="res://ToolNode.cs" id="1_tool"]
+[ext_resource type="Script" uid="uid://bcvkapn82b6lo" path="res://ToolNode.cs" id="1_tool"]
 
-[node name="ToolNode" type="Node"]
+[node name="ToolNode" type="Node" unique_id=1840098127]
 script = ExtResource("1_tool")
+ReadyCalled = true
+ProcessCount = 5
