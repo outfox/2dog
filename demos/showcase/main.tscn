@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c7kfp5sga55qa" path="res://GDScriptLinkerProbe.gd" id="2_gdscript_probe"]
 [ext_resource type="Script" uid="uid://blxvnypm25yon" path="res://SpinningCube.cs" id="3_spin"]
 [ext_resource type="Script" uid="uid://iij6nqf8c83c" path="res://spinning_cube.gd" id="4_spin_gd"]
-[ext_resource type="Script" path="res://WebXR.cs" id="5_webxr"]
+[ext_resource type="Script" uid="uid://b6yvva55iwkax" path="res://WebXR.cs" id="5_webxr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cube"]
 
@@ -104,19 +104,6 @@ surface_material_override/0 = SubResource("Mat_white")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
 mesh = SubResource("BoxMesh_cube")
 surface_material_override/0 = SubResource("Mat_white")
-
-[node name="QuitLabel" type="Label" parent="." unique_id=1230139195]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -90.0
-offset_right = 589.0
-grow_vertical = 0
-text = "Quit the App by: 
-- closing this window (Quit via Godot) 
-- pressing Q in the console (Quit via 2dog)"
-label_settings = SubResource("LabelSettings_1bvp3")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1087203752]
 layout_mode = 1

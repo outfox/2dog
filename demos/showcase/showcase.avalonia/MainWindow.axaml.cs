@@ -61,7 +61,7 @@ public partial class MainWindow : Window
         // it (display/window/stretch: canvas_items, expand). Anchored top-left like the
         // scene's own labels, whose style it borrows.
         var scene = _session.Engine.Tree.CurrentScene;
-        var hud = new Godot.Label { LabelSettings = scene.GetNode<Godot.Label>("QuitLabel").LabelSettings };
+        var hud = new Godot.Label { LabelSettings = scene.GetNode<Godot.Label>("CenterContainer/TargetLabel").LabelSettings };
         scene.AddChild(hud);
         hud.SetAnchorsAndOffsetsPreset(Godot.Control.LayoutPreset.TopLeft,
             Godot.Control.LayoutPresetMode.KeepSize, margin: 16);
