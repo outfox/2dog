@@ -25,6 +25,14 @@
         <TwoDogPackageRoot Condition="'$(TwoDogPackageRoot)' == ''">$(MSBuildThisFileDirectory)../</TwoDogPackageRoot>
     </PropertyGroup>
 
+    <!-- The package ships GodotSharp.dll in lib/ as a transitive compile reference; a ProjectReference to twodog.engine
+         forwards nothing (HintPath references are private), so the source checkout supplies it here. -->
+    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)../twodog.engine.csproj') And '$(TwoDogGodotSharpApiDir)' != ''">
+        <Reference Include="GodotSharp">
+            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
     <!-- Native selection, API layout and assembly metadata all key from TwoDogVariant, so they never disagree. -->
     <Target Name="TwoDogValidateVariant" BeforeTargets="Build;Publish">
         <Error Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'editor'"
