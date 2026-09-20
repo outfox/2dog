@@ -7,7 +7,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <!-- The assembly keeps the folder name, but 'Company.Product1.avalonia'
+        <!-- The assembly keeps the folder name, but 'TPLRAWNAME.avalonia'
              would differ from the other hosts for types shared with them. -->
         <RootNamespace>Company.Product1</RootNamespace>
         <!-- comctl32 v6 + long paths for Godot's Windows display server -->

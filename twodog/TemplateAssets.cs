@@ -106,18 +106,23 @@ internal static class TemplateAssets
     }
 
     /// <summary>
-    /// Ordered literal replacement: the host folder token first (it starts with the sourceName token, so the
-    /// general rename must not run first), then the project-wide tokens.
+    /// Ordered literal replacement: the host folder tokens first (they start with the project-wide tokens, so
+    /// the general rename must not run first), then the project-wide tokens.
     /// </summary>
     private static string Rename(string text, string sourceFolder, string folder, string baseName) =>
-        Substitute(text.Replace(sourceFolder, folder), baseName);
+        Substitute(text.Replace(sourceFolder, folder).Replace($"TPLRAWNAME.{Hosts.Suffix(KindOf(sourceFolder))}", folder), baseName);
+
+    private static HostKind KindOf(string sourceFolder) =>
+        Enum.GetValues<HostKind>().First(kind => $"{SourceName}.{Hosts.Suffix(kind)}" == sourceFolder);
 
     /// <summary>
-    /// Ordered literal replacement of the template tokens. Both rename tokens resolve to the same base name; the
-    /// sourceName token also matches path fragments, which HostFiles relies on.
+    /// Ordered literal replacement of the template tokens, mirroring dotnet new: the sourceName token stands in
+    /// namespace positions and takes the namespace-safe form, TPLRAWNAME in file names, paths and labels and
+    /// takes the base name verbatim. The two differ only for a name the project dictates (assembly_name
+    /// "GWJ-97" -> namespace GWJ_97); SanitizeName-derived names are already namespace-safe.
     /// </summary>
     public static string Substitute(string text, string baseName) => text
-        .Replace(SourceName, baseName)
+        .Replace(SourceName, Hosts.NamespaceName(baseName))
         .Replace("TPLRAWNAME", baseName)
         .Replace("TWODOG_PKG_VERSION", ToolVersions.TwoDogVersion)
         .Replace("NATIVES_PKG_VERSION", ToolVersions.NativesVersion)

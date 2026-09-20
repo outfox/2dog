@@ -39,7 +39,7 @@ internal static class Tui
         var prompt = new TextPrompt<string>("Project name:")
             .Validate(value => Hosts.SanitizeName(value) is { } name && name == value.Trim()
                 ? ValidationResult.Success()
-                : ValidationResult.Error("[red]only letters, digits, '.', '_' and '-'[/]"));
+                : ValidationResult.Error("[red]only letters, digits, '.' and '_'[/]"));
         if (Hosts.SanitizeName(suggestion) is { } valid) prompt.DefaultValue(valid);
         return Ask(prompt).Trim();
     }
@@ -60,7 +60,7 @@ internal static class Tui
         var prompt = new TextPrompt<string>("New name:")
             .Validate(value => Hosts.SanitizeName(value) is { } name && name == value.Trim()
                 ? ValidationResult.Success()
-                : ValidationResult.Error("[red]only letters, digits, '.', '_' and '-'[/]"));
+                : ValidationResult.Error("[red]only letters, digits, '.' and '_'[/]"));
         if (problem.Suggested is { } suggested) prompt.DefaultValue(suggested);
         var answer = Ask(prompt).Trim();
         Out.Blank();
@@ -162,7 +162,7 @@ internal static class Tui
     {
         var name = Hosts.SanitizeName(value);
         if (name is null) return ValidationResult.Error("[red]needs at least one letter or digit[/]");
-        if (name != value.Trim()) return ValidationResult.Error("[red]only letters, digits, '.', '_' and '-'[/]");
+        if (name != value.Trim()) return ValidationResult.Error("[red]only letters, digits, '.' and '_'[/]");
         return taken.Contains(name, StringComparer.OrdinalIgnoreCase)
             ? ValidationResult.Error("[red]that folder is already taken[/]")
             : ValidationResult.Success();

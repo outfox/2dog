@@ -11,7 +11,7 @@ internal static class Program
     {
         // The default constructor finds raw project content during development
         // and the exe-adjacent .pck after publish. Arguments are forwarded to Godot.
-        using var engine = new Engine("Company.Product1", args: args);
+        using var engine = new Engine("TPLRAWNAME", args: args);
         engine.Start();
 
         if (engine.Tree.CurrentScene is { } scene)

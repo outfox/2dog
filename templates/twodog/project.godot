@@ -12,13 +12,13 @@ custom_features="dotnet"
 
 [application]
 
-config/name="Company.Product1"
+config/name="TPLRAWNAME"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.7", "C#")
 
 [dotnet]
 
-project/assembly_name="Company.Product1"
+project/assembly_name="TPLRAWNAME"
 
 [display]
 

@@ -14,7 +14,7 @@ hosts to create; any host flag or `-y` runs unattended.
 
 | Argument | Meaning |
 | --- | --- |
-| `Name` | Project name; letters, digits, `.`, `_` and `-` survive, an adjustment is announced |
+| `Name` | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` survive, `-` becomes `_`, an adjustment is announced |
 | `dir` | Directory to create; defaults to the sanitized name |
 
 ## Hosts

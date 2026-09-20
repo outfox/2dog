@@ -24,7 +24,7 @@ internal sealed class MainForm : Form
     {
         _extraArgs = extraArgs;
 
-        Text = "Company.Product1 — WinForms host";
+        Text = "TPLRAWNAME — WinForms host";
         ClientSize = new Size(1152, 688);
         MinimumSize = new Size(480, 320);
 
@@ -48,7 +48,7 @@ internal sealed class MainForm : Form
 
         // `--wid` wants a top-level owner window, so pass the form's handle; geometry is fixed up
         // below because `--position` goes through Godot's virtual multi-monitor origin math.
-        _engine = new Engine("Company.Product1", args:
+        _engine = new Engine("TPLRAWNAME", args:
         [
             "--wid", Handle.ToInt64().ToString(CultureInfo.InvariantCulture),
             "--resolution", $"{_gamePanel.ClientSize.Width}x{_gamePanel.ClientSize.Height}",

@@ -34,7 +34,7 @@ the project once.
 
 | Option | Effect |
 | --- | --- |
-| `-n, --name <name>` | Base name override for the scaffolded files; letters, digits, `.`, `_` and `-` survive |
+| `-n, --name <name>` | Base name override for the scaffolded files; letters, digits, `.` and `_` survive, `-` becomes `_` |
 | `--rename <NewName>` | Rename a .NET project name that [contains spaces](/add#project-names-with-spaces), then scaffold; only before any hosts exist |
 | `--dry-run` | Print the plan; change nothing |
 | `--force` | Overwrite scaffolded files that exist; never deletes |

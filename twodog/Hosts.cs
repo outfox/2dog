@@ -163,14 +163,37 @@ internal static class Hosts
     }
 
     /// <summary>
-    /// Reduce a name to a safe folder/assembly stem (dotnet-new style). A stem needs a letter or digit: '.' and '..'
-    /// survive the character filter and would otherwise write outside the project.
+    /// Reduce a name to a stem usable as folder, assembly name AND C# namespace, so the scaffolded files agree
+    /// with each other: whitespace and punctuation are dropped, '-' becomes '_' (a name like GWJ-97 would
+    /// otherwise land in 'namespace GWJ-97.Tests'), and a digit-leading '.'-segment gets a '_' prefix. Null when
+    /// nothing usable remains: '.' and '..' would otherwise write outside the project.
     /// </summary>
     public static string? SanitizeName(string? name)
     {
         if (name == null) return null;
-        var chars = name.Where(c => char.IsLetterOrDigit(c) || c is '.' or '_' or '-').ToArray();
-        return chars.Any(char.IsLetterOrDigit) ? new string(chars) : null;
+        var segments = name.Split('.')
+            .Select(segment => new string(segment
+                .Select(c => c == '-' ? '_' : c)
+                .Where(c => char.IsLetterOrDigit(c) || c == '_')
+                .ToArray()))
+            .Where(segment => segment.Length > 0)
+            .Select(segment => char.IsDigit(segment[0]) ? "_" + segment : segment)
+            .ToList();
+        return segments.Any(segment => segment.Any(char.IsLetterOrDigit)) ? string.Join(".", segments) : null;
+    }
+
+    /// <summary>
+    /// The C# namespace for a base name the project dictates (an existing assembly_name / csproj): every
+    /// character that cannot appear in an identifier becomes '_', digit-leading segments get a '_' prefix. The
+    /// same transform dotnet new applies to its sourceName in file contents (its safe_namespace form).
+    /// </summary>
+    public static string NamespaceName(string baseName)
+    {
+        var segments = baseName.Split('.')
+            .Select(segment => new string(segment.Select(c => char.IsLetterOrDigit(c) || c == '_' ? c : '_').ToArray()))
+            .Where(segment => segment.Length > 0)
+            .Select(segment => char.IsDigit(segment[0]) ? "_" + segment : segment);
+        return string.Join(".", segments);
     }
 }
 

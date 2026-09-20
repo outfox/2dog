@@ -7,7 +7,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <!-- The assembly keeps the folder name, but 'Company.Product1.2dog' is
+        <!-- The assembly keeps the folder name, but 'TPLRAWNAME.2dog' is
              not a valid C# namespace (digit-leading segment). -->
         <RootNamespace>Company.Product1</RootNamespace>
         <!-- comctl32 v6 + long paths for Godot's Windows display server -->

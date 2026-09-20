@@ -20,7 +20,7 @@ internal sealed class MainWindow : Window
     {
         _extraArgs = extraArgs;
 
-        Title = "Company.Product1 — Avalonia host";
+        Title = "TPLRAWNAME — Avalonia host";
         Width = 1152;
         Height = 720;
         MinWidth = 480;
@@ -58,7 +58,7 @@ internal sealed class MainWindow : Window
         // Command-line arguments are forwarded to Godot (--quit-after, --verbose, ...).
         _session = new GodotSession(new GodotSessionOptions
         {
-            Project = "Company.Product1",
+            Project = "TPLRAWNAME",
             ExtraArgs = _extraArgs,
         });
         _session.QuitRequested += (_, _) => Close();

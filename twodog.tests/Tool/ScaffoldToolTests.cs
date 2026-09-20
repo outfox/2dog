@@ -134,6 +134,13 @@ public class DeriveBaseNameTests
     }
 
     [Fact]
+    public void DisplayName_IsSanitizedToAnIdentifier()
+    {
+        using var tmp = new TempProjectDir();
+        Assert.Equal("GWJ_97", Derive(tmp, "[application]\nconfig/name=\"GWJ-97\"\n"));
+    }
+
+    [Fact]
     public void AssemblyName_MismatchingCsproj_Throws()
     {
         using var tmp = new TempProjectDir();
@@ -173,7 +180,9 @@ public class DeriveBaseNameTests
     {
         using var tmp = new TempProjectDir();
         var name = Derive(tmp, "config_version=5\n");
-        Assert.Equal(System.IO.Path.GetFileName(tmp.Dir), name);
+        // The temp dir starts with a digit and contains '-', so the fallback sanitizes it like any other name.
+        Assert.Equal(Hosts.SanitizeName(System.IO.Path.GetFileName(tmp.Dir)), name);
+        Assert.NotEqual(System.IO.Path.GetFileName(tmp.Dir), name);
     }
 
     [Fact]
@@ -796,6 +805,51 @@ public class AddEndToEndTests
     private static (int ExitCode, string Stdout, string Stderr) RunCaptured(ScaffoldOptions options) =>
         CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options).ExitCode);
 
+    [Fact]
+    public void Add_HyphenatedAssemblyName_KeepsFilesAndSanitizesNamespaces()
+    {
+        // The Godot editor requires res://<assembly_name>.csproj, so "GWJ-97" stays the file and assembly
+        // name; the namespaces the hosts declare must still compile.
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", "config_version=5\n\n[application]\n\nconfig/name=\"GWJ-97\"\n\n" +
+                                   "[dotnet]\n\nproject/assembly_name=\"GWJ-97\"\n");
+        tmp.Write("GWJ-97.csproj", "<Project Sdk=\"Godot.NET.Sdk/4.7.0\"><PropertyGroup>" +
+                                   "<TargetFramework>net10.0</TargetFramework></PropertyGroup></Project>");
+
+        var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop", "--tests", "--blazor"]), project);
+        Assert.Equal(0, RunCaptured(options).ExitCode);
+
+        var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.tests", "BasicTests.cs"));
+        Assert.Contains("namespace GWJ_97.Tests;", tests);
+        var testsCsproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.tests", "GWJ-97.tests.csproj"));
+        Assert.Contains("<RootNamespace>GWJ_97.Tests</RootNamespace>", testsCsproj);
+        Assert.Contains("../GWJ-97.csproj", testsCsproj);
+
+        var desktopCsproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.2dog", "GWJ-97.2dog.csproj"));
+        Assert.Contains("<RootNamespace>GWJ_97</RootNamespace>", desktopCsproj);
+        Assert.Contains("'GWJ-97.2dog'", desktopCsproj);
+        var program = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.2dog", "Program.cs"));
+        Assert.Contains("new Engine(\"GWJ-97\"", program);
+
+        var blazor = System.IO.Path.Combine(tmp.Dir, "GWJ-97.blazor");
+        Assert.Contains("using GWJ_97.Blazor.Components;", File.ReadAllText(System.IO.Path.Combine(blazor, "Program.cs")));
+        var client = File.ReadAllText(System.IO.Path.Combine(blazor, "Client", "GWJ-97.blazor.Client.csproj"));
+        Assert.Contains("<RootNamespace>GWJ_97.Blazor.Client</RootNamespace>", client);
+        Assert.Contains("<TrimmerRootAssembly Include=\"GWJ-97\"/>", client);
+
+        // No C# source may spell the raw name into a namespace position.
+        foreach (var file in Directory.EnumerateFiles(tmp.Dir, "*.cs", SearchOption.AllDirectories))
+            Assert.DoesNotContain("GWJ-97.", File.ReadAllText(file));
+        foreach (var file in Directory.EnumerateFiles(tmp.Dir, "*", SearchOption.AllDirectories))
+        {
+            var text = File.ReadAllText(file);
+            Assert.DoesNotContain("Company.Product1", text);
+            Assert.DoesNotContain("TPLRAWNAME", text);
+        }
+    }
+
     private static string Snapshot(string dir) =>
         string.Join("\n---\n", Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)
             .Order(StringComparer.Ordinal)
@@ -1221,11 +1275,24 @@ public class HostsTests
         Assert.Equal("MyGame.web2", Hosts.AllocateFolder(HostKind.Web, "MyGame", ["mygame.web"]));
     }
 
+    // One stem serves as folder, assembly name and namespace, so it must be a
+    // valid dotted identifier: "GWJ-97" once produced `namespace GWJ-97.Tests;`.
     [Theory]
     [InlineData("My Game!", "MyGame")]
-    [InlineData("my-game_1.x", "my-game_1.x")]
-    public void SanitizeName_KeepsFolderSafeCharacters(string input, string expected) =>
+    [InlineData("my-game_1.x", "my_game_1.x")]
+    [InlineData("GWJ-97", "GWJ_97")]
+    [InlineData("97 Games", "_97Games")]
+    [InlineData("Studio..Game.2", "Studio.Game._2")]
+    public void SanitizeName_ProducesIdentifierSafeStems(string input, string expected) =>
         Assert.Equal(expected, Hosts.SanitizeName(input));
+
+    // A name the project dictates stays as is for files; only the namespace form changes.
+    [Theory]
+    [InlineData("MyGame", "MyGame")]
+    [InlineData("GWJ-97", "GWJ_97")]
+    [InlineData("Studio.2d Game", "Studio._2d_Game")]
+    public void NamespaceName_ReplacesInvalidIdentifierCharacters(string input, string expected) =>
+        Assert.Equal(expected, Hosts.NamespaceName(input));
 
     // Names that survive the character filter but are pure path syntax would
     // write outside the project root once combined into a path.
@@ -1588,6 +1655,26 @@ public class ScaffoldEndToEndTests
             Assert.DoesNotContain("Company.Product1", text);
             Assert.DoesNotContain("TPLRAWNAME", text);
         }
+    }
+
+    [Fact]
+    public void New_HyphenatedName_IsSanitizedEverywhere()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = System.IO.Path.Combine(tmp.Dir, "GWJ-97");
+        var options = new ScaffoldOptions { ProjectPath = dir, NameOverride = "GWJ-97", CreateProject = true, Restore = false };
+
+        Assert.Equal(0, Run(options));
+
+        // Folders, assembly and namespaces share the one sanitized stem.
+        var projectGodot = File.ReadAllText(System.IO.Path.Combine(dir, "project.godot"));
+        Assert.Contains("project/assembly_name=\"GWJ_97\"", projectGodot);
+        Assert.Contains("config/name=\"GWJ_97\"", projectGodot);
+        Assert.True(File.Exists(System.IO.Path.Combine(dir, "GWJ_97.csproj")));
+        Assert.Contains("GWJ_97.web/**", File.ReadAllText(System.IO.Path.Combine(dir, "GWJ_97.csproj")));
+        Assert.Contains("namespace GWJ_97.Tests;",
+            File.ReadAllText(System.IO.Path.Combine(dir, "GWJ_97.tests", "BasicTests.cs")));
+        Assert.False(Directory.EnumerateFileSystemEntries(dir, "GWJ-97*", SearchOption.AllDirectories).Any());
     }
 
     [Fact]

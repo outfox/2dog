@@ -32,7 +32,8 @@ internal static class ScaffoldCommand
                            : $"'{options.NameOverride}' is not a usable project name - it needs a letter or a digit");
             if (name != options.NameOverride)
                 Out.Note($"project name adjusted: '{options.NameOverride}' -> '{name}' " +
-                         "(spaces would break .NET publish; only letters, digits, '.', '_' and '-' survive)");
+                         "(it names folders, assemblies and namespaces: letters, digits, '.' and '_' survive, " +
+                         "'-' becomes '_')");
             return new ProjectContext
             {
                 Dir = projectDir,
@@ -49,10 +50,14 @@ internal static class ScaffoldCommand
         var godot = new GodotProjectFile(projectGodot);
         var existingHosts = HostScan.Find(projectDir);
         var rename = ResolveSpacedName(options, projectDir, godot, existingHosts);
+        var baseName = rename?.NewName ?? DeriveBaseName(options, projectDir, godot);
+        if (Hosts.NamespaceName(baseName) is var ns && ns != baseName)
+            Out.Note($"'{baseName}' is not a valid C# namespace; the scaffolded code uses namespace '{ns}' " +
+                     "(folders and assemblies keep the project's name)");
         return new ProjectContext
         {
             Dir = projectDir,
-            BaseName = rename?.NewName ?? DeriveBaseName(options, projectDir, godot),
+            BaseName = baseName,
             Godot = godot,
             ExistingHosts = existingHosts,
             ExistingFolders = Subdirectories(projectDir),
@@ -112,7 +117,7 @@ internal static class ScaffoldCommand
         var newName = Hosts.SanitizeName(options.RenameTo);
         if (newName is null || newName != options.RenameTo.Trim())
             throw new ToolException($"--rename '{options.RenameTo}' is not a usable name - " +
-                                    "only letters, digits, '.', '_' and '-'");
+                                    "only letters, digits, '.' and '_'");
         if (options.NameOverride != null && options.NameOverride != newName)
             throw new ToolException($"--name '{options.NameOverride}' conflicts with --rename '{newName}' - " +
                                     "--rename already sets the project's name");

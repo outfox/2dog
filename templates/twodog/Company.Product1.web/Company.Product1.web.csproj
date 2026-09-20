@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Browser (wasm) host; requires `dotnet workload install wasm-tools`. Publish from the project root:
-         dotnet publish Company.Product1.web -> AppBundle/ (engine linked in, content exported as godot.pck) -->
+         dotnet publish TPLRAWNAME.web -> AppBundle/ (engine linked in, content exported as godot.pck) -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <OutputType>Exe</OutputType>

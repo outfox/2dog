@@ -31,7 +31,7 @@ internal sealed class MainWindow : Window
     {
         _extraArgs = extraArgs;
 
-        Title = "Company.Product1 — WinUI 3 host";
+        Title = "TPLRAWNAME — WinUI 3 host";
         _hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         AppWindow.ResizeClient(new SizeInt32(1152, 688));
 
@@ -75,7 +75,7 @@ internal sealed class MainWindow : Window
         // below because `--position` goes through Godot's virtual multi-monitor origin math. XAML
         // lengths are DIPs while Godot works in pixels, hence the rasterization scale.
         var scale = _gamePanel.XamlRoot.RasterizationScale;
-        _engine = new Engine("Company.Product1", args:
+        _engine = new Engine("TPLRAWNAME", args:
         [
             "--wid", _hwnd.ToInt64().ToString(CultureInfo.InvariantCulture),
             "--resolution",

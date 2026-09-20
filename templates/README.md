@@ -128,7 +128,7 @@ The host csprojs point `<GodotProjectDir>` at the parent directory (`..`) and
 reference `../Company.Product1.csproj`; the Godot csproj excludes the nested
 host folders via `DefaultItemExcludes`. The solution gives the web host
 ActiveCfg-only entries (no `.Build.0`) so "Build Solution" works without the
-wasm-tools workload  –  the web host is built explicitly with `dotnet publish`.
+wasm-tools workload – the web host is built explicitly with `dotnet publish`.
 
 ## Template Parameters
 
@@ -144,8 +144,12 @@ wasm-tools workload  –  the web host is built explicitly with `dotnet publish`
 
 The template uses `Company.Product1` as the source name, which gets replaced with your project name:
 
-- `Company.Product1` → Your project name (e.g., `MyGame`)
-- Applied to: `.csproj` files, `Program.cs`, `project.godot`, namespaces
+- `Company.Product1` → Your project name in namespace positions (`namespace`, `using`, `RootNamespace`) and in
+  file names. `dotnet new` gives file contents its `safe_namespace` form (`GWJ-97` → `GWJ_97`) and file names
+  the name verbatim; the `2dog` tool does the same.
+- `TPLRAWNAME` → Your project name verbatim: paths and folder names inside files (`DefaultItemExcludes`, the
+  solution), `project.godot`, `TrimmerRootAssembly`, window titles and the `Engine` label. Anything that must
+  match a file or assembly name uses this token, never `Company.Product1`.
 
 ## Packaging
 
