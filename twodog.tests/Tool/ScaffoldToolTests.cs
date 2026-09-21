@@ -1294,6 +1294,50 @@ public class HostsTests
     public void NamespaceName_ReplacesInvalidIdentifierCharacters(string input, string expected) =>
         Assert.Equal(expected, Hosts.NamespaceName(input));
 
+    // Whitespace is the common case for a Godot display name ("My Game") and also the one .NET publish
+    // silently mishandles, so every kind of it must vanish from a stem: it is dropped, never kept or
+    // turned into '_', and a digit exposed at a segment start still gets its '_' prefix.
+    [Theory]
+    [InlineData("My Game", "MyGame")]
+    [InlineData("  My Game  ", "MyGame")]
+    [InlineData("My   Game", "MyGame")]
+    [InlineData("My\tGame\r\n", "MyGame")]
+    [InlineData("My\u00a0Game\u3000Two", "MyGameTwo")]
+    [InlineData("Studio . My Game", "Studio.MyGame")]
+    [InlineData("Studio. 2d Game", "Studio._2dGame")]
+    [InlineData("My Game v 2", "MyGamev2")]
+    public void SanitizeName_DropsAllWhitespace(string input, string expected)
+    {
+        var name = Hosts.SanitizeName(input);
+        Assert.Equal(expected, name);
+        Assert.DoesNotContain(name!, char.IsWhiteSpace);
+    }
+
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("\t\r\n")]
+    [InlineData(" . ")]
+    [InlineData(" - _ ")]
+    public void SanitizeName_RejectsWhitespaceOnlyNames(string input) =>
+        Assert.Null(Hosts.SanitizeName(input));
+
+    // The namespace form keeps a spaced name's shape so it stays recognizable next to the file name
+    // ("Fast Dragon.csproj" -> namespace Fast_Dragon); each whitespace character becomes one '_'.
+    [Theory]
+    [InlineData("My Game", "My_Game")]
+    [InlineData("My  Game", "My__Game")]
+    [InlineData(" My Game ", "_My_Game_")]
+    [InlineData("My\tGame", "My_Game")]
+    [InlineData("My\u00a0Game", "My_Game")]
+    [InlineData("Studio. 2d Game", "Studio._2d_Game")]
+    [InlineData("Fast Dragon.Tests", "Fast_Dragon.Tests")]
+    public void NamespaceName_ReplacesEachWhitespaceCharacterWithUnderscore(string input, string expected)
+    {
+        var ns = Hosts.NamespaceName(input);
+        Assert.Equal(expected, ns);
+        Assert.DoesNotContain(ns, char.IsWhiteSpace);
+    }
+
     // Names that survive the character filter but are pure path syntax would
     // write outside the project root once combined into a path.
     [Theory]
