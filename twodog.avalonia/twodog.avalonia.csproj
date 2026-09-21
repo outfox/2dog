@@ -6,6 +6,7 @@
         <!-- A 'twodog.Avalonia' namespace would collide with the root 'Avalonia' namespace in
              every file; public types share the engine's 'twodog' namespace instead. -->
         <RootNamespace>twodog</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <!-- NuGet Package Metadata -->

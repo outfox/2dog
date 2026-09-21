@@ -34,6 +34,7 @@ public sealed class GodotSessionOptions
     /// <summary>Additional Godot command-line arguments, passed through verbatim.</summary>
     public IReadOnlyList<string> ExtraArgs { get; init; } = [];
 
+    /// <summary>How frames reach the control; <see cref="GodotPresentationMode.Auto"/> prefers GPU sharing.</summary>
     public GodotPresentationMode PresentationMode { get; init; } = GodotPresentationMode.Auto;
 
     /// <summary>Pause the engine while no <see cref="GodotControl"/> is attached.</summary>

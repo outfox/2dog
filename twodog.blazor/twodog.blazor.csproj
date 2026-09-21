@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <!-- Public types share the engine's 'twodog' namespace, like 2dog.avalonia. -->
         <RootNamespace>twodog</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <!-- NuGet Package Metadata -->

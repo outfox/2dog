@@ -58,6 +58,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Additional Godot command-line arguments (after the pack argument).</summary>
     [Parameter] public IReadOnlyList<string>? Args { get; set; }
 
+    /// <summary>How the canvas is sized; see <see cref="GodotCanvasResize"/>.</summary>
     [Parameter] public GodotCanvasResize Resize { get; set; } = GodotCanvasResize.Container;
 
     /// <summary>Focus the canvas once the engine starts so it receives keyboard input.</summary>
@@ -69,12 +70,16 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Start the engine after the first render (default); false leaves it to <see cref="StartAsync"/>.</summary>
     [Parameter] public bool AutoStart { get; set; } = true;
 
+    /// <summary>CSS class applied to the view's container.</summary>
     [Parameter] public string? Class { get; set; }
+
+    /// <summary>Inline style applied to the view's container.</summary>
     [Parameter] public string? Style { get; set; }
 
     /// <summary>Content rendered on top of the canvas (positioned within the view's container).</summary>
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
+    /// <summary>Unmatched attributes, splatted onto the view's container.</summary>
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
@@ -96,6 +101,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>The running engine's scene tree, null unless <see cref="IsRunning"/>.</summary>
     public SceneTree? Tree => IsRunning ? Engine!.Tree : null;
 
+    /// <summary>Whether an engine is running in this view.</summary>
     public bool IsRunning => Engine is not null;
 
     /// <summary>Number of engines this view has started (informational).</summary>
@@ -104,8 +110,10 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary><see cref="StartAsync"/> would start an engine now.</summary>
     public bool CanStart => !IsRunning && !_starting && !_disposed;
 
+    /// <summary>The exception of the last failed start, null otherwise.</summary>
     public Exception? Error { get; private set; }
 
+    /// <inheritdoc/>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // The fresh canvas of a restart is in the DOM once this render completed.
@@ -386,6 +394,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Focuses the canvas so keyboard input reaches Godot.</summary>
     public ValueTask FocusAsync() => _canvas.FocusAsync();
 
+    /// <summary>Stops the engine and releases the canvas; safe to call more than once.</summary>
     public ValueTask DisposeAsync() => new(_disposeTask ??= InvokeAsync(DisposeCoreAsync));
 
     private async Task DisposeCoreAsync()

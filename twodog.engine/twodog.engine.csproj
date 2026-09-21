@@ -4,6 +4,8 @@
         <TargetFramework>net10.0</TargetFramework>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+        <!-- twodog.xml ships next to twodog.dll so consumers get IntelliSense docs -->
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <!-- Programming & Linkage Characteristics -->

@@ -115,6 +115,7 @@ public class Engine : IDisposable, IAsyncDisposable
         }
     }
 
+    /// <summary>The running engine's scene tree. Throws unless the engine is running.</summary>
     public SceneTree Tree
     {
         get
@@ -160,12 +161,14 @@ public class Engine : IDisposable, IAsyncDisposable
     /// <summary>Raised after this engine's native instance has been destroyed.</summary>
     public event Action? Exited;
 
+    /// <summary>Begins shutting the engine down; returns before native destruction completes.</summary>
     public void Dispose()
     {
         BeginDispose();
         GC.SuppressFinalize(this);
     }
 
+    /// <summary>Shuts the engine down and awaits <see cref="Completion"/>.</summary>
     public async ValueTask DisposeAsync()
     {
         BeginDispose();

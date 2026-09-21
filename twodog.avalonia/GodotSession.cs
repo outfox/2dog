@@ -40,6 +40,7 @@ public sealed class GodotSession : IDisposable
     // it at most this often (the control stretches the last frame in between).
     private static readonly TimeSpan ResizeThrottle = TimeSpan.FromMilliseconds(125);
 
+    /// <summary>Creates a session; call <see cref="Start"/> to boot the engine.</summary>
     public GodotSession(GodotSessionOptions options)
     {
         _options = options;
@@ -54,6 +55,7 @@ public sealed class GodotSession : IDisposable
     public GodotInstance Instance => _instance ?? throw new InvalidOperationException(
         $"{nameof(GodotSession)}: Start() must be called first.");
 
+    /// <summary>Whether <see cref="Start"/> has run and the engine has not stopped.</summary>
     public bool IsStarted => _instance is not null;
 
     // The root viewport's texture RID is engine-lifetime stable (only its RD-level backing
@@ -88,6 +90,7 @@ public sealed class GodotSession : IDisposable
     /// <summary><see cref="ActiveMode"/> changed: attach, detach, or an Auto upgrade/fallback.</summary>
     public event EventHandler? ActiveModeChanged;
 
+    /// <summary>The engine started and the frame pump is running.</summary>
     public event EventHandler? Started;
 
     /// <summary>
@@ -100,6 +103,7 @@ public sealed class GodotSession : IDisposable
     /// <summary>The engine asked to quit. The host should close its window and Dispose().</summary>
     public event EventHandler? QuitRequested;
 
+    /// <summary>The engine has been torn down; <see cref="IsStarted"/> is false.</summary>
     public event EventHandler? Stopped;
 
     /// <summary>Starts the engine and the frame pump. UI thread only.</summary>
@@ -396,6 +400,7 @@ public sealed class GodotSession : IDisposable
         _detachedTimer = null;
     }
 
+    /// <summary>Stops the engine and releases presentation resources. UI thread only.</summary>
     public void Dispose()
     {
         if (_disposed) return;

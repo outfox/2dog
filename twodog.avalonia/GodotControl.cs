@@ -14,6 +14,7 @@ namespace twodog;
 /// </summary>
 public class GodotControl : Control
 {
+    /// <summary>Defines the <see cref="Session"/> property.</summary>
     public static readonly StyledProperty<GodotSession?> SessionProperty =
         AvaloniaProperty.Register<GodotControl, GodotSession?>(nameof(Session));
 
@@ -37,6 +38,7 @@ public class GodotControl : Control
     // Window sizing and input DIP-to-pixel conversion must agree on the scale; both read it here.
     internal double RenderScaling => TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
 
+    /// <inheritdoc/>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -106,6 +108,7 @@ public class GodotControl : Control
         failure?.Throw();
     }
 
+    /// <inheritdoc/>
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
@@ -115,6 +118,7 @@ public class GodotControl : Control
         SyncSession();
     }
 
+    /// <inheritdoc/>
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         _onTree = false;
@@ -127,12 +131,14 @@ public class GodotControl : Control
 
     private void OnScalingChanged(object? sender, EventArgs e) => Session?.NotifyControlResized();
 
+    /// <summary>Takes keyboard focus so Godot receives key input.</summary>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         Focus();
         base.OnPointerPressed(e);
     }
 
+    /// <summary>Draws the last CPU-presented frame, or black before the first frame.</summary>
     public override void Render(DrawingContext context)
     {
         if (PresentedFrame is { } frame)
