@@ -141,6 +141,22 @@ public class DeriveBaseNameTests
     }
 
     [Fact]
+    public void DisplayName_WithPunctuationAndGodotEscapes_IsSanitized()
+    {
+        // project.godot escapes '"' and '\\' inside the quoted value; the unescaped text is what gets sanitized.
+        using var tmp = new TempProjectDir();
+        Assert.Equal("CGameTheSequel",
+            Derive(tmp, "[application]\nconfig/name=\"C# Game: \\\"The Sequel\\\"!\"\n"));
+    }
+
+    [Fact]
+    public void DisplayName_ThatIsACSharpKeyword_GetsAPrefix()
+    {
+        using var tmp = new TempProjectDir();
+        Assert.Equal("_event", Derive(tmp, "[application]\nconfig/name=\"event\"\n"));
+    }
+
+    [Fact]
     public void AssemblyName_MismatchingCsproj_Throws()
     {
         using var tmp = new TempProjectDir();
@@ -850,6 +866,31 @@ public class AddEndToEndTests
         }
     }
 
+    [Fact]
+    public void Add_KeywordAssemblyName_KeepsFilesAndPrefixesNamespaces()
+    {
+        // An existing project called "event" keeps event.csproj; the code it gets must still parse.
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", "config_version=5\n\n[application]\n\nconfig/name=\"event\"\n\n" +
+                                   "[dotnet]\n\nproject/assembly_name=\"event\"\n");
+        tmp.Write("event.csproj", "<Project Sdk=\"Godot.NET.Sdk/4.7.0\"><PropertyGroup>" +
+                                  "<TargetFramework>net10.0</TargetFramework></PropertyGroup></Project>");
+
+        var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop", "--tests"]), project);
+        Assert.Equal(0, RunCaptured(options).ExitCode);
+
+        var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.tests", "BasicTests.cs"));
+        Assert.Contains("namespace _event.Tests;", tests);
+        Assert.Contains("../event.csproj",
+            File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.tests", "event.tests.csproj")));
+        var desktopCsproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.2dog", "event.2dog.csproj"));
+        Assert.Contains("<RootNamespace>_event</RootNamespace>", desktopCsproj);
+        Assert.Contains("new Engine(\"event\"",
+            File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.2dog", "Program.cs")));
+    }
+
     private static string Snapshot(string dir) =>
         string.Join("\n---\n", Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)
             .Order(StringComparer.Ordinal)
@@ -1337,6 +1378,74 @@ public class HostsTests
         Assert.Equal(expected, ns);
         Assert.DoesNotContain(ns, char.IsWhiteSpace);
     }
+
+    // A Godot display name is free text ("C# Game: The Sequel!"), so every punctuation and symbol
+    // character must go; letters of any script are identifier characters and stay. An emoji is a
+    // surrogate pair, which IsLetterOrDigit rejects half by half, so no lone surrogate can survive.
+    [Theory]
+    [InlineData("C# Game", "CGame")]
+    [InlineData("Game #1", "Game1")]
+    [InlineData("@$%&Game!?", "Game")]
+    [InlineData("Game: \"The Sequel\"", "GameTheSequel")]
+    [InlineData("a/b\\c|d*e<f>g", "abcdefg")]
+    [InlineData("Game (2024) [beta] {x} +1 =2 ~3 `4 ^5 ;6 ,7 '8", "Game2024betax12345678")]
+    [InlineData("Game \U0001F3AE Two", "GameTwo")]
+    [InlineData("\u00dcbergame", "\u00dcbergame")]
+    [InlineData("\u30b2\u30fc\u30e0", "\u30b2\u30fc\u30e0")]
+    public void SanitizeName_DropsPunctuationAndSymbols(string input, string expected)
+    {
+        var name = Hosts.SanitizeName(input);
+        Assert.Equal(expected, name);
+        Assert.All(name!, c => Assert.True(char.IsLetterOrDigit(c) || c is '.' or '_'));
+    }
+
+    // Each UTF-16 unit that is not an identifier character becomes one '_', so an emoji yields two.
+    [Theory]
+    [InlineData("C# Game", "C__Game")]
+    [InlineData("Game #1", "Game__1")]
+    [InlineData("a/b\\c:d", "a_b_c_d")]
+    [InlineData("Game (2024)", "Game__2024_")]
+    [InlineData("Game\U0001F3AE", "Game__")]
+    [InlineData("\u00dcbergame.\u30b2\u30fc\u30e0", "\u00dcbergame.\u30b2\u30fc\u30e0")]
+    public void NamespaceName_ReplacesPunctuationAndSymbols(string input, string expected)
+    {
+        var ns = Hosts.NamespaceName(input);
+        Assert.Equal(expected, ns);
+        Assert.All(ns, c => Assert.True(char.IsLetterOrDigit(c) || c is '.' or '_'));
+    }
+
+    // A stem is also a namespace, and 'namespace event.Tests;' does not parse: reserved keywords get the
+    // same '_' prefix as a digit-leading segment. Contextual keywords and other casings are fine.
+    [Theory]
+    [InlineData("event", "_event")]
+    [InlineData("class.Tests", "_class.Tests")]
+    [InlineData("My.new.Game", "My._new.Game")]
+    [InlineData("Event", "Event")]
+    [InlineData("var", "var")]
+    [InlineData("record", "record")]
+    public void SanitizeName_PrefixesCSharpKeywords(string input, string expected) =>
+        Assert.Equal(expected, Hosts.SanitizeName(input));
+
+    // Godot appends '_' to an assembly name that collides with its own (path_utils.cpp), and the editor
+    // then wants res://<that name>.csproj, so the stem 2dog picks must be the one Godot will use.
+    [Theory]
+    [InlineData("GodotSharp", "GodotSharp_")]
+    [InlineData("GodotSharpEditor", "GodotSharpEditor_")]
+    [InlineData("Godot.SourceGenerators", "Godot.SourceGenerators_")]
+    [InlineData("Godot Sharp", "GodotSharp_")]
+    [InlineData("godotsharp", "godotsharp")]
+    [InlineData("GodotSharp2", "GodotSharp2")]
+    public void SanitizeName_SuffixesGodotReservedAssemblyNames(string input, string expected) =>
+        Assert.Equal(expected, Hosts.SanitizeName(input));
+
+    [Theory]
+    [InlineData("event", "_event")]
+    [InlineData("my-class", "my_class")]
+    [InlineData("Studio.event.2", "Studio._event._2")]
+    [InlineData("Event", "Event")]
+    [InlineData("GodotSharp", "GodotSharp")]
+    public void NamespaceName_PrefixesCSharpKeywords(string input, string expected) =>
+        Assert.Equal(expected, Hosts.NamespaceName(input));
 
     // Names that survive the character filter but are pure path syntax would
     // write outside the project root once combined into a path.

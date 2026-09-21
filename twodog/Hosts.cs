@@ -165,7 +165,8 @@ internal static class Hosts
     /// <summary>
     /// Reduce a name to a stem usable as folder, assembly name AND C# namespace, so the scaffolded files agree
     /// with each other: whitespace and punctuation are dropped, '-' becomes '_' (a name like GWJ-97 would
-    /// otherwise land in 'namespace GWJ-97.Tests'), and a digit-leading '.'-segment gets a '_' prefix. Null when
+    /// otherwise land in 'namespace GWJ-97.Tests'), a digit-leading or keyword '.'-segment gets a '_' prefix,
+    /// and a name Godot reserves for its own assemblies gets the '_' suffix Godot itself would apply. Null when
     /// nothing usable remains: '.' and '..' would otherwise write outside the project.
     /// </summary>
     public static string? SanitizeName(string? name)
@@ -177,24 +178,47 @@ internal static class Hosts
                 .Where(c => char.IsLetterOrDigit(c) || c == '_')
                 .ToArray()))
             .Where(segment => segment.Length > 0)
-            .Select(segment => char.IsDigit(segment[0]) ? "_" + segment : segment)
+            .Select(IdentifierSegment)
             .ToList();
-        return segments.Any(segment => segment.Any(char.IsLetterOrDigit)) ? string.Join(".", segments) : null;
+        if (!segments.Any(segment => segment.Any(char.IsLetterOrDigit))) return null;
+        var stem = string.Join(".", segments);
+        return GodotReservedAssemblyNames.Contains(stem) ? stem + "_" : stem;
     }
 
     /// <summary>
     /// The C# namespace for a base name the project dictates (an existing assembly_name / csproj): every
-    /// character that cannot appear in an identifier becomes '_', digit-leading segments get a '_' prefix. The
-    /// same transform dotnet new applies to its sourceName in file contents (its safe_namespace form).
+    /// character that cannot appear in an identifier becomes '_', digit-leading and keyword segments get a '_'
+    /// prefix. The same transform dotnet new applies to its sourceName in file contents (its safe_namespace
+    /// form), plus the keyword guard dotnet new lacks.
     /// </summary>
     public static string NamespaceName(string baseName)
     {
         var segments = baseName.Split('.')
             .Select(segment => new string(segment.Select(c => char.IsLetterOrDigit(c) || c == '_' ? c : '_').ToArray()))
             .Where(segment => segment.Length > 0)
-            .Select(segment => char.IsDigit(segment[0]) ? "_" + segment : segment);
+            .Select(IdentifierSegment);
         return string.Join(".", segments);
     }
+
+    /// <summary>A '.'-segment that C# accepts as a plain identifier: 'namespace event.Tests;' does not parse.</summary>
+    private static string IdentifierSegment(string segment) =>
+        char.IsDigit(segment[0]) || CSharpKeywords.Contains(segment) ? "_" + segment : segment;
+
+    /// <summary>Godot appends '_' to these (modules/mono/utils/path_utils.cpp); the csproj name must match.</summary>
+    private static readonly HashSet<string> GodotReservedAssemblyNames =
+        ["GodotSharp", "GodotSharpEditor", "Godot.SourceGenerators"];
+
+    /// <summary>The reserved keywords; contextual ones (var, record, async, ...) are valid identifiers.</summary>
+    private static readonly HashSet<string> CSharpKeywords =
+    [
+        "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const",
+        "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern",
+        "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface",
+        "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override",
+        "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short",
+        "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof",
+        "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while",
+    ];
 }
 
 /// <summary>Recognizes the host projects an existing 2dog project already has.</summary>

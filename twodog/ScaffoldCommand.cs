@@ -33,7 +33,7 @@ internal static class ScaffoldCommand
             if (name != options.NameOverride)
                 Out.Note($"project name adjusted: '{options.NameOverride}' -> '{name}' " +
                          "(it names folders, assemblies and namespaces: letters, digits, '.' and '_' survive, " +
-                         "'-' becomes '_')");
+                         "'-' becomes '_', C# keywords get a '_' prefix)");
             return new ProjectContext
             {
                 Dir = projectDir,
@@ -117,7 +117,7 @@ internal static class ScaffoldCommand
         var newName = Hosts.SanitizeName(options.RenameTo);
         if (newName is null || newName != options.RenameTo.Trim())
             throw new ToolException($"--rename '{options.RenameTo}' is not a usable name - " +
-                                    "only letters, digits, '.' and '_'");
+                                    "only letters, digits, '.' and '_', no C# keywords");
         if (options.NameOverride != null && options.NameOverride != newName)
             throw new ToolException($"--name '{options.NameOverride}' conflicts with --rename '{newName}' - " +
                                     "--rename already sets the project's name");
