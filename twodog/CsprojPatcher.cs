@@ -74,10 +74,10 @@ internal static class CsprojPatcher
         }
 
         var defines = properties.Where(e => e.Name.LocalName == "DefineConstants").ToList();
-        if (!defines.Any(d => d.Value.Contains("LIBGODOT_ENABLED")))
+        if (!defines.Any(d => d.Value.Contains("TWODOG_WEB_BOOT")))
         {
-            patch.Add(Element(ns, "DefineConstants", "$(DefineConstants);LIBGODOT_ENABLED"));
-            added.Add("DefineConstants: LIBGODOT_ENABLED");
+            patch.Add(Element(ns, "DefineConstants", "$(DefineConstants);TWODOG_WEB_BOOT"));
+            added.Add("DefineConstants: TWODOG_WEB_BOOT");
         }
 
         var excludes = properties.Where(e => e.Name.LocalName == "DefaultItemExcludes").ToList();

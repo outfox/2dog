@@ -243,7 +243,7 @@ public class CsprojPatcherTests
         Assert.Equal(4, result.Added.Count);
         Assert.Contains("<EnableDynamicLoading>true</EnableDynamicLoading>", result.NewContent);
         Assert.Contains("<AllowUnsafeBlocks>true</AllowUnsafeBlocks>", result.NewContent);
-        Assert.Contains("LIBGODOT_ENABLED", result.NewContent);
+        Assert.Contains("TWODOG_WEB_BOOT", result.NewContent);
         Assert.Contains("MyGame.2dog/**;MyGame.web/**;MyGame.tests/**", result.NewContent);
         // The original content is preserved verbatim.
         Assert.Contains("<TargetFramework>net10.0</TargetFramework>", result.NewContent);
@@ -441,7 +441,7 @@ public class CsprojPatcherTests
                     <TargetFramework>net10.0</TargetFramework>
                     <EnableDynamicLoading>true</EnableDynamicLoading>
                     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-                    <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+                    <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
                     <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.tests/**</DefaultItemExcludes>
                 </PropertyGroup>
                 <ItemGroup>
@@ -468,7 +468,7 @@ public class CsprojPatcherTests
                     <TargetFramework>net10.0</TargetFramework>
                     <EnableDynamicLoading>true</EnableDynamicLoading>
                     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-                    <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+                    <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
                     <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.tests/**</DefaultItemExcludes>
                 </PropertyGroup>
                 <ItemGroup>
@@ -696,7 +696,7 @@ public class TemplateAssetsTests
     public void WebBootSource_IsVerbatimAndGuarded()
     {
         var source = TemplateAssets.WebBootSource();
-        Assert.Contains("LIBGODOT_ENABLED", source);
+        Assert.Contains("TWODOG_WEB_BOOT", source);
         // Platform line breaks whatever the pack host used, so tool-written files compare equal to the resource.
         Assert.Equal(source.ReplaceLineEndings(), source);
     }

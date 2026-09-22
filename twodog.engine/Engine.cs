@@ -242,7 +242,7 @@ public class Engine : IDisposable, IAsyncDisposable
                             $"{nameof(Engine)}: On browser, call {nameof(RegisterWebPluginsInitializer)}() with " +
                             "the game assembly's plugins-initializer pointer (see TwoDogWebBoot.cs in your web " +
                             "host folder, from the 2dog template; it must compile into the game project, which " +
-                            "requires the LIBGODOT_ENABLED define) before Start().");
+                            "requires the TWODOG_WEB_BOOT define) before Start().");
                     ThrowIfInstanceRunning();
                     instance = StartCore();
                 }

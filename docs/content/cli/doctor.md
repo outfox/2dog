@@ -90,7 +90,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `game.sdk` | the game csproj uses Godot.NET.Sdk |
 | `game.sdk-mismatch` | Godot.NET.Sdk matches the Godot line 2dog.engine was built for |
 | `game.target-framework` | the game csproj targets net10.0 |
-| `game.properties` | EnableDynamicLoading, AllowUnsafeBlocks and LIBGODOT_ENABLED are set |
+| `game.properties` | EnableDynamicLoading, AllowUnsafeBlocks and TWODOG_WEB_BOOT are set |
 | `game.default-item-excludes` | every host folder is excluded from the game's default globs |
 | `game.webboot-include` | the web bootstrap is compiled into the game assembly |
 | `game.webboot-duplicate` | exactly one TwoDogWebBoot.cs compiles into the game assembly |

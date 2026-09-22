@@ -1,15 +1,13 @@
-#if LIBGODOT_ENABLED
+#if TWODOG_WEB_BOOT
 using System;
 using Godot.NativeInterop;
 
 namespace GodotPlugins.Game
 {
     /// <summary>
-    /// Extends the source-generated <c>GodotPlugins.Game.Main</c> (a partial
-    /// class) to expose a pointer to its private plugins-initializer method.
-    /// Self-contained on purpose (mirrors the 2dog web template): it works
-    /// with the stock Godot.NET.Sdk source generators, so the showcase also
-    /// builds against the official NuGet packages (-p:Official=true).
+    /// Extends the source-generated <c>GodotPlugins.Game.Main</c> to reach its private plugins initializer.
+    /// Works with the stock Godot.NET.Sdk generators, so the showcase also builds against the official
+    /// NuGet packages (-p:Official=true).
     /// </summary>
     internal static partial class Main
     {
@@ -21,13 +19,9 @@ namespace GodotPlugins.Game
 namespace showcase.web
 {
     /// <summary>
-    /// Web (browser-wasm) bootstrap for 2dog hosts. Exposes the game assembly's
-    /// plugins-initializer function pointer (internal to this assembly) so the
-    /// host can hand it to <c>twodog.Engine.RegisterWebPluginsInitializer()</c>.
-    /// Scripts are looked up in the assembly that contains the generated
-    /// initializer, which is why this file compiles into the Godot project's
-    /// assembly (via a Compile Include in the root csproj) even though it lives
-    /// in the web host folder.
+    /// Public entry point for the web host assemblies. It cannot live in <c>Main</c>: the generated part declares
+    /// that class internal and partial parts may not disagree on accessibility. Compiled into the Godot project's
+    /// assembly (Compile Include in the root csproj) because scripts resolve from the assembly holding the initializer.
     /// </summary>
     public static class TwoDogWebBoot
     {

@@ -2,7 +2,7 @@
 
 Browser (WebAssembly) support for [2dog](https://2dog.dev): statically links the
 Godot engine into your .NET `browser-wasm` publish and ships the Godot web boot
-shell. Your C# code hosts Godot in the browser  –  the same inversion 2dog does on
+shell. Your C# code hosts Godot in the browser – the same inversion 2dog does on
 desktop.
 
 ## How it works
@@ -20,7 +20,7 @@ bundle.
 - A host project: `net10.0`, `OutputType=Exe`, `RuntimeIdentifier=browser-wasm`,
   `PackageReference` to `2dog` and `2dog.browser-wasm`, `<GodotProjectDir>` set
 - The Godot project needs a `Web` export preset, a solution file, and
-  `LIBGODOT_ENABLED` + `AllowUnsafeBlocks` in its csproj
+  `TWODOG_WEB_BOOT` + `AllowUnsafeBlocks` in its csproj
 - A `wwwroot/index.html` boot page (create a project with
   `dnx 2dog new MyGame --web` for a working setup out of the box)
 - Or a Blazor WebAssembly project: the package detects the Blazor SDK and

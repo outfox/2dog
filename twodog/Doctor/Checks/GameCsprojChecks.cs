@@ -8,7 +8,7 @@ internal static class GameCsprojChecks
         new("game.sdk", Category.GameProject, "the game csproj uses Godot.NET.Sdk"),
         new("game.sdk-mismatch", Category.GameProject, "Godot.NET.Sdk matches the Godot line 2dog.engine was built for"),
         new("game.target-framework", Category.GameProject, "the game csproj targets net10.0"),
-        new("game.properties", Category.GameProject, "EnableDynamicLoading, AllowUnsafeBlocks and LIBGODOT_ENABLED are set"),
+        new("game.properties", Category.GameProject, "EnableDynamicLoading, AllowUnsafeBlocks and TWODOG_WEB_BOOT are set"),
         new("game.default-item-excludes", Category.GameProject, "every host folder is excluded from the game's default globs"),
         new("game.webboot-include", Category.GameProject, "the web bootstrap is compiled into the game assembly"),
         new("game.webboot-duplicate", Category.GameProject, "exactly one TwoDogWebBoot.cs compiles into the game assembly"),

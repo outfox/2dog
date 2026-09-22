@@ -6,7 +6,7 @@
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <!-- TwoDogWebBoot.cs (web hosts) takes a function pointer to the source-generated plugins initializer;
              harmless on desktop -->
-        <DefineConstants>$(DefineConstants);LIBGODOT_ENABLED</DefineConstants>
+        <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
              from the Godot editor) -->

@@ -17,7 +17,7 @@ importer, and exporter skip them:
 - **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
-- **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`LIBGODOT_ENABLED`-guarded `Compile Include` in the game csproj)
+- **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`TWODOG_WEB_BOOT`-guarded `Compile Include` in the game csproj)
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
 
