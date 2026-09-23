@@ -43,11 +43,24 @@ dnx 2dog new MyGodotApp
 ## What's Included
 
 - **twodog.dll** - engine hosting API
-- **GodotSharp.dll** - Godot C# bindings
-- **Godot.SourceGenerators** and **GodotPlugins** - script generation and loading
+- **2dog.godotsharp** - exact-pinned fork C# bindings and source generator
+- **GodotPlugins** - script loading
 - **Automatic asset import** - incremental import during build
 
 Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`); the GodotTools assemblies used by the automatic import come from `2dog.tools`.
+
+## Game and library bindings
+
+Reference `2dog.godotsharp` in the game/library project, using the same version as
+`2dog.engine`. For editor APIs also reference `2dog.godotsharp.editor`.
+New templates include these references. Existing Godot.NET.Sdk projects must set
+`DisableImplicitGodotSharpReferences` and `DisableImplicitGodotGeneratorReferences`
+to `true`, remove stock binding references, restore, and rebuild.
+The host's dependency cannot change how a referenced project compiles.
+
+Mixed stock/fork packages and mismatched assembly contents now fail the build.
+See the [binding package migration guide](../twodog.godotsharp/README.md).
+Trimming compatibility of your own code remains a separate concern.
 
 ## Documentation
 

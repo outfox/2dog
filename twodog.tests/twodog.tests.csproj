@@ -47,12 +47,9 @@
         <DefineConstants>$(DefineConstants);EDITOR</DefineConstants>
     </PropertyGroup>
 
-    <!-- Editor-only assembly for EditorInterface, EditorPlugin, etc. Referenced from the fork build like twodog.import:
-         a configuration-conditional PackageReference is never restored by the single (Debug) CI restore. -->
-    <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-        <Reference Include="GodotSharpEditor">
-            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Debug/GodotSharpEditor.dll</HintPath>
-        </Reference>
+    <!-- Keep this restored in every configuration: CI restores once before its configuration matrix. -->
+    <ItemGroup>
+        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
     </ItemGroup>
 
 </Project>

@@ -67,9 +67,29 @@ cache and by nuget.org. Pack with a prerelease suffix CI can never publish and
 point the consumer at the local feed:
 
 ```bash
+dotnet pack twodog.godotsharp -c Release -p:TwoDogVersion=:2dog-version:-local.1
+dotnet pack twodog.godotsharp.editor -c Release -p:TwoDogVersion=:2dog-version:-local.1
 dotnet pack twodog.engine -c Release -p:TwoDogVersion=:2dog-version:-local.1
+python tests/bindings/test_packages.py --version :2dog-version:-local.1
 # consumer nuget.config: add the repo's packages/ folder as a source, reference -local.1
 ```
+
+## Mixed Godot bindings (TDG001–TDG004)
+
+2dog now distributes its bindings through `2dog.godotsharp` and
+`2dog.godotsharp.editor`. Game and library projects must reference these packages
+at the host's 2dog version. A host dependency does not change a game's compile
+references.
+
+In Godot.NET.Sdk projects, set `DisableImplicitGodotSharpReferences` and
+`DisableImplicitGodotGeneratorReferences` to `true`. Replace stock
+`GodotSharp`/`GodotSharpEditor` package references, remove stale HintPaths, then
+restore and rebuild all projects. Third-party packages that depend on stock bindings
+need a compatible release. New templates already have the correct references.
+
+The build checks both assembly contents and package versions before compilation
+and publish trimming. Do not suppress IL2125 to fix binding selection; warnings for
+your own libraries require a separate trimming review.
 
 ## The Godot editor holds a file
 

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <PackageId>2dog.godotsharp.editor</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>2dog fork editor C# bindings. No native engine dependencies.</Description>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.godotsharp" Version="[$(TwoDogVersion)]" />
+        <None Include="$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.dll" Pack="true" PackagePath="lib/net10.0/" />
+        <None Include="$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.xml" Pack="true" PackagePath="lib/net10.0/" Condition="Exists('$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.xml')" />
+        <None Include="buildTransitive/*" Pack="true" PackagePath="buildTransitive/" />
+        <None Include="README.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+</Project>

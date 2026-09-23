@@ -1,0 +1,15 @@
+<Project>
+    <!-- Explicitly set these in Godot projects too: package props do not exist before the first restore. -->
+    <PropertyGroup>
+        <DisableImplicitGodotSharpReferences>true</DisableImplicitGodotSharpReferences>
+        <DisableImplicitGodotGeneratorReferences>true</DisableImplicitGodotGeneratorReferences>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- Same compiler inputs as Godot.SourceGenerators.props, which the fork generator consumes. -->
+        <CompilerVisibleProperty Include="GodotDisabledSourceGenerators" />
+        <CompilerVisibleProperty Include="GodotProjectDir" />
+        <CompilerVisibleProperty Include="GodotProjectDirBase64" />
+        <CompilerVisibleProperty Include="GodotSourceGenerators" />
+        <CompilerVisibleProperty Include="IsGodotToolsProject" />
+    </ItemGroup>
+</Project>

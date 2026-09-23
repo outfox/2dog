@@ -211,6 +211,11 @@ jobs:
           mkdir -p packages
           dotnet pack platforms/ -p:ForcePackAllPlatforms=true
 
+      - name: Pack managed bindings
+        run: |
+          dotnet pack twodog.godotsharp
+          dotnet pack twodog.godotsharp.editor
+
       - name: Build twodog library (all configs)
         run: |
           dotnet build twodog.engine -c Debug
@@ -224,6 +229,9 @@ jobs:
           dotnet pack twodog.blazor
           dotnet pack twodog.xunit
           dotnet pack twodog
+
+      - name: Test managed binding packages
+        run: python3 tests/bindings/test_packages.py
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
@@ -898,7 +906,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.engine" "2dog.avalonia" "2dog.blazor"; do
+          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

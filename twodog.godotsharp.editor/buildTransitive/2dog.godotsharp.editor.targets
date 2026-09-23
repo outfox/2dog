@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <_TwoDogExpectedEditorBinding>$(MSBuildThisFileDirectory)../lib/net10.0/GodotSharpEditor.dll</_TwoDogExpectedEditorBinding>
+    </PropertyGroup>
+</Project>

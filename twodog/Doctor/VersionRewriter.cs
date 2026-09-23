@@ -28,6 +28,8 @@ internal static class VersionRewriter
     private static readonly IReadOnlyDictionary<string, (string Property, bool Pinned)> Managed =
         new Dictionary<string, (string, bool)>(StringComparer.OrdinalIgnoreCase)
         {
+            ["2dog.godotsharp"] = ("TwoDogVersion", false),
+            ["2dog.godotsharp.editor"] = ("TwoDogVersion", false),
             ["2dog.engine"] = ("TwoDogVersion", false),
             ["2dog.xunit"] = ("TwoDogVersion", false),
             ["2dog.avalonia"] = ("TwoDogVersion", false),

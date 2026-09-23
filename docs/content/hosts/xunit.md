@@ -92,7 +92,7 @@ The shared host project is documented in [Hosts](./). The test host references
 </PropertyGroup>
 
 <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-  <PackageReference Include="GodotSharpEditor" Version=":godot-version:.*"/>
+  <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)"/>
 </ItemGroup>
 ```
 

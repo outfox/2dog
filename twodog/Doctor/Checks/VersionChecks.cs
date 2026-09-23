@@ -26,6 +26,7 @@ internal static class VersionChecks
         var refs = p.Hosts.SelectMany(h => h.Packages.Select(r => (In: h.Folder, Ref: r)))
             .Concat(p.Hosts.Where(h => h.ClientText != null)
                 .SelectMany(h => ClientReferences(h.ClientText!).Select(r => (In: $"{h.Folder}/Client", Ref: r))))
+            .Concat(p.GameCsprojText is { } gameText ? VersionRewriter.References(gameText).Select(r => (In: p.GameCsprojName!, Ref: r)) : [])
             .ToList();
 
         var foreign = refs.Where(x => x.Ref.IsProperty && !x.Ref.RawVersion.Contains("$(TwoDog")).Select(x => x.Ref.RawVersion).Distinct().ToList();

@@ -144,8 +144,13 @@ internal static class ProjectVersions
                     Note(VersionRewriter.PropertyFor(reference.Id)!, reference);
         }
 
-        if (project.GameCsprojText is { } game && VersionRewriter.GodotSdkVersion(game) is { } sdk)
-            Note("TwoDogGodotVersion", new PackageRef("Godot.NET.Sdk", sdk));
+        if (project.GameCsprojText is { } game)
+        {
+            foreach (var reference in SafeLiterals(game))
+                Note(VersionRewriter.PropertyFor(reference.Id)!, reference);
+            if (VersionRewriter.GodotSdkVersion(game) is { } sdk)
+                Note("TwoDogGodotVersion", new PackageRef("Godot.NET.Sdk", sdk));
+        }
         return current;
     }
 

@@ -85,7 +85,7 @@ internal static class UpdateCommand
 
     private static void PlanMigrations(List<PlannedAction> plan, ProjectModel model)
     {
-        foreach (var csproj in model.HostCsprojs)
+        foreach (var csproj in model.HostCsprojs.Concat(model.GameCsprojPath is { } game ? [game] : []))
         {
             var (newText, changes) = VersionRewriter.Migrate(csproj);
             if (newText == null) continue;
@@ -136,7 +136,7 @@ internal static class UpdateCommand
         if (newText == null) return;
 
         plan.Add(new PlannedAction($"set {model.GameCsprojName} Sdk to Godot.NET.Sdk/{ToolVersions.GodotSdkVersion} (was {current})",
-            ActionKind.Patch, () => MsBuildXml.Write(game, newText)));
+            ActionKind.Patch, () => MsBuildXml.Write(game, VersionRewriter.SetGodotSdkVersion(File.ReadAllText(game), ToolVersions.GodotSdkVersion)!)));
 
         if (VersionRewriter.GodotLineChangeWarning(current, ToolVersions.GodotSdkVersion) is { } warning)
             warnings.Add(warning);

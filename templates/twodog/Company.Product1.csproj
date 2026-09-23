@@ -1,6 +1,8 @@
 <Project Sdk="Godot.NET.Sdk/GODOT_SDK_VERSION">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <DisableImplicitGodotSharpReferences>true</DisableImplicitGodotSharpReferences>
+        <DisableImplicitGodotGeneratorReferences>true</DisableImplicitGodotGeneratorReferences>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
@@ -12,6 +14,11 @@
              from the Godot editor) -->
         <DefaultItemExcludes>$(DefaultItemExcludes);TPLRAWNAME.2dog/**;TPLRAWNAME.web/**;TPLRAWNAME.webxr/**;TPLRAWNAME.tests/**;TPLRAWNAME.winforms/**;TPLRAWNAME.winui/**;TPLRAWNAME.avalonia/**;TPLRAWNAME.blazor/**</DefaultItemExcludes>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.godotsharp" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)"
+                          Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'" />
+    </ItemGroup>
     <ItemGroup>
         <!-- Web bootstrap lives in the web host folder but must compile into THIS assembly: scripts resolve
              from the assembly holding the source-generated plugins initializer. Inert without a web host -->

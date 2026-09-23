@@ -1,0 +1,81 @@
+<Project>
+    <!-- Godot's generator requires SDK-provided project properties. Plain .NET hosts/libraries do not
+         need it; custom game projects may opt in and supply GodotProjectDir themselves. -->
+    <Target Name="TwoDogSelectGodotGenerator" BeforeTargets="CoreCompile"
+            Condition="'$(UsingGodotNETSdk)' != 'true' And '$(TwoDogEnableGodotSourceGenerators)' != 'true'">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="'%(Filename)' == 'Godot.SourceGenerators'" />
+        </ItemGroup>
+    </Target>
+
+    <!-- Reject mixed packages instead of letting ResolveAssemblyReference choose by assembly version.
+         Godot and 2dog can have identical assembly versions but different native ABIs and trim metadata. -->
+    <Target Name="TwoDogCheckBindingPackages" AfterTargets="ResolvePackageAssets">
+        <ItemGroup>
+            <_TwoDogStockBinding Include="@(ResolvedCompileFileDefinitions);@(RuntimeCopyLocalItems)"
+                Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+            <_TwoDogCorePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp'" />
+            <_TwoDogEditorPackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp.editor'" />
+        </ItemGroup>
+        <Error Code="TDG001" Condition="'@(_TwoDogStockBinding)' != ''"
+               Text="TwoDog: stock GodotSharp/GodotSharpEditor packages are mixed with 2dog bindings. In each game/library project, set DisableImplicitGodotSharpReferences and DisableImplicitGodotGeneratorReferences to true, replace GodotSharp with 2dog.godotsharp, and replace GodotSharpEditor with 2dog.godotsharp.editor. Use the same version as 2dog.engine; restore and rebuild all projects." />
+        <PropertyGroup>
+            <_TwoDogCorePackageVersion>%(_TwoDogCorePackage.NuGetPackageVersion)</_TwoDogCorePackageVersion>
+        </PropertyGroup>
+        <Error Code="TDG004"
+               Condition="'@(_TwoDogEditorPackage)' != '' And '%(_TwoDogEditorPackage.NuGetPackageVersion)' != '$(_TwoDogCorePackageVersion)'"
+               Text="TwoDog: core and editor binding packages must have the same 2dog version." />
+    </Target>
+
+    <Target Name="TwoDogReadBindingHashes">
+        <GetFileHash Files="$(MSBuildThisFileDirectory)../lib/net10.0/GodotSharp.dll" Algorithm="SHA256">
+            <Output TaskParameter="Hash" PropertyName="_TwoDogCoreHash" />
+        </GetFileHash>
+        <GetFileHash Files="$(_TwoDogExpectedEditorBinding)" Algorithm="SHA256" Condition="'$(_TwoDogExpectedEditorBinding)' != ''">
+            <Output TaskParameter="Hash" PropertyName="_TwoDogEditorHash" />
+        </GetFileHash>
+    </Target>
+
+    <!-- Hashes also validate manually supplied references and project-output copies, without relying on
+         assembly version or IsTrimmable metadata. Equal copies of the fork payload are allowed. -->
+    <Target Name="TwoDogValidateCompileBindings" AfterTargets="ResolveReferences"
+            BeforeTargets="CoreCompile" DependsOnTargets="TwoDogReadBindingHashes">
+        <ItemGroup>
+            <_TwoDogCompileBinding Include="@(ReferencePath);@(ReferenceCopyLocalPaths)"
+                Condition="'%(Filename)%(Extension)' == 'GodotSharp.dll' Or '%(Filename)%(Extension)' == 'GodotSharpEditor.dll'" />
+        </ItemGroup>
+        <Error Code="TDG002"
+               Condition="'%(_TwoDogCompileBinding.Filename)' == 'GodotSharpEditor' And '$(_TwoDogExpectedEditorBinding)' == ''"
+               Text="TwoDog: GodotSharpEditor requires 2dog.godotsharp.editor at the same version as 2dog.engine. Remove stock package and HintPath references." />
+        <GetFileHash Files="@(_TwoDogCompileBinding)" Algorithm="SHA256">
+            <Output TaskParameter="Items" ItemName="_TwoDogCompileBindingHash" />
+        </GetFileHash>
+        <Error Code="TDG003"
+               Condition="'%(_TwoDogCompileBindingHash.Filename)' == 'GodotSharp' And '%(_TwoDogCompileBindingHash.FileHash)' != '$(_TwoDogCoreHash)'"
+               Text="TwoDog: '%(_TwoDogCompileBindingHash.Identity)' differs from the packaged 2dog GodotSharp.dll. Remove conflicting references and rebuild every game/library project against 2dog.godotsharp." />
+        <Error Code="TDG003"
+               Condition="'%(_TwoDogCompileBindingHash.Filename)' == 'GodotSharpEditor' And '%(_TwoDogCompileBindingHash.FileHash)' != '$(_TwoDogEditorHash)'"
+               Text="TwoDog: '%(_TwoDogCompileBindingHash.Identity)' differs from the packaged 2dog GodotSharpEditor.dll. Use 2dog.godotsharp.editor at the engine version." />
+    </Target>
+
+    <!-- Validate original publish inputs before ILLink rewrites them; this also runs for publishes that skip the build. -->
+    <Target Name="TwoDogValidatePublishBindings" AfterTargets="ComputeResolvedFilesToPublishList"
+            BeforeTargets="ILLink" DependsOnTargets="TwoDogReadBindingHashes">
+        <ItemGroup>
+            <_TwoDogPublishBinding Include="@(ResolvedFileToPublish)"
+                Condition="'%(Filename)%(Extension)' == 'GodotSharp.dll' Or '%(Filename)%(Extension)' == 'GodotSharpEditor.dll'" />
+        </ItemGroup>
+        <Error Code="TDG002"
+               Condition="'%(_TwoDogPublishBinding.Filename)' == 'GodotSharpEditor' And '$(_TwoDogExpectedEditorBinding)' == ''"
+               Text="TwoDog: GodotSharpEditor requires 2dog.godotsharp.editor at the same version as 2dog.engine. Remove stock package and HintPath references." />
+        <GetFileHash Files="@(_TwoDogPublishBinding)" Algorithm="SHA256">
+            <Output TaskParameter="Items" ItemName="_TwoDogPublishBindingHash" />
+        </GetFileHash>
+        <Error Code="TDG003"
+               Condition="'%(_TwoDogPublishBindingHash.Filename)' == 'GodotSharp' And '%(_TwoDogPublishBindingHash.FileHash)' != '$(_TwoDogCoreHash)'"
+               Text="TwoDog: '%(_TwoDogPublishBindingHash.Identity)' differs from the packaged 2dog GodotSharp.dll. Remove conflicting references and rebuild every game/library project against 2dog.godotsharp." />
+        <Error Code="TDG003"
+               Condition="'%(_TwoDogPublishBindingHash.Filename)' == 'GodotSharpEditor' And '%(_TwoDogPublishBindingHash.FileHash)' != '$(_TwoDogEditorHash)'"
+               Text="TwoDog: '%(_TwoDogPublishBindingHash.Identity)' differs from the packaged 2dog GodotSharpEditor.dll. Use 2dog.godotsharp.editor at the engine version." />
+    </Target>
+</Project>

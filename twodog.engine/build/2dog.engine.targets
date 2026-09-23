@@ -25,14 +25,6 @@
         <TwoDogPackageRoot Condition="'$(TwoDogPackageRoot)' == ''">$(MSBuildThisFileDirectory)../</TwoDogPackageRoot>
     </PropertyGroup>
 
-    <!-- The package ships GodotSharp.dll in lib/ as a transitive compile reference; a ProjectReference to twodog.engine
-         forwards nothing (HintPath references are private), so the source checkout supplies it here. -->
-    <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)../twodog.engine.csproj') And '$(TwoDogGodotSharpApiDir)' != ''">
-        <Reference Include="GodotSharp">
-            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
     <!-- Native selection, API layout and assembly metadata all key from TwoDogVariant, so they never disagree. -->
     <Target Name="TwoDogValidateVariant" BeforeTargets="Build;Publish">
         <Error Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'editor'"
@@ -68,46 +60,21 @@
         </ItemGroup>
     </Target>
 
-    <!-- Godot.NET.Sdk pulls stock GodotSharp (different native ABI); on equal versions MSBuild picks arbitrarily and on
-         skew the higher wins. Fail on skew, then drop the stock assets so the fork copy is the only candidate. -->
-    <Target Name="TwoDogEnforceForkGodotSharp" AfterTargets="ResolvePackageAssets">
+    <Target Name="TwoDogCheckEngineBindingVersion" AfterTargets="ResolvePackageAssets">
         <ItemGroup>
-            <_TwoDogStockGodotSharp Include="@(ResolvedCompileFileDefinitions);@(RuntimeCopyLocalItems)"
-                                    Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
-            <_TwoDogForkGodotSharp Include="@(ResolvedCompileFileDefinitions)"
-                                   Condition="'%(NuGetPackageId)' == '2dog.engine' And '%(Filename)%(Extension)' == 'GodotSharp.dll'"/>
+            <_TwoDogEnginePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.engine' And '%(Filename)' == 'twodog'" />
+            <_TwoDogEngineCoreBinding Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp' And '%(Filename)' == 'GodotSharp'" />
         </ItemGroup>
         <PropertyGroup>
-            <_TwoDogStockGodotSharpVersion Condition="'@(_TwoDogStockGodotSharp)' != ''">%(_TwoDogStockGodotSharp.NuGetPackageVersion)</_TwoDogStockGodotSharpVersion>
-            <_TwoDogEngineVersion Condition="'@(_TwoDogForkGodotSharp)' != ''">%(_TwoDogForkGodotSharp.NuGetPackageVersion)</_TwoDogEngineVersion>
-            <!-- 2dog.engine is versioned <godot>.<revision>; a prerelease suffix (-local.N) is not part of it -->
-            <_TwoDogEngineGodotVersion Condition="'$(_TwoDogEngineVersion)' != ''">$([System.Text.RegularExpressions.Regex]::Match('$(_TwoDogEngineVersion)', '^\d+\.\d+\.\d+').Value)</_TwoDogEngineGodotVersion>
-            <_TwoDogForkApiGodotSharp Condition="'$(TwoDogGodotSharpApiDir)' != ''">$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</_TwoDogForkApiGodotSharp>
+            <_TwoDogRequiredBindingVersion>%(_TwoDogEnginePackage.NuGetPackageVersion)</_TwoDogRequiredBindingVersion>
+            <_TwoDogRequiredBindingVersion Condition="'$(_TwoDogRequiredBindingVersion)' == '' And Exists('$(MSBuildThisFileDirectory)../twodog.engine.csproj')">$(TwoDogVersion)</_TwoDogRequiredBindingVersion>
         </PropertyGroup>
-
-        <Error Condition="'$(_TwoDogStockGodotSharpVersion)' != '' And '$(_TwoDogEngineGodotVersion)' != '' And '$(_TwoDogStockGodotSharpVersion)' != '$(_TwoDogEngineGodotVersion)'"
-               Text="TwoDog: the Godot project references GodotSharp $(_TwoDogStockGodotSharpVersion) (via Godot.NET.Sdk) but 2dog.engine $(_TwoDogEngineVersion) is built for Godot $(_TwoDogEngineGodotVersion). Mixed versions crash at runtime. Set the Godot project's Sdk to &quot;Godot.NET.Sdk/$(_TwoDogEngineGodotVersion)&quot; or update the 2dog.engine package to a $(_TwoDogStockGodotSharpVersion).* release."/>
-
-        <ItemGroup Condition="'@(_TwoDogForkGodotSharp)' != ''">
-            <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
-            <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
-            <_ReferenceDocumentationFiles Remove="@(_ReferenceDocumentationFiles)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
-        </ItemGroup>
-
-        <!-- Source checkout (ProjectReference to twodog.engine, TwoDogGodotSharpApiDir from the repo props): on equal
-             file versions the stock runtime copy could win over the fork's, so swap it for the fork API copy
-             explicitly. Compiling against the stock surface is harmless (same API). -->
-        <ItemGroup Condition="'@(_TwoDogForkGodotSharp)' == '' And '@(_TwoDogStockGodotSharp)' != '' And '$(_TwoDogForkApiGodotSharp)' != '' And Exists('$(_TwoDogForkApiGodotSharp)')">
-            <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp'"/>
-            <RuntimeCopyLocalItems Include="$(_TwoDogForkApiGodotSharp)">
-                <NuGetPackageId>2dog.engine</NuGetPackageId>
-                <NuGetPackageVersion>$(TwoDogVersion)</NuGetPackageVersion>
-                <AssetType>runtime</AssetType>
-                <CopyLocal>true</CopyLocal>
-                <Private>true</Private>
-            </RuntimeCopyLocalItems>
-        </ItemGroup>
+        <Error Code="TDG004"
+               Condition="'$(_TwoDogRequiredBindingVersion)' != '' And '%(_TwoDogEngineCoreBinding.NuGetPackageVersion)' != '$(_TwoDogRequiredBindingVersion)'"
+               Text="TwoDog: 2dog.engine and 2dog.godotsharp must use the same version ($(_TwoDogRequiredBindingVersion))." />
     </Target>
+
+    <!-- 2dog.godotsharp validates both managed bindings for package and ProjectReference consumers. -->
 
     <!-- ============================================ -->
     <!-- GodotPlugins Configuration                   -->

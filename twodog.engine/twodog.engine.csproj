@@ -32,11 +32,9 @@
         <PackageTags>godot;2dog;game-engine</PackageTags>
     </PropertyGroup>
 
-    <!-- GodotSharp from fork build (embedded in the 2dog.engine package, no external dependency) -->
+    <!-- Exact-pinned managed bindings are shared with game and library projects. -->
     <ItemGroup>
-        <Reference Include="GodotSharp">
-            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</HintPath>
-        </Reference>
+        <PackageReference Include="2dog.godotsharp" Version="[$(TwoDogVersion)]" />
     </ItemGroup>
 
     <!-- All platform natives are dependencies regardless of pack OS; only the matching platform's targets copy.
@@ -53,18 +51,6 @@
     <ItemGroup>
         <None Include="build\2dog.engine.targets" Pack="true" PackagePath="build\"/>
         <None Include="buildTransitive\2dog.engine.targets" Pack="true" PackagePath="buildTransitive\"/>
-    </ItemGroup>
-
-    <!-- GodotSharp.dll ships in lib/net10.0/ (transitive compile reference, no GodotSharp NuGet dependency);
-         Godot.SourceGenerators.dll in analyzers/dotnet/cs/ runs as a source generator for consumers. -->
-    <PropertyGroup>
-        <GodotSharpApiDir>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/</GodotSharpApiDir>
-        <GodotSourceGenDir>$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
-    </PropertyGroup>
-    <ItemGroup>
-        <None Include="$(GodotSharpApiDir)GodotSharp.dll" Pack="true" PackagePath="lib/net10.0/" Visible="false"/>
-        <None Include="$(GodotSharpApiDir)GodotSharp.xml" Pack="true" PackagePath="lib/net10.0/" Visible="false" Condition="Exists('$(GodotSharpApiDir)GodotSharp.xml')"/>
-        <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" Visible="false"/>
     </ItemGroup>
 
     <!-- Package icon and readme -->

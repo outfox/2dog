@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <PackageId>2dog.godotsharp</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>2dog fork core C# bindings. No native engine dependencies.</Description>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IsPackable>true</IsPackable>
+        <GodotSourceGenDir Condition="'$(GodotSourceGenDir)' == ''">$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(TwoDogGodotSharpApiDir)Release/GodotSharp.dll" Pack="true" PackagePath="lib/net10.0/" />
+        <None Include="$(TwoDogGodotSharpApiDir)Release/GodotSharp.xml" Pack="true" PackagePath="lib/net10.0/" Condition="Exists('$(TwoDogGodotSharpApiDir)Release/GodotSharp.xml')" />
+        <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" />
+        <None Include="buildTransitive/*" Pack="true" PackagePath="buildTransitive/" />
+        <None Include="README.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+</Project>

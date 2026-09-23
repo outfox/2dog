@@ -52,6 +52,6 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-        <PackageReference Include="GodotSharpEditor" Version="$(TwoDogGodotVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
     </ItemGroup>
 </Project>

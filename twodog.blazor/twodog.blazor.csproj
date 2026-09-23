@@ -21,13 +21,7 @@
         <PackageTags>godot;2dog;blazor;webassembly;game-engine</PackageTags>
     </PropertyGroup>
 
-    <!-- Plain References do not flow across ProjectReference, so the engine's is repeated. Not packed: consumers
-         get GodotSharp.dll from 2dog.engine's lib/net10.0/. -->
-    <ItemGroup>
-        <Reference Include="GodotSharp">
-            <HintPath>$([MSBuild]::EnsureTrailingSlash('$(TwoDogGodotSharpApiDir)'))Release/GodotSharp.dll</HintPath>
-        </Reference>
-    </ItemGroup>
+    <!-- Managed bindings flow transitively from the engine ProjectReference. -->
 
     <!-- PrivateAssets=all: the package must NOT depend on 2dog.engine. A Blazor Web App server references this
          package (transitively, to serve _content/2dog.blazor/*), and 2dog.engine's build targets and native

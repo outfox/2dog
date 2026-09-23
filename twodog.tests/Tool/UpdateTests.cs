@@ -57,12 +57,26 @@ public class UpdateTests
         Assert.Contains("Version=\"$(TwoDogVersion)\"", web);
         Assert.Contains("Version=\"[$(TwoDogNativesVersion)]\"", web);
         Assert.DoesNotMatch(@"Version=""\[?4\.7\.1", web);
-        Assert.Contains("Version=\"$(TwoDogGodotVersion)\"", File.ReadAllText(Path.Combine(dir, "Game.tests", "Game.tests.csproj")));
+        Assert.Contains("Include=\"2dog.godotsharp.editor\" Version=\"$(TwoDogVersion)\"", File.ReadAllText(Path.Combine(dir, "Game.tests", "Game.tests.csproj")));
+        Assert.DoesNotMatch(@"Version=""\[?4\.7\.1", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
         Assert.Contains($"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
 
         var again = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
         Assert.Equal(0, again.ExitCode);
         Assert.Contains("Nothing to do", again.Stdout);
+    }
+
+    [Fact]
+    public void Update_DoesNotDowngradeGameBindingPackages()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = AgedProject(tmp);
+        var game = Path.Combine(dir, "Game.csproj");
+        File.WriteAllText(game, File.ReadAllText(game).Replace("Version=\"4.7.1.10\"", "Version=\"99.0.0.1\""));
+        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.NotEqual(0, run.ExitCode);
+        Assert.Contains("99.0.0.1", run.Stdout + run.Stderr);
+        Assert.Contains("Version=\"99.0.0.1\"", File.ReadAllText(game));
     }
 
     [Fact]
