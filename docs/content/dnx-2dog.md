@@ -107,7 +107,31 @@ block; [`2dog version`](/cli/version) prints what it would write.
 
 ### Under dnx
 
-`dnx 2dog --version` never reaches the tool: `--version <VERSION>` is `dnx`'s
-own option and selects which `2dog` package version to run. Use
-`dnx 2dog version` to print versions and `dnx 2dog@:2dog-version:` to run a
-specific tool version.
+Choose a specific **CLI package version** with `@version`:
+
+```bash
+dnx 2dog@:2dog-version: doctor
+dnx 2dog@:2dog-version: update
+```
+
+Replace the version with the release you want to run. The equivalent dnx option is:
+
+```bash
+dnx --version :2dog-version: 2dog doctor
+```
+
+These commands select the tool version; a missing version may still need to be
+downloaded. They do not take the tool version from `Directory.Build.props` or
+`global.json`. The project's dependency versions live in `Directory.Build.props`;
+`global.json` controls SDK selection. Running `update` explicitly changes the
+project's version block to the selected tool's versions, subject to its
+[no-downgrade rule](/cli/update).
+
+To **print** versions, use `dnx 2dog version`, or select the tool too:
+
+```bash
+dnx 2dog@:2dog-version: version
+```
+
+`dnx 2dog --version` never reaches the tool: `--version <VERSION>` belongs to
+`dnx`, whereas `version` is a 2dog command.

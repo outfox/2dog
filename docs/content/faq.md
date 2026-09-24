@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, whether it replaces GodotSharp, and why the tool and engine ship as separate packages."
+description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, GodotSharp compatibility, separate tool and engine packages, and choosing a tool version."
 ---
 
 # FAQ
@@ -56,6 +56,23 @@ NuGet packages marked as dotnet tools cannot also be consumed through a
 library, while `2dog` contains the self-contained tool and template. They are
 released together, and both scaffolding routes produce the same output. See
 [Adding 2dog to a Project](/add).
+
+## How do I keep dnx from switching to a newer 2dog version?
+
+Specify the tool version with `@`:
+
+```bash
+dnx 2dog@:2dog-version: doctor
+```
+
+Replace the version with the one you want to keep. This selects that version of
+the **2dog CLI**; it can still download it if it is missing locally. It does not
+read the project's `TwoDogVersion` property to choose the tool version.
+
+Project dependencies are controlled separately by `Directory.Build.props`.
+`global.json` selects SDK versions, not the 2dog CLI or engine package version.
+See [running a specific tool version under dnx](/dnx-2dog#under-dnx) for the
+alternative syntax and the difference between selecting and printing a version.
 
 ---
 
