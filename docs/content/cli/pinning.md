@@ -25,7 +25,7 @@ update using the selected tool version:
 
 ```bash
 dnx 2dog@:2dog-version: update --dry-run
-dnx 2dog@:2dog-version: doctor --dry-run
+dnx 2dog@:2dog-version: doctor
 ```
 
 Remove `--dry-run` to apply the update. The update command changes the project's
