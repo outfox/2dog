@@ -240,7 +240,10 @@ public class CsprojPatcherTests
 
         Assert.NotNull(result.NewContent);
         Assert.Empty(result.Warnings);
-        Assert.Equal(4, result.Added.Count);
+        Assert.Equal(5, result.Added.Count);
+        Assert.Contains("Include=\"2dog.godotsharp\"", result.NewContent);
+        Assert.Contains("Include=\"2dog.godotsharp.editor\"", result.NewContent);
+        Assert.DoesNotContain("DisableImplicitGodot", result.NewContent);
         Assert.Contains("<EnableDynamicLoading>true</EnableDynamicLoading>", result.NewContent);
         Assert.Contains("<AllowUnsafeBlocks>true</AllowUnsafeBlocks>", result.NewContent);
         Assert.Contains("TWODOG_WEB_BOOT", result.NewContent);
@@ -473,6 +476,8 @@ public class CsprojPatcherTests
                 </PropertyGroup>
                 <ItemGroup>
                     <Compile Include="boot/TwoDogWebBoot.cs"/>
+                    <PackageReference Include="2dog.godotsharp" Version="$(TwoDogVersion)"/>
+                    <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)"/>
                 </ItemGroup>
             </Project>
             """);

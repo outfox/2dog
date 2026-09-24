@@ -67,6 +67,34 @@ public class UpdateTests
     }
 
     [Fact]
+    public void Update_WiresExistingGodotGameWithoutOptOutProperties()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = AgedProject(tmp);
+        var path = Path.Combine(dir, "Game.csproj");
+        var doc = System.Xml.Linq.XDocument.Load(path);
+        doc.Descendants("PackageReference").Where(e =>
+            ((string?)e.Attribute("Include"))?.StartsWith("2dog.godotsharp", StringComparison.Ordinal) == true)
+            .ToList().ForEach(e => e.Remove());
+        doc.Save(path);
+        var before = File.ReadAllText(path);
+        var dry = CliConsole.Run("update", dir, "--dry-run", "--no-restore", "--allow-dirty");
+        Assert.Equal(0, dry.ExitCode);
+        Assert.Contains("configure fork bindings", dry.Stdout);
+        Assert.Equal(before, File.ReadAllText(path));
+        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, run.ExitCode);
+        var after = File.ReadAllText(path);
+        Assert.Contains("Include=\"2dog.godotsharp\"", after);
+        Assert.Contains("Include=\"2dog.godotsharp.editor\"", after);
+        Assert.DoesNotContain("DisableImplicitGodot", after);
+        Assert.Equal(ToolVersions.GodotSdkVersion, VersionRewriter.GodotSdkVersion(after));
+        var again = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, again.ExitCode);
+        Assert.Contains("Nothing to do", again.Stdout);
+    }
+
+    [Fact]
     public void Update_DoesNotDowngradeGameBindingPackages()
     {
         using var tmp = new TempProjectDir();

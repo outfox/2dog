@@ -33,6 +33,7 @@ internal static class UpdateCommand
         ScaffoldCommand.PlanRootBuildProps(plan, project.Dir);
         PlanPropsValues(plan, model, current);
         PlanGodotSdk(plan, model, warnings);
+        PlanGameBindings(plan, model);
         PlanWebBootRefresh(plan, model);
 
         if (plan.Count > 0 && cmd.Options.Restore)
@@ -140,6 +141,16 @@ internal static class UpdateCommand
 
         if (VersionRewriter.GodotLineChangeWarning(current, ToolVersions.GodotSdkVersion) is { } warning)
             warnings.Add(warning);
+    }
+
+    private static void PlanGameBindings(List<PlannedAction> plan, ProjectModel model)
+    {
+        if (model.GameCsprojPath is not { } game || CsprojPatcher.PatchBindings(game) == null) return;
+        plan.Add(new PlannedAction($"configure fork bindings in {model.GameCsprojName}", ActionKind.Patch, () =>
+        {
+            // Earlier actions may update package versions and the SDK in the same file.
+            if (CsprojPatcher.PatchBindings(game) is { } text) MsBuildXml.Write(game, text);
+        }));
     }
 
     /// <summary>TwoDogWebBoot.cs is tool-owned: a newer tool may need a newer bootstrap.</summary>

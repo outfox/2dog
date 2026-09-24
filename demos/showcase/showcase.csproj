@@ -7,8 +7,6 @@
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
         <!-- Compile the repository demo against the fork, including its trim annotations.
              A host's 2dog.engine dependency does not flow back into this game project. -->
-        <DisableImplicitGodotSharpReferences>true</DisableImplicitGodotSharpReferences>
-        <DisableImplicitGodotGeneratorReferences>true</DisableImplicitGodotGeneratorReferences>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <!-- TwoDogWebBoot.cs (web hosts) takes a function pointer to the source-generated plugins initializer;

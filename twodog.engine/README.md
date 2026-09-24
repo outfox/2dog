@@ -51,15 +51,13 @@ Platform-specific native libraries are provided by transitive dependencies (`2do
 
 ## Game and library bindings
 
-Reference `2dog.godotsharp` in the game/library project, using the same version as
-`2dog.engine`. For editor APIs also reference `2dog.godotsharp.editor`.
-New templates include these references. Existing Godot.NET.Sdk projects must set
-`DisableImplicitGodotSharpReferences` and `DisableImplicitGodotGeneratorReferences`
-to `true`, remove stock binding references, restore, and rebuild.
-The host's dependency cannot change how a referenced project compiles.
+`2dog new`, `2dog add`, and `2dog update` configure fork bindings in the game automatically.
+Existing Godot.NET.Sdk defaults and compatible stock dependencies are supported; no implicit-reference
+opt-out properties are required. Plain .NET libraries can reference `2dog.godotsharp` directly,
+and `2dog.godotsharp.editor` when they use editor APIs, at the engine's version.
 
-Mixed stock/fork packages and mismatched assembly contents now fail the build.
-See the [binding package migration guide](../twodog.godotsharp/README.md).
+Incompatible Godot versions and stale manual binding references still fail the build.
+See the [binding package guide](../twodog.godotsharp/README.md).
 Trimming compatibility of your own code remains a separate concern.
 
 ## Documentation

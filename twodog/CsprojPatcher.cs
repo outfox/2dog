@@ -113,6 +113,8 @@ internal static class CsprojPatcher
             added.Add($"Compile Include: {webBootPath}");
         }
 
+        if (EnsureBindings(doc)) added.Add("PackageReference: 2dog.godotsharp");
+
         if (!patch.HasElements && bootGroup == null && added.Count == 0) return new Result(null, added, warnings);
 
         if (patch.HasElements)
@@ -128,6 +130,34 @@ internal static class CsprojPatcher
                 new XText("\n"));
 
         return new Result(MsBuildXml.Serialize(doc), added, warnings);
+    }
+
+    // The host's dependencies cannot flow backwards into the game. Add the managed package when
+    // adapting an existing game, just as the new-project template does. The package handles SDK defaults.
+    internal static string? PatchBindings(string csprojPath)
+    {
+        var doc = MsBuildXml.Load(csprojPath);
+        return EnsureBindings(doc) ? MsBuildXml.Serialize(doc) : null;
+    }
+
+    private static bool EnsureBindings(XDocument doc)
+    {
+        var root = doc.Root!;
+        var ns = root.Name.Namespace;
+        var changed = false;
+        foreach (var id in new[] { "2dog.godotsharp", "2dog.godotsharp.editor" })
+        {
+            if (root.Descendants(ns + "PackageReference").Any(e =>
+                string.Equals((string?)e.Attribute("Include"), id, StringComparison.OrdinalIgnoreCase))) continue;
+            var reference = new XElement(ns + "PackageReference",
+                new XAttribute("Include", id), new XAttribute("Version", "$(TwoDogVersion)"));
+            if (id.EndsWith(".editor", StringComparison.Ordinal))
+                reference.SetAttributeValue("Condition", "'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'");
+            root.Add(new XText("    "), new XElement(ns + "ItemGroup",
+                new XText("\n        "), reference, new XText("\n    ")), new XText("\n"));
+            changed = true;
+        }
+        return changed;
     }
 
     private static XElement Element(XNamespace ns, string name, string value) => new(ns + name, value);

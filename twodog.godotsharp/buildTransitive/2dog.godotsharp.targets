@@ -1,30 +1,58 @@
 <Project>
-    <!-- Godot's generator requires SDK-provided project properties. Plain .NET hosts/libraries do not
-         need it; custom game projects may opt in and supply GodotProjectDir themselves. -->
-    <Target Name="TwoDogSelectGodotGenerator" BeforeTargets="CoreCompile"
-            Condition="'$(UsingGodotNETSdk)' != 'true' And '$(TwoDogEnableGodotSourceGenerators)' != 'true'">
+    <PropertyGroup>
+        <_TwoDogCoreBinding>$(MSBuildThisFileDirectory)../lib/net10.0/GodotSharp.dll</_TwoDogCoreBinding>
+        <_TwoDogFallbackEditorBinding>$(MSBuildThisFileDirectory)api/GodotSharpEditor.dll</_TwoDogFallbackEditorBinding>
+        <_TwoDogGenerator>$(MSBuildThisFileDirectory)../analyzers/dotnet/cs/Godot.SourceGenerators.dll</_TwoDogGenerator>
+        <_TwoDogExpectedEditorBinding Condition="'$(_TwoDogExpectedEditorBinding)' == ''">$(_TwoDogFallbackEditorBinding)</_TwoDogExpectedEditorBinding>
+    </PropertyGroup>
+    <!-- Keep the fork generator for Godot games and remove the SDK's duplicate, including on first restore. -->
+    <Target Name="TwoDogSelectGodotGenerator" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="'%(Filename)' == 'Godot.SourceGenerators'" />
+            <Analyzer Include="$(_TwoDogGenerator)"
+                      Condition="('$(UsingGodotNETSdk)' == 'true' Or '$(TwoDogEnableGodotSourceGenerators)' == 'true') And '$(TwoDogRemoveDuplicateGodotAnalyzers)' != 'true'" />
         </ItemGroup>
     </Target>
 
-    <!-- Reject mixed packages instead of letting ResolveAssemblyReference choose by assembly version.
-         Godot and 2dog can have identical assembly versions but different native ABIs and trim metadata. -->
+    <!-- Stock packages are normal inputs from Godot.NET.Sdk and third-party libraries. Check their Godot
+         line, then choose the fork for compile/copy. Do not require consumer opt-out properties. -->
     <Target Name="TwoDogCheckBindingPackages" AfterTargets="ResolvePackageAssets">
         <ItemGroup>
             <_TwoDogStockBinding Include="@(ResolvedCompileFileDefinitions);@(RuntimeCopyLocalItems)"
-                Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+                Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'">
+                <GodotLine>$([System.Text.RegularExpressions.Regex]::Match('%(NuGetPackageVersion)', '^\d+\.\d+\.\d+').Value)</GodotLine>
+            </_TwoDogStockBinding>
             <_TwoDogCorePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp'" />
             <_TwoDogEditorPackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp.editor'" />
         </ItemGroup>
-        <Error Code="TDG001" Condition="'@(_TwoDogStockBinding)' != ''"
-               Text="TwoDog: stock GodotSharp/GodotSharpEditor packages are mixed with 2dog bindings. In each game/library project, set DisableImplicitGodotSharpReferences and DisableImplicitGodotGeneratorReferences to true, replace GodotSharp with 2dog.godotsharp, and replace GodotSharpEditor with 2dog.godotsharp.editor. Use the same version as 2dog.engine; restore and rebuild all projects." />
         <PropertyGroup>
             <_TwoDogCorePackageVersion>%(_TwoDogCorePackage.NuGetPackageVersion)</_TwoDogCorePackageVersion>
+            <_TwoDogGodotLine>$([System.Text.RegularExpressions.Regex]::Match('$(_TwoDogCorePackageVersion)', '^\d+\.\d+\.\d+').Value)</_TwoDogGodotLine>
+            <_TwoDogNeedsEditor Condition="'%(_TwoDogStockBinding.Filename)' == 'GodotSharpEditor' Or ('$(UsingGodotNETSdk)' == 'true' And ('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'))">true</_TwoDogNeedsEditor>
         </PropertyGroup>
+        <Error Code="TDG001"
+               Condition="'@(_TwoDogStockBinding)' != '' And '%(_TwoDogStockBinding.GodotLine)' != '$(_TwoDogGodotLine)'"
+               Text="TwoDog: %(_TwoDogStockBinding.NuGetPackageId) %(_TwoDogStockBinding.NuGetPackageVersion) targets a different Godot version than 2dog $(_TwoDogCorePackageVersion). Align the Godot.NET.Sdk and library dependencies with Godot $(_TwoDogGodotLine)." />
         <Error Code="TDG004"
                Condition="'@(_TwoDogEditorPackage)' != '' And '%(_TwoDogEditorPackage.NuGetPackageVersion)' != '$(_TwoDogCorePackageVersion)'"
                Text="TwoDog: core and editor binding packages must have the same 2dog version." />
+        <ItemGroup>
+            <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+            <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+            <_ReferenceDocumentationFiles Remove="@(_ReferenceDocumentationFiles)" Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+            <Reference Include="GodotSharpEditor" Condition="'$(_TwoDogNeedsEditor)' == 'true' And '@(_TwoDogEditorPackage)' == ''">
+                <HintPath>$(_TwoDogFallbackEditorBinding)</HintPath>
+                <Private>true</Private>
+            </Reference>
+        </ItemGroup>
+    </Target>
+
+    <!-- Publish resolves package runtime assets afresh. Stock assets must not re-enter the publish set. -->
+    <Target Name="TwoDogSelectPublishBindings" AfterTargets="_ComputeResolvedCopyLocalPublishAssets">
+        <ItemGroup>
+            <ResolvedCopyLocalPublishAssets Remove="@(ResolvedCopyLocalPublishAssets)"
+                Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+        </ItemGroup>
     </Target>
 
     <Target Name="TwoDogReadBindingHashes">

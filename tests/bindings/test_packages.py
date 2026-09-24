@@ -93,8 +93,6 @@ class BindingPackages(unittest.TestCase):
         references = "".join(f'<PackageReference Include="{p}" Version="{v}"/>' for p, v in packages)
         csproj = directory / f"{name}.csproj"
         csproj.write_text(f'<Project Sdk="{sdk}"><PropertyGroup><TargetFramework>net10.0</TargetFramework>'
-                          '<DisableImplicitGodotSharpReferences>true</DisableImplicitGodotSharpReferences>'
-                          '<DisableImplicitGodotGeneratorReferences>true</DisableImplicitGodotGeneratorReferences>'
                           '<WarningsAsErrors>IL2125;CS8785;CS0433</WarningsAsErrors>'
                           '</PropertyGroup><ItemGroup>' + references + '</ItemGroup>' + extra + '</Project>')
         (directory / "Code.cs").write_text(source or "public class Api { public Godot.Vector2 Value; }")
@@ -133,9 +131,7 @@ class BindingPackages(unittest.TestCase):
                 output = self.dotnet("build", host, "-c", config)
                 self.assertNotIn("IL2125", output)
                 assets = (game_dir / ".godot/mono/temp/obj/project.assets.json").read_text()
-                self.assertNotIn('"GodotSharp/', assets)
-                self.assertNotIn('"GodotSharpEditor/', assets)
-                self.assertNotIn('"Godot.SourceGenerators/', assets)
+                self.assertIn(f'"{CORE}/', assets)
                 self.assertTrue(list((game_dir / ".godot").rglob("*ScriptPath.generated.cs")))
                 publish = self.dir / ("publish-" + config)
                 self.dotnet("publish", host, "-c", config, "--no-build", "-o", publish)
@@ -157,11 +153,41 @@ class BindingPackages(unittest.TestCase):
         # ILLink is allowed to rewrite the validated binding payload.
         self.assertNotEqual(self.core_bytes, (publish / "GodotSharp.dll").read_bytes())
 
-    def test_stock_core_package_rejected(self):
+    def test_sdk_defaults_with_core_only_first_and_second_restore(self):
+        project = self.project(sdk=f"Godot.NET.Sdk/{GODOT}",
+                               source="public partial class Api : Godot.EditorPlugin { }",
+                               extra="<PropertyGroup><IsTrimmable>true</IsTrimmable>"
+                               "<VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility></PropertyGroup>")
+        for iteration in range(2):
+            with self.subTest(restore=iteration):
+                self.dotnet("build", project, "-c", "Debug")
+                publish = self.dir / "published"
+                self.dotnet("publish", project, "-c", "Debug", "--no-build", "-o", publish)
+                self.assertEqual(self.core_bytes, (publish / "GodotSharp.dll").read_bytes())
+                self.assertEqual(self.editor_bytes, (publish / "GodotSharpEditor.dll").read_bytes())
+
+    def test_legacy_game_host_accepts_sdk_dependencies(self):
+        game = self.project("Legacy", packages=[], sdk=f"Godot.NET.Sdk/{GODOT}")
+        host = self.project("Host", packages=[("2dog.engine", VERSION)],
+                            extra='<ItemGroup><ProjectReference Include="../Legacy/Legacy.csproj"/></ItemGroup>'
+                            '<PropertyGroup><TwoDogAutoImport>false</TwoDogAutoImport>'
+                            '<TwoDogExportPack>false</TwoDogExportPack></PropertyGroup>')
+        host.write_text(host.read_text().replace("</Project>",
+            "<PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>"))
+        (host.parent / "Code.cs").write_text("System.Console.WriteLine(new Api().Value.LengthSquared());")
+        self.dotnet("build", host, "-c", "Debug")
+        publish = self.dir / "published"
+        self.dotnet("publish", host, "-c", "Debug", "--no-build", "-o", publish)
+        self.assertEqual(self.core_bytes, (publish / "GodotSharp.dll").read_bytes())
+        self.assertEqual(self.editor_bytes, (publish / "GodotSharpEditor.dll").read_bytes())
+
+        self.dotnet(publish / "Host.dll")
+
+    def test_incompatible_stock_core_package_rejected(self):
         project = self.project(packages=[(CORE, VERSION), ("GodotSharp", "0.0.1-test")])
         self.dotnet("build", project, error="TDG001")
 
-    def test_stock_editor_package_rejected(self):
+    def test_incompatible_stock_editor_package_rejected(self):
         project = self.project(packages=[(CORE, VERSION), ("GodotSharpEditor", "0.0.1-test")])
         self.dotnet("build", project, error="TDG001")
 
@@ -184,9 +210,9 @@ class BindingPackages(unittest.TestCase):
         project = self.project(packages=[(EDITOR, VERSION)], extra=self.inject("GodotSharpEditor", "Compile"))
         self.dotnet("build", project, error="TDG003")
 
-    def test_editor_without_editor_package_rejected(self):
+    def test_stale_editor_without_explicit_editor_package_rejected(self):
         project = self.project(extra=self.inject("GodotSharpEditor", "Compile"))
-        self.dotnet("build", project, error="TDG002")
+        self.dotnet("build", project, error="TDG003")
 
     def test_stale_publish_binding_rejected_without_build(self):
         project = self.project()

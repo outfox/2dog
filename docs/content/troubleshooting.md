@@ -76,20 +76,22 @@ python tests/bindings/test_packages.py --version :2dog-version:-local.1
 
 ## Mixed Godot bindings (TDG001–TDG004)
 
-2dog now distributes its bindings through `2dog.godotsharp` and
-`2dog.godotsharp.editor`. Game and library projects must reference these packages
-at the host's 2dog version. A host dependency does not change a game's compile
-references.
+Run the current `2dog update` to configure fork bindings in an existing game. `2dog add`
+and new templates do this automatically too. No DisableImplicitGodotSharpReferences or
+DisableImplicitGodotGeneratorReferences properties are required.
 
-In Godot.NET.Sdk projects, set `DisableImplicitGodotSharpReferences` and
-`DisableImplicitGodotGeneratorReferences` to `true`. Replace stock
-`GodotSharp`/`GodotSharpEditor` package references, remove stale HintPaths, then
-restore and rebuild all projects. Third-party packages that depend on stock bindings
-need a compatible release. New templates already have the correct references.
+Compatible stock GodotSharp/GodotSharpEditor package assets are replaced with the matching
+fork assemblies before compile/copy/publish. TDG001 now means a dependency targets a different
+Godot version: align its version (or Godot.NET.Sdk) with the engine's Godot version.
+TDG003 identifies a stale manual assembly reference; remove the conflicting HintPath.
+TDG004 requires core/editor/engine packages to use the same 2dog version.
 
-The build checks both assembly contents and package versions before compilation
-and publish trimming. Do not suppress IL2125 to fix binding selection; warnings for
-your own libraries require a separate trimming review.
+The published 4.7.2.89 binding package rejected all mixed package graphs. Updating only the CLI
+cannot repair that package's build targets; upgrade the engine and managed packages together
+to a release containing the compatibility fix.
+
+Builds still validate binding contents before compilation and publish trimming. IL2125 warnings
+for your own libraries require a separate trimming review.
 
 ## The Godot editor holds a file
 

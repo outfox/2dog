@@ -1,8 +1,6 @@
 <Project Sdk="Godot.NET.Sdk/GODOT_SDK_VERSION">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <DisableImplicitGodotSharpReferences>true</DisableImplicitGodotSharpReferences>
-        <DisableImplicitGodotGeneratorReferences>true</DisableImplicitGodotGeneratorReferences>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <IsTrimmable>true</IsTrimmable>
         <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>

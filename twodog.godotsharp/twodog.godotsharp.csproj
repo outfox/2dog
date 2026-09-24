@@ -14,6 +14,8 @@
     <ItemGroup>
         <None Include="$(TwoDogGodotSharpApiDir)Release/GodotSharp.dll" Pack="true" PackagePath="lib/net10.0/" />
         <None Include="$(TwoDogGodotSharpApiDir)Release/GodotSharp.xml" Pack="true" PackagePath="lib/net10.0/" Condition="Exists('$(TwoDogGodotSharpApiDir)Release/GodotSharp.xml')" />
+        <!-- Private fallback for SDK/legacy editor references. It is selected only when editor APIs are requested. -->
+        <None Include="$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.dll" Pack="true" PackagePath="buildTransitive/api/" />
         <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" />
         <None Include="buildTransitive/*" Pack="true" PackagePath="buildTransitive/" />
         <None Include="README.md" Pack="true" PackagePath="/" />
