@@ -17,6 +17,11 @@ Add `@` and the version number after `2dog`:
 dnx 2dog@:2dog-version: version
 ```
 
+or run:
+
+```bash
+dnx 2dog@:2dog-version: doctor
+```
 Replace the number with the version you want to keep using. This runs `doctor`
 from that release of the tool. If it is not already downloaded, `dnx` downloads it.
 
@@ -25,7 +30,6 @@ update using the selected tool version:
 
 ```bash
 dnx 2dog@:2dog-version: update --dry-run
-dnx 2dog@:2dog-version: doctor
 ```
 
 Remove `--dry-run` to apply the update. The update command changes the project's
