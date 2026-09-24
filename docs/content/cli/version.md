@@ -7,7 +7,7 @@ description: "Reference for 2dog version: print the tool version and every packa
 
 Prints the tool version and every package a scaffold references, each checked
 against nuget.org (best effort, 2.5 s). `--version` is the same, except
-[under dnx](/dnx-2dog#under-dnx).
+[under dnx](/cli/versions#print-the-version).
 
 ```bash
 2dog version

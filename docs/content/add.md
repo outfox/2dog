@@ -52,8 +52,8 @@ dnx 2dog add path/to/MyGame --dry-run  # show the plan; change nothing
 
 Naming a host option, passing `--yes`, or passing `--non-interactive` disables
 the prompts. [`2dog add`](/cli/add) lists every host flag and option;
-[dnx 2dog](/dnx-2dog) covers output modes, exit codes and the
-`--version`-under-`dnx` trap.
+[dnx 2dog](/dnx-2dog) covers output modes and exit codes. The
+[Version guide](/cli/versions) explains how to choose which tool release to run.
 
 ::: tip From stock Godot to the browser
 

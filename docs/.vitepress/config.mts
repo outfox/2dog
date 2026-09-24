@@ -148,10 +148,16 @@ export default defineConfig({
                 ]
               },
               {
+                text: 'Version',
+                link: '/cli/versions',
+                items: [
+                  { text: gd('tag') + 'version', link: '/cli/version' }
+                ]
+              },
+              {
                 text: 'Inspect',
                 items: [
                   { text: gd('box') + 'pack', link: '/cli/pack' },
-                  { text: gd('tag') + 'version', link: '/cli/version' },
                   { text: gd('help') + 'help', link: '/cli/help' }
                 ]
               }
