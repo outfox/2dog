@@ -163,7 +163,6 @@ export default defineConfig({
               }
             ]
           },
-          { text: gd('wrench') + 'Doctor and Update', link: '/doctor' },
           {
             text: gd('book_open') + 'API Reference',
             link: '/api-reference',
@@ -199,7 +198,7 @@ export default defineConfig({
               }
             ]
           },
-          { text: gd('file_arrow_down') + 'Resource Import', link: '/import-tool' },
+          { text: gd('file_arrow_up') + 'Resource Import', link: '/import-tool' },
           { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' }
         ]
       },

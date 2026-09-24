@@ -72,7 +72,7 @@ const menus = computed<{ label: string; items: MenuItem[] }[]>(() => [
       { text: 'Build Variants', link: '/build-configurations' },
       { text: 'Web / Browser (WASM)', link: '/web' },
       { text: 'API Reference', link: '/api-reference' },
-      { sep: true },
+            { sep: true },
       {
         text: isDark.value ? 'Use Light Theme' : 'Use Dark Theme',
         action: 'theme',
