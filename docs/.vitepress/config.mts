@@ -105,7 +105,7 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Build and Ship',
+        text: 'Quickstart',
         items: [
           { text: gd('bone') + 'Existing Projects', link: '/add' },
           { text: gd('sprout') + 'New Projects', link: '/templates' }

@@ -6,9 +6,10 @@ description: "Reference for 2dog add: add .NET hosts to an existing Godot projec
 # `2dog add`
 
 Adds hosts to an existing Godot project, in place. Run it again to add more
-hosts, including a second host of the same kind. Without host flags it asks
-interactively; any host flag or `-y` runs unattended. `2dog convert` is an
-alias, for projects that have no hosts yet.
+hosts, including a second host of the same kind. 
+
+Without host flags it asks
+interactively; any host flag or `-y` runs unattended. 
 
 ```bash
 2dog add [path] [hosts] [options]
