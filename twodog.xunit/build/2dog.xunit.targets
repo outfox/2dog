@@ -1,4 +1,10 @@
 <Project>
+    <!-- Test projects are executables; like godot.exe they need the comctl32 v6 manifest, or Godot's Windows display
+         server warns "Unable to initialize Windows common controls" and fails the rendering fixture's first test. -->
+    <PropertyGroup Condition="'$(ApplicationManifest)' == ''">
+        <ApplicationManifest>$(MSBuildThisFileDirectory)2dog.xunit.manifest</ApplicationManifest>
+    </PropertyGroup>
+
     <!-- xUnit only discovers [CollectionDefinition] in the test assembly itself (a referenced DLL is silently
          ignored, so DisableParallelization would not apply). build/ not buildTransitive/: direct references only. -->
     <ItemGroup>
@@ -6,5 +12,17 @@
         <Compile Include="$(MSBuildThisFileDirectory)GodotHeadlessCollection.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)RenderingCollection.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)HeadlessCollection.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)GodotErrorChecks.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)GodotTestFramework.cs"/>
+    </ItemGroup>
+
+    <!-- Collections using 2dog fixtures run on their own (STA on Windows) thread; set TwoDogGodotTestThread to false to opt out. -->
+    <ItemGroup Condition="'$(TwoDogGodotTestThread)' != 'false'">
+        <Compile Include="$(MSBuildThisFileDirectory)GodotTestFramework.Assembly.cs"/>
+    </ItemGroup>
+
+    <!-- Godot errors and warnings fail tests on 2dog fixtures by default; set TwoDogFailOnGodotErrors to false to opt out. -->
+    <ItemGroup Condition="'$(TwoDogFailOnGodotErrors)' != 'false'">
+        <Compile Include="$(MSBuildThisFileDirectory)FailOnGodotErrors.Assembly.cs"/>
     </ItemGroup>
 </Project>

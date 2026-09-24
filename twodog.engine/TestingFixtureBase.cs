@@ -18,7 +18,7 @@ public abstract class FixtureBase : IDisposable
         global::twodog.fixture.AssemblyPreloader.PreloadGameAssemblies(projectPath);
 
         Console.WriteLine("Godot project: " + projectPath);
-        Engine = new Engine("twodog.tests", projectPath, WithLogFile(cmdLineArgs));
+        Engine = new Engine("twodog.tests", projectPath, WithLogFile(cmdLineArgs)) { CaptureErrors = true };
         GodotInstance = Engine.Start();
         Console.WriteLine("Godot initialized successfully.");
     }
@@ -50,6 +50,12 @@ public abstract class FixtureBase : IDisposable
 
     /// <summary>The active scene tree.</summary>
     public SceneTree Tree => Engine.Tree;
+
+    /// <summary>
+    /// Every error and warning Godot reported since startup and not yet drained. 2dog.xunit fails a test that leaves
+    /// any behind; tests that expect one consume it with <see cref="GodotErrorLog.Expect"/>.
+    /// </summary>
+    public GodotErrorLog Errors => Engine.Errors;
 
     /// <summary>Disposes the owning engine.</summary>
     public void Dispose()

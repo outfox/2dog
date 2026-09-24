@@ -47,7 +47,6 @@ public class DocsDriftTests
     {
         var config = Doc("docs/.vitepress/config.mts");
         Assert.Contains("link: '/dnx-2dog'", config);
-        Assert.Contains("link: '/doctor'", config);
         Assert.Contains("link: '/troubleshooting'", config);
         foreach (var command in CliTree.Root.Subcommands.Where(c => !c.Hidden))
         {

@@ -38,6 +38,19 @@ public class OpenGl3Fixture()
 | `Engine` | `twodog.Engine` | Engine owned by the fixture |
 | `GodotInstance` | `Godot.GodotInstance` | Borrowed compatibility handle |
 | `Tree` | `Godot.SceneTree` | Active scene tree |
+| `Errors` | `twodog.GodotErrorLog` | Errors and warnings Godot reported and no test consumed yet |
+
+## `Errors`
+
+The fixture starts its engine with `CaptureErrors` enabled, so every error and warning Godot reports lands in
+`Errors`: `push_error`, failed engine checks, and exceptions Godot catches in C# callbacks. With `2dog.xunit`,
+a test fails when it leaves any behind. A test that expects one consumes it, asserting its text:
+
+```csharp
+godot.Errors.Expect("Health must not be negative");
+```
+
+`Drain()` returns and clears the log without asserting anything.
 
 ## `Dispose`
 

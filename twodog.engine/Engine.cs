@@ -44,6 +44,7 @@ public class Engine : IDisposable, IAsyncDisposable
     private bool _exitNotified;
     private int _ownerThreadId;
     private SynchronizationContext? _hostSynchronizationContext;
+    private IDisposable? _errorCapture;
 
     /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
     /// <param name="project">Label passed as Godot's first argument.</param>
@@ -143,6 +144,15 @@ public class Engine : IDisposable, IAsyncDisposable
     /// generous enough for a debug-native first boot on a loaded CI runner, exceeded only when a boot is stuck.
     /// </summary>
     public TimeSpan BootLockTimeout { get; init; } = TimeSpan.FromSeconds(120);
+
+    /// <summary>
+    /// Collects every error and warning Godot reports into <see cref="Errors"/>, from before the instance is created
+    /// until it is destroyed. Test fixtures enable it; nothing drains the log otherwise. Not supported on browser.
+    /// </summary>
+    public bool CaptureErrors { get; init; }
+
+    /// <summary>Errors and warnings Godot reported while this engine ran; empty unless <see cref="CaptureErrors"/> is set.</summary>
+    public GodotErrorLog Errors { get; } = new();
 
     /// <summary>
     /// Name of the process-wide mutex serializing engine boots; public so hosts and tests can contend on it.
@@ -309,6 +319,13 @@ public class Engine : IDisposable, IAsyncDisposable
             // Register unconditionally: gd_mono's hostfxr fallback boots a second runtime under
             // self-contained hosts and needs a machine-wide .NET install.
             HostedGodotPlugins.Register(LibGodotLoader.EnsureLoaded());
+        }
+
+        if (CaptureErrors)
+        {
+            if (OperatingSystem.IsBrowser())
+                throw new PlatformNotSupportedException($"{nameof(Engine)}: {nameof(CaptureErrors)} is not supported on browser.");
+            _errorCapture = Errors.Register();
         }
 
         Console.WriteLine($"{nameof(Engine)}: 2dog {Version}, starting Godot instance...");
@@ -621,10 +638,14 @@ public class Engine : IDisposable, IAsyncDisposable
                     if (_godotInstancePtr == instancePtr) _godotInstancePtr = IntPtr.Zero;
                     _destroyingInstance = false;
                 }
+                StopErrorCapture();
             }
         }
+        StopErrorCapture();
         CompleteExit();
     }
+
+    private void StopErrorCapture() => Interlocked.Exchange(ref _errorCapture, null)?.Dispose();
 
     private void CompleteExit()
     {

@@ -55,6 +55,9 @@ internal static unsafe partial class LibGodot
     [LibraryImport(LIBGODOT_LIBRARY_NAME)]
     public static partial void libgodot_destroy_godot_instance(nint p_godot_instance);
 
+    [LibraryImport(LIBGODOT_LIBRARY_NAME)]
+    public static partial void libgodot_set_error_callback(nint p_callback, nint p_userdata);
+
     [UnmanagedCallersOnly]
     private static void InitializeCallback(nint userdata, GDExtensionInitializationLevel level)
     {

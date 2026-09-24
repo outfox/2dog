@@ -123,6 +123,43 @@ discovery. Pass primitive values or set `DisableDiscoveryEnumeration = true`.
 See [xUnit Test Discovery](/known-issues/xunit-discovery).
 :::
 
+## Godot Errors
+
+Any error or warning Godot reports while a test runs fails that test. That
+covers `push_error`, failed engine checks, and exceptions Godot catches in C#
+callbacks, which it would otherwise only print. A test that expects an error
+consumes it through the fixture, which also checks its text:
+
+```csharp
+[Fact]
+public void RejectsNegativeHealth()
+{
+    player.Health = -1;
+    godot.Errors.Expect("Health must not be negative");
+}
+```
+
+Errors reported between tests, such as during engine startup or from deferred
+calls an earlier test left queued, fail the next test on a fixture and say so.
+Tests without a 2dog fixture are not checked.
+
+To opt out, mark a test or class `[AllowGodotErrors]`, or set
+`<TwoDogFailOnGodotErrors>false</TwoDogFailOnGodotErrors>` in the test project.
+
+## Godot's Thread
+
+Each collection that uses a 2dog fixture runs on a thread of its own. The
+engine starts there, and the tests, their `await` continuations, and the
+fixture's disposal all stay on it, as Godot requires. Between tests the thread
+also runs continuations Godot queued for its frame loop. On Windows the thread
+is STA, which Godot's windowing needs for drag-and-drop. `2dog.xunit` also
+gives test projects the comctl32 v6 manifest that `godot.exe` has, unless they
+set their own `ApplicationManifest`.
+
+Tests without a 2dog fixture keep xUnit's usual threads. To use a different
+xUnit test framework, set
+`<TwoDogGodotTestThread>false</TwoDogGodotTestThread>`.
+
 ## Running Tests
 
 ```bash
