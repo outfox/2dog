@@ -23,7 +23,7 @@ public class GodotTestThreadTests(HeadlessFixture godot)
 
         await Task.Yield();
         Assert.Equal(thread, Environment.CurrentManagedThreadId);
-        await Task.Delay(10);
+        await Task.Delay(10, TestContext.Current.CancellationToken);
         Assert.Equal(thread, Environment.CurrentManagedThreadId);
 
         godot.Engine.Iteration();

@@ -37,9 +37,9 @@ public class GodotErrorCaptureTests(HeadlessFixture godot)
     }
 
     [Fact]
-    public void ErrorFromAnotherThread_IsCaptured()
+    public async Task ErrorFromAnotherThread_IsCaptured()
     {
-        Task.Run(() => GD.PushError("expected worker error")).Wait();
+        await Task.Run(() => GD.PushError("expected worker error"), TestContext.Current.CancellationToken);
 
         godot.Errors.Expect("expected worker error");
     }

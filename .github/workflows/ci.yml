@@ -272,8 +272,12 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      # The showcase's LFS assets (e.g. splash.png) must be real files: Godot reports an error for every
+      # engine boot that finds an LFS pointer instead, and 2dog.xunit fails tests on Godot errors.
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          lfs: true
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
