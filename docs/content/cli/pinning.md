@@ -14,23 +14,18 @@ You can also choose the version of the **2dog tool** you run and the version of 
 Add `@` and the version number after `2dog`:
 
 ```bash
-dnx 2dog@:2dog-version: doctor
+dnx 2dog@:2dog-version: version
 ```
 
 Replace the number with the version you want to keep using. This runs `doctor`
 from that release of the tool. If it is not already downloaded, `dnx` downloads it.
-
-You can also write the same command with `--version`:
-
-```bash
-dnx --version :2dog-version: 2dog doctor
-```
 
 Use the same syntax with other commands. For example, this previews a project
 update using the selected tool version:
 
 ```bash
 dnx 2dog@:2dog-version: update --dry-run
+dnx 2dog@:2dog-version: doctor --dry-run
 ```
 
 Remove `--dry-run` to apply the update. The update command changes the project's
