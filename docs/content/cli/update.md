@@ -7,7 +7,7 @@ description: "Reference for 2dog update: bring a project's 2dog packages to the 
 
 Sets the project's 2dog package versions to the running tool's, and restores.
 Never downgrades; refuses a dirty git tree. What it rewrites, step by step:
-[Updating a project](/doctor#updating-a-project).
+[Updating a project](/cli/doctor#updating-a-project).
 
 ```bash
 2dog update [path] [options]

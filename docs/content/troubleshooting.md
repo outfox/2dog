@@ -5,7 +5,7 @@ description: "What the 2dog tool's exit codes, notes and errors mean, how it beh
 
 # Troubleshooting
 
-Most problems have a first step in common: run [`2dog doctor`](/doctor) in
+Most problems have a first step in common: run [`2dog doctor`](/cli/doctor) in
 the project. It checks the machine and the project, fixes what it safely can,
 and explains build failures it recognizes (`2dog doctor --build`, or
 `2dog doctor --log <file>` for a log you already have).

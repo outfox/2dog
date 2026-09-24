@@ -149,8 +149,8 @@ export default defineConfig({
               },
               {
                 text: 'Version',
-                link: '/cli/versions',
                 items: [
+                  { text: gd('tag') + 'pinning', link: '/cli/pinning' },
                   { text: gd('tag') + 'version', link: '/cli/version' }
                 ]
               },

@@ -62,9 +62,9 @@ of the root `Directory.Build.props` and reference it from the hosts:
 <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]"/>
 ```
 
-[`2dog update`](/doctor#updating-a-project) rewrites that block (and the game
+[`2dog update`](/cli/doctor#updating-a-project) rewrites that block (and the game
 project's `Godot.NET.Sdk` version, which cannot come from a property);
-[`2dog doctor`](/doctor) reports literals left in host csprojs and versions on
+[`2dog doctor`](/cli/doctor) reports literals left in host csprojs and versions on
 different Godot lines.
 
 `2dog.engine` selects the platform meta package for the current OS:

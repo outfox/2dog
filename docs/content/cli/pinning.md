@@ -1,12 +1,13 @@
 ---
-title: Version
+title: Pinning
 description: "Choose which version of the 2dog tool to run, keep project package versions fixed, and understand what global.json controls."
 ---
 
-# Version
+# Pinning a specific Version
 
-You can choose the version of the **2dog tool** you run and the version of the
-**2dog packages** your project uses. These are separate settings.
+2dog already pins your project to a specific version in `Directory.build.props`, which you can manually edit.
+
+You can also choose the version of the **2dog tool** you run and the version of the **2dog packages** the tool will use. These are separate settings.
 
 ## Run a specific tool version
 

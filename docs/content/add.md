@@ -52,8 +52,7 @@ dnx 2dog add path/to/MyGame --dry-run  # show the plan; change nothing
 
 Naming a host option, passing `--yes`, or passing `--non-interactive` disables
 the prompts. [`2dog add`](/cli/add) lists every host flag and option;
-[dnx 2dog](/dnx-2dog) covers output modes and exit codes. The
-[Version guide](/cli/versions) explains how to choose which tool release to run.
+[dnx 2dog](/dnx-2dog) covers output modes and exit codes. 
 
 ::: tip From stock Godot to the browser
 
@@ -109,7 +108,7 @@ a space-free name when you ask it to.
 
 The tool runs `dotnet restore` unless you pass `--no-restore`. A failed
 restore is reported with its last lines and the command to install
-`wasm-tools` when that is the cause. Afterwards, [`2dog doctor`](/doctor)
+`wasm-tools` when that is the cause. Afterwards, [`2dog doctor`](/cli/doctor)
 checks the result and fixes what it safely can.
 
 ## Project names with spaces

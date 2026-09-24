@@ -63,7 +63,7 @@ Valid under every verb, also before it (`2dog --json add`).
 | --- | --- |
 | `-y, --yes` | Do not prompt; take the flags and defaults (also `--non-interactive`, `--no-input`) |
 | `-h, --help` | Show help; after a verb, the help for that verb |
-| `--version` | Same as [`2dog version`](/cli/version); see [choosing a tool version](/cli/versions#run-a-specific-tool-version) |
+| `--version` | Same as [`2dog version`](/cli/version); see [choosing a tool version](/cli/pinning#run-a-specific-tool-version) |
 
 Values attach or follow: `--name Foo`, `--name=Foo`. `--` ends option parsing.
 Mistyped options and verbs get a suggestion.
@@ -99,5 +99,5 @@ colour in a pipe.
 
 ## Versions
 
-The [Version guide](/cli/versions) explains how to run a specific tool release,
+The [Version guide](/cli/pinning) explains how to run a specific tool release,
 print its version, and keep your project's package versions fixed.
