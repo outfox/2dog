@@ -3,18 +3,11 @@ title: Getting Started
 description: "Embed a new or existing Godot C# project in a .NET application: install the .NET 10 SDK, scaffold hosts with 2dog new or 2dog add, and run your game with dotnet run."
 ---
 
-# Getting Started / Quickstart
+# Let's take Godot for a walk!
 
+![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
-::: info Trail marker: *Same dog, new tricks!*
-Once you embed your Godot C# project into .NET applications via 2dog, the project can be run through desktop, test, browser, and other "host" applications.
-
-The stock Godot editor and official export templates will still work, as well.
-
-2dog does not create a second game or port scripts to another language, it just runs a (slightly modified) version of `libgodot` in a .NET process. GDScript, C# Scripts (GodotSharp), autoloads, input actions, and the rest of Godot stay generally the same.
-:::
-
-## Prerequisites
+## Prerequisites :gd-bone@gold: 
 
 To get set up, you'll need:
 
@@ -23,10 +16,11 @@ To get set up, you'll need:
 - the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as
   usual, for scene and resource authoring (builds and CI do not require it).
 
+## 1. Getting Started / Quickstart
 
-## 1. Let's take Godot for a walk! :gd-bone@gold: 
-
-![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
+::: info Trail marker: *Good robot, new tricks!*
+ 2dog lets you run your project through desktop, test, browser, and other "host" applications. The stock Godot editor and export templates will still work, and usually you don't need any code changes.
+:::
 
 ### 2dog works by adding small [host](/hosts/) projects to a Godot project:
 
@@ -35,13 +29,15 @@ To get set up, you'll need:
 ```bash [Existing Project]
 # Existing game content stays where it is.
 cd path/to/MyGame
+
 dnx 2dog add
 ```
 
 ```bash [Fresh Project]
 # Create the Godot project and its hosts together.
-dnx 2dog new MyGame
-cd MyGame
+dnx 2dog new MyNewGame
+
+cd MyNewGame
 ```
 
 :::
