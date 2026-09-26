@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using Godot;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -26,6 +27,7 @@ internal sealed class MainWindow : Window
     private GodotInstance? _instance;
     private nint _godotHwnd;
     private bool _paused;
+    private bool _closeRequested;
 
     public MainWindow(string[] extraArgs)
     {
@@ -63,7 +65,7 @@ internal sealed class MainWindow : Window
         _gamePanel.Loaded += OnPanelLoaded;
         // Tear down while the owner HWND still exists: Godot self-closes its window when the owner
         // disappears, and the engine must be gone before the ProcessExit libgodot unload runs.
-        AppWindow.Closing += (_, _) => ShutdownEngine();
+        AppWindow.Closing += OnClosing;
         Closed += (_, _) => ShutdownEngine();
     }
 
@@ -102,15 +104,16 @@ internal sealed class MainWindow : Window
     // WinUI has no idle event; a self-reposting low-priority dispatcher callback plays that role:
     // one engine frame per pass, so normal-priority input and layout always interleave. Iteration()
     // also runs DisplayServer::process_events(), which dispatches this thread's queued messages
-    // without XAML's preprocessing; harmless, exactly like a classic WinForms idle loop.
+    // without XAML's preprocessing, like a classic WinForms idle loop; only closing needs care (OnClosing).
     private void PumpFrame()
     {
         DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
         {
             if (_instance is null || _engine is not { } engine)
                 return;
-            // Iteration() returns true when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...).
-            if (engine.Iteration())
+            // Iteration() returns true when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...);
+            // a window close deferred by OnClosing ends here too.
+            if (engine.Iteration() || _closeRequested)
             {
                 ShutdownEngine();
                 Close();
@@ -152,6 +155,17 @@ internal sealed class MainWindow : Window
         else
             _instance!.Resume();
         _pauseButton.Content = _paused ? "Resume" : "Pause";
+    }
+
+    // Iteration() dispatches this thread's messages, so a close usually arrives inside an engine frame. A window
+    // destroyed there never wakes XAML's own message loop, which would keep running without windows. Closing
+    // resumes from the pump instead, between frames.
+    private void OnClosing(AppWindow sender, AppWindowClosingEventArgs args)
+    {
+        if (_engine is null)
+            return;
+        args.Cancel = true;
+        _closeRequested = true;
     }
 
     private void ShutdownEngine()
