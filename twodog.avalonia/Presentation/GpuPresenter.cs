@@ -74,8 +74,7 @@ internal sealed class GpuPresenter : IPresenter
                     KnownPlatformGraphicsExternalImageHandleTypes.VulkanOpaquePosixFileDescriptor,
                     needsMemorySize: true);
             if (OperatingSystem.IsMacOS())
-                return ([RenderingDevice.ExternalTextureShareHandleType.Iosurface],
-                    (interop, _) => new IOSurfaceSharedTextureFactory(interop));
+                return ([RenderingDevice.ExternalTextureShareHandleType.Iosurface], CreateIOSurfaceFactory);
             return null;
 
             static (RenderingDevice.ExternalTextureShareHandleType[],
@@ -95,6 +94,10 @@ internal sealed class GpuPresenter : IPresenter
                      KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle);
         return new D3D11SharedTextureFactory(interop.DeviceLuid, nt);
     }
+
+    [SupportedOSPlatform("macos")]
+    private static ISharedTextureFactory CreateIOSurfaceFactory(ICompositionGpuInterop interop, uint engineTypes) =>
+        new IOSurfaceSharedTextureFactory(interop);
 
     /// <summary>Whether the running engine's natives can share textures on this platform.
     /// The engine must be started.</summary>
