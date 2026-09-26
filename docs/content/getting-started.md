@@ -16,7 +16,7 @@ To get set up, you'll need:
 - the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as
   usual, for scene and resource authoring (builds and CI do not require it).
 
-## 1. Getting Started / Quickstart
+## 1. Getting Started
 
 ::: info Trail marker: *Good robot, new tricks!*
  2dog lets you run your project through desktop, test, browser, and other "host" applications. The stock Godot editor and export templates will still work, and usually you don't need any code changes.
