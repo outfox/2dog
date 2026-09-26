@@ -210,10 +210,10 @@ public class EngineRestartTests
         {
             first.Start();
             stall = FinalizerStall.Begin();
-            DropWrappers();
-            // Their weak references die here, so shutdown can no longer dispose them; their finalizers wait.
+            var dropped = DropWrappers();
+            // Their finalizers queue behind the stall, as on a runtime that cannot run finalizers during shutdown.
             GC.Collect();
-            stall.Arm();
+            stall.ReleaseOnceDisposed(dropped);
         }
         finally
         {
@@ -353,23 +353,28 @@ public class EngineRestartTests
         Assert.False(recovered.Iteration());
     }
 
+    /// <summary>
+    /// Drops wrappers whose native objects only they keep alive; the returned references observe them without doing so.
+    /// </summary>
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static void DropWrappers()
+    private static WeakReference<Godot.GodotObject>[] DropWrappers()
     {
-        for (var i = 0; i < 8; i++)
-            _ = new Godot.RefCounted();
+        var dropped = new WeakReference<Godot.GodotObject>[8];
+        for (var i = 0; i < dropped.Length; i++)
+            dropped[i] = new WeakReference<Godot.GodotObject>(new Godot.RefCounted(), trackResurrection: true);
         _ = new Godot.Collections.Array { new Godot.RefCounted() };
+        return dropped;
     }
 
     /// <summary>
-    /// Holds the finalizer thread until released, or until a full collection runs after <see cref="Arm"/>: engine
-    /// shutdown collects before it waits for pending finalizers, which must not deadlock on this stall.
+    /// Holds the finalizer thread until released, or until the tracked wrappers were disposed: engine shutdown waits
+    /// for pending finalizers after disposing, which must not deadlock on this stall.
     /// </summary>
     private sealed class FinalizerStall
     {
         private readonly ManualResetEventSlim _entered = new();
         private readonly ManualResetEventSlim _released = new();
-        private int _armedAt = int.MaxValue;
+        private WeakReference<Godot.GodotObject>[]? _awaitedDisposal;
 
         public static FinalizerStall Begin()
         {
@@ -380,7 +385,11 @@ public class EngineRestartTests
             return stall;
         }
 
-        public void Arm() => Volatile.Write(ref _armedAt, GC.CollectionCount(2));
+        public void ReleaseOnceDisposed(WeakReference<Godot.GodotObject>[] wrappers) =>
+            Volatile.Write(ref _awaitedDisposal, wrappers);
+
+        private bool AwaitedDisposed() => Volatile.Read(ref _awaitedDisposal) is { } wrappers &&
+            wrappers.All(w => !w.TryGetTarget(out var wrapper) || wrapper.NativeInstance == IntPtr.Zero);
 
         public void Release() => _released.Set();
 
@@ -393,7 +402,7 @@ public class EngineRestartTests
             {
                 stall._entered.Set();
                 var deadline = System.Environment.TickCount64 + 30_000;
-                while (!stall._released.Wait(10) && GC.CollectionCount(2) <= Volatile.Read(ref stall._armedAt) &&
+                while (!stall._released.Wait(10) && !stall.AwaitedDisposed() &&
                        System.Environment.TickCount64 < deadline)
                 {
                 }
