@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using twodog;
 using twodog.fixture;
 
@@ -198,6 +199,100 @@ public class EngineRestartTests
     }
 
     [Fact]
+    public void WrappersCollectedBeforeShutdownAreReleasedByTheirOwnEngine()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+
+        var first = new Engine("pending-finalizers", projectDir, "--headless") { CaptureErrors = true };
+        FinalizerStall stall;
+        try
+        {
+            first.Start();
+            stall = FinalizerStall.Begin();
+            DropWrappers();
+            // Their weak references die here, so shutdown can no longer dispose them; their finalizers wait.
+            GC.Collect();
+            stall.Arm();
+        }
+        finally
+        {
+            first.Dispose();
+        }
+
+        using var second = new Engine("after-pending-finalizers", projectDir, "--headless") { CaptureErrors = true };
+        second.Start();
+        // Whatever the first shutdown left pending now runs while the second engine owns the memory.
+        stall.Release();
+        GC.WaitForPendingFinalizers();
+        Assert.False(second.Iteration());
+
+        Assert.Empty(first.Errors.Drain());
+        Assert.Empty(second.Errors.Drain());
+    }
+
+    [Fact]
+    public void ClassSettingsAreRegisteredForEveryLifetime()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+
+        // Classes register once per process; settings defined while registering them must return with every engine.
+        string[] classSettings =
+        [
+            "editor/naming/node_name_num_separator", "editor/naming/node_name_casing",
+            "gui/timers/button_shortcut_feedback_highlight_time", "gui/common/default_scroll_deadzone",
+            "gui/timers/text_edit_idle_detect_sec", "gui/common/text_edit_undo_stack_max_size",
+            "editor/movie_writer/mix_rate",
+        ];
+        var lifetimes = new List<string[]>();
+        for (var lifetime = 0; lifetime < 2; lifetime++)
+        {
+            using var engine = new Engine($"settings-{lifetime}", projectDir, "--headless");
+            engine.Start();
+            foreach (var setting in classSettings)
+                Assert.True(Godot.ProjectSettings.HasSetting(setting), $"Lifetime {lifetime} lacks {setting}.");
+            lifetimes.Add([.. Godot.ProjectSettings.Singleton.GetPropertyList().Select(p => (string)p["name"]).Order()]);
+        }
+
+        Assert.Equal(lifetimes[0], lifetimes[1]);
+    }
+
+    [Fact]
+    public void IndexedPropertiesWorkInEveryLifetime()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+
+        // These classes list indexed properties ("point_0/position", "item_0/text") through helpers they register once
+        // per process.
+        string[] classes =
+        [
+            "Curve", "Curve2D", "Curve3D", "LabelSettings", "AudioStreamRandomizer", "ItemList", "PopupMenu",
+            "OptionButton", "MenuButton", "TabBar", "TabContainer", "FileDialog", "TileMap",
+        ];
+        for (var lifetime = 0; lifetime < 2; lifetime++)
+        {
+            using var engine = new Engine($"indexed-{lifetime}", projectDir, "--headless") { CaptureErrors = true };
+            engine.Start();
+            foreach (var name in classes)
+            {
+                var instance = Godot.ClassDB.Instantiate(name).AsGodotObject();
+                Assert.NotEmpty(instance.GetPropertyList());
+                if (instance is Godot.Node node) node.Free();
+                else instance.Dispose();
+            }
+
+            using var curve = new Godot.Curve();
+            curve.AddPoint(new Godot.Vector2(0, 0));
+            curve.AddPoint(new Godot.Vector2(1, 1));
+            using var copy = (Godot.Curve)curve.Duplicate();
+            Assert.Equal(new Godot.Vector2(1, 1), copy.GetPointPosition(1));
+            Assert.Empty(engine.Errors.Drain());
+        }
+    }
+
+    [Fact]
     public void NativeInstanceRejectsSecondStartWithoutBreakingLifetime()
     {
         var projectDir = Engine.ResolveProjectDir();
@@ -256,5 +351,53 @@ public class EngineRestartTests
         using var recovered = new Engine("after-failed-main-loop", projectDir, "--headless");
         recovered.Start();
         Assert.False(recovered.Iteration());
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void DropWrappers()
+    {
+        for (var i = 0; i < 8; i++)
+            _ = new Godot.RefCounted();
+        _ = new Godot.Collections.Array { new Godot.RefCounted() };
+    }
+
+    /// <summary>
+    /// Holds the finalizer thread until released, or until a full collection runs after <see cref="Arm"/>: engine
+    /// shutdown collects before it waits for pending finalizers, which must not deadlock on this stall.
+    /// </summary>
+    private sealed class FinalizerStall
+    {
+        private readonly ManualResetEventSlim _entered = new();
+        private readonly ManualResetEventSlim _released = new();
+        private int _armedAt = int.MaxValue;
+
+        public static FinalizerStall Begin()
+        {
+            var stall = new FinalizerStall();
+            Abandon(stall);
+            GC.Collect();
+            Assert.True(stall._entered.Wait(TimeSpan.FromSeconds(10)), "The finalizer thread never ran the stall.");
+            return stall;
+        }
+
+        public void Arm() => Volatile.Write(ref _armedAt, GC.CollectionCount(2));
+
+        public void Release() => _released.Set();
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void Abandon(FinalizerStall stall) => _ = new Blocker(stall);
+
+        private sealed class Blocker(FinalizerStall stall)
+        {
+            ~Blocker()
+            {
+                stall._entered.Set();
+                var deadline = System.Environment.TickCount64 + 30_000;
+                while (!stall._released.Wait(10) && GC.CollectionCount(2) <= Volatile.Read(ref stall._armedAt) &&
+                       System.Environment.TickCount64 < deadline)
+                {
+                }
+            }
+        }
     }
 }

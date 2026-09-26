@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 using twodog.cli;
@@ -150,13 +151,13 @@ public class OutputModeTests
             var copy = alc.LoadFromAssemblyPath(typeof(OutputModeTests).Assembly.Location);
             // Running any method of the copy runs its module initializers first.
             copy.GetType(typeof(OutputModeTests).FullName!, throwOnError: true)!
-                .GetMethod(nameof(Touch))!.Invoke(null, null);
+                .GetMethod(nameof(Touch), BindingFlags.NonPublic | BindingFlags.Static)!.Invoke(null, null);
             Assert.True(Out.Mode.Verbose);
             return 0;
         });
     }
 
-    public static void Touch() { }
+    private static void Touch() { }
 
     [Fact]
     public void Quiet_KeepsResultsAndProblems_DropsNarration()

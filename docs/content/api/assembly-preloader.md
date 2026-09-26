@@ -31,12 +31,18 @@ Finds compiled game assemblies under the project's
 context. This prevents the same game type from being loaded with a second type
 identity in Godot's plugin context.
 
+When the host references the game project, the host's own copy is loaded, so it
+always matches the host's build configuration; other configurations' outputs and
+leftovers of renamed projects are ignored. Otherwise the first of the `Debug`,
+`Release` and `Editor` folders that contains assemblies is loaded.
+
 | Parameter | Description |
 | --- | --- |
 | `projectPath` | Directory containing `project.godot` |
 
 Call it before `Engine.Start()`. In the browser it returns without doing work.
-Discovery failures are written to the console instead of thrown.
+Discovery and load failures are written to the console instead of thrown; one
+assembly that fails to load does not stop the others.
 
 ```csharp
 var projectDir = twodog.Engine.ResolveProjectDir();

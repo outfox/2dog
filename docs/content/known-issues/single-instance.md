@@ -44,6 +44,11 @@ This allows xUnit collections to use fresh engines sequentially in one test
 process. Collections that share an engine must disable parallelization; see
 [Testing](../testing).
 
+Shutdown releases every Godot object the engine created before it returns,
+including wrappers the garbage collector dropped but had not finalized yet, so
+nothing from one engine is released into the next. You do not need to force a
+garbage collection between engines.
+
 A restart does not reload the game assembly: static fields keep their values
 across engines, while every Godot object the previous engine created was
 disposed when it shut down. A static that holds a Godot object - a `Resource`
