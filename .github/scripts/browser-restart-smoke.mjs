@@ -39,7 +39,9 @@ ws.addEventListener("message", (message) => {
     } else if (data.method === "Runtime.consoleAPICalled") {
         const text = data.params.args.map((a) => a.value ?? a.description ?? "").join(" ");
         if (data.params.type === "error" || /(^|\n)ERROR:/.test(text)) browserFailure ??= text;
-        if (/error|exception|2DOG|Engine:|destroyed/i.test(text)) console.log(`[browser:${data.params.type}] ${text.slice(0, 300)}`);
+        if (data.params.type === "error" || /error|exception|2DOG|Engine:|destroyed/i.test(text)) {
+            console.log(`[browser:${data.params.type}] ${data.params.type === "error" ? text : text.slice(0, 300)}`);
+        }
     } else if (data.method === "Runtime.exceptionThrown") {
         const text = data.params.exceptionDetails.exception?.description ?? data.params.exceptionDetails.text;
         browserFailure ??= text;
@@ -94,6 +96,14 @@ const click = (label) => evaluate(`(() => {
     button.click();
     return "clicked";
 })()`);
+// button.click() never moves the pointer. Exercise the window-level input handlers too,
+// especially while Godot is stopped: a leftover handler can call a freed wasm callback.
+const movePointer = async () => {
+    await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 20, y: 20 });
+    await send("Input.dispatchMouseEvent", { type: "mouseMoved", x: 40, y: 40 });
+    await sleep(100);
+    if (browserFailure) throw new Error(`Browser runtime error after pointer movement: ${browserFailure}`);
+};
 const waitFor = async (what, predicate) => {
     let last = null;
     while (Date.now() < deadline) {
@@ -120,20 +130,30 @@ try {
     await sleep(1000);
     // The lifetime's canvas must survive the page's own re-renders (the FPS panel re-renders a few times a second).
     await waitFor("first lifetime settled", (s) => running(s) && s.lifetime === "1");
-    const quit = await click("Quit engine");
-    if (quit !== "clicked") throw new Error(`Quit engine button: ${quit}`);
-    await waitFor("engine quit", (s) => s.status?.startsWith("Godot quit"));
-    await sleep(500);
-    const start = await click("Start engine");
-    if (start !== "clicked") throw new Error(`Start engine button: ${start}`);
-    await waitFor("second lifetime", (s) => running(s) && s.lifetime === "2" && s.status === "Running");
-    await sleep(1000);
-    await waitFor("second lifetime settled", (s) => running(s) && s.lifetime === "2" && s.status === "Running");
-    const restart = await click("Restart engine");
-    if (restart !== "clicked") throw new Error(`Restart engine button: ${restart}`);
-    await waitFor("callback restart", (s) => running(s) && s.lifetime === "3" && s.status === "Running");
-    await sleep(1000);
-    await waitFor("callback restart settled", (s) => running(s) && s.lifetime === "3" && s.status === "Running");
+    for (let lifetime = 2; lifetime <= 4; lifetime++) {
+        await movePointer();
+        const quit = await click("Quit engine");
+        if (quit !== "clicked") throw new Error(`Quit engine button: ${quit}`);
+        await waitFor("engine quit", (s) => s.status?.startsWith("Godot quit"));
+        await movePointer();
+        const start = await click("Start engine");
+        if (start !== "clicked") throw new Error(`Start engine button: ${start}`);
+        await waitFor(`lifetime ${lifetime}`, (s) => running(s) && s.lifetime === String(lifetime) && s.status === "Running");
+        await movePointer();
+        await sleep(1000);
+        await waitFor(`lifetime ${lifetime} settled`, (s) => running(s) && s.lifetime === String(lifetime) && s.status === "Running");
+    }
+    for (let lifetime = 5; lifetime <= 6; lifetime++) {
+        const restart = await click("Restart engine");
+        if (restart !== "clicked") throw new Error(`Restart engine button: ${restart}`);
+        await waitFor(`callback restart ${lifetime}`, (s) => running(s) && s.lifetime === String(lifetime) && s.status === "Running");
+        await movePointer();
+        await sleep(1000);
+        await waitFor(`callback restart ${lifetime} settled`, (s) => running(s) && s.lifetime === String(lifetime) && s.status === "Running");
+    }
+    if (await click("Quit engine") !== "clicked") throw new Error("Final quit failed");
+    await waitFor("final shutdown", (s) => s.status?.startsWith("Godot quit"));
+    await movePointer();
     console.log("Engine restart smoke passed");
     ws.close();
     process.exit(0);

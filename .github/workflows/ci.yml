@@ -795,8 +795,10 @@ jobs:
       # Same probe through the Blazor host: the published ASP.NET Core server
       # serves the client, whose home page runs GodotApiSmoke after GodotView
       # started the engine and marks the DOM.
-      - name: Test Blazor preparation cancellation
-        run: node --test .github/scripts/blazor-lifetime.test.mjs
+      - name: Test browser lifetime cleanup and Blazor preparation cancellation
+        env:
+          GODOT_WEB_JS_LIB_DIR: godot/bin/web/template_release/libgodot/js_library
+        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs
 
       - name: Run Blazor browser smoke
         run: |
@@ -850,7 +852,7 @@ jobs:
           fi
           echo "Blazor browser smoke passed"
 
-          # Second engine lifetime in the same page: Quit, then Start again on a fresh canvas.
+          # Repeated lifetimes in one page, including pointer input while running and stopped.
           set +e
           timeout 130s node .github/scripts/browser-restart-smoke.mjs http://127.0.0.1:8000/ 120000 9222
           RESTART_STATUS=$?
