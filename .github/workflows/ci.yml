@@ -854,7 +854,8 @@ jobs:
 
           # Repeated lifetimes in one page, including pointer input while running and stopped.
           set +e
-          timeout 130s node .github/scripts/browser-restart-smoke.mjs http://127.0.0.1:8000/ 120000 9222
+          timeout 130s node .github/scripts/browser-restart-smoke.mjs http://127.0.0.1:8000/ 120000 9222 \
+            | tee /tmp/2dog-blazor-restart.log
           RESTART_STATUS=$?
           set -e
           if [ "$RESTART_STATUS" -ne 0 ]; then
@@ -871,6 +872,18 @@ jobs:
             exit "$RESTART_STATUS"
           fi
           echo "Blazor engine restart smoke passed"
+
+      - name: Preserve failed Blazor publish and browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: blazor-browser-failure-${{ github.run_attempt }}
+          path: |
+            demos/showcase/showcase.blazor/bin/Release/net10.0/publish/
+            /tmp/2dog-blazor-server.log
+            /tmp/2dog-blazor-browser.log
+            /tmp/2dog-blazor-restart.log
+          retention-days: 7
 
   # The packed `2dog` tool, installed from the artifacts the way a user gets
   # it: scaffolds into a path with a space, builds and tests the result

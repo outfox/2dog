@@ -127,7 +127,14 @@ try {
     await send("Network.enable");
     await send("Log.enable");
     await send("Runtime.enable");
-    const running = (s) => s.smoke === "passed" && s.canvases === 1 && s.canvasLive;
+    const running = (s) => {
+        if (s.smoke !== "passed" || s.canvases !== 1 || !s.canvasLive) return false;
+        if (s.lifetime === "1") return true; // Audio observation starts below, before the first restart.
+        const current = s.audio.at(-1);
+        return current?.id === Number(s.lifetime) && current.state !== 'closed' &&
+            current.loads.length === 2 && current.loads.every(load => load.status === 'loaded') &&
+            s.audio.slice(0, -1).every(audio => audio.state === 'closed');
+    };
     await waitFor("first lifetime", (s) => running(s) && s.lifetime === "1");
     await sleep(1000);
     // The lifetime's canvas must survive the page's own re-renders (the FPS panel re-renders a few times a second).
@@ -184,7 +191,8 @@ try {
         await waitFor(`callback restart ${lifetime} settled`, (s) => running(s) && s.lifetime === String(lifetime) && s.status === "Running");
     }
     if (await click("Quit engine") !== "clicked") throw new Error("Final quit failed");
-    await waitFor("final shutdown", (s) => s.status?.startsWith("Godot quit"));
+    await waitFor("final shutdown", (s) => s.status?.startsWith("Godot quit") &&
+        s.audio.length === 5 && s.audio.every(audio => audio.state === 'closed'));
     await movePointer();
     console.log("Engine restart smoke passed");
     ws.close();
