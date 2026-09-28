@@ -81,6 +81,7 @@ const state = () => evaluate(`JSON.stringify({
     lifetime: document.documentElement.getAttribute("data-twodog-lifetime"),
     status: document.querySelector(".status")?.textContent ?? null,
     canvases: document.querySelectorAll("canvas").length,
+    audio: window.__twodogAudioProbe?.map(({context, ...record}) => ({...record, state: context.state})) ?? [],
     canvasLive: (() => {
         const canvas = document.querySelector("canvas");
         if (!canvas || canvas.clientWidth === 0) return false;
@@ -122,6 +123,7 @@ const waitFor = async (what, predicate) => {
 };
 
 try {
+    console.log(`Browser version: ${JSON.stringify((await send("Browser.getVersion")).result)}`);
     await send("Network.enable");
     await send("Log.enable");
     await send("Runtime.enable");
@@ -130,6 +132,36 @@ try {
     await sleep(1000);
     // The lifetime's canvas must survive the page's own re-renders (the FPS panel re-renders a few times a second).
     await waitFor("first lifetime settled", (s) => running(s) && s.lifetime === "1");
+    // Observe subsequent contexts without changing audio timing or swallowing rejections.
+    // Worklet requests do not consistently appear in the page's Network domain.
+    await evaluate(`(() => {
+        window.__twodogAudioProbe = [];
+        const OriginalAudioContext = window.AudioContext;
+        window.AudioContext = class extends OriginalAudioContext {
+            constructor(...args) {
+                super(...args);
+                const context = this;
+                const record = {context, id: window.__twodogAudioProbe.length + 2, loads: []};
+                window.__twodogAudioProbe.push(record);
+                const addModule = context.audioWorklet.addModule.bind(context.audioWorklet);
+                context.audioWorklet.addModule = (url, ...options) => {
+                    const load = {url: String(url), status: 'pending'};
+                    record.loads.push(load);
+                    return addModule(url, ...options).then(value => {
+                        load.status = 'loaded';
+                        return value;
+                    }, error => {
+                        load.status = 'failed';
+                        load.error = String(error);
+                        console.error('Audio worklet failed: ' + JSON.stringify({
+                            context: record.id, state: context.state, ...load
+                        }));
+                        throw error;
+                    });
+                };
+            }
+        };
+    })()`);
     for (let lifetime = 2; lifetime <= 4; lifetime++) {
         await movePointer();
         const quit = await click("Quit engine");
