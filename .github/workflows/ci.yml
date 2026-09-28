@@ -798,7 +798,7 @@ jobs:
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
         env:
           GODOT_WEB_JS_LIB_DIR: godot/bin/web/template_release/libgodot/js_library
-        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs
+        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs
 
       - name: Run Blazor browser smoke
         run: |

@@ -175,7 +175,7 @@
     <Target Name="TwoDogExportGamePack"
             BeforeTargets="Publish"
             AfterTargets="Build"
-            DependsOnTargets="TwoDogResolveContentCapability"
+            DependsOnTargets="TwoDogResolveContentCapability;TwoDogWebExportSideModuleImports"
             Inputs="@(TwoDogWebExportInputs)"
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
@@ -268,12 +268,14 @@
 
     <!-- GDExtension side modules: Godot loads them at runtime (from the pck) against this link, which is not a
          relocatable emscripten MAIN_MODULE, so it must export every symbol they import (libc, libc++). Scans the
-         project's *.wasm files carrying a dylink.0 section; set TwoDogWebSideModuleExports=false to export by hand
-         (EmccExportedFunction). -->
+         project's *.wasm files carrying a dylink.0 section and explicit .gdextension references (even inside
+         .gdignore directories). Set TwoDogWebSideModuleExports=false to export by hand (EmccExportedFunction). -->
     <UsingTask TaskName="TwoDogReadSideModuleImports" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
         <ParameterGroup>
             <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true"/>
+            <ExtensionFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]"/>
+            <ProjectDir ParameterType="System.String"/>
             <SideModules ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
             <Symbols ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
         </ParameterGroup>
@@ -285,8 +287,27 @@
 
                 var symbols = new System.Collections.Generic.SortedSet<string>(StringComparer.Ordinal);
                 var sideModules = new System.Collections.Generic.List<ITaskItem>();
-                foreach (var file in Files)
+                var candidates = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+                foreach (var file in Files) candidates.Add(Path.GetFullPath(file.ItemSpec));
+                // .gdignore hides resources from Godot's import scan, not native libraries explicitly
+                // referenced by a visible .gdextension. Include its libraries and dependencies as well.
+                foreach (var extension in ExtensionFiles ?? new ITaskItem[0])
                 {
+                    var text = System.Text.RegularExpressions.Regex.Replace(
+                        File.ReadAllText(extension.ItemSpec), @"(?m)^\s*;[^\r\n]*", "");
+                    foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
+                        text, "\"([^\"\\r\\n]+\\.wasm)\""))
+                    {
+                        var path = match.Groups[1].Value;
+                        path = path.StartsWith("res://", StringComparison.Ordinal)
+                            ? Path.Combine(ProjectDir, path.Substring(6))
+                            : Path.Combine(Path.GetDirectoryName(extension.ItemSpec), path);
+                        if (File.Exists(path)) candidates.Add(Path.GetFullPath(path));
+                    }
+                }
+                foreach (var path in candidates)
+                {
+                    var file = new Microsoft.Build.Utilities.TaskItem(path);
                     try
                     {
                         if (Scan(file))
@@ -337,7 +358,13 @@
                                 byte kind = b[p++];
                                 if (kind == 0) Leb(b, ref p);                    // function: type index
                                 else if (kind == 1) { p++; Limits(b, ref p); }   // table: reftype, limits
-                                else if (kind == 2) Limits(b, ref p);            // memory
+                                else if (kind == 2)                             // memory
+                                {
+                                    // The .NET host is single-threaded. A descriptor may also reference
+                                    // threaded variants, whose shared memory/TLS imports cannot bind here.
+                                    if ((b[p] & 2) != 0) return false;
+                                    Limits(b, ref p);
+                                }
                                 else if (kind == 3) p += 2;                      // global: valtype, mutability
                                 else if (kind == 4) { p++; Leb(b, ref p); }      // tag: attribute, type index
                                 bool symbol = module == "GOT.mem" || module == "GOT.func"
@@ -370,13 +397,18 @@
             <_TwoDogSideModuleGdIgnoredDir Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
             <_TwoDogSideModuleCandidate Include="$(TwoDogGodotProjectFullPath)/**/*.wasm"
                                         Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;@(_TwoDogSideModuleGdIgnoredDir->'%(RootDir)%(Directory)**')"/>
+            <_TwoDogSideModuleExtension Include="$(TwoDogGodotProjectFullPath)/**/*.gdextension"
+                                       Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;@(_TwoDogSideModuleGdIgnoredDir->'%(RootDir)%(Directory)**')"/>
         </ItemGroup>
-        <TwoDogReadSideModuleImports Files="@(_TwoDogSideModuleCandidate)" Condition="'@(_TwoDogSideModuleCandidate)' != ''">
+        <TwoDogReadSideModuleImports Files="@(_TwoDogSideModuleCandidate)" ExtensionFiles="@(_TwoDogSideModuleExtension)"
+                                    ProjectDir="$(TwoDogGodotProjectFullPath)"
+                                    Condition="'@(_TwoDogSideModuleCandidate)' != '' Or '@(_TwoDogSideModuleExtension)' != ''">
             <Output TaskParameter="SideModules" ItemName="_TwoDogSideModule"/>
             <Output TaskParameter="Symbols" ItemName="_TwoDogSideModuleSymbol"/>
         </TwoDogReadSideModuleImports>
         <ItemGroup>
             <EmccExportedFunction Include="@(_TwoDogSideModuleSymbol->'_%(Identity)')"/>
+            <TwoDogWebExportInputs Include="@(_TwoDogSideModule)"/>
         </ItemGroup>
         <Message Condition="'@(_TwoDogSideModule)' != ''" Importance="high"
                  Text="TwoDog: exporting @(_TwoDogSideModuleSymbol->Count()) symbol(s) imported by GDExtension side module(s): @(_TwoDogSideModule->'%(Filename)%(Extension)', ', ')"/>
