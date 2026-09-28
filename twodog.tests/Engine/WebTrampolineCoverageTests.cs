@@ -17,6 +17,19 @@ public class WebTrampolineCoverageTests
     private static Type TwodogTrampolines => typeof(Engine).Assembly
         .GetType("twodog.WebTrampolines", throwOnError: true)!;
 
+    [Theory]
+    [InlineData("godotsharp_stack_info_vector_resize")]
+    [InlineData("godotsharp_internal_signal_awaiter_connect")]
+    [InlineData("godotsharp_array_resize")]
+    public void NativeErrorResults_MatchInt32Abi(string name)
+    {
+        // Matching two managed declarations is insufficient: both used to declare Error : long
+        // even though runtime_interop.cpp returns int32_t, reading a stale upper word on wasm.
+        var method = typeof(Godot.NativeInterop.NativeFuncs).GetMethod(name,
+            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)!;
+        Assert.Equal(typeof(int), method.ReturnType);
+    }
+
     [Fact]
     public void TwodogTrampolines_CoverEveryNativeFuncsShape()
     {

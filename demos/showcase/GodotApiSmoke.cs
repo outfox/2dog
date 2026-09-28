@@ -43,6 +43,11 @@ public static class GodotApiSmoke
 
         using var values = new Godot.Collections.Array { 7, "two", new Vector3(1, 2, 3) };
         Require(values.Count == 3, "Godot Array marshalling failed");
+        // Exercise an int32_t Error result immediately after an int64_t result with a nonzero
+        // upper word. Reading the native result as Error : long used to retain stale wasm state.
+        Require(integer.AsInt64() == 4_294_967_296L, "64-bit Variant conversion failed before resize");
+        Require(values.Resize(4) == Error.Ok && values.Count == 4, "Godot Array resize returned a corrupt Error");
+        Require(values.Resize(3) == Error.Ok, "Godot Array shrink failed");
 
         using var data = new Godot.Collections.Dictionary
         {
