@@ -35,4 +35,7 @@
         <Compile Include="showcase.blazor/TwoDogWebBoot.cs"
                  Condition="!Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs') And !Exists('$(MSBuildThisFileDirectory)showcase.webxr/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)showcase.blazor/TwoDogWebBoot.cs')"/>
     </ItemGroup>
+
+    <!-- The GDExtension probe's native library for this machine's desktop platform (hosts build this project first) -->
+    <Import Project="gdextension/TwoDogProbe.targets"/>
 </Project>

@@ -1,0 +1,11 @@
+[configuration]
+
+entry_symbol = "twodog_probe_init"
+compatibility_minimum = "4.7"
+
+[libraries]
+
+windows.x86_64 = "res://gdextension/bin/twodog_probe.windows.x86_64.dll"
+linux.x86_64 = "res://gdextension/bin/libtwodog_probe.linux.x86_64.so"
+macos = "res://gdextension/bin/libtwodog_probe.macos.dylib"
+web.wasm32 = "res://gdextension/bin/twodog_probe.web.wasm32.wasm"

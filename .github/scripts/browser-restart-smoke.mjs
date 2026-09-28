@@ -30,6 +30,7 @@ await new Promise((resolve, reject) => { ws.addEventListener("open", resolve); w
 let nextId = 0;
 let browserFailure = null;
 const pending = new Map();
+const requests = new Map();
 ws.addEventListener("message", (message) => {
     const data = JSON.parse(message.data);
     if (data.id && pending.has(data.id)) {
@@ -43,6 +44,20 @@ ws.addEventListener("message", (message) => {
         const text = data.params.exceptionDetails.exception?.description ?? data.params.exceptionDetails.text;
         browserFailure ??= text;
         console.error(`[browser:exception] ${text}`);
+    } else if (data.method === "Network.requestWillBeSent") {
+        requests.set(data.params.requestId, data.params.request.url);
+    } else if (data.method === "Network.loadingFailed") {
+        const { requestId, errorText, blockedReason, corsErrorStatus } = data.params;
+        const url = requests.get(requestId) ?? requestId;
+        console.error(`[browser:network] ${url}: ${errorText}` +
+            (blockedReason ? ` (blocked: ${blockedReason})` : "") +
+            (corsErrorStatus ? ` ${JSON.stringify(corsErrorStatus)}` : ""));
+        requests.delete(requestId);
+    } else if (data.method === "Network.loadingFinished") {
+        requests.delete(data.params.requestId);
+    } else if (data.method === "Log.entryAdded") {
+        const { level, source, text, url } = data.params.entry;
+        console.error(`[browser:${source}:${level}] ${text}${url ? ` (${url})` : ""}`);
     }
 });
 const send = (method, params = {}) => new Promise((resolve) => {
@@ -58,6 +73,8 @@ const evaluate = async (expression) => {
 // canvasLive: the canvas in the DOM is the one Godot draws into - its backing store follows its CSS box (the
 // GodotView's ResizeObserver does that), while a canvas a re-render swapped in keeps the 300x150 default.
 const state = () => evaluate(`JSON.stringify({
+    url: location.href,
+    baseURI: document.baseURI,
     smoke: document.documentElement.getAttribute("data-twodog-smoke"),
     lifetime: document.documentElement.getAttribute("data-twodog-lifetime"),
     status: document.querySelector(".status")?.textContent ?? null,
@@ -95,6 +112,8 @@ const waitFor = async (what, predicate) => {
 };
 
 try {
+    await send("Network.enable");
+    await send("Log.enable");
     await send("Runtime.enable");
     const running = (s) => s.smoke === "passed" && s.canvases === 1 && s.canvasLive;
     await waitFor("first lifetime", (s) => running(s) && s.lifetime === "1");
@@ -120,6 +139,16 @@ try {
     process.exit(0);
 } catch (error) {
     console.error(`Engine restart smoke failed: ${error.message}`);
+    // Keep this bounded separately: the renderer may be stuck inside a wasm call.
+    try {
+        const last = await Promise.race([
+            state(),
+            sleep(2000).then(() => { throw new Error("state capture timed out"); }),
+        ]);
+        console.error(`Browser state at failure: ${JSON.stringify(last)}`);
+    } catch (stateError) {
+        console.error(`Could not capture browser state: ${stateError.message}`);
+    }
     ws.close();
     process.exit(1);
 }

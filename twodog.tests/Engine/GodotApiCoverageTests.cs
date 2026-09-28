@@ -37,4 +37,8 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
     [Fact]
     public void GDScriptOnlyEngineFeatures_RunWithoutManagedReferences() =>
         GodotApiSmoke.GDScriptOnlyEngineFeatures(godot.Tree);
+
+    [Fact]
+    public void GDExtensionProbe_LoadsAndAnswersEveryCallPath() =>
+        GodotApiSmoke.GDExtensionProbe(godot.Tree);
 }

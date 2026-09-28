@@ -46,6 +46,7 @@ Restart `dotnet serve` only when you change its options.
 - Trims managed assemblies and precompresses large output files.
 - Supports Godot's WebXR interface; the [WebXR host](./webxr) adds the Layers
   polyfill needed by browsers without native support.
+- Loads [GDExtensions](#gdextensions) built as WebAssembly side modules.
 - The same engine link powers the [Blazor host](./blazor), where a Razor
   component owns the canvas and calls Godot directly.
 
@@ -150,6 +151,7 @@ All properties are optional:
 | `TwoDogWebStripMaps` | `true` for release | Remove `*.js.map` files from the bundle |
 | `TwoDogWebPrecompress` | `true` | Write `.br` and `.gz` siblings for sizeable files |
 | `TwoDogWebPrecompressLevel` | `Optimal` | Set sibling compression; `SmallestSize` trades publish time for size |
+| `TwoDogWebSideModuleExports` | `true` | Export the symbols [GDExtension](#gdextensions) side modules import; `false` leaves it to `EmccExportedFunction` items |
 | `WasmEmitSymbolMap` | `false` | Include native symbols for stack traces at about 20 MB per load |
 | `WasmInitialHeapSize` | `256MB` | Set initial linear memory; memory growth remains enabled |
 
@@ -208,6 +210,39 @@ Large packs commonly contain PCM audio, oversized lossless textures, or files
 included by a broad export filter. Prefer Ogg Vorbis for long audio, review
 texture imports, and exclude non-game directories or mark them with `.gdignore`.
 
+## GDExtensions
+
+Native [GDExtensions](https://docs.godotengine.org/en/stable/tutorials/scripting/gdextension/what_is_gdextension.html)
+work in the browser when they ship a WebAssembly side module, just as
+Godot's own [web export](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_web.html)
+needs one. List it under a `web` key in the `.gdextension` file:
+
+```ini
+[libraries]
+windows.x86_64 = "res://addons/my_ext/bin/my_ext.windows.x86_64.dll"
+web.wasm32 = "res://addons/my_ext/bin/my_ext.web.wasm32.nothreads.wasm"
+```
+
+Publish embeds the side module in `godot.pck`, and Godot loads it from there
+at startup. The engine link also exports every C and C++ runtime symbol the
+module imports; the publish log names each module it scanned. The
+repository's showcase carries a minimal C extension
+(`demos/showcase/gdextension`) that runs on every host.
+
+Build side modules the way Godot's web export expects:
+
+- single-threaded (`threads=no` for godot-cpp), because this host has no
+  threads;
+- with `-sSIDE_MODULE`, ideally using the emscripten version of the .NET
+  runtime (`3.1.56` for .NET 10). A module from another version can import
+  runtime symbols that version lacks; the publish then fails with an
+  undefined exported symbol error naming them.
+
+Side modules cannot use `EM_ASM` or `EM_JS`, and two extensions can share
+symbols only through the `[dependencies]` section. Chrome refuses to
+compile modules larger than 8 MB synchronously on the main thread, which
+limits the size of each module.
+
 ## WebXR
 
 Godot's [WebXR interface](https://docs.godotengine.org/en/stable/tutorials/xr/setting_up_webxr.html)
@@ -222,7 +257,7 @@ that setup.
   supported.
 - The Compatibility renderer uses WebGL 2. Forward+ projects fall back through
   Godot's `rendering_method.web` setting.
-- Native GDExtension side modules cannot be loaded because .NET owns the wasm
-  main module.
+- [GDExtensions](#gdextensions) must be single-threaded side modules without
+  `EM_ASM` or `EM_JS`.
 - Browser platform policies still apply, including user gestures for audio,
   fullscreen, and XR.

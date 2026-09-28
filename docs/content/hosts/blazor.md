@@ -162,5 +162,5 @@ are off.
 - Godot and .NET are single-threaded in this host, and Blazor renders on the
   same thread: long engine frames delay UI updates and vice versa.
 - One engine instance at a time (see [Lifecycle](#lifecycle)).
-- The browser host's [limitations](./web#limitations) apply: no dynamic
-  GDExtensions, WebGL 2 only.
+- The browser host's [limitations](./web#limitations) apply: WebGL 2 only,
+  and [GDExtensions](./web#gdextensions) must be single-threaded side modules.

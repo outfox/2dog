@@ -341,14 +341,17 @@ jobs:
             runner: blacksmith-4vcpu-ubuntu-2404
             rid: linux-x64
             exe: showcase.2dog
+            gdextension: libtwodog_probe.linux.x86_64.so
           - name: win-x64
             runner: blacksmith-4vcpu-windows-2025
             rid: win-x64
             exe: showcase.2dog.exe
+            gdextension: twodog_probe.windows.x86_64.dll
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
             rid: osx-arm64
             exe: showcase.2dog
+            gdextension: libtwodog_probe.macos.dylib
 
     timeout-minutes: 15
 
@@ -408,15 +411,21 @@ jobs:
       # Desktop publishes must export the game content as an exe-adjacent
       # pck; the published host then boots from it (Engine.ResolveContent()
       # returns null when the pck is present). Issue #43 regression guard.
+      # The pack export also copies the showcase's GDExtension library beside
+      # it, where Godot looks once res:// is the pack.
       - name: Verify exported pck
         shell: bash
         run: |
-          for pck in \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/showcase.2dog.pck" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid/showcase.2dog.pck" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd/showcase.2dog.pck"; do
-            if [ ! -f "$pck" ]; then
-              echo "::error::Missing $pck - the desktop publish did not export the game pck"
+          for dir in \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish" \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid" \
+            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd"; do
+            if [ ! -f "$dir/showcase.2dog.pck" ]; then
+              echo "::error::Missing $dir/showcase.2dog.pck - the desktop publish did not export the game pck"
+              exit 1
+            fi
+            if [ ! -f "$dir/${{ matrix.gdextension }}" ]; then
+              echo "::error::Missing $dir/${{ matrix.gdextension }} - the pack export did not copy the GDExtension library"
               exit 1
             fi
           done
@@ -506,6 +515,10 @@ jobs:
             fi
             if ! grep -q "2DOG_GDSCRIPT_LINKER_SMOKE_PASSED" "$log"; then
               echo "::error::[$label] GDScript linker smoke marker missing"
+              fail=1
+            fi
+            if ! grep -q "2DOG_GDEXTENSION_SMOKE_PASSED" "$log"; then
+              echo "::error::[$label] GDExtension smoke marker missing (the probe extension did not load)"
               fail=1
             fi
             if [ "$status" != "0" ]; then
@@ -681,8 +694,9 @@ jobs:
 
       # Execute the linked app in a real browser. The game assembly runs the
       # shared GodotApiSmoke probe and marks the DOM only after native API,
-      # resource, codec, server, scene, generated C# script, and GDScript-only
-      # engine-module calls succeed. The webxr flavor additionally asserts the
+      # resource, codec, server, scene, generated C# script, GDScript-only
+      # engine-module and GDExtension side module (loaded from the pck) calls
+      # succeed. The webxr flavor additionally asserts the
       # WebXR interface is registered on XRServer (its Program.cs does).
       - name: Run browser API smoke
         run: |
@@ -826,6 +840,14 @@ jobs:
           RESTART_STATUS=$?
           set -e
           if [ "$RESTART_STATUS" -ne 0 ]; then
+            # Distinguish a dead host from a browser-side fetch/cache failure.
+            if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+              echo "::error::The Blazor server exited during the restart probe"
+            fi
+            curl --silent --show-error --max-time 5 --output /dev/null \
+              --write-out 'Blazor pack HTTP status after failure: %{http_code}\n' \
+              http://127.0.0.1:8000/godot.pck || true
+            cat /tmp/2dog-blazor-server.log
             cat /tmp/2dog-blazor-browser.log
             echo "::error::The blazor host could not restart the engine in the same page"
             exit "$RESTART_STATUS"

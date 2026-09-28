@@ -50,6 +50,9 @@
     <Import Project="../../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('OSX'))"/>
     <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets" Condition="'$(Official)' != 'true'"/>
 
+    <!-- The GDExtension probe as a web side module (embedded in the exported pck) -->
+    <Import Project="../gdextension/TwoDogProbe.targets"/>
+
     <Target Name="DeepClean" AfterTargets="Clean">
         <RemoveDir Directories="AppBundle"/>
     </Target>

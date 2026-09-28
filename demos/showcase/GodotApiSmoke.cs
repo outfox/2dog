@@ -19,6 +19,7 @@ public static class GodotApiSmoke
         LowLevelServers();
         SceneAndGeneratedScript();
         GDScriptOnlyEngineFeatures(tree);
+        GDExtensionProbe(tree);
     }
 
     public static void CoreTypesAndNativeHelpers(SceneTree tree)
@@ -181,24 +182,52 @@ public static class GodotApiSmoke
         }
     }
 
-    public static void GDScriptOnlyEngineFeatures(SceneTree tree)
+    public static void GDScriptOnlyEngineFeatures(SceneTree tree) =>
+        RequireScenePassed(tree, "CenterContainer/GDScriptLinkerProbe", "gdscript_linker_smoke", "GDScript linker probe");
+
+    /// <summary>
+    /// The C GDExtension in gdextension/ (a side module loaded from the pck on the web, a native library elsewhere):
+    /// called from C# here, and through GDScript's variant and typed (ptrcall) paths by the scene's probe label.
+    /// </summary>
+    public static void GDExtensionProbe(SceneTree tree)
     {
-        const string nodePath = "CenterContainer/GDScriptLinkerProbe";
-        const string passedMeta = "gdscript_linker_smoke_passed";
-        const string failureMeta = "gdscript_linker_smoke_failure";
+        Require(ClassDB.ClassExists("TwoDogProbe"), "the TwoDogProbe GDExtension class is not registered");
+        using var instance = ClassDB.Instantiate("TwoDogProbe");
+        var probe = instance.AsGodotObject();
+        Require(probe is not null, "TwoDogProbe could not be instantiated");
+
+        using var sum = probe.Call("add", 40, 2);
+        Require(sum.AsInt64() == 42, $"TwoDogProbe.add returned {sum.AsInt64()}");
+
+        var platform = OperatingSystem.IsBrowser() ? "web"
+            : OperatingSystem.IsWindows() ? "windows"
+            : OperatingSystem.IsMacOS() ? "macos"
+            : "linux";
+        using var description = probe.Call("describe");
+        Require(description.AsString().StartsWith($"twodog_probe (C) on {platform},", StringComparison.Ordinal),
+            $"TwoDogProbe.describe returned '{description.AsString()}'");
+
+        RequireScenePassed(tree, "CenterContainer/GDExtensionProbe", "gdextension_smoke", "GDExtension probe");
+    }
+
+    // Scene-attached probe scripts record <prefix>_passed (and <prefix>_failure) metadata in _ready().
+    private static void RequireScenePassed(SceneTree tree, string nodePath, string metaPrefix, string what)
+    {
+        var passedMeta = metaPrefix + "_passed";
+        var failureMeta = metaPrefix + "_failure";
 
         var currentScene = tree.CurrentScene;
-        Require(currentScene is not null, "there is no current scene for the GDScript linker probe");
+        Require(currentScene is not null, $"there is no current scene for the {what}");
 
         var probe = currentScene.GetNodeOrNull<Node>(nodePath);
-        Require(probe is not null, "the scene-attached GDScript linker probe is missing");
-        Require(probe.HasMeta(passedMeta), "the GDScript linker probe did not run _ready()");
+        Require(probe is not null, $"the scene-attached {what} is missing");
+        Require(probe.HasMeta(passedMeta), $"the {what} did not run _ready()");
 
         using var passed = probe.GetMeta(passedMeta);
         if (passed.AsBool())
             return;
 
-        var failure = "unknown GDScript failure";
+        var failure = $"unknown {what} failure";
         if (probe.HasMeta(failureMeta))
         {
             using var failureValue = probe.GetMeta(failureMeta);

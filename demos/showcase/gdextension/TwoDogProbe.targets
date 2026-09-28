@@ -1,0 +1,89 @@
+<Project>
+    <!-- Builds the showcase's GDExtension probe (src/twodog_probe.c) into bin/, where twodog_probe.gdextension points,
+         with toolchains the hosts already need: the build machine's C compiler for its own desktop platform (imported
+         by the game project, which every host builds first), and the wasm-tools workload's emscripten for the web
+         side module (imported by the browser-wasm hosts). Opt out with -p:TwoDogProbeBuild=false. -->
+    <PropertyGroup>
+        <_TwoDogProbeDir>$(MSBuildThisFileDirectory)</_TwoDogProbeDir>
+        <_TwoDogProbeBin>$(_TwoDogProbeDir)bin/</_TwoDogProbeBin>
+        <_TwoDogProbeSource>$(_TwoDogProbeDir)src/twodog_probe.c</_TwoDogProbeSource>
+        <_TwoDogProbeWasm>$(_TwoDogProbeBin)twodog_probe.web.wasm32.wasm</_TwoDogProbeWasm>
+        <_TwoDogProbeCFlags>-O2 -std=c11 -Wall -Wextra -fvisibility=hidden -I&quot;$(_TwoDogProbeDir)include&quot;</_TwoDogProbeCFlags>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <_TwoDogProbeDesktopLib Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(_TwoDogProbeBin)twodog_probe.windows.x86_64.dll</_TwoDogProbeDesktopLib>
+        <_TwoDogProbeDesktopLib Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(_TwoDogProbeBin)libtwodog_probe.linux.x86_64.so</_TwoDogProbeDesktopLib>
+        <_TwoDogProbeDesktopLib Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(_TwoDogProbeBin)libtwodog_probe.macos.dylib</_TwoDogProbeDesktopLib>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <_TwoDogProbeInput Include="$(_TwoDogProbeSource);$(_TwoDogProbeDir)include/*.h;$(MSBuildThisFileFullPath)"/>
+    </ItemGroup>
+
+    <Target Name="TwoDogProbeBuildDesktop"
+            BeforeTargets="CoreCompile"
+            Inputs="@(_TwoDogProbeInput)"
+            Outputs="$(_TwoDogProbeDesktopLib)"
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(_TwoDogProbeDesktopLib)' != ''">
+        <!-- Intermediates stay outside the Godot project tree (MSVC's .obj would import as a Wavefront mesh) -->
+        <PropertyGroup>
+            <_TwoDogProbeObj>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog_probe'))</_TwoDogProbeObj>
+        </PropertyGroup>
+        <MakeDir Directories="$(_TwoDogProbeBin);$(_TwoDogProbeObj)"/>
+
+        <!-- Windows: MSVC through vswhere and vcvars64 -->
+        <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+            <_TwoDogProbeVsWhere>$(MSBuildProgramFiles32)\Microsoft Visual Studio\Installer\vswhere.exe</_TwoDogProbeVsWhere>
+        </PropertyGroup>
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Windows')) And Exists('$(_TwoDogProbeVsWhere)')"
+              Command="&quot;$(_TwoDogProbeVsWhere)&quot; -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath"
+              ConsoleToMSBuild="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogProbeVsPath"/>
+        </Exec>
+        <Error Condition="$([MSBuild]::IsOSPlatform('Windows')) And '$(_TwoDogProbeVsPath)' == ''"
+               Text="TwoDog showcase: building the GDExtension probe needs MSVC (Visual Studio or Build Tools with the 'Desktop development with C++' workload). Pass -p:TwoDogProbeBuild=false to skip it (the probe then reports the extension as missing)."/>
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))"
+              Command="call &quot;$(_TwoDogProbeVsPath)\VC\Auxiliary\Build\vcvars64.bat&quot; &gt;nul 2&gt;&amp;1 &amp;&amp; cl /nologo /O2 /std:c11 /W3 /LD /I&quot;$(_TwoDogProbeDir)include&quot; &quot;$(_TwoDogProbeSource)&quot; /Fo&quot;$(_TwoDogProbeObj)twodog_probe.obj&quot; /Fe&quot;$(_TwoDogProbeDesktopLib)&quot; /link /IMPLIB:&quot;$(_TwoDogProbeObj)twodog_probe.lib&quot;"/>
+
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))"
+              Command="cc $(_TwoDogProbeCFlags) -fPIC -shared &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeDesktopLib)&quot;"/>
+
+        <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))"
+              Command="cc $(_TwoDogProbeCFlags) -dynamiclib -arch arm64 -arch x86_64 -install_name @rpath/libtwodog_probe.macos.dylib &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeDesktopLib)&quot;"/>
+    </Target>
+
+    <!-- Web: a SIDE_MODULE from the workload's emscripten (the runtime's own, see <EmscriptenVersion>), before the
+         pck export embeds it and the engine link exports its imports -->
+    <Target Name="TwoDogProbeBuildWeb"
+            BeforeTargets="TwoDogExportGamePack;TwoDogWebExportSideModuleImports"
+            Inputs="@(_TwoDogProbeInput)"
+            Outputs="$(_TwoDogProbeWasm)"
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true'">
+        <Error Condition="'$(EmscriptenUpstreamEmscriptenPath)' == ''"
+               Text="TwoDog showcase: building the web GDExtension probe needs the wasm-tools workload (dotnet workload install wasm-tools)."/>
+        <PropertyGroup>
+            <!-- Per project: the browser hosts may build in parallel and share the final output -->
+            <_TwoDogProbeWasmObj>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog_probe'))twodog_probe.web.wasm32.wasm</_TwoDogProbeWasmObj>
+            <_TwoDogProbeEmcc>$(EmscriptenUpstreamEmscriptenPath)emcc</_TwoDogProbeEmcc>
+            <_TwoDogProbeEmcc Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(EmscriptenUpstreamEmscriptenPath)emcc.bat</_TwoDogProbeEmcc>
+            <_TwoDogProbeNode>$(EmscriptenNodeToolsPath)bin/node</_TwoDogProbeNode>
+            <_TwoDogProbeNode Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(EmscriptenNodeToolsPath)bin/node.exe</_TwoDogProbeNode>
+        </PropertyGroup>
+        <!-- What the SDK's own emcc invocations get (BrowserWasmApp.targets) -->
+        <ItemGroup>
+            <_TwoDogProbeEmccEnv Include="@(EmscriptenEnvVars)"/>
+            <_TwoDogProbeEmccEnv Include="DOTNET_EMSCRIPTEN_LLVM_ROOT=$(EmscriptenSdkToolsPath)bin"/>
+            <_TwoDogProbeEmccEnv Include="DOTNET_EMSCRIPTEN_BINARYEN_ROOT=$(EmscriptenSdkToolsPath)"/>
+            <_TwoDogProbeEmccEnv Include="DOTNET_EMSCRIPTEN_NODE_JS=$(_TwoDogProbeNode)"/>
+            <_TwoDogProbeEmccEnv Include="EM_CACHE=$(WasmCachePath)" Condition="'$(WasmCachePath)' != ''"/>
+            <_TwoDogProbeEmccEnv Include="EM_FROZEN_CACHE=1" Condition="'$(WasmCachePath)' != '' And '$(WasmCachePath)' == '$(EmscriptenCacheSdkCacheDir)'"/>
+            <_TwoDogProbeEmccEnv Include="PYTHONPATH=$(EmscriptenPythonToolsPath)" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
+            <_TwoDogProbeEmccEnv Include="PYTHONHOME=" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
+        </ItemGroup>
+        <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogProbeWasmObj)'))"/>
+        <Exec Command="&quot;$(_TwoDogProbeEmcc)&quot; $(_TwoDogProbeCFlags) -sSIDE_MODULE=1 -sWASM_BIGINT &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeWasmObj)&quot;"
+              EnvironmentVariables="@(_TwoDogProbeEmccEnv)"/>
+        <Copy SourceFiles="$(_TwoDogProbeWasmObj)" DestinationFiles="$(_TwoDogProbeWasm)" Retries="5" RetryDelayMilliseconds="200"/>
+    </Target>
+</Project>

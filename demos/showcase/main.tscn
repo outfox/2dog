@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://blxvnypm25yon" path="res://SpinningCube.cs" id="3_spin"]
 [ext_resource type="Script" uid="uid://iij6nqf8c83c" path="res://spinning_cube.gd" id="4_spin_gd"]
 [ext_resource type="Script" uid="uid://b6yvva55iwkax" path="res://WebXR.cs" id="5_webxr"]
+[ext_resource type="Script" uid="uid://ce2ngeyqr7nfp" path="res://gdextension/gdextension_probe.gd" id="6_gdextension_probe"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cube"]
 
@@ -140,6 +141,14 @@ label_settings = SubResource("LabelSettings_1bvp3")
 
 [node name="GDScriptLinkerProbe" type="Node" parent="CenterContainer" unique_id=1497267197]
 script = ExtResource("2_gdscript_probe")
+
+[node name="GDExtensionProbe" type="Label" parent="CenterContainer" unique_id=1739420521]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, 200)
+text = "GDExtension probe pending"
+label_settings = SubResource("LabelSettings_1bvp3")
+script = ExtResource("6_gdextension_probe")
 
 [node name="EnterVrButton" type="Button" parent="." unique_id=1071455239]
 visible = false

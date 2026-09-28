@@ -5,6 +5,9 @@ the 2dog host projects nested inside it (each hidden from the Godot editor by
 a `.gdignore`):
 
 - `showcase.csproj` / `project.godot` - the Godot project (scenes, resources, C# scripts)
+- `gdextension/` - a GDExtension in plain C (`TwoDogProbe`); the `GDExtensionProbe` label in `main.tscn` calls it
+  on every host. Building the game project compiles it for the build machine (MSVC on Windows, `cc` elsewhere); the
+  browser hosts compile a WebAssembly side module with the wasm-tools workload's emscripten and embed it in `godot.pck`
 - `showcase.2dog/` - desktop host: `dotnet run --project demos/showcase/showcase.2dog`
 - `showcase.web/` - browser (wasm) host: `dotnet publish` from that folder (defaults to Release; needs the wasm-tools workload)
 - `showcase.webxr/` - WebXR browser host (its page ships the WebXR Layers polyfill): same publish flow; VR needs a secure context (localhost or HTTPS)

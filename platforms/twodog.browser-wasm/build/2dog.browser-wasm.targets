@@ -266,6 +266,122 @@
         <Message Importance="high" Text="TwoDog: Blazor static web assets: @(_TwoDogBlazorAssetCandidate->'%(Filename)%(Extension)', ', ')"/>
     </Target>
 
+    <!-- GDExtension side modules: Godot loads them at runtime (from the pck) against this link, which is not a
+         relocatable emscripten MAIN_MODULE, so it must export every symbol they import (libc, libc++). Scans the
+         project's *.wasm files carrying a dylink.0 section; set TwoDogWebSideModuleExports=false to export by hand
+         (EmccExportedFunction). -->
+    <UsingTask TaskName="TwoDogReadSideModuleImports" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true"/>
+            <SideModules ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
+            <Symbols ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                uint Leb(byte[] b, ref int p) { uint r = 0; int s = 0; byte x; do { x = b[p++]; r |= (uint)(x & 0x7f) << s; s += 7; } while ((x & 0x80) != 0); return r; }
+                string Str(byte[] b, ref int p) { int n = (int)Leb(b, ref p); var s = System.Text.Encoding.UTF8.GetString(b, p, n); p += n; return s; }
+                void Limits(byte[] b, ref int p) { byte flags = b[p++]; Leb(b, ref p); if ((flags & 1) != 0) Leb(b, ref p); }
+
+                var symbols = new System.Collections.Generic.SortedSet<string>(StringComparer.Ordinal);
+                var sideModules = new System.Collections.Generic.List<ITaskItem>();
+                foreach (var file in Files)
+                {
+                    try
+                    {
+                        if (Scan(file))
+                            sideModules.Add(file);
+                    }
+                    catch (Exception e) when (e is IndexOutOfRangeException || e is ArgumentException)
+                    {
+                        Log.LogWarning("TwoDog: " + file.ItemSpec + " looks like a GDExtension side module but is malformed; its imports are not exported.");
+                    }
+                }
+                SideModules = sideModules.ToArray();
+                Symbols = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(symbols, s => (ITaskItem)new Microsoft.Build.Utilities.TaskItem(s)));
+
+                bool Scan(ITaskItem file)
+                {
+                    var b = File.ReadAllBytes(file.ItemSpec);
+                    // A side module starts with its dylink.0 custom section, right after magic and version.
+                    if (b.Length < 10 || b[0] != 0 || b[1] != (byte)'a' || b[2] != (byte)'s' || b[3] != (byte)'m' || b[8] != 0)
+                        return false;
+                    int p = 9;
+                    int end = (int)Leb(b, ref p) + p;
+                    if (Str(b, ref p) != "dylink.0")
+                        return false;
+
+                    var weak = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+                    while (p < end)
+                    {
+                        byte type = b[p++];
+                        int next = (int)Leb(b, ref p) + p;
+                        if (type == 4) // WASM_DYLINK_IMPORT_INFO
+                            for (uint n = Leb(b, ref p); n > 0; n--) { Str(b, ref p); var name = Str(b, ref p); if ((Leb(b, ref p) & 3) == 1) weak.Add(name); }
+                        p = next;
+                    }
+
+                    var imported = new System.Collections.Generic.List<string>();
+                    var defined = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+                    p = end;
+                    while (p < b.Length)
+                    {
+                        byte id = b[p++];
+                        int next = (int)Leb(b, ref p) + p;
+                        if (id == 2) // imports
+                        {
+                            for (uint n = Leb(b, ref p); n > 0; n--)
+                            {
+                                var module = Str(b, ref p);
+                                var name = Str(b, ref p);
+                                byte kind = b[p++];
+                                if (kind == 0) Leb(b, ref p);                    // function: type index
+                                else if (kind == 1) { p++; Limits(b, ref p); }   // table: reftype, limits
+                                else if (kind == 2) Limits(b, ref p);            // memory
+                                else if (kind == 3) p += 2;                      // global: valtype, mutability
+                                else if (kind == 4) { p++; Leb(b, ref p); }      // tag: attribute, type index
+                                bool symbol = module == "GOT.mem" || module == "GOT.func"
+                                    || (kind == 0 && (module == "env" || module == "wasi_snapshot_preview1"));
+                                if (symbol && !weak.Contains(name))
+                                    imported.Add(name);
+                            }
+                        }
+                        else if (id == 7) // exports: a module's own GOT entries resolve to itself
+                        {
+                            for (uint n = Leb(b, ref p); n > 0; n--) { defined.Add(Str(b, ref p)); p++; Leb(b, ref p); }
+                        }
+                        p = next;
+                    }
+
+                    foreach (var name in imported)
+                        if (!defined.Contains(name))
+                            symbols.Add(name);
+                    return true;
+                }
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <Target Name="TwoDogWebExportSideModuleImports"
+            BeforeTargets="_BrowserWasmWriteRspForLinking"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebSideModuleExports)' != 'false' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <!-- Target-time glob: side modules may be built earlier in this same build -->
+        <ItemGroup>
+            <_TwoDogSideModuleGdIgnoredDir Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
+            <_TwoDogSideModuleCandidate Include="$(TwoDogGodotProjectFullPath)/**/*.wasm"
+                                        Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;@(_TwoDogSideModuleGdIgnoredDir->'%(RootDir)%(Directory)**')"/>
+        </ItemGroup>
+        <TwoDogReadSideModuleImports Files="@(_TwoDogSideModuleCandidate)" Condition="'@(_TwoDogSideModuleCandidate)' != ''">
+            <Output TaskParameter="SideModules" ItemName="_TwoDogSideModule"/>
+            <Output TaskParameter="Symbols" ItemName="_TwoDogSideModuleSymbol"/>
+        </TwoDogReadSideModuleImports>
+        <ItemGroup>
+            <EmccExportedFunction Include="@(_TwoDogSideModuleSymbol->'_%(Identity)')"/>
+        </ItemGroup>
+        <Message Condition="'@(_TwoDogSideModule)' != ''" Importance="high"
+                 Text="TwoDog: exporting @(_TwoDogSideModuleSymbol->Count()) symbol(s) imported by GDExtension side module(s): @(_TwoDogSideModule->'%(Filename)%(Extension)', ', ')"/>
+    </Target>
+
     <!-- Bundle post-processing (sizes + compression): property functions cannot stat files, hence inline tasks -->
     <UsingTask TaskName="TwoDogWriteSizeManifest" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">

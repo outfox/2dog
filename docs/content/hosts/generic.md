@@ -28,7 +28,8 @@ desktop game, headless process, or custom host.
 ## How It Works
 
 With no path, `Engine` finds the raw project during development and the
-exe-adjacent `.pck` after publish.
+exe-adjacent `.pck` after publish. Publish also copies the platform's
+GDExtension libraries next to the executable, where Godot looks for them.
 
 ```csharp
 using Godot;
