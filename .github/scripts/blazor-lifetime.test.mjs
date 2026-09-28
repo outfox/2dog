@@ -95,3 +95,38 @@ test('a replacement view joins filesystem initialization left behind by a cancel
     assert.deepEqual(v.calls, ['copy', 'observe', 'configure']);
     v.release(nextCanvas);
 });
+
+test('a transient network failure of the pack download is retried', async () => {
+    const v = await view();
+    let attempts = 0;
+    globalThis.fetch = async () => {
+        if (++attempts === 1) throw new TypeError('Failed to fetch');
+        return { ok: true, arrayBuffer: async () => new ArrayBuffer(0) };
+    };
+    await v.prepare(v.canvas, v.options);
+    assert.equal(attempts, 2);
+    assert.deepEqual(v.calls, ['copy', 'observe', 'configure']);
+    v.release(v.canvas);
+});
+
+test('a missing pack fails without retrying', async () => {
+    const v = await view();
+    let attempts = 0;
+    globalThis.fetch = async () => { attempts++; return { ok: false, status: 404 }; };
+    await assert.rejects(v.prepare(v.canvas, v.options), /HTTP 404/);
+    assert.equal(attempts, 1);
+    assert.deepEqual(v.calls, []);
+});
+
+test('release while waiting to retry the pack stops further attempts', async () => {
+    const v = await view();
+    let attempts = 0;
+    const failed = deferred();
+    globalThis.fetch = async () => { attempts++; failed.resolve(); throw new TypeError('Failed to fetch'); };
+    const starting = v.prepare(v.canvas, v.options);
+    await failed.promise;
+    v.release(v.canvas);
+    await assert.rejects(starting, { name: 'AbortError' });
+    assert.equal(attempts, 1);
+    assert.deepEqual(v.calls, []);
+});

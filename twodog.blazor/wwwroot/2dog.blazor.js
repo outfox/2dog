@@ -23,6 +23,52 @@ function resolveUrl(url) {
     return new URL(url, document.baseURI).href;
 }
 
+// Like Godot's own preloader (engine.js retries every download), a transient failure must not fail the start:
+// CI restarts saw the pack fetch cancelled at the network layer (net::ERR_ABORTED) while the server served it fine.
+const PACK_ATTEMPTS = 4;
+const PACK_RETRY_DELAY_MS = 500;
+
+function delay(ms, signal) {
+    return new Promise((resolve, reject) => {
+        const onAbort = () => {
+            clearTimeout(timer);
+            reject(signal.reason);
+        };
+        const timer = setTimeout(() => {
+            signal.removeEventListener('abort', onAbort);
+            resolve();
+        }, ms);
+        signal.addEventListener('abort', onAbort, { once: true });
+    });
+}
+
+async function fetchPack(url, signal) {
+    for (let attempt = 1; ; attempt++) {
+        let failure;
+        let retryable = true;
+        try {
+            const response = await fetch(url, { signal });
+            if (response.ok) {
+                return await response.arrayBuffer();
+            }
+            failure = new Error(`2dog.blazor: could not load the game pack '${url}' (HTTP ${response.status}).`);
+            retryable = response.status >= 500;
+        } catch (error) {
+            // A released view reports its cancellation; network failures reject with a TypeError.
+            signal.throwIfAborted();
+            if (!(error instanceof TypeError)) {
+                throw error;
+            }
+            failure = error;
+        }
+        if (!retryable || attempt >= PACK_ATTEMPTS) {
+            throw failure;
+        }
+        console.warn(`2dog.blazor: loading '${url}' failed (${failure.message}); retrying.`);
+        await delay(PACK_RETRY_DELAY_MS, signal);
+    }
+}
+
 // Container mode: the canvas backing store follows its CSS box (Godot's policy 0 reads canvas.width/height).
 function observeContainer(canvas) {
     const apply = () => {
@@ -71,11 +117,7 @@ export async function prepare(canvas, options) {
             throw error;
         }));
         controller.signal.throwIfAborted();
-        const response = await fetch(resolveUrl(options.packUrl), { signal: controller.signal });
-        if (!response.ok) {
-            throw new Error(`2dog.blazor: could not load the game pack '${options.packUrl}' (HTTP ${response.status}).`);
-        }
-        const pack = await response.arrayBuffer();
+        const pack = await fetchPack(resolveUrl(options.packUrl), controller.signal);
         // Cancelling .NET JS interop does not cancel this JavaScript promise. A released
         // view must never reconfigure the runtime after another view acquires the lease.
         controller.signal.throwIfAborted();

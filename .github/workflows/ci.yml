@@ -355,6 +355,10 @@ jobs:
 
     timeout-minutes: 15
 
+    env:
+      # Release hosts are WinExe: a host startup error would otherwise block on a message box until the job times out.
+      DOTNET_DISABLE_GUI_ERRORS: '1'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -412,14 +416,18 @@ jobs:
       # pck; the published host then boots from it (Engine.ResolveContent()
       # returns null when the pck is present). Issue #43 regression guard.
       # The pack export also copies the showcase's GDExtension library beside
-      # it, where Godot looks once res:// is the pack.
+      # it, where Godot looks once res:// is the pack - and nothing else: the
+      # C# export plugin's own publish once leaked a .NET runtime (hostfxr)
+      # there, turning the framework-dependent host into a broken
+      # self-contained one.
       - name: Verify exported pck
         shell: bash
         run: |
+          fdd=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd
           for dir in \
             "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish" \
             "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd"; do
+            "$fdd"; do
             if [ ! -f "$dir/showcase.2dog.pck" ]; then
               echo "::error::Missing $dir/showcase.2dog.pck - the desktop publish did not export the game pck"
               exit 1
@@ -428,7 +436,15 @@ jobs:
               echo "::error::Missing $dir/${{ matrix.gdextension }} - the pack export did not copy the GDExtension library"
               exit 1
             fi
+            if ls -d "$dir"/data_* > /dev/null 2>&1; then
+              echo "::error::$dir contains Godot export data directories - the pack export copied C# build outputs"
+              exit 1
+            fi
           done
+          if ls "$fdd" | grep -qi hostfxr; then
+            echo "::error::The framework-dependent publish contains a .NET host (hostfxr) - the pack export leaked a runtime"
+            exit 1
+          fi
 
       # The engine must load the game assembly from the publish output itself.
       # Delete the game project's own build outputs so a regression back to
