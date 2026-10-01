@@ -2,8 +2,9 @@
 // 2dog: this file is part of https://2dog.dev
 
 // A GDExtension in plain C (no godot-cpp) registering TwoDogProbe (RefCounted) with add() and describe(), so each host
-// can prove the extension was loaded, registered and is callable. Deliberately uses libc (calloc, snprintf): on the
-// web the side module imports those from the host's main module.
+// can prove the extension was loaded, registered and is callable, and TwoDogTicker (Node), which emits ticked(count)
+// once per second from its _process override for the showcase's signal table. Deliberately uses libc (calloc,
+// snprintf): on the web the side module imports those from the host's main module.
 
 #include <stdint.h>
 #include <stdio.h>
@@ -36,46 +37,71 @@ typedef struct {
 	void *opaque;
 } String;
 
+// Variant is 24 bytes in single-precision builds, on 32- and 64-bit platforms alike.
+typedef struct {
+	uint64_t opaque[3];
+} Variant;
+
 typedef struct {
 	GDExtensionObjectPtr object;
 	int64_t calls;
 } Probe;
+
+#define TICKER_INTERVAL 1.0 // seconds
+
+typedef struct {
+	GDExtensionObjectPtr object;
+	int64_t count;
+	double elapsed;
+} Ticker;
 
 static struct {
 	GDExtensionClassLibraryPtr library;
 	GDExtensionInterfaceClassdbConstructObject3 classdb_construct_object3;
 	GDExtensionInterfaceClassdbRegisterExtensionClass6 classdb_register_extension_class6;
 	GDExtensionInterfaceClassdbRegisterExtensionClassMethod classdb_register_extension_class_method;
+	GDExtensionInterfaceClassdbRegisterExtensionClassSignal classdb_register_extension_class_signal;
 	GDExtensionInterfaceClassdbUnregisterExtensionClass classdb_unregister_extension_class;
 	GDExtensionInterfaceObjectSetInstance object_set_instance;
 	GDExtensionInterfaceStringNameNewWithLatin1Chars string_name_new_with_latin1_chars;
 	GDExtensionInterfaceStringNewWithUtf8Chars string_new_with_utf8_chars;
 	GDExtensionInterfaceVariantGetType variant_get_type;
+	GDExtensionInterfaceVariantCall variant_call;
+	GDExtensionInterfaceVariantDestroy variant_destroy;
 	GDExtensionPtrDestructor string_name_destroy;
 	GDExtensionPtrDestructor string_destroy;
 	GDExtensionVariantFromTypeConstructorFunc variant_from_int;
 	GDExtensionVariantFromTypeConstructorFunc variant_from_string;
+	GDExtensionVariantFromTypeConstructorFunc variant_from_string_name;
+	GDExtensionVariantFromTypeConstructorFunc variant_from_object;
 	GDExtensionTypeFromVariantConstructorFunc int_from_variant;
 } api;
 
-static StringName class_name;
+static StringName probe_class_name;
+static StringName ticker_class_name;
+static StringName process_name;
+static StringName emit_signal_name;
+static StringName ticked_name;
+
+static GDExtensionObjectPtr construct_parent(const char *p_parent) {
+	StringName parent;
+	api.string_name_new_with_latin1_chars(&parent, p_parent, 0);
+	GDExtensionObjectPtr object = api.classdb_construct_object3(&parent);
+	api.string_name_destroy(&parent);
+	return object;
+}
 
 static GDExtensionObjectPtr probe_create(void *p_class_userdata, GDExtensionBool p_notify_postinitialize) {
 	(void)p_class_userdata;
 	(void)p_notify_postinitialize;
 
-	StringName parent;
-	api.string_name_new_with_latin1_chars(&parent, "RefCounted", 0);
-	GDExtensionObjectPtr object = api.classdb_construct_object3(&parent);
-	api.string_name_destroy(&parent);
-
 	Probe *self = (Probe *)calloc(1, sizeof(Probe));
-	self->object = object;
-	api.object_set_instance(object, &class_name, self);
-	return object;
+	self->object = construct_parent("RefCounted");
+	api.object_set_instance(self->object, &probe_class_name, self);
+	return self->object;
 }
 
-static void probe_free(void *p_class_userdata, GDExtensionClassInstancePtr p_instance) {
+static void instance_free(void *p_class_userdata, GDExtensionClassInstancePtr p_instance) {
 	(void)p_class_userdata;
 	free(p_instance);
 }
@@ -147,7 +173,103 @@ static void describe_ptrcall(void *p_method_userdata, GDExtensionClassInstancePt
 	probe_describe((Probe *)p_instance, (String *)r_ret);
 }
 
-static void register_method(const char *p_name, GDExtensionClassMethodCall p_call, GDExtensionClassMethodPtrCall p_ptrcall, GDExtensionVariantType p_return_type, uint32_t p_argument_count, const char *const *p_argument_names) {
+static GDExtensionObjectPtr ticker_create(void *p_class_userdata, GDExtensionBool p_notify_postinitialize) {
+	(void)p_class_userdata;
+	(void)p_notify_postinitialize;
+
+	Ticker *self = (Ticker *)calloc(1, sizeof(Ticker));
+	self->object = construct_parent("Node");
+	api.object_set_instance(self->object, &ticker_class_name, self);
+	return self->object;
+}
+
+// Emits ticked(count) through Object::emit_signal, as a script would.
+static int64_t ticker_tick(Ticker *self) {
+	self->count++;
+
+	Variant object;
+	Variant signal;
+	Variant count;
+	Variant result;
+	api.variant_from_object(&object, &self->object);
+	api.variant_from_string_name(&signal, &ticked_name);
+	api.variant_from_int(&count, &self->count);
+
+	const GDExtensionConstVariantPtr args[2] = { &signal, &count };
+	GDExtensionCallError error;
+	api.variant_call(&object, &emit_signal_name, args, 2, &result, &error);
+
+	api.variant_destroy(&result);
+	api.variant_destroy(&count);
+	api.variant_destroy(&signal);
+	api.variant_destroy(&object);
+	return self->count;
+}
+
+static void ticker_process(GDExtensionClassInstancePtr p_instance, const GDExtensionConstTypePtr *p_args, GDExtensionTypePtr r_ret) {
+	(void)r_ret;
+	Ticker *self = (Ticker *)p_instance;
+	self->elapsed += *(const double *)p_args[0];
+	if (self->elapsed >= TICKER_INTERVAL) {
+		self->elapsed -= TICKER_INTERVAL;
+		ticker_tick(self);
+	}
+}
+
+// Overriding _process also makes Node enable processing on ready.
+static GDExtensionClassCallVirtual ticker_get_virtual(void *p_class_userdata, GDExtensionConstStringNamePtr p_name, uint32_t p_hash) {
+	(void)p_class_userdata;
+	(void)p_hash;
+	// StringNames are interned: equal names share one data pointer, which is all StringName::operator== compares.
+	return ((const StringName *)p_name)->opaque == process_name.opaque ? ticker_process : NULL;
+}
+
+static void tick_call(void *p_method_userdata, GDExtensionClassInstancePtr p_instance, const GDExtensionConstVariantPtr *p_args, GDExtensionInt p_argument_count, GDExtensionVariantPtr r_return, GDExtensionCallError *r_error) {
+	(void)p_method_userdata;
+	if (!check_args(p_args, p_argument_count, 0, r_error)) {
+		return;
+	}
+	int64_t count = ticker_tick((Ticker *)p_instance);
+	api.variant_from_int(r_return, &count);
+}
+
+static void tick_ptrcall(void *p_method_userdata, GDExtensionClassInstancePtr p_instance, const GDExtensionConstTypePtr *p_args, GDExtensionTypePtr r_ret) {
+	(void)p_method_userdata;
+	(void)p_args;
+	*(int64_t *)r_ret = ticker_tick((Ticker *)p_instance);
+}
+
+static void register_class(const StringName *p_class, const char *p_parent, GDExtensionClassCreateInstance3 p_create, GDExtensionClassGetVirtual2 p_get_virtual) {
+	StringName parent;
+	api.string_name_new_with_latin1_chars(&parent, p_parent, 0);
+
+	GDExtensionClassCreationInfo6 info = { 0 };
+	info.is_exposed = 1;
+	info.create_instance_func = p_create;
+	info.free_instance_func = instance_free;
+	info.get_virtual_func = p_get_virtual;
+	api.classdb_register_extension_class6(api.library, p_class, &parent, &info);
+	api.string_name_destroy(&parent);
+}
+
+static void register_int_signal(const StringName *p_class, const StringName *p_signal, const char *p_argument_name) {
+	StringName argument_name;
+	StringName empty_name;
+	String empty_hint;
+	api.string_name_new_with_latin1_chars(&argument_name, p_argument_name, 0);
+	api.string_name_new_with_latin1_chars(&empty_name, "", 0);
+	api.string_new_with_utf8_chars(&empty_hint, "");
+
+	const uint32_t usage_default = 6; // PROPERTY_USAGE_STORAGE | PROPERTY_USAGE_EDITOR
+	GDExtensionPropertyInfo argument = { GDEXTENSION_VARIANT_TYPE_INT, &argument_name, &empty_name, 0, &empty_hint, usage_default };
+	api.classdb_register_extension_class_signal(api.library, p_class, p_signal, &argument, 1);
+
+	api.string_destroy(&empty_hint);
+	api.string_name_destroy(&empty_name);
+	api.string_name_destroy(&argument_name);
+}
+
+static void register_method(const StringName *p_class, const char *p_name, GDExtensionClassMethodCall p_call, GDExtensionClassMethodPtrCall p_ptrcall, GDExtensionVariantType p_return_type, uint32_t p_argument_count, const char *const *p_argument_names) {
 	StringName method_name;
 	StringName empty_name;
 	StringName argument_names[2];
@@ -181,7 +303,7 @@ static void register_method(const char *p_name, GDExtensionClassMethodCall p_cal
 	method.arguments_metadata = arguments_metadata;
 	method.default_argument_count = 0;
 	method.default_arguments = NULL;
-	api.classdb_register_extension_class_method(api.library, &class_name, &method);
+	api.classdb_register_extension_class_method(api.library, p_class, &method);
 
 	for (uint32_t i = 0; i < p_argument_count; i++) {
 		api.string_name_destroy(&argument_names[i]);
@@ -197,20 +319,19 @@ static void initialize(void *p_userdata, GDExtensionInitializationLevel p_level)
 		return;
 	}
 
-	StringName parent;
-	api.string_name_new_with_latin1_chars(&class_name, "TwoDogProbe", 0);
-	api.string_name_new_with_latin1_chars(&parent, "RefCounted", 0);
-
-	GDExtensionClassCreationInfo6 info = { 0 };
-	info.is_exposed = 1;
-	info.create_instance_func = probe_create;
-	info.free_instance_func = probe_free;
-	api.classdb_register_extension_class6(api.library, &class_name, &parent, &info);
-	api.string_name_destroy(&parent);
-
+	api.string_name_new_with_latin1_chars(&probe_class_name, "TwoDogProbe", 0);
+	register_class(&probe_class_name, "RefCounted", probe_create, NULL);
 	static const char *const add_arguments[] = { "a", "b" };
-	register_method("add", add_call, add_ptrcall, GDEXTENSION_VARIANT_TYPE_INT, 2, add_arguments);
-	register_method("describe", describe_call, describe_ptrcall, GDEXTENSION_VARIANT_TYPE_STRING, 0, NULL);
+	register_method(&probe_class_name, "add", add_call, add_ptrcall, GDEXTENSION_VARIANT_TYPE_INT, 2, add_arguments);
+	register_method(&probe_class_name, "describe", describe_call, describe_ptrcall, GDEXTENSION_VARIANT_TYPE_STRING, 0, NULL);
+
+	api.string_name_new_with_latin1_chars(&ticker_class_name, "TwoDogTicker", 0);
+	api.string_name_new_with_latin1_chars(&process_name, "_process", 0);
+	api.string_name_new_with_latin1_chars(&emit_signal_name, "emit_signal", 0);
+	api.string_name_new_with_latin1_chars(&ticked_name, "ticked", 0);
+	register_class(&ticker_class_name, "Node", ticker_create, ticker_get_virtual);
+	register_method(&ticker_class_name, "tick", tick_call, tick_ptrcall, GDEXTENSION_VARIANT_TYPE_INT, 0, NULL);
+	register_int_signal(&ticker_class_name, &ticked_name, "count");
 }
 
 static void deinitialize(void *p_userdata, GDExtensionInitializationLevel p_level) {
@@ -218,8 +339,13 @@ static void deinitialize(void *p_userdata, GDExtensionInitializationLevel p_leve
 	if (p_level != GDEXTENSION_INITIALIZATION_SCENE) {
 		return;
 	}
-	api.classdb_unregister_extension_class(api.library, &class_name);
-	api.string_name_destroy(&class_name);
+	api.classdb_unregister_extension_class(api.library, &ticker_class_name);
+	api.classdb_unregister_extension_class(api.library, &probe_class_name);
+	api.string_name_destroy(&ticked_name);
+	api.string_name_destroy(&emit_signal_name);
+	api.string_name_destroy(&process_name);
+	api.string_name_destroy(&ticker_class_name);
+	api.string_name_destroy(&probe_class_name);
 }
 
 // Interface functions arrive as void (*)(); casting through void (*)(void) states the real type explicitly (compilers
@@ -231,11 +357,14 @@ PROBE_EXPORT GDExtensionBool twodog_probe_init(GDExtensionInterfaceGetProcAddres
 	api.classdb_construct_object3 = LOAD(GDExtensionInterfaceClassdbConstructObject3, "classdb_construct_object3");
 	api.classdb_register_extension_class6 = LOAD(GDExtensionInterfaceClassdbRegisterExtensionClass6, "classdb_register_extension_class6");
 	api.classdb_register_extension_class_method = LOAD(GDExtensionInterfaceClassdbRegisterExtensionClassMethod, "classdb_register_extension_class_method");
+	api.classdb_register_extension_class_signal = LOAD(GDExtensionInterfaceClassdbRegisterExtensionClassSignal, "classdb_register_extension_class_signal");
 	api.classdb_unregister_extension_class = LOAD(GDExtensionInterfaceClassdbUnregisterExtensionClass, "classdb_unregister_extension_class");
 	api.object_set_instance = LOAD(GDExtensionInterfaceObjectSetInstance, "object_set_instance");
 	api.string_name_new_with_latin1_chars = LOAD(GDExtensionInterfaceStringNameNewWithLatin1Chars, "string_name_new_with_latin1_chars");
 	api.string_new_with_utf8_chars = LOAD(GDExtensionInterfaceStringNewWithUtf8Chars, "string_new_with_utf8_chars");
 	api.variant_get_type = LOAD(GDExtensionInterfaceVariantGetType, "variant_get_type");
+	api.variant_call = LOAD(GDExtensionInterfaceVariantCall, "variant_call");
+	api.variant_destroy = LOAD(GDExtensionInterfaceVariantDestroy, "variant_destroy");
 
 	GDExtensionInterfaceVariantGetPtrDestructor get_destructor = LOAD(GDExtensionInterfaceVariantGetPtrDestructor, "variant_get_ptr_destructor");
 	GDExtensionInterfaceGetVariantFromTypeConstructor from_type = LOAD(GDExtensionInterfaceGetVariantFromTypeConstructor, "get_variant_from_type_constructor");
@@ -247,6 +376,8 @@ PROBE_EXPORT GDExtensionBool twodog_probe_init(GDExtensionInterfaceGetProcAddres
 	api.string_destroy = get_destructor(GDEXTENSION_VARIANT_TYPE_STRING);
 	api.variant_from_int = from_type(GDEXTENSION_VARIANT_TYPE_INT);
 	api.variant_from_string = from_type(GDEXTENSION_VARIANT_TYPE_STRING);
+	api.variant_from_string_name = from_type(GDEXTENSION_VARIANT_TYPE_STRING_NAME);
+	api.variant_from_object = from_type(GDEXTENSION_VARIANT_TYPE_OBJECT);
 	api.int_from_variant = to_type(GDEXTENSION_VARIANT_TYPE_INT);
 
 	r_initialization->minimum_initialization_level = GDEXTENSION_INITIALIZATION_SCENE;

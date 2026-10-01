@@ -32,8 +32,20 @@ internal static class Program
                 throw new InvalidOperationException("WebXR interface is not registered");
             }
 
-            // The browser loop owns the lifetime after Run() returns.
-            engine.Run();
+            // The blue cubes spin themselves via SpinningCube._Process (Godot side), the red ones via GDScript;
+            // the white ones are plain MeshInstance3Ds we drive from Run()'s per-frame callback.
+            var whiteCubes = engine.Tree.CurrentScene
+                .GetNode<Node3D>("Flair/WhiteCubes")
+                .GetChildren().OfType<Node3D>().ToArray();
+            var whiteSpinAxis = new Vector3(1, 1, 0).Normalized();
+
+            // The browser loop owns the lifetime after Run() returns, calling back after every engine frame.
+            engine.Run(() =>
+            {
+                var delta = (float)engine.Tree.Root.GetProcessDeltaTime();
+                foreach (var cube in whiteCubes)
+                    cube.Rotate(whiteSpinAxis, 1.8f * delta);
+            });
         }
         catch (Exception exception)
         {

@@ -8,6 +8,9 @@ a `.gdignore`):
 - `gdextension/` - a GDExtension in plain C (`TwoDogProbe`); the `GDExtensionProbe` label in `main.tscn` calls it
   on every host. Building the game project compiles it for the build machine (MSVC on Windows, `cc` elsewhere); the
   browser hosts compile a WebAssembly side module with the wasm-tools workload's emscripten and embed it in `godot.pck`
+- `signals/` - the signal table in the top-left corner: four sources tick once per second (a C# `[Signal]`, a GDScript
+  `signal`, an engine `Timer` and the GDExtension's `TwoDogTicker`), and each row counts what a C# (`SignalCounter.cs`)
+  and a GDScript (`signal_counter.gd`) listener received. Both columns should advance in lockstep on every host
 - `showcase.2dog/` - desktop host: `dotnet run --project demos/showcase/showcase.2dog`
 - `showcase.web/` - browser (wasm) host: `dotnet publish` from that folder (defaults to Release; needs the wasm-tools workload)
 - `showcase.webxr/` - WebXR browser host (its page ships the WebXR Layers polyfill): same publish flow; VR needs a secure context (localhost or HTTPS)

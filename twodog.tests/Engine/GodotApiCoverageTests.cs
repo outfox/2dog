@@ -41,4 +41,8 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
     [Fact]
     public void GDExtensionProbe_LoadsAndAnswersEveryCallPath() =>
         GodotApiSmoke.GDExtensionProbe(godot.Tree);
+
+    [Fact]
+    public void SignalTable_EverySourceReachesCSharpAndGDScript() =>
+        GodotApiSmoke.SignalTable(godot.Tree);
 }

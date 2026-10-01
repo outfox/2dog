@@ -5,6 +5,11 @@
 [ext_resource type="Script" uid="uid://iij6nqf8c83c" path="res://spinning_cube.gd" id="4_spin_gd"]
 [ext_resource type="Script" uid="uid://b6yvva55iwkax" path="res://WebXR.cs" id="5_webxr"]
 [ext_resource type="Script" uid="uid://ce2ngeyqr7nfp" path="res://gdextension/gdextension_probe.gd" id="6_gdextension_probe"]
+[ext_resource type="Script" uid="uid://udilgiroekpe" path="res://signals/signal_sources.gd" id="7_signal_sources"]
+[ext_resource type="Script" uid="uid://ccv70l8e0x3f1" path="res://signals/CSharpTicker.cs" id="8_csharp_ticker"]
+[ext_resource type="Script" uid="uid://cs5cooybrprck" path="res://signals/gdscript_ticker.gd" id="9_gdscript_ticker"]
+[ext_resource type="Script" uid="uid://dov5je877svgy" path="res://signals/SignalCounter.cs" id="10_counter_cs"]
+[ext_resource type="Script" uid="uid://d1hcx2etqrtl6" path="res://signals/signal_counter.gd" id="11_counter_gd"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cube"]
 
@@ -20,6 +25,24 @@ albedo_color = Color(1, 0.15, 0.2, 1)
 font_size = 20
 outline_size = 6
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_signals"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.45)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_signal_header"]
+font_size = 14
+font_color = Color(1, 1, 1, 0.7)
+
+[sub_resource type="LabelSettings" id="LabelSettings_signal"]
+font_size = 16
 
 [node name="Control" type="Control" unique_id=1963222945]
 layout_mode = 3
@@ -150,6 +173,134 @@ text = "GDExtension probe pending"
 label_settings = SubResource("LabelSettings_1bvp3")
 script = ExtResource("6_gdextension_probe")
 
+[node name="Signals" type="PanelContainer" parent="." unique_id=1766298625]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 16.0
+offset_bottom = 16.0
+theme_override_styles/panel = SubResource("StyleBox_signals")
+
+[node name="Sources" type="Node" parent="Signals" unique_id=1659017669]
+script = ExtResource("7_signal_sources")
+
+[node name="CSharpTicker" type="Node" parent="Signals/Sources" unique_id=441084440]
+script = ExtResource("8_csharp_ticker")
+
+[node name="GDScriptTicker" type="Node" parent="Signals/Sources" unique_id=1302195625]
+script = ExtResource("9_gdscript_ticker")
+
+[node name="EngineTimer" type="Timer" parent="Signals/Sources" unique_id=164660391]
+autostart = true
+
+[node name="Table" type="GridContainer" parent="Signals" unique_id=1179797352]
+layout_mode = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 2
+columns = 3
+
+[node name="EmittedBy" type="Label" parent="Signals/Table" unique_id=382856456]
+layout_mode = 2
+text = "Emitted by"
+label_settings = SubResource("LabelSettings_signal_header")
+
+[node name="CSharpGot" type="Label" parent="Signals/Table" unique_id=1224315192]
+layout_mode = 2
+text = "C# got"
+label_settings = SubResource("LabelSettings_signal_header")
+horizontal_alignment = 1
+
+[node name="GDScriptGot" type="Label" parent="Signals/Table" unique_id=797480252]
+layout_mode = 2
+text = "GDScript got"
+label_settings = SubResource("LabelSettings_signal_header")
+horizontal_alignment = 1
+
+[node name="CSharpTickerName" type="Label" parent="Signals/Table" unique_id=439307037]
+layout_mode = 2
+text = "C# [Signal]"
+label_settings = SubResource("LabelSettings_signal")
+
+[node name="CSharpTickerInCSharp" type="Label" parent="Signals/Table" unique_id=1585304600]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("10_counter_cs")
+Source = NodePath("../../Sources/CSharpTicker")
+
+[node name="CSharpTickerInGDScript" type="Label" parent="Signals/Table" unique_id=632352821]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("11_counter_gd")
+source = NodePath("../../Sources/CSharpTicker")
+signal_name = &"Ticked"
+
+[node name="GDScriptTickerName" type="Label" parent="Signals/Table" unique_id=1250594759]
+layout_mode = 2
+text = "GDScript signal"
+label_settings = SubResource("LabelSettings_signal")
+
+[node name="GDScriptTickerInCSharp" type="Label" parent="Signals/Table" unique_id=1252924378]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("10_counter_cs")
+Source = NodePath("../../Sources/GDScriptTicker")
+
+[node name="GDScriptTickerInGDScript" type="Label" parent="Signals/Table" unique_id=445303362]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("11_counter_gd")
+source = NodePath("../../Sources/GDScriptTicker")
+
+[node name="EngineTimerName" type="Label" parent="Signals/Table" unique_id=1844602670]
+layout_mode = 2
+text = "Engine Timer"
+label_settings = SubResource("LabelSettings_signal")
+
+[node name="EngineTimerInCSharp" type="Label" parent="Signals/Table" unique_id=1213688100]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("10_counter_cs")
+Source = NodePath("../../Sources/EngineTimer")
+
+[node name="EngineTimerInGDScript" type="Label" parent="Signals/Table" unique_id=1255960917]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("11_counter_gd")
+source = NodePath("../../Sources/EngineTimer")
+signal_name = &"timeout"
+
+[node name="GDExtensionTickerName" type="Label" parent="Signals/Table" unique_id=963367516]
+layout_mode = 2
+text = "GDExtension (C)"
+label_settings = SubResource("LabelSettings_signal")
+
+[node name="GDExtensionTickerInCSharp" type="Label" parent="Signals/Table" unique_id=1822665816]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("10_counter_cs")
+Source = NodePath("../../Sources/GDExtensionTicker")
+
+[node name="GDExtensionTickerInGDScript" type="Label" parent="Signals/Table" unique_id=1407712963]
+layout_mode = 2
+text = "-"
+label_settings = SubResource("LabelSettings_signal")
+horizontal_alignment = 1
+script = ExtResource("11_counter_gd")
+source = NodePath("../../Sources/GDExtensionTicker")
 [node name="EnterVrButton" type="Button" parent="." unique_id=1071455239]
 visible = false
 layout_mode = 1

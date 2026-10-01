@@ -20,6 +20,7 @@ public static class GodotApiSmoke
         SceneAndGeneratedScript();
         GDScriptOnlyEngineFeatures(tree);
         GDExtensionProbe(tree);
+        SignalTable(tree);
     }
 
     public static void CoreTypesAndNativeHelpers(SceneTree tree)
@@ -178,7 +179,7 @@ public static class GodotApiSmoke
             const string cubePath = "Flair/BlueCubes/BlueCube1";
             var cube = instance.GetNodeOrNull<SpinningCube>(cubePath);
             Require(cube is not null, "generated C# script type was not attached to the scene: "
-                                      + DescribeScriptBinding(instance.GetNodeOrNull(cubePath)!));
+                                      + DescribeScriptBinding(instance.GetNodeOrNull(cubePath)!, typeof(SpinningCube)));
             Require(GodotObject.IsInstanceValid(cube), "generated C# script instance is invalid");
         }
         finally
@@ -215,6 +216,72 @@ public static class GodotApiSmoke
         RequireScenePassed(tree, "CenterContainer/GDExtensionProbe", "gdextension_smoke", "GDExtension probe");
     }
 
+    /// <summary>
+    /// The scene's signal table: a C# [Signal], a GDScript signal, an engine Timer and a GDExtension signal, each
+    /// counted by a C# (SignalCounter) and a GDScript (signal_counter.gd) listener. Fires every source once, out of
+    /// band of the sources' own once-per-second ticks, and requires both listeners to receive it with its payload.
+    /// </summary>
+    public static void SignalTable(SceneTree tree)
+    {
+        var scene = tree.CurrentScene;
+        Require(scene is not null, "there is no current scene for the signal table");
+
+        RequireSignalReceived(scene, "CSharpTicker", source =>
+        {
+            Require(source is CSharpTicker,
+                "the CSharpTicker script did not bind: " + DescribeScriptBinding(source, typeof(CSharpTicker)));
+            return ((CSharpTicker)source).Tick();
+        });
+        RequireSignalReceived(scene, "GDScriptTicker", source =>
+        {
+            using var count = source.Call("tick");
+            return count.AsInt32();
+        });
+        RequireSignalReceived(scene, "EngineTimer", source =>
+        {
+            source.EmitSignal(Timer.SignalName.Timeout);
+            return -1;
+        });
+        RequireSignalReceived(scene, "GDExtensionTicker", source =>
+        {
+            using var count = source.Call("tick");
+            return count.AsInt32();
+        });
+    }
+
+    // emit returns the payload the listeners must report, or -1 for a signal without one.
+    private static void RequireSignalReceived(Node scene, string source, Func<Node, int> emit)
+    {
+        var emitter = scene.GetNodeOrNull($"Signals/Sources/{source}");
+        Require(emitter is not null, $"signal source {source} is missing");
+        var inCSharp = scene.GetNodeOrNull<SignalCounter>($"Signals/Table/{source}InCSharp");
+        var inGDScript = scene.GetNodeOrNull<Label>($"Signals/Table/{source}InGDScript");
+        Require(inCSharp is not null && inGDScript is not null, $"the {source} signal counters are missing");
+
+        var csharpBefore = inCSharp.Received;
+        var gdscriptBefore = GDScriptCounter(inGDScript, "received");
+        var payload = emit(emitter);
+
+        Require(inCSharp.Received == csharpBefore + 1,
+            $"{source}'s signal reached the C# listener {inCSharp.Received - csharpBefore} times, not once");
+        var gdscriptReceived = GDScriptCounter(inGDScript, "received");
+        Require(gdscriptReceived == gdscriptBefore + 1,
+            $"{source}'s signal reached the GDScript listener {gdscriptReceived - gdscriptBefore} times, not once");
+        if (payload < 0) return;
+
+        Require(inCSharp.LastCount == payload,
+            $"the C# listener got {source}'s payload as {inCSharp.LastCount}, not {payload}");
+        var gdscriptPayload = GDScriptCounter(inGDScript, "last_count");
+        Require(gdscriptPayload == payload,
+            $"the GDScript listener got {source}'s payload as {gdscriptPayload}, not {payload}");
+    }
+
+    private static int GDScriptCounter(Label counter, string property)
+    {
+        using var value = counter.Get(property);
+        return value.AsInt32();
+    }
+
     // Scene-attached probe scripts record <prefix>_passed (and <prefix>_failure) metadata in _ready().
     private static void RequireScenePassed(SceneTree tree, string nodePath, string metaPrefix, string what)
     {
@@ -244,11 +311,10 @@ public static class GodotApiSmoke
 
     // Distinguishes a missing node, a script that failed to bind, and a managed type loaded twice
     // (different AssemblyLoadContext), which is otherwise invisible in a null GetNodeOrNull<T>.
-    private static string DescribeScriptBinding(Node node)
+    private static string DescribeScriptBinding(Node node, Type expected)
     {
         if (node is null) return "node not found";
 
-        var expected = typeof(SpinningCube);
         var actual = node.GetType();
         using var scriptValue = node.GetScript();
         var script = scriptValue.AsGodotObject() as Script;
