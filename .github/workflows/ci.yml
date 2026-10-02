@@ -552,12 +552,16 @@ jobs:
   # is complete. Consumers never install emsdk — the workload ships the
   # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
   web-smoke:
-    name: Web Smoke (browser-wasm publish)
+    name: Web Smoke (AOT=${{ matrix.aot }})
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: ${{ !cancelled() && needs.pack.result == 'success' }}
     runs-on: blacksmith-8vcpu-ubuntu-2404
-    timeout-minutes: 30
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        aot: [false, true]
 
     steps:
       - name: Checkout repository
@@ -606,18 +610,18 @@ jobs:
       # wasm-capable SDK band, so the from-root publish flow the docs promise
       # stays covered.
       - name: Publish showcase.web
-        run: dotnet publish demos/showcase/showcase.web -c Release
+        run: dotnet publish demos/showcase/showcase.web -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
       # The WebXR flavor differs only in its page shell (Layers polyfill); the
       # engine link and pck export are shared, so this publish is incremental.
       - name: Publish showcase.webxr
-        run: dotnet publish demos/showcase/showcase.webxr -c Release
+        run: dotnet publish demos/showcase/showcase.webxr -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
       # The Blazor flavor is a Blazor Web App (server + wasm client); the client
       # links the engine into Blazor's own dotnet.native.wasm and 2dog.blazor's
       # GodotView starts Godot in-process. Shares the pck export.
       - name: Publish showcase.blazor
-        run: dotnet publish demos/showcase/showcase.blazor -c Release
+        run: dotnet publish demos/showcase/showcase.blazor -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
       - name: Verify app bundle
         run: |
@@ -895,7 +899,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: blazor-browser-failure-${{ github.run_attempt }}
+          name: blazor-browser-failure-aot-${{ matrix.aot }}-${{ github.run_attempt }}
           path: |
             demos/showcase/showcase.blazor/bin/Release/net10.0/publish/
             /tmp/2dog-blazor-server.log

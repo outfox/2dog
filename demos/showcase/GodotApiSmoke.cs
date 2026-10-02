@@ -13,6 +13,7 @@ public static class GodotApiSmoke
     public static void RunAll(SceneTree tree)
     {
         CoreTypesAndNativeHelpers(tree);
+        ManagedCallables();
         ErrorReportingAndTypedCollections();
         ImagesAndResources();
         EngineSingletons();
@@ -77,6 +78,45 @@ public static class GodotApiSmoke
         Require(result.AsInt32() == 42, "managed Callable invocation failed");
     }
 
+    public static void ManagedCallables()
+    {
+        using var emitter = new Node();
+        using var child = new Node();
+        try
+        {
+            var received = 0;
+            Action<Node> listener = node =>
+            {
+                Require(ReferenceEquals(node, child), "managed Callable received the wrong object argument");
+                received++;
+            };
+            var callable = Callable.From<Node>(listener);
+            using Variant boxed = callable;
+            var roundTrip = boxed.AsCallable();
+            Require(ReferenceEquals(roundTrip.Delegate, listener), "Callable marshalling lost the original delegate");
+            using var ignored = roundTrip.Call(child);
+            Require(received == 1, "round-tripped managed Callable did not invoke its listener");
+
+            Require(emitter.Connect(Node.SignalName.ChildEnteredTree, roundTrip) == Error.Ok,
+                "managed Callable could not connect to an object-argument signal");
+            emitter.EmitSignal(Node.SignalName.ChildEnteredTree, child);
+            Require(received == 2, "connected managed Callable did not receive its signal");
+            // A new Callable has a different native handle, but must compare by the original delegate.
+            emitter.Disconnect(Node.SignalName.ChildEnteredTree, Callable.From<Node>(listener));
+            emitter.EmitSignal(Node.SignalName.ChildEnteredTree, child);
+            Require(received == 2, "disconnecting an equivalent Callable left its listener connected");
+
+            var transform = Callable.From<Vector3, Vector3>(value => value * 2);
+            using var transformed = transform.Call(new Vector3(1, 2, 3));
+            Require(transformed.AsVector3() == new Vector3(2, 4, 6), "managed Callable lost its struct argument or result");
+        }
+        finally
+        {
+            emitter.Free();
+            child.Free();
+        }
+    }
+
     public static void ErrorReportingAndTypedCollections()
     {
         // Both calls go through the 7-pointer-arg native shape that had no wasm trampoline
@@ -88,6 +128,7 @@ public static class GodotApiSmoke
         try
         {
             GD.PushWarning("2dog smoke: expected warning, exercising err_print_error");
+            GD.PushError("2dog smoke: expected error, exercising err_print_error");
         }
         finally
         {

@@ -12,10 +12,17 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
         GodotApiSmoke.CoreTypesAndNativeHelpers(godot.Tree);
 
     [Fact]
+    public void ManagedCallables_PreserveInvocationAndSignalIdentity() =>
+        GodotApiSmoke.ManagedCallables();
+
+    [Fact]
     public void ErrorReportingAndTypedCollections_ReachTheirNativeShapes()
     {
         GodotApiSmoke.ErrorReportingAndTypedCollections();
-        godot.Errors.Expect("2dog smoke: expected warning");
+        var diagnostics = godot.Errors.Expect("2dog smoke: expected");
+        Assert.Collection(diagnostics,
+            warning => Assert.Equal(GodotErrorType.Warning, warning.Type),
+            error => Assert.Equal(GodotErrorType.Error, error.Type));
     }
 
     [Fact]

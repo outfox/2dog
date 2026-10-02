@@ -15,6 +15,7 @@ namespace twodog;
 internal static unsafe partial class WebHost
 {
     private static nint _pluginsInitializer;
+    private static nint _initializePluginsCallback;
     private static bool _pluginsInitialized;
     private static Func<bool>? _iterate;
     private static Action? _perFrame;
@@ -60,8 +61,7 @@ internal static unsafe partial class WebHost
     private static extern void godot_js_os_finish_async(nint callback);
 
     [UnmanagedCallersOnly]
-    private static nint LoadFromExecutable() =>
-        (nint)(delegate* unmanaged<nint, nint, nint, int, godot_bool>)&InitializePlugins;
+    private static nint LoadFromExecutable() => _initializePluginsCallback;
 
     [UnmanagedCallersOnly]
     private static godot_bool InitializePlugins(nint godotDllHandle, nint outManagedCallbacks,
@@ -95,6 +95,9 @@ internal static unsafe partial class WebHost
         if (initializer == 0)
             throw new ArgumentException($"{nameof(WebHost)}: plugins initializer pointer must not be null.", nameof(initializer));
         _pluginsInitializer = initializer;
+        // Mono wasm AOT can abort in ldftn when a native callback takes another
+        // UnmanagedCallersOnly method's address. Resolve it before native entry.
+        _initializePluginsCallback = (nint)(delegate* unmanaged<nint, nint, nint, int, godot_bool>)&InitializePlugins;
         set_load_from_executable_fn((nint)(delegate* unmanaged<nint>)&LoadFromExecutable);
     }
 
