@@ -220,18 +220,93 @@ Blazor hosts. It does not change the runtime's exception termination policy.
 Some fatal Mono runtime paths bypass managed unhandled-exception events and
 write directly to stderr, which the browser host also routes to console errors.
 
-An unawaited task's exception is reported only when the faulted task becomes
-eligible for garbage collection and is finalized. To expose failures immediately,
+A plain discarded task (`_ = SaveAsync()`) reaches the global unobserved-task
+handler only when it becomes eligible for garbage collection and is finalized.
+There is no reporting timer or fixed deadline. With little managed allocation,
+the relevant collection may not happen during the page's lifetime; a task that
+remains referenced cannot be collected at all. The runtime can also terminate
+before finalization. This event is a fallback, not a reliable prompt notification.
+For intentionally unawaited operations, use `Forget()` to report failures as
+soon as the task faults, even while the task is still referenced:
+
+```csharp
+using twodog;
+
+SaveAsync().Forget();
+```
+
+This also observes tasks failed with `TaskCompletionSource.SetException` or
+`Task.FromException`, where no exception was thrown for first-chance logging to
+see. Successful and canceled tasks produce no output. It works with `Task`,
+`Task<T>`, `ValueTask`, and `ValueTask<T>` on desktop and browser. Passing a value
+task to `Forget()` consumes it; do not await or consume that value task again.
+
+To expose every thrown exception, including failures in plain discarded tasks,
 or catch the original exception before a runtime abort, enable first-chance
-logging before registering the plugins initializer or starting Godot:
+logging in the **web host**, before registering the plugins initializer or
+starting Godot:
 
 ```csharp
 twodog.Engine.WebLogFirstChanceExceptions = true;
 ```
 
+The `.2dog` host's `Program.cs` runs on desktop. The standard browser host has
+its own `.web/Program.cs`; put the setting at the start of its `Main`. If the
+web entry point is shared or otherwise not obvious, add `BrowserDiagnostics.cs`
+to the `.web` project with a module initializer:
+
+```csharp
+using System.Runtime.CompilerServices;
+
+internal static class BrowserDiagnostics
+{
+    [ModuleInitializer]
+    internal static void Initialize()
+    {
+        twodog.Engine.WebLogFirstChanceExceptions = true;
+    }
+}
+```
+
+Republish the `.web` project and reload its updated app bundle. For a Blazor
+host, put the setting in the **client** startup or a client module initializer.
+
 This diagnostic mode logs **all** thrown managed exceptions, including ones
 your code catches. It can be noisy and expensive; set it back to `false` after
 investigating. Await tasks when possible to handle their failures at the call site.
+
+First-chance logging does not depend on garbage collection. If it appears silent,
+test both stderr and a deliberate throw immediately after enabling it:
+
+```csharp
+Console.Error.WriteLine($"stderr works; diagnostics={twodog.Engine.WebLogFirstChanceExceptions}");
+try { throw new InvalidOperationException("diagnostics test"); }
+catch (InvalidOperationException) { }
+```
+
+The marker should say `diagnostics=True`, followed by a `2dog: First-chance managed
+exception` error containing `diagnostics test`. If the marker is missing, check
+the published entry point, deployed bundle, and console filters. If the marker
+appears but the deliberately thrown exception does not, investigate the runtime
+and publish configuration; GC timing cannot explain that result.
+
+If `EmitSignal` runs but a scene-connected handler never starts, inspect the
+exported scene's connections too:
+
+```csharp
+var scene = GD.Load<PackedScene>("res://IntroScene/intro.tscn");
+Console.WriteLine($"Saved connections: {scene.GetState().GetConnectionCount()}");
+```
+
+A missing connection produces no managed exception. During content export,
+2dog supplies the game assembly built for the current configuration so the editor
+can discover custom C# signals. It also refreshes the scene export cache when
+managed assemblies change, including caches made before this assembly selection
+was available. Republish the pack as well as the managed browser app after updating.
+
+Managed AOT is optional: `WasmBuildNative` links Godot and the .NET runtime into
+WebAssembly; `RunAOTCompilation` additionally compiles managed assemblies ahead
+of time during publish. First-chance exception logging works without managed AOT.
 
 ## GDExtensions
 

@@ -39,7 +39,8 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 try {
     await send('Runtime.enable');
     await send('Page.enable');
-    for (const mode of ['caught', 'first-chance', 'unobserved', 'broken-stderr', 'unhandled-first-chance', 'unhandled']) {
+    for (const mode of ['forgotten', 'forgotten-completed', 'forgotten-source', 'forgotten-quiet', 'forgotten-value-task',
+        'caught', 'first-chance', 'unobserved', 'broken-stderr', 'unhandled-first-chance', 'unhandled']) {
         logs = [];
         const probeUrl = new URL(url);
         probeUrl.searchParams.set('mode', mode);
@@ -50,7 +51,20 @@ try {
         assert(logs.some((l) => terminal.test(l.text)), `${mode} did not finish: ${JSON.stringify(logs)}`);
         await delay(100);
         const errors = logs.filter((l) => l.type === 'error').map((l) => l.text).join('\n');
-        if (mode === 'first-chance') {
+        if (mode === 'forgotten' || mode === 'forgotten-source') {
+            assert.equal(errors.match(/2dog: Fire-and-forget task exception/g)?.length, 1);
+            assert.match(errors, mode === 'forgotten' ? /forgotten-task/ : /source-task/);
+            assert.match(errors, /inner-failure/);
+            if (mode === 'forgotten') assert.match(errors, /FailAsync/);
+        } else if (mode === 'forgotten-completed') {
+            assert.equal(errors.match(/2dog: Fire-and-forget task exception/g)?.length, 1);
+            assert.match(errors, /completed-task/);
+            assert.match(errors, /second-failure/);
+        } else if (mode === 'forgotten-value-task') {
+            assert.equal(errors.match(/2dog: Fire-and-forget task exception/g)?.length, 2);
+            assert.match(errors, /InvalidOperationException: value-task/);
+            assert.match(errors, /InvalidOperationException: generic-value-task/);
+        } else if (mode === 'first-chance') {
             assert.match(errors, /2dog: First-chance managed exception[\s\S]*retained-task/);
             assert.match(errors, /FailAsync/);
             assert.doesNotMatch(errors, /caught-after-disable/);

@@ -7,6 +7,44 @@ WebExceptionDiagnostics.Install();
 WebExceptionDiagnostics.Install();
 switch (args.Single())
 {
+    case "forgotten":
+        var forgotten = FailAsync("forgotten-task");
+        forgotten.Forget();
+        await Task.Delay(100);
+        GC.KeepAlive(forgotten);
+        break;
+    case "forgotten-completed":
+        Task.FromException(new AggregateException(
+            new InvalidOperationException("completed-task"), new Exception("second-failure"))).Forget();
+        break;
+    case "forgotten-source":
+        var source = new TaskCompletionSource();
+        var context = SynchronizationContext.Current;
+        SynchronizationContext.SetSynchronizationContext(new NeverPumpedContext());
+        source.Task.Forget();
+        SynchronizationContext.SetSynchronizationContext(context);
+        source.SetException(new InvalidOperationException("source-task", new Exception("inner-failure")));
+        await Task.Delay(100);
+        GC.KeepAlive(source);
+        break;
+    case "forgotten-quiet":
+        Task.CompletedTask.Forget();
+        Task.FromResult(1).Forget();
+        Task.FromCanceled(new CancellationToken(true)).Forget();
+        var success = new TaskCompletionSource();
+        success.Task.Forget();
+        success.SetResult();
+        var cancellation = new TaskCompletionSource();
+        cancellation.Task.Forget();
+        cancellation.SetCanceled();
+        await Task.Delay(100);
+        break;
+    case "forgotten-value-task":
+        new ValueTask(FailAsync("value-task")).Forget();
+        new ValueTask<int>(Task.FromException<int>(new InvalidOperationException("generic-value-task"))).Forget();
+        ValueTask.CompletedTask.Forget();
+        await Task.Delay(100);
+        break;
     case "unobserved":
         AbandonFaultedTask();
         for (var i = 0; i < 4; i++)
@@ -44,6 +82,7 @@ switch (args.Single())
         try { throw new InvalidOperationException("original-failure"); }
         catch (InvalidOperationException e) when (e.Message == "original-failure") { }
         WebExceptionDiagnostics.LogFirstChanceExceptions = false;
+        Task.FromException(new Exception("forgotten-with-broken-stderr")).Forget();
         break;
     default:
         throw new ArgumentException("Unknown probe mode");
@@ -68,4 +107,9 @@ static async void ThrowAsyncVoid()
 sealed class ThrowingWriter : StringWriter
 {
     public override void WriteLine(string? value) => throw new IOException("stderr-failure");
+}
+
+sealed class NeverPumpedContext : SynchronizationContext
+{
+    public override void Post(SendOrPostCallback callback, object? state) { }
 }

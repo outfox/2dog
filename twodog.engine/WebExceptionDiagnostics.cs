@@ -54,6 +54,9 @@ internal static class WebExceptionDiagnostics
     private static void OnFirstChanceException(object? sender, FirstChanceExceptionEventArgs e) =>
         Report("First-chance managed exception", e.Exception, captureCurrentStack: true);
 
+    internal static void ReportTaskFailure(AggregateException exception) =>
+        Report("Fire-and-forget task exception", exception);
+
     private static void Report(string kind, object exception, bool captureCurrentStack = false)
     {
         // Formatting or writing an exception can itself throw. In first-chance

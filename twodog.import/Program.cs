@@ -11,6 +11,7 @@ string? projectPath = null;
 string? exportPreset = null;
 string? exportOutput = null;
 string? listPackPath = null;
+string? assemblyHash = null;
 var verbose = false;
 
 for (var i = 0; i < args.Length; i++)
@@ -37,6 +38,9 @@ for (var i = 0; i < args.Length; i++)
             break;
         case "--list-pack" when i + 1 < args.Length:
             listPackPath = args[++i];
+            break;
+        case "--assembly-hash" when i + 1 < args.Length:
+            assemblyHash = args[++i];
             break;
         case "--verbose":
             verbose = true;
@@ -76,6 +80,7 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
     Console.Error.WriteLine("  --list-pack <pck>  List a .pck's contents by size (no engine involved).");
+    Console.Error.WriteLine("  --assembly-hash <hash>  Refresh cached export scenes when managed assemblies change.");
     Console.Error.WriteLine("  --verbose          Pass --verbose to the engine.");
     Console.Error.WriteLine();
     Console.Error.WriteLine("  The project path must contain a project.godot file.");
@@ -91,6 +96,22 @@ if (importLock == null)
 {
     Console.Error.WriteLine($"Timed out waiting for import lock: {lockPath}");
     return 1;
+}
+
+// Scene conversion does not track C# assembly metadata in Godot's cache key. Refresh under the same lock
+// as export: concurrent hosts must never delete this cache while another export is repacking a scene.
+var assemblyStamp = Path.Combine(projectPath, ".godot", "2dog.export-assemblies.hash");
+if (exportPreset != null && assemblyHash != null &&
+    (!File.Exists(assemblyStamp) || File.ReadAllText(assemblyStamp) != assemblyHash))
+{
+    var exportCache = Path.GetFullPath(Path.Combine(projectPath, ".godot", "exported"));
+    if (Directory.Exists(exportCache)) Directory.Delete(exportCache, recursive: true);
+}
+
+void RecordExportAssemblyHash(int exitCode)
+{
+    if (exitCode == 0 && exportPreset != null && assemblyHash != null)
+        File.WriteAllText(assemblyStamp, assemblyHash);
 }
 
 // An explicitly configured external editor wins: it is unambiguous user intent
@@ -126,6 +147,7 @@ if (editorPath != null)
 
     process.Start();
     process.WaitForExit();
+    RecordExportAssemblyHash(process.ExitCode);
     return process.ExitCode;
 }
 
@@ -196,6 +218,8 @@ unsafe
 
 if (rc == -1)
     Console.Error.WriteLine($"{libgodotPath} is not an editor build of libgodot; {(exportPreset != null ? "export" : "import")} requires the editor variant.");
+
+RecordExportAssemblyHash(rc);
 
 // Engine cleanup can leave non-background threads; exit hard so the helper
 // process reliably terminates.
