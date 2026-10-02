@@ -24,10 +24,15 @@ public sealed class ExportPackSceneScenario : IEngineScenario
         using var state = scene.GetState();
         using var source = ReadProperty(state, "Receiver", "Source");
         using var interval = ReadProperty(state, "Emitter", "Interval");
-        return $"connections={state.GetConnectionCount()};signal={state.GetConnectionSignal(0)};" +
-            $"from={state.GetConnectionSource(0)};to={state.GetConnectionTarget(0)};method={state.GetConnectionMethod(0)};" +
+        return $"connections={state.GetConnectionCount()};{DescribeFirstConnection(state)};" +
             $"Source={DescribeValue(source)};Interval={DescribeValue(interval)}";
     }
+
+    // Indexing an empty connection list logs engine errors; report a lost connection as "none" instead.
+    private static string DescribeFirstConnection(SceneState state) =>
+        state.GetConnectionCount() == 0 ? "signal=none" :
+            $"signal={state.GetConnectionSignal(0)};from={state.GetConnectionSource(0)};" +
+            $"to={state.GetConnectionTarget(0)};method={state.GetConnectionMethod(0)}";
 
     // Variant.ToString() renders NIL as an empty string; name it so a lost value is obvious in the failure.
     private static string DescribeValue(Variant value) =>
