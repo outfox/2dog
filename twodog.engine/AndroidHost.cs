@@ -13,9 +13,6 @@ public static class AndroidHost
     private static readonly object Sync = new();
     private static string? _registeredDirectory;
 
-    [DllImport("libc", SetLastError = true)]
-    private static extern int setenv(string name, string value, int overwrite);
-
     /// <summary>Registers GodotPlugins and the directory containing the game's extracted assembly.</summary>
     /// <param name="projectAssemblyDirectory">Private app directory containing the game DLL, extracted from APK assets.</param>
     public static void Register(string projectAssemblyDirectory)
@@ -34,9 +31,7 @@ public static class AndroidHost
                 return;
             }
             var module = NativeLibrary.Load("libgodot_android.so", typeof(AndroidHost).Assembly, null);
-            // Native getenv() does not necessarily see Environment.SetEnvironmentVariable().
-            if (setenv("GODOT_PROJECT_ASSEMBLY_DIR", directory, 1) != 0)
-                throw new InvalidOperationException($"setenv failed: {Marshal.GetLastPInvokeError()}");
+            NativeEnvironment.SetVariable("GODOT_PROJECT_ASSEMBLY_DIR", directory);
             HostedGodotPlugins.Register(module);
             _registeredDirectory = directory;
         }

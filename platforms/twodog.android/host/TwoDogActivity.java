@@ -10,7 +10,6 @@ public final class TwoDogActivity extends org.godotengine.godot.GodotActivity {
         List<String> args = new ArrayList<>(super.getCommandLine());
         args.add("--main-pack");
         args.add("res://game.pck");
-        args.add("--verbose");
         return args;
     }
 }

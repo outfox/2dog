@@ -60,11 +60,6 @@ public class Engine : IDisposable, IAsyncDisposable
         _projectPath = string.IsNullOrEmpty(path) ? null : Path.GetFullPath(path);
     }
 
-    // .NET's Environment.SetEnvironmentVariable does not propagate to native getenv()
-    // on Linux/.NET 8+. We must call setenv directly for Godot's native code to see it.
-    [DllImport("libc", SetLastError = true)]
-    private static extern int setenv(string name, string value, int overwrite);
-
     [DllImport("kernel32", SetLastError = true)]
     private static extern IntPtr GetModuleHandleW([MarshalAs(UnmanagedType.LPWStr)] string name);
 
@@ -398,7 +393,7 @@ public class Engine : IDisposable, IAsyncDisposable
         var baseDir = (projectAssemblyDir ?? AppContext.BaseDirectory)
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         if (!string.IsNullOrEmpty(baseDir))
-            SetEnvironmentVariableForNative("GODOT_PROJECT_ASSEMBLY_DIR", baseDir);
+            NativeEnvironment.SetVariable("GODOT_PROJECT_ASSEMBLY_DIR", baseDir);
 
         var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
         if (string.IsNullOrEmpty(assemblyDir)) return;
@@ -410,16 +405,7 @@ public class Engine : IDisposable, IAsyncDisposable
             if (!File.Exists(Path.Combine(dir, "GodotPlugins.dll"))) return;
         }
 
-        SetEnvironmentVariableForNative("GODOTSHARP_DIR", dir);
-    }
-
-    private static void SetEnvironmentVariableForNative(string name, string value)
-    {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-            RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            setenv(name, value, 1);
-        else
-            System.Environment.SetEnvironmentVariable(name, value);
+        NativeEnvironment.SetVariable("GODOTSHARP_DIR", dir);
     }
 
     /// <summary>

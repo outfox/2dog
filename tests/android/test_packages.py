@@ -1,4 +1,6 @@
 """Pack real Android NuGets and exercise their targets without the Android workload or device."""
+import importlib.util
+import io
 import os
 from pathlib import Path
 import subprocess
@@ -8,6 +10,9 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 REPO = Path(__file__).resolve().parents[2]
+JAVA_BUILD_SPEC = importlib.util.spec_from_file_location("build_android_java_package_tests", REPO / "scripts/build_android_java.py")
+java_build = importlib.util.module_from_spec(JAVA_BUILD_SPEC)
+JAVA_BUILD_SPEC.loader.exec_module(java_build)
 
 
 def xml(value):
@@ -40,11 +45,15 @@ class AndroidPackages(unittest.TestCase):
                     (directory / name).write_bytes(f"{arch}/{target}/{name}".encode())
         java = cls.bin / "android/java"
         for variant in ("debug", "release"):
-            directory = java / variant
-            directory.mkdir(parents=True)
-            with zipfile.ZipFile(directory / "godot.aar", "w") as archive:
+            source = cls.root / f"godot-{variant}.aar"
+            with zipfile.ZipFile(source, "w") as archive:
                 archive.writestr("classes.jar", variant.encode())
                 archive.writestr("AndroidManifest.xml", b"manifest")
+                archive.writestr("res/values/strings.xml", b"resources")
+                for abi in ("arm64-v8a", "x86_64"):
+                    archive.writestr(f"jni/{abi}/libgodot_android.so", b"native Godot")
+                    archive.writestr(f"jni/{abi}/libc++_shared.so", b"native C++")
+            java_build.strip_native_libraries(source, java / variant / "godot.aar")
         for rid in ("android-arm64", "android-x64", "android"):
             command = ["dotnet", "pack", str(REPO / f"platforms/twodog.{rid}/twodog.{rid}.csproj"),
                        "--nologo", f"-p:GodotBinDir={cls.bin.as_posix()}/",
@@ -95,7 +104,11 @@ class AndroidPackages(unittest.TestCase):
     def test_java_package_has_two_native_free_flavors_and_host(self):
         with zipfile.ZipFile(self.feed / f"2dog.android.{self.version}.nupkg") as archive:
             for variant in ("debug", "release"):
-                self.assertIn(f"android/java/{variant}/godot.aar", archive.namelist())
+                with zipfile.ZipFile(io.BytesIO(archive.read(f"android/java/{variant}/godot.aar"))) as aar:
+                    self.assertFalse(any(name.startswith("jni/") for name in aar.namelist()), aar.namelist())
+                    self.assertEqual(variant.encode(), aar.read("classes.jar"))
+                    self.assertEqual(b"manifest", aar.read("AndroidManifest.xml"))
+                    self.assertEqual(b"resources", aar.read("res/values/strings.xml"))
             self.assertIn("android/host/TwoDogActivity.java", archive.namelist())
             self.assertIn("buildTransitive/2dog.android.targets", archive.namelist())
 
@@ -104,7 +117,8 @@ class AndroidPackages(unittest.TestCase):
             with zipfile.ZipFile(self.feed / f"2dog.{rid}.{self.version}.nupkg") as archive:
                 nuspec = ET.fromstring(archive.read(f"2dog.{rid}.nuspec"))
                 deps = nuspec.findall(".//{*}dependency")
-                self.assertEqual(2, len(deps))
+                self.assertCountEqual([f"2dog.{rid}.release", f"2dog.{rid}.debug"],
+                                      [dep.attrib["id"] for dep in deps])
                 for dep in deps:
                     self.assertEqual(f"[{self.version}]", dep.attrib["version"])
                     self.assertEqual("native", dep.attrib["exclude"])
@@ -135,14 +149,36 @@ class AndroidPackages(unittest.TestCase):
             self.assertIn(diagnostic, result.stdout)
 
     def test_force_pack_cannot_publish_empty_android_packages(self):
-        for rid in ("android-arm64", "android-x64", "android"):
-            project = REPO / f"platforms/twodog.{rid}/twodog.{rid}.csproj"
+        projects = [REPO / f"platforms/twodog.{rid}/twodog.{rid}{suffix}.csproj"
+                    for rid in ("android-arm64", "android-x64") for suffix in ("", ".debug", ".release")]
+        projects.append(REPO / "platforms/twodog.android/twodog.android.csproj")
+        for project in projects:
             result = subprocess.run(["dotnet", "msbuild", str(project), "-getProperty:IsPackable", "-nologo",
                                      "-p:ForcePackAllPlatforms=true", f"-p:GodotBinDir={self.root.as_posix()}/absent/",
                                      f"-p:AndroidJavaPayloadDir={self.root.as_posix()}/absent/"], cwd=REPO,
                                     text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
             self.assertEqual(0, result.returncode, result.stdout)
             self.assertEqual("false", result.stdout.strip())
+
+    def test_incomplete_native_payload_fails_normal_pack_and_skips_forced_pack(self):
+        directory = Path(tempfile.mkdtemp(dir=self.root))
+        payload = directory / "android/template_release/arm64"
+        payload.mkdir(parents=True)
+        (payload / "libgodot_android.so").write_bytes(b"native Godot")
+        project = REPO / "platforms/twodog.android-arm64/twodog.android-arm64.release.csproj"
+        result = subprocess.run(["dotnet", "pack", str(project), "--nologo",
+                                 f"-p:GodotBinDir={directory.as_posix()}/", f"-p:PackageOutputPath={directory / 'feed'}",
+                                 f"-p:RestoreConfigFile={self.restore_config}", f"-p:RestorePackagesPath={self.restore_packages}",
+                                 "-p:NuGetAudit=false"], cwd=REPO, text=True,
+                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=180)
+        self.assertNotEqual(0, result.returncode, result.stdout)
+        self.assertIn("Android payload is missing libc++_shared.so", result.stdout)
+        self.assertEqual([], list((directory / "feed").glob("*.nupkg")))
+        forced = subprocess.run(["dotnet", "msbuild", str(project), "-getProperty:IsPackable", "-nologo",
+                                 "-p:ForcePackAllPlatforms=true", f"-p:GodotBinDir={directory.as_posix()}/"],
+                                cwd=REPO, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
+        self.assertEqual(0, forced.returncode, forced.stdout)
+        self.assertEqual("false", forced.stdout.strip())
 
     def test_game_dll_is_added_before_android_asset_paths_are_computed(self):
         directory = Path(tempfile.mkdtemp(dir=self.root))

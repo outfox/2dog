@@ -247,7 +247,12 @@ def parse_arguments():
         help="SCons cache directory path (passed as cache_path= to scons)",
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.platform == Platform.ANDROID.value and args.arch not in (
+        "auto", Arch.ARM64.value, Arch.X86_64.value,
+    ):
+        parser.error("Android .NET hosts support --arch arm64 or x86_64 only (or auto)")
+    return args
 
 
 def run_with_live_output(cmd, cwd=None, description="Running command..."):
@@ -591,6 +596,11 @@ def main():
         arch_override=args.arch,
     )
 
+    if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value):
+        # Editor/glue come from desktop builds for both cross-compilation targets.
+        args.no_editor = True
+        args.no_glue = True
+
     show_build_config(args, platform_config)
 
     console.print(
@@ -601,11 +611,6 @@ def main():
             border_style="cyan",
         )
     )
-
-    if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value):
-        # Editor/glue come from desktop builds for both cross-compilation targets.
-        args.no_editor = True
-        args.no_glue = True
 
     if not args.no_editor:
         build_editor(args, platform_config)

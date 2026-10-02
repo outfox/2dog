@@ -1,7 +1,10 @@
 import argparse
 import importlib.util
+import io
 import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -39,6 +42,32 @@ class AndroidBuild(unittest.TestCase):
             with self.assertRaises(ValueError):
                 build.build_libgodot(args, build.get_platform_config("android", "arm64"))
             run.assert_not_called()
+
+    def test_invalid_android_architecture_is_cli_usage_error(self):
+        result = subprocess.run(
+            [sys.executable, str(REPO / "build-godot.py"), "--platform", "android", "--arch", "wasm32"],
+            capture_output=True, text=True, timeout=30,
+        )
+        self.assertEqual(2, result.returncode)
+        self.assertIn("usage:", result.stderr)
+        self.assertIn("Android .NET hosts support --arch arm64 or x86_64 only", result.stderr)
+        self.assertNotIn("Traceback", result.stdout + result.stderr)
+
+    def test_cross_target_configuration_reports_skipped_editor_and_glue(self):
+        for target in ("android", "web"):
+            with self.subTest(platform=target):
+                output = io.StringIO()
+                with patch.object(sys, "argv", ["build-godot.py", "--platform", target, "--no-library"]), \
+                     patch.object(build, "console", build.Console(file=output, width=120, color_system=None)), \
+                     patch.object(build, "build_editor") as editor, \
+                     patch.object(build, "generate_glue") as glue, \
+                     patch.object(build, "build_libgodot") as library:
+                    build.main()
+                self.assertRegex(output.getvalue(), r"Skip Editor Build\s+│ Yes")
+                self.assertRegex(output.getvalue(), r"Skip Glue Generation\s+│ Yes")
+                editor.assert_not_called()
+                glue.assert_not_called()
+                library.assert_not_called()
 
     def test_build_all_stages_two_variants_and_cpp_runtime(self):
         for arch, abi in (("arm64", "arm64-v8a"), ("x86_64", "x86_64")):

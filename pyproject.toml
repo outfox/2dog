@@ -89,7 +89,7 @@ sequence = [
 
 [tool.poe.tasks.test-android]
 help = "Portable Android build and NuGet selection tests (no device/workload required)"
-cmd = "uv run python -m unittest discover -s tests/android -p test_*.py"
+cmd = "uv run python -m unittest discover -s tests/android -p 'test_*.py'"
 
 [tool.poe.tasks.publish-android]
 help = "Publish an experimental Android host to APK/AAB; pass project and --pack"

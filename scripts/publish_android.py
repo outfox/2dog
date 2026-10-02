@@ -35,7 +35,7 @@ def main():
         if "=" not in value:
             parser.error("--property requires NAME=VALUE")
         if value.split("=", 1)[0].lower() in {"twodogvariant", "twodogandroidpack", "runtimeidentifier",
-                                             "publishtrimmed", "runaotcompilation", "publishaot"}:
+                                             "androidpackageformats", "publishtrimmed", "runaotcompilation", "publishaot"}:
             parser.error(f"Use the dedicated option for {value.split('=', 1)[0]}")
     command = publish_command(args)
     if args.dry_run:
