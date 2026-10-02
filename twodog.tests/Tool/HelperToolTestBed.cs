@@ -81,6 +81,9 @@ internal static class HelperToolTestBed
     /// <summary>Runs <paramref name="psi"/> with redirected output; fails with that output on timeout.</summary>
     public static (int ExitCode, string Output) RunProcess(ProcessStartInfo psi, string name)
     {
+        // Never inherit the process CWD: in-process engines chdir it into scratch projects that parallel tests
+        // delete, and dotnet started in a deleted directory dies in getcwd (FileNotFoundException).
+        if (string.IsNullOrEmpty(psi.WorkingDirectory)) psi.WorkingDirectory = RepoRoot;
         psi.UseShellExecute = false;
         psi.RedirectStandardOutput = true;
         psi.RedirectStandardError = true;
