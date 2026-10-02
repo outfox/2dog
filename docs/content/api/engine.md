@@ -166,6 +166,23 @@ to terminate the entire WebAssembly runtime on quit. Blazor keeps it `false`.
 Browser restarts require a fresh canvas and host configuration before `Start()`;
 `GodotView` handles those browser resources automatically.
 
+### `WebLogFirstChanceExceptions`
+
+```csharp
+public static bool WebLogFirstChanceExceptions { get; set; }
+```
+
+Defaults to `false`. Set to `true` before browser startup to print every thrown
+managed exception to the browser console as an error, including caught exceptions
+and exceptions stored in unawaited tasks. Set back to `false` after investigating;
+this diagnostic mode adds logging overhead. Setting it on desktop throws
+`PlatformNotSupportedException`.
+
+Unhandled managed exceptions and unobserved task exceptions are logged
+automatically on browser from the first use of `Engine`, across restarts.
+Unobserved task reporting waits for garbage collection; see
+[Diagnosing Async Exceptions](../hosts/web#diagnosing-async-exceptions).
+
 ### `ResolveContent`
 
 ```csharp

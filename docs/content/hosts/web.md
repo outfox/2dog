@@ -210,6 +210,29 @@ Large packs commonly contain PCM audio, oversized lossless textures, or files
 included by a broad export filter. Prefer Ogg Vorbis for long audio, review
 texture imports, and exclude non-game directories or mark them with `.gdignore`.
 
+### Diagnosing Async Exceptions
+
+2dog automatically writes unhandled managed exceptions and unobserved task
+exceptions to the browser console as errors, with the exception type, message,
+inner exceptions, and available stack traces. Reporting starts when the host
+first uses `twodog.Engine` and stays active across engine restarts, including
+Blazor hosts. It does not change the runtime's exception termination policy.
+Some fatal Mono runtime paths bypass managed unhandled-exception events and
+write directly to stderr, which the browser host also routes to console errors.
+
+An unawaited task's exception is reported only when the faulted task becomes
+eligible for garbage collection and is finalized. To expose failures immediately,
+or catch the original exception before a runtime abort, enable first-chance
+logging before registering the plugins initializer or starting Godot:
+
+```csharp
+twodog.Engine.WebLogFirstChanceExceptions = true;
+```
+
+This diagnostic mode logs **all** thrown managed exceptions, including ones
+your code catches. It can be noisy and expensive; set it back to `false` after
+investigating. Await tasks when possible to handle their failures at the call site.
+
 ## GDExtensions
 
 Native [GDExtensions](https://docs.godotengine.org/en/stable/tutorials/scripting/gdextension/what_is_gdextension.html)

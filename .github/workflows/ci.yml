@@ -798,7 +798,25 @@ jobs:
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
         env:
           GODOT_WEB_JS_LIB_DIR: godot/bin/web/template_release/libgodot/js_library
-        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs
+        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
+
+      - name: Test managed exception reporting in browser-wasm
+        run: |
+          dotnet publish tests/browser-exceptions -c Release -r browser-wasm --configfile nuget.config \
+            -p:WasmAppDir="$PWD/browser-exceptions-probe" -v:quiet
+          python3 -m http.server 8091 --bind 127.0.0.1 --directory browser-exceptions-probe > /tmp/2dog-exceptions-server.log 2>&1 &
+          SERVER_PID=$!
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          "$CHROME" --headless=new --no-sandbox --disable-dev-shm-usage \
+            --remote-debugging-port=9231 --user-data-dir=/tmp/2dog-exceptions-chrome \
+            http://127.0.0.1:8091/index.html > /tmp/2dog-exceptions-chrome.log 2>&1 &
+          CHROME_PID=$!
+          trap 'kill "$CHROME_PID" "$SERVER_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:9231/json/list > /dev/null; then break; fi
+            sleep 1
+          done
+          node .github/scripts/web-exception-diagnostics-smoke.mjs http://127.0.0.1:8091/index.html 9231
 
       - name: Run Blazor browser smoke
         run: |

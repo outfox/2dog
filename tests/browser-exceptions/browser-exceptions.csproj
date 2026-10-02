@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <!-- Isolate real runtime exception events from Godot and the test runner. -->
+    <ItemGroup>
+        <Compile Include="../../twodog.engine/WebExceptionDiagnostics.cs" Link="WebExceptionDiagnostics.cs" />
+    </ItemGroup>
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+        <WasmMainJSPath>main.js</WasmMainJSPath>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+        <WasmExtraFilesToDeploy Include="index.html" />
+    </ItemGroup>
+</Project>

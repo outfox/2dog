@@ -73,6 +73,9 @@ public class Engine : IDisposable, IAsyncDisposable
 
     static Engine()
     {
+        if (OperatingSystem.IsBrowser())
+            WebExceptionDiagnostics.Install();
+
         // Windows: unload libgodot before loader shutdown, else its static destructors run under loader lock and
         // CoreMessaging.dll fail-fasts (0xE0464645). macOS aborts similarly but dyld pins ObjC images (fork TODO).
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -446,6 +449,23 @@ public class Engine : IDisposable, IAsyncDisposable
                 throw new PlatformNotSupportedException(
                     $"{nameof(WebExitRuntimeOnQuit)} is only meaningful on browser (wasm) hosts.");
             WebHost.ExitRuntimeOnQuit = value;
+        }
+    }
+
+    /// <summary>
+    /// Browser only: logs every thrown managed exception to the browser console, including exceptions that
+    /// are later caught or stored in an unawaited task. Default false; enable before startup when diagnosing
+    /// a runtime abort. Unhandled and unobserved task exceptions are always logged on browser.
+    /// </summary>
+    public static bool WebLogFirstChanceExceptions
+    {
+        get => OperatingSystem.IsBrowser() && WebExceptionDiagnostics.LogFirstChanceExceptions;
+        set
+        {
+            if (!OperatingSystem.IsBrowser())
+                throw new PlatformNotSupportedException(
+                    $"{nameof(WebLogFirstChanceExceptions)} is only meaningful on browser (wasm) hosts.");
+            WebExceptionDiagnostics.LogFirstChanceExceptions = value;
         }
     }
 
