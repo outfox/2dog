@@ -21,6 +21,14 @@ class AndroidPackages(unittest.TestCase):
         cls.root = Path(cls.temp.name)
         cls.bin = cls.root / "natives"
         cls.feed = cls.root / "feed"
+        # Packaging fixtures only need NETStandard.Library from nuget.org. The repository's
+        # local Godot/package feeds do not exist on a clean runner without a native build.
+        cls.restore_config = cls.root / "NuGet.Config"
+        cls.restore_config.write_text(
+            '<configuration><packageSources><clear/>'
+            '<add key="nuget.org" value="https://api.nuget.org/v3/index.json"/>'
+            '</packageSources></configuration>')
+        cls.restore_packages = os.environ.get("TWODOG_TEST_RESTORE_PACKAGES", str(cls.root / "restore"))
         props = ET.parse(REPO / "Directory.Build.props")
         cls.version = props.findtext(".//GodotVersion") + "." + props.findtext(".//NativesRevision")
         cls.packages = cls.root / "cache"
@@ -41,9 +49,8 @@ class AndroidPackages(unittest.TestCase):
             command = ["dotnet", "pack", str(REPO / f"platforms/twodog.{rid}/twodog.{rid}.csproj"),
                        "--nologo", f"-p:GodotBinDir={cls.bin.as_posix()}/",
                        f"-p:AndroidJavaPayloadDir={java.as_posix()}/", f"-p:PackageOutputPath={cls.feed}",
+                       f"-p:RestoreConfigFile={cls.restore_config}", f"-p:RestorePackagesPath={cls.restore_packages}",
                        "-p:NuGetAudit=false"]
-            if os.environ.get("TWODOG_TEST_RESTORE_PACKAGES"):
-                command.append(f"-p:RestorePackagesPath={os.environ['TWODOG_TEST_RESTORE_PACKAGES']}")
             result = subprocess.run(command, cwd=REPO, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=180)
             if result.returncode:
                 raise RuntimeError(f"{' '.join(command)}\n{result.stdout}")
