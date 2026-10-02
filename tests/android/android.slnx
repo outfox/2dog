@@ -1,0 +1,4 @@
+<Solution>
+    <Project Path="game/android-smoke-game.csproj"/>
+    <Project Path="host/android-smoke.csproj"/>
+</Solution>

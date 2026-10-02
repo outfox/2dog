@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>2dog.android-arm64</PackageId>
+        <Description>Experimental Android arm64 runtime variants. Requires 2dog.android for Java host support.</Description>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <IsPackable Condition="!Exists('$(GodotBinDir)android/template_debug/arm64/libgodot_android.so') Or !Exists('$(GodotBinDir)android/template_release/arm64/libgodot_android.so') Or !Exists('$(GodotBinDir)android/template_debug/arm64/libc++_shared.so') Or !Exists('$(GodotBinDir)android/template_release/arm64/libc++_shared.so')">false</IsPackable>
+        <NuspecFile>twodog.android-arm64.nuspec</NuspecFile>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="twodog.android-arm64.release.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.android-arm64.debug.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+</Project>

@@ -70,3 +70,28 @@ sequence = [
     { ref = "build" },
 ]
 
+[tool.poe.tasks.build-android]
+help = "Experimental Android arm64/x64 natives and Java payloads (requires Android SDK, JDK 17 and desktop Mono glue)"
+sequence = [
+    { cmd = "uv run build-godot.py --platform android --arch arm64" },
+    { cmd = "uv run build-godot.py --platform android --arch x86_64" },
+    { cmd = "uv run scripts/build_android_java.py" },
+    { ref = "pack-android" },
+]
+
+[tool.poe.tasks.pack-android]
+help = "Pack experimental Android runtime and Java host packages"
+sequence = [
+    { cmd = "dotnet pack platforms/twodog.android-arm64/twodog.android-arm64.csproj" },
+    { cmd = "dotnet pack platforms/twodog.android-x64/twodog.android-x64.csproj" },
+    { cmd = "dotnet pack platforms/twodog.android/twodog.android.csproj" },
+]
+
+[tool.poe.tasks.test-android]
+help = "Portable Android build and NuGet selection tests (no device/workload required)"
+cmd = "uv run python -m unittest discover -s tests/android -p 'test_*.py'"
+
+[tool.poe.tasks.publish-android]
+help = "Publish an experimental Android host to APK/AAB; pass project and --pack"
+cmd = "uv run scripts/publish_android.py"
+

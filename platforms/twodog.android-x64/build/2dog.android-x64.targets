@@ -1,0 +1,12 @@
+<Project>
+    <PropertyGroup>
+        <_TwoDogAndroidTargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogAndroidTargetsDir>
+        <_TwoDogAndroidPackageVersion>$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogAndroidTargetsDir)'))))</_TwoDogAndroidPackageVersion>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+    </PropertyGroup>
+    <ItemGroup>
+        <TwoDogAndroidNative Include="android-x64" PackageVersion="$(_TwoDogAndroidPackageVersion)" Abi="x86_64" Arch="x86_64"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildThisFileDirectory)2dog.android-native-resolver.targets"
+            Condition="'$(_TwoDogAndroidNativeResolverImported)' != 'true'"/>
+</Project>

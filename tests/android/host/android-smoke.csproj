@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0-android36.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ApplicationId>dev.twodog.smoke</ApplicationId>
+        <ApplicationTitle>2dog Android smoke</ApplicationTitle>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">android-arm64</RuntimeIdentifier>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <PublishTrimmed>false</PublishTrimmed>
+        <RunAOTCompilation>false</RunAOTCompilation>
+        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <TwoDogAutoImport>false</TwoDogAutoImport>
+        <TwoDogAndroidGameAssembly>android-smoke-game</TwoDogAndroidGameAssembly>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.android" Version="$(NativesVersion)"/>
+        <PackageReference Include="2dog.android-arm64" Version="$(NativesVersion)"/>
+        <PackageReference Include="2dog.android-x64" Version="$(NativesVersion)"/>
+        <!-- Match the Java dependencies of Godot's lib/build.gradle. -->
+        <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6"/>
+        <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>
+        <PackageReference Include="Xamarin.Kotlin.StdLib" Version="2.1.21"/>
+        <ProjectReference Include="../game/android-smoke-game.csproj"/>
+    </ItemGroup>
+</Project>

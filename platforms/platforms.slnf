@@ -21,6 +21,13 @@
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.debug.csproj",
       "platforms\\twodog.browser-wasm\\twodog.browser-wasm.csproj",
 
+      "platforms\\twodog.android-arm64\\twodog.android-arm64.csproj",
+      "platforms\\twodog.android-arm64\\twodog.android-arm64.debug.csproj",
+      "platforms\\twodog.android-arm64\\twodog.android-arm64.release.csproj",
+      "platforms\\twodog.android-x64\\twodog.android-x64.csproj",
+      "platforms\\twodog.android-x64\\twodog.android-x64.debug.csproj",
+      "platforms\\twodog.android-x64\\twodog.android-x64.release.csproj",
+      "platforms\\twodog.android\\twodog.android.csproj",
       "platforms\\twodog.tools\\twodog.tools.csproj"
     ]
   }

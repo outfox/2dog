@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PlatformRID>android-arm64</PlatformRID>
+        <PlatformOS>android</PlatformOS>
+        <PlatformArch>arm64</PlatformArch>
+        <BuildVariant>template_release</BuildVariant>
+        <NativeLibExt>so</NativeLibExt>
+        <PackageSuffix>.release</PackageSuffix>
+        <Description>Experimental Android arm64 release Godot JNI runtime and C++ runtime for .NET Android hosts.</Description>
+    </PropertyGroup>
+</Project>
