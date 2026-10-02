@@ -24,7 +24,7 @@ jobs:
   # job below builds it inline, so every run self-heals in a single run graph.
   check-natives:
     name: Check Native Libraries
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 5
     outputs:
       ready: ${{ steps.check.outputs.ready }}
