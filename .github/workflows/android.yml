@@ -8,6 +8,7 @@ on:
       - 'platforms/**'
       - 'scripts/*android*.py'
       - 'tests/android/**'
+      - 'twodog.engine/**'
       - 'build-godot.py'
       - 'Directory.Build.*'
       - '2dog.slnx'
