@@ -121,13 +121,17 @@ public class ExportPackToolTests
         using var process = Process.Start(start)!;
         var stdout = process.StandardOutput.ReadToEndAsync();
         var stderr = process.StandardError.ReadToEndAsync();
-        if (!process.WaitForExit(TimeSpan.FromMinutes(3)))
+        var timedOut = !process.WaitForExit(TimeSpan.FromMinutes(3));
+        if (timedOut)
         {
             process.Kill(entireProcessTree: true);
-            Assert.Fail("Export target timed out");
+            process.WaitForExit();
         }
         Task.WaitAll(stdout, stderr);
-        Assert.True(process.ExitCode == 0, stdout.Result + stderr.Result);
+        var output = stdout.Result + stderr.Result;
+        if (timedOut)
+            Assert.Fail("Export target timed out" + Environment.NewLine + output);
+        Assert.True(process.ExitCode == 0, output);
     }
 
     [Fact]
