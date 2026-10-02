@@ -17,9 +17,14 @@
         <VariantShortName Condition="'$(BuildVariant)' == 'template_debug'">debug</VariantShortName>
         <VariantShortName Condition="'$(BuildVariant)' == 'editor'">editor</VariantShortName>
         <OutputLibName>libgodot-$(VariantShortName).$(NativeLibExt)</OutputLibName>
+        <!-- Android's JNI loader and SONAME require the original name; variants are exclusive in an APK. -->
+        <NativeLibPath Condition="'$(PlatformOS)' == 'android'">$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libgodot_android.so</NativeLibPath>
+        <OutputLibName Condition="'$(PlatformOS)' == 'android'">libgodot_android.so</OutputLibName>
 
         <!-- Skip packaging if native library doesn't exist (unless forcing all platforms) -->
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
+        <!-- Android is opt-in and is not an engine dependency. Never let CI's force-pack publish empty stubs. -->
+        <IsPackable Condition="'$(PlatformOS)' == 'android' And (!Exists('$(NativeLibPath)') Or !Exists('$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so'))">false</IsPackable>
     </PropertyGroup>
 
     <!-- Web variants pack a payload directory (static archive + JS glue + boot shell) under godot-web/; the runtime
@@ -52,6 +57,18 @@
               Link="runtimes/$(PlatformRID)/native/$(OutputLibName)"
               CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
+
+    <ItemGroup Condition="'$(PlatformOS)' == 'android'">
+        <None Include="$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so"
+              Condition="Exists('$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so')"
+              Pack="true" PackagePath="runtimes/$(PlatformRID)/native/libc++_shared.so" Visible="false"/>
+    </ItemGroup>
+
+    <Target Name="TwoDogValidateAndroidPayload" BeforeTargets="GenerateNuspec"
+            Condition="'$(PlatformOS)' == 'android' And '$(ForcePackAllPlatforms)' != 'true'">
+        <Error Condition="!Exists('$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so')"
+               Text="2dog: Android payload is missing libc++_shared.so. Rebuild with build-godot.py --platform android."/>
+    </Target>
 
     <!-- Only meta packages (no PackageSuffix) ship targets; variant packages are DLL-only -->
     <ItemGroup Condition="'$(PackageSuffix)' == ''">

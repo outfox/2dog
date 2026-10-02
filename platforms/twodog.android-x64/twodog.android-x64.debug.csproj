@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PlatformRID>android-x64</PlatformRID>
+        <PlatformOS>android</PlatformOS>
+        <PlatformArch>x86_64</PlatformArch>
+        <BuildVariant>template_debug</BuildVariant>
+        <NativeLibExt>so</NativeLibExt>
+        <PackageSuffix>.debug</PackageSuffix>
+        <Description>Experimental Android x64 debug Godot JNI runtime and C++ runtime for .NET Android hosts.</Description>
+    </PropertyGroup>
+</Project>

@@ -29,6 +29,7 @@ class Platform(Enum):
     LINUX = "linuxbsd"
     MACOS = "macos"
     WEB = "web"
+    ANDROID = "android"
 
 
 class Arch(Enum):
@@ -102,6 +103,17 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         arch = detect_arch()
 
     arch_str = arch.value
+
+    if plat == Platform.ANDROID:
+        # Prefer devices over the build machine's architecture when cross-compiling.
+        arch_str = Arch.ARM64.value if not arch_override or arch_override == "auto" else arch.value
+        if arch_str not in (Arch.ARM64.value, Arch.X86_64.value):
+            raise ValueError("Android .NET hosts support arm64 and x86_64 only")
+        return PlatformConfig(
+            godot_platform=plat.value, godot_arch=arch_str, godot_exe="",
+            lib_path_var="PATH", path_separator=os.pathsep,
+            lib_extension=".so", lib_prefix="libgodot",
+        )
 
     if plat == Platform.WINDOWS:
         # Absolute path from repo root (works regardless of cwd)
@@ -210,7 +222,7 @@ def parse_arguments():
     parser.add_argument(
         "--platform",
         type=str,
-        choices=["auto", "windows", "linuxbsd", "macos", "web"],
+        choices=["auto", "windows", "linuxbsd", "macos", "web", "android"],
         default="auto",
         help="Override target platform (for CI/cross-compilation)",
     )
@@ -473,9 +485,14 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
     # Determine which targets to build
     if args.target == "all":
-        targets = ["template_release", "template_debug", "editor"]
+        targets = ["template_release", "template_debug"]
+        if platform_config.godot_platform != Platform.ANDROID.value:
+            targets.append("editor")
     else:
         targets = [args.target]
+
+    if platform_config.godot_platform == Platform.ANDROID.value and "editor" in targets:
+        raise ValueError("Android .NET library builds have no editor target; use a desktop editor for glue")
 
     for target in targets:
         # template_release should never be a dev build (for optimized release binaries)
@@ -507,6 +524,20 @@ def build_libgodot(args, platform_config: PlatformConfig):
         if args.cache_path:
             cmd.append(f"cache_path={args.cache_path}")
         run_with_live_output(cmd, cwd="godot", description=task_desc)
+
+        if platform_config.godot_platform == Platform.ANDROID.value:
+            # Android's SCsub moves the build into java/lib/libs, including the NDK's C++ runtime.
+            # Preserve libgodot_android.so: GodotLib.java and the ELF SONAME depend on this name.
+            import shutil
+            from pathlib import Path
+
+            variant = "release" if target == "template_release" else "debug"
+            abi = "arm64-v8a" if platform_config.godot_arch == "arm64" else "x86_64"
+            source = Path("godot/platform/android/java/lib/libs") / variant / abi
+            destination = Path("godot/bin/android") / target / platform_config.godot_arch
+            destination.mkdir(parents=True, exist_ok=True)
+            for name in ("libgodot_android.so", "libc++_shared.so"):
+                shutil.copy2(source / name, destination / name)
 
 
 def generate_glue(platform_config: PlatformConfig):
@@ -571,8 +602,8 @@ def main():
         )
     )
 
-    if platform_config.godot_platform == Platform.WEB.value:
-        # No editor or glue on web; both come from desktop builds.
+    if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value):
+        # Editor/glue come from desktop builds for both cross-compilation targets.
         args.no_editor = True
         args.no_glue = True
 

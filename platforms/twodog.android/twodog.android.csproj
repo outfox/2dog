@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>2dog.android</PackageId>
+        <Description>Experimental Android Java host and APK build targets for 2dog. Requires an Android runtime meta package and 2dog.engine.</Description>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <AndroidJavaPayloadDir>$(GodotBinDir)android/java/</AndroidJavaPayloadDir>
+        <IsPackable Condition="!Exists('$(AndroidJavaPayloadDir)debug/godot.aar') Or !Exists('$(AndroidJavaPayloadDir)release/godot.aar')">false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(AndroidJavaPayloadDir)**/*.aar" Pack="true" PackagePath="android/java/" Visible="false"/>
+        <None Include="host/*.java;host/AndroidManifest.xml" Pack="true" PackagePath="android/host/"/>
+    </ItemGroup>
+    <Target Name="TwoDogValidateAndroidJavaPayload" BeforeTargets="GenerateNuspec" Condition="'$(ForcePackAllPlatforms)' != 'true'">
+        <Error Condition="!Exists('$(AndroidJavaPayloadDir)debug/godot.aar') Or !Exists('$(AndroidJavaPayloadDir)release/godot.aar')"
+               Text="2dog: build the Android Java payload with scripts/build_android_java.py before packing."/>
+    </Target>
+</Project>

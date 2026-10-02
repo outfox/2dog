@@ -1,0 +1,33 @@
+<Project>
+    <PropertyGroup>
+        <_TwoDogAndroidNativeResolverImported>true</_TwoDogAndroidNativeResolverImported>
+    </PropertyGroup>
+    <Target Name="TwoDogResolveAndroidNatives" BeforeTargets="PrepareForBuild"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
+        <PropertyGroup>
+            <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+            <_TwoDogAndroidTarget Condition="'$(TwoDogVariant)' == 'release'">template_release</_TwoDogAndroidTarget>
+            <_TwoDogAndroidTarget Condition="'$(TwoDogVariant)' == 'debug'">template_debug</_TwoDogAndroidTarget>
+            <_TwoDogAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidRids>
+        </PropertyGroup>
+        <Error Code="TDGA001" Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug'"
+               Text="2dog: Android supports TwoDogVariant release or debug only; use a desktop editor for imports."/>
+        <ItemGroup>
+            <_TwoDogSelectedAndroidNative Include="@(TwoDogAndroidNative)"
+                    Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';%(Identity);'))">
+                <Root>$(NuGetPackageRoot)2dog.%(Identity).$(TwoDogVariant)/%(PackageVersion)/runtimes/%(Identity)/native/</Root>
+            </_TwoDogSelectedAndroidNative>
+            <_TwoDogSelectedAndroidNative>
+                <Root Condition="!Exists('%(Root)libgodot_android.so')">$(TwoDogLocalGodotBin)android/$(_TwoDogAndroidTarget)/%(Arch)/</Root>
+            </_TwoDogSelectedAndroidNative>
+        </ItemGroup>
+        <Error Code="TDGA002" Condition="'@(_TwoDogSelectedAndroidNative)' == ''"
+               Text="2dog: select android-arm64 or android-x64 with RuntimeIdentifier/RuntimeIdentifiers and reference its runtime meta package."/>
+        <Error Code="TDGA003" Condition="!Exists('%(_TwoDogSelectedAndroidNative.Root)libgodot_android.so') Or !Exists('%(_TwoDogSelectedAndroidNative.Root)libc++_shared.so')"
+               Text="2dog: missing $(TwoDogVariant) Android native payload for %(_TwoDogSelectedAndroidNative.Identity) in %(_TwoDogSelectedAndroidNative.Root). Build the Android natives or restore the matching packages."/>
+        <ItemGroup>
+            <AndroidNativeLibrary Include="%(_TwoDogSelectedAndroidNative.Root)libgodot_android.so" Abi="%(_TwoDogSelectedAndroidNative.Abi)"/>
+            <AndroidNativeLibrary Include="%(_TwoDogSelectedAndroidNative.Root)libc++_shared.so" Abi="%(_TwoDogSelectedAndroidNative.Abi)"/>
+        </ItemGroup>
+    </Target>
+</Project>

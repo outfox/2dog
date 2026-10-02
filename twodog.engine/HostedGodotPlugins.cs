@@ -29,7 +29,9 @@ internal static unsafe class HostedGodotPlugins
         {
             var alc = AssemblyLoadContext.GetLoadContext(typeof(HostedGodotPlugins).Assembly)
                       ?? AssemblyLoadContext.Default;
-            var assembly = alc.LoadFromAssemblyPath(FindGodotPluginsPath());
+            var assembly = OperatingSystem.IsAndroid()
+                ? alc.LoadFromAssemblyName(new AssemblyName("GodotPlugins"))
+                : alc.LoadFromAssemblyPath(FindGodotPluginsPath());
             var method = assembly.GetType("GodotPlugins.Main", throwOnError: true)!
                              .GetMethod("InitializeFromEngine", BindingFlags.NonPublic | BindingFlags.Static)
                          ?? throw new MissingMethodException("GodotPlugins.Main", "InitializeFromEngine");

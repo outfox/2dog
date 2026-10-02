@@ -10,6 +10,33 @@
       <BuildType Solution="Editor|*" Project="Debug" />
     </Project>
   </Folder>
+  <Folder Name="/platforms/android-arm64/">
+    <Project Path="platforms/twodog.android-arm64/twodog.android-arm64.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.android-arm64/twodog.android-arm64.debug.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.android-arm64/twodog.android-arm64.release.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/platforms/android-x64/">
+    <Project Path="platforms/twodog.android-x64/twodog.android-x64.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.android-x64/twodog.android-x64.debug.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.android-x64/twodog.android-x64.release.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/platforms/android/">
+    <Project Path="platforms/twodog.android/twodog.android.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
   <Folder Name="/platforms/browser-wasm/">
     <Project Path="platforms/twodog.browser-wasm/twodog.browser-wasm.csproj">
       <BuildType Solution="Editor|*" Project="Debug" />

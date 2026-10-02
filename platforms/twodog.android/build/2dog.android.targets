@@ -1,0 +1,44 @@
+<Project>
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'android'">
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <!-- Android packages content before Publish; the desktop AfterTargets=Publish export is too late. -->
+        <TwoDogExportPack>false</TwoDogExportPack>
+        <_TwoDogAndroidJavaRoot>$(MSBuildThisFileDirectory)../android/</_TwoDogAndroidJavaRoot>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'android'">
+        <AndroidLibrary Include="$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar" Bind="false"/>
+        <AndroidJavaSource Include="$(_TwoDogAndroidJavaRoot)host/TwoDogActivity.java" Bind="false"/>
+        <AndroidManifestOverlay Include="$(_TwoDogAndroidJavaRoot)host/AndroidManifest.xml"/>
+        <AndroidAsset Include="$(TwoDogAndroidPack)" Link="game.pck" Condition="'$(TwoDogAndroidPack)' != ''"/>
+    </ItemGroup>
+    <Target Name="TwoDogValidateAndroidHost" BeforeTargets="PrepareForBuild"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
+        <Error Code="TDGA001" Condition="'$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'release'"
+               Text="2dog: Android supports debug and release variants only."/>
+        <Error Code="TDGA004" Condition="!Exists('$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar')"
+               Text="2dog: the selected Android Java payload is missing. Run scripts/build_android_java.py and repack 2dog.android."/>
+        <Error Code="TDGA005" Condition="'$(TwoDogAndroidPack)' == '' Or !Exists('$(TwoDogAndroidPack)')"
+               Text="2dog: set TwoDogAndroidPack to an exported Godot PCK before building the APK. Use scripts/publish_android.py."/>
+        <Error Code="TDGA006" Condition="'$(PublishTrimmed)' == 'true' Or '$(PublishAot)' == 'true' Or '$(RunAOTCompilation)' == 'true'"
+               Text="2dog: the initial Android host requires untrimmed, non-AOT managed assemblies."/>
+    </Target>
+    <Target Name="TwoDogReferenceAndroidPlugins" BeforeTargets="ResolveAssemblyReferences"
+            Condition="'$(TargetPlatformIdentifier)' == 'android'">
+        <Error Condition="!Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.dll')"
+               Text="2dog: reference 2dog.engine so GodotPlugins.dll can be included in the Android managed bundle."/>
+        <ItemGroup>
+            <Reference Include="GodotPlugins" HintPath="$(TwoDogGodotApiSourcePath)GodotPlugins.dll" Private="true"/>
+        </ItemGroup>
+    </Target>
+    <Target Name="TwoDogBundleAndroidGameAssembly" BeforeTargets="_ComputeAndroidAssetsPaths"
+            DependsOnTargets="ResolveReferences" Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(TwoDogAndroidGameAssembly)' != ''">
+        <ItemGroup>
+            <_TwoDogAndroidGame Include="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)' == '$(TwoDogAndroidGameAssembly)' And '%(Extension)' == '.dll'"/>
+        </ItemGroup>
+        <Error Condition="'@(_TwoDogAndroidGame)' == ''" Text="2dog: game assembly $(TwoDogAndroidGameAssembly) was not resolved. Add its ProjectReference."/>
+        <!-- The native module checks for an assembly file before asking GodotPlugins to reuse the loaded assembly. -->
+        <ItemGroup>
+            <AndroidAsset Include="@(_TwoDogAndroidGame)" Link="2dog/$(TwoDogAndroidGameAssembly).dll"/>
+        </ItemGroup>
+    </Target>
+</Project>
