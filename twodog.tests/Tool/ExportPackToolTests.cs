@@ -9,15 +9,16 @@ using static HelperToolTestBed;
 /// Exercises the twodog.import helper's export-pack mode
 /// (libgodot_export_pack) against a scratch copy of the game project - the
 /// desktop half of the web content pipeline (TwoDogExportGamePack runs this
-/// during a browser-wasm publish). Spawns the helper as a subprocess, so it
-/// does not conflict with the single-Godot-instance fixtures.
+/// during a browser-wasm publish). Exports run in subprocesses; scene-state
+/// verification runs in a separate isolated engine fixture.
 /// </summary>
-public class ExportPackToolTests
+[Collection(nameof(ExportPackCollection))]
+public class ExportPackToolTests(ExportPackEngineFixture fixture)
 {
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void ExportPack_RetainsCSharpSceneConnections_AndRepairsOldCache(bool web)
+    public void ExportPack_RetainsCSharpConnectionsAndProperties_AndRepairsOldCache(bool web)
     {
         var (apiDir, toolsDir) = GodotSharpDirs();
         using var scratch = new TempProjectDir();
@@ -42,11 +43,13 @@ public class ExportPackToolTests
             [ext_resource type="Script" path="res://signals/CSharpTicker.cs" id="1"]
             [ext_resource type="Script" path="res://signals/SignalCounter.cs" id="2"]
             [node name="Main" type="Node"]
-            [node name="Source" type="Node" parent="."]
+            [node name="Emitter" type="Node" parent="."]
             script = ExtResource("1")
+            Interval = 3.25
             [node name="Receiver" type="Label" parent="."]
             script = ExtResource("2")
-            [connection signal="Ticked" from="Source" to="Receiver" method="OnTicked"]
+            Source = NodePath("../Emitter")
+            [connection signal="Ticked" from="Emitter" to="Receiver" method="OnTicked"]
             """);
         foreach (var file in new[] { "CSharpTicker.cs", "SignalCounter.cs" })
             scratch.Write("signals/" + file, File.ReadAllText(Path.Combine(RepoRoot, "demos", "showcase", "signals", file)));
@@ -99,6 +102,11 @@ public class ExportPackToolTests
         File.WriteAllText(project, harness.Replace("BASELINE_OVERRIDE", ""));
         RunExportTarget(project, target);
         Assert.Contains("OnTicked\0", Encoding.UTF8.GetString(File.ReadAllBytes(pck)), StringComparison.Ordinal);
+        // Release assemblies also need exported-property defaults, or placeholders save [Export] values as NIL
+        // under intact names. Only the actual scene state shows that; macOS cannot host the engine instance.
+        if (EngineHost.IsSupported)
+            Assert.Equal("connections=1;signal=Ticked;from=./Emitter;to=./Receiver;method=OnTicked;Source=../Emitter;Interval=3.25",
+                fixture.Run<ExportPackSceneScenario>(pck));
 
         var modified = File.GetLastWriteTimeUtc(pck);
         var cachedScene = Directory.GetFiles(Path.Combine(scratch.Dir, ".godot", "exported"), "*.scn", SearchOption.AllDirectories).Single();
@@ -109,29 +117,12 @@ public class ExportPackToolTests
 
     private static void RunExportTarget(string project, string target)
     {
-        var start = new ProcessStartInfo("dotnet")
-        {
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
+        var start = new ProcessStartInfo("dotnet");
         foreach (var argument in new[] { "msbuild", project, "-target:" + target, "-verbosity:quiet" })
             start.ArgumentList.Add(argument);
         start.Environment.Remove("GODOT_PROJECT_ASSEMBLY_DIR");
-        using var process = Process.Start(start)!;
-        var stdout = process.StandardOutput.ReadToEndAsync();
-        var stderr = process.StandardError.ReadToEndAsync();
-        var timedOut = !process.WaitForExit(TimeSpan.FromMinutes(3));
-        if (timedOut)
-        {
-            process.Kill(entireProcessTree: true);
-            process.WaitForExit();
-        }
-        Task.WaitAll(stdout, stderr);
-        var output = stdout.Result + stderr.Result;
-        if (timedOut)
-            Assert.Fail("Export target timed out" + Environment.NewLine + output);
-        Assert.True(process.ExitCode == 0, output);
+        var (exitCode, output) = RunProcess(start, "Export target");
+        Assert.True(exitCode == 0, output);
     }
 
     [Fact]
