@@ -1,4 +1,9 @@
 import importlib.util
+import argparse
+import contextlib
+import io
+import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -91,6 +96,87 @@ class AndroidApkTests(unittest.TestCase):
                     build.main()
             self.assertEqual(1, raised.exception.code)
             self.assertEqual(original, (root / "nuget.config").read_bytes())
+
+    def test_private_restore_cache_is_removed_after_success_and_failure(self):
+        for fail in (False, True):
+            with self.subTest(fail=fail), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                cache_paths = []
+                def finish(args, output, feed, config, restore):
+                    cache_paths.append(restore)
+                    (restore / "cached-package").write_bytes(b"temporary package")
+                    if fail:
+                        raise subprocess.CalledProcessError(1, "dotnet")
+                    apk = output / "game.apk"
+                    apk.write_bytes(b"APK artifact")
+                    return apk
+                args = argparse.Namespace(output=root / "output", skip_java=False)
+                with patch.object(build, "REPO", root), patch.object(build, "build_with_packages", side_effect=finish):
+                    if fail:
+                        with self.assertRaises(subprocess.CalledProcessError):
+                            build.build(args)
+                    else:
+                        self.assertTrue(build.build(args).is_file())
+                self.assertEqual(1, len(cache_paths))
+                self.assertFalse(cache_paths[0].exists())
+
+    def test_skip_java_rejects_either_missing_variant_before_building(self):
+        for missing in ("debug", "release"):
+            with self.subTest(missing=missing), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                present = "release" if missing == "debug" else "debug"
+                aar = root / f"godot/bin/android/java/{present}/godot.aar"
+                aar.parent.mkdir(parents=True)
+                aar.touch()
+                with patch.object(build, "REPO", root), patch.object(build, "run") as run:
+                    with self.assertRaisesRegex(ValueError, f"Missing {missing} Android Java payload"):
+                        build.build(argparse.Namespace(skip_java=True))
+                run.assert_not_called()
+
+    def test_missing_build_tool_reports_a_concise_error_and_cleans_restore_cache(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "editor").touch()
+            error = io.StringIO()
+            with patch.object(build, "REPO", root), \
+                 patch.object(build, "run", side_effect=FileNotFoundError("missing tool")), \
+                 patch.object(sys, "argv", ["build_android_apk.py", "--editor", str(root / "editor"),
+                                          "--output", str(root / "output")]), \
+                 contextlib.redirect_stderr(error):
+                with self.assertRaises(SystemExit) as raised:
+                    build.main()
+            self.assertEqual(1, raised.exception.code)
+            self.assertIn("Android APK build failed: missing tool", error.getvalue())
+            self.assertNotIn("Traceback", error.getvalue())
+            self.assertEqual([], list((root / "output").glob("restore-*")))
+
+    def test_smoke_host_selects_packages_for_singular_and_plural_rids_and_rejects_unsupported_rids(self):
+        cases = [([], {"android-arm64"}, None),
+                 (["-p:RuntimeIdentifier=android-x64"], {"android-x64"}, None),
+                 (["-p:RuntimeIdentifiers=android-x64"], {"android-x64"}, None),
+                 ([], {"android-arm64", "android-x64"}, "android-arm64;android-x64")]
+        for properties, expected, rids in cases:
+            with self.subTest(properties=properties):
+                environment = dict(os.environ)
+                environment.pop("RuntimeIdentifier", None)
+                environment.pop("RuntimeIdentifiers", None)
+                if rids:
+                    environment["RuntimeIdentifiers"] = rids
+                result = subprocess.run(["dotnet", "msbuild", str(REPO / "tests/android/host/android-smoke.csproj"),
+                                         "-p:TargetFramework=net10.0", "-t:TwoDogValidateAndroidSmokeRids",
+                                         "-getItem:PackageReference", "-nologo", *properties], cwd=REPO,
+                                        env=environment, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
+                self.assertEqual(0, result.returncode, result.stdout)
+                references = json.loads(result.stdout)["Items"]["PackageReference"]
+                actual = {item["Identity"].removeprefix("2dog.") for item in references
+                          if item["Identity"].startswith("2dog.android-")}
+                self.assertEqual(expected, actual)
+        result = subprocess.run(["dotnet", "msbuild", str(REPO / "tests/android/host/android-smoke.csproj"),
+                                 "-p:TargetFramework=net10.0", "-p:RuntimeIdentifier=android-x86",
+                                 "-t:TwoDogValidateAndroidSmokeRids", "-nologo"], cwd=REPO,
+                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
+        self.assertNotEqual(0, result.returncode, result.stdout)
+        self.assertIn("TDGSMOKE001", result.stdout)
 
 
 if __name__ == "__main__":

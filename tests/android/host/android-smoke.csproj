@@ -8,7 +8,8 @@
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
-        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">android-arm64</RuntimeIdentifier>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(RuntimeIdentifiers)' == ''">android-arm64</RuntimeIdentifier>
+        <_TwoDogAndroidHostRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidHostRids>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <PublishTrimmed>false</PublishTrimmed>
@@ -25,11 +26,20 @@
     <ItemGroup>
         <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.android" Version="$(NativesVersion)"/>
-        <PackageReference Include="2dog.$(RuntimeIdentifier)" Version="$(NativesVersion)"/>
+        <PackageReference Include="2dog.android-arm64" Version="$(NativesVersion)"
+                          Condition="$([System.String]::Copy('$(_TwoDogAndroidHostRids)').Contains(';android-arm64;'))"/>
+        <PackageReference Include="2dog.android-x64" Version="$(NativesVersion)"
+                          Condition="$([System.String]::Copy('$(_TwoDogAndroidHostRids)').Contains(';android-x64;'))"/>
+        <_TwoDogAndroidHostRid Include="$(RuntimeIdentifier);$(RuntimeIdentifiers)"/>
         <!-- Match the Java dependencies of Godot's lib/build.gradle. -->
         <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6"/>
         <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>
         <PackageReference Include="Xamarin.Kotlin.StdLib" Version="2.1.21"/>
         <ProjectReference Include="../game/android-smoke-game.csproj"/>
     </ItemGroup>
+    <Target Name="TwoDogValidateAndroidSmokeRids" BeforeTargets="_GenerateRestoreGraphProjectEntry;PrepareForBuild">
+        <Error Code="TDGSMOKE001"
+               Condition="'%(_TwoDogAndroidHostRid.Identity)' != 'android-arm64' And '%(_TwoDogAndroidHostRid.Identity)' != 'android-x64'"
+               Text="2dog Android smoke supports android-arm64 and android-x64 only; unsupported RID: %(_TwoDogAndroidHostRid.Identity)."/>
+    </Target>
 </Project>

@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-import uuid
+import tempfile
 import xml.etree.ElementTree as ET
 
 from inspect_android_apk import inspect_apk
@@ -33,21 +33,33 @@ def restore_config(path, feed):
 
 
 def build(args):
+    if args.skip_java:
+        validate_java_payloads()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     feed = output / "packages"
     feed.mkdir(exist_ok=True)
     config = output / "NuGet.Config"
     restore_config(config, feed)
-    # Local packages are rebuilt at the same version during development. A fresh
-    # cache prevents NuGet from silently reusing a previous invocation's payload.
-    restore = output / "restore" / uuid.uuid4().hex
-    properties = [f"-p:RestoreConfigFile={config}", f"-p:RestorePackagesPath={restore}",
-                  f"-p:PackageOutputPath={feed}", "-p:NuGetAudit=false"]
     # SDK resolution precedes project restore settings and reads repository sources.
     # Keep those existing local source folders valid; restores use the private config.
     (REPO / "packages").mkdir(exist_ok=True)
     (REPO / "godot/bin/GodotSharp/Tools/nupkgs").mkdir(parents=True, exist_ok=True)
+    # Rebuilt local packages must not reuse an older payload at the same version.
+    # Keep the fresh cache alive through inspection, then clean it on every exit.
+    with tempfile.TemporaryDirectory(prefix="restore-", dir=output) as restore:
+        return build_with_packages(args, output, feed, config, Path(restore))
+
+
+def validate_java_payloads():
+    for variant in ("debug", "release"):
+        if not (REPO / f"godot/bin/android/java/{variant}/godot.aar").is_file():
+            raise ValueError(f"Missing {variant} Android Java payload; build both Java variants first")
+
+
+def build_with_packages(args, output, feed, config, restore):
+    properties = [f"-p:RestoreConfigFile={config}", f"-p:RestorePackagesPath={restore}",
+                  f"-p:PackageOutputPath={feed}", "-p:NuGetAudit=false"]
     editor = args.editor.resolve()
     run([editor, "--headless", "--generate-mono-glue", REPO / "godot/modules/mono/glue"])
     if not args.skip_native:
@@ -59,6 +71,7 @@ def build(args):
         run(command)
     if not args.skip_java:
         run([sys.executable, REPO / "scripts/build_android_java.py"])
+    validate_java_payloads()
     for target in ("template_debug", "template_release"):
         arch = "x86_64" if args.rid == "android-x64" else "arm64"
         for library in ("libgodot_android.so", "libc++_shared.so"):
@@ -110,7 +123,7 @@ def main():
         parser.error("--editor must point to a built Godot Mono editor")
     try:
         build(args)
-    except (ValueError, subprocess.CalledProcessError) as error:
+    except (ValueError, subprocess.CalledProcessError, OSError) as error:
         parser.exit(1, f"Android APK build failed: {error}\n")
 
 

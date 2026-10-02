@@ -20,6 +20,8 @@ public partial class Smoke : Node
         if (GetNode<Node>("RuntimeProbe") != probe)
             throw new System.InvalidOperationException("Native node lookup did not preserve the managed instance.");
         probe.QueueFree();
+        if (!HasNode("RuntimeProbe") || !probe.IsQueuedForDeletion())
+            throw new System.InvalidOperationException("QueueFree did not defer node disposal until the end of the frame.");
         AddChild(new ColorRect { Color = new Color(0.1f, 0.8f, 0.3f), Size = new Vector2(256, 256) });
         RenderingServer.FramePostDraw += OnFrameDrawn;
         GD.Print("2DOG_ANDROID_CSHARP_SMOKE_STARTED");
