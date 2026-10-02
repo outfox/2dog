@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net10.0-android36.0</TargetFramework>
         <OutputType>Exe</OutputType>
+        <RootNamespace>TwoDog.Android.Smoke</RootNamespace>
         <ApplicationId>dev.twodog.smoke</ApplicationId>
         <ApplicationTitle>2dog Android smoke</ApplicationTitle>
         <ApplicationVersion>1</ApplicationVersion>
@@ -13,6 +14,8 @@
         <PublishTrimmed>false</PublishTrimmed>
         <RunAOTCompilation>false</RunAOTCompilation>
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <!-- Preserve the exact native bytes so APK inspection catches variant substitution. -->
+        <AndroidStripNativeLibraries>false</AndroidStripNativeLibraries>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
@@ -22,8 +25,7 @@
     <ItemGroup>
         <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.android" Version="$(NativesVersion)"/>
-        <PackageReference Include="2dog.android-arm64" Version="$(NativesVersion)"/>
-        <PackageReference Include="2dog.android-x64" Version="$(NativesVersion)"/>
+        <PackageReference Include="2dog.$(RuntimeIdentifier)" Version="$(NativesVersion)"/>
         <!-- Match the Java dependencies of Godot's lib/build.gradle. -->
         <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6"/>
         <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>

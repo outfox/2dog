@@ -1,9 +1,9 @@
-name: 2dog Android foundations
+name: 2dog Android build and package tests
 
 on:
   workflow_dispatch:
   push:
-    branches: [android]
+    branches: [main, 'android*']
     paths:
       - 'platforms/**'
       - 'scripts/*android*.py'
@@ -12,6 +12,8 @@ on:
       - 'build-godot.py'
       - 'Directory.Build.*'
       - '2dog.slnx'
+      - 'global.json'
+      - 'pyproject.toml'
       - '.github/workflows/android.yml'
 
 permissions:
@@ -22,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  portable-tests:
+  build-and-package-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

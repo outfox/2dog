@@ -45,14 +45,43 @@ bundle. Signing properties can be passed using repeated `--property NAME=VALUE`
 arguments; use normal .NET Android keystore configuration for distributable builds.
 No store upload or NuGet push is performed.
 
-Run `uv run python -m unittest discover -s tests/android -p 'test_*.py'` for portable
-build/packaging tests. APK compilation, C# callbacks, input, pause/resume, restart,
-GDExtensions, and device rendering remain validation gates before production support.
-The Android workload and emulator are not required for the portable tests.
+Run `uv run poe test-android-build` for Android build and package tests.
+The APK smoke test validates C# callbacks, signals, node disposal and a rendered
+pixel on an Android 36 x64 emulator. Input, pause/resume, restart, GDExtensions
+and physical-device validation remain gates before production support.
+The Android workload and emulator are not required for the build and package tests.
 The separate `tests/android/android.slnx` keeps Android workload requirements out
 of ordinary desktop solution builds. The main release workflow skips these
 packages until complete Android payloads are staged; `ForcePackAllPlatforms`
 cannot publish empty Android packages.
+
+## APK implementation milestones
+
+1. Build both native variants for one ABI, build both Java AARs, pack a private
+   local NuGet feed, build/export the C# scene, and publish a signed smoke APK.
+   Inspect the final APK for the exact selected native libraries, one ABI, the
+   PCK and the extracted game-assembly asset. The private feed also contains
+   desktop dependency stubs and must never be published.
+2. Run that APK on an x64 emulator. The scene verifies signals, native node
+   lookup, deferred disposal, 32 C# frame callbacks and a green rendered pixel before
+   reporting success. The `2dog Android APK` workflow builds and runs this path.
+3. Add Android engine tests for touch input, background/resume, Activity
+   recreation, process death and repeated launches, with per-test results and
+   crash diagnostics. Use Android-owned lifecycle fixtures and the existing
+   `*Tests` naming convention.
+4. Validate Debug/Release on physical arm64 hardware, AAB-derived APKs and a
+   16 KB page-size environment before expanding the supported RID list.
+
+With source-matched GodotSharp/editor release outputs staged, an installed
+Android workload, and `ANDROID_HOME`/`JAVA_HOME` pointing to the SDK/JDK:
+
+```sh
+uv run poe build-android-apk --editor godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+```
+
+Use `--rid android-arm64` or `--configuration Release` for the other target.
+`--skip-native --skip-java` reuses already staged payloads. The resulting APK
+and inspection report are written to `artifacts/android-apk/`.
 
 References: [Godot Android library](https://docs.godotengine.org/en/4.7/tutorials/platform/android/android_library.html),
 [.NET Android build items](https://learn.microsoft.com/en-us/dotnet/android/building-apps/build-items).
