@@ -175,8 +175,8 @@
     <Target Name="TwoDogExportGamePack"
             BeforeTargets="Publish"
             AfterTargets="Build"
-            DependsOnTargets="TwoDogResolveContentCapability;TwoDogWebExportSideModuleImports"
-            Inputs="@(TwoDogWebExportInputs)"
+            DependsOnTargets="TwoDogPrepareExport;TwoDogWebExportSideModuleImports"
+            Inputs="@(TwoDogWebExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
@@ -194,15 +194,20 @@
 
         <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogWebPackFullPath)'))"/>
 
-        <!-- (1) explicitly configured external editor -->
-        <Exec Condition="'$(TwoDogExternalGodotEditor)' != ''"
+        <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; --output &quot;$(_TwoDogWebPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
               Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; &quot;$(TwoDogGodotProjectFullPath)&quot;"
-              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg)"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <Error Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"

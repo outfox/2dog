@@ -60,6 +60,22 @@ Incompatible Godot versions and stale manual binding references still fail the b
 See the [binding package guide](../twodog.godotsharp/README.md).
 Trimming compatibility of your own code remains a separate concern.
 
+## Intentionally unawaited tasks
+
+Observe fire-and-forget operations so failures are reported immediately:
+
+```csharp
+using twodog;
+
+SaveAsync().Forget(); // Console.Error on desktop, browser console errors on web
+```
+
+`Forget()` supports `Task`, `Task<T>`, `ValueTask`, and `ValueTask<T>`; successful
+completion and cancellation stay quiet. It consumes value tasks, which must
+not be awaited or consumed again. Plain discarded tasks rely on the runtime's
+GC-delayed unobserved-exception event. See [browser exception diagnostics](../docs/content/hosts/web.md#diagnosing-async-exceptions)
+for logging every thrown exception during debugging.
+
 ## Documentation
 
 - [Getting Started](https://github.com/outfox/2dog)

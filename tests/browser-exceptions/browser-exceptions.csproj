@@ -9,6 +9,7 @@
     <!-- Isolate real runtime exception events from Godot and the test runner. -->
     <ItemGroup>
         <Compile Include="../../twodog.engine/WebExceptionDiagnostics.cs" Link="WebExceptionDiagnostics.cs" />
+        <Compile Include="../../twodog.engine/TaskExtensions.cs" Link="TaskExtensions.cs" />
     </ItemGroup>
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
         <WasmMainJSPath>main.js</WasmMainJSPath>

@@ -13,6 +13,45 @@ before(async () => {
 });
 const probe = (mode) => run('dotnet', [assembly, mode], { timeout: 15000 });
 
+test('forgotten async failures report while the task is retained, without garbage collection', async () => {
+    const { stdout, stderr } = await probe('forgotten');
+    assert.match(stdout, /PROBE_COMPLETE/);
+    assert.equal(stderr.match(/2dog: Fire-and-forget task exception/g)?.length, 1);
+    assert.match(stderr, /InvalidOperationException: forgotten-task/);
+    assert.match(stderr, /inner-failure/);
+    assert.match(stderr, /FailAsync/);
+});
+
+test('already-faulted tasks report all failures immediately', async () => {
+    const { stdout, stderr } = await probe('forgotten-completed');
+    assert.match(stdout, /PROBE_COMPLETE/);
+    assert.equal(stderr.match(/2dog: Fire-and-forget task exception/g)?.length, 1);
+    assert.match(stderr, /completed-task/);
+    assert.match(stderr, /second-failure/);
+});
+
+test('task-source failures report even though no exception was thrown and the captured context never pumps', async () => {
+    const { stdout, stderr } = await probe('forgotten-source');
+    assert.match(stdout, /PROBE_COMPLETE/);
+    assert.equal(stderr.match(/2dog: Fire-and-forget task exception/g)?.length, 1);
+    assert.match(stderr, /source-task/);
+    assert.match(stderr, /inner-failure/);
+});
+
+test('forgotten successful and cancelled tasks stay quiet', async () => {
+    const { stdout, stderr } = await probe('forgotten-quiet');
+    assert.match(stdout, /PROBE_COMPLETE/);
+    assert.equal(stderr, '');
+});
+
+test('both value-task overloads report failures', async () => {
+    const { stdout, stderr } = await probe('forgotten-value-task');
+    assert.match(stdout, /PROBE_COMPLETE/);
+    assert.equal(stderr.match(/2dog: Fire-and-forget task exception/g)?.length, 2);
+    assert.match(stderr, /InvalidOperationException: value-task/);
+    assert.match(stderr, /InvalidOperationException: generic-value-task/);
+});
+
 test('abandoned async tasks report the complete exception exactly once', async () => {
     const { stdout, stderr } = await probe('unobserved');
     assert.match(stdout, /PROBE_COMPLETE/);

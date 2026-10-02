@@ -178,7 +178,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             Engine = engine;
             try
             {
-                engine.Exited += () => _ = InvokeAsync(() => CompleteExitAsync(engine));
+                engine.Exited += () => InvokeAsync(() => CompleteExitAsync(engine)).Forget();
                 engine.Start();
                 _lifetime++;
                 // Hands the loop to emscripten and returns; the engine destroys itself on quit.
