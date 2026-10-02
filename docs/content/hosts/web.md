@@ -304,6 +304,12 @@ can discover custom C# signals. It also refreshes the scene export cache when
 managed assemblies change, including caches made before this assembly selection
 was available. Republish the pack as well as the managed browser app after updating.
 
+For handlers connected in `_Ready()`, inspect the exported `[Export]` property
+values as well, e.g. with `SceneState.GetNodePropertyValue()`. A `NodePath` that
+reads back as `Nil` leaves the receiver unable to find its source. Older 2dog
+versions lost these values when exporting from a Release build, although the
+property names remained; update and republish the pack.
+
 Managed AOT is optional: `WasmBuildNative` links Godot and the .NET runtime into
 WebAssembly; `RunAOTCompilation` additionally compiles managed assemblies ahead
 of time during publish. First-chance exception logging works without managed AOT.
