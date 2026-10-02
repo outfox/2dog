@@ -7,6 +7,7 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
         <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+        <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
     </PropertyGroup>
@@ -15,6 +16,7 @@
         <None Include="$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.dll" Pack="true" PackagePath="lib/net10.0/" />
         <None Include="$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.xml" Pack="true" PackagePath="lib/net10.0/" Condition="Exists('$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.xml')" />
         <None Include="buildTransitive/*" Pack="true" PackagePath="buildTransitive/" />
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false" />
         <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 </Project>

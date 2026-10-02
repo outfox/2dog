@@ -7,6 +7,7 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
         <NoWarn>$(NoWarn);NU5128;NU5131</NoWarn>
+        <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
         <GodotSourceGenDir Condition="'$(GodotSourceGenDir)' == ''">$(MSBuildProjectDirectory)/../godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/</GodotSourceGenDir>
@@ -18,6 +19,7 @@
         <None Include="$(TwoDogGodotSharpApiDir)Debug/GodotSharpEditor.dll" Pack="true" PackagePath="buildTransitive/api/" />
         <None Include="$(GodotSourceGenDir)Godot.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs/" />
         <None Include="buildTransitive/*" Pack="true" PackagePath="buildTransitive/" />
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false" />
         <None Include="README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 </Project>
