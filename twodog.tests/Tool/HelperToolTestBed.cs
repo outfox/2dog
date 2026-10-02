@@ -73,30 +73,36 @@ internal static class HelperToolTestBed
 
     public static int RunHelper(params string[] arguments)
     {
-        var psi = new ProcessStartInfo
-        {
-            FileName = "dotnet",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
-        psi.ArgumentList.Add("exec");
-        psi.ArgumentList.Add(HelperPath);
-        foreach (var arg in arguments) psi.ArgumentList.Add(arg);
+        var psi = new ProcessStartInfo("dotnet");
+        foreach (var arg in new[] { "exec", HelperPath }.Concat(arguments)) psi.ArgumentList.Add(arg);
+        return RunProcess(psi, "Import helper").ExitCode;
+    }
 
+    /// <summary>Runs <paramref name="psi"/> with redirected output; fails with that output on timeout.</summary>
+    public static (int ExitCode, string Output) RunProcess(ProcessStartInfo psi, string name)
+    {
+        // Never inherit the process CWD: in-process engines chdir it into scratch projects that parallel tests
+        // delete, and dotnet started in a deleted directory dies in getcwd (FileNotFoundException).
+        if (string.IsNullOrEmpty(psi.WorkingDirectory)) psi.WorkingDirectory = RepoRoot;
+        psi.UseShellExecute = false;
+        psi.RedirectStandardOutput = true;
+        psi.RedirectStandardError = true;
         using var process = Process.Start(psi)!;
         // Drain both streams concurrently; reading them sequentially can
         // deadlock once the other pipe's buffer fills.
         var stdout = process.StandardOutput.ReadToEndAsync();
         var stderr = process.StandardError.ReadToEndAsync();
-        if (!process.WaitForExit(TimeSpan.FromMinutes(3)))
+        var timedOut = !process.WaitForExit(TimeSpan.FromMinutes(3));
+        if (timedOut)
         {
             process.Kill(entireProcessTree: true);
-            Assert.Fail("Import helper timed out");
+            process.WaitForExit();
         }
-
         Task.WaitAll(stdout, stderr);
-        return process.ExitCode;
+        var output = stdout.Result + stderr.Result;
+        if (timedOut)
+            Assert.Fail(name + " timed out" + Environment.NewLine + output);
+        return (process.ExitCode, output);
     }
 
     public static string CreateScratchProject()

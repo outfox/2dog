@@ -73,11 +73,16 @@ public static partial class ScratchProject
             // process-global), and the process's current directory cannot be
             // deleted on Windows - step out before removing it.
             var full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(dir));
-            var cwd = Path.TrimEndingDirectorySeparator(Path.GetFullPath(Environment.CurrentDirectory));
-            if (cwd.Equals(full, StringComparison.OrdinalIgnoreCase)
+            var cwd = CurrentDirectoryOrNull();
+            if (cwd is null
+                || cwd.Equals(full, StringComparison.OrdinalIgnoreCase)
                 || cwd.StartsWith(full + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
                 Environment.CurrentDirectory = Path.GetTempPath();
             Directory.Delete(dir, recursive: true);
+            // Godot's DirAccessUnix does getcwd, chdir, chdir back: another engine can restore a CWD captured before
+            // the step-out above, which Unix then deletes. Never leave the process in a deleted directory.
+            if (CurrentDirectoryOrNull() is null)
+                Environment.CurrentDirectory = Path.GetTempPath();
             // Prune the per-pid parent once its last project is gone; quiet on
             // failure (a sibling fixture may race a new Create into it).
             if (Path.GetDirectoryName(full) is { } parent)
@@ -94,6 +99,19 @@ public static partial class ScratchProject
         catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
             Console.Error.WriteLine($"[2dog.hosting] warning: could not delete scratch project '{dir}': {e.Message}");
+        }
+    }
+
+    /// <summary>The normalized CWD, or null once its directory was deleted (Unix getcwd fails with ENOENT).</summary>
+    private static string? CurrentDirectoryOrNull()
+    {
+        try
+        {
+            return Path.TrimEndingDirectorySeparator(Path.GetFullPath(Environment.CurrentDirectory));
+        }
+        catch (IOException)
+        {
+            return null;
         }
     }
 
