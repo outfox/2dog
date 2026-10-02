@@ -4,6 +4,7 @@ import io
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -83,7 +84,7 @@ class AndroidPackages(unittest.TestCase):
         project.write_text(f'''<Project>
 <PropertyGroup><TargetPlatformIdentifier>{platform}</TargetPlatformIdentifier>
 <RuntimeIdentifier>{'' if multi else rid}</RuntimeIdentifier><RuntimeIdentifiers>{rid if multi else ''}</RuntimeIdentifiers>
-<TwoDogVariant>{variant}</TwoDogVariant><NuGetPackageRoot>{xml(cache.as_posix())}/</NuGetPackageRoot>
+<TwoDogVariant>{variant}</TwoDogVariant><NuGetPackageRoot>{xml(cache.as_posix())}</NuGetPackageRoot>
 <TwoDogLocalGodotBin>{xml((directory / 'absent').as_posix())}/</TwoDogLocalGodotBin></PropertyGroup>
 {''.join(imports)}
 <Target Name="Collect" DependsOnTargets="TwoDogResolveAndroidNatives">
@@ -140,6 +141,31 @@ class AndroidPackages(unittest.TestCase):
         result, items = self.consumer("win-x64", platform="")
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertEqual([], items)
+
+    def test_desktop_native_copy_targets_skip_android_hosts(self):
+        host_os = "Windows" if os.name == "nt" else "OSX" if sys.platform == "darwin" else "Linux"
+        for platform in ("android", ""):
+            with self.subTest(platform=platform):
+                directory = Path(tempfile.mkdtemp(dir=self.root))
+                (directory / "desktop.so").write_bytes(b"desktop fixture")
+                project = directory / "Host.proj"
+                project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>{platform}</TargetPlatformIdentifier>
+<OutputPath>{xml(directory.as_posix())}/build/</OutputPath><PublishDir>{xml(directory.as_posix())}/publish/</PublishDir>
+<NuGetPackageRoot>{xml(directory.as_posix())}/absent/</NuGetPackageRoot></PropertyGroup>
+<ItemGroup><TwoDogNativeResolver Include="desktop">
+<PackageId>fixture</PackageId><PackageVersion>1</PackageVersion><LibPrefix>libgodot</LibPrefix><Ext>so</Ext>
+<HostOs>{host_os}</HostOs><RidPrefix>desktop</RidPrefix><LocalBin>{xml(directory.as_posix())}/</LocalBin>
+<LocalRelease>desktop.so</LocalRelease><LocalDebug>desktop.so</LocalDebug><LocalEditor>desktop.so</LocalEditor>
+</TwoDogNativeResolver></ItemGroup>
+<Import Project="{xml(REPO / 'platforms/common/2dog.native-resolver.targets')}"/>
+<Target Name="Build"/><Target Name="Publish"/>
+</Project>''')
+                result = subprocess.run(["dotnet", "msbuild", str(project), "-t:Build,Publish", "-nologo"],
+                                        cwd=REPO, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
+                self.assertEqual(0, result.returncode, result.stdout)
+                for output in ("build", "publish"):
+                    self.assertEqual(platform != "android", (directory / output / "libgodot-release.so").exists())
 
     def test_editor_unknown_rid_and_missing_payload_fail_loudly(self):
         for arguments, diagnostic in (({"variant": "editor"}, "TDGA001"), ({"rid": "android-x86"}, "TDGA002"),

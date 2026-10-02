@@ -87,9 +87,13 @@ sequence = [
     { cmd = "dotnet pack platforms/twodog.android/twodog.android.csproj" },
 ]
 
-[tool.poe.tasks.test-android]
-help = "Portable Android build and NuGet selection tests (no device/workload required)"
+[tool.poe.tasks.test-android-build]
+help = "Android build and package tests (no device/workload required)"
 cmd = "uv run python -m unittest discover -s tests/android -p 'test_*.py'"
+
+[tool.poe.tasks.build-android-apk]
+help = "Build and inspect the Android smoke APK from local packages; pass --editor"
+cmd = "uv run scripts/build_android_apk.py"
 
 [tool.poe.tasks.publish-android]
 help = "Publish an experimental Android host to APK/AAB; pass project and --pack"

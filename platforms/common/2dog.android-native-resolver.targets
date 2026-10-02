@@ -15,7 +15,7 @@
         <ItemGroup>
             <_TwoDogSelectedAndroidNative Include="@(TwoDogAndroidNative)"
                     Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';%(Identity);'))">
-                <Root>$(NuGetPackageRoot)2dog.%(Identity).$(TwoDogVariant)/%(PackageVersion)/runtimes/%(Identity)/native/</Root>
+                <Root>$(NuGetPackageRoot)/2dog.%(Identity).$(TwoDogVariant)/%(PackageVersion)/runtimes/%(Identity)/native/</Root>
             </_TwoDogSelectedAndroidNative>
             <_TwoDogSelectedAndroidNative>
                 <Root Condition="!Exists('%(Root)libgodot_android.so')">$(TwoDogLocalGodotBin)android/$(_TwoDogAndroidTarget)/%(Arch)/</Root>

@@ -94,7 +94,7 @@ has its own entry point and dependencies.
 - Packages available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
 Experimental Android arm64/x64 support includes runtime packages, a Java Activity
-host, portable packaging tests and APK/AAB publishing scripts.
+host, build and package tests and APK/AAB publishing scripts.
 See [Android host setup](platforms/twodog.android/README.md).
 Device validation is still required before Android joins the supported RID list.
 
