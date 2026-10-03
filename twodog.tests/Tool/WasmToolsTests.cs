@@ -76,7 +76,52 @@ public class WasmToolsTests
         var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 1, "SDK not found"));
         WasmTools.EnsureInstalled(".", false, () => throw new Exception("must not prompt"), runner);
         Assert.Single(runner.Requests);
-        Assert.Throws<ToolException>(() => WasmTools.EnsureInstalled(".", true, null, runner));
+    }
+
+    [Theory]
+    [InlineData(false, "exit")]
+    [InlineData(false, "timeout")]
+    [InlineData(false, "exception")]
+    [InlineData(true, "exit")]
+    [InlineData(true, "timeout")]
+    [InlineData(true, "exception")]
+    public void ExplicitRequest_FailedProbeStillAttemptsInstallation(bool update, string failure)
+    {
+        var runner = new FakeProcessRunner(request =>
+        {
+            if (!request.Args.SequenceEqual(["workload", "list"])) return FakeProcessRunner.Result(request, 0);
+            if (failure == "exception") throw new ToolException("listing could not start");
+            return FakeProcessRunner.Result(request, 1, "listing failed") with { TimedOut = failure == "timeout" };
+        });
+        var run = CliConsole.Capture(() =>
+        {
+            WasmTools.EnsureInstalled(".", !update, () => throw new Exception("must not prompt"), runner,
+                update, () => throw new Exception("must not prompt"));
+            return ExitCodes.Ok;
+        });
+
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Contains("could not list installed workloads", run.Stderr);
+        Assert.DoesNotContain("error:", run.Stderr);
+        Assert.Equal(["workload", "install", "wasm-tools"], runner.Requests[1].Args);
+        Assert.Equal(update ? 3 : 2, runner.Requests.Count);
+        if (update) Assert.Equal(["workload", "update"], runner.Requests[2].Args);
+    }
+
+    [Fact]
+    public void FailedProbeAndInstallation_ReportsTheInstallationFailure()
+    {
+        var runner = new FakeProcessRunner(request => request.Args.Contains("list")
+            ? throw new ToolException("listing could not start")
+            : FakeProcessRunner.Result(request, 1, "installation denied"));
+        var run = CliConsole.Capture(() =>
+        {
+            var error = Assert.Throws<ToolException>(() => WasmTools.EnsureInstalled(".", true, null, runner));
+            Assert.Contains("installing wasm-tools failed", error.Message);
+            return 0;
+        });
+        Assert.Contains("installation denied", run.Stderr);
+        Assert.Equal(["workload", "install", "wasm-tools"], runner.Requests[1].Args);
     }
 
     [Fact]
@@ -92,10 +137,14 @@ public class WasmToolsTests
         Assert.Contains(WasmTools.InstallCommand, run.Stderr);
     }
 
-    [Fact]
-    public void Cancellation_IsPropagated()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Cancellation_IsPropagated(bool duringInstallation)
     {
-        var runner = new FakeProcessRunner(_ => throw new OperationCanceledException());
+        var runner = new FakeProcessRunner(request => duringInstallation && request.Args.Contains("list")
+            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", "")
+            : throw new OperationCanceledException());
         Assert.Throws<OperationCanceledException>(() => WasmTools.EnsureInstalled(".", true, null, runner));
     }
 

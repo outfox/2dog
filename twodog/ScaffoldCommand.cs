@@ -714,6 +714,7 @@ internal static class ScaffoldCommand
                 }));
         }
 
+        var hasProjectChanges = plan.Count > 0;
         // Run after global.json has been created, so both probes and installation use the project's SDK.
         var needsWasm = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
         if (needsWasm && (options.InstallWasmTools || options.Restore && options.ConfirmWasmToolsInstall != null))
@@ -721,8 +722,8 @@ internal static class ScaffoldCommand
                 () => WasmTools.EnsureInstalled(projectDir, options.InstallWasmTools,
                     options.ConfirmWasmToolsInstall, workloadRunner)));
 
-        // Only restore when the run actually changes something.
-        if (options.Restore && plan.Count > 0)
+        // Workload checks and installation alone do not change the project's restore inputs.
+        if (options.Restore && hasProjectChanges)
             plan.Add(new PlannedAction($"dotnet restore {solutionName}", ActionKind.Restore, () =>
             {
                 var result = SolutionOps.Restore(solutionPath);

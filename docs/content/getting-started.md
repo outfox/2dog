@@ -31,12 +31,12 @@ or `npx serve MyGame.web/AppBundle`.
 
 Develop on Windows x64, Linux x64, or macOS ARM64. 2dog upgrades your `sln` file to `slnx`, so you can code in your IDE or code editor of choice - including Godot itself.
 
-The various hosts appear as projects inside the solution.
+The various hosts appear as projects inside the solution, where you can extend and debug them as normal .NET projects.
 
 You may have any number of hosts of the same type, 2dog will ask you for alternative names on creation. This is great for different automation suites, demo versions, etc.
 
 ## Updating and Fixing
-2dog safely stays on the version you installed it on, but updating or checking for problems is easy:
+The project's package versions stay pinned until you update them. Run the latest tool to update or check for problems:
 
 ```bash
 dnx 2dog update
@@ -52,11 +52,11 @@ Keep editing scenes and scripts in Godot as usual. Hosts import changed resource
 See [Hosts](/hosts/) for other host types and [Testing with xUnit](/testing) to begin writing tests... *(you should, it's awesome!)*
 
 
-## Squirrel ?! (Start a New Project)
+## Squirrel ?!
 
-2dog can do a lot more, such as provide unit testing, embedding in other UIs, etc. It's maybe safest to do this in a completely fresh project, and *you know you wanted to start a new game project anyway!*
+2dog can do a lot more, such as provide unit testing, embedding in other applications and UIs, etc. It's maybe safest to try this in a completely fresh project, and *you know you wanted to start a new game project anyway!*
 
-To create a full project, `project.godot` and all, from the command line:
+To create a project from scratch, `project.godot` and all, from the command line:
 
 ```bash
 dnx 2dog new NewGame

@@ -36,13 +36,14 @@ internal static class UpdateCommand
         PlanGameBindings(plan, model);
         PlanWebBootRefresh(plan, model);
 
+        var hasProjectChanges = plan.Count > 0;
         if (model.HasWebLikeHost && (cmd.Options.InstallWasmTools || cmd.Options.UpdateWorkloads || interactive && cmd.Options.Restore))
             plan.Add(new PlannedAction("check wasm-tools and offer workload installation or updates", ActionKind.Workload,
                 () => WasmTools.EnsureInstalled(project.Dir, cmd.Options.InstallWasmTools,
                     interactive ? Tui.OfferWasmToolsInstall : null, Runner,
                     cmd.Options.UpdateWorkloads, interactive ? Tui.OfferWorkloadUpdate : null)));
 
-        if (plan.Count > 0 && cmd.Options.Restore)
+        if (hasProjectChanges && cmd.Options.Restore)
             plan.Add(new PlannedAction("dotnet restore", ActionKind.Restore, () => Restore(project)));
 
         var result = ScaffoldCommand.Apply(plan, warnings, [], cmd.Options.DryRun,

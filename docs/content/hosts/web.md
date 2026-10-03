@@ -10,15 +10,14 @@ browser. It publishes a static site that needs no server-side code.
 
 ## Build and Serve Locally
 
-From your Godot project directory:
+From your Godot project directory, run these commands. Accept `add`'s
+installation offer if `wasm-tools` is missing:
 
 ```bash
 dnx 2dog add --web
 dotnet publish MyGame.web
 dnx dotnet-serve -d MyGame.web/AppBundle
 ```
-
-Accept the installation offer if `wasm-tools` is missing.
 
 Open the URL printed by the server. Game output appears in the browser console.
 Edit `MyGame.web/wwwroot/` to customize the page, then publish again.
@@ -34,7 +33,9 @@ See [Web Host Configuration](/configuration#web-host) for build settings.
 ## GDExtensions
 
 Extensions need a single-threaded WebAssembly side module listed under a `web`
-key in their `.gdextension` file. Publishing includes it in `godot.pck`.
+key in their `.gdextension` file. With the default `TwoDogExportPack=true`,
+publishing includes it in `godot.pck`. If you disable export, include the
+extension in your supplied pack.
 Side modules cannot use `EM_ASM` or `EM_JS`.
 
 ## Limitations

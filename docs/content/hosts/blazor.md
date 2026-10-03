@@ -11,14 +11,13 @@ objects directly.
 
 ## Use It
 
-From your Godot project directory:
+From your Godot project directory, run these commands. Accept `add`'s
+installation offer if `wasm-tools` is missing:
 
 ```bash
 dnx 2dog add --blazor
 dotnet run --project MyGame.blazor
 ```
-
-Accept the installation offer if `wasm-tools` is missing.
 
 Open the URL printed by the server. To publish the server and client:
 

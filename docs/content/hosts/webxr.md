@@ -10,14 +10,13 @@ and the WebXR Layers polyfill included.
 
 ## Use It
 
-From your Godot project directory:
+From your Godot project directory, run these commands. Accept `add`'s
+installation offer if `wasm-tools` is missing:
 
 ```bash
 dnx 2dog add --webxr
 dotnet publish MyGame.webxr
 ```
-
-Accept the installation offer if `wasm-tools` is missing.
 
 Serve the site:
 

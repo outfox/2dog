@@ -5,8 +5,9 @@ description: "Reference for 2dog update: bring a project's 2dog packages to the 
 
 # `2dog update`
 
-Sets the project's 2dog package versions to the running tool's, and restores.
-Never downgrades; requires a clean Git working tree unless you pass `--allow-dirty`.
+Sets the project's 2dog package versions to the running tool's, and restores
+after project changes. Never downgrades. When Git can check the project, it
+refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 
 ```bash
 2dog update [path] [options]
@@ -22,7 +23,7 @@ Never downgrades; requires a clean Git working tree unless you pass `--allow-dir
 | --- | --- |
 | `--dry-run` | Print the plan; change nothing |
 | `--no-restore` | Skip the final `dotnet restore` |
-| `--allow-dirty` | Proceed although the git working tree has uncommitted changes |
+| `--allow-dirty` | Proceed despite uncommitted tracked-file changes |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts |
 | `--update-workloads` | Install missing `wasm-tools`, or run `dotnet workload update` for the project's SDK |
 

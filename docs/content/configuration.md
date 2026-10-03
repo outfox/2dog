@@ -82,13 +82,13 @@ client's `.csproj`:
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `TwoDogWebVariant` | `release` | Engine build; `debug` needs a `2dog.browser-wasm.debug` reference |
+| `TwoDogWebVariant` | `release`, or `debug` in Debug when the debug package is restored | Engine build; `debug` needs a `2dog.browser-wasm.debug` reference |
 | `TwoDogExportPack` | `true` | Export content; `false` uses `wwwroot/godot.pck` |
 | `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
 | `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for loading progress |
 | `TwoDogWebStripMaps` | `true` for release | Remove JavaScript source maps |
-| `TwoDogWebPrecompress` | `true` | Write Brotli and gzip copies of large files |
+| `TwoDogWebPrecompress` | `true` with Core MSBuild | Write Brotli and gzip copies of large files; skipped with full-framework MSBuild |
 | `TwoDogWebPrecompressLevel` | `Optimal` | Compression level; `SmallestSize` takes longer |
 | `TwoDogWebSideModuleExports` | `true` | Export symbols used by GDExtensions |
 | `WasmEmitSymbolMap` | `false` | Include native symbols for stack traces |

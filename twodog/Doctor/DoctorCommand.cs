@@ -52,7 +52,7 @@ internal static class DoctorCommand
 
         Out.Blank();
         DoctorRenderer.Summary(final, options.Strict);
-        if (!interactive && selected.Count == 0) DoctorRenderer.HowToFix(final);
+        if (!interactive) DoctorRenderer.HowToFix(final);
 
         ProcessResult? buildResult = null;
         BuildDiagnosis? diagnosis = null;
