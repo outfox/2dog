@@ -35,6 +35,32 @@ only the host should remove duplicate analyzers.
 See [Selecting a Variant](./build-configurations#selecting-a-variant) for the
 variant mapping and [Resource Import](./import-tool) for import properties.
 
+## Native AOT
+
+Generic, Avalonia, and WinUI hosts can publish with `PublishAot`. The release
+and debug variants support it; the editor variant does not, because it loads
+GodotTools at runtime.
+
+Native AOT needs the platform's native toolchain: the Visual Studio C++ build
+tools on Windows, `clang` and `zlib1g-dev` on Linux, and the Xcode command-line
+tools on macOS (see the
+[.NET prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites)).
+Publish on the operating system you target.
+
+2dog keeps `GodotSharp` and the game assembly whole, because Godot binds
+script classes through reflection. The game assembly is the project referenced
+from `GodotProjectDir`. Root other assemblies that are only reached through
+reflection:
+
+```xml
+<TrimmerRootAssembly Include="MyLibrary"/>
+```
+
+Other hosts compile ahead of time differently. WinForms does not support
+trimming, so it cannot use Native AOT. Android and Web hosts run on Mono and
+use its AOT compiler (`RunAOTCompilation`) instead: Android Release builds do
+by default, and Web hosts opt in with `-p:RunAOTCompilation=true`.
+
 ## Packages and Versions
 
 Reference `2dog.engine` from generic hosts:

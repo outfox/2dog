@@ -28,3 +28,8 @@ See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/
 
 The app runs unpackaged. WinUI controls cannot overlap the game window;
 use [Avalonia](./avalonia) for overlays or a cross-platform UI.
+
+## Publish It
+
+Publish like the [generic host](./generic#publishing), with or without
+[Native AOT](./generic#native-aot).

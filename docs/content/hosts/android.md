@@ -65,8 +65,9 @@ the APK. Every listed library must exist, because the pack export copies them.
 Release builds are trimmed and AOT-compiled, like any .NET for Android app. 2dog
 keeps `GodotSharp`, `GodotPlugins`, `twodog`, and your game assembly whole. To
 keep other assemblies or compile every method ahead of time, see
-[Android Host Configuration](/configuration#android-host). NativeAOT
-(`PublishAot`) is not supported.
+[Android Host Configuration](/configuration#android-host). This is Mono's AOT
+compiler (`RunAOTCompilation`), not Native AOT: .NET for Android's Native AOT
+(`PublishAot`) is experimental and not supported.
 
 ## Limitations
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -394,6 +395,9 @@ public class Engine : IDisposable, IAsyncDisposable
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         if (!string.IsNullOrEmpty(baseDir))
             NativeEnvironment.SetVariable("GODOT_PROJECT_ASSEMBLY_DIR", baseDir);
+
+        // NativeAOT initializes without GodotPlugins.dll (NativeAotPlugins).
+        if (!RuntimeFeature.IsDynamicCodeSupported) return;
 
         var assemblyDir = Path.GetDirectoryName(typeof(Engine).Assembly.Location);
         if (string.IsNullOrEmpty(assemblyDir)) return;

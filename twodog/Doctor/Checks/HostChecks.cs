@@ -12,7 +12,8 @@ internal static class HostChecks
         new("host.godot-project-dir", Category.Hosts, "GodotProjectDir points at the Godot project"),
         new("host.variant", Category.Hosts, "TwoDogVariant is release, debug or editor"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
-        new("host.publish-aot", Category.Hosts, "no desktop host enables PublishAot or PublishSingleFile"),
+        new("host.publish-aot", Category.Hosts, "only desktop, Avalonia and WinUI hosts enable PublishAot"),
+        new("host.publish-singlefile", Category.Hosts, "no desktop host enables PublishSingleFile"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
         new("host.web-props-shim", Category.Hosts, "browser hosts chain to the root Directory.Build.props"),
@@ -90,12 +91,20 @@ internal static class HostChecks
                     new Fix($"csproj:{host.Folder}:buildtype", FixClass.Safe, $"remove TwoDogBuildType from {csproj}",
                         () => RemoveProperties(host.CsprojPath, "TwoDogBuildType"))));
 
-            if (!host.IsWebLike)
-                foreach (var property in new[] { "PublishAot", "PublishSingleFile" })
-                    if (host.Properties(property).Any(e => e.Value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase)))
-                        yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables {property}",
-                            "the engine loads GodotPlugins and the game assembly from disk through hostfxr, which a single binary cannot carry",
-                            $"remove {property} and publish as a folder (dotnet publish -c Release -r <rid>)", csproj));
+            bool Enables(string property) =>
+                host.Properties(property).Any(e => e.Value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase));
+
+            if (host.Kind is HostKind.WinForms or HostKind.Android && Enables("PublishAot"))
+                yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables PublishAot",
+                    host.Kind == HostKind.WinForms
+                        ? "Windows Forms does not support trimming, so the SDK rejects NativeAOT (NETSDK1175)"
+                        : "Android hosts run on Mono, whose Release builds are already AOT-compiled (RunAOTCompilation)",
+                    "remove PublishAot", csproj));
+
+            if (!host.IsWebLike && Enables("PublishSingleFile"))
+                yield return Issue(new Finding("host.publish-singlefile", c, Severity.Fail, $"{csproj} enables PublishSingleFile",
+                    "the engine loads GodotPlugins and the game assembly from disk, which a single-file bundle cannot provide",
+                    "remove PublishSingleFile and publish as a folder, or use PublishAot for a native executable", csproj));
 
             if (referencesGame && analyzers.Count == 0)
                 yield return Issue(new Finding("host.duplicate-analyzers", c, Severity.Warn, $"{csproj} lacks TwoDogRemoveDuplicateGodotAnalyzers",

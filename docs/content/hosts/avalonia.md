@@ -27,6 +27,11 @@ access game state through `session.Engine.Tree`.
 See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.avalonia)
 for a pause button, time-scale slider, and FPS display.
 
+## Publish It
+
+Publish like the [generic host](./generic#publishing), with or without
+[Native AOT](./generic#native-aot).
+
 ## Requirements
 
 - Avalonia 12.1 or later on Windows, Linux, or macOS.

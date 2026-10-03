@@ -108,6 +108,19 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
+    public void PublishAot_FailsOnlyWhereNativeAotCannotWork()
+    {
+        var dir = Scaffold("--generic", "--avalonia", "--winforms");
+        foreach (var host in new[] { "Game.2dog", "Game.avalonia", "Game.winforms" })
+            Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
+                "<GodotProjectDir>..</GodotProjectDir><PublishAot>true</PublishAot>");
+
+        var issue = Issue(Doctor(dir, "--json").Stdout, "host.publish-aot", "fail", fixable: false);
+        Assert.Contains("Game.winforms", issue.GetProperty("title").GetString());
+        Assert.Contains("NETSDK1175", issue.GetProperty("detail").GetString());
+    }
+
+    [Fact]
     public void BlazorClientLiterals_CountForTheVersionChecks()
     {
         var dir = Scaffold("--blazor");

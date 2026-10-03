@@ -366,8 +366,9 @@ public static class GodotApiSmoke
         using var script = scriptValue.AsGodotObject() as Script;
         var scriptInfo = script is null ? "no script"
             : $"script '{script.ResourcePath}' (can instantiate: {script.CanInstantiate()})";
-        var typeInfo = $"node type {actual.FullName} from {actual.Assembly.Location} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(actual.Assembly)?.Name}'";
-        var expectedInfo = $"expected {expected.FullName} from {expected.Assembly.Location} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(expected.Assembly)?.Name}'";
+        // Assembly names, not file locations: NativeAOT compiles every assembly into the executable.
+        var typeInfo = $"node type {actual.FullName} from {actual.Assembly.FullName} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(actual.Assembly)?.Name}'";
+        var expectedInfo = $"expected {expected.FullName} from {expected.Assembly.FullName} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(expected.Assembly)?.Name}'";
         return $"{scriptInfo}; {typeInfo}; {expectedInfo}";
     }
 

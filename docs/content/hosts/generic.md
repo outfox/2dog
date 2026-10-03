@@ -38,8 +38,20 @@ pack. Copy the whole folder to the target machine. Add `-r win-x64`,
 `-r linux-x64`, or `-r osx-arm64` to select a platform.
 
 For a build that requires an installed .NET runtime, pass
-`-p:PublishSelfContained=false`. Desktop Native AOT and single-file publishing
-are unsupported.
+`-p:PublishSelfContained=false`. Single-file publishing is unsupported.
+
+### Native AOT
+
+Native AOT compiles the host, your game, and GodotSharp into one native
+executable. It needs no .NET runtime and starts faster:
+
+```bash
+dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishAot=true
+```
+
+The publish folder holds the executable, the engine, and the game pack. To
+make it the default, set `<PublishAot>true</PublishAot>` in the host's
+`.csproj`. See [Native AOT](/configuration#native-aot) for requirements.
 
 See [Engine](/api/engine) to customize the frame loop and
 [Build Variants](/build-configurations) to select an engine build.

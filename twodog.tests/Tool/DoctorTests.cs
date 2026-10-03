@@ -171,15 +171,15 @@ public class DoctorTests : IDisposable
     public void ManualFindings_HaveRemedies_AndNoFix()
     {
         var dir = Scaffold("--generic", "--tests");
-        Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><PublishAot>true</PublishAot>");
+        Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><PublishSingleFile>true</PublishSingleFile>");
         Edit(dir, "Game.csproj", $"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", "Godot.NET.Sdk/4.7.1");
 
         var run = Doctor(dir, null, "--json");
         Assert.Equal(ExitCodes.Findings, run.ExitCode);
-        var aot = Finding(run.Stdout, "host.publish-aot")!.Value;
-        Assert.Equal("fail", aot.GetProperty("severity").GetString());
-        Assert.False(aot.TryGetProperty("fix", out _));
-        Assert.Contains("remove PublishAot", aot.GetProperty("remedy").GetString());
+        var singleFile = Finding(run.Stdout, "host.publish-singlefile")!.Value;
+        Assert.Equal("fail", singleFile.GetProperty("severity").GetString());
+        Assert.False(singleFile.TryGetProperty("fix", out _));
+        Assert.Contains("remove PublishSingleFile", singleFile.GetProperty("remedy").GetString());
 
         var mismatch = Finding(run.Stdout, "game.sdk-mismatch")!.Value;
         Assert.Equal("2dog update", mismatch.GetProperty("remedy").GetString());
@@ -695,7 +695,8 @@ public class BuildLogAnalyzerTests
         var samples = new Dictionary<string, string>
         {
             ["build.variant-invalid"] = "error : TwoDog: invalid TwoDogVariant 'fast'. Allowed values: release, debug, editor.",
-            ["build.publish-aot"] = "error : TwoDog: PublishAot (NativeAOT) is not supported for 2dog desktop hosts.",
+            ["build.publish-aot"] = "error : TwoDog: PublishAot (NativeAOT) does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies at runtime.",
+            ["build.publish-singlefile"] = "error : TwoDog: PublishSingleFile is not supported for 2dog desktop hosts.",
             ["build.no-import-capability"] = "warning : TwoDog: Godot project 'x' needs a resource import, but no import capability was found (editor libgodot='', helper='', tools='').",
             ["build.import-required"] = "error : TwoDog: import required (TwoDogRequireImport=true) but no import capability is available (editor libgodot='', helper='', tools='').",
             ["build.web-payload-missing"] = "error : TwoDog: web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.release package v4.7.2.3 and the source checkout.",

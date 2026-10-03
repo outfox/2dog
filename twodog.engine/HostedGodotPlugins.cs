@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
@@ -10,6 +11,7 @@ namespace twodog;
 /// <summary>
 /// Registers this load context's GodotPlugins with libgodot via set_load_from_executable_fn, so GDMono uses the
 /// host's runtime and never falls back to hostfxr (which boots a second runtime under self-contained hosts).
+/// NativeAOT hosts register twodog's built-in <see cref="NativeAotPlugins"/> entry point instead.
 /// </summary>
 internal static unsafe class HostedGodotPlugins
 {
@@ -17,32 +19,13 @@ internal static unsafe class HostedGodotPlugins
 
     /// <summary>Registers this context's GodotPlugins.Main.InitializeFromEngine with the
     /// given libgodot module. Must run before the engine instance is created.</summary>
-    [UnconditionalSuppressMessage("Trimming", "IL2026",
-        Justification = "Desktop hosts load GodotPlugins from the untrimmed output layout (AssemblyDependencyResolver " +
-                        "needs deps.json); Android loads it by name.")]
-    [UnconditionalSuppressMessage("Trimming", "IL2075",
-        Justification = "GodotPlugins.Main.InitializeFromEngine is preserved: desktop deployments ship GodotPlugins.dll " +
-                        "untrimmed, and 2dog.android roots GodotPlugins whole in trimmed Android builds.")]
     internal static void Register(nint moduleHandle)
     {
+        // Constant under NativeAOT, so ILC drops the GodotPlugins.dll loader.
         if (_initializeFromEngine == 0)
-        {
-            var alc = AssemblyLoadContext.GetLoadContext(typeof(HostedGodotPlugins).Assembly)
-                      ?? AssemblyLoadContext.Default;
-            var assembly = OperatingSystem.IsAndroid()
-                ? alc.LoadFromAssemblyName(new AssemblyName("GodotPlugins"))
-                : alc.LoadFromAssemblyPath(FindGodotPluginsPath());
-            var method = assembly.GetType("GodotPlugins.Main", throwOnError: true)!
-                             .GetMethod("InitializeFromEngine", BindingFlags.NonPublic | BindingFlags.Static)
-                         ?? throw new MissingMethodException("GodotPlugins.Main", "InitializeFromEngine");
-            // The pointer is only native-callable for [UnmanagedCallersOnly] methods; a contract
-            // drift in GodotPlugins must fail managed here, not as a native ABI crash later.
-            if (method.GetCustomAttribute<UnmanagedCallersOnlyAttribute>() is null)
-                throw new InvalidOperationException(
-                    "TwoDog: GodotPlugins.Main.InitializeFromEngine is not [UnmanagedCallersOnly] - the " +
-                    "GodotPlugins.dll found does not match this engine's hosted-mode contract.");
-            _initializeFromEngine = method.MethodHandle.GetFunctionPointer();
-        }
+            _initializeFromEngine = RuntimeFeature.IsDynamicCodeSupported
+                ? LoadGodotPluginsInitializer()
+                : NativeAotPlugins.InitializeFromEngineFunction;
 
         var setLoadFromExecutable = (delegate* unmanaged<nint, void>)NativeLibrary.GetExport(
             moduleHandle, "set_load_from_executable_fn");
@@ -51,6 +34,31 @@ internal static unsafe class HostedGodotPlugins
 
     [UnmanagedCallersOnly]
     private static nint LoadFromExecutable() => _initializeFromEngine;
+
+    [UnconditionalSuppressMessage("Trimming", "IL2026",
+        Justification = "Desktop hosts load GodotPlugins from the untrimmed output layout (AssemblyDependencyResolver " +
+                        "needs deps.json); Android loads it by name.")]
+    [UnconditionalSuppressMessage("Trimming", "IL2075",
+        Justification = "GodotPlugins.Main.InitializeFromEngine is preserved: desktop deployments ship GodotPlugins.dll " +
+                        "untrimmed, and 2dog.android roots GodotPlugins whole in trimmed Android builds.")]
+    private static nint LoadGodotPluginsInitializer()
+    {
+        var alc = AssemblyLoadContext.GetLoadContext(typeof(HostedGodotPlugins).Assembly)
+                  ?? AssemblyLoadContext.Default;
+        var assembly = OperatingSystem.IsAndroid()
+            ? alc.LoadFromAssemblyName(new AssemblyName("GodotPlugins"))
+            : alc.LoadFromAssemblyPath(FindGodotPluginsPath());
+        var method = assembly.GetType("GodotPlugins.Main", throwOnError: true)!
+                         .GetMethod("InitializeFromEngine", BindingFlags.NonPublic | BindingFlags.Static)
+                     ?? throw new MissingMethodException("GodotPlugins.Main", "InitializeFromEngine");
+        // The pointer is only native-callable for [UnmanagedCallersOnly] methods; a contract
+        // drift in GodotPlugins must fail managed here, not as a native ABI crash later.
+        if (method.GetCustomAttribute<UnmanagedCallersOnlyAttribute>() is null)
+            throw new InvalidOperationException(
+                "TwoDog: GodotPlugins.Main.InitializeFromEngine is not [UnmanagedCallersOnly] - the " +
+                "GodotPlugins.dll found does not match this engine's hosted-mode contract.");
+        return method.MethodHandle.GetFunctionPointer();
+    }
 
     private static string FindGodotPluginsPath()
     {
