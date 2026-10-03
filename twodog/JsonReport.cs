@@ -104,8 +104,8 @@ internal static class JsonReport
     public static void Describe(Report report, ProjectContext project, IReadOnlyList<HostSpec> hosts, ScaffoldResult result)
     {
         report.Project = new ReportProject(project.Dir, project.BaseName, project.IsNew,
-            project.ExistingHosts.Select(h => new ReportHost(Hosts.Label(h.Kind), h.Folder)).ToList());
-        report.Hosts = hosts.Select(h => new ReportHost(Hosts.Label(h.Kind), h.Folder)).ToList();
+            project.ExistingHosts.Select(h => new ReportHost(Hosts.Id(h.Kind), h.Folder)).ToList());
+        report.Hosts = hosts.Select(h => new ReportHost(Hosts.Id(h.Kind), h.Folder)).ToList();
         report.DryRun = result.DryRun;
         report.Cancelled = result.Cancelled;
         report.Actions = result.Actions.Select(a => new ReportAction(Name(a.Kind), a.Description, Name(a.Status))).ToList();

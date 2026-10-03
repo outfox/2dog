@@ -14,12 +14,13 @@ internal enum HostKind
     Android,
 }
 
-/// <summary>Picker groups: created by default, opt-in, or opt-in and Windows-only.</summary>
+/// <summary>Picker groups by the kind of application a host creates.</summary>
 internal enum HostGroup
 {
-    Default,
-    OptIn,
-    WindowsOnly,
+    Desktop,
+    Browser,
+    Mobile,
+    Testing,
 }
 
 /// <summary>One host to create: its kind and the folder (and csproj) name it gets.</summary>
@@ -62,7 +63,8 @@ internal static class Hosts
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
-    public static string Label(HostKind kind) => kind switch
+    /// <summary>Stable host-kind identifiers for machine-readable reports.</summary>
+    public static string Id(HostKind kind) => kind switch
     {
         HostKind.Desktop => "generic",
         HostKind.Web => "browser",
@@ -74,6 +76,13 @@ internal static class Hosts
         HostKind.Blazor => "blazor",
         HostKind.Android => "android",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
+    };
+
+    public static string Label(HostKind kind) => kind switch
+    {
+        HostKind.Desktop => ".NET (generic)",
+        HostKind.Web => "web",
+        _ => Id(kind),
     };
 
     public static string Blurb(HostKind kind) => kind switch
@@ -146,9 +155,11 @@ internal static class Hosts
     /// <summary>How the interactive picker groups the kinds.</summary>
     public static HostGroup Group(HostKind kind) => kind switch
     {
-        HostKind.WinForms or HostKind.WinUi => HostGroup.WindowsOnly,
-        _ when InDefaultSet(kind) => HostGroup.Default,
-        _ => HostGroup.OptIn,
+        HostKind.Desktop or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia => HostGroup.Desktop,
+        HostKind.Web or HostKind.WebXr or HostKind.Blazor => HostGroup.Browser,
+        HostKind.Android => HostGroup.Mobile,
+        HostKind.Tests => HostGroup.Testing,
+        _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
     /// <summary>

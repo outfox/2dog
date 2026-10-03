@@ -131,8 +131,8 @@ public class CommandLineCoverageTests
 public class HostsCoverageTests
 {
     [Theory]
-    [InlineData("2dog", "generic", "your own Main(), runs the game as a .NET app", "--generic")]
-    [InlineData("web", "browser", "WebAssembly host, published as a static bundle", "--web")]
+    [InlineData("2dog", ".NET (generic)", "your own Main(), runs the game as a .NET app", "--generic")]
+    [InlineData("web", "web", "WebAssembly host, published as a static bundle", "--web")]
     [InlineData("webxr", "webxr", "WebAssembly host with the WebXR Layers polyfill for VR", "--webxr")]
     [InlineData("tests", "tests", "xUnit project driving a headless engine", "--tests")]
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]

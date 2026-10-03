@@ -118,11 +118,11 @@ internal static class Tui
         var prompt = new MultiSelectionPrompt<HostChoice>()
             .Title("Which [green]hosts[/] do you want?")
             .NotRequired()
-            .PageSize(12)
+            .PageSize(13)
             .Mode(SelectionMode.Leaf)
             .InstructionsText("[grey](space toggles, enter accepts, nothing selected is fine)[/]")
             .UseConverter(Describe);
-        foreach (var group in new[] { HostGroup.Default, HostGroup.OptIn, HostGroup.WindowsOnly })
+        foreach (var group in Enum.GetValues<HostGroup>())
         {
             var members = choices.Where(c => Hosts.Group(c.Kind) == group).ToList();
             if (members.Count > 0) prompt.AddChoiceGroup(HostChoice.GroupRow(group), members);
@@ -180,7 +180,7 @@ internal static class Tui
     {
         if (choice.IsGroup) return $"[grey]{choice.Folder}[/]";
         var suffix = choice.KindPresent ? " [yellow](adds a second one)[/]" : "";
-        return $"[bold]{Hosts.Label(choice.Kind),-8}[/] {Markup.Escape(choice.Folder)}  " +
+        return $"[bold]{Hosts.Label(choice.Kind),-14}[/] {Markup.Escape(choice.Folder)}  " +
                $"[grey]{Hosts.Blurb(choice.Kind)}[/]{suffix}";
     }
 
@@ -238,9 +238,11 @@ internal static class Tui
 
         public static HostChoice GroupRow(HostGroup group) => new(HostKind.Desktop, group switch
         {
-            HostGroup.Default => "default set",
-            HostGroup.OptIn => "opt-in",
-            _ => "Windows-only",
+            HostGroup.Desktop => "desktop",
+            HostGroup.Browser => "browser",
+            HostGroup.Mobile => "mobile",
+            HostGroup.Testing => "testing",
+            _ => throw new ArgumentOutOfRangeException(nameof(group)),
         }, false, false) { IsGroup = true };
     }
 }
