@@ -4,7 +4,9 @@
 # assembly in a child process and HelperToolTestBed spawns 2dog.import grandchildren; on a hang
 # those are the stacks that matter, so we createdump each of them before killing the tree.
 # On macOS, createdump can itself hang; retain test output and a process snapshot instead.
-# Usage: test-with-watchdog.sh <Configuration> [timeout-seconds]
+# A hang is a run that prints nothing for the limit: per-test console lines are the progress signal,
+# so a slow but progressing suite is never killed (Windows: vstest's per-test hang timeout).
+# Usage: test-with-watchdog.sh <Configuration> [idle-seconds]
 set -euo pipefail
 
 config="$1"
@@ -35,19 +37,28 @@ if [[ "${RUNNER_OS:-}" == "Linux" ]]; then
   sudo sysctl -q -w kernel.yama.ptrace_scope=0 || true
 fi
 
+output="twodog.tests/TestResults/test-$config.log"
+mkdir -p "$(dirname "$output")"
+: > "$output"
 if [[ "${RUNNER_OS:-}" == "macOS" ]]; then
   dotnet test 2dog.tests.slnf -c "$config" --no-restore \
-    --blame --logger 'console;verbosity=normal' &
+    --blame --logger 'console;verbosity=normal' > >(tee "$output") 2>&1 &
 else
   dotnet test 2dog.tests.slnf -c "$config" --no-restore \
-    --blame-crash --blame-crash-dump-type full &
+    --blame-crash --blame-crash-dump-type full --logger 'console;verbosity=normal' > >(tee "$output") 2>&1 &
 fi
 test_pid=$!
 
-elapsed=0
+idle=0
+size=0
 while kill -0 "$test_pid" 2>/dev/null; do
-  if (( elapsed >= limit )); then
-    echo "::error::Test run ($config) exceeded ${limit}s; collecting diagnostics in $dumps"
+  current=$(wc -c < "$output")
+  if (( current != size )); then
+    size=$current
+    idle=0
+  fi
+  if (( idle >= limit )); then
+    echo "::error::Test run ($config) printed nothing for ${limit}s; collecting diagnostics in $dumps"
     mkdir -p "$dumps"
     if [[ "${RUNNER_OS:-}" == "macOS" ]]; then
       ps -axo pid,ppid,state,etime,command > "$dumps/processes.txt" || true
@@ -64,7 +75,7 @@ while kill -0 "$test_pid" 2>/dev/null; do
     exit 1
   fi
   sleep 2
-  elapsed=$((elapsed + 2))
+  idle=$((idle + 2))
 done
 
 wait "$test_pid"
