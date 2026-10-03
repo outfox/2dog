@@ -26,6 +26,20 @@ editor's ADB device poll during the headless export, which logs an `EditorSettin
 error when it exits. Release publishes produce an app bundle unless the host sets
 `<AndroidPackageFormats>apk</AndroidPackageFormats>`.
 
+Signing follows established conventions only:
+
+- .NET Android's `AndroidKeyStore=true` with `AndroidSigningKeyStore`,
+  `AndroidSigningKeyAlias`, `AndroidSigningStorePass` and `AndroidSigningKeyPass`
+  always wins (`env:` and `file:` password prefixes keep secrets out of logs);
+- otherwise Godot's export variables `GODOT_ANDROID_KEYSTORE_RELEASE_PATH`, `_USER`
+  (the key alias) and `_PASSWORD` (`GODOT_ANDROID_KEYSTORE_DEBUG_*` for debug builds).
+  2dog maps them onto the .NET properties and hands the password over as an `env:`
+  reference, so it never reads the secret;
+- otherwise .NET signs with its per-user debug key (`debug.keystore` in its
+  `Xamarin/Mono for Android` settings directory), and release builds say so.
+
+`TwoDogAndroidSigning=false` turns the variable mapping off.
+
 `demos/showcase/showcase.android` is the complete example; `tests/android/host` is
 the minimal one. Both include the Java
 dependencies Godot needs (AndroidX Fragment, DocumentFile, Kotlin standard library)

@@ -292,6 +292,63 @@ Lines="@(AndroidNativeLibrary->'%(Abi)|%(Filename)%(Extension)')" Overwrite="tru
         result, _ = self.gdextension_libraries("android-arm64", "debug", missing=("libprobe.x86_64.so",))
         self.assertEqual(0, result.returncode, result.stdout)
 
+    def android_signing(self, variant="release", environment=(), properties=""):
+        directory = Path(tempfile.mkdtemp(dir=self.root))
+        keystore = directory / "release.keystore"
+        keystore.write_bytes(b"keystore")
+        targets = self.packages / "2dog.android" / self.version / "build/2dog.android.targets"
+        project = directory / "Host.proj"
+        project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier><TwoDogVariant>{variant}</TwoDogVariant>{properties}</PropertyGroup>
+<Import Project="{xml(targets)}"/>
+<Target Name="_ResolveAndroidSigningKey"><WriteLinesToFile File="{xml(directory / 'signing.txt')}" Overwrite="true"
+Lines="AndroidKeyStore=$(AndroidKeyStore);KeyStore=$(AndroidSigningKeyStore);Alias=$(AndroidSigningKeyAlias);StorePass=$(AndroidSigningStorePass);KeyPass=$(AndroidSigningKeyPass)"/></Target>
+</Project>''')
+        env = {name: value for name, value in os.environ.items() if not name.startswith("GODOT_ANDROID_KEYSTORE_")}
+        env.update({name: value.replace("{keystore}", str(keystore)) for name, value in dict(environment).items()})
+        result = subprocess.run(["dotnet", "msbuild", str(project), "-t:_ResolveAndroidSigningKey", "-nologo", "-v:diag"],
+                                cwd=REPO, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+        listing = directory / "signing.txt"
+        signing = dict(line.split("=", 1) for line in listing.read_text().splitlines()) if listing.exists() else {}
+        return result, signing, keystore
+
+    RELEASE_KEYSTORE = {"GODOT_ANDROID_KEYSTORE_RELEASE_PATH": "{keystore}", "GODOT_ANDROID_KEYSTORE_RELEASE_USER": "upload",
+                        "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD": "s3cr3t-value"}
+
+    def test_signing_follows_godots_keystore_variables_without_reading_the_password(self):
+        result, signing, keystore = self.android_signing(environment=self.RELEASE_KEYSTORE)
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual(("true", str(keystore.resolve()), "upload"),
+                         (signing["AndroidKeyStore"], signing["KeyStore"], signing["Alias"]))
+        self.assertEqual("env:GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD", signing["StorePass"])
+        self.assertEqual(signing["StorePass"], signing["KeyPass"])
+        # Not even a diagnostic-verbosity log contains the password.
+        self.assertNotIn("s3cr3t-value", result.stdout)
+
+    def test_signing_respects_explicit_keystores_and_the_variant(self):
+        result, signing, _ = self.android_signing(environment=self.RELEASE_KEYSTORE, properties=(
+            "<AndroidKeyStore>true</AndroidKeyStore><AndroidSigningKeyStore>mine.jks</AndroidSigningKeyStore>"))
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual(("mine.jks", ""), (signing["KeyStore"], signing["Alias"]))
+        # A debug build reads only the DEBUG variables and otherwise keeps the .NET debug key.
+        result, signing, _ = self.android_signing(variant="debug", environment=self.RELEASE_KEYSTORE)
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual("", signing["AndroidKeyStore"])
+        result, signing, _ = self.android_signing()
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual("", signing["AndroidKeyStore"])
+        self.assertIn("signed with the .NET debug key", result.stdout)
+
+    def test_incomplete_signing_configuration_fails(self):
+        result, _, _ = self.android_signing(environment={**self.RELEASE_KEYSTORE,
+                                                         "GODOT_ANDROID_KEYSTORE_RELEASE_PATH": "absent.jks"})
+        self.assertNotEqual(0, result.returncode, result.stdout[-2000:])
+        self.assertIn("TDGA011", result.stdout)
+        environment = {name: value for name, value in self.RELEASE_KEYSTORE.items() if not name.endswith("PASSWORD")}
+        result, _, _ = self.android_signing(environment=environment)
+        self.assertNotEqual(0, result.returncode, result.stdout[-2000:])
+        self.assertIn("TDGA012", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

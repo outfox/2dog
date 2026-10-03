@@ -132,6 +132,38 @@
             ]]></Code>
         </Task>
     </UsingTask>
+    <!-- Signing follows established conventions only: a project's own AndroidKeyStore wins, otherwise Godot's documented
+         GODOT_ANDROID_KEYSTORE_<VARIANT>_PATH/_USER/_PASSWORD variables, otherwise .NET's debug key. The password reaches
+         the signer as an env: reference, never as an MSBuild property. Opt out with TwoDogAndroidSigning=false. -->
+    <Target Name="TwoDogResolveAndroidSigning" BeforeTargets="_CreateAndroidDebugSigningKey;_ResolveAndroidSigningKey"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(AndroidKeyStore)' != 'true' And '$(TwoDogAndroidSigning)' != 'false'">
+        <PropertyGroup>
+            <_TwoDogKeystoreVariable Condition="'$(TwoDogVariant)' == 'debug'">GODOT_ANDROID_KEYSTORE_DEBUG_</_TwoDogKeystoreVariable>
+            <_TwoDogKeystoreVariable Condition="'$(TwoDogVariant)' != 'debug'">GODOT_ANDROID_KEYSTORE_RELEASE_</_TwoDogKeystoreVariable>
+            <_TwoDogKeystore>$([System.Environment]::GetEnvironmentVariable('$(_TwoDogKeystoreVariable)PATH'))</_TwoDogKeystore>
+            <_TwoDogKeystoreAlias>$([System.Environment]::GetEnvironmentVariable('$(_TwoDogKeystoreVariable)USER'))</_TwoDogKeystoreAlias>
+            <!-- Only whether the password is set: its value must not land in a log. -->
+            <_TwoDogKeystoreHasPassword>$([System.String]::IsNullOrEmpty($([System.Environment]::GetEnvironmentVariable('$(_TwoDogKeystoreVariable)PASSWORD'))))</_TwoDogKeystoreHasPassword>
+            <_TwoDogKeystore Condition="'$(_TwoDogKeystore)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogKeystore)'))))</_TwoDogKeystore>
+        </PropertyGroup>
+        <Error Code="TDGA011" Condition="'$(_TwoDogKeystore)' != '' And !Exists('$(_TwoDogKeystore)')"
+               Text="2dog: $(_TwoDogKeystoreVariable)PATH names '$(_TwoDogKeystore)', which does not exist."/>
+        <Error Code="TDGA012" Condition="'$(_TwoDogKeystore)' != '' And ('$(_TwoDogKeystoreAlias)' == '' Or '$(_TwoDogKeystoreHasPassword)' == 'True')"
+               Text="2dog: $(_TwoDogKeystoreVariable)PATH is set, so $(_TwoDogKeystoreVariable)USER (the key alias) and $(_TwoDogKeystoreVariable)PASSWORD must be set too."/>
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' != ''">
+            <AndroidKeyStore>true</AndroidKeyStore>
+            <AndroidSigningKeyStore>$(_TwoDogKeystore)</AndroidSigningKeyStore>
+            <AndroidSigningKeyAlias>$(_TwoDogKeystoreAlias)</AndroidSigningKeyAlias>
+            <!-- Godot uses one password for the keystore and the key -->
+            <AndroidSigningStorePass>env:$(_TwoDogKeystoreVariable)PASSWORD</AndroidSigningStorePass>
+            <AndroidSigningKeyPass>env:$(_TwoDogKeystoreVariable)PASSWORD</AndroidSigningKeyPass>
+        </PropertyGroup>
+        <Message Importance="high" Condition="'$(_TwoDogKeystore)' != ''"
+                 Text="2dog: signing with $(_TwoDogKeystore) (alias $(_TwoDogKeystoreAlias)) from $(_TwoDogKeystoreVariable)*."/>
+        <Message Importance="high" Condition="'$(_TwoDogKeystore)' == '' And '$(TwoDogVariant)' == 'release'"
+                 Text="2dog: no release keystore is configured, so the APK is signed with the .NET debug key. Set AndroidKeyStore and the AndroidSigning* properties, or GODOT_ANDROID_KEYSTORE_RELEASE_PATH/_USER/_PASSWORD."/>
+    </Target>
+
     <Target Name="TwoDogAddAndroidGdExtensions" BeforeTargets="PrepareForBuild"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogAndroidGdExtensions)' != 'false' And '$(TwoDogGodotProjectFullPath)' != ''">
         <PropertyGroup>
