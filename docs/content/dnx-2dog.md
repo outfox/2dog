@@ -10,7 +10,7 @@ and updates them. The project directory becomes the solution root; hosts live
 in nested folders Godot ignores. It creates files and edits `*.csproj`,
 `project.godot`, the solution and `Directory.Build.props` in place. Nothing is
 moved, renamed or deleted, except two announced opt-ins: the `.sln` → `.slnx`
-migration and the [`--rename` fix](/add#project-names-with-spaces).
+migration and the [`--rename` fix](/known-issues/spaced-project-names).
 
 The tool and the matching `dotnet new` template ship together in the
 [`2dog` NuGet package](https://www.nuget.org/packages/2dog/).
@@ -35,8 +35,10 @@ dotnet tool install -g 2dog   # or install it globally
 | [`2dog help`](/cli/help) | Show the usage, or the help for one verb |
 
 `2dog` alone prints the version info and the usage. `new`, `add` and `doctor`
-prompt on a terminal when no deciding flag is given; any host flag, `--yes` or
-a pipe turns the prompts off.
+prompt on a terminal when no deciding flag is given. Host flags skip the project
+wizard; missing `wasm-tools` can still be offered before restore.
+`--yes`, pipes, and CI skip workload offers. Use `--install-wasm-tools` to request
+installation explicitly, or `2dog update --update-workloads` to update workloads.
 
 ## Host flags
 
@@ -45,8 +47,8 @@ flag adds a second host of the same kind.
 
 | Flag | Host |
 | --- | --- |
-| `--desktop [folder]` | [Generic desktop host](/hosts/generic) with your own `Main()` |
-| `--web [folder]` | [Browser (WebAssembly) host](/hosts/web) |
+| `--desktop [folder]` | [2dog (generic .NET)](/hosts/generic) with your own `Main()` |
+| `--web [folder]` | [Web host](/hosts/web) |
 | `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
 | `--tests [folder]` | [xUnit test project](/hosts/xunit) |
 | `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only, opt-in |

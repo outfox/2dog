@@ -1,6 +1,6 @@
 ---
 title: MSBuild Configuration
-description: "2dog MSBuild properties for host projects: GodotProjectDir, TwoDogVariant, duplicate Godot analyzer removal, package versioning, and the GodotSharp directory."
+description: "MSBuild properties and package versions for desktop and Web hosts."
 ---
 
 # Configuration
@@ -62,7 +62,7 @@ of the root `Directory.Build.props` and reference it from the hosts:
 <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]"/>
 ```
 
-[`2dog update`](/cli/doctor#updating-a-project) rewrites that block (and the game
+[`2dog update`](/cli/update) rewrites that block (and the game
 project's `Godot.NET.Sdk` version, which cannot come from a property);
 [`2dog doctor`](/cli/doctor) reports literals left in host csprojs and versions on
 different Godot lines.
@@ -72,6 +72,36 @@ different Godot lines.
 the `release`, `debug`, and `editor` native packages. The selected native is
 copied as `libgodot-<variant>.dll`, `.so`, or `.dylib` and loaded by that name.
 
-For xUnit, reference `2dog.xunit`; it brings in `2dog.engine`. Browser hosts
-also reference `2dog.browser-wasm`; see [Browser Host](/hosts/web#configuration)
-for web-specific properties and packaging.
+For xUnit, reference `2dog.xunit`; it brings in `2dog.engine`. Web hosts
+also reference `2dog.browser-wasm`.
+
+## Web Host
+
+Set these optional properties in the Web host's `.csproj`, or the Blazor
+client's `.csproj`:
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `TwoDogWebVariant` | `release`, or `debug` in Debug when the debug package is restored | Engine build; `debug` needs a `2dog.browser-wasm.debug` reference |
+| `TwoDogExportPack` | `true` | Export content; `false` uses `wwwroot/godot.pck` |
+| `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
+| `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
+| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for loading progress |
+| `TwoDogWebStripMaps` | `true` for release | Remove JavaScript source maps |
+| `TwoDogWebPrecompress` | `true` with Core MSBuild | Write Brotli and gzip copies of large files; skipped with full-framework MSBuild |
+| `TwoDogWebPrecompressLevel` | `Optimal` | Compression level; `SmallestSize` takes longer |
+| `TwoDogWebSideModuleExports` | `true` | Export symbols used by GDExtensions |
+| `WasmEmitSymbolMap` | `false` | Include native symbols for stack traces |
+| `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
+
+Blazor manages its own bundle, progress, and compression, so size-manifest,
+source-map stripping, and precompression settings apply only to Web and WebXR.
+
+For libraries accessed only through reflection, add a trimmer root:
+
+```xml
+<TrimmerRootAssembly Include="MyLibrary"/>
+```
+
+The generated host already preserves the game, host, `GodotSharp`, and
+`twodog` assemblies.

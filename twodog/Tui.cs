@@ -80,6 +80,13 @@ internal static class Tui
         Confirm($"{Markup.Escape(dir)} is not empty - create the project alongside its files? (existing files are kept)",
             false);
 
+    public static bool OfferWasmToolsInstall() =>
+        Confirm($"wasm-tools is missing. Run '{WasmTools.InstallCommand}' now?");
+
+    public static bool OfferWorkloadUpdate() =>
+        Confirm($"Run '{WasmTools.UpdateCommand}' to check for and apply updates to all installed workloads for this SDK?",
+            false);
+
     /// <summary>
     /// The host picker. Kinds the project already has start unchecked and pre-named so checking one adds a second
     /// host of that kind rather than colliding with the first. Accessible mode asks one yes/no question per kind.

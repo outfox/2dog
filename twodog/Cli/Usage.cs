@@ -37,6 +37,7 @@ internal static class Usage
     private static readonly Option[] GeneralOptions =
     [
         CliTree.Name, CliTree.Rename, CliTree.Output, CliTree.Yes, CliTree.DryRun, CliTree.Force, CliTree.NoRestore,
+        CliTree.InstallWasmTools,
         CliTree.VersionOption, CliTree.HelpOption,
     ];
 
@@ -148,11 +149,12 @@ internal static class Usage
 
     private static string Prose(Verb verb) => verb switch
     {
-        Verb.New => "Without host options it asks which hosts to create; any host flag or -y runs unattended. " +
+        Verb.New => "Without host options it asks which hosts to create; host flags skip the project wizard. " +
+                    "On terminals, missing wasm-tools can still be offered. -y runs unattended. " +
                     "The directory defaults to the (sanitized) project name.",
         Verb.Add => "The path defaults to the current directory. Run it again to add more hosts, including a " +
-                    "second host of the same kind. Without host options it asks interactively; any host flag or " +
-                    "-y runs unattended. Existing files are never overwritten without --force.",
+                    "second host of the same kind. Host flags skip the project wizard; on terminals missing " +
+                    "wasm-tools can still be offered. -y runs unattended. Existing files are never overwritten without --force.",
         Verb.Doctor => "Static checks by default (fast, works offline): the machine, the layout, every csproj, the " +
                        "solution, versions, export presets, project.godot. Safe fixes apply under --fix, announced " +
                        "ones under --fix-all; interactively it asks. Exit code 3 while findings remain. --build " +

@@ -1,95 +1,44 @@
 ---
-title: WebXR Host
-description: "The WebXR host adds a prewired WebXR Layers polyfill to the browser host for browser-based VR and AR."
+title: WebXR
+description: "Run Godot VR and AR in the browser with WebXR and the WebXR Layers polyfill."
 ---
 
-# WebXR Host
+# WebXR
 
-`MyGame.webxr` is the [Browser host](./web) with the WebXR Layers polyfill
-vendored and loaded before Godot. Use it for browser VR or AR when targets may
-not implement the Layers API themselves.
+The WebXR host is a `browser-wasm` host with Godot's WebXR capabilities enabled
+and the WebXR Layers polyfill included.
 
 ## Use It
 
-The host is opt-in:
+From your Godot project directory, run these commands. Accept `add`'s
+installation offer if `wasm-tools` is missing:
 
 ```bash
 dnx 2dog add --webxr
-dotnet new 2dog -n MyGame --webxr true
+dotnet publish MyGame.webxr
 ```
 
-Its build and local serving workflow is the same as the browser host; see
-[Build and Serve Locally](./web#build-and-serve-locally).
+Serve the site:
 
-## Capabilities
-
-- Uses Godot's built-in WebXR interface.
-- Works with native WebXR Layers implementations, including Meta Quest Browser.
-- Adds Layers support for desktop Chrome and the Immersive Web Emulator.
-- Keeps the normal non-XR viewport available before and after an XR session.
-
-## How It Works
-
-The page shell loads and instantiates version 1.1.0 or newer of the
-[WebXR Layers polyfill](https://github.com/immersive-web/webxr-layers-polyfill)
-before `godot.js`:
-
-```html
-<script src="webxr-layers-polyfill.min.js"></script>
-<script>if (navigator.xr) new WebXRLayersPolyfill();</script>
-<script src="godot.js"></script>
+```bash
+dnx dotnet-serve -d MyGame.webxr/AppBundle
 ```
 
-The `navigator.xr` guard allows the page to load in browsers where no XR
-session is available. The polyfill is necessary because Godot renders through
-the [WebXR Layers API](https://www.w3.org/TR/webxrlayers-1/), which some desktop
-browsers and emulators do not implement natively.
+## Set Up Your Scene
 
-## Project Setup
-
-Enable web-only XR shaders in `project.godot`, then add an `XROrigin3D` with an
-`XRCamera3D` to the scene:
+Enable web XR shaders in `project.godot`:
 
 ```ini
 [xr]
 shaders/enabled.web=true
 ```
 
-Start the session from a user gesture, such as a Godot button press:
+Add an `XROrigin3D` with an `XRCamera3D`. Start Godot's `WebXRInterface` from a
+button press and enable `Viewport.UseXR` when the session starts.
+See the [showcase scene](https://github.com/outfox/2dog/tree/main/demos/showcase)
+for an example.
 
-```csharp
-if (XRServer.FindInterface("WebXR") is not WebXRInterface webxr)
-    return;
-
-webxr.SessionSupported += (mode, supported) => _enterVrButton.Visible = supported;
-webxr.SessionStarted += () => GetViewport().UseXR = true;
-webxr.SessionEnded += () => GetViewport().UseXR = false;
-webxr.IsSessionSupported("immersive-vr");
-
-// In the button's Pressed handler:
-webxr.SessionMode = "immersive-vr";
-webxr.RequestedReferenceSpaceTypes = "bounded-floor, local-floor, local";
-webxr.RequiredFeatures = "local-floor";
-webxr.OptionalFeatures = "bounded-floor";
-webxr.Initialize();
-```
-
-The pattern guard also makes this game code safe on desktop hosts, where no
-`WebXR` interface is registered.
-
-## Testing
-
-- Install the
-  [Immersive Web Emulator](https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik)
-  in Chrome to test without a headset.
-- Use HTTPS outside `localhost`; browsers require a secure context for WebXR.
-- For a Quest connected to a development machine, use HTTPS or
-  `adb reverse tcp:8080 tcp:8080` to preserve a `localhost` origin.
-- Tools using IWER must call `installRuntime` with `{ polyfillLayers: true }`.
-
-## Limitations
-
-- The [Browser host limitations](./web#limitations) also apply.
-- XR sessions require browser and device support plus a user gesture.
-- Polyfill versions before 1.1.0 allocate layer textures with invalid WebGL
-  formats and are unsupported.
+Use an XR-capable browser and device, or the
+[Immersive Web Emulator](https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik).
+Serve over HTTPS outside `localhost`. The [Web host's limitations](./web#limitations)
+also apply.

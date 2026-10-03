@@ -6,8 +6,8 @@ description: "Reference for 2dog doctor: check a 2dog project and the machine, a
 # `2dog doctor`
 
 Checks the project and this machine without building, and applies the fixes
-it can. Static by default; works offline. Fix classes, the interactive
-checklist and a sample run: [Doctor and Update](/cli/doctor).
+it can. Safe repairs use `--fix`; announced changes use `--fix-all` or the
+interactive checklist.
 
 ```bash
 2dog doctor [path] [options]
@@ -22,7 +22,8 @@ checklist and a sample run: [Doctor and Update](/cli/doctor).
 | Option | Effect |
 | --- | --- |
 | `--fix` | Apply the safe fixes, then check again |
-| `--fix-all` | Also apply the announced fixes: solution migration, target framework, bootstrap refresh |
+| `--fix-all` | Also apply announced fixes, including missing `wasm-tools` installation |
+| `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts, then re-check |
 | `--build [target]` | Run `dotnet build` of the solution, or a host folder or project, and explain known failures |
 | `-c, --configuration <Cfg>` | Configuration for `--build` (default `Debug`) |
 | `--log <file>` | Only explain an existing build, restore or runtime log; `-` reads stdin |
@@ -33,6 +34,9 @@ checklist and a sample run: [Doctor and Update](/cli/doctor).
 
 Plus the [global and output options](/dnx-2dog#global-options); `-v` lists
 the passed checks too.
+
+Installing `wasm-tools` is an announced fix: select it in the checklist, or use
+`--install-wasm-tools` or `--fix-all`. `--fix` alone does not install workloads.
 
 ## Exit codes
 

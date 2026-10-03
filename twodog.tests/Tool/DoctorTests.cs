@@ -269,6 +269,148 @@ public class DoctorTests : IDisposable
         Assert.Contains("2dog.tools", Finding(unrestored.Stdout, "env.packages-restored")!.Value.GetProperty("title").GetString());
     }
 
+    [Theory]
+    [InlineData("--install-wasm-tools")]
+    [InlineData("--fix-all")]
+    [InlineData("--fix")]
+    public void MissingWasmTools_RequiresExplicitInstallation_AndRechecks(string option)
+    {
+        var dir = Scaffold("--web");
+        var installed = false;
+        var fallback = Runner();
+        var runner = new FakeProcessRunner(request =>
+        {
+            if (request.Args.SequenceEqual(["workload", "install", "wasm-tools"]))
+            {
+                installed = true;
+                return FakeProcessRunner.Result(request, 0);
+            }
+            if (request.Args.SequenceEqual(["workload", "list"]))
+                return FakeProcessRunner.Result(request, 0, "Installed Workload Id", "-------------------",
+                    installed ? "wasm-tools  10.0.100  SDK" : "", "");
+            return fallback.Run(request);
+        });
+
+        var run = Doctor(dir, runner, "--json", option);
+        var shouldInstall = option != "--fix";
+        Assert.Equal(shouldInstall ? ExitCodes.Ok : ExitCodes.Findings, run.ExitCode);
+        Assert.Equal(shouldInstall, installed);
+        Assert.Equal(shouldInstall ? "pass" : "fail", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+        Assert.Equal(shouldInstall ? 2 : 1, runner.Requests.Count(request => request.Args.SequenceEqual(["workload", "list"])));
+    }
+
+    [Theory]
+    [InlineData(false, 0)]
+    [InlineData(true, 0)]
+    [InlineData(false, 1)]
+    [InlineData(true, 1)]
+    public void FailedWorkloadProbe_ExplicitInstallIsAttemptedAndRechecked(bool cannotStart, int installExit)
+    {
+        var dir = Scaffold("--web");
+        var installed = false;
+        var fallback = Runner();
+        var runner = new FakeProcessRunner(request =>
+        {
+            if (request.Args.SequenceEqual(["workload", "install", "wasm-tools"]))
+            {
+                installed = installExit == 0;
+                return FakeProcessRunner.Result(request, installExit, installed ? "installed" : "installation denied");
+            }
+            if (request.Args.SequenceEqual(["workload", "list"]))
+            {
+                if (installed) return FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", "wasm-tools  10.0.100  SDK", "");
+                if (cannotStart) throw new ToolException("listing could not start");
+                return FakeProcessRunner.Result(request, 1, "listing failed");
+            }
+            return fallback.Run(request);
+        });
+
+        var diagnostic = Doctor(dir, runner, "--json");
+        Assert.Equal(ExitCodes.Ok, diagnostic.ExitCode);
+        Assert.Equal("info", Finding(diagnostic.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+        Assert.DoesNotContain(runner.Requests, request => request.Args.Contains("install"));
+        runner.Requests.Clear();
+
+        var run = Doctor(dir, runner, "--json", "--install-wasm-tools");
+        Assert.Equal(installed ? ExitCodes.Ok : ExitCodes.Findings, run.ExitCode);
+        Assert.Equal(installed ? "pass" : "fail", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+        Assert.Single(runner.Requests, request => request.Args.SequenceEqual(["workload", "install", "wasm-tools"]) && request.WorkingDir == dir);
+        Assert.Equal(installed ? 2 : 1, runner.Requests.Count(request => request.Args.SequenceEqual(["workload", "list"])));
+    }
+
+    [Fact]
+    public void ExplicitInstall_StillFailingVerification_DoesNotReportSuccess()
+    {
+        var dir = Scaffold("--web");
+        var fallback = Runner();
+        var runner = new FakeProcessRunner(request => request.Args.SequenceEqual(["workload", "list"])
+            ? FakeProcessRunner.Result(request, 1, "listing failed")
+            : fallback.Run(request));
+        var run = Doctor(dir, runner, "--json", "--install-wasm-tools");
+        Assert.Equal(ExitCodes.Findings, run.ExitCode);
+        Assert.Equal("fail", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+        Assert.Single(runner.Requests, request => request.Args.SequenceEqual(["workload", "install", "wasm-tools"]));
+        Assert.Equal(2, runner.Requests.Count(request => request.Args.SequenceEqual(["workload", "list"])));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void WorkloadRepair_StillPrintsCommandsForRemainingFixes(int installExit)
+    {
+        var dir = Scaffold("--web");
+        File.Delete(Path.Combine(dir, "Game.web", ".gdignore"));
+        File.WriteAllText(Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs"), "// stale\n");
+        var installed = false;
+        var fallback = Runner();
+        var runner = new FakeProcessRunner(request =>
+        {
+            if (request.Args.SequenceEqual(["workload", "install", "wasm-tools"]))
+            {
+                installed = installExit == 0;
+                return FakeProcessRunner.Result(request, installExit);
+            }
+            if (request.Args.SequenceEqual(["workload", "list"]))
+                return FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------",
+                    installed ? "wasm-tools  10.0.100  SDK" : "", "");
+            return fallback.Run(request);
+        });
+        var run = Doctor(dir, runner, "--install-wasm-tools");
+        Assert.Equal(ExitCodes.Findings, run.ExitCode);
+        Assert.Contains("apply the safe fixes:", run.Stdout);
+        Assert.Contains("2dog doctor --fix", run.Stdout);
+        Assert.Contains("the announced ones as well:", run.Stdout);
+        Assert.Contains("2dog doctor --fix-all", run.Stdout);
+        Assert.False(File.Exists(Path.Combine(dir, "Game.web", ".gdignore")));
+        Assert.Equal("// stale\n", File.ReadAllText(Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs")));
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void WorkloadInstallationFailure_RemainsAFinding(bool json)
+    {
+        var dir = Scaffold("--web");
+        var fallback = Runner(wasmTools: false);
+        var runner = new FakeProcessRunner(request => request.Args.Contains("install")
+            ? FakeProcessRunner.Result(request, 1, "installation denied")
+            : fallback.Run(request));
+        var run = Doctor(dir, runner, json ? ["--json", "--install-wasm-tools"] : ["--install-wasm-tools"]);
+        Assert.Equal(ExitCodes.Findings, run.ExitCode);
+        if (json)
+        {
+            Assert.Equal("fail", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+            Assert.Contains(JsonDocument.Parse(run.Stdout).RootElement.GetProperty("errors").EnumerateArray(),
+                error => error.GetString()!.Contains("workload install wasm-tools"));
+            Assert.Empty(run.Stderr);
+        }
+        else
+        {
+            Assert.Contains("wasm-tools workload missing", run.Stdout);
+            Assert.Contains("installation denied", run.Stderr);
+        }
+    }
+
     [Fact]
     public void ListChecks_CoversTheCatalogueAndSignatures()
     {

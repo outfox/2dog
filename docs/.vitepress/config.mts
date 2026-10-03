@@ -115,10 +115,10 @@ export default defineConfig({
         text: 'Hosts',
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
-          { text: gd('margincontainer') + '2dog (generic host)', link: '/hosts/generic' },
+          { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
           { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
-          { text: gd('globe') + 'Browser', link: '/hosts/web' },
           { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
+          { text: gd('globe') + 'Web', link: '/hosts/web' },
           { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' },
           { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
           { text: gd('window') + 'WinUI 3', link: '/hosts/winui' },

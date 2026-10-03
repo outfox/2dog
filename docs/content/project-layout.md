@@ -49,7 +49,7 @@ the game assembly and content; they do not duplicate either.
 
 ## Three Ways to Run It
 
-### Generic Host
+### 2dog (generic .NET)
 
 `MyGame.2dog` starts the embedded engine, points it at the parent Godot project,
 and drives the main loop.
@@ -67,7 +67,7 @@ loads the real game assembly and resources.
 dotnet test MyGame.tests
 ```
 
-### Browser Host
+### Web Host
 
 `MyGame.web` is a .NET WebAssembly host. Publishing it builds the managed
 application, imports and exports the Godot content, and assembles a static
@@ -118,8 +118,8 @@ For a fresh project, the same tool creates the game and hosts together:
 dnx 2dog new MyGame
 ```
 
-See [Adding 2dog](/add) for patching behavior or [Project Templates](/templates)
-for every generated file and option.
+See [Adding 2dog](/add) or [Creating a New Project](/templates) to get started,
+and the [CLI reference](/dnx-2dog) for all options.
 
 ## When to Use Another Layout
 

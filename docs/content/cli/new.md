@@ -6,7 +6,8 @@ description: "Reference for 2dog new: create a Godot project with 2dog hosts - a
 # `2dog new`
 
 Creates a new Godot project with 2dog hosts. Without host flags it asks which
-hosts to create; any host flag or `-y` runs unattended.
+hosts to create. Host flags skip that wizard; missing `wasm-tools` can still
+be offered on terminals. `-y` runs unattended.
 
 ```bash
 2dog new [Name] [dir] [hosts] [options]
@@ -31,8 +32,12 @@ desktop, browser and tests, minus the `--no-<host>` ones.
 | `--dry-run` | Print the plan; change nothing |
 | `--force` | Overwrite scaffolded files that exist; never deletes |
 | `--no-restore` | Skip the final `dotnet restore` |
+| `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
 
 Plus the [global and output options](/dnx-2dog#global-options).
+
+`--no-restore` skips the workload offer; `--install-wasm-tools` requests
+installation explicitly. `--dry-run` never checks or installs workloads.
 
 ## Examples
 
@@ -42,5 +47,6 @@ Plus the [global and output options](/dnx-2dog#global-options).
 2dog new "My Game" -o games/mine --no-web  # name adjusted to MyGame
 ```
 
-The generated layout and the `dotnet new 2dog` template:
-[Creating a New Project](/templates).
+For a quick start and the `dotnet new` template, see
+[Creating a New Project](/templates). For generated files, see
+[Project Layout](/project-layout).

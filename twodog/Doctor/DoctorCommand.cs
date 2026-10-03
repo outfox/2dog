@@ -33,7 +33,10 @@ internal static class DoctorCommand
 
         var selected = options.Fix || options.FixAll
             ? DoctorRunner.Select(findings, options.FixAll)
-            : interactive ? Tui.SelectFixes(DoctorRunner.Fixes(findings)) : [];
+            : options.InstallWasmTools ? [] : interactive ? Tui.SelectFixes(DoctorRunner.Fixes(findings)) : [];
+        if (options.InstallWasmTools && findings.FirstOrDefault(f => f.Id == "env.wasm-tools")?.Fix is { } workloadFix
+            && selected.All(f => f.Key != workloadFix.Key))
+            selected.Add(workloadFix);
         List<Fix> applied = [];
         var final = findings;
         if (selected.Count > 0)
@@ -49,7 +52,7 @@ internal static class DoctorCommand
 
         Out.Blank();
         DoctorRenderer.Summary(final, options.Strict);
-        if (!interactive && selected.Count == 0) DoctorRenderer.HowToFix(final);
+        if (!interactive) DoctorRenderer.HowToFix(final);
 
         ProcessResult? buildResult = null;
         BuildDiagnosis? diagnosis = null;
