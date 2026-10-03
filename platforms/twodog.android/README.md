@@ -25,12 +25,14 @@ via JNI and catch every exception, because listeners run inside Godot's JNI call
 
 Build prerequisites: .NET 10 with the `android` workload, JDK 17, Android SDK 36,
 build tools 36.1.0, and NDK 29.0.14206865 (see the pinned Godot submodule config).
-Android native and Java builds consume desktop-generated Mono glue.
-The pinned Godot submodule includes the Android native-symbol resolver changes;
-rebuild the managed bindings from that source before testing.
+CI builds the Android natives (arm64/x64, debug/release) and the Java AARs into the
+`godot-<hash>` natives release; its pack job packs the `2dog.android*` packages
+from them. Neither build needs Mono glue. The pinned Godot submodule includes the
+Android native-symbol resolver changes; rebuild the managed bindings from that
+source before testing. To build everything locally:
 
 ```sh
-uv run build-godot.py # desktop editor, Mono glue and managed bindings
+uv run build-godot.py # desktop editor and managed bindings
 uv run build-godot.py --platform android --arch arm64
 uv run build-godot.py --platform android --arch x86_64
 uv run scripts/build_android_java.py
@@ -60,9 +62,9 @@ Input, pause/resume, restart, broader GDExtension coverage and physical-device
 validation remain gates before production support.
 The Android workload and emulator are not required for the build and package tests.
 The separate `tests/android/android.slnx` keeps Android workload requirements out
-of ordinary desktop solution builds. The main release workflow skips these
-packages until complete Android payloads are staged; `ForcePackAllPlatforms`
-cannot publish empty Android packages.
+of ordinary desktop solution builds. CI uploads the Android packages as their own
+`android-packages` artifact, which deploy does not publish yet; `ForcePackAllPlatforms`
+cannot pack empty Android packages.
 
 ## APK implementation milestones
 
@@ -73,8 +75,10 @@ cannot publish empty Android packages.
    desktop dependency stubs and must never be published.
 2. Run that APK on an x64 emulator. The scene verifies signals, native node
    lookup, deferred disposal, 32 C# frame callbacks and a green rendered pixel before
-   reporting success. The `2dog Android APK` workflow builds and runs this path, then
-   the showcase APK, which must report `2DOG_ANDROID_SHOWCASE_SMOKE_PASSED`.
+   reporting success. CI's Android Smoke job builds this APK and the showcase's
+   against the packed packages and runs both; the showcase must report
+   `2DOG_ANDROID_SHOWCASE_SMOKE_PASSED`. It uploads them as `android-apks`, with an
+   arm64 showcase APK for devices.
 3. Add Android engine tests for touch input, background/resume, Activity
    recreation, process death and repeated launches, with per-test results and
    crash diagnostics. Use Android-owned lifecycle fixtures and the existing
@@ -90,7 +94,10 @@ uv run poe build-android-apk --editor godot/bin/godot.linuxbsd.editor.x86_64.exe
 ```
 
 Use `--rid android-arm64` or `--configuration Release` for the other target.
-`--skip-native --skip-java` reuses already staged payloads. The resulting APK
+`--skip-native --skip-java` reuses already staged payloads. `--feed <dir>` skips
+building and packing entirely and builds against already packed packages, the way
+an app consumes 2dog (CI passes its `nuget-packages` and `android-packages`, with
+the natives staged in `godot/bin/android/` for the APK inspection). The resulting APK
 and inspection report are written to `artifacts/android-apk/`. `--app showcase`
 builds the showcase host instead (into `artifacts/android-showcase-apk/`); it also
 needs an Android NDK for the showcase's GDExtension (`ANDROID_NDK_ROOT`, or one under

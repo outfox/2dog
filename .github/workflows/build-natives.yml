@@ -30,7 +30,7 @@ permissions:
   contents: write
 
 jobs:
-  # Quick check: compute submodule hash and see if a release already exists.
+  # Quick check: compute submodule hash and see if a complete release already exists.
   preflight:
     name: Preflight
     runs-on: blacksmith-4vcpu-ubuntu-2404
@@ -59,7 +59,7 @@ jobs:
           # `inputs`, not `github.event.inputs`: in workflow_call mode the
           # github.event* context belongs to the caller's triggering event.
           FORCE="${{ inputs.force }}"
-          if [ "$FORCE" != "true" ] && gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          if [ "$FORCE" != "true" ] && bash scripts/check_natives_release.sh "$TAG"; then
             echo "Release $TAG already exists — skipping builds"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
@@ -193,6 +193,28 @@ jobs:
             arch: arm64
             rid: osx-arm64
             lib_ext: dylib
+          # Android (experimental): libgodot_android.so + libc++_shared.so per ABI,
+          # no editor target. Godot's Java host comes from build-android-java.
+          - platform: android
+            target: template_release
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: arm64
+            rid: android-arm64
+          - platform: android
+            target: template_debug
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: arm64
+            rid: android-arm64
+          - platform: android
+            target: template_release
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: x86_64
+            rid: android-x64
+          - platform: android
+            target: template_debug
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: x86_64
+            rid: android-x64
           # Web (browser-wasm) static libraries: no editor target, built with
           # the emscripten version pinned in Directory.Build.props (must match
           # the .NET browser-wasm runtime pack the consumers publish with).
@@ -278,6 +300,21 @@ jobs:
           version: ${{ steps.emsdk-version.outputs.version }}
           actions-cache-folder: emsdk-cache
 
+      # Android: the NDK pinned in godot/platform/android/detect.py; sdkmanager needs Java 17
+      - name: Setup Java (Android)
+        if: matrix.platform == 'android'
+        uses: actions/setup-java@v5
+        with:
+          distribution: microsoft
+          java-version: '17'
+
+      - name: Setup Android NDK
+        if: matrix.platform == 'android'
+        uses: android-actions/setup-android@v3
+        with:
+          packages: ndk;29.0.14206865
+          log-accepted-android-sdk-licenses: false
+
       # Cache SCons build
       - name: Cache SCons
         uses: actions/cache@v6
@@ -306,7 +343,7 @@ jobs:
       # Upload the library under its original Godot file name; the release job
       # zips each artifact directory as-is.
       - name: Upload artifact
-        if: matrix.platform != 'web'
+        if: matrix.platform != 'web' && matrix.platform != 'android'
         uses: actions/upload-artifact@v7
         with:
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}
@@ -324,10 +361,68 @@ jobs:
           path: godot/bin/web/${{ matrix.target }}/
           retention-days: 7
 
+      # Android uploads the ABI's staged pair (build-godot.py keeps the JNI name libgodot_android.so) - the
+      # contract with ci.yml's staging step and the 2dog.android-<abi> packages.
+      - name: Upload artifact (Android natives)
+        if: matrix.platform == 'android'
+        uses: actions/upload-artifact@v7
+        with:
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}
+          path: godot/bin/android/${{ matrix.target }}/${{ matrix.arch }}/
+          retention-days: 7
+
+  # Godot's Android Java host (godot.aar, debug + release) for the 2dog.android package. Gradle only compiles Java and
+  # Kotlin here: build_android_java.py excludes the native SCons tasks and strips natives from the AARs (they ship in
+  # the per-ABI packages), but Gradle still resolves scons while configuring.
+  build-android-java:
+    name: Build Android Java host
+    needs: preflight
+    if: needs.preflight.outputs.skip != 'true'
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: pip install scons
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: microsoft
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: godot/platform/android/java/**/*.gradle*
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platforms;android-36 build-tools;36.1.0 ndk;29.0.14206865
+          log-accepted-android-sdk-licenses: false
+
+      - name: Build Godot Android library
+        run: python scripts/build_android_java.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: godot-android-java
+          path: godot/bin/android/java/
+          retention-days: 7
+
   # Create a GitHub release tagged godot-{hash} with all native libs + GodotSharp
   release:
     name: Create Release
-    needs: [preflight, build-godotsharp, build-natives]
+    needs: [preflight, build-godotsharp, build-natives, build-android-java]
     # Gate on the `inputs` context only: github.event* belongs to the caller's
     # event in workflow_call mode and would silently skip this job there.
     if: needs.preflight.outputs.skip != 'true' && inputs.create_release
@@ -383,12 +478,14 @@ jobs:
           - Windows x64 (template_release, template_debug, editor)
           - macOS arm64 (template_release, template_debug, editor)
           - Browser wasm32 (template_release, template_debug — static library payloads)
+          - Android arm64 and x64 (template_release, template_debug — libgodot_android.so + libc++_shared.so; experimental)
 
           ### Additional assets
           - `godotsharp.zip` — GodotSharp assemblies (platform-independent)
           - `godotsharp-nupkgs.zip` — GodotSharp NuGet packages
           - `godot-source-generators.zip` — Godot.SourceGenerators.dll
           - `godot-editor-linux-x64.zip` — Linux editor binary (for project import)
+          - `godot-android-java.zip` — Godot's Android Java host (`debug/godot.aar`, `release/godot.aar`)
           EOF
           )" \
             release-assets/*

@@ -19,9 +19,10 @@ permissions:
   contents: read # jobs that need more (build-natives, deploy) declare their own
 
 jobs:
-  # Pure gate: compute the godot submodule hash and check whether a pre-built
-  # godot-<hash> natives release exists. When it is missing, the build-natives
-  # job below builds it inline, so every run self-heals in a single run graph.
+  # Pure gate: compute the godot submodule hash and check whether a complete
+  # pre-built godot-<hash> natives release exists. When it is missing (or predates
+  # the Android payloads), the build-natives job below builds it inline, so every
+  # run self-heals in a single run graph.
   check-natives:
     name: Check Native Libraries
     runs-on: blacksmith-2vcpu-ubuntu-2404
@@ -42,10 +43,10 @@ jobs:
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "Godot submodule hash: $HASH"
 
-          if gh release view "godot-$HASH" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+          if bash scripts/check_natives_release.sh "godot-$HASH"; then
             echo "ready=true" >> $GITHUB_OUTPUT
           else
-            echo "::notice::No natives release for godot submodule $HASH — building inline."
+            echo "::notice::No complete natives release for godot submodule $HASH — building inline."
             echo "ready=false" >> $GITHUB_OUTPUT
           fi
 
@@ -176,6 +177,8 @@ jobs:
           # Web (browser-wasm) zips contain the whole payload directory and are
           # staged under godot/bin/web/<target>/ (the 2dog.browser-wasm pack
           # location and the local-fallback path of its consumer targets).
+          # Android zips hold one ABI's libgodot_android.so + libc++_shared.so,
+          # staged where build-godot.py puts them (godot/bin/android/<target>/<arch>/).
           for z in release-assets/libgodot-*.zip; do
             base=$(basename "$z" .zip)
             case "$base" in
@@ -184,11 +187,21 @@ jobs:
                 mkdir -p "godot/bin/web/$target"
                 unzip -o "$z" -d "godot/bin/web/$target/"
                 ;;
+              libgodot-android-*)
+                abi_target="${base#libgodot-android-}"
+                arch="${abi_target%%-*}"
+                [ "$arch" = x64 ] && arch=x86_64
+                target="${abi_target#*-}"
+                mkdir -p "godot/bin/android/$target/$arch"
+                unzip -o "$z" -d "godot/bin/android/$target/$arch/"
+                ;;
               *)
                 unzip -o "$z" -d godot/bin/
                 ;;
             esac
           done
+          # Godot's Android Java host (debug/ and release/ godot.aar) for the 2dog.android package.
+          unzip -o release-assets/godot-android-java.zip -d godot/bin/android/java/
 
           # Releases created before the zips carried the Godot file names hold a
           # single generically named library each — fail early with a pointer
@@ -233,12 +246,15 @@ jobs:
       - name: Test managed binding packages
         run: python3 tests/bindings/test_packages.py
 
+      # The Android payloads and packages travel separately: only android-smoke needs them, and deploy publishes
+      # nuget-packages, which leaves the experimental Android packages out until they are ready for nuget.org.
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
         with:
           name: godot-bin
           path: |
             godot/bin/
+            !godot/bin/android/**
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
 
@@ -246,7 +262,19 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: nuget-packages
-          path: packages/
+          path: |
+            packages/
+            !packages/2dog.android*
+          retention-days: 7
+
+      - name: Upload Android packages and natives
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-packages
+          path: |
+            packages/2dog.android*.nupkg
+            godot/bin/android/
+          if-no-files-found: error
           retention-days: 7
 
   # Run tests on each platform.
@@ -951,6 +979,122 @@ jobs:
       - name: Run tool smoke
         shell: bash
         run: bash .github/scripts/tool-smoke.sh
+
+  # Experimental Android: builds the smoke and showcase APKs against the packed packages the way an app does (game
+  # build, Godot pck export, dotnet publish), then runs the x64 pair on an emulator. The arm64 showcase APK is built
+  # and inspected for devices only. Not a deploy gate while the Android packages stay unpublished.
+  android-smoke:
+    name: Android Smoke
+    needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 45
+
+    steps:
+      # The showcase's LFS assets (e.g. splash.png) must be real files for its pck export.
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: microsoft
+          java-version: '17'
+
+      # The NDK builds the showcase's GDExtension probe.
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-36 build-tools;36.1.0 ndk;29.0.14206865
+          log-accepted-android-sdk-licenses: false
+
+      - name: Install Android workload
+        run: dotnet workload install android --skip-manifest-update --source https://api.nuget.org/v3/index.json
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      # packages/2dog.android*.nupkg plus godot/bin/android/, the natives the APK inspection compares against.
+      - name: Download Android packages and natives
+        uses: actions/download-artifact@v8
+        with:
+          name: android-packages
+          path: .
+
+      - name: Make Linux editor executable
+        run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+
+      - name: Build and inspect APKs
+        run: |
+          editor=godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+          python scripts/build_android_apk.py --app smoke --feed packages --rid android-x64 --editor "$editor"
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 --editor "$editor"
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 --editor "$editor" \
+            --output artifacts/android-showcase-arm64-apk
+          for apk in artifacts/android-*apk/apk/*-Signed.apk; do
+            "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"
+          done
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-apks
+          path: |
+            artifacts/android-*apk/apk/*-Signed.apk
+            artifacts/android-*apk/apk-report.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Enable emulator acceleration
+        run: sudo chmod 666 /dev/kvm
+
+      - name: Run smoke and showcase on the emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          # swangle: the legacy SwiftShader GLES translator cannot link Godot's GLES3 shaders.
+          emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none
+          # The action runs each script line separately; folding keeps this one shell command.
+          script: >-
+            python scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk
+            --serial emulator-5554 --timeout 120
+            && python scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
+            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
+            status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
+
+      - name: Upload emulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-emulator-logcat
+          path: artifacts/android-apk/logcat.txt
+          if-no-files-found: ignore
+          retention-days: 7
 
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed

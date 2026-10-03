@@ -86,39 +86,70 @@ class AndroidApkTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, f"missing lib/x86_64/{probe}"):
                 inspect.inspect_apk(*args, "showcase", [probe])
 
-    def test_showcase_app_builds_its_game_with_the_android_probe_and_publishes_its_host(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "editor").touch()
-            for variant in ("debug", "release"):
+    def build_showcase(self, root, *arguments, variants=("debug", "release"), java=True):
+        """Runs the APK build with recorded commands; stages only the given natives (and the AARs if java)."""
+        (root / "editor").touch()
+        for variant in variants:
+            if java:
                 aar = root / f"godot/bin/android/java/{variant}/godot.aar"
                 aar.parent.mkdir(parents=True)
                 aar.touch()
-                natives = root / f"godot/bin/android/template_{variant}/x86_64"
-                natives.mkdir(parents=True)
-                for library in ("libgodot_android.so", "libc++_shared.so"):
-                    (natives / library).touch()
-            commands = []
-            def run(command):
-                command = list(map(str, command))
-                commands.append(command)
-                if "publish" in command:
-                    apk = Path(command[command.index("-o") + 1]) / "dev.twodog.showcase-Signed.apk"
-                    apk.parent.mkdir(parents=True)
-                    apk.touch()
+            natives = root / f"godot/bin/android/template_{variant}/x86_64"
+            natives.mkdir(parents=True)
+            for library in ("libgodot_android.so", "libc++_shared.so"):
+                (natives / library).touch()
+        commands = []
+        def run(command):
+            command = list(map(str, command))
+            commands.append(command)
+            if "publish" in command:
+                apk = Path(command[command.index("-o") + 1]) / "dev.twodog.showcase-Signed.apk"
+                apk.parent.mkdir(parents=True)
+                apk.touch()
+        with patch.object(build, "REPO", root), patch.object(build, "run", side_effect=run), \
+             patch.object(build, "inspect_apk", return_value={}) as inspect_apk, \
+             patch.object(sys, "argv", ["build_android_apk.py", "--app", "showcase", "--editor",
+                                      str(root / "editor"), *arguments]):
+            build.main()
+        return commands, inspect_apk
+
+    def test_showcase_app_builds_its_game_with_the_android_probe_and_publishes_its_host(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            commands, inspect_apk = self.build_showcase(root, "--skip-native", "--skip-java")
             app = build.APPS["showcase"]
-            with patch.object(build, "REPO", root), patch.object(build, "run", side_effect=run), \
-                 patch.object(build, "inspect_apk", return_value={}) as inspect_apk, \
-                 patch.object(sys, "argv", ["build_android_apk.py", "--app", "showcase", "--editor",
-                                          str(root / "editor"), "--skip-native", "--skip-java"]):
-                build.main()
             self.assertIn([str(app.game / "showcase.csproj"), "-c", "Debug", "-p:TwoDogProbeAndroid=true"],
                           [command[2:6] for command in commands if command[1] == "build"])
             self.assertTrue(any("--export-pack" in command and str(app.game) in command for command in commands))
             self.assertTrue(any(command[1:3] == ["publish", str(app.host)] for command in commands))
+            self.assertFalse(any("--generate-mono-glue" in command for command in commands))
             self.assertEqual(("showcase", ["libtwodog_probe.android.x86_64.so"]), inspect_apk.call_args.args[4:])
             report = json.loads((root / "artifacts/android-showcase-apk/apk-report.json").read_text())
             self.assertEqual("showcase", report["app"])
+
+    def test_feed_builds_against_packed_packages_without_building_or_packing_payloads(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            feed = root / "packages"
+            feed.mkdir()
+            # Only the selected variant's natives, for the inspection; no Java payloads.
+            commands, _ = self.build_showcase(root, "--feed", str(feed), variants=("debug",), java=False)
+            scripts = ("build-godot.py", "build_android_java.py")
+            self.assertEqual([], [command for command in commands if command[1] == "pack"
+                                  or any(part.endswith(scripts) for part in command)])
+            self.assertTrue(any(command[1] == "publish" for command in commands))
+            config = (root / "artifacts/android-showcase-apk/NuGet.Config").read_text()
+            self.assertIn(f'value="{feed.resolve()}"', config)
+
+    def test_feed_requires_the_selected_natives_for_the_inspection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "packages").mkdir()
+            with self.assertRaises(SystemExit) as raised, contextlib.redirect_stderr(io.StringIO()) as error:
+                self.build_showcase(root, "--feed", str(root / "packages"), "--configuration", "Release",
+                                    variants=("debug",), java=False)
+            self.assertEqual(1, raised.exception.code)
+            self.assertIn("template_release", error.getvalue())
 
     def test_replaced_pack_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -158,7 +189,7 @@ class AndroidApkTests(unittest.TestCase):
                     apk = output / "game.apk"
                     apk.write_bytes(b"APK artifact")
                     return apk
-                args = argparse.Namespace(output=root / "output", skip_java=False)
+                args = argparse.Namespace(output=root / "output", skip_java=False, feed=None)
                 with patch.object(build, "REPO", root), patch.object(build, "build_with_packages", side_effect=finish):
                     if fail:
                         with self.assertRaises(subprocess.CalledProcessError):
@@ -178,7 +209,7 @@ class AndroidApkTests(unittest.TestCase):
                 aar.touch()
                 with patch.object(build, "REPO", root), patch.object(build, "run") as run:
                     with self.assertRaisesRegex(ValueError, f"Missing {missing} Android Java payload"):
-                        build.build(argparse.Namespace(skip_java=True))
+                        build.build(argparse.Namespace(skip_java=True, feed=None))
                 run.assert_not_called()
 
     def test_missing_build_tool_reports_a_concise_error_and_cleans_restore_cache(self):

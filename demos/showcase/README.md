@@ -22,9 +22,11 @@ a `.gdignore`):
 - `showcase.android/` - experimental Android host (APK): Godot's Activity owns the loop, so the host drives the white
   cubes and runs the API smoke from `TwoDogActivity.addMainLoopStartedListener`. Needs the Android natives, Java
   payloads and NDK (see [2dog.android](../../platforms/twodog.android/README.md)); it is in no solution because restore
-  needs the android workload. Build and inspect the APK, then run it on a device or emulator:
+  needs the android workload. CI's Android Smoke job builds it against the packed packages, the way an app consumes
+  2dog, and uploads the APKs as `android-apks`. To build and inspect the APK locally (`--feed <dir>` uses already
+  packed packages instead of building and packing them), then run it on a device or emulator:
 
-      uv run poe build-android-apk --app showcase --editor <godot mono editor> [--rid android-arm64]
+      uv run poe build-android-apk --app showcase --editor <godot mono editor> [--rid android-arm64] [--feed <dir>]
       uv run scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk \
           --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED
 
