@@ -54,12 +54,14 @@ See [Hosts](/hosts/) for other host types and [Testing with xUnit](/testing) to 
 
 ## Squirrel ?! (Start a New Project)
 
-2dog can do a lot more, such as provide unit testing, embedding in other UIs, etc. You can also conveniently create a full project, `project.godot` and all, from the command line:
+2dog can do a lot more, such as provide unit testing, embedding in other UIs, etc. It's maybe safest to do this in a completely fresh project, and *you know you wanted to start a new game project anyway!*
+
+To create a full project, `project.godot` and all, from the command line:
 
 ```bash
 dnx 2dog new NewGame
 cd NewGame
 dotnet run --project NewGame.2dog
 dotnet test
-dotnet publish NewGame.web
+godot-mono -e . # or open it in the Godot project picker, etc.
 ```
