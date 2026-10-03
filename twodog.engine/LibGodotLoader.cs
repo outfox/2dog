@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace twodog;
@@ -170,7 +171,10 @@ internal static class LibGodotLoader
     private static List<string> ProbeDirs()
     {
         List<string> dirs = [];
-        var assemblyDir = Path.GetDirectoryName(typeof(LibGodotLoader).Assembly.Location);
+        // NativeAOT compiles twodog into the executable, so only the app base directory applies.
+        var assemblyDir = RuntimeFeature.IsDynamicCodeSupported
+            ? Path.GetDirectoryName(typeof(LibGodotLoader).Assembly.Location)
+            : null;
         if (!string.IsNullOrEmpty(assemblyDir)) dirs.Add(assemblyDir);
         if (!string.IsNullOrEmpty(AppContext.BaseDirectory) && !dirs.Contains(AppContext.BaseDirectory))
             dirs.Add(AppContext.BaseDirectory);

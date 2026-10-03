@@ -111,7 +111,8 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.godot-project-dir` | GodotProjectDir points at the Godot project |
 | `host.variant` | TwoDogVariant is release, debug or editor |
 | `host.buildtype-deprecated` | the deprecated TwoDogBuildType property is gone |
-| `host.publish-aot` | no desktop host enables PublishAot or PublishSingleFile |
+| `host.publish-aot` | no WinForms, browser or Blazor host enables PublishAot |
+| `host.publish-singlefile` | PublishSingleFile is only enabled by browser hosts or alongside PublishAot |
 | `host.duplicate-analyzers` | hosts referencing the game strip the duplicate Godot analyzers |
 | `host.app-manifest` | the app.manifest a host declares exists |
 | `host.web-props-shim` | browser hosts chain to the root Directory.Build.props |
@@ -175,7 +176,7 @@ line and the fixing command; other errors follow.
 | --- | --- |
 | `build.variant-invalid` | TwoDogVariant is not release, debug or editor |
 | `build.buildtype-deprecated` | the deprecated TwoDogBuildType property is set |
-| `build.publish-aot` | PublishAot is not supported for desktop hosts |
+| `build.publish-aot` | PublishAot does not support the editor variant |
 | `build.publish-singlefile` | PublishSingleFile is not supported for desktop hosts |
 | `build.godot-sdk-mismatch` | Godot.NET.Sdk and 2dog.engine are on different Godot lines |
 | `build.no-import-capability` | no import capability (`2dog.<rid>.editor` and 2dog.tools packages missing) |

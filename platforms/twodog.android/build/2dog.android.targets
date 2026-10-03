@@ -12,8 +12,10 @@
         <AndroidManifestOverlay Include="$(_TwoDogAndroidJavaRoot)host/AndroidManifest.xml"/>
         <!-- Release builds trim and AOT-compile by default. GodotPlugins is only reached through reflection, and
              GodotSharp finds the game's scripts through reflection, so these assemblies stay whole. .NET for Android
-             requires RootMode on every root. -->
-        <TrimmerRootAssembly Include="GodotSharp;GodotPlugins;twodog" RootMode="All"/>
+             requires RootMode on every root. NativeAOT initializes without GodotPlugins, and a whole twodog would
+             compile its GodotPlugins loader. -->
+        <TrimmerRootAssembly Include="GodotSharp" RootMode="All"/>
+        <TrimmerRootAssembly Include="GodotPlugins;twodog" RootMode="All" Condition="'$(PublishAot)' != 'true'"/>
         <TrimmerRootAssembly Include="$(TwoDogAndroidGameAssembly)" RootMode="All" Condition="'$(TwoDogAndroidGameAssembly)' != ''"/>
     </ItemGroup>
     <Target Name="TwoDogValidateAndroidHost" BeforeTargets="PrepareForBuild"
@@ -22,10 +24,10 @@
                Text="2dog: Android supports debug and release variants only."/>
         <Error Code="TDGA004" Condition="!Exists('$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar')"
                Text="2dog: the selected Android Java payload is missing. Run scripts/build_android_java.py and repack 2dog.android."/>
-        <!-- Only Mono is validated; NativeAOT and CoreCLR are experimental in .NET for Android and untested with
-             Godot. -->
-        <Error Code="TDGA006" Condition="'$(PublishAot)' == 'true' Or '$(UseMonoRuntime)' == 'false'"
-               Text="2dog: Android hosts run on the Mono runtime; NativeAOT (PublishAot) and CoreCLR (UseMonoRuntime=false) are not supported. Release builds AOT-compile with Mono (RunAOTCompilation)."/>
+        <!-- Mono is the default; NativeAOT is experimental in .NET for Android and opt-in. CoreCLR, also
+             experimental there, is untested with Godot. -->
+        <Error Code="TDGA006" Condition="'$(UseMonoRuntime)' == 'false' And '$(PublishAot)' != 'true'"
+               Text="2dog: Android hosts run on Mono, or on NativeAOT (PublishAot, experimental); CoreCLR (UseMonoRuntime=false) is not supported. Release builds AOT-compile with Mono (RunAOTCompilation)."/>
         <!-- Other RIDs reference no 2dog.android-<abi> package, so nothing would resolve libgodot for them and the APK
              would start without Godot. -->
         <ItemGroup>
@@ -37,7 +39,7 @@
                Text="2dog: Android hosts support android-arm64 and android-x64 only; unsupported RID: %(_TwoDogAndroidHostRid.Identity)."/>
     </Target>
     <Target Name="TwoDogReferenceAndroidPlugins" BeforeTargets="ResolveAssemblyReferences"
-            Condition="'$(TargetPlatformIdentifier)' == 'android'">
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(PublishAot)' != 'true'">
         <Error Condition="!Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.dll')"
                Text="2dog: reference 2dog.engine so GodotPlugins.dll can be included in the Android managed bundle."/>
         <ItemGroup>

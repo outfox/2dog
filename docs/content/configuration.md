@@ -35,6 +35,43 @@ only the host should remove duplicate analyzers.
 See [Selecting a Variant](./build-configurations#selecting-a-variant) for the
 variant mapping and [Resource Import](./import-tool) for import properties.
 
+## Native AOT
+
+Generic, Avalonia, and WinUI hosts can publish with `PublishAot`, and Android
+hosts can as an experiment. The release and debug variants support it; the
+editor variant does not, because it loads GodotTools at runtime.
+
+On desktop, Native AOT needs the platform's native toolchain: the Visual Studio
+C++ build tools on Windows, `clang` and `zlib1g-dev` on Linux, and the Xcode
+command-line tools on macOS (see the
+[.NET prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites)).
+Publish desktop hosts on the operating system you target. Android hosts link
+with the Android NDK on any build machine (see below).
+
+2dog keeps `GodotSharp` and the game assembly whole, because Godot binds
+script classes through reflection. The game assembly is the project referenced
+from `GodotProjectDir`. In desktop hosts, root other assemblies that are only
+reached through reflection:
+
+```xml
+<TrimmerRootAssembly Include="MyLibrary"/>
+```
+
+Android hosts root them with `RootMode="All"`, which .NET for Android requires
+(see [Android Host](#android-host)).
+
+.NET for Android marks its Native AOT experimental (warning XA1040). It links
+with the Android NDK, so install the NDK and point `AndroidNdkDirectory` at it:
+
+```bash
+dotnet publish MyGame.android -c Release -p:PublishAot=true -p:AndroidNdkDirectory=$ANDROID_HOME/ndk/29.0.14206865
+```
+
+Without `PublishAot`, Android Release builds use Mono's AOT compiler
+(`RunAOTCompilation`). Web hosts also run on Mono and opt into its AOT compiler
+with `-p:RunAOTCompilation=true`. WinForms does not support trimming, so it
+cannot use Native AOT.
+
 ## Packages and Versions
 
 Reference `2dog.engine` from generic hosts:

@@ -436,6 +436,27 @@ jobs:
           -p:PublishSelfContained=false
           -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd
 
+      # NativeAOT links ILC output with the platform toolchain (clang + zlib on
+      # Linux); install them only when the runner image lacks them.
+      - name: Install NativeAOT prerequisites (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          if ! command -v clang > /dev/null || ! dpkg -s zlib1g-dev > /dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y clang zlib1g-dev
+          fi
+
+      # NativeAOT: one native executable without a .NET runtime, GodotPlugins
+      # or game assembly on disk; twodog initializes GodotSharp through its
+      # built-in plugins entry point. Warnings fail the step: ILC reports the
+      # reflection and assembly-location uses that break at runtime.
+      - name: Publish showcase desktop host (Release, NativeAOT)
+        run: >-
+          dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
+          -p:PublishAot=true -warnaserror
+          -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
+
       # Desktop publishes must export the game content as an exe-adjacent
       # pck; the published host then boots from it (Engine.ResolveContent()
       # returns null when the pck is present). Issue #43 regression guard.
@@ -448,10 +469,11 @@ jobs:
         shell: bash
         run: |
           fdd=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd
+          aot=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
           for dir in \
             "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish" \
             "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid" \
-            "$fdd"; do
+            "$fdd" "$aot"; do
             if [ ! -f "$dir/showcase.2dog.pck" ]; then
               echo "::error::Missing $dir/showcase.2dog.pck - the desktop publish did not export the game pck"
               exit 1
@@ -469,6 +491,13 @@ jobs:
             echo "::error::The framework-dependent publish contains a .NET host (hostfxr) - the pack export leaked a runtime"
             exit 1
           fi
+          # Everything managed is compiled into the NativeAOT executable.
+          for managed in GodotPlugins.dll GodotSharp.dll twodog.dll showcase.dll; do
+            if [ -f "$aot/$managed" ]; then
+              echo "::error::The NativeAOT publish contains $managed - managed assemblies must be compiled in"
+              exit 1
+            fi
+          done
 
       # The engine must load the game assembly from the publish output itself.
       # Delete the game project's own build outputs so a regression back to
@@ -510,11 +539,22 @@ jobs:
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
+      - name: Run published host (headless, NativeAOT)
+        id: run_aot
+        shell: bash
+        run: |
+          set +e
+          demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot/${{ matrix.exe }} \
+            --headless --quit-after 120 2>&1 | tee smoke-aot.log
+          status=${PIPESTATUS[0]}
+          echo "Host exit code: $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
       # Surface the .ips crash report for the known macOS teardown abort
       # (libgodot exit-time static destructors; see the twodog.Engine static
       # ctor comment) so it can be root-caused in the fork.
       - name: Dump crash report (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_aot.outputs.status != '0')
         shell: bash
         run: |
           # ReportCrash writes the .ips shortly after the abort
@@ -529,14 +569,18 @@ jobs:
       # all threads at the abort. This is the data source for fixing the
       # teardown crash in the fork.
       - name: Rerun under lldb for backtrace (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_aot.outputs.status != '0')
         shell: bash
         run: |
+          publish=demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish
+          if [ "${{ steps.run_aot.outputs.status }}" != "0" ]; then
+            publish=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
+          fi
           lldb -b \
             -o run \
             -o "bt all" \
             -o quit \
-            -- demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+            -- "$publish/${{ matrix.exe }}" \
                --headless --quit-after 120 2>&1 | tail -150 || true
 
       - name: Assert scripts bound
@@ -561,6 +605,10 @@ jobs:
               echo "::error::[$label] GDExtension smoke marker missing (the probe extension did not load)"
               fail=1
             fi
+            if ! grep -q "2DOG_API_SMOKE_PASSED" "$log"; then
+              echo "::error::[$label] GodotSharp API smoke marker missing (GodotApiSmoke.RunAll failed)"
+              fail=1
+            fi
             if [ "$status" != "0" ]; then
               echo "::error::[$label] Host exited with code $status"
               fail=1
@@ -569,6 +617,7 @@ jobs:
           check smoke.log "${{ steps.run.outputs.status }}" "rid"
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
           check smoke-fdd.log "${{ steps.run_fdd.outputs.status }}" "framework-dependent"
+          check smoke-aot.log "${{ steps.run_aot.outputs.status }}" "nativeaot"
           exit $fail
 
   # Publish the web showcase end-to-end: statically links the web libgodot.a into
@@ -1051,6 +1100,9 @@ jobs:
             --configuration Release --output artifacts/android-showcase-release-apk
           python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
             --configuration Release --output artifacts/android-showcase-arm64-apk
+          # Experimental NativeAOT; links with the NDK installed above.
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
+            --configuration Release --aot --output artifacts/android-showcase-aot-apk
           for apk in artifacts/android-*apk/apk/*-Signed.apk; do
             "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"
           done
@@ -1084,6 +1136,8 @@ jobs:
             && python scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
             && python scripts/test_android_device.py artifacts/android-showcase-release-apk/apk/dev.twodog.showcase-Signed.apk
+            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
+            && python scripts/test_android_device.py artifacts/android-showcase-aot-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
             status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
 

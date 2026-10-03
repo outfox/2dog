@@ -29,10 +29,6 @@
     <ItemGroup>
         <ProjectReference Include="..\twodog.engine\twodog.engine.csproj"/>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
-        <!-- Windows zero-copy path (D3D11 shared textures); same bindings Avalonia's own
-             GpuInterop sample uses. Managed-only, safe to reference cross-platform. -->
-        <PackageReference Include="Silk.NET.Direct3D11" Version="2.22.0"/>
-        <PackageReference Include="Silk.NET.DXGI" Version="2.22.0"/>
     </ItemGroup>
 
     <!-- Package icon and readme -->

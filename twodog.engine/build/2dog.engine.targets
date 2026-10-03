@@ -33,11 +33,8 @@
         <Warning Condition="'$(TwoDogBuildType)' != ''"
                  Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
 
-        <!-- NativeAOT ships no hostfxr and both modes empty Assembly.Location (used by GodotPlugins/libgodot probing);
-             fail here instead of at runtime with an opaque 'Failed to load hostfxr'. -->
-        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishAot)' == 'true'"
-               Text="TwoDog: PublishAot (NativeAOT) is not supported for 2dog desktop hosts. The engine loads GodotPlugins and the game assembly through hostfxr and on-disk assemblies, which a native single-binary publish does not carry. Publish framework-dependent or self-contained instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
-        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true'"
+        <!-- NativeAOT ignores PublishSingleFile: its output already is one native executable. -->
+        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true' And '$(PublishAot)' != 'true'"
                Text="TwoDog: PublishSingleFile is not supported for 2dog desktop hosts. Assemblies embedded in a single-file bundle have no on-disk location, which the GodotPlugins / libgodot probing relies on. Publish as a normal folder instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
     </Target>
 
@@ -128,9 +125,10 @@
     <!-- ============================================ -->
     <!-- Target: Publish GodotPlugins                 -->
     <!-- ============================================ -->
+    <!-- NativeAOT publishes initialize through twodog's built-in plugins entry point instead. -->
     <Target Name="TwoDogPublishGodotApi"
             AfterTargets="Publish"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(PublishAot)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
 
         <PropertyGroup>
             <TwoDogGodotApiPublishDestPath>$(PublishDir)$(TwoDogGodotApiDestSubdir)</TwoDogGodotApiPublishDestPath>
@@ -148,6 +146,27 @@
               SkipUnchangedFiles="true"/>
 
         <Message Importance="high" Text="TwoDog: Published GodotPlugins to $(TwoDogGodotApiPublishDestPath)"/>
+    </Target>
+
+    <!-- ============================================ -->
+    <!-- NativeAOT                                    -->
+    <!-- ============================================ -->
+    <!-- GodotSharp binds script classes by reflection over the game assembly, so ILC keeps both whole. The game
+         assembly is the ProjectReference living in GodotProjectDir. -->
+    <!-- Android roots these itself (TwoDogAndroidGameAssembly), with the RootMode .NET for Android requires. -->
+    <ItemGroup Condition="'$(PublishAot)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(TargetPlatformIdentifier)' != 'android'">
+        <TrimmerRootAssembly Include="GodotSharp"/>
+    </ItemGroup>
+    <Target Name="TwoDogPrepareAotPublish"
+            BeforeTargets="PrepareForPublish"
+            DependsOnTargets="TwoDogResolveExportAssemblyDir"
+            Condition="'$(PublishAot)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(TargetPlatformIdentifier)' != 'android'">
+        <!-- Publish time only: hosts may set PublishAot and still build the editor variant. -->
+        <Error Condition="'$(TwoDogVariant)' == 'editor'"
+               Text="TwoDog: PublishAot (NativeAOT) does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies at runtime. Publish the release or debug variant."/>
+        <ItemGroup>
+            <TrimmerRootAssembly Include="@(_TwoDogExportGameAssembly->'%(Filename)')"/>
+        </ItemGroup>
     </Target>
 
     <!-- ============================================ -->

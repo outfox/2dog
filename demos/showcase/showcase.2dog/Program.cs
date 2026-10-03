@@ -28,6 +28,10 @@ internal static class Program
         if (engine.Tree.CurrentScene.GetNodeOrNull<SpinningCube>("Flair/BlueCubes/BlueCube1") is not null)
             Console.WriteLine("2DOG_CSHARP_SCRIPT_SMOKE_PASSED");
 
+        // The broad GodotSharp probe the web hosts run too; only published hosts exercise NativeAOT.
+        GodotApiSmoke.RunAll(engine.Tree);
+        Console.WriteLine("2DOG_API_SMOKE_PASSED");
+
         // The blue cubes spin themselves via SpinningCube._Process (Godot side);
         // the white ones are plain MeshInstance3Ds we drive from this loop.
         var whiteCubes = engine.Tree.CurrentScene

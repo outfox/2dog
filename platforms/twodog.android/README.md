@@ -57,8 +57,9 @@ the Godot Activity directly after process death.
 Release builds trim and AOT-compile with .NET for Android's defaults (`TrimMode=partial`,
 profiled AOT); `TrimMode=full` and `AndroidEnableProfiledAot=false` work too. The package
 roots GodotSharp, GodotPlugins, twodog and `TwoDogAndroidGameAssembly` for the trimmer.
-NativeAOT (`PublishAot`) and CoreCLR (`UseMonoRuntime=false`), both experimental in .NET
-for Android, fail with TDGA006: only Mono is validated.
+Native AOT (`PublishAot`), experimental in .NET for Android, links with the NDK
+(`AndroidNdkDirectory`); 2dog then roots only GodotSharp and the game assembly. CoreCLR
+(`UseMonoRuntime=false`), also experimental there, fails with TDGA006.
 
 Host code reaches the scene through `TwoDogActivity.addMainLoopStartedListener(Runnable)`:
 Godot runs each listener on its render thread (the engine's main thread) once the main
