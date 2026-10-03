@@ -7,8 +7,9 @@ namespace showcase;
 
 // Code-only WinUI 3 application: without XAML in the project there is no generated metadata
 // provider, so the app forwards WinUI's own controls provider itself - without it the first
-// control style lookup dies in native code with a stowed exception (0xC000027B).
-internal sealed class App : Application, IXamlMetadataProvider
+// control style lookup dies in native code with a stowed exception (0xC000027B). Partial lets CsWinRT generate the
+// provider's vtable for NativeAOT, where it otherwise fails the same way.
+internal sealed partial class App : Application, IXamlMetadataProvider
 {
     private readonly string[] _args;
     private readonly XamlControlsXamlMetaDataProvider _provider = new();

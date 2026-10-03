@@ -15,6 +15,8 @@
              without MSIX packaging or the Windows App Runtime installer. -->
         <WindowsPackageType>None</WindowsPackageType>
         <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+        <!-- Publishes the app's .pri resource index; without it the code-created controls find no templates. -->
+        <EnableMsixTooling>true</EnableMsixTooling>
         <!-- Self-contained Windows App SDK needs a concrete RID; 2dog natives ship win-x64. -->
         <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
         <!-- Publish bundles the .NET runtime so the output runs without a .NET install;
