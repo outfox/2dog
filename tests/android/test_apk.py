@@ -29,7 +29,8 @@ build = module("build_android_apk_tests", REPO / "scripts/build_android_apk.py")
 
 
 class AndroidApkTests(unittest.TestCase):
-    def fixture(self, root, rid="android-x64", wrong_variant=False, extra_abi=False, missing_asset=False):
+    def fixture(self, root, rid="android-x64", wrong_variant=False, extra_abi=False, missing_asset=False,
+                game="android-smoke-game", libraries=()):
         abi, machine = inspect.RID_ABI[rid]
         native = root / "native"
         native.mkdir(exist_ok=True)
@@ -37,15 +38,16 @@ class AndroidApkTests(unittest.TestCase):
         pack.write_bytes(b"exported game")
         apk = root / "game.apk"
         with zipfile.ZipFile(apk, "w") as archive:
-            for asset in ("AndroidManifest.xml", "classes.dex", "assets/game.pck",
-                          "assets/2dog/android-smoke-game.dll"):
-                if missing_asset and asset == "assets/2dog/android-smoke-game.dll":
+            for asset in ("AndroidManifest.xml", "classes.dex", "assets/game.pck", f"assets/2dog/{game}.dll"):
+                if missing_asset and asset == f"assets/2dog/{game}.dll":
                     continue
                 archive.writestr(asset, pack.read_bytes() if asset.endswith("game.pck") else b"fixture")
             for name in ("libgodot_android.so", "libc++_shared.so"):
                 data = b"\x7fELF\x02\x01" + bytes(12) + machine.to_bytes(2, "little") + b"variant"
                 (native / name).write_bytes(data)
                 archive.writestr(f"lib/{abi}/{name}", data + (b"wrong" if wrong_variant else b""))
+            for name in libraries:
+                archive.writestr(f"lib/{abi}/{name}", b"extra library")
             if extra_abi:
                 archive.writestr("lib/unselected/libgodot_android.so", b"wrong ABI")
         return apk, rid, native, pack
@@ -71,6 +73,52 @@ class AndroidApkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaisesRegex(ValueError, "missing assets/2dog/android-smoke-game.dll"):
                 inspect.inspect_apk(*self.fixture(Path(directory), missing_asset=True))
+
+    def test_named_game_assembly_and_extra_libraries_are_required(self):
+        probe = "libtwodog_probe.android.x86_64.so"
+        with tempfile.TemporaryDirectory() as directory:
+            args = self.fixture(Path(directory), game="showcase", libraries=(probe,))
+            self.assertEqual("android-x64", inspect.inspect_apk(*args, "showcase", [probe])["rid"])
+            with self.assertRaisesRegex(ValueError, "missing assets/2dog/android-smoke-game.dll"):
+                inspect.inspect_apk(*args)
+        with tempfile.TemporaryDirectory() as directory:
+            args = self.fixture(Path(directory), game="showcase")
+            with self.assertRaisesRegex(ValueError, f"missing lib/x86_64/{probe}"):
+                inspect.inspect_apk(*args, "showcase", [probe])
+
+    def test_showcase_app_builds_its_game_with_the_android_probe_and_publishes_its_host(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "editor").touch()
+            for variant in ("debug", "release"):
+                aar = root / f"godot/bin/android/java/{variant}/godot.aar"
+                aar.parent.mkdir(parents=True)
+                aar.touch()
+                natives = root / f"godot/bin/android/template_{variant}/x86_64"
+                natives.mkdir(parents=True)
+                for library in ("libgodot_android.so", "libc++_shared.so"):
+                    (natives / library).touch()
+            commands = []
+            def run(command):
+                command = list(map(str, command))
+                commands.append(command)
+                if "publish" in command:
+                    apk = Path(command[command.index("-o") + 1]) / "dev.twodog.showcase-Signed.apk"
+                    apk.parent.mkdir(parents=True)
+                    apk.touch()
+            app = build.APPS["showcase"]
+            with patch.object(build, "REPO", root), patch.object(build, "run", side_effect=run), \
+                 patch.object(build, "inspect_apk", return_value={}) as inspect_apk, \
+                 patch.object(sys, "argv", ["build_android_apk.py", "--app", "showcase", "--editor",
+                                          str(root / "editor"), "--skip-native", "--skip-java"]):
+                build.main()
+            self.assertIn([str(app.game / "showcase.csproj"), "-c", "Debug", "-p:TwoDogProbeAndroid=true"],
+                          [command[2:6] for command in commands if command[1] == "build"])
+            self.assertTrue(any("--export-pack" in command and str(app.game) in command for command in commands))
+            self.assertTrue(any(command[1:3] == ["publish", str(app.host)] for command in commands))
+            self.assertEqual(("showcase", ["libtwodog_probe.android.x86_64.so"]), inspect_apk.call_args.args[4:])
+            report = json.loads((root / "artifacts/android-showcase-apk/apk-report.json").read_text())
+            self.assertEqual("showcase", report["app"])
 
     def test_replaced_pack_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

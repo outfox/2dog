@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Experimental Android host: Godot's Activity from 2dog.android owns the surface, render loop, input and
+         lifecycle; this app registers the .NET runtime before it starts. Needs the android workload and the Android
+         packages from the local feed, so it is in no solution (like tests/android). scripts/build_android_apk.py
+         builds and inspects its APK (see ../README.md) -->
+    <PropertyGroup>
+        <TargetFramework>net10.0-android36.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'showcase.android' must not shadow the Android namespaces -->
+        <RootNamespace>showcase.android</RootNamespace>
+        <ApplicationId>dev.twodog.showcase</ApplicationId>
+        <ApplicationTitle>2dog showcase</ApplicationTitle>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+        <!-- Devices by default; the x64 emulator needs -r android-x64 -->
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(RuntimeIdentifiers)' == ''">android-arm64</RuntimeIdentifier>
+        <_ShowcaseAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_ShowcaseAndroidRids>
+        <!-- The initial Android host requires untrimmed, JIT-compiled assemblies (TDGA006) -->
+        <PublishTrimmed>false</PublishTrimmed>
+        <RunAOTCompilation>false</RunAOTCompilation>
+        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    </PropertyGroup>
+
+    <!-- In this repo the native variant follows the build configuration (Android has no editor variant) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <!-- The APK ships an exported pck (TwoDogAndroidPack), so there is no host-side import -->
+        <TwoDogAutoImport>false</TwoDogAutoImport>
+        <TwoDogAndroidGameAssembly>showcase</TwoDogAndroidGameAssembly>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.android" Version="$(NativesVersion)"/>
+        <PackageReference Include="2dog.android-arm64" Version="$(NativesVersion)"
+                          Condition="$([System.String]::Copy('$(_ShowcaseAndroidRids)').Contains(';android-arm64;'))"/>
+        <PackageReference Include="2dog.android-x64" Version="$(NativesVersion)"
+                          Condition="$([System.String]::Copy('$(_ShowcaseAndroidRids)').Contains(';android-x64;'))"/>
+        <!-- The Java dependencies of Godot's lib/build.gradle -->
+        <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6"/>
+        <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>
+        <PackageReference Include="Xamarin.Kotlin.StdLib" Version="2.1.21"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../showcase.csproj"/>
+    </ItemGroup>
+
+    <!-- Packages the GDExtension probe's Android libraries -->
+    <Import Project="../gdextension/TwoDogProbe.targets"/>
+</Project>

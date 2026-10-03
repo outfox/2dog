@@ -7,7 +7,8 @@ a `.gdignore`):
 - `showcase.csproj` / `project.godot` - the Godot project (scenes, resources, C# scripts)
 - `gdextension/` - a GDExtension in plain C (`TwoDogProbe`); the `GDExtensionProbe` label in `main.tscn` calls it
   on every host. Building the game project compiles it for the build machine (MSVC on Windows, `cc` elsewhere); the
-  browser hosts compile a WebAssembly side module with the wasm-tools workload's emscripten and embed it in `godot.pck`
+  browser hosts compile a WebAssembly side module with the wasm-tools workload's emscripten and embed it in `godot.pck`;
+  `-p:TwoDogProbeAndroid=true` adds the arm64/x86_64 Android libraries (NDK clang), which the Android host packages
 - `signals/` - the signal table in the top-left corner: four sources tick once per second (a C# `[Signal]`, a GDScript
   `signal`, an engine `Timer` and the GDExtension's `TwoDogTicker`), and each row counts what a C# (`SignalCounter.cs`)
   and a GDScript (`signal_counter.gd`) listener received. Both columns should advance in lockstep on every host
@@ -18,6 +19,17 @@ a `.gdignore`):
 - `showcase.winforms/` - Windows-only GUI embedding demo (`--wid`): `dotnet run --project demos/showcase/showcase.winforms`
 - `showcase.winui/` - Windows-only WinUI 3 embedding demo (`--wid`; builds only on Windows): `dotnet run --project demos/showcase/showcase.winui`
 - `showcase.avalonia/` - cross-platform Avalonia embedding demo (controls composite over the game): `dotnet run --project demos/showcase/showcase.avalonia`
+- `showcase.android/` - experimental Android host (APK): Godot's Activity owns the loop, so the host drives the white
+  cubes and runs the API smoke from `TwoDogActivity.addMainLoopStartedListener`. Needs the Android natives, Java
+  payloads and NDK (see [2dog.android](../../platforms/twodog.android/README.md)); it is in no solution because restore
+  needs the android workload. Build and inspect the APK, then run it on a device or emulator:
+
+      uv run poe build-android-apk --app showcase --editor <godot mono editor> [--rid android-arm64]
+      uv run scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk \
+          --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED
+
+  Start emulators with `-gpu swangle` (or `host`): the legacy SwiftShader GLES translator cannot link Godot's GLES3
+  shaders, so the screen stays gray even though the smoke passes
 
 The test suite (`twodog.tests/`, at the repository root) runs against this
 project. Assets are imported automatically during build.

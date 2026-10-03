@@ -2,7 +2,9 @@
     <!-- Builds the showcase's GDExtension probe (src/twodog_probe.c) into bin/, where twodog_probe.gdextension points,
          with toolchains the hosts already need: the build machine's C compiler for its own desktop platform (imported
          by the game project, which every host builds first), and the wasm-tools workload's emscripten for the web
-         side module (imported by the browser-wasm hosts). Opt out with -p:TwoDogProbeBuild=false. -->
+         side module (imported by the browser-wasm hosts). The Android libraries need the NDK and must exist before
+         the pck export, so the game project builds them on request (-p:TwoDogProbeAndroid=true) and the Android host
+         only packages them. Opt out with -p:TwoDogProbeBuild=false. -->
     <PropertyGroup>
         <_TwoDogProbeDir>$(MSBuildThisFileDirectory)</_TwoDogProbeDir>
         <_TwoDogProbeBin>$(_TwoDogProbeDir)bin/</_TwoDogProbeBin>
@@ -25,7 +27,7 @@
             BeforeTargets="CoreCompile"
             Inputs="@(_TwoDogProbeInput)"
             Outputs="$(_TwoDogProbeDesktopLib)"
-            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(_TwoDogProbeDesktopLib)' != ''">
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(TargetPlatformIdentifier)' != 'android' And '$(DesignTimeBuild)' != 'true' And '$(_TwoDogProbeDesktopLib)' != ''">
         <!-- Intermediates stay outside the Godot project tree (MSVC's .obj would import as a Wavefront mesh) -->
         <PropertyGroup>
             <_TwoDogProbeObj>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog_probe'))</_TwoDogProbeObj>
@@ -85,5 +87,69 @@
         <Exec Command="&quot;$(_TwoDogProbeEmcc)&quot; $(_TwoDogProbeCFlags) -sSIDE_MODULE=1 -sWASM_BIGINT &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeWasmObj)&quot;"
               EnvironmentVariables="@(_TwoDogProbeEmccEnv)"/>
         <Copy SourceFiles="$(_TwoDogProbeWasmObj)" DestinationFiles="$(_TwoDogProbeWasm)" Retries="5" RetryDelayMilliseconds="200"/>
+    </Target>
+
+    <!-- Android: both ABIs the Android export preset enables; its pck export copies every library it lists -->
+    <ItemGroup>
+        <_TwoDogProbeAndroidArch Include="arm64" Triple="aarch64-linux-android" Abi="arm64-v8a" Rid="android-arm64"/>
+        <_TwoDogProbeAndroidArch Include="x86_64" Triple="x86_64-linux-android" Abi="x86_64" Rid="android-x64"/>
+    </ItemGroup>
+
+    <!-- Any recent NDK builds this C file: TwoDogProbeAndroidNdk, ANDROID_NDK_ROOT, ANDROID_NDK_HOME, else one
+         installed under ANDROID_HOME or ANDROID_SDK_ROOT -->
+    <Target Name="TwoDogProbeResolveAndroidNdk">
+        <PropertyGroup>
+            <TwoDogProbeAndroidNdk Condition="'$(TwoDogProbeAndroidNdk)' == ''">$(ANDROID_NDK_ROOT)</TwoDogProbeAndroidNdk>
+            <TwoDogProbeAndroidNdk Condition="'$(TwoDogProbeAndroidNdk)' == ''">$(ANDROID_NDK_HOME)</TwoDogProbeAndroidNdk>
+        </PropertyGroup>
+        <ItemGroup Condition="'$(TwoDogProbeAndroidNdk)' == ''">
+            <_TwoDogProbeNdk Include="$(ANDROID_HOME)/ndk/*/source.properties" Condition="'$(ANDROID_HOME)' != ''"/>
+            <_TwoDogProbeNdk Include="$(ANDROID_SDK_ROOT)/ndk/*/source.properties" Condition="'$(ANDROID_SDK_ROOT)' != ''"/>
+        </ItemGroup>
+        <PropertyGroup Condition="'$(TwoDogProbeAndroidNdk)' == '' And '@(_TwoDogProbeNdk)' != ''">
+            <_TwoDogProbeNdks>@(_TwoDogProbeNdk->'%(RootDir)%(Directory)')</_TwoDogProbeNdks>
+            <TwoDogProbeAndroidNdk>$(_TwoDogProbeNdks.Substring($([MSBuild]::Add($(_TwoDogProbeNdks.LastIndexOf(';')), 1))))</TwoDogProbeAndroidNdk>
+        </PropertyGroup>
+        <PropertyGroup>
+            <_TwoDogProbeNdkHost Condition="$([MSBuild]::IsOSPlatform('Windows'))">windows-x86_64</_TwoDogProbeNdkHost>
+            <_TwoDogProbeNdkHost Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux-x86_64</_TwoDogProbeNdkHost>
+            <_TwoDogProbeNdkHost Condition="$([MSBuild]::IsOSPlatform('OSX'))">darwin-x86_64</_TwoDogProbeNdkHost>
+            <_TwoDogProbeNdkClang>$(TwoDogProbeAndroidNdk.TrimEnd('\').TrimEnd('/'))/toolchains/llvm/prebuilt/$(_TwoDogProbeNdkHost)/bin/clang</_TwoDogProbeNdkClang>
+            <_TwoDogProbeNdkClang Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(_TwoDogProbeNdkClang).exe</_TwoDogProbeNdkClang>
+        </PropertyGroup>
+        <Error Condition="'$(TwoDogProbeAndroidNdk)' == '' Or !Exists('$(_TwoDogProbeNdkClang)')"
+               Text="TwoDog showcase: building the Android GDExtension probe needs the Android NDK (clang not found at '$(_TwoDogProbeNdkClang)'). Set ANDROID_NDK_ROOT or TwoDogProbeAndroidNdk, or pass -p:TwoDogProbeBuild=false (the probe then reports the extension as missing)."/>
+    </Target>
+
+    <!-- Built by the game project on request: the libraries must exist before the pck export, which runs before the
+         Android host build -->
+    <Target Name="TwoDogProbeBuildAndroid"
+            BeforeTargets="CoreCompile"
+            DependsOnTargets="TwoDogProbeResolveAndroidNdk"
+            Inputs="@(_TwoDogProbeInput)"
+            Outputs="$(_TwoDogProbeBin)libtwodog_probe.android.%(_TwoDogProbeAndroidArch.Identity).so"
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(TwoDogProbeAndroid)' == 'true' And '$(DesignTimeBuild)' != 'true'">
+        <MakeDir Directories="$(_TwoDogProbeBin)"/>
+        <Exec Command="&quot;$(_TwoDogProbeNdkClang)&quot; --target=%(_TwoDogProbeAndroidArch.Triple)24 $(_TwoDogProbeCFlags) -fPIC -shared -Wl,-soname,libtwodog_probe.android.%(_TwoDogProbeAndroidArch.Identity).so -Wl,-z,max-page-size=16384 &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeBin)libtwodog_probe.android.%(_TwoDogProbeAndroidArch.Identity).so&quot;"/>
+    </Target>
+
+    <!-- Android hosts package each selected ABI's library into the APK's lib/<abi>/: the pck does not embed it, and
+         the engine falls back to loading it by file name -->
+    <Target Name="TwoDogProbePackageAndroid"
+            BeforeTargets="PrepareForBuild"
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
+        <PropertyGroup>
+            <_TwoDogProbeAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogProbeAndroidRids>
+        </PropertyGroup>
+        <ItemGroup>
+            <_TwoDogProbeAndroidPackaged Include="@(_TwoDogProbeAndroidArch)"
+                                         Condition="$([System.String]::Copy('$(_TwoDogProbeAndroidRids)').Contains(';%(Rid);'))"/>
+        </ItemGroup>
+        <Error Condition="!Exists('$(_TwoDogProbeBin)libtwodog_probe.android.%(_TwoDogProbeAndroidPackaged.Identity).so')"
+               Text="TwoDog showcase: the %(_TwoDogProbeAndroidPackaged.Abi) GDExtension probe is missing. Build the game project with -p:TwoDogProbeAndroid=true before exporting the pck (uv run poe build-android-apk --app showcase does), or pass -p:TwoDogProbeBuild=false."/>
+        <ItemGroup>
+            <AndroidNativeLibrary Include="$(_TwoDogProbeBin)libtwodog_probe.android.%(_TwoDogProbeAndroidPackaged.Identity).so"
+                                  Abi="%(_TwoDogProbeAndroidPackaged.Abi)"/>
+        </ItemGroup>
     </Target>
 </Project>

@@ -1,6 +1,7 @@
 extends Label
 ## Shows and checks the C GDExtension in this folder (twodog_probe.gdextension). On the web the library is a side
-## module loaded from the pck; on desktop a native library in bin/ (or beside a published executable).
+## module loaded from the pck; on desktop a native library in bin/ (or beside a published executable); on Android a
+## native library in the APK.
 
 const PASSED_META := "gdextension_smoke_passed"
 const FAILURE_META := "gdextension_smoke_failure"

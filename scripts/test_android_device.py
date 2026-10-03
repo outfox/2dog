@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install the smoke APK and require its C# scene marker in logcat (one explicitly selected device)."""
+"""Install an APK and require its C# scene marker in logcat (one explicitly selected device)."""
 import argparse
 from pathlib import Path
 import subprocess
@@ -11,6 +11,7 @@ def main():
     parser.add_argument("apk", type=Path)
     parser.add_argument("--serial", required=True)
     parser.add_argument("--package", default="dev.twodog.smoke")
+    parser.add_argument("--marker", default="2DOG_ANDROID_CSHARP_SMOKE_PASSED")
     parser.add_argument("--timeout", type=int, default=90)
     parser.add_argument("--adb", default="adb")
     args = parser.parse_args()
@@ -38,8 +39,8 @@ def main():
                     logs = subprocess.run([*adb, "logcat", "-d", "--pid", pid.split()[0]],
                                           capture_output=True, text=True, check=True,
                                           timeout=min(15, remaining)).stdout
-                    if "2DOG_ANDROID_CSHARP_SMOKE_PASSED" in logs:
-                        print("2DOG_ANDROID_CSHARP_SMOKE_PASSED")
+                    if args.marker in logs:
+                        print(args.marker)
                         return
             except subprocess.TimeoutExpired:
                 # An adb read may use up this poll's remaining time budget.

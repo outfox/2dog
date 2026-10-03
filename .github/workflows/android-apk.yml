@@ -21,6 +21,7 @@ on:
       - 'twodog.import/**'
       - 'scripts/*android*.py'
       - 'tests/android/**'
+      - 'demos/showcase/**'
       - 'Directory.Build.*'
       - 'build-godot.py'
       - 'global.json'
@@ -56,7 +57,7 @@ jobs:
     with:
       create_release: true
   apk:
-    name: Build and inspect Android APK
+    name: Build and inspect Android APKs
     needs: natives
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -67,6 +68,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: recursive
+          # The showcase's LFS assets (e.g. splash.png) must be real files for the import and pck export
+          lfs: true
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
@@ -114,18 +117,26 @@ jobs:
           python scripts/build_android_apk.py --rid "$RID" --configuration "$CONFIGURATION" \
             --editor godot/bin/godot.linuxbsd.editor.x86_64.executable.mono --cache-path godot/.scons_cache
           "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify artifacts/android-apk/apk/*-Signed.apk
+      # Reuses the natives and Java payloads staged above; its GDExtension probe uses the installed NDK
+      - name: Build showcase APK from local packages
+        run: |
+          python scripts/build_android_apk.py --app showcase --rid "$RID" --configuration "$CONFIGURATION" \
+            --editor godot/bin/godot.linuxbsd.editor.x86_64.executable.mono --skip-native --skip-java
+          "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify artifacts/android-showcase-apk/apk/*-Signed.apk
       - uses: actions/upload-artifact@v7
         with:
           name: android-apk-${{ env.RID }}-${{ env.CONFIGURATION }}
           path: |
             artifacts/android-apk/apk/*-Signed.apk
             artifacts/android-apk/apk-report.json
+            artifacts/android-showcase-apk/apk/*-Signed.apk
+            artifacts/android-showcase-apk/apk-report.json
           if-no-files-found: error
           retention-days: 7
       - name: Enable emulator acceleration
         if: env.RID == 'android-x64'
         run: sudo chmod 666 /dev/kvm
-      - name: Run Android smoke test
+      - name: Run Android smoke and showcase tests
         if: env.RID == 'android-x64'
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -134,7 +145,13 @@ jobs:
           target: google_apis
           disable-animations: true
           emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none
-          script: python scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk --serial emulator-5554 --timeout 120; status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
+          # The action runs each script line separately; folding keeps this one shell command.
+          script: >-
+            python scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk
+            --serial emulator-5554 --timeout 120
+            && python scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
+            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
+            status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
       - name: Upload emulator diagnostics
         if: always() && env.RID == 'android-x64'
         uses: actions/upload-artifact@v7

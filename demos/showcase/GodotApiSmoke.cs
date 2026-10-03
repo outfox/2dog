@@ -233,7 +233,8 @@ public static class GodotApiSmoke
         RequireScenePassed(tree, "CenterContainer/GDScriptLinkerProbe", "gdscript_linker_smoke", "GDScript linker probe");
 
     /// <summary>
-    /// The C GDExtension in gdextension/ (a side module loaded from the pck on the web, a native library elsewhere):
+    /// The C GDExtension in gdextension/ (a side module loaded from the pck on the web, a native library elsewhere,
+    /// packaged into the APK on Android):
     /// called from C# here, and through GDScript's variant and typed (ptrcall) paths by the scene's probe label.
     /// </summary>
     public static void GDExtensionProbe(SceneTree tree)
@@ -249,6 +250,7 @@ public static class GodotApiSmoke
         var platform = OperatingSystem.IsBrowser() ? "web"
             : OperatingSystem.IsWindows() ? "windows"
             : OperatingSystem.IsMacOS() ? "macos"
+            : OperatingSystem.IsAndroid() ? "android"
             : "linux";
         using var description = probe.Call("describe");
         Require(description.AsString().StartsWith($"twodog_probe (C) on {platform},", StringComparison.Ordinal),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify a smoke APK contains the selected Godot native payload and exported game assets."""
+"""Verify an APK contains the selected Godot native payload and exported game assets."""
 import argparse
 import hashlib
 import json
@@ -10,14 +10,14 @@ import zipfile
 RID_ABI = {"android-x64": ("x86_64", 62), "android-arm64": ("arm64-v8a", 183)}
 
 
-def inspect_apk(apk, rid, native_directory, pack):
+def inspect_apk(apk, rid, native_directory, pack, game_assembly="android-smoke-game", libraries=()):
     abi, machine = RID_ABI[rid]
     with zipfile.ZipFile(apk) as archive:
         names = archive.namelist()
         if len(names) != len(set(names)):
             raise ValueError("APK contains duplicate ZIP entries")
         for required in ("AndroidManifest.xml", "classes.dex", "assets/game.pck",
-                         "assets/2dog/android-smoke-game.dll"):
+                         f"assets/2dog/{game_assembly}.dll", *(f"lib/{abi}/{library}" for library in libraries)):
             if required not in names:
                 raise ValueError(f"APK is missing {required}")
         actual_abis = {name.split("/")[1] for name in names if name.startswith("lib/") and name.endswith(".so")}
@@ -47,9 +47,12 @@ def main():
     parser.add_argument("--rid", choices=RID_ABI, required=True)
     parser.add_argument("--native-directory", type=Path, required=True)
     parser.add_argument("--pack", type=Path, required=True)
+    parser.add_argument("--game-assembly", default="android-smoke-game")
+    parser.add_argument("--library", action="append", default=[], help="Extra library required in the ABI directory")
     args = parser.parse_args()
     try:
-        print(json.dumps(inspect_apk(args.apk, args.rid, args.native_directory, args.pack), indent=2))
+        print(json.dumps(inspect_apk(args.apk, args.rid, args.native_directory, args.pack, args.game_assembly,
+                                     args.library), indent=2))
     except (ValueError, OSError, zipfile.BadZipFile) as error:
         parser.exit(1, f"Android APK validation failed: {error}\n")
 
