@@ -50,24 +50,41 @@ public class WorkloadsTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void Update_InstalledWorkload_UsesASeparateOffer(bool consent)
+    public void UpdateOffer_RunsOnlyAfterConsent(bool consent)
     {
         var runner = Runner(installed: true);
-        Workloads.EnsureInstalled(Workload.WasmTools, ".", false,
-            _ => throw new Exception("must not offer installation"), runner, confirmUpdate: () => consent);
+        Workloads.Update(".", runner, () => consent);
         Assert.Equal(consent ? 2 : 1, runner.Requests.Count);
         if (consent) Assert.Equal(["workload", "update"], runner.Requests[1].Args);
     }
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void ExplicitUpdate_InstallsMissingOrUpdatesInstalled(bool installed)
+    [Fact]
+    public void UpdateOffer_WithoutInstalledWorkloads_DoesNotPrompt()
     {
-        var runner = Runner(installed);
-        Workloads.EnsureInstalled(Workload.WasmTools, ".", false, _ => throw new Exception("must not prompt"), runner,
-            update: true, confirmUpdate: () => throw new Exception("must not prompt"));
-        Assert.Equal(installed ? ["workload", "update"] : ["workload", "install", "wasm-tools"], runner.Requests[1].Args);
+        var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 0, "Installed Workload Id",
+            "--------------------", ""));
+        Workloads.Update(".", runner, () => throw new Exception("must not prompt"));
+        Assert.Single(runner.Requests);
+    }
+
+    [Fact]
+    public void UpdateOffer_FailedProbe_DoesNotPrompt()
+    {
+        var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 1, "listing failed"));
+        CliConsole.Capture(() =>
+        {
+            Workloads.Update(".", runner, () => throw new Exception("must not prompt"));
+            return ExitCodes.Ok;
+        });
+        Assert.Single(runner.Requests);
+    }
+
+    [Fact]
+    public void ExplicitUpdate_RunsWithoutProbing()
+    {
+        var runner = Runner(installed: false);
+        Workloads.Update(".", runner);
+        Assert.Equal(["workload", "update"], Assert.Single(runner.Requests).Args);
     }
 
     [Fact]
@@ -79,13 +96,10 @@ public class WorkloadsTests
     }
 
     [Theory]
-    [InlineData(false, "exit")]
-    [InlineData(false, "timeout")]
-    [InlineData(false, "exception")]
-    [InlineData(true, "exit")]
-    [InlineData(true, "timeout")]
-    [InlineData(true, "exception")]
-    public void ExplicitRequest_FailedProbeStillAttemptsInstallation(bool update, string failure)
+    [InlineData("exit")]
+    [InlineData("timeout")]
+    [InlineData("exception")]
+    public void ExplicitRequest_FailedProbeStillAttemptsInstallation(string failure)
     {
         var runner = new FakeProcessRunner(request =>
         {
@@ -95,8 +109,7 @@ public class WorkloadsTests
         });
         var run = CliConsole.Capture(() =>
         {
-            Workloads.EnsureInstalled(Workload.WasmTools, ".", !update, _ => throw new Exception("must not prompt"),
-                runner, update, () => throw new Exception("must not prompt"));
+            Workloads.EnsureInstalled(Workload.WasmTools, ".", true, _ => throw new Exception("must not prompt"), runner);
             return ExitCodes.Ok;
         });
 
@@ -104,8 +117,7 @@ public class WorkloadsTests
         Assert.Contains("could not list installed workloads", run.Stderr);
         Assert.DoesNotContain("error:", run.Stderr);
         Assert.Equal(["workload", "install", "wasm-tools"], runner.Requests[1].Args);
-        Assert.Equal(update ? 3 : 2, runner.Requests.Count);
-        if (update) Assert.Equal(["workload", "update"], runner.Requests[2].Args);
+        Assert.Equal(2, runner.Requests.Count);
     }
 
     [Fact]

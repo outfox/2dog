@@ -123,8 +123,9 @@ class AndroidBuild(unittest.TestCase):
         command = publish.publish_command(args)
         self.assertIn(f"-p:TwoDogAndroidPack={args.pack.resolve()}", command)
         self.assertIn("-p:TwoDogVariant=debug", command)
-        # Trimming and AOT follow .NET for Android's configuration defaults.
-        self.assertFalse([part for part in command if "Trimmed" in part or "AOT" in part])
+        # Trimming and AOT follow .NET for Android's configuration defaults; MSBuild property names ignore case.
+        overrides = ("-p:publishtrimmed", "-p:trimmode", "-p:runaotcompilation", "-p:publishaot")
+        self.assertFalse([part for part in command if part.lower().startswith(overrides)])
 
     def test_publish_without_pack_leaves_the_export_to_the_build(self):
         args = argparse.Namespace(project=Path("host.csproj"), output=Path("out"), pack=None, rid="android-arm64",

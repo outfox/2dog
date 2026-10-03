@@ -46,8 +46,10 @@ See [Engine](/api/engine) to customize the frame loop and
 
 ## No Console
 
-If you want to ship a desktop game for end users, change the output type in the `.csproj` from `Exe` to:
+End users of generic 2dog apps usually don't need or expect a console window. The
+generated host already builds Release as `WinExe`, which hides it on Windows:
 ```xml
-<OutputType>WinExe</OutputType>
+<OutputType Condition="'$(Configuration)' == 'Release'">WinExe</OutputType>
 ```
-
+Linux and macOS ignore `WinExe`. On Windows, console output then goes nowhere
+unless it is redirected.

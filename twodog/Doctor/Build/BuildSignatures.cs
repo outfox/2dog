@@ -59,9 +59,10 @@ internal static class BuildSignatures
             "conflicting package versions across the solution", "2dog update (aligns every host)"),
         new("build.msb3277-godotsharp", Rx(@"MSB3277.*?GodotSharp"),
             "two GodotSharp versions meet in one build", "2dog update (one Godot line for the SDK and the engine)", Severity.Warn),
-        new("build.wasm-tools-missing", Rx(@"NETSDK1147.*?wasm-tools"),
+        // Whole workload ids only: NETSDK1147 may instead name 'wasm-tools-net8' or 'maui-android'.
+        new("build.wasm-tools-missing", Rx(@"NETSDK1147.*?(?<![\w-])wasm-tools(?![\w-])"),
             "the wasm-tools workload is not installed", "dotnet workload install wasm-tools"),
-        new("build.android-workload-missing", Rx(@"NETSDK1147.*?\bandroid\b"),
+        new("build.android-workload-missing", Rx(@"NETSDK1147.*?(?<![\w-])android(?![\w-])"),
             "the android workload is not installed", "dotnet workload install android"),
         new("build.sdk-too-old", Rx(@"NETSDK1045"),
             "the installed .NET SDK is too old for net10.0", "install the .NET 10 SDK"),

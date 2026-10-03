@@ -81,22 +81,37 @@ public class UpdateTests
         foreach (var (path, text) in before) Assert.Equal(text, File.ReadAllText(path));
     }
 
-    [Fact]
-    public void UpdateWorkloads_InstallsEveryMissingWorkloadAndUpdatesOnce()
+    [Theory]
+    [InlineData("wasm-tools", "android")]
+    [InlineData("android", "wasm-tools")]
+    public void UpdateWorkloads_InstallsEveryMissingWorkloadThenUpdatesOnce(string installed, string missing)
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
         Assert.Equal(ExitCodes.Ok, CliConsole.Run("new", "Game", dir, "--web", "--android", "--no-restore").ExitCode);
         var runner = new FakeProcessRunner(request => request.Args.Contains("list")
-            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", "wasm-tools  10.0.100  SDK", "")
+            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", $"{installed}  10.0.100  SDK", "")
             : FakeProcessRunner.Result(request, 0));
 
         var run = WithRunner(runner, () => CliConsole.Run("update", dir, "--update-workloads", "--no-restore", "--allow-dirty"));
 
         Assert.Equal(ExitCodes.Ok, run.ExitCode);
-        Assert.Single(runner.Requests, request => request.Args.SequenceEqual(["workload", "update"]));
-        Assert.Contains(runner.Requests, request => request.Args.SequenceEqual(["workload", "install", "android"]));
-        Assert.DoesNotContain(runner.Requests, request => request.Args.SequenceEqual(["workload", "install", "wasm-tools"]));
+        var commands = runner.Requests.Where(request => !request.Args.Contains("list")).Select(request => request.Args).ToList();
+        Assert.Equal([["workload", "install", missing], ["workload", "update"]], commands);
+    }
+
+    [Fact]
+    public void UpdateWorkloads_UpdatesWithoutWorkloadHosts()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(ExitCodes.Ok, CliConsole.Run("new", "Game", dir, "--generic", "--no-restore").ExitCode);
+        var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 0));
+
+        var run = WithRunner(runner, () => CliConsole.Run("update", dir, "--update-workloads", "--no-restore", "--allow-dirty"));
+
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Equal(["workload", "update"], Assert.Single(runner.Requests).Args);
     }
 
     [Fact]
@@ -108,7 +123,7 @@ public class UpdateTests
         var run = WithRunner(runner, () => CliConsole.Run("update", dir, "--update-workloads", "--dry-run", "--allow-dirty"));
         Assert.Equal(ExitCodes.Ok, run.ExitCode);
         Assert.Empty(runner.Requests);
-        Assert.Contains("workload installation or updates", run.Stdout);
+        Assert.Contains("update installed workloads (dotnet workload update)", run.Stdout);
     }
 
     [Fact]

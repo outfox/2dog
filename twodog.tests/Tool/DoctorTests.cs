@@ -702,6 +702,7 @@ public class BuildLogAnalyzerTests
             ["build.native-missing"] = "warning : 2dog: could not locate libgodot-debug.dll for 2dog.win-x64. Searched NuGet: x - local: y.",
             ["build.nu1213"] = "error NU1213: The package 2dog 4.7.2.79 has a package type DotnetTool that is incompatible with this project.",
             ["build.wasm-tools-missing"] = "error NETSDK1147: To build this project, the following workloads must be installed: wasm-tools",
+            ["build.android-workload-missing"] = "error NETSDK1147: To build this project, the following workloads must be installed: android",
             ["build.webboot-duplicate"] = "TwoDogWebBoot.cs(5,18): error CS0101: The namespace 'Game.web' already contains a definition for 'TwoDogWebBoot'",
             ["build.godotplugins-missing"] = "Unhandled exception. System.IO.FileNotFoundException: TwoDog: GodotPlugins.dll not found (probed GODOTSHARP_DIR, ...)",
             ["build.variant-fallback"] = "TwoDog: TwoDogVariant is 'editor' but libgodot-editor.dll was not found; falling back to libgodot.dll, which may be a different variant.",
@@ -711,6 +712,19 @@ public class BuildLogAnalyzerTests
             var diagnosis = BuildLogAnalyzer.Analyze(line);
             Assert.Contains(diagnosis.Matches, m => m.Signature.Id == id);
         }
+    }
+
+    [Theory]
+    [InlineData("wasm-tools android", true, true)]
+    [InlineData("maui-android", false, false)]
+    [InlineData("wasm-tools-net8", false, false)]
+    [InlineData("android-net8 wasm-tools", true, false)]
+    public void MissingWorkloads_MatchWholeWorkloadIds(string workloads, bool wasmTools, bool android)
+    {
+        var diagnosis = BuildLogAnalyzer.Analyze(
+            $"error NETSDK1147: To build this project, the following workloads must be installed: {workloads}");
+        Assert.Equal(wasmTools, diagnosis.Matches.Any(m => m.Signature.Id == "build.wasm-tools-missing"));
+        Assert.Equal(android, diagnosis.Matches.Any(m => m.Signature.Id == "build.android-workload-missing"));
     }
 
     [Fact]

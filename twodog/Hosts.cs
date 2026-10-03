@@ -212,13 +212,16 @@ internal static class Hosts
 
     /// <summary>
     /// The base name as the last part of an Android application id: lowercase, characters other than letters,
-    /// digits and '_' become '_', and a segment that does not start with a letter gets an 'app' prefix (Android
-    /// requires each segment to). The template's derived 'androidName' symbol applies the same rules.
+    /// digits and '_' become '_', empty segments (repeated or edge dots) are dropped, and a segment that does not
+    /// start with a letter gets an 'app' prefix (Android requires each segment to). The template's derived
+    /// 'androidName' symbol applies the same rules.
     /// </summary>
     public static string AndroidPackageName(string baseName)
     {
-        var lower = System.Text.RegularExpressions.Regex.Replace(baseName.ToLowerInvariant(), "[^a-z0-9_.]", "_");
-        return System.Text.RegularExpressions.Regex.Replace(lower, @"(^|\.)([^a-z.])", "$1app$2");
+        var segments = baseName.ToLowerInvariant().Split('.', StringSplitOptions.RemoveEmptyEntries)
+            .Select(segment => System.Text.RegularExpressions.Regex.Replace(segment, "[^a-z0-9_]", "_"))
+            .Select(segment => segment[0] is >= 'a' and <= 'z' ? segment : "app" + segment);
+        return string.Join(".", segments) is { Length: > 0 } name ? name : "app";
     }
 
     /// <summary>A '.'-segment that C# accepts as a plain identifier: 'namespace event.Tests;' does not parse.</summary>

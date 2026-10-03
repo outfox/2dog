@@ -31,11 +31,11 @@ Android SDK, and JDK 17.
 
 ```bash
 dotnet publish MyGame.android -r android-arm64
-adb install MyGame.android/bin/Release/net10.0-android/android-arm64/publish/com.companyname.mygame-Signed.apk
+adb install MyGame.android/bin/Release/net10.0-android/android-arm64/publish/*-Signed.apk
 ```
 
 Publishing builds the game, exports its pack with the Android preset, and
-packages a signed APK. Use `-r android-x64` for an x64 emulator, and start it
+packages a signed APK named after the `ApplicationId`. Use `-r android-x64` for an x64 emulator, and start it
 with `-gpu swangle` or `-gpu host`.
 
 Publishing signs with the first keystore it finds:

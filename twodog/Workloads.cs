@@ -17,36 +17,29 @@ internal sealed record Workload(string Id, string NeededBy)
     }
 }
 
-/// <summary>Checks the project's selected SDK and installs a workload its hosts need when requested.</summary>
+/// <summary>
+/// Checks the project's selected SDK, installs a workload its hosts need when requested, and updates the installed
+/// workloads.
+/// </summary>
 internal static class Workloads
 {
     public const string UpdateCommand = "dotnet workload update";
 
     public static void EnsureInstalled(Workload workload, string projectDir, bool install, Func<Workload, bool>? confirm,
-        IProcessRunner runner, bool update = false, Func<bool>? confirmUpdate = null)
+        IProcessRunner runner)
     {
         var workloads = TryListWorkloads(projectDir, runner);
         if (workloads is null)
         {
-            if (install || update)
-            {
-                // Listing is only an optimization: an explicit request still gets an installation attempt.
-                Install(workload, projectDir, runner);
-                if (update) Run(projectDir, runner, ["workload", "update"], "updating installed workloads");
-            }
-            else
-                Out.Hint($"run '{workload.InstallCommand}' before publishing");
+            // Listing is only an optimization: an explicit request still gets an installation attempt.
+            if (install) Install(workload, projectDir, runner);
+            else Out.Hint($"run '{workload.InstallCommand}' before publishing");
             return;
         }
 
-        if (workloads.Contains(workload.Id))
-        {
-            if (update || confirmUpdate?.Invoke() == true)
-                Run(projectDir, runner, ["workload", "update"], "updating installed workloads");
-            return;
-        }
+        if (workloads.Contains(workload.Id)) return;
 
-        if (!install && !update && !(confirm?.Invoke(workload) ?? false))
+        if (!install && !(confirm?.Invoke(workload) ?? false))
         {
             Out.Hint($"{workload.NeededBy} need {workload.Id}; run '{workload.InstallCommand}' before publishing");
             return;
@@ -57,6 +50,16 @@ internal static class Workloads
 
     public static void Install(Workload workload, string projectDir, IProcessRunner runner) =>
         Run(projectDir, runner, ["workload", "install", workload.Id], $"installing {workload.Id}");
+
+    /// <summary>
+    /// `dotnet workload update` for the project's SDK. Without <paramref name="confirm"/> it always runs (an explicit
+    /// request); an offer is only made when there is an installed workload to update.
+    /// </summary>
+    public static void Update(string projectDir, IProcessRunner runner, Func<bool>? confirm = null)
+    {
+        if (confirm != null && (TryListWorkloads(projectDir, runner) is not { Count: > 0 } || !confirm())) return;
+        Run(projectDir, runner, ["workload", "update"], "updating installed workloads");
+    }
 
     private static List<string>? TryListWorkloads(string projectDir, IProcessRunner runner)
     {

@@ -154,7 +154,7 @@ Ids are stable; `--ignore <id>` drops one.
 | --- | --- |
 | `preset.file` | export_presets.cfg exists |
 | `preset.web` | the 'Web' preset exists when a browser host does |
-| `preset.android` | the 'Android' preset exists when an Android host does |
+| `preset.android` | the Android hosts' export preset ('Android' by default) exists, unless they ship a pre-exported pck |
 | `preset.desktop` | the per-OS desktop presets exist |
 
 ### Godot settings

@@ -164,6 +164,29 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
+    public void AndroidPreset_FollowsHowTheHostGetsItsPck()
+    {
+        var dir = Scaffold("--android");
+        Edit(dir, "export_presets.cfg", "name=\"Android\"", "name=\"Phone\"");
+        const string csproj = "Game.android/Game.android.csproj", anchor = "<TwoDogAndroidGameAssembly>";
+        bool HasIssue() => Findings(Doctor(dir, "--json").Stdout, "preset.android")
+            .Any(f => f.GetProperty("severity").GetString() is "warn" or "fail");
+
+        // The host's own preset name is the one the build exports through.
+        Edit(dir, csproj, anchor, "<TwoDogAndroidExportPreset>Phone</TwoDogAndroidExportPreset>" + anchor);
+        Assert.False(HasIssue());
+
+        // A custom name cannot be appended from the template.
+        Edit(dir, csproj, ">Phone<", ">Tablet<");
+        var missing = Issue(Doctor(dir, "--json").Stdout, "preset.android", "fail", fixable: false);
+        Assert.Equal("'Tablet' export preset missing", missing.GetProperty("title").GetString());
+
+        // A pre-exported pck needs no preset at all.
+        Edit(dir, csproj, anchor, "<TwoDogAndroidPack>game.pck</TwoDogAndroidPack>" + anchor);
+        Assert.False(HasIssue());
+    }
+
+    [Fact]
     public void AnalyzersSetToFalse_Warns()
     {
         var dir = Scaffold("--generic");

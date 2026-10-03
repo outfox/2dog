@@ -179,7 +179,7 @@ internal static class Program
         var rows = new (string Label, string Version, string Probe, string Packages)[]
         {
             ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit"),
-            ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.tools"),
+            ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.tools"),
             ("Godot SDK", ToolVersions.GodotSdkVersion, "Godot.NET.Sdk", "Godot.NET.Sdk, GodotSharp"),
         };
         var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => r.Probe)) : null;

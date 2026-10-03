@@ -136,6 +136,16 @@
       "pattern": "[^a-z0-9_.]",
       "replacement": "_"
     },
+    "androidDots": {
+      "identifier": "replace",
+      "pattern": "\\.{2,}",
+      "replacement": "."
+    },
+    "androidEdges": {
+      "identifier": "replace",
+      "pattern": "^\\.|\\.$",
+      "replacement": ""
+    },
     "androidSegments": {
       "identifier": "replace",
       "pattern": "(^|\\.)([^a-z.])",
@@ -143,7 +153,7 @@
     },
     "androidPackage": {
       "identifier": "chain",
-      "steps": ["androidLower", "androidCharacters", "androidSegments"]
+      "steps": ["androidLower", "androidCharacters", "androidDots", "androidEdges", "androidSegments"]
     }
   },
   "specialCustomOperations": {

@@ -28,6 +28,27 @@ public class DetectionTests
             Assert.Contains($"Game.{Hosts.Suffix(kind)}/**", csproj);
     }
 
+    [Theory]
+    [InlineData("MyGame", "mygame")]
+    [InlineData("Game..Mobile", "game.mobile")]
+    [InlineData(".Game.", "game")]
+    [InlineData("2D.Game", "app2d.game")]
+    [InlineData("Game_Ünï", "game__n_")]
+    [InlineData("...", "app")]
+    public void AndroidPackageName_YieldsValidSegments(string baseName, string expected) =>
+        Assert.Equal(expected, Hosts.AndroidPackageName(baseName));
+
+    [Fact]
+    public void TemplateTokens_AreReplacedOnce()
+    {
+        // A base name that contains a token must not be rewritten by a later replacement.
+        const string name = "mytplandroidname";
+        var csproj = TemplateAssets.HostFiles(HostKind.Android, name, $"{name}.android")
+            .Single(f => f.RelativePath.EndsWith(".csproj", StringComparison.Ordinal)).Text;
+        Assert.Contains($"<ProjectReference Include=\"../{name}.csproj\"/>", csproj);
+        Assert.Contains($"<ApplicationId>com.companyname.{name}</ApplicationId>", csproj);
+    }
+
     [Fact]
     public void Classify_HandlesNamespacedProjects()
     {

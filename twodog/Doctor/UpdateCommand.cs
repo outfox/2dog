@@ -37,20 +37,23 @@ internal static class UpdateCommand
         PlanWebBootRefresh(plan, model);
 
         var hasProjectChanges = plan.Count > 0;
-        // The first workload also carries the update offer: `dotnet workload update` covers every installed one.
-        var first = true;
-        foreach (var workload in Workload.For(model.Hosts.Select(h => h.Kind)))
+        var workloads = Workload.For(model.Hosts.Select(h => h.Kind)).ToList();
+        foreach (var workload in workloads)
         {
             var install = cmd.Options.InstallRequested(workload) || cmd.Options.UpdateWorkloads;
-            var update = first && cmd.Options.UpdateWorkloads;
-            var offerUpdate = first && interactive;
-            first = false;
-            if (install || update || interactive && cmd.Options.Restore)
-                plan.Add(new PlannedAction($"check {workload.Id} and offer workload installation or updates", ActionKind.Workload,
+            if (install || interactive && cmd.Options.Restore)
+                plan.Add(new PlannedAction($"check {workload.Id} and install if requested", ActionKind.Workload,
                     () => Workloads.EnsureInstalled(workload, project.Dir, install,
-                        interactive ? Tui.OfferWorkloadInstall : null, Runner,
-                        update, offerUpdate ? Tui.OfferWorkloadUpdate : null)));
+                        interactive ? Tui.OfferWorkloadInstall : null, Runner)));
         }
+
+        // After the installations: `dotnet workload update` covers every installed workload, whatever the hosts.
+        if (cmd.Options.UpdateWorkloads)
+            plan.Add(new PlannedAction($"update installed workloads ({Workloads.UpdateCommand})", ActionKind.Workload,
+                () => Workloads.Update(project.Dir, Runner)));
+        else if (interactive && cmd.Options.Restore && workloads.Count > 0)
+            plan.Add(new PlannedAction("offer updates for installed workloads", ActionKind.Workload,
+                () => Workloads.Update(project.Dir, Runner, Tui.OfferWorkloadUpdate)));
 
         if (hasProjectChanges && cmd.Options.Restore)
             plan.Add(new PlannedAction("dotnet restore", ActionKind.Restore, () => Restore(project)));

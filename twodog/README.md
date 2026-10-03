@@ -92,7 +92,7 @@ Options:
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | `new`, `add`, `doctor`, `update`: install missing `wasm-tools` for browser hosts |
 | `--install-android-workload` | `new`, `add`, `doctor`, `update`: install the missing `android` workload for Android hosts |
-| `--update-workloads` | `update`: install missing workloads the hosts need, or update all installed workloads for the project's SDK |
+| `--update-workloads` | `update`: install missing workloads the hosts need, then update all installed workloads for the project's SDK |
 | `--allow-dirty` | `update`: proceed with uncommitted git changes |
 | `--fix`, `--fix-all`, `--build [target]`, `-c, --configuration <Cfg>`, `--log <file>`, `--ignore <id>`, `--strict`, `--offline`, `--list-checks` | `doctor` options; see `2dog doctor --help` |
 | `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |

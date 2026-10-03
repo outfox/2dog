@@ -101,7 +101,7 @@ internal static class CliTree
         { Description = "Install the missing android workload for Android hosts without prompting" };
 
     public static readonly Option<bool> UpdateWorkloads = new("--update-workloads")
-        { Description = "Install missing workloads (wasm-tools, android), or update all installed workloads for the project's SDK" };
+        { Description = "Install missing workloads the hosts need, then update all installed workloads for the project's SDK" };
 
     public static readonly Option<bool> AllowDirty = new("--allow-dirty")
         { Description = "Update although the git working tree has uncommitted changes" };
