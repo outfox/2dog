@@ -126,6 +126,11 @@ class AndroidBuild(unittest.TestCase):
         self.assertIn("-p:PublishTrimmed=false", command)
         self.assertIn("-p:RunAOTCompilation=false", command)
 
+    def test_publish_without_pack_leaves_the_export_to_the_build(self):
+        args = argparse.Namespace(project=Path("host.csproj"), output=Path("out"), pack=None, rid="android-arm64",
+                                  configuration="Release", variant=None, format="apk", property=[])
+        self.assertFalse([part for part in publish.publish_command(args) if "TwoDogAndroidPack" in part])
+
 
 if __name__ == "__main__":
     unittest.main()

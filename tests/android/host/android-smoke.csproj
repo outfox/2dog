@@ -20,7 +20,8 @@
         <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
-        <TwoDogAutoImport>false</TwoDogAutoImport>
+        <!-- The build imports the game and exports its pck for the APK. -->
+        <GodotProjectDir>../game</GodotProjectDir>
         <TwoDogAndroidGameAssembly>android-smoke-game</TwoDogAndroidGameAssembly>
     </PropertyGroup>
     <ItemGroup>

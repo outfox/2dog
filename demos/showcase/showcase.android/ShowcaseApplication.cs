@@ -4,7 +4,7 @@ using twodog;
 
 namespace showcase.android;
 
-[Application]
+[Application(Icon = "@mipmap/appicon", RoundIcon = "@mipmap/appicon")]
 public class ShowcaseApplication : Application
 {
     // Java holds the listener for the process lifetime; this keeps its managed peer reachable too.

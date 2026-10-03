@@ -1,6 +1,7 @@
 <Project>
     <!-- 2dog.engine consumer targets: GodotPlugins copy, variant metadata, automatic import and desktop pck export.
-         Consumer knobs: TwoDogVariant (release|debug|editor), TwoDogExportPack, TwoDogDesktopExportPreset. -->
+         Consumer knobs: TwoDogVariant (release|debug|editor), TwoDogExportPack, TwoDogDesktopExportPreset,
+         TwoDogAndroidExportPreset. -->
 
     <!-- ============================================ -->
     <!-- GodotProjectDir Assembly Metadata             -->
@@ -352,6 +353,70 @@
                Text="TwoDog: desktop publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck."/>
 
         <Message Importance="high" Text="TwoDog: exported $(TargetName).pck to the publish directory"/>
+    </Target>
+
+    <!-- ============================================ -->
+    <!-- Content pipeline: Android .pck                -->
+    <!-- ============================================ -->
+    <!-- Godot's Activity loads game.pck from the APK's assets, so Android exports during the build, before
+         2dog.android's TwoDogAddAndroidPack adds it to the assets - after Publish would be too late. Same capability
+         as the desktop export. An explicit TwoDogAndroidPack (a pre-exported pck) skips it.
+         Knobs: TwoDogAndroidExportPreset (default Android), TwoDogAndroidExportPath (default under obj/). -->
+    <PropertyGroup>
+        <TwoDogAndroidExportPreset Condition="'$(TwoDogAndroidExportPreset)' == ''">Android</TwoDogAndroidExportPreset>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(TwoDogAndroidPack)' == '' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <_TwoDogAndroidGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
+        <TwoDogAndroidExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
+                                   Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogAndroidGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
+    </ItemGroup>
+
+    <!-- Runs even when the export is up to date, so TwoDogAndroidPack always names the pck. -->
+    <Target Name="_TwoDogResolveAndroidExportPath">
+        <PropertyGroup>
+            <TwoDogAndroidExportPath Condition="'$(TwoDogAndroidExportPath)' == ''">$(IntermediateOutputPath)twodog/game.pck</TwoDogAndroidExportPath>
+            <_TwoDogAndroidPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(TwoDogAndroidExportPath)'))))</_TwoDogAndroidPackFullPath>
+            <TwoDogAndroidPack>$(_TwoDogAndroidPackFullPath)</TwoDogAndroidPack>
+        </PropertyGroup>
+    </Target>
+
+    <Target Name="TwoDogExportAndroidPack"
+            BeforeTargets="TwoDogAddAndroidPack"
+            DependsOnTargets="TwoDogImportGodotProject;TwoDogPrepareExport;_TwoDogResolveAndroidExportPath"
+            Inputs="@(TwoDogAndroidExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Outputs="$(_TwoDogAndroidPackFullPath)"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogAndroidPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+
+        <PropertyGroup>
+            <_TwoDogAndroidExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogAndroidExportPresetsPath>
+            <_TwoDogHasAndroidPreset>false</_TwoDogHasAndroidPreset>
+            <_TwoDogHasAndroidPreset Condition="Exists('$(_TwoDogAndroidExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogAndroidExportPresetsPath)').Contains('name=&quot;$(TwoDogAndroidExportPreset)&quot;'))">true</_TwoDogHasAndroidPreset>
+        </PropertyGroup>
+        <Error Code="TDGA007" Condition="'$(_TwoDogHasAndroidPreset)' != 'true'"
+               Text="TwoDog: the Android build exports the game pck via the '$(TwoDogAndroidExportPreset)' export preset, which '$(_TwoDogAndroidExportPresetsPath)' does not define (or the file is missing). Add an Android preset in the Godot editor (Project &gt; Export &gt; Add), point &lt;TwoDogAndroidExportPreset&gt; at an existing one, or set &lt;TwoDogAndroidPack&gt; to a pre-exported pck."/>
+        <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogAndroidPackFullPath)'))"/>
+
+        <!-- (1) explicitly configured external editor, through the helper when available -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; --output &quot;$(_TwoDogAndroidPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; &quot;$(_TwoDogAndroidPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+
+        <!-- (2) in-process export helper against the packaged editor libgodot -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; --output &quot;$(_TwoDogAndroidPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+
+        <Error Code="TDGA008" Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"
+               Text="TwoDog: the Android build needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, restore the 2dog.&lt;build-machine-rid&gt;.editor and 2dog.tools packages, or set &lt;TwoDogAndroidPack&gt; to a pre-exported pck."/>
+
+        <Message Importance="high" Text="TwoDog: exported the game pck for the APK to $(_TwoDogAndroidPackFullPath)"/>
     </Target>
 
 </Project>

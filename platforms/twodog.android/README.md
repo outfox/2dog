@@ -9,7 +9,25 @@ Reference `2dog.engine`, this package, and the `2dog.android-arm64` and/or
 an explicit Android RID. Both native variants retain the JNI name
 `libgodot_android.so`; exactly one belongs in each ABI directory of the APK.
 
-Use `tests/android/host` as the initial host example. It includes the Java
+Set `GodotProjectDir` to the Godot project, and `dotnet publish -r android-arm64`
+produces a signed APK:
+
+- the build imports the project and exports its pck with the project's `Android`
+  export preset (`TwoDogAndroidExportPreset`), using the same capability as desktop
+  publish: the packaged editor libgodot of the build machine, or `GodotEditor`.
+  `TwoDogAndroidPack` supplies a pre-exported pck instead;
+- every Android library and dependency that the project's `.gdextension` files list
+  for the APK's ABIs and variant goes into `lib/<abi>/`, where the engine loads it
+  (`TwoDogAndroidGdExtensions=false` opts out);
+- the pck becomes the APK asset `game.pck`, which `TwoDogActivity` loads.
+
+Mark the Android preset `runnable=false`: a runnable Android preset starts the
+editor's ADB device poll during the headless export, which logs an `EditorSettings`
+error when it exits. Release publishes produce an app bundle unless the host sets
+`<AndroidPackageFormats>apk</AndroidPackageFormats>`.
+
+`demos/showcase/showcase.android` is the complete example; `tests/android/host` is
+the minimal one. Both include the Java
 dependencies Godot needs (AndroidX Fragment, DocumentFile, Kotlin standard library)
 and extracts the game DLL into private app storage before `AndroidHost.Register`.
 Registration happens in `Application.OnCreate`, including when Android recreates
@@ -40,19 +58,17 @@ uv run poe pack-android
 uv run poe build # pack desktop dependencies and the managed engine with AndroidHost
 ```
 
-Export the game to a PCK using an Android export preset, then publish:
+Then publish a host and run it:
 
 ```sh
-dotnet build tests/android/game/android-smoke-game.csproj -c Release
-godot-mono --headless --path tests/android/game --export-pack Android /path/to/game.pck
-uv run scripts/publish_android.py tests/android/host/android-smoke.csproj --pack /path/to/game.pck --rid android-x64
+dotnet publish tests/android/host/android-smoke.csproj -c Debug -r android-x64 -o artifacts/android
 uv run scripts/test_android_device.py artifacts/android/dev.twodog.smoke-Signed.apk --serial emulator-5554
 ```
 
-The publishing script produces an APK by default; `--format aab` builds an app
-bundle. Signing properties can be passed using repeated `--property NAME=VALUE`
-arguments; use normal .NET Android keystore configuration for distributable builds.
-No store upload or NuGet push is performed.
+`scripts/publish_android.py` wraps the same publish: `--format aab` builds an app
+bundle, `--pack` supplies a pre-exported pck, and signing properties can be passed
+using repeated `--property NAME=VALUE` arguments; use normal .NET Android keystore
+configuration for distributable builds. No store upload or NuGet push is performed.
 
 Run `uv run poe test-android-build` for Android build and package tests.
 The APK smoke test validates C# callbacks, signals, node disposal and a rendered
@@ -69,7 +85,7 @@ cannot pack empty Android packages.
 ## APK implementation milestones
 
 1. Build both native variants for one ABI, build both Java AARs, pack a private
-   local NuGet feed, build/export the C# scene, and publish a signed smoke APK.
+   local NuGet feed, and publish a signed smoke APK (the publish exports the C# scene).
    Inspect the final APK for the exact selected native libraries, one ABI, the
    PCK and the extracted game-assembly asset. The private feed also contains
    desktop dependency stubs and must never be published.
@@ -87,21 +103,23 @@ cannot pack empty Android packages.
    16 KB page-size environment before expanding the supported RID list.
 
 With source-matched GodotSharp/editor release outputs staged, an installed
-Android workload, and `ANDROID_HOME`/`JAVA_HOME` pointing to the SDK/JDK:
+Android workload, and `ANDROID_HOME`/`JAVA_HOME` pointing to the SDK/JDK,
+`build-android-apk` packs a private feed from the staged payloads, publishes a host
+against it exactly like `dotnet publish` above, and inspects the APK:
 
 ```sh
-uv run poe build-android-apk --editor godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
+uv run poe build-android-apk
 ```
 
-Use `--rid android-arm64` or `--configuration Release` for the other target.
-`--skip-native --skip-java` reuses already staged payloads. `--feed <dir>` skips
-building and packing entirely and builds against already packed packages, the way
-an app consumes 2dog (CI passes its `nuget-packages` and `android-packages`, with
-the natives staged in `godot/bin/android/` for the APK inspection). The resulting APK
-and inspection report are written to `artifacts/android-apk/`. `--app showcase`
-builds the showcase host instead (into `artifacts/android-showcase-apk/`); it also
-needs an Android NDK for the showcase's GDExtension (`ANDROID_NDK_ROOT`, or one under
-`ANDROID_HOME/ndk`).
+The pck export uses the editor libgodot packed from `godot/bin`, or `--editor <godot
+mono editor>`. Use `--rid android-arm64` or `--configuration Release` for the other
+target. `--skip-native --skip-java` reuses already staged payloads. `--feed <dir>`
+publishes against already packed packages instead of packing them (CI passes its
+`nuget-packages` and `android-packages`, with the natives staged in
+`godot/bin/android/` for the APK inspection). The resulting APK and inspection report
+are written to `artifacts/android-apk/`. `--app showcase` publishes the showcase host
+instead (into `artifacts/android-showcase-apk/`); its GDExtension needs an Android NDK
+(`ANDROID_NDK_ROOT`, or one under the Android SDK).
 
 References: [Godot Android library](https://docs.godotengine.org/en/4.7/tutorials/platform/android/android_library.html),
 [.NET Android build items](https://learn.microsoft.com/en-us/dotnet/android/building-apps/build-items).

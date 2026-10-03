@@ -980,9 +980,9 @@ jobs:
         shell: bash
         run: bash .github/scripts/tool-smoke.sh
 
-  # Experimental Android: builds the smoke and showcase APKs against the packed packages the way an app does (game
-  # build, Godot pck export, dotnet publish), then runs the x64 pair on an emulator. The arm64 showcase APK is built
-  # and inspected for devices only. Not a deploy gate while the Android packages stay unpublished.
+  # Experimental Android: publishes the smoke and showcase hosts against the packed packages the way an app does,
+  # then runs the x64 pair on an emulator. The arm64 showcase APK is built and inspected for devices only. Not a
+  # deploy gate while the Android packages stay unpublished.
   android-smoke:
     name: Android Smoke
     needs: [pack]
@@ -1043,15 +1043,13 @@ jobs:
           name: android-packages
           path: .
 
-      - name: Make Linux editor executable
-        run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
-
+      # Each is one `dotnet publish` of the host: it builds the game, imports and exports its pck with the packaged
+      # editor libgodot (2dog.linux-x64.editor), and packages the APK; the script then inspects the APK.
       - name: Build and inspect APKs
         run: |
-          editor=godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
-          python scripts/build_android_apk.py --app smoke --feed packages --rid android-x64 --editor "$editor"
-          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 --editor "$editor"
-          python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 --editor "$editor" \
+          python scripts/build_android_apk.py --app smoke --feed packages --rid android-x64
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
             --output artifacts/android-showcase-arm64-apk
           for apk in artifacts/android-*apk/apk/*-Signed.apk; do
             "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"

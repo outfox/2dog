@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Publish an experimental .NET Android host to an APK or AAB using an already exported PCK."""
+"""Publish an experimental .NET Android host to an APK or AAB. The build exports the game pck from the host's
+GodotProjectDir unless --pack supplies one."""
 import argparse
 from pathlib import Path
 import subprocess
@@ -9,7 +10,7 @@ def publish_command(args):
     return ["dotnet", "publish", str(args.project.resolve()), "-c", args.configuration,
             "-r", args.rid, "-o", str(args.output.resolve()),
             f"-p:TwoDogVariant={args.variant or args.configuration.lower()}",
-            f"-p:TwoDogAndroidPack={args.pack.resolve()}",
+            *([f"-p:TwoDogAndroidPack={args.pack.resolve()}"] if args.pack else []),
             f"-p:AndroidPackageFormats={args.format}",
             "-p:PublishTrimmed=false", "-p:RunAOTCompilation=false", "-p:PublishAot=false",
             *[f"-p:{value}" for value in args.property]]
@@ -18,7 +19,8 @@ def publish_command(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path)
-    parser.add_argument("--pack", required=True, type=Path, help="Godot PCK exported using an Android preset")
+    parser.add_argument("--pack", type=Path, help="Godot PCK exported using an Android preset (default: exported "
+                        "by the build)")
     parser.add_argument("--rid", choices=("android-arm64", "android-x64"), default="android-arm64")
     parser.add_argument("--configuration", choices=("Debug", "Release"), default="Release")
     parser.add_argument("--variant", choices=("debug", "release"))
@@ -29,7 +31,7 @@ def main():
     args = parser.parse_args()
     if not args.project.exists():
         parser.error(f"Project does not exist: {args.project}")
-    if not args.pack.is_file():
+    if args.pack and not args.pack.is_file():
         parser.error(f"Exported PCK does not exist: {args.pack}")
     for value in args.property:
         if "=" not in value:

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Build an Android APK (the smoke test or the showcase) against 2dog packages: CI's packed feed (--feed), or a
-private feed packed here from staged Godot bindings and Android payloads."""
+"""Publish an Android host (the smoke test or the showcase) the way an app does - `dotnet publish`, which exports the
+game pck itself - against 2dog packages: CI's packed feed (--feed), or a private feed packed here from staged Godot
+bindings and Android payloads. Then verify the APK's natives, assets and pck."""
 import argparse
 from dataclasses import dataclass
 import json
@@ -19,22 +20,17 @@ REPO = Path(__file__).resolve().parents[1]
 
 @dataclass(frozen=True)
 class App:
-    game: Path
-    project: str
     host: Path
     assembly: str
-    game_properties: tuple = ()
     # Extra libraries the APK must carry in its ABI directory; {arch} is Godot's architecture name.
     libraries: tuple = ()
 
 
 APPS = {
-    "smoke": App(REPO / "tests/android/game", "android-smoke-game.csproj",
-                 REPO / "tests/android/host/android-smoke.csproj", "android-smoke-game"),
-    # The showcase's GDExtension probe must exist for both ABIs before the pck export lists it.
-    "showcase": App(REPO / "demos/showcase", "showcase.csproj",
-                    REPO / "demos/showcase/showcase.android/showcase.android.csproj", "showcase",
-                    ("-p:TwoDogProbeAndroid=true",), ("libtwodog_probe.android.{arch}.so",)),
+    "smoke": App(REPO / "tests/android/host/android-smoke.csproj", "android-smoke-game"),
+    # The showcase's GDExtension probe, packaged by 2dog.android from its .gdextension.
+    "showcase": App(REPO / "demos/showcase/showcase.android/showcase.android.csproj", "showcase",
+                    ("libtwodog_probe.android.{arch}.so",)),
 }
 
 
@@ -109,21 +105,21 @@ def build_with_packages(args, output, feed, config, restore):
     app = APPS[args.app]
     arch = "x86_64" if args.rid == "android-x64" else "arm64"
     properties = [f"-p:RestoreConfigFile={config}", f"-p:RestorePackagesPath={restore}", "-p:NuGetAudit=false"]
-    editor = args.editor.resolve()
     if args.feed is None:
         pack_local_feed(args, arch, feed, properties)
     # The selected variant's natives, which the APK must carry byte for byte.
     native = REPO / f"godot/bin/android/template_{args.configuration.lower()}/{arch}"
     if not (native / "libgodot_android.so").is_file():
         raise ValueError(f"Missing {native / 'libgodot_android.so'}; stage the Android natives first")
-    run([args.dotnet, "build", app.game / app.project, "-c", args.configuration, *app.game_properties, *properties])
-    run([editor, "--headless", "--editor", "--path", app.game, "--import"])
+    # The build exports the pck; directing it here lets the inspection compare it with the APK's copy, as unstripped
+    # natives keep their bytes comparable.
     pack = output / "game.pck"
-    run([editor, "--headless", "--path", app.game, "--export-pack", "Android", pack])
     apk_output = output / "apk"
-    publish = [args.dotnet, "publish", app.host, "-c", args.configuration, "-r", args.rid,
-               "-o", apk_output, f"-p:TwoDogAndroidPack={pack}", "-p:AndroidPackageFormats=apk",
-               "-p:PublishTrimmed=false", "-p:RunAOTCompilation=false", *properties]
+    publish = [args.dotnet, "publish", app.host, "-c", args.configuration, "-r", args.rid, "-o", apk_output,
+               f"-p:TwoDogAndroidExportPath={pack}", "-p:AndroidPackageFormats=apk",
+               "-p:AndroidStripNativeLibraries=false", *properties]
+    if args.editor:
+        publish.append(f"-p:GodotEditor={args.editor.resolve()}")
     if os.environ.get("ANDROID_HOME"):
         publish.append(f"-p:AndroidSdkDirectory={os.environ['ANDROID_HOME']}")
     if os.environ.get("JAVA_HOME"):
@@ -146,7 +142,8 @@ def main():
     parser.add_argument("--app", choices=APPS, default="smoke")
     parser.add_argument("--rid", choices=("android-x64", "android-arm64"), default="android-x64")
     parser.add_argument("--configuration", choices=("Debug", "Release"), default="Debug")
-    parser.add_argument("--editor", required=True, type=Path, help="Source-matched Godot Mono editor executable")
+    parser.add_argument("--editor", type=Path, help="Source-matched Godot Mono editor executable for the pck "
+                        "export (default: the editor libgodot from the 2dog.<build-machine-rid>.editor package)")
     parser.add_argument("--dotnet", default="dotnet")
     parser.add_argument("--output", type=Path,
                         help="Default: artifacts/android-apk (smoke) or artifacts/android-<app>-apk")
@@ -158,7 +155,7 @@ def main():
     args = parser.parse_args()
     if args.output is None:
         args.output = REPO / ("artifacts/android-apk" if args.app == "smoke" else f"artifacts/android-{args.app}-apk")
-    if not args.editor.is_file():
+    if args.editor and not args.editor.is_file():
         parser.error("--editor must point to a built Godot Mono editor")
     try:
         build(args)

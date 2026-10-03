@@ -230,6 +230,68 @@ Lines="@(AndroidAsset->'%(Link)|%(FullPath)')" Overwrite="true"/></Target>
         self.assertTrue(any(item.startswith("2dog/smoke-game.dll|") for item in assets))
         self.assertTrue(any(item.startswith("game.pck|") for item in assets))
 
+    GDEXTENSION = '''[configuration]
+entry_symbol = "probe_init"
+
+[libraries]
+windows.x86_64 = "res://addon/bin/probe.dll"
+android.debug.arm64 = "res://addon/bin/libprobe.debug.arm64.so"
+android.release.arm64 = "res://addon/bin/libprobe.release.arm64.so"
+android.x86_64 = "bin/libprobe.x86_64.so"
+
+[dependencies]
+android.arm64 = {
+    "res://addon/bin/libdep.arm64.so" : ""
+}
+'''
+
+    def gdextension_libraries(self, rid, variant, missing=()):
+        directory = Path(tempfile.mkdtemp(dir=self.root))
+        game = directory / "game"
+        for name in ("probe.dll", "libprobe.debug.arm64.so", "libprobe.release.arm64.so", "libprobe.x86_64.so",
+                     "libdep.arm64.so"):
+            if name not in missing:
+                (game / "addon/bin").mkdir(parents=True, exist_ok=True)
+                (game / "addon/bin" / name).write_bytes(b"library")
+        (game / "addon/probe.gdextension").write_text(self.GDEXTENSION)
+        # Godot never loads extensions under .gdignore, so their missing libraries are not an error.
+        (game / "host").mkdir()
+        (game / "host/.gdignore").touch()
+        (game / "host/stale.gdextension").write_text('[libraries]\nandroid.arm64 = "res://absent.so"\n'
+                                                     'android.x86_64 = "res://absent.so"\n')
+        targets = self.packages / "2dog.android" / self.version / "build/2dog.android.targets"
+        project = directory / "Host.proj"
+        project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier><RuntimeIdentifier>{rid}</RuntimeIdentifier>
+<TwoDogVariant>{variant}</TwoDogVariant><TwoDogGodotProjectFullPath>{xml(game)}</TwoDogGodotProjectFullPath></PropertyGroup>
+<Import Project="{xml(targets)}"/>
+<Target Name="PrepareForBuild"><WriteLinesToFile File="{xml(directory / 'libraries.txt')}"
+Lines="@(AndroidNativeLibrary->'%(Abi)|%(Filename)%(Extension)')" Overwrite="true"/></Target>
+</Project>''')
+        result = subprocess.run(["dotnet", "msbuild", str(project), "-t:PrepareForBuild", "-nologo"], cwd=REPO,
+                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+        listing = directory / "libraries.txt"
+        return result, sorted(listing.read_text().splitlines()) if listing.exists() else []
+
+    def test_gdextension_libraries_follow_the_selected_abi_and_variant(self):
+        cases = {("android-arm64", "debug"): ["arm64-v8a|libdep.arm64.so", "arm64-v8a|libprobe.debug.arm64.so"],
+                 ("android-arm64", "release"): ["arm64-v8a|libdep.arm64.so", "arm64-v8a|libprobe.release.arm64.so"],
+                 ("android-x64", "debug"): ["x86_64|libprobe.x86_64.so"]}
+        for (rid, variant), expected in cases.items():
+            with self.subTest(rid=rid, variant=variant):
+                result, libraries = self.gdextension_libraries(rid, variant)
+                self.assertEqual(0, result.returncode, result.stdout)
+                self.assertEqual(expected, libraries)
+
+    def test_missing_gdextension_library_for_a_selected_abi_fails(self):
+        result, _ = self.gdextension_libraries("android-arm64", "debug", missing=("libdep.arm64.so",))
+        self.assertNotEqual(0, result.returncode, result.stdout)
+        self.assertIn("TDGA009", result.stdout)
+        self.assertIn("res://addon/bin/libdep.arm64.so", result.stdout)
+        # A library for an unselected ABI may be absent.
+        result, _ = self.gdextension_libraries("android-arm64", "debug", missing=("libprobe.x86_64.so",))
+        self.assertEqual(0, result.returncode, result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

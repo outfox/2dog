@@ -88,7 +88,6 @@ class AndroidApkTests(unittest.TestCase):
 
     def build_showcase(self, root, *arguments, variants=("debug", "release"), java=True):
         """Runs the APK build with recorded commands; stages only the given natives (and the AARs if java)."""
-        (root / "editor").touch()
         for variant in variants:
             if java:
                 aar = root / f"godot/bin/android/java/{variant}/godot.aar"
@@ -108,24 +107,33 @@ class AndroidApkTests(unittest.TestCase):
                 apk.touch()
         with patch.object(build, "REPO", root), patch.object(build, "run", side_effect=run), \
              patch.object(build, "inspect_apk", return_value={}) as inspect_apk, \
-             patch.object(sys, "argv", ["build_android_apk.py", "--app", "showcase", "--editor",
-                                      str(root / "editor"), *arguments]):
+             patch.object(sys, "argv", ["build_android_apk.py", "--app", "showcase", *arguments]):
             build.main()
         return commands, inspect_apk
 
-    def test_showcase_app_builds_its_game_with_the_android_probe_and_publishes_its_host(self):
+    def test_showcase_app_is_one_publish_that_exports_its_own_pack(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            commands, inspect_apk = self.build_showcase(root, "--skip-native", "--skip-java")
+            (root / "editor").touch()
+            commands, inspect_apk = self.build_showcase(root, "--skip-native", "--skip-java",
+                                                        "--editor", str(root / "editor"))
             app = build.APPS["showcase"]
-            self.assertIn([str(app.game / "showcase.csproj"), "-c", "Debug", "-p:TwoDogProbeAndroid=true"],
-                          [command[2:6] for command in commands if command[1] == "build"])
-            self.assertTrue(any("--export-pack" in command and str(app.game) in command for command in commands))
-            self.assertTrue(any(command[1:3] == ["publish", str(app.host)] for command in commands))
-            self.assertFalse(any("--generate-mono-glue" in command for command in commands))
+            output = root / "artifacts/android-showcase-apk"
+            # Only packing and the publish: the publish builds the game and exports the pck itself.
+            self.assertEqual(["publish"], [command[1] for command in commands if command[1] != "pack"])
+            publish = commands[-1]
+            self.assertEqual(str(app.host), publish[2])
+            self.assertIn(f"-p:TwoDogAndroidExportPath={output / 'game.pck'}", publish)
+            self.assertIn(f"-p:GodotEditor={(root / 'editor').resolve()}", publish)
+            self.assertEqual(output / "game.pck", inspect_apk.call_args.args[3])
             self.assertEqual(("showcase", ["libtwodog_probe.android.x86_64.so"]), inspect_apk.call_args.args[4:])
-            report = json.loads((root / "artifacts/android-showcase-apk/apk-report.json").read_text())
+            report = json.loads((output / "apk-report.json").read_text())
             self.assertEqual("showcase", report["app"])
+
+    def test_without_editor_the_export_uses_the_packaged_editor(self):
+        with tempfile.TemporaryDirectory() as directory:
+            commands, _ = self.build_showcase(Path(directory), "--skip-native", "--skip-java")
+            self.assertFalse([part for part in commands[-1] if part.startswith("-p:GodotEditor=")])
 
     def test_feed_builds_against_packed_packages_without_building_or_packing_payloads(self):
         with tempfile.TemporaryDirectory() as directory:
