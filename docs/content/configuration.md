@@ -37,9 +37,9 @@ variant mapping and [Resource Import](./import-tool) for import properties.
 
 ## Native AOT
 
-Generic, Avalonia, and WinUI hosts can publish with `PublishAot`. The release
-and debug variants support it; the editor variant does not, because it loads
-GodotTools at runtime.
+Generic, Avalonia, and WinUI hosts can publish with `PublishAot`, and Android
+hosts can as an experiment. The release and debug variants support it; the
+editor variant does not, because it loads GodotTools at runtime.
 
 Native AOT needs the platform's native toolchain: the Visual Studio C++ build
 tools on Windows, `clang` and `zlib1g-dev` on Linux, and the Xcode command-line
@@ -56,10 +56,17 @@ reflection:
 <TrimmerRootAssembly Include="MyLibrary"/>
 ```
 
-Other hosts compile ahead of time differently. WinForms does not support
-trimming, so it cannot use Native AOT. Android and Web hosts run on Mono and
-use its AOT compiler (`RunAOTCompilation`) instead: Android Release builds do
-by default, and Web hosts opt in with `-p:RunAOTCompilation=true`.
+.NET for Android marks its Native AOT experimental (warning XA1040). It links
+with the Android NDK, so install the NDK and point `AndroidNdkDirectory` at it:
+
+```bash
+dotnet publish MyGame.android -c Release -p:PublishAot=true -p:AndroidNdkDirectory=$ANDROID_HOME/ndk/29.0.14206865
+```
+
+Without `PublishAot`, Android Release builds use Mono's AOT compiler
+(`RunAOTCompilation`). Web hosts also run on Mono and opt into its AOT compiler
+with `-p:RunAOTCompilation=true`. WinForms does not support trimming, so it
+cannot use Native AOT.
 
 ## Packages and Versions
 

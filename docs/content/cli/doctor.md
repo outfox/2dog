@@ -110,7 +110,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.godot-project-dir` | GodotProjectDir points at the Godot project |
 | `host.variant` | TwoDogVariant is release, debug or editor |
 | `host.buildtype-deprecated` | the deprecated TwoDogBuildType property is gone |
-| `host.publish-aot` | only desktop, Avalonia and WinUI hosts enable PublishAot |
+| `host.publish-aot` | no WinForms host enables PublishAot |
 | `host.publish-singlefile` | no desktop host enables PublishSingleFile |
 | `host.duplicate-analyzers` | hosts referencing the game strip the duplicate Godot analyzers |
 | `host.app-manifest` | the app.manifest a host declares exists |

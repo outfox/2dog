@@ -12,7 +12,7 @@ internal static class HostChecks
         new("host.godot-project-dir", Category.Hosts, "GodotProjectDir points at the Godot project"),
         new("host.variant", Category.Hosts, "TwoDogVariant is release, debug or editor"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
-        new("host.publish-aot", Category.Hosts, "only desktop, Avalonia and WinUI hosts enable PublishAot"),
+        new("host.publish-aot", Category.Hosts, "no WinForms host enables PublishAot"),
         new("host.publish-singlefile", Category.Hosts, "no desktop host enables PublishSingleFile"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
@@ -94,11 +94,9 @@ internal static class HostChecks
             bool Enables(string property) =>
                 host.Properties(property).Any(e => e.Value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase));
 
-            if (host.Kind is HostKind.WinForms or HostKind.Android && Enables("PublishAot"))
+            if (host.Kind == HostKind.WinForms && Enables("PublishAot"))
                 yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables PublishAot",
-                    host.Kind == HostKind.WinForms
-                        ? "Windows Forms does not support trimming, so the SDK rejects NativeAOT (NETSDK1175)"
-                        : "Android hosts run on Mono, whose Release builds are already AOT-compiled (RunAOTCompilation)",
+                    "Windows Forms does not support trimming, so the SDK rejects NativeAOT (NETSDK1175)",
                     "remove PublishAot", csproj));
 
             if (!host.IsWebLike && Enables("PublishSingleFile"))

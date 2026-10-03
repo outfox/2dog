@@ -1100,6 +1100,9 @@ jobs:
             --configuration Release --output artifacts/android-showcase-release-apk
           python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
             --configuration Release --output artifacts/android-showcase-arm64-apk
+          # Experimental NativeAOT; links with the NDK installed above.
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
+            --configuration Release --aot --output artifacts/android-showcase-aot-apk
           for apk in artifacts/android-*apk/apk/*-Signed.apk; do
             "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"
           done
@@ -1133,6 +1136,8 @@ jobs:
             && python scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
             && python scripts/test_android_device.py artifacts/android-showcase-release-apk/apk/dev.twodog.showcase-Signed.apk
+            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
+            && python scripts/test_android_device.py artifacts/android-showcase-aot-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
             status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
 

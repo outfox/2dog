@@ -101,6 +101,17 @@ def pack_local_feed(args, arch, feed, properties):
         run([args.dotnet, "pack", REPO / project, "-c", "Release", *pack])
 
 
+def ndk_directory():
+    for variable in ("ANDROID_NDK_ROOT", "ANDROID_NDK_HOME"):
+        if os.environ.get(variable):
+            return Path(os.environ[variable])
+    if os.environ.get("ANDROID_HOME"):
+        versions = sorted((Path(os.environ["ANDROID_HOME"]) / "ndk").glob("*/source.properties"))
+        if versions:
+            return versions[-1].parent
+    return None
+
+
 def build_with_packages(args, output, feed, config, restore):
     app = APPS[args.app]
     arch = "x86_64" if args.rid == "android-x64" else "arm64"
@@ -119,6 +130,11 @@ def build_with_packages(args, output, feed, config, restore):
     publish = [args.dotnet, "publish", app.host, "-c", args.configuration, "-r", args.rid, "-o", apk_output,
                f"-p:TwoDogAndroidExportPath={pack}", "-p:AndroidPackageFormats=apk",
                "-p:AndroidStripNativeLibraries=false", *properties]
+    if args.aot:
+        publish.append("-p:PublishAot=true")
+        # .NET for Android links NativeAOT with the NDK's clang and only finds it through AndroidNdkDirectory.
+        if ndk := ndk_directory():
+            publish.append(f"-p:AndroidNdkDirectory={ndk}")
     if args.editor:
         publish.append(f"-p:GodotEditor={args.editor.resolve()}")
     if os.environ.get("ANDROID_HOME"):
@@ -153,6 +169,7 @@ def main():
     parser.add_argument("--cache-path", type=Path)
     parser.add_argument("--skip-native", action="store_true", help="Reuse both staged native variants")
     parser.add_argument("--skip-java", action="store_true", help="Reuse both staged Java AAR variants")
+    parser.add_argument("--aot", action="store_true", help="Publish with NativeAOT (experimental) instead of Mono")
     args = parser.parse_args()
     if args.output is None:
         args.output = REPO / ("artifacts/android-apk" if args.app == "smoke" else f"artifacts/android-{args.app}-apk")

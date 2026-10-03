@@ -152,13 +152,14 @@
     <!-- ============================================ -->
     <!-- GodotSharp binds script classes by reflection over the game assembly, so ILC keeps both whole. The game
          assembly is the ProjectReference living in GodotProjectDir. -->
-    <ItemGroup Condition="'$(PublishAot)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm'">
+    <!-- Android roots these itself (TwoDogAndroidGameAssembly), with the RootMode .NET for Android requires. -->
+    <ItemGroup Condition="'$(PublishAot)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(TargetPlatformIdentifier)' != 'android'">
         <TrimmerRootAssembly Include="GodotSharp"/>
     </ItemGroup>
     <Target Name="TwoDogPrepareAotPublish"
             BeforeTargets="PrepareForPublish"
             DependsOnTargets="TwoDogResolveExportAssemblyDir"
-            Condition="'$(PublishAot)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm'">
+            Condition="'$(PublishAot)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(TargetPlatformIdentifier)' != 'android'">
         <!-- Publish time only: hosts may set PublishAot and still build the editor variant. -->
         <Error Condition="'$(TwoDogVariant)' == 'editor'"
                Text="TwoDog: PublishAot (NativeAOT) does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies at runtime. Publish the release or debug variant."/>
