@@ -70,10 +70,10 @@ internal static class VersionChecks
             var engine = twoDog[^1];
             if (natives.Major != engine.Major || natives.Minor != engine.Minor || natives.Build != engine.Build)
                 yield return new Finding("ver.natives", c, Severity.Fail, $"natives {natives} are not on the engine's Godot line ({engine})",
-                    "the browser payload and the engine must come from the same Godot build", "2dog update");
-            else if (refs.Any(x => x.Ref.Id.Equals("2dog.browser-wasm", StringComparison.OrdinalIgnoreCase) && !x.Ref.IsPinned
-                                   && (!x.Ref.IsProperty || x.Ref.RawVersion.Contains("$(TwoDog"))))
-                yield return new Finding("ver.natives", c, Severity.Warn, "2dog.browser-wasm is not exact-pinned ([version] or [$(TwoDogNativesVersion)])",
+                    "the native payloads and the engine must come from the same Godot build", "2dog update");
+            else if (refs.FirstOrDefault(x => VersionRewriter.IsPinnedPackage(x.Ref.Id) && !x.Ref.IsPinned
+                                              && (!x.Ref.IsProperty || x.Ref.RawVersion.Contains("$(TwoDog"))) is { Ref: { } floating })
+                yield return new Finding("ver.natives", c, Severity.Warn, $"{floating.Id} is not exact-pinned ([version] or [$(TwoDogNativesVersion)])",
                     "a floating reference can drift away from the engine's build", "2dog update");
             else if (engine == tool && EnvironmentChecks.Normalize(natives) != EnvironmentChecks.Normalize(toolNatives))
                 yield return new Finding("ver.natives", c, Severity.Warn, $"natives {natives} -> {ToolVersions.NativesVersion} available", null, "2dog update");

@@ -35,6 +35,9 @@ internal static class VersionRewriter
             ["2dog.avalonia"] = ("TwoDogVersion", false),
             ["2dog.blazor"] = ("TwoDogVersion", false),
             ["2dog.browser-wasm"] = ("TwoDogNativesVersion", true),
+            ["2dog.android"] = ("TwoDogNativesVersion", true),
+            ["2dog.android-arm64"] = ("TwoDogNativesVersion", true),
+            ["2dog.android-x64"] = ("TwoDogNativesVersion", true),
             ["GodotSharpEditor"] = ("TwoDogGodotVersion", false),
             ["Avalonia.Desktop"] = ("TwoDogAvaloniaVersion", false),
             ["Avalonia.Wayland"] = ("TwoDogAvaloniaVersion", false),
@@ -49,6 +52,9 @@ internal static class VersionRewriter
         Managed.TryGetValue(id, out var m) && m.Property == "TwoDogVersion";
 
     public static string? PropertyFor(string id) => Managed.TryGetValue(id, out var m) ? m.Property : null;
+
+    /// <summary>Whether the package must be exact-pinned (the natives, which have to match the engine's build).</summary>
+    public static bool IsPinnedPackage(string id) => Managed.TryGetValue(id, out var m) && m.Pinned;
 
     /// <summary>The property reference a managed package should carry, e.g. "[$(TwoDogNativesVersion)]".</summary>
     public static string Reference(string id)

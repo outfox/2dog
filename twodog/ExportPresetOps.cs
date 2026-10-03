@@ -3,13 +3,14 @@ using System.Text.RegularExpressions;
 namespace twodog.cli;
 
 /// <summary>
-/// export_presets.cfg handling: publishes export the pck via presets ('Web', per-OS desktop names) and the engine
+/// export_presets.cfg handling: publishes export the pck via presets ('Web', 'Android', per-OS desktop names) and the engine
 /// refuses to export without the file. Append-only: a missing preset is appended under the next free index.
 /// </summary>
 internal static class ExportPresetOps
 {
     public const string FileName = "export_presets.cfg";
     public const string WebPresetName = "Web";
+    public const string AndroidPresetName = "Android";
 
     /// <summary>Godot's standard desktop preset names, as the desktop publish's RID mapping expects them.</summary>
     public static readonly string[] DesktopPresetNames = ["Windows Desktop", "Linux", "macOS"];

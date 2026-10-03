@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace twodog.cli;
 
@@ -98,6 +99,7 @@ internal static class TemplateAssets
             // -> MyGame.tools.csproj for a desktop host folder "MyGame.tools").
             var relative = $"{folder}/{Rename(name[prefix.Length..], sourceFolder, folder, baseName)}";
             var content = Path.GetFileName(name).StartsWith("favicon", StringComparison.Ordinal)
+                          || name.EndsWith(".png", StringComparison.Ordinal)
                           || name.EndsWith(".min.js", StringComparison.Ordinal)
                 ? ReadRawBytes(name)
                 : Encoding.UTF8.GetBytes(Rename(ReadRaw(name), sourceFolder, folder, baseName));
@@ -105,29 +107,44 @@ internal static class TemplateAssets
         }
     }
 
-    /// <summary>
-    /// Ordered literal replacement: the host folder tokens first (they start with the project-wide tokens, so
-    /// the general rename must not run first), then the project-wide tokens.
-    /// </summary>
+    /// <summary>The host folder tokens (they start with the project-wide tokens, so they match first), then the
+    /// project-wide tokens.</summary>
     private static string Rename(string text, string sourceFolder, string folder, string baseName) =>
-        Substitute(text.Replace(sourceFolder, folder).Replace($"TPLRAWNAME.{Hosts.Suffix(KindOf(sourceFolder))}", folder), baseName);
+        ReplaceTokens(text, [(sourceFolder, folder), ($"TPLRAWNAME.{Hosts.Suffix(KindOf(sourceFolder))}", folder),
+            .. Tokens(baseName)]);
 
     private static HostKind KindOf(string sourceFolder) =>
         Enum.GetValues<HostKind>().First(kind => $"{SourceName}.{Hosts.Suffix(kind)}" == sourceFolder);
 
     /// <summary>
-    /// Ordered literal replacement of the template tokens, mirroring dotnet new: the sourceName token stands in
+    /// Literal replacement of the template tokens, mirroring dotnet new: the sourceName token stands in
     /// namespace positions and takes the namespace-safe form, TPLRAWNAME in file names, paths and labels and
     /// takes the base name verbatim. The two differ only for a name the project dictates (assembly_name
     /// "GWJ-97" -> namespace GWJ_97); SanitizeName-derived names are already namespace-safe.
     /// </summary>
-    public static string Substitute(string text, string baseName) => text
-        .Replace(SourceName, Hosts.NamespaceName(baseName))
-        .Replace("TPLRAWNAME", baseName)
-        .Replace("TWODOG_PKG_VERSION", ToolVersions.TwoDogVersion)
-        .Replace("NATIVES_PKG_VERSION", ToolVersions.NativesVersion)
-        .Replace("GODOT_SDK_VERSION", ToolVersions.GodotSdkVersion)
-        .Replace("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion)
-        .Replace("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion)
-        .Replace("ASPNETCORE_PKG_VERSION", ToolVersions.AspNetCoreVersion);
+    public static string Substitute(string text, string baseName) => ReplaceTokens(text, Tokens(baseName));
+
+    private static (string Token, string Value)[] Tokens(string baseName) =>
+    [
+        (SourceName, Hosts.NamespaceName(baseName)),
+        ("TPLRAWNAME", baseName),
+        ("tplandroidname", Hosts.AndroidPackageName(baseName)),
+        ("TWODOG_PKG_VERSION", ToolVersions.TwoDogVersion),
+        ("NATIVES_PKG_VERSION", ToolVersions.NativesVersion),
+        ("GODOT_SDK_VERSION", ToolVersions.GodotSdkVersion),
+        ("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion),
+        ("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion),
+        ("ASPNETCORE_PKG_VERSION", ToolVersions.AspNetCoreVersion),
+    ];
+
+    /// <summary>
+    /// One pass, longest token first where two start at the same place: an inserted value is never scanned again,
+    /// so a base name containing a token ('mytplandroidname') stays as given.
+    /// </summary>
+    private static string ReplaceTokens(string text, IEnumerable<(string Token, string Value)> tokens)
+    {
+        var values = tokens.ToDictionary(t => t.Token, t => t.Value, StringComparer.Ordinal);
+        var pattern = string.Join("|", values.Keys.OrderByDescending(token => token.Length).Select(Regex.Escape));
+        return Regex.Replace(text, pattern, match => values[match.Value]);
+    }
 }

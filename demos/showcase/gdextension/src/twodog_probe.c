@@ -24,6 +24,8 @@
 #define PROBE_PLATFORM "windows"
 #elif defined(__APPLE__)
 #define PROBE_PLATFORM "macos"
+#elif defined(__ANDROID__)
+#define PROBE_PLATFORM "android"
 #else
 #define PROBE_PLATFORM "linux"
 #endif

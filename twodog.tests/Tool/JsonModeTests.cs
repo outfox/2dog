@@ -18,7 +18,7 @@ public class JsonModeTests
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", "[application]\nconfig/name=\"Game\"\n");
 
-        var run = CliConsole.Run("add", tmp.Dir, "--desktop", "--dry-run", "--no-restore", "--json");
+        var run = CliConsole.Run("add", tmp.Dir, "--generic", "--dry-run", "--no-restore", "--json");
         Assert.Equal(0, run.ExitCode);
         var doc = Parse(run);
 
@@ -27,7 +27,7 @@ public class JsonModeTests
         Assert.Equal("add", doc.GetProperty("command").GetString());
         Assert.Equal("Game", doc.GetProperty("project").GetProperty("name").GetString());
         Assert.True(doc.GetProperty("dryRun").GetBoolean());
-        Assert.Equal("desktop", doc.GetProperty("hosts")[0].GetProperty("kind").GetString());
+        Assert.Equal("generic", doc.GetProperty("hosts")[0].GetProperty("kind").GetString());
         var actions = doc.GetProperty("actions").EnumerateArray().ToList();
         Assert.NotEmpty(actions);
         Assert.All(actions, a => Assert.Equal("planned", a.GetProperty("status").GetString()));
@@ -53,7 +53,7 @@ public class JsonModeTests
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", "[application]\nconfig/name=\"Game\"\n");
 
-        var run = CliConsole.Run("add", tmp.Dir, "--desktop", "--no-restore", "--json");
+        var run = CliConsole.Run("add", tmp.Dir, "--generic", "--no-restore", "--json");
         Assert.Equal(0, run.ExitCode);
         var doc = Parse(run);
         Assert.All(doc.GetProperty("actions").EnumerateArray(), a => Assert.Equal("applied", a.GetProperty("status").GetString()));
@@ -65,7 +65,7 @@ public class JsonModeTests
     public void ToolError_StillProducesADocument()
     {
         var missing = Path.Combine(Path.GetTempPath(), "2dog-missing-" + Guid.NewGuid().ToString("N"));
-        var run = CliConsole.Run("add", missing, "--desktop", "--json");
+        var run = CliConsole.Run("add", missing, "--generic", "--json");
         Assert.Equal(ExitCodes.Error, run.ExitCode);
         var doc = Parse(run);
         Assert.False(doc.GetProperty("ok").GetBoolean());

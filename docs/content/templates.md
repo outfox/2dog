@@ -8,7 +8,7 @@ description: "Create a Godot project with a .NET host and run it."
 Install the [.NET 10 SDK](https://dotnet.microsoft.com/download), then run:
 
 ```bash
-dnx 2dog new MyGame --desktop
+dnx 2dog new MyGame --generic
 cd MyGame
 dotnet run --project MyGame.2dog
 ```
@@ -22,7 +22,7 @@ Run `dnx 2dog new MyGame` without flags to choose hosts interactively.
 To include the generic .NET and xUnit hosts:
 
 ```bash
-dnx 2dog new MyGame --desktop --tests
+dnx 2dog new MyGame --generic --tests
 ```
 
 See [Getting Started](/getting-started) for browser publishing,

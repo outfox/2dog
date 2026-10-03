@@ -9,7 +9,7 @@ Install the [.NET 10 SDK](https://dotnet.microsoft.com/download), then run:
 
 ```bash
 cd path/to/MyGame
-dnx 2dog add --desktop
+dnx 2dog add --generic
 dotnet run --project MyGame.2dog
 ```
 
@@ -21,7 +21,7 @@ and scripts in Godot as usual. GDScript projects work too.
 Run `dnx 2dog add` without flags to choose hosts interactively, or name them:
 
 ```bash
-dnx 2dog add --desktop --tests
+dnx 2dog add --generic --tests
 ```
 
 Run the command again to add more hosts. Use `--dry-run` to preview changes.

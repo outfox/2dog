@@ -37,11 +37,23 @@ internal static class UpdateCommand
         PlanWebBootRefresh(plan, model);
 
         var hasProjectChanges = plan.Count > 0;
-        if (model.HasWebLikeHost && (cmd.Options.InstallWasmTools || cmd.Options.UpdateWorkloads || interactive && cmd.Options.Restore))
-            plan.Add(new PlannedAction("check wasm-tools and offer workload installation or updates", ActionKind.Workload,
-                () => WasmTools.EnsureInstalled(project.Dir, cmd.Options.InstallWasmTools,
-                    interactive ? Tui.OfferWasmToolsInstall : null, Runner,
-                    cmd.Options.UpdateWorkloads, interactive ? Tui.OfferWorkloadUpdate : null)));
+        var workloads = Workload.For(model.Hosts.Select(h => h.Kind)).ToList();
+        foreach (var workload in workloads)
+        {
+            var install = cmd.Options.InstallRequested(workload) || cmd.Options.UpdateWorkloads;
+            if (install || interactive && cmd.Options.Restore)
+                plan.Add(new PlannedAction($"check {workload.Id} and install if requested", ActionKind.Workload,
+                    () => Workloads.EnsureInstalled(workload, project.Dir, install,
+                        interactive ? Tui.OfferWorkloadInstall : null, Runner)));
+        }
+
+        // After the installations: `dotnet workload update` covers every installed workload, whatever the hosts.
+        if (cmd.Options.UpdateWorkloads)
+            plan.Add(new PlannedAction($"update installed workloads ({Workloads.UpdateCommand})", ActionKind.Workload,
+                () => Workloads.Update(project.Dir, Runner)));
+        else if (interactive && cmd.Options.Restore && workloads.Count > 0)
+            plan.Add(new PlannedAction("offer updates for installed workloads", ActionKind.Workload,
+                () => Workloads.Update(project.Dir, Runner, Tui.OfferWorkloadUpdate)));
 
         if (hasProjectChanges && cmd.Options.Restore)
             plan.Add(new PlannedAction("dotnet restore", ActionKind.Restore, () => Restore(project)));

@@ -35,6 +35,7 @@ internal sealed class DoctorOptions
     public bool Offline;
     public bool ListChecks;
     public bool InstallWasmTools;
+    public bool InstallAndroidWorkload;
     public HashSet<string> Ignore = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Run a build: null = no build, "" = the default target, else a host folder or project/solution.</summary>

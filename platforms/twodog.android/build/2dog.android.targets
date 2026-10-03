@@ -1,7 +1,8 @@
 <Project>
     <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'android'">
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
-        <!-- Android packages content before Publish; the desktop AfterTargets=Publish export is too late. -->
+        <!-- 2dog.engine exports Android packs during the build (TwoDogExportAndroidPack); its desktop export after
+             Publish would be too late for the APK's assets. -->
         <TwoDogExportPack>false</TwoDogExportPack>
         <_TwoDogAndroidJavaRoot>$(MSBuildThisFileDirectory)../android/</_TwoDogAndroidJavaRoot>
     </PropertyGroup>
@@ -9,7 +10,11 @@
         <AndroidLibrary Include="$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar" Bind="false"/>
         <AndroidJavaSource Include="$(_TwoDogAndroidJavaRoot)host/TwoDogActivity.java" Bind="false"/>
         <AndroidManifestOverlay Include="$(_TwoDogAndroidJavaRoot)host/AndroidManifest.xml"/>
-        <AndroidAsset Include="$(TwoDogAndroidPack)" Link="game.pck" Condition="'$(TwoDogAndroidPack)' != ''"/>
+        <!-- Release builds trim and AOT-compile by default. GodotPlugins is only reached through reflection, and
+             GodotSharp finds the game's scripts through reflection, so these assemblies stay whole. .NET for Android
+             requires RootMode on every root. -->
+        <TrimmerRootAssembly Include="GodotSharp;GodotPlugins;twodog" RootMode="All"/>
+        <TrimmerRootAssembly Include="$(TwoDogAndroidGameAssembly)" RootMode="All" Condition="'$(TwoDogAndroidGameAssembly)' != ''"/>
     </ItemGroup>
     <Target Name="TwoDogValidateAndroidHost" BeforeTargets="PrepareForBuild"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
@@ -17,10 +22,19 @@
                Text="2dog: Android supports debug and release variants only."/>
         <Error Code="TDGA004" Condition="!Exists('$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar')"
                Text="2dog: the selected Android Java payload is missing. Run scripts/build_android_java.py and repack 2dog.android."/>
-        <Error Code="TDGA005" Condition="'$(TwoDogAndroidPack)' == '' Or !Exists('$(TwoDogAndroidPack)')"
-               Text="2dog: set TwoDogAndroidPack to an exported Godot PCK before building the APK. Use scripts/publish_android.py."/>
-        <Error Code="TDGA006" Condition="'$(PublishTrimmed)' == 'true' Or '$(PublishAot)' == 'true' Or '$(RunAOTCompilation)' == 'true'"
-               Text="2dog: the initial Android host requires untrimmed, non-AOT managed assemblies."/>
+        <!-- Only Mono is validated; NativeAOT and CoreCLR are experimental in .NET for Android and untested with
+             Godot. -->
+        <Error Code="TDGA006" Condition="'$(PublishAot)' == 'true' Or '$(UseMonoRuntime)' == 'false'"
+               Text="2dog: Android hosts run on the Mono runtime; NativeAOT (PublishAot) and CoreCLR (UseMonoRuntime=false) are not supported. Release builds AOT-compile with Mono (RunAOTCompilation)."/>
+        <!-- Other RIDs reference no 2dog.android-<abi> package, so nothing would resolve libgodot for them and the APK
+             would start without Godot. -->
+        <ItemGroup>
+            <_TwoDogAndroidHostRid Include="$(RuntimeIdentifier);$(RuntimeIdentifiers)"/>
+        </ItemGroup>
+        <Error Code="TDGA013" Condition="'@(_TwoDogAndroidHostRid)' == ''"
+               Text="2dog: select android-arm64 and/or android-x64 with RuntimeIdentifier or RuntimeIdentifiers."/>
+        <Error Code="TDGA013" Condition="'%(_TwoDogAndroidHostRid.Identity)' != 'android-arm64' And '%(_TwoDogAndroidHostRid.Identity)' != 'android-x64'"
+               Text="2dog: Android hosts support android-arm64 and android-x64 only; unsupported RID: %(_TwoDogAndroidHostRid.Identity)."/>
     </Target>
     <Target Name="TwoDogReferenceAndroidPlugins" BeforeTargets="ResolveAssemblyReferences"
             Condition="'$(TargetPlatformIdentifier)' == 'android'">
@@ -39,6 +53,177 @@
         <!-- The native module checks for an assembly file before asking GodotPlugins to reuse the loaded assembly. -->
         <ItemGroup>
             <AndroidAsset Include="@(_TwoDogAndroidGame)" Link="2dog/$(TwoDogAndroidGameAssembly).dll"/>
+        </ItemGroup>
+    </Target>
+
+    <!-- game.pck, the main pack TwoDogActivity hands to Godot: TwoDogAndroidPack when set, otherwise the pck that
+         2dog.engine's TwoDogExportAndroidPack (hooked in before this target) exports from GodotProjectDir. -->
+    <Target Name="TwoDogAddAndroidPack" BeforeTargets="_ComputeAndroidAssetsPaths" DependsOnTargets="ResolveReferences"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
+        <Error Code="TDGA005" Condition="'$(TwoDogAndroidPack)' == '' Or !Exists('$(TwoDogAndroidPack)')"
+               Text="2dog: there is no game pck for the APK. Set GodotProjectDir to the Godot project so 2dog.engine exports it with its Android preset, or set TwoDogAndroidPack to a pck exported with an Android preset."/>
+        <ItemGroup>
+            <AndroidAsset Include="$(TwoDogAndroidPack)" Link="game.pck"/>
+        </ItemGroup>
+    </Target>
+
+    <!-- GDExtensions: the pck export leaves native libraries out, and the engine loads them by file name from the
+         APK's lib/<abi>/. Packages every android library and dependency that the project's .gdextension files list
+         for the selected ABIs and variant - a superset of what Godot picks by feature tags at runtime. Opt out with
+         TwoDogAndroidGdExtensions=false. -->
+    <UsingTask TaskName="TwoDogFindAndroidGdExtensionLibraries" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <ProjectDirectory ParameterType="System.String" Required="true"/>
+            <Extensions ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true"/>
+            <Architectures ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true"/>
+            <Variant ParameterType="System.String" Required="true"/>
+            <Libraries ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Text.RegularExpressions"/>
+            <Code Type="Method" Language="cs"><![CDATA[
+            public override bool Execute()
+            {
+                var archTags = new HashSet<string> { "x86_32", "x86_64", "arm32", "arm64", "rv64", "ppc64", "wasm32", "loongarch64" };
+                var otherVariant = Variant == "release"
+                    ? new[] { "debug", "template_debug", "editor" }
+                    : new[] { "release", "template_release", "editor" };
+                var packaged = new Dictionary<string, string>();
+                var libraries = new List<ITaskItem>();
+                foreach (var extension in Extensions)
+                {
+                    var text = File.ReadAllText(extension.ItemSpec);
+                    foreach (Match section in Regex.Matches(text, @"(?ms)^\[(libraries|dependencies)\][^\n]*\n(.*?)(?=^\[|\z)"))
+                    {
+                        var dependencies = section.Groups[1].Value == "dependencies";
+                        foreach (Match entry in Regex.Matches(section.Groups[2].Value, @"(?m)^[ \t]*([\w.]+)[ \t]*=[ \t]*(\{[^}]*\}|""[^""\r\n]*"")"))
+                        {
+                            var tags = entry.Groups[1].Value.Split('.');
+                            if (!tags.Contains("android") || tags.Any(otherVariant.Contains))
+                                continue;
+                            var arch = tags.FirstOrDefault(archTags.Contains);
+                            // [libraries] maps tags to one path, [dependencies] to a dictionary keyed by paths.
+                            var paths = Regex.Matches(entry.Groups[2].Value, dependencies ? @"""([^""]+)""\s*:" : @"""([^""]+)""");
+                            foreach (Match path in paths)
+                            {
+                                var value = path.Groups[1].Value;
+                                var file = Path.GetFullPath(value.StartsWith("res://")
+                                    ? Path.Combine(ProjectDirectory, value.Substring("res://".Length))
+                                    : Path.Combine(Path.GetDirectoryName(extension.ItemSpec), value));
+                                foreach (var architecture in Architectures)
+                                {
+                                    if (arch != null && arch != architecture.ItemSpec)
+                                        continue;
+                                    var abi = architecture.GetMetadata("Abi");
+                                    if (!File.Exists(file))
+                                    {
+                                        Log.LogError(null, "TDGA009", null, extension.ItemSpec, 0, 0, 0, 0,
+                                            "2dog: {0} lists '{1}' for {2}, but the file does not exist. Build or install it before the Android build, or set TwoDogAndroidGdExtensions=false.",
+                                            Path.GetFileName(extension.ItemSpec), value, abi);
+                                        continue;
+                                    }
+                                    var key = abi + "/" + Path.GetFileName(file);
+                                    string existing;
+                                    if (packaged.TryGetValue(key, out existing))
+                                    {
+                                        if (!string.Equals(existing, file, StringComparison.Ordinal))
+                                            Log.LogError(null, "TDGA010", null, extension.ItemSpec, 0, 0, 0, 0,
+                                                "2dog: two GDExtension libraries for {0} are named {1} ('{2}' and '{3}'); Android loads them by file name.",
+                                                abi, Path.GetFileName(file), existing, file);
+                                        continue;
+                                    }
+                                    packaged[key] = file;
+                                    var item = new TaskItem(file);
+                                    item.SetMetadata("Abi", abi);
+                                    libraries.Add(item);
+                                }
+                            }
+                        }
+                    }
+                }
+                Libraries = libraries.ToArray();
+                return !Log.HasLoggedErrors;
+            }
+            ]]></Code>
+        </Task>
+    </UsingTask>
+    <!-- Signing follows established conventions only: a project's own AndroidKeyStore wins, otherwise Godot's documented
+         GODOT_ANDROID_KEYSTORE_<VARIANT>_PATH/_USER/_PASSWORD variables, otherwise the Android SDK's debug keystore
+         (ANDROID_USER_HOME or ~/.android, as Android Studio and Gradle sign debug builds), otherwise .NET's debug key.
+         The password reaches the signer as an env: reference, never as an MSBuild property. Opt out with
+         TwoDogAndroidSigning=false. -->
+    <Target Name="TwoDogResolveAndroidSigning" BeforeTargets="_CreateAndroidDebugSigningKey;_ResolveAndroidSigningKey"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(AndroidKeyStore)' != 'true' And '$(TwoDogAndroidSigning)' != 'false'">
+        <PropertyGroup>
+            <_TwoDogKeystoreVariable Condition="'$(TwoDogVariant)' == 'debug'">GODOT_ANDROID_KEYSTORE_DEBUG_</_TwoDogKeystoreVariable>
+            <_TwoDogKeystoreVariable Condition="'$(TwoDogVariant)' != 'debug'">GODOT_ANDROID_KEYSTORE_RELEASE_</_TwoDogKeystoreVariable>
+            <_TwoDogKeystore>$([System.Environment]::GetEnvironmentVariable('$(_TwoDogKeystoreVariable)PATH'))</_TwoDogKeystore>
+            <_TwoDogKeystoreAlias>$([System.Environment]::GetEnvironmentVariable('$(_TwoDogKeystoreVariable)USER'))</_TwoDogKeystoreAlias>
+            <!-- Only whether the password is set: its value must not land in a log. -->
+            <_TwoDogKeystoreHasPassword>$([System.String]::IsNullOrEmpty($([System.Environment]::GetEnvironmentVariable('$(_TwoDogKeystoreVariable)PASSWORD'))))</_TwoDogKeystoreHasPassword>
+            <_TwoDogKeystore Condition="'$(_TwoDogKeystore)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogKeystore)'))))</_TwoDogKeystore>
+        </PropertyGroup>
+        <Error Code="TDGA011" Condition="'$(_TwoDogKeystore)' != '' And !Exists('$(_TwoDogKeystore)')"
+               Text="2dog: $(_TwoDogKeystoreVariable)PATH names '$(_TwoDogKeystore)', which does not exist."/>
+        <Error Code="TDGA012" Condition="'$(_TwoDogKeystore)' != '' And ('$(_TwoDogKeystoreAlias)' == '' Or '$(_TwoDogKeystoreHasPassword)' == 'True')"
+               Text="2dog: $(_TwoDogKeystoreVariable)PATH is set, so $(_TwoDogKeystoreVariable)USER (the key alias) and $(_TwoDogKeystoreVariable)PASSWORD must be set too."/>
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' != ''">
+            <AndroidKeyStore>true</AndroidKeyStore>
+            <AndroidSigningKeyStore>$(_TwoDogKeystore)</AndroidSigningKeyStore>
+            <AndroidSigningKeyAlias>$(_TwoDogKeystoreAlias)</AndroidSigningKeyAlias>
+            <!-- Godot uses one password for the keystore and the key -->
+            <AndroidSigningStorePass>env:$(_TwoDogKeystoreVariable)PASSWORD</AndroidSigningStorePass>
+            <AndroidSigningKeyPass>env:$(_TwoDogKeystoreVariable)PASSWORD</AndroidSigningKeyPass>
+        </PropertyGroup>
+        <Message Importance="high" Condition="'$(_TwoDogKeystore)' != ''"
+                 Text="2dog: signing with $(_TwoDogKeystore) (alias $(_TwoDogKeystoreAlias)) from $(_TwoDogKeystoreVariable)*."/>
+
+        <!-- The Android SDK's debug key: its well-known alias and password are public, not secrets. -->
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' == ''">
+            <_TwoDogAndroidUserHome>$(ANDROID_USER_HOME)</_TwoDogAndroidUserHome>
+            <_TwoDogAndroidUserHome Condition="'$(_TwoDogAndroidUserHome)' == ''">$([System.IO.Path]::Combine($([System.Environment]::GetFolderPath(SpecialFolder.UserProfile)), '.android'))</_TwoDogAndroidUserHome>
+            <_TwoDogAndroidDebugKeystore>$([System.IO.Path]::Combine('$(_TwoDogAndroidUserHome)', 'debug.keystore'))</_TwoDogAndroidDebugKeystore>
+        </PropertyGroup>
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' == '' And Exists('$(_TwoDogAndroidDebugKeystore)')">
+            <AndroidKeyStore>true</AndroidKeyStore>
+            <AndroidSigningKeyStore>$(_TwoDogAndroidDebugKeystore)</AndroidSigningKeyStore>
+            <AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>
+            <AndroidSigningStorePass>android</AndroidSigningStorePass>
+            <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
+            <_TwoDogDebugSigner>the Android debug key ($(_TwoDogAndroidDebugKeystore))</_TwoDogDebugSigner>
+        </PropertyGroup>
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' == '' And '$(AndroidKeyStore)' != 'true'">
+            <_TwoDogDebugSigner>the .NET debug key</_TwoDogDebugSigner>
+        </PropertyGroup>
+        <Message Importance="high" Condition="'$(_TwoDogKeystore)' == '' And '$(TwoDogVariant)' == 'release'"
+                 Text="2dog: no release keystore is configured, so the APK is signed with $(_TwoDogDebugSigner). Set AndroidKeyStore and the AndroidSigning* properties, or GODOT_ANDROID_KEYSTORE_RELEASE_PATH/_USER/_PASSWORD."/>
+    </Target>
+
+    <Target Name="TwoDogAddAndroidGdExtensions" BeforeTargets="PrepareForBuild"
+            Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogAndroidGdExtensions)' != 'false' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <PropertyGroup>
+            <_TwoDogAndroidGdExtensionRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidGdExtensionRids>
+        </PropertyGroup>
+        <ItemGroup>
+            <_TwoDogAndroidGdExtensionAbi Include="arm64" Abi="arm64-v8a"
+                                          Condition="$([System.String]::Copy('$(_TwoDogAndroidGdExtensionRids)').Contains(';android-arm64;'))"/>
+            <_TwoDogAndroidGdExtensionAbi Include="x86_64" Abi="x86_64"
+                                          Condition="$([System.String]::Copy('$(_TwoDogAndroidGdExtensionRids)').Contains(';android-x64;'))"/>
+            <!-- Godot's filesystem scan, which finds the extensions it loads, skips .godot/ and .gdignore trees. -->
+            <_TwoDogAndroidGdIgnoredDir Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
+            <_TwoDogAndroidGdExtension Include="$(TwoDogGodotProjectFullPath)/**/*.gdextension"
+                                       Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;@(_TwoDogAndroidGdIgnoredDir->'%(RootDir)%(Directory)**')"/>
+        </ItemGroup>
+        <TwoDogFindAndroidGdExtensionLibraries Condition="'@(_TwoDogAndroidGdExtension)' != '' And '@(_TwoDogAndroidGdExtensionAbi)' != ''"
+                                               ProjectDirectory="$(TwoDogGodotProjectFullPath)"
+                                               Extensions="@(_TwoDogAndroidGdExtension)"
+                                               Architectures="@(_TwoDogAndroidGdExtensionAbi)"
+                                               Variant="$(TwoDogVariant)">
+            <Output TaskParameter="Libraries" ItemName="_TwoDogAndroidGdExtensionLibrary"/>
+        </TwoDogFindAndroidGdExtensionLibraries>
+        <ItemGroup>
+            <AndroidNativeLibrary Include="@(_TwoDogAndroidGdExtensionLibrary)"/>
         </ItemGroup>
     </Target>
 </Project>

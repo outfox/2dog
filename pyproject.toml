@@ -92,7 +92,7 @@ help = "Android build and package tests (no device/workload required)"
 cmd = "uv run python -m unittest discover -s tests/android -p 'test_*.py'"
 
 [tool.poe.tasks.build-android-apk]
-help = "Build and inspect the Android smoke APK from local packages; pass --editor"
+help = "Build and inspect the Android smoke (or --app showcase) APK from local packages; pass --editor"
 cmd = "uv run scripts/build_android_apk.py"
 
 [tool.poe.tasks.publish-android]

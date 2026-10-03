@@ -42,10 +42,15 @@ internal sealed class ScaffoldOptions
     public bool Force;
     public bool Restore = true;
     public bool InstallWasmTools;
+    public bool InstallAndroidWorkload;
     public bool UpdateWorkloads;
 
     /// <summary>Only supplied for interactive terminals; a declined offer leaves workload installation to the user.</summary>
-    public Func<bool>? ConfirmWasmToolsInstall;
+    public Func<Workload, bool>? ConfirmWorkloadInstall;
+
+    /// <summary>Whether the workload's own --install-... flag asked for it.</summary>
+    public bool InstallRequested(Workload workload) =>
+        workload == Workload.Android ? InstallAndroidWorkload : InstallWasmTools;
 }
 
 /// <summary>The project a run operates on, resolved before anything is planned.</summary>

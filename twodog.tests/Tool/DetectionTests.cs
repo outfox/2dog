@@ -21,6 +21,35 @@ public class DetectionTests
     }
 
     [Fact]
+    public void TemplateGameProject_ExcludesEveryHostFolder()
+    {
+        var csproj = TemplateAssets.GodotCsproj("Game");
+        foreach (var kind in Hosts.All)
+            Assert.Contains($"Game.{Hosts.Suffix(kind)}/**", csproj);
+    }
+
+    [Theory]
+    [InlineData("MyGame", "mygame")]
+    [InlineData("Game..Mobile", "game.mobile")]
+    [InlineData(".Game.", "game")]
+    [InlineData("2D.Game", "app2d.game")]
+    [InlineData("Game_Ünï", "game__n_")]
+    [InlineData("...", "app")]
+    public void AndroidPackageName_YieldsValidSegments(string baseName, string expected) =>
+        Assert.Equal(expected, Hosts.AndroidPackageName(baseName));
+
+    [Fact]
+    public void TemplateTokens_AreReplacedOnce()
+    {
+        // A base name that contains a token must not be rewritten by a later replacement.
+        const string name = "mytplandroidname";
+        var csproj = TemplateAssets.HostFiles(HostKind.Android, name, $"{name}.android")
+            .Single(f => f.RelativePath.EndsWith(".csproj", StringComparison.Ordinal)).Text;
+        Assert.Contains($"<ProjectReference Include=\"../{name}.csproj\"/>", csproj);
+        Assert.Contains($"<ApplicationId>com.companyname.{name}</ApplicationId>", csproj);
+    }
+
+    [Fact]
     public void Classify_HandlesNamespacedProjects()
     {
         const string csproj =
@@ -99,13 +128,13 @@ public class DetectionTests
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
 
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--tests", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--tests", "--no-restore").ExitCode);
         // The default set minus web is exactly what exists; a host flag would ask for a second host of that kind.
         var again = CliConsole.Run("add", dir, "--no-web", "--no-restore");
         Assert.Equal(0, again.ExitCode);
         Assert.Contains("Nothing to do", again.Stdout);
 
-        var twice = CliConsole.Run("new", "Game", dir, "--desktop", "--no-restore");
+        var twice = CliConsole.Run("new", "Game", dir, "--generic", "--no-restore");
         Assert.Equal(ExitCodes.Error, twice.ExitCode);
         Assert.Contains("already holds a Godot project", twice.Stderr);
     }
@@ -129,7 +158,7 @@ public class DetectionTests
         using var tmp = new TempProjectDir();
         tmp.Write("notes.txt", "keep me");
 
-        var run = CliConsole.Run("new", "Game", tmp.Dir, "--desktop", "--dry-run", "--no-restore");
+        var run = CliConsole.Run("new", "Game", tmp.Dir, "--generic", "--dry-run", "--no-restore");
         Assert.Equal(0, run.ExitCode);
         Assert.Contains("warning:", run.Stderr);
         Assert.Contains("is not empty", run.Stderr);

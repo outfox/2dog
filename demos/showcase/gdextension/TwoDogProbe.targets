@@ -2,7 +2,10 @@
     <!-- Builds the showcase's GDExtension probe (src/twodog_probe.c) into bin/, where twodog_probe.gdextension points,
          with toolchains the hosts already need: the build machine's C compiler for its own desktop platform (imported
          by the game project, which every host builds first), and the wasm-tools workload's emscripten for the web
-         side module (imported by the browser-wasm hosts). Opt out with -p:TwoDogProbeBuild=false. -->
+         side module (imported by the browser-wasm hosts), and the Android NDK's clang for the Android libraries
+         (imported by the Android host, whose 2dog.android packaging and pck export need them). Desktop and web builds
+         can opt out with -p:TwoDogProbeBuild=false (the probe then reports the extension as missing); Android hosts
+         cannot, because every Android build exports a pck, which copies each library the .gdextension lists. -->
     <PropertyGroup>
         <_TwoDogProbeDir>$(MSBuildThisFileDirectory)</_TwoDogProbeDir>
         <_TwoDogProbeBin>$(_TwoDogProbeDir)bin/</_TwoDogProbeBin>
@@ -25,7 +28,7 @@
             BeforeTargets="CoreCompile"
             Inputs="@(_TwoDogProbeInput)"
             Outputs="$(_TwoDogProbeDesktopLib)"
-            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(_TwoDogProbeDesktopLib)' != ''">
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(TargetPlatformIdentifier)' != 'android' And '$(DesignTimeBuild)' != 'true' And '$(_TwoDogProbeDesktopLib)' != ''">
         <!-- Intermediates stay outside the Godot project tree (MSVC's .obj would import as a Wavefront mesh) -->
         <PropertyGroup>
             <_TwoDogProbeObj>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog_probe'))</_TwoDogProbeObj>
@@ -85,5 +88,50 @@
         <Exec Command="&quot;$(_TwoDogProbeEmcc)&quot; $(_TwoDogProbeCFlags) -sSIDE_MODULE=1 -sWASM_BIGINT &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeWasmObj)&quot;"
               EnvironmentVariables="@(_TwoDogProbeEmccEnv)"/>
         <Copy SourceFiles="$(_TwoDogProbeWasmObj)" DestinationFiles="$(_TwoDogProbeWasm)" Retries="5" RetryDelayMilliseconds="200"/>
+    </Target>
+
+    <!-- Android: both ABIs the Android export preset enables, since its pck export copies every library it lists -->
+    <ItemGroup>
+        <_TwoDogProbeAndroidArch Include="arm64" Triple="aarch64-linux-android"/>
+        <_TwoDogProbeAndroidArch Include="x86_64" Triple="x86_64-linux-android"/>
+    </ItemGroup>
+
+    <!-- Any recent NDK builds this C file: TwoDogProbeAndroidNdk, ANDROID_NDK_ROOT, ANDROID_NDK_HOME, else one
+         installed under the Android SDK (AndroidSdkDirectory, ANDROID_HOME or ANDROID_SDK_ROOT) -->
+    <Target Name="TwoDogProbeResolveAndroidNdk">
+        <PropertyGroup>
+            <TwoDogProbeAndroidNdk Condition="'$(TwoDogProbeAndroidNdk)' == ''">$(ANDROID_NDK_ROOT)</TwoDogProbeAndroidNdk>
+            <TwoDogProbeAndroidNdk Condition="'$(TwoDogProbeAndroidNdk)' == ''">$(ANDROID_NDK_HOME)</TwoDogProbeAndroidNdk>
+        </PropertyGroup>
+        <ItemGroup Condition="'$(TwoDogProbeAndroidNdk)' == ''">
+            <_TwoDogProbeNdk Include="$(AndroidSdkDirectory)/ndk/*/source.properties" Condition="'$(AndroidSdkDirectory)' != ''"/>
+            <_TwoDogProbeNdk Include="$(ANDROID_HOME)/ndk/*/source.properties" Condition="'$(ANDROID_HOME)' != ''"/>
+            <_TwoDogProbeNdk Include="$(ANDROID_SDK_ROOT)/ndk/*/source.properties" Condition="'$(ANDROID_SDK_ROOT)' != ''"/>
+        </ItemGroup>
+        <PropertyGroup Condition="'$(TwoDogProbeAndroidNdk)' == '' And '@(_TwoDogProbeNdk)' != ''">
+            <_TwoDogProbeNdks>@(_TwoDogProbeNdk->'%(RootDir)%(Directory)')</_TwoDogProbeNdks>
+            <TwoDogProbeAndroidNdk>$(_TwoDogProbeNdks.Substring($([MSBuild]::Add($(_TwoDogProbeNdks.LastIndexOf(';')), 1))))</TwoDogProbeAndroidNdk>
+        </PropertyGroup>
+        <PropertyGroup>
+            <_TwoDogProbeNdkHost Condition="$([MSBuild]::IsOSPlatform('Windows'))">windows-x86_64</_TwoDogProbeNdkHost>
+            <_TwoDogProbeNdkHost Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux-x86_64</_TwoDogProbeNdkHost>
+            <_TwoDogProbeNdkHost Condition="$([MSBuild]::IsOSPlatform('OSX'))">darwin-x86_64</_TwoDogProbeNdkHost>
+            <_TwoDogProbeNdkClang>$(TwoDogProbeAndroidNdk.TrimEnd('\').TrimEnd('/'))/toolchains/llvm/prebuilt/$(_TwoDogProbeNdkHost)/bin/clang</_TwoDogProbeNdkClang>
+            <_TwoDogProbeNdkClang Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(_TwoDogProbeNdkClang).exe</_TwoDogProbeNdkClang>
+        </PropertyGroup>
+        <Error Condition="'$(TwoDogProbeAndroidNdk)' == '' Or !Exists('$(_TwoDogProbeNdkClang)')"
+               Text="TwoDog showcase: building the Android GDExtension probe needs the Android NDK (clang not found at '$(_TwoDogProbeNdkClang)'). Install it with the Android SDK manager, or set ANDROID_NDK_ROOT or TwoDogProbeAndroidNdk."/>
+    </Target>
+
+    <!-- In the Android host, before 2dog.android packages the libraries the .gdextension lists (and the pck export
+         copies them) -->
+    <Target Name="TwoDogProbeBuildAndroid"
+            BeforeTargets="TwoDogAddAndroidGdExtensions"
+            DependsOnTargets="TwoDogProbeResolveAndroidNdk"
+            Inputs="@(_TwoDogProbeInput)"
+            Outputs="$(_TwoDogProbeBin)libtwodog_probe.android.%(_TwoDogProbeAndroidArch.Identity).so"
+            Condition="'$(TwoDogProbeBuild)' != 'false' And '$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
+        <MakeDir Directories="$(_TwoDogProbeBin)"/>
+        <Exec Command="&quot;$(_TwoDogProbeNdkClang)&quot; --target=%(_TwoDogProbeAndroidArch.Triple)24 $(_TwoDogProbeCFlags) -fPIC -shared -Wl,-soname,libtwodog_probe.android.%(_TwoDogProbeAndroidArch.Identity).so -Wl,-z,max-page-size=16384 &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeBin)libtwodog_probe.android.%(_TwoDogProbeAndroidArch.Identity).so&quot;"/>
     </Target>
 </Project>

@@ -109,6 +109,7 @@ internal static class CommandLine
                 cmd.Options.DryRun = result.GetValue(CliTree.DryRun);
                 cmd.Options.Restore = !result.GetValue(CliTree.NoRestore);
                 cmd.Options.InstallWasmTools = result.GetValue(CliTree.InstallWasmTools);
+                cmd.Options.InstallAndroidWorkload = result.GetValue(CliTree.InstallAndroidWorkload);
                 cmd.Options.UpdateWorkloads = result.GetValue(CliTree.UpdateWorkloads);
                 cmd.AllowDirty = result.GetValue(CliTree.AllowDirty);
                 break;
@@ -241,6 +242,7 @@ internal static class CommandLine
             Offline = result.GetValue(CliTree.Offline),
             ListChecks = result.GetValue(CliTree.ListChecks),
             InstallWasmTools = result.GetValue(CliTree.InstallWasmTools),
+            InstallAndroidWorkload = result.GetValue(CliTree.InstallAndroidWorkload),
             LogFile = result.GetValue(CliTree.Log),
         };
         if (result.GetValue(CliTree.BuildConfiguration) is { } configuration) options.Configuration = configuration;
@@ -256,6 +258,7 @@ internal static class CommandLine
         cmd.Options.Force = result.GetValue(CliTree.Force);
         cmd.Options.Restore = !result.GetValue(CliTree.NoRestore);
         cmd.Options.InstallWasmTools = result.GetValue(CliTree.InstallWasmTools);
+        cmd.Options.InstallAndroidWorkload = result.GetValue(CliTree.InstallAndroidWorkload);
 
         // Host requests in command-line order (hosts are created in that order): walk the tokens rather than the
         // per-option values, which would group them by kind.

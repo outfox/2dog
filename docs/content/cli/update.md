@@ -25,14 +25,16 @@ refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--allow-dirty` | Proceed despite uncommitted tracked-file changes |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts |
-| `--update-workloads` | Install missing `wasm-tools`, or run `dotnet workload update` for the project's SDK |
+| `--install-android-workload` | Install the missing `android` workload for Android hosts |
+| `--update-workloads` | Install missing workloads the hosts need, then run `dotnet workload update` for the project's SDK |
 
 Plus the [global and output options](/dnx-2dog#global-options). There is no
 `--to`: pin the tool instead.
 
-For browser hosts, terminals offer installation if `wasm-tools` is missing,
-or a separate update if it is installed. `dotnet workload update` checks for
-and applies updates to **all installed workloads** for the selected SDK.
+For projects with browser or Android hosts, terminals offer to install a missing
+workload (`wasm-tools` or `android`), then, separately, to update the installed
+ones. `dotnet workload update` checks for and applies updates to **all installed
+workloads** for the selected SDK.
 `--no-restore` skips these offers; the explicit flags still apply.
 `--dry-run` never checks or changes workloads.
 

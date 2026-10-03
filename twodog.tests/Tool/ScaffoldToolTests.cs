@@ -839,7 +839,7 @@ public class AddEndToEndTests
 
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
-        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop", "--tests", "--blazor"]), project);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--tests", "--blazor"]), project);
         Assert.Equal(0, RunCaptured(options).ExitCode);
 
         var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.tests", "BasicTests.cs"));
@@ -883,7 +883,7 @@ public class AddEndToEndTests
 
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
-        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop", "--tests"]), project);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--tests"]), project);
         Assert.Equal(0, RunCaptured(options).ExitCode);
 
         var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.tests", "BasicTests.cs"));
@@ -977,7 +977,7 @@ public class AddEndToEndTests
         var options = Options(tmp.Dir);
         options.Restore = true;
         var prompts = 0;
-        options.ConfirmWasmToolsInstall = () => { prompts++; return false; };
+        options.ConfirmWorkloadInstall = _ => { prompts++; return false; };
         var runner = new FakeProcessRunner(request => request.Args.SequenceEqual(["workload", "list"])
             ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------",
                 installed ? "wasm-tools  10.0.100  SDK" : "", "")
@@ -1583,7 +1583,7 @@ public class CommandLineTests
     [Fact]
     public void HostFlags_TakeAnOptionalFolderName()
     {
-        var cmd = CommandLine.Parse(["add", "--desktop", "--web", "MyGame.web2", "--tests"]);
+        var cmd = CommandLine.Parse(["add", "--generic", "--web", "MyGame.web2", "--tests"]);
 
         Assert.True(cmd.HostFlagsSeen);
         Assert.Equal(
@@ -1602,7 +1602,7 @@ public class CommandLineTests
     [Fact]
     public void RepeatedHostFlag_RequestsTwoHosts()
     {
-        var cmd = CommandLine.Parse(["add", "--desktop", "One", "--desktop", "Two"]);
+        var cmd = CommandLine.Parse(["add", "--generic", "One", "--generic", "Two"]);
         Assert.Equal(["One", "Two"], cmd.Requested.Select(r => r.Folder!).ToArray());
     }
 
@@ -1662,8 +1662,8 @@ public class CommandLineTests
     [Theory]
     [InlineData(true, "new", "MyGame")]
     [InlineData(true, "add")]
-    [InlineData(false, "add", "--desktop")]
-    [InlineData(false, "add", "--desktop", "MyGame.editor")]
+    [InlineData(false, "add", "--generic")]
+    [InlineData(false, "add", "--generic", "MyGame.editor")]
     [InlineData(false, "convert", "--no-web")]
     [InlineData(false, "new", "MyGame", "--tests")]
     [InlineData(false, "add", "--yes")]
@@ -1751,7 +1751,7 @@ public class HostSelectionTests
     [Fact]
     public void FromFlags_AllocatesFreeFoldersForRepeatKinds()
     {
-        var cmd = CommandLine.Parse(["add", "--desktop", "--desktop"]);
+        var cmd = CommandLine.Parse(["add", "--generic", "--generic"]);
         var hosts = HostSelection.FromFlags(cmd, Project((HostKind.Desktop, "MyGame.2dog")));
         Assert.Equal(["MyGame.2dog2", "MyGame.2dog3"], hosts.Select(h => h.Folder).ToArray());
     }
@@ -1929,7 +1929,7 @@ public class ScaffoldEndToEndTests
 
         var options = new ScaffoldOptions { ProjectPath = dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
-        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--desktop"]), project);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic"]), project);
         Assert.Equal(0, ScaffoldCommand.Run(project, options).ExitCode);
 
         var host = System.IO.Path.Combine(dir, "MyGame.2dog2");

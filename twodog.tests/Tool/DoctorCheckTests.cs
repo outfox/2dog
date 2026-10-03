@@ -84,7 +84,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void MissingPresetFile_FailsAndIsRecreated()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.Delete(Path.Combine(dir, "export_presets.cfg"));
 
         var run = Doctor(dir, "--json");
@@ -99,7 +99,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void DisabledGameProperty_IsReportedWithoutAFix()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "Game.csproj", "<EnableDynamicLoading>true</EnableDynamicLoading>", "<EnableDynamicLoading>false</EnableDynamicLoading>");
 
         var issue = Issue(Doctor(dir, "--json").Stdout, "game.properties", "warn", fixable: false);
@@ -122,7 +122,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void MalformedPropsVersion_Fails()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "Directory.Build.props", $"<TwoDogVersion>{ToolVersions.TwoDogVersion}</TwoDogVersion>", "<TwoDogVersion>garbage</TwoDogVersion>");
 
         var run = Doctor(dir, "--json");
@@ -133,7 +133,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void MalformedCompanionVersion_Fails()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "Directory.Build.props", $"<TwoDogAvaloniaVersion>{ToolVersions.AvaloniaVersion}</TwoDogAvaloniaVersion>",
             "<TwoDogAvaloniaVersion>latest</TwoDogAvaloniaVersion>");
 
@@ -151,19 +151,45 @@ public class DoctorCheckTests : IDisposable
         Assert.Contains("Game.blazor.Client.csproj is not valid XML", issue.GetProperty("title").GetString());
     }
 
-    [Fact]
-    public void UnpinnedBrowserWasmProperty_Warns()
+    [Theory]
+    [InlineData("--web", "Game.web/Game.web.csproj", "2dog.browser-wasm")]
+    [InlineData("--android", "Game.android/Game.android.csproj", "2dog.android")]
+    public void UnpinnedNativesProperty_Warns(string host, string csproj, string package)
     {
-        var dir = Scaffold("--web");
-        Edit(dir, "Game.web/Game.web.csproj", "Version=\"[$(TwoDogNativesVersion)]\"", "Version=\"$(TwoDogNativesVersion)\"");
+        var dir = Scaffold(host);
+        Edit(dir, csproj, "Version=\"[$(TwoDogNativesVersion)]\"", "Version=\"$(TwoDogNativesVersion)\"");
 
-        Assert.Contains("not exact-pinned", Issue(Doctor(dir, "--json").Stdout, "ver.natives", "warn", fixable: false).GetProperty("title").GetString());
+        var title = Issue(Doctor(dir, "--json").Stdout, "ver.natives", "warn", fixable: false).GetProperty("title").GetString();
+        Assert.Equal($"{package} is not exact-pinned ([version] or [$(TwoDogNativesVersion)])", title);
+    }
+
+    [Fact]
+    public void AndroidPreset_FollowsHowTheHostGetsItsPck()
+    {
+        var dir = Scaffold("--android");
+        Edit(dir, "export_presets.cfg", "name=\"Android\"", "name=\"Phone\"");
+        const string csproj = "Game.android/Game.android.csproj", anchor = "<TwoDogAndroidGameAssembly>";
+        bool HasIssue() => Findings(Doctor(dir, "--json").Stdout, "preset.android")
+            .Any(f => f.GetProperty("severity").GetString() is "warn" or "fail");
+
+        // The host's own preset name is the one the build exports through.
+        Edit(dir, csproj, anchor, "<TwoDogAndroidExportPreset>Phone</TwoDogAndroidExportPreset>" + anchor);
+        Assert.False(HasIssue());
+
+        // A custom name cannot be appended from the template.
+        Edit(dir, csproj, ">Phone<", ">Tablet<");
+        var missing = Issue(Doctor(dir, "--json").Stdout, "preset.android", "fail", fixable: false);
+        Assert.Equal("'Tablet' export preset missing", missing.GetProperty("title").GetString());
+
+        // A pre-exported pck needs no preset at all.
+        Edit(dir, csproj, anchor, "<TwoDogAndroidPack>game.pck</TwoDogAndroidPack>" + anchor);
+        Assert.False(HasIssue());
     }
 
     [Fact]
     public void AnalyzersSetToFalse_Warns()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>",
             "<TwoDogRemoveDuplicateGodotAnalyzers>false</TwoDogRemoveDuplicateGodotAnalyzers>");
 
@@ -174,7 +200,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void AnalyzersFalseForOneConfiguration_Warns()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>",
             "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>\n" +
             "    <TwoDogRemoveDuplicateGodotAnalyzers Condition=\"'$(Configuration)' == 'Release'\">false</TwoDogRemoveDuplicateGodotAnalyzers>");
@@ -209,7 +235,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void TargetsWithoutTheDeepCleanTarget_Warns()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.WriteAllText(Path.Combine(dir, "Directory.Build.targets"), "<Project>\n</Project>\n");
 
         var issue = Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
@@ -219,7 +245,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void TargetsOnlyMentioningTheDeepCleanTarget_Warns()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.WriteAllText(Path.Combine(dir, "Directory.Build.targets"), "<Project>\n  <!-- TwoDogDeepClean lives elsewhere -->\n</Project>\n");
 
         Issue(Doctor(dir, "--json").Stdout, "layout.root-build-targets", "warn", fixable: false);
@@ -228,7 +254,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void RootTargets_HideAParentsDeepClean_UnlessTheyImportIt()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.WriteAllText(Path.Combine(_tmp.Dir, "Directory.Build.targets"), TemplateAssets.RootBuildTargets());
         var targets = Path.Combine(dir, "Directory.Build.targets");
 
@@ -280,7 +306,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void FixAll_MigratesTheSln_ThenAddsProjectsToTheSlnx()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.Delete(Path.Combine(dir, "Game.slnx"));
         const string guid = "{11111111-1111-1111-1111-111111111111}";
         File.WriteAllText(Path.Combine(dir, "Game.sln"),

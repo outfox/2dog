@@ -37,7 +37,7 @@ public class CliTreeTests
     [Theory]
     [InlineData("new", "--rename", "X")]
     [InlineData("add", "--output", "X")]
-    [InlineData("pack", "list", "x.pck", "--desktop")]
+    [InlineData("pack", "list", "x.pck", "--generic")]
     [InlineData("version", "--dry-run")]
     public void Option_OutsideItsVerb_NamesTheVerbsItBelongsTo(params string[] args)
     {
@@ -55,7 +55,8 @@ public class CliTreeTests
     }
 
     [Theory]
-    [InlineData("--dekstop", "--desktop")]
+    [InlineData("--generc", "--generic")]
+    [InlineData("--andriod", "--android")]
     [InlineData("--tets", "--tests")]
     [InlineData("--dry", "--dry-run")]
     [InlineData("--forc", "--force")]
@@ -148,7 +149,7 @@ public class CliTreeTests
     [Fact]
     public void HostFolder_AcceptsTheAttachedForm()
     {
-        var cmd = CommandLine.Parse(["add", "--desktop=Tools", "--web"]);
+        var cmd = CommandLine.Parse(["add", "--generic=Tools", "--web"]);
         Assert.Equal([(HostKind.Desktop, "Tools"), (HostKind.Web, (string?)null)],
             cmd.Requested.Select(r => (r.Kind, r.Folder)).ToArray());
     }
@@ -196,7 +197,7 @@ public class CliTreeTests
     [InlineData(1, "--unknown")]
     [InlineData(1, "--pin", "1.2.3")]
     [InlineData(1, "ad")]
-    [InlineData(1, "new", "--desktop")]
+    [InlineData(1, "new", "--generic")]
     [InlineData(1, "add", "--dekstop")]
     [InlineData(1, "pack")]
     [InlineData(1, "pack", "list")]
@@ -242,7 +243,7 @@ public class UsageTests
 
         var packHelp = Usage.Render(Verb.Pack);
         Assert.StartsWith("usage: 2dog pack list <pck>", packHelp);
-        Assert.DoesNotContain("--desktop", packHelp);
+        Assert.DoesNotContain("--generic", packHelp);
     }
 
     [Fact]
@@ -294,15 +295,15 @@ public class OptionalValueTokensTests
     [Fact]
     public void Normalize_AttachesFolderNamesAndMarksBareFlags()
     {
-        Assert.Equal(["add", "--desktop=*", "--web=Site", "--tests=*", "./proj"],
-            OptionalValueTokens.Normalize(["add", "--desktop", "--web", "Site", "--tests", "./proj"]));
+        Assert.Equal(["add", "--generic=*", "--web=Site", "--tests=*", "./proj"],
+            OptionalValueTokens.Normalize(["add", "--generic", "--web", "Site", "--tests", "./proj"]));
     }
 
     [Fact]
     public void Normalize_LeavesAttachedFormsAndEverythingAfterDoubleDashAlone()
     {
-        Assert.Equal(["add", "--desktop=Given", "--", "--web", "Folder"],
-            OptionalValueTokens.Normalize(["add", "--desktop=Given", "--", "--web", "Folder"]));
+        Assert.Equal(["add", "--generic=Given", "--", "--web", "Folder"],
+            OptionalValueTokens.Normalize(["add", "--generic=Given", "--", "--web", "Folder"]));
     }
 
     [Theory]

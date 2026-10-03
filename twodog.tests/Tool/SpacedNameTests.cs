@@ -394,7 +394,7 @@ public class NewNameAnnouncementTests
     [Fact]
     public void PrepareNewProject_DefaultsTheDirectoryToTheSanitizedName()
     {
-        var cmd = CommandLine.Parse(["new", "My Game!", "--desktop", "--no-restore"]);
+        var cmd = CommandLine.Parse(["new", "My Game!", "--generic", "--no-restore"]);
         Program.PrepareNewProject(cmd, interactive: false);
         Assert.Equal("MyGame", cmd.Options.ProjectPath);
         Assert.Equal("My Game!", cmd.Options.NameOverride);

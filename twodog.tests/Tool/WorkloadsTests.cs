@@ -2,7 +2,7 @@ using twodog.cli;
 
 namespace twodog.tests.ToolTests;
 
-public class WasmToolsTests
+public class WorkloadsTests
 {
     private static FakeProcessRunner Runner(bool installed, int installExit = 0) => new(request =>
         request.Args.SequenceEqual(["workload", "list"])
@@ -14,7 +14,7 @@ public class WasmToolsTests
     public void Installed_DoesNotOfferOrInstall()
     {
         var runner = Runner(installed: true);
-        WasmTools.EnsureInstalled(".", false, () => throw new Exception("must not prompt"), runner);
+        Workloads.EnsureInstalled(Workload.WasmTools, ".", false, _ => throw new Exception("must not prompt"), runner);
         Assert.Single(runner.Requests);
     }
 
@@ -25,7 +25,7 @@ public class WasmToolsTests
     {
         var runner = Runner(installed: false);
         var offers = 0;
-        WasmTools.EnsureInstalled(".", false, () => { offers++; return consent; }, runner);
+        Workloads.EnsureInstalled(Workload.WasmTools, ".", false, _ => { offers++; return consent; }, runner);
         Assert.Equal(1, offers);
         Assert.Equal(consent ? 2 : 1, runner.Requests.Count);
         if (consent) Assert.Equal(["workload", "install", "wasm-tools"], runner.Requests[1].Args);
@@ -35,7 +35,7 @@ public class WasmToolsTests
     public void Missing_WithoutATerminal_DoesNotInstall()
     {
         var runner = Runner(installed: false);
-        WasmTools.EnsureInstalled(".", false, null, runner);
+        Workloads.EnsureInstalled(Workload.WasmTools, ".", false, null, runner);
         Assert.Single(runner.Requests);
     }
 
@@ -43,49 +43,63 @@ public class WasmToolsTests
     public void ExplicitInstall_DoesNotPrompt()
     {
         var runner = Runner(installed: false);
-        WasmTools.EnsureInstalled(".", true, () => throw new Exception("must not prompt"), runner);
+        Workloads.EnsureInstalled(Workload.WasmTools, ".", true, _ => throw new Exception("must not prompt"), runner);
         Assert.Equal(["workload", "install", "wasm-tools"], runner.Requests[1].Args);
     }
 
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void Update_InstalledWorkload_UsesASeparateOffer(bool consent)
+    public void UpdateOffer_RunsOnlyAfterConsent(bool consent)
     {
         var runner = Runner(installed: true);
-        WasmTools.EnsureInstalled(".", false, () => throw new Exception("must not offer installation"), runner,
-            confirmUpdate: () => consent);
+        Workloads.Update(".", runner, () => consent);
         Assert.Equal(consent ? 2 : 1, runner.Requests.Count);
         if (consent) Assert.Equal(["workload", "update"], runner.Requests[1].Args);
     }
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void ExplicitUpdate_InstallsMissingOrUpdatesInstalled(bool installed)
+    [Fact]
+    public void UpdateOffer_WithoutInstalledWorkloads_DoesNotPrompt()
     {
-        var runner = Runner(installed);
-        WasmTools.EnsureInstalled(".", false, () => throw new Exception("must not prompt"), runner,
-            update: true, confirmUpdate: () => throw new Exception("must not prompt"));
-        Assert.Equal(installed ? ["workload", "update"] : ["workload", "install", "wasm-tools"], runner.Requests[1].Args);
+        var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 0, "Installed Workload Id",
+            "--------------------", ""));
+        Workloads.Update(".", runner, () => throw new Exception("must not prompt"));
+        Assert.Single(runner.Requests);
+    }
+
+    [Fact]
+    public void UpdateOffer_FailedProbe_DoesNotPrompt()
+    {
+        var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 1, "listing failed"));
+        CliConsole.Capture(() =>
+        {
+            Workloads.Update(".", runner, () => throw new Exception("must not prompt"));
+            return ExitCodes.Ok;
+        });
+        Assert.Single(runner.Requests);
+    }
+
+    [Fact]
+    public void ExplicitUpdate_RunsWithoutProbing()
+    {
+        var runner = Runner(installed: false);
+        Workloads.Update(".", runner);
+        Assert.Equal(["workload", "update"], Assert.Single(runner.Requests).Args);
     }
 
     [Fact]
     public void FailedProbe_DoesNotOfferOrInstall()
     {
         var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 1, "SDK not found"));
-        WasmTools.EnsureInstalled(".", false, () => throw new Exception("must not prompt"), runner);
+        Workloads.EnsureInstalled(Workload.WasmTools, ".", false, _ => throw new Exception("must not prompt"), runner);
         Assert.Single(runner.Requests);
     }
 
     [Theory]
-    [InlineData(false, "exit")]
-    [InlineData(false, "timeout")]
-    [InlineData(false, "exception")]
-    [InlineData(true, "exit")]
-    [InlineData(true, "timeout")]
-    [InlineData(true, "exception")]
-    public void ExplicitRequest_FailedProbeStillAttemptsInstallation(bool update, string failure)
+    [InlineData("exit")]
+    [InlineData("timeout")]
+    [InlineData("exception")]
+    public void ExplicitRequest_FailedProbeStillAttemptsInstallation(string failure)
     {
         var runner = new FakeProcessRunner(request =>
         {
@@ -95,8 +109,7 @@ public class WasmToolsTests
         });
         var run = CliConsole.Capture(() =>
         {
-            WasmTools.EnsureInstalled(".", !update, () => throw new Exception("must not prompt"), runner,
-                update, () => throw new Exception("must not prompt"));
+            Workloads.EnsureInstalled(Workload.WasmTools, ".", true, _ => throw new Exception("must not prompt"), runner);
             return ExitCodes.Ok;
         });
 
@@ -104,8 +117,7 @@ public class WasmToolsTests
         Assert.Contains("could not list installed workloads", run.Stderr);
         Assert.DoesNotContain("error:", run.Stderr);
         Assert.Equal(["workload", "install", "wasm-tools"], runner.Requests[1].Args);
-        Assert.Equal(update ? 3 : 2, runner.Requests.Count);
-        if (update) Assert.Equal(["workload", "update"], runner.Requests[2].Args);
+        Assert.Equal(2, runner.Requests.Count);
     }
 
     [Fact]
@@ -116,7 +128,8 @@ public class WasmToolsTests
             : FakeProcessRunner.Result(request, 1, "installation denied"));
         var run = CliConsole.Capture(() =>
         {
-            var error = Assert.Throws<ToolException>(() => WasmTools.EnsureInstalled(".", true, null, runner));
+            var error = Assert.Throws<ToolException>(() =>
+                Workloads.EnsureInstalled(Workload.WasmTools, ".", true, null, runner));
             Assert.Contains("installing wasm-tools failed", error.Message);
             return 0;
         });
@@ -130,11 +143,12 @@ public class WasmToolsTests
         var runner = Runner(installed: false, installExit: 1);
         var run = CliConsole.Capture(() =>
         {
-            Assert.Throws<ToolException>(() => WasmTools.EnsureInstalled(".", true, null, runner));
+            Assert.Throws<ToolException>(() =>
+                Workloads.EnsureInstalled(Workload.WasmTools, ".", true, null, runner));
             return 0;
         });
         Assert.Contains("installation denied", run.Stderr);
-        Assert.Contains(WasmTools.InstallCommand, run.Stderr);
+        Assert.Contains(Workload.WasmTools.InstallCommand, run.Stderr);
     }
 
     [Theory]
@@ -145,20 +159,53 @@ public class WasmToolsTests
         var runner = new FakeProcessRunner(request => duringInstallation && request.Args.Contains("list")
             ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", "")
             : throw new OperationCanceledException());
-        Assert.Throws<OperationCanceledException>(() => WasmTools.EnsureInstalled(".", true, null, runner));
+        Assert.Throws<OperationCanceledException>(() =>
+            Workloads.EnsureInstalled(Workload.WasmTools, ".", true, null, runner));
+    }
+
+    [Fact]
+    public void Android_MissingInstallsTheAndroidWorkload()
+    {
+        var runner = Runner(installed: true);
+        Workload? offered = null;
+        Workloads.EnsureInstalled(Workload.Android, ".", false, workload => { offered = workload; return true; }, runner);
+        Assert.Equal(Workload.Android, offered);
+        Assert.Equal(["workload", "install", "android"], runner.Requests[1].Args);
+    }
+
+    [Fact]
+    public void Android_Installed_DoesNotOffer()
+    {
+        var runner = new FakeProcessRunner(request => FakeProcessRunner.Result(request, 0, "Installed Workload Id",
+            "--------------------", "android  36.1.2/10.0.100  SDK 10.0.100", ""));
+        Workloads.EnsureInstalled(Workload.Android, ".", false, _ => throw new Exception("must not prompt"), runner);
+        Assert.Single(runner.Requests);
+    }
+
+    [Fact]
+    public void For_ListsEachNeededWorkloadOnce()
+    {
+        Assert.Empty(Workload.For([HostKind.Desktop, HostKind.Avalonia]));
+        Assert.Equal([Workload.WasmTools], Workload.For([HostKind.Web, HostKind.Blazor]));
+        Assert.Equal([Workload.Android], Workload.For([HostKind.Android]));
+        Assert.Equal([Workload.WasmTools, Workload.Android], Workload.For([HostKind.Android, HostKind.WebXr]));
     }
 
     [Theory]
     [InlineData("new")]
     [InlineData("add")]
     [InlineData("update")]
-    public void InstallFlag_ParsesForScaffoldingAndUpdate(string verb) =>
+    public void InstallFlags_ParseForScaffoldingAndUpdate(string verb)
+    {
         Assert.True(CommandLine.Parse([verb, "--install-wasm-tools"]).Options.InstallWasmTools);
+        Assert.True(CommandLine.Parse([verb, "--install-android-workload"]).Options.InstallAndroidWorkload);
+    }
 
     [Fact]
     public void WorkloadFlags_ParseForDoctorAndUpdate()
     {
         Assert.True(CommandLine.Parse(["doctor", "--install-wasm-tools"]).Doctor!.InstallWasmTools);
+        Assert.True(CommandLine.Parse(["doctor", "--install-android-workload"]).Doctor!.InstallAndroidWorkload);
         Assert.True(CommandLine.Parse(["update", "--update-workloads"]).Options.UpdateWorkloads);
     }
 
@@ -189,6 +236,46 @@ public class WasmToolsTests
         Assert.Equal(2, runner.Requests.Count);
     }
 
+    [Fact]
+    public void Scaffold_AndroidHost_InstallsOnlyTheAndroidWorkload()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        var runner = Runner(installed: false);
+        var options = new ScaffoldOptions
+        {
+            ProjectPath = dir, NameOverride = "Game", CreateProject = true, Restore = false,
+            InstallWasmTools = true, InstallAndroidWorkload = true,
+            Hosts = [new HostSpec(HostKind.Android, "Game.android")],
+        };
+        var run = CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options,
+            workloadRunner: runner).ExitCode);
+        Assert.Equal(0, run.ExitCode);
+        Assert.Equal(["workload", "install", "android"], runner.Requests[^1].Args);
+        Assert.DoesNotContain(runner.Requests, request => request.Args.Contains("wasm-tools"));
+    }
+
+    [Fact]
+    public void Scaffold_PlansACheckForEachWorkloadItsHostsNeed()
+    {
+        using var tmp = new TempProjectDir();
+        var runner = new FakeProcessRunner(_ => throw new Exception("a cancelled plan must not run workload commands"));
+        var options = new ScaffoldOptions
+        {
+            ProjectPath = Path.Combine(tmp.Dir, "Game"), NameOverride = "Game", CreateProject = true, Restore = true,
+            ConfirmWorkloadInstall = _ => throw new Exception("a cancelled plan must not prompt"),
+            Hosts = [new HostSpec(HostKind.Web, "Game.web"), new HostSpec(HostKind.Android, "Game.android")],
+        };
+        string[] checks = [];
+        var run = CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options, actions =>
+        {
+            checks = actions.Where(a => a.Kind == ActionKind.Workload).Select(a => a.Description).ToArray();
+            return false;
+        }, runner).ExitCode);
+        Assert.Equal(0, run.ExitCode);
+        Assert.Equal(["check wasm-tools and install if requested", "check android and install if requested"], checks);
+    }
+
     [Theory]
     [InlineData("web", false)]
     [InlineData("2dog", true)]
@@ -200,7 +287,7 @@ public class WasmToolsTests
         {
             ProjectPath = Path.Combine(tmp.Dir, "Game"), NameOverride = "Game", CreateProject = true,
             Restore = false, InstallWasmTools = explicitInstall,
-            ConfirmWasmToolsInstall = () => throw new Exception("must not prompt"),
+            ConfirmWorkloadInstall = _ => throw new Exception("must not prompt"),
             Hosts = [new HostSpec(HostKinds.Of(kind), "Game.host")],
         };
         var run = CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options,

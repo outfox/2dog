@@ -113,7 +113,7 @@ const starts = [
     title: 'Existing Project',
     code: [
       { comment: false, text: 'cd MyGame' },
-      { comment: false, text: 'dnx 2dog add --desktop' },
+      { comment: false, text: 'dnx 2dog add --generic' },
       { comment: false, text: 'dotnet run --project MyGame.2dog' },
     ],
     link: '/add',
@@ -124,7 +124,7 @@ const starts = [
     tint: 'gui',
     title: 'New Project',
     code: [
-      { comment: false, text: 'dnx 2dog new MyGame --desktop' },
+      { comment: false, text: 'dnx 2dog new MyGame --generic' },
       { comment: false, text: 'cd MyGame' },
       { comment: false, text: 'dotnet run --project MyGame.2dog' },
     ],

@@ -33,10 +33,15 @@ internal static class DoctorCommand
 
         var selected = options.Fix || options.FixAll
             ? DoctorRunner.Select(findings, options.FixAll)
-            : options.InstallWasmTools ? [] : interactive ? Tui.SelectFixes(DoctorRunner.Fixes(findings)) : [];
-        if (options.InstallWasmTools && findings.FirstOrDefault(f => f.Id == "env.wasm-tools")?.Fix is { } workloadFix
-            && selected.All(f => f.Key != workloadFix.Key))
-            selected.Add(workloadFix);
+            : options.InstallWasmTools || options.InstallAndroidWorkload ? []
+            : interactive ? Tui.SelectFixes(DoctorRunner.Fixes(findings)) : [];
+        foreach (var (requested, id) in new[]
+                 {
+                     (options.InstallWasmTools, "env.wasm-tools"), (options.InstallAndroidWorkload, "env.android-workload"),
+                 })
+            if (requested && findings.FirstOrDefault(f => f.Id == id)?.Fix is { } workloadFix
+                && selected.All(f => f.Key != workloadFix.Key))
+                selected.Add(workloadFix);
         List<Fix> applied = [];
         var final = findings;
         if (selected.Count > 0)

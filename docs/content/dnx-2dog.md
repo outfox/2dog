@@ -36,9 +36,10 @@ dotnet tool install -g 2dog   # or install it globally
 
 `2dog` alone prints the version info and the usage. `new`, `add` and `doctor`
 prompt on a terminal when no deciding flag is given. Host flags skip the project
-wizard; missing `wasm-tools` can still be offered before restore.
-`--yes`, pipes, and CI skip workload offers. Use `--install-wasm-tools` to request
-installation explicitly, or `2dog update --update-workloads` to update workloads.
+wizard; a missing workload (`wasm-tools`, `android`) can still be offered before
+restore. `--yes`, pipes, and CI skip workload offers. Use `--install-wasm-tools` or
+`--install-android-workload` to request installation explicitly, or
+`2dog update --update-workloads` to update workloads.
 
 ## Host flags
 
@@ -47,7 +48,7 @@ flag adds a second host of the same kind.
 
 | Flag | Host |
 | --- | --- |
-| `--desktop [folder]` | [2dog (generic .NET)](/hosts/generic) with your own `Main()` |
+| `--generic [folder]` | [2dog (generic .NET)](/hosts/generic) with your own `Main()` |
 | `--web [folder]` | [Web host](/hosts/web) |
 | `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
 | `--tests [folder]` | [xUnit test project](/hosts/xunit) |
@@ -55,7 +56,8 @@ flag adds a second host of the same kind.
 | `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |
 | `--avalonia [folder]` | [Avalonia host](/hosts/avalonia); opt-in |
 | `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); opt-in, needs wasm-tools |
-| `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
+| `--android [folder]` | [Android host](/hosts/android); experimental, opt-in, needs the android workload |
+| `--no-generic`, `--no-web`, `--no-tests` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
 
 ## Global options
 

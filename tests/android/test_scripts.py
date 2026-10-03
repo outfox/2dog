@@ -36,7 +36,7 @@ class Clock:
 
 
 class AndroidDeviceScript(unittest.TestCase):
-    def run_smoke(self, clock, timeout, read, expected_timeout=True):
+    def run_smoke(self, clock, timeout, read, expected_timeout=True, arguments=()):
         calls = []
         output = io.StringIO()
 
@@ -47,7 +47,7 @@ class AndroidDeviceScript(unittest.TestCase):
             return SimpleNamespace(stdout="")
 
         with patch.object(sys, "argv", ["test_android_device.py", "smoke.apk", "--serial", "test-device",
-                                       "--timeout", str(timeout)]), \
+                                       "--timeout", str(timeout), *arguments]), \
                 patch.object(device.time, "monotonic", side_effect=lambda: clock.now), \
                 patch.object(device.time, "sleep", side_effect=clock.sleep), \
                 patch.object(device.subprocess, "run", side_effect=run), contextlib.redirect_stdout(output):
@@ -134,6 +134,36 @@ class AndroidDeviceScript(unittest.TestCase):
         self.assertEqual(2, pid_calls)
         self.assertEqual([1], clock.sleeps)
         self.assertEqual("2DOG_ANDROID_CSHARP_SMOKE_PASSED\n", output)
+
+    def test_custom_marker_replaces_the_smoke_marker(self):
+        def read(command, options):
+            if "pidof" in command:
+                return SimpleNamespace(stdout="123\n")
+            return SimpleNamespace(stdout="2DOG_ANDROID_CSHARP_SMOKE_PASSED\n2DOG_ANDROID_SHOWCASE_SMOKE_PASSED\n")
+
+        marker = ["--package", "dev.twodog.showcase", "--marker", "2DOG_ANDROID_SHOWCASE_SMOKE_PASSED"]
+        calls, output = self.run_smoke(Clock(), 5, read, expected_timeout=False, arguments=marker)
+        self.assertEqual("2DOG_ANDROID_SHOWCASE_SMOKE_PASSED\n", output)
+        # The package is the one stopped, launched and polled.
+        for step in ("force-stop", "monkey", "pidof"):
+            self.assertIn("dev.twodog.showcase", next(command for command, _ in calls if step in command))
+
+        def other_app(command, options):
+            if "pidof" in command:
+                return SimpleNamespace(stdout="123\n")
+            return SimpleNamespace(stdout="2DOG_ANDROID_CSHARP_SMOKE_PASSED\n")
+
+        self.run_smoke(Clock(), 2, other_app, arguments=marker)
+
+    def test_empty_marker_is_rejected(self):
+        with patch.object(sys, "argv", ["test_android_device.py", "smoke.apk", "--serial", "test-device",
+                                       "--marker", ""]), \
+                patch.object(device.subprocess, "run") as run, contextlib.redirect_stderr(io.StringIO()) as error:
+            with self.assertRaises(SystemExit) as raised:
+                device.main()
+        self.assertEqual(2, raised.exception.code)
+        self.assertIn("--marker must not be empty", error.getvalue())
+        run.assert_not_called()
 
 
 class AndroidPublishScript(unittest.TestCase):

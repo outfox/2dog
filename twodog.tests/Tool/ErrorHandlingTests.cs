@@ -15,12 +15,12 @@ public class ErrorHandlingTests
         tmp.Write("project.godot", "[application]\nconfig/name=\"Game\"\n");
         tmp.Write("Game.csproj", "<Project Sdk=\"Godot.NET.Sdk/4.7.2\">\n  <PropertyGroup>\n</Project>\n");
 
-        var run = CliConsole.Run("add", tmp.Dir, "--desktop", "--dry-run", "--no-restore");
+        var run = CliConsole.Run("add", tmp.Dir, "--generic", "--dry-run", "--no-restore");
         Assert.Equal(ExitCodes.Error, run.ExitCode);
         Assert.Contains("error: Game.csproj is not valid XML (line 3", run.Stderr);
         Assert.DoesNotContain("   at ", run.Stderr);
 
-        var verbose = CliConsole.Run("add", tmp.Dir, "--desktop", "--dry-run", "--no-restore", "--verbose");
+        var verbose = CliConsole.Run("add", tmp.Dir, "--generic", "--dry-run", "--no-restore", "--verbose");
         Assert.Equal(ExitCodes.Error, verbose.ExitCode);
         Assert.Contains("verbose: System.Xml.XmlException", verbose.Stderr);
     }
@@ -34,7 +34,7 @@ public class ErrorHandlingTests
         File.SetAttributes(godot, FileAttributes.ReadOnly);
         try
         {
-            var run = CliConsole.Run("add", tmp.Dir, "--desktop", "--no-restore", "--yes");
+            var run = CliConsole.Run("add", tmp.Dir, "--generic", "--no-restore", "--yes");
 
             Assert.Equal(ExitCodes.Error, run.ExitCode);
             Assert.Contains("error: step 2/", run.Stderr);

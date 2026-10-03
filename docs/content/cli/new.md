@@ -6,8 +6,8 @@ description: "Reference for 2dog new: create a Godot project with 2dog hosts - a
 # `2dog new`
 
 Creates a new Godot project with 2dog hosts. Without host flags it asks which
-hosts to create. Host flags skip that wizard; missing `wasm-tools` can still
-be offered on terminals. `-y` runs unattended.
+hosts to create. Host flags skip that wizard; a missing workload (`wasm-tools`,
+`android`) can still be offered on terminals. `-y` runs unattended.
 
 ```bash
 2dog new [Name] [dir] [hosts] [options]
@@ -21,7 +21,7 @@ be offered on terminals. `-y` runs unattended.
 ## Hosts
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
-desktop, browser and tests, minus the `--no-<host>` ones.
+generic, browser and tests, minus the `--no-<host>` ones.
 
 ## Options
 
@@ -33,17 +33,18 @@ desktop, browser and tests, minus the `--no-<host>` ones.
 | `--force` | Overwrite scaffolded files that exist; never deletes |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
+| `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
 
 Plus the [global and output options](/dnx-2dog#global-options).
 
-`--no-restore` skips the workload offer; `--install-wasm-tools` requests
+`--no-restore` skips the workload offers; the install flags request
 installation explicitly. `--dry-run` never checks or installs workloads.
 
 ## Examples
 
 ```bash
 2dog new MyGame                            # interactive host choice
-2dog new MyGame --desktop --tests          # unattended
+2dog new MyGame --generic --tests          # unattended
 2dog new "My Game" -o games/mine --no-web  # name adjusted to MyGame
 ```
 

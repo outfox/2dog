@@ -230,6 +230,167 @@ Lines="@(AndroidAsset->'%(Link)|%(FullPath)')" Overwrite="true"/></Target>
         self.assertTrue(any(item.startswith("2dog/smoke-game.dll|") for item in assets))
         self.assertTrue(any(item.startswith("game.pck|") for item in assets))
 
+    GDEXTENSION = '''[configuration]
+entry_symbol = "probe_init"
+
+[libraries]
+windows.x86_64 = "res://addon/bin/probe.dll"
+android.debug.arm64 = "res://addon/bin/libprobe.debug.arm64.so"
+android.release.arm64 = "res://addon/bin/libprobe.release.arm64.so"
+android.x86_64 = "bin/libprobe.x86_64.so"
+
+[dependencies]
+android.arm64 = {
+    "res://addon/bin/libdep.arm64.so" : ""
+}
+'''
+
+    def gdextension_libraries(self, rid, variant, missing=()):
+        directory = Path(tempfile.mkdtemp(dir=self.root))
+        game = directory / "game"
+        for name in ("probe.dll", "libprobe.debug.arm64.so", "libprobe.release.arm64.so", "libprobe.x86_64.so",
+                     "libdep.arm64.so"):
+            if name not in missing:
+                (game / "addon/bin").mkdir(parents=True, exist_ok=True)
+                (game / "addon/bin" / name).write_bytes(b"library")
+        (game / "addon/probe.gdextension").write_text(self.GDEXTENSION)
+        # Godot never loads extensions under .gdignore, so their missing libraries are not an error.
+        (game / "host").mkdir()
+        (game / "host/.gdignore").touch()
+        (game / "host/stale.gdextension").write_text('[libraries]\nandroid.arm64 = "res://absent.so"\n'
+                                                     'android.x86_64 = "res://absent.so"\n')
+        targets = self.packages / "2dog.android" / self.version / "build/2dog.android.targets"
+        project = directory / "Host.proj"
+        project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier><RuntimeIdentifier>{rid}</RuntimeIdentifier>
+<TwoDogVariant>{variant}</TwoDogVariant><TwoDogGodotProjectFullPath>{xml(game)}</TwoDogGodotProjectFullPath></PropertyGroup>
+<Import Project="{xml(targets)}"/>
+<Target Name="PrepareForBuild"><WriteLinesToFile File="{xml(directory / 'libraries.txt')}"
+Lines="@(AndroidNativeLibrary->'%(Abi)|%(Filename)%(Extension)')" Overwrite="true"/></Target>
+</Project>''')
+        result = subprocess.run(["dotnet", "msbuild", str(project), "-t:PrepareForBuild", "-nologo"], cwd=REPO,
+                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+        listing = directory / "libraries.txt"
+        return result, sorted(listing.read_text().splitlines()) if listing.exists() else []
+
+    def test_gdextension_libraries_follow_the_selected_abi_and_variant(self):
+        cases = {("android-arm64", "debug"): ["arm64-v8a|libdep.arm64.so", "arm64-v8a|libprobe.debug.arm64.so"],
+                 ("android-arm64", "release"): ["arm64-v8a|libdep.arm64.so", "arm64-v8a|libprobe.release.arm64.so"],
+                 ("android-x64", "debug"): ["x86_64|libprobe.x86_64.so"]}
+        for (rid, variant), expected in cases.items():
+            with self.subTest(rid=rid, variant=variant):
+                result, libraries = self.gdextension_libraries(rid, variant)
+                self.assertEqual(0, result.returncode, result.stdout)
+                self.assertEqual(expected, libraries)
+
+    def test_missing_gdextension_library_for_a_selected_abi_fails(self):
+        result, _ = self.gdextension_libraries("android-arm64", "debug", missing=("libdep.arm64.so",))
+        self.assertNotEqual(0, result.returncode, result.stdout)
+        self.assertIn("TDGA009", result.stdout)
+        self.assertIn("res://addon/bin/libdep.arm64.so", result.stdout)
+        # A library for an unselected ABI may be absent.
+        result, _ = self.gdextension_libraries("android-arm64", "debug", missing=("libprobe.x86_64.so",))
+        self.assertEqual(0, result.returncode, result.stdout)
+
+    def android_signing(self, variant="release", environment=(), properties=""):
+        directory = Path(tempfile.mkdtemp(dir=self.root))
+        keystore = directory / "release.keystore"
+        keystore.write_bytes(b"keystore")
+        targets = self.packages / "2dog.android" / self.version / "build/2dog.android.targets"
+        project = directory / "Host.proj"
+        project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier><TwoDogVariant>{variant}</TwoDogVariant>{properties}</PropertyGroup>
+<Import Project="{xml(targets)}"/>
+<Target Name="_ResolveAndroidSigningKey"><WriteLinesToFile File="{xml(directory / 'signing.txt')}" Overwrite="true"
+Lines="AndroidKeyStore=$(AndroidKeyStore);KeyStore=$(AndroidSigningKeyStore);Alias=$(AndroidSigningKeyAlias);StorePass=$(AndroidSigningStorePass);KeyPass=$(AndroidSigningKeyPass)"/></Target>
+</Project>''')
+        env = {name: value for name, value in os.environ.items() if not name.startswith("GODOT_ANDROID_KEYSTORE_")}
+        # An empty Android user home: the developer's own ~/.android/debug.keystore must not leak into the result.
+        (directory / "android-home").mkdir()
+        env["ANDROID_USER_HOME"] = str(directory / "android-home")
+        env.update({name: value.replace("{keystore}", str(keystore)).replace("{directory}", str(directory))
+                    for name, value in dict(environment).items()})
+        result = subprocess.run(["dotnet", "msbuild", str(project), "-t:_ResolveAndroidSigningKey", "-nologo", "-v:diag"],
+                                cwd=REPO, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+        listing = directory / "signing.txt"
+        signing = dict(line.split("=", 1) for line in listing.read_text().splitlines()) if listing.exists() else {}
+        return result, signing, keystore
+
+    RELEASE_KEYSTORE = {"GODOT_ANDROID_KEYSTORE_RELEASE_PATH": "{keystore}", "GODOT_ANDROID_KEYSTORE_RELEASE_USER": "upload",
+                        "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD": "s3cr3t-value"}
+
+    def test_signing_follows_godots_keystore_variables_without_reading_the_password(self):
+        result, signing, keystore = self.android_signing(environment=self.RELEASE_KEYSTORE)
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual(("true", str(keystore.resolve()), "upload"),
+                         (signing["AndroidKeyStore"], signing["KeyStore"], signing["Alias"]))
+        self.assertEqual("env:GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD", signing["StorePass"])
+        self.assertEqual(signing["StorePass"], signing["KeyPass"])
+        # Not even a diagnostic-verbosity log contains the password.
+        self.assertNotIn("s3cr3t-value", result.stdout)
+
+    def test_signing_respects_explicit_keystores_and_the_variant(self):
+        result, signing, _ = self.android_signing(environment=self.RELEASE_KEYSTORE, properties=(
+            "<AndroidKeyStore>true</AndroidKeyStore><AndroidSigningKeyStore>mine.jks</AndroidSigningKeyStore>"))
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual(("mine.jks", ""), (signing["KeyStore"], signing["Alias"]))
+        # A debug build reads only the DEBUG variables and otherwise keeps the .NET debug key.
+        result, signing, _ = self.android_signing(variant="debug", environment=self.RELEASE_KEYSTORE)
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual("", signing["AndroidKeyStore"])
+        result, signing, _ = self.android_signing()
+        self.assertEqual(0, result.returncode, result.stdout)
+        self.assertEqual("", signing["AndroidKeyStore"])
+        self.assertIn("signed with the .NET debug key", result.stdout)
+
+    def test_signing_falls_back_to_the_android_sdk_debug_keystore(self):
+        android_home = Path(tempfile.mkdtemp(dir=self.root))
+        (android_home / "debug.keystore").write_bytes(b"keystore")
+        for variant in ("debug", "release"):
+            with self.subTest(variant=variant):
+                result, signing, _ = self.android_signing(variant=variant,
+                                                          environment={"ANDROID_USER_HOME": str(android_home)})
+                self.assertEqual(0, result.returncode, result.stdout[-2000:])
+                self.assertEqual(("true", str(android_home / "debug.keystore"), "androiddebugkey", "android", "android"),
+                                 (signing["AndroidKeyStore"], signing["KeyStore"], signing["Alias"],
+                                  signing["StorePass"], signing["KeyPass"]))
+        self.assertIn("signed with the Android debug key", result.stdout)
+        # Godot's keystore variables still win.
+        result, signing, keystore = self.android_signing(
+            environment={**self.RELEASE_KEYSTORE, "ANDROID_USER_HOME": str(android_home)})
+        self.assertEqual(str(keystore.resolve()), signing["KeyStore"])
+
+    def test_android_hosts_reject_unsupported_rids(self):
+        targets = self.packages / "2dog.android" / self.version / "build/2dog.android.targets"
+        for rids, error in (("android-x64", None), ("android-arm64;android-x64", None),
+                            ("android-arm", "unsupported RID: android-arm"), ("", "select android-arm64")):
+            with self.subTest(rids=rids):
+                directory = Path(tempfile.mkdtemp(dir=self.root))
+                project = directory / "Host.proj"
+                project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier><RuntimeIdentifiers>{rids}</RuntimeIdentifiers></PropertyGroup>
+<Import Project="{xml(targets)}"/>
+<Target Name="PrepareForBuild"/>
+</Project>''')
+                result = subprocess.run(["dotnet", "msbuild", str(project), "-t:PrepareForBuild", "-nologo"], cwd=REPO,
+                                        text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+                if error is None:
+                    self.assertEqual(0, result.returncode, result.stdout)
+                else:
+                    self.assertNotEqual(0, result.returncode, result.stdout)
+                    self.assertIn("TDGA013", result.stdout)
+                    self.assertIn(error, result.stdout)
+
+    def test_incomplete_signing_configuration_fails(self):
+        result, _, _ = self.android_signing(environment={**self.RELEASE_KEYSTORE,
+                                                         "GODOT_ANDROID_KEYSTORE_RELEASE_PATH": "absent.jks"})
+        self.assertNotEqual(0, result.returncode, result.stdout[-2000:])
+        self.assertIn("TDGA011", result.stdout)
+        environment = {name: value for name, value in self.RELEASE_KEYSTORE.items() if not name.endswith("PASSWORD")}
+        result, _, _ = self.android_signing(environment=environment)
+        self.assertNotEqual(0, result.returncode, result.stdout[-2000:])
+        self.assertIn("TDGA012", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

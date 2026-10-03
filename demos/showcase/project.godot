@@ -27,6 +27,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="showcase"
 
+[rendering]
+
+renderer/rendering_method.mobile="gl_compatibility"
+
 [xr]
 
 shaders/enabled.web=true
