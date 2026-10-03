@@ -585,7 +585,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        aot: [false, true]
+        # AOT is the slowest smoke build; keep it as a release gate for both
+        # pushed v* tags and release.yml's workflow_dispatch on the new tag.
+        aot: ${{ fromJSON(startsWith(github.ref, 'refs/tags/v') && '[false, true]' || '[false]') }}
 
     steps:
       - name: Checkout repository

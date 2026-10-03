@@ -43,7 +43,7 @@ public abstract class GodotRestartSmokeTests(HeadlessFixture godot)
     [Fact]
     public void Scene_CanLoadInstantiateAndFree()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         Assert.NotNull(scene);
 
         var instance = scene.Instantiate();

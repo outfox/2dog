@@ -144,7 +144,7 @@ public static class GodotApiSmoke
 
     public static void ImagesAndResources()
     {
-        var image = Image.CreateEmpty(2, 2, false, Image.Format.Rgba8);
+        using var image = Image.CreateEmpty(2, 2, false, Image.Format.Rgba8);
         Require(image is not null, "Image creation failed");
 
         image.SetPixel(1, 1, Colors.CornflowerBlue);
@@ -153,13 +153,15 @@ public static class GodotApiSmoke
         var png = image.SavePngToBuffer();
         Require(png.Length > 8, "PNG encoding returned no data");
 
-        var decoded = new Image();
+        using var decoded = new Image();
         Require(decoded.LoadPngFromBuffer(png) == Error.Ok, "PNG decoding failed");
         Require(decoded.GetWidth() == 2 && decoded.GetHeight() == 2, "decoded PNG has the wrong size");
 
         Require(ResourceLoader.Exists("res://main.tscn", "PackedScene"), "main scene is absent from ResourceLoader");
-        Require(ResourceLoader.Load<PackedScene>("res://main.tscn") is not null, "main scene could not be loaded");
-        Require(ResourceLoader.Load<Texture2D>("res://icon.svg") is not null, "imported SVG texture could not be loaded");
+        using var packedScene = ResourceLoader.Load<PackedScene>("res://main.tscn");
+        Require(packedScene is not null, "main scene could not be loaded");
+        using var texture = ResourceLoader.Load<Texture2D>("res://icon.svg");
+        Require(texture is not null, "imported SVG texture could not be loaded");
     }
 
     public static void EngineSingletons()
@@ -208,7 +210,7 @@ public static class GodotApiSmoke
 
     public static void SceneAndGeneratedScript()
     {
-        var packedScene = ResourceLoader.Load<PackedScene>("res://main.tscn");
+        using var packedScene = ResourceLoader.Load<PackedScene>("res://main.tscn");
         Require(packedScene is not null, "main PackedScene could not be loaded");
 
         var instance = packedScene.Instantiate();
@@ -219,8 +221,9 @@ public static class GodotApiSmoke
 
             const string cubePath = "Flair/BlueCubes/BlueCube1";
             var cube = instance.GetNodeOrNull<SpinningCube>(cubePath);
-            Require(cube is not null, "generated C# script type was not attached to the scene: "
-                                      + DescribeScriptBinding(instance.GetNodeOrNull(cubePath)!, typeof(SpinningCube)));
+            if (cube is null)
+                Require(false, "generated C# script type was not attached to the scene: "
+                               + DescribeScriptBinding(instance.GetNodeOrNull(cubePath)!, typeof(SpinningCube)));
             Require(GodotObject.IsInstanceValid(cube), "generated C# script instance is invalid");
         }
         finally
@@ -271,8 +274,8 @@ public static class GodotApiSmoke
 
         RequireSignalReceived(scene, "CSharpTicker", source =>
         {
-            Require(source is CSharpTicker,
-                "the CSharpTicker script did not bind: " + DescribeScriptBinding(source, typeof(CSharpTicker)));
+            if (source is not CSharpTicker)
+                Require(false, "the CSharpTicker script did not bind: " + DescribeScriptBinding(source, typeof(CSharpTicker)));
             return ((CSharpTicker)source).Tick();
         });
         RequireSignalReceived(scene, "GDScriptTicker", source =>
@@ -360,7 +363,7 @@ public static class GodotApiSmoke
 
         var actual = node.GetType();
         using var scriptValue = node.GetScript();
-        var script = scriptValue.AsGodotObject() as Script;
+        using var script = scriptValue.AsGodotObject() as Script;
         var scriptInfo = script is null ? "no script"
             : $"script '{script.ResourcePath}' (can instantiate: {script.CanInstantiate()})";
         var typeInfo = $"node type {actual.FullName} from {actual.Assembly.Location} in ALC '{System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(actual.Assembly)?.Name}'";

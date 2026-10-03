@@ -10,14 +10,14 @@ public class GodotSceneTests(HeadlessFixture godot)
     [Fact]
     public void LoadScene_MainScene_ReturnsPackedScene()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         Assert.NotNull(scene);
     }
 
     [Fact]
     public void InstantiateScene_CreatesCorrectRootType()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         var instance = scene.Instantiate();
 
         Assert.NotNull(instance);
@@ -29,7 +29,7 @@ public class GodotSceneTests(HeadlessFixture godot)
     [Fact]
     public void InstantiateScene_HasChildren()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         var instance = scene.Instantiate();
 
         Assert.True(instance.GetChildCount() > 0);
@@ -40,7 +40,7 @@ public class GodotSceneTests(HeadlessFixture godot)
     [Fact]
     public void InstantiateScene_ContainsExpectedChildren()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         var instance = scene.Instantiate();
         godot.Tree.Root.AddChild(instance);
 
@@ -57,7 +57,7 @@ public class GodotSceneTests(HeadlessFixture godot)
     [Fact]
     public void InstantiateScene_LabelHasText()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         var instance = scene.Instantiate();
         godot.Tree.Root.AddChild(instance);
 
@@ -72,7 +72,7 @@ public class GodotSceneTests(HeadlessFixture godot)
     [Fact]
     public void InstantiateScene_AddToTree_IsInsideTree()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
         var instance = scene.Instantiate();
         godot.Tree.Root.AddChild(instance);
 
@@ -85,7 +85,7 @@ public class GodotSceneTests(HeadlessFixture godot)
     [Fact]
     public void PackedScene_CanInstantiateMultipleTimes()
     {
-        var scene = GD.Load<PackedScene>("res://main.tscn");
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
 
         var a = scene.Instantiate();
         var b = scene.Instantiate();
@@ -96,5 +96,33 @@ public class GodotSceneTests(HeadlessFixture godot)
 
         a.Free();
         b.Free();
+    }
+
+    [Fact]
+    public void PackedScene_RepeatedLoadsSurviveGarbageCollection()
+    {
+        // Cached resources are shared with the running scene. Release each managed
+        // reference on the engine thread and keep it alive until its instance is freed,
+        // so finalizer cleanup cannot race the next load/instantiate's GCHandle swaps.
+        for (var i = 0; i < 64; i++)
+        {
+            showcase.GodotApiSmoke.ImagesAndResources();
+            showcase.GodotApiSmoke.SceneAndGeneratedScript();
+            GC.Collect();
+            using var scene = GD.Load<PackedScene>("res://main.tscn");
+            var instance = scene.Instantiate();
+            try
+            {
+                Assert.IsType<Control>(instance);
+                Assert.True(instance.GetChildCount() > 0);
+            }
+            finally
+            {
+                instance.Free();
+            }
+            GC.Collect();
+        }
+
+        GC.WaitForPendingFinalizers();
     }
 }

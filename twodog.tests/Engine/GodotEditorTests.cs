@@ -119,17 +119,18 @@ public class GodotEditorTests(HeadlessFixture godot)
     [Fact]
     public void ToolScene_CanLoad()
     {
-        var scene = GD.Load<PackedScene>("res://tool_test.tscn");
+        using var scene = GD.Load<PackedScene>("res://tool_test.tscn");
         Assert.NotNull(scene);
     }
 
     [Fact]
     public void ToolNode_IsToolScript()
     {
-        var scene = GD.Load<PackedScene>("res://tool_test.tscn");
+        using var scene = GD.Load<PackedScene>("res://tool_test.tscn");
         var node = scene.Instantiate();
 
-        var script = node.GetScript().As<Script>();
+        using var scriptValue = node.GetScript();
+        using var script = scriptValue.As<Script>();
         Assert.NotNull(script);
         Assert.True(script.IsTool());
 
@@ -139,7 +140,7 @@ public class GodotEditorTests(HeadlessFixture godot)
     [Fact]
     public void ToolNode_ReadyCalled_WhenAddedToTree()
     {
-        var scene = GD.Load<PackedScene>("res://tool_test.tscn");
+        using var scene = GD.Load<PackedScene>("res://tool_test.tscn");
         var node = scene.Instantiate();
         godot.Tree.Root.AddChild(node);
 
@@ -154,7 +155,7 @@ public class GodotEditorTests(HeadlessFixture godot)
     [Fact]
     public void ToolNode_ProcessCount_IncrementsOnIteration()
     {
-        var scene = GD.Load<PackedScene>("res://tool_test.tscn");
+        using var scene = GD.Load<PackedScene>("res://tool_test.tscn");
         var node = scene.Instantiate();
         godot.Tree.Root.AddChild(node);
 
