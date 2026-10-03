@@ -41,11 +41,12 @@ Generic, Avalonia, and WinUI hosts can publish with `PublishAot`, and Android
 hosts can as an experiment. The release and debug variants support it; the
 editor variant does not, because it loads GodotTools at runtime.
 
-Native AOT needs the platform's native toolchain: the Visual Studio C++ build
-tools on Windows, `clang` and `zlib1g-dev` on Linux, and the Xcode command-line
-tools on macOS (see the
+On desktop, Native AOT needs the platform's native toolchain: the Visual Studio
+C++ build tools on Windows, `clang` and `zlib1g-dev` on Linux, and the Xcode
+command-line tools on macOS (see the
 [.NET prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites)).
-Publish on the operating system you target.
+Publish desktop hosts on the operating system you target. Android hosts link
+with the Android NDK on any build machine (see below).
 
 2dog keeps `GodotSharp` and the game assembly whole, because Godot binds
 script classes through reflection. The game assembly is the project referenced

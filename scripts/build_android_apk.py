@@ -105,10 +105,11 @@ def ndk_directory():
     for variable in ("ANDROID_NDK_ROOT", "ANDROID_NDK_HOME"):
         if os.environ.get(variable):
             return Path(os.environ[variable])
-    if os.environ.get("ANDROID_HOME"):
-        versions = sorted((Path(os.environ["ANDROID_HOME"]) / "ndk").glob("*/source.properties"))
-        if versions:
-            return versions[-1].parent
+    for variable in ("ANDROID_HOME", "ANDROID_SDK_ROOT"):
+        if os.environ.get(variable):
+            versions = sorted((Path(os.environ[variable]) / "ndk").glob("*/source.properties"))
+            if versions:
+                return versions[-1].parent
     return None
 
 
