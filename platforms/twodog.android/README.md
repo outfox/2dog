@@ -4,9 +4,9 @@ Initial, experimental Android host support. Godot's Java Activity owns the surfa
 render thread, input, pause/resume and shutdown; the .NET app registers its runtime
 before launching it. Do not use the desktop `Engine.Start()` loop on Android.
 
-Reference `2dog.engine`, this package, and the `2dog.android-arm64` and/or
-`2dog.android-x64` meta packages. Choose Debug or Release with `TwoDogVariant` and
-an explicit Android RID. Both native variants retain the JNI name
+`dnx 2dog add --android` scaffolds such a host. By hand: reference `2dog.engine`,
+this package, and the `2dog.android-arm64` and/or `2dog.android-x64` meta packages.
+Choose Debug or Release with `TwoDogVariant` and an explicit Android RID. Both native variants retain the JNI name
 `libgodot_android.so`; exactly one belongs in each ABI directory of the APK.
 
 Set `GodotProjectDir` to the Godot project, and `dotnet publish -r android-arm64`
@@ -101,9 +101,9 @@ Input, pause/resume, restart, broader GDExtension coverage and physical-device
 validation remain gates before production support.
 The Android workload and emulator are not required for the build and package tests.
 The separate `tests/android/android.slnx` keeps Android workload requirements out
-of ordinary desktop solution builds. CI uploads the Android packages as their own
-`android-packages` artifact, which deploy does not publish yet; `ForcePackAllPlatforms`
-cannot pack empty Android packages.
+of ordinary desktop solution builds. The Android packages ship to NuGet with the
+others, and the Android Smoke job gates deploy. `ForcePackAllPlatforms` cannot pack
+empty Android packages.
 
 ## APK implementation milestones
 
@@ -138,8 +138,8 @@ The pck export uses the editor libgodot packed from `godot/bin`, or `--editor <g
 mono editor>`. Use `--rid android-arm64` or `--configuration Release` for the other
 target. `--skip-native --skip-java` reuses already staged payloads. `--feed <dir>`
 publishes against already packed packages instead of packing them (CI passes its
-`nuget-packages` and `android-packages`, with the natives staged in
-`godot/bin/android/` for the APK inspection). The resulting APK and inspection report
+`nuget-packages`, with its `android-natives` staged in `godot/bin/android/` for the
+APK inspection). The resulting APK and inspection report
 are written to `artifacts/android-apk/`. `--app showcase` publishes the showcase host
 instead (into `artifacts/android-showcase-apk/`); its GDExtension needs an Android NDK
 (`ANDROID_NDK_ROOT`, or one under the Android SDK).

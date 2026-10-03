@@ -93,9 +93,9 @@ has its own entry point and dependencies.
 - Supported RIDs for published builds: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
 - Packages available on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases)
 
-Experimental Android arm64/x64 support includes runtime packages, a Java Activity
-host, build and package tests and APK/AAB publishing scripts.
-See [Android host setup](platforms/twodog.android/README.md).
+Experimental Android arm64/x64 support: `dnx 2dog add --android` scaffolds a host
+whose `dotnet publish` makes an APK.
+See the [Android host](https://2dog.dev/hosts/android) and [2dog.android](platforms/twodog.android/README.md).
 Device validation is still required before Android joins the supported RID list.
 
 

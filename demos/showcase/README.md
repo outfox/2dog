@@ -25,8 +25,8 @@ a `.gdignore`):
   API smoke from `TwoDogActivity.addMainLoopStartedListener`. Needs the android workload and, in `packages/`, the
   `2dog.android*` packages (`uv run poe build-android`) next to the rest of 2dog's packages (`uv run poe build`). Those
   include the build machine's editor libgodot (`2dog.<rid>.editor`) and `2dog.tools`, which export the pck; pass
-  `-p:GodotEditor=<godot mono editor>` to export with an editor binary instead. CI's `nuget-packages` and
-  `android-packages` artifacts together are the same feed (see [2dog.android](../../platforms/twodog.android/README.md)).
+  `-p:GodotEditor=<godot mono editor>` to export with an editor binary instead. CI's `nuget-packages` artifact is
+  the same feed (see [2dog.android](../../platforms/twodog.android/README.md)).
   It is in no solution because restore needs the android workload. CI's Android Smoke job publishes it the same way
   and uploads the APKs as `android-apks`. To run an APK:
 

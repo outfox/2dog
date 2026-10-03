@@ -246,8 +246,8 @@ jobs:
       - name: Test managed binding packages
         run: python3 tests/bindings/test_packages.py
 
-      # The Android payloads and packages travel separately: only android-smoke needs them, and deploy publishes
-      # nuget-packages, which leaves the experimental Android packages out until they are ready for nuget.org.
+      # The Android natives travel separately (android-natives): only android-smoke needs them, to compare the
+      # APKs against. Their packages are in nuget-packages like every other published package.
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
         with:
@@ -262,18 +262,14 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: nuget-packages
-          path: |
-            packages/
-            !packages/2dog.android*
+          path: packages/
           retention-days: 7
 
-      - name: Upload Android packages and natives
+      - name: Upload Android natives
         uses: actions/upload-artifact@v7
         with:
-          name: android-packages
-          path: |
-            packages/2dog.android*.nupkg
-            godot/bin/android/
+          name: android-natives
+          path: godot/bin/android/
           if-no-files-found: error
           retention-days: 7
 
@@ -981,8 +977,7 @@ jobs:
         run: bash .github/scripts/tool-smoke.sh
 
   # Experimental Android: publishes the smoke and showcase hosts against the packed packages the way an app does,
-  # then runs the x64 pair on an emulator. The arm64 showcase APK is built and inspected for devices only. Not a
-  # deploy gate while the Android packages stay unpublished.
+  # then runs the x64 pair on an emulator. The arm64 showcase APK is built and inspected for devices only.
   android-smoke:
     name: Android Smoke
     needs: [pack]
@@ -1036,12 +1031,12 @@ jobs:
           name: nuget-packages
           path: packages
 
-      # packages/2dog.android*.nupkg plus godot/bin/android/, the natives the APK inspection compares against.
-      - name: Download Android packages and natives
+      # The natives the APK inspection compares against.
+      - name: Download Android natives
         uses: actions/download-artifact@v8
         with:
-          name: android-packages
-          path: .
+          name: android-natives
+          path: godot/bin/android
 
       # Each is one `dotnet publish` of the host: it builds the game, imports and exports its pck with the packaged
       # editor libgodot (2dog.linux-x64.editor), and packages the APK; the script then inspects the APK.
@@ -1100,20 +1095,22 @@ jobs:
   # Uses NuGet Trusted Publishing (OIDC) — no long-lived API key is stored.
   deploy:
     name: Deploy to NuGet
-    # web-smoke gates deploy because the 2dog.browser-wasm packages it
-    # exercises are among the packages being published; desktop-smoke gates it
-    # because it is the only check that runs a Release-only publish; tool-smoke
-    # because it installs the packed `2dog` tool the way users get it.
-    needs: [test, desktop-smoke, web-smoke, tool-smoke]
+    # web-smoke and android-smoke gate deploy because the 2dog.browser-wasm and
+    # 2dog.android packages they exercise are among the packages being
+    # published; desktop-smoke gates it because it is the only check that runs
+    # a Release-only publish; tool-smoke because it installs the packed `2dog`
+    # tool the way users get it.
+    needs: [test, desktop-smoke, web-smoke, android-smoke, tool-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
     # transitive-skip reason as the test job — deploy must still require all
-    # three gates to have actually succeeded.
+    # gates to have actually succeeded.
     if: >-
       ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') &&
           needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
-          needs.web-smoke.result == 'success' && needs.tool-smoke.result == 'success' }}
+          needs.web-smoke.result == 'success' && needs.android-smoke.result == 'success' &&
+          needs.tool-smoke.result == 'success' }}
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing
