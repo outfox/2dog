@@ -70,7 +70,7 @@ const menus = computed<{ label: string; items: MenuItem[] }[]>(() => [
     label: 'Editor',
     items: [
       { text: 'Build Variants', link: '/build-configurations' },
-      { text: 'Web / Browser (WASM)', link: '/web' },
+      { text: 'Web', link: '/hosts/web' },
       { text: 'API Reference', link: '/api-reference' },
             { sep: true },
       {

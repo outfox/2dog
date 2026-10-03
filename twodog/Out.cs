@@ -291,6 +291,7 @@ internal static class Out
         Count("project.godot edit", "project.godot edits", ActionKind.GodotConfig);
         Count("rename", "renames", ActionKind.Rename);
         Count("solution step", "solution steps", ActionKind.Solution);
+        Count("workload check", "workload checks", ActionKind.Workload);
         Count("restore", "restores", ActionKind.Restore);
         return string.Join(", ", parts);
     }

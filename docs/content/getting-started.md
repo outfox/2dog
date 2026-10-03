@@ -1,147 +1,65 @@
 ---
 title: Getting Started
-description: "Embed a new or existing Godot C# project in a .NET application: install the .NET 10 SDK, scaffold hosts with 2dog new or 2dog add, and run your game with dotnet run."
+description: "Run Godot inside .NET applications with desktop, web, and test hosts."
 ---
 
 # Let's take Godot for a walk!
 
+2dog runs Godot inside .NET applications for desktop games, web publishing,
+embedded UIs, and automated tests.
+
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
-## Prerequisites :gd-bone@gold: 
-
-To get set up, you'll need:
-
-- the [.NET SDK 10.0 or later](https://dotnet.microsoft.com/download);
-- a supported platform to develop on: `win-x64`, `linux-x64`, or `osx-arm64`;
-- the official [Godot 4.7.x .NET editor](https://godotengine.org/download) as
-  usual, for scene and resource authoring (builds and CI do not require it).
-
-## 1. Getting Started
-
-::: info Trail marker: *Good robot, new tricks!*
- 2dog lets you run your project through desktop, test, browser, and other "host" applications. The stock Godot editor and export templates will still work, and usually you don't need any code changes.
-:::
-
-### 2dog works by adding small [host](/hosts/) projects to a Godot project:
-
-::: code-group
-
-```bash [Existing Project]
-# Existing game content stays where it is.
-cd path/to/MyGame
-
-dnx 2dog add
-```
-
-```bash [Fresh Project]
-# Create the Godot project and its hosts together.
-dnx 2dog new MyNewGame
-
-cd MyNewGame
-```
-
-:::
-
-The tool asks which hosts you want and shows its plan before making changes.
-Flags skip the prompts; for example, `dnx 2dog new MyGame --desktop --tests --web`.
-
-::: tip Try before you bite?
-Use `dnx 2dog add path/to/MyGame --dry-run` to inspect every planned action.
-[Adding 2dog to a Project](/add) documents what the command creates and patches.
-:::
-
-## 2. Run the Generic Host
+::: tip From stock Godot to the browser
+With the [.NET 10 SDK](https://dotnet.microsoft.com/download) installed, in the
+base directory of your Godot project (e.g. `~/MyGame`), run:
 
 ```bash
-dotnet run --project MyGame.2dog
-```
-
-`MyGame.2dog` is the process entry point: a plain .NET console application that
-starts Godot as an embedded library. Change and extend it like any other .NET
-code – it's the simplest way to run 2dog, and the first place to look when
-troubleshooting.
-
-
-## 3. Keep Using Godot
-
-Open your project in the Godot .NET editor, it should still work exactly as before:
-
-```bash
-godot-mono --editor . # or Godot_v4.7.2-stable_mono_win64.exe, etc.
-```
-
-Edit scenes and C# scripts as usual. Builds detect changed project inputs and
-run the required resource import automatically. See [Resource Import](/import-tool)
-for how it works and how to configure it.
-
-::: info Trail marker
-You now have two compatible ways into the same project: the Godot editor for
-authoring and exporting, and the .NET hosts for running, testing, and publishing.
-:::
-
-## 4. Run some Tests
-
-Projects scaffolded by 2dog include a headless xUnit host by default:
-
-```bash
-dotnet test MyGame.tests
-```
-
-This starts Godot without a window and runs tests through the normal .NET test runner. See [Testing with xUnit](/testing) to load scenes and test game behavior, and [Single Godot Instance](/known-issues/single-instance) for parallelism constraints.
-
-Start adding some Unit tests right away, we know you want to!
-
-
-## 5. Publish a Host
-
-```bash
-dotnet publish MyGame.2dog -c Release            # host OS
-dotnet publish MyGame.2dog -c Release -r win-x64 # or a specific RID
-```
-
-The publish folder is a complete build: your host executable, the native
-engine, the .NET runtime and assemblies, and your game content exported as
-`MyGame.2dog.pck`. Copy the folder to another machine and run the executable – 
-no .NET installation required. See the
-[Generic Host guide](/hosts/generic#publishing) for the framework-dependent
-opt-out, preset configuration, and unsupported publish modes.
-
-
-
-## 6. Publish to the Browser
-
-Install the WebAssembly build tools and a static file server once:
-
-```bash
-dotnet workload install wasm-tools
-dotnet tool install --global dotnet-serve
-```
-
-Then publish the web host:
-
-```bash
+dotnet workload install wasm-tools # 2dog after 4.7.2.100 does this for you
+dnx 2dog add --web
 dotnet publish MyGame.web
 ```
 
-The static site is written to `MyGame.web/AppBundle/`. Serve that directory
-with any static file server (or upload it to itch.io, S3, etc.)
+Your static site is in `MyGame.web/AppBundle/`. Upload that to itch.io, your web
+space, or serve locally, e.g. `dnx dotnet-serve -d MyGame.web/AppBundle`
+or `npx serve MyGame.web/AppBundle`.
 
-For example:
+*(use your project's name in place of `MyGame`)*
+:::
+
+## Developing
+
+Develop on Windows x64, Linux x64, or macOS ARM64. 2dog upgrades your `sln` file to `slnx`, so you can code in your IDE or code editor of choice - including Godot itself.
+
+The various hosts appear as projects inside the solution.
+
+You may have any number of hosts of the same type, 2dog will ask you for alternative names on creation. This is great for different automation suites, demo versions, etc.
+
+## Updating and Fixing
+2dog safely stays on the version you installed it on, but updating or checking for problems is easy:
 
 ```bash
-# serve locally
-dotnet serve --directory MyGame.web/AppBundle
-
-# release to itch.io
-butler push MyGame.web/AppBundle user/game:channel
-
-# upload to AWS
-aws s3 sync MyGame.web/AppBundle s3://your-game-bucket
-
-# etc, etc.
+dnx 2dog update
+dnx 2dog doctor
 ```
 
-::: info Trail Marker: Customizing Web Builds
-The [Browser Host guide](/hosts/web) covers building, local serving,
-deployment, configuration, and current browser limitations.
-:::
+## Importing and Editing
+Just continue using the official
+[Godot :godot-version: .NET editor](https://godotengine.org/download) for scene editing or other exports.
+
+Keep editing scenes and scripts in Godot as usual. Hosts import changed resources automatically (this differs from other solutions that may need you to run `godot --import`).
+
+See [Hosts](/hosts/) for other host types and [Testing with xUnit](/testing) to begin writing tests... *(you should, it's awesome!)*
+
+
+## Squirrel ?! (Start a New Project)
+
+2dog can do a lot more, such as provide unit testing, embedding in other UIs, etc. You can also conveniently create a full project, `project.godot` and all, from the command line:
+
+```bash
+dnx 2dog new NewGame
+cd NewGame
+dotnet run --project NewGame.2dog
+dotnet test
+dotnet publish NewGame.web
+```

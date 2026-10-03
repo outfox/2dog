@@ -7,7 +7,7 @@ namespace twodog.cli;
 /// </summary>
 internal static class UpdateCommand
 {
-    /// <summary>Tests inject a fake runner for the git probe and the restore.</summary>
+    /// <summary>Tests inject a fake runner for git, workload commands and restore.</summary>
     internal static IProcessRunner Runner { get; set; } = ProcessRunner.Default;
 
     public static int Run(ParsedCommand cmd, Report report)
@@ -35,6 +35,12 @@ internal static class UpdateCommand
         PlanGodotSdk(plan, model, warnings);
         PlanGameBindings(plan, model);
         PlanWebBootRefresh(plan, model);
+
+        if (model.HasWebLikeHost && (cmd.Options.InstallWasmTools || cmd.Options.UpdateWorkloads || interactive && cmd.Options.Restore))
+            plan.Add(new PlannedAction("check wasm-tools and offer workload installation or updates", ActionKind.Workload,
+                () => WasmTools.EnsureInstalled(project.Dir, cmd.Options.InstallWasmTools,
+                    interactive ? Tui.OfferWasmToolsInstall : null, Runner,
+                    cmd.Options.UpdateWorkloads, interactive ? Tui.OfferWorkloadUpdate : null)));
 
         if (plan.Count > 0 && cmd.Options.Restore)
             plan.Add(new PlannedAction("dotnet restore", ActionKind.Restore, () => Restore(project)));

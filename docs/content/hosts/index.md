@@ -1,46 +1,35 @@
 ---
 title: What's a Host?
-description: "A host is a small .NET program that owns the process, starts embedded Godot, and drives its frame loop - an overview of the hosts 2dog generates and how they relate."
+description: "Choose a .NET application that runs your Godot project."
 ---
 
 # Hosts
 
-A **host** is a small .NET program that owns the process, starts embedded
-Godot, and drives its Main Loop.
+A host is a .NET application that starts Godot and runs your game.
+Each host has its own entry point and references the same game project.
 
-## Adding a Host
+## Add a Host
 
-[`2dog new`](/templates) generates a new project with your selection of hosts;
-[`2dog add`](/add) adds them to an existing project.
+Run this from the directory containing `project.godot`:
 
-The default set includes Generic, Browser, and xUnit hosts. WebXR, Blazor,
-Avalonia, WinForms, and WinUI 3 are opt-in. Each host page shows the relevant command.
-
-## Solution / Project Layouts
-
-Every host is its own `Microsoft.NET.Sdk` project with:
-
-- a package reference to its 2dog host package;
-- `<ProjectReference>` to `MyGame.csproj`, your Godot C# assembly;
-- `<GodotProjectDir>`, which points to the location of `project.godot`
-- `.gdignore`, because hosts nest inside the Godot project;
-
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <GodotProjectDir>..</GodotProjectDir>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="2dog.engine" Version=":2dog-version:"/>
-    <ProjectReference Include="../MyGame.csproj"/>
-  </ItemGroup>
-</Project>
+```bash
+dnx 2dog add
 ```
 
-## Engine Surface
+Choose hosts when prompted, or use the flags below. For a new project, use
+`dnx 2dog new MyGame` instead.
 
-Hosts talk to Godot through one object: [`twodog.Engine`](/api/engine).
+| Host | Flag | Purpose |
+| --- | --- | --- |
+| [2dog (generic .NET)](./generic) | `--desktop` | Desktop or headless .NET application |
+| [Avalonia](./avalonia) | `--avalonia` | Cross-platform desktop UI |
+| [Blazor](./blazor) | `--blazor` | Game inside a Blazor page |
+| [Web](./web) | `--web` | Static browser site |
+| [WebXR](./webxr) | `--webxr` | Browser VR and AR |
+| [WinForms](./winforms) | `--winforms` | Windows Forms UI |
+| [WinUI 3](./winui) | `--winui` | Windows App SDK UI |
+| [xUnit](./xunit) | `--tests` | Tests using the Godot engine |
+
+Without host flags, unattended commands include generic .NET, Web, and xUnit.
+See [Project Layout](/project-layout) for files and
+[MSBuild Configuration](/configuration) for shared settings.

@@ -58,14 +58,13 @@ godot-mono --editor . # or Godot_v4.7.2-stable_mono_win64.exe, etc.
 You can also publish the generated .NET app to `browser-wasm` for the browser.
 
 ```bash
-dotnet workload install wasm-tools
-dotnet tool install --global dotnet-serve
 dotnet publish MyGame.web
-dotnet serve --directory MyGame.web/AppBundle
+dnx dotnet-serve -d MyGame.web/AppBundle
 ```
 
-See [Web / Browser](https://2dog.dev/web.html) for the development loop,
-deployment options, and current limitations.
+See the [Web host](https://2dog.dev/hosts/web) for building and deployment.
+
+When adding a Web host, 2dog offers to install missing `wasm-tools` on terminals.
 
 
 ## Project structure

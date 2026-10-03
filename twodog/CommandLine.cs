@@ -60,8 +60,8 @@ internal sealed class UsageException(string message, Verb? verb = null) : Except
 }
 
 /// <summary>
-/// Parses the command line against <see cref="CliTree"/>. Every interactive choice has a flag here, and giving any
-/// host flag is what turns the prompts off.
+/// Parses the command line against <see cref="CliTree"/>. Every interactive choice has a flag here; host flags skip
+/// the project wizard, while --yes turns all prompts off.
 /// </summary>
 internal static class CommandLine
 {
@@ -108,6 +108,8 @@ internal static class CommandLine
                 cmd.Options.ProjectPath = result.GetValue(CliTree.ProjectPathArg);
                 cmd.Options.DryRun = result.GetValue(CliTree.DryRun);
                 cmd.Options.Restore = !result.GetValue(CliTree.NoRestore);
+                cmd.Options.InstallWasmTools = result.GetValue(CliTree.InstallWasmTools);
+                cmd.Options.UpdateWorkloads = result.GetValue(CliTree.UpdateWorkloads);
                 cmd.AllowDirty = result.GetValue(CliTree.AllowDirty);
                 break;
             case Verb.Pack:
@@ -238,6 +240,7 @@ internal static class CommandLine
             Strict = result.GetValue(CliTree.Strict),
             Offline = result.GetValue(CliTree.Offline),
             ListChecks = result.GetValue(CliTree.ListChecks),
+            InstallWasmTools = result.GetValue(CliTree.InstallWasmTools),
             LogFile = result.GetValue(CliTree.Log),
         };
         if (result.GetValue(CliTree.BuildConfiguration) is { } configuration) options.Configuration = configuration;
@@ -252,6 +255,7 @@ internal static class CommandLine
         cmd.Options.DryRun = result.GetValue(CliTree.DryRun);
         cmd.Options.Force = result.GetValue(CliTree.Force);
         cmd.Options.Restore = !result.GetValue(CliTree.NoRestore);
+        cmd.Options.InstallWasmTools = result.GetValue(CliTree.InstallWasmTools);
 
         // Host requests in command-line order (hosts are created in that order): walk the tokens rather than the
         // per-option values, which would group them by kind.

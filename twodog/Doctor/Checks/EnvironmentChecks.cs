@@ -57,7 +57,12 @@ internal static class EnvironmentChecks
                     "'dotnet workload list' failed", "run 'dotnet workload list' yourself; the browser hosts need wasm-tools");
             else if (!workloads.Contains("wasm-tools"))
                 yield return new Finding("env.wasm-tools", c, Severity.Fail, $"wasm-tools workload missing (needed by {folders})",
-                    "browser hosts publish through the .NET WebAssembly SDK", "dotnet workload install wasm-tools");
+                    "browser hosts publish through the .NET WebAssembly SDK", WasmTools.InstallCommand,
+                    Fix: new Fix("env:wasm-tools", FixClass.Announced, $"install wasm-tools ({WasmTools.InstallCommand})", () =>
+                    {
+                        WasmTools.Install(project.Dir, ctx.Runner);
+                        ctx.InvalidateWorkloads();
+                    }));
             else
                 yield return Finding.Pass("env.wasm-tools", c, "wasm-tools");
         }

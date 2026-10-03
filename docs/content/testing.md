@@ -18,9 +18,8 @@ dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
 
-`2dog.xunit` brings in `2dog.engine` automatically. Projects created by the
-[`2dog` tool](/add) already include a test project; add one later with
-`2dog add --tests`. Run it with:
+`2dog.xunit` brings in `2dog.engine` automatically. To generate a test host in
+your Godot project, run `dnx 2dog add --tests`. Run the tests with:
 
 ```bash
 dotnet test MyGame.tests

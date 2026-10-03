@@ -1,6 +1,6 @@
 # 2dog
 
-Command-line tool and project templates for [2dog](https://2dog.dev)  –  run
+Command-line tool and project templates for [2dog](https://2dog.dev) – run
 Godot as a library from your own .NET entry point. It scaffolds host projects,
 checks and repairs them (`2dog doctor`), and updates them (`2dog update`). The
 engine library itself is the [`2dog.engine`](https://www.nuget.org/packages/2dog.engine)
@@ -28,7 +28,9 @@ dotnet tool install -g 2dog
 
 With no host options the tool prompts: a checkbox list of hosts, editable
 folder names, the plan, and a confirmation. Naming any host option (or passing
-`--yes`) runs it unattended instead. The `dotnet new` template produces the
+`--yes`) skips that wizard. On terminals, missing `wasm-tools` can still be
+offered before restore; `--yes` skips the offer. Use `--install-wasm-tools`
+for explicit installation. The `dotnet new` template produces the
 same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
 ## What it does
@@ -56,7 +58,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.blazor/ (.gdignore) <- Blazor Web App host (opt-in: --blazor; server + Client/ WebAssembly page)
 ```
 
-Run it again whenever you want another host  –  hosts that exist are recognized
+Run it again whenever you want another host – hosts that exist are recognized
 and left alone, and a kind you already have is added a second time under a
 free folder name (`2dog add --desktop MyGame.editor`).
 
@@ -87,6 +89,8 @@ Options:
 | `--dry-run` | Print planned actions without changing anything |
 | `--force` | Overwrite files that already exist (never deletes/moves) |
 | `--no-restore` | Skip the final `dotnet restore` |
+| `--install-wasm-tools` | `new`, `add`, `doctor`, `update`: install missing `wasm-tools` for browser hosts |
+| `--update-workloads` | `update`: install missing `wasm-tools`, or update all installed workloads for the project's SDK |
 | `--allow-dirty` | `update`: proceed with uncommitted git changes |
 | `--fix`, `--fix-all`, `--build [target]`, `-c, --configuration <Cfg>`, `--log <file>`, `--ignore <id>`, `--strict`, `--offline`, `--list-checks` | `doctor` options; see `2dog doctor --help` |
 | `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |

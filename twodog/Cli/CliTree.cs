@@ -94,6 +94,12 @@ internal static class CliTree
     public static readonly Option<bool> NoRestore = new("--no-restore")
         { Description = "Skip the final 'dotnet restore'" };
 
+    public static readonly Option<bool> InstallWasmTools = new("--install-wasm-tools")
+        { Description = "Install missing wasm-tools for Web, WebXR or Blazor hosts without prompting" };
+
+    public static readonly Option<bool> UpdateWorkloads = new("--update-workloads")
+        { Description = "Install missing wasm-tools, or update all installed workloads for the project's SDK" };
+
     public static readonly Option<bool> AllowDirty = new("--allow-dirty")
         { Description = "Update although the git working tree has uncommitted changes" };
 
@@ -105,7 +111,7 @@ internal static class CliTree
         { Description = "Apply the safe fixes, then check again" };
 
     public static readonly Option<bool> FixAll = new("--fix-all")
-        { Description = "Also apply the announced fixes (solution migration, target framework, bootstrap refresh)" };
+        { Description = "Also apply announced fixes, including missing wasm-tools installation" };
 
     /// <summary>Optional value: the pre-pass gives a bare --build the AnyFolder sentinel, meaning the default target.</summary>
     public static readonly Option<string[]> Build = new("--build")
@@ -197,14 +203,15 @@ internal static class CliTree
         {
             foreach (var kind in Hosts.All) command.Options.Add(HostOptions[kind]);
             foreach (var kind in Hosts.All) command.Options.Add(NoHostOptions[kind]);
-            foreach (var option in new Option[] { DryRun, Force, NoRestore }) command.Options.Add(option);
+            foreach (var option in new Option[] { DryRun, Force, NoRestore, InstallWasmTools }) command.Options.Add(option);
         }
 
         Update.Arguments.Add(ProjectPathArg);
-        foreach (var option in new Option[] { DryRun, NoRestore, AllowDirty, To }) Update.Options.Add(option);
+        foreach (var option in new Option[] { DryRun, NoRestore, AllowDirty, To, InstallWasmTools, UpdateWorkloads })
+            Update.Options.Add(option);
 
         Doctor.Arguments.Add(ProjectPathArg);
-        foreach (var option in new Option[] { Fix, FixAll, Build, BuildConfiguration, Log, Offline, Ignore, Strict, ListChecks })
+        foreach (var option in new Option[] { Fix, FixAll, Build, BuildConfiguration, Log, Offline, Ignore, Strict, ListChecks, InstallWasmTools })
             Doctor.Options.Add(option);
 
         PackList.Arguments.Add(PackFileArg);

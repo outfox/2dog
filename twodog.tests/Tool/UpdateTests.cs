@@ -33,6 +33,52 @@ public class UpdateTests
         finally { UpdateCommand.Runner = previous; }
     }
 
+    [Theory]
+    [InlineData(true, "--update-workloads")]
+    [InlineData(false, "--update-workloads")]
+    [InlineData(true, "--install-wasm-tools")]
+    [InlineData(false, "--install-wasm-tools")]
+    public void WorkloadFlags_UpdateInstalledOrInstallMissing(bool installed, string option)
+    {
+        using var tmp = new TempProjectDir();
+        var dir = AgedProject(tmp);
+        var runner = new FakeProcessRunner(request => request.Args.Contains("list")
+            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------",
+                installed ? "wasm-tools  10.0.100  SDK" : "", "")
+            : FakeProcessRunner.Result(request, 0));
+        var run = WithRunner(runner, () => CliConsole.Run("update", dir, option, "--no-restore", "--allow-dirty"));
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        if (installed && option == "--install-wasm-tools") Assert.Single(runner.Requests);
+        else Assert.Contains(runner.Requests, request => request.Args.SequenceEqual(installed
+            ? ["workload", "update"] : ["workload", "install", "wasm-tools"]) && request.WorkingDir == dir);
+    }
+
+    [Fact]
+    public void WorkloadUpdate_DryRunDoesNotProbeOrModifyTheMachine()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = AgedProject(tmp);
+        var runner = new FakeProcessRunner(_ => throw new Exception("must not run a workload command"));
+        var run = WithRunner(runner, () => CliConsole.Run("update", dir, "--update-workloads", "--dry-run", "--allow-dirty"));
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Empty(runner.Requests);
+        Assert.Contains("workload installation or updates", run.Stdout);
+    }
+
+    [Fact]
+    public void WorkloadUpdateFailure_StopsBeforeRestore()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = AgedProject(tmp);
+        var runner = new FakeProcessRunner(request => request.Args.Contains("list")
+            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", "wasm-tools  10.0.100  SDK", "")
+            : FakeProcessRunner.Result(request, 1, "update denied"));
+        var run = WithRunner(runner, () => CliConsole.Run("update", dir, "--update-workloads", "--allow-dirty"));
+        Assert.Equal(ExitCodes.Error, run.ExitCode);
+        Assert.DoesNotContain(runner.Requests, request => request.Args.Contains("restore"));
+        Assert.Contains("update denied", run.Stderr);
+    }
+
     [Fact]
     public void Update_MigratesLiterals_AndSetsTheBlock()
     {
