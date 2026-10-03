@@ -164,7 +164,8 @@ internal static class ScaffoldCommand
     /// Actions apply in order with no rollback: a failure names its step, earlier steps stand, later ones never run.
     /// </summary>
     public static ScaffoldResult Run(ProjectContext project, ScaffoldOptions options,
-        Func<IReadOnlyList<ActionReport>, bool>? confirm = null, IProcessRunner? workloadRunner = null)
+        Func<IReadOnlyList<ActionReport>, bool>? confirm = null, IProcessRunner? workloadRunner = null,
+        IEnvironment? environment = null)
     {
         var projectDir = project.Dir;
         var baseName = project.BaseName;
@@ -185,6 +186,7 @@ internal static class ScaffoldCommand
             .ToList();
         var wantsWeb = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
         var wantsAndroid = newHosts.Any(h => h.Kind == HostKind.Android) || existingHosts.Any(h => h.Kind == HostKind.Android);
+        if (wantsAndroid) warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
         // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
         var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
             .Concat(existingHosts.Concat(newHosts.Select(h => new ExistingHost(h.Kind, h.Folder)))

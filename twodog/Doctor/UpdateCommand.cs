@@ -10,7 +10,7 @@ internal static class UpdateCommand
     /// <summary>Tests inject a fake runner for git, workload commands and restore.</summary>
     internal static IProcessRunner Runner { get; set; } = ProcessRunner.Default;
 
-    public static int Run(ParsedCommand cmd, Report report)
+    public static int Run(ParsedCommand cmd, Report report, IEnvironment? environment = null)
     {
         var interactive = !cmd.NoInteractive && Tui.CanPrompt;
         var options = new ScaffoldOptions { ProjectPath = cmd.Options.ProjectPath };
@@ -29,6 +29,8 @@ internal static class UpdateCommand
 
         var plan = new List<PlannedAction>();
         var warnings = new List<string>();
+        if (model.Hosts.Any(h => h.Kind == HostKind.Android))
+            warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
         PlanMigrations(plan, model);
         ScaffoldCommand.PlanRootBuildProps(plan, project.Dir);
         PlanPropsValues(plan, model, current);

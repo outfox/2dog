@@ -335,6 +335,24 @@ public class DoctorTests : IDisposable
     }
 
     [Fact]
+    public void MissingAndroidSdk_IsAWarningWithoutAnAutomaticFix()
+    {
+        var dir = Scaffold("--android");
+        var before = Snapshot(dir);
+        var runner = Runner();
+
+        var run = Doctor(dir, runner, "--json", "--fix-all");
+
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        var finding = Finding(run.Stdout, "env.android-sdk")!.Value;
+        Assert.Equal("warn", finding.GetProperty("severity").GetString());
+        Assert.Contains("ANDROID_HOME", finding.GetProperty("title").GetString());
+        Assert.False(finding.TryGetProperty("fix", out _));
+        Assert.Equal(before, Snapshot(dir));
+        Assert.DoesNotContain(runner.Requests, r => r.Args.Contains("install"));
+    }
+
+    [Fact]
     public void AndroidHost_IsRecognizedAndItsPresetRestored()
     {
         var dir = Scaffold("--generic", "--android");

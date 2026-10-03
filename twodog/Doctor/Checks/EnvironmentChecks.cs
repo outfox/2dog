@@ -14,6 +14,7 @@ internal static class EnvironmentChecks
         new("env.global-json", Category.Environment, "the root global.json pin is satisfied by an installed SDK"),
         new("env.wasm-tools", Category.Environment, "the wasm-tools workload is installed when a browser host exists"),
         new("env.android-workload", Category.Environment, "the android workload is installed when an Android host exists"),
+        new("env.android-sdk", Category.Environment, "Android SDK paths and components are available when an Android host exists"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot-editor", Category.Environment, "GODOT_EDITOR, when set, points at an existing file"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
@@ -58,6 +59,16 @@ internal static class EnvironmentChecks
                      project.Hosts.Where(h => h.Kind == HostKind.Android), "Android hosts build with .NET for Android",
                      ctx.Options.InstallAndroidWorkload))
             yield return finding;
+
+        if (project.Hosts.Any(h => h.Kind == HostKind.Android))
+        {
+            var sdk = AndroidSdk.Inspect(ctx.Env);
+            foreach (var warning in sdk.Warnings)
+                yield return new Finding("env.android-sdk", c, Severity.Warn, warning,
+                    Remedy: $"Android SDK setup: {AndroidSdk.SetupUrl}");
+            if (sdk.Warnings.Count == 0)
+                yield return Finding.Pass("env.android-sdk", c, $"Android SDK ({sdk.Directory})");
+        }
 
         var rid = Rid(ctx.Env);
         if (SupportedRids.Contains(rid))

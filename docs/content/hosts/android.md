@@ -27,6 +27,16 @@ own package name.
 You also need the .NET `android` workload (the tool offers to install it), an
 Android SDK, and JDK 17.
 
+`2dog new`, `add`, `update`, and `doctor` check `AndroidSdkDirectory`,
+[`ANDROID_HOME` and `ANDROID_SDK_ROOT`](https://developer.android.com/tools/variables)
+and common SDK install locations. They warn politely about missing SDKs,
+incomplete SDK roots, or conflicting environment variables. These checks look
+for platform tools, platforms, and build tools; they do not verify every
+project-specific API or build-tools version. The tool leaves your SDK paths
+and environment variables untouched. See
+[Android SDK setup](https://learn.microsoft.com/en-us/dotnet/android/getting-started/installation/dependencies)
+to install the required components.
+
 ## Build and Install
 
 ```bash

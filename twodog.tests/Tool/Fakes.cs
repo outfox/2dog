@@ -19,12 +19,12 @@ internal sealed class FakeProcessRunner(Func<ProcessRequest, ProcessResult> answ
 }
 
 /// <summary>A Windows x64 machine with nothing set, backed by the real file system for existence checks.</summary>
-internal sealed class FakeEnvironment : IEnvironment
+internal sealed class FakeEnvironment(bool isWindows = true, bool isMacOS = false) : IEnvironment
 {
     public Dictionary<string, string> Vars { get; } = [];
     public string? Var(string name) => Vars.GetValueOrDefault(name);
-    public bool IsWindows => true;
-    public bool IsMacOS => false;
+    public bool IsWindows => isWindows;
+    public bool IsMacOS => isMacOS;
     public Architecture Architecture => Architecture.X64;
     public bool FileExists(string path) => File.Exists(path);
     public bool DirectoryExists(string path) => Directory.Exists(path);

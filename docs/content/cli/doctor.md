@@ -70,6 +70,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `env.global-json` | the root global.json pin is satisfied by an installed SDK |
 | `env.wasm-tools` | the wasm-tools workload is installed when a browser host exists |
 | `env.android-workload` | the android workload is installed when an Android host exists |
+| `env.android-sdk` | Android SDK paths and components are available when an Android host exists |
 | `env.host-platform` | this OS and architecture have 2dog native packages |
 | `env.godot-editor` | GODOT_EDITOR, when set, points at an existing file |
 | `env.overrides` | GODOTSHARP_DIR and the other layout overrides point at what they claim |

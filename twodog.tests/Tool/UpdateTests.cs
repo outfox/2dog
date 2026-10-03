@@ -33,6 +33,24 @@ public class UpdateTests
         finally { UpdateCommand.Runner = previous; }
     }
 
+    [Fact]
+    public void AndroidUpdate_WarnsAboutAMissingSdkWithoutChangingPaths()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(ExitCodes.Ok, CliConsole.Run("new", "Game", dir, "--android", "--no-restore").ExitCode);
+        var env = new FakeEnvironment();
+        var runner = new FakeProcessRunner(r => FakeProcessRunner.Result(r, 0));
+        var cmd = CommandLine.Parse(["update", dir, "--no-restore", "--allow-dirty"]);
+
+        var run = WithRunner(runner, () => CliConsole.Capture(() => UpdateCommand.Run(cmd, new Report(), env)));
+
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Contains("Could not find an Android SDK", run.Stderr);
+        Assert.Empty(env.Vars);
+        Assert.Empty(runner.Requests);
+    }
+
     [Theory]
     [InlineData(true, "--update-workloads")]
     [InlineData(false, "--update-workloads")]
