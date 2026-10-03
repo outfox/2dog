@@ -15,12 +15,11 @@ With the [.NET 10 SDK](https://dotnet.microsoft.com/download) installed, in the
 base directory of your Godot project (e.g. `~/MyGame`), run:
 
 ```bash
-dotnet workload install wasm-tools # 2dog after 4.7.2.100 does this for you
 dnx 2dog add --web
 dotnet publish MyGame.web
 ```
 
-Your static site is in `MyGame.web/AppBundle/`. Upload that to itch.io, your web
+Your app/game and `index.html` are then in `MyGame.web/AppBundle/`. Upload that to itch.io, your web
 space, or serve locally, e.g. `dnx dotnet-serve -d MyGame.web/AppBundle`
 or `npx serve MyGame.web/AppBundle`.
 
