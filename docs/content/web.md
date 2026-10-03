@@ -1,5 +1,5 @@
 ---
-# Merged into the Browser Host page (hosts/web.md).
+# Merged into the Web host page (hosts/web.md).
 # This stub keeps the old URL alive for external links; kept out of search.
 search: false
 head:
@@ -8,6 +8,6 @@ head:
       content: 0; url=/hosts/web
 ---
 
-# Browser Host
+# Web
 
-This page has a new home: [Browser Host](/hosts/web). You are being redirected.
+This page has a new home: [Web](/hosts/web). You are being redirected.

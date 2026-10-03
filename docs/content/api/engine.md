@@ -180,8 +180,7 @@ this diagnostic mode adds logging overhead. Setting it on desktop throws
 
 Unhandled managed exceptions and unobserved task exceptions are logged
 automatically on browser from the first use of `Engine`, across restarts.
-Unobserved task reporting waits for garbage collection; see
-[Diagnosing Async Exceptions](../hosts/web#diagnosing-async-exceptions).
+Unobserved task reporting waits for garbage collection.
 
 ### `ResolveContent`
 
@@ -243,4 +242,4 @@ internal static class Program
 `--headless`, `--verbose`, `--rendering-driver opengl3`, `--audio-driver Dummy`,
 and the rest – and passes them to the engine unchanged.
 
-See [Generic Host](../hosts/generic) for the full desktop-host pattern.
+See [2dog (generic .NET)](../hosts/generic) to run and publish a desktop host.

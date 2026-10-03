@@ -110,30 +110,26 @@ const starts = [
   {
     icon: 'arrow_right_arrow_left',
     tint: 'gold',
-    title: 'I Have a Godot Game',
+    title: 'Existing Project',
     code: [
-      { comment: true, text: "# no install needed, just use .NET 10's dotnet tool execute (dnx)" },
-      { comment: false, text: 'dnx 2dog add MyGame' },
       { comment: false, text: 'cd MyGame' },
-      { comment: true, text: "# if you created a browser host in the tool, try:" },
-      { comment: false, text: 'dotnet publish MyGame.web' },
+      { comment: false, text: 'dnx 2dog add --desktop' },
+      { comment: false, text: 'dotnet run --project MyGame.2dog' },
     ],
     link: '/add',
-    linkText: 'Just add 2dog →',
+    linkText: 'Existing project guide →',
   },
   {
     icon: 'tennis_ball',
     tint: 'gui',
-    title: "I'm Starting Fresh",
+    title: 'New Project',
     code: [
-      { comment: true, text: '# the 2dog tool will walk you through creation of a new project' },
-      { comment: false, text: 'dnx 2dog new MyGame' },
+      { comment: false, text: 'dnx 2dog new MyGame --desktop' },
       { comment: false, text: 'cd MyGame' },
-      { comment: true, text: "# there's also dotnet templates:" },
-      { comment: false, text: 'dotnet new install 2dog' },
+      { comment: false, text: 'dotnet run --project MyGame.2dog' },
     ],
     link: '/templates',
-    linkText: 'Template options →',
+    linkText: 'New project guide →',
   },
 ]
 </script>
@@ -202,6 +198,7 @@ const starts = [
               <span v-html="s.title"></span>
             </h2>
             <div class="ed-subwin-body">
+              <p class="ed-start-requirement">Requires the .NET 10 SDK.</p>
               <div class="ed-shell-wrap">
                 <pre class="ed-shell"><code><span
                   v-for="(l, i) in s.code"
@@ -234,7 +231,7 @@ const starts = [
           <p class="ln sys">Starting Godot instance...</p>
           <p class="ln">Engine: Godot instance created successfully!</p>
           <p class="ln sys">Godot Engine (2dog) v{{ godotVersion }}.stable.mono.2dog.69c545edf (2026-08-26 11:55:01 UTC) - https://2dog.dev</p>
-          <p class="ln sys">Vulkan 1.4.341 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce RTX 3080</p>
+          <p class="ln sys">Vulkan 1.4.341 - <a href="https://docs.godotengine.org/en/stable/tutorials/rendering/renderers.html">Forward+</a> - Using Device #0: NVIDIA - NVIDIA GeForce RTX 3080</p>
           <p class="ln" aria-hidden="true">&nbsp;</p>
           <p class="ln">Engine: Godot started successfully!</p>
           <p class="ln ok">2dog is running 'MyGame'!</p>
@@ -371,6 +368,12 @@ const starts = [
   flex-direction: column;
   flex: 1;
   padding: 12px 14px 12px;
+}
+
+.ed-start-requirement {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--ed-text-2);
 }
 
 .ed-shell-wrap {

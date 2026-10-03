@@ -965,6 +965,43 @@ public class AddEndToEndTests
         Assert.Equal(snapshot, Snapshot(tmp.Dir));
     }
 
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Add_WorkloadOnlyCheck_DoesNotRestore(bool installed)
+    {
+        using var tmp = new TempProjectDir();
+        tmp.Write("project.godot", GdScriptProject);
+        Assert.Equal(ExitCodes.Ok, Run(Options(tmp.Dir)));
+        var before = Snapshot(tmp.Dir);
+        var options = Options(tmp.Dir);
+        options.Restore = true;
+        var prompts = 0;
+        options.ConfirmWasmToolsInstall = () => { prompts++; return false; };
+        var runner = new FakeProcessRunner(request => request.Args.SequenceEqual(["workload", "list"])
+            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------",
+                installed ? "wasm-tools  10.0.100  SDK" : "", "")
+            : throw new Exception("the workload-only check must not install or restore"));
+        ScaffoldResult? result = null;
+
+        var run = CliConsole.Capture(() =>
+        {
+            result = ScaffoldCommand.Run(ScaffoldCommand.Open(options), options, actions =>
+            {
+                // Reject a restore at planning time, before a real restore could run in this regression test.
+                Assert.DoesNotContain(actions, action => action.Kind == ActionKind.Restore);
+                return true;
+            }, runner);
+            return result.ExitCode;
+        });
+
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Equal(ActionKind.Workload, Assert.Single(result!.Actions).Kind);
+        Assert.Single(runner.Requests);
+        Assert.Equal(installed ? 0 : 1, prompts);
+        Assert.Equal(before, Snapshot(tmp.Dir));
+    }
+
     [Fact]
     public void Add_ExistingCsproj_PutsWebBootInWebFolderAndPatchesInclude()
     {

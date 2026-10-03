@@ -163,7 +163,8 @@ internal static class ScaffoldCommand
     /// Runs a scaffold. <paramref name="confirm"/>, when given, sees the planned actions and decides whether to apply.
     /// Actions apply in order with no rollback: a failure names its step, earlier steps stand, later ones never run.
     /// </summary>
-    public static ScaffoldResult Run(ProjectContext project, ScaffoldOptions options, Func<IReadOnlyList<ActionReport>, bool>? confirm = null)
+    public static ScaffoldResult Run(ProjectContext project, ScaffoldOptions options,
+        Func<IReadOnlyList<ActionReport>, bool>? confirm = null, IProcessRunner? workloadRunner = null)
     {
         var projectDir = project.Dir;
         var baseName = project.BaseName;
@@ -231,7 +232,8 @@ internal static class ScaffoldCommand
         PlanExportPresets(plan, projectDir, wantsWeb);
         PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
-        PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts, existingHosts);
+        PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts, existingHosts,
+            workloadRunner ?? ProcessRunner.Default);
 
         return Apply(plan, warnings, skipped, options.DryRun, confirm,
             () => NextStepRows(newHosts), () => PrintNextSteps(project, newHosts));
@@ -652,7 +654,7 @@ internal static class ScaffoldCommand
     private static void PlanSolution(
         List<PlannedAction> plan, ScaffoldOptions options, string projectDir, string baseName,
         string godotCsproj, IReadOnlyList<string> allHostProjects, IReadOnlyList<HostSpec> newHosts,
-        IReadOnlyList<ExistingHost> existingHosts)
+        IReadOnlyList<ExistingHost> existingHosts, IProcessRunner workloadRunner)
     {
         var (solutionPath, exists) = SolutionOps.Locate(projectDir, baseName);
         if (!exists)
@@ -712,8 +714,16 @@ internal static class ScaffoldCommand
                 }));
         }
 
-        // Only restore when the run actually changes something.
-        if (options.Restore && plan.Count > 0)
+        var hasProjectChanges = plan.Count > 0;
+        // Run after global.json has been created, so both probes and installation use the project's SDK.
+        var needsWasm = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
+        if (needsWasm && (options.InstallWasmTools || options.Restore && options.ConfirmWasmToolsInstall != null))
+            plan.Add(new PlannedAction("check wasm-tools and install if requested", ActionKind.Workload,
+                () => WasmTools.EnsureInstalled(projectDir, options.InstallWasmTools,
+                    options.ConfirmWasmToolsInstall, workloadRunner)));
+
+        // Workload checks and installation alone do not change the project's restore inputs.
+        if (options.Restore && hasProjectChanges)
             plan.Add(new PlannedAction($"dotnet restore {solutionName}", ActionKind.Restore, () =>
             {
                 var result = SolutionOps.Restore(solutionPath);

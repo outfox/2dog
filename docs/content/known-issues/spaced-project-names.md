@@ -39,7 +39,7 @@ space-free.
 
 `2dog add`/`convert` refuses to scaffold hosts against a name containing
 whitespace and offers to fix it - interactively, or via
-[`2dog add --rename NewName`](/add#project-names-with-spaces). The rename
+`2dog add --rename NewName`. The rename
 touches the .NET identity only: the csproj file, `[dotnet]
 project/assembly_name` in `project.godot`, and the solution reference. Godot's
 display name (`config/name`) keeps its spaces.

@@ -53,11 +53,14 @@ internal static class EnvironmentChecks
         {
             var folders = string.Join(", ", project.Hosts.Where(h => h.IsWebLike).Select(h => h.Folder));
             if (ctx.Workloads is not { } workloads)
-                yield return new Finding("env.wasm-tools", c, Severity.Info, "could not list workloads",
-                    "'dotnet workload list' failed", "run 'dotnet workload list' yourself; the browser hosts need wasm-tools");
+                yield return new Finding("env.wasm-tools", c, ctx.Options.InstallWasmTools ? Severity.Fail : Severity.Info,
+                    "could not list workloads", "'dotnet workload list' failed",
+                    ctx.Options.InstallWasmTools ? WasmTools.InstallCommand : "run 'dotnet workload list' yourself; the browser hosts need wasm-tools",
+                    Fix: ctx.Options.InstallWasmTools ? InstallWasmTools(ctx) : null);
             else if (!workloads.Contains("wasm-tools"))
                 yield return new Finding("env.wasm-tools", c, Severity.Fail, $"wasm-tools workload missing (needed by {folders})",
-                    "browser hosts publish through the .NET WebAssembly SDK", "dotnet workload install wasm-tools");
+                    "browser hosts publish through the .NET WebAssembly SDK", WasmTools.InstallCommand,
+                    Fix: InstallWasmTools(ctx));
             else
                 yield return Finding.Pass("env.wasm-tools", c, "wasm-tools");
         }
@@ -108,6 +111,13 @@ internal static class EnvironmentChecks
                     "the import step and the native copy need them at build time", "dotnet restore");
         }
     }
+
+    private static Fix InstallWasmTools(DoctorContext ctx) =>
+        new("env:wasm-tools", FixClass.Announced, $"install wasm-tools ({WasmTools.InstallCommand})", () =>
+        {
+            WasmTools.Install(ctx.Project.Dir, ctx.Runner);
+            ctx.InvalidateWorkloads();
+        });
 
     internal static string Rid(IEnvironment env)
     {

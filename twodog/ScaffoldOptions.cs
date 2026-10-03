@@ -41,6 +41,11 @@ internal sealed class ScaffoldOptions
     public bool DryRun;
     public bool Force;
     public bool Restore = true;
+    public bool InstallWasmTools;
+    public bool UpdateWorkloads;
+
+    /// <summary>Only supplied for interactive terminals; a declined offer leaves workload installation to the user.</summary>
+    public Func<bool>? ConfirmWasmToolsInstall;
 }
 
 /// <summary>The project a run operates on, resolved before anything is planned.</summary>
@@ -102,6 +107,7 @@ internal enum ActionKind
     GodotConfig,
     Rename,
     Solution,
+    Workload,
     Restore,
 }
 

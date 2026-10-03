@@ -2,7 +2,7 @@ namespace twodog.cli;
 
 /// <summary>
 /// The 2dog command. Bare `2dog` prints version info and usage; the scaffolding verbs (new, add) prompt when no
-/// host flags are given and run unattended when they are. Both paths end in the same scaffolder.
+/// host flags are given. Host flags skip the project wizard; missing workloads can still be offered on terminals.
 /// </summary>
 internal static class Program
 {
@@ -127,14 +127,19 @@ internal static class Program
             ? Tui.SelectHosts(project, HostSelection.Defaults(cmd.Excluded, project))
             : HostSelection.FromFlags(cmd, project);
 
+        // Host flags skip the project wizard, but a missing machine prerequisite still gets its own offer.
+        // --yes, JSON, CI and redirected input/output keep their unattended behavior.
+        if (!cmd.NoInteractive && Tui.CanPrompt)
+            cmd.Options.ConfirmWasmToolsInstall = Tui.OfferWasmToolsInstall;
+
         var result = ScaffoldCommand.Run(project, cmd.Options, interactive ? Tui.ConfirmPlan : null);
         JsonReport.Describe(report, project, cmd.Options.Hosts, result);
         return result.ExitCode;
     }
 
     /// <summary>
-    /// Prompting is off once the command line answers the questions itself (any host flag, or --yes), so scripted
-    /// runs never block, not even at the final confirmation. --dry-run still asks, then prints the plan.
+    /// Host flags and --yes skip the project wizard. Workload offers have their own terminal policy.
+    /// --dry-run may gather project choices, but never applies the plan or offers workload changes.
     /// </summary>
     internal static bool WantsPrompts(ParsedCommand cmd) =>
         cmd is { NoInteractive: false, HostFlagsSeen: false } && !Out.Mode.Json;

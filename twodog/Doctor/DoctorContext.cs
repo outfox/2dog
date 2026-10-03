@@ -34,6 +34,7 @@ internal sealed class DoctorOptions
     public bool Strict;
     public bool Offline;
     public bool ListChecks;
+    public bool InstallWasmTools;
     public HashSet<string> Ignore = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Run a build: null = no build, "" = the default target, else a host folder or project/solution.</summary>
@@ -58,7 +59,7 @@ internal sealed class DoctorContext
     public required DoctorOptions Options { get; init; }
 
     private readonly Lazy<List<DotnetInfo.Sdk>> _sdks;
-    private readonly Lazy<List<string>?> _workloads;
+    private Lazy<List<string>?> _workloads;
     private readonly Lazy<string?> _globalPackages;
     private Task<IReadOnlyDictionary<string, string?>>? _latest;
     private Dictionary<string, Version>? _versions;
@@ -98,6 +99,10 @@ internal sealed class DoctorContext
 
     /// <summary>Installed workload ids, or null when the listing failed.</summary>
     public List<string>? Workloads => _workloads.Value;
+
+    /// <summary>A workload repair changes the machine facts cached for the post-fix check.</summary>
+    public void InvalidateWorkloads() =>
+        _workloads = new(() => Dotnet("workload", "list") is { Ok: true } r ? DotnetInfo.ParseWorkloads(r.Output) : null);
 
     /// <summary>The NuGet global packages folder, or null when unknown.</summary>
     public string? GlobalPackages => _globalPackages.Value;
