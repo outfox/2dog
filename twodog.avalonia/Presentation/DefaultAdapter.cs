@@ -1,6 +1,4 @@
 using System.Runtime.Versioning;
-using Silk.NET.Core.Native;
-using Silk.NET.DXGI;
 
 namespace twodog.Presentation;
 
@@ -12,31 +10,30 @@ internal static unsafe class DefaultAdapter
     /// default adapter is software (WARP cannot share with a hardware Vulkan device).</summary>
     public static long? TryGetLuid()
     {
-        using var dxgi = DXGI.GetApi(null, false);
-        IDXGIFactory1* factory = null;
-        if (dxgi.CreateDXGIFactory1(SilkMarshal.GuidPtrOf<IDXGIFactory1>(), (void**)&factory) < 0)
+        var factory = D3D11Interop.TryCreateFactory1();
+        if (factory is null)
             return null;
         try
         {
-            IDXGIAdapter1* adapter = null;
-            if (factory->EnumAdapters1(0, &adapter) != 0)
+            void* adapter = null;
+            if (D3D11Interop.EnumAdapters1(factory, 0, &adapter) != 0)
                 return null;
             try
             {
-                AdapterDesc1 desc;
-                adapter->GetDesc1(&desc);
-                if ((desc.Flags & (uint)AdapterFlag.Software) != 0)
+                D3D11Interop.AdapterDesc1 desc;
+                D3D11Interop.GetDesc1(adapter, &desc);
+                if ((desc.Flags & D3D11Interop.AdapterFlagSoftware) != 0)
                     return null;
-                return ((long)desc.AdapterLuid.High << 32) | (uint)desc.AdapterLuid.Low;
+                return desc.Luid;
             }
             finally
             {
-                adapter->Release();
+                D3D11Interop.Release(adapter);
             }
         }
         finally
         {
-            factory->Release();
+            D3D11Interop.Release(factory);
         }
     }
 }

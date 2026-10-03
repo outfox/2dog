@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.OpenGL;
 using Avalonia.OpenGL.Egl;
 using Avalonia.OpenGL.Features;
@@ -17,9 +18,14 @@ namespace twodog.Presentation;
 /// <see cref="ExternalObjectsOpenGlExtensionFeature"/> for the Skia GL context and hands it
 /// to the already-constructed Skia external-objects wrapper, which consults it per call.
 /// Reflection-based by necessity; every step is fail-soft (worst case: CPU presentation).
+/// The internal types are named by constant so trimming and NativeAOT keep the reflected members.
 /// </summary>
 internal static class EglExternalObjectsShim
 {
+    private const string ServerCompositorType = "Avalonia.Rendering.Composition.Server.ServerCompositor, Avalonia.Base";
+    private const string ContextManagerType = "Avalonia.Rendering.PlatformRenderInterfaceContextManager, Avalonia.Base";
+    private const string SkiaExternalObjectsType = "Avalonia.Skia.GlSkiaExternalObjectsFeature, Avalonia.Skia";
+
     private static readonly bool Diag = Environment.GetEnvironmentVariable("TWODOG_AVALONIA_DIAG") == "1";
 
     private static void Log(string message)
@@ -37,9 +43,11 @@ internal static class EglExternalObjectsShim
             var server = typeof(Compositor)
                 .GetProperty("Server", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 ?.GetValue(compositor);
-            var manager = server?.GetType()
-                .GetProperty("RenderInterface", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                ?.GetValue(server);
+            var manager = server is null
+                ? null
+                : Type.GetType(ServerCompositorType)
+                    ?.GetProperty("RenderInterface", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?.GetValue(server);
             var invokeServerJob = typeof(Compositor).GetMethod("InvokeServerJobAsync",
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, [typeof(Action), typeof(bool)]);
             if (manager is null || invokeServerJob is null)
@@ -63,22 +71,26 @@ internal static class EglExternalObjectsShim
     {
         try
         {
-            var managerType = manager.GetType();
+            var managerType = Type.GetType(ContextManagerType);
+            if (managerType is null || !managerType.IsInstanceOfType(manager))
+            {
+                Log($"render interface manager {manager.GetType().Name} is not {ContextManagerType}");
+                return;
+            }
             managerType.GetMethod("EnsureValidBackendContext")?.Invoke(manager, null);
             var context = managerType
                 .GetProperty("Value", BindingFlags.Instance | BindingFlags.Public)
-                ?.GetValue(manager);
-            var feature = context?.GetType().GetMethod("TryGetFeature", [typeof(Type)])
-                ?.Invoke(context, [typeof(Avalonia.Platform.IExternalObjectsRenderInterfaceContextFeature)]);
+                ?.GetValue(manager) as IOptionalFeatureProvider;
+            var feature = context?.TryGetFeature(typeof(Avalonia.Platform.IExternalObjectsRenderInterfaceContextFeature));
             if (feature is null)
             {
                 Log($"render context {context?.GetType().Name ?? "null"} has no external objects wrapper");
                 return;
             }
 
-            var featureField = feature.GetType()
-                .GetField("_feature", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (featureField is null)
+            var featureField = Type.GetType(SkiaExternalObjectsType)
+                ?.GetField("_feature", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (featureField is null || !featureField.DeclaringType!.IsInstanceOfType(feature))
             {
                 Log($"no _feature field on {feature.GetType().Name}");
                 return;

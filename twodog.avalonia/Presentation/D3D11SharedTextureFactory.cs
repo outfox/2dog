@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Platform;
 using Avalonia.Rendering.Composition;
 using Godot;
-using Silk.NET.Core.Native;
-using Silk.NET.Direct3D11;
-using Silk.NET.DXGI;
+using static twodog.Presentation.D3D11Interop;
 
 namespace twodog.Presentation;
 
@@ -24,9 +22,8 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
     private const uint SharedResourceRead = 0x80000000;
     private const uint SharedResourceWrite = 0x00000001;
 
-    private readonly D3D11 _api;
     private readonly bool _ntHandle;
-    private ComPtr<ID3D11Device> _device;
+    private void* _device;
 
     public string AvaloniaHandleType => _ntHandle
         ? KnownPlatformGraphicsExternalImageHandleTypes.D3D11TextureNtHandle
@@ -42,55 +39,49 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
     public D3D11SharedTextureFactory(byte[]? adapterLuid, bool ntHandle)
     {
         _ntHandle = ntHandle;
-        _api = D3D11.GetApi(null, false);
+        var adapter = FindAdapter(adapterLuid);
         try
         {
-            using var adapter = FindAdapter(adapterLuid);
-
-            ID3D11Device* device = null;
+            void* device = null;
             // A specific adapter requires DriverType Unknown per D3D11CreateDevice rules. No immediate
             // context: this device only creates resources, and the keyed mutex synchronizes access.
-            SilkMarshal.ThrowHResult(_api.CreateDevice(
-                (IDXGIAdapter*)adapter.Handle,
-                adapter.Handle is null ? D3DDriverType.Hardware : D3DDriverType.Unknown,
-                0, (uint)CreateDeviceFlag.BgraSupport, null, 0, D3D11.SdkVersion,
-                &device, null, (ID3D11DeviceContext**)null));
+            ThrowIfFailed(D3D11CreateDevice(
+                adapter, adapter is null ? DriverTypeHardware : DriverTypeUnknown,
+                0, CreateDeviceBgraSupport, null, 0, SdkVersion, &device, null, null));
             _device = device;
         }
-        catch
+        finally
         {
-            // A failed constructor cannot be disposed; the native-library context must not leak.
-            _api.Dispose();
-            throw;
+            if (adapter is not null) D3D11Interop.Release(adapter);
         }
     }
 
-    private static ComPtr<IDXGIAdapter1> FindAdapter(byte[]? luid)
+    /// <summary>The adapter with this LUID (caller releases), or null for the default adapter.</summary>
+    private static void* FindAdapter(byte[]? luid)
     {
-        if (luid is not { Length: 8 }) return default;
+        if (luid is not { Length: 8 }) return null;
         var target = BitConverter.ToInt64(luid, 0);
 
-        using var dxgi = DXGI.GetApi(null, false);
-        IDXGIFactory1* factory = null;
-        SilkMarshal.ThrowHResult(dxgi.CreateDXGIFactory1(SilkMarshal.GuidPtrOf<IDXGIFactory1>(), (void**)&factory));
+        var factory = TryCreateFactory1();
+        if (factory is null)
+            throw new InvalidOperationException("DXGI could not create a factory.");
         try
         {
             for (uint i = 0; ; i++)
             {
-                IDXGIAdapter1* adapter = null;
-                if (factory->EnumAdapters1(i, &adapter) != 0) break;
+                void* adapter = null;
+                if (EnumAdapters1(factory, i, &adapter) != 0) break;
                 AdapterDesc1 desc;
-                adapter->GetDesc1(&desc);
-                var adapterLuid = ((long)desc.AdapterLuid.High << 32) | (uint)desc.AdapterLuid.Low;
-                if (adapterLuid == target) return adapter;
-                adapter->Release();
+                GetDesc1(adapter, &desc);
+                if (desc.Luid == target) return adapter;
+                D3D11Interop.Release(adapter);
             }
         }
         finally
         {
-            factory->Release();
+            D3D11Interop.Release(factory);
         }
-        return default;
+        return null;
     }
 
     public ISharedTexture Create(RenderingDevice rd, int width, int height)
@@ -101,24 +92,23 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             Height = (uint)height,
             MipLevels = 1,
             ArraySize = 1,
-            Format = Format.FormatR8G8B8A8Unorm,
-            SampleDesc = new SampleDesc(1, 0),
-            Usage = Usage.Default,
-            BindFlags = (uint)(BindFlag.RenderTarget | BindFlag.ShaderResource),
-            MiscFlags = (uint)(_ntHandle
-                ? ResourceMiscFlag.SharedKeyedmutex | ResourceMiscFlag.SharedNthandle
-                : ResourceMiscFlag.SharedKeyedmutex),
+            Format = FormatR8G8B8A8Unorm,
+            SampleCount = 1,
+            SampleQuality = 0,
+            Usage = UsageDefault,
+            BindFlags = BindRenderTarget | BindShaderResource,
+            MiscFlags = _ntHandle ? MiscSharedKeyedMutex | MiscSharedNtHandle : MiscSharedKeyedMutex,
         };
-        ID3D11Texture2D* texture = null;
-        SilkMarshal.ThrowHResult(_device.Get().CreateTexture2D(&desc, null, &texture));
+        void* texture = null;
+        ThrowIfFailed(CreateTexture2D(_device, &desc, null, &texture));
 
         // Staged acquisition: any failure past this point must release what already exists,
         // or the CPU-fallback path leaks the texture and mutex on every attempt.
-        IDXGIKeyedMutex* mutex = null;
+        void* mutex = null;
         try
         {
-            var mutexIid = IDXGIKeyedMutex.Guid;
-            SilkMarshal.ThrowHResult(texture->QueryInterface(&mutexIid, (void**)&mutex));
+            var mutexIid = IidKeyedMutex;
+            ThrowIfFailed(QueryInterface(texture, &mutexIid, &mutex));
 
             var shared = _ntHandle ? CreateNtHandle(texture) : GetKmtHandle(texture);
             try
@@ -145,46 +135,45 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         }
         catch
         {
-            if (mutex is not null) mutex->Release();
-            texture->Release();
+            if (mutex is not null) D3D11Interop.Release(mutex);
+            D3D11Interop.Release(texture);
             throw;
         }
     }
 
     /// <summary>The legacy KMT global shared handle - not an owned resource.</summary>
-    private static nint GetKmtHandle(ID3D11Texture2D* texture)
+    private static nint GetKmtHandle(void* texture)
     {
-        IDXGIResource* resource = null;
-        var resourceIid = IDXGIResource.Guid;
-        SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
+        void* resource = null;
+        var resourceIid = IidResource;
+        ThrowIfFailed(QueryInterface(texture, &resourceIid, &resource));
         try
         {
-            void* handle = null;
-            SilkMarshal.ThrowHResult(resource->GetSharedHandle(&handle));
-            return (nint)handle;
+            nint handle = 0;
+            ThrowIfFailed(GetSharedHandle(resource, &handle));
+            return handle;
         }
         finally
         {
-            resource->Release();
+            D3D11Interop.Release(resource);
         }
     }
 
     /// <summary>An owned NT handle the caller must eventually close.</summary>
-    private static nint CreateNtHandle(ID3D11Texture2D* texture)
+    private static nint CreateNtHandle(void* texture)
     {
-        IDXGIResource1* resource = null;
-        var resourceIid = IDXGIResource1.Guid;
-        SilkMarshal.ThrowHResult(texture->QueryInterface(&resourceIid, (void**)&resource));
+        void* resource = null;
+        var resourceIid = IidResource1;
+        ThrowIfFailed(QueryInterface(texture, &resourceIid, &resource));
         try
         {
-            void* handle = null;
-            SilkMarshal.ThrowHResult(resource->CreateSharedHandle(
-                null, SharedResourceRead | SharedResourceWrite, (char*)null, &handle));
-            return (nint)handle;
+            nint handle = 0;
+            ThrowIfFailed(CreateSharedHandle(resource, null, SharedResourceRead | SharedResourceWrite, null, &handle));
+            return handle;
         }
         finally
         {
-            resource->Release();
+            D3D11Interop.Release(resource);
         }
     }
 
@@ -193,18 +182,17 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
     public void Dispose()
     {
-        _device.Dispose();
-        _device = default;
-        // Last: the API wrapper's native-library context must outlive objects created through it.
-        _api.Dispose();
+        if (_device is null) return;
+        D3D11Interop.Release(_device);
+        _device = null;
     }
 
     private sealed class D3D11SharedTexture(
-        RenderingDevice rd, Rid rid, ID3D11Texture2D* texture, IDXGIKeyedMutex* mutex,
+        RenderingDevice rd, Rid rid, void* texture, void* mutex,
         nint sharedHandle, int width, int height, string handleType, bool ownsHandle) : ISharedTexture
     {
-        private ComPtr<ID3D11Texture2D> _texture = texture;
-        private ComPtr<IDXGIKeyedMutex> _mutex = mutex;
+        private void* _texture = texture;
+        private void* _mutex = mutex;
 
         public int Width => width;
         public int Height => height;
@@ -224,8 +212,8 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
 
         public AcquireResult Acquire()
         {
-            if (_mutex.Handle is null) return AcquireResult.Failed;
-            return _mutex.Get().AcquireSync(0, 0) switch
+            if (_mutex is null) return AcquireResult.Failed;
+            return AcquireSync(_mutex, 0, 0) switch
             {
                 0 => AcquireResult.Acquired,
                 // AcquireSync reports contention as WAIT_TIMEOUT (0x102, success severity; some
@@ -236,7 +224,7 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
             };
         }
 
-        public bool Release() => _mutex.Handle is not null && _mutex.Get().ReleaseSync(1) == 0;
+        public bool Release() => _mutex is not null && ReleaseSync(_mutex, 1) == 0;
 
         // The complement of the writer's protocol: the writer acquired 0 and released 1, so
         // the compositor presents with (1, 0).
@@ -253,10 +241,10 @@ internal sealed unsafe class D3D11SharedTextureFactory : ISharedTextureFactory
         public void Dispose()
         {
             rd.FreeRid(rid);
-            _mutex.Dispose();
-            _mutex = default;
-            _texture.Dispose();
-            _texture = default;
+            if (_mutex is not null) D3D11Interop.Release(_mutex);
+            _mutex = null;
+            if (_texture is not null) D3D11Interop.Release(_texture);
+            _texture = null;
             if (ownsHandle) CloseHandle(sharedHandle);
         }
     }
