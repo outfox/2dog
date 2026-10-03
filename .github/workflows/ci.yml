@@ -977,7 +977,8 @@ jobs:
         run: bash .github/scripts/tool-smoke.sh
 
   # Experimental Android: publishes the smoke and showcase hosts against the packed packages the way an app does,
-  # then runs the x64 pair on an emulator. The arm64 showcase APK is built and inspected for devices only.
+  # then runs the x64 APKs on an emulator. The Release showcase builds are trimmed and AOT-compiled (.NET for
+  # Android's Release defaults); the arm64 one is built and inspected for devices only.
   android-smoke:
     name: Android Smoke
     needs: [pack]
@@ -1044,8 +1045,10 @@ jobs:
         run: |
           python scripts/build_android_apk.py --app smoke --feed packages --rid android-x64
           python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64
+          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
+            --configuration Release --output artifacts/android-showcase-release-apk
           python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
-            --output artifacts/android-showcase-arm64-apk
+            --configuration Release --output artifacts/android-showcase-arm64-apk
           for apk in artifacts/android-*apk/apk/*-Signed.apk; do
             "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"
           done
@@ -1063,7 +1066,7 @@ jobs:
       - name: Enable emulator acceleration
         run: sudo chmod 666 /dev/kvm
 
-      - name: Run smoke and showcase on the emulator
+      - name: Run smoke and showcases on the emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 36
@@ -1077,6 +1080,8 @@ jobs:
             python scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk
             --serial emulator-5554 --timeout 120
             && python scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
+            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
+            && python scripts/test_android_device.py artifacts/android-showcase-release-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
             status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
 

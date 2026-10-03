@@ -12,7 +12,6 @@ def publish_command(args):
             f"-p:TwoDogVariant={args.variant or args.configuration.lower()}",
             *([f"-p:TwoDogAndroidPack={args.pack.resolve()}"] if args.pack else []),
             f"-p:AndroidPackageFormats={args.format}",
-            "-p:PublishTrimmed=false", "-p:RunAOTCompilation=false", "-p:PublishAot=false",
             *[f"-p:{value}" for value in args.property]]
 
 
@@ -37,7 +36,7 @@ def main():
         if "=" not in value:
             parser.error("--property requires NAME=VALUE")
         if value.split("=", 1)[0].lower() in {"twodogvariant", "twodogandroidpack", "runtimeidentifier",
-                                             "androidpackageformats", "publishtrimmed", "runaotcompilation", "publishaot"}:
+                                             "androidpackageformats"}:
             parser.error(f"Use the dedicated option for {value.split('=', 1)[0]}")
     command = publish_command(args)
     if args.dry_run:

@@ -60,7 +60,14 @@ Extensions need an Android library for each ABI, listed under `android.arm64` an
 `android.x86_64` keys in their `.gdextension` file. Publishing packages them into
 the APK. Every listed library must exist, because the pack export copies them.
 
+## Trimming and AOT
+
+Release builds are trimmed and AOT-compiled, like any .NET for Android app. 2dog
+keeps `GodotSharp`, `GodotPlugins`, `twodog`, and your game assembly whole. To
+keep other assemblies or compile every method ahead of time, see
+[Android Host Configuration](/configuration#android-host). NativeAOT
+(`PublishAot`) is not supported.
+
 ## Limitations
 
-- Assemblies stay untrimmed and JIT-compiled; trimming and AOT are rejected.
 - Input, pause/resume, and process restarts are not validated yet.

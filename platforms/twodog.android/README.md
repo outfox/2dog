@@ -54,7 +54,11 @@ dependencies Godot needs (AndroidX Fragment, DocumentFile, Kotlin standard libra
 and extracts the game DLL into private app storage before `AndroidHost.Register`.
 Registration happens in `Application.OnCreate`, including when Android recreates
 the Godot Activity directly after process death.
-GodotPlugins and the game must remain untrimmed; AOT is not enabled in this first pass.
+Release builds trim and AOT-compile with .NET for Android's defaults (`TrimMode=partial`,
+profiled AOT); `TrimMode=full` and `AndroidEnableProfiledAot=false` work too. The package
+roots GodotSharp, GodotPlugins, twodog and `TwoDogAndroidGameAssembly` for the trimmer.
+NativeAOT (`PublishAot`) and CoreCLR (`UseMonoRuntime=false`), both experimental in .NET
+for Android, fail with TDGA006: only Mono is validated.
 
 Host code reaches the scene through `TwoDogActivity.addMainLoopStartedListener(Runnable)`:
 Godot runs each listener on its render thread (the engine's main thread) once the main

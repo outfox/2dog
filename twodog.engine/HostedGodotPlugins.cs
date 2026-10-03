@@ -18,11 +18,11 @@ internal static unsafe class HostedGodotPlugins
     /// <summary>Registers this context's GodotPlugins.Main.InitializeFromEngine with the
     /// given libgodot module. Must run before the engine instance is created.</summary>
     [UnconditionalSuppressMessage("Trimming", "IL2026",
-        Justification = "Hosted multi-instance loads GodotPlugins from the untrimmed output layout; " +
-                        "hosted deployments cannot be trimmed (AssemblyDependencyResolver needs deps.json).")]
+        Justification = "Desktop hosts load GodotPlugins from the untrimmed output layout (AssemblyDependencyResolver " +
+                        "needs deps.json); Android loads it by name.")]
     [UnconditionalSuppressMessage("Trimming", "IL2075",
-        Justification = "GodotPlugins.Main.InitializeFromEngine is preserved by the untrimmed GodotPlugins.dll " +
-                        "shipped in the 2dog.engine package; hosted deployments cannot be trimmed.")]
+        Justification = "GodotPlugins.Main.InitializeFromEngine is preserved: desktop deployments ship GodotPlugins.dll " +
+                        "untrimmed, and 2dog.android roots GodotPlugins whole in trimmed Android builds.")]
     internal static void Register(nint moduleHandle)
     {
         if (_initializeFromEngine == 0)

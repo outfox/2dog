@@ -112,8 +112,19 @@ Set these optional properties in the [Android host](/hosts/android)'s `.csproj`:
 
 | Property | Default | Purpose |
 | --- | --- | --- |
+| `TwoDogAndroidGameAssembly` | set by the generated host | Game assembly that Godot loads; kept whole by the trimmer |
 | `TwoDogAndroidExportPreset` | `Android` | Preset in `export_presets.cfg` |
 | `TwoDogAndroidPack` | exported by the build | Use a pre-exported pack instead |
 | `TwoDogAndroidGdExtensions` | `true` | Package the Android libraries of the project's GDExtensions |
 | `TwoDogAndroidSigning` | `true` | Sign from Godot's keystore variables or `~/.android/debug.keystore` |
-| `AndroidPackageFormats` | `aab` for Release | `apk` for a sideloadable package; the showcase host sets it |
+| `AndroidPackageFormats` | `aab` for Release | `apk` for a sideloadable package; the generated host sets it |
+
+Release builds are trimmed and AOT-compiled, as .NET for Android does by default
+(`TrimMode` `partial`, profiled AOT). 2dog keeps `GodotSharp`, `GodotPlugins`,
+`twodog`, and the game assembly whole. `TrimMode=full` and
+`AndroidEnableProfiledAot=false` (AOT for every method) work too. Root other
+assemblies that are only reached through reflection:
+
+```xml
+<TrimmerRootAssembly Include="MyLibrary" RootMode="All"/>
+```

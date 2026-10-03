@@ -23,9 +23,6 @@
         <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
         <!-- Keep the assemblies in the APK in Debug too, so it runs without a deployment session -->
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-        <!-- The Android host requires untrimmed, JIT-compiled assemblies for now -->
-        <PublishTrimmed>false</PublishTrimmed>
-        <RunAOTCompilation>false</RunAOTCompilation>
     </PropertyGroup>
 
     <ItemGroup>

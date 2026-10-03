@@ -12,8 +12,6 @@
         <_TwoDogAndroidHostRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidHostRids>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <PublishTrimmed>false</PublishTrimmed>
-        <RunAOTCompilation>false</RunAOTCompilation>
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
         <!-- Preserve the exact native bytes so APK inspection catches variant substitution. -->
         <AndroidStripNativeLibraries>false</AndroidStripNativeLibraries>

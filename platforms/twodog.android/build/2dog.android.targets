@@ -10,6 +10,11 @@
         <AndroidLibrary Include="$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar" Bind="false"/>
         <AndroidJavaSource Include="$(_TwoDogAndroidJavaRoot)host/TwoDogActivity.java" Bind="false"/>
         <AndroidManifestOverlay Include="$(_TwoDogAndroidJavaRoot)host/AndroidManifest.xml"/>
+        <!-- Release builds trim and AOT-compile by default. GodotPlugins is only reached through reflection, and
+             GodotSharp finds the game's scripts through reflection, so these assemblies stay whole. .NET for Android
+             requires RootMode on every root. -->
+        <TrimmerRootAssembly Include="GodotSharp;GodotPlugins;twodog" RootMode="All"/>
+        <TrimmerRootAssembly Include="$(TwoDogAndroidGameAssembly)" RootMode="All" Condition="'$(TwoDogAndroidGameAssembly)' != ''"/>
     </ItemGroup>
     <Target Name="TwoDogValidateAndroidHost" BeforeTargets="PrepareForBuild"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
@@ -17,8 +22,10 @@
                Text="2dog: Android supports debug and release variants only."/>
         <Error Code="TDGA004" Condition="!Exists('$(_TwoDogAndroidJavaRoot)java/$(TwoDogVariant)/godot.aar')"
                Text="2dog: the selected Android Java payload is missing. Run scripts/build_android_java.py and repack 2dog.android."/>
-        <Error Code="TDGA006" Condition="'$(PublishTrimmed)' == 'true' Or '$(PublishAot)' == 'true' Or '$(RunAOTCompilation)' == 'true'"
-               Text="2dog: the initial Android host requires untrimmed, non-AOT managed assemblies."/>
+        <!-- Only Mono is validated; NativeAOT and CoreCLR are experimental in .NET for Android and untested with
+             Godot. -->
+        <Error Code="TDGA006" Condition="'$(PublishAot)' == 'true' Or '$(UseMonoRuntime)' == 'false'"
+               Text="2dog: Android hosts run on the Mono runtime; NativeAOT (PublishAot) and CoreCLR (UseMonoRuntime=false) are not supported. Release builds AOT-compile with Mono (RunAOTCompilation)."/>
         <!-- Other RIDs reference no 2dog.android-<abi> package, so nothing would resolve libgodot for them and the APK
              would start without Godot. -->
         <ItemGroup>

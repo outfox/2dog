@@ -21,9 +21,6 @@
         <_ShowcaseAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_ShowcaseAndroidRids>
         <!-- A sideloadable APK; Release publishes would otherwise default to an app bundle (.aab) -->
         <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
-        <!-- The initial Android host requires untrimmed, JIT-compiled assemblies (TDGA006) -->
-        <PublishTrimmed>false</PublishTrimmed>
-        <RunAOTCompilation>false</RunAOTCompilation>
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     </PropertyGroup>
     <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
