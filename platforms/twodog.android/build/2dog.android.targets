@@ -19,6 +19,15 @@
                Text="2dog: the selected Android Java payload is missing. Run scripts/build_android_java.py and repack 2dog.android."/>
         <Error Code="TDGA006" Condition="'$(PublishTrimmed)' == 'true' Or '$(PublishAot)' == 'true' Or '$(RunAOTCompilation)' == 'true'"
                Text="2dog: the initial Android host requires untrimmed, non-AOT managed assemblies."/>
+        <!-- Other RIDs reference no 2dog.android-<abi> package, so nothing would resolve libgodot for them and the APK
+             would start without Godot. -->
+        <ItemGroup>
+            <_TwoDogAndroidHostRid Include="$(RuntimeIdentifier);$(RuntimeIdentifiers)"/>
+        </ItemGroup>
+        <Error Code="TDGA013" Condition="'@(_TwoDogAndroidHostRid)' == ''"
+               Text="2dog: select android-arm64 and/or android-x64 with RuntimeIdentifier or RuntimeIdentifiers."/>
+        <Error Code="TDGA013" Condition="'%(_TwoDogAndroidHostRid.Identity)' != 'android-arm64' And '%(_TwoDogAndroidHostRid.Identity)' != 'android-x64'"
+               Text="2dog: Android hosts support android-arm64 and android-x64 only; unsupported RID: %(_TwoDogAndroidHostRid.Identity)."/>
     </Target>
     <Target Name="TwoDogReferenceAndroidPlugins" BeforeTargets="ResolveAssemblyReferences"
             Condition="'$(TargetPlatformIdentifier)' == 'android'">

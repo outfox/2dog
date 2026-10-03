@@ -10,21 +10,25 @@ an explicit Android RID. Both native variants retain the JNI name
 `libgodot_android.so`; exactly one belongs in each ABI directory of the APK.
 
 Set `GodotProjectDir` to the Godot project, and `dotnet publish -r android-arm64`
-produces a signed APK:
+produces a signed package. `dotnet publish` builds Release, for which .NET Android
+makes an app bundle (`.aab`) unless the host sets
+`<AndroidPackageFormats>apk</AndroidPackageFormats>` (the showcase does) or you publish
+with `-c Debug`. The build:
 
-- the build imports the project and exports its pck with the project's `Android`
-  export preset (`TwoDogAndroidExportPreset`), using the same capability as desktop
-  publish: the packaged editor libgodot of the build machine, or `GodotEditor`.
-  `TwoDogAndroidPack` supplies a pre-exported pck instead;
-- every Android library and dependency that the project's `.gdextension` files list
-  for the APK's ABIs and variant goes into `lib/<abi>/`, where the engine loads it
+- imports the project and exports its pck with the project's `Android` export preset
+  (`TwoDogAndroidExportPreset`), using the same capability as desktop publish: the
+  build machine's editor libgodot from the `2dog.<rid>.editor` and `2dog.tools`
+  packages that `2dog.engine` brings, or `GodotEditor`. `TwoDogAndroidPack` supplies a
+  pre-exported pck instead;
+- puts every Android library and dependency that the project's `.gdextension` files
+  list for the APK's ABIs and variant into `lib/<abi>/`, where the engine loads it
   (`TwoDogAndroidGdExtensions=false` opts out);
-- the pck becomes the APK asset `game.pck`, which `TwoDogActivity` loads.
+- adds the pck as the APK asset `game.pck`, which `TwoDogActivity` loads.
 
-Mark the Android preset `runnable=false`: a runnable Android preset starts the
+Only `android-arm64` and `android-x64` are supported; any other RID fails with
+TDGA013. Mark the Android preset `runnable=false`: a runnable Android preset starts the
 editor's ADB device poll during the headless export, which logs an `EditorSettings`
-error when it exits. Release publishes produce an app bundle unless the host sets
-`<AndroidPackageFormats>apk</AndroidPackageFormats>`.
+error when it exits.
 
 Signing follows established conventions only:
 
@@ -55,7 +59,8 @@ GodotPlugins and the game must remain untrimmed; AOT is not enabled in this firs
 Host code reaches the scene through `TwoDogActivity.addMainLoopStartedListener(Runnable)`:
 Godot runs each listener on its render thread (the engine's main thread) once the main
 loop has started and the main scene is in the tree. Register from `Application.OnCreate`
-via JNI and catch every exception, because listeners run inside Godot's JNI call.
+via JNI. A listener that throws is logged (tag `TwoDogActivity`) and the others still run;
+handle exceptions in the listener to report them your own way.
 `demos/showcase/showcase.android` uses it to drive scene nodes once per frame
 (`SceneTree.ProcessFrame`) and to run the showcase's API smoke.
 

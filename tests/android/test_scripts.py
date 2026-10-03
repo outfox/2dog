@@ -144,7 +144,9 @@ class AndroidDeviceScript(unittest.TestCase):
         marker = ["--package", "dev.twodog.showcase", "--marker", "2DOG_ANDROID_SHOWCASE_SMOKE_PASSED"]
         calls, output = self.run_smoke(Clock(), 5, read, expected_timeout=False, arguments=marker)
         self.assertEqual("2DOG_ANDROID_SHOWCASE_SMOKE_PASSED\n", output)
-        self.assertIn("dev.twodog.showcase", calls[0][0] + calls[1][0])
+        # The package is the one stopped, launched and polled.
+        for step in ("force-stop", "monkey", "pidof"):
+            self.assertIn("dev.twodog.showcase", next(command for command, _ in calls if step in command))
 
         def other_app(command, options):
             if "pidof" in command:
@@ -152,6 +154,16 @@ class AndroidDeviceScript(unittest.TestCase):
             return SimpleNamespace(stdout="2DOG_ANDROID_CSHARP_SMOKE_PASSED\n")
 
         self.run_smoke(Clock(), 2, other_app, arguments=marker)
+
+    def test_empty_marker_is_rejected(self):
+        with patch.object(sys, "argv", ["test_android_device.py", "smoke.apk", "--serial", "test-device",
+                                       "--marker", ""]), \
+                patch.object(device.subprocess, "run") as run, contextlib.redirect_stderr(io.StringIO()) as error:
+            with self.assertRaises(SystemExit) as raised:
+                device.main()
+        self.assertEqual(2, raised.exception.code)
+        self.assertIn("--marker must not be empty", error.getvalue())
+        run.assert_not_called()
 
 
 class AndroidPublishScript(unittest.TestCase):

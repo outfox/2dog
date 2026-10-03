@@ -23,14 +23,20 @@ def inspect_apk(apk, rid, native_directory, pack, game_assembly="android-smoke-g
         actual_abis = {name.split("/")[1] for name in names if name.startswith("lib/") and name.endswith(".so")}
         if actual_abis != {abi}:
             raise ValueError(f"Expected only ABI {abi}, found {sorted(actual_abis)}")
+        def elf(name):
+            data = archive.read(name)
+            if len(data) < 20 or data[:6] != b"\x7fELF\x02\x01" or int.from_bytes(data[18:20], "little") != machine:
+                raise ValueError(f"{name} is not a 64-bit Android {abi} ELF library")
+            return data
+
+        for library in libraries:
+            elf(f"lib/{abi}/{library}")
         hashes = {}
         for library in ("libgodot_android.so", "libc++_shared.so"):
             name = f"lib/{abi}/{library}"
             if name not in names:
                 raise ValueError(f"APK is missing {name}")
-            data = archive.read(name)
-            if len(data) < 20 or data[:6] != b"\x7fELF\x02\x01" or int.from_bytes(data[18:20], "little") != machine:
-                raise ValueError(f"{name} is not a 64-bit Android {abi} ELF library")
+            data = elf(name)
             digest = hashlib.sha256(data).hexdigest()
             if digest != hashlib.sha256((native_directory / library).read_bytes()).hexdigest():
                 raise ValueError(f"APK {library} differs from the selected native variant")

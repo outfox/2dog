@@ -17,6 +17,8 @@ def main():
     args = parser.parse_args()
     if args.timeout <= 0:
         parser.error("--timeout must be greater than zero")
+    if not args.marker:
+        parser.error("--marker must not be empty: any log would contain it")
     adb = [args.adb, "-s", args.serial]
     subprocess.run([*adb, "install", "-r", str(args.apk.resolve())], check=True)
     subprocess.run([*adb, "shell", "am", "force-stop", args.package], check=True)

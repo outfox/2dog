@@ -109,8 +109,9 @@ def build_with_packages(args, output, feed, config, restore):
         pack_local_feed(args, arch, feed, properties)
     # The selected variant's natives, which the APK must carry byte for byte.
     native = REPO / f"godot/bin/android/template_{args.configuration.lower()}/{arch}"
-    if not (native / "libgodot_android.so").is_file():
-        raise ValueError(f"Missing {native / 'libgodot_android.so'}; stage the Android natives first")
+    for library in ("libgodot_android.so", "libc++_shared.so"):
+        if not (native / library).is_file():
+            raise ValueError(f"Missing {native / library}; stage the Android natives first")
     # The build exports the pck; directing it here lets the inspection compare it with the APK's copy, as unstripped
     # natives keep their bytes comparable.
     pack = output / "game.pck"

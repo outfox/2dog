@@ -3,8 +3,9 @@
          with toolchains the hosts already need: the build machine's C compiler for its own desktop platform (imported
          by the game project, which every host builds first), and the wasm-tools workload's emscripten for the web
          side module (imported by the browser-wasm hosts), and the Android NDK's clang for the Android libraries
-         (imported by the Android host, whose 2dog.android packaging and pck export need them). Opt out with
-         -p:TwoDogProbeBuild=false. -->
+         (imported by the Android host, whose 2dog.android packaging and pck export need them). Desktop and web builds
+         can opt out with -p:TwoDogProbeBuild=false (the probe then reports the extension as missing); Android hosts
+         cannot, because every Android build exports a pck, which copies each library the .gdextension lists. -->
     <PropertyGroup>
         <_TwoDogProbeDir>$(MSBuildThisFileDirectory)</_TwoDogProbeDir>
         <_TwoDogProbeBin>$(_TwoDogProbeDir)bin/</_TwoDogProbeBin>

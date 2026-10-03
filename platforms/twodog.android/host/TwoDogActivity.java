@@ -11,7 +11,8 @@ public final class TwoDogActivity extends org.godotengine.godot.GodotActivity {
 
     /**
      * Runs the listener on Godot's render thread (the engine's main thread) once the main loop has started and the
-     * main scene is in the tree: the first point where a .NET host can use the SceneTree. Listeners must not throw.
+     * main scene is in the tree: the first point where a .NET host can use the SceneTree. A listener that throws is
+     * logged; it cannot stop the others or unwind into Godot's JNI call.
      */
     public static void addMainLoopStartedListener(Runnable listener) {
         mainLoopStartedListeners.add(Objects.requireNonNull(listener));
@@ -29,7 +30,11 @@ public final class TwoDogActivity extends org.godotengine.godot.GodotActivity {
     public void onGodotMainLoopStarted() {
         super.onGodotMainLoopStarted();
         for (Runnable listener : mainLoopStartedListeners) {
-            listener.run();
+            try {
+                listener.run();
+            } catch (Throwable throwable) {
+                android.util.Log.e("TwoDogActivity", "main-loop-started listener failed", throwable);
+            }
         }
     }
 }

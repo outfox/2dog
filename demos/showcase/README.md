@@ -22,10 +22,13 @@ a `.gdignore`):
 - `showcase.android/` - experimental Android host: `dotnet publish demos/showcase/showcase.android` (arm64; add
   `-r android-x64` for the emulator) builds the game, exports its pck and packages a signed APK with the GDExtension
   probe (built with the Android NDK). Godot's Activity owns the loop, so the host drives the white cubes and runs the
-  API smoke from `TwoDogActivity.addMainLoopStartedListener`. Needs the android workload and the `2dog.android*`
-  packages in `packages/` - from `uv run poe build-android` or CI's `android-packages` artifact (see
-  [2dog.android](../../platforms/twodog.android/README.md)); it is in no solution because restore needs the android
-  workload. CI's Android Smoke job publishes it the same way and uploads the APKs as `android-apks`. To run an APK:
+  API smoke from `TwoDogActivity.addMainLoopStartedListener`. Needs the android workload and, in `packages/`, the
+  `2dog.android*` packages (`uv run poe build-android`) next to the rest of 2dog's packages (`uv run poe build`). Those
+  include the build machine's editor libgodot (`2dog.<rid>.editor`) and `2dog.tools`, which export the pck; pass
+  `-p:GodotEditor=<godot mono editor>` to export with an editor binary instead. CI's `nuget-packages` and
+  `android-packages` artifacts together are the same feed (see [2dog.android](../../platforms/twodog.android/README.md)).
+  It is in no solution because restore needs the android workload. CI's Android Smoke job publishes it the same way
+  and uploads the APKs as `android-apks`. To run an APK:
 
       uv run scripts/test_android_device.py <dir>/dev.twodog.showcase-Signed.apk --serial emulator-5554 \
           --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED

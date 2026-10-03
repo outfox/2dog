@@ -360,6 +360,27 @@ Lines="AndroidKeyStore=$(AndroidKeyStore);KeyStore=$(AndroidSigningKeyStore);Ali
             environment={**self.RELEASE_KEYSTORE, "ANDROID_USER_HOME": str(android_home)})
         self.assertEqual(str(keystore.resolve()), signing["KeyStore"])
 
+    def test_android_hosts_reject_unsupported_rids(self):
+        targets = self.packages / "2dog.android" / self.version / "build/2dog.android.targets"
+        for rids, error in (("android-x64", None), ("android-arm64;android-x64", None),
+                            ("android-arm", "unsupported RID: android-arm"), ("", "select android-arm64")):
+            with self.subTest(rids=rids):
+                directory = Path(tempfile.mkdtemp(dir=self.root))
+                project = directory / "Host.proj"
+                project.write_text(f'''<Project>
+<PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier><RuntimeIdentifiers>{rids}</RuntimeIdentifiers></PropertyGroup>
+<Import Project="{xml(targets)}"/>
+<Target Name="PrepareForBuild"/>
+</Project>''')
+                result = subprocess.run(["dotnet", "msbuild", str(project), "-t:PrepareForBuild", "-nologo"], cwd=REPO,
+                                        text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
+                if error is None:
+                    self.assertEqual(0, result.returncode, result.stdout)
+                else:
+                    self.assertNotEqual(0, result.returncode, result.stdout)
+                    self.assertIn("TDGA013", result.stdout)
+                    self.assertIn(error, result.stdout)
+
     def test_incomplete_signing_configuration_fails(self):
         result, _, _ = self.android_signing(environment={**self.RELEASE_KEYSTORE,
                                                          "GODOT_ANDROID_KEYSTORE_RELEASE_PATH": "absent.jks"})

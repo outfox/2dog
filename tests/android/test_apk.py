@@ -30,7 +30,7 @@ build = module("build_android_apk_tests", REPO / "scripts/build_android_apk.py")
 
 class AndroidApkTests(unittest.TestCase):
     def fixture(self, root, rid="android-x64", wrong_variant=False, extra_abi=False, missing_asset=False,
-                game="android-smoke-game", libraries=()):
+                game="android-smoke-game", libraries=(), wrong_library=False):
         abi, machine = inspect.RID_ABI[rid]
         native = root / "native"
         native.mkdir(exist_ok=True)
@@ -47,7 +47,10 @@ class AndroidApkTests(unittest.TestCase):
                 (native / name).write_bytes(data)
                 archive.writestr(f"lib/{abi}/{name}", data + (b"wrong" if wrong_variant else b""))
             for name in libraries:
-                archive.writestr(f"lib/{abi}/{name}", b"extra library")
+                # A library built for another ABI carries the other machine type.
+                other = 183 if machine == 62 else 62
+                header = b"\x7fELF\x02\x01" + bytes(12) + (other if wrong_library else machine).to_bytes(2, "little")
+                archive.writestr(f"lib/{abi}/{name}", header + b"extra library")
             if extra_abi:
                 archive.writestr("lib/unselected/libgodot_android.so", b"wrong ABI")
         return apk, rid, native, pack
@@ -84,6 +87,10 @@ class AndroidApkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             args = self.fixture(Path(directory), game="showcase")
             with self.assertRaisesRegex(ValueError, f"missing lib/x86_64/{probe}"):
+                inspect.inspect_apk(*args, "showcase", [probe])
+        with tempfile.TemporaryDirectory() as directory:
+            args = self.fixture(Path(directory), game="showcase", libraries=(probe,), wrong_library=True)
+            with self.assertRaisesRegex(ValueError, f"lib/x86_64/{probe} is not a 64-bit Android x86_64 ELF"):
                 inspect.inspect_apk(*args, "showcase", [probe])
 
     def build_showcase(self, root, *arguments, variants=("debug", "release"), java=True):
@@ -158,6 +165,21 @@ class AndroidApkTests(unittest.TestCase):
                                     variants=("debug",), java=False)
             self.assertEqual(1, raised.exception.code)
             self.assertIn("template_release", error.getvalue())
+
+    def test_feed_requires_the_cpp_runtime_before_publishing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "packages").mkdir()
+            native = root / "godot/bin/android/template_debug/x86_64"
+            native.mkdir(parents=True)
+            (native / "libgodot_android.so").touch()
+            commands = []
+            with patch.object(build, "REPO", root), patch.object(build, "run", side_effect=commands.append), \
+                 patch.object(sys, "argv", ["build_android_apk.py", "--feed", str(root / "packages")]), \
+                 contextlib.redirect_stderr(io.StringIO()) as error, self.assertRaises(SystemExit):
+                build.main()
+            self.assertIn("libc++_shared.so", error.getvalue())
+            self.assertEqual([], commands)
 
     def test_replaced_pack_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
