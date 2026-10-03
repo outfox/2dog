@@ -38,7 +38,7 @@ concurrency:
 
 jobs:
   source:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-16vcpu-ubuntu-2404
     outputs:
       hash: ${{ steps.source.outputs.hash }}
     steps:
@@ -59,7 +59,7 @@ jobs:
   apk:
     name: Build and inspect Android APKs
     needs: natives
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-16vcpu-ubuntu-2404
     timeout-minutes: 90
     env:
       RID: ${{ inputs.rid || 'android-x64' }}
