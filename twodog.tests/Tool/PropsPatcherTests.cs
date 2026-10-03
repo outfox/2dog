@@ -32,7 +32,7 @@ public class PropsPatcherTests
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--web", "--tests", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--tests", "--no-restore").ExitCode);
 
         var props = File.ReadAllText(Path.Combine(dir, "Directory.Build.props"));
         Assert.Contains("Label=\"2dog\"", props);
@@ -50,7 +50,7 @@ public class PropsPatcherTests
         var props = tmp.Write("Directory.Build.props",
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Project>\n  <PropertyGroup>\n    <Nullable>enable</Nullable>\n  </PropertyGroup>\n</Project>\n");
 
-        var first = CliConsole.Run("add", tmp.Dir, "--desktop", "--no-restore");
+        var first = CliConsole.Run("add", tmp.Dir, "--generic", "--no-restore");
         Assert.Equal(0, first.ExitCode);
         Assert.Contains("append the 2dog version block to your Directory.Build.props", first.Stdout);
 

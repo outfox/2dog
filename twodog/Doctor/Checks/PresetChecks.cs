@@ -7,6 +7,7 @@ internal static class PresetChecks
     [
         new("preset.file", Category.Presets, "export_presets.cfg exists"),
         new("preset.web", Category.Presets, "the 'Web' preset exists when a browser host does"),
+        new("preset.android", Category.Presets, "the 'Android' preset exists when an Android host does"),
         new("preset.desktop", Category.Presets, "the per-OS desktop presets exist"),
     ];
 
@@ -21,13 +22,14 @@ internal static class PresetChecks
         {
             yield return new Finding("preset.file", c, Severity.Fail, $"{ExportPresetOps.FileName} missing",
                 "publishes export the game pck through it (the publish stops without it)", null, ExportPresetOps.FileName,
-                new Fix("presets:create", FixClass.Safe, $"create {ExportPresetOps.FileName} (web + desktop export presets)",
+                new Fix("presets:create", FixClass.Safe, $"create {ExportPresetOps.FileName} (web, desktop and Android export presets)",
                     () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             yield break;
         }
 
         var wanted = new List<(string Name, Severity Missing)>();
         if (p.HasWebLikeHost) wanted.Add((ExportPresetOps.WebPresetName, Severity.Fail));
+        if (p.Hosts.Any(h => h.Kind == HostKind.Android)) wanted.Add((ExportPresetOps.AndroidPresetName, Severity.Fail));
         var hostOs = ctx.Env.IsWindows ? "Windows Desktop" : ctx.Env.IsMacOS ? "macOS" : "Linux";
         foreach (var name in ExportPresetOps.DesktopPresetNames)
             wanted.Add((name, name == hostOs ? Severity.Fail : Severity.Warn));
@@ -41,9 +43,13 @@ internal static class PresetChecks
                 continue;
             }
 
-            var id = name == ExportPresetOps.WebPresetName ? "preset.web" : "preset.desktop";
-            yield return new Finding(id, c, severity, $"'{name}' export preset missing",
-                name == ExportPresetOps.WebPresetName ? "web publish exports the pck through it" : $"desktop publish for {name} exports the pck through it",
+            var (id, why) = name switch
+            {
+                ExportPresetOps.WebPresetName => ("preset.web", "web publish exports the pck through it"),
+                ExportPresetOps.AndroidPresetName => ("preset.android", "Android builds export the pck through it"),
+                _ => ("preset.desktop", $"desktop publish for {name} exports the pck through it"),
+            };
+            yield return new Finding(id, c, severity, $"'{name}' export preset missing", why,
                 null, ExportPresetOps.FileName,
                 new Fix($"preset:{name}", FixClass.Safe, $"append '{name}' export preset to {ExportPresetOps.FileName}",
                     () => File.AppendAllText(path, ExportPresetOps.AppendText(File.ReadAllText(path), name))));

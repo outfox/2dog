@@ -116,6 +116,7 @@ export default defineConfig({
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
           { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
+          { text: gd('mobile_phone') + 'Android', link: '/hosts/android' },
           { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
           { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
           { text: gd('globe') + 'Web', link: '/hosts/web' },

@@ -10,7 +10,7 @@ internal static class SolutionChecks
         new("sln.legacy-format", Category.Solution, "the solution uses the .slnx format"),
         new("sln.contains-game", Category.Solution, "the solution lists the game project"),
         new("sln.contains-hosts", Category.Solution, "the solution lists every host project"),
-        new("sln.build-exclusions", Category.Solution, "browser and WinUI hosts are excluded from plain solution builds"),
+        new("sln.build-exclusions", Category.Solution, "browser, Android and WinUI hosts are excluded from plain solution builds"),
     ];
 
     public static IEnumerable<Finding> Run(DoctorContext ctx)
@@ -93,10 +93,10 @@ internal static class SolutionChecks
         if (included.Count > 0)
             yield return new Finding("sln.build-exclusions", c, Severity.Warn,
                 $"{name} builds {string.Join(", ", included.Select(i => Path.GetFileName(i.Relative)))} in plain solution builds",
-                "browser hosts need wasm-tools and WinUI needs Windows; 'dotnet build' of the solution would fail without them", null, name,
+                "browser hosts need wasm-tools, Android hosts the android workload and WinUI needs Windows; 'dotnet build' of the solution would fail without them", null, name,
                 new Fix("sln:exclude", FixClass.Safe, $"exclude {included.Count} host(s) from plain solution builds", () =>
                 {
-                    // The wasm hosts have no Editor configuration; the WinUI host does.
+                    // The wasm and Android hosts have no Editor configuration; the WinUI host does.
                     foreach (var (relative, kind) in included)
                         SolutionOps.ExcludeFromSolutionBuild(Current(), relative, mapEditorToDebug: kind is not HostKind.WinUi);
                 }));

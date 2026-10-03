@@ -44,7 +44,7 @@ echo "::endgroup::"
 cd "$work/dir with space"
 
 echo "::group::scaffold"
-"$tool" new "Smoke Game" --desktop --tests -y --no-restore 2> stderr.txt
+"$tool" new "Smoke Game" --generic --tests -y --no-restore 2> stderr.txt
 cat stderr.txt
 grep -q "note: project name adjusted" stderr.txt
 test -f SmokeGame/SmokeGame.slnx
@@ -56,10 +56,10 @@ echo "::endgroup::"
 
 echo "::group::usage errors and help"
 set +e
-"$tool" add SmokeGame --dekstop 2> usage.txt; status=$?
+"$tool" add SmokeGame --genric 2> usage.txt; status=$?
 set -e
 test "$status" -eq 1
-grep -q "did you mean --desktop" usage.txt
+grep -q "did you mean --generic" usage.txt
 "$tool" new --help | grep -q -- "--output"
 "$tool" doctor --list-checks | grep -q "env.dotnet-sdk"
 echo "::endgroup::"

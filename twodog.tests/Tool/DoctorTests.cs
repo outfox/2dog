@@ -25,13 +25,14 @@ public class DoctorTests : IDisposable
 
     public void Dispose() => _tmp.Dispose();
 
-    private FakeProcessRunner Runner(bool wasmTools = true, bool sdk = true) => new(r =>
+    private FakeProcessRunner Runner(bool wasmTools = true, bool sdk = true, bool android = true) => new(r =>
     {
         if (r.Args.Contains("--list-sdks"))
             return FakeProcessRunner.Result(r, 0, sdk ? ["10.0.303 [C:\\Program Files\\dotnet\\sdk]"] : []);
         if (r.Args.Contains("workload"))
             return FakeProcessRunner.Result(r, 0, "Installed Workload Id   Manifest Version   Installation Source",
-                "------------------------------------------------------------", wasmTools ? "wasm-tools              10.0.100/10.0.100  SDK 10.0.300" : "aspire  1.0", "");
+                "------------------------------------------------------------", wasmTools ? "wasm-tools              10.0.100/10.0.100  SDK 10.0.300" : "aspire  1.0",
+                android ? "android                 36.1.2/10.0.100    SDK 10.0.300" : "", "");
         if (r.Args.Contains("locals"))
             return FakeProcessRunner.Result(r, 0, $"global-packages: {_cache}{Path.DirectorySeparatorChar}");
         if (r.Args.Contains("build"))
@@ -83,7 +84,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void FreshScaffold_IsClean()
     {
-        var dir = Scaffold("--desktop", "--web", "--tests");
+        var dir = Scaffold("--generic", "--web", "--tests");
 
         var run = Doctor(dir);
         Assert.Equal(0, run.ExitCode);
@@ -100,7 +101,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void AllOptInHosts_AreCleanToo()
     {
-        var dir = Scaffold("--desktop", "--webxr", "--avalonia", "--blazor", "--winforms", "--winui", "--tests");
+        var dir = Scaffold("--generic", "--webxr", "--avalonia", "--blazor", "--winforms", "--winui", "--tests");
         var run = Doctor(dir, null, "--json");
         var issues = Findings(run.Stdout).EnumerateArray()
             .Where(f => f.GetProperty("severity").GetString() is "warn" or "fail")
@@ -111,7 +112,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void Verbose_ListsEveryCheck()
     {
-        var dir = Scaffold("--desktop", "--web", "--tests");
+        var dir = Scaffold("--generic", "--web", "--tests");
         var run = Doctor(dir, null, "-v");
         Assert.Contains("  ok", run.Stdout);
         var ids = Findings(Doctor(dir, null, "--json").Stdout).EnumerateArray().Select(f => f.GetProperty("id").GetString()).ToHashSet();
@@ -146,7 +147,7 @@ public class DoctorTests : IDisposable
     [MemberData(nameof(SafeBreakers))]
     public void SafeBreaker_IsFound_FixedAndIdempotent(string id, string severity, Action<string> breaker)
     {
-        var dir = Scaffold("--desktop", "--web", "--webxr", "--blazor", "--tests");
+        var dir = Scaffold("--generic", "--web", "--webxr", "--blazor", "--tests");
         breaker(dir);
 
         var broken = Doctor(dir, null, "--json");
@@ -169,7 +170,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void ManualFindings_HaveRemedies_AndNoFix()
     {
-        var dir = Scaffold("--desktop", "--tests");
+        var dir = Scaffold("--generic", "--tests");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><PublishAot>true</PublishAot>");
         Edit(dir, "Game.csproj", $"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", "Godot.NET.Sdk/4.7.1");
 
@@ -191,7 +192,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void AnnouncedFixes_WaitForFixAll()
     {
-        var dir = Scaffold("--desktop", "--web");
+        var dir = Scaffold("--generic", "--web");
         var boot = Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs");
         File.WriteAllText(boot, "// stale\n");
 
@@ -210,7 +211,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void NonInteractive_PointsAtTheFixCommands()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.Delete(Path.Combine(dir, "Game.2dog", ".gdignore"));
         var run = Doctor(dir);
         Assert.Equal(ExitCodes.Findings, run.ExitCode);
@@ -222,12 +223,12 @@ public class DoctorTests : IDisposable
     [Fact]
     public void Ignore_DropsAFinding_AndStrict_CountsWarnings()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.Delete(Path.Combine(dir, "Game.2dog", ".gdignore"));
         Assert.Equal(0, Doctor(dir, null, "--ignore", "host.gdignore").ExitCode);
 
         var dir2 = Path.Combine(_tmp.Dir, "Other");
-        Assert.Equal(0, CliConsole.Run("new", "Other", dir2, "--desktop", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Other", dir2, "--generic", "--no-restore").ExitCode);
         File.Delete(Path.Combine(dir2, "Directory.Build.targets"));
         Assert.Equal(0, Doctor(dir2).ExitCode);
         Assert.Equal(ExitCodes.Findings, Doctor(dir2, null, "--strict").ExitCode);
@@ -254,7 +255,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void EnvironmentProblems_AreReported()
     {
-        var dir = Scaffold("--desktop", "--web");
+        var dir = Scaffold("--generic", "--web");
 
         var noSdk = Doctor(dir, Runner(sdk: false), "--json");
         Assert.Equal("fail", Finding(noSdk.Stdout, "env.dotnet-sdk")!.Value.GetProperty("severity").GetString());
@@ -297,6 +298,57 @@ public class DoctorTests : IDisposable
         Assert.Equal(shouldInstall, installed);
         Assert.Equal(shouldInstall ? "pass" : "fail", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
         Assert.Equal(shouldInstall ? 2 : 1, runner.Requests.Count(request => request.Args.SequenceEqual(["workload", "list"])));
+    }
+
+    [Theory]
+    [InlineData("--install-android-workload")]
+    [InlineData("--fix")]
+    public void MissingAndroidWorkload_IsReportedAndInstalledOnRequest(string option)
+    {
+        var dir = Scaffold("--generic", "--android");
+        var noAndroid = Doctor(dir, Runner(android: false), "--json");
+        var finding = Finding(noAndroid.Stdout, "env.android-workload")!.Value;
+        Assert.Equal("fail", finding.GetProperty("severity").GetString());
+        Assert.Equal("dotnet workload install android", finding.GetProperty("remedy").GetString());
+        Assert.Contains("Game.android", finding.GetProperty("title").GetString());
+
+        var installed = false;
+        var fallback = Runner(android: false);
+        var runner = new FakeProcessRunner(request =>
+        {
+            if (request.Args.SequenceEqual(["workload", "install", "android"]))
+            {
+                installed = true;
+                return FakeProcessRunner.Result(request, 0);
+            }
+            if (request.Args.SequenceEqual(["workload", "list"]) && installed)
+                return FakeProcessRunner.Result(request, 0, "Installed Workload Id", "-------------------",
+                    "wasm-tools  10.0.100  SDK", "android  36.1.2/10.0.100  SDK", "");
+            return fallback.Run(request);
+        });
+        var run = Doctor(dir, runner, "--json", option);
+        var shouldInstall = option != "--fix";
+        Assert.Equal(shouldInstall, installed);
+        Assert.Equal(shouldInstall ? "pass" : "fail",
+            Finding(run.Stdout, "env.android-workload")!.Value.GetProperty("severity").GetString());
+        Assert.DoesNotContain(runner.Requests, request => request.Args.Contains("wasm-tools"));
+    }
+
+    [Fact]
+    public void AndroidHost_IsRecognizedAndItsPresetRestored()
+    {
+        var dir = Scaffold("--generic", "--android");
+        Assert.Contains(ProjectModel.Load(dir).Hosts, h => h.Kind == HostKind.Android && h.Folder == "Game.android");
+        Assert.Null(Issue(Doctor(dir, null, "--json").Stdout, "preset.android"));
+
+        var presets = Path.Combine(dir, "export_presets.cfg");
+        File.WriteAllText(presets, File.ReadAllText(presets).Replace("name=\"Android\"", "name=\"Phone\""));
+        Assert.Equal("fail", Issue(Doctor(dir, null, "--json").Stdout, "preset.android")!.Value
+            .GetProperty("severity").GetString());
+
+        Doctor(dir, null, "--json", "--fix");
+        Assert.Null(Issue(Doctor(dir, null, "--json").Stdout, "preset.android"));
+        Assert.True(ExportPresetOps.HasPreset(File.ReadAllText(presets), ExportPresetOps.AndroidPresetName));
     }
 
     [Theory]
@@ -451,7 +503,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void Build_RunsAndExplains()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         var failing = new FakeProcessRunner(r => r.Args.Contains("build")
             ? FakeProcessRunner.Result(r, 1, "error NETSDK1147: To build this project, the following workloads must be installed: wasm-tools")
             : Runner().Run(r));
@@ -471,7 +523,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void HostCsproj_MissingBothProperties_IsOneFix()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>", "");
 
@@ -490,7 +542,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void FixAll_ComposesTheTargetFrameworkUpgrade_WithSafePatches()
     {
-        var dir = Scaffold("--desktop", "--tests");
+        var dir = Scaffold("--generic", "--tests");
         Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>", "<TargetFramework>net8.0</TargetFramework>");
         Edit(dir, "Game.csproj", ";Game.tests/**", "");
 
@@ -511,7 +563,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void LoadProblems_CoverTraversalAssemblyNames_AndUnreadableFiles()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         Edit(dir, "project.godot", "project/assembly_name=\"Game\"", "project/assembly_name=\"../Game\"");
         var model = ProjectModel.Load(dir);
         Assert.Contains(model.LoadProblems, p => p.Contains("assembly_name '../Game'"));
@@ -544,7 +596,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void AmbiguousSolutions_AreNotSilentlyPicked()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.Copy(Path.Combine(dir, "Game.slnx"), Path.Combine(dir, "Other.slnx"));
 
         var model = ProjectModel.Load(dir);
@@ -556,7 +608,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void ASolutionNamingASimilarProject_IsNotTheGamesSolution()
     {
-        var dir = Scaffold("--desktop");
+        var dir = Scaffold("--generic");
         File.WriteAllText(Path.Combine(dir, "Other.slnx"), "<Solution>\n  <Project Path=\"OtherGame.csproj\" />\n</Solution>\n");
 
         var model = ProjectModel.Load(dir);

@@ -98,6 +98,7 @@ internal static class TemplateAssets
             // -> MyGame.tools.csproj for a desktop host folder "MyGame.tools").
             var relative = $"{folder}/{Rename(name[prefix.Length..], sourceFolder, folder, baseName)}";
             var content = Path.GetFileName(name).StartsWith("favicon", StringComparison.Ordinal)
+                          || name.EndsWith(".png", StringComparison.Ordinal)
                           || name.EndsWith(".min.js", StringComparison.Ordinal)
                 ? ReadRawBytes(name)
                 : Encoding.UTF8.GetBytes(Rename(ReadRaw(name), sourceFolder, folder, baseName));
@@ -124,6 +125,7 @@ internal static class TemplateAssets
     public static string Substitute(string text, string baseName) => text
         .Replace(SourceName, Hosts.NamespaceName(baseName))
         .Replace("TPLRAWNAME", baseName)
+        .Replace("tplandroidname", Hosts.AndroidPackageName(baseName))
         .Replace("TWODOG_PKG_VERSION", ToolVersions.TwoDogVersion)
         .Replace("NATIVES_PKG_VERSION", ToolVersions.NativesVersion)
         .Replace("GODOT_SDK_VERSION", ToolVersions.GodotSdkVersion)

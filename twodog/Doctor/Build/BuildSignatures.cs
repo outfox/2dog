@@ -61,6 +61,8 @@ internal static class BuildSignatures
             "two GodotSharp versions meet in one build", "2dog update (one Godot line for the SDK and the engine)", Severity.Warn),
         new("build.wasm-tools-missing", Rx(@"NETSDK1147.*?wasm-tools"),
             "the wasm-tools workload is not installed", "dotnet workload install wasm-tools"),
+        new("build.android-workload-missing", Rx(@"NETSDK1147.*?\bandroid\b"),
+            "the android workload is not installed", "dotnet workload install android"),
         new("build.sdk-too-old", Rx(@"NETSDK1045"),
             "the installed .NET SDK is too old for net10.0", "install the .NET 10 SDK"),
         new("build.global-json-unresolved", Rx(@"Unable to resolve the \.NET SDK version as specified in the global\.json|A compatible \.NET SDK was not found"),

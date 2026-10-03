@@ -184,6 +184,7 @@ internal static class ScaffoldCommand
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
         var wantsWeb = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
+        var wantsAndroid = newHosts.Any(h => h.Kind == HostKind.Android) || existingHosts.Any(h => h.Kind == HostKind.Android);
         // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
         var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
             .Concat(existingHosts.Concat(newHosts.Select(h => new ExistingHost(h.Kind, h.Folder)))
@@ -229,7 +230,7 @@ internal static class ScaffoldCommand
         PlanPropsValues(plan, projectDir);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
-        PlanExportPresets(plan, projectDir, wantsWeb);
+        PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
         PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
         PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts, existingHosts,
@@ -598,7 +599,7 @@ internal static class ScaffoldCommand
             () => (project.Godot ?? new GodotProjectFile(path)).Set("xr", "shaders/enabled.web", "true", raw: true)));
     }
 
-    private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb)
+    private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb, bool wantsAndroid)
     {
         // The engine refuses `--export-pack` without a root export_presets.cfg; web publish uses the 'Web' preset,
         // desktop publishes the per-OS presets.
@@ -607,7 +608,7 @@ internal static class ScaffoldCommand
         {
             // Even without a web host, matching dotnet-new output: the template
             // always ships all presets, so adding a host later just works.
-            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web + desktop export presets)", ActionKind.CreateFile,
+            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web, desktop and Android export presets)", ActionKind.CreateFile,
                 () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             return;
         }
@@ -619,6 +620,8 @@ internal static class ScaffoldCommand
             .Where(name => !ExportPresetOps.HasPreset(text, name));
         if (wantsWeb && !ExportPresetOps.HasPreset(text, ExportPresetOps.WebPresetName))
             missing = missing.Prepend(ExportPresetOps.WebPresetName);
+        if (wantsAndroid && !ExportPresetOps.HasPreset(text, ExportPresetOps.AndroidPresetName))
+            missing = missing.Append(ExportPresetOps.AndroidPresetName);
 
         foreach (var preset in missing)
         {
@@ -699,13 +702,14 @@ internal static class ScaffoldCommand
             {
                 HostKind.WinUi => ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems"),
                 HostKind.Blazor => ("needs wasm-tools; built via dotnet run", "requires the wasm-tools workload"),
+                HostKind.Android => ("needs the android workload; built via dotnet publish", "requires the android workload"),
                 _ => ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload"),
             };
             plan.Add(new PlannedAction(
                 $"exclude {host.Folder} from plain solution builds ({why})", ActionKind.Solution,
                 () =>
                 {
-                    // The wasm hosts have no Editor configuration; the WinUI host does.
+                    // The wasm and Android hosts have no Editor configuration; the WinUI host does.
                     foreach (var relative in relatives)
                         if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, relative,
                                 mapEditorToDebug: host.Kind is not HostKind.WinUi))
@@ -716,11 +720,11 @@ internal static class ScaffoldCommand
 
         var hasProjectChanges = plan.Count > 0;
         // Run after global.json has been created, so both probes and installation use the project's SDK.
-        var needsWasm = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
-        if (needsWasm && (options.InstallWasmTools || options.Restore && options.ConfirmWasmToolsInstall != null))
-            plan.Add(new PlannedAction("check wasm-tools and install if requested", ActionKind.Workload,
-                () => WasmTools.EnsureInstalled(projectDir, options.InstallWasmTools,
-                    options.ConfirmWasmToolsInstall, workloadRunner)));
+        foreach (var workload in Workload.For(newHosts.Select(h => h.Kind).Concat(existingHosts.Select(h => h.Kind))))
+            if (options.InstallRequested(workload) || options.Restore && options.ConfirmWorkloadInstall != null)
+                plan.Add(new PlannedAction($"check {workload.Id} and install if requested", ActionKind.Workload,
+                    () => Workloads.EnsureInstalled(workload, projectDir, options.InstallRequested(workload),
+                        options.ConfirmWorkloadInstall, workloadRunner)));
 
         // Workload checks and installation alone do not change the project's restore inputs.
         if (options.Restore && hasProjectChanges)
@@ -759,7 +763,7 @@ internal static class ScaffoldCommand
     private static List<(string Command, string Comment)> NextStepRows(IReadOnlyList<HostSpec> hosts) =>
         hosts.Select(host => host.Kind switch
         {
-            HostKind.Desktop => ($"dotnet run --project {host.Folder}", "desktop host"),
+            HostKind.Desktop => ($"dotnet run --project {host.Folder}", "generic .NET host"),
             HostKind.Tests => ($"dotnet test {host.Folder}", "xUnit tests (headless Godot)"),
             HostKind.Web => ($"dotnet publish {host.Folder}", "browser bundle (needs wasm-tools workload)"),
             HostKind.WebXr => ($"dotnet publish {host.Folder}", "WebXR browser bundle (needs wasm-tools workload)"),
@@ -767,6 +771,7 @@ internal static class ScaffoldCommand
             HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
             HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
             HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
+            HostKind.Android => ($"dotnet publish {host.Folder}", "Android APK (needs the android workload)"),
             _ => (host.Folder, ""),
         }).ToList();
 

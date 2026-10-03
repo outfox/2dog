@@ -37,11 +37,20 @@ internal static class UpdateCommand
         PlanWebBootRefresh(plan, model);
 
         var hasProjectChanges = plan.Count > 0;
-        if (model.HasWebLikeHost && (cmd.Options.InstallWasmTools || cmd.Options.UpdateWorkloads || interactive && cmd.Options.Restore))
-            plan.Add(new PlannedAction("check wasm-tools and offer workload installation or updates", ActionKind.Workload,
-                () => WasmTools.EnsureInstalled(project.Dir, cmd.Options.InstallWasmTools,
-                    interactive ? Tui.OfferWasmToolsInstall : null, Runner,
-                    cmd.Options.UpdateWorkloads, interactive ? Tui.OfferWorkloadUpdate : null)));
+        // The first workload also carries the update offer: `dotnet workload update` covers every installed one.
+        var first = true;
+        foreach (var workload in Workload.For(model.Hosts.Select(h => h.Kind)))
+        {
+            var install = cmd.Options.InstallRequested(workload) || cmd.Options.UpdateWorkloads;
+            var update = first && cmd.Options.UpdateWorkloads;
+            var offerUpdate = first && interactive;
+            first = false;
+            if (install || update || interactive && cmd.Options.Restore)
+                plan.Add(new PlannedAction($"check {workload.Id} and offer workload installation or updates", ActionKind.Workload,
+                    () => Workloads.EnsureInstalled(workload, project.Dir, install,
+                        interactive ? Tui.OfferWorkloadInstall : null, Runner,
+                        update, offerUpdate ? Tui.OfferWorkloadUpdate : null)));
+        }
 
         if (hasProjectChanges && cmd.Options.Restore)
             plan.Add(new PlannedAction("dotnet restore", ActionKind.Restore, () => Restore(project)));

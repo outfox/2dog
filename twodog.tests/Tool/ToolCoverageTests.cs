@@ -20,12 +20,12 @@ public class ProgramTests
         Assert.Equal(1, unknown.ExitCode);
         Assert.Contains("unknown option '--unknown'", unknown.Stderr);
 
-        var nameless = CliConsole.Run("new", "--desktop");
+        var nameless = CliConsole.Run("new", "--generic");
         Assert.Equal(1, nameless.ExitCode);
         Assert.Contains("2dog new needs a project name", nameless.Stderr);
 
         var missing = Path.Combine(Path.GetTempPath(), "2dog-missing-" + Guid.NewGuid().ToString("N"));
-        var noProject = CliConsole.Run("add", missing, "--desktop");
+        var noProject = CliConsole.Run("add", missing, "--generic");
         Assert.Equal(2, noProject.ExitCode);
         Assert.Contains("no project.godot", noProject.Stderr);
     }
@@ -36,7 +36,7 @@ public class ProgramTests
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", "[application]\nconfig/name=\"My Game\"\n");
 
-        Assert.Equal(0, CliConsole.Run("add", tmp.Dir, "--desktop", "--dry-run", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("add", tmp.Dir, "--generic", "--dry-run", "--no-restore").ExitCode);
 
         Assert.False(File.Exists(Path.Combine(tmp.Dir, "MyGame.csproj")));
     }
@@ -48,14 +48,14 @@ public class ProgramTests
     {
         Assert.Equal(Verb.None, CommandLine.Parse([]).Verb);
         Assert.Throws<UsageException>(() => CommandLine.Parse(["some/path"]));
-        Assert.Throws<UsageException>(() => CommandLine.Parse(["--desktop"]));
+        Assert.Throws<UsageException>(() => CommandLine.Parse(["--generic"]));
         Assert.Throws<UsageException>(() => CommandLine.Parse(["--yes"]));
     }
 
     [Fact]
     public void PrepareNewProject_MapsNameAndOutputIntoScaffoldOptions()
     {
-        var cmd = CommandLine.Parse(["new", "My Game!", "games/mine", "--desktop"]);
+        var cmd = CommandLine.Parse(["new", "My Game!", "games/mine", "--generic"]);
 
         Program.PrepareNewProject(cmd, interactive: false);
 
@@ -121,7 +121,7 @@ public class CommandLineCoverageTests
     [InlineData("folder\\child")]
     public void HostFlag_LeavesPathLikeTokensAsTheProjectPath(string path)
     {
-        var cmd = CommandLine.Parse(["add", "--desktop", path]);
+        var cmd = CommandLine.Parse(["add", "--generic", path]);
 
         Assert.Null(cmd.Requested.Single().Folder);
         Assert.Equal(path, cmd.Options.ProjectPath);
@@ -131,7 +131,7 @@ public class CommandLineCoverageTests
 public class HostsCoverageTests
 {
     [Theory]
-    [InlineData("2dog", "desktop", "your own Main(), runs the game on desktop", "--desktop")]
+    [InlineData("2dog", "generic", "your own Main(), runs the game as a .NET app", "--generic")]
     [InlineData("web", "browser", "WebAssembly host, published as a static bundle", "--web")]
     [InlineData("webxr", "webxr", "WebAssembly host with the WebXR Layers polyfill for VR", "--webxr")]
     [InlineData("tests", "tests", "xUnit project driving a headless engine", "--tests")]
@@ -169,7 +169,7 @@ public class HostsCoverageTests
     [Fact]
     public void FromFlags_RejectsFolderNamesWithoutLettersOrDigits()
     {
-        var cmd = CommandLine.Parse(["add", "--desktop", "!!!"]);
+        var cmd = CommandLine.Parse(["add", "--generic", "!!!"]);
         var project = new ProjectContext { Dir = ".", BaseName = "Game" };
 
         Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, project));

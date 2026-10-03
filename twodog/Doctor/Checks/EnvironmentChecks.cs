@@ -13,6 +13,7 @@ internal static class EnvironmentChecks
         new("env.dotnet-sdk", Category.Environment, "a .NET 10 SDK is installed"),
         new("env.global-json", Category.Environment, "the root global.json pin is satisfied by an installed SDK"),
         new("env.wasm-tools", Category.Environment, "the wasm-tools workload is installed when a browser host exists"),
+        new("env.android-workload", Category.Environment, "the android workload is installed when an Android host exists"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot-editor", Category.Environment, "GODOT_EDITOR, when set, points at an existing file"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
@@ -49,21 +50,14 @@ internal static class EnvironmentChecks
                 yield return Finding.Pass("env.global-json", c, $"global.json {pin} ({roll})");
         }
 
-        if (project.HasWebLikeHost)
-        {
-            var folders = string.Join(", ", project.Hosts.Where(h => h.IsWebLike).Select(h => h.Folder));
-            if (ctx.Workloads is not { } workloads)
-                yield return new Finding("env.wasm-tools", c, ctx.Options.InstallWasmTools ? Severity.Fail : Severity.Info,
-                    "could not list workloads", "'dotnet workload list' failed",
-                    ctx.Options.InstallWasmTools ? WasmTools.InstallCommand : "run 'dotnet workload list' yourself; the browser hosts need wasm-tools",
-                    Fix: ctx.Options.InstallWasmTools ? InstallWasmTools(ctx) : null);
-            else if (!workloads.Contains("wasm-tools"))
-                yield return new Finding("env.wasm-tools", c, Severity.Fail, $"wasm-tools workload missing (needed by {folders})",
-                    "browser hosts publish through the .NET WebAssembly SDK", WasmTools.InstallCommand,
-                    Fix: InstallWasmTools(ctx));
-            else
-                yield return Finding.Pass("env.wasm-tools", c, "wasm-tools");
-        }
+        foreach (var finding in WorkloadFindings(ctx, Workload.WasmTools, "env.wasm-tools",
+                     project.Hosts.Where(h => h.IsWebLike), "browser hosts publish through the .NET WebAssembly SDK",
+                     ctx.Options.InstallWasmTools))
+            yield return finding;
+        foreach (var finding in WorkloadFindings(ctx, Workload.Android, "env.android-workload",
+                     project.Hosts.Where(h => h.Kind == HostKind.Android), "Android hosts build with .NET for Android",
+                     ctx.Options.InstallAndroidWorkload))
+            yield return finding;
 
         var rid = Rid(ctx.Env);
         if (SupportedRids.Contains(rid))
@@ -112,10 +106,29 @@ internal static class EnvironmentChecks
         }
     }
 
-    private static Fix InstallWasmTools(DoctorContext ctx) =>
-        new("env:wasm-tools", FixClass.Announced, $"install wasm-tools ({WasmTools.InstallCommand})", () =>
+    /// <summary>A workload the project's hosts need: missing, unknown (listing failed) or present.</summary>
+    private static IEnumerable<Finding> WorkloadFindings(DoctorContext ctx, Workload workload, string id,
+        IEnumerable<HostModel> hosts, string why, bool install)
+    {
+        const Category c = Category.Environment;
+        var folders = string.Join(", ", hosts.Select(h => h.Folder));
+        if (folders.Length == 0) yield break;
+        if (ctx.Workloads is not { } workloads)
+            yield return new Finding(id, c, install ? Severity.Fail : Severity.Info,
+                "could not list workloads", "'dotnet workload list' failed",
+                install ? workload.InstallCommand : $"run 'dotnet workload list' yourself; the {workload.NeededBy} need {workload.Id}",
+                Fix: install ? InstallWorkload(ctx, workload) : null);
+        else if (!workloads.Contains(workload.Id))
+            yield return new Finding(id, c, Severity.Fail, $"{workload.Id} workload missing (needed by {folders})",
+                why, workload.InstallCommand, Fix: InstallWorkload(ctx, workload));
+        else
+            yield return Finding.Pass(id, c, workload.Id);
+    }
+
+    private static Fix InstallWorkload(DoctorContext ctx, Workload workload) =>
+        new($"env:{workload.Id}", FixClass.Announced, $"install {workload.Id} ({workload.InstallCommand})", () =>
         {
-            WasmTools.Install(ctx.Project.Dir, ctx.Runner);
+            Workloads.Install(workload, ctx.Project.Dir, ctx.Runner);
             ctx.InvalidateWorkloads();
         });
 

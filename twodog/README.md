@@ -28,9 +28,9 @@ dotnet tool install -g 2dog
 
 With no host options the tool prompts: a checkbox list of hosts, editable
 folder names, the plan, and a confirmation. Naming any host option (or passing
-`--yes`) skips that wizard. On terminals, missing `wasm-tools` can still be
-offered before restore; `--yes` skips the offer. Use `--install-wasm-tools`
-for explicit installation. The `dotnet new` template produces the
+`--yes`) skips that wizard. On terminals, a missing workload (`wasm-tools`,
+`android`) can still be offered before restore; `--yes` skips the offer. Use
+`--install-wasm-tools` or `--install-android-workload` for explicit installation. The `dotnet new` template produces the
 same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
 ## What it does
@@ -48,7 +48,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.csproj              <- created or minimally patched
   MyGame.slnx                <- created, or an existing .sln is migrated
   Directory.Build.props      <- the package versions every host references
-  MyGame.2dog/   (.gdignore) <- desktop host (your Main entry point)
+  MyGame.2dog/   (.gdignore) <- generic .NET host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
   MyGame.tests/  (.gdignore) <- xUnit test project
@@ -56,11 +56,12 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
   MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)
   MyGame.blazor/ (.gdignore) <- Blazor Web App host (opt-in: --blazor; server + Client/ WebAssembly page)
+  MyGame.android/ (.gdignore) <- Android host (opt-in: --android; dotnet publish makes an APK)
 ```
 
 Run it again whenever you want another host – hosts that exist are recognized
 and left alone, and a kind you already have is added a second time under a
-free folder name (`2dog add --desktop MyGame.editor`).
+free folder name (`2dog add --generic MyGame.editor`).
 
 Commands:
 
@@ -80,8 +81,8 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--desktop [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, winui, avalonia, and blazor are opt-in and never in the default set) |
-| `--no-desktop`, `--no-web`, `--no-tests` | Leave a host out of the default set |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
+| `--no-generic`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |
 | `-o, --output <dir>` | Directory for a new project |
@@ -90,7 +91,8 @@ Options:
 | `--force` | Overwrite files that already exist (never deletes/moves) |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | `new`, `add`, `doctor`, `update`: install missing `wasm-tools` for browser hosts |
-| `--update-workloads` | `update`: install missing `wasm-tools`, or update all installed workloads for the project's SDK |
+| `--install-android-workload` | `new`, `add`, `doctor`, `update`: install the missing `android` workload for Android hosts |
+| `--update-workloads` | `update`: install missing workloads the hosts need, or update all installed workloads for the project's SDK |
 | `--allow-dirty` | `update`: proceed with uncommitted git changes |
 | `--fix`, `--fix-all`, `--build [target]`, `-c, --configuration <Cfg>`, `--log <file>`, `--ignore <id>`, `--strict`, `--offline`, `--list-checks` | `doctor` options; see `2dog doctor --help` |
 | `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |

@@ -105,3 +105,15 @@ For libraries accessed only through reflection, add a trimmer root:
 
 The generated host already preserves the game, host, `GodotSharp`, and
 `twodog` assemblies.
+
+## Android Host
+
+Set these optional properties in the [Android host](/hosts/android)'s `.csproj`:
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `TwoDogAndroidExportPreset` | `Android` | Preset in `export_presets.cfg` |
+| `TwoDogAndroidPack` | exported by the build | Use a pre-exported pack instead |
+| `TwoDogAndroidGdExtensions` | `true` | Package the Android libraries of the project's GDExtensions |
+| `TwoDogAndroidSigning` | `true` | Sign from Godot's keystore variables or `~/.android/debug.keystore` |
+| `AndroidPackageFormats` | `aab` for Release | `apk` for a sideloadable package; the showcase host sets it |

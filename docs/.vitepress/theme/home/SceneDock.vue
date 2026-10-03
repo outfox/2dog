@@ -9,7 +9,7 @@ import { plain } from './content'
 /* name/role accept inline HTML — see content.ts for the rule. */
 const hosts = [
   { name: 'MyGame.2dog', role: 'generic .NET', color: 'var(--ed-node-2d)', icon: 'margincontainer', link: '/hosts/generic' },
-  { name: 'MyGame.blazor', role: 'Blazor', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/blazor' },
+  { name: 'MyGame.android', role: 'Android', color: 'var(--ed-node-gui)', icon: 'mobile_phone', link: '/hosts/android' },
   { name: 'MyGame.web', role: 'Web', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/web' },
   { name: 'MyGame.webxr', role: 'WebXR', color: 'var(--ed-node-3d)', icon: 'vr_headset', link: '/hosts/webxr' },
   { name: 'MyGame.tests', role: 'xUnit', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/hosts/xunit' },

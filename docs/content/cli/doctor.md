@@ -22,8 +22,9 @@ interactive checklist.
 | Option | Effect |
 | --- | --- |
 | `--fix` | Apply the safe fixes, then check again |
-| `--fix-all` | Also apply announced fixes, including missing `wasm-tools` installation |
+| `--fix-all` | Also apply announced fixes, including missing workload installation |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts, then re-check |
+| `--install-android-workload` | Install the missing `android` workload for Android hosts, then re-check |
 | `--build [target]` | Run `dotnet build` of the solution, or a host folder or project, and explain known failures |
 | `-c, --configuration <Cfg>` | Configuration for `--build` (default `Debug`) |
 | `--log <file>` | Only explain an existing build, restore or runtime log; `-` reads stdin |
@@ -35,8 +36,8 @@ interactive checklist.
 Plus the [global and output options](/dnx-2dog#global-options); `-v` lists
 the passed checks too.
 
-Installing `wasm-tools` is an announced fix: select it in the checklist, or use
-`--install-wasm-tools` or `--fix-all`. `--fix` alone does not install workloads.
+Installing a workload is an announced fix: select it in the checklist, or use
+its install flag or `--fix-all`. `--fix` alone does not install workloads.
 
 ## Exit codes
 
@@ -68,6 +69,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `env.dotnet-sdk` | a .NET 10 SDK is installed |
 | `env.global-json` | the root global.json pin is satisfied by an installed SDK |
 | `env.wasm-tools` | the wasm-tools workload is installed when a browser host exists |
+| `env.android-workload` | the android workload is installed when an Android host exists |
 | `env.host-platform` | this OS and architecture have 2dog native packages |
 | `env.godot-editor` | GODOT_EDITOR, when set, points at an existing file |
 | `env.overrides` | GODOTSHARP_DIR and the other layout overrides point at what they claim |
@@ -152,6 +154,7 @@ Ids are stable; `--ignore <id>` drops one.
 | --- | --- |
 | `preset.file` | export_presets.cfg exists |
 | `preset.web` | the 'Web' preset exists when a browser host does |
+| `preset.android` | the 'Android' preset exists when an Android host does |
 | `preset.desktop` | the per-OS desktop presets exist |
 
 ### Godot settings
@@ -186,6 +189,7 @@ line and the fixing command; other errors follow.
 | `build.version-conflict` | conflicting package versions across the solution |
 | `build.msb3277-godotsharp` | two GodotSharp versions meet in one build |
 | `build.wasm-tools-missing` | the wasm-tools workload is not installed |
+| `build.android-workload-missing` | the android workload is not installed |
 | `build.sdk-too-old` | the installed .NET SDK is too old for net10.0 |
 | `build.global-json-unresolved` | no installed SDK satisfies global.json |
 | `build.godot-sdk-not-found` | the Godot.NET.Sdk version could not be downloaded |

@@ -32,6 +32,12 @@
     <Build Project="false" />
   </Project>
 #endif
+#if (android)
+  <Project Path="TPLRAWNAME.android/TPLRAWNAME.android.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+#endif
 #if (blazor)
   <Project Path="TPLRAWNAME.blazor/TPLRAWNAME.blazor.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />

@@ -10,7 +10,7 @@ public class UpdateTests
     private static string AgedProject(TempProjectDir tmp)
     {
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--web", "--tests", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--tests", "--no-restore").ExitCode);
         File.Delete(Path.Combine(dir, "Directory.Build.props"));
         foreach (var csproj in Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
         {
@@ -79,6 +79,24 @@ public class UpdateTests
         Assert.DoesNotContain(runner.Requests, request => request.Args.Contains("restore"));
         Assert.Equal(before.Keys.Order(), Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories).Order());
         foreach (var (path, text) in before) Assert.Equal(text, File.ReadAllText(path));
+    }
+
+    [Fact]
+    public void UpdateWorkloads_InstallsEveryMissingWorkloadAndUpdatesOnce()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(ExitCodes.Ok, CliConsole.Run("new", "Game", dir, "--web", "--android", "--no-restore").ExitCode);
+        var runner = new FakeProcessRunner(request => request.Args.Contains("list")
+            ? FakeProcessRunner.Result(request, 0, "Installed Workload Id", "--------------------", "wasm-tools  10.0.100  SDK", "")
+            : FakeProcessRunner.Result(request, 0));
+
+        var run = WithRunner(runner, () => CliConsole.Run("update", dir, "--update-workloads", "--no-restore", "--allow-dirty"));
+
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Single(runner.Requests, request => request.Args.SequenceEqual(["workload", "update"]));
+        Assert.Contains(runner.Requests, request => request.Args.SequenceEqual(["workload", "install", "android"]));
+        Assert.DoesNotContain(runner.Requests, request => request.Args.SequenceEqual(["workload", "install", "wasm-tools"]));
     }
 
     [Fact]
@@ -220,7 +238,7 @@ public class UpdateTests
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--no-restore").ExitCode);
         var props = Path.Combine(dir, "Directory.Build.props");
         File.WriteAllText(props, File.ReadAllText(props).Replace($"<TwoDogVersion>{ToolVersions.TwoDogVersion}<", "<TwoDogVersion>99.0.0.1<"));
 
@@ -273,7 +291,7 @@ public class UpdateTests
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--no-restore").ExitCode);
         var props = Path.Combine(dir, "Directory.Build.props");
         var aged = File.ReadAllText(props).Replace($"<TwoDogVersion>{ToolVersions.TwoDogVersion}<", "<TwoDogVersion>4.7.1.10<");
         File.WriteAllText(props, "<?xml version=\"1.0\" encoding=\"utf-16\"?>\n" + aged, System.Text.Encoding.Unicode);
@@ -290,7 +308,7 @@ public class UpdateTests
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--no-restore").ExitCode);
         var game = Path.Combine(dir, "Game.csproj");
         File.WriteAllText(game, File.ReadAllText(game).Replace($"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", "Godot.NET.Sdk/4.6.0"));
 
@@ -305,7 +323,7 @@ public class UpdateTests
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--desktop", "--web", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--no-restore").ExitCode);
         var boot = Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs");
         File.WriteAllText(boot, "// stale\n");
 
@@ -342,6 +360,7 @@ public class UpdateTests
         Assert.True(literals[1].IsPinned);
         Assert.Equal(new Version(4, 7, 1, 1), literals[1].Parsed);
         Assert.Equal("[$(TwoDogNativesVersion)]", VersionRewriter.Reference("2dog.browser-wasm"));
+        Assert.Equal("[$(TwoDogNativesVersion)]", VersionRewriter.Reference("2dog.android-arm64"));
         Assert.Null(VersionRewriter.PropertyFor("Avalonia.Controls.DataGrid"));
 
         Assert.Equal("4.7.1", VersionRewriter.GodotSdkVersion("<Project Sdk=\"Godot.NET.Sdk/4.7.1\">"));

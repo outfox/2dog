@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Experimental Android host: Godot's Activity owns the screen, render loop, input and lifecycle; this app
+         registers .NET with it first. `dotnet publish -r android-arm64` builds the game, exports its pck with the
+         'Android' export preset and packages a signed APK. Needs the android workload. -->
+    <PropertyGroup>
+        <TargetFramework>net10.0-android</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'TPLRAWNAME.android'
+             would differ from the other hosts for types shared with them. -->
+        <RootNamespace>Company.Product1</RootNamespace>
+        <ApplicationId>com.companyname.tplandroidname</ApplicationId>
+        <ApplicationTitle>TPLRAWNAME</ApplicationTitle>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+        <!-- Devices by default; pass -r android-x64 for an x64 emulator -->
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(RuntimeIdentifiers)' == ''">android-arm64</RuntimeIdentifier>
+        <_TwoDogAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidRids>
+        <!-- A sideloadable APK; Release publishes would otherwise make an app bundle (.aab) for app stores -->
+        <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
+        <!-- Keep the assemblies in the APK in Debug too, so it runs without a deployment session -->
+        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <!-- The Android host requires untrimmed, JIT-compiled assemblies for now -->
+        <PublishTrimmed>false</PublishTrimmed>
+        <RunAOTCompilation>false</RunAOTCompilation>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.android" Version="[$(TwoDogNativesVersion)]"/>
+        <PackageReference Include="2dog.android-arm64" Version="[$(TwoDogNativesVersion)]"
+                          Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-arm64;'))"/>
+        <PackageReference Include="2dog.android-x64" Version="[$(TwoDogNativesVersion)]"
+                          Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-x64;'))"/>
+        <!-- The Java libraries Godot's Android host depends on -->
+        <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6"/>
+        <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>
+        <PackageReference Include="Xamarin.Kotlin.StdLib" Version="2.1.21"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
+    </ItemGroup>
+
+    <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
+         their .gdignore. The build imports it and exports its pck for the APK. -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <TwoDogAndroidGameAssembly>TPLRAWNAME</TwoDogAndroidGameAssembly>
+    </PropertyGroup>
+</Project>

@@ -8,6 +8,9 @@ description: "Choose a .NET application that starts Godot for your game or tests
 A host is a .NET application that starts Godot for your game or its tests.
 Each host has its own entry point and references the same game project.
 
+You can have multiple hosts of the same type, each will have its unique project.
+
+
 ## Add a Host
 
 Run this from the directory containing `project.godot`:
@@ -21,10 +24,11 @@ Choose hosts when prompted, or use the flags below. For a new project, use
 
 | Host | Flag | Purpose |
 | --- | --- | --- |
-| [2dog (generic .NET)](./generic) | `--desktop` | Desktop or headless .NET application |
+| [2dog (generic .NET)](./generic) | `--generic` | .NET console application (desktop or headless) |
+| [Android](./android) | `--android` | Android APK (experimental) |
 | [Avalonia](./avalonia) | `--avalonia` | Cross-platform desktop UI |
 | [Blazor](./blazor) | `--blazor` | Game inside a Blazor page |
-| [Web](./web) | `--web` | Static browser site |
+| [Web](./web) | `--web` | WASM / HTML5 browser bundle (e.g. for [itch.io](https://itch.io))|
 | [WebXR](./webxr) | `--webxr` | Browser VR and AR |
 | [WinForms](./winforms) | `--winforms` | Windows Forms UI |
 | [WinUI 3](./winui) | `--winui` | Windows App SDK UI |

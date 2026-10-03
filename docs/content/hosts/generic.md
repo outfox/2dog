@@ -6,14 +6,18 @@ description: "Run and publish your Godot game as a .NET console application."
 # 2dog (generic .NET)
 
 The generic .NET host is a console application that runs Godot on Windows,
-Linux, or macOS. Edit `MyGame.2dog/Program.cs` to add your own host code.
+Linux, or macOS. A Godot window will open (unless headless).
+
+Edit `MyGame.2dog/Program.cs` to add your own host code. 
+
+It's a simple way to just add C# code around or on top of your Godot game and comfortably run, test, and debug it inside your IDE or using the `dotnet` CLI.
 
 ## Use It
 
 From your Godot project directory:
 
 ```bash
-dnx 2dog add --desktop
+dnx 2dog add --generic
 dotnet run --project MyGame.2dog
 ```
 
@@ -39,3 +43,11 @@ are unsupported.
 
 See [Engine](/api/engine) to customize the frame loop and
 [Build Variants](/build-configurations) to select an engine build.
+
+## No Console
+
+If you want to ship a desktop game for end users, change the output type in the `.csproj` from `Exe` to:
+```xml
+<OutputType>WinExe</OutputType>
+```
+

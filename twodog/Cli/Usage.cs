@@ -37,7 +37,7 @@ internal static class Usage
     private static readonly Option[] GeneralOptions =
     [
         CliTree.Name, CliTree.Rename, CliTree.Output, CliTree.Yes, CliTree.DryRun, CliTree.Force, CliTree.NoRestore,
-        CliTree.InstallWasmTools,
+        CliTree.InstallWasmTools, CliTree.InstallAndroidWorkload,
         CliTree.VersionOption, CliTree.HelpOption,
     ];
 
@@ -150,11 +150,11 @@ internal static class Usage
     private static string Prose(Verb verb) => verb switch
     {
         Verb.New => "Without host options it asks which hosts to create; host flags skip the project wizard. " +
-                    "On terminals, missing wasm-tools can still be offered. -y runs unattended. " +
+                    "On terminals, missing workloads (wasm-tools, android) can still be offered. -y runs unattended. " +
                     "The directory defaults to the (sanitized) project name.",
         Verb.Add => "The path defaults to the current directory. Run it again to add more hosts, including a " +
                     "second host of the same kind. Host flags skip the project wizard; on terminals missing " +
-                    "wasm-tools can still be offered. -y runs unattended. Existing files are never overwritten without --force.",
+                    "workloads (wasm-tools, android) can still be offered. -y runs unattended. Existing files are never overwritten without --force.",
         Verb.Doctor => "Static checks by default (fast, works offline): the machine, the layout, every csproj, the " +
                        "solution, versions, export presets, project.godot. Safe fixes apply under --fix, announced " +
                        "ones under --fix-all; interactively it asks. Exit code 3 while findings remain. --build " +
@@ -215,8 +215,8 @@ internal static class Usage
             [
                 ("2dog add", "interactive, here"),
                 ("2dog new MyGame", "interactive host choice, new project"),
-                ("2dog new MyGame --desktop --tests", ""),
-                ("2dog add --desktop MyGame.editor", ""),
+                ("2dog new MyGame --generic --tests", ""),
+                ("2dog add --generic MyGame.editor", ""),
                 ("2dog add path/to/project --no-web", ""),
                 ("2dog doctor", "check the project; offers fixes"),
                 ("2dog update", "packages to this tool's versions"),
@@ -225,13 +225,13 @@ internal static class Usage
             Verb.New =>
             [
                 ("2dog new MyGame", "interactive host choice"),
-                ("2dog new MyGame --desktop --tests", "unattended"),
+                ("2dog new MyGame --generic --tests", "unattended"),
                 ("2dog new \"My Game\" -o games/mine --no-web", "name adjusted to MyGame"),
             ],
             Verb.Add =>
             [
                 ("2dog add", "interactive, here"),
-                ("2dog add --desktop MyGame.editor", "a second desktop host, named"),
+                ("2dog add --generic MyGame.editor", "a second generic host, named"),
                 ("2dog add path/to/project --no-web", ""),
                 ("2dog add --rename MyGame", "fix a spaced .NET name first"),
             ],
