@@ -128,12 +128,16 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void PublishSingleFile_OffersNativeAotOnlyWhereItWorks()
     {
-        var dir = Scaffold("--generic", "--winforms");
-        foreach (var host in new[] { "Game.2dog", "Game.winforms" })
+        var dir = Scaffold("--generic", "--winforms", "--avalonia");
+        foreach (var host in new[] { "Game.2dog", "Game.winforms", "Game.avalonia" })
             Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
                 "<GodotProjectDir>..</GodotProjectDir><PublishSingleFile>true</PublishSingleFile>");
+        // NativeAOT ignores PublishSingleFile.
+        Edit(dir, "Game.avalonia/Game.avalonia.csproj", "<PublishSingleFile>true</PublishSingleFile>",
+            "<PublishSingleFile>true</PublishSingleFile><PublishAot>true</PublishAot>");
 
         var failures = Failures(Doctor(dir, "--json").Stdout, "host.publish-singlefile");
+        Assert.Equal(["Game.2dog", "Game.winforms"], failures.Keys.Order().ToArray());
         Assert.Contains("PublishAot", failures["Game.2dog"].GetProperty("remedy").GetString());
         Assert.DoesNotContain("PublishAot", failures["Game.winforms"].GetProperty("remedy").GetString());
     }

@@ -13,7 +13,7 @@ internal static class HostChecks
         new("host.variant", Category.Hosts, "TwoDogVariant is release, debug or editor"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
         new("host.publish-aot", Category.Hosts, "no WinForms, browser or Blazor host enables PublishAot"),
-        new("host.publish-singlefile", Category.Hosts, "only browser hosts enable PublishSingleFile"),
+        new("host.publish-singlefile", Category.Hosts, "PublishSingleFile is only enabled by browser hosts or alongside PublishAot"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
         new("host.web-props-shim", Category.Hosts, "browser hosts chain to the root Directory.Build.props"),
@@ -107,9 +107,10 @@ internal static class HostChecks
                     host.Kind is HostKind.Web or HostKind.WebXr ? "replace PublishAot with RunAOTCompilation" : "remove PublishAot",
                     csproj));
 
-            if (!host.IsWebLike && Enables("PublishSingleFile"))
+            // NativeAOT ignores PublishSingleFile; its executable already holds every assembly.
+            if (!host.IsWebLike && Enables("PublishSingleFile") && !(nativeAot && Enables("PublishAot")))
                 yield return Issue(new Finding("host.publish-singlefile", c, Severity.Fail, $"{csproj} enables PublishSingleFile",
-                    "the engine loads GodotPlugins and the game assembly from disk, which a single-file bundle cannot provide",
+                    "without NativeAOT the engine loads GodotPlugins and the game assembly from disk, which a single-file bundle cannot provide",
                     nativeAot
                         ? "remove PublishSingleFile and publish as a folder, or use PublishAot for a native executable"
                         : "remove PublishSingleFile and publish as a folder", csproj));

@@ -38,7 +38,8 @@ pack. Copy the whole folder to the target machine. Add `-r win-x64`,
 `-r linux-x64`, or `-r osx-arm64` to select a platform.
 
 For a build that requires an installed .NET runtime, pass
-`-p:PublishSelfContained=false`. Single-file publishing is unsupported.
+`-p:PublishSelfContained=false`. Single-file publishing is unsupported; Native
+AOT produces one executable instead.
 
 ### Native AOT
 

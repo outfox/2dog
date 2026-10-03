@@ -50,12 +50,15 @@ with the Android NDK on any build machine (see below).
 
 2dog keeps `GodotSharp` and the game assembly whole, because Godot binds
 script classes through reflection. The game assembly is the project referenced
-from `GodotProjectDir`. Root other assemblies that are only reached through
-reflection:
+from `GodotProjectDir`. In desktop hosts, root other assemblies that are only
+reached through reflection:
 
 ```xml
 <TrimmerRootAssembly Include="MyLibrary"/>
 ```
+
+Android hosts root them with `RootMode="All"`, which .NET for Android requires
+(see [Android Host](#android-host)).
 
 .NET for Android marks its Native AOT experimental (warning XA1040). It links
 with the Android NDK, so install the NDK and point `AndroidNdkDirectory` at it:

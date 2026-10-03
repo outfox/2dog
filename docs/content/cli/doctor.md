@@ -111,7 +111,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.variant` | TwoDogVariant is release, debug or editor |
 | `host.buildtype-deprecated` | the deprecated TwoDogBuildType property is gone |
 | `host.publish-aot` | no WinForms, browser or Blazor host enables PublishAot |
-| `host.publish-singlefile` | only browser hosts enable PublishSingleFile |
+| `host.publish-singlefile` | PublishSingleFile is only enabled by browser hosts or alongside PublishAot |
 | `host.duplicate-analyzers` | hosts referencing the game strip the duplicate Godot analyzers |
 | `host.app-manifest` | the app.manifest a host declares exists |
 | `host.web-props-shim` | browser hosts chain to the root Directory.Build.props |

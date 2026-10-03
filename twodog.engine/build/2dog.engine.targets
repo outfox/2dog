@@ -33,7 +33,8 @@
         <Warning Condition="'$(TwoDogBuildType)' != ''"
                  Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
 
-        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true'"
+        <!-- NativeAOT ignores PublishSingleFile: its output already is one native executable. -->
+        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true' And '$(PublishAot)' != 'true'"
                Text="TwoDog: PublishSingleFile is not supported for 2dog desktop hosts. Assemblies embedded in a single-file bundle have no on-disk location, which the GodotPlugins / libgodot probing relies on. Publish as a normal folder instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
     </Target>
 
