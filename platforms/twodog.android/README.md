@@ -35,8 +35,12 @@ Signing follows established conventions only:
   (the key alias) and `_PASSWORD` (`GODOT_ANDROID_KEYSTORE_DEBUG_*` for debug builds).
   2dog maps them onto the .NET properties and hands the password over as an `env:`
   reference, so it never reads the secret;
-- otherwise .NET signs with its per-user debug key (`debug.keystore` in its
-  `Xamarin/Mono for Android` settings directory), and release builds say so.
+- otherwise the Android SDK's debug keystore, `debug.keystore` in `ANDROID_USER_HOME`
+  or `~/.android` (alias `androiddebugkey`, password `android`), which Android Studio and
+  Gradle sign debug builds with, so 2dog builds install as updates over theirs;
+- otherwise .NET's own debug key (in its `Xamarin/Mono for Android` settings directory).
+
+Release builds that fall back to a debug key say so.
 
 `TwoDogAndroidSigning=false` turns the variable mapping off.
 

@@ -305,7 +305,11 @@ Lines="@(AndroidNativeLibrary->'%(Abi)|%(Filename)%(Extension)')" Overwrite="tru
 Lines="AndroidKeyStore=$(AndroidKeyStore);KeyStore=$(AndroidSigningKeyStore);Alias=$(AndroidSigningKeyAlias);StorePass=$(AndroidSigningStorePass);KeyPass=$(AndroidSigningKeyPass)"/></Target>
 </Project>''')
         env = {name: value for name, value in os.environ.items() if not name.startswith("GODOT_ANDROID_KEYSTORE_")}
-        env.update({name: value.replace("{keystore}", str(keystore)) for name, value in dict(environment).items()})
+        # An empty Android user home: the developer's own ~/.android/debug.keystore must not leak into the result.
+        (directory / "android-home").mkdir()
+        env["ANDROID_USER_HOME"] = str(directory / "android-home")
+        env.update({name: value.replace("{keystore}", str(keystore)).replace("{directory}", str(directory))
+                    for name, value in dict(environment).items()})
         result = subprocess.run(["dotnet", "msbuild", str(project), "-t:_ResolveAndroidSigningKey", "-nologo", "-v:diag"],
                                 cwd=REPO, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
         listing = directory / "signing.txt"
@@ -338,6 +342,23 @@ Lines="AndroidKeyStore=$(AndroidKeyStore);KeyStore=$(AndroidSigningKeyStore);Ali
         self.assertEqual(0, result.returncode, result.stdout)
         self.assertEqual("", signing["AndroidKeyStore"])
         self.assertIn("signed with the .NET debug key", result.stdout)
+
+    def test_signing_falls_back_to_the_android_sdk_debug_keystore(self):
+        android_home = Path(tempfile.mkdtemp(dir=self.root))
+        (android_home / "debug.keystore").write_bytes(b"keystore")
+        for variant in ("debug", "release"):
+            with self.subTest(variant=variant):
+                result, signing, _ = self.android_signing(variant=variant,
+                                                          environment={"ANDROID_USER_HOME": str(android_home)})
+                self.assertEqual(0, result.returncode, result.stdout[-2000:])
+                self.assertEqual(("true", str(android_home / "debug.keystore"), "androiddebugkey", "android", "android"),
+                                 (signing["AndroidKeyStore"], signing["KeyStore"], signing["Alias"],
+                                  signing["StorePass"], signing["KeyPass"]))
+        self.assertIn("signed with the Android debug key", result.stdout)
+        # Godot's keystore variables still win.
+        result, signing, keystore = self.android_signing(
+            environment={**self.RELEASE_KEYSTORE, "ANDROID_USER_HOME": str(android_home)})
+        self.assertEqual(str(keystore.resolve()), signing["KeyStore"])
 
     def test_incomplete_signing_configuration_fails(self):
         result, _, _ = self.android_signing(environment={**self.RELEASE_KEYSTORE,

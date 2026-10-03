@@ -133,8 +133,10 @@
         </Task>
     </UsingTask>
     <!-- Signing follows established conventions only: a project's own AndroidKeyStore wins, otherwise Godot's documented
-         GODOT_ANDROID_KEYSTORE_<VARIANT>_PATH/_USER/_PASSWORD variables, otherwise .NET's debug key. The password reaches
-         the signer as an env: reference, never as an MSBuild property. Opt out with TwoDogAndroidSigning=false. -->
+         GODOT_ANDROID_KEYSTORE_<VARIANT>_PATH/_USER/_PASSWORD variables, otherwise the Android SDK's debug keystore
+         (ANDROID_USER_HOME or ~/.android, as Android Studio and Gradle sign debug builds), otherwise .NET's debug key.
+         The password reaches the signer as an env: reference, never as an MSBuild property. Opt out with
+         TwoDogAndroidSigning=false. -->
     <Target Name="TwoDogResolveAndroidSigning" BeforeTargets="_CreateAndroidDebugSigningKey;_ResolveAndroidSigningKey"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(AndroidKeyStore)' != 'true' And '$(TwoDogAndroidSigning)' != 'false'">
         <PropertyGroup>
@@ -160,8 +162,26 @@
         </PropertyGroup>
         <Message Importance="high" Condition="'$(_TwoDogKeystore)' != ''"
                  Text="2dog: signing with $(_TwoDogKeystore) (alias $(_TwoDogKeystoreAlias)) from $(_TwoDogKeystoreVariable)*."/>
+
+        <!-- The Android SDK's debug key: its well-known alias and password are public, not secrets. -->
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' == ''">
+            <_TwoDogAndroidUserHome>$(ANDROID_USER_HOME)</_TwoDogAndroidUserHome>
+            <_TwoDogAndroidUserHome Condition="'$(_TwoDogAndroidUserHome)' == ''">$([System.IO.Path]::Combine($([System.Environment]::GetFolderPath(SpecialFolder.UserProfile)), '.android'))</_TwoDogAndroidUserHome>
+            <_TwoDogAndroidDebugKeystore>$([System.IO.Path]::Combine('$(_TwoDogAndroidUserHome)', 'debug.keystore'))</_TwoDogAndroidDebugKeystore>
+        </PropertyGroup>
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' == '' And Exists('$(_TwoDogAndroidDebugKeystore)')">
+            <AndroidKeyStore>true</AndroidKeyStore>
+            <AndroidSigningKeyStore>$(_TwoDogAndroidDebugKeystore)</AndroidSigningKeyStore>
+            <AndroidSigningKeyAlias>androiddebugkey</AndroidSigningKeyAlias>
+            <AndroidSigningStorePass>android</AndroidSigningStorePass>
+            <AndroidSigningKeyPass>android</AndroidSigningKeyPass>
+            <_TwoDogDebugSigner>the Android debug key ($(_TwoDogAndroidDebugKeystore))</_TwoDogDebugSigner>
+        </PropertyGroup>
+        <PropertyGroup Condition="'$(_TwoDogKeystore)' == '' And '$(AndroidKeyStore)' != 'true'">
+            <_TwoDogDebugSigner>the .NET debug key</_TwoDogDebugSigner>
+        </PropertyGroup>
         <Message Importance="high" Condition="'$(_TwoDogKeystore)' == '' And '$(TwoDogVariant)' == 'release'"
-                 Text="2dog: no release keystore is configured, so the APK is signed with the .NET debug key. Set AndroidKeyStore and the AndroidSigning* properties, or GODOT_ANDROID_KEYSTORE_RELEASE_PATH/_USER/_PASSWORD."/>
+                 Text="2dog: no release keystore is configured, so the APK is signed with $(_TwoDogDebugSigner). Set AndroidKeyStore and the AndroidSigning* properties, or GODOT_ANDROID_KEYSTORE_RELEASE_PATH/_USER/_PASSWORD."/>
     </Target>
 
     <Target Name="TwoDogAddAndroidGdExtensions" BeforeTargets="PrepareForBuild"
