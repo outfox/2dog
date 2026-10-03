@@ -110,15 +110,38 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void PublishAot_FailsOnlyWhereNativeAotCannotWork()
     {
-        var dir = Scaffold("--generic", "--avalonia", "--winforms", "--android");
-        foreach (var host in new[] { "Game.2dog", "Game.avalonia", "Game.winforms", "Game.android" })
+        var dir = Scaffold("--generic", "--avalonia", "--winforms", "--android", "--web", "--blazor", "--tests");
+        foreach (var host in new[] { "Game.2dog", "Game.avalonia", "Game.winforms", "Game.android", "Game.web", "Game.tests" })
             Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
                 "<GodotProjectDir>..</GodotProjectDir><PublishAot>true</PublishAot>");
+        Edit(dir, "Game.blazor/Game.blazor.csproj", "<TargetFramework>net10.0</TargetFramework>",
+            "<TargetFramework>net10.0</TargetFramework><PublishAot>true</PublishAot>");
 
-        var issue = Issue(Doctor(dir, "--json").Stdout, "host.publish-aot", "fail", fixable: false);
-        Assert.Contains("Game.winforms", issue.GetProperty("title").GetString());
-        Assert.Contains("NETSDK1175", issue.GetProperty("detail").GetString());
+        var failures = Failures(Doctor(dir, "--json").Stdout, "host.publish-aot");
+        Assert.Equal(["Game.blazor", "Game.web", "Game.winforms"], failures.Keys.Order().ToArray());
+        Assert.Contains("NETSDK1175", failures["Game.winforms"].GetProperty("detail").GetString());
+        Assert.Contains("NETSDK1203", failures["Game.web"].GetProperty("detail").GetString());
+        Assert.Equal("replace PublishAot with RunAOTCompilation", failures["Game.web"].GetProperty("remedy").GetString());
+        Assert.Equal("remove PublishAot", failures["Game.blazor"].GetProperty("remedy").GetString());
     }
+
+    [Fact]
+    public void PublishSingleFile_OffersNativeAotOnlyWhereItWorks()
+    {
+        var dir = Scaffold("--generic", "--winforms");
+        foreach (var host in new[] { "Game.2dog", "Game.winforms" })
+            Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
+                "<GodotProjectDir>..</GodotProjectDir><PublishSingleFile>true</PublishSingleFile>");
+
+        var failures = Failures(Doctor(dir, "--json").Stdout, "host.publish-singlefile");
+        Assert.Contains("PublishAot", failures["Game.2dog"].GetProperty("remedy").GetString());
+        Assert.DoesNotContain("PublishAot", failures["Game.winforms"].GetProperty("remedy").GetString());
+    }
+
+    /// <summary>The failing findings with that id, keyed by the host folder that starts their titles.</summary>
+    private static Dictionary<string, JsonElement> Failures(string stdout, string id) =>
+        Findings(stdout, id).Where(f => f.GetProperty("severity").GetString() == "fail")
+            .ToDictionary(f => f.GetProperty("title").GetString()!.Split('/')[0]);
 
     [Fact]
     public void BlazorClientLiterals_CountForTheVersionChecks()
