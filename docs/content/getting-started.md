@@ -10,7 +10,7 @@ description: "Run Godot inside .NET applications with desktop, web, and test hos
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
 ## Who's a good robot?
-Although the things 2dog does can be complex, we try to make it very developer friendly.
+Things you can do with 2dog may be complex, so we try to make it developer friendly.
 ::: tip From stock Godot to the browser
 With the [.NET 10 SDK](https://dotnet.microsoft.com/download) installed, in the
 base directory of your Godot project (e.g. `~/MyGame`), run:
