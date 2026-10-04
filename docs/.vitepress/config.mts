@@ -5,9 +5,9 @@ import {
   nativesVersionPlugin,
   twodogVersion,
   godotVersion
-} from './plugins/version-markers'
-import { columnsPlugin } from './plugins/columns'
-import { godotIconsPlugin, godotIconHtml } from './plugins/godot-icons'
+} from './plugins/version-markers.mts'
+import { columnsPlugin } from './plugins/columns.mts'
+import { godotIconsPlugin, godotIconHtml } from './plugins/godot-icons.mts'
 
 // Sidebar node glyphs; the section's --tree-color tints them (theme/custom.css).
 const gd = (name: string) => `${godotIconHtml(name)} `

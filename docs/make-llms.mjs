@@ -10,7 +10,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const content = join(here, 'content');
 const HOST = 'https://2dog.dev';
 
-// Same version source as .vitepress/plugins/version-markers.ts: the repo-root
+// Same version source as .vitepress/plugins/version-markers.mts: the repo-root
 // Directory.Build.props. Markers in page bodies resolve to real versions so
 // the llms files read like the rendered site.
 const props = readFileSync(join(here, '..', 'Directory.Build.props'), 'utf8');

@@ -8,13 +8,13 @@
  *  - icons/brand: vendored brand marks (simple-icons, CC0)
  *
  * Names are matched case-insensitively against the build-time inventory in
- * icons.data.ts. iconUrl falls through node -> godot-editor -> godot-theme
+ * icons.data.mts. iconUrl falls through node -> godot-editor -> godot-theme
  * (same precedence as the :gd-...: markdown shortcode); the folder-specific
  * helpers stay scoped for glyphs that exist in several sets. Unknown names
  * throw, which fails the build during SSR rendering.
  */
 import { withBase } from 'vitepress'
-import { data as manifest } from './icons.data'
+import { data as manifest } from './icons.data.mts'
 
 const folderMaps = new Map(
   Object.entries(manifest).map(([folder, stems]) => [
