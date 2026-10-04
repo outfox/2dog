@@ -28,3 +28,5 @@ See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/
 
 Controls cannot overlap the game window. Use [Avalonia](./avalonia) for overlays
 or a cross-platform UI.
+
+See [WinForms Configuration](/configuration/winforms) for build and publish settings.

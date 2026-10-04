@@ -21,6 +21,8 @@ Edit `MyGame.tests/BasicTests.cs` to add tests. Use `HeadlessFixture` for headle
 tests or `Fixture` for rendered tests. See [Testing with xUnit](/testing)
 for examples, collections, and CI setup.
 
+See [xUnit Configuration](/configuration/xunit) for native variants and Editor tests.
+
 ## Shared State
 
 Tests in a collection share one engine. Keep collection parallelism disabled

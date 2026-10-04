@@ -1,0 +1,6 @@
+<Project>
+    <!-- Apply defaults after the project body (so explicit settings win) but before the WebAssembly SDK defaults. -->
+    <PropertyGroup>
+        <BeforeMicrosoftNETSdkTargets>$(BeforeMicrosoftNETSdkTargets);$(MSBuildThisFileDirectory)2dog.browser-wasm.defaults.props</BeforeMicrosoftNETSdkTargets>
+    </PropertyGroup>
+</Project>

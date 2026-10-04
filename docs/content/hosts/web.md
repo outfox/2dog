@@ -28,7 +28,7 @@ Upload the contents of `MyGame.web/AppBundle/` to a static web host.
 Enable gzip or Brotli compression for faster downloads. Cross-origin isolation
 headers are not required.
 
-See [Web Host Configuration](/configuration#web-host) for build settings.
+See [Web Configuration](/configuration/web) for build settings.
 
 ## GDExtensions
 

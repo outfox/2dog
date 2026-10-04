@@ -1,5 +1,7 @@
 <Project>
     <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'android'">
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
         <!-- 2dog.engine exports Android packs during the build (TwoDogExportAndroidPack); its desktop export after
              Publish would be too late for the APK's assets. -->

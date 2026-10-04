@@ -19,7 +19,9 @@
     <!-- Variant Configuration                        -->
     <!-- ============================================ -->
     <PropertyGroup>
-        <!-- Variant: release (default), debug, or editor -->
+        <!-- Follow the .NET configuration unless the consumer explicitly selects a variant. -->
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
 
         <!-- Package root (for locating contentFiles when used as a NuGet package) -->

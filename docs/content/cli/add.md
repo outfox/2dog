@@ -32,6 +32,10 @@ are raised to them in the same run (never lowered), as `2dog update` would. A
 move across Godot lines is called out: install the matching editor and open
 the project once.
 
+Migrating an existing `.sln` to `.slnx` first saves a `.sln.old` backup beside
+it, using `.sln.old.1`, `.sln.old.2`, and so on if needed. Existing backups
+are kept; the `.sln` is removed only after conversion succeeds.
+
 ## Options
 
 | Option | Effect |

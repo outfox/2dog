@@ -33,3 +33,4 @@ use [Avalonia](./avalonia) for overlays or a cross-platform UI.
 
 Publish like the [generic host](./generic#publishing), with or without
 [Native AOT](./generic#native-aot).
+See [WinUI 3 Configuration](/configuration/winui) for build and publish settings.

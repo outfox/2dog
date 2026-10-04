@@ -26,29 +26,32 @@ or `npx serve MyGame.web/AppBundle`.
 *(use your project's name in place of `MyGame`)*
 :::
 
+
 ## Developing
+Just use Godot or your favorite IDE. Building with 2dog uses [MSBuild](https://learn.microsoft.com/en-us/visualstudio/msbuild/walkthrough-using-msbuild), which runs on Windows x64, Linux x64, or macOS ARM64. 
 
-Develop on Windows x64, Linux x64, or macOS ARM64. 2dog upgrades your `sln` file to `slnx`, so you can code in your IDE or code editor of choice - including Godot itself.
+2dog upgrades your `.sln` file to the newer `.slnx` (after making a backup `.sln.old`), which you can open in your IDE or editor of choice. Godot understands both solution formats.
 
-The various hosts appear as projects inside the solution, where you can extend and debug them as normal .NET projects.
+The hosts you add appear as projects inside the solution, where you can extend and debug them as normal .NET projects. Use your IDE or `dotnet` CLI to build/run/debug.
 
-You may have any number of hosts of the same type, 2dog will ask you for alternative names on creation. This is great for different automation suites, demo versions, etc.
+
+## Editing and Importing
+Keep editing scenes and scripts in Godot as usual! Continue using the official
+[Godot :godot-version: .NET editor](https://godotengine.org/download) for scene editing, development, and use `Project→Export...` to make classic Godot builds using the familiar export templates.
+
+2dog's Hosts import changed resources automatically, you won't need `godot --import`. (you can still run it, of course)
+
+See [Hosts](/hosts/) for more .NET app types, and [Testing with xUnit](/testing) for tests... 
+*(it's awesome!)*
+
 
 ## Updating and Fixing
-The project's package versions stay pinned until you update them. Run the latest tool to update or check for problems:
+The project's 2dog package dependencies stay pinned until you update them. Run the latest tool to update or check for problems:
 
 ```bash
 dnx 2dog update
 dnx 2dog doctor
 ```
-
-## Importing and Editing
-Just continue using the official
-[Godot :godot-version: .NET editor](https://godotengine.org/download) for scene editing or other exports.
-
-Keep editing scenes and scripts in Godot as usual. Hosts import changed resources automatically (this differs from other solutions that may need you to run `godot --import`).
-
-See [Hosts](/hosts/) for other host types and [Testing with xUnit](/testing) to begin writing tests... *(you should, it's awesome!)*
 
 
 ## Squirrel ?!

@@ -672,7 +672,8 @@ internal static class ScaffoldCommand
         {
             var classicSolutionPath = solutionPath;
             solutionPath = Path.ChangeExtension(classicSolutionPath, ".slnx");
-            plan.Add(new PlannedAction($"migrate {Path.GetFileName(classicSolutionPath)} to {Path.GetFileName(solutionPath)}", ActionKind.Solution,
+            var classicName = Path.GetFileName(classicSolutionPath);
+            plan.Add(new PlannedAction($"back up {classicName} as {classicName}.old (numbered if needed), then migrate to {Path.GetFileName(solutionPath)}", ActionKind.Solution,
                 () => SolutionOps.MigrateToSlnx(classicSolutionPath)));
         }
         var solutionName = Path.GetFileName(solutionPath);

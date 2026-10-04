@@ -8,6 +8,8 @@ description: "Run Godot VR and AR in the browser with WebXR and the WebXR Layers
 The WebXR host is a `browser-wasm` host with Godot's WebXR capabilities enabled
 and the WebXR Layers polyfill included.
 
+See [WebXR Configuration](/configuration/webxr) for build and publish settings.
+
 ## Use It
 
 From your Godot project directory, run these commands. Accept `add`'s

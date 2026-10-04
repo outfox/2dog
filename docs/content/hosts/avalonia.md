@@ -31,6 +31,7 @@ for a pause button, time-scale slider, and FPS display.
 
 Publish like the [generic host](./generic#publishing), with or without
 [Native AOT](./generic#native-aot).
+See [Avalonia Configuration](/configuration/avalonia) for build and publish settings.
 
 ## Requirements
 

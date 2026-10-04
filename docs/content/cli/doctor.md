@@ -39,6 +39,10 @@ the passed checks too.
 Installing a workload is an announced fix: select it in the checklist, or use
 its install flag or `--fix-all`. `--fix` alone does not install workloads.
 
+Solution migration first saves a `.sln.old` backup beside the original,
+numbered `.sln.old.1`, `.sln.old.2`, and so on if needed. Existing backups
+are kept; the `.sln` is removed only after conversion to `.slnx` succeeds.
+
 ## Exit codes
 
 | Code | Meaning |

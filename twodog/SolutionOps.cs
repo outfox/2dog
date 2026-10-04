@@ -58,7 +58,7 @@ internal static class SolutionOps
             """ + Environment.NewLine);
     }
 
-    /// <summary>Converts a classic solution to .slnx, then removes the old file.</summary>
+    /// <summary>Backs up a classic solution, converts it to .slnx, then removes the old file.</summary>
     public static void MigrateToSlnx(string classicSolutionPath)
     {
         if (!classicSolutionPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
@@ -67,6 +67,14 @@ internal static class SolutionOps
         var slnxPath = Path.ChangeExtension(classicSolutionPath, ".slnx");
         if (File.Exists(slnxPath))
             throw new ToolException($"Cannot migrate {Path.GetFileName(classicSolutionPath)} because {Path.GetFileName(slnxPath)} already exists.");
+
+        // Match Godot's .old / .old.1 naming, without ever overwriting an earlier backup.
+        var backupBase = classicSolutionPath + ".old";
+        var backupPath = backupBase;
+        for (var number = 1; File.Exists(backupPath) || Directory.Exists(backupPath); number++)
+            backupPath = $"{backupBase}.{number}";
+        File.Copy(classicSolutionPath, backupPath, overwrite: false);
+        Out.Note($"saved solution backup: {Path.GetFileName(backupPath)}");
 
         Run(Path.GetDirectoryName(classicSolutionPath)!, $"migrating {Path.GetFileName(classicSolutionPath)}",
             "sln", classicSolutionPath, "migrate");

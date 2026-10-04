@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+        <!-- Native stack symbols add a sizeable download: omit them in Release and keep them for debugging.
+             An explicit project or command-line setting takes precedence. -->
+        <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == '' And '$(Configuration)' == 'Release'">false</WasmEmitSymbolMap>
+        <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == ''">true</WasmEmitSymbolMap>
+    </PropertyGroup>
+</Project>

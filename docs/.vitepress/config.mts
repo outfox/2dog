@@ -207,7 +207,22 @@ export default defineConfig({
         text: 'Configure',
         items: [
           { text: gd('layers') + 'Build Variants', link: '/build-configurations' },
-          { text: gd('wrench') + 'MSBuild Configuration', link: '/configuration' }
+          {
+            text: gd('wrench') + 'MSBuild Config',
+            link: '/configuration',
+            collapsed: true,
+            items: [
+              { text: '2dog (generic)', link: '/configuration/generic' },
+              { text: 'Android', link: '/configuration/android' },
+              { text: 'Avalonia', link: '/configuration/avalonia' },
+              { text: 'Blazor', link: '/configuration/blazor' },
+              { text: 'Web', link: '/configuration/web' },
+              { text: 'WebXR', link: '/configuration/webxr' },
+              { text: 'WinForms', link: '/configuration/winforms' },
+              { text: 'WinUI 3', link: '/configuration/winui' },
+              { text: 'xUnit', link: '/configuration/xunit' }
+            ]
+          }
         ]
       },
       {

@@ -42,4 +42,5 @@ Use `Started` to access the engine, `OnFrame` for per-frame work, and child
 content to overlay HTML on the game. One engine can run at a time.
 
 Godot and Blazor share one thread. The [Web host's limitations](./web#limitations)
-and [pack settings](/configuration#web-host) apply to the client project.
+apply to the client project. See [Blazor Configuration](/configuration/blazor)
+for client build and pack settings.

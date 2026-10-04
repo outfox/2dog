@@ -8,21 +8,22 @@
         <TwoDogWebPackageVersion Condition="'$(TwoDogWebPackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogWebTargetsDir)'))))</TwoDogWebPackageVersion>
     </PropertyGroup>
 
-    <!-- Debug configuration prefers the debug payload when its package is restored; everything else uses release -->
+    <!-- Select the requested variant independently of which payloads have been restored. -->
     <PropertyGroup>
         <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebDebugPackageDir>
         <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebReleasePackageDir>
 
-        <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Debug' And Exists('$(_TwoDogWebDebugPackageDir)libgodot/libgodot.a')">debug</TwoDogWebVariant>
+        <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogWebVariant>
+        <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogWebVariant>
         <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == ''">release</TwoDogWebVariant>
 
         <_TwoDogWebBuildVariant Condition="'$(TwoDogWebVariant)' == 'debug'">template_debug</_TwoDogWebBuildVariant>
-        <_TwoDogWebBuildVariant Condition="'$(_TwoDogWebBuildVariant)' == ''">template_release</_TwoDogWebBuildVariant>
+        <_TwoDogWebBuildVariant Condition="'$(TwoDogWebVariant)' == 'release'">template_release</_TwoDogWebBuildVariant>
 
         <!-- Resolve payload dir: NuGet package first, source checkout fallback -->
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'debug' And Exists('$(_TwoDogWebDebugPackageDir)libgodot/libgodot.a')">$(_TwoDogWebDebugPackageDir)</TwoDogWebNativeDir>
-        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And Exists('$(_TwoDogWebReleasePackageDir)libgodot/libgodot.a')">$(_TwoDogWebReleasePackageDir)</TwoDogWebNativeDir>
-        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/web/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/web/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
+        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'release' And Exists('$(_TwoDogWebReleasePackageDir)libgodot/libgodot.a')">$(_TwoDogWebReleasePackageDir)</TwoDogWebNativeDir>
+        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(_TwoDogWebBuildVariant)' != '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/web/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/web/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
     </PropertyGroup>
 
     <!-- Wasm build configuration -->
@@ -43,9 +44,7 @@
         <WasmInitialHeapSize Condition="'$(WasmInitialHeapSize)' == ''">256MB</WasmInitialHeapSize>
         <EmccStackSize Condition="'$(EmccStackSize)' == ''">5120KB</EmccStackSize>
 
-        <!-- dotnet.js downloads dotnet.native.js.symbols (~20 MB) on every boot; it only symbolicates native stack
-             traces -->
-        <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == ''">false</WasmEmitSymbolMap>
+        <!-- WasmEmitSymbolMap is defaulted before the WebAssembly SDK imports; see 2dog.browser-wasm.defaults.props. -->
         <!-- Bundle post-processing is for the plain shell; Blazor strips, fingerprints and compresses itself -->
         <TwoDogWebStripMaps Condition="'$(TwoDogWebStripMaps)' == '' And '$(TwoDogWebVariant)' == 'release' And '$(TwoDogWebBlazor)' != 'true'">true</TwoDogWebStripMaps>
         <TwoDogWebSizeManifest Condition="'$(TwoDogWebSizeManifest)' == '' And '$(TwoDogWebBlazor)' != 'true'">true</TwoDogWebSizeManifest>
@@ -130,10 +129,14 @@
     </PropertyGroup>
 
     <Target Name="TwoDogWebCheckNativeDir"
-            BeforeTargets="Build"
+            BeforeTargets="PrepareForBuild;Build;Publish"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true'">
+        <Error Condition="'$(TwoDogWebVariant)' == 'editor'"
+               Text="TwoDog: the editor native variant is not available for Web hosts. Use Debug or Release, or explicitly set TwoDogWebVariant to debug or release."/>
+        <Error Condition="'$(TwoDogWebVariant)' != 'release' And '$(TwoDogWebVariant)' != 'debug'"
+               Text="TwoDog: invalid TwoDogWebVariant '$(TwoDogWebVariant)'. Allowed values for Web hosts: release, debug."/>
         <Error Condition="'$(TwoDogWebNativeDir)' == '' Or !Exists('$(TwoDogWebNativeDir)libgodot/libgodot.a')"
-               Text="TwoDog: web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.$(TwoDogWebVariant) package v$(TwoDogWebPackageVersion) and the source checkout (godot/bin/web/$(_TwoDogWebBuildVariant)/). Restore the 2dog.browser-wasm package or build the web natives."/>
+               Text="TwoDog: $(TwoDogWebVariant) web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.$(TwoDogWebVariant) package v$(TwoDogWebPackageVersion) and the source checkout (godot/bin/web/$(_TwoDogWebBuildVariant)/). Restore the 2dog.browser-wasm package or build the matching web natives; another variant will not be substituted."/>
     </Target>
 
     <!-- The engine preloader fetches <executable>.wasm (outside _framework) and hands it to dotnet.js; also prunes the

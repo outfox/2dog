@@ -1,89 +1,47 @@
 ---
 title: MSBuild Configuration
-description: "MSBuild properties and package versions for desktop and Web hosts."
+description: "Shared 2dog settings, MSBuild runtimes, package versions, and configuration references for each host."
 ---
 
-# Configuration
+# MSBuild Configuration
 
-Set 2dog properties in your host project's `.csproj`.
+Set host properties inside a `<PropertyGroup>` in its `.csproj`. Put shared
+settings in `Directory.Build.props`. Project settings override shared values;
+command-line properties (`-p:Name=value`) override project settings. Omitted
+2dog properties use their documented defaults.
 
-## Properties
+## Global Properties {#properties}
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `GodotProjectDir` | None | Directory containing `project.godot`; enables automatic resource import and is embedded for `Engine.ResolveProjectDir()` |
-| `TwoDogVariant` | `release` | Native desktop variant: `release`, `debug`, or `editor` |
+| `GodotProjectDir` | None | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()` |
+| `TwoDogVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android native variant; explicit settings override the default. Android does not support `editor`; browser hosts use `TwoDogWebVariant` |
 | `TwoDogRemoveDuplicateGodotAnalyzers` | `false` | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project |
-| `TwoDogExportPack` | `true` | Desktop publishes export the game content as an exe-adjacent `.pck`; `false` skips it (also disables the web host's pack export) |
-| `TwoDogDesktopExportPreset` | RID-mapped | Export preset for the desktop pack; defaults to `Windows Desktop`, `Linux`, or `macOS` by publish target |
 
-The standard nested-host setup is:
+For a host nested directly inside the Godot project:
 
 ```xml
 <PropertyGroup>
   <GodotProjectDir>..</GodotProjectDir>
-  <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
-  <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
   <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
 </PropertyGroup>
 ```
 
 `GodotProjectDir` is resolved relative to the project file and embedded as an
-absolute path. The game project itself must keep its Godot source generator;
-only the host should remove duplicate analyzers.
+absolute path. The game project keeps its Godot source generator; only the
+host should remove duplicate analyzers. Blazor clients are nested an extra
+level and normally use `../..`.
 
-See [Selecting a Variant](./build-configurations#selecting-a-variant) for the
-variant mapping and [Resource Import](./import-tool) for import properties.
-
-## Native AOT
-
-Generic, Avalonia, and WinUI hosts can publish with `PublishAot`, and Android
-hosts can as an experiment. The release and debug variants support it; the
-editor variant does not, because it loads GodotTools at runtime.
-
-On desktop, Native AOT needs the platform's native toolchain: the Visual Studio
-C++ build tools on Windows, `clang` and `zlib1g-dev` on Linux, and the Xcode
-command-line tools on macOS (see the
-[.NET prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites)).
-Publish desktop hosts on the operating system you target. Android hosts link
-with the Android NDK on any build machine (see below).
-
-2dog keeps `GodotSharp` and the game assembly whole, because Godot binds
-script classes through reflection. The game assembly is the project referenced
-from `GodotProjectDir`. In desktop hosts, root other assemblies that are only
-reached through reflection:
-
-```xml
-<TrimmerRootAssembly Include="MyLibrary"/>
-```
-
-Android hosts root them with `RootMode="All"`, which .NET for Android requires
-(see [Android Host](#android-host)).
-
-.NET for Android marks its Native AOT experimental (warning XA1040). It links
-with the Android NDK, so install the NDK and point `AndroidNdkDirectory` at it:
-
-```bash
-dotnet publish MyGame.android -c Release -p:PublishAot=true -p:AndroidNdkDirectory=$ANDROID_HOME/ndk/29.0.14206865
-```
-
-Without `PublishAot`, Android Release builds use Mono's AOT compiler
-(`RunAOTCompilation`). Web hosts also run on Mono and opt into its AOT compiler
-with `-p:RunAOTCompilation=true`. WinForms does not support trimming, so it
-cannot use Native AOT.
+See [Build Variants](./build-configurations) for native selection and
+[Resource Import](./import-tool) for import controls, including
+`TwoDogAutoImport`, `TwoDogRequireImport`, and `GodotEditor`.
 
 ## Packages and Versions
 
-Reference `2dog.engine` from generic hosts:
-
-```xml
-<PackageReference Include="2dog.engine" Version=":godot-version:.*"/>
-```
-
 Package versions begin with the embedded Godot version. Pin manual references
-to your project's Godot line, as above, so NuGet does not silently select a
-newer engine line. Projects scaffolded by 2dog keep every version in one block
-of the root `Directory.Build.props` and reference it from the hosts:
+to your project's Godot line, for example `Version=":godot-version:.*"`, so
+NuGet does not silently select a newer engine line. Scaffolded projects keep
+versions in one block of the root `Directory.Build.props`:
 
 ```xml
 <PropertyGroup Label="2dog">
@@ -94,74 +52,68 @@ of the root `Directory.Build.props` and reference it from the hosts:
 </PropertyGroup>
 ```
 
+Hosts reference those properties:
+
 ```xml
 <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
 <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]"/>
 ```
 
-[`2dog update`](/cli/update) rewrites that block (and the game
-project's `Godot.NET.Sdk` version, which cannot come from a property);
-[`2dog doctor`](/cli/doctor) reports literals left in host csprojs and versions on
-different Godot lines.
+[`2dog update`](/cli/update) rewrites the version block and the game project's
+`Godot.NET.Sdk` version, which cannot come from a property.
+[`2dog doctor`](/cli/doctor) reports remaining literal versions and mismatched
+Godot lines.
 
-`2dog.engine` selects the platform meta package for the current OS:
-`2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64`. Each meta package pins
-the `release`, `debug`, and `editor` native packages. The selected native is
-copied as `libgodot-<variant>.dll`, `.so`, or `.dylib` and loaded by that name.
+`2dog.engine` references the desktop meta packages `2dog.win-x64`,
+`2dog.linux-x64`, and `2dog.osx-arm64`. Their targets select the native for the
+build or publish platform. Each pins the release, debug, and editor packages;
+the selected library is copied as `libgodot-<variant>.dll`, `.so`, or `.dylib`.
+`2dog.browser-wasm` pins both release and debug browser natives.
 
-For xUnit, reference `2dog.xunit`; it brings in `2dog.engine`. Web hosts
-also reference `2dog.browser-wasm`.
+## Native AOT
 
-## Web Host
+Generic, Avalonia, and WinUI hosts support `PublishAot=true` with debug or
+release natives. The editor variant loads GodotTools at runtime and cannot
+use Native AOT. WinForms does not support trimming or Native AOT.
 
-Set these optional properties in the Web host's `.csproj`, or the Blazor
-client's `.csproj`:
+Desktop Native AOT requires the platform's native toolchain: Visual Studio
+C++ build tools on Windows, `clang` and `zlib1g-dev` on Linux, or Xcode
+command-line tools on macOS. Publish on the operating system you target; see
+the [.NET prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites).
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogWebVariant` | `release`, or `debug` in Debug when the debug package is restored | Engine build; `debug` needs a `2dog.browser-wasm.debug` reference |
-| `TwoDogExportPack` | `true` | Export content; `false` uses `wwwroot/godot.pck` |
-| `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
-| `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
-| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for loading progress |
-| `TwoDogWebStripMaps` | `true` for release | Remove JavaScript source maps |
-| `TwoDogWebPrecompress` | `true` with Core MSBuild | Write Brotli and gzip copies of large files; skipped with full-framework MSBuild |
-| `TwoDogWebPrecompressLevel` | `Optimal` | Compression level; `SmallestSize` takes longer |
-| `TwoDogWebSideModuleExports` | `true` | Export symbols used by GDExtensions |
-| `WasmEmitSymbolMap` | `false` | Include native symbols for stack traces |
-| `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
-
-Blazor manages its own bundle, progress, and compression, so size-manifest,
-source-map stripping, and precompression settings apply only to Web and WebXR.
-
-For libraries accessed only through reflection, add a trimmer root:
+2dog preserves `GodotSharp` and the game assembly for reflection. Root other
+assemblies that are only accessed through reflection:
 
 ```xml
-<TrimmerRootAssembly Include="MyLibrary"/>
+<ItemGroup>
+  <TrimmerRootAssembly Include="MyLibrary"/>
+</ItemGroup>
 ```
 
-The generated host already preserves the game, host, `GodotSharp`, and
-`twodog` assemblies.
+Android has [experimental Native AOT](./configuration/android#native-aot)
+with NDK requirements and different trimmer roots. Browser hosts use Mono's
+AOT compiler through `RunAOTCompilation`, described in their host references.
 
-## Android Host
+## MSBuild Runtimes
 
-Set these optional properties in the [Android host](/hosts/android)'s `.csproj`:
+`Core`, `Full`, and `Mono` describe the runtime executing MSBuild. They are
+independent of your project's `TargetFramework`, build `Configuration`, and
+the runtime used by your published app. Windows builds can use Core or Full.
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogAndroidGameAssembly` | set by the generated host | Game assembly that Godot loads; kept whole by the trimmer |
-| `TwoDogAndroidExportPreset` | `Android` | Preset in `export_presets.cfg` |
-| `TwoDogAndroidPack` | exported by the build | Use a pre-exported pack instead |
-| `TwoDogAndroidGdExtensions` | `true` | Package the Android libraries of the project's GDExtensions |
-| `TwoDogAndroidSigning` | `true` | Sign from Godot's keystore variables or `~/.android/debug.keystore` |
-| `AndroidPackageFormats` | `aab` for Release | `apk` for a sideloadable package; the generated host sets it |
+| `MSBuildRuntimeType` | Build tool |
+| --- | --- |
+| `Core` | MSBuild from the .NET SDK: `dotnet build`, `dotnet publish`, or `dotnet msbuild` |
+| `Full` | .NET Framework MSBuild, such as Visual Studio's `MSBuild.exe` |
+| `Mono` | Legacy MSBuild running on Mono |
 
-Release builds are trimmed and AOT-compiled, as .NET for Android does by default
-(`TrimMode` `partial`, profiled AOT). 2dog keeps `GodotSharp`, `GodotPlugins`,
-`twodog`, and the game assembly whole. `TrimMode=full` and
-`AndroidEnableProfiledAot=false` (AOT for every method) work too. Root other
-assemblies that are only reached through reflection:
+MSBuild sets this [reserved property](https://learn.microsoft.com/visualstudio/msbuild/msbuild-reserved-and-well-known-properties#reserved-and-well-known-properties)
+automatically. To inspect the runtime used by a command:
 
-```xml
-<TrimmerRootAssembly Include="MyLibrary" RootMode="All"/>
+```bash
+dotnet msbuild MyGame.2dog/MyGame.2dog.csproj -getProperty:MSBuildRuntimeType
 ```
+
+Use the .NET 10+ SDK for 2dog's CLI workflows. Currently, Web and WebXR
+[precompression](./configuration/web#precompression) runs only under Core
+MSBuild; Full and Mono skip it even when explicitly enabled. The current
+inline task depends on Core's compression APIs.

@@ -344,7 +344,7 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
-    public void FixAll_MigratesTheSln_ThenAddsProjectsToTheSlnx()
+    public void FixAll_AddsProjectsAndBacksUpBeforeMigratingSln()
     {
         var dir = Scaffold("--generic");
         File.Delete(Path.Combine(dir, "Game.slnx"));
@@ -366,6 +366,8 @@ public class DoctorCheckTests : IDisposable
         Assert.Equal(0, all.ExitCode);
         Assert.DoesNotContain("fix failed", all.Stderr);
         Assert.False(File.Exists(Path.Combine(dir, "Game.sln")));
+        Assert.True(SolutionOps.ContainsProject(Path.Combine(dir, "Game.sln.old"), "Game.csproj"));
+        Assert.True(SolutionOps.ContainsProject(Path.Combine(dir, "Game.sln.old"), "Game.2dog.csproj"));
         Assert.Contains("Game.2dog.csproj", File.ReadAllText(Path.Combine(dir, "Game.slnx")));
     }
 }

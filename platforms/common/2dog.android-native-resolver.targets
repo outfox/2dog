@@ -5,6 +5,8 @@
     <Target Name="TwoDogResolveAndroidNatives" BeforeTargets="PrepareForBuild"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true'">
         <PropertyGroup>
+            <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+            <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
             <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
             <_TwoDogAndroidTarget Condition="'$(TwoDogVariant)' == 'release'">template_release</_TwoDogAndroidTarget>
             <_TwoDogAndroidTarget Condition="'$(TwoDogVariant)' == 'debug'">template_debug</_TwoDogAndroidTarget>

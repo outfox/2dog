@@ -38,7 +38,10 @@ same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 Creates the host projects **in place**: it creates files and edits `*.csproj`,
 `project.godot`, the solution and `Directory.Build.props`; no file is ever
 moved, renamed or deleted (two announced opt-ins aside: the `.sln` to `.slnx`
-migration and `--rename`). The Godot project directory becomes the solution
+migration and `--rename`). Solution migration first saves a `.sln.old` backup,
+using `.sln.old.1`, `.sln.old.2`, and so on if needed, and removes the `.sln`
+only after conversion succeeds. Existing backups are kept.
+The Godot project directory becomes the solution
 root, and host projects are scaffolded as nested subfolders that the Godot
 editor ignores (each carries a `.gdignore`):
 

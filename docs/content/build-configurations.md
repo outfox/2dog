@@ -5,17 +5,16 @@ description: "Choosing between the debug, release, and editor native Godot varia
 
 # Build Variants
 
-2dog offers three native Godot variants. Pick the lightest one that has the
-features your host needs.
+2dog selects the native Godot variant from your .NET build configuration.
 
-| .NET configuration | Recommended variant | Godot build | `TOOLS_ENABLED` | Use |
+| .NET configuration | Default variant | Godot build | `TOOLS_ENABLED` | Use |
 | --- | --- | --- | --- | --- |
 | **Debug** | `debug` | `template_debug` | No | Development, debugging, tests |
 | **Release** | `release` | `template_release` | No | Production and final validation |
 | **Editor** | `editor` | `editor` | Yes | Editor types and `[Tool]` scripts |
 
 `debug` includes assertions and debugging support; `release` is the optimized
-production runtime and the default when `TwoDogVariant` is unset; `editor`
+production runtime; `editor`
 enables `TOOLS_ENABLED`, including editor types, import plugins, and `[Tool]`
 scripts.
 
@@ -28,17 +27,15 @@ Resource import runs separately and automatically at build time; see
 
 ## Selecting a Variant
 
-The .NET configuration does not select the native variant automatically.
-`2dog.engine` defaults to `release`; map Debug and Editor explicitly with
-`TwoDogVariant`:
+`TwoDogVariant` defaults to `debug` in Debug, `editor` in Editor, and `release`
+for Release and other configurations. Set it explicitly to override that mapping:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
-    <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+    <TwoDogVariant>debug</TwoDogVariant>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,11 +44,16 @@ The .NET configuration does not select the native variant automatically.
 </Project>
 ```
 
-All three desktop variants come through the platform meta package, so this
-needs no extra package references. `TwoDogVariant` also controls the copied
+All three desktop variants come through the platform meta package, so selecting
+a variant needs no extra package references. `TwoDogVariant` also controls the copied
 native library, GodotPlugins layout, and embedded runtime metadata.
 
-Use the configuration in the usual way:
+Web hosts use `TwoDogWebVariant` with the same configuration mapping. The
+`2dog.browser-wasm` package restores both debug and release natives; a missing
+selected payload fails the build. Web and Android do not support the editor
+variant: use Debug or Release, or explicitly select a supported variant.
+
+Without an explicit variant override, use the configuration in the usual way:
 
 ```bash
 dotnet run -c Debug

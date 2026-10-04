@@ -40,8 +40,8 @@ the `2dog.win-x64`, `2dog.linux-x64`, or `2dog.osx-arm64` NuGet package.
 
 Each platform package ships three native variants of `libgodot`: `debug` (assertions and
 error checking), `release` (optimized for production), and `editor`
-(`TOOLS_ENABLED`, editor APIs, resource import). Generated hosts map the
-Debug, Release, and Editor .NET configurations onto them with `TwoDogVariant`;
+(`TOOLS_ENABLED`, editor APIs, resource import). `TwoDogVariant` follows the
+Debug, Release, and Editor .NET configurations by default;
 [Build Variants](./build-configurations) is the complete guide.
 
 ## GodotSharp ... !

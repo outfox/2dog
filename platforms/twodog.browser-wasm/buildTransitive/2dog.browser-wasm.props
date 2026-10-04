@@ -1,0 +1,4 @@
+<Project>
+    <!-- Forward defaults for projects that transitively reference 2dog.browser-wasm. -->
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.browser-wasm.props"/>
+</Project>

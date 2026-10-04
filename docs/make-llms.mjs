@@ -43,7 +43,7 @@ const SECTIONS = [
     'add.md', 'templates.md',
   ]],
   ['Hosts', [
-    'hosts/index.md', 'hosts/generic.md', 'hosts/avalonia.md', 'hosts/blazor.md',
+    'hosts/index.md', 'hosts/generic.md', 'hosts/android.md', 'hosts/avalonia.md', 'hosts/blazor.md',
     'hosts/web.md', 'hosts/webxr.md', 'hosts/winforms.md', 'hosts/winui.md', 'hosts/xunit.md',
   ]],
   ['API Reference', [
@@ -53,7 +53,13 @@ const SECTIONS = [
   ]],
   ['Develop and Configure', [
     'dnx-2dog.md', 'cli/new.md', 'cli/add.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md',
-    'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'testing.md', 'build-configurations.md', 'configuration.md',
+    'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'testing.md', 'build-configurations.md',
+  ]],
+  ['MSBuild Configuration', [
+    'configuration.md', 'configuration/generic.md', 'configuration/android.md',
+    'configuration/avalonia.md', 'configuration/blazor.md', 'configuration/web.md',
+    'configuration/webxr.md', 'configuration/winforms.md', 'configuration/winui.md',
+    'configuration/xunit.md',
   ]],
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',

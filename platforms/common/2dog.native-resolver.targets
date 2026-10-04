@@ -8,6 +8,8 @@
     <Target Name="TwoDogResolveNativeLibs">
         <PropertyGroup>
             <_TwoDogNativeVariant>$(TwoDogVariant)</_TwoDogNativeVariant>
+            <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == '' And '$(Configuration)' == 'Debug'">debug</_TwoDogNativeVariant>
+            <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == '' And '$(Configuration)' == 'Editor'">editor</_TwoDogNativeVariant>
             <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == ''">release</_TwoDogNativeVariant>
         </PropertyGroup>
         <ItemGroup>

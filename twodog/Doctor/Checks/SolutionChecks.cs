@@ -60,7 +60,7 @@ internal static class SolutionChecks
         if (solution.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
             yield return new Finding("sln.legacy-format", c, Severity.Info, $"{name} uses the classic format",
                 "new 2dog projects use .slnx", null, name,
-                new Fix("sln:migrate", FixClass.Announced, $"migrate {name} to {Path.ChangeExtension(name, ".slnx")} (deletes the .sln)",
+                new Fix("sln:migrate", FixClass.Announced, $"back up {name} as {name}.old (numbered if needed), then migrate to {Path.ChangeExtension(name, ".slnx")}",
                     () => SolutionOps.MigrateToSlnx(solution)));
 
         var text = p.SolutionText ?? "";

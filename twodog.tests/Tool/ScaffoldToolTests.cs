@@ -563,10 +563,11 @@ public class SolutionOpsTests
     }
 
     [Fact]
-    public void MigrateToSlnx_ReplacesClassicSolution()
+    public void MigrateToSlnx_BacksUpAndReplacesClassicSolution()
     {
         using var tmp = new TempProjectDir();
         var sln = tmp.Write("MyGame.sln", WebSln("\\"));
+        var original = File.ReadAllBytes(sln);
 
         CliConsole.Capture(() =>
         {
@@ -579,6 +580,71 @@ public class SolutionOpsTests
         Assert.True(File.Exists(slnx));
         Assert.Contains("<Solution>", File.ReadAllText(slnx));
         Assert.True(SolutionOps.ContainsProject(slnx, "MyGame.web.csproj"));
+        Assert.Equal(original, File.ReadAllBytes(sln + ".old"));
+        Assert.Equal((slnx, true), SolutionOps.Locate(tmp.Dir, "MyGame"));
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(6)]
+    public void MigrateToSlnx_NumbersBackupsWithoutOverwriting(int existingBackups)
+    {
+        using var tmp = new TempProjectDir();
+        var sln = tmp.Write("MyGame.sln", WebSln("\\"));
+        var original = File.ReadAllBytes(sln);
+        var backups = new Dictionary<string, byte[]>();
+        for (var number = 0; number < existingBackups; number++)
+        {
+            var path = sln + ".old" + (number == 0 ? "" : $".{number}");
+            File.WriteAllText(path, $"previous backup {number}");
+            backups.Add(path, File.ReadAllBytes(path));
+        }
+
+        CliConsole.Capture(() =>
+        {
+            SolutionOps.MigrateToSlnx(sln);
+            return 0;
+        });
+
+        Assert.Equal(original, File.ReadAllBytes($"{sln}.old.{existingBackups}"));
+        foreach (var (path, content) in backups)
+            Assert.Equal(content, File.ReadAllBytes(path));
+        Assert.False(File.Exists(sln));
+        Assert.True(File.Exists(System.IO.Path.ChangeExtension(sln, ".slnx")));
+    }
+
+    [Fact]
+    public void MigrateToSlnx_FailedConversionKeepsOriginalAndBackup()
+    {
+        using var tmp = new TempProjectDir();
+        var sln = tmp.Write("MyGame.sln", "not a valid solution");
+        var original = File.ReadAllBytes(sln);
+
+        CliConsole.Capture(() =>
+        {
+            Assert.Throws<ToolException>(() => SolutionOps.MigrateToSlnx(sln));
+            return 0;
+        });
+
+        Assert.Equal(original, File.ReadAllBytes(sln));
+        Assert.Equal(original, File.ReadAllBytes(sln + ".old"));
+        Assert.False(File.Exists(System.IO.Path.ChangeExtension(sln, ".slnx")));
+    }
+
+    [Fact]
+    public void MigrateToSlnx_ExistingDestinationLeavesFilesUntouched()
+    {
+        using var tmp = new TempProjectDir();
+        var sln = tmp.Write("MyGame.sln", WebSln("\\"));
+        var slnx = tmp.Write("MyGame.slnx", "<Solution />");
+        var original = File.ReadAllBytes(sln);
+        var destination = File.ReadAllBytes(slnx);
+
+        Assert.Throws<ToolException>(() => SolutionOps.MigrateToSlnx(sln));
+
+        Assert.Equal(original, File.ReadAllBytes(sln));
+        Assert.Equal(destination, File.ReadAllBytes(slnx));
+        Assert.False(File.Exists(sln + ".old"));
     }
 
     [Fact]

@@ -56,7 +56,7 @@ Publishing signs with the first keystore it finds:
 3. Android's debug keystore, `~/.android/debug.keystore`
 4. The .NET debug keystore
 
-See [Android Host Configuration](/configuration#android-host) for build settings.
+See [Android Configuration](/configuration/android) for build settings.
 
 ## Host Code
 
@@ -75,8 +75,8 @@ the APK. Every listed library must exist, because the pack export copies them.
 Release builds are trimmed and AOT-compiled, like any .NET for Android app. 2dog
 keeps `GodotSharp`, `GodotPlugins`, `twodog`, and your game assembly whole. To
 keep other assemblies or compile every method ahead of time, see
-[Android Host Configuration](/configuration#android-host). This is Mono's AOT
-compiler (`RunAOTCompilation`). Experimental [Native AOT](/configuration#native-aot)
+[Android Configuration](/configuration/android). This is Mono's AOT
+compiler (`RunAOTCompilation`). Experimental [Native AOT](/configuration/android#native-aot)
 builds compile the app into one native library instead.
 
 ## Limitations

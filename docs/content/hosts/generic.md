@@ -55,7 +55,8 @@ make it the default, set `<PublishAot>true</PublishAot>` in the host's
 `.csproj`. See [Native AOT](/configuration#native-aot) for requirements.
 
 See [Engine](/api/engine) to customize the frame loop and
-[Build Variants](/build-configurations) to select an engine build.
+[Build Variants](/build-configurations) to select an engine build. See
+[Generic .NET Configuration](/configuration/generic) for build and publish settings.
 
 ## No Console
 
