@@ -42,12 +42,37 @@ installation explicitly. `--dry-run` never checks or installs workloads.
 
 ## Examples
 
+Install the [.NET 10 SDK](https://dotnet.microsoft.com/download), then create
+and run a project with a generic .NET host:
+
+```bash
+dnx 2dog new MyGame --generic
+cd MyGame
+dotnet run --project MyGame.2dog
+```
+
+Open `project.godot` in the Godot .NET editor to edit scenes and scripts.
+See [Project Layout](/project-layout) for the generated files and
+[Hosts](/hosts/) for host types.
+
+Choose hosts interactively, or supply host flags:
+
 ```bash
 2dog new MyGame                            # interactive host choice
 2dog new MyGame --generic --tests          # unattended
 2dog new "My Game" -o games/mine --no-web  # name adjusted to MyGame
 ```
 
-For a quick start and the `dotnet new` template, see
-[Creating a New Project](/templates). For generated files, see
-[Project Layout](/project-layout).
+For an existing project, use [`2dog add`](/cli/add).
+
+## Use the .NET Template
+
+The same template is available through `dotnet new`:
+
+```bash
+dotnet new install 2dog
+dotnet new 2dog -n MyGame --web false
+```
+
+This creates generic .NET and xUnit hosts. Omit `--web false` to include Web;
+install `wasm-tools` first.

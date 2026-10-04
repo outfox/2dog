@@ -118,7 +118,7 @@ For a fresh project, the same tool creates the game and hosts together:
 dnx 2dog new MyGame
 ```
 
-See [Adding 2dog](/add) or [Creating a New Project](/templates) to get started,
+See [`2dog add`](/cli/add) or [`2dog new`](/cli/new) to get started,
 and the [CLI reference](/dnx-2dog) for all options.
 
 ## When to Use Another Layout

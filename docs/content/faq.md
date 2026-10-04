@@ -55,7 +55,7 @@ NuGet packages marked as dotnet tools cannot also be consumed through a
 `PackageReference`; doing so fails with `NU1213`. Therefore `2dog.engine` is the
 library, while `2dog` contains the self-contained tool and template. They are
 released together, and both scaffolding routes produce the same output. See
-[Adding 2dog to a Project](/add).
+[`2dog add`](/cli/add).
 
 ---
 

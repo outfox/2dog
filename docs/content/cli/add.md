@@ -56,6 +56,20 @@ flags request installation explicitly, including in CI. `--dry-run` never checks
 
 ## Examples
 
+Install the [.NET 10 SDK](https://dotnet.microsoft.com/download), then add
+and run a generic .NET host in your existing Godot project:
+
+```bash
+cd path/to/MyGame
+dnx 2dog add --generic
+dotnet run --project MyGame.2dog
+```
+
+2dog creates a nested host project that runs your game. Keep editing scenes
+and scripts in Godot as usual. GDScript projects work too.
+
+Choose hosts interactively, or supply host flags:
+
 ```bash
 2dog add                           # interactive, here
 2dog add --generic MyGame.editor   # a second generic host, named
@@ -64,5 +78,5 @@ flags request installation explicitly, including in CI. `--dry-run` never checks
 2dog add --rename MyGame           # fix a spaced .NET name first
 ```
 
-For a quick start, see [Adding 2dog to Existing Projects](/add).
-For generated files, see [Project Layout](/project-layout).
+See [Hosts](/hosts/) for host types and [Project Layout](/project-layout) for
+generated files. For a new project, use [`2dog new`](/cli/new).

@@ -116,8 +116,8 @@ const starts = [
       { comment: false, text: 'dnx 2dog add --generic' },
       { comment: false, text: 'dotnet run --project MyGame.2dog' },
     ],
-    link: '/add',
-    linkText: 'Existing project guide →',
+    link: '/cli/add',
+    linkText: '2dog add reference →',
   },
   {
     icon: 'tennis_ball',
@@ -128,8 +128,8 @@ const starts = [
       { comment: false, text: 'cd MyGame' },
       { comment: false, text: 'dotnet run --project MyGame.2dog' },
     ],
-    link: '/templates',
-    linkText: 'New project guide →',
+    link: '/cli/new',
+    linkText: '2dog new reference →',
   },
 ]
 </script>

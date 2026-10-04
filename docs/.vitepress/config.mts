@@ -78,6 +78,7 @@ export default defineConfig({
 
   themeConfig: {
     siteTitle: false,
+    aside: false,
     // Named for screen readers; the light navbar gets a dark-bodied variant.
     logo: { light: '/icon-light.svg', dark: '/icon.svg', alt: '2dog' },
 
@@ -102,13 +103,6 @@ export default defineConfig({
           { text: gd('play') + 'Getting Started', link: '/getting-started' },
           { text: gd('lightbulb') + 'Core Concepts', link: '/concepts' },
           { text: gd('folder_open') + 'Project Layout', link: '/project-layout' }
-        ]
-      },
-      {
-        text: 'Quickstart',
-        items: [
-          { text: gd('bone') + 'Existing Projects', link: '/add' },
-          { text: gd('sprout') + 'New Projects', link: '/templates' }
         ]
       },
       {
@@ -212,15 +206,15 @@ export default defineConfig({
             link: '/configuration',
             collapsed: true,
             items: [
-              { text: '2dog (generic)', link: '/configuration/generic' },
-              { text: 'Android', link: '/configuration/android' },
-              { text: 'Avalonia', link: '/configuration/avalonia' },
-              { text: 'Blazor', link: '/configuration/blazor' },
-              { text: 'Web', link: '/configuration/web' },
-              { text: 'WebXR', link: '/configuration/webxr' },
-              { text: 'WinForms', link: '/configuration/winforms' },
-              { text: 'WinUI 3', link: '/configuration/winui' },
-              { text: 'xUnit', link: '/configuration/xunit' }
+              { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' },
+              { text: gd('mobile_phone') + 'Android', link: '/configuration/android' },
+              { text: gd('window') + 'Avalonia', link: '/configuration/avalonia' },
+              { text: gd('globe') + 'Blazor', link: '/configuration/blazor' },
+              { text: gd('globe') + 'Web', link: '/configuration/web' },
+              { text: gd('vr_headset') + 'WebXR', link: '/configuration/webxr' },
+              { text: gd('window') + 'WinForms', link: '/configuration/winforms' },
+              { text: gd('window') + 'WinUI 3', link: '/configuration/winui' },
+              { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
             ]
           }
         ]

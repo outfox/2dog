@@ -5,11 +5,12 @@ description: "Run Godot inside .NET applications with desktop, web, and test hos
 
 # Let's take Godot for a walk!
 
-2dog runs Godot inside .NET applications for desktop games, web publishing,
-embedded UIs, and automated tests.
+**2dog** embeds **Godot** inside **.NET** applications to help build games, apps, and tools for **desktop**, **web**, and **mobile**. It simplifies build automation, has templates for integration with **UI** frameworks and **web servers**, and running automated **tests** in your IDE.
 
 ![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
 
+## Who's a good robot?
+Although the things 2dog does can be complex, we try to make it very developer friendly.
 ::: tip From stock Godot to the browser
 With the [.NET 10 SDK](https://dotnet.microsoft.com/download) installed, in the
 base directory of your Godot project (e.g. `~/MyGame`), run:
@@ -19,11 +20,13 @@ dnx 2dog add --web
 dotnet publish MyGame.web
 ```
 
-Your app/game and `index.html` are then in `MyGame.web/AppBundle/`. Upload that to itch.io, your web
+Your app/game and `index.html` are then in `MyGame.web/AppBundle/` - easy!
+
+Upload that to itch.io, your web
 space, or serve locally, e.g. `dnx dotnet-serve -d MyGame.web/AppBundle`
 or `npx serve MyGame.web/AppBundle`.
 
-*(use your project's name in place of `MyGame`)*
+*(use your project's name, i.e. as in `project.godot` in place of `MyGame`)*
 :::
 
 
@@ -35,17 +38,17 @@ Just use Godot or your favorite IDE. Building with 2dog uses [MSBuild](https://l
 The hosts you add appear as projects inside the solution, where you can extend and debug them as normal .NET projects. Use your IDE or `dotnet` CLI to build/run/debug.
 
 
-## Editing and Importing
+## Editing & Importing
 Keep editing scenes and scripts in Godot as usual! Continue using the official
 [Godot :godot-version: .NET editor](https://godotengine.org/download) for scene editing, development, and use `Project→Export...` to make classic Godot builds using the familiar export templates.
 
-2dog's Hosts import changed resources automatically, you won't need `godot --import`. (you can still run it, of course)
+2dog's Hosts import changed resources automatically, you won't need `godot --import`. (you may still run it, of course)
 
 See [Hosts](/hosts/) for more .NET app types, and [Testing with xUnit](/testing) for tests... 
 *(it's awesome!)*
 
 
-## Updating and Fixing
+## Updating & Fixing
 The project's 2dog package dependencies stay pinned until you update them. Run the latest tool to update or check for problems:
 
 ```bash

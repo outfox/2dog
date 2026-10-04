@@ -39,9 +39,6 @@ const SECTIONS = [
   ['Start Here', [
     'getting-started.md', 'concepts.md', 'project-layout.md',
   ]],
-  ['Quickstart', [
-    'add.md', 'templates.md',
-  ]],
   ['Hosts', [
     'hosts/index.md', 'hosts/generic.md', 'hosts/android.md', 'hosts/avalonia.md', 'hosts/blazor.md',
     'hosts/web.md', 'hosts/webxr.md', 'hosts/winforms.md', 'hosts/winui.md', 'hosts/xunit.md',
@@ -71,7 +68,7 @@ const SECTIONS = [
 ];
 
 // Redirect stubs and other pages that should not be indexed.
-const EXCLUDE = new Set(['convert.md', 'web.md']);
+const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md']);
 
 function frontmatter(file) {
   const text = readFileSync(file, 'utf8').replace(/^﻿/, '');

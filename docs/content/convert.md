@@ -5,10 +5,10 @@ search: false
 head:
   - - meta
     - http-equiv: refresh
-      content: 0; url=/add
+      content: 0; url=/cli/add
 ---
 
 # Adding 2dog to a Project
 
-This page has a new home: [Adding 2dog to a Project](/add). You are being
+This page has a new home: [`2dog add`](/cli/add). You are being
 redirected – `2dog convert` still works as an alias of `2dog add`.
