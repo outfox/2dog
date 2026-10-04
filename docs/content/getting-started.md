@@ -23,10 +23,10 @@ dotnet publish MyGame.web
 Your app/game and `index.html` are then in `MyGame.web/AppBundle/` - easy!
 
 Upload that to itch.io, your web
-space, or serve locally, e.g. `dnx dotnet-serve -d MyGame.web/AppBundle`
-or `npx serve MyGame.web/AppBundle`.
+space, or serve locally, for example:  
+`dnx dotnet-serve -d MyGame.web/AppBundle` or `npx serve MyGame.web/AppBundle`
 
-*(use your project's name, i.e. as in `project.godot` in place of `MyGame`)*
+*(use your project's name, i.e. the one in `project.godot`, in place of `MyGame`)*
 :::
 
 
