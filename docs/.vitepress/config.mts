@@ -131,8 +131,8 @@ export default defineConfig({
               {
                 text: 'Scaffold',
                 items: [
-                  { text: gd('sprout') + 'new', link: '/cli/new' },
-                  { text: gd('bone') + 'add', link: '/cli/add' }
+                  { text: gd('bone') + 'add', link: '/cli/add' },
+                  { text: gd('sprout') + 'new', link: '/cli/new' }
                 ]
               },
               {
@@ -145,8 +145,8 @@ export default defineConfig({
               {
                 text: 'Inspect',
                 items: [
-                  { text: gd('box') + 'pack', link: '/cli/pack' },
-                  { text: gd('help') + 'help', link: '/cli/help' }
+                  { text: gd('help') + 'help', link: '/cli/help' },
+                  { text: gd('box') + 'pack', link: '/cli/pack' }
                 ]
               },
               {
@@ -187,8 +187,8 @@ export default defineConfig({
               {
                 text: 'twodog.Testing.Xunit',
                 items: [
-                  { text: gd('layers') + 'RenderingCollection', link: '/api/rendering-collection' },
-                  { text: gd('layers') + 'HeadlessCollection', link: '/api/headless-collection' }
+                  { text: gd('layers') + 'HeadlessCollection', link: '/api/headless-collection' },
+                  { text: gd('layers') + 'RenderingCollection', link: '/api/rendering-collection' }
                 ]
               }
             ]
