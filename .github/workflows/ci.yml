@@ -454,7 +454,7 @@ jobs:
       - name: Publish showcase desktop host (Release, NativeAOT)
         run: >-
           dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
-          -p:PublishAot=true -warnaserror
+          -p:PublishAot=true -p:TrimmerSingleWarn=false -warnaserror
           -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
 
       # Desktop publishes must export the game content as an exe-adjacent

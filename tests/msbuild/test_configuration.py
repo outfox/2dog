@@ -144,6 +144,26 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(values["ExistingHookRan"], "true")
         self.assertEqual(values["WasmEmitSymbolMap"], "false")
 
+    def test_showcase_source_hosts_apply_symbol_defaults(self):
+        for host in (
+            "showcase.web/showcase.web.csproj",
+            "showcase.webxr/showcase.webxr.csproj",
+            "showcase.blazor/Client/showcase.blazor.Client.csproj",
+        ):
+            project = ROOT / "demos/showcase" / host
+            for configuration, expected in (("Release", "false"), ("Debug", "true")):
+                with self.subTest(host=host, configuration=configuration):
+                    output = self.run_msbuild(
+                        project, f"-p:Configuration={configuration}", "-getProperty:WasmEmitSymbolMap",
+                    )
+                    self.assertEqual(output.strip(), expected)
+            with self.subTest(host=host, explicit_override=True):
+                output = self.run_msbuild(
+                    project, "-p:Configuration=Release", "-p:WasmEmitSymbolMap=true",
+                    "-getProperty:WasmEmitSymbolMap",
+                )
+                self.assertEqual(output.strip(), "true")
+
     def test_configuration_set_in_project_body_controls_defaults(self):
         project = self.project("<Configuration>Release</Configuration>")
         values = json.loads(self.run_msbuild(

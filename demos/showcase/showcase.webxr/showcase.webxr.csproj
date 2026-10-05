@@ -44,6 +44,7 @@
 
     <!-- Source-checkout stand-ins for the package targets: 2dog.engine, the host-OS desktop meta targets (editor
          libgodot for the .pck export) and browser-wasm (all web wiring); Official=true gets these transitively -->
+    <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.props" Condition="'$(Official)' != 'true'"/>
     <Import Project="../../../twodog.engine/build/2dog.engine.targets" Condition="'$(Official)' != 'true'"/>
     <Import Project="../../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('Windows'))"/>
     <Import Project="../../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="'$(Official)' != 'true' And $([MSBuild]::IsOSPlatform('Linux'))"/>
