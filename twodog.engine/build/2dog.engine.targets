@@ -252,7 +252,8 @@
          publish. Export repacks instantiated scenes: without the game's script metadata, custom signal
          connections disappear. Resolve the actual game output, also before Blazor copies host outputs. -->
     <Target Name="TwoDogResolveExportAssemblyDir"
-            DependsOnTargets="ResolveReferences;TwoDogResolveContentCapability">
+            DependsOnTargets="ResolveReferences;TwoDogResolveContentCapability"
+            Condition="'$(TwoDogGodotProjectFullPath)' != ''">
         <PropertyGroup>
             <_TwoDogExportProjectDir>$([MSBuild]::NormalizeDirectory('$(TwoDogGodotProjectFullPath)'))</_TwoDogExportProjectDir>
         </PropertyGroup>
