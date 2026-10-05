@@ -94,6 +94,9 @@ public class JsonModeTests
         Assert.Equal(3, versions.Count);
         Assert.Equal("tool + packages", versions[0].GetProperty("label").GetString());
         Assert.Equal(ToolVersions.TwoDogVersion, versions[0].GetProperty("version").GetString());
+        Assert.Equal("GodotSharp", versions[2].GetProperty("label").GetString());
+        Assert.Equal(ToolVersions.TwoDogVersion, versions[2].GetProperty("version").GetString());
+        Assert.Equal("2dog.godotsharp, 2dog.godotsharp.editor", versions[2].GetProperty("packages").GetString());
     }
 
     [Fact]

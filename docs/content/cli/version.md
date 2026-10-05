@@ -17,8 +17,8 @@ against nuget.org (best effort, 2.5 s). `--version` is the same, except
 2dog :2dog-version:  https://2dog.dev
 
 tool + packages  :2dog-version: ✅  2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit
-native binaries  :natives-version: ✅  2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.tools
-Godot SDK        :godot-version: ✅  Godot.NET.Sdk, GodotSharp
+native binaries  :natives-version: ✅  2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.tools
+GodotSharp       :2dog-version: ✅  2dog.godotsharp, 2dog.godotsharp.editor
 ```
 
 | Mark | Meaning |
