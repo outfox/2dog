@@ -457,6 +457,24 @@ jobs:
           -p:PublishAot=true -p:TrimmerSingleWarn=false -warnaserror
           -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
 
+      - name: Test delegate serialization (JIT and NativeAOT)
+        shell: bash
+        run: |
+          NATIVE=$(find demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot \
+            -maxdepth 1 -type f -name 'libgodot-release.*' -print -quit)
+          if [ -z "$NATIVE" ]; then
+            echo "::error::Release libgodot library missing from the NativeAOT publish"
+            exit 1
+          fi
+          dotnet publish tests/bindings/delegate-serialization -c Release -r ${{ matrix.rid }} \
+            -warnaserror -o artifacts/delegate-serialization-jit
+          dotnet artifacts/delegate-serialization-jit/DelegateSerialization.dll "$NATIVE"
+          dotnet publish tests/bindings/delegate-serialization -c Release -r ${{ matrix.rid }} \
+            -p:PublishAot=true -warnaserror -o artifacts/delegate-serialization-aot
+          EXE=artifacts/delegate-serialization-aot/DelegateSerialization
+          if [ "$RUNNER_OS" = "Windows" ]; then EXE="$EXE.exe"; fi
+          "$EXE" "$NATIVE"
+
       # Desktop publishes must export the game content as an exe-adjacent
       # pck; the published host then boots from it (Engine.ResolveContent()
       # returns null when the pck is present). Issue #43 regression guard.

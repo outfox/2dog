@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <GodotSharpPath Condition="'$(GodotSharpPath)' == '' And '$(TwoDogEnginePath)' != ''">$(MSBuildThisFileDirectory)../../../godot/bin/GodotSharp/Api/Release/GodotSharp.dll</GodotSharpPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GodotSharp" HintPath="$(GodotSharpPath)" Condition="'$(GodotSharpPath)' != ''"/>
+    <Reference Include="twodog" HintPath="$(TwoDogEnginePath)" Condition="'$(TwoDogEnginePath)' != ''"/>
+    <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" Condition="'$(TwoDogEnginePath)' == ''"/>
+    <!-- Exercise the same whole-binding root as the desktop hosts, including private serialization callbacks. -->
+    <TrimmerRootAssembly Include="GodotSharp"/>
+    <TrimmerRootAssembly Include="$(AssemblyName)"/>
+    <None Include="project.godot;main.tscn" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <None Update="global_script_class_cache.cfg" TargetPath=".godot/global_script_class_cache.cfg"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+    <None Include="../../../godot/bin/GodotSharp/Api/Release/GodotPlugins.*"
+          Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"
+          Condition="'$(PublishAot)' != 'true'"/>
+  </ItemGroup>
+</Project>
