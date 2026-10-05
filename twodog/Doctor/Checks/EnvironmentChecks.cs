@@ -17,6 +17,7 @@ internal static class EnvironmentChecks
         new("env.android-sdk", Category.Environment, "Android SDK paths and components are available when an Android host exists"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot-editor", Category.Environment, "GODOT_EDITOR, when set, points at an existing file"),
+        new("env.godot4", Category.Environment, "GODOT4 points at an existing Godot executable for IDE debugging"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
         new("env.packages-restored", Category.Environment, "the engine, tools and native packages are in the NuGet cache"),
     ];
@@ -77,6 +78,8 @@ internal static class EnvironmentChecks
             yield return new Finding("env.host-platform", c, Severity.Fail, $"no 2dog native packages for {rid}",
                 $"supported: {string.Join(", ", SupportedRids)}", "build on a supported platform, or build the natives yourself");
 
+        yield return Godot4Finding(ctx.Env);
+
         if (ctx.Env.Var("GODOT_EDITOR") is { Length: > 0 } editor)
             yield return ctx.Env.FileExists(editor)
                 ? Finding.Pass("env.godot-editor", c, "GODOT_EDITOR set")
@@ -134,6 +137,20 @@ internal static class EnvironmentChecks
                 why, workload.InstallCommand, Fix: InstallWorkload(ctx, workload));
         else
             yield return Finding.Pass(id, c, workload.Id);
+    }
+
+    internal static Finding Godot4Finding(IEnvironment env)
+    {
+        const string id = "env.godot4";
+        const string remedy = "set GODOT4 to the full path of the main .NET-enabled Godot executable (not the console wrapper), then restart your IDE";
+        var path = env.Var("GODOT4");
+        if (string.IsNullOrWhiteSpace(path))
+            return new Finding(id, Category.Environment, Severity.Warn, "GODOT4 is not set",
+                "the template's VS Code launch configuration uses GODOT4 to launch Godot", remedy);
+        if (!env.FileExists(path))
+            return new Finding(id, Category.Environment, Severity.Warn, $"GODOT4 points at a missing file: {path}",
+                "IDE debugging cannot launch this path", remedy);
+        return Finding.Pass(id, Category.Environment, $"GODOT4 executable found ({path})");
     }
 
     private static Fix InstallWorkload(DoctorContext ctx, Workload workload) =>

@@ -122,6 +122,8 @@ artifacts/
 
 # VS Code
 .vscode/
+!templates/twodog/.vscode/
+!templates/twodog/.vscode/*.json
 
 *_i.c
 *_p.c

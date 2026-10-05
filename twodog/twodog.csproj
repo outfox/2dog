@@ -82,6 +82,7 @@
         <EmbeddedResource Include="../templates/twodog/main.tscn" LogicalName="tpl/main.tscn"/>
         <EmbeddedResource Include="../templates/twodog/.editorconfig" LogicalName="tpl/.editorconfig"/>
         <EmbeddedResource Include="../templates/twodog/.gitignore" LogicalName="tpl/.gitignore"/>
+        <EmbeddedResource Include="../templates/twodog/.vscode/*.json" LogicalName="tpl/.vscode/%(Filename)%(Extension)"/>
     </ItemGroup>
 
     <!-- Unit tests in twodog.tests exercise the internal conversion pipeline -->

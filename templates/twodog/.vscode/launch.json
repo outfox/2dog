@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Godot: Play (C#)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build Godot project",
+      "program": "${env:GODOT4}",
+      "args": ["--path", "${workspaceFolder}"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Godot: Attach (C#)",
+      "type": "coreclr",
+      "request": "attach"
+    }
+  ]
+}

@@ -78,6 +78,9 @@ internal static class TemplateAssets
         yield return ("main.tscn", ReadRaw("tpl/main.tscn"));
         yield return (".editorconfig", ReadRaw("tpl/.editorconfig"));
         yield return (".gitignore", ReadRaw("tpl/.gitignore"));
+        yield return (".vscode/launch.json", ReadRaw("tpl/.vscode/launch.json"));
+        yield return (".vscode/tasks.json", Substitute(ReadRaw("tpl/.vscode/tasks.json"), baseName));
+        yield return (".vscode/extensions.json", ReadRaw("tpl/.vscode/extensions.json"));
     }
 
     /// <summary>

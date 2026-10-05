@@ -46,6 +46,7 @@ public class DoctorTests : IDisposable
         var previousEnv = DoctorCommand.Environment;
         DoctorCommand.Runner = runner ?? Runner();
         DoctorCommand.Environment = new FakeEnvironment();
+        ((FakeEnvironment)DoctorCommand.Environment).Vars["GODOT4"] = Environment.ProcessPath!;
         try
         {
             return CliConsole.Run(["doctor", dir, "--offline", .. extra]);

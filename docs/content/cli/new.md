@@ -76,3 +76,11 @@ dotnet new 2dog -n MyGame --web false
 
 This creates generic .NET and xUnit hosts. Omit `--web false` to include Web;
 install `wasm-tools` first.
+
+## Debugging the Godot project in VS Code
+
+New projects include `.vscode/launch.json`, `tasks.json`, and a recommendation for Microsoft's C# extension. Open the project root folder, install that extension, select **Godot: Play (C#)** in Run and Debug, and press F5. The build task builds only the root Godot project in Debug configuration.
+
+Set the `GODOT4` environment variable to the main **.NET-enabled** Godot executable and restart VS Code, or replace `program` in `launch.json` with its absolute path. On Windows, use the `mono` executable, not the `_console.exe` wrapper. Godot Tools' editor path setting alone does not configure the C# debugger.
+
+The Godot SDK root is a library loaded by Godot, so it needs this external executable launch. The `.2dog` host is a regular .NET executable and supports the usual .NET launch workflow. **Godot: Attach (C#)** can attach to an already running .NET Godot game or editor; select the process that loads your scripts.
