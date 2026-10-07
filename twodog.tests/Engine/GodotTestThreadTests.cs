@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using twodog.Testing;
 using twodog.Testing.Xunit;
 
@@ -11,6 +12,8 @@ public class GodotTestThreadTests(HeadlessFixture godot)
     {
         Assert.Equal("2dog test thread", Thread.CurrentThread.Name);
         if (OperatingSystem.IsWindows()) Assert.Equal(ApartmentState.STA, Thread.CurrentThread.GetApartmentState());
+        // AppKit aborts a windowed engine anywhere but on the process main thread.
+        if (OperatingSystem.IsMacOS()) Assert.Equal(1, pthread_main_np());
 
         // Iteration throws unless called on the thread that started the engine.
         godot.Engine.Iteration();
@@ -28,6 +31,9 @@ public class GodotTestThreadTests(HeadlessFixture godot)
 
         godot.Engine.Iteration();
     }
+
+    [DllImport("/usr/lib/libSystem.dylib")]
+    private static extern int pthread_main_np();
 }
 
 public class PlainTestThreadTests

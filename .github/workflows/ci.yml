@@ -337,6 +337,34 @@ jobs:
       - name: Test (Editor)
         run: bash .github/scripts/test-with-watchdog.sh Editor
 
+      # The suite above is headless. This starts the stock windowed fixture on the 2dog test thread, as consumers'
+      # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
+      - name: Test windowed fixture
+        if: runner.os == 'macOS'
+        timeout-minutes: 5
+        run: |
+          results=tests/windowed-fixture/TestResults
+          reports="$HOME/Library/Logs/DiagnosticReports"
+          started="$RUNNER_TEMP/windowed-fixture.started"
+          touch "$started"
+          status=0
+          dotnet test tests/windowed-fixture -c Release --logger 'console;verbosity=normal' --blame \
+            --results-directory "$results" || status=$?
+          if [ "$status" -ne 0 ]; then
+            # Keep every crash report from this run; ReportCrash may still be writing when the run returns, and a
+            # fresh runner may not have the reports directory yet.
+            mkdir -p "$results"
+            for _ in $(seq 10); do
+              if [ -d "$reports" ] && find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" | grep -q .; then
+                find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" -exec cp {} "$results/" \;
+                break
+              fi
+              sleep 1
+            done
+            ls "$results"/*.ips 2>/dev/null || echo "No macOS crash report was written during this run."
+          fi
+          exit "$status"
+
       - name: Upload test dumps and blame sequence
         if: failure()
         uses: actions/upload-artifact@v7
