@@ -337,6 +337,22 @@ jobs:
       - name: Test (Editor)
         run: bash .github/scripts/test-with-watchdog.sh Editor
 
+      # The suite above is headless. This starts the stock windowed fixture on the 2dog test thread, as consumers'
+      # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
+      - name: Test windowed fixture
+        if: runner.os == 'macOS'
+        timeout-minutes: 5
+        run: |
+          results=tests/windowed-fixture/TestResults
+          status=0
+          dotnet test tests/windowed-fixture -c Release --logger 'console;verbosity=normal' --blame \
+            --results-directory "$results" || status=$?
+          if [ "$status" -ne 0 ]; then
+            mkdir -p "$results"
+            cp ~/Library/Logs/DiagnosticReports/WindowedFixture.Tests-*.ips "$results/" 2>/dev/null || true
+          fi
+          exit "$status"
+
       - name: Upload test dumps and blame sequence
         if: failure()
         uses: actions/upload-artifact@v7
