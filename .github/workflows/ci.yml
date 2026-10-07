@@ -344,12 +344,21 @@ jobs:
         timeout-minutes: 5
         run: |
           results=tests/windowed-fixture/TestResults
+          reports="$HOME/Library/Logs/DiagnosticReports"
+          started="$RUNNER_TEMP/windowed-fixture.started"
+          touch "$started"
           status=0
           dotnet test tests/windowed-fixture -c Release --logger 'console;verbosity=normal' --blame \
             --results-directory "$results" || status=$?
           if [ "$status" -ne 0 ]; then
+            # Keep every crash report from this run; ReportCrash may still be writing when the run returns.
+            for _ in $(seq 10); do
+              if find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" | grep -q .; then break; fi
+              sleep 1
+            done
             mkdir -p "$results"
-            cp ~/Library/Logs/DiagnosticReports/WindowedFixture.Tests-*.ips "$results/" 2>/dev/null || true
+            find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" -exec cp {} "$results/" \;
+            ls "$results"/*.ips 2>/dev/null || echo "No macOS crash report was written during this run."
           fi
           exit "$status"
 
