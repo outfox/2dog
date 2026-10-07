@@ -351,13 +351,16 @@ jobs:
           dotnet test tests/windowed-fixture -c Release --logger 'console;verbosity=normal' --blame \
             --results-directory "$results" || status=$?
           if [ "$status" -ne 0 ]; then
-            # Keep every crash report from this run; ReportCrash may still be writing when the run returns.
+            # Keep every crash report from this run; ReportCrash may still be writing when the run returns, and a
+            # fresh runner may not have the reports directory yet.
+            mkdir -p "$results"
             for _ in $(seq 10); do
-              if find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" | grep -q .; then break; fi
+              if [ -d "$reports" ] && find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" | grep -q .; then
+                find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" -exec cp {} "$results/" \;
+                break
+              fi
               sleep 1
             done
-            mkdir -p "$results"
-            find "$reports" -maxdepth 1 -name '*.ips' -newer "$started" -exec cp {} "$results/" \;
             ls "$results"/*.ips 2>/dev/null || echo "No macOS crash report was written during this run."
           fi
           exit "$status"

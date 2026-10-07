@@ -163,7 +163,10 @@ point should run xUnit through `GodotTestThread.RunMain`.
 
 Tests without a 2dog fixture keep xUnit's usual threads. To use a different
 xUnit test framework, set
-`<TwoDogGodotTestThread>false</TwoDogGodotTestThread>`.
+`<TwoDogGodotTestThread>false</TwoDogGodotTestThread>`. That leaves out the
+entry point too, so on macOS windowed fixtures abort unless your framework runs
+their collections through `GodotTestThread.Run`, from an entry point that calls
+`GodotTestThread.RunMain`.
 
 ## Running Tests
 
