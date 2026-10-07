@@ -39,6 +39,7 @@
         <None Include="build\FailOnGodotErrors.Assembly.cs" Pack="true" PackagePath="build\"/>
         <None Include="build\GodotTestFramework.cs"       Pack="true" PackagePath="build\"/>
         <None Include="build\GodotTestFramework.Assembly.cs" Pack="true" PackagePath="build\"/>
+        <None Include="build\GodotTestEntryPoint.cs"      Pack="true" PackagePath="build\"/>
         <None Include="build\2dog.xunit.manifest"        Pack="true" PackagePath="build\"/>
         <None Include="build\2dog.xunit.targets"         Pack="true" PackagePath="build\"/>
     </ItemGroup>

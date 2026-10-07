@@ -155,6 +155,12 @@ is STA, which Godot's windowing needs for drag-and-drop. `2dog.xunit` also
 gives test projects the comctl32 v6 manifest that `godot.exe` has, unless they
 set their own `ApplicationManifest`.
 
+On macOS that thread is the process main thread, because AppKit aborts a
+windowed engine started anywhere else. `2dog.xunit` wraps the entry point xUnit
+generates so that xUnit's runner moves to another thread and the main thread
+runs the 2dog collections, one at a time. A test project with its own entry
+point should run xUnit through `GodotTestThread.RunMain`.
+
 Tests without a 2dog fixture keep xUnit's usual threads. To use a different
 xUnit test framework, set
 `<TwoDogGodotTestThread>false</TwoDogGodotTestThread>`.
