@@ -24,6 +24,7 @@ jobs:
   # the Android payloads), the build-natives job below builds it inline, so every
   # run self-heals in a single run graph.
   check-natives:
+    if: github.repository == 'outfox/2dog'
     name: Check Native Libraries
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 5
@@ -59,7 +60,7 @@ jobs:
   build-natives:
     name: Build Natives
     needs: [check-natives]
-    if: needs.check-natives.outputs.ready != 'true'
+    if: github.repository == 'outfox/2dog' && (needs.check-natives.outputs.ready != 'true')
     permissions:
       contents: write # callee's release job creates the godot-<hash> release
     concurrency:
@@ -78,8 +79,9 @@ jobs:
     # Skip-tolerant gate, not always(): run when build-natives succeeded or was
     # skipped (natives already existed), never after a failed natives build.
     if: >-
-      !cancelled() && needs.check-natives.result == 'success' &&
-      (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped')
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.check-natives.result == 'success' &&
+      (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped'))
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 20
 
@@ -280,7 +282,7 @@ jobs:
     # Explicit result check: the implicit success() evaluates the transitive
     # needs chain, and the (usually) skipped build-natives job would skip this
     # job too — a green run with zero testing.
-    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -383,7 +385,7 @@ jobs:
     name: Desktop Smoke (${{ matrix.name }})
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -674,7 +676,7 @@ jobs:
     name: Web Smoke (AOT=${{ matrix.aot }})
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: blacksmith-8vcpu-ubuntu-2404
     timeout-minutes: 45
     strategy:
@@ -1038,7 +1040,7 @@ jobs:
     name: Tool Smoke (${{ matrix.name }})
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -1083,7 +1085,7 @@ jobs:
     name: Android Smoke
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: ${{ !cancelled() && needs.pack.result == 'success' }}
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 45
 
@@ -1217,10 +1219,11 @@ jobs:
     # transitive-skip reason as the test job — deploy must still require all
     # gates to have actually succeeded.
     if: >-
-      ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') &&
-          needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
-          needs.web-smoke.result == 'success' && needs.android-smoke.result == 'success' &&
-          needs.tool-smoke.result == 'success' }}
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
+      needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
+      needs.web-smoke.result == 'success' && needs.android-smoke.result == 'success' &&
+      needs.tool-smoke.result == 'success')
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing

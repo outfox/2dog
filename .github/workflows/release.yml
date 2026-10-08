@@ -32,6 +32,7 @@ concurrency:
 
 jobs:
   release:
+    if: github.repository == 'outfox/2dog'
     name: Bump, Tag, and Push
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10

@@ -25,6 +25,7 @@ concurrency:
 
 jobs:
   build-and-package-tests:
+    if: github.repository == 'outfox/2dog'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
