@@ -85,4 +85,5 @@ the next test. Override `FailOnGodotErrors` to opt out for a fixture, or
 `CreateFixture()` to supply a custom `twodog.Testing.FixtureBase`.
 
 The generated `BasicTests.cs` includes eight runnable examples. See
+[Testing with NUnit](/testing/nunit) for the development guide and
 [NUnit Configuration](/configuration/nunit) for package and variant settings.

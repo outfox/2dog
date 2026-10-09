@@ -113,12 +113,17 @@ export default defineConfig({
           { text: gd('mobile_phone') + 'Android', link: '/hosts/android' },
           { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
           { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
-          { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
+          {
+            text: 'Testing',
+            items: [
+              { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
+              { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
+            ]
+          },
           { text: gd('globe') + 'Web', link: '/hosts/web' },
           { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' },
           { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
-          { text: gd('window') + 'WinUI 3', link: '/hosts/winui' },
-          { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
+          { text: gd('window') + 'WinUI 3', link: '/hosts/winui' }
         ]
       },
       {
@@ -201,7 +206,14 @@ export default defineConfig({
             ]
           },
           { text: gd('file_arrow_up') + 'Resource Import', link: '/import-tool' },
-          { text: gd('test_tube') + 'Testing with xUnit', link: '/testing' }
+          {
+            text: 'Testing',
+            items: [
+              { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
+              { text: gd('test_tube') + 'xUnit', link: '/testing' },
+              { text: gd('mouse') + 'Simulating Input', link: '/testing/input' }
+            ]
+          }
         ]
       },
       {
