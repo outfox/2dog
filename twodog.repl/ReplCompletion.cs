@@ -15,16 +15,18 @@ internal static class ReplCompletion
 {
     public static async Task<char?> ContinuationAsync(PreparedInput prepared, int caret, CancellationToken token)
     {
-        if (prepared.Input.At(caret) is { } incomplete &&
+        var reference = prepared.Input.CompletionAt(caret);
+        if (reference is { } incomplete &&
             (incomplete.Search || !incomplete.Complete || incomplete.Path.Length == 0 || incomplete.Path.EndsWith('/') ||
                 caret != incomplete.Span.End || !prepared.Nodes.ContainsKey(incomplete.LookupPath))) return null;
-        if (prepared.Input.At(caret) is { Complete: true } path && caret == path.Span.End && prepared.Nodes.ContainsKey(path.Path))
+        if (reference is { Complete: true } path && caret == path.Span.End && prepared.Nodes.ContainsKey(path.Path))
         {
             if (!prepared.Input.Original.AsSpan(path.Span.Start).StartsWith("$[") &&
                 prepared.Nodes.Values.Any(n => (path.Path.StartsWith('/') ? n.AbsolutePath ?? n.Path : n.Path).StartsWith(path.Path + "/", StringComparison.Ordinal))) return '/';
             return ListTreeCommand.TryParse(prepared.Input.Original, out _) || NavigationCommand.TryParse(prepared.Input.Original, out _) ? null : '.';
         }
-        if (ListTreeCommand.TryParse(prepared.Input.Original, out _) || NavigationCommand.TryParse(prepared.Input.Original, out _)) return null;
+        if (ListTreeCommand.TryParse(prepared.Input.Original, out _) ||
+            NavigationCommand.TryParse(prepared.Input.Original, out var navigation) && navigation.Expression is null) return null;
         var position = prepared.Input.ToGenerated(caret);
         var root = await prepared.Document.GetSyntaxRootAsync(token);
         var expression = ExpressionAt(root!, position);
@@ -49,7 +51,8 @@ internal static class ReplCompletion
     {
         var text = prepared.Input.Original.Remove(span.Start, span.Length).Insert(span.Start, name);
         var end = span.Start + name.Length;
-        var input = new NodePathInput(text, prepared.Nodes);
+        NavigationCommand.TryParse(text, out var navigation);
+        var input = new NodePathInput(text, prepared.Nodes, navigation?.ExpressionSpan, navigation?.DestinationSpan);
         var document = prepared.Document.WithText(SourceText.From(input.Code));
         var root = (await document.GetSyntaxRootAsync(token))!;
         var model = (await document.GetSemanticModelAsync(token))!;

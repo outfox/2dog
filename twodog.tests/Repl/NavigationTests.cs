@@ -61,7 +61,54 @@ public class NavigationIntegrationTests
         Assert.Equal(":cd $Control", Complete(":cd $Cont", tab, run));
         Assert.Equal("cd $Control", Complete("cd ", tab, tab, run));
 
+        var left = new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, false);
+        var leftFive = Enumerable.Repeat(left, 5).ToArray();
+        Assert.Equal("ls $Control/Flair", ReadPrompt("ls $ControlFlair", true, [.. leftFive, tab, run]));
+        Assert.Equal("ls $Control/CenterContainerFlair", ReadPrompt("ls $ContFlair", true, [.. leftFive, tab, tab, tab, run]));
+
         Success("int retainedAnswer = 42;");
+        Success("var x = $Control/CenterContainer; var selectedContainer = x;");
+        var variableScope = Success("cd x");
+        Assert.False(variableScope.Committed);
+        Assert.Equal("/root/Control/CenterContainer", variableScope.Value);
+        Assert.Equal("42", Success("retainedAnswer").Value);
+        Assert.Equal("cd selectedContainer", Complete("cd selectedCont", tab, run));
+        Assert.Equal(":cd selectedContainer", Complete(":cd selectedCont", tab, run));
+        Assert.Equal("cd x.GetParent()", Complete("cd x.GetPa", tab, run));
+        Assert.Equal(":cd x.GetParent()", Complete(":cd x.GetPa", tab, run));
+        Assert.Equal("cd x.", ReadPrompt("cd x", true, tab, run));
+        Assert.Equal("/root/Control", Success("cd x.GetParent()").Value);
+        Assert.Equal("/root/Control/CenterContainer", Success(":cd x;").Value);
+        Assert.Equal("/root/Control", Success("cd scene").Value);
+        Assert.Equal("/root", Success("cd $CenterContainer.GetParent().GetParent()").Value);
+        Assert.Equal("/root/Control", Success(":cd (scene ?? root)").Value);
+        Assert.Equal("/root", Success("cd root").Value);
+
+        Success("int scopeCalls = 0; int scopeThread = System.Environment.CurrentManagedThreadId; " +
+            "Node PickScope() { scopeCalls++; if (System.Environment.CurrentManagedThreadId != scopeThread) throw new Exception(\"Wrong thread\"); return x; } " +
+            "async Task<Node> AwaitScope() { await Task.Delay(10, ct); return PickScope(); }");
+        Assert.Equal("/root/Control/CenterContainer", Success("cd PickScope()").Value);
+        Assert.Equal("1", Success("scopeCalls").Value);
+        Assert.Equal("/root/Control/CenterContainer", Success("cd await AwaitScope()").Value);
+        Assert.Equal("2", Success("scopeCalls").Value);
+        Assert.Contains("Usage:", Eval("cd PickScope(); throw new Exception(\"must not run\");").Error!);
+        Assert.Equal("2", Success("scopeCalls").Value);
+        Success("Node FailScope() { scopeCalls++; throw new InvalidOperationException(\"navigation failure\"); } " +
+            "Node QueueScope() { var node = new Node(); root.AddChild(node); node.QueueFree(); return node; }");
+        var beforeFailure = Scope();
+        Assert.Contains("navigation failure", Eval("cd FailScope()").Error!);
+        Assert.Equal("3", Success("scopeCalls").Value);
+        Assert.Contains("live node", Eval("cd QueueScope()").Error!);
+        Assert.Contains("Godot.Node", Eval("cd 42").Error!);
+        Assert.Contains("returned null", Eval("cd null").Error!);
+        Assert.Contains("(1,4): CS0103", Eval("cd missingScopeVariable").Error!);
+        Assert.Equal(beforeFailure, Scope());
+        Success("var detachedScope = new Node();");
+        Assert.Contains("live node", Eval("cd detachedScope").Error!);
+        Success("detachedScope.Free();");
+        Assert.Contains("live node", Eval("cd detachedScope").Error!);
+        Assert.Equal(beforeFailure, Scope());
+        Success("cd root");
         var changed = Success("cd $Control/Signals/Table/");
         Assert.False(changed.Committed);
         scopeFromOwner = Scope();
@@ -74,6 +121,8 @@ public class NavigationIntegrationTests
         Assert.Equal("true", Success("$EngineTimerName is Label").Value);
         Assert.Equal("true", Success("$/root/Control/Signals/Sources/CSharpTicker is showcase.CSharpTicker").Value);
         Assert.Equal("cd $EngineTimerName", Complete("cd $EngineTimerNa", tab, run));
+        Assert.Equal("ls $EngineTimerNameFlair", Complete("ls $EngineTimerNaFlair", [.. leftFive, tab, run]));
+        Assert.Equal("ls $/root/ControlFlair", Complete("ls $/root/ContFlair", [.. leftFive, tab, run]));
         Assert.Equal(":cd $EngineTimerName", Complete(":cd $EngineTimerNa", tab, run));
         Assert.Equal("$/root/Control/CenterContainer/GDScriptLinkerProbe", Complete("?GDScriptL", tab, run));
         Assert.Equal("ls $EngineTimerName", Complete("ls $EngineTimerNa", tab, run));
@@ -107,6 +156,12 @@ public class NavigationIntegrationTests
         Assert.Equal("/root", Scope());
         Assert.Same(globals.root, globals.here);
 
+        Success("Func<Node, Node> cd = node => node;");
+        Assert.Equal("true", Success("cd (root) is Window").Value);
+        Assert.Equal("true", Success("cd ($Control) is Control").Value);
+        Success("cd (root); int ordinaryCdAnswer = 8;");
+        Assert.Equal("8", Success("ordinaryCdAnswer").Value);
+        Assert.Equal("/root", Success("cd root").Value);
         Success("int cd = 6; int pwd = 7;");
         Assert.Equal("6", Success("cd").Value);
         Assert.Equal("7", Success("pwd").Value);

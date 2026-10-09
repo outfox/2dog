@@ -46,19 +46,21 @@ internal sealed class ReplSession : IDisposable
 
     public static bool IsComplete(string text)
     {
-        if (ListTreeCommand.TryParse(text, out _) || NavigationCommand.TryParse(text, out _)) return true;
-        var input = new NodePathInput(text, new Dictionary<string, NodePathTarget>());
+        NavigationCommand.TryParse(text, out var navigation);
+        if (ListTreeCommand.TryParse(text, out _) || navigation is { Expression: null }) return true;
+        var input = new NodePathInput(text, new Dictionary<string, NodePathTarget>(), navigation?.ExpressionSpan, navigation?.DestinationSpan);
         return input.References.All(p => p.Complete && p.Path.Length > 0) &&
             SyntaxFactory.IsCompleteSubmission(CSharpSyntaxTree.ParseText(input.Code, ParseOptions));
     }
 
     public async Task<PreparedInput> PrepareAsync(string text, CancellationToken cancellationToken)
     {
+        NavigationCommand.TryParse(text, out var navigation);
         IReadOnlyDictionary<string, NodePathTarget> nodes = new Dictionary<string, NodePathTarget>();
         if (NodePathInput.Find(text).Count > 0 || ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget ||
-            NavigationCommand.TryParse(text, out var navigation) && navigation.AwaitingTarget)
+            navigation?.AwaitingTarget == true)
             nodes = await dispatcher.InvokeAsync(() => Task.FromResult(NodePathInput.Capture(globals.root, cancellationToken, globals.here)), cancellationToken).ConfigureAwait(false);
-        var input = new NodePathInput(text, nodes);
+        var input = new NodePathInput(text, nodes, navigation?.ExpressionSpan, navigation?.DestinationSpan);
         return new(Document(input.Code), input, nodes, nodes.ToDictionary(n => n.Key, n => n.Value.Family, StringComparer.Ordinal));
     }
 
@@ -87,11 +89,12 @@ internal sealed class ReplSession : IDisposable
 
     public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken)
     {
-        if (NavigationCommand.TryParse(text, out var navigation) &&
-            (navigation.Explicit || navigation.Path is not (null or "..") || navigation.Error is not null ||
+        NavigationCommand.TryParse(text, out var navigation);
+        if (navigation?.Error is { } navigationError) return new(null, navigationError, false);
+        if (navigation is { Expression: null } &&
+            (navigation.Explicit || navigation.Path is not (null or "..") ||
                 state?.Variables.Any(variable => variable.Name == navigation.Name) != true))
         {
-            if (navigation.Error is { } navigationError) return new(null, navigationError, false);
             return await dispatcher.InvokeAsync(() =>
             {
                 var current = globals.here;
@@ -100,14 +103,13 @@ internal sealed class ReplSession : IDisposable
                     var path = NodeColors.CapturePath(current);
                     return Task.FromResult(new ReplResult(path.Path, null, false, Styled: path.Display));
                 }
+                if ((navigation.Name == "rm" || navigation.IsTransfer) && navigation.Path is null)
+                    return Task.FromResult(new ReplResult(null, NavigationCommand.Usage(navigation.Name), false));
                 var node = navigation.Path is null or "/" ? globals.root :
                     navigation.Path == ".." && current == globals.root ? current : current.GetNodeOrNull<Godot.Node>(navigation.Path);
                 if (node is null || !Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion() || !node.IsInsideTree())
                     return Task.FromResult(new ReplResult(null, $"Node '{navigation.Path}' was not found from {current.GetPath()}. Paths are case-sensitive; use ls or Tab to explore.", false));
-                globals.SelectNode(node);
-                navigationVersion++;
-                var selected = NodeColors.CapturePath(node);
-                return Task.FromResult(new ReplResult(selected.Path, null, false, Styled: selected.Display));
+                return Task.FromResult(ApplyNodeCommand(navigation.Name, node));
             }, cancellationToken).ConfigureAwait(false);
         }
         if (ListTreeCommand.TryParse(text, out var listing))
@@ -148,6 +150,17 @@ internal sealed class ReplSession : IDisposable
             var next = state is null
                 ? await script.RunAsync(globals, catchException: _ => true, cancellationToken: cancellationToken)
                 : await script.RunFromAsync(state, catchException: _ => true, cancellationToken: cancellationToken);
+            if (navigation?.Expression is not null)
+            {
+                if (next.Exception is OperationCanceledException) return new ReplResult(null, null, false, Cancelled: true);
+                if (next.Exception is not null) return new ReplResult(null, next.Exception.ToString(), false);
+                if (navigation.IsTransfer && next.ReturnValue is System.Runtime.CompilerServices.ITuple { Length: 2 } operands)
+                    return ApplyTransfer(navigation.Name, operands[0], operands[1]);
+                if (next.ReturnValue is not Godot.Node node)
+                    return new ReplResult(null, navigation.Name + " expects a Godot.Node; the expression returned " +
+                        (next.ReturnValue is null ? "null" : next.ReturnValue.GetType().FullName) + ".", false);
+                return ApplyNodeCommand(navigation.Name, node);
+            }
             state = next;
             // Formatting may invoke user code (ToString), so it also belongs on the engine thread.
             if (next.Exception is OperationCanceledException) return new ReplResult(null, null, true, Cancelled: true);
@@ -172,6 +185,63 @@ internal sealed class ReplSession : IDisposable
             editingDocument = null;
         }
         return result;
+    }
+
+    // Validation, tree membership and path styling all belong on the owner thread.
+    private ReplResult ApplyNodeCommand(string command, Godot.Node node)
+    {
+        if (!Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion() || !node.IsInsideTree() || node.GetTree() != globals.tree)
+            return new(null, command + " requires a live node in this engine's scene tree. The current scope was kept.", false);
+        if (command == "rm")
+        {
+            if (node == globals.root) return new(null, "rm cannot remove the root Window. Choose a scene node.", false);
+            var removed = NodeColors.CapturePath(node);
+            node.QueueFree();
+            navigationVersion++;
+            return new("Queued for deletion: " + removed.Path, null, false,
+                Styled: new PrettyPrompt.Highlighting.FormattedString("Queued for deletion: ") + removed.Display);
+        }
+        globals.SelectNode(node);
+        navigationVersion++;
+        var selected = NodeColors.CapturePath(node);
+        return new(selected.Path, null, false, Styled: selected.Display);
+    }
+
+    private ReplResult ApplyTransfer(string command, object? sourceValue, object? parentValue)
+    {
+        if (sourceValue is not Godot.Node source || parentValue is not Godot.Node parent)
+            return new(null, command + " expects two Godot.Node values: a source and an existing parent.", false);
+        bool Live(Godot.Node node) => Godot.GodotObject.IsInstanceValid(node) && !node.IsQueuedForDeletion() &&
+            node.IsInsideTree() && node.GetTree() == globals.tree;
+        if (!Live(source) || !Live(parent))
+            return new(null, command + " requires live nodes in this engine's scene tree.", false);
+        if (source == globals.root)
+            return new(null, command + " cannot copy or move the root Window. Choose a scene node.", false);
+        if (source == parent || source.IsAncestorOf(parent))
+            return new(null, command + " cannot place a node inside itself or one of its descendants.", false);
+        if (command == "mv" && source.GetParent() == parent)
+            return new("The node already has that parent.", null, false);
+        if (parent.GetChildren(includeInternal: true).Any(child => child.Name == source.Name))
+            return new(null, "The destination already has a child named '" + source.Name + "'. Rename it in C# or choose another parent.", false);
+        var original = NodeColors.CapturePath(source);
+        Godot.Node result;
+        if (command == "cp")
+        {
+            result = source.Duplicate();
+            if (result is null) return new(null, "Godot could not duplicate this node.", false);
+            parent.AddChild(result);
+        }
+        else
+        {
+            source.Reparent(parent, keepGlobalTransform: true);
+            result = source;
+        }
+        navigationVersion++;
+        var destination = NodeColors.CapturePath(result);
+        var verb = command == "cp" ? "Copied: " : "Moved: ";
+        return new(verb + original.Path + " -> " + destination.Path, null, false,
+            Styled: new PrettyPrompt.Highlighting.FormattedString(verb) + original.Display +
+                new PrettyPrompt.Highlighting.FormattedString(" -> ") + destination.Display);
     }
 
     private static string Diagnostic(Diagnostic diagnostic, NodePathInput input)

@@ -21,26 +21,55 @@ internal sealed class NodePathInput
     public string Code { get; }
     public IReadOnlyList<NodePathReference> References { get; }
 
-    public NodePathInput(string text, IReadOnlyDictionary<string, NodePathTarget> nodes)
+    public NodePathInput(string text, IReadOnlyDictionary<string, NodePathTarget> nodes, TextSpan? expression = null, TextSpan? destination = null)
     {
         Original = text;
         References = Find(text);
-        var code = new StringBuilder();
-        var position = 0;
+        // Command expressions use the same Roslyn pipeline as ordinary input.
+        // Track generated wrappers as well as aliases in the position map.
+        var edits = new List<(TextSpan Span, string Text)>();
+        if (expression is { } source && destination is { } parent)
+        {
+            // Evaluate left to right in one transient C# tuple. Boxing permits
+            // null/non-node results to receive the command's own diagnostics.
+            edits.Add((TextSpan.FromBounds(0, source.Start), "((object)("));
+            edits.Add((TextSpan.FromBounds(source.End, parent.Start), "), (object)("));
+            edits.Add((TextSpan.FromBounds(parent.End, text.Length), "))"));
+        }
+        else if (expression is { } target)
+            text = new string(text.Select((c, i) => target.Contains(i) || char.IsWhiteSpace(c) ? c : ' ').ToArray());
         foreach (var reference in References)
         {
-            code.Append(text, position, reference.Span.Start - position);
-            var start = code.Length;
             var type = nodes.TryGetValue(reference.LookupPath, out var node) ? node.TypeName : "global::Godot.Node";
-            code.Append("(root.GetNode<").Append(type).Append(">(")
-                .Append(SymbolDisplay.FormatLiteral(node?.AbsolutePath ?? reference.LookupPath, quote: true)).Append("))");
-            replacements.Add((reference.Span, TextSpan.FromBounds(start, code.Length)));
-            position = reference.Span.End;
+            edits.Add((reference.Span, "(root.GetNode<" + type + ">(" +
+                SymbolDisplay.FormatLiteral(node?.AbsolutePath ?? reference.LookupPath, quote: true) + "))"));
+        }
+        var code = new StringBuilder();
+        var position = 0;
+        foreach (var edit in edits.OrderBy(e => e.Span.Start))
+        {
+            code.Append(text, position, edit.Span.Start - position);
+            var start = code.Length;
+            code.Append(edit.Text);
+            replacements.Add((edit.Span, TextSpan.FromBounds(start, code.Length)));
+            position = edit.Span.End;
         }
         Code = code.Append(text, position, text.Length - position).ToString();
     }
 
     public NodePathReference? At(int caret) => References.FirstOrDefault(r => caret > r.Span.Start && caret <= r.Span.End);
+
+    public NodePathReference? CompletionAt(int caret) => PrefixAt(Original, At(caret), caret);
+    internal static NodePathReference? CompletionAt(string text, int caret)
+        => PrefixAt(text, Find(text).FirstOrDefault(r => caret > r.Span.Start && caret <= r.Span.End), caret);
+
+    private static NodePathReference? PrefixAt(string text, NodePathReference? path, int caret)
+    {
+        if (path is null || caret == path.Span.End) return path;
+        // Completion edits the prefix at the caret. The rest of the path is
+        // existing user input, even if it looks like the rest of this token.
+        return Find(text[..caret]).FirstOrDefault(r => r.Span.Start == path.Span.Start && r.Span.End == caret);
+    }
     public bool IsGenerated(TextSpan span) => replacements.Any(r => r.Generated.OverlapsWith(span));
     public int ToGenerated(int position) => Map(position, toGenerated: true);
     public int ToOriginal(int position, bool end = false) => Map(position, toGenerated: false, end);
@@ -101,7 +130,11 @@ internal sealed class NodePathInput
             // null-conditional access, strings and comments to ordinary C#.
             var previous = token.GetPreviousToken(includeSkipped: true);
             var context = previous.Kind();
-            var listing = (text[..start].Trim() is "ls" or "cd" or ":cd") && !text[(start + 1)..].Contains(':');
+            var prefix = text[..start].TrimStart();
+            var separator = prefix.IndexOfAny([' ', '\t', '\r', '\n']);
+            var transfer = separator > 0 && prefix[..separator] is "cp" or "mv" or ":cp" or ":mv" &&
+                start > 0 && char.IsWhiteSpace(text[start - 1]);
+            var listing = (prefix.TrimEnd() is "ls" or "cd" or ":cd" or "rm" or ":rm" || transfer) && !text[(start + 1)..].Contains(':');
             if (!listing && previous.RawKind != 0 && context is not (
                 SyntaxKind.OpenParenToken or SyntaxKind.OpenBracketToken or SyntaxKind.OpenBraceToken or
                 SyntaxKind.CommaToken or SyntaxKind.SemicolonToken or SyntaxKind.EqualsToken or SyntaxKind.EqualsGreaterThanToken or

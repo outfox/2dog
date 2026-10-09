@@ -54,7 +54,11 @@ internal static class ReplOutput
         Row("engine / ct", "The 2dog host / cancellation token for this submission.");
         Example("ls");
         Example("ls $Control");
+        Example("rm $Child  // QueueFree this node and its descendants; a target is required");
+        Example("cp $Source $Parent  // duplicate the subtree into an existing parent");
+        Example("mv savedNode destination  // reparent, preserving the global transform");
         Example("cd $Control/Signals/Table/");
+        Example("var x = here;  // save a node, then use cd x or cd x.GetParent()");
         Example("ls  // children of the selected node");
         Example("cd ..  // parent; cd / returns to root");
         Example("$Control.Size");
@@ -64,6 +68,8 @@ internal static class ReplOutput
         Console.WriteLine("  $ paths start at here and infer the live node's public C# type. cd selects here.");
         Console.WriteLine("  The prompt shows your scope. :cd / :pwd force commands if C# variables have those names.");
         Console.WriteLine("  cd $/root/Control uses an absolute path; ?Name still searches the whole tree.");
+        Console.WriteLine("  cp/mv take two node expressions: source and existing parent. Name collisions are rejected.");
+        Console.WriteLine("  mv(...), mv.Member, mv[index] stay C#. :mv forces the command; @mv selects the identifier.");
         Console.WriteLine("  If the selected node leaves the tree, the scope returns to root.");
         Console.WriteLine("  Use $[\"Control/My Node\"] for spaces or punctuation; C# $\"...\" strings stay strings.");
         Console.WriteLine();
@@ -81,6 +87,7 @@ internal static class ReplOutput
         Console.WriteLine();
         Section("Editing and session");
         Row("Enter", "Accept a selected completion; otherwise " + (multiline ? "insert a newline. Shift+Enter runs." : "run the input. Shift+Enter inserts a newline."));
+        Console.WriteLine("  Enter always runs an exact bare command such as ls, cd, pwd or :help, with no trailing space.");
         Row(":multiline", "Swap Enter and Shift+Enter for this session; Ctrl+Enter always runs.");
         Row("Tab / Shift+Tab", "Accept, then cycle matching completions forward / backward. Backspace restores your prefix.");
         Row(". / space / ( / /", "Finish cycling and continue editing. ?Name searches all live node names.");

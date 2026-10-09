@@ -13,6 +13,10 @@ namespace twodog.Repl;
 internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? takePaste = null) : PromptCallbacks
 {
     private bool completionWindowOpen;
+    private (string Text, int Caret)? bareCommand;
+    private bool enterCompletion;
+    private static bool IsBareCommand(string text) => text is "ls" or "cd" or "pwd" or "rm" or "cp" or "mv" or "exit" or ":cd" or ":pwd" or ":rm" or ":cp" or ":mv" or
+        ":help" or ":clear" or ":reset" or ":multiline" or ":quit" or ":exit";
     private bool pairCall;
     private int pairedCaret;
     private bool callOnCommit = true;
@@ -65,6 +69,12 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     {
         preparedTask = null;
         pendingEdit = null;
+        // Submit through a callback, leaving the buffer intact in both input
+        // modes. Trailing spaces stay meaningful for argument completion.
+        enterCompletion = false;
+        bareCommand = keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Enter, Modifiers: 0 } && IsBareCommand(text) ? (text, caret) : null;
+        if (bareCommand is not null)
+            keyPress = new KeyPress(new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, true));
         // Reuse the editor's word deletion, selection and undo behavior. Unlike
         // plain Backspace, this ends completion cycling instead of reverting it.
         if (keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Backspace, Modifiers: ConsoleModifiers.Shift })
@@ -146,6 +156,15 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     {
         preparedTask = null;
         cycle = null;
+        // PrettyPrompt skips TransformKeyPressAsync when a selection would be
+        // committed, so exact command submission must also intercept this path.
+        enterCompletion = keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Enter, Modifiers: 0 };
+        bareCommand = enterCompletion && IsBareCommand(text) ? (text, caret) : null;
+        if (bareCommand is not null)
+        {
+            completionWindowOpen = false;
+            return Task.FromResult(false);
+        }
         callOnCommit = keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Tab, Modifiers: 0 or ConsoleModifiers.Shift }
             or { Key: ConsoleKey.Enter, Modifiers: 0 };
         // Inside a quoted node name, '.', '(' and '/' are path characters.
@@ -161,6 +180,15 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     protected override Task<(string Text, int Caret)> FormatInput(string text, int caret, KeyPress keyPress, CancellationToken cancellationToken)
     {
+        // A rejected completion can reach the editor's newline binding. Restore
+        // the exact command before rendering, history and the submit callback.
+        if (bareCommand is { } command)
+        {
+            pairCall = false;
+            refineCycle = false;
+            pendingEdit = null;
+            return Task.FromResult(command);
+        }
         if (refineCycle)
         {
             refineCycle = false;
@@ -182,6 +210,9 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     protected override IEnumerable<(KeyPressPattern Pattern, KeyPressCallbackAsync Callback)> GetKeyPressCallbacks()
     {
+        yield return (new KeyPressPattern(ConsoleKey.Enter),
+            (text, _, _) => Task.FromResult<KeyPressCallbackResult?>(
+                bareCommand is { } command ? new KeyPressCallbackResult(command.Text, null) : null));
         yield return (new KeyPressPattern(ConsoleModifiers.Control, ConsoleKey.D),
             (text, _, _) => Task.FromResult<KeyPressCallbackResult?>(
                 text.Length == 0 ? new KeyPressCallbackResult(":quit", null) : null));
@@ -205,15 +236,17 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         var prepared = await PrepareInputAsync(text, cancellationToken);
         var paths = prepared.Input.References.SelectMany(p => NodeColors.Path(text.Substring(p.Span.Start, p.Span.Length), prepared.Families)
             .FormatSpans.ToArray().Select(s => s.Offset(p.Span.Start))).ToArray();
-        if (NavigationCommand.TryParse(text, out var navigation))
+        NavigationCommand.TryParse(text, out var navigation);
+        if (navigation is { Expression: null })
             return new[] { new FormatSpan(navigation.Start, navigation.Length, AnsiColor.BrightMagenta) }
                 .Concat(paths).ToArray();
-        if (text.TrimStart().StartsWith(':')) return [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)];
+        if (navigation is null && text.TrimStart().StartsWith(':')) return [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)];
         if (ListTreeCommand.TryParse(text, out var listing))
             return new[] { new FormatSpan(listing.Start, 2, AnsiColor.BrightMagenta) }
                 .Concat(paths).ToArray();
         var spans = await Classifier.GetClassifiedSpansAsync(prepared.Document, new TextSpan(0, prepared.Input.Code.Length), cancellationToken);
         var result = new List<FormatSpan>();
+        if (navigation is not null) result.Add(new FormatSpan(navigation.Start, navigation.Length, AnsiColor.BrightMagenta));
         foreach (var classified in spans)
         {
             if (prepared.Input.IsGenerated(classified.TextSpan) || Color(classified.ClassificationType) is not { } color) continue;
@@ -244,7 +277,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
             return new PromptSpan(text.IndexOf(':'), text.Length - text.IndexOf(':'));
         var prepared = await PrepareInputAsync(text, cancellationToken);
-        if (prepared.Input.At(caret) is { } path) return new PromptSpan(path.Span.Start, path.Span.Length);
+        if (prepared.Input.CompletionAt(caret) is { } path) return new PromptSpan(path.Span.Start, path.Span.Length);
         var span = CompletionService.GetService(prepared.Document)!.GetDefaultCompletionListSpan(
             SourceText.From(prepared.Input.Code), prepared.Input.ToGenerated(caret));
         var original = prepared.Input.ToOriginal(span);
@@ -275,6 +308,16 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             cycle = new CompletionCycle(text, caret, matches, Array.IndexOf(matches, item));
             cycle.Apply(edit);
         }
+        if (enterCompletion)
+        {
+            var accepted = text.Remove(edit.SpanToReplace.Start, edit.SpanToReplace.Length).Insert(edit.SpanToReplace.Start, edit.NewText);
+            if (IsBareCommand(accepted))
+            {
+                bareCommand = (accepted, edit.NewCaret ?? edit.SpanToReplace.Start + edit.NewText.Length);
+                cycle = null;
+                completionWindowOpen = false;
+            }
+        }
         return edit;
     }
 
@@ -290,14 +333,14 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     private static bool AwaitingNodeArgument(string text, int caret)
         => ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart ||
-            NavigationCommand.TryParse(text, out var navigation) && navigation.AwaitingTarget && caret >= navigation.ArgumentStart;
+            NavigationCommand.TryParse(text, out var navigation) && navigation.AwaitingTargetAt(caret);
 
     private async Task<IReadOnlyList<CompletionItem>> CreateCompletionItemsAsync(string text, int caret, PromptSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
-            return new[] { ":help", ":quit", ":clear", ":reset", ":multiline", ":cd", ":pwd" }.Select(c => new CompletionItem(c)).ToArray();
+            return new[] { ":help", ":quit", ":clear", ":reset", ":multiline", ":cd", ":pwd", ":rm", ":cp", ":mv" }.Select(c => new CompletionItem(c)).ToArray();
         var prepared = await PrepareInputAsync(text, cancellationToken);
-        var path = prepared.Input.At(caret);
+        var path = prepared.Input.CompletionAt(caret);
         if (path is not null || AwaitingNodeArgument(text, caret))
         {
             var bracket = path is not null && text.AsSpan(path.Span.Start).StartsWith("$[");
@@ -345,12 +388,22 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
                 return new CompletionEdit(new PromptSpan(original.Start, original.Length), change.TextChange.NewText ?? "",
                     change.NewPosition is { } p ? current.Input.ToOriginal(p) : null);
             })).ToList() ?? [];
+        foreach (var command in new[] { "cp", "mv" })
+        {
+            if (command.StartsWith(text.Trim(), StringComparison.Ordinal))
+                items.Insert(0, new CompletionItem(command, getExtendedDescription: _ => Task.FromResult(
+                    new FormattedString(command + " $Source $Parent: " + (command == "cp" ? "duplicate a subtree" : "move a node, keeping its global transform") +
+                        " into an existing parent. C# node expressions work in both arguments."))));
+        }
         if (text.Trim() is "" or "l" or "ls")
             items.Insert(0, new CompletionItem("ls", getExtendedDescription: _ => Task.FromResult(
                 new FormattedString("List the selected node's tree, or use ls $Child to list a subtree."))));
         if (text.Trim() is "" or "c" or "cd")
             items.Insert(0, new CompletionItem("cd", getExtendedDescription: _ => Task.FromResult(
-                new FormattedString("Select a node: cd $Child, cd .., or cd /. :cd is the explicit command form."))));
+                new FormattedString("Select a node: cd $Child, cd nodeExpression, cd .., or cd /. :cd is the explicit command form."))));
+        if (text.Trim() is "" or "r" or "rm")
+            items.Insert(0, new CompletionItem("rm", getExtendedDescription: _ => Task.FromResult(
+                new FormattedString("Remove a scene node and its descendants: rm $Child or rm nodeExpression. A target is required."))));
         if (text.Trim() is "" or "p" or "pw" or "pwd")
             items.Insert(0, new CompletionItem("pwd", getExtendedDescription: _ => Task.FromResult(new FormattedString("Show the selected node's absolute path."))));
         return items;
@@ -364,11 +417,32 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             new PrettyPrompt.Consoles.CharacterSetModificationRule(PrettyPrompt.Consoles.CharacterSetModificationKind.Add, System.Collections.Immutable.ImmutableArray.Create('/'))),
         getComplexTextEdit: (text, caret, _) =>
         {
-            var path = NodePathInput.Find(text).FirstOrDefault(p => caret > p.Span.Start && caret <= p.Span.End);
+            var full = NodePathInput.Find(text).FirstOrDefault(p => caret > p.Span.Start && caret <= p.Span.End);
+            var path = NodePathInput.CompletionAt(text, caret);
             var name = path?.Path.StartsWith('/') == true ? target.AbsolutePath ?? target.Path : target.Path;
             var quoted = bracket || path is not null && text.AsSpan(path.Span.Start).StartsWith("$[");
             var span = path is null ? new PromptSpan(caret, 0) : new PromptSpan(path.Span.Start, path.Span.Length);
-            return Task.FromResult(new CompletionEdit(span, Alias(name + (children ? "/" : ""), quoted)));
+            var replacement = Alias(name + (children ? "/" : ""), quoted);
+            quoted = replacement.StartsWith("$[", StringComparison.Ordinal);
+            if (quoted && full is not null && caret < full.Span.End && !text.AsSpan(full.Span.Start).StartsWith("$["))
+            {
+                // A match with spaces introduces quotes. Wrap the preserved
+                // suffix too, and leave the caret between the completion and it.
+                var newCaret = span.Start + replacement.Length - 2;
+                replacement = Alias(name + (children ? "/" : "") + text[caret..full.Span.End], bracket: true);
+                return Task.FromResult(new CompletionEdit(new PromptSpan(full.Span.Start, full.Span.Length), replacement, newCaret));
+            }
+            if (quoted && full is not null && caret < full.Span.End && text.AsSpan(full.Span.Start).StartsWith("$["))
+            {
+                // Keep the literal's existing closing quote/bracket after the
+                // caret instead of introducing another pair before its suffix.
+                var literalStart = full.Span.Start + 2;
+                while (literalStart < text.Length && char.IsWhiteSpace(text[literalStart])) literalStart++;
+                var literal = Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseToken(text[literalStart..]);
+                var closing = literalStart + literal.Span.End - 1;
+                replacement = replacement[..^(caret <= closing ? 2 : 1)];
+            }
+            return Task.FromResult(new CompletionEdit(span, replacement));
         })
     {
         public override int GetCompletionItemPriority(string text, int caret, PromptSpan spanToBeReplaced)

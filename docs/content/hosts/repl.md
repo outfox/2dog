@@ -84,12 +84,73 @@ path (shortened in narrow terminals; `pwd` always prints it in full).
 Use `cd $/root/Control` or `:cd /root/Control` for absolute paths. Quoted paths
 such as `cd $["My Node"]` support spaces and punctuation.
 
+You can also select a C# node variable or expression:
+
+```text
+cd /
+var x = $Control/CenterContainer;
+cd x
+cd x.GetParent()
+cd scene
+:cd (scene ?? root)
+```
+
+Tab completes variables and members in the argument. The expression runs once
+on the Godot thread and must return a live node in this engine's scene tree.
+Null, freed or detached nodes and other values produce an error and preserve
+the selected scope. Existing variables, imports and expression side effects
+remain available; navigation itself does not add a C# submission.
+Use `:cd` for a parenthesized expression, since `cd (node)` is a C# call.
+
 No colon is required for these navigation forms. C# calls, assignments and
 arithmetic using `cd` or `pwd` keep their normal meaning. If you declare a C#
 variable named `cd` or `pwd`, its bare name evaluates that variable; use `:cd`
 or `:pwd` to explicitly run the command instead. The scope follows renaming and
 reparenting. If the selected node is freed, queued for deletion or removed from
 the tree, it falls back to root. `:reset` preserves the selected scope.
+
+Remove a node and its descendants with `rm`:
+
+```text
+rm $Child
+rm $["My Node"]
+rm savedNode
+rm savedNode.GetChild(0)
+```
+
+Paths are relative to `here`; absolute paths, C# node expressions, `?` search
+and Tab completion work as they do for `cd`. `:rm` is the explicit command
+form. A target is required, and the engine's root Window cannot be removed.
+Removal uses Godot's deferred `QueueFree()` on the owner thread. Removing the
+selected node or an ancestor returns the scope to root. C# variables persist,
+but saved references to removed nodes are no longer valid after deletion.
+
+`cp $Source $Parent` duplicates a node and its descendants into an existing
+parent. `mv $Source $Parent` reparents the original, preserving its global
+transform where Godot supports it (Control preserves position). Both accept
+C# node variables and expressions in either argument, with Tab completion:
+
+```text
+cp $Player $Backup
+mv savedNode destination
+:cp (source ?? here) (destination ?? root)
+```
+
+Arguments are two whitespace-separated C# expressions; use parentheses to
+make expression boundaries clear. Both run once, left to right, on the Godot
+thread. The root Window, self/descendant destinations and conflicting child
+names are rejected. Rename nodes through C# when needed. `cp` uses Godot's
+standard `Duplicate()` behavior: serialized properties, children, groups,
+signals and scripts; resources retain their normal sharing rules. Internal
+nodes and arbitrary runtime fields are not copied. These commands change the
+live tree; they do not save scene files. Moving `here` preserves its identity
+and updates the prompt path.
+
+Command names remain usable in C#: `mv(...)`, `mv.Member`, `mv[index]`,
+assignments and arithmetic keep their C# meaning, even with whitespace before
+the punctuation. `mv source parent` is a command even if `mv` is a variable;
+`:mv` explicitly forces the command. `@mv` explicitly selects the C# identifier.
+As with `cd`, a bare `mv` or `cp` evaluates an existing variable of that name.
 
 Search node names across the whole live tree with `?`, without knowing their
 parents:
@@ -170,8 +231,9 @@ variables and imports while preserving both scenes.
 | Ctrl+C | Cancel input or cooperatively cancel the running submission |
 | Ctrl+L, `:clear` | Clear the screen |
 | Ctrl+D on empty input, `:quit` | Stop the prompt and game |
-| `cd $Child`, `cd ..`, `cd /` | Select a node, its parent or the root |
+| `cd $Child`, `cd nodeExpression`, `cd ..`, `cd /` | Select a node, its parent or the root |
 | `pwd`, `:pwd` | Show the selected node's absolute path |
+| `rm $Child`, `rm nodeExpression` | Remove a scene node and its descendants |
 | `:help` | Show examples, globals and keybindings |
 | `:reset` | Clear C# session variables and imports, preserving the scene |
 
@@ -189,6 +251,12 @@ Typing more letters refines the prefix. Type `.` to inspect members of an
 object such as `world.Scene`, or `/` to explore children of an unquoted `$` path.
 Quoted paths use `.` to continue into C# members.
 
+When editing inside a node path, completion uses the prefix before the cursor
+and preserves the text to its right. For example, completing `ls $Cont|Flair`
+produces `ls $Control|Flair`, where `|` marks the cursor. If the node is already
+complete, Tab can insert `/` before the existing child name. Tab cycling and
+Backspace restoration also keep the suffix intact, including in quoted paths.
+
 Startup shows `Preparing C# completion...` while language services initialize.
 The `godot>` prompt appears when they are ready. Keys typed during startup
 remain queued; rapid typing preserves Enter, Tab and other controls. Unix
@@ -197,7 +265,11 @@ one edit. Windows' normal console key API removes those paste boundaries;
 use `:multiline` before pasting several lines, then Ctrl+Enter to run them.
 
 When the completion menu has a selection, Enter accepts it without running
-the input. Otherwise Enter runs input by default. Use `:multiline` to make Enter
+the input. Exact command names such as `ls`, `cd`, `pwd`, `exit` and `:help`
+run immediately on Enter in either input mode, even with a suggestion selected.
+This exception requires no trailing whitespace: `ls ` and `cd ` keep argument
+completion. Enter also accepts and runs a selected bare command, such as `l`
+completing to `ls`. Otherwise Enter runs input by default. Use `:multiline` to make Enter
 insert a newline and Shift+Enter run instead. Use `:multiline` again to restore the default.
 Ctrl+Enter always runs; changing the input mode preserves your C# variables,
 scenes and history.

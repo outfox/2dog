@@ -24,6 +24,13 @@ public class NodePathTests
     [InlineData("var node = ?EngineT", 1)]
     [InlineData("Console.Write(?EngineT)", 1)]
     [InlineData("ls ?EngineT", 1)]
+    [InlineData("rm ?EngineT", 1)]
+    [InlineData("cp ?EngineT root", 1)]
+    [InlineData("mv source ?EngineT", 1)]
+    [InlineData(":mv $Source ?EngineT", 1)]
+    [InlineData("mv source EngineT?.Name", 0)]
+    [InlineData("mv source true ? EngineT : other", 0)]
+    [InlineData(":rm ?EngineT", 1)]
     [InlineData("true ? EngineT : other", 0)]
     [InlineData("true?EngineT:other", 0)]
     [InlineData("int? EngineT", 0)]
@@ -36,6 +43,20 @@ public class NodePathTests
     [InlineData("$\"{?EngineT.Name}\"", 1)]
     public void NodeSearchOnlyDecoratesExpressionStarts(string text, int count)
         => Assert.Equal(count, NodePathInput.Find(text).Count(p => p.Search));
+
+    [Theory]
+    [InlineData("ls $ContFlair", 8, "Cont")]
+    [InlineData("ls $ControlFlair", 11, "Control")]
+    [InlineData("$Control/Flair", 9, "Control/")]
+    [InlineData("$[\"Control/My NFlair\"]", 15, "Control/My N")]
+    [InlineData("?EngineTFlair", 8, "EngineT")]
+    public void CompletionUsesOnlyTheNodePrefixBeforeTheCaret(string text, int caret, string path)
+    {
+        var reference = NodePathInput.CompletionAt(text, caret);
+        Assert.NotNull(reference);
+        Assert.Equal(path, reference.Path);
+        Assert.Equal(caret, reference.Span.End);
+    }
 
     [Fact]
     public void TypedTranslationMapsPositionsAfterMultiplePathsBackToUserInput()

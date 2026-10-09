@@ -18,13 +18,21 @@ Enter runs the whole input; Shift+Enter inserts a newline. `:multiline`
 toggles those two keys for the current session. Ctrl+Enter always runs.
 Enter accepts the selected suggestion when the completion menu is open;
 otherwise it keeps the selected input mode. Ctrl+Enter always runs immediately.
+Exact command names such as `ls`, `cd`, `pwd`, `exit` and `:help` run immediately
+on Enter in either input mode, even with the completion menu open. This requires
+no trailing whitespace; `ls ` and `cd ` keep argument completion. Enter also
+accepts and runs a selected bare command, such as `l` completing to `ls`.
 Tab accepts a completion or opens suggestions. Further Tab presses cycle the
 matches for your original prefix; Shift+Tab cycles backward and wraps around.
 Backspace restores that prefix, including removing inserted parentheses.
 Shift+Backspace deletes backward to a word break, like Ctrl+Backspace;
 dots and path slashes count as breaks. It also respects selections and undo.
 Typing a word break such as `.`, `/`, a space or `(` accepts the current choice.
-Typing more letters refines the prefix. Methods insert parentheses:
+Typing more letters refines the prefix. When editing inside a node path,
+completion changes only the prefix before the caret, preserving the text to
+its right. Completing an exact node can insert `/` before an existing child
+name. Cycling and prefix restoration preserve that suffix too.
+Methods insert parentheses:
 `world.Op` then Tab becomes `world.Open()` with the caret inside the call.
 Parameterless calls leave the caret after `)`. Argument signatures appear
 automatically; Ctrl+Shift+Space reopens them.
@@ -44,9 +52,50 @@ prompt shows it. `cd ..` selects the parent; `cd /` or `cd` returns to `root`.
 `root` always remains the engine's root Window. Use `cd $/root/Control` for
 absolute paths, or `:cd /root/Control`. `:cd` and `:pwd` force command handling
 when C# variables share those names; calls, assignments and arithmetic stay C#.
+Node variables and expressions work too: `var x = $Control/CenterContainer;`
+then `cd x`, `cd x.GetParent()` or `cd scene`. Tab completes C# variables and
+members in the argument. Use `:cd (scene ?? root)` for parentheses, since
+`cd (node)` stays an ordinary C# call. Expressions run once on the Godot thread
+and must return a live node in this engine's scene tree. A failed expression
+keeps the selected scope. Navigation does not add a C# submission; existing
+variables, imports and expression side effects remain available.
 The scope follows a renamed or reparented node, and returns to root if that node
 is freed or leaves the tree. Navigation preserves C# variables and imports;
 `:reset` preserves the scope.
+
+`rm $Child` removes a node and its descendants with Godot's deferred
+`QueueFree()`. `rm savedNode`, `rm savedNode.GetChild(0)` and `:rm` forms
+accept the same node expressions and completion as `cd`. A target is required;
+the engine's root Window is protected. Removing the selected node or one of
+its ancestors returns the scope to root. C# variables persist, but a saved
+reference to a removed node is no longer valid after deletion.
+
+`cp $Source $Parent` duplicates a node and its descendants into an existing
+parent. `mv $Source $Parent` reparents the original, preserving its global
+transform where Godot supports it (Control preserves position). Both accept
+C# node variables and expressions in either argument, with Tab completion:
+
+```text
+cp $Player $Backup
+mv savedNode destination
+:cp (source ?? here) (destination ?? root)
+```
+
+Arguments are two whitespace-separated C# expressions; use parentheses to
+make expression boundaries clear. Both run once, left to right, on the Godot
+thread. The root Window, self/descendant destinations and conflicting child
+names are rejected. Rename nodes through C# when needed. `cp` uses Godot's
+standard `Duplicate()` behavior: serialized properties, children, groups,
+signals and scripts; resources retain their normal sharing rules. Internal
+nodes and arbitrary runtime fields are not copied. These commands change the
+live tree; they do not save scene files. Moving `here` preserves its identity
+and updates the prompt path.
+
+Command names remain usable in C#: `mv(...)`, `mv.Member`, `mv[index]`,
+assignments and arithmetic keep their C# meaning, even with whitespace before
+the punctuation. `mv source parent` is a command even if `mv` is a variable;
+`:mv` explicitly forces the command. `@mv` explicitly selects the C# identifier.
+As with `cd`, a bare `mv` or `cp` evaluates an existing variable of that name.
 
 `?EngineT` searches node names anywhere in the live tree, ignoring case.
 Tab or Enter accepts a match as its complete, typed `$` path. Tab/Shift+Tab

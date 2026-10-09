@@ -149,6 +149,20 @@ public class ReplIntegrationTests
         var enter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false);
         var shiftEnter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, true, false, false);
         var escape = new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false);
+        // One Enter must submit an exact command rather than accept a suggestion.
+        foreach (var command in new[] { "ls", "cd", "pwd", "rm", "cp", "mv", "exit", ":cd", ":pwd", ":rm", ":cp", ":mv", ":help", ":clear", ":reset", ":multiline", ":quit", ":exit" })
+        {
+            Assert.Equal(command, ReadPrompt(command, false, enter));
+            Assert.Equal(command, ReadPrompt(command, true, enter));
+        }
+        Success("int lsOther = 1; int cdOther = 2; int pwdOther = 3;");
+        var down = new ConsoleKeyInfo('\0', ConsoleKey.DownArrow, false, false, false);
+        foreach (var command in new[] { "ls", "cd", "pwd" })
+            Assert.Equal(command, ReadPrompt(command, false, down, enter));
+        Assert.Equal("ls", ReadPrompt("l", false, enter));
+        Assert.Equal("ls", ReadPrompt("l", true, enter));
+        Assert.Equal("cd", ReadPrompt("c", false, enter));
+        Assert.Equal(":help", ReadPrompt(":he", false, enter));
         Assert.Equal("$Control", ReadPrompt("$Cont", false, tab, enter));
         Assert.Equal("ls $Control", ReadPrompt("ls $cont", false, tab, enter));
         Assert.Equal("ls $Control", ReadPrompt("ls ", false, tab, tab, enter));
@@ -187,9 +201,25 @@ public class ReplIntegrationTests
         Assert.Equal("$Control" + Environment.NewLine, ReadPrompt("$Cont", false, tab, shiftEnter, enter));
 
         var controlEnter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, true);
+        // A trailing space opts into argument completion; Enter still accepts it.
+        Assert.Equal("ls $Control", ReadPrompt("ls ", false, tab, enter, controlEnter));
+        Assert.Equal("cd $Control", ReadPrompt("cd ", false, tab, enter, controlEnter));
+        Assert.Equal("cd $Control", ReadPrompt("cd ", true, tab, enter, controlEnter));
+        Assert.Equal("cd" + Environment.NewLine, ReadPrompt("cd", false, shiftEnter, controlEnter));
         var shiftTab = new ConsoleKeyInfo('\t', ConsoleKey.Tab, true, false, false);
         var backspace = new ConsoleKeyInfo('\b', ConsoleKey.Backspace, false, false, false);
         var shiftBackspace = new ConsoleKeyInfo('\b', ConsoleKey.Backspace, true, false, false);
+        var left = new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, false);
+        var leftFive = Enumerable.Repeat(left, 5).ToArray();
+        Assert.Equal("ls $ControlFlair", ReadPrompt("ls $ContFlair", false, [.. leftFive, tab, controlEnter]));
+        Assert.Equal("ls $Control/CenterContainerFlair", ReadPrompt("ls $ContFlair", false, [.. leftFive, tab, tab, controlEnter]));
+        Assert.Equal("ls $ControlFlair", ReadPrompt("ls $ContFlair", false, [.. leftFive, tab, tab, shiftTab, controlEnter]));
+        Assert.Equal("ls $ContFlair", ReadPrompt("ls $ContFlair", false, [.. leftFive, tab, tab, backspace, controlEnter]));
+        Assert.Equal("$[\"Control/My NodeFlair\"]", ReadPrompt("$[\"Control/My NFlair\"]", false,
+            [.. Enumerable.Repeat(left, 7), tab, controlEnter]));
+        Assert.Equal("$[\"Control/My Node\"]", ReadPrompt("$[\"Control/My Node\"]", false, left, tab, controlEnter));
+        Assert.Equal("$[\"Control/My NodeFlair\"]", ReadPrompt("$Control/MyFlair", false, [.. leftFive, tab, controlEnter]));
+        Assert.Equal("$Control/MyFlair", ReadPrompt("$Control/MyFlair", false, [.. leftFive, tab, backspace, controlEnter]));
         Assert.Equal("world.", ReadPrompt("world.NoSuchMember", false, shiftBackspace, controlEnter));
         Assert.Equal("$Control/", ReadPrompt("$Control/NoSuchChild", false, shiftBackspace, controlEnter));
         Assert.Equal("alpha ", ReadPrompt("alpha beta", false, shiftBackspace, controlEnter));
