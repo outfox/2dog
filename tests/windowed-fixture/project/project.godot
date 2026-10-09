@@ -6,3 +6,6 @@ run/main_scene="res://main.tscn"
 
 [rendering]
 renderer/rendering_method="gl_compatibility"
+; The macOS CI VM exposes Metal but cannot initialize native OpenGL.
+renderer/rendering_method.macos="mobile"
+rendering_device/driver.macos="metal"

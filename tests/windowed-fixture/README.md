@@ -7,3 +7,6 @@ It needs a display, so it is not part of `2dog.tests.slnf`. CI runs it on macOS 
 ```bash
 dotnet test tests/windowed-fixture -c Release
 ```
+
+On macOS the fixture uses the Mobile renderer with Metal. Native OpenGL is unavailable on the CI virtual machine;
+the test still creates a real window and renders frames through the stock fixture.
