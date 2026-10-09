@@ -150,6 +150,35 @@
         <Message Importance="high" Text="TwoDog: Published GodotPlugins to $(TwoDogGodotApiPublishDestPath)"/>
     </Target>
 
+    <!-- Editor-mode C# initialization loads GodotTools and its dependencies from GodotSharp/Tools beside the
+         executable. Resolve at target execution so 2dog.tools may be imported after these targets. -->
+    <Target Name="TwoDogResolveGodotToolsFiles"
+            DependsOnTargets="TwoDogResolveContentCapability"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogVariant)' == 'editor'">
+        <ItemGroup Condition="'$(_TwoDogToolsDir)' != '' And Exists('$(_TwoDogToolsDirArg)/GodotTools.dll')">
+            <_TwoDogGodotToolsFiles Include="$(_TwoDogToolsDirArg)/**/*"
+                                   Exclude="$(_TwoDogToolsDirArg)/**/*.pdb;$(_TwoDogToolsDirArg)/nupkgs/**"/>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="TwoDogCopyGodotTools"
+            AfterTargets="Build"
+            DependsOnTargets="TwoDogResolveGodotToolsFiles"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogVariant)' == 'editor'">
+        <Copy SourceFiles="@(_TwoDogGodotToolsFiles)"
+              DestinationFiles="@(_TwoDogGodotToolsFiles->'$(OutputPath)GodotSharp/Tools/%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true"/>
+    </Target>
+
+    <Target Name="TwoDogPublishGodotTools"
+            AfterTargets="Publish"
+            DependsOnTargets="TwoDogResolveGodotToolsFiles"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogVariant)' == 'editor'">
+        <Copy SourceFiles="@(_TwoDogGodotToolsFiles)"
+              DestinationFiles="@(_TwoDogGodotToolsFiles->'$(PublishDir)GodotSharp/Tools/%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true"/>
+    </Target>
+
     <!-- ============================================ -->
     <!-- NativeAOT                                    -->
     <!-- ============================================ -->
