@@ -30,7 +30,9 @@
       "twodog.hosting.xunit\\twodog.hosting.xunit.csproj",
       "twodog.import\\twodog.import.csproj",
       "twodog.tests\\twodog.tests.csproj",
-      "twodog.xunit\\twodog.xunit.csproj"
+      "twodog.xunit\\twodog.xunit.csproj",
+      "twodog.nunit\\twodog.nunit.csproj",
+      "tests\\nunit\\nunit.csproj"
     ]
   }
 }

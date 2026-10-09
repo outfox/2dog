@@ -99,6 +99,10 @@ whose `dotnet publish` makes an APK.
 See the [Android host](https://2dog.dev/hosts/android) and [2dog.android](platforms/twodog.android/README.md).
 Device validation is still required before Android joins the supported RID list.
 
+NUnit testing: `dnx 2dog add --nunit` adds a headless test host with signal
+expectations, frame waits and deferred-deletion assertions. Run it with
+`dotnet test MyGame.nunit`. See the [NUnit host](https://2dog.dev/hosts/nunit).
+
 
 ## Dogs and robots are nice
 

@@ -78,6 +78,12 @@
       "description": "Include a test project with xUnit (v3) and the 2dog.xunit collection fixtures. Included by default; pass '--tests false' to omit.",
       "defaultValue": "true"
     },
+    "nunit": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include an NUnit test project using 2dog.nunit. Omitted by default; pass '--nunit true' to include.",
+      "defaultValue": "false"
+    },
     "web": {
       "type": "parameter",
       "datatype": "bool",
@@ -183,6 +189,10 @@
           ]
         },
         {
+          "condition": "(!nunit)",
+          "exclude": ["Company.Product1.nunit/**/*"]
+        },
+        {
           "condition": "(!web)",
           "exclude": [
             "Company.Product1.web/**/*"
@@ -258,6 +268,10 @@
     {
       "condition": "(tests)",
       "path": "Company.Product1.xunit/Company.Product1.xunit.csproj"
+    },
+    {
+      "condition": "(nunit)",
+      "path": "Company.Product1.nunit/Company.Product1.nunit.csproj"
     },
     {
       "condition": "(web)",

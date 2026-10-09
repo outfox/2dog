@@ -9,6 +9,9 @@
 #if (tests)
   <Project Path="TPLRAWNAME.xunit/TPLRAWNAME.xunit.csproj" />
 #endif
+#if (nunit)
+  <Project Path="TPLRAWNAME.nunit/TPLRAWNAME.nunit.csproj" />
+#endif
 #if (winforms)
   <Project Path="TPLRAWNAME.winforms/TPLRAWNAME.winforms.csproj" />
 #endif

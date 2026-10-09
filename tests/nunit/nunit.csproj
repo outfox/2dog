@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AssemblyName>twodog.nunit.tests</AssemblyName>
+        <PackageId>twodog.nunit.tests</PackageId>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <GodotProjectDir>../../demos/showcase</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.nunit" Version="$(TwoDogVersion)" />
+        <PackageReference Include="NUnit" Version="4.*" />
+        <PackageReference Include="NUnit3TestAdapter" Version="6.*" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
+        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <ProjectReference Include="../../demos/showcase/showcase.csproj" />
+        <Compile Include="../../templates/twodog/Company.Product1.nunit/BasicTests.cs" Link="TemplateExamples.cs" />
+    </ItemGroup>
+</Project>

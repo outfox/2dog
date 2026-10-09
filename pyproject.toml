@@ -27,7 +27,7 @@ sequence = [
 ]
 
 [tool.poe.tasks.build-managed]
-help = "dotnet pack: bindings, engine, Avalonia, Blazor, xUnit, tool and restore"
+help = "dotnet pack: bindings, engine, Avalonia, Blazor, xUnit, NUnit, tool and restore"
 sequence = [
     { cmd = "dotnet pack twodog.godotsharp" },
     { cmd = "dotnet pack twodog.godotsharp.editor" },
@@ -35,6 +35,7 @@ sequence = [
     { cmd = "dotnet pack twodog.avalonia" },
     { cmd = "dotnet pack twodog.blazor" },
     { cmd = "dotnet pack twodog.xunit" },
+    { cmd = "dotnet pack twodog.nunit" },
     { cmd = "dotnet pack twodog" },
     { cmd = "dotnet restore" },
 ]

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <RootNamespace>Company.Product1.Tests</RootNamespace>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.nunit" Version="$(TwoDogVersion)" />
+        <PackageReference Include="NUnit" Version="4.*" />
+        <PackageReference Include="NUnit3TestAdapter" Version="6.*" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
+        <PackageReference Include="coverlet.collector" Version="10.*" />
+        <ProjectReference Include="../TPLRAWNAME.csproj" />
+    </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Editor'">
+        <DefineConstants>$(DefineConstants);EDITOR</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Editor'">
+        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+    </ItemGroup>
+</Project>

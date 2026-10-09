@@ -101,6 +101,8 @@
   <Project Path="twodog.import/twodog.import.csproj" />
   <Project Path="twodog.tests/twodog.tests.csproj" />
   <Project Path="twodog.xunit/twodog.xunit.csproj" />
+  <Project Path="twodog.nunit/twodog.nunit.csproj" />
+  <Project Path="tests/nunit/nunit.csproj" />
   <Project Path="twodog/twodog.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
   </Project>

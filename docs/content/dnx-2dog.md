@@ -52,12 +52,13 @@ flag adds a second host of the same kind.
 | `--web [folder]` | [Web host](/hosts/web) |
 | `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
 | `--tests [folder]` | [xUnit test project](/hosts/xunit) |
+| `--nunit [folder]` | [NUnit test project](/hosts/nunit) (opt-in) |
 | `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only, opt-in |
 | `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |
 | `--avalonia [folder]` | [Avalonia host](/hosts/avalonia); opt-in |
 | `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); opt-in, needs wasm-tools |
 | `--android [folder]` | [Android host](/hosts/android); experimental, opt-in, needs the android workload |
-| `--no-generic`, `--no-web`, `--no-tests` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
+| `--no-generic`, `--no-web`, `--no-tests`, `--no-nunit` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
 
 ## Global options
 

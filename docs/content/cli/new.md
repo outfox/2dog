@@ -82,6 +82,9 @@ dotnet new 2dog -n MyGame --web false
 This creates generic .NET and xUnit hosts. Omit `--web false` to include Web;
 install `wasm-tools` when you want to build or publish that host.
 
+For NUnit tests, use `2dog new MyGame --nunit`, or pass
+`--nunit true --tests false` to `dotnet new 2dog` to select NUnit instead of xUnit.
+
 ## Debugging the Godot project in VS Code
 
 New projects include `.vscode/launch.json`, `tasks.json`, and a recommendation for Microsoft's C# extension. Open the project root folder, install that extension, select **Godot: Play (C#)** in Run and Debug, and press F5. The build task builds only the root Godot project in Debug configuration.
