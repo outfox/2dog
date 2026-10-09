@@ -12,7 +12,7 @@ internal static class HostChecks
         new("host.godot-project-dir", Category.Hosts, "GodotProjectDir points at the Godot project"),
         new("host.variant", Category.Hosts, "the selected native variant is supported by its host platform"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
-        new("host.publish-aot", Category.Hosts, "no WinForms, browser or Blazor host enables PublishAot"),
+        new("host.publish-aot", Category.Hosts, "no WinForms, REPL, browser or Blazor host enables PublishAot"),
         new("host.publish-singlefile", Category.Hosts, "PublishSingleFile is only enabled by browser hosts or alongside PublishAot"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
@@ -94,10 +94,11 @@ internal static class HostChecks
 
             // Test hosts are never published, so PublishAot there only adds analyzers.
             var nativeAot = host.Kind is HostKind.Desktop or HostKind.Avalonia or HostKind.WinUi or HostKind.Android;
-            if (Enables("PublishAot") && host.Kind is HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor)
+            if (Enables("PublishAot") && host.Kind is HostKind.Repl or HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor)
                 yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables PublishAot",
                     host.Kind switch
                     {
+                        HostKind.Repl => "the C# REPL compiles and loads code at runtime, which requires the JIT",
                         HostKind.WinForms => "Windows Forms does not support trimming, so the SDK rejects NativeAOT (NETSDK1175)",
                         HostKind.Blazor => "Blazor does not support NativeAOT; its WebAssembly client can AOT-compile with Mono (RunAOTCompilation)",
                         _ => "NativeAOT cannot target the browser (NETSDK1203); Mono's AOT compiler (RunAOTCompilation) can",

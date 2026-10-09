@@ -11,6 +11,7 @@
     <ItemGroup>
         <PackageReference Include="2dog.avalonia" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.repl" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.xunit" Version="$(TwoDogVersion)"/>
         <PackageReference Include="Avalonia.Headless" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="coverlet.collector" Version="10.*"/>

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>2dog.repl</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>A terminal C# REPL inside a running Godot engine, with completion, highlighting and history.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>godot;2dog;repl;csharp</PackageTags>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="[$(TwoDogVersion)]" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.3.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="5.3.0" />
+        <PackageReference Include="PrettyPrompt" Version="6.0.4" />
+        <InternalsVisibleTo Include="twodog.tests" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false" />
+        <None Include="README.md" Pack="true" PackagePath="README.md" />
+        <None Include="THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="" />
+        <None Include="licenses/*" Pack="true" PackagePath="licenses/" />
+        <None Include="buildTransitive/2dog.repl.targets" Pack="true" PackagePath="buildTransitive/" />
+    </ItemGroup>
+</Project>

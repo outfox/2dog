@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <!-- The REPL always needs a terminal, including Release. -->
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>Company.Product1.Repl</RootNamespace>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <PublishSelfContained>true</PublishSelfContained>
+        <!-- Roslyn needs the JIT and assembly metadata on disk. -->
+        <PublishAot>false</PublishAot>
+        <PublishTrimmed>false</PublishTrimmed>
+        <PublishSingleFile>false</PublishSingleFile>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.repl" Version="$(TwoDogVersion)" />
+        <!-- Restore in every configuration so switching to Editor needs no extra restore. -->
+        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <ProjectReference Include="../TPLRAWNAME.csproj" />
+    </ItemGroup>
+</Project>

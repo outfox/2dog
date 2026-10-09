@@ -15,7 +15,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
              from the Godot editor) -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.web/**;showcase.webxr/**;showcase.blazor/**;showcase.winforms/**;showcase.winui/**;showcase.avalonia/**;showcase.android/**</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);showcase.2dog/**;showcase.repl/**;showcase.web/**;showcase.webxr/**;showcase.blazor/**;showcase.winforms/**;showcase.winui/**;showcase.avalonia/**;showcase.android/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="2dog.godotsharp" Version="$(TwoDogVersion)" />

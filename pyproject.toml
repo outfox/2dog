@@ -36,6 +36,7 @@ sequence = [
     { cmd = "dotnet pack twodog.blazor" },
     { cmd = "dotnet pack twodog.xunit" },
     { cmd = "dotnet pack twodog.nunit" },
+    { cmd = "dotnet pack twodog.repl" },
     { cmd = "dotnet pack twodog" },
     { cmd = "dotnet restore" },
 ]

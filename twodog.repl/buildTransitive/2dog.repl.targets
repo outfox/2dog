@@ -1,0 +1,14 @@
+<Project>
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)../THIRD-PARTY-NOTICES.txt"
+              Link="2dog.repl/THIRD-PARTY-NOTICES.txt" Visible="false"
+              CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <None Include="$(MSBuildThisFileDirectory)../licenses/*.txt"
+              Link="2dog.repl/licenses/%(Filename)%(Extension)" Visible="false"
+              CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+    <Target Name="TwoDogValidateReplPublish" BeforeTargets="PrepareForBuild;PrepareForPublish">
+        <Error Condition="'$(PublishAot)' == 'true' Or '$(PublishTrimmed)' == 'true' Or '$(PublishSingleFile)' == 'true'"
+               Text="2dog.repl requires a JIT runtime and assembly metadata on disk. Disable PublishAot, PublishTrimmed and PublishSingleFile; Debug, Editor and Release natives are supported." />
+    </Target>
+</Project>

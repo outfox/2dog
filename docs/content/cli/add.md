@@ -22,6 +22,9 @@ on terminals, a missing workload (`wasm-tools`, `android`) can still be offered.
 
 ## Hosts
 
+`--repl [folder]` adds an opt-in [C# REPL host](/hosts/repl) with syntax
+highlighting, completion and live access to the running game.
+
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic, browser and tests, minus the `--no-<host>` ones. Existing hosts are
 recognized and skipped.

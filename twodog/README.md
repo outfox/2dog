@@ -62,6 +62,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
   MyGame.xunit/  (.gdignore) <- xUnit test project
+  MyGame.repl/   (.gdignore) <- interactive C# prompt in the running game (opt-in: --repl)
   MyGame.nunit/  (.gdignore) <- NUnit test project (opt-in: --nunit)
   MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
@@ -92,7 +93,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--nunit [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; nunit, webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--nunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; repl, nunit, webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
 | `--no-generic`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |

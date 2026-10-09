@@ -245,6 +245,7 @@ jobs:
           dotnet pack twodog.blazor
           dotnet pack twodog.xunit
           dotnet pack twodog.nunit
+          dotnet pack twodog.repl
           dotnet pack twodog
 
       - name: Test managed binding packages
@@ -556,13 +557,14 @@ jobs:
         shell: bash
         run: rm -rf demos/showcase/.godot/mono/temp/bin
 
+      # Scene probes always run; opt into their success markers for the log assertions below.
       - name: Run published host (headless, RID)
         id: run
         shell: bash
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -573,7 +575,7 @@ jobs:
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-norid.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-norid.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -584,7 +586,7 @@ jobs:
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-fdd.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-fdd.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -595,7 +597,7 @@ jobs:
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-aot.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-aot.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -631,7 +633,7 @@ jobs:
             -o "bt all" \
             -o quit \
             -- "$publish/${{ matrix.exe }}" \
-               --headless --quit-after 120 2>&1 | tail -150 || true
+               --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tail -150 || true
 
       - name: Assert scripts bound
         shell: bash
@@ -1243,7 +1245,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor"; do
+          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.repl"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

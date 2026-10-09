@@ -29,6 +29,7 @@ Choose hosts when prompted, or use the flags below. For a new project, use
 | [Avalonia](./avalonia) | `--avalonia` | Cross-platform desktop UI |
 | [Blazor](./blazor) | `--blazor` | Game inside a Blazor page |
 | [NUnit](./nunit) | `--nunit` | NUnit tests using the Godot engine (opt-in) |
+| [REPL](./repl) | `--repl` | Interactive C# inside the running game (opt-in) |
 | [Web](./web) | `--web` | WASM / HTML5 browser bundle (e.g. for [itch.io](https://itch.io))|
 | [WebXR](./webxr) | `--webxr` | Browser VR and AR |
 | [WinForms](./winforms) | `--winforms` | Windows Forms UI |
