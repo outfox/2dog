@@ -3,7 +3,7 @@ using Godot;
 
 namespace twodog.Testing;
 
-/// <summary>Simulates input through Godot's input server or viewport router, without calling control handlers.</summary>
+/// <summary>Simulates input through Godot's input server or viewport router, without directly invoking control handlers.</summary>
 public sealed class TestInput
 {
     private readonly FixtureBase _fixture;
