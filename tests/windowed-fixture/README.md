@@ -10,3 +10,5 @@ dotnet test tests/windowed-fixture -c Release
 
 On macOS the fixture uses the Mobile renderer with Metal. Native OpenGL is unavailable on the CI virtual machine;
 the test still creates a real window and renders frames through the stock fixture.
+
+The project selects the Dummy audio driver because this rendering-only test does not need an audio device.

@@ -4,6 +4,10 @@ config_version=5
 config/name="Windowed fixture regression"
 run/main_scene="res://main.tscn"
 
+[audio]
+; This rendering regression test does not need an audio device on CI.
+driver/driver="Dummy"
+
 [rendering]
 renderer/rendering_method="gl_compatibility"
 ; The macOS CI VM exposes Metal but cannot initialize native OpenGL.
