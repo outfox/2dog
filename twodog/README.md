@@ -93,7 +93,7 @@ Options:
 | Option | Effect |
 | --- | --- |
 | `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--tests [folder]`, `--nunit [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; nunit, webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
-| `--no-generic`, `--no-web`, `--no-tests`, `--no-nunit` | Leave a host out of the default set |
+| `--no-generic`, `--no-web`, `--no-tests` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |
 | `-o, --output <dir>` | Directory for a new project |

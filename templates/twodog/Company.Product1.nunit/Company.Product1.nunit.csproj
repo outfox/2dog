@@ -12,6 +12,7 @@
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
     <ItemGroup>
+        <Using Include="NUnit.Framework" />
         <PackageReference Include="2dog.nunit" Version="$(TwoDogVersion)" />
         <PackageReference Include="NUnit" Version="4.*" />
         <PackageReference Include="NUnit3TestAdapter" Version="6.*" />

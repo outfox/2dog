@@ -33,7 +33,8 @@ public class MyTests : GodotTestFixture
 ```
 
 `GodotTestFixture` shares an engine across the tests in each derived fixture.
-NUnit's inherited `SingleThreaded`, `NonParallelizable` and `SingleInstance`
+NUnit's inherited `SingleThreaded`, `NonParallelizable` and
+`FixtureLifeCycle(LifeCycle.SingleInstance)`
 attributes keep setup, tests, async continuations and teardown on the engine's
 owner thread. Do not use `ConfigureAwait(false)` before accessing Godot, or
 thread-switching attributes such as `Timeout` or `RequiresThread` on these tests.

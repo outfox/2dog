@@ -45,8 +45,9 @@ public abstract class GodotTestFixture
 
     private void CheckErrors(string when)
     {
+        if (!FailOnGodotErrors) return;
         var errors = Godot.Errors.Drain();
-        if (FailOnGodotErrors && errors.Length > 0)
+        if (errors.Length > 0)
             throw new AssertionException($"Godot reported {errors.Length} error(s) {when}:\n{string.Join("\n", errors)}");
     }
 
@@ -54,7 +55,12 @@ public abstract class GodotTestFixture
     [OneTimeTearDown]
     public void StopGodot()
     {
-        try { _godot?.Dispose(); }
-        finally { _godot = null; }
+        if (_godot is not { } godot) return;
+        try { CheckErrors("during fixture setup or teardown"); }
+        finally
+        {
+            try { godot.Dispose(); }
+            finally { _godot = null; }
+        }
     }
 }

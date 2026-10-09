@@ -58,7 +58,7 @@ flag adds a second host of the same kind.
 | `--avalonia [folder]` | [Avalonia host](/hosts/avalonia); opt-in |
 | `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); opt-in, needs wasm-tools |
 | `--android [folder]` | [Android host](/hosts/android); experimental, opt-in, needs the android workload |
-| `--no-generic`, `--no-web`, `--no-tests`, `--no-nunit` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
+| `--no-generic`, `--no-web`, `--no-tests` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
 
 ## Global options
 

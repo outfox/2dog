@@ -28,7 +28,8 @@ The generated Editor configuration defines `EDITOR` and references
 the managed reference needed to compile Editor API calls.
 
 `GodotTestFixture` uses one headless engine per NUnit fixture with inherited
-`SingleThreaded`, `NonParallelizable` and `SingleInstance` attributes.
+`SingleThreaded`, `NonParallelizable` and
+`FixtureLifeCycle(LifeCycle.SingleInstance)` attributes.
 Keep these settings so engine startup, tests and disposal share one thread.
 Use derived `[OneTimeSetUp]`, `[SetUp]`, `[TearDown]` and `[OneTimeTearDown]`
 methods for your own lifecycle work; they may return `Task`.
