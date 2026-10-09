@@ -219,7 +219,7 @@ public class DeriveBaseNameTests
 
 public class CsprojPatcherTests
 {
-    private static readonly string[] HostFolders = ["MyGame.2dog", "MyGame.web", "MyGame.tests"];
+    private static readonly string[] HostFolders = ["MyGame.2dog", "MyGame.web", "MyGame.xunit"];
 
     // Pinned to the SDK version the tool targets so the "older than" warning
     // doesn't fire (the fixture would go stale on every Godot version bump).
@@ -247,7 +247,7 @@ public class CsprojPatcherTests
         Assert.Contains("<EnableDynamicLoading>true</EnableDynamicLoading>", result.NewContent);
         Assert.Contains("<AllowUnsafeBlocks>true</AllowUnsafeBlocks>", result.NewContent);
         Assert.Contains("TWODOG_WEB_BOOT", result.NewContent);
-        Assert.Contains("MyGame.2dog/**;MyGame.web/**;MyGame.tests/**", result.NewContent);
+        Assert.Contains("MyGame.2dog/**;MyGame.web/**;MyGame.xunit/**", result.NewContent);
         // The original content is preserved verbatim.
         Assert.Contains("<TargetFramework>net10.0</TargetFramework>", result.NewContent);
     }
@@ -340,7 +340,7 @@ public class CsprojPatcherTests
             """);
         var result = CsprojPatcher.Patch(path, HostFolders);
         Assert.NotNull(result.NewContent);
-        Assert.Contains(";MyGame.web/**;MyGame.tests/**", result.NewContent);
+        Assert.Contains(";MyGame.web/**;MyGame.xunit/**", result.NewContent);
         Assert.DoesNotContain(";MyGame.2dog/**;MyGame.web/**", result.NewContent);
     }
 
@@ -445,7 +445,7 @@ public class CsprojPatcherTests
                     <EnableDynamicLoading>true</EnableDynamicLoading>
                     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
                     <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
-                    <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.tests/**</DefaultItemExcludes>
+                    <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.xunit/**</DefaultItemExcludes>
                 </PropertyGroup>
                 <ItemGroup>
                     <Compile Include="MyGame.web/TwoDogWebBoot.cs" Condition="Exists('MyGame.web/TwoDogWebBoot.cs')"/>
@@ -472,7 +472,7 @@ public class CsprojPatcherTests
                     <EnableDynamicLoading>true</EnableDynamicLoading>
                     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
                     <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
-                    <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.tests/**</DefaultItemExcludes>
+                    <DefaultItemExcludes>$(DefaultItemExcludes);MyGame.2dog/**;MyGame.web/**;MyGame.xunit/**</DefaultItemExcludes>
                 </PropertyGroup>
                 <ItemGroup>
                     <Compile Include="boot/TwoDogWebBoot.cs"/>
@@ -703,7 +703,7 @@ public class TemplateAssetsTests
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("webxr")]
-    [InlineData("tests")]
+    [InlineData("xunit")]
     [InlineData("winforms")]
     [InlineData("winui")]
     [InlineData("avalonia")]
@@ -727,7 +727,7 @@ public class TemplateAssetsTests
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("webxr")]
-    [InlineData("tests")]
+    [InlineData("xunit")]
     [InlineData("winforms")]
     [InlineData("winui")]
     [InlineData("avalonia")]
@@ -760,7 +760,7 @@ public class TemplateAssetsTests
         AssertNoTokens(csproj);
         Assert.Contains("MyGame.2dog/**", csproj);
         Assert.Contains("MyGame.web/**", csproj);
-        Assert.Contains("MyGame.tests/**", csproj);
+        Assert.Contains("MyGame.xunit/**", csproj);
     }
 
     [Fact]
@@ -910,9 +910,9 @@ public class AddEndToEndTests
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--tests", "--blazor"]), project);
         Assert.Equal(0, RunCaptured(options).ExitCode);
 
-        var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.tests", "BasicTests.cs"));
+        var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.xunit", "BasicTests.cs"));
         Assert.Contains("namespace GWJ_97.Tests;", tests);
-        var testsCsproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.tests", "GWJ-97.tests.csproj"));
+        var testsCsproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.xunit", "GWJ-97.xunit.csproj"));
         Assert.Contains("<RootNamespace>GWJ_97.Tests</RootNamespace>", testsCsproj);
         Assert.Contains("../GWJ-97.csproj", testsCsproj);
 
@@ -954,10 +954,10 @@ public class AddEndToEndTests
         options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--tests"]), project);
         Assert.Equal(0, RunCaptured(options).ExitCode);
 
-        var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.tests", "BasicTests.cs"));
+        var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.xunit", "BasicTests.cs"));
         Assert.Contains("namespace _event.Tests;", tests);
         Assert.Contains("../event.csproj",
-            File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.tests", "event.tests.csproj")));
+            File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.xunit", "event.xunit.csproj")));
         var desktopCsproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.2dog", "event.2dog.csproj"));
         Assert.Contains("<RootNamespace>_event</RootNamespace>", desktopCsproj);
         Assert.Contains("new Engine(\"event\"",
@@ -999,7 +999,7 @@ public class AddEndToEndTests
                      "SpaceMiner.2dog/SpaceMiner.2dog.csproj", "SpaceMiner.2dog/.gdignore",
                      "SpaceMiner.web/SpaceMiner.web.csproj", "SpaceMiner.web/.gdignore", "SpaceMiner.web/Directory.Build.props",
                      "SpaceMiner.web/TwoDogWebBoot.cs",
-                     "SpaceMiner.tests/SpaceMiner.tests.csproj", "SpaceMiner.tests/.gdignore",
+                     "SpaceMiner.xunit/SpaceMiner.xunit.csproj", "SpaceMiner.xunit/.gdignore",
                  })
             Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, expected)), $"missing {expected}");
 
@@ -1022,7 +1022,7 @@ public class AddEndToEndTests
         foreach (var project in new[]
                  {
                      "SpaceMiner.csproj", "SpaceMiner.2dog.csproj",
-                     "SpaceMiner.web.csproj", "SpaceMiner.tests.csproj",
+                     "SpaceMiner.web.csproj", "SpaceMiner.xunit.csproj",
                  })
             Assert.True(SolutionOps.ContainsProject(sln, project), $"{project} missing from sln");
         Assert.Contains("<Build Project=\"false\" />", File.ReadAllText(sln));
@@ -1036,7 +1036,7 @@ public class AddEndToEndTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void Add_WorkloadOnlyCheck_DoesNotRestore(bool installed)
+    public void Add_UnchangedOptionalHosts_DoNotProbeWorkloadsOrRestore(bool installed)
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
@@ -1064,9 +1064,9 @@ public class AddEndToEndTests
         });
 
         Assert.Equal(ExitCodes.Ok, run.ExitCode);
-        Assert.Equal(ActionKind.Workload, Assert.Single(result!.Actions).Kind);
-        Assert.Single(runner.Requests);
-        Assert.Equal(installed ? 0 : 1, prompts);
+        Assert.Empty(result!.Actions);
+        Assert.Empty(runner.Requests);
+        Assert.Equal(0, prompts);
         Assert.Equal(before, Snapshot(tmp.Dir));
     }
 
@@ -1208,15 +1208,15 @@ public class AddEndToEndTests
     {
         using var tmp = new TempProjectDir();
         tmp.Write("project.godot", GdScriptProject);
-        tmp.Write("SpaceMiner.tests/notes.md", "hand-written GDScript test notes");
+        tmp.Write("SpaceMiner.xunit/notes.md", "hand-written GDScript test notes");
 
         Assert.Equal(0, Run(Options(tmp.Dir)));
 
         Assert.Equal(
             ["notes.md"],
-            Directory.EnumerateFileSystemEntries(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.tests"))
+            Directory.EnumerateFileSystemEntries(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.xunit"))
                 .Select(e => System.IO.Path.GetFileName(e)!).ToArray());
-        Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.tests2", "SpaceMiner.tests2.csproj")));
+        Assert.True(File.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.xunit2", "SpaceMiner.xunit2.csproj")));
     }
 
     [Fact]
@@ -1396,7 +1396,7 @@ public class AddEndToEndTests
 
         Assert.True(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.2dog")));
         Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.web")));
-        Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.tests")));
+        Assert.False(Directory.Exists(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.xunit")));
         // The root global.json (wasm SDK pin) only comes with the web host.
         Assert.False(File.Exists(System.IO.Path.Combine(tmp.Dir, "global.json")));
 
@@ -1406,7 +1406,7 @@ public class AddEndToEndTests
         var csproj = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj"));
         Assert.Contains("SpaceMiner.2dog/**", csproj);
         Assert.DoesNotContain("SpaceMiner.web/**", csproj);
-        Assert.DoesNotContain("SpaceMiner.tests", csproj);
+        Assert.DoesNotContain("SpaceMiner.xunit", csproj);
     }
 }
 
@@ -1416,7 +1416,7 @@ public class HostsTests
     public void AllocateFolder_UsesTheDefaultNameWhenFree()
     {
         Assert.Equal("MyGame.2dog", Hosts.AllocateFolder(HostKind.Desktop, "MyGame", []));
-        Assert.Equal("MyGame.tests", Hosts.AllocateFolder(HostKind.Tests, "MyGame", []));
+        Assert.Equal("MyGame.xunit", Hosts.AllocateFolder(HostKind.Tests, "MyGame", []));
     }
 
     [Fact]
@@ -1578,7 +1578,7 @@ public class HostScanTests
     [InlineData("2dog")]
     [InlineData("web")]
     [InlineData("webxr")]
-    [InlineData("tests")]
+    [InlineData("xunit")]
     [InlineData("winforms")]
     [InlineData("winui")]
     [InlineData("avalonia")]
@@ -1605,7 +1605,7 @@ public class HostScanTests
         foreach (var (kind, folder) in new[]
                  {
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
-                     (HostKind.Web, "MyGame.web"), (HostKind.WebXr, "MyGame.webxr"), (HostKind.Tests, "MyGame.tests"),
+                     (HostKind.Web, "MyGame.web"), (HostKind.WebXr, "MyGame.webxr"), (HostKind.Tests, "MyGame.xunit"),
                      (HostKind.WinForms, "MyGame.winforms"), (HostKind.WinUi, "MyGame.winui"),
                      (HostKind.Avalonia, "MyGame.avalonia"), (HostKind.Blazor, "MyGame.blazor"),
                  })
@@ -1622,9 +1622,9 @@ public class HostScanTests
         Assert.Equal(
             [("MyGame.2dog", HostKind.Desktop), ("MyGame.avalonia", HostKind.Avalonia),
              ("MyGame.blazor", HostKind.Blazor),
-             ("MyGame.editor", HostKind.Desktop), ("MyGame.tests", HostKind.Tests),
+             ("MyGame.editor", HostKind.Desktop),
              ("MyGame.web", HostKind.Web), ("MyGame.webxr", HostKind.WebXr),
-             ("MyGame.winforms", HostKind.WinForms), ("MyGame.winui", HostKind.WinUi)],
+             ("MyGame.winforms", HostKind.WinForms), ("MyGame.winui", HostKind.WinUi), ("MyGame.xunit", HostKind.Tests)],
             hosts.Select(h => (h.Folder, h.Kind)).Order().ToArray());
     }
 }
@@ -1772,7 +1772,7 @@ public class HostSelectionTests
     {
         var hosts = HostSelection.Defaults([], Project((HostKind.Desktop, "MyGame.2dog")));
         Assert.Equal(
-            [(HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests")],
+            [(HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.xunit")],
             hosts.Select(h => (h.Kind, h.Folder)).ToArray());
     }
 
@@ -1829,8 +1829,8 @@ public class HostSelectionTests
     [Fact]
     public void FromFlags_RejectsAFolderThatIsTaken()
     {
-        var cmd = CommandLine.Parse(["add", "--tests", "MyGame.tests"]);
-        var ex = Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, Project((HostKind.Tests, "MyGame.tests"))));
+        var cmd = CommandLine.Parse(["add", "--tests", "MyGame.xunit"]);
+        var ex = Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, Project((HostKind.Tests, "MyGame.xunit"))));
         Assert.Contains("already exists", ex.Message);
     }
 
@@ -1846,9 +1846,9 @@ public class HostSelectionTests
     [Fact]
     public void Defaults_AvoidDirectoriesThatAreNotHosts()
     {
-        var hosts = HostSelection.Defaults([], ProjectWithFolders("MyGame.tests", "assets"));
+        var hosts = HostSelection.Defaults([], ProjectWithFolders("MyGame.xunit", "assets"));
         Assert.Equal(
-            [(HostKind.Desktop, "MyGame.2dog"), (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.tests2")],
+            [(HostKind.Desktop, "MyGame.2dog"), (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.xunit2")],
             hosts.Select(h => (h.Kind, h.Folder)).ToArray());
     }
 
@@ -1856,7 +1856,7 @@ public class HostSelectionTests
     public void FromFlags_AllocatesAroundDirectoriesThatAreNotHosts()
     {
         var cmd = CommandLine.Parse(["add", "--tests"]);
-        Assert.Equal("MyGame.tests2", HostSelection.FromFlags(cmd, ProjectWithFolders("MyGame.tests")).Single().Folder);
+        Assert.Equal("MyGame.xunit2", HostSelection.FromFlags(cmd, ProjectWithFolders("MyGame.xunit")).Single().Folder);
     }
 
     [Fact]
@@ -1897,7 +1897,7 @@ public class ScaffoldEndToEndTests
                      "MyGame.csproj", "MyGame.slnx", "Directory.Build.targets",
                      "export_presets.cfg", "global.json",
                      "MyGame.2dog/MyGame.2dog.csproj", "MyGame.web/MyGame.web.csproj",
-                     "MyGame.web/TwoDogWebBoot.cs", "MyGame.tests/MyGame.tests.csproj",
+                     "MyGame.web/TwoDogWebBoot.cs", "MyGame.xunit/MyGame.xunit.csproj",
                  })
             Assert.True(File.Exists(System.IO.Path.Combine(dir, expected)), $"missing {expected}");
 
@@ -1938,7 +1938,7 @@ public class ScaffoldEndToEndTests
         Assert.True(File.Exists(System.IO.Path.Combine(dir, "GWJ_97.csproj")));
         Assert.Contains("GWJ_97.web/**", File.ReadAllText(System.IO.Path.Combine(dir, "GWJ_97.csproj")));
         Assert.Contains("namespace GWJ_97.Tests;",
-            File.ReadAllText(System.IO.Path.Combine(dir, "GWJ_97.tests", "BasicTests.cs")));
+            File.ReadAllText(System.IO.Path.Combine(dir, "GWJ_97.xunit", "BasicTests.cs")));
         Assert.False(Directory.EnumerateFileSystemEntries(dir, "GWJ-97*", SearchOption.AllDirectories).Any());
     }
 

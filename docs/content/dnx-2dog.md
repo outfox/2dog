@@ -36,8 +36,8 @@ dotnet tool install -g 2dog   # or install it globally
 
 `2dog` alone prints the version info and the usage. `new`, `add` and `doctor`
 prompt on a terminal when no deciding flag is given. Host flags skip the project
-wizard; a missing workload (`wasm-tools`, `android`) can still be offered before
-restore. `--yes`, pipes, and CI skip workload offers. Use `--install-wasm-tools` or
+wizard; a missing workload (`wasm-tools`, `android`) can still be offered for
+newly selected hosts before restore. `--yes`, pipes, and CI skip workload offers. Use `--install-wasm-tools` or
 `--install-android-workload` to request installation explicitly, or
 `2dog update --update-workloads` to update workloads.
 

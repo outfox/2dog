@@ -134,7 +134,7 @@ public class HostsCoverageTests
     [InlineData("2dog", ".NET (generic)", "your own Main(), runs the game as a .NET app", "--generic")]
     [InlineData("web", "web", "WebAssembly host, published as a static bundle", "--web")]
     [InlineData("webxr", "webxr", "WebAssembly host with the WebXR Layers polyfill for VR", "--webxr")]
-    [InlineData("tests", "tests", "xUnit project driving a headless engine", "--tests")]
+    [InlineData("xunit", "tests", "xUnit project driving a headless engine", "--tests")]
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]
     [InlineData("winui", "winui", "game embedded in a WinUI 3 window (Windows-only)", "--winui")]
     [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]
@@ -162,6 +162,10 @@ public class HostsCoverageTests
     {
         const string wired = "<Project><GodotProjectDir>..</GodotProjectDir></Project>";
         Assert.Equal(HostKind.Web, HostScan.Classify(wired, "custom.web"));
+        Assert.Equal(HostKind.Tests, HostScan.Classify(wired, "custom.tests"));
+        Assert.Equal(HostKind.Tests, HostScan.Classify(wired, "custom.xunit"));
+        Assert.Equal(HostKind.Tests, HostScan.ClassifyText("<Project><GodotProjectDir>..</GodotProjectDir>", "custom.tests"));
+        Assert.Equal(HostKind.Tests, HostScan.ClassifyText("<Project><GodotProjectDir>..</GodotProjectDir>", "custom.xunit"));
         Assert.Equal(HostKind.Desktop, HostScan.Classify(wired, "custom"));
         Assert.Empty(HostScan.Find(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))));
     }

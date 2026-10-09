@@ -186,7 +186,8 @@ internal static class ScaffoldCommand
             .ToList();
         var wantsWeb = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
         var wantsAndroid = newHosts.Any(h => h.Kind == HostKind.Android) || existingHosts.Any(h => h.Kind == HostKind.Android);
-        if (wantsAndroid) warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
+        if (newHosts.Any(h => h.Kind == HostKind.Android))
+            warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
         // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
         var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
             .Concat(existingHosts.Concat(newHosts.Select(h => new ExistingHost(h.Kind, h.Folder)))
@@ -723,8 +724,9 @@ internal static class ScaffoldCommand
 
         var hasProjectChanges = plan.Count > 0;
         // Run after global.json has been created, so both probes and installation use the project's SDK.
+        var selectedWorkloads = Workload.For(newHosts.Select(h => h.Kind)).ToHashSet();
         foreach (var workload in Workload.For(newHosts.Select(h => h.Kind).Concat(existingHosts.Select(h => h.Kind))))
-            if (options.InstallRequested(workload) || options.Restore && options.ConfirmWorkloadInstall != null)
+            if (options.InstallRequested(workload) || selectedWorkloads.Contains(workload) && options.Restore && options.ConfirmWorkloadInstall != null)
                 plan.Add(new PlannedAction($"check {workload.Id} and install if requested", ActionKind.Workload,
                     () => Workloads.EnsureInstalled(workload, projectDir, options.InstallRequested(workload),
                         options.ConfirmWorkloadInstall, workloadRunner)));
@@ -733,16 +735,15 @@ internal static class ScaffoldCommand
         if (options.Restore && hasProjectChanges)
             plan.Add(new PlannedAction($"dotnet restore {solutionName}", ActionKind.Restore, () =>
             {
-                var result = SolutionOps.Restore(solutionPath);
+                var result = SolutionOps.Restore(solutionPath, workloadRunner);
                 if (result.Ok)
                 {
                     Out.Verbose($"restored in {result.Elapsed.TotalSeconds:0.0} s");
                     return;
                 }
 
-                ProcessRunner.ReportFailure(result);
-                Out.Warning("dotnet restore failed - if the web host is the culprit, install " +
-                            "the wasm-tools workload (dotnet workload install wasm-tools) and restore again.");
+                BuildLogAnalyzer.ReportFailure(result, ProjectModel.Load(projectDir));
+                throw new ToolException("dotnet restore failed - the project files are created; fix the restore and run 'dotnet restore' again");
             }));
     }
 

@@ -7,6 +7,7 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
+      - '**/AGENTS.md'
   # No pull_request trigger: push already runs on every branch, so a PR
   # would run CI twice. Caveat: PRs from forks get no CI without it.
   workflow_dispatch:

@@ -2,9 +2,10 @@
 // (https://llmstxt.org) from the site's markdown sources, using each page's
 // frontmatter title and description. Sections mirror the sidebar. Runs
 // automatically before `npm run dev` / `npm run build`.
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
-import { join, relative, dirname, sep } from 'node:path';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadPages } from './llms-pages.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const content = join(here, 'content');
@@ -33,8 +34,8 @@ const resolveMarkers = (text) => text
   .replace(/ ?:gd-[a-z0-9_-]+(?:@[a-z0-9-]+)?:/g, '');
 
 // Sections mirror the sidebar (.vitepress/config.mts). Every page must be
-// listed here or in EXCLUDE; anything else gets a build warning and lands in
-// the trailing section so it is never silently dropped.
+// listed here or in EXCLUDE. Missing metadata, unlisted pages and stale entries
+// fail validation, including dev/build, so published indexes cannot omit pages.
 const SECTIONS = [
   ['Start Here', [
     'getting-started.md', 'concepts.md', 'project-layout.md',
@@ -61,59 +62,25 @@ const SECTIONS = [
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',
     'known-issues/xunit-discovery.md', 'known-issues/gd-print-output.md',
+    'known-issues/spaced-project-names.md',
   ]],
   ['Optional', [
-    'faq.md',
+    'faq.md', 'troubleshooting.md',
   ]],
 ];
 
 // Redirect stubs and other pages that should not be indexed.
 const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md']);
 
-function frontmatter(file) {
-  const text = readFileSync(file, 'utf8').replace(/^﻿/, '');
-  const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
-  if (!match) return {};
-  const get = (field) => {
-    const m = match[1].match(new RegExp(`^${field}: (?:'(.*)'|"(.*)"|(.+))$`, 'm'));
-    return m ? (m[1] ?? m[2] ?? m[3]).replace(/''/g, "'").trim() : undefined;
-  };
-  return { title: get('title'), description: get('description'), body: text.slice(match[0].length) };
-}
-
-const pages = new Map();
-let home;
-for (const entry of readdirSync(content, { recursive: true, withFileTypes: true })) {
-  if (!entry.isFile() || !entry.name.endsWith('.md')) continue;
-  const file = join(entry.parentPath, entry.name);
-  const rel = relative(content, file).split(sep).join('/');
-  if (rel.startsWith('public/') || EXCLUDE.has(rel)) continue;
-  const { title, description, body } = frontmatter(file);
-  if (!title || !description) {
-    console.warn(`make-llms: ${rel} has no frontmatter title/description - skipped`);
-    continue;
-  }
-  const page = { rel, url: `${HOST}/${rel}`, title, description, body: resolveMarkers(body) };
-  if (rel === 'index.md') home = page;
-  else pages.set(rel, page);
-}
-if (!home) throw new Error('make-llms: content/index.md has no frontmatter title/description');
-
-const sections = SECTIONS.map(([label, rels]) => {
-  const listed = rels.flatMap((rel) => {
-    if (pages.has(rel)) return [pages.get(rel)];
-    console.warn(`make-llms: ${rel} is listed in SECTIONS but missing - skipped`);
-    return [];
-  });
-  rels.forEach((rel) => pages.delete(rel));
-  return { label, pages: listed };
-});
-if (pages.size > 0) {
-  for (const rel of pages.keys()) console.warn(`make-llms: ${rel} is not listed in SECTIONS - appended to "${SECTIONS.at(-1)[0]}"`);
-  sections.at(-1).pages.push(...pages.values());
-}
+const inventory = loadPages(content, SECTIONS, EXCLUDE);
+const prepare = (page) => ({ ...page, url: `${HOST}/${page.rel}`, body: resolveMarkers(page.body) });
+const home = prepare(inventory.home);
+const sections = inventory.sections.map(({ label, pages }) => ({ label, pages: pages.map(prepare) }));
 const pageCount = 1 + sections.reduce((n, s) => n + s.pages.length, 0);
-
+if (process.argv.includes('--check')) {
+  console.log(`make-llms: ${pageCount} pages validated`);
+  process.exit(0);
+}
 // llms-full.txt: a YAML divider per page (page/section/source/description);
 // bodies verbatim.
 const divider = (page, label) =>

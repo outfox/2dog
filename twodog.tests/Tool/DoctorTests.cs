@@ -99,6 +99,24 @@ public class DoctorTests : IDisposable
         Assert.True(summary.GetProperty("pass").GetInt32() > 15);
     }
 
+    [Theory]
+    [InlineData("Game.tests")]
+    [InlineData("Game.xunit")]
+    [InlineData("Game.integration")]
+    public void XunitHostNames_RemainRecognizedAndAreNotDuplicated(string folder)
+    {
+        var dir = Scaffold("--generic", "--web", "--tests", folder);
+        var host = Assert.Single(ProjectModel.Load(dir).Hosts, h => h.Kind == HostKind.Tests);
+        Assert.Equal(folder, host.Folder);
+        Assert.Equal(ExitCodes.Ok, Doctor(dir, null, "--json", "--strict").ExitCode);
+
+        var before = Snapshot(dir);
+        Assert.Equal(ExitCodes.Ok, CliConsole.Run("add", dir, "--yes", "--no-restore").ExitCode);
+        Assert.Equal(before, Snapshot(dir));
+        Assert.Equal(ExitCodes.Ok, CliConsole.Run("update", dir, "--no-restore", "--allow-dirty", "--yes").ExitCode);
+        Assert.Equal(before, Snapshot(dir));
+    }
+
     [Fact]
     public void AllOptInHosts_AreCleanToo()
     {
@@ -129,7 +147,7 @@ public class DoctorTests : IDisposable
         ["preset.web", "fail", (Action<string>)(d => Edit(d, "export_presets.cfg", "name=\"Web\"", "name=\"Web-old\""))],
         ["host.buildtype-deprecated", "warn", (Action<string>)(d => Edit(d, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><TwoDogBuildType>debug</TwoDogBuildType>"))],
         ["host.duplicate-analyzers", "warn", (Action<string>)(d => Edit(d, "Game.2dog/Game.2dog.csproj", "<TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>", ""))],
-        ["game.default-item-excludes", "warn", (Action<string>)(d => Edit(d, "Game.csproj", ";Game.tests/**", ""))],
+        ["game.default-item-excludes", "warn", (Action<string>)(d => Edit(d, "Game.csproj", ";Game.xunit/**", ""))],
         ["layout.root-build-targets", "warn", (Action<string>)(d => File.Delete(Path.Combine(d, "Directory.Build.targets")))],
         ["layout.root-global-json", "warn", (Action<string>)(d => File.Delete(Path.Combine(d, "global.json")))],
         ["sln.build-exclusions", "warn", (Action<string>)(d => Edit(d, "Game.slnx", "<Build Project=\"false\" />", ""))],
@@ -263,7 +281,7 @@ public class DoctorTests : IDisposable
 
         var noWasm = Doctor(dir, Runner(wasmTools: false), "--json");
         var wasm = Finding(noWasm.Stdout, "env.wasm-tools")!.Value;
-        Assert.Equal("fail", wasm.GetProperty("severity").GetString());
+        Assert.Equal("info", wasm.GetProperty("severity").GetString());
         Assert.Equal("dotnet workload install wasm-tools", wasm.GetProperty("remedy").GetString());
 
         Directory.Delete(Path.Combine(_cache, "2dog.tools"), true);
@@ -294,10 +312,10 @@ public class DoctorTests : IDisposable
         });
 
         var run = Doctor(dir, runner, "--json", option);
-        var shouldInstall = option != "--fix";
-        Assert.Equal(shouldInstall ? ExitCodes.Ok : ExitCodes.Findings, run.ExitCode);
+        var shouldInstall = option == "--install-wasm-tools";
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
         Assert.Equal(shouldInstall, installed);
-        Assert.Equal(shouldInstall ? "pass" : "fail", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+        Assert.Equal(shouldInstall ? "pass" : "info", Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
         Assert.Equal(shouldInstall ? 2 : 1, runner.Requests.Count(request => request.Args.SequenceEqual(["workload", "list"])));
     }
 
@@ -309,7 +327,7 @@ public class DoctorTests : IDisposable
         var dir = Scaffold("--generic", "--android");
         var noAndroid = Doctor(dir, Runner(android: false), "--json");
         var finding = Finding(noAndroid.Stdout, "env.android-workload")!.Value;
-        Assert.Equal("fail", finding.GetProperty("severity").GetString());
+        Assert.Equal("info", finding.GetProperty("severity").GetString());
         Assert.Equal("dotnet workload install android", finding.GetProperty("remedy").GetString());
         Assert.Contains("Game.android", finding.GetProperty("title").GetString());
 
@@ -330,13 +348,13 @@ public class DoctorTests : IDisposable
         var run = Doctor(dir, runner, "--json", option);
         var shouldInstall = option != "--fix";
         Assert.Equal(shouldInstall, installed);
-        Assert.Equal(shouldInstall ? "pass" : "fail",
+        Assert.Equal(shouldInstall ? "pass" : "info",
             Finding(run.Stdout, "env.android-workload")!.Value.GetProperty("severity").GetString());
         Assert.DoesNotContain(runner.Requests, request => request.Args.Contains("wasm-tools"));
     }
 
     [Fact]
-    public void MissingAndroidSdk_IsAWarningWithoutAnAutomaticFix()
+    public void MissingAndroidSdk_IsOptionalUntilAnAndroidBuild()
     {
         var dir = Scaffold("--android");
         var before = Snapshot(dir);
@@ -346,11 +364,111 @@ public class DoctorTests : IDisposable
 
         Assert.Equal(ExitCodes.Ok, run.ExitCode);
         var finding = Finding(run.Stdout, "env.android-sdk")!.Value;
-        Assert.Equal("warn", finding.GetProperty("severity").GetString());
+        Assert.Equal("info", finding.GetProperty("severity").GetString());
         Assert.Contains("ANDROID_HOME", finding.GetProperty("title").GetString());
         Assert.False(finding.TryGetProperty("fix", out _));
         Assert.Equal(before, Snapshot(dir));
         Assert.DoesNotContain(runner.Requests, r => r.Args.Contains("install"));
+    }
+
+    [Theory]
+    [InlineData("Game.web", "wasm-tools", "android")]
+    [InlineData("Game.android", "android", "wasm-tools")]
+    public void FixAll_InstallsOnlyTheSelectedBuildWorkload(string target, string needed, string optional)
+    {
+        var dir = Scaffold("--web", "--android");
+        var installed = false;
+        var fallback = Runner(wasmTools: false, android: false);
+        var runner = new FakeProcessRunner(request =>
+        {
+            if (request.Args.SequenceEqual(["workload", "install", needed]))
+            {
+                installed = true;
+                return FakeProcessRunner.Result(request, 0);
+            }
+            if (request.Args.SequenceEqual(["workload", "list"]) && installed)
+                return FakeProcessRunner.Result(request, 0, "Installed Workload Id", "-------------------", $"{needed}  10.0.100  SDK", "");
+            return fallback.Run(request);
+        });
+
+        var run = Doctor(dir, runner, "--json", "--build", target, "--fix-all");
+
+        Assert.True(installed);
+        var check = needed == "android" ? "env.android-workload" : "env.wasm-tools";
+        Assert.Equal("pass", Finding(run.Stdout, check)!.Value.GetProperty("severity").GetString());
+        Assert.DoesNotContain(runner.Requests, r => r.Args.Contains("install") && r.Args.Contains(optional));
+    }
+
+    [Theory]
+    [InlineData(null, "info", "info")]
+    [InlineData("", "info", "info")]
+    [InlineData("Game.2dog", "info", "info")]
+    [InlineData("Game.xunit", "info", "info")]
+    [InlineData("Game.web", "fail", "info")]
+    [InlineData("Game.web/Game.web.csproj", "fail", "info")]
+    [InlineData("Game.blazor/Client", "fail", "info")]
+    [InlineData("Game.android", "info", "fail")]
+    public void WorkloadRequirements_FollowTheBuildTarget(string? target, string wasm, string android)
+    {
+        var dir = Scaffold("--generic", "--tests", "--web", "--blazor", "--android");
+        var runner = Runner(wasmTools: false, android: false);
+        var args = target is null ? new[] { "--json", "--strict", "--fix-all" }
+            : target.Length == 0 ? new[] { "--json", "--strict", "--build" }
+            : new[] { "--json", "--strict", "--build", target };
+
+        var run = Doctor(dir, runner, args);
+
+        Assert.Equal(wasm, Finding(run.Stdout, "env.wasm-tools")!.Value.GetProperty("severity").GetString());
+        Assert.Equal(android, Finding(run.Stdout, "env.android-workload")!.Value.GetProperty("severity").GetString());
+        Assert.Equal(android, Finding(run.Stdout, "env.android-sdk")!.Value.GetProperty("severity").GetString());
+        Assert.Equal(wasm == "fail" || android == "fail" ? ExitCodes.Findings : ExitCodes.Ok, run.ExitCode);
+        Assert.DoesNotContain(runner.Requests, r => r.Args.Contains("install"));
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void SolutionWorkloadRequirements_RespectBuildExclusions(bool legacy)
+    {
+        var dir = Scaffold("--generic", "--web", "--android");
+        if (legacy)
+        {
+            File.Delete(Path.Combine(dir, "Game.slnx"));
+            File.WriteAllText(Path.Combine(dir, "Game.sln"), """
+                Microsoft Visual Studio Solution File, Format Version 12.00
+                Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game.csproj", "{11111111-1111-1111-1111-111111111111}"
+                EndProject
+                Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game.web", "Game.web\Game.web.csproj", "{22222222-2222-2222-2222-222222222222}"
+                EndProject
+                Global
+                    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+                        {22222222-2222-2222-2222-222222222222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+                    EndGlobalSection
+                EndGlobal
+                """ + "\n");
+        }
+        var model = ProjectModel.Load(dir);
+        Assert.DoesNotContain(BuildRunner.HostsForTarget(model, ""), h => h.IsWebLike || h.Kind == HostKind.Android);
+        var web = model.Hosts.Single(h => h.Kind == HostKind.Web);
+        if (legacy)
+        {
+            var text = File.ReadAllText(model.Solution!);
+            File.WriteAllText(model.Solution!, text.Replace(".ActiveCfg = Debug|Any CPU", ".Build.0 = Debug|Any CPU"));
+        }
+        else
+        {
+            var text = File.ReadAllText(model.Solution!);
+            File.WriteAllText(model.Solution!, text.Replace("<Build Project=\"false\" />", "<Build Project=\"true\" />"));
+        }
+        Assert.Contains(BuildRunner.HostsForTarget(ProjectModel.Load(dir), ""), h => h.Folder == web.Folder);
+        // A host enabled only in Release must remain optional in Debug.
+        var enabled = File.ReadAllText(model.Solution!);
+        File.WriteAllText(model.Solution!, legacy
+            ? enabled.Replace(".Debug|Any CPU.Build.0", ".Release|Any CPU.Build.0")
+            : enabled.Replace("<Build Project=\"true\" />", "<Build Project=\"false\" /><Build Solution=\"Release|*\" Project=\"true\" />"));
+        model = ProjectModel.Load(dir);
+        Assert.DoesNotContain(BuildRunner.HostsForTarget(model, "", "Debug"), h => h.Folder == web.Folder);
+        Assert.Contains(BuildRunner.HostsForTarget(model, "", "Release"), h => h.Folder == web.Folder);
     }
 
     [Fact]
@@ -563,7 +681,7 @@ public class DoctorTests : IDisposable
     {
         var dir = Scaffold("--generic", "--tests");
         Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>", "<TargetFramework>net8.0</TargetFramework>");
-        Edit(dir, "Game.csproj", ";Game.tests/**", "");
+        Edit(dir, "Game.csproj", ";Game.xunit/**", "");
 
         var broken = Doctor(dir, null, "--json");
         Assert.Equal("announced", Finding(broken.Stdout, "game.target-framework")!.Value.GetProperty("fix").GetProperty("class").GetString());
@@ -573,7 +691,7 @@ public class DoctorTests : IDisposable
         var csproj = File.ReadAllText(Path.Combine(dir, "Game.csproj"));
         Assert.Contains("<TargetFramework>net10.0</TargetFramework>", csproj);
         Assert.DoesNotContain("net8.0", csproj);
-        Assert.Contains("Game.tests/**", csproj);
+        Assert.Contains("Game.xunit/**", csproj);
         var after = Doctor(dir, null, "--json");
         Assert.Null(Issue(after.Stdout, "game.target-framework"));
         Assert.Null(Issue(after.Stdout, "game.default-item-excludes"));

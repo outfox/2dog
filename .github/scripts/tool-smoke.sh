@@ -17,10 +17,14 @@ rm -rf "$work"
 mkdir -p "$work/dir with space" "$work/toolbin"
 
 # packageSourceMapping pins every 2dog.* package to the artifact feed, so an identically numbered package on
-# nuget.org can never shadow the bits under test.
+# nuget.org can never shadow the bits under test. The packages folder is relative to each copy of this file, so the
+# local Godot packages stay under $work instead of the user's global cache.
 cat > "$work/nuget.config" <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
+  <config>
+    <add key="globalPackagesFolder" value="./nuget-packages/" />
+  </config>
   <packageSources>
     <clear />
     <add key="local" value="$root/packages" />
@@ -50,7 +54,7 @@ grep -q "note: project name adjusted" stderr.txt
 test -f SmokeGame/SmokeGame.slnx
 test -f SmokeGame/Directory.Build.props
 test -f SmokeGame/SmokeGame.2dog/SmokeGame.2dog.csproj
-test -f SmokeGame/SmokeGame.tests/SmokeGame.tests.csproj
+test -f SmokeGame/SmokeGame.xunit/SmokeGame.xunit.csproj
 "$tool" add SmokeGame --web --dry-run --json --no-restore | jq -e '.ok and (.actions | length) > 0 and .dryRun' > /dev/null
 echo "::endgroup::"
 
@@ -66,13 +70,23 @@ echo "::endgroup::"
 
 echo "::group::build and test the scaffolded project"
 cp "$work/nuget.config" SmokeGame/nuget.config
-dotnet build SmokeGame/SmokeGame.slnx -c Debug
-dotnet test SmokeGame/SmokeGame.tests -c Debug --no-build
+for config in Debug Release Editor; do
+  dotnet build SmokeGame/SmokeGame.slnx -c "$config"
+  dotnet test SmokeGame/SmokeGame.xunit -c "$config" --no-build
+done
+echo "::endgroup::"
+
+echo "::group::desktop and tests with unused optional hosts"
+"$tool" add SmokeGame --web --android -y --no-restore
+# Disabling SDK workload resolution proves this graph does not evaluate either
+# optional host, even on runners where a workload happens to be installed.
+dotnet build SmokeGame/SmokeGame.slnx -c Debug -p:MSBuildEnableWorkloadResolver=false
+dotnet test SmokeGame/SmokeGame.xunit -c Debug --no-build
 echo "::endgroup::"
 
 echo "::group::doctor"
 "$tool" doctor SmokeGame --json --offline | tee doctor.json | jq -e '.doctor.summary.fail == 0' > /dev/null
-rm SmokeGame/SmokeGame.tests/.gdignore
+rm SmokeGame/SmokeGame.xunit/.gdignore
 set +e
 "$tool" doctor SmokeGame --offline; status=$?
 set -e

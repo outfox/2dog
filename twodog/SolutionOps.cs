@@ -184,9 +184,27 @@ internal static class SolutionOps
     }
 
     /// <summary>Whether the solution already keeps the project out of plain builds (either format).</summary>
-    public static bool IsExcludedFromSolutionBuild(string solutionPath, string projectRelativePath)
+    public static bool IsExcludedFromSolutionBuild(string solutionPath, string projectRelativePath, string? configuration = null)
     {
         if (!File.Exists(solutionPath)) return false;
+        if (configuration is not null)
+        {
+            var text = File.ReadAllText(solutionPath);
+            if (!solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
+                return !TryFindProjectGuid(text, projectRelativePath, out var guid)
+                    || !Regex.IsMatch(text, $@"^\s*\{{{Regex.Escape(guid)}\}}\.{Regex.Escape(configuration)}\|[^\r\n]*\.Build\.0\s*=",
+                        RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+            var project = System.Xml.Linq.XDocument.Parse(text).Descendants("Project")
+                .FirstOrDefault(e => string.Equals(((string?)e.Attribute("Path"))?.Replace('\\', '/'),
+                    projectRelativePath.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase));
+            var build = project?.Elements("Build")
+                .Where(e => (string?)e.Attribute("Solution") is not { } pattern || Regex.IsMatch(configuration + "|Any CPU",
+                    "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$", RegexOptions.IgnoreCase))
+                .OrderBy(e => ((string?)e.Attribute("Solution") ?? "*").Count(c => c != '*'))
+                .LastOrDefault();
+            return string.Equals((string?)build?.Attribute("Project"), "false", StringComparison.OrdinalIgnoreCase);
+        }
         if (!solutionPath.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase))
             return !HasSolutionBuildEntries(solutionPath, projectRelativePath);
         return IsExcludedSlnx(File.ReadAllText(solutionPath), SlnxPathPattern(projectRelativePath));
@@ -236,8 +254,8 @@ internal static class SolutionOps
     }
 
     /// <summary>Restores the solution; the caller decides what a failure means.</summary>
-    public static ProcessResult Restore(string solutionPath) =>
-        ProcessRunner.Default.Run(ProcessRunner.Dotnet(Path.GetDirectoryName(solutionPath)!,
+    public static ProcessResult Restore(string solutionPath, IProcessRunner? runner = null) =>
+        (runner ?? ProcessRunner.Default).Run(ProcessRunner.Dotnet(Path.GetDirectoryName(solutionPath)!,
             $"restoring {Path.GetFileName(solutionPath)}", TimeSpan.FromMinutes(10),
             "restore", Path.GetFileName(solutionPath)), Cancellation.Token);
 

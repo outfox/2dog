@@ -11,10 +11,12 @@ importer, and exporter skip them:
 
 - **Sample Godot project** - project.godot, the `Godot.NET.Sdk` csproj, and a simple scene at the root
 - **Desktop host** (`<Name>.2dog/`) - Minimal working 2dog application (Program.cs with Main)
-- **Test project** (`<Name>.tests/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
+- **Test project** (`<Name>.xunit/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
 - **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
+- **Avalonia host** (`<Name>.avalonia/`) - Cross-platform GUI embedding the game (opt-in via `--avalonia true`)
+- **Android host** (`<Name>.android/`) - Experimental APK host (opt-in via `--android true`; building requires the Android workload, SDK and JDK 17)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
 - **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`TWODOG_WEB_BOOT`-guarded `Compile Include` in the game csproj)
@@ -27,8 +29,13 @@ importer, and exporter skip them:
 
 ```bash
 # From the repository root
-dotnet new install ./templates/twodog
+dotnet pack twodog
+# Replace <TwoDogVersion> with the version printed by pack:
+dotnet new install packages/2dog.<TwoDogVersion>.nupkg
 ```
+
+Packing substitutes the source template's version placeholders. Installing the
+raw `templates/twodog` directory leaves those placeholders unresolved.
 
 ### Creating Projects
 
@@ -39,7 +46,7 @@ dotnet new 2dog -n MyGame
 # Without the test project
 dotnet new 2dog -n MyGame --tests false
 
-# Without the web host (e.g. no .NET 10 SDK / wasm-tools on this machine)
+# Without the web host (all hosts require .NET 10; only browser builds need wasm-tools)
 dotnet new 2dog -n MyGame --web false
 
 # With the WebXR browser host (omitted by default)
@@ -55,7 +62,7 @@ dotnet new 2dog -n MyGame --winforms true
 ### Uninstalling the Template
 
 ```bash
-dotnet new uninstall ./templates/twodog
+dotnet new uninstall 2dog
 ```
 
 ## Template Structure
@@ -76,9 +83,9 @@ templates/
     │   ├── Company.Product1.2dog.csproj
     │   ├── Program.cs
     │   └── app.manifest
-    ├── Company.Product1.tests/    # Test project (default; --tests false to omit)
+    ├── Company.Product1.xunit/    # Test project (default; --tests false to omit)
     │   ├── .gdignore
-    │   ├── Company.Product1.tests.csproj
+    │   ├── Company.Product1.xunit.csproj
     │   ├── BasicTests.cs
     │   └── xunit.runner.json
     ├── Company.Product1.web/      # Browser (wasm) host (default; --web false to omit)
@@ -232,25 +239,22 @@ The template is defined in `.template.config/template.json`:
 
 After modifying the template:
 
-1. **Uninstall the old version:**
-   ```bash
-   dotnet new uninstall ./templates/twodog
-   ```
+1. **Pack and reinstall:** run `dotnet pack twodog`, then install the resulting
+   `packages/2dog.<TwoDogVersion>.nupkg` with `dotnet new install --force`.
 
-2. **Reinstall:**
-   ```bash
-   dotnet new install ./templates/twodog
-   ```
-
-3. **Test project creation:**
+2. **Test project creation:**
    ```bash
    mkdir test_project
    cd test_project
-   dotnet new 2dog -n TestApp
+   dotnet new 2dog -n TestApp -o TestApp
    cd TestApp
    dotnet build
    dotnet run --project TestApp.2dog
    ```
+
+The template already generates a solution with Debug/Release/Editor
+configurations. Browser, Android and WinUI hosts are excluded from ordinary
+solution builds and are built explicitly when needed.
 
 ## Future Enhancements
 
@@ -258,7 +262,5 @@ Potential improvements for the template:
 
 - [ ] Add `--empty` option for projects without sample Godot content
 - [ ] Add `--minimal` option for absolute bare minimum
-- [ ] Add solution file generation when `--tests` is used
-- [ ] Support for multiple build configurations (Debug/Release/Editor)
 - [ ] Optional CI/CD workflow files (GitHub Actions, etc.)
 - [ ] Optional Docker support

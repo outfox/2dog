@@ -10,7 +10,7 @@ internal static class UpdateCommand
     /// <summary>Tests inject a fake runner for git, workload commands and restore.</summary>
     internal static IProcessRunner Runner { get; set; } = ProcessRunner.Default;
 
-    public static int Run(ParsedCommand cmd, Report report, IEnvironment? environment = null)
+    public static int Run(ParsedCommand cmd, Report report)
     {
         var interactive = !cmd.NoInteractive && Tui.CanPrompt;
         var options = new ScaffoldOptions { ProjectPath = cmd.Options.ProjectPath };
@@ -29,8 +29,6 @@ internal static class UpdateCommand
 
         var plan = new List<PlannedAction>();
         var warnings = new List<string>();
-        if (model.Hosts.Any(h => h.Kind == HostKind.Android))
-            warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
         PlanMigrations(plan, model);
         ScaffoldCommand.PlanRootBuildProps(plan, project.Dir);
         PlanPropsValues(plan, model, current);
@@ -43,7 +41,7 @@ internal static class UpdateCommand
         foreach (var workload in workloads)
         {
             var install = cmd.Options.InstallRequested(workload) || cmd.Options.UpdateWorkloads;
-            if (install || interactive && cmd.Options.Restore)
+            if (install)
                 plan.Add(new PlannedAction($"check {workload.Id} and install if requested", ActionKind.Workload,
                     () => Workloads.EnsureInstalled(workload, project.Dir, install,
                         interactive ? Tui.OfferWorkloadInstall : null, Runner)));
@@ -194,7 +192,7 @@ internal static class UpdateCommand
         var result = Runner.Run(ProcessRunner.Dotnet(project.Dir, $"restoring {target}", TimeSpan.FromMinutes(10),
             "restore", target), Cancellation.Token);
         if (result.Ok) return;
-        ProcessRunner.ReportFailure(result);
+        BuildLogAnalyzer.ReportFailure(result, ProjectModel.Load(project.Dir));
         // Thrown, not warned: the new versions do not resolve, so the update failed even though the files are written.
         throw new ToolException("dotnet restore failed - the version files are updated; fix the restore and run 'dotnet restore' again");
     }

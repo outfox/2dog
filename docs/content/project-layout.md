@@ -22,9 +22,9 @@ MyGame/                         Godot project and solution root
 │   ├── .gdignore
 │   ├── MyGame.2dog.csproj
 │   └── Program.cs              Desktop entry point
-├── MyGame.tests/
+├── MyGame.xunit/
 │   ├── .gdignore
-│   ├── MyGame.tests.csproj
+│   ├── MyGame.xunit.csproj
 │   └── BasicTests.cs           Headless xUnit tests
 └── MyGame.web/
     ├── .gdignore
@@ -60,11 +60,11 @@ dotnet run --project MyGame.2dog
 
 ### Test Host
 
-`MyGame.tests` starts Godot through an xUnit fixture, normally headless, and
+`MyGame.xunit` starts Godot through an xUnit fixture, normally headless, and
 loads the real game assembly and resources.
 
 ```bash
-dotnet test MyGame.tests
+dotnet test MyGame.xunit
 ```
 
 ### Web Host

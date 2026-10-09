@@ -82,6 +82,87 @@ public class DoctorCheckTests : IDisposable
         File.WriteAllText(path, text.Replace(from, to));
     }
 
+    [Theory]
+    [InlineData("2dog", "TwoDogVariant", "editor", false)]
+    [InlineData("android", "TwoDogVariant", "editor", true)]
+    [InlineData("web", "TwoDogWebVariant", "editor", true)]
+    [InlineData("webxr", "TwoDogWebVariant", "invalid", true)]
+    [InlineData("blazor", "TwoDogWebVariant", "editor", true)]
+    [InlineData("web", "TwoDogWebVariant", "debug", false)]
+    [InlineData("web", "TwoDogVariant", "invalid", true)]
+    [InlineData("web", "TwoDogVariant", "editor", false)]
+    [InlineData("web", "TwoDogWebVariant", "DEBUG", false)]
+    public void NativeVariants_FollowEachHostPlatform(string kind, string property, string value, bool invalid)
+    {
+        var dir = Scaffold(kind == "2dog" ? "--generic" : $"--{kind}");
+        var path = kind == "blazor" ? Hosts.BlazorClientProject("Game.blazor") : $"Game.{kind}/Game.{kind}.csproj";
+        HostChecks.AddProperties(Path.Combine(dir, path), (property, value));
+
+        var findings = Findings(Doctor(dir, "--json").Stdout, "host.variant");
+
+        Assert.Equal(invalid, findings.Any(f => f.GetProperty("severity").GetString() == "fail"));
+        if (invalid) Assert.Contains(property, Assert.Single(findings).GetProperty("title").GetString());
+    }
+
+    [Fact]
+    public void NativeVariants_RespectInheritedSettingsAndConfigurationOverrides()
+    {
+        var dir = Scaffold("--web");
+        HostChecks.AddProperties(Path.Combine(dir, "Directory.Build.props"), ("TwoDogWebVariant", "editor"));
+        Issue(Doctor(dir, "--json").Stdout, "host.variant", "fail", false);
+        var path = Path.Combine(dir, "Game.web/Game.web.csproj");
+        var text = File.ReadAllText(path).Replace("</Project>", "<PropertyGroup Condition=\"'$(Configuration)' == 'Debug'\"><TwoDogWebVariant>debug</TwoDogWebVariant></PropertyGroup></Project>");
+        File.WriteAllText(path, text);
+        Assert.DoesNotContain(Findings(Doctor(dir, "--json").Stdout, "host.variant"), f => f.GetProperty("severity").GetString() == "fail");
+        Issue(Doctor(dir, "--json", "-c", "Release").Stdout, "host.variant", "fail", false);
+    }
+
+    [Fact]
+    public void NativeVariants_UnresolvedExpressionsAreInformational()
+    {
+        var dir = Scaffold("--web");
+        HostChecks.AddProperties(Path.Combine(dir, "Game.web/Game.web.csproj"), ("TwoDogWebVariant", "$(CustomVariant)"));
+        Assert.Equal("info", Assert.Single(Findings(Doctor(dir, "--json").Stdout, "host.variant")).GetProperty("severity").GetString());
+    }
+
+    [Fact]
+    public void NativeVariants_OnlyInheritPropsThatAreActuallyChained()
+    {
+        File.WriteAllText(Path.Combine(_tmp.Dir, "Directory.Build.props"),
+            "<Project><PropertyGroup><TwoDogWebVariant>editor</TwoDogWebVariant></PropertyGroup></Project>");
+        var dir = Scaffold("--web");
+        Issue(Doctor(dir, "--json").Stdout, "host.variant", "fail", false);
+
+        var hostDir = Path.Combine(dir, "Game.web");
+        File.WriteAllText(Path.Combine(hostDir, "unrelated.props"), "<Project />");
+        File.WriteAllText(Path.Combine(hostDir, "Directory.Build.props"),
+            "<Project><Import Project=\"unrelated.props\" /></Project>");
+        Assert.DoesNotContain(Findings(Doctor(dir, "--json").Stdout, "host.variant"),
+            f => f.GetProperty("severity").GetString() == "fail");
+    }
+
+    [Theory]
+    [InlineData("<Choose><When Condition=\"'$(UseEditor)' == 'true'\">", "</When></Choose>")]
+    [InlineData("<Target Name=\"SelectVariant\">", "</Target>")]
+    public void NativeVariants_ComplexControlFlowNeedsMsBuild(string open, string close)
+    {
+        var dir = Scaffold("--web");
+        var path = Path.Combine(dir, "Game.web/Game.web.csproj");
+        File.WriteAllText(path, File.ReadAllText(path).Replace("</Project>",
+            open + "<PropertyGroup><TwoDogWebVariant>editor</TwoDogWebVariant></PropertyGroup>" + close + "</Project>"));
+        Assert.Equal("info", Assert.Single(Findings(Doctor(dir, "--json").Stdout, "host.variant")).GetProperty("severity").GetString());
+    }
+
+    [Theory]
+    [InlineData("web")]
+    [InlineData("android")]
+    public void NativeVariants_SelectedEditorBuildRejectsUnsupportedDefaults(string kind)
+    {
+        var dir = Scaffold($"--{kind}");
+        var finding = Issue(Doctor(dir, "--json", "--build", $"Game.{kind}", "-c", "Editor").Stdout, "host.variant", "fail", false);
+        Assert.Contains("'editor'", finding.GetProperty("title").GetString());
+    }
+
     [Fact]
     public void MissingPresetFile_FailsAndIsRecreated()
     {
@@ -112,7 +193,7 @@ public class DoctorCheckTests : IDisposable
     public void PublishAot_FailsOnlyWhereNativeAotCannotWork()
     {
         var dir = Scaffold("--generic", "--avalonia", "--winforms", "--android", "--web", "--blazor", "--tests");
-        foreach (var host in new[] { "Game.2dog", "Game.avalonia", "Game.winforms", "Game.android", "Game.web", "Game.tests" })
+        foreach (var host in new[] { "Game.2dog", "Game.avalonia", "Game.winforms", "Game.android", "Game.web", "Game.xunit" })
             Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
                 "<GodotProjectDir>..</GodotProjectDir><PublishAot>true</PublishAot>");
         Edit(dir, "Game.blazor/Game.blazor.csproj", "<TargetFramework>net10.0</TargetFramework>",

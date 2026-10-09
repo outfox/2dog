@@ -22,11 +22,13 @@ dotnet add package xunit.runner.visualstudio
 your Godot project, run `dnx 2dog add --tests`. Run the tests with:
 
 ```bash
-dotnet test MyGame.tests
+dotnet test MyGame.xunit
 ```
 
 The generated test project sits inside the Godot project, includes a
 `.gdignore`, and points `<GodotProjectDir>` at `..`.
+New hosts default to `MyGame.xunit`. Existing `.tests` hosts and custom names
+remain supported by `add`, `doctor` and `update`; they are not renamed.
 
 ## Fixtures
 
@@ -104,14 +106,16 @@ public class SceneTests(HeadlessFixture godot)
     [Fact]
     public void LoadScene_ValidPath_Succeeds()
     {
-        var scene = GD.Load<PackedScene>("res://test_scene.tscn");
+        using var scene = GD.Load<PackedScene>("res://test_scene.tscn");
         Assert.NotNull(scene);
 
         var instance = scene.Instantiate();
-        godot.Tree.Root.AddChild(instance);
-
-        Assert.True(instance.IsInsideTree());
-        instance.QueueFree();
+        try
+        {
+            godot.Tree.Root.AddChild(instance);
+            Assert.True(instance.IsInsideTree());
+        }
+        finally { instance.Free(); }
     }
 }
 ```
@@ -121,6 +125,77 @@ Godot types such as `NodePath` and `StringName` can crash the runner during
 discovery. Pass primitive values or set `DisableDiscoveryEnumeration = true`.
 See [xUnit Test Discovery](/known-issues/xunit-discovery).
 :::
+
+## Async work, signals and deferred deletion
+
+The generated `BasicTests.cs` includes runnable examples of async continuations,
+Godot signal awaits, timer signals, signal arguments, entering/leaving the tree,
+and `QueueFree`. Every test frees the nodes and resources it owns. Use `Free()`
+in `finally` for native nodes; disposing a node's C# wrapper does not free it.
+
+An ordinary `await Task.Delay(...)` preserves the fixture's engine thread but
+does not advance Godot. A Godot timer, signal or deferred call needs frames.
+Use `AwaitAsync` to pump while an asynchronous operation runs, or
+`WaitUntilAsync` to pump until a condition holds:
+
+```csharp
+async Task NextFrame()
+{
+    await godot.Tree.ToSignal(godot.Tree, SceneTree.SignalName.ProcessFrame);
+}
+
+await godot.AwaitAsync(NextFrame(), cancellationToken: TestContext.Current.CancellationToken);
+await godot.WaitUntilAsync(() => node.IsNodeReady(),
+    timeout: TimeSpan.FromSeconds(2), cancellationToken: TestContext.Current.CancellationToken);
+```
+
+Both helpers default to a five-second timeout, observe xUnit cancellation, and
+keep pumping on the engine thread. Task results, exceptions and cancellation
+propagate through `AwaitAsync`. A timeout stops waiting; it cannot cancel the
+operation you supplied, so cancel or clean up that operation yourself.
+Await one pumping operation at a time. Do not use `ConfigureAwait(false)` or
+access Godot objects from `Task.Run`.
+
+### Expect signals
+
+Create an expectation **before** triggering the behavior. This catches both
+synchronous and deferred emissions:
+
+```csharp
+using var entered = GodotAssert.ExpectSignal<Node>(parent, Node.SignalName.ChildEnteredTree);
+parent.AddChild(child);
+entered.AssertEmitted(); // Exactly once; AssertEmitted(2) checks two emissions.
+Assert.Same(child, Assert.Single(entered.Values));
+
+using var timeout = GodotAssert.ExpectSignal(timer, Godot.Timer.SignalName.Timeout);
+timer.Start();
+await timeout.WaitAsync(godot, cancellationToken: TestContext.Current.CancellationToken);
+timeout.AssertEmitted();
+```
+
+`ExpectSignal` handles signals without arguments; `ExpectSignal<T>` records a
+single argument in `Values`, in emission order. `WaitAsync` advances frames until
+at least one emission arrives (or pass `count:`). It fails with the signal name
+on timeout or if the source is freed first. Expectations disconnect on disposal,
+timeout and cancellation; disposal itself does not assert. For other signal
+signatures, connect a typed callable and use `WaitUntilAsync` on a recorded
+condition.
+
+### Expect deletion
+
+`QueueFree` marks a node for deletion; it is still valid until Godot flushes the
+queue. Check actual deletion with:
+
+```csharp
+node.QueueFree();
+Assert.True(node.IsQueuedForDeletion());
+await GodotAssert.FreedAsync(godot, node, cancellationToken: TestContext.Current.CancellationToken);
+Assert.False(GodotObject.IsInstanceValid(node));
+```
+
+`TreeExiting` fires while the node is still inside the tree; `TreeExited` fires
+after removal. Removing a node from its parent does not free it, so tree exit
+and deletion should be asserted separately.
 
 ## Godot Errors
 

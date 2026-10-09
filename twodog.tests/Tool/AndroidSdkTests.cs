@@ -117,7 +117,7 @@ public class AndroidSdkTests
     [InlineData(false, true)]
     [InlineData(true, true)]
     [InlineData(true, false)]
-    public void Scaffold_OnlyWarnsForAndroidHosts_WithoutChangingPathsOrRunningCommands(bool existing, bool android)
+    public void Scaffold_OnlyWarnsForNewAndroidHosts_WithoutChangingPathsOrRunningCommands(bool existing, bool android)
     {
         using var tmp = new TempProjectDir();
         var env = new FakeEnvironment();
@@ -142,8 +142,8 @@ public class AndroidSdkTests
         });
 
         Assert.Equal(ExitCodes.Ok, run.ExitCode);
-        Assert.Equal(android, result!.Warnings.Any(w => w.Contains("Android SDK")));
-        Assert.Equal(android, run.Stderr.Contains("Android SDK"));
+        Assert.Equal(android && !existing, result!.Warnings.Any(w => w.Contains("Android SDK")));
+        Assert.Equal(android && !existing, run.Stderr.Contains("Android SDK"));
         Assert.Empty(env.Vars);
         Assert.Empty(runner.Requests);
         Assert.Empty(Directory.EnumerateFileSystemEntries(tmp.Dir));

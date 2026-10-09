@@ -366,3 +366,6 @@ __pycache__/
 
 # Web (browser-wasm) publish output
 AppBundle/
+
+# Agent instructions; overrides a global excludesFile that ignores them
+!AGENTS.md

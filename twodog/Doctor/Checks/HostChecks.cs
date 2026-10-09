@@ -10,7 +10,7 @@ internal static class HostChecks
         new("host.gdignore", Category.Hosts, "every host folder carries a .gdignore"),
         new("host.project-reference", Category.Hosts, "every ProjectReference points at an existing project"),
         new("host.godot-project-dir", Category.Hosts, "GodotProjectDir points at the Godot project"),
-        new("host.variant", Category.Hosts, "TwoDogVariant is release, debug or editor"),
+        new("host.variant", Category.Hosts, "the selected native variant is supported by its host platform"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
         new("host.publish-aot", Category.Hosts, "no WinForms, browser or Blazor host enables PublishAot"),
         new("host.publish-singlefile", Category.Hosts, "PublishSingleFile is only enabled by browser hosts or alongside PublishAot"),
@@ -80,10 +80,8 @@ internal static class HostChecks
                         null, "set <GodotProjectDir>..</GodotProjectDir>", csproj));
             }
 
-            foreach (var variant in host.Properties("TwoDogVariant").Select(e => e.Value.Trim()).Where(v => !v.Contains("$(")))
-                if (variant is not ("release" or "debug" or "editor"))
-                    yield return Issue(new Finding("host.variant", c, Severity.Fail, $"{csproj} sets TwoDogVariant '{variant}'",
-                        "allowed: release, debug, editor (the build stops with the same message)", "fix the value", csproj));
+            foreach (var variantFinding in VariantChecks.Check(ctx, host))
+                yield return Issue(variantFinding);
 
             if (host.HasProperty("TwoDogBuildType"))
                 yield return Issue(new Finding("host.buildtype-deprecated", c, Severity.Warn, $"{csproj} sets the deprecated TwoDogBuildType",

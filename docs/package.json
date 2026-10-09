@@ -5,6 +5,8 @@
     "vitepress": "^2.0.0-alpha.16"
   },
   "scripts": {
+    "test": "node --test llms-pages.test.mjs",
+    "check": "node make-llms.mjs --check",
     "predev": "node make-llms.mjs",
     "dev": "vitepress dev",
     "prebuild": "node make-llms.mjs",

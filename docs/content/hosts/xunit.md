@@ -14,12 +14,19 @@ From your Godot project directory:
 
 ```bash
 dnx 2dog add --tests
-dotnet test MyGame.tests
+dotnet test MyGame.xunit
 ```
 
-Edit `MyGame.tests/BasicTests.cs` to add tests. Use `HeadlessFixture` for headless
-tests or `Fixture` for rendered tests. See [Testing with xUnit](/testing)
-for examples, collections, and CI setup.
+Edit `MyGame.xunit/BasicTests.cs` to add tests. The template includes async/await,
+signal arguments and expectations, enter/exit-tree signals, timers and deferred
+deletion examples. See
+[Testing with xUnit](/testing#async-work-signals-and-deferred-deletion) for the helpers.
+
+Existing `.tests` hosts and custom project names remain supported; adding or
+updating hosts does not rename them. Use their existing paths with `dotnet test`.
+
+Use `HeadlessFixture` for headless tests or `Fixture` for rendered tests. See
+[Testing with xUnit](/testing) for examples, collections, and CI setup.
 
 See [xUnit Configuration](/configuration/xunit) for native variants and Editor tests.
 

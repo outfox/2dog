@@ -10,8 +10,29 @@ The fixtures themselves (`Fixture`, `HeadlessFixture`, and `FixtureBase`) ship i
 - **`RenderingCollection`** - binds the rendering-enabled `Fixture`
 - **`HeadlessCollection`** - binds `HeadlessFixture` (use this for CI)
 
-Both set `DisableParallelization = true`, which is required because Godot allows only one instance
-per process.
+Both set `DisableParallelization = true`, because normal hosting allows one active Godot instance
+per assembly load context. These collections share that context and run sequentially.
+
+New test hosts scaffold as `<Name>.xunit`; existing `.tests` hosts and custom names
+remain supported. The template includes eight examples covering async/await,
+Godot signal awaits, signal arguments and counts, timers, enter/exit-tree signals,
+deferred work and `QueueFree`.
+
+## Waits and assertions
+
+Use these helpers on the fixture's engine thread (`twodog.Testing.Xunit`):
+
+- `await godot.AwaitAsync(task, cancellationToken: TestContext.Current.CancellationToken)` pumps frames and propagates the task's result or failure.
+- `await godot.WaitUntilAsync(() => condition, cancellationToken: TestContext.Current.CancellationToken)` pumps until a condition holds.
+- `using var signal = GodotAssert.ExpectSignal(node, Node.SignalName.TreeEntered)` subscribes immediately. Call `signal.AssertEmitted()` for exactly one emission, or `await signal.WaitAsync(godot, cancellationToken: TestContext.Current.CancellationToken)` to wait for one.
+- `GodotAssert.ExpectSignal<Node>(parent, Node.SignalName.ChildEnteredTree)` records a single argument per emission in `Values`.
+- `await GodotAssert.FreedAsync(godot, node, cancellationToken: TestContext.Current.CancellationToken)` asserts actual deletion after `QueueFree`.
+
+Waits default to five seconds, honor xUnit cancellation, and allow one active pump
+per fixture. Expectations disconnect on disposal, timeout or cancellation;
+disposal does not assert. A timed-out `AwaitAsync` does not cancel its supplied task.
+Free native nodes in `finally`; disposing a node's C# wrapper does not free it.
+See [testing documentation](https://2dog.dev/testing#async-work-signals-and-deferred-deletion) for examples and ownership rules.
 
 ## How it works
 

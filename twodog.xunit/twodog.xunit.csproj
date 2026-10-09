@@ -13,7 +13,7 @@
     <PropertyGroup>
         <PackageId>2dog.xunit</PackageId>
         <Version>$(TwoDogVersion)</Version>
-        <Description>xUnit collection definitions for testing Godot applications with 2dog. The collections are compiled into your test assembly so xUnit discovers them correctly; the fixtures they bind come from the 2dog.engine package.</Description>
+        <Description>xUnit collections, bounded frame waits, signal expectations and deferred-deletion assertions for testing real Godot applications with 2dog. Collections and helpers compile into your test assembly; fixtures come from 2dog.engine.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IsPackable>true</IsPackable>
@@ -36,6 +36,7 @@
         <None Include="build\RenderingCollection.cs"     Pack="true" PackagePath="build\"/>
         <None Include="build\HeadlessCollection.cs"      Pack="true" PackagePath="build\"/>
         <None Include="build\GodotErrorChecks.cs"        Pack="true" PackagePath="build\"/>
+        <None Include="build\GodotAssert.cs"             Pack="true" PackagePath="build\"/>
         <None Include="build\FailOnGodotErrors.Assembly.cs" Pack="true" PackagePath="build\"/>
         <None Include="build\GodotTestFramework.cs"       Pack="true" PackagePath="build\"/>
         <None Include="build\GodotTestFramework.Assembly.cs" Pack="true" PackagePath="build\"/>

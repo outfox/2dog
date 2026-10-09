@@ -12,9 +12,9 @@ internal static class EnvironmentChecks
     [
         new("env.dotnet-sdk", Category.Environment, "a .NET 10 SDK is installed"),
         new("env.global-json", Category.Environment, "the root global.json pin is satisfied by an installed SDK"),
-        new("env.wasm-tools", Category.Environment, "the wasm-tools workload is installed when a browser host exists"),
-        new("env.android-workload", Category.Environment, "the android workload is installed when an Android host exists"),
-        new("env.android-sdk", Category.Environment, "Android SDK paths and components are available when an Android host exists"),
+        new("env.wasm-tools", Category.Environment, "the wasm-tools workload is available for selected browser builds"),
+        new("env.android-workload", Category.Environment, "the android workload is available for selected Android builds"),
+        new("env.android-sdk", Category.Environment, "Android SDK paths and components are available for selected Android builds"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot4", Category.Environment, "GODOT4 points at an existing Godot executable for IDE debugging"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
@@ -63,8 +63,9 @@ internal static class EnvironmentChecks
         if (project.Hosts.Any(h => h.Kind == HostKind.Android))
         {
             var sdk = AndroidSdk.Inspect(ctx.Env);
+            var required = ctx.BuildHosts.Any(h => h.Kind == HostKind.Android);
             foreach (var warning in sdk.Warnings)
-                yield return new Finding("env.android-sdk", c, Severity.Warn, warning,
+                yield return new Finding("env.android-sdk", c, required ? sdk.Directory is null ? Severity.Fail : Severity.Warn : Severity.Info, warning,
                     Remedy: $"Android SDK setup: {AndroidSdk.SetupUrl}");
             if (sdk.Warnings.Count == 0)
                 yield return Finding.Pass("env.android-sdk", c, $"Android SDK ({sdk.Directory})");
@@ -100,7 +101,7 @@ internal static class EnvironmentChecks
             {
                 expected.Add(("2dog.tools", natives));
                 if (SupportedRids.Contains(rid)) expected.Add(($"2dog.{rid}.editor", natives));
-                if (project.HasWebLikeHost) expected.Add(("2dog.browser-wasm.release", natives));
+                if (ctx.BuildHosts.Any(h => h.IsWebLike)) expected.Add(("2dog.browser-wasm.release", natives));
             }
 
             var missing = expected.Where(e => !Restored(ctx.Env, cache, e.Id, e.Version)).Select(e => $"{e.Id} {e.Version}").ToList();
@@ -118,16 +119,19 @@ internal static class EnvironmentChecks
         IEnumerable<HostModel> hosts, string why, bool install)
     {
         const Category c = Category.Environment;
-        var folders = string.Join(", ", hosts.Select(h => h.Folder));
+        var hostList = hosts.ToList();
+        var folders = string.Join(", ", hostList.Select(h => h.Folder));
         if (folders.Length == 0) yield break;
+        var required = install || hostList.Any(ctx.BuildHosts.Contains);
         if (ctx.Workloads is not { } workloads)
             yield return new Finding(id, c, install ? Severity.Fail : Severity.Info,
                 "could not list workloads", "'dotnet workload list' failed",
                 install ? workload.InstallCommand : $"run 'dotnet workload list' yourself; the {workload.NeededBy} need {workload.Id}",
                 Fix: install ? InstallWorkload(ctx, workload) : null);
         else if (!workloads.Contains(workload.Id))
-            yield return new Finding(id, c, Severity.Fail, $"{workload.Id} workload missing (needed by {folders})",
-                why, workload.InstallCommand, Fix: InstallWorkload(ctx, workload));
+            yield return new Finding(id, c, required ? Severity.Fail : Severity.Info, $"{workload.Id} workload missing (needed by {folders})",
+                required ? why : $"optional until building or publishing {folders}", workload.InstallCommand,
+                Fix: required ? InstallWorkload(ctx, workload) : null);
         else
             yield return Finding.Pass(id, c, workload.Id);
     }

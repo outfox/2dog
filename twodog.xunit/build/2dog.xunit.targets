@@ -13,6 +13,7 @@
         <Compile Include="$(MSBuildThisFileDirectory)RenderingCollection.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)HeadlessCollection.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)GodotErrorChecks.cs"/>
+        <Compile Include="$(MSBuildThisFileDirectory)GodotAssert.cs"/>
         <Compile Include="$(MSBuildThisFileDirectory)GodotTestFramework.cs"/>
     </ItemGroup>
 

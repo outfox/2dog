@@ -31,10 +31,11 @@ refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 Plus the [global and output options](/dnx-2dog#global-options). There is no
 `--to`: pin the tool instead.
 
-For projects with browser or Android hosts, terminals offer to install a missing
-workload (`wasm-tools` or `android`), then, separately, to update the installed
-ones. `dotnet workload update` checks for and applies updates to **all installed
-workloads** for the selected SDK.
+Package updates do not require browser/Android workloads or an Android SDK.
+Missing workloads are installed only with the explicit install flags or
+`--update-workloads`. For projects with browser or Android hosts, terminals can
+offer to update installed workloads. `dotnet workload update` checks for and
+applies updates to **all installed workloads** for the selected SDK.
 `--no-restore` skips these offers; the explicit flags still apply.
 `--dry-run` never checks or changes workloads.
 

@@ -33,6 +33,19 @@ Relative paths are resolved from the process working directory.
 
 ## Properties
 
+### `CaptureErrors` and `Errors`
+
+```csharp
+public bool CaptureErrors { get; init; }
+public GodotErrorLog Errors { get; }
+```
+
+Set `CaptureErrors = true` before `Start()` to collect Godot's native errors and
+warnings in `Errors` (`twodog.GodotErrorLog`). It defaults to `false`.
+Browser capture is unsupported: `Start()` throws `PlatformNotSupportedException`
+when capture is enabled there. The [testing fixtures](./fixture-base#errors)
+enable capture automatically and expose the same log.
+
 ### `Tree`
 
 ```csharp
@@ -98,7 +111,7 @@ public GodotInstance Start()
 
 Starts Godot and the project's `run/main_scene`, then returns a borrowed
 `GodotInstance` compatibility handle. `Engine` owns the instance; do not dispose
-the handle. Starting another instance before completion throws
+the handle. Starting another instance in the same assembly load context before completion throws
 `InvalidOperationException`.
 
 ### `Iteration`

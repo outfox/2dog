@@ -159,14 +159,14 @@ internal static class LayoutChecks
     private static readonly Regex PropertyReference = new(@"\$\((?<name>[A-Za-z_]\w*)\)", RegexOptions.Compiled);
 
     private static readonly Regex FileAboveLookup =
-        new(@"GetPathOfFileAbove\(\s*['""]Directory\.Build\.targets['""]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        new(@"GetPathOfFileAbove\(\s*['""](?<file>Directory\.Build\.(?:targets|props))['""]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     /// <summary>
     /// Whether the file imports that parent: an Import whose path (after expanding $(MSBuildThisFileDirectory) and
     /// the file's own properties) resolves to it, or a GetPathOfFileAbove lookup for the same file name, which
     /// resolves to the nearest one above - the parent. Other expressions cannot be evaluated here and do not count.
     /// </summary>
-    private static bool ImportsParent(string path, string parent) => Inspect(path, doc =>
+    internal static bool ImportsParent(string path, string parent) => Inspect(path, doc =>
     {
         var dir = Path.GetDirectoryName(path)!;
         var properties = doc.Descendants().Where(e => e.Parent?.Name.LocalName == "PropertyGroup")
@@ -186,7 +186,9 @@ internal static class LayoutChecks
 
         return doc.Descendants().Where(e => e.Name.LocalName == "Import")
             .Select(e => Expand((string?)e.Attribute("Project") ?? ""))
-            .Any(project => FileAboveLookup.IsMatch(project) || (!project.Contains("$(") && ResolvesTo(project, dir, parent)));
+            .Any(project => FileAboveLookup.Match(project) is { Success: true } lookup
+                    && lookup.Groups["file"].Value.Equals(Path.GetFileName(parent), StringComparison.OrdinalIgnoreCase)
+                || (!project.Contains("$(") && ResolvesTo(project, dir, parent)));
     });
 
     private static bool ResolvesTo(string project, string dir, string target)

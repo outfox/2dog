@@ -5,6 +5,12 @@ description: "Only one Godot instance may run per assembly load context in 2dog;
 
 # Single Godot Instance Per Load Context
 
+The repository also contains experimental `twodog.hosting*` projects and
+[hosting demos](https://github.com/outfox/2dog/tree/main/demos) for concurrent
+desktop engines. They are not published NuGet packages: each engine needs its
+own assembly load context and physical native library copy. CWD, environment
+variables and signal handlers remain process-global; macOS hosting is unsupported.
+
 Only one Godot instance may run in an assembly load context at a time. Starting
 a second instance throws `InvalidOperationException`:
 

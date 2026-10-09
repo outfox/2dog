@@ -27,7 +27,11 @@ internal static class OptionalValueTokens
                 continue;
             }
 
-            if (i + 1 < args.Count && IsFolderToken(args[i + 1]))
+            // --build accepts project/solution paths; host flags accept only a folder name so a project path
+            // after --web/--android remains the command's positional argument.
+            if (i + 1 < args.Count && (arg == CliTree.Build.Name
+                    ? args[i + 1].Length > 0 && !args[i + 1].StartsWith('-')
+                    : IsFolderToken(args[i + 1])))
                 result.Add($"{arg}={args[++i]}");
             else
                 result.Add($"{arg}={CliTree.AnyFolder}");

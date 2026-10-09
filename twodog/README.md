@@ -29,9 +29,16 @@ dotnet tool install -g 2dog
 With no host options the tool prompts: a checkbox list of hosts, editable
 folder names, the plan, and a confirmation. Naming any host option (or passing
 `--yes`) skips that wizard. On terminals, a missing workload (`wasm-tools`,
-`android`) can still be offered before restore; `--yes` skips the offer. Use
+`android`) can still be offered for newly selected hosts before restore; `--yes` skips the offer. Use
 `--install-wasm-tools` or `--install-android-workload` for explicit installation. The `dotnet new` template produces the
 same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
+
+Browser and Android hosts are excluded from ordinary solution builds. Install their
+workloads when building or publishing those hosts. Package updates and desktop/test
+builds do not require them. Doctor only requires them for its selected `--build`
+target, or installs them when explicitly requested with an install flag.
+Failed restores return exit code `2`, preserve the created files, and explain
+recognized failures; fix the cause and run `dotnet restore` again.
 
 ## What it does
 
@@ -54,7 +61,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.2dog/   (.gdignore) <- generic .NET host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
-  MyGame.tests/  (.gdignore) <- xUnit test project
+  MyGame.xunit/  (.gdignore) <- xUnit test project
   MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
   MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)

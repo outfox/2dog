@@ -22,11 +22,11 @@ interactive checklist.
 | Option | Effect |
 | --- | --- |
 | `--fix` | Apply the safe fixes, then check again |
-| `--fix-all` | Also apply announced fixes, including missing workload installation |
+| `--fix-all` | Also apply announced fixes, including workloads required by the selected build |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts, then re-check |
 | `--install-android-workload` | Install the missing `android` workload for Android hosts, then re-check |
 | `--build [target]` | Run `dotnet build` of the solution, or a host folder or project, and explain known failures |
-| `-c, --configuration <Cfg>` | Configuration for `--build` (default `Debug`) |
+| `-c, --configuration <Cfg>` | Configuration for variant checks and `--build` (default `Debug`) |
 | `--log <file>` | Only explain an existing build, restore or runtime log; `-` reads stdin |
 | `--ignore <id>` | Drop a finding by [check id](#checks); repeatable |
 | `--strict` | Warnings count as findings for the exit code |
@@ -36,8 +36,16 @@ interactive checklist.
 Plus the [global and output options](/dnx-2dog#global-options); `-v` lists
 the passed checks too.
 
-Installing a workload is an announced fix: select it in the checklist, or use
-its install flag or `--fix-all`. `--fix` alone does not install workloads.
+Missing browser/Android tooling is informational until `--build` selects a host
+that needs it. Excluded solution hosts do not require their workloads. Installing
+a required workload is an announced fix: select it in the checklist or use
+`--fix-all`. The install flags explicitly request installation for existing hosts
+without a build. `--fix` alone does not install workloads.
+
+Variant checks read project and inherited `Directory.Build.props` literals and
+simple `Configuration` conditions. Browser clients use `TwoDogWebVariant`;
+Android and browser linking accept only `debug` and `release`. Complex MSBuild
+expressions are reported as informational; use `--build` to evaluate them.
 
 Solution migration first saves a `.sln.old` backup beside the original,
 numbered `.sln.old.1`, `.sln.old.2`, and so on if needed. Existing backups
@@ -57,6 +65,7 @@ are kept; the `.sln` is removed only after conversion to `.slnx` succeeds.
 2dog doctor                                         # check, then ask which fixes to apply
 2dog doctor --fix                                   # apply the safe fixes unattended
 2dog doctor --build MyGame.web -c Release           # build one host and explain failures
+2dog doctor --build MyGame.web/MyGame.web.csproj    # a project path also works
 2dog doctor --log build.log                         # explain an existing log
 dotnet build 2>&1 | 2dog doctor --log -             # or a piped one
 2dog doctor --json --strict | jq '.doctor.summary'  # CI: exit 3 on any warning
@@ -72,9 +81,9 @@ Ids are stable; `--ignore <id>` drops one.
 | --- | --- |
 | `env.dotnet-sdk` | a .NET 10 SDK is installed |
 | `env.global-json` | the root global.json pin is satisfied by an installed SDK |
-| `env.wasm-tools` | the wasm-tools workload is installed when a browser host exists |
-| `env.android-workload` | the android workload is installed when an Android host exists |
-| `env.android-sdk` | Android SDK paths and components are available when an Android host exists |
+| `env.wasm-tools` | wasm-tools is available for the selected browser build; otherwise optional |
+| `env.android-workload` | android is available for the selected Android build; otherwise optional |
+| `env.android-sdk` | Android SDK paths and components are available for the selected Android build; otherwise optional |
 | `env.host-platform` | this OS and architecture have 2dog native packages |
 | `env.godot4` | GODOT4 points at an existing Godot executable for IDE debugging |
 | `env.overrides` | GODOTSHARP_DIR and the other layout overrides point at what they claim |
@@ -113,7 +122,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.gdignore` | every host folder carries a .gdignore |
 | `host.project-reference` | every ProjectReference points at an existing project |
 | `host.godot-project-dir` | GodotProjectDir points at the Godot project |
-| `host.variant` | TwoDogVariant is release, debug or editor |
+| `host.variant` | TwoDogVariant / TwoDogWebVariant is supported by the host platform |
 | `host.buildtype-deprecated` | the deprecated TwoDogBuildType property is gone |
 | `host.publish-aot` | no WinForms, browser or Blazor host enables PublishAot |
 | `host.publish-singlefile` | PublishSingleFile is only enabled by browser hosts or alongside PublishAot |

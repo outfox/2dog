@@ -292,6 +292,19 @@ public class SuggestTests
 
 public class OptionalValueTokensTests
 {
+    [Theory]
+    [InlineData("Game.web/Game.web.csproj")]
+    [InlineData("Game.blazor\\Client")]
+    [InlineData("./Game.slnx")]
+    [InlineData("C:\\Games\\Game.web\\Game.web.csproj")]
+    public void Build_AcceptsPathsWithoutChangingHostFlagPathHandling(string target)
+    {
+        var command = CommandLine.Parse(["doctor", "./Game", "--build", target]);
+        Assert.Equal("./Game", command.Options.ProjectPath);
+        Assert.Equal(target, command.Doctor!.BuildTarget);
+        Assert.Equal(["add", "--web=*", "./Game"], OptionalValueTokens.Normalize(["add", "--web", "./Game"]));
+    }
+
     [Fact]
     public void Normalize_AttachesFolderNamesAndMarksBareFlags()
     {

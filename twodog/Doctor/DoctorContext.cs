@@ -101,6 +101,13 @@ internal sealed class DoctorContext
     /// <summary>Installed workload ids, or null when the listing failed.</summary>
     public List<string>? Workloads => _workloads.Value;
 
+    /// <summary>Hosts included in the requested build; an ordinary check requires no optional workloads.</summary>
+    public IReadOnlyList<HostModel> BuildHosts => _buildHosts ??= Options.BuildTarget is { } target
+        ? BuildRunner.HostsForTarget(Project, target, Options.Configuration)
+        : [];
+
+    private IReadOnlyList<HostModel>? _buildHosts;
+
     /// <summary>A workload repair changes the machine facts cached for the post-fix check.</summary>
     public void InvalidateWorkloads() =>
         _workloads = new(() => Dotnet("workload", "list") is { Ok: true } r ? DotnetInfo.ParseWorkloads(r.Output) : null);

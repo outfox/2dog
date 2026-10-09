@@ -34,20 +34,18 @@ public class UpdateTests
     }
 
     [Fact]
-    public void AndroidUpdate_WarnsAboutAMissingSdkWithoutChangingPaths()
+    public void AndroidUpdate_DoesNotRequireItsSdkOrWorkload()
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
         Assert.Equal(ExitCodes.Ok, CliConsole.Run("new", "Game", dir, "--android", "--no-restore").ExitCode);
-        var env = new FakeEnvironment();
         var runner = new FakeProcessRunner(r => FakeProcessRunner.Result(r, 0));
         var cmd = CommandLine.Parse(["update", dir, "--no-restore", "--allow-dirty"]);
 
-        var run = WithRunner(runner, () => CliConsole.Capture(() => UpdateCommand.Run(cmd, new Report(), env)));
+        var run = WithRunner(runner, () => CliConsole.Capture(() => UpdateCommand.Run(cmd, new Report())));
 
         Assert.Equal(ExitCodes.Ok, run.ExitCode);
-        Assert.Contains("Could not find an Android SDK", run.Stderr);
-        Assert.Empty(env.Vars);
+        Assert.DoesNotContain("Could not find an Android SDK", run.Stderr);
         Assert.Empty(runner.Requests);
     }
 
@@ -182,7 +180,7 @@ public class UpdateTests
         Assert.Contains("Version=\"$(TwoDogVersion)\"", web);
         Assert.Contains("Version=\"[$(TwoDogNativesVersion)]\"", web);
         Assert.DoesNotMatch(@"Version=""\[?4\.7\.1", web);
-        Assert.Contains("Include=\"2dog.godotsharp.editor\" Version=\"$(TwoDogVersion)\"", File.ReadAllText(Path.Combine(dir, "Game.tests", "Game.tests.csproj")));
+        Assert.Contains("Include=\"2dog.godotsharp.editor\" Version=\"$(TwoDogVersion)\"", File.ReadAllText(Path.Combine(dir, "Game.xunit", "Game.xunit.csproj")));
         Assert.DoesNotMatch(@"Version=""\[?4\.7\.1", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
         Assert.Contains($"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
 

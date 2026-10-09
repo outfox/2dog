@@ -5,7 +5,7 @@ description: "MSBuild configuration for xUnit hosts: engine variants, resource i
 
 # xUnit Configuration
 
-Set properties in `MyGame.tests.csproj`. Reference `2dog.xunit`, which brings
+Set properties in `MyGame.xunit.csproj`. Reference `2dog.xunit`, which brings
 in `2dog.engine` and the compile-in collection definitions.
 The [global settings](/configuration#properties) control the game directory,
 resource import, analyzers, and native variant.
@@ -17,7 +17,7 @@ resource import, analyzers, and native variant.
 | Editor | `editor` | Tests using Editor APIs and `[Tool]` scripts |
 
 ```bash
-dotnet test MyGame.tests -c Editor
+dotnet test MyGame.xunit -c Editor
 ```
 
 The generated Editor configuration also defines `EDITOR` and references

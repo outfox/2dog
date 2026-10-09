@@ -177,6 +177,12 @@ export default defineConfig({
                 ]
               },
               {
+                text: 'twodog.fixture',
+                items: [
+                  { text: gd('script') + 'AssemblyPreloader', link: '/api/assembly-preloader' }
+                ]
+              },
+              {
                 text: 'twodog.Testing',
                 items: [
                   { text: gd('test_tube') + 'FixtureBase', link: '/api/fixture-base' },
@@ -231,7 +237,8 @@ export default defineConfig({
             items: [
               { text: gd('window') + 'Single Godot Instance', link: '/known-issues/single-instance' },
               { text: gd('magnifying_glass') + 'xUnit Test Discovery', link: '/known-issues/xunit-discovery' },
-              { text: gd('window_terminal') + 'GD.Print in Tests', link: '/known-issues/gd-print-output' }
+              { text: gd('window_terminal') + 'GD.Print in Tests', link: '/known-issues/gd-print-output' },
+              { text: gd('script') + 'Spaced Project Names', link: '/known-issues/spaced-project-names' }
             ]
           },
         ]

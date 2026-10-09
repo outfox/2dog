@@ -40,6 +40,11 @@ Plus the [global and output options](/dnx-2dog#global-options).
 `--no-restore` skips the workload offers; the install flags request
 installation explicitly. `--dry-run` never checks or installs workloads.
 
+Workload offers apply to newly selected hosts. Browser and Android hosts are
+excluded from plain solution builds; desktop/test work needs neither workload.
+A failed restore returns exit code `2` and keeps the created files. Fix the
+reported cause and run `dotnet restore` again.
+
 ## Examples
 
 Install the [.NET 10 SDK](https://dotnet.microsoft.com/download), then create
@@ -75,7 +80,7 @@ dotnet new 2dog -n MyGame --web false
 ```
 
 This creates generic .NET and xUnit hosts. Omit `--web false` to include Web;
-install `wasm-tools` first.
+install `wasm-tools` when you want to build or publish that host.
 
 ## Debugging the Godot project in VS Code
 

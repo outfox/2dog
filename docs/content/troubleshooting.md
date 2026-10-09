@@ -39,11 +39,13 @@ styling off; `CLICOLOR_FORCE` keeps colour in a pipe.
 
 ## `dotnet restore` failed
 
-The tool prints the last lines of the restore and keeps going (the files are
-already written). Common causes:
+The tool prints the restore failure, explains recognized errors and returns
+exit code `2`. Files already written are kept. Common causes:
 
 - **`NETSDK1147` / wasm-tools**: the browser hosts need the workload -
   `dotnet workload install wasm-tools`.
+- **`NETSDK1147` / android**: Android hosts need `dotnet workload install android`.
+  Building or publishing Android also requires the Android SDK and JDK 17.
 - **`NU1101`/`NU1102`, a `2dog.*` package version not found**: the version the
   project pins was not published yet, or your `nuget.config` hides nuget.org.
   `2dog update` pins the versions the running tool ships.

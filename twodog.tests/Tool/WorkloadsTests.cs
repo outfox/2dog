@@ -276,6 +276,29 @@ public class WorkloadsTests
         Assert.Equal(["check wasm-tools and install if requested", "check android and install if requested"], checks);
     }
 
+    [Fact]
+    public void AddingDesktopHost_DoesNotOfferWorkloadsForExistingOptionalHosts()
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--web", "--android", "--no-restore").ExitCode);
+        var options = new ScaffoldOptions
+        {
+            ProjectPath = dir, Restore = true,
+            ConfirmWorkloadInstall = _ => throw new Exception("no optional host was selected"),
+            Hosts = [new HostSpec(HostKind.Desktop, "Game.2dog")],
+        };
+        var runner = new FakeProcessRunner(_ => throw new Exception("must not probe optional workloads"));
+        var run = CliConsole.Capture(() => ScaffoldCommand.Run(ScaffoldCommand.Open(options), options, actions =>
+        {
+            Assert.DoesNotContain(actions, a => a.Kind == ActionKind.Workload);
+            return false;
+        }, runner).ExitCode);
+        Assert.Equal(ExitCodes.Ok, run.ExitCode);
+        Assert.Empty(runner.Requests);
+        Assert.DoesNotContain("Could not find an Android SDK", run.Stderr);
+    }
+
     [Theory]
     [InlineData("web", false)]
     [InlineData("2dog", true)]

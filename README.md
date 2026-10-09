@@ -78,7 +78,7 @@ MyGame/                       Godot project and solution root
 ├── MyGame.csproj             Godot C# game assembly
 ├── MyGame.2dog/              Desktop .NET host
 ├── MyGame.web/               Browser WebAssembly host
-└── MyGame.tests/             Headless xUnit host
+└── MyGame.xunit/             Headless xUnit host
 ```
 
 Each nested host carries a `.gdignore`, so Godot ignores it. Your game project stays as it was, and each host
@@ -87,7 +87,8 @@ has its own entry point and dependencies.
 
 ## Requirements and status
 
-- .NET SDK 10.0 or later, with the `wasm-tools` workload
+- .NET SDK 10.0 or later
+- Web/WebXR/Blazor builds: `wasm-tools`; Android builds: `android`, Android SDK and JDK 17. Desktop and tests need neither workload, even when those optional hosts exist in the solution.
 - Godot 4.7.x official .NET editor (only when you want to edit scenes visually)
 - Supported build platforms: `win-x64`, `linux-x64`, and `osx-arm64`
 - Supported RIDs for published builds: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`

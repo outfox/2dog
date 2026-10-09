@@ -54,7 +54,7 @@ internal static class Hosts
         HostKind.Desktop => "2dog",
         HostKind.Web => "web",
         HostKind.WebXr => "webxr",
-        HostKind.Tests => "tests",
+        HostKind.Tests => "xunit",
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
@@ -378,7 +378,7 @@ internal static class HostScan
 
     /// <summary>Wired to a Godot project but unrecognizable otherwise: the folder suffix decides, default generic.</summary>
     private static HostKind BySuffix(string folder) =>
-        Hosts.All.FirstOrDefault(
+        folder.EndsWith(".tests", StringComparison.OrdinalIgnoreCase) ? HostKind.Tests : Hosts.All.FirstOrDefault(
             k => folder.EndsWith("." + Hosts.Suffix(k), StringComparison.OrdinalIgnoreCase),
             HostKind.Desktop);
 }

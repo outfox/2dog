@@ -14,6 +14,13 @@ internal sealed record BuildDiagnosis(List<SignatureMatch> Matches, List<string>
 /// <summary>Matches a build, restore or runtime log against the signature table.</summary>
 internal static class BuildLogAnalyzer
 {
+    /// <summary>Keep the original subprocess failure and add remedies derived from its actual log.</summary>
+    public static void ReportFailure(ProcessResult result, ProjectModel? project = null)
+    {
+        ProcessRunner.ReportFailure(result);
+        Render(Analyze(result.Output, project));
+    }
+
     /// <summary>The canonical MSBuild diagnostic line: file(line,col): error CODE: message.</summary>
     private static readonly Regex Diagnostic = new(
         @"^\s*(?:(?<file>.+?)(?:\((?<line>\d+),(?<col>\d+)\))?\s*:\s*)?(?<kind>error|warning)\s+(?<code>[A-Z]+\d+)\s*:\s*(?<msg>.*)$",
@@ -104,9 +111,7 @@ internal static class BuildRunner
     public static (ProcessResult Result, string LogPath, string Target) Run(DoctorContext ctx, string target, string configuration)
     {
         var project = ctx.Project;
-        var resolved = target.Length == 0
-            ? project.Solution ?? project.GameCsprojPath ?? throw new ToolException("nothing to build: no solution and no game csproj")
-            : Resolve(project, target);
+        var resolved = Resolve(project, target);
 
         var logDir = Path.Combine(Path.GetTempPath(), "2dog", "doctor");
         Directory.CreateDirectory(logDir);
@@ -120,12 +125,39 @@ internal static class BuildRunner
     }
 
     /// <summary>A host folder name, or a project or solution path relative to the project.</summary>
-    private static string Resolve(ProjectModel project, string target)
+    internal static string Resolve(ProjectModel project, string target)
     {
+        if (target.Length == 0)
+            return project.Solution ?? project.GameCsprojPath ?? throw new ToolException("nothing to build: no solution and no game csproj");
         if (project.Hosts.FirstOrDefault(h => h.Folder.Equals(target, StringComparison.OrdinalIgnoreCase)) is { } host)
             return host.CsprojPath;
         var path = Path.GetFullPath(Path.Combine(project.Dir, target));
         if (File.Exists(path) || Directory.Exists(path)) return path;
         throw new ToolException($"--build target '{target}' is neither a host folder nor a file in {project.Dir}");
+    }
+
+    /// <summary>Optional prerequisites follow the selected host, or the projects enabled in a solution build.</summary>
+    internal static IReadOnlyList<HostModel> HostsForTarget(ProjectModel project, string target, string configuration = "Debug")
+    {
+        var resolved = Resolve(project, target);
+        if (Directory.Exists(resolved))
+        {
+            var candidates = Directory.GetFiles(resolved, "*.sln").Concat(Directory.GetFiles(resolved, "*.slnx")).ToList();
+            if (candidates.Count == 0) candidates = Directory.GetFiles(resolved, "*.csproj").ToList();
+            if (candidates.Count == 1) resolved = candidates[0];
+        }
+
+        if (Path.GetExtension(resolved) is ".sln" or ".slnx")
+        {
+            var text = File.ReadAllText(resolved).Replace('\\', '/');
+            return project.Hosts.Where(host => new[] { host.CsprojPath, host.ClientCsprojPath }.OfType<string>().Any(path =>
+            {
+                var relative = Path.GetRelativePath(Path.GetDirectoryName(resolved)!, path).Replace('\\', '/');
+                return ProjectModel.NamesProject(text, relative) && !SolutionOps.IsExcludedFromSolutionBuild(resolved, relative, configuration);
+            })).ToList();
+        }
+
+        return project.Hosts.Where(host => HostChecks.SamePath(host.CsprojPath, resolved)
+            || host.ClientCsprojPath is { } client && HostChecks.SamePath(client, resolved)).ToList();
     }
 }

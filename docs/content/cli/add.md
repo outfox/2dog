@@ -50,9 +50,14 @@ are kept; the `.sln` is removed only after conversion succeeds.
 
 Plus the [global and output options](/dnx-2dog#global-options).
 
-Before restore, browser hosts get a `wasm-tools` installation offer on terminals,
-and Android hosts an `android` one. `--no-restore` skips the offers; the install
+Before restore, newly selected browser hosts get a `wasm-tools` installation offer
+on terminals, and newly selected Android hosts an `android` one. Existing optional
+hosts do not trigger offers when adding a desktop or test host.
+`--no-restore` skips the offers; the install
 flags request installation explicitly, including in CI. `--dry-run` never checks or installs workloads.
+
+A failed restore returns exit code `2` and keeps the created files. The tool
+explains recognized errors; fix the cause and run `dotnet restore` again.
 
 ## Examples
 

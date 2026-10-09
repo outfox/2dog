@@ -62,8 +62,12 @@ class BindingPackages(unittest.TestCase):
                 z.writestr(f"lib/net10.0/{name}.dll", data)
         (cls.root / "Directory.Build.props").write_text("<Project />")
         (cls.root / "Directory.Build.targets").write_text("<Project />")
+        # A private packages folder keeps the local Godot builds and test fixtures out of the user's global cache,
+        # and stops same-version fixtures from an earlier run being reused.
         (cls.root / "NuGet.Config").write_text(
-            '<configuration><packageSources><clear/>'
+            '<configuration><config>'
+            f'<add key="globalPackagesFolder" value="{xml(cls.root / "nuget-packages")}"/>'
+            '</config><packageSources><clear/>'
             f'<add key="test" value="{xml(cls.local)}"/>'
             f'<add key="packages" value="{xml(FEED)}"/>'
             f'<add key="sdk" value="{xml(REPO / "godot/bin/GodotSharp/Tools/nupkgs")}"/>'

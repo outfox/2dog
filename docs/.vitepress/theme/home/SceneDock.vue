@@ -12,7 +12,7 @@ const hosts = [
   { name: 'MyGame.android', role: 'Android', color: 'var(--ed-node-gui)', icon: 'mobile_phone', link: '/hosts/android' },
   { name: 'MyGame.web', role: 'Web', color: 'var(--ed-node-gui)', icon: 'globe', link: '/hosts/web' },
   { name: 'MyGame.webxr', role: 'WebXR', color: 'var(--ed-node-3d)', icon: 'vr_headset', link: '/hosts/webxr' },
-  { name: 'MyGame.tests', role: 'xUnit', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/hosts/xunit' },
+  { name: 'MyGame.xunit', role: 'xUnit', color: 'var(--ed-node-gold)', icon: 'test_tube', link: '/hosts/xunit' },
 ]
 
 /* Filter Nodes works for real, with Godot's rule: ancestors of matches stay visible. */
