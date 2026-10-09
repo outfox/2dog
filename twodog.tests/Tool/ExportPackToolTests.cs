@@ -59,7 +59,7 @@ public class ExportPackToolTests(ExportPackEngineFixture fixture)
         string Escape(string value) => SecurityElement.Escape(value)!;
         var assembly = typeof(showcase.CSharpTicker).Assembly.Location;
         var target = web ? "TwoDogExportGamePack" : "TwoDogExportDesktopPack";
-        var pck = Path.Combine(scratch.Dir, web ? "obj/twodog-web/godot.pck" : "out/host.pck");
+        var pck = Path.Combine(scratch.Dir, web ? "obj/twodog-web/Release/release/godot.pck" : "out/host.pck");
         var harness = $"""
             <Project>
               <PropertyGroup>
@@ -123,6 +123,82 @@ public class ExportPackToolTests(ExportPackEngineFixture fixture)
         start.Environment.Remove("GODOT_PROJECT_ASSEMBLY_DIR");
         var (exitCode, output) = RunProcess(start, "Export target");
         Assert.True(exitCode == 0, output);
+    }
+
+    [Fact]
+    public void WebExportPack_SelectsMatchingGDExtensionAndIsolatesVariants()
+    {
+        var (apiDir, toolsDir) = GodotSharpDirs();
+        using var scratch = new TempProjectDir();
+        scratch.Write("project.godot", "config_version=5\n[application]\nconfig/name=\"VariantProbe\"\n");
+        scratch.Write("export_presets.cfg", """
+            [preset.0]
+            name="Web"
+            platform="Web"
+            export_filter="all_resources"
+            [preset.0.options]
+            variant/extensions_support=true
+            variant/thread_support=false
+            """);
+        var native = OperatingSystem.IsWindows() ? "twodog_probe.windows.x86_64.dll"
+            : OperatingSystem.IsLinux() ? "libtwodog_probe.linux.x86_64.so" : "libtwodog_probe.macos.dylib";
+        var source = Path.Combine(RepoRoot, "demos/showcase/gdextension/bin", native);
+        Assert.SkipWhen(!File.Exists(source), "Build the showcase's native GDExtension probe first.");
+        scratch.Write("bin/.gdignore", "");
+        File.Copy(source, Path.Combine(scratch.Dir, "bin", native));
+        // The host editor loads the native probe. The web payloads only need distinct bytes here:
+        // the browser smoke test covers loading, and this test verifies export selection.
+        scratch.Write("bin/debug.wasm", "debug side module");
+        scratch.Write("bin/release.wasm", "release side module");
+        scratch.Write("probe.gdextension", $$"""
+            [configuration]
+            entry_symbol="twodog_probe_init"
+            compatibility_minimum="4.7"
+            [libraries]
+            windows.x86_64="bin/{{native}}"
+            linux.x86_64="bin/{{native}}"
+            macos="bin/{{native}}"
+            web.debug.wasm32="bin/debug.wasm"
+            web.release.wasm32="bin/release.wasm"
+            """);
+        string Escape(string value) => SecurityElement.Escape(value)!;
+        var project = scratch.Write("export.proj", $"""
+            <Project>
+              <PropertyGroup>
+                <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+                <GodotProjectDir>{Escape(scratch.Dir)}</GodotProjectDir>
+                <BaseIntermediateOutputPath>obj/</BaseIntermediateOutputPath>
+                <TwoDogExportPack>true</TwoDogExportPack>
+                <TwoDogWebSideModuleExports>false</TwoDogWebSideModuleExports>
+                <TwoDogImportHelperPath>{Escape(HelperPath)}</TwoDogImportHelperPath>
+                <TwoDogEditorLibGodotPath>{Escape(EditorLibGodot)}</TwoDogEditorLibGodotPath>
+                <TwoDogGodotApiSourcePath>{Escape(apiDir)}</TwoDogGodotApiSourcePath>
+                <TwoDogGodotToolsDir>{Escape(toolsDir)}</TwoDogGodotToolsDir>
+              </PropertyGroup>
+              <Import Project="{Escape(Path.Combine(RepoRoot, "twodog.engine/build/2dog.engine.targets"))}" />
+              <Import Project="{Escape(Path.Combine(RepoRoot, "platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"))}" />
+              <Target Name="TwoDogPrepareExport" DependsOnTargets="TwoDogResolveContentCapability" />
+            </Project>
+            """);
+        // Same game inputs, changing configurations and explicit native overrides. Returning to
+        // Release must use its own cached pack instead of the debug pack exported immediately before it.
+        foreach (var (configuration, variant) in new[] {
+            ("Release", "release"), ("Debug", "debug"), ("Release", "debug"),
+            ("Debug", "release"), ("Release", "release") })
+        {
+            var start = new ProcessStartInfo("dotnet");
+            foreach (var arg in new[] { "msbuild", project, "-t:TwoDogExportGamePack", "-v:quiet",
+                "-p:Configuration=" + configuration, "-p:TwoDogWebVariant=" + variant })
+                start.ArgumentList.Add(arg);
+            start.Environment["GODOT_EDITOR"] = Path.Combine(scratch.Dir, "unrelated-editor.exe");
+            start.Environment["GODOT4"] = Path.Combine(scratch.Dir, "unrelated-ide-editor.exe");
+            var (exitCode, output) = RunProcess(start, "Variant export");
+            Assert.True(exitCode == 0, output);
+            var pck = Path.Combine(scratch.Dir, "obj/twodog-web", configuration, variant, "godot.pck");
+            var entries = twodog.pck.GdpcPack.Read(pck).Entries.Select(entry => entry.Path).ToArray();
+            Assert.Contains("bin/" + variant + ".wasm", entries);
+            Assert.DoesNotContain("bin/" + (variant == "debug" ? "release" : "debug") + ".wasm", entries);
+        }
     }
 
     [Fact]

@@ -175,7 +175,7 @@
     <!-- Automatic Godot Project Import               -->
     <!-- ============================================ -->
     <!-- Headless import of $(GodotProjectDir) when its sources changed, via 2dog.import against the editor libgodot
-         (or $(GodotEditor)/GODOT_EDITOR). Knobs: TwoDogAutoImport/RequireImport/ForceImport/ImportStampFile/ImportExcludes. -->
+         (or an explicitly configured $(GodotEditor)). Knobs: TwoDogAutoImport/RequireImport/ForceImport/ImportStampFile/ImportExcludes. -->
     <PropertyGroup>
         <TwoDogAutoImport Condition="'$(TwoDogAutoImport)' == ''">true</TwoDogAutoImport>
         <TwoDogGodotProjectFullPath Condition="'$(GodotProjectDir)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))))</TwoDogGodotProjectFullPath>
@@ -203,7 +203,7 @@
     <Target Name="TwoDogResolveContentCapability">
         <PropertyGroup>
             <TwoDogExternalGodotEditor Condition="'$(TwoDogExternalGodotEditor)' == ''">$(GodotEditor)</TwoDogExternalGodotEditor>
-            <TwoDogExternalGodotEditor Condition="'$(TwoDogExternalGodotEditor)' == ''">$(GODOT_EDITOR)</TwoDogExternalGodotEditor>
+            <!-- Ambient GODOT_EDITOR/GODOT4 settings belong to IDEs, not this content pipeline. -->
             <!-- GodotTools: 2dog.tools package, or the source checkout -->
             <_TwoDogToolsDir>$(TwoDogGodotToolsDir)</_TwoDogToolsDir>
             <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/</_TwoDogToolsDir>

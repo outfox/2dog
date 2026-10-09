@@ -13,6 +13,7 @@ string? exportOutput = null;
 string? listPackPath = null;
 string? assemblyHash = null;
 var verbose = false;
+var exportDebug = false;
 
 for (var i = 0; i < args.Length; i++)
 {
@@ -42,6 +43,9 @@ for (var i = 0; i < args.Length; i++)
         case "--assembly-hash" when i + 1 < args.Length:
             assemblyHash = args[++i];
             break;
+        case "--debug":
+            exportDebug = true;
+            break;
         case "--verbose":
             verbose = true;
             break;
@@ -51,7 +55,6 @@ for (var i = 0; i < args.Length; i++)
     }
 }
 
-editorPath ??= Environment.GetEnvironmentVariable("GODOT_EDITOR");
 projectPath = projectPath != null ? Path.GetFullPath(projectPath) : null;
 exportOutput = exportOutput != null ? Path.GetFullPath(exportOutput) : null;
 
@@ -62,7 +65,7 @@ if (listPackPath != null)
 
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
     (editorPath == null && libgodotPath == null) ||
-    (exportPreset != null && exportOutput == null))
+    (exportPreset != null && exportOutput == null) || (exportDebug && exportPreset == null))
 {
     Console.Error.WriteLine("Usage: twodog.import [--libgodot <libgodot-library>] [--editor <godot-binary>]");
     Console.Error.WriteLine("                     [--export-pack <preset> --output <pck-path>] <path-to-godot-project>");
@@ -73,12 +76,12 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("                     Defaults to the helper's own directory.");
     Console.Error.WriteLine("  --tools-dir <dir>  Directory containing GodotTools.dll (GODOT_TOOLS_DIR).");
     Console.Error.WriteLine("  --editor <path>    Path to a Godot editor binary; runs as a subprocess.");
-    Console.Error.WriteLine("                     Falls back to the GODOT_EDITOR environment variable.");
     Console.Error.WriteLine("                     Takes precedence over --libgodot.");
     Console.Error.WriteLine("  --export-pack <preset>  Instead of importing, export the project's");
     Console.Error.WriteLine("                     content as a .pck using the named export preset");
     Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
+    Console.Error.WriteLine("  --debug            Export debug resources and GDExtensions (with --export-pack).");
     Console.Error.WriteLine("  --list-pack <pck>  List a .pck's contents by size (no engine involved).");
     Console.Error.WriteLine("  --assembly-hash <hash>  Refresh cached export scenes when managed assemblies change.");
     Console.Error.WriteLine("  --verbose          Pass --verbose to the engine.");
@@ -137,6 +140,11 @@ if (editorPath != null)
         Directory.CreateDirectory(Path.GetDirectoryName(exportOutput!)!);
         foreach (var a in new[] { "--headless", "--export-pack", exportPreset, exportOutput!, "--path", projectPath })
             process.StartInfo.ArgumentList.Add(a);
+        if (exportDebug)
+        {
+            process.StartInfo.ArgumentList.Add("--export-debug");
+            process.StartInfo.ArgumentList.Add(exportPreset);
+        }
     }
     else
     {
@@ -202,10 +210,22 @@ unsafe
             var exportPack = (delegate* unmanaged[Cdecl]<byte*, byte*, byte*, int, byte**, int>)export;
             var presetUtf8 = Encoding.UTF8.GetBytes(exportPreset + "\0");
             var outputUtf8 = Encoding.UTF8.GetBytes(exportOutput + "\0");
+            var debugUtf8 = "--export-debug\0"u8.ToArray();
             fixed (byte* pPreset = presetUtf8)
             fixed (byte* pOutput = outputUtf8)
+            fixed (byte* pDebug = debugUtf8)
             {
-                rc = exportPack(pProject, pPreset, pOutput, verbose ? 1 : 0, verbose ? extra : null);
+                // Keep the native helper ABI: --export-pack chooses pack-only output;
+                // --export-debug adds debug features without switching to a full export.
+                var exportExtra = stackalloc byte*[3];
+                var count = 0;
+                if (verbose) exportExtra[count++] = pVerbose;
+                if (exportDebug)
+                {
+                    exportExtra[count++] = pDebug;
+                    exportExtra[count++] = pPreset;
+                }
+                rc = exportPack(pProject, pPreset, pOutput, count, count == 0 ? null : exportExtra);
             }
         }
         else

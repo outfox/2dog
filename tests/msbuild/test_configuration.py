@@ -198,6 +198,30 @@ class ConfigurationTests(unittest.TestCase):
                 )
                 self.assertEqual(output.strip(), expected)
 
+    def test_web_pack_export_matches_selected_native_variant(self):
+        project = self.project()
+        paths = set()
+        for configuration, variant in (("Debug", "debug"), ("Release", "release"),
+                                       ("Release", "debug"), ("Debug", "release")):
+            with self.subTest(configuration=configuration, variant=variant):
+                output = self.run_msbuild(
+                    project, f"-p:Configuration={configuration}", f"-p:TwoDogWebVariant={variant}",
+                    "-getProperty:_TwoDogWebPackPath,_TwoDogWebExportDebugArg,_TwoDogWebEditorDebugArg",
+                )
+                values = json.loads(output)["Properties"]
+                paths.add(values["_TwoDogWebPackPath"])
+                self.assertEqual(values["_TwoDogWebExportDebugArg"], "--debug" if variant == "debug" else "")
+                self.assertEqual(values["_TwoDogWebEditorDebugArg"], '--export-debug "Web"' if variant == "debug" else "")
+        self.assertEqual(len(paths), 4, "each configuration/native variant needs an independent pack")
+
+    def test_content_pipeline_ignores_ambient_editor_variables(self):
+        editor = escape((self.scratch / "unrelated-editor.exe").as_posix())
+        for property_name in ("GODOT_EDITOR", "GODOT4", "GodotEditor", "TwoDogExternalGodotEditor"):
+            with self.subTest(property=property_name):
+                project = self.project(f"<{property_name}>{editor}</{property_name}>")
+                result = self.run_msbuild(project, "-t:TwoDogResolveContentCapability", "-getProperty:TwoDogExternalGodotEditor")
+                self.assertEqual(result.strip(), "" if property_name in ("GODOT_EDITOR", "GODOT4") else editor)
+
     def test_missing_debug_payload_does_not_use_release(self):
         self.archive("debug").unlink()
         project = self.project()

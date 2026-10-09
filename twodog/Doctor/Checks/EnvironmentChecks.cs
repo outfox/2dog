@@ -16,7 +16,6 @@ internal static class EnvironmentChecks
         new("env.android-workload", Category.Environment, "the android workload is installed when an Android host exists"),
         new("env.android-sdk", Category.Environment, "Android SDK paths and components are available when an Android host exists"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
-        new("env.godot-editor", Category.Environment, "GODOT_EDITOR, when set, points at an existing file"),
         new("env.godot4", Category.Environment, "GODOT4 points at an existing Godot executable for IDE debugging"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
         new("env.packages-restored", Category.Environment, "the engine, tools and native packages are in the NuGet cache"),
@@ -79,12 +78,6 @@ internal static class EnvironmentChecks
                 $"supported: {string.Join(", ", SupportedRids)}", "build on a supported platform, or build the natives yourself");
 
         yield return Godot4Finding(ctx.Env);
-
-        if (ctx.Env.Var("GODOT_EDITOR") is { Length: > 0 } editor)
-            yield return ctx.Env.FileExists(editor)
-                ? Finding.Pass("env.godot-editor", c, "GODOT_EDITOR set")
-                : new Finding("env.godot-editor", c, Severity.Warn, $"GODOT_EDITOR points at a missing file: {editor}",
-                    "imports and exports fall back to the 2dog editor packages", "fix or unset GODOT_EDITOR");
 
         foreach (var (name, check, what) in new (string, Func<string, bool>, string)[]
                  {

@@ -164,7 +164,10 @@
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
         <!-- BaseIntermediateOutputPath is defined early by Microsoft.Common.props, so the path is stable whether
              imported from the package (after common targets) or from a source-checkout project body (before) -->
-        <_TwoDogWebPackPath>$(BaseIntermediateOutputPath)twodog-web/$(TwoDogWebPackName)</_TwoDogWebPackPath>
+        <!-- A Debug engine resolves debug libraries; never reuse a Release pack (or vice versa). -->
+        <_TwoDogWebPackPath>$(BaseIntermediateOutputPath)twodog-web/$(Configuration)/$(TwoDogWebVariant)/$(TwoDogWebPackName)</_TwoDogWebPackPath>
+        <_TwoDogWebExportDebugArg Condition="'$(TwoDogWebVariant)' == 'debug'">--debug</_TwoDogWebExportDebugArg>
+        <_TwoDogWebEditorDebugArg Condition="'$(TwoDogWebVariant)' == 'debug'">--export-debug &quot;$(TwoDogWebExportPreset)&quot;</_TwoDogWebEditorDebugArg>
     </PropertyGroup>
 
     <!-- Do NOT borrow @(TwoDogImportInputs): empty Inputs silently skip the export. .gdignore dirs are skipped by the
@@ -199,17 +202,17 @@
 
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; --output &quot;$(_TwoDogWebPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; $(_TwoDogWebExportDebugArg) --output &quot;$(_TwoDogWebPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg)"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; $(_TwoDogWebExportDebugArg) --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 

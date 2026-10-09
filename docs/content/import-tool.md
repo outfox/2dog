@@ -31,7 +31,7 @@ incremental import after `Build`:
 | `TwoDogForceImport` | `false` | Set `true` to force the import to run even when up-to-date. Also covers staleness the file tracking cannot see (deleted assets). |
 | `TwoDogImportStampFile` | `<project>/.godot/2dog.import.stamp` | Override the stamp file location. |
 | `TwoDogImportExcludes` | - | Extra semicolon-separated glob excludes for the import inputs (directories with a `.gdignore` are always excluded). |
-| `GodotEditor` | - | Path to an external Godot editor binary. When set (or the `GODOT_EDITOR` environment variable is set), it is used instead of the in-process helper. |
+| `GodotEditor` | - | Path to an external Godot editor binary. Only an explicit build setting selects this instead of the in-process helper; ambient `GODOT_EDITOR` and `GODOT4` variables do not affect imports or exports. |
 
 When neither the helper payload nor an external editor can be resolved, the
 build warns and skips the import. Set `TwoDogRequireImport` to fail instead.
@@ -59,8 +59,7 @@ all three, or set `<GodotEditor>` to an external editor binary.
 ### GodotTools.dll not found
 
 The bundled import needs the GodotTools assemblies from `2dog.tools`. Restore
-`2dog.engine` normally, or configure an external editor with `<GodotEditor>` or
-`GODOT_EDITOR`.
+`2dog.engine` normally, or configure an external editor explicitly with `<GodotEditor>`.
 
 ### No .uid files generated
 

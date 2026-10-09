@@ -833,6 +833,8 @@ public class ExportPresetOpsTests
         Assert.Contains("[preset.1.options]", text);
         Assert.DoesNotContain("[preset.0]", text);
         Assert.Contains("name=\"Web\"", text);
+        Assert.Contains("variant/extensions_support=true", text);
+        Assert.Contains("variant/thread_support=false", text);
     }
 
     [Fact]
@@ -1246,6 +1248,8 @@ public class AddEndToEndTests
         Assert.Contains("[preset.3]", text);
         Assert.DoesNotContain("[preset.4]", text);
         Assert.Contains("name=\"Web\"", text);
+        Assert.Contains("variant/extensions_support=true", text);
+        Assert.Contains("variant/thread_support=false", text);
         Assert.Contains("name=\"Linux\"", text);
         Assert.Contains("name=\"macOS\"", text);
         Assert.Single(Regex.Matches(text, "name=\"Windows Desktop\""));

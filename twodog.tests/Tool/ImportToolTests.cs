@@ -10,14 +10,22 @@ using static HelperToolTestBed;
 /// </summary>
 public class ImportToolTests
 {
-    [Fact]
-    public void InProcessImport_GeneratesUidsAndCache()
+    [Theory]
+    [InlineData("GODOT_EDITOR")]
+    [InlineData("GODOT4")]
+    public void InProcessImport_IgnoresAmbientEditorAndGeneratesUids(string variable)
     {
         var (apiDir, toolsDir) = GodotSharpDirs();
         var scratch = CreateScratchProject();
         try
         {
-            var exitCode = RunHelper("--libgodot", EditorLibGodot, "--api-dir", apiDir, "--tools-dir", toolsDir, scratch);
+            var start = new System.Diagnostics.ProcessStartInfo("dotnet");
+            foreach (var argument in new[] { "exec", HelperPath, "--libgodot", EditorLibGodot,
+                "--api-dir", apiDir, "--tools-dir", toolsDir, scratch })
+                start.ArgumentList.Add(argument);
+            start.Environment[variable] = Path.Combine(scratch, "unrelated-editor.exe");
+            var (exitCode, output) = RunProcess(start, "Import with ambient editor");
+            Assert.True(exitCode == 0, output);
 
             Assert.Equal(0, exitCode);
             Assert.True(File.Exists(Path.Combine(scratch, "SpinningCube.cs.uid")), "SpinningCube.cs.uid not generated");

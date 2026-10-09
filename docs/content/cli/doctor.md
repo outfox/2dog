@@ -76,7 +76,6 @@ Ids are stable; `--ignore <id>` drops one.
 | `env.android-workload` | the android workload is installed when an Android host exists |
 | `env.android-sdk` | Android SDK paths and components are available when an Android host exists |
 | `env.host-platform` | this OS and architecture have 2dog native packages |
-| `env.godot-editor` | GODOT_EDITOR, when set, points at an existing file |
 | `env.godot4` | GODOT4 points at an existing Godot executable for IDE debugging |
 | `env.overrides` | GODOTSHARP_DIR and the other layout overrides point at what they claim |
 | `env.packages-restored` | the engine, tools and native packages are in the NuGet cache |
