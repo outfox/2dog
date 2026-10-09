@@ -109,21 +109,41 @@ export default defineConfig({
         text: 'Hosts',
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
-          { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
-          { text: gd('mobile_phone') + 'Android', link: '/hosts/android' },
-          { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
-          { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
+          {
+            text: 'Console',
+            items: [
+              { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' }
+            ]
+          },
+          {
+            text: 'Desktop',
+            items: [
+              { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
+              { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
+              { text: gd('window') + 'WinUI 3', link: '/hosts/winui' }
+            ]
+          },
+          {
+            text: 'Web',
+            items: [
+              { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
+              { text: gd('globe') + 'Web', link: '/hosts/web' },
+              { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' }
+            ]
+          },
+          {
+            text: 'Mobile',
+            items: [
+              { text: gd('mobile_phone') + 'Android', link: '/hosts/android' }
+            ]
+          },
           {
             text: 'Testing',
             items: [
               { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
               { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
             ]
-          },
-          { text: gd('globe') + 'Web', link: '/hosts/web' },
-          { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' },
-          { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
-          { text: gd('window') + 'WinUI 3', link: '/hosts/winui' }
+          }
         ]
       },
       {
@@ -225,16 +245,41 @@ export default defineConfig({
             link: '/configuration',
             collapsed: true,
             items: [
-              { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' },
-              { text: gd('mobile_phone') + 'Android', link: '/configuration/android' },
-              { text: gd('window') + 'Avalonia', link: '/configuration/avalonia' },
-              { text: gd('globe') + 'Blazor', link: '/configuration/blazor' },
-              { text: gd('test_tube') + 'NUnit', link: '/configuration/nunit' },
-              { text: gd('globe') + 'Web', link: '/configuration/web' },
-              { text: gd('vr_headset') + 'WebXR', link: '/configuration/webxr' },
-              { text: gd('window') + 'WinForms', link: '/configuration/winforms' },
-              { text: gd('window') + 'WinUI 3', link: '/configuration/winui' },
-              { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
+              {
+                text: 'Console',
+                items: [
+                  { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' }
+                ]
+              },
+              {
+                text: 'Desktop',
+                items: [
+                  { text: gd('window') + 'Avalonia', link: '/configuration/avalonia' },
+                  { text: gd('window') + 'WinForms', link: '/configuration/winforms' },
+                  { text: gd('window') + 'WinUI 3', link: '/configuration/winui' }
+                ]
+              },
+              {
+                text: 'Web',
+                items: [
+                  { text: gd('globe') + 'Blazor', link: '/configuration/blazor' },
+                  { text: gd('globe') + 'Web', link: '/configuration/web' },
+                  { text: gd('vr_headset') + 'WebXR', link: '/configuration/webxr' }
+                ]
+              },
+              {
+                text: 'Mobile',
+                items: [
+                  { text: gd('mobile_phone') + 'Android', link: '/configuration/android' }
+                ]
+              },
+              {
+                text: 'Testing',
+                items: [
+                  { text: gd('test_tube') + 'NUnit', link: '/configuration/nunit' },
+                  { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
+                ]
+              }
             ]
           }
         ]

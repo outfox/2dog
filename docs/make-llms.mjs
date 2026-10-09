@@ -41,8 +41,19 @@ const SECTIONS = [
     'getting-started.md', 'concepts.md', 'project-layout.md',
   ]],
   ['Hosts', [
-    'hosts/index.md', 'hosts/generic.md', 'hosts/android.md', 'hosts/avalonia.md', 'hosts/blazor.md',
-    'hosts/web.md', 'hosts/webxr.md', 'hosts/winforms.md', 'hosts/winui.md',
+    'hosts/index.md',
+  ]],
+  ['Console Hosts', [
+    'hosts/generic.md',
+  ]],
+  ['Desktop Hosts', [
+    'hosts/avalonia.md', 'hosts/winforms.md', 'hosts/winui.md',
+  ]],
+  ['Web Hosts', [
+    'hosts/blazor.md', 'hosts/web.md', 'hosts/webxr.md',
+  ]],
+  ['Mobile Hosts', [
+    'hosts/android.md',
   ]],
   ['Testing Hosts', [
     'hosts/nunit.md', 'hosts/xunit.md',
@@ -60,10 +71,22 @@ const SECTIONS = [
     'testing/nunit.md', 'testing.md', 'testing/input.md',
   ]],
   ['MSBuild Configuration', [
-    'configuration.md', 'configuration/generic.md', 'configuration/android.md',
-    'configuration/avalonia.md', 'configuration/blazor.md', 'configuration/nunit.md', 'configuration/web.md',
-    'configuration/webxr.md', 'configuration/winforms.md', 'configuration/winui.md',
-    'configuration/xunit.md',
+    'configuration.md',
+  ]],
+  ['Console Configuration', [
+    'configuration/generic.md',
+  ]],
+  ['Desktop Configuration', [
+    'configuration/avalonia.md', 'configuration/winforms.md', 'configuration/winui.md',
+  ]],
+  ['Web Configuration', [
+    'configuration/blazor.md', 'configuration/web.md', 'configuration/webxr.md',
+  ]],
+  ['Mobile Configuration', [
+    'configuration/android.md',
+  ]],
+  ['Testing Configuration', [
+    'configuration/nunit.md', 'configuration/xunit.md',
   ]],
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',

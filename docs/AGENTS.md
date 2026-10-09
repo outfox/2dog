@@ -21,8 +21,8 @@
   `make-llms.mjs`. Pages that must stay out of the index go in `EXCLUDE`.
 - When a page moves or merges, keep a redirect stub at the old path like `content/web.md`: `search: false`,
   a meta refresh, no title or description, listed in `EXCLUDE`. Point internal links at the new page.
-- Each host has `hosts/<host>.md` and `configuration/<host>.md`. Sidebar host lists start with the generic
-  host, then run alphabetically.
+- Each host has `hosts/<host>.md` and `configuration/<host>.md`. Group host and configuration lists into
+  Console, Desktop, Web, Mobile and Testing, with hosts listed alphabetically within each group.
 - Each visible CLI verb has `cli/<verb>.md`, linked from the sidebar as `/cli/<verb>`. `dnx-2dog.md` and the
   verb pages mention every visible option, and `cli/doctor.md` lists every check id in backticks. Keep
   `twodog/README.md` in step; `DocsDriftTests` checks all of this.

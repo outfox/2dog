@@ -22,16 +22,37 @@ dnx 2dog add
 Choose hosts when prompted, or use the flags below. For a new project, use
 `dnx 2dog new MyGame` instead.
 
+Without host flags, unattended commands include generic .NET, Web, and xUnit.
+See [Project Layout](/project-layout) for files and
+[MSBuild Configuration](/configuration) for shared settings.
+
+### Console
+
 | Host | Flag | Purpose |
 | --- | --- | --- |
 | [2dog (generic .NET)](./generic) | `--generic` | .NET console application (desktop or headless) |
-| [Android](./android) | `--android` | Android APK (experimental) |
+
+### Desktop
+
+| Host | Flag | Purpose |
+| --- | --- | --- |
 | [Avalonia](./avalonia) | `--avalonia` | Cross-platform desktop UI |
+| [WinForms](./winforms) | `--winforms` | Windows Forms UI |
+| [WinUI 3](./winui) | `--winui` | Windows App SDK UI |
+
+### Web
+
+| Host | Flag | Purpose |
+| --- | --- | --- |
 | [Blazor](./blazor) | `--blazor` | Game inside a Blazor page |
 | [Web](./web) | `--web` | WASM / HTML5 browser bundle (e.g. for [itch.io](https://itch.io))|
 | [WebXR](./webxr) | `--webxr` | Browser VR and AR |
-| [WinForms](./winforms) | `--winforms` | Windows Forms UI |
-| [WinUI 3](./winui) | `--winui` | Windows App SDK UI |
+
+### Mobile
+
+| Host | Flag | Purpose |
+| --- | --- | --- |
+| [Android](./android) | `--android` | Android APK (experimental) |
 
 ### Testing
 
@@ -39,7 +60,3 @@ Choose hosts when prompted, or use the flags below. For a new project, use
 | --- | --- | --- |
 | [NUnit](./nunit) | `--nunit` | NUnit tests using the Godot engine (opt-in) |
 | [xUnit](./xunit) | `--tests` | xUnit tests using the Godot engine |
-
-Without host flags, unattended commands include generic .NET, Web, and xUnit.
-See [Project Layout](/project-layout) for files and
-[MSBuild Configuration](/configuration) for shared settings.
