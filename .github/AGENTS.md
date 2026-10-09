@@ -7,6 +7,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - `ci.yml` reuses `godot-<submodule-hash>` native releases or builds missing natives through
   `build-natives.yml`, then packs, tests three OSes in Debug/Release/Editor and runs smoke jobs. `v*` tags
   also deploy to NuGet. Pushes that only touch `docs/**`, root Markdown or `AGENTS.md` files skip it.
+- Each OS/configuration pair is its own test job in a fresh workspace, so no configuration relies on files
+  another one built. Do not merge configurations back into one job: together they exceed the job timeout.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
   tags pushed with `GITHUB_TOKEN` start no workflows. `android.yml` runs Android build and package tests;
   `docs.yml` builds the documentation site.

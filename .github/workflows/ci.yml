@@ -277,9 +277,10 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  # Run tests on each platform.
+  # Run tests on each platform, one job per configuration: a single job running all three back to back
+  # took 8-10 minutes and hit the job timeout.
   test:
-    name: Test (${{ matrix.name }})
+    name: Test (${{ matrix.name }}, ${{ matrix.config }})
     needs: [pack]
     # Explicit result check: the implicit success() evaluates the transitive
     # needs chain, and the (usually) skipped build-natives job would skip this
@@ -289,6 +290,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        name: [linux-x64, win-x64, osx-arm64]
+        config: [Debug, Release, Editor]
         include:
           - name: linux-x64
             runner: blacksmith-4vcpu-ubuntu-2404
@@ -332,19 +335,13 @@ jobs:
 
       # The watchdog dumps the xunit v3 child (and 2dog.import grandchildren) on a hang;
       # vstest's own --blame-hang only ever dumped its testhost. Crash dumps cover a segv.
-      - name: Test (Debug)
-        run: bash .github/scripts/test-with-watchdog.sh Debug
-
-      - name: Test (Release)
-        run: bash .github/scripts/test-with-watchdog.sh Release
-
-      - name: Test (Editor)
-        run: bash .github/scripts/test-with-watchdog.sh Editor
+      - name: Test (${{ matrix.config }})
+        run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
 
       # The suite above is headless. This starts the stock windowed fixture on the 2dog test thread, as consumers'
       # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
       - name: Test windowed fixture
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS' && matrix.config == 'Release'
         timeout-minutes: 5
         run: |
           results=tests/windowed-fixture/TestResults
@@ -373,7 +370,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-dumps-${{ matrix.name }}
+          name: test-dumps-${{ matrix.name }}-${{ matrix.config }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7
