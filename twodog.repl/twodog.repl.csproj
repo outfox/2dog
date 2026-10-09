@@ -3,6 +3,8 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <!-- Keep symbols with the packaged host for debugging and coverage of the actual NuGet assembly. -->
+        <DebugType>embedded</DebugType>
         <PackageId>2dog.repl</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Description>A terminal C# REPL inside a running Godot engine, with completion, highlighting and history.</Description>

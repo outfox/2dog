@@ -173,7 +173,7 @@ internal sealed class NodePathInput
         return nodes;
     }
 
-    private static string ReferenceableType(Type actual)
+    internal static string ReferenceableType(Type actual)
     {
         for (Type? type = actual; type is not null; type = type.BaseType)
         {

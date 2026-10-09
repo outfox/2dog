@@ -139,3 +139,23 @@ the prompt and attaching to other processes are outside this host's scope.
 
 Third-party license texts and source links ship in this package. See
 `THIRD-PARTY-NOTICES.txt`.
+
+## Tests and coverage
+
+The REPL tests drive real PrettyPrompt key events and a live headless Godot
+engine. They cover persistent C# state, completion and undo, node commands,
+thread affinity, cancellation, scratch worlds, output and host cleanup.
+They consume the packed `2dog.repl` NuGet assembly, which carries embedded
+symbols. There are no source-file, member or branch coverage exclusions.
+
+After packing the managed packages and restoring the tests, use a fresh
+results directory (replace `Debug` with `Editor` or `Release` as needed):
+
+```text
+dotnet test twodog.tests -c Debug --filter "FullyQualifiedName~Repl" --collect:"XPlat Code Coverage" --settings tests/repl/coverage.runsettings --results-directory obj/repl-coverage-check
+uv run --no-project python scripts/check_repl_coverage.py obj/repl-coverage-check
+```
+
+CI runs the behavior tests on Windows, Linux and macOS in all three native
+variants, and requires at least 95% line and branch coverage on Windows in
+each configuration. Missing or empty coverage reports fail the check.

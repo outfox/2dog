@@ -8,10 +8,13 @@ internal sealed class PromptConsole : IConsole
 {
     private readonly Queue<ConsoleKeyInfo> keys;
     private readonly ReplInputBuffer? input;
+    private readonly CancellationToken? waitForInput;
+    public int Clears { get; private set; }
 
-    public PromptConsole(IEnumerable<ConsoleKeyInfo> keys, bool buffered = false, bool windows = true)
+    public PromptConsole(IEnumerable<ConsoleKeyInfo> keys, bool buffered = false, bool windows = true, CancellationToken? waitForInput = null)
     {
         this.keys = new(keys);
+        this.waitForInput = waitForInput;
         if (buffered) input = new ReplInputBuffer(() => this.keys.Count > 0, ReadNext, windows);
     }
     public int CursorTop => 0;
@@ -24,8 +27,16 @@ internal sealed class PromptConsole : IConsole
     public event ConsoleCancelEventHandler CancelKeyPress { add { } remove { } }
     public string? TakePaste() => input?.TakePaste();
     public ConsoleKeyInfo ReadKey(bool intercept) => input?.ReadKey() ?? ReadNext();
-    private ConsoleKeyInfo ReadNext() => keys.TryDequeue(out var key) ? key :
+    private ConsoleKeyInfo ReadNext()
+    {
+        if (keys.TryDequeue(out var key)) return key;
+        if (waitForInput is { } token)
+        {
+            token.WaitHandle.WaitOne();
+            token.ThrowIfCancellationRequested();
+        }
         throw new InvalidOperationException("Prompt did not submit after the expected key events.");
+    }
     public void Write(string? value) { }
     public void WriteLine(string? value) { }
     public void WriteError(string? value) { }
@@ -34,7 +45,7 @@ internal sealed class PromptConsole : IConsole
     public void WriteLine(ReadOnlySpan<char> value) { }
     public void WriteError(ReadOnlySpan<char> value) { }
     public void WriteErrorLine(ReadOnlySpan<char> value) { }
-    public void Clear() { }
+    public void Clear() => Clears++;
     public void ShowCursor() { }
     public void HideCursor() { }
     public void InitVirtualTerminalProcessing() { }

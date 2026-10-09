@@ -15,6 +15,10 @@ public static class ReplHost
     /// <param name="references">Game assemblies loaded before startup, sharing their types with live scene instances.</param>
     /// <returns>Zero on normal exit, one if a redirected submission fails.</returns>
     public static int Run(Engine engine, params Assembly[] references)
+        => Run(engine, token => new ReplConsole(token), references);
+
+    // Drive the same lifetime and editor loop with a scripted terminal in tests.
+    internal static int Run(Engine engine, Func<CancellationToken, IReplTerminal> createTerminal, params Assembly[] references)
     {
         if (!RuntimeFeature.IsDynamicCodeSupported)
             throw new PlatformNotSupportedException("The C# REPL requires a JIT runtime; NativeAOT is unsupported.");
@@ -30,7 +34,7 @@ public static class ReplHost
             using var scratch = globals.world;
             var scenePath = engine.Tree.CurrentScene?.SceneFilePath ?? "(no game scene loaded)";
             using var lifetime = new CancellationTokenSource();
-            var console = new ReplConsole(lifetime.Token);
+            var console = createTerminal(lifetime.Token);
             var terminal = Task.Run(() => ReadEvalPrintAsync(globals, scenePath, references, dispatcher, console, lifetime.Token));
             try
             {
@@ -54,16 +58,17 @@ public static class ReplHost
     }
 
     private static async Task<int> ReadEvalPrintAsync(ReplGlobals globals, string scenePath, Assembly[] references, EngineDispatcher dispatcher,
-        ReplConsole console, CancellationToken lifetime)
+        IReplTerminal console, CancellationToken lifetime)
     {
-        var interactive = !Console.IsInputRedirected && !Console.IsOutputRedirected;
-        if (interactive) Console.WriteLine("Preparing C# completion...");
+        var interactive = console.Interactive;
+        var output = console.Output;
+        if (interactive) output.Message("Preparing C# completion...");
         var assemblies = AppDomain.CurrentDomain.GetAssemblies().Concat(references).ToArray();
         var session = new ReplSession(globals, assemblies, dispatcher);
         Prompt? prompt = null;
         var exitCode = 0;
         var multiline = false;
-        var history = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history");
+        var history = console.HistoryFile;
         string? promptScope = "/root";
         IReadOnlyDictionary<string, NodeFamily>? promptFamilies = null;
         try
@@ -75,7 +80,7 @@ public static class ReplHost
                 promptScope = initialScope.Path;
                 promptFamilies = initialScope.Families;
                 prompt = await CreatePromptAsync(session, console, history, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
-                ReplOutput.Banner(scenePath);
+                output.Banner(scenePath);
             }
             while (!lifetime.IsCancellationRequested)
             {
@@ -96,39 +101,39 @@ public static class ReplHost
                     text = response.Text;
                     submissionToken = response.CancellationToken;
                 }
-                else text = await ReadSubmissionAsync(lifetime).ConfigureAwait(false);
+                else text = await ReadSubmissionAsync(console.Input, lifetime).ConfigureAwait(false);
                 if (text is null) break;
                 if (string.IsNullOrWhiteSpace(text)) continue;
                 switch (text.Trim())
                 {
                     case ":quit": case ":exit": case "exit": return exitCode;
                     case ":help":
-                        ReplOutput.Help(multiline);
+                        output.Help(multiline);
                         continue;
                     case ":clear":
-                        if (interactive) Console.Clear();
+                        if (interactive) console.Editor.Clear();
                         continue;
                     case ":multiline":
                         multiline = !multiline;
                         if (prompt is not null)
                         {
                             await prompt.DisposeAsync();
-                            prompt = await CreatePromptAsync(session, console, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history"),
+                            prompt = await CreatePromptAsync(session, console, history,
                                 multiline, warmUp: false, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
                         }
-                        ReplOutput.InputMode(multiline);
+                        output.InputMode(multiline);
                         continue;
                     case ":reset":
-                        if (interactive) Console.WriteLine("Preparing C# completion...");
+                        if (interactive) output.Message("Preparing C# completion...");
                         session.Dispose();
                         session = new ReplSession(globals, assemblies, dispatcher);
                         if (prompt is not null)
                         {
                             await prompt.DisposeAsync();
-                            prompt = await CreatePromptAsync(session, console, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history"),
+                            prompt = await CreatePromptAsync(session, console, history,
                                 multiline, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
                         }
-                        Console.WriteLine("C# session reset. The running scene is preserved.");
+                        output.Message("C# session reset. The running scene is preserved.");
                         continue;
                 }
                 using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(lifetime, submissionToken);
@@ -137,20 +142,20 @@ public static class ReplHost
                     var result = await session.EvaluateAsync(text, cancellation.Token).ConfigureAwait(false);
                     if (result.Cancelled)
                     {
-                        Console.WriteLine("Submission cancelled.");
+                        output.Message("Submission cancelled.");
                         continue;
                     }
                     if (result.Error is { } error)
                     {
-                        ReplOutput.Error(error);
+                        output.Error(error);
                         if (!interactive) exitCode = 1;
                     }
-                    else if (result.Tree is { } hierarchy) ReplOutput.Tree(hierarchy, result.Styled);
-                    else if (result.Value is { } value) ReplOutput.Result(value, result.Styled);
+                    else if (result.Tree is { } hierarchy) output.Tree(hierarchy, result.Styled);
+                    else if (result.Value is { } value) output.Result(value, result.Styled);
                 }
                 catch (OperationCanceledException) when (!lifetime.IsCancellationRequested)
                 {
-                    Console.WriteLine("Submission cancelled.");
+                    output.Message("Submission cancelled.");
                 }
             }
             return exitCode;
@@ -163,17 +168,17 @@ public static class ReplHost
         }
     }
 
-    private static async Task<Prompt> CreatePromptAsync(ReplSession session, ReplConsole console, string history, bool multiline = false,
+    private static async Task<Prompt> CreatePromptAsync(ReplSession session, IReplTerminal console, string history, bool multiline = false,
         bool warmUp = true, CancellationToken cancellationToken = default, string? scopePath = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null)
     {
         var callbacks = new ReplPromptCallbacks(session, console.TakePaste);
         if (warmUp) await callbacks.WarmUpAsync(cancellationToken);
-        return new Prompt(persistentHistoryFilepath: history, callbacks: callbacks, console: console,
-            configuration: CreatePromptConfiguration(multiline, scopePath, console.BufferWidth, scopeFamilies));
+        return new Prompt(persistentHistoryFilepath: history, callbacks: callbacks, console: console.Editor,
+            configuration: CreatePromptConfiguration(multiline, scopePath, console.Editor.BufferWidth, scopeFamilies));
     }
 
     internal static PromptConfiguration CreatePromptConfiguration(bool multiline = false, string? scopePath = null, int? terminalWidth = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null) => new(
-        prompt: CreatePromptText(scopePath, terminalWidth, scopeFamilies),
+        prompt: CreatePromptText(scopePath, terminalWidth, scopeFamilies, color: !PromptConfiguration.HasUserOptedOutFromColor),
         keyBindings: new KeyBindings(
             commitCompletion: new KeyPressPatterns(new KeyPressPattern(ConsoleKey.Tab), new KeyPressPattern(ConsoleModifiers.Shift, ConsoleKey.Tab),
                 new KeyPressPattern(ConsoleKey.Enter), new KeyPressPattern('.'), new KeyPressPattern('(')),
@@ -185,7 +190,7 @@ public static class ReplHost
             triggerOverloadList: new KeyPressPatterns(new KeyPressPattern('('), new KeyPressPattern(','), new KeyPressPattern(ConsoleKey.Tab),
                 new KeyPressPattern(ConsoleModifiers.Control | ConsoleModifiers.Shift, ConsoleKey.Spacebar))));
 
-    private static FormattedString CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies)
+    internal static FormattedString CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies, bool color)
     {
         // Leave room for code and completion even in narrow terminals. pwd always
         // shows the full path; the prompt keeps the end of a long scope visible.
@@ -198,7 +203,7 @@ public static class ReplHost
             scopePath = "..." + (separator >= 0 ? tail[separator..] : tail);
         }
         var text = scopePath is null or "/root" ? "godot> " : $"godot [{scopePath}]> ";
-        if (PromptConfiguration.HasUserOptedOutFromColor) return new FormattedString(text);
+        if (!color) return new FormattedString(text);
         var family = scopeFamilies is not null && fullPath is not null && scopeFamilies.TryGetValue(fullPath, out var known) ? known : NodeFamily.Node;
         var spans = new List<FormatSpan> { new(0, 5, NodeColors.Color(family)) };
         if (scopePath is not null && scopePath != "/root")
@@ -212,12 +217,12 @@ public static class ReplHost
         return new FormattedString(text, spans);
     }
 
-    private static async Task<string?> ReadSubmissionAsync(CancellationToken cancellationToken)
+    internal static async Task<string?> ReadSubmissionAsync(TextReader input, CancellationToken cancellationToken)
     {
         var text = new StringBuilder();
         while (true)
         {
-            var line = await Console.In.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+            var line = await input.ReadLineAsync(cancellationToken).ConfigureAwait(false);
             if (line is null) return text.Length == 0 ? null : text.ToString();
             text.AppendLine(line);
             if (line.TrimStart().StartsWith(':') || ReplSession.IsComplete(text.ToString())) return text.ToString();
@@ -225,8 +230,24 @@ public static class ReplHost
     }
 }
 
-internal sealed class ReplConsole : SystemConsole, IConsole
+internal interface IReplTerminal
 {
+    IConsole Editor { get; }
+    bool Interactive { get; }
+    TextReader Input { get; }
+    ReplOutput Output { get; }
+    string HistoryFile { get; }
+    string? TakePaste();
+    void Restore();
+}
+
+internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
+{
+    public IConsole Editor => this;
+    public bool Interactive => !Console.IsInputRedirected && !Console.IsOutputRedirected;
+    public TextReader Input => Console.In;
+    public ReplOutput Output { get; } = ReplOutput.ForConsole();
+    public string HistoryFile => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history");
     private readonly CancellationToken lifetime;
     private readonly ReplInputBuffer input;
 

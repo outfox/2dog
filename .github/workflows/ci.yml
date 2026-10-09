@@ -339,6 +339,37 @@ jobs:
       - name: Test (${{ matrix.config }})
         run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
 
+      # Instrument the actual packed assembly, not a special source-project build.
+      # Windows is the coverage baseline; behavior runs in all nine OS/config jobs.
+      - name: Setup uv for REPL coverage
+        if: runner.os == 'Windows'
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Require 95% REPL line and branch coverage
+        if: runner.os == 'Windows'
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          uv run --no-project python -m unittest discover -s tests/repl -v
+          dotnet test twodog.tests -c ${{ matrix.config }} --no-build --no-restore \
+            --filter 'FullyQualifiedName~Repl' --collect:'XPlat Code Coverage' \
+            --settings tests/repl/coverage.runsettings \
+            --results-directory twodog.tests/TestResults/repl-coverage \
+            --logger 'console;verbosity=normal' --blame-hang-timeout 120s
+          uv run --no-project python scripts/check_repl_coverage.py twodog.tests/TestResults/repl-coverage
+
+      - name: Upload REPL coverage
+        if: always() && runner.os == 'Windows'
+        uses: actions/upload-artifact@v7
+        with:
+          name: repl-coverage-${{ matrix.config }}
+          path: twodog.tests/TestResults/repl-coverage/**/coverage.cobertura.xml
+          if-no-files-found: error
+          retention-days: 7
+
       # The suite above is headless. This starts the stock windowed fixture on the 2dog test thread, as consumers'
       # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
       - name: Test windowed fixture

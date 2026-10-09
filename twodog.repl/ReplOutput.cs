@@ -3,50 +3,53 @@ using PrettyPrompt.Highlighting;
 
 namespace twodog.Repl;
 
-internal static class ReplOutput
+internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color, bool errorColor)
 {
-    private static bool Color => !Console.IsOutputRedirected && !PromptConfiguration.HasUserOptedOutFromColor;
-    private static string Paint(string text, string style) => Color ? $"\x1b[{style}m{text}\x1b[0m" : text;
+    internal static ReplOutput ForConsole() => new(Console.Out, Console.Error,
+        !Console.IsOutputRedirected && !PromptConfiguration.HasUserOptedOutFromColor,
+        !Console.IsOutputRedirected && !Console.IsErrorRedirected && !PromptConfiguration.HasUserOptedOutFromColor);
+    public void Message(string text) => output.WriteLine(text);
+    private string Paint(string text, string style) => color ? $"\x1b[{style}m{text}\x1b[0m" : text;
 
-    public static void Banner(string scenePath)
+    public void Banner(string scenePath)
     {
-        Console.WriteLine();
-        Console.WriteLine(Paint("2dog", "1;36") + "  " + Paint("C# REPL", "1;37"));
-        Console.WriteLine("Game scene  " + Paint(scenePath, "32"));
-        Console.WriteLine();
+        output.WriteLine();
+        output.WriteLine(Paint("2dog", "1;36") + "  " + Paint("C# REPL", "1;37"));
+        output.WriteLine("Game scene  " + Paint(scenePath, "32"));
+        output.WriteLine();
         InputMode(multiline: false);
-        Console.WriteLine("  " + Paint("Tab / Shift+Tab", "36") + "  complete / cycle    " + Paint(":help", "36") + "  examples and controls");
-        Console.WriteLine("  " + Paint(":multiline", "36") + "  swap Enter and Shift+Enter");
-        Console.WriteLine();
-        Console.WriteLine("Explore  " + Paint("ls", "33") + "  or  " + Paint("$Control", "33") + "    Navigate  " + Paint("cd $Control", "33") + "    Find nodes  " + Paint("?Timer", "33"));
-        Console.WriteLine();
+        output.WriteLine("  " + Paint("Tab / Shift+Tab", "36") + "  complete / cycle    " + Paint(":help", "36") + "  examples and controls");
+        output.WriteLine("  " + Paint(":multiline", "36") + "  swap Enter and Shift+Enter");
+        output.WriteLine();
+        output.WriteLine("Explore  " + Paint("ls", "33") + "  or  " + Paint("$Control", "33") + "    Navigate  " + Paint("cd $Control", "33") + "    Find nodes  " + Paint("?Timer", "33"));
+        output.WriteLine();
     }
 
-    public static void Result(string value, FormattedString? styled = null)
+    public void Result(string value, FormattedString? styled = null)
     {
-        Console.WriteLine(Paint("\u2192 ", "36") + (styled is { } formatted ? NodeColors.Ansi(formatted, Color) : Paint(value, "32")));
-        Console.WriteLine();
+        output.WriteLine(Paint("\u2192 ", "36") + (styled is { } formatted ? NodeColors.Ansi(formatted, color) : Paint(value, "32")));
+        output.WriteLine();
     }
 
-    public static void Tree(string hierarchy, FormattedString? styled = null)
+    public void Tree(string hierarchy, FormattedString? styled = null)
     {
-        Console.WriteLine(styled is { } formatted ? NodeColors.Ansi(formatted.Substring(0, hierarchy.TrimEnd().Length), Color) : hierarchy.TrimEnd());
-        Console.WriteLine();
+        output.WriteLine(styled is { } formatted ? NodeColors.Ansi(formatted.Substring(0, hierarchy.TrimEnd().Length), color) : hierarchy.TrimEnd());
+        output.WriteLine();
     }
 
-    public static void Error(string error)
+    public void Error(string message)
     {
-        Console.Error.WriteLine(Color && !Console.IsErrorRedirected ? $"\x1b[31m{error}\x1b[0m" : error);
-        Console.Error.WriteLine();
+        error.WriteLine(errorColor ? $"\x1b[31m{message}\x1b[0m" : message);
+        error.WriteLine();
     }
 
-    public static void InputMode(bool multiline)
-        => Console.WriteLine("  " + Paint("Enter", "36") + (multiline ? "  newline     " : "  run         ") +
+    public void InputMode(bool multiline)
+        => output.WriteLine("  " + Paint("Enter", "36") + (multiline ? "  newline     " : "  run         ") +
             Paint("Shift+Enter", "36") + (multiline ? "  run" : "  newline"));
 
-    public static void Help(bool multiline)
+    public void Help(bool multiline)
     {
-        Console.WriteLine();
+        output.WriteLine();
         Section("Explore the game");
         Row("scene", "Root node of the game's currently loaded .tscn (tree.CurrentScene).");
         Row("tree / root", "The shared SceneTree / its root Window.");
@@ -64,30 +67,30 @@ internal static class ReplOutput
         Example("$Control.Size");
         Example("?Timer  // Tab searches node names anywhere in the tree");
         Example("$Control/Signals/Sources/CSharpTicker.Tick();");
-        Console.WriteLine("  ls prints a node and all its descendants. Paths are case-sensitive; Tab fills them in.");
-        Console.WriteLine("  $ paths start at here and infer the live node's public C# type. cd selects here.");
-        Console.WriteLine("  The prompt shows your scope. :cd / :pwd force commands if C# variables have those names.");
-        Console.WriteLine("  cd $/root/Control uses an absolute path; ?Name still searches the whole tree.");
-        Console.WriteLine("  cp/mv take two node expressions: source and existing parent. Name collisions are rejected.");
-        Console.WriteLine("  mv(...), mv.Member, mv[index] stay C#. :mv forces the command; @mv selects the identifier.");
-        Console.WriteLine("  If the selected node leaves the tree, the scope returns to root.");
-        Console.WriteLine("  Use $[\"Control/My Node\"] for spaces or punctuation; C# $\"...\" strings stay strings.");
-        Console.WriteLine();
+        output.WriteLine("  ls prints a node and all its descendants. Paths are case-sensitive; Tab fills them in.");
+        output.WriteLine("  $ paths start at here and infer the live node's public C# type. cd selects here.");
+        output.WriteLine("  The prompt shows your scope. :cd / :pwd force commands if C# variables have those names.");
+        output.WriteLine("  cd $/root/Control uses an absolute path; ?Name still searches the whole tree.");
+        output.WriteLine("  cp/mv take two node expressions: source and existing parent. Name collisions are rejected.");
+        output.WriteLine("  mv(...), mv.Member, mv[index] stay C#. :mv forces the command; @mv selects the identifier.");
+        output.WriteLine("  If the selected node leaves the tree, the scope returns to root.");
+        output.WriteLine("  Use $[\"Control/My Node\"] for spaces or punctuation; C# $\"...\" strings stay strings.");
+        output.WriteLine();
         Section("Change scenes");
         Example("tree.ChangeSceneToFile(\"res://other_scene.tscn\");");
         Example("await tree.ToSignal(tree, SceneTree.SignalName.SceneChanged);");
-        Console.WriteLine("  scene follows the new game scene after the change finishes.");
-        Console.WriteLine();
+        output.WriteLine("  scene follows the new game scene after the change finishes.");
+        output.WriteLine();
         Section("Scratch world beside the game");
         Example("world.Open(\"res://other_scene.tscn\");");
         Example("world.Scene.GetChildren()");
         Example("world.Clear();  // empty scratch scene");
         Example("world.Close();");
-        Console.WriteLine("  Independent 2D/3D worlds in a separate window. The SceneTree and singletons are shared.");
-        Console.WriteLine();
+        output.WriteLine("  Independent 2D/3D worlds in a separate window. The SceneTree and singletons are shared.");
+        output.WriteLine();
         Section("Editing and session");
         Row("Enter", "Accept a selected completion; otherwise " + (multiline ? "insert a newline. Shift+Enter runs." : "run the input. Shift+Enter inserts a newline."));
-        Console.WriteLine("  Enter always runs an exact bare command such as ls, cd, pwd or :help, with no trailing space.");
+        output.WriteLine("  Enter always runs an exact bare command such as ls, cd, pwd or :help, with no trailing space.");
         Row(":multiline", "Swap Enter and Shift+Enter for this session; Ctrl+Enter always runs.");
         Row("Tab / Shift+Tab", "Accept, then cycle matching completions forward / backward. Backspace restores your prefix.");
         Row(". / space / ( / /", "Finish cycling and continue editing. ?Name searches all live node names.");
@@ -95,13 +98,13 @@ internal static class ReplOutput
         Row("Ctrl+Space", "Open suggestions. Ctrl+Shift+Space shows method signatures and arguments.");
         Row("Up / Down", "History. Ctrl+C cancels input or cooperatively cancels code; pass ct to waits.");
         Row(":reset / :clear", "Clear C# variables / screen. :quit or Ctrl+D on empty input exits.");
-        Console.WriteLine("  #r \"assembly.dll\" and #load \"script.csx\" load local code.");
-        Console.WriteLine("  C# and normal await continuations run on Godot's thread; frames advance while awaiting.");
-        Console.WriteLine("  Keep Godot calls off Task.Run/ConfigureAwait(false). Synchronous code blocks the game.");
-        Console.WriteLine();
+        output.WriteLine("  #r \"assembly.dll\" and #load \"script.csx\" load local code.");
+        output.WriteLine("  C# and normal await continuations run on Godot's thread; frames advance while awaiting.");
+        output.WriteLine("  Keep Godot calls off Task.Run/ConfigureAwait(false). Synchronous code blocks the game.");
+        output.WriteLine();
     }
 
-    private static void Section(string text) => Console.WriteLine(Paint(text, "1;36"));
-    private static void Row(string name, string description) => Console.WriteLine("  " + Paint(name.PadRight(20), "36") + description);
-    private static void Example(string text) => Console.WriteLine("  " + Paint(text, "33"));
+    private void Section(string text) => output.WriteLine(Paint(text, "1;36"));
+    private void Row(string name, string description) => output.WriteLine("  " + Paint(name.PadRight(20), "36") + description);
+    private void Example(string text) => output.WriteLine("  " + Paint(text, "33"));
 }
