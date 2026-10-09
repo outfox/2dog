@@ -41,9 +41,22 @@ const SECTIONS = [
     'getting-started.md', 'concepts.md', 'project-layout.md',
   ]],
   ['Hosts', [
-    'hosts/index.md', 'hosts/generic.md', 'hosts/android.md', 'hosts/avalonia.md', 'hosts/blazor.md',
-    'hosts/nunit.md', 'hosts/repl.md', 'hosts/web.md', 'hosts/webxr.md', 'hosts/winforms.md',
-    'hosts/winui.md', 'hosts/xunit.md',
+    'hosts/index.md',
+  ]],
+  ['Console Hosts', [
+    'hosts/generic.md', 'hosts/repl.md',
+  ]],
+  ['Desktop Hosts', [
+    'hosts/avalonia.md', 'hosts/winforms.md', 'hosts/winui.md',
+  ]],
+  ['Web Hosts', [
+    'hosts/blazor.md', 'hosts/web.md', 'hosts/webxr.md',
+  ]],
+  ['Mobile Hosts', [
+    'hosts/android.md',
+  ]],
+  ['Testing Hosts', [
+    'hosts/nunit.md', 'hosts/xunit.md',
   ]],
   ['API Reference', [
     'api-reference.md', 'api/engine.md', 'api/godot-instance.md', 'api/godotsharp.md',
@@ -52,14 +65,28 @@ const SECTIONS = [
   ]],
   ['Develop and Configure', [
     'dnx-2dog.md', 'cli/add.md', 'cli/new.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md',
-    'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'testing.md', 'build-configurations.md',
+    'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'build-configurations.md',
+  ]],
+  ['Testing', [
+    'testing/nunit.md', 'testing.md', 'testing/input.md',
   ]],
   ['MSBuild Configuration', [
-    'configuration.md', 'configuration/generic.md', 'configuration/android.md',
-    'configuration/avalonia.md', 'configuration/blazor.md', 'configuration/nunit.md', 'configuration/repl.md',
-    'configuration/web.md',
-    'configuration/webxr.md', 'configuration/winforms.md', 'configuration/winui.md',
-    'configuration/xunit.md',
+    'configuration.md',
+  ]],
+  ['Console Configuration', [
+    'configuration/generic.md', 'configuration/repl.md',
+  ]],
+  ['Desktop Configuration', [
+    'configuration/avalonia.md', 'configuration/winforms.md', 'configuration/winui.md',
+  ]],
+  ['Web Configuration', [
+    'configuration/blazor.md', 'configuration/web.md', 'configuration/webxr.md',
+  ]],
+  ['Mobile Configuration', [
+    'configuration/android.md',
+  ]],
+  ['Testing Configuration', [
+    'configuration/nunit.md', 'configuration/xunit.md',
   ]],
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',
@@ -113,11 +140,12 @@ const llms = `# 2dog
 model: instead of the Godot editor exporting your game, a plain .NET
 application hosts the engine (libgodot) as a library. Your scenes, scripts,
 and GodotSharp C# API stay exactly as they are - you gain \`dotnet run\`,
-\`dotnet publish\` to desktop and browser (WebAssembly), real-engine xUnit
+\`dotnet publish\` to desktop and browser (WebAssembly), real-engine xUnit and NUnit
 tests, and embedding in any .NET app.
 Current version: ${twodogVersion} (Godot ${godotVersion}).
 NuGet packages: \`2dog\` (CLI tool + templates) - https://www.nuget.org/packages/2dog/,
-\`2dog.engine\` (the library), \`2dog.xunit\` (test collections).
+\`2dog.engine\` (the library), \`2dog.xunit\` (test collections),
+\`2dog.nunit\` (NUnit fixtures).
 Source: https://github.com/outfox/2dog
 
 Every page below is also served as raw Markdown: replace \`.html\` with \`.md\`

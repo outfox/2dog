@@ -18,10 +18,20 @@ production runtime; `editor`
 enables `TOOLS_ENABLED`, including editor types, import plugins, and `[Tool]`
 scripts.
 
-::: warning Editor runtime limitations
-The variant provides compile-time access to editor APIs, but embedded libgodot
-does not initialize editor runtime singletons such as `EditorInterface`.
-Resource import runs separately and automatically at build time; see
+::: tip Opening the editor
+The editor variant enables editor APIs; pass `--editor` to start the interactive
+editor and initialize editor runtime singletons such as `EditorInterface`:
+
+```bash
+dotnet run --project MyGame.2dog -c Editor -- --editor
+```
+
+The generic host forwards these arguments and pumps the editor's main loop.
+Editor builds and publishes copy GodotTools and its dependencies into
+`GodotSharp/Tools` beside the host executable. Custom hosts must keep pumping
+the engine and avoid assuming that a game scene is running in editor mode.
+
+Resource import also runs separately and automatically at build time; see
 [Resource Import](./import-tool).
 :::
 

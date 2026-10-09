@@ -20,6 +20,7 @@ public abstract class FixtureBase : IDisposable
         Console.WriteLine("Godot project: " + projectPath);
         Engine = new Engine("twodog.tests", projectPath, WithLogFile(cmdLineArgs)) { CaptureErrors = true };
         GodotInstance = Engine.Start();
+        Input = new TestInput(this);
         Console.WriteLine("Godot initialized successfully.");
     }
 
@@ -51,8 +52,11 @@ public abstract class FixtureBase : IDisposable
     /// <summary>The active scene tree.</summary>
     public SceneTree Tree => Engine.Tree;
 
+    /// <summary>Input simulation shared by NUnit fixtures and xUnit collections. Use on the engine's owner thread.</summary>
+    public TestInput Input { get; }
+
     /// <summary>
-    /// Every error and warning Godot reported since startup and not yet drained. 2dog.xunit fails a test that leaves
+    /// Every error and warning Godot reported since startup and not yet drained. 2dog.xunit and 2dog.nunit fail tests that leave
     /// any behind; tests that expect one consume it with <see cref="GodotErrorLog.Expect"/>.
     /// </summary>
     public GodotErrorLog Errors => Engine.Errors;

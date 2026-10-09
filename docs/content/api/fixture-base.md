@@ -39,6 +39,15 @@ public class OpenGl3Fixture()
 | `GodotInstance` | `Godot.GodotInstance` | Borrowed compatibility handle |
 | `Tree` | `Godot.SceneTree` | Active scene tree |
 | `Errors` | `twodog.GodotErrorLog` | Errors and warnings Godot reported and no test consumed yet |
+| `Input` | `twodog.Testing.TestInput` | Input server events, viewport routing and control-position clicks |
+
+## `Input`
+
+Use `Input.Click(control)` to aim at a control through its viewport's input
+router. Foreground controls and input suppression still apply. `PushToViewport`
+routes custom events locally; `Send` uses the input server and updates global
+polling state. Call these on the engine's owner thread. See
+[Simulating Input](/testing/input) for examples and the distinction between modes.
 
 ## `Errors`
 
