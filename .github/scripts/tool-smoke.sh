@@ -15,15 +15,16 @@ version="$(dotnet msbuild "$root/twodog/twodog.csproj" -getProperty:TwoDogVersio
 work="${RUNNER_TEMP:-/tmp}/2dog-tool-smoke"
 rm -rf "$work"
 mkdir -p "$work/dir with space" "$work/toolbin"
+cache="$(cd "$work" && (pwd -W 2>/dev/null || pwd))/nuget-packages"
 
 # packageSourceMapping pins every 2dog.* package to the artifact feed, so an identically numbered package on
-# nuget.org can never shadow the bits under test. The packages folder is relative to each copy of this file, so the
-# local Godot packages stay under $work instead of the user's global cache.
+# nuget.org can never shadow the bits under test. Keep the cache under $work but outside the scaffolded game:
+# package sources such as 2dog.xunit's compile-in helpers must never enter the game's default compile glob.
 cat > "$work/nuget.config" <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <config>
-    <add key="globalPackagesFolder" value="./nuget-packages/" />
+    <add key="globalPackagesFolder" value="$cache" />
   </config>
   <packageSources>
     <clear />
@@ -48,13 +49,15 @@ echo "::endgroup::"
 cd "$work/dir with space"
 
 echo "::group::scaffold"
-"$tool" new "Smoke Game" --generic --tests -y --no-restore 2> stderr.txt
+"$tool" new "Smoke Game" --generic --tests --nunit -y --no-restore 2> stderr.txt
 cat stderr.txt
 grep -q "note: project name adjusted" stderr.txt
 test -f SmokeGame/SmokeGame.slnx
 test -f SmokeGame/Directory.Build.props
 test -f SmokeGame/SmokeGame.2dog/SmokeGame.2dog.csproj
 test -f SmokeGame/SmokeGame.xunit/SmokeGame.xunit.csproj
+test -f SmokeGame/SmokeGame.nunit/SmokeGame.nunit.csproj
+test -f SmokeGame/SmokeGame.nunit/.gdignore
 "$tool" add SmokeGame --web --dry-run --json --no-restore | jq -e '.ok and (.actions | length) > 0 and .dryRun' > /dev/null
 echo "::endgroup::"
 
@@ -73,6 +76,7 @@ cp "$work/nuget.config" SmokeGame/nuget.config
 for config in Debug Release Editor; do
   dotnet build SmokeGame/SmokeGame.slnx -c "$config"
   dotnet test SmokeGame/SmokeGame.xunit -c "$config" --no-build
+  dotnet test SmokeGame/SmokeGame.nunit -c "$config" --no-build
 done
 echo "::endgroup::"
 
@@ -82,6 +86,7 @@ echo "::group::desktop and tests with unused optional hosts"
 # optional host, even on runners where a workload happens to be installed.
 dotnet build SmokeGame/SmokeGame.slnx -c Debug -p:MSBuildEnableWorkloadResolver=false
 dotnet test SmokeGame/SmokeGame.xunit -c Debug --no-build
+dotnet test SmokeGame/SmokeGame.nunit -c Debug --no-build
 echo "::endgroup::"
 
 echo "::group::doctor"

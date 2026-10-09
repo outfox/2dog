@@ -244,6 +244,7 @@ jobs:
           dotnet pack twodog.avalonia
           dotnet pack twodog.blazor
           dotnet pack twodog.xunit
+          dotnet pack twodog.nunit
           dotnet pack twodog
 
       - name: Test managed binding packages

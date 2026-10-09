@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <PackageId>2dog.nunit</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>NUnit fixtures, bounded frame waits, signal expectations and deferred-deletion assertions for testing real Godot applications with 2dog.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="../twodog.engine/twodog.engine.csproj" />
+        <PackageReference Include="NUnit" Version="4.*" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false" />
+        <None Include="README.md" Pack="true" PackagePath="README.md" />
+    </ItemGroup>
+</Project>

@@ -42,7 +42,7 @@ const SECTIONS = [
   ]],
   ['Hosts', [
     'hosts/index.md', 'hosts/generic.md', 'hosts/android.md', 'hosts/avalonia.md', 'hosts/blazor.md',
-    'hosts/web.md', 'hosts/webxr.md', 'hosts/winforms.md', 'hosts/winui.md', 'hosts/xunit.md',
+    'hosts/nunit.md', 'hosts/web.md', 'hosts/webxr.md', 'hosts/winforms.md', 'hosts/winui.md', 'hosts/xunit.md',
   ]],
   ['API Reference', [
     'api-reference.md', 'api/engine.md', 'api/godot-instance.md', 'api/godotsharp.md',
@@ -55,7 +55,7 @@ const SECTIONS = [
   ]],
   ['MSBuild Configuration', [
     'configuration.md', 'configuration/generic.md', 'configuration/android.md',
-    'configuration/avalonia.md', 'configuration/blazor.md', 'configuration/web.md',
+    'configuration/avalonia.md', 'configuration/blazor.md', 'configuration/nunit.md', 'configuration/web.md',
     'configuration/webxr.md', 'configuration/winforms.md', 'configuration/winui.md',
     'configuration/xunit.md',
   ]],

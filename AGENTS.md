@@ -2,7 +2,7 @@
 
 2dog lets .NET load Godot as `libgodot` and drive its main loop. The `godot/` submodule is
 `thygrrr/godot`, branch `2dog-<GodotVersion>`. This repo packages the fork's natives and C# bindings,
-plus a CLI/template for desktop, web, WebXR, xUnit, Avalonia, Blazor, WinForms, WinUI and Android hosts.
+plus a CLI/template for desktop, web, WebXR, xUnit, NUnit, Avalonia, Blazor, WinForms, WinUI and Android hosts.
 
 Nested `AGENTS.md` files add rules for their folders: `docs/` (documentation site) and `.github/` (workflows
 and CI scripts). Read them before working there. Put new folder-specific rules in a nested `AGENTS.md`, which
@@ -22,6 +22,8 @@ Code reads them instead of `AGENTS.md`.
 - `twodog.avalonia/` and `twodog.blazor/`: UI integration; host examples live in `demos/showcase/`.
 - `twodog.xunit/`: collections, test framework, frame waits and assertions shipped as compile-in source, because xUnit
   discovers collections in the test assembly. Fixtures live in `2dog.engine`; native warnings/errors fail tests.
+- `twodog.nunit/`: NUnit's sequential, single-threaded fixture base and Godot signal/wait assertions.
+  `tests/nunit/` runs the template examples and real-engine regression tests through NUnit's adapter.
 - `twodog.hosting*`: experimental, unpacked multi-instance hosting with a separate assembly load context
   and physical native library per engine. CWD, environment and signal handlers remain process-global;
   macOS hosting is unsupported.

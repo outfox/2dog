@@ -5,6 +5,9 @@ description: "Run xUnit tests against a real Godot engine with 2dog.xunit: insta
 
 # Testing with xUnit
 
+For NUnit, see the [NUnit host](/hosts/nunit), which includes signal
+expectations, bounded frame waits and a headless fixture base.
+
 `2dog.engine` provides the fixtures in `twodog.Testing`. `2dog.xunit` adds
 ready-made xUnit collections, so tests can start a real Godot engine without
 having to manage its lifetime themselves.

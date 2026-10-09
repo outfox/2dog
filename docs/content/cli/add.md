@@ -79,6 +79,7 @@ Choose hosts interactively, or supply host flags:
 2dog add                           # interactive, here
 2dog add --generic MyGame.editor   # a second generic host, named
 2dog add --android                 # an Android host
+2dog add --nunit                   # an NUnit test host
 2dog add path/to/project --no-web
 2dog add --rename MyGame           # fix a spaced .NET name first
 ```

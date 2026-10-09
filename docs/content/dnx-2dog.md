@@ -52,6 +52,7 @@ flag adds a second host of the same kind.
 | `--web [folder]` | [Web host](/hosts/web) |
 | `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
 | `--tests [folder]` | [xUnit test project](/hosts/xunit) |
+| `--nunit [folder]` | [NUnit test project](/hosts/nunit) (opt-in) |
 | `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only, opt-in |
 | `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |
 | `--avalonia [folder]` | [Avalonia host](/hosts/avalonia); opt-in |

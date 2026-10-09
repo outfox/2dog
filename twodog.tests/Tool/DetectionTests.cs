@@ -7,6 +7,14 @@ namespace twodog.tests.ToolTests;
 // broken XML, CRLF files with byte-order marks, escaped values.
 public class DetectionTests
 {
+    [Theory]
+    [InlineData("<Project><ItemGroup><PackageReference Include=\"2dog.nunit\" /></ItemGroup></Project>")]
+    [InlineData("<Project><PropertyGroup><GodotProjectDir>..</GodotProjectDir></PropertyGroup><ItemGroup><PackageReference Include=\"NUnit\" /></ItemGroup></Project>")]
+    [InlineData("<Project><PackageReference Include='2dog.nunit'>")]
+    [InlineData("<Project><GodotProjectDir>..<PackageReference Include='NUnit'>")]
+    public void Classify_RecognizesNUnitInCustomFolders(string project)
+        => Assert.Equal(HostKind.NUnit, HostScan.Classify(project, "custom.verification"));
+
     [Fact]
     public void Classify_RecognizesEveryTemplateHost()
     {
