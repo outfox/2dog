@@ -76,6 +76,16 @@ not be awaited or consumed again. Plain discarded tasks rely on the runtime's
 GC-delayed unobserved-exception event. See [browser exception diagnostics](../docs/content/hosts/web.md#diagnosing-async-exceptions)
 for logging every thrown exception during debugging.
 
+## Simulating Test Input
+
+`twodog.Testing.FixtureBase.Input` is shared by xUnit collections and NUnit
+fixtures. `Input.Click(control)` aims at a control through its viewport's input
+router, so foreground controls, clipping and input suppression still apply.
+`PushToViewport(event, viewport)` routes custom events locally; `Send(event)`
+uses Godot's input server, flushes buffered input and updates global polling
+state. Use these methods on the engine's owner thread. See
+[Simulating Input](https://2dog.dev/testing/input) for examples and routing limits.
+
 ## Documentation
 
 - [Getting Started](https://github.com/outfox/2dog)

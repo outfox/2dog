@@ -5,7 +5,7 @@ description: "Run xUnit tests against a real Godot engine with 2dog.xunit: insta
 
 # Testing with xUnit
 
-For NUnit, see the [NUnit host](/hosts/nunit), which includes signal
+For NUnit, see [Testing with NUnit](/testing/nunit), which includes signal
 expectations, bounded frame waits and a headless fixture base.
 
 `2dog.engine` provides the fixtures in `twodog.Testing`. `2dog.xunit` adds
@@ -199,6 +199,22 @@ Assert.False(GodotObject.IsInstanceValid(node));
 `TreeExiting` fires while the node is still inside the tree; `TreeExited` fires
 after removal. Removing a node from its parent does not free it, so tree exit
 and deletion should be asserted separately.
+
+## Simulating Input
+
+The shared fixture exposes `godot.Input`. Aim at a control through Godot's
+viewport router, preserving foreground controls, clipping and input suppression:
+
+```csharp
+godot.Engine.Iteration(); // Settle layout first.
+using var pressed = GodotAssert.ExpectSignal(playButton, BaseButton.SignalName.Pressed);
+godot.Input.Click(playButton);
+pressed.AssertEmitted();
+```
+
+`PushToViewport` routes custom events locally; `Send` uses Godot's input server
+and updates global polling state. See [Simulating Input](/testing/input) for
+keyboard focus, coordinate-based clicks and the distinction between modes.
 
 ## Godot Errors
 
