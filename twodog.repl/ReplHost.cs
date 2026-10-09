@@ -63,13 +63,18 @@ public static class ReplHost
         Prompt? prompt = null;
         var exitCode = 0;
         var multiline = false;
+        var history = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history");
+        string? promptScope = "/root";
+        IReadOnlyDictionary<string, NodeFamily>? promptFamilies = null;
         try
         {
             if (interactive)
             {
-                var history = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history");
                 Directory.CreateDirectory(Path.GetDirectoryName(history)!);
-                prompt = await CreatePromptAsync(session, console, history, cancellationToken: lifetime);
+                var initialScope = await session.ScopeStyleAsync(lifetime);
+                promptScope = initialScope.Path;
+                promptFamilies = initialScope.Families;
+                prompt = await CreatePromptAsync(session, console, history, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
                 ReplOutput.Banner(scenePath);
             }
             while (!lifetime.IsCancellationRequested)
@@ -78,6 +83,14 @@ public static class ReplHost
                 CancellationToken submissionToken = lifetime;
                 if (prompt is not null)
                 {
+                    var scope = await session.ScopeStyleAsync(lifetime);
+                    if (scope.Path != promptScope || promptFamilies is null || !scope.Families.SequenceEqual(promptFamilies))
+                    {
+                        await prompt.DisposeAsync();
+                        prompt = await CreatePromptAsync(session, console, history, multiline, warmUp: false, cancellationToken: lifetime, scopePath: scope.Path, scopeFamilies: scope.Families);
+                        promptScope = scope.Path;
+                        promptFamilies = scope.Families;
+                    }
                     var response = await prompt.ReadLineAsync().ConfigureAwait(false);
                     if (!response.IsSuccess) continue;
                     text = response.Text;
@@ -101,7 +114,7 @@ public static class ReplHost
                         {
                             await prompt.DisposeAsync();
                             prompt = await CreatePromptAsync(session, console, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history"),
-                                multiline, warmUp: false, cancellationToken: lifetime);
+                                multiline, warmUp: false, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
                         }
                         ReplOutput.InputMode(multiline);
                         continue;
@@ -113,7 +126,7 @@ public static class ReplHost
                         {
                             await prompt.DisposeAsync();
                             prompt = await CreatePromptAsync(session, console, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history"),
-                                multiline, cancellationToken: lifetime);
+                                multiline, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
                         }
                         Console.WriteLine("C# session reset. The running scene is preserved.");
                         continue;
@@ -132,8 +145,8 @@ public static class ReplHost
                         ReplOutput.Error(error);
                         if (!interactive) exitCode = 1;
                     }
-                    else if (result.Tree is { } hierarchy) ReplOutput.Tree(hierarchy);
-                    else if (result.Value is { } value) ReplOutput.Result(value);
+                    else if (result.Tree is { } hierarchy) ReplOutput.Tree(hierarchy, result.Styled);
+                    else if (result.Value is { } value) ReplOutput.Result(value, result.Styled);
                 }
                 catch (OperationCanceledException) when (!lifetime.IsCancellationRequested)
                 {
@@ -151,17 +164,16 @@ public static class ReplHost
     }
 
     private static async Task<Prompt> CreatePromptAsync(ReplSession session, ReplConsole console, string history, bool multiline = false,
-        bool warmUp = true, CancellationToken cancellationToken = default)
+        bool warmUp = true, CancellationToken cancellationToken = default, string? scopePath = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null)
     {
         var callbacks = new ReplPromptCallbacks(session, console.TakePaste);
         if (warmUp) await callbacks.WarmUpAsync(cancellationToken);
         return new Prompt(persistentHistoryFilepath: history, callbacks: callbacks, console: console,
-            configuration: CreatePromptConfiguration(multiline));
+            configuration: CreatePromptConfiguration(multiline, scopePath, console.BufferWidth, scopeFamilies));
     }
 
-    internal static PromptConfiguration CreatePromptConfiguration(bool multiline = false) => new(
-        prompt: PromptConfiguration.HasUserOptedOutFromColor ? new FormattedString("godot> ") :
-            new FormattedString("godot> ", new FormatSpan(0, 5, AnsiColor.BrightCyan)),
+    internal static PromptConfiguration CreatePromptConfiguration(bool multiline = false, string? scopePath = null, int? terminalWidth = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null) => new(
+        prompt: CreatePromptText(scopePath, terminalWidth, scopeFamilies),
         keyBindings: new KeyBindings(
             commitCompletion: new KeyPressPatterns(new KeyPressPattern(ConsoleKey.Tab), new KeyPressPattern(ConsoleModifiers.Shift, ConsoleKey.Tab),
                 new KeyPressPattern(ConsoleKey.Enter), new KeyPressPattern('.'), new KeyPressPattern('(')),
@@ -172,6 +184,33 @@ public static class ReplHost
             triggerCompletionList: new KeyPressPatterns(new KeyPressPattern(ConsoleModifiers.Control, ConsoleKey.Spacebar)),
             triggerOverloadList: new KeyPressPatterns(new KeyPressPattern('('), new KeyPressPattern(','), new KeyPressPattern(ConsoleKey.Tab),
                 new KeyPressPattern(ConsoleModifiers.Control | ConsoleModifiers.Shift, ConsoleKey.Spacebar))));
+
+    private static FormattedString CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies)
+    {
+        // Leave room for code and completion even in narrow terminals. pwd always
+        // shows the full path; the prompt keeps the end of a long scope visible.
+        var fullPath = scopePath;
+        var pathBudget = Math.Max(6, (terminalWidth ?? 160) / 4 - 10);
+        if (scopePath is { Length: > 0 } && scopePath.Length > pathBudget)
+        {
+            var tail = scopePath[^(pathBudget - 3)..];
+            var separator = tail.IndexOf('/');
+            scopePath = "..." + (separator >= 0 ? tail[separator..] : tail);
+        }
+        var text = scopePath is null or "/root" ? "godot> " : $"godot [{scopePath}]> ";
+        if (PromptConfiguration.HasUserOptedOutFromColor) return new FormattedString(text);
+        var family = scopeFamilies is not null && fullPath is not null && scopeFamilies.TryGetValue(fullPath, out var known) ? known : NodeFamily.Node;
+        var spans = new List<FormatSpan> { new(0, 5, NodeColors.Color(family)) };
+        if (scopePath is not null && scopePath != "/root")
+        {
+            var full = NodeColors.Path(fullPath!, scopeFamilies);
+            var hidden = scopePath.StartsWith("...", StringComparison.Ordinal) ? 3 : 0;
+            var visibleLength = scopePath.Length - hidden;
+            if (hidden > 0) spans.Add(new(7, hidden, NodeColors.Grey));
+            spans.AddRange(full.Substring(full.Length - visibleLength, visibleLength).FormatSpans.ToArray().Select(s => s.Offset(7 + hidden)));
+        }
+        return new FormattedString(text, spans);
+    }
 
     private static async Task<string?> ReadSubmissionAsync(CancellationToken cancellationToken)
     {

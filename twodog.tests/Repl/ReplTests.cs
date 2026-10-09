@@ -189,6 +189,16 @@ public class ReplIntegrationTests
         var controlEnter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, true);
         var shiftTab = new ConsoleKeyInfo('\t', ConsoleKey.Tab, true, false, false);
         var backspace = new ConsoleKeyInfo('\b', ConsoleKey.Backspace, false, false, false);
+        var shiftBackspace = new ConsoleKeyInfo('\b', ConsoleKey.Backspace, true, false, false);
+        Assert.Equal("world.", ReadPrompt("world.NoSuchMember", false, shiftBackspace, controlEnter));
+        Assert.Equal("$Control/", ReadPrompt("$Control/NoSuchChild", false, shiftBackspace, controlEnter));
+        Assert.Equal("alpha ", ReadPrompt("alpha beta", false, shiftBackspace, controlEnter));
+        Assert.Equal("", ReadPrompt("", false, shiftBackspace, controlEnter));
+        Assert.Equal("alpha beta", ReadPrompt("alpha beta", false, shiftBackspace,
+            new ConsoleKeyInfo('\x1a', ConsoleKey.Z, false, false, true), controlEnter));
+        Assert.Equal("world.", ReadPrompt("world.Scene", false,
+            new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, true, false, true), shiftBackspace, controlEnter));
+        Assert.Equal("$", ReadPrompt("$Cont", false, tab, shiftBackspace, controlEnter));
         Assert.Equal("world.Open()", ReadPrompt("world.Op", false, enter, enter));
         Assert.Equal("$Cont", ReadPrompt("$Cont", false, controlEnter));
         Assert.Equal("$Cont" + Environment.NewLine, ReadPrompt("$Cont", false, shiftEnter, controlEnter));
@@ -264,7 +274,8 @@ public class ReplIntegrationTests
             item => item.DisplayText == "ls");
         var listColors = Pump(Task.Run(() => callbacks.HighlightCallbackAsync(listInput, testCancellation)));
         Assert.Contains(listColors, color => color.Start == 0 && color.Length == 2);
-        Assert.Contains(listColors, color => color.Start == 3 && color.Length == 5);
+        Assert.Contains(listColors, color => color.Start == 3 && color.Length == 1 && color.Formatting.Foreground == NodeColors.Grey);
+        Assert.Contains(listColors, color => color.Start == 4 && color.Length == 4);
 
         const string typedInput = "$Control.Si";
         var typedSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(typedInput, typedInput.Length, testCancellation)));
@@ -292,7 +303,8 @@ public class ReplIntegrationTests
         var gameSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(gameInput, gameInput.Length, testCancellation)));
         Assert.Contains(Pump(Task.Run(() => callbacks.GetCompletionItemsAsync(gameInput, gameInput.Length, gameSpan, testCancellation))), item => item.DisplayText == "Tick");
         var colors = Pump(Task.Run(() => callbacks.HighlightCallbackAsync(typedInput, testCancellation)));
-        Assert.Contains(colors, span => span.Start == 0 && span.Length == "$Control".Length);
+        Assert.Contains(colors, span => span.Start == 0 && span.Length == 1 && span.Formatting.Foreground == NodeColors.Grey);
+        Assert.Contains(colors, span => span.Start == 1 && span.Length == "Control".Length && span.Formatting.Foreground == NodeColors.Color(NodeFamily.Control));
         Assert.All(colors, span => Assert.True(span.Start >= 0 && span.End <= typedInput.Length));
         var mappedFailure = Eval("$Control.NoSuchProperty");
         Assert.StartsWith("(1,10): CS1061:", mappedFailure.Error);

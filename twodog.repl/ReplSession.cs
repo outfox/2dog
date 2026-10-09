@@ -20,7 +20,12 @@ internal sealed class ReplSession : IDisposable
     private ProjectId? previous;
     private int submission;
     private Document? editingDocument;
-    internal int Version => submission;
+    private int navigationVersion;
+    internal int Version => submission + navigationVersion;
+    public Task<NodePathStyle> ScopeStyleAsync(CancellationToken token)
+        => dispatcher.InvokeAsync(() => Task.FromResult(NodeColors.CapturePath(globals.here)), token);
+    public Task<string> ScopePathAsync(CancellationToken token)
+        => dispatcher.InvokeAsync(() => Task.FromResult(globals.here.GetPath().ToString()), token);
 
     public ReplSession(ReplGlobals globals, IEnumerable<Assembly> assemblies, EngineDispatcher dispatcher)
     {
@@ -41,7 +46,7 @@ internal sealed class ReplSession : IDisposable
 
     public static bool IsComplete(string text)
     {
-        if (ListTreeCommand.TryParse(text, out _)) return true;
+        if (ListTreeCommand.TryParse(text, out _) || NavigationCommand.TryParse(text, out _)) return true;
         var input = new NodePathInput(text, new Dictionary<string, NodePathTarget>());
         return input.References.All(p => p.Complete && p.Path.Length > 0) &&
             SyntaxFactory.IsCompleteSubmission(CSharpSyntaxTree.ParseText(input.Code, ParseOptions));
@@ -50,10 +55,11 @@ internal sealed class ReplSession : IDisposable
     public async Task<PreparedInput> PrepareAsync(string text, CancellationToken cancellationToken)
     {
         IReadOnlyDictionary<string, NodePathTarget> nodes = new Dictionary<string, NodePathTarget>();
-        if (NodePathInput.Find(text).Count > 0 || ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget)
-            nodes = await dispatcher.InvokeAsync(() => Task.FromResult(NodePathInput.Capture(globals.root, cancellationToken)), cancellationToken).ConfigureAwait(false);
+        if (NodePathInput.Find(text).Count > 0 || ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget ||
+            NavigationCommand.TryParse(text, out var navigation) && navigation.AwaitingTarget)
+            nodes = await dispatcher.InvokeAsync(() => Task.FromResult(NodePathInput.Capture(globals.root, cancellationToken, globals.here)), cancellationToken).ConfigureAwait(false);
         var input = new NodePathInput(text, nodes);
-        return new(Document(input.Code), input, nodes);
+        return new(Document(input.Code), input, nodes, nodes.ToDictionary(n => n.Key, n => n.Value.Family, StringComparer.Ordinal));
     }
 
     private Document Document(string text)
@@ -81,16 +87,40 @@ internal sealed class ReplSession : IDisposable
 
     public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken)
     {
+        if (NavigationCommand.TryParse(text, out var navigation) &&
+            (navigation.Explicit || navigation.Path is not (null or "..") || navigation.Error is not null ||
+                state?.Variables.Any(variable => variable.Name == navigation.Name) != true))
+        {
+            if (navigation.Error is { } navigationError) return new(null, navigationError, false);
+            return await dispatcher.InvokeAsync(() =>
+            {
+                var current = globals.here;
+                if (navigation.Name == "pwd")
+                {
+                    var path = NodeColors.CapturePath(current);
+                    return Task.FromResult(new ReplResult(path.Path, null, false, Styled: path.Display));
+                }
+                var node = navigation.Path is null or "/" ? globals.root :
+                    navigation.Path == ".." && current == globals.root ? current : current.GetNodeOrNull<Godot.Node>(navigation.Path);
+                if (node is null || !Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion() || !node.IsInsideTree())
+                    return Task.FromResult(new ReplResult(null, $"Node '{navigation.Path}' was not found from {current.GetPath()}. Paths are case-sensitive; use ls or Tab to explore.", false));
+                globals.SelectNode(node);
+                navigationVersion++;
+                var selected = NodeColors.CapturePath(node);
+                return Task.FromResult(new ReplResult(selected.Path, null, false, Styled: selected.Display));
+            }, cancellationToken).ConfigureAwait(false);
+        }
         if (ListTreeCommand.TryParse(text, out var listing))
         {
             if (listing.Error is { } error) return new(null, error, false);
             return await dispatcher.InvokeAsync(() =>
             {
-                var node = listing.Path is null ? globals.root : globals.root.GetNodeOrNull<Godot.Node>(listing.Path);
-                var result = node is null || !Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion()
-                    ? new ReplResult(null, $"Node '{listing.Path}' was not found under root. Paths are case-sensitive; use ls or Tab to explore.", false)
-                    : new ReplResult(null, null, false, Tree: node.GetTreeStringPretty());
-                return Task.FromResult(result);
+                var current = globals.here;
+                var node = listing.Path is null ? current : current.GetNodeOrNull<Godot.Node>(listing.Path);
+                if (node is null || !Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion())
+                    return Task.FromResult(new ReplResult(null, $"Node '{listing.Path}' was not found from {current.GetPath()}. Paths are case-sensitive; use ls or Tab to explore.", false));
+                var hierarchy = NodeColors.Tree(node);
+                return Task.FromResult(new ReplResult(null, null, false, Tree: hierarchy.Text, Styled: hierarchy));
             }, cancellationToken).ConfigureAwait(false);
         }
         var prepared = await PrepareAsync(text, cancellationToken).ConfigureAwait(false);
@@ -101,7 +131,7 @@ internal sealed class ReplSession : IDisposable
             if (!path.Complete || path.Path.Length == 0)
                 return new(null, "Incomplete node path. Use $Control/Child or $[\"Control/My Node\"].", false);
             if (!prepared.Nodes.ContainsKey(path.LookupPath))
-                return new(null, $"Node '{path.Path}' was not found under root. Use ls or Tab to explore.", false);
+                return new(null, $"Node '{path.Path}' was not found in the current scope. Use ls or Tab to explore.", false);
         }
         var script = state is null
             ? CSharpScript.Create(prepared.Input.Code, options, typeof(ReplGlobals))
@@ -193,6 +223,6 @@ internal sealed class ReplSession : IDisposable
     public void Dispose() => workspace.Dispose();
 }
 
-internal sealed record PreparedInput(Document Document, NodePathInput Input, IReadOnlyDictionary<string, NodePathTarget> Nodes);
+internal sealed record PreparedInput(Document Document, NodePathInput Input, IReadOnlyDictionary<string, NodePathTarget> Nodes, IReadOnlyDictionary<string, NodeFamily> Families);
 
-internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null);
+internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null, PrettyPrompt.Highlighting.FormattedString? Styled = null);

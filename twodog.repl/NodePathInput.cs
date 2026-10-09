@@ -10,7 +10,7 @@ internal sealed record NodePathReference(TextSpan Span, string Path, bool Comple
 {
     public string LookupPath => Path.TrimEnd('/');
 }
-internal sealed record NodePathTarget(string Path, string TypeName, string DisplayType);
+internal sealed record NodePathTarget(string Path, string TypeName, string DisplayType, string? AbsolutePath = null, NodeFamily Family = NodeFamily.Node);
 
 // Keep the user's text in the editor/history. Roslyn receives ordinary typed C#, with
 // a bidirectional position map for completion, highlighting and diagnostic locations.
@@ -33,7 +33,7 @@ internal sealed class NodePathInput
             var start = code.Length;
             var type = nodes.TryGetValue(reference.LookupPath, out var node) ? node.TypeName : "global::Godot.Node";
             code.Append("(root.GetNode<").Append(type).Append(">(")
-                .Append(SymbolDisplay.FormatLiteral(reference.LookupPath, quote: true)).Append("))");
+                .Append(SymbolDisplay.FormatLiteral(node?.AbsolutePath ?? reference.LookupPath, quote: true)).Append("))");
             replacements.Add((reference.Span, TextSpan.FromBounds(start, code.Length)));
             position = reference.Span.End;
         }
@@ -101,7 +101,7 @@ internal sealed class NodePathInput
             // null-conditional access, strings and comments to ordinary C#.
             var previous = token.GetPreviousToken(includeSkipped: true);
             var context = previous.Kind();
-            var listing = text[..start].Trim() == "ls";
+            var listing = (text[..start].Trim() is "ls" or "cd" or ":cd") && !text[(start + 1)..].Contains(':');
             if (!listing && previous.RawKind != 0 && context is not (
                 SyntaxKind.OpenParenToken or SyntaxKind.OpenBracketToken or SyntaxKind.OpenBraceToken or
                 SyntaxKind.CommaToken or SyntaxKind.SemicolonToken or SyntaxKind.EqualsToken or SyntaxKind.EqualsGreaterThanToken or
@@ -116,8 +116,9 @@ internal sealed class NodePathInput
     }
 
     // Called only through the engine dispatcher. Editor callbacks never traverse Godot off-thread.
-    public static IReadOnlyDictionary<string, NodePathTarget> Capture(Window root, CancellationToken token)
+    public static IReadOnlyDictionary<string, NodePathTarget> Capture(Window root, CancellationToken token, Node? scope = null)
     {
+        scope ??= root;
         var nodes = new Dictionary<string, NodePathTarget>(StringComparer.Ordinal);
         var pending = new Stack<Node>();
         pending.Push(root);
@@ -125,12 +126,15 @@ internal sealed class NodePathInput
         {
             token.ThrowIfCancellationRequested();
             if (!GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion()) continue;
-            using var relative = root.GetPathTo(node);
+            using var relative = scope.GetPathTo(node);
             using var absolute = node.GetPath();
             var type = ReferenceableType(node.GetType());
-            var target = new NodePathTarget(relative.ToString(), type, node.GetType().FullName ?? type);
-            nodes[target.Path] = target;
-            nodes[absolute.ToString()] = target;
+            var local = relative.ToString();
+            var full = absolute.ToString();
+            var target = new NodePathTarget(local == ".." || local.StartsWith("../", StringComparison.Ordinal) ? full : local,
+                type, node.GetType().FullName ?? type, full, NodeColors.Family(node));
+            nodes[local] = target;
+            nodes[full] = target;
             foreach (var child in node.GetChildren()) pending.Push(child);
         }
         return nodes;

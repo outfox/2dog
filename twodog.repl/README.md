@@ -6,7 +6,8 @@ An interactive C# prompt inside a running Godot process. Add a host with
 Syntax highlighting, Tab/Ctrl+Space completion with documentation, multiline
 input, persistent history and cancellation use PrettyPrompt and Roslyn, the
 libraries underlying CSharpRepl. The live globals are `engine`, `tree`, `root`,
-`scene`, `world` and `ct`. Variables and using directives persist between submissions.
+`here`, `scene`, `world` and `ct`. Variables and using directives persist
+between submissions.
 The host prepares completion and highlighting before displaying `godot>`.
 Keys typed during startup remain queued, and buffered Enter/Tab/Escape keys
 keep their editing behavior rather than becoming pasted text. Unix terminals
@@ -20,6 +21,8 @@ otherwise it keeps the selected input mode. Ctrl+Enter always runs immediately.
 Tab accepts a completion or opens suggestions. Further Tab presses cycle the
 matches for your original prefix; Shift+Tab cycles backward and wraps around.
 Backspace restores that prefix, including removing inserted parentheses.
+Shift+Backspace deletes backward to a word break, like Ctrl+Backspace;
+dots and path slashes count as breaks. It also respects selections and undo.
 Typing a word break such as `.`, `/`, a space or `(` accepts the current choice.
 Typing more letters refines the prefix. Methods insert parentheses:
 `world.Op` then Tab becomes `world.Open()` with the caret inside the call.
@@ -27,23 +30,36 @@ Parameterless calls leave the caret after `)`. Argument signatures appear
 automatically; Ctrl+Shift+Space reopens them.
 Typing `)` skips an existing closing parenthesis. The banner, help, code and
 results use color unless `NO_COLOR` is set or output is redirected.
+Trees and node paths use Godot's editor family colors: green for Control,
+blue for Node2D, red for Node3D, purple for Animation and neutral for other
+nodes. Each path component reflects its own node type; separators are grey.
+The scoped prompt uses the selected node's family color.
 
-`ls` lists the whole scene hierarchy; `ls $Control/Child` lists that node and
-its descendants. Tab completes node paths, including after `ls `, and fills in
+`ls` lists the selected node and its descendants (initially the whole tree).
+`ls $Control/Child` lists that node and its descendants. Tab completes node paths, including after `ls `, and fills in
 the exact casing. `$["Control/My Node"]` supports spaces and punctuation.
-Listing preserves your C# variables and imports.
+`cd $Control/Signals/Table/` selects a node: subsequent `ls` and `$Child`
+paths start there. `here` is that node, `pwd` prints its absolute path, and the
+prompt shows it. `cd ..` selects the parent; `cd /` or `cd` returns to `root`.
+`root` always remains the engine's root Window. Use `cd $/root/Control` for
+absolute paths, or `:cd /root/Control`. `:cd` and `:pwd` force command handling
+when C# variables share those names; calls, assignments and arithmetic stay C#.
+The scope follows a renamed or reparented node, and returns to root if that node
+is freed or leaves the tree. Navigation preserves C# variables and imports;
+`:reset` preserves the scope.
 
 `?EngineT` searches node names anywhere in the live tree, ignoring case.
 Tab or Enter accepts a match as its complete, typed `$` path. Tab/Shift+Tab
 cycles matches; Backspace restores `?EngineT`. Branches end in `/` so you can
 type a child name; names with spaces use the quoted `$["..."]` form. This also
-works after `ls ` and inside C# expressions. The search is a completion shortcut;
+works after `ls `, `cd ` and inside C# expressions. Matches outside your scope
+insert absolute `$` paths. The search is a completion shortcut;
 choose a full path before running. Ordinary C# `?`, `?.` and `??` stay C#.
 
 `scene` follows `tree.CurrentScene`, the root node of the game's loaded scene.
 Use `tree.ChangeSceneToFile("res://other.tscn")` to replace it, then await
 `tree.ToSignal(tree, SceneTree.SignalName.SceneChanged)` before accessing it.
-`$Control/Child` looks up a path relative to `root` and infers its live public
+`$Child` looks up a path relative to `here` and infers its live public
 C# type for member completion and evaluation. `$["Control/My Node"]` supports
 spaces and punctuation. These aliases work in submissions; `#load` files use
 ordinary C#.

@@ -54,7 +54,8 @@ node.QueueFree();
 scene, rather than the root Window. It follows scene changes and can be null
 while a change is in progress or when no main scene is loaded.
 
-Use `$` paths to look up nodes relative to `root`. The REPL infers each node's
+Use `$` paths to look up nodes relative to the selected node (`here`), which
+starts at `root`. The REPL infers each node's
 live public C# type, including your game's script classes, so member completion
 and evaluation use that type:
 
@@ -64,16 +65,44 @@ $Control/Player.Health
 $["Control/My Node"].Name
 ```
 
+Navigate the live tree without losing C# variables or imports:
+
+```text
+cd $Control/Signals/Table/
+ls
+$EngineTimerName
+pwd
+cd ..
+cd /
+```
+
+`cd` selects a node. `ls` prints that node and its descendants, and `$Child`
+paths and completion start there. `here` exposes the selected node to C#;
+`root` always refers to the engine's root Window. The prompt shows your current
+path (shortened in narrow terminals; `pwd` always prints it in full).
+`cd ..` selects the parent, while `cd /` or bare `cd` returns to root.
+Use `cd $/root/Control` or `:cd /root/Control` for absolute paths. Quoted paths
+such as `cd $["My Node"]` support spaces and punctuation.
+
+No colon is required for these navigation forms. C# calls, assignments and
+arithmetic using `cd` or `pwd` keep their normal meaning. If you declare a C#
+variable named `cd` or `pwd`, its bare name evaluates that variable; use `:cd`
+or `:pwd` to explicitly run the command instead. The scope follows renaming and
+reparenting. If the selected node is freed, queued for deletion or removed from
+the tree, it falls back to root. `:reset` preserves the selected scope.
+
 Search node names across the whole live tree with `?`, without knowing their
 parents:
 
 ```text
 ?EngineT
 ls ?EngineT
+cd ?EngineT
 ```
 
 Tab or Enter accepts a selected match as its full `$Control/Table/EngineTimer`
-path, retaining the live C# type. Tab cycles through the other matching nodes;
+path, retaining the live C# type. Matches outside the selected scope insert an
+absolute path such as `$/root/Control/Table/EngineTimer`. Tab cycles through the other matching nodes;
 Shift+Tab cycles backward. Backspace restores the `?EngineT` prefix. Matching
 ignores case and includes both C# and GDScript-backed nodes. Branch nodes end
 in `/` so you can type a child name; names with spaces receive a quoted path.
@@ -130,6 +159,7 @@ variables and imports while preserving both scenes.
 | Tab | Accept a completion, then cycle matching choices forward |
 | Shift+Tab | Cycle matching choices backward, wrapping at the ends |
 | Backspace after completion | Restore the prefix you typed |
+| Shift+Backspace, Ctrl+Backspace | Delete backward to a word break, including dots and slashes |
 | Ctrl+Space | Open completion suggestions |
 | Ctrl+Shift+Space | Show method signatures and argument help |
 | Enter | Accept the selected completion; otherwise run the input |
@@ -140,6 +170,8 @@ variables and imports while preserving both scenes.
 | Ctrl+C | Cancel input or cooperatively cancel the running submission |
 | Ctrl+L, `:clear` | Clear the screen |
 | Ctrl+D on empty input, `:quit` | Stop the prompt and game |
+| `cd $Child`, `cd ..`, `cd /` | Select a node, its parent or the root |
+| `pwd`, `:pwd` | Show the selected node's absolute path |
 | `:help` | Show examples, globals and keybindings |
 | `:reset` | Clear C# session variables and imports, preserving the scene |
 
@@ -174,7 +206,12 @@ The terminal uses [PrettyPrompt](https://github.com/waf/PrettyPrompt) and
 [Roslyn](https://github.com/dotnet/roslyn), following the architecture of
 [CSharpRepl](https://github.com/waf/CSharpRepl). Completion includes Godot,
 game types, live node paths and previous submissions, with documentation
-tooltips. The banner, help and results also use colors and spacing. Set
+tooltips. The banner, help and results also use colors and spacing. Trees, path
+completion and input use Godot's editor node family colors: light green for
+Control, light blue for Node2D, light red for Node3D and magenta for Animation.
+Custom script classes inherit their native node's color. Each path component
+uses its node's family, with grey slashes and tree connectors. The scoped
+prompt follows the selected node's family. Set
 `NO_COLOR` to disable colors. Local `#r "assembly.dll"` and
 `#load "script.csx"` directives are supported. Installing NuGet packages from
 the prompt and attaching to other running processes are outside this host.

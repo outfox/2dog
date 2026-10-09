@@ -15,14 +15,16 @@ internal static class ReplCompletion
 {
     public static async Task<char?> ContinuationAsync(PreparedInput prepared, int caret, CancellationToken token)
     {
-        if (prepared.Input.At(caret) is { } incomplete && (incomplete.Search || !incomplete.Complete || incomplete.Path.EndsWith('/'))) return null;
+        if (prepared.Input.At(caret) is { } incomplete &&
+            (incomplete.Search || !incomplete.Complete || incomplete.Path.Length == 0 || incomplete.Path.EndsWith('/') ||
+                caret != incomplete.Span.End || !prepared.Nodes.ContainsKey(incomplete.LookupPath))) return null;
         if (prepared.Input.At(caret) is { Complete: true } path && caret == path.Span.End && prepared.Nodes.ContainsKey(path.Path))
         {
             if (!prepared.Input.Original.AsSpan(path.Span.Start).StartsWith("$[") &&
-                prepared.Nodes.Values.Any(n => n.Path.StartsWith(path.Path + "/", StringComparison.Ordinal))) return '/';
-            return ListTreeCommand.TryParse(prepared.Input.Original, out _) ? null : '.';
+                prepared.Nodes.Values.Any(n => (path.Path.StartsWith('/') ? n.AbsolutePath ?? n.Path : n.Path).StartsWith(path.Path + "/", StringComparison.Ordinal))) return '/';
+            return ListTreeCommand.TryParse(prepared.Input.Original, out _) || NavigationCommand.TryParse(prepared.Input.Original, out _) ? null : '.';
         }
-        if (ListTreeCommand.TryParse(prepared.Input.Original, out _)) return null;
+        if (ListTreeCommand.TryParse(prepared.Input.Original, out _) || NavigationCommand.TryParse(prepared.Input.Original, out _)) return null;
         var position = prepared.Input.ToGenerated(caret);
         var root = await prepared.Document.GetSyntaxRootAsync(token);
         var expression = ExpressionAt(root!, position);

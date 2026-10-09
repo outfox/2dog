@@ -65,6 +65,10 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     {
         preparedTask = null;
         pendingEdit = null;
+        // Reuse the editor's word deletion, selection and undo behavior. Unlike
+        // plain Backspace, this ends completion cycling instead of reverting it.
+        if (keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Backspace, Modifiers: ConsoleModifiers.Shift })
+            keyPress = new KeyPress(new ConsoleKeyInfo('\b', ConsoleKey.Backspace, false, false, true));
         if (cycle is { } active && active.Matches(text, caret))
         {
             if (keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Tab, Modifiers: 0 or ConsoleModifiers.Shift } tab)
@@ -146,6 +150,10 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             or { Key: ConsoleKey.Enter, Modifiers: 0 };
         // Inside a quoted node name, '.', '(' and '/' are path characters.
         var path = NodePathInput.Find(text).FirstOrDefault(p => caret > p.Span.Start && caret <= p.Span.End);
+        // Slashes in an absolute path are literal separators. Accepting an
+        // ancestor's suggested descendant here would change the path being typed.
+        if (keyPress.ConsoleKeyInfo.KeyChar == '/' && path is not null &&
+            (path.Path.Length == 0 || path.Path.StartsWith('/'))) return Task.FromResult(false);
         var insideQuotedPath = path is not null && text.AsSpan(path.Span.Start).StartsWith("$[") &&
             (!path.Complete || caret < path.Span.End);
         return Task.FromResult(callOnCommit || !insideQuotedPath);
@@ -183,7 +191,10 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     {
         if (pairCall || refineCycle) return Task.FromResult(false);
         var key = keyPress.ConsoleKeyInfo.KeyChar;
-        if ((key is '$' or '?' or '/' || char.IsLetterOrDigit(key)) && NodePathInput.Find(text).Any(p => caret > p.Span.Start && caret <= p.Span.End))
+        // Wait for a path character so $/ opens absolute suggestions immediately.
+        // Tab/Ctrl+Space still opens the full list after a bare $.
+        if (key == '$') return Task.FromResult(false);
+        if ((key is '?' or '/' || char.IsLetterOrDigit(key)) && NodePathInput.Find(text).Any(p => caret > p.Span.Start && caret <= p.Span.End))
             return Task.FromResult(true);
         return base.ShouldOpenCompletionWindowAsync(text, caret, keyPress, cancellationToken);
     }
@@ -191,11 +202,16 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     protected override async Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(text)) return [];
+        var prepared = await PrepareInputAsync(text, cancellationToken);
+        var paths = prepared.Input.References.SelectMany(p => NodeColors.Path(text.Substring(p.Span.Start, p.Span.Length), prepared.Families)
+            .FormatSpans.ToArray().Select(s => s.Offset(p.Span.Start))).ToArray();
+        if (NavigationCommand.TryParse(text, out var navigation))
+            return new[] { new FormatSpan(navigation.Start, navigation.Length, AnsiColor.BrightMagenta) }
+                .Concat(paths).ToArray();
         if (text.TrimStart().StartsWith(':')) return [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)];
         if (ListTreeCommand.TryParse(text, out var listing))
             return new[] { new FormatSpan(listing.Start, 2, AnsiColor.BrightMagenta) }
-                .Concat(NodePathInput.Find(text).Select(p => new FormatSpan(p.Span.Start, p.Span.Length, AnsiColor.BrightCyan))).ToArray();
-        var prepared = await PrepareInputAsync(text, cancellationToken);
+                .Concat(paths).ToArray();
         var spans = await Classifier.GetClassifiedSpansAsync(prepared.Document, new TextSpan(0, prepared.Input.Code.Length), cancellationToken);
         var result = new List<FormatSpan>();
         foreach (var classified in spans)
@@ -204,7 +220,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             var span = prepared.Input.ToOriginal(classified.TextSpan);
             if (span.Length > 0) result.Add(new FormatSpan(span.Start, span.Length, color));
         }
-        result.AddRange(prepared.Input.References.Select(p => new FormatSpan(p.Span.Start, p.Span.Length, AnsiColor.BrightCyan)));
+        result.AddRange(paths);
         return result.OrderBy(s => s.Start).ToArray();
     }
 
@@ -224,9 +240,9 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     protected override async Task<PromptSpan> GetSpanToReplaceByCompletionAsync(string text, int caret, CancellationToken cancellationToken)
     {
-        if (text.TrimStart().StartsWith(':')) return new PromptSpan(text.IndexOf(':'), text.Length - text.IndexOf(':'));
-        if (ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart)
-            return new PromptSpan(caret, 0);
+        if (AwaitingNodeArgument(text, caret)) return new PromptSpan(caret, 0);
+        if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
+            return new PromptSpan(text.IndexOf(':'), text.Length - text.IndexOf(':'));
         var prepared = await PrepareInputAsync(text, cancellationToken);
         if (prepared.Input.At(caret) is { } path) return new PromptSpan(path.Span.Start, path.Span.Length);
         var span = CompletionService.GetService(prepared.Document)!.GetDefaultCompletionListSpan(
@@ -269,22 +285,32 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             => inner.GetCompletionItemPriority(text, caret, span);
     }
 
+    private static bool NavigationArgument(string text, int caret)
+        => NavigationCommand.TryParse(text, out var command) && command.InArgument(caret);
+
+    private static bool AwaitingNodeArgument(string text, int caret)
+        => ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart ||
+            NavigationCommand.TryParse(text, out var navigation) && navigation.AwaitingTarget && caret >= navigation.ArgumentStart;
+
     private async Task<IReadOnlyList<CompletionItem>> CreateCompletionItemsAsync(string text, int caret, PromptSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
-        if (text.TrimStart().StartsWith(':'))
-            return new[] { ":help", ":quit", ":clear", ":reset", ":multiline" }.Select(c => new CompletionItem(c)).ToArray();
+        if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
+            return new[] { ":help", ":quit", ":clear", ":reset", ":multiline", ":cd", ":pwd" }.Select(c => new CompletionItem(c)).ToArray();
         var prepared = await PrepareInputAsync(text, cancellationToken);
         var path = prepared.Input.At(caret);
-        if (path is not null || ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart)
+        if (path is not null || AwaitingNodeArgument(text, caret))
         {
             var bracket = path is not null && text.AsSpan(path.Span.Start).StartsWith("$[");
             // PrettyPrompt retains this list until the menu closes. Include descendants and
             // rank them against the current input so typing '/' immediately reveals children.
-            var nodes = prepared.Nodes.Values.DistinctBy(n => n.Path).Where(n => n.Path != ".")
+            var absolute = path?.Path.StartsWith('/') == true;
+            var nodes = prepared.Nodes.Values.DistinctBy(n => n.Path)
+                .Where(n => n.Path != "." || absolute || path?.Search == true)
+                .Select(n => (absolute || n.Path == ".") && n.AbsolutePath is { } full ? n with { Path = full } : n)
                 .OrderBy(n => n.Path, StringComparer.Ordinal).ToArray();
-            var parents = path?.Search == true ? nodes.Where(n => n.Path.Contains('/'))
-                .Select(n => n.Path[..n.Path.LastIndexOf('/')]).ToHashSet(StringComparer.Ordinal) : [];
-            return nodes.Select(n => (CompletionItem)new NodeCompletionItem(n, bracket, parents.Contains(n.Path))).ToArray();
+            var parents = path?.Search == true ? nodes.Select(n => n.AbsolutePath ?? n.Path)
+                .Where(p => p.Contains('/')).Select(p => p[..p.LastIndexOf('/')]).ToHashSet(StringComparer.Ordinal) : [];
+            return nodes.Select(n => (CompletionItem)new NodeCompletionItem(n, bracket, parents.Contains(n.AbsolutePath ?? n.Path), prepared.Families)).ToArray();
         }
         var service = CompletionService.GetService(prepared.Document)!;
         var list = await service.GetCompletionsAsync(prepared.Document, prepared.Input.ToGenerated(caret), cancellationToken: cancellationToken);
@@ -321,17 +347,29 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             })).ToList() ?? [];
         if (text.Trim() is "" or "l" or "ls")
             items.Insert(0, new CompletionItem("ls", getExtendedDescription: _ => Task.FromResult(
-                new FormattedString("List the whole scene tree, or use ls $Control/Child to list a subtree."))));
+                new FormattedString("List the selected node's tree, or use ls $Child to list a subtree."))));
+        if (text.Trim() is "" or "c" or "cd")
+            items.Insert(0, new CompletionItem("cd", getExtendedDescription: _ => Task.FromResult(
+                new FormattedString("Select a node: cd $Child, cd .., or cd /. :cd is the explicit command form."))));
+        if (text.Trim() is "" or "p" or "pw" or "pwd")
+            items.Insert(0, new CompletionItem("pwd", getExtendedDescription: _ => Task.FromResult(new FormattedString("Show the selected node's absolute path."))));
         return items;
     }
 
-    private sealed class NodeCompletionItem(NodePathTarget target, bool bracket, bool children) : CompletionItem(
+    private sealed class NodeCompletionItem(NodePathTarget target, bool bracket, bool children, IReadOnlyDictionary<string, NodeFamily> families) : CompletionItem(
         Alias(target.Path + (children ? "/" : ""), bracket),
-        displayText: new FormattedString(Alias(target.Path + (children ? "/" : ""), bracket),
-            new FormatSpan(0, Alias(target.Path + (children ? "/" : ""), bracket).Length, AnsiColor.BrightCyan)),
-        getExtendedDescription: _ => Task.FromResult(new FormattedString(target.DisplayType + "\n/root/" + target.Path)),
+        displayText: NodeColors.Path(Alias(target.Path + (children ? "/" : ""), bracket), families),
+        getExtendedDescription: _ => Task.FromResult(new FormattedString(target.DisplayType + "\n") + NodeColors.Path(target.AbsolutePath ?? "/root/" + target.Path, families)),
         commitCharacterRules: System.Collections.Immutable.ImmutableArray.Create(
-            new PrettyPrompt.Consoles.CharacterSetModificationRule(PrettyPrompt.Consoles.CharacterSetModificationKind.Add, System.Collections.Immutable.ImmutableArray.Create('/'))))
+            new PrettyPrompt.Consoles.CharacterSetModificationRule(PrettyPrompt.Consoles.CharacterSetModificationKind.Add, System.Collections.Immutable.ImmutableArray.Create('/'))),
+        getComplexTextEdit: (text, caret, _) =>
+        {
+            var path = NodePathInput.Find(text).FirstOrDefault(p => caret > p.Span.Start && caret <= p.Span.End);
+            var name = path?.Path.StartsWith('/') == true ? target.AbsolutePath ?? target.Path : target.Path;
+            var quoted = bracket || path is not null && text.AsSpan(path.Span.Start).StartsWith("$[");
+            var span = path is null ? new PromptSpan(caret, 0) : new PromptSpan(path.Span.Start, path.Span.Length);
+            return Task.FromResult(new CompletionEdit(span, Alias(name + (children ? "/" : ""), quoted)));
+        })
     {
         public override int GetCompletionItemPriority(string text, int caret, PromptSpan spanToBeReplaced)
         {
@@ -339,12 +377,15 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             var path = typed.StartsWith("$[", StringComparison.Ordinal)
                 ? Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseToken(typed[2..].TrimStart()).ValueText
                 : typed.TrimStart('$');
-            var candidate = target.Path;
+            var candidate = path.StartsWith('/') ? target.AbsolutePath ?? target.Path : target.Path;
             if (typed.StartsWith('?'))
             {
                 path = typed[1..];
                 candidate = target.Path[(target.Path.LastIndexOf('/') + 1)..];
             }
+            // Outside this scope, searches insert an absolute $/root path. Normal
+            // relative completion keeps descendants ahead of unrelated nodes.
+            if (!typed.StartsWith('?') && candidate.StartsWith('/') && !path.StartsWith('/')) return int.MinValue;
             var match = candidate.StartsWith(path, StringComparison.Ordinal) ? 2 :
                 candidate.StartsWith(path, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
             return match == 0 ? int.MinValue : match * 100_000 - target.Path.Count(c => c == '/');
