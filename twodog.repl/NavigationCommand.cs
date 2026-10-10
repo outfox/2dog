@@ -17,12 +17,12 @@ internal sealed record NavigationCommand(string Name, int Start, int ArgumentSta
     public bool InArgument(int caret) => Name is "cd" or "rm" or "cp" or "mv" && ArgumentStart > Start + Length && caret >= ArgumentStart;
     public bool AwaitingTargetAt(int caret) => AwaitingTarget && caret >= (DestinationSpan?.Start ?? ArgumentStart);
     internal static string Usage(string name) => name is "cp" or "mv"
-        ? "Usage: " + name + " $Source $Parent or " + name + " sourceExpression parentExpression. The parent must exist; names must not collide. Use :" + name + " to force command handling."
+        ? "Usage: " + name + " $Source $Parent or " + name + " sourceExpression parentExpression. The destination parent must exist; mv also accepts a quoted new name. Names must not collide. Use :" + name + " to force command handling."
         : name == "rm"
         ? "Usage: rm $Child or rm nodeExpression. A target is required; the root Window cannot be removed."
         : "Usage: cd $Child, cd nodeExpression, cd .., or cd /. Use :cd $[\"My Node\"] for spaces; :cd also accepts absolute /root paths.";
 
-    public static bool TryParse(string text, [NotNullWhen(true)] out NavigationCommand? command)
+    public static bool TryParse(string text, [NotNullWhen(true)] out NavigationCommand? command, bool forceShell = false)
     {
         command = null;
         var start = 0;
@@ -39,13 +39,13 @@ internal sealed record NavigationCommand(string Name, int Start, int ArgumentSta
         if (argument.EndsWith(';')) argument = argument[..^1].TrimEnd();
         if (name is "cp" or "mv")
         {
-            if (!explicitCommand && NodeTransferCommand.IsCSharp(text, argument)) return false;
+            if (!explicitCommand && !forceShell && NodeTransferCommand.IsCSharp(text, argument)) return false;
             command = NodeTransferCommand.Parse(text, name, start, argumentStart, argument, explicitCommand);
             return true;
         }
         if (name == "pwd")
         {
-            if (argument.Length > 0 && !explicitCommand) return false;
+            if (argument.Length > 0 && !explicitCommand && !forceShell) return false;
             command = new(name, start, argumentStart, null, argument.Length == 0 ? null : "Usage: pwd or :pwd", explicitCommand);
             return true;
         }
@@ -55,10 +55,10 @@ internal sealed record NavigationCommand(string Name, int Start, int ArgumentSta
             return true;
         }
         // Slash is also C# division. Bare absolute paths therefore need either
-        // the $ decorator or :cd.
-        if (explicitCommand && argument.StartsWith("/root", StringComparison.Ordinal) && !argument.Any(char.IsWhiteSpace))
+        // the $ decorator, :cd, or shell mode.
+        if ((explicitCommand || forceShell) && argument.StartsWith("/root", StringComparison.Ordinal) && !argument.Any(char.IsWhiteSpace))
         {
-            command = new(name, start, argumentStart, argument.TrimEnd('/'), null, true);
+            command = new(name, start, argumentStart, argument.TrimEnd('/'), null, explicitCommand);
             return true;
         }
         var paths = NodePathInput.Find(argument);
@@ -77,7 +77,7 @@ internal sealed record NavigationCommand(string Name, int Start, int ArgumentSta
         // Prefer ordinary C# calls, assignments and arithmetic, including
         // submissions with several statements. A declaration-shaped `cd x;`
         // remains navigation; :cd disambiguates parenthesized expressions.
-        if (!explicitCommand && !argument.StartsWith('$'))
+        if (!explicitCommand && !forceShell && !argument.StartsWith('$'))
         {
             var ordinaryInput = new NodePathInput(text, new Dictionary<string, NodePathTarget>());
             var ordinary = CSharpSyntaxTree.ParseText(ordinaryInput.Code, new CSharpParseOptions(kind: SourceCodeKind.Script)).GetRoot();

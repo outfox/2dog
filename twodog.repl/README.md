@@ -18,7 +18,7 @@ Enter runs the whole input; Shift+Enter inserts a newline. `:multiline`
 toggles those two keys for the current session. Ctrl+Enter always runs.
 Enter accepts the selected suggestion when the completion menu is open;
 otherwise it keeps the selected input mode. Ctrl+Enter always runs immediately.
-Exact command names such as `ls`, `cd`, `pwd`, `exit` and `:help` run immediately
+In `:auto` and `:sh`, exact command names such as `ls`, `cd`, `pwd` and `exit` run immediately
 on Enter in either input mode, even with the completion menu open. This requires
 no trailing whitespace; `ls ` and `cd ` keep argument completion. Enter also
 accepts and runs a selected bare command, such as `l` completing to `ls`.
@@ -42,6 +42,40 @@ Trees and node paths use Godot's editor family colors: green for Control,
 blue for Node2D, red for Node3D, purple for Animation and neutral for other
 nodes. Each path component reflects its own node type; separators are grey.
 The scoped prompt uses the selected node's family color.
+
+## Modes
+
+Use `:auto`, `:sh`, `:cs` or `:ai` to change how submissions are interpreted.
+Switching modes preserves C# variables, imports and the selected node.
+
+| Mode | Behavior |
+| --- | --- |
+| `:auto` (default) | C# and node shell commands together, with the existing command disambiguation rules |
+| `:sh` | Shell command names take priority, even when a C# variable has the same name; single expressions inspect properties and call node methods |
+| `:cs` | Pure C# submissions: no shell commands; typed `$` paths, `?` searches and Tab completion still work |
+| `:ai` | Agent stub: each submission replies "the lights are on, but there's no one home" and executes no code |
+
+The prompt shows `godot:sh>`, `godot:cs>` or `godot:ai>` outside the default
+mode, alongside the selected node path. `:help`, `:exit`, `:clear`,
+`:multiline`, `:reset` and mode switches work in every mode. `:reset` clears
+C# variables while preserving the mode and node scope. Bare `exit` quits in
+`:auto` and `:sh`; use `:exit` in the other modes.
+
+```text
+:cs
+var mv = 42;
+mv
+:sh
+cd $Control
+here.Name
+$CenterContainer.Show()
+:auto
+```
+
+Shell mode accepts node commands and single C# expressions, including node
+properties and method calls. Use `:cs` for declarations, multiple statements,
+`using` directives or loading scripts. In `:cs`, names such as `ls` and `mv`
+are ordinary C# identifiers; colon-prefixed shell commands are also disabled.
 
 `ls` lists the selected node and its descendants (initially the whole tree).
 `ls $Control/Child` lists that node and its descendants. Tab completes node paths, including after `ls `, and fills in
@@ -78,32 +112,38 @@ C# node variables and expressions in either argument, with Tab completion:
 ```text
 cp $Player $Backup
 mv savedNode destination
+mv $Player "Hero"
 :cp (source ?? here) (destination ?? root)
 ```
 
 Arguments are two whitespace-separated C# expressions; use parentheses to
 make expression boundaries clear. Both run once, left to right, on the Godot
 thread. The root Window, self/descendant destinations and conflicting child
-names are rejected. Rename nodes through C# when needed. `cp` uses Godot's
+names are rejected. `mv $Old "NewName"` renames a node in place; a C#
+string expression also works as the new name. Invalid names and sibling
+collisions are rejected before changing the tree. Renaming preserves the node
+identity and updates the selected scope and completion paths. `cp` uses Godot's
 standard `Duplicate()` behavior: serialized properties, children, groups,
 signals and scripts; resources retain their normal sharing rules. Internal
 nodes and arbitrary runtime fields are not copied. These commands change the
 live tree; they do not save scene files. Moving `here` preserves its identity
 and updates the prompt path.
 
-Command names remain usable in C#: `mv(...)`, `mv.Member`, `mv[index]`,
+In `:auto`, command names remain usable in C#: `mv(...)`, `mv.Member`, `mv[index]`,
 assignments and arithmetic keep their C# meaning, even with whitespace before
 the punctuation. `mv source parent` is a command even if `mv` is a variable;
 `:mv` explicitly forces the command. `@mv` explicitly selects the C# identifier.
 As with `cd`, a bare `mv` or `cp` evaluates an existing variable of that name.
 
-`?EngineT` searches node names anywhere in the live tree, ignoring case.
+`$EngineT` completes paths and searches node names across the whole live tree.
+Path-prefix matches come first, followed by node-name prefixes, ignoring case.
 Tab or Enter accepts a match as its complete, typed `$` path. Tab/Shift+Tab
-cycles matches; Backspace restores `?EngineT`. Branches end in `/` so you can
-type a child name; names with spaces use the quoted `$["..."]` form. This also
-works after `ls `, `cd ` and inside C# expressions. Matches outside your scope
-insert absolute `$` paths. The search is a completion shortcut;
-choose a full path before running. Ordinary C# `?`, `?.` and `??` stay C#.
+cycles matches; Backspace restores `$EngineT`. Name matches with children end
+in `/` so you can continue into the subtree; names with spaces use `$["..."]`.
+This also works after `ls `, `cd ` and inside C# expressions. Matches outside
+`here` insert absolute `$` paths. Search only chooses completion candidates;
+evaluating a `$` path still requires an exact, case-sensitive match.
+The earlier `?EngineT` spelling remains a name-search-only alias.
 
 `scene` follows `tree.CurrentScene`, the root node of the game's loaded scene.
 Use `tree.ChangeSceneToFile("res://other.tscn")` to replace it, then await
@@ -118,7 +158,7 @@ with independent 2D and 3D worlds. Inspect `world.Scene` or `world.Viewport`,
 use `world.Clear()` for an empty scene and `world.Close()` to close it.
 The SceneTree, autoloads and singletons are shared with the game.
 
-Type `:help` for examples and keyboard shortcuts, `:quit` to stop both the
+Type `:help` for examples and keyboard shortcuts, `:exit` to stop both the
 prompt and the game, or `:reset` to clear C# state without restarting Godot.
 
 Debug, Editor and Release natives are supported. Run on a JIT runtime, with

@@ -69,6 +69,7 @@ public static class ReplHost
         var exitCode = 0;
         var multiline = false;
         var history = console.HistoryFile;
+        var promptMode = session.Mode;
         string? promptScope = "/root";
         IReadOnlyDictionary<string, NodeFamily>? promptFamilies = null;
         try
@@ -89,10 +90,11 @@ public static class ReplHost
                 if (prompt is not null)
                 {
                     var scope = await session.ScopeStyleAsync(lifetime);
-                    if (scope.Path != promptScope || promptFamilies is null || !scope.Families.SequenceEqual(promptFamilies))
+                    if (session.Mode != promptMode || scope.Path != promptScope || promptFamilies is null || !scope.Families.SequenceEqual(promptFamilies))
                     {
                         await prompt.DisposeAsync();
                         prompt = await CreatePromptAsync(session, console, history, multiline, warmUp: false, cancellationToken: lifetime, scopePath: scope.Path, scopeFamilies: scope.Families);
+                        promptMode = session.Mode;
                         promptScope = scope.Path;
                         promptFamilies = scope.Families;
                     }
@@ -101,14 +103,15 @@ public static class ReplHost
                     text = response.Text;
                     submissionToken = response.CancellationToken;
                 }
-                else text = await ReadSubmissionAsync(console.Input, lifetime).ConfigureAwait(false);
+                else text = await ReadSubmissionAsync(console.Input, lifetime, session.Mode).ConfigureAwait(false);
                 if (text is null) break;
                 if (string.IsNullOrWhiteSpace(text)) continue;
                 switch (text.Trim())
                 {
-                    case ":quit": case ":exit": case "exit": return exitCode;
+                    case ":exit": return exitCode;
+                    case "exit" when session.Mode.HasShell(): return exitCode;
                     case ":help":
-                        output.Help(multiline);
+                        output.Help(multiline, session.Mode);
                         continue;
                     case ":clear":
                         if (interactive) console.Editor.Clear();
@@ -125,8 +128,10 @@ public static class ReplHost
                         continue;
                     case ":reset":
                         if (interactive) output.Message("Preparing C# completion...");
+                        var mode = session.Mode;
                         session.Dispose();
                         session = new ReplSession(globals, assemblies, dispatcher);
+                        await session.EvaluateAsync(":" + mode.Name(), lifetime);
                         if (prompt is not null)
                         {
                             await prompt.DisposeAsync();
@@ -174,11 +179,11 @@ public static class ReplHost
         var callbacks = new ReplPromptCallbacks(session, console.TakePaste);
         if (warmUp) await callbacks.WarmUpAsync(cancellationToken);
         return new Prompt(persistentHistoryFilepath: history, callbacks: callbacks, console: console.Editor,
-            configuration: CreatePromptConfiguration(multiline, scopePath, console.Editor.BufferWidth, scopeFamilies));
+            configuration: CreatePromptConfiguration(multiline, scopePath, console.Editor.BufferWidth, scopeFamilies, session.Mode));
     }
 
-    internal static PromptConfiguration CreatePromptConfiguration(bool multiline = false, string? scopePath = null, int? terminalWidth = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null) => new(
-        prompt: CreatePromptText(scopePath, terminalWidth, scopeFamilies, color: !PromptConfiguration.HasUserOptedOutFromColor),
+    internal static PromptConfiguration CreatePromptConfiguration(bool multiline = false, string? scopePath = null, int? terminalWidth = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null, ReplMode mode = ReplMode.Auto) => new(
+        prompt: CreatePromptText(scopePath, terminalWidth, scopeFamilies, color: !PromptConfiguration.HasUserOptedOutFromColor, mode),
         keyBindings: new KeyBindings(
             commitCompletion: new KeyPressPatterns(new KeyPressPattern(ConsoleKey.Tab), new KeyPressPattern(ConsoleModifiers.Shift, ConsoleKey.Tab),
                 new KeyPressPattern(ConsoleKey.Enter), new KeyPressPattern('.'), new KeyPressPattern('(')),
@@ -190,7 +195,7 @@ public static class ReplHost
             triggerOverloadList: new KeyPressPatterns(new KeyPressPattern('('), new KeyPressPattern(','), new KeyPressPattern(ConsoleKey.Tab),
                 new KeyPressPattern(ConsoleModifiers.Control | ConsoleModifiers.Shift, ConsoleKey.Spacebar))));
 
-    internal static FormattedString CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies, bool color)
+    internal static FormattedString CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies, bool color, ReplMode mode = ReplMode.Auto)
     {
         // Leave room for code and completion even in narrow terminals. pwd always
         // shows the full path; the prompt keeps the end of a long scope visible.
@@ -202,22 +207,24 @@ public static class ReplHost
             var separator = tail.IndexOf('/');
             scopePath = "..." + (separator >= 0 ? tail[separator..] : tail);
         }
-        var text = scopePath is null or "/root" ? "godot> " : $"godot [{scopePath}]> ";
+        var prefix = mode == ReplMode.Auto ? "godot" : "godot:" + mode.Name();
+        var text = scopePath is null or "/root" ? prefix + "> " : $"{prefix} [{scopePath}]> ";
         if (!color) return new FormattedString(text);
         var family = scopeFamilies is not null && fullPath is not null && scopeFamilies.TryGetValue(fullPath, out var known) ? known : NodeFamily.Node;
         var spans = new List<FormatSpan> { new(0, 5, NodeColors.Color(family)) };
+        if (mode != ReplMode.Auto) spans.Add(new(5, prefix.Length - 5, AnsiColor.BrightMagenta));
         if (scopePath is not null && scopePath != "/root")
         {
             var full = NodeColors.Path(fullPath!, scopeFamilies);
             var hidden = scopePath.StartsWith("...", StringComparison.Ordinal) ? 3 : 0;
             var visibleLength = scopePath.Length - hidden;
-            if (hidden > 0) spans.Add(new(7, hidden, NodeColors.Grey));
-            spans.AddRange(full.Substring(full.Length - visibleLength, visibleLength).FormatSpans.ToArray().Select(s => s.Offset(7 + hidden)));
+            if (hidden > 0) spans.Add(new(prefix.Length + 2, hidden, NodeColors.Grey));
+            spans.AddRange(full.Substring(full.Length - visibleLength, visibleLength).FormatSpans.ToArray().Select(s => s.Offset(prefix.Length + 2 + hidden)));
         }
         return new FormattedString(text, spans);
     }
 
-    internal static async Task<string?> ReadSubmissionAsync(TextReader input, CancellationToken cancellationToken)
+    internal static async Task<string?> ReadSubmissionAsync(TextReader input, CancellationToken cancellationToken, ReplMode mode = ReplMode.Auto)
     {
         var text = new StringBuilder();
         while (true)
@@ -225,7 +232,7 @@ public static class ReplHost
             var line = await input.ReadLineAsync(cancellationToken).ConfigureAwait(false);
             if (line is null) return text.Length == 0 ? null : text.ToString();
             text.AppendLine(line);
-            if (line.TrimStart().StartsWith(':') || ReplSession.IsComplete(text.ToString())) return text.ToString();
+            if (line.TrimStart().StartsWith(':') || ReplSession.IsComplete(text.ToString(), mode)) return text.ToString();
         }
     }
 }

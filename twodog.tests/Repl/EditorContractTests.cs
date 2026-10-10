@@ -271,7 +271,7 @@ public class EditorContractIntegrationTests
         Assert.True(bed.Pump(bed.Callbacks.ConfirmCompletionCommit("world.Op", 8,
             new KeyPress(new ConsoleKeyInfo('.', ConsoleKey.OemPeriod, false, false, false)), bed.Token)));
         Assert.Equal("Open", bed.Pump(method.GetComplexTextEditAsync("world.Op", 8, bed.Token)).NewText);
-        Assert.Equal(":quit", bed.Read("", new ConsoleKeyInfo('\x04', ConsoleKey.D, false, false, true)));
+        Assert.Equal(":exit", bed.Read("", new ConsoleKeyInfo('\x04', ConsoleKey.D, false, false, true)));
         Assert.Equal("x", bed.Read("x", new('\x04', ConsoleKey.D, false, false, true), Bed.Submit));
         Assert.Equal("$Controlzz", bed.Read("$Cont", Bed.Tab, new('z', ConsoleKey.Z, false, false, false),
             new('z', ConsoleKey.Z, false, false, false), Bed.Tab, Bed.Submit));

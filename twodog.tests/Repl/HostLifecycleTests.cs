@@ -35,7 +35,7 @@ public class HostLifecycleTests
             .Concat(Code("int retained = 42;")).Concat(Code("retained"))
             .Concat(Code("cd $Control")).Concat(Command("pwd")).Concat(Command("ls"))
             .Concat(Code("throw new OperationCanceledException();"))
-            .Concat(Command(":reset")).Concat(Code("retained")).Concat(Command(":quit"));
+            .Concat(Command(":reset")).Concat(Code("retained")).Concat(Command(":exit"));
         var (exit, terminal) = Run(null, keys);
         Assert.Equal(0, exit);
         Assert.Equal(1, terminal.Prompt.Clears);
@@ -52,6 +52,10 @@ public class HostLifecycleTests
 
     [Theory]
     [InlineData(":help\n:clear\n:multiline\n:reset\n40+2\n:exit\n", 0)]
+    [InlineData(":auto\n:exit\nthis must not execute\n", 0)]
+    [InlineData(":sh\n:exit\nthis must not execute\n", 0)]
+    [InlineData(":cs\n:exit\nthis must not execute\n", 0)]
+    [InlineData(":ai\n:exit\nthis must not execute\n", 0)]
     [InlineData("\n40+2\nls\nexit\n", 0)]
     [InlineData("var broken = ;\n40+2\n", 1)]
     [InlineData("if (true) {", 1)]
@@ -66,6 +70,8 @@ public class HostLifecycleTests
             Assert.Equal(0, terminal.Prompt.Clears);
             Assert.DoesNotContain("Preparing C# completion...", terminal.Stdout.ToString());
             if (expected != 0) Assert.NotEmpty(terminal.Stderr.ToString());
+            else Assert.Empty(terminal.Stderr.ToString());
+            Assert.DoesNotContain("this must not execute", terminal.Stdout.ToString());
             if (input.Contains("40+2")) Assert.Contains("42", terminal.Stdout.ToString());
         }
     }
@@ -83,12 +89,34 @@ public class HostLifecycleTests
         var original = Console.In;
         try
         {
-            Console.SetIn(new StringReader(":quit\n"));
+            Console.SetIn(new StringReader(":exit\n"));
             var game = typeof(showcase.CSharpTicker).Assembly;
             using var engine = new Engine("repl-public-entry", Engine.ResolveProjectDir(), "--headless");
             Assert.Equal(0, ReplHost.Run(engine, game));
         }
         finally { Console.SetIn(original); }
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void HostSwitchesModesAndPreservesModeThroughReset(bool interactive)
+    {
+        var inputs = new[] { "var ls = 42; var exit = 43;", ":cs", "ls", "exit", ":sh", "ls", ":ai", "tree.Quit();", ":reset", "tree.Quit();", ":auto", "exit" };
+        var (exit, terminal) = interactive
+            ? Run(null, inputs.SelectMany(Code))
+            : Run(string.Join("\n", inputs) + "\n");
+        using (terminal)
+        {
+            Assert.Equal(0, exit);
+            Assert.Empty(terminal.Stderr.ToString());
+            Assert.Contains("42", terminal.Stdout.ToString());
+            Assert.Contains("43", terminal.Stdout.ToString());
+            Assert.Contains("CenterContainer", terminal.Stdout.ToString());
+            Assert.Equal(2, terminal.Stdout.ToString().Split(ReplModes.AgentReply).Length - 1);
+            foreach (var mode in new[] { "cs", "sh", "ai", "auto" })
+                Assert.Contains("Mode: :" + mode, terminal.Stdout.ToString());
+        }
     }
 
     private sealed class Terminal : IReplTerminal, IDisposable

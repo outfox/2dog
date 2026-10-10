@@ -150,7 +150,7 @@ public class ReplIntegrationTests
         var shiftEnter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, true, false, false);
         var escape = new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false);
         // One Enter must submit an exact command rather than accept a suggestion.
-        foreach (var command in new[] { "ls", "cd", "pwd", "rm", "cp", "mv", "exit", ":cd", ":pwd", ":rm", ":cp", ":mv", ":help", ":clear", ":reset", ":multiline", ":quit", ":exit" })
+        foreach (var command in new[] { "ls", "cd", "pwd", "rm", "cp", "mv", "exit", ":cd", ":pwd", ":rm", ":cp", ":mv", ":help", ":clear", ":reset", ":multiline", ":exit" })
         {
             Assert.Equal(command, ReadPrompt(command, false, enter));
             Assert.Equal(command, ReadPrompt(command, true, enter));
@@ -256,15 +256,18 @@ public class ReplIntegrationTests
             "var searchBranch = new Control { Name = \"CycleEngineTimerName\" }; searchParent.AddChild(searchBranch); " +
             "searchBranch.AddChild(new Node { Name = \"Leaf\" }); " +
             "searchParent.AddChild(new Node { Name = \"CycleEngineTimer With Space\" });");
-        Assert.Equal("$[\"ReplSearch/CycleEngineTimer With Space\"]", ReadPrompt("?CycleEngineT", false, tab, controlEnter));
-        Assert.Equal("$ReplSearch/CycleEngineTimerInCSharp", ReadPrompt("?CycleEngineT", false, tab, tab, controlEnter));
-        Assert.Equal("$ReplSearch/CycleEngineTimerInGDScript", ReadPrompt("?CycleEngineT", false, tab, tab, tab, controlEnter));
-        Assert.Equal("$ReplSearch/CycleEngineTimerName/", ReadPrompt("?CycleEngineT", false, tab, shiftTab, controlEnter));
-        Assert.Equal("?CycleEngineT", ReadPrompt("?CycleEngineT", false, tab, tab, backspace, controlEnter));
-        Assert.Equal("$ReplSearch/CycleEngineTimerInCSharp", ReadPrompt("?cycleenginetimerinc", false, enter, controlEnter));
-        Assert.Equal("ls $ReplSearch/CycleEngineTimerName/", ReadPrompt("ls ?CycleEngineTimerNa", false, tab, controlEnter));
-        Assert.Equal("$ReplSearch/CycleEngineTimerName/Leaf", ReadPrompt("?CycleEngineTimerNa", false, tab,
-            new ConsoleKeyInfo('L', ConsoleKey.L, true, false, false), tab, controlEnter));
+        foreach (var decorator in new[] { "$", "?" })
+        {
+            Assert.Equal("$[\"ReplSearch/CycleEngineTimer With Space\"]", ReadPrompt(decorator + "CycleEngineT", false, tab, controlEnter));
+            Assert.Equal("$ReplSearch/CycleEngineTimerInCSharp", ReadPrompt(decorator + "CycleEngineT", false, tab, tab, controlEnter));
+            Assert.Equal("$ReplSearch/CycleEngineTimerInGDScript", ReadPrompt(decorator + "CycleEngineT", false, tab, tab, tab, controlEnter));
+            Assert.Equal("$ReplSearch/CycleEngineTimerName/", ReadPrompt(decorator + "CycleEngineT", false, tab, shiftTab, controlEnter));
+            Assert.Equal(decorator + "CycleEngineT", ReadPrompt(decorator + "CycleEngineT", false, tab, tab, backspace, controlEnter));
+            Assert.Equal("$ReplSearch/CycleEngineTimerInCSharp", ReadPrompt(decorator + "cycleenginetimerinc", false, enter, controlEnter));
+            Assert.Equal("ls $ReplSearch/CycleEngineTimerName/", ReadPrompt("ls " + decorator + "CycleEngineTimerNa", false, tab, controlEnter));
+            Assert.Equal("$ReplSearch/CycleEngineTimerName/Leaf", ReadPrompt(decorator + "CycleEngineTimerNa", false, tab,
+                new ConsoleKeyInfo('L', ConsoleKey.L, true, false, false), tab, controlEnter));
+        }
         Assert.Equal("true", Success("$ReplSearch/CycleEngineTimerName/ is Control").Value);
         Assert.Contains("for completion", Eval("?CycleEngineT").Error!);
         Assert.Contains("Press Tab", Eval("ls ?CycleEngineT").Error!);

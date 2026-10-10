@@ -17,6 +17,40 @@ For a new project, use `dnx 2dog new MyGame --repl`. The dotnet template also
 supports `dotnet new 2dog -n MyGame --repl true --web false --tests false`.
 The host is opt-in, uses `2dog.repl`, and keeps a console in every configuration.
 
+## Modes
+
+Use `:auto`, `:sh`, `:cs` or `:ai` to change how submissions are interpreted.
+Switching modes preserves C# variables, imports and the selected node.
+
+| Mode | Behavior |
+| --- | --- |
+| `:auto` (default) | C# and node shell commands together, with the existing command disambiguation rules |
+| `:sh` | Shell command names take priority, even when a C# variable has the same name; single expressions inspect properties and call node methods |
+| `:cs` | Pure C# submissions: no shell commands; typed `$` paths, `?` searches and Tab completion still work |
+| `:ai` | Agent stub: each submission replies "the lights are on, but there's no one home" and executes no code |
+
+The prompt shows `godot:sh>`, `godot:cs>` or `godot:ai>` outside the default
+mode, alongside the selected node path. `:help`, `:exit`, `:clear`,
+`:multiline`, `:reset` and mode switches work in every mode. `:reset` clears
+C# variables while preserving the mode and node scope. Bare `exit` quits in
+`:auto` and `:sh`; use `:exit` in the other modes.
+
+```text
+:cs
+var mv = 42;
+mv
+:sh
+cd $Control
+here.Name
+$CenterContainer.Show()
+:auto
+```
+
+Shell mode accepts node commands and single C# expressions, including node
+properties and method calls. Use `:cs` for declarations, multiple statements,
+`using` directives or loading scripts. In `:cs`, names such as `ls` and `mv`
+are ordinary C# identifiers; colon-prefixed shell commands are also disabled.
+
 ## Explore the Running Scene
 
 The prompt exposes `engine`, `tree`, `root`, `scene`, `world` and the
@@ -133,43 +167,50 @@ C# node variables and expressions in either argument, with Tab completion:
 ```text
 cp $Player $Backup
 mv savedNode destination
+mv $Player "Hero"
 :cp (source ?? here) (destination ?? root)
 ```
 
 Arguments are two whitespace-separated C# expressions; use parentheses to
 make expression boundaries clear. Both run once, left to right, on the Godot
 thread. The root Window, self/descendant destinations and conflicting child
-names are rejected. Rename nodes through C# when needed. `cp` uses Godot's
+names are rejected. `mv $Old "NewName"` renames a node in place; a C#
+string expression also works as the new name. Invalid names and sibling
+collisions are rejected before changing the tree. Renaming preserves the node
+identity and updates the selected scope and completion paths. `cp` uses Godot's
 standard `Duplicate()` behavior: serialized properties, children, groups,
 signals and scripts; resources retain their normal sharing rules. Internal
 nodes and arbitrary runtime fields are not copied. These commands change the
 live tree; they do not save scene files. Moving `here` preserves its identity
 and updates the prompt path.
 
-Command names remain usable in C#: `mv(...)`, `mv.Member`, `mv[index]`,
+In `:auto`, command names remain usable in C#: `mv(...)`, `mv.Member`, `mv[index]`,
 assignments and arithmetic keep their C# meaning, even with whitespace before
 the punctuation. `mv source parent` is a command even if `mv` is a variable;
 `:mv` explicitly forces the command. `@mv` explicitly selects the C# identifier.
 As with `cd`, a bare `mv` or `cp` evaluates an existing variable of that name.
 
-Search node names across the whole live tree with `?`, without knowing their
-parents:
+Use `$` to complete a path or find a node without knowing its parents:
 
 ```text
-?EngineT
-ls ?EngineT
-cd ?EngineT
+$EngineT
+ls $EngineT
+cd $EngineT
 ```
 
-Tab or Enter accepts a selected match as its full `$Control/Table/EngineTimer`
-path, retaining the live C# type. Matches outside the selected scope insert an
-absolute path such as `$/root/Control/Table/EngineTimer`. Tab cycles through the other matching nodes;
-Shift+Tab cycles backward. Backspace restores the `?EngineT` prefix. Matching
-ignores case and includes both C# and GDScript-backed nodes. Branch nodes end
-in `/` so you can type a child name; names with spaces receive a quoted path.
-The shortcut works inside C# expressions too. Choose a full path before
-running; C# ternaries, nullable types and null-conditional access keep their
-ordinary meaning.
+Path-prefix matches come first, followed by node-name prefixes anywhere in the
+live tree. Both ignore case, preferring exact case within each group. Tab or
+Enter accepts a selected match as its full `$Control/Table/EngineTimer` path,
+retaining the live C# type. Matches outside the selected scope insert an
+absolute path such as `$/root/Control/Table/EngineTimer`. Tab cycles through
+matching nodes; Shift+Tab cycles backward. Backspace restores the `$EngineT`
+prefix. Name matches with children end in `/` so you can continue into the
+subtree; names with spaces receive a quoted path. This works with both C# and
+GDScript-backed nodes and inside C# expressions.
+
+Searching affects completion only. Evaluating a `$` path still requires an
+exact, case-sensitive match. The earlier `?EngineT` spelling remains a
+name-search-only alias; ordinary C# `?`, `?.` and `??` keep their meaning.
 
 Tab completes child paths and members. Spaces and punctuation require the
 bracket form; ordinary C# interpolated strings such as `$"hello {scene.Name}"`
@@ -230,7 +271,7 @@ variables and imports while preserving both scenes.
 | Up, Down | Browse history, persisted between runs |
 | Ctrl+C | Cancel input or cooperatively cancel the running submission |
 | Ctrl+L, `:clear` | Clear the screen |
-| Ctrl+D on empty input, `:quit` | Stop the prompt and game |
+| Ctrl+D on empty input, `:exit` | Stop the prompt and game |
 | `cd $Child`, `cd nodeExpression`, `cd ..`, `cd /` | Select a node, its parent or the root |
 | `pwd`, `:pwd` | Show the selected node's absolute path |
 | `rm $Child`, `rm nodeExpression` | Remove a scene node and its descendants |
@@ -265,8 +306,8 @@ one edit. Windows' normal console key API removes those paste boundaries;
 use `:multiline` before pasting several lines, then Ctrl+Enter to run them.
 
 When the completion menu has a selection, Enter accepts it without running
-the input. Exact command names such as `ls`, `cd`, `pwd`, `exit` and `:help`
-run immediately on Enter in either input mode, even with a suggestion selected.
+the input. In `:auto` and `:sh`, exact command names such as `ls`, `cd`,
+`pwd` and `exit` run immediately on Enter in either input mode, even with a suggestion selected.
 This exception requires no trailing whitespace: `ls ` and `cd ` keep argument
 completion. Enter also accepts and runs a selected bare command, such as `l`
 completing to `ls`. Otherwise Enter runs input by default. Use `:multiline` to make Enter

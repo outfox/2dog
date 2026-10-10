@@ -22,6 +22,7 @@ internal sealed class ReplSession : IDisposable
     private Document? editingDocument;
     private int navigationVersion;
     internal int Version => submission + navigationVersion;
+    public ReplMode Mode { get; private set; } = ReplMode.Auto;
     public Task<NodePathStyle> ScopeStyleAsync(CancellationToken token)
         => dispatcher.InvokeAsync(() => Task.FromResult(NodeColors.CapturePath(globals.here)), token);
     public Task<string> ScopePathAsync(CancellationToken token)
@@ -44,10 +45,11 @@ internal sealed class ReplSession : IDisposable
             .WithSourceResolver(new SourceFileResolver([], Environment.CurrentDirectory));
     }
 
-    public static bool IsComplete(string text)
+    public static bool IsComplete(string text, ReplMode mode = ReplMode.Auto)
     {
-        NavigationCommand.TryParse(text, out var navigation);
-        if (ListTreeCommand.TryParse(text, out _) || navigation is { Expression: null }) return true;
+        if (mode is ReplMode.Shell or ReplMode.Agent || ReplModes.TryParse(text.Trim(), out _)) return true;
+        mode.TryNavigation(text, out var navigation);
+        if (mode.TryListing(text, out _) || navigation is { Expression: null }) return true;
         var input = new NodePathInput(text, new Dictionary<string, NodePathTarget>(), navigation?.ExpressionSpan, navigation?.DestinationSpan);
         return input.References.All(p => p.Complete && p.Path.Length > 0) &&
             SyntaxFactory.IsCompleteSubmission(CSharpSyntaxTree.ParseText(input.Code, ParseOptions));
@@ -55,13 +57,13 @@ internal sealed class ReplSession : IDisposable
 
     public async Task<PreparedInput> PrepareAsync(string text, CancellationToken cancellationToken)
     {
-        NavigationCommand.TryParse(text, out var navigation);
+        Mode.TryNavigation(text, out var navigation);
         IReadOnlyDictionary<string, NodePathTarget> nodes = new Dictionary<string, NodePathTarget>();
-        if (NodePathInput.Find(text).Count > 0 || ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget ||
+        if (NodePathInput.Find(text).Count > 0 || Mode.TryListing(text, out var listing) && listing.AwaitingTarget ||
             navigation?.AwaitingTarget == true)
             nodes = await dispatcher.InvokeAsync(() => Task.FromResult(NodePathInput.Capture(globals.root, cancellationToken, globals.here)), cancellationToken).ConfigureAwait(false);
         var input = new NodePathInput(text, nodes, navigation?.ExpressionSpan, navigation?.DestinationSpan);
-        return new(Document(input.Code), input, nodes, nodes.ToDictionary(n => n.Key, n => n.Value.Family, StringComparer.Ordinal));
+        return new(Document(input.Code), input, nodes, nodes.ToDictionary(n => n.Key, n => n.Value.Family, StringComparer.Ordinal), Mode);
     }
 
     private Document Document(string text)
@@ -89,10 +91,19 @@ internal sealed class ReplSession : IDisposable
 
     public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken)
     {
-        NavigationCommand.TryParse(text, out var navigation);
+        if (ReplModes.TryParse(text.Trim(), out var mode))
+        {
+            Mode = mode;
+            navigationVersion++;
+            return new("Mode: :" + mode.Name(), null, false);
+        }
+        if (Mode == ReplMode.Agent) return new(ReplModes.AgentReply, null, false);
+        if (Mode == ReplMode.CSharp && text.TrimStart().StartsWith(':'))
+            return new(null, "C# mode has no shell commands. Use :auto or :sh to navigate the tree.", false);
+        Mode.TryNavigation(text, out var navigation);
         if (navigation?.Error is { } navigationError) return new(null, navigationError, false);
         if (navigation is { Expression: null } &&
-            (navigation.Explicit || navigation.Path is not (null or "..") ||
+            (Mode == ReplMode.Shell || navigation.Explicit || navigation.Path is not (null or "..") ||
                 state?.Variables.Any(variable => variable.Name == navigation.Name) != true))
         {
             return await dispatcher.InvokeAsync(() =>
@@ -112,7 +123,7 @@ internal sealed class ReplSession : IDisposable
                 return Task.FromResult(ApplyNodeCommand(navigation.Name, node));
             }, cancellationToken).ConfigureAwait(false);
         }
-        if (ListTreeCommand.TryParse(text, out var listing))
+        if (Mode.TryListing(text, out var listing))
         {
             if (listing.Error is { } error) return new(null, error, false);
             return await dispatcher.InvokeAsync(() =>
@@ -126,6 +137,12 @@ internal sealed class ReplSession : IDisposable
             }, cancellationToken).ConfigureAwait(false);
         }
         var prepared = await PrepareAsync(text, cancellationToken).ConfigureAwait(false);
+        if (Mode == ReplMode.Shell && navigation is null)
+        {
+            var expression = SyntaxFactory.ParseExpression(prepared.Input.Code.Trim().TrimEnd(';'), consumeFullText: true);
+            if (expression.ContainsDiagnostics || expression.ContainsDirectives)
+                return new(null, "Shell mode accepts node commands and single expressions, such as $Control.Show() or here.Name. Use :cs for C# statements and declarations.", false);
+        }
         foreach (var path in prepared.Input.References)
         {
             if (path.Search)
@@ -209,8 +226,10 @@ internal sealed class ReplSession : IDisposable
 
     private ReplResult ApplyTransfer(string command, object? sourceValue, object? parentValue)
     {
+        if (command == "mv" && sourceValue is Godot.Node renamed && parentValue is string name)
+            return RenameNode(renamed, name);
         if (sourceValue is not Godot.Node source || parentValue is not Godot.Node parent)
-            return new(null, command + " expects two Godot.Node values: a source and an existing parent.", false);
+            return new(null, command + " expects two Godot.Node values: a source and an existing parent. mv also accepts a string new name.", false);
         bool Live(Godot.Node node) => Godot.GodotObject.IsInstanceValid(node) && !node.IsQueuedForDeletion() &&
             node.IsInsideTree() && node.GetTree() == globals.tree;
         if (!Live(source) || !Live(parent))
@@ -222,7 +241,7 @@ internal sealed class ReplSession : IDisposable
         if (command == "mv" && source.GetParent() == parent)
             return new("The node already has that parent.", null, false);
         if (parent.GetChildren(includeInternal: true).Any(child => child.Name == source.Name))
-            return new(null, "The destination already has a child named '" + source.Name + "'. Rename it in C# or choose another parent.", false);
+            return new(null, "The destination already has a child named '" + source.Name + "'. Rename the source with mv or choose another parent.", false);
         var original = NodeColors.CapturePath(source);
         Godot.Node result;
         if (command == "cp")
@@ -242,6 +261,24 @@ internal sealed class ReplSession : IDisposable
         return new(verb + original.Path + " -> " + destination.Path, null, false,
             Styled: new PrettyPrompt.Highlighting.FormattedString(verb) + original.Display +
                 new PrettyPrompt.Highlighting.FormattedString(" -> ") + destination.Display);
+    }
+
+    private ReplResult RenameNode(Godot.Node node, string name)
+    {
+        if (!Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion() || !node.IsInsideTree() || node.GetTree() != globals.tree)
+            return new(null, "mv requires a live node in this engine's scene tree.", false);
+        if (node == globals.root) return new(null, "mv cannot rename the root Window. Choose a scene node.", false);
+        if (string.IsNullOrWhiteSpace(name) || name.Contains('\0') || Godot.StringExtensions.ValidateNodeName(name) != name)
+            return new(null, "mv requires a nonempty, valid Godot node name. Use a single name, not a path.", false);
+        if (node.GetParent().GetChildren(includeInternal: true).Any(child => child != node && child.Name == name))
+            return new(null, "The destination already has a child named '" + name + "'.", false);
+        var original = NodeColors.CapturePath(node);
+        node.Name = name;
+        navigationVersion++;
+        var renamed = NodeColors.CapturePath(node);
+        return new("Renamed: " + original.Path + " -> " + renamed.Path, null, false,
+            Styled: new PrettyPrompt.Highlighting.FormattedString("Renamed: ") + original.Display +
+                new PrettyPrompt.Highlighting.FormattedString(" -> ") + renamed.Display);
     }
 
     private static string Diagnostic(Diagnostic diagnostic, NodePathInput input)
@@ -293,6 +330,6 @@ internal sealed class ReplSession : IDisposable
     public void Dispose() => workspace.Dispose();
 }
 
-internal sealed record PreparedInput(Document Document, NodePathInput Input, IReadOnlyDictionary<string, NodePathTarget> Nodes, IReadOnlyDictionary<string, NodeFamily> Families);
+internal sealed record PreparedInput(Document Document, NodePathInput Input, IReadOnlyDictionary<string, NodePathTarget> Nodes, IReadOnlyDictionary<string, NodeFamily> Families, ReplMode Mode = ReplMode.Auto);
 
 internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null, PrettyPrompt.Highlighting.FormattedString? Styled = null);

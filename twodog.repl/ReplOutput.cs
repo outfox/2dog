@@ -19,9 +19,10 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         output.WriteLine();
         InputMode(multiline: false);
         output.WriteLine("  " + Paint("Tab / Shift+Tab", "36") + "  complete / cycle    " + Paint(":help", "36") + "  examples and controls");
+        output.WriteLine("  " + Paint(":auto / :sh / :cs / :ai", "36") + "  switch modes (default: auto)");
         output.WriteLine("  " + Paint(":multiline", "36") + "  swap Enter and Shift+Enter");
         output.WriteLine();
-        output.WriteLine("Explore  " + Paint("ls", "33") + "  or  " + Paint("$Control", "33") + "    Navigate  " + Paint("cd $Control", "33") + "    Find nodes  " + Paint("?Timer", "33"));
+        output.WriteLine("Explore  " + Paint("ls", "33") + "  or  " + Paint("$Control", "33") + "    Navigate  " + Paint("cd $Control", "33") + "    Find nodes  " + Paint("$Timer", "33"));
         output.WriteLine();
     }
 
@@ -47,8 +48,15 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         => output.WriteLine("  " + Paint("Enter", "36") + (multiline ? "  newline     " : "  run         ") +
             Paint("Shift+Enter", "36") + (multiline ? "  run" : "  newline"));
 
-    public void Help(bool multiline)
+    public void Help(bool multiline, ReplMode mode = ReplMode.Auto)
     {
+        output.WriteLine();
+        Section("Modes (current: :" + mode.Name() + ")");
+        Row(":auto", "Default: C# and shell commands together.");
+        Row(":sh", "Shell commands take priority. Inspect properties and call node methods with C# expressions.");
+        Row(":cs", "Pure C#: no shell commands; typed $ paths and completion still work.");
+        Row(":ai", "Agent placeholder; input only gets a reply and never executes.");
+        output.WriteLine("  Modes share C# variables and the selected node. :reset keeps the current mode.");
         output.WriteLine();
         Section("Explore the game");
         Row("scene", "Root node of the game's currently loaded .tscn (tree.CurrentScene).");
@@ -60,18 +68,19 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Example("rm $Child  // QueueFree this node and its descendants; a target is required");
         Example("cp $Source $Parent  // duplicate the subtree into an existing parent");
         Example("mv savedNode destination  // reparent, preserving the global transform");
+        Example("mv $Old \"NewName\"  // rename without changing parent or node identity");
         Example("cd $Control/Signals/Table/");
         Example("var x = here;  // save a node, then use cd x or cd x.GetParent()");
         Example("ls  // children of the selected node");
         Example("cd ..  // parent; cd / returns to root");
         Example("$Control.Size");
-        Example("?Timer  // Tab searches node names anywhere in the tree");
+        Example("$Timer  // Tab: matching paths first, then node names anywhere in the tree");
         Example("$Control/Signals/Sources/CSharpTicker.Tick();");
         output.WriteLine("  ls prints a node and all its descendants. Paths are case-sensitive; Tab fills them in.");
         output.WriteLine("  $ paths start at here and infer the live node's public C# type. cd selects here.");
         output.WriteLine("  The prompt shows your scope. :cd / :pwd force commands if C# variables have those names.");
-        output.WriteLine("  cd $/root/Control uses an absolute path; ?Name still searches the whole tree.");
-        output.WriteLine("  cp/mv take two node expressions: source and existing parent. Name collisions are rejected.");
+        output.WriteLine("  cd $/root/Control uses an absolute path; $Name also finds nodes across the whole tree.");
+        output.WriteLine("  cp/mv take source and existing parent expressions; mv also takes a string new name. Name collisions are rejected.");
         output.WriteLine("  mv(...), mv.Member, mv[index] stay C#. :mv forces the command; @mv selects the identifier.");
         output.WriteLine("  If the selected node leaves the tree, the scope returns to root.");
         output.WriteLine("  Use $[\"Control/My Node\"] for spaces or punctuation; C# $\"...\" strings stay strings.");
@@ -90,14 +99,14 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         output.WriteLine();
         Section("Editing and session");
         Row("Enter", "Accept a selected completion; otherwise " + (multiline ? "insert a newline. Shift+Enter runs." : "run the input. Shift+Enter inserts a newline."));
-        output.WriteLine("  Enter always runs an exact bare command such as ls, cd, pwd or :help, with no trailing space.");
+        output.WriteLine("  Enter runs exact bare commands with no trailing space; shell commands apply in :auto and :sh.");
         Row(":multiline", "Swap Enter and Shift+Enter for this session; Ctrl+Enter always runs.");
         Row("Tab / Shift+Tab", "Accept, then cycle matching completions forward / backward. Backspace restores your prefix.");
-        Row(". / space / ( / /", "Finish cycling and continue editing. ?Name searches all live node names.");
+        Row(". / space / ( / /", "Finish cycling and continue editing. $Name completes paths, then searches node names.");
         Row("Shift+Backspace", "Delete backward to a word break, like Ctrl+Backspace. Dots and slashes are breaks.");
         Row("Ctrl+Space", "Open suggestions. Ctrl+Shift+Space shows method signatures and arguments.");
         Row("Up / Down", "History. Ctrl+C cancels input or cooperatively cancels code; pass ct to waits.");
-        Row(":reset / :clear", "Clear C# variables / screen. :quit or Ctrl+D on empty input exits.");
+        Row(":reset / :clear", "Clear C# variables / screen. :exit or Ctrl+D on empty input exits.");
         output.WriteLine("  #r \"assembly.dll\" and #load \"script.csx\" load local code.");
         output.WriteLine("  C# and normal await continuations run on Godot's thread; frames advance while awaiting.");
         output.WriteLine("  Keep Godot calls off Task.Run/ConfigureAwait(false). Synchronous code blocks the game.");

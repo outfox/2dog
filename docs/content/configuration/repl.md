@@ -55,4 +55,5 @@ internal static class Program
 
 The prompt's history lives in `2dog/repl-history` under .NET's local application
 data directory. `:reset` clears the scripting session while keeping that
-history and the engine alive. See [REPL](/hosts/repl) for threading and controls.
+history, the selected node, the active mode and the engine alive. The default
+mode is `:auto`; `:sh`, `:cs` and `:ai` switch interpretation at runtime. See [REPL](/hosts/repl) for threading and controls.

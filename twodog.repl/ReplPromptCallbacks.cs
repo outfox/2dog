@@ -15,8 +15,9 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     private bool completionWindowOpen;
     private (string Text, int Caret)? bareCommand;
     private bool enterCompletion;
-    private static bool IsBareCommand(string text) => text is "ls" or "cd" or "pwd" or "rm" or "cp" or "mv" or "exit" or ":cd" or ":pwd" or ":rm" or ":cp" or ":mv" or
-        ":help" or ":clear" or ":reset" or ":multiline" or ":quit" or ":exit";
+    private bool IsBareCommand(string text) => ReplModes.Controls.Contains(text) ||
+        session.Mode.HasShell() && (ReplModes.ShellCommands.Contains(text) ||
+            text.StartsWith(':') && ReplModes.ShellCommands.Contains(text[1..]));
     private bool pairCall;
     private int pairedCaret;
     private bool callOnCommit = true;
@@ -41,6 +42,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     internal async Task WarmUpAsync(CancellationToken cancellationToken)
     {
+        if (session.Mode == ReplMode.Agent) return;
         // Exercise the same metadata, completion, docs and highlighting paths used by
         // real keystrokes before displaying an input-ready prompt. No C# is executed.
         foreach (var text in new[] { "l", "root." })
@@ -120,7 +122,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         // With the menu closed, Tab advances complete expressions or opens suggestions.
         // Trigger and commit must stay separate: PrettyPrompt consumes shared bindings as triggers.
         pairCall = false;
-        if (keyPress.ConsoleKeyInfo.KeyChar == ')' && caret < text.Length && text[caret] == ')')
+        if (session.Mode != ReplMode.Agent && keyPress.ConsoleKeyInfo.KeyChar == ')' && caret < text.Length && text[caret] == ')')
         {
             var prepared = await PrepareInputAsync(text, cancellationToken);
             var root = (await prepared.Document.GetSyntaxRootAsync(cancellationToken))!;
@@ -131,6 +133,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         }
         if (!completionWindowOpen && keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Tab, Modifiers: 0 })
         {
+            if (session.Mode == ReplMode.Agent && !text.TrimStart().StartsWith(':')) return IgnoreKey();
             var prepared = await PrepareInputAsync(text, cancellationToken);
             var continuation = await ReplCompletion.ContinuationAsync(prepared, caret, cancellationToken);
             if (continuation is { } character && (caret == text.Length || text[caret] != character) &&
@@ -206,7 +209,8 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     }
 
     protected override async Task<(IReadOnlyList<OverloadItem>, int ArgumentIndex)> GetOverloadsAsync(string text, int caret, CancellationToken cancellationToken)
-        => await ReplCompletion.OverloadsAsync(await PrepareInputAsync(text, cancellationToken), caret, cancellationToken);
+        => session.Mode == ReplMode.Agent ? ([], 0)
+            : await ReplCompletion.OverloadsAsync(await PrepareInputAsync(text, cancellationToken), caret, cancellationToken);
 
     protected override IEnumerable<(KeyPressPattern Pattern, KeyPressCallbackAsync Callback)> GetKeyPressCallbacks()
     {
@@ -215,7 +219,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
                 bareCommand is { } command ? new KeyPressCallbackResult(command.Text, null) : null));
         yield return (new KeyPressPattern(ConsoleModifiers.Control, ConsoleKey.D),
             (text, _, _) => Task.FromResult<KeyPressCallbackResult?>(
-                text.Length == 0 ? new KeyPressCallbackResult(":quit", null) : null));
+                text.Length == 0 ? new KeyPressCallbackResult(":exit", null) : null));
     }
 
     protected override Task<bool> ShouldOpenCompletionWindowAsync(string text, int caret, KeyPress keyPress, CancellationToken cancellationToken)
@@ -233,15 +237,17 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     protected override async Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(text)) return [];
+        if (session.Mode == ReplMode.Agent)
+            return text.TrimStart().StartsWith(':') ? [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)] : [];
         var prepared = await PrepareInputAsync(text, cancellationToken);
         var paths = prepared.Input.References.SelectMany(p => NodeColors.Path(text.Substring(p.Span.Start, p.Span.Length), prepared.Families)
             .FormatSpans.ToArray().Select(s => s.Offset(p.Span.Start))).ToArray();
-        NavigationCommand.TryParse(text, out var navigation);
+        session.Mode.TryNavigation(text, out var navigation);
         if (navigation is { Expression: null })
             return new[] { new FormatSpan(navigation.Start, navigation.Length, AnsiColor.BrightMagenta) }
                 .Concat(paths).ToArray();
         if (navigation is null && text.TrimStart().StartsWith(':')) return [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)];
-        if (ListTreeCommand.TryParse(text, out var listing))
+        if (session.Mode.TryListing(text, out var listing))
             return new[] { new FormatSpan(listing.Start, 2, AnsiColor.BrightMagenta) }
                 .Concat(paths).ToArray();
         var spans = await Classifier.GetClassifiedSpansAsync(prepared.Document, new TextSpan(0, prepared.Input.Code.Length), cancellationToken);
@@ -328,17 +334,19 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             => inner.GetCompletionItemPriority(text, caret, span);
     }
 
-    private static bool NavigationArgument(string text, int caret)
-        => NavigationCommand.TryParse(text, out var command) && command.InArgument(caret);
+    private bool NavigationArgument(string text, int caret)
+        => session.Mode.TryNavigation(text, out var command) && command.InArgument(caret);
 
-    private static bool AwaitingNodeArgument(string text, int caret)
-        => ListTreeCommand.TryParse(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart ||
-            NavigationCommand.TryParse(text, out var navigation) && navigation.AwaitingTargetAt(caret);
+    private bool AwaitingNodeArgument(string text, int caret)
+        => session.Mode.TryListing(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart ||
+            session.Mode.TryNavigation(text, out var navigation) && navigation.AwaitingTargetAt(caret);
 
     private async Task<IReadOnlyList<CompletionItem>> CreateCompletionItemsAsync(string text, int caret, PromptSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
-            return new[] { ":help", ":quit", ":clear", ":reset", ":multiline", ":cd", ":pwd", ":rm", ":cp", ":mv" }.Select(c => new CompletionItem(c)).ToArray();
+            return ReplModes.Controls.Concat(session.Mode.HasShell() ? new[] { ":cd", ":pwd", ":rm", ":cp", ":mv" } : [])
+                .Select(c => new CompletionItem(c)).ToArray();
+        if (session.Mode == ReplMode.Agent) return [];
         var prepared = await PrepareInputAsync(text, cancellationToken);
         var path = prepared.Input.CompletionAt(caret);
         if (path is not null || AwaitingNodeArgument(text, caret))
@@ -348,12 +356,11 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             // rank them against the current input so typing '/' immediately reveals children.
             var absolute = path?.Path.StartsWith('/') == true;
             var nodes = prepared.Nodes.Values.DistinctBy(n => n.Path)
-                .Where(n => n.Path != "." || absolute || path?.Search == true)
                 .Select(n => (absolute || n.Path == ".") && n.AbsolutePath is { } full ? n with { Path = full } : n)
                 .OrderBy(n => n.Path, StringComparer.Ordinal).ToArray();
-            var parents = path?.Search == true ? nodes.Select(n => n.AbsolutePath ?? n.Path)
-                .Where(p => p.Contains('/')).Select(p => p[..p.LastIndexOf('/')]).ToHashSet(StringComparer.Ordinal) : [];
-            return nodes.Select(n => (CompletionItem)new NodeCompletionItem(n, bracket, parents.Contains(n.AbsolutePath ?? n.Path), prepared.Families)).ToArray();
+            var parents = nodes.Select(n => n.AbsolutePath ?? n.Path)
+                .Where(p => p.Contains('/')).Select(p => p[..p.LastIndexOf('/')]).ToHashSet(StringComparer.Ordinal);
+            return nodes.Select(n => (CompletionItem)new NodeCompletionItem(n, bracket, parents.Contains(n.AbsolutePath ?? n.Path), path, prepared.Families)).ToArray();
         }
         var service = CompletionService.GetService(prepared.Document)!;
         var list = await service.GetCompletionsAsync(prepared.Document, prepared.Input.ToGenerated(caret), cancellationToken: cancellationToken);
@@ -388,12 +395,13 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
                 return new CompletionEdit(new PromptSpan(original.Start, original.Length), change.TextChange.NewText ?? "",
                     change.NewPosition is { } p ? current.Input.ToOriginal(p) : null);
             })).ToList() ?? [];
+        if (!session.Mode.HasShell()) return items;
         foreach (var command in new[] { "cp", "mv" })
         {
             if (command.StartsWith(text.Trim(), StringComparison.Ordinal))
                 items.Insert(0, new CompletionItem(command, getExtendedDescription: _ => Task.FromResult(
                     new FormattedString(command + " $Source $Parent: " + (command == "cp" ? "duplicate a subtree" : "move a node, keeping its global transform") +
-                        " into an existing parent. C# node expressions work in both arguments."))));
+                        " into an existing parent. mv $Node \"NewName\" renames it. C# node expressions work in both arguments."))));
         }
         if (text.Trim() is "" or "l" or "ls")
             items.Insert(0, new CompletionItem("ls", getExtendedDescription: _ => Task.FromResult(
@@ -409,9 +417,9 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         return items;
     }
 
-    private sealed class NodeCompletionItem(NodePathTarget target, bool bracket, bool children, IReadOnlyDictionary<string, NodeFamily> families) : CompletionItem(
-        Alias(target.Path + (children ? "/" : ""), bracket),
-        displayText: NodeColors.Path(Alias(target.Path + (children ? "/" : ""), bracket), families),
+    private sealed class NodeCompletionItem(NodePathTarget target, bool bracket, bool children, NodePathReference? initialPath, IReadOnlyDictionary<string, NodeFamily> families) : CompletionItem(
+        Alias(target.Path + Suffix(target, children, initialPath), bracket),
+        displayText: NodeColors.Path(Alias(target.Path + Suffix(target, children, initialPath), bracket), families),
         getExtendedDescription: _ => Task.FromResult(new FormattedString(target.DisplayType + "\n") + NodeColors.Path(target.AbsolutePath ?? "/root/" + target.Path, families)),
         commitCharacterRules: System.Collections.Immutable.ImmutableArray.Create(
             new PrettyPrompt.Consoles.CharacterSetModificationRule(PrettyPrompt.Consoles.CharacterSetModificationKind.Add, System.Collections.Immutable.ImmutableArray.Create('/'))),
@@ -422,14 +430,15 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             var name = path?.Path.StartsWith('/') == true ? target.AbsolutePath ?? target.Path : target.Path;
             var quoted = bracket || path is not null && text.AsSpan(path.Span.Start).StartsWith("$[");
             var span = path is null ? new PromptSpan(caret, 0) : new PromptSpan(path.Span.Start, path.Span.Length);
-            var replacement = Alias(name + (children ? "/" : ""), quoted);
+            var suffix = Suffix(target, children, path);
+            var replacement = Alias(name + suffix, quoted);
             quoted = replacement.StartsWith("$[", StringComparison.Ordinal);
             if (quoted && full is not null && caret < full.Span.End && !text.AsSpan(full.Span.Start).StartsWith("$["))
             {
                 // A match with spaces introduces quotes. Wrap the preserved
                 // suffix too, and leave the caret between the completion and it.
                 var newCaret = span.Start + replacement.Length - 2;
-                replacement = Alias(name + (children ? "/" : "") + text[caret..full.Span.End], bracket: true);
+                replacement = Alias(name + suffix + text[caret..full.Span.End], bracket: true);
                 return Task.FromResult(new CompletionEdit(new PromptSpan(full.Span.Start, full.Span.Length), replacement, newCaret));
             }
             if (quoted && full is not null && caret < full.Span.End && text.AsSpan(full.Span.Start).StartsWith("$["))
@@ -448,22 +457,33 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         public override int GetCompletionItemPriority(string text, int caret, PromptSpan spanToBeReplaced)
         {
             var typed = text[spanToBeReplaced.Start..caret];
-            var path = typed.StartsWith("$[", StringComparison.Ordinal)
+            var search = typed.StartsWith('?');
+            var prefix = search ? typed[1..] : typed.StartsWith("$[", StringComparison.Ordinal)
                 ? Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseToken(typed[2..].TrimStart()).ValueText
                 : typed.TrimStart('$');
-            var candidate = path.StartsWith('/') ? target.AbsolutePath ?? target.Path : target.Path;
-            if (typed.StartsWith('?'))
-            {
-                path = typed[1..];
-                candidate = target.Path[(target.Path.LastIndexOf('/') + 1)..];
-            }
-            // Outside this scope, searches insert an absolute $/root path. Normal
-            // relative completion keeps descendants ahead of unrelated nodes.
-            if (!typed.StartsWith('?') && candidate.StartsWith('/') && !path.StartsWith('/')) return int.MinValue;
-            var match = candidate.StartsWith(path, StringComparison.Ordinal) ? 2 :
-                candidate.StartsWith(path, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
+            var match = Match(target, prefix, search);
             return match == 0 ? int.MinValue : match * 100_000 - target.Path.Count(c => c == '/');
         }
+
+        // Prefer every matching path (including case-insensitive prefixes) before
+        // node-name matches anywhere in the tree. Shallower paths win ties.
+        private static int Match(NodePathTarget target, string prefix, bool search)
+        {
+            var candidate = prefix.StartsWith('/') ? target.AbsolutePath ?? target.Path : target.Path;
+            if (!search && (!candidate.StartsWith('/') || prefix.StartsWith('/')))
+            {
+                if (candidate.StartsWith(prefix, StringComparison.Ordinal)) return 4;
+                if (candidate.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return 3;
+            }
+            // An empty $ lists the current scope, rather than the entire tree.
+            if (prefix.Length == 0 && !search) return 0;
+            var name = target.Path[(target.Path.LastIndexOf('/') + 1)..];
+            return name.StartsWith(prefix, StringComparison.Ordinal) ? 2 :
+                name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
+        }
+
+        private static string Suffix(NodePathTarget target, bool children, NodePathReference? path)
+            => children && (path?.Search == true || Match(target, path?.Path ?? "", search: false) is 1 or 2) ? "/" : "";
     }
 
     private static string Alias(string path, bool bracket) => !bracket && path.All(c => Microsoft.CodeAnalysis.CSharp.SyntaxFacts.IsIdentifierPartCharacter(c) || c == '/')
