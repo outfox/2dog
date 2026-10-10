@@ -264,7 +264,7 @@ prior to termination shall survive termination.
 *  -------------------------                                           *
 *                                                                      *
 *  Covered Software is provided under this License on an "as is"       *
-*  basis, without warranty of any kind, either expressed, implied, or  *
+*  basis, without warranty of any kind, either express, implied, or    *
 *  statutory, including, without limitation, warranties that the       *
 *  Covered Software is free of defects, merchantable, fit for a        *
 *  particular purpose or non-infringing. The entire risk as to the     *

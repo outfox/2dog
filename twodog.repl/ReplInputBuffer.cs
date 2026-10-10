@@ -88,7 +88,7 @@ internal sealed class ReplInputBuffer(Func<bool> available, Func<ConsoleKeyInfo>
             if (escapeSequence)
             {
                 // Do not swallow a following Enter/Tab into a completed sequence.
-                if (previous.KeyChar is '~' or 'P' or 'Q' or 'R' or 'S') escapeSequence = false;
+                if (previous.KeyChar is >= '@' and <= '~' and not '[') escapeSequence = false;
                 else return true;
             }
             if (!windows && previous.Key == ConsoleKey.Escape && (pending.Value.KeyChar == '[' || char.IsAsciiDigit(pending.Value.KeyChar)))

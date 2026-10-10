@@ -348,8 +348,15 @@ public class ReplIntegrationTests
         Assert.Equal("true", Success("world.Viewport.FindWorld2D() != game2D && world.Viewport.FindWorld3D() != game3D").Value);
         Assert.Equal("true", Success("$ReplWorld/ToolNode.ReadyCalled").Value);
         Assert.Equal("true", Success("var scratchFrames = $ReplWorld/ToolNode.ProcessCount; await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame); await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame); $ReplWorld/ToolNode.ProcessCount > scratchFrames").Value);
+        Success("var detachedScratch = world.Scene; detachedScratch.GetParent().RemoveChild(detachedScratch);");
+        Assert.Equal("true", Success("detachedScratch.GetParent() is null").Value);
         Success("world.Clear();");
         Assert.Equal("\"Scratch\"", Success("world.Scene.Name.ToString()").Value);
+        Assert.Equal("true", Success("!GodotObject.IsInstanceValid(detachedScratch) || detachedScratch.IsQueuedForDeletion()").Value);
+        Success("var detachedEmpty = world.Scene; detachedEmpty.GetParent().RemoveChild(detachedEmpty);");
+        Success("world.Open(\"res://tool_test.tscn\");");
+        Assert.Equal("true", Success("world.Scene is showcase.ToolNode && world.Scene.GetParent() == world.Viewport").Value);
+        Assert.Equal("true", Success("!GodotObject.IsInstanceValid(detachedEmpty) || detachedEmpty.IsQueuedForDeletion()").Value);
         Success("world.Close();");
         Assert.Equal("true", Success("world.Viewport is null && ReferenceEquals(scene, gameScene)").Value);
 
@@ -363,8 +370,9 @@ public class ReplIntegrationTests
         Assert.Contains("Result formatting failed", Eval("var badDisplay = new BadDisplay(); badDisplay").Error!);
         Assert.Equal("true", Success("badDisplay is BadDisplay").Value);
         using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(testCancellation);
+        var previousSubmissionToken = globals.ct;
         var cancelled = Pump(Task.Run(() => session.EvaluateAsync("await Task.Delay(Timeout.Infinite, ct);", cancellation.Token)),
-            () => { if (globals.ct == cancellation.Token) cancellation.Cancel(); });
+            () => { if (globals.ct != previousSubmissionToken) cancellation.Cancel(); });
         Assert.True(cancelled.Cancelled);
         Assert.Equal("42", Success("survives").Value);
         Success("madeNode.QueueFree(); spaced.QueueFree();");

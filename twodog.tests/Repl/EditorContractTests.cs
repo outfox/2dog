@@ -303,6 +303,60 @@ public class EditorContractIntegrationTests
     }
 
     [Fact]
+    public void MethodCompletionPreservesExistingGenericTypeArgumentsAndCalls()
+    {
+        using var bed = new Bed();
+        bed.Success("class GenericCalls { public static int Empty<T>() => 1; }");
+        foreach (var (source, name, expected, caret) in new (string, string, string, int)[] {
+            ("root.GetNo<Node>", "GetNode", "root.GetNode<Node>()", "root.GetNode<Node>(".Length),
+            ("$Control.GetNo <Node>", "GetNode", "$Control.GetNode <Node>()", "$Control.GetNode <Node>(".Length),
+            ("root.GetNo<Node> (\"Control\")", "GetNode", "root.GetNode<Node> (\"Control\")", "root.GetNode<Node> (".Length),
+            ("root.GetNo<Dictionary<string, Node>>", "GetNode", "root.GetNode<Dictionary<string, Node>>()", "root.GetNode<Dictionary<string, Node>>(".Length),
+            ("root.GetNo<Node", "GetNode", "root.GetNode<Node", "root.GetNode".Length),
+            ("GenericCalls.Emp <Node", "Empty", "GenericCalls.Empty <Node", "GenericCalls.Empty".Length),
+            ("GenericCalls.Emp<", "Empty", "GenericCalls.Empty<", "GenericCalls.Empty".Length),
+            ("root.GetT < 1", "GetTree", "root.GetTree() < 1", "root.GetTree()".Length),
+            ("GenericCalls.Emp < 1", "Empty", "GenericCalls.Empty() < 1", "GenericCalls.Empty()".Length),
+            ("GenericCalls.Emp<Node>", "Empty", "GenericCalls.Empty<Node>()", "GenericCalls.Empty<Node>()".Length) })
+        {
+            var start = source.IndexOf('.') + 1;
+            var length = source[start..source.IndexOf('<')].TrimEnd().Length;
+            var edit = bed.Pump(ReplCompletion.CallEditAsync(bed.Prepare(source), new TextSpan(start, length), name, bed.Token));
+            var result = source.Remove(edit.SpanToReplace.Start, edit.SpanToReplace.Length).Insert(edit.SpanToReplace.Start, edit.NewText);
+            Assert.Equal(expected, result);
+            Assert.Equal(caret, edit.NewCaret);
+        }
+        var completion = bed.Items("root.GetNo").Single(item => item.DisplayText == "GetNode");
+        const string text = "root.GetNo<Node>";
+        var committed = bed.Pump(completion.GetComplexTextEditAsync(text, "root.GetNo".Length, bed.Token));
+        Assert.Equal("root.GetNode<Node>()", text.Remove(committed.SpanToReplace.Start, committed.SpanToReplace.Length)
+            .Insert(committed.SpanToReplace.Start, committed.NewText));
+    }
+
+    [Fact]
+    public void AliasSignatureHelpSelectsTheUsersInvocationAndExactArgumentIndex()
+    {
+        using var bed = new Bed();
+        const string text = "root.AddChild($Control";
+        for (var caret = text.IndexOf('$') + 1; caret <= text.Length; caret++)
+        {
+            var (items, index) = bed.Pump(ReplCompletion.OverloadsAsync(bed.Prepare(text), caret, bed.Token));
+            Assert.NotEmpty(items);
+            Assert.All(items, item => Assert.Contains("AddChild(", item.Signature.Text!));
+            Assert.Equal(0, index);
+        }
+        const string multiArgument = "root.AddChild($Control, false, ";
+        var (overloads, argumentIndex) = bed.Pump(ReplCompletion.OverloadsAsync(bed.Prepare(multiArgument), multiArgument.Length, bed.Token));
+        Assert.NotEmpty(overloads);
+        Assert.All(overloads, item => Assert.Contains("AddChild(", item.Signature.Text!));
+        Assert.Equal(2, argumentIndex);
+        Assert.Contains(overloads, item => item.Parameters.Count >= 3);
+        const string comparison = "root == ?EnterVrB";
+        var completion = bed.Items(comparison).Single(item => item.DisplayText == "$Control/EnterVrButton");
+        Assert.Equal("$Control/EnterVrButton", bed.Pump(completion.GetComplexTextEditAsync(comparison, comparison.Length, bed.Token)).NewText);
+    }
+
+    [Fact]
     public void SignaturesAndFormattingHandleDocsConstructorsNullCollectionsAndLoadedErrors()
     {
         using var bed = new Bed();
@@ -313,7 +367,7 @@ public class EditorContractIntegrationTests
             var prepared = bed.Prepare(text);
             var (items, index) = bed.Pump(ReplCompletion.OverloadsAsync(prepared, text.Length, bed.Token));
             if (text == "new Docs(") Assert.NotEmpty(items);
-            Assert.True(index >= 0);
+            Assert.Equal(0, index);
         }
         var call = bed.Prepare("new Docs(1).Call(");
         var (overloads, _) = bed.Pump(ReplCompletion.OverloadsAsync(call, call.Input.Original.Length, bed.Token));

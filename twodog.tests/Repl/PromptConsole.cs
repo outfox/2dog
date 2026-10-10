@@ -24,7 +24,15 @@ internal sealed class PromptConsole : IConsole
     public bool KeyAvailable => input?.KeyAvailable ?? false;
     public bool IsErrorRedirected => false;
     public bool CaptureControlC { get; set; }
-    public event ConsoleCancelEventHandler CancelKeyPress { add { } remove { } }
+    public event ConsoleCancelEventHandler? CancelKeyPress;
+    public bool CancelExecution()
+    {
+        var args = (ConsoleCancelEventArgs)Activator.CreateInstance(typeof(ConsoleCancelEventArgs),
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
+            binder: null, args: [ConsoleSpecialKey.ControlC], culture: null)!;
+        CancelKeyPress?.Invoke(this, args);
+        return args.Cancel;
+    }
     public string? TakePaste() => input?.TakePaste();
     public ConsoleKeyInfo ReadKey(bool intercept) => input?.ReadKey() ?? ReadNext();
     private ConsoleKeyInfo ReadNext()

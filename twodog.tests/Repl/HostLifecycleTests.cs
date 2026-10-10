@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using PrettyPrompt;
 using PrettyPrompt.Highlighting;
 using twodog.Repl;
@@ -15,12 +16,17 @@ public class HostLifecycleTests
     private static IEnumerable<ConsoleKeyInfo> Command(string text) => Type(text).Append(new('\r', ConsoleKey.Enter, false, false, false));
     private static IEnumerable<ConsoleKeyInfo> Code(string text) => Type(text).Append(RunKey);
 
-    private static (int Exit, Terminal Terminal) Run(string? input, IEnumerable<ConsoleKeyInfo>? keys = null, bool wait = false)
+    private static (int Exit, Terminal Terminal) Run(string? input, IEnumerable<ConsoleKeyInfo>? keys = null, bool wait = false, Action<Terminal>? created = null)
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-host-lifetime", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         Terminal? terminal = null;
-        var exit = ReplHost.Run(engine, token => terminal = new Terminal(input, keys ?? [], wait ? token : null), game);
+        var exit = ReplHost.Run(engine, token =>
+        {
+            terminal = new Terminal(input, keys ?? [], wait ? token : null);
+            created?.Invoke(terminal);
+            return terminal;
+        }, game);
         Assert.True(terminal!.Restored);
         Assert.Empty(engine.Errors.Drain());
         return (exit, terminal);
@@ -46,7 +52,12 @@ public class HostLifecycleTests
         Assert.Contains("Submission cancelled.", terminal.Stdout.ToString());
         Assert.Contains("C# session reset", terminal.Stdout.ToString());
         Assert.Contains("CS0103", terminal.Stderr.ToString());
-        Assert.False(File.Exists(terminal.HistoryFile) && new FileInfo(terminal.HistoryFile).Length == 0);
+        Assert.True(File.Exists(terminal.HistoryFile));
+        var history = File.ReadAllLines(terminal.HistoryFile)
+            .Select(line => Encoding.UTF8.GetString(Convert.FromBase64String(line))).ToArray();
+        Assert.Contains("int retained = 42;", history);
+        Assert.Contains("cd $Control", history);
+        Assert.Contains(":exit", history);
         terminal.Dispose();
     }
 
@@ -84,8 +95,62 @@ public class HostLifecycleTests
     }
 
     [Fact]
+    public void EngineQuitDrainsAwaitedSubmissionCleanupBeforeDisposingTheEngine()
+    {
+        var owner = Environment.CurrentManagedThreadId;
+        var cleanupThread = 0;
+        var liveRoot = false;
+        ReplLifetimeProbe.OnCleanup = root =>
+        {
+            cleanupThread = Environment.CurrentManagedThreadId;
+            liveRoot = Godot.GodotObject.IsInstanceValid(root) && root.IsInsideTree() && root.GetTree() is not null;
+        };
+        try
+        {
+            var (exit, terminal) = Run(null, Code("try { tree.Quit(); await Task.Delay(Timeout.Infinite, ct); } finally { await Task.Yield(); twodog.tests.ReplTests.ReplLifetimeProbe.Cleanup(root); }"), wait: true);
+            using (terminal)
+            {
+                Assert.Equal(0, exit);
+                Assert.Empty(terminal.Stderr.ToString());
+                Assert.Equal(owner, cleanupThread);
+                Assert.True(liveRoot);
+            }
+        }
+        finally { ReplLifetimeProbe.OnCleanup = null; }
+    }
+
+    [Fact]
+    public async Task ControlCCancelsAnInFlightSubmissionThroughPrettyPromptConsoleEvent()
+    {
+        using var started = new ManualResetEventSlim();
+        ReplLifetimeProbe.OnStarted = started.Set;
+        Task? cancel = null;
+        try
+        {
+            var keys = Code("twodog.tests.ReplTests.ReplLifetimeProbe.Started(); await Task.Delay(TimeSpan.FromSeconds(5), ct);")
+                .Concat(Command(":exit"));
+            var (exit, terminal) = Run(null, keys, created: terminal => cancel = Task.Run(() =>
+            {
+                Assert.True(started.Wait(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken), "Submission did not begin.");
+                Assert.False(terminal.Prompt.CaptureControlC);
+                Assert.True(terminal.Prompt.CancelExecution());
+            }));
+            using (terminal)
+            {
+                await cancel!;
+                Assert.Equal(0, exit);
+                Assert.Contains("Submission cancelled.", terminal.Stdout.ToString());
+                Assert.Empty(terminal.Stderr.ToString());
+            }
+        }
+        finally { ReplLifetimeProbe.OnStarted = null; }
+    }
+
+    [Fact]
     public void PublicEntryPointUsesTheRedirectedSystemTerminal()
     {
+        Assert.SkipUnless(Console.IsInputRedirected && Console.IsOutputRedirected,
+            "The public system terminal requires redirected process streams; Console.SetIn does not redirect a terminal.");
         var original = Console.In;
         try
         {
@@ -214,4 +279,13 @@ public class TerminalOutputTests
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => skipped);
         Assert.False(called);
     }
+}
+
+// Public so a real Roslyn submission can report its lifecycle without replacing the engine dispatcher.
+public static class ReplLifetimeProbe
+{
+    public static Action? OnStarted { get; set; }
+    public static Action<Godot.Node>? OnCleanup { get; set; }
+    public static void Started() => OnStarted?.Invoke();
+    public static void Cleanup(Godot.Node root) => OnCleanup?.Invoke(root);
 }

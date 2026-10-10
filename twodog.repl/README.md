@@ -27,7 +27,11 @@ matches for your original prefix; Shift+Tab cycles backward and wraps around.
 Backspace restores that prefix, including removing inserted parentheses.
 Shift+Backspace deletes backward to a word break, like Ctrl+Backspace;
 dots and path slashes count as breaks. It also respects selections and undo.
-Typing a word break such as `.`, `/`, a space or `(` accepts the current choice.
+Word breaks finish completion cycling. With the suggestion menu open, `.` or
+`(` accepts a selection outside quoted path text. `/` accepts a selection for
+a nonempty relative path outside quoted path text; absolute-path slashes stay
+separators. Inside `$["..."]`, these characters stay literal path text. Space
+inserts a space and ends any existing completion cycle.
 Typing more letters refines the prefix. When editing inside a node path,
 completion changes only the prefix before the caret, preserving the text to
 its right. Completing an exact node can insert `/` before an existing child
@@ -171,6 +175,8 @@ the background; submissions, object formatting and normal await continuations
 run on the owner thread while the host pumps frames. Synchronous blocking C#
 blocks the game too. Cancellation is cooperative: use `ct` in waits and loops.
 Avoid `Task.Run` or `ConfigureAwait(false)` when accessing Godot objects.
+Shutdown waits for running submissions and their asynchronous cleanup before
+disposing Godot. Code that ignores `ct` can prevent shutdown.
 
 Redirected input supports complete C# submissions, multiline blocks and EOF
 shutdown, and returns a nonzero exit code if any submission fails.

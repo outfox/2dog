@@ -27,6 +27,6 @@ internal static class ReplModes
     public static bool TryListing(this ReplMode mode, string text, [NotNullWhen(true)] out ListTreeCommand? command)
     {
         command = null;
-        return mode.HasShell() && ListTreeCommand.TryParse(text, out command);
+        return mode.HasShell() && ListTreeCommand.TryParse(text, out command, forceShell: mode == ReplMode.Shell);
     }
 }

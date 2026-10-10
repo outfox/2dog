@@ -47,12 +47,17 @@ public static class ReplHost
             }
             finally
             {
-                lifetime.Cancel();
-                dispatcher.Dispose();
-                // Join terminal cleanup before restoring process-wide console modes or returning
-                // to an embedding caller. ReadKey and queued submissions are cancellable.
-                try { terminal.GetAwaiter().GetResult(); }
-                finally { console.Restore(); }
+                try { lifetime.Cancel(); }
+                finally
+                {
+                    try { dispatcher.Dispose(); }
+                    finally
+                    {
+                        // Join terminal cleanup even if a user's cancellation callback throws.
+                        try { terminal.GetAwaiter().GetResult(); }
+                        finally { console.Restore(); }
+                    }
+                }
             }
         }
     }

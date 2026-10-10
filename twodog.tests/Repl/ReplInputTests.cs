@@ -89,6 +89,33 @@ public class ReplInputTests
         => Assert.Equal(Environment.NewLine, await Read(new[] { Escape }.Concat(Text("[27;2;13~")).Append(Enter), windows: false));
 
     [Theory]
+    [InlineData("[A", false)]
+    [InlineData("[B", true)]
+    [InlineData("[C", false)]
+    [InlineData("[D", true)]
+    [InlineData("[H", false)]
+    [InlineData("[F", true)]
+    [InlineData("[Z", false)]
+    [InlineData("[1;5D", true)]
+    [InlineData("[27;2;13~", false)]
+    public void UnixCsiFinalBytesPreserveFollowingEditingKeyBoundaries(string sequence, bool tab)
+    {
+        var boundary = tab ? new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, false) : Enter;
+        var keys = new Queue<ConsoleKeyInfo>(new[] { Escape }.Concat(Text(sequence)).Append(boundary).Concat(Text("shell")));
+        var buffer = new ReplInputBuffer(() => keys.Count > 0, () => keys.Dequeue(), windows: false);
+        Assert.Equal(Escape, buffer.ReadKey());
+        foreach (var character in sequence)
+        {
+            Assert.True(buffer.KeyAvailable);
+            Assert.Equal(character, buffer.ReadKey().KeyChar);
+        }
+        Assert.False(buffer.KeyAvailable);
+        Assert.Equal(boundary, buffer.ReadKey());
+        Assert.False(buffer.KeyAvailable);
+        Assert.Equal('s', keys.Peek().KeyChar);
+    }
+
+    [Theory]
     [InlineData("[200~", "[201~")]
     [InlineData("200~", "201~")]
     public void BracketedPastePreservesLiteralNewlinesAndTabs(string start, string end)

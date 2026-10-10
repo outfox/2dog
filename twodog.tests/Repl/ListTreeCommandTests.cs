@@ -33,8 +33,27 @@ public class ListTreeCommandTests
     [Theory]
     [InlineData("ls()")]
     [InlineData("ls.Count")]
+    [InlineData("ls + 1")]
+    [InlineData("ls = value;")]
+    [InlineData("ls += 2; value = ls;")]
+    [InlineData("ls (root)")]
+    [InlineData("ls ?? root")]
+    [InlineData("ls + $Control.GetIndex()")]
+    [InlineData("ls is Node")]
     [InlineData("var ls = 1;")]
     [InlineData("\"ls $Control\"")]
     public void OrdinaryCSharpKeepsItsMeaning(string text)
         => Assert.False(ListTreeCommand.TryParse(text, out _));
+
+    [Theory]
+    [InlineData("ls + 1")]
+    [InlineData("ls = value;")]
+    [InlineData("ls (root)")]
+    public void ShellModeKeepsListingPrecedence(string text)
+    {
+        Assert.True(ReplMode.Shell.TryListing(text, out var command));
+        Assert.StartsWith("Usage:", command.Error);
+        Assert.False(ReplMode.Auto.TryListing(text, out _));
+        Assert.False(ReplMode.CSharp.TryListing(text, out _));
+    }
 }

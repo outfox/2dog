@@ -161,12 +161,12 @@ internal sealed class ReplSession : IDisposable
 
         var document = prepared.Document;
         var hasResult = HasResult(script);
-        var result = await dispatcher.InvokeAsync(async () =>
+        var result = await dispatcher.InvokeAsync(async executionToken =>
         {
-            globals.ct = cancellationToken;
+            globals.ct = executionToken;
             var next = state is null
-                ? await script.RunAsync(globals, catchException: _ => true, cancellationToken: cancellationToken)
-                : await script.RunFromAsync(state, catchException: _ => true, cancellationToken: cancellationToken);
+                ? await script.RunAsync(globals, catchException: _ => true, cancellationToken: executionToken)
+                : await script.RunFromAsync(state, catchException: _ => true, cancellationToken: executionToken);
             if (navigation?.Expression is not null)
             {
                 if (next.Exception is OperationCanceledException) return new ReplResult(null, null, false, Cancelled: true);

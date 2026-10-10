@@ -67,6 +67,12 @@ public class NavigationIntegrationTests
         Assert.Equal("ls $Control/CenterContainerFlair", ReadPrompt("ls $ContFlair", true, [.. leftFive, tab, tab, tab, run]));
 
         Success("int retainedAnswer = 42;");
+        Success("int ls = 6; int listingValue = 10;");
+        Assert.Equal("7", Success("ls + 1").Value);
+        Success("ls = listingValue;");
+        Assert.Equal("10", Success("ls + 0").Value);
+        Success("ls += 2; listingValue = ls;");
+        Assert.Equal("12", Success("listingValue").Value);
         Success("var x = $Control/CenterContainer; var selectedContainer = x;");
         var variableScope = Success("cd x");
         Assert.False(variableScope.Committed);
@@ -208,6 +214,21 @@ public class NavigationIntegrationTests
         }
         Assert.DoesNotContain("\x1b", NodeColors.Ansi(formatted, color: false), StringComparison.Ordinal);
         Assert.Contains("\x1b[38;2;252;127;127mRedFamily", NodeColors.Ansi(formatted, color: true), StringComparison.Ordinal);
+        // Exercise actual native tree layout across branches, internal nodes,
+        // multi-code-unit names, and connector-like characters in a node name.
+        Success("var layoutBranch = new Node2D { Name = \"枝😀 ┖╴\" }; familyRoot.AddChild(layoutBranch); " +
+            "layoutBranch.AddChild(new Node3D { Name = \"DeepRed\" }); " +
+            "familyRoot.AddChild(new Control { Name = \"NestedInternal\" }, @internal: Node.InternalMode.Front);");
+        var layout = Success("ls $/root/FamilyRoot").Styled!.Value;
+        Assert.Equal(globals.root.GetNode("FamilyRoot").GetTreeStringPretty(), layout.Text);
+        Assert.All(layout.FormatSpans.ToArray(), span => Assert.InRange(span.End, 0, layout.Length));
+        foreach (var (name, family) in new[] { ("枝😀 ┖╴", NodeFamily.Node2D), ("DeepRed", NodeFamily.Node3D), ("NestedInternal", NodeFamily.Control) })
+        {
+            var nameStart = layout.Text!.IndexOf(name, StringComparison.Ordinal);
+            var nameSpan = Assert.Single(layout.FormatSpans.ToArray(), span => span.Start == nameStart && span.Length == name.Length);
+            Assert.Equal(NodeColors.Color(family), nameSpan.Formatting.Foreground);
+            Assert.Contains(NodeColors.Color(family).GetEscapeSequence() + name + "\x1b[0m", NodeColors.Ansi(layout, color: true), StringComparison.Ordinal);
+        }
         Success("cd /");
         Success("familyRoot.QueueFree();");
         Assert.Empty(engine.Errors.Drain());

@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using PrettyPrompt.Completion;
@@ -59,15 +60,32 @@ internal static class ReplCompletion
         var document = prepared.Document.WithText(SourceText.From(input.Code));
         var root = (await document.GetSyntaxRootAsync(token))!;
         var model = (await document.GetSemanticModelAsync(token))!;
-        var expression = ExpressionAt(root, input.ToGenerated(end));
+        var position = input.ToGenerated(end);
+        var generic = root.FindToken(position - 1).Parent as GenericNameSyntax;
+        // The identifier's existing type arguments belong before its call parentheses.
+        // Keep an unfinished type list editable rather than inserting () in front of it.
+        if (generic is not null && generic.Identifier.Span.End == position && generic.TypeArgumentList.GreaterThanToken.IsMissing)
+            return new CompletionEdit(new PromptSpan(span.Start, span.Length), name, end);
+        var callEnd = generic is not null && generic.Identifier.Span.End == position
+            ? input.ToOriginal(generic.Span.End) : end;
+        var expression = ExpressionAt(root, input.ToGenerated(callEnd));
         var methods = expression is null ? [] : model.GetMemberGroup(expression, token).OfType<IMethodSymbol>().ToArray();
+        // In expression context Roslyn parses an unfinished <T as a comparison.
+        // Parse the name separately only for generic methods; numeric comparisons
+        // have a missing type argument and must still receive call parentheses.
+        if (generic is null && methods.Any(m => m.Arity > 0) &&
+            SyntaxFactory.ParseName(name + text[end..], consumeFullText: false) is GenericNameSyntax suffix &&
+            suffix.TypeArgumentList.GreaterThanToken.IsMissing &&
+            (suffix.TypeArgumentList.Arguments.Any(type => !type.IsMissing) || suffix.Span.End == suffix.TypeArgumentList.LessThanToken.Span.End))
+            return new CompletionEdit(new PromptSpan(span.Start, span.Length), name, end);
         var hasArguments = methods.Length == 0 || methods.Any(m => m.Parameters.Length > 0);
-        var following = end;
+        var following = callEnd;
         while (following < text.Length && char.IsWhiteSpace(text[following])) following++;
         // Completing in the middle of existing code must preserve its argument list.
         return following < text.Length && text[following] == '('
             ? new CompletionEdit(new PromptSpan(span.Start, span.Length), name, following + 1)
-            : new CompletionEdit(new PromptSpan(span.Start, span.Length), name + "()", end + (hasArguments ? 1 : 2));
+            : new CompletionEdit(new PromptSpan(span.Start, span.Length + callEnd - end),
+                name + text[end..callEnd] + "()", callEnd + (hasArguments ? 1 : 2));
     }
 
     public static async Task<(IReadOnlyList<OverloadItem>, int ArgumentIndex)> OverloadsAsync(PreparedInput prepared, int caret, CancellationToken token)

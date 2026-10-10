@@ -48,7 +48,7 @@ public sealed class ReplWorld(Engine owner) : IDisposable
         }
         if (Scene is { } previous)
         {
-            previous.GetParent().RemoveChild(previous);
+            previous.GetParent()?.RemoveChild(previous);
             previous.QueueFree();
         }
         current = scene;

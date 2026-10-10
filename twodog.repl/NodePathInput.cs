@@ -138,6 +138,8 @@ internal sealed class NodePathInput
             if (!listing && previous.RawKind != 0 && context is not (
                 SyntaxKind.OpenParenToken or SyntaxKind.OpenBracketToken or SyntaxKind.OpenBraceToken or
                 SyntaxKind.CommaToken or SyntaxKind.SemicolonToken or SyntaxKind.EqualsToken or SyntaxKind.EqualsGreaterThanToken or
+                SyntaxKind.EqualsEqualsToken or SyntaxKind.ExclamationEqualsToken or SyntaxKind.LessThanToken or
+                SyntaxKind.LessThanEqualsToken or SyntaxKind.GreaterThanToken or SyntaxKind.GreaterThanEqualsToken or
                 SyntaxKind.ReturnKeyword or SyntaxKind.PlusToken or SyntaxKind.MinusToken or SyntaxKind.AsteriskToken or
                 SyntaxKind.SlashToken or SyntaxKind.PercentToken or SyntaxKind.AmpersandAmpersandToken or SyntaxKind.BarBarToken)) continue;
             var end = start + 1;

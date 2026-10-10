@@ -7,7 +7,7 @@ internal sealed record ListTreeCommand(int Start, int ArgumentStart, string? Pat
     public bool AwaitingTarget => ArgumentStart > Start + 2 && Path is null && Error is null;
     private const string Usage = "Usage: ls or ls $Control/Child. Use ls $[\"Control/My Node\"] for spaces or punctuation.";
 
-    public static bool TryParse(string text, [NotNullWhen(true)] out ListTreeCommand? command)
+    public static bool TryParse(string text, [NotNullWhen(true)] out ListTreeCommand? command, bool forceShell = false)
     {
         command = null;
         var start = 0;
@@ -23,6 +23,9 @@ internal sealed record ListTreeCommand(int Start, int ArgumentStart, string? Pat
             command = new(start, argumentStart, null, null);
             return true;
         }
+        // In auto mode, preserve ordinary C# expressions using a persistent ls
+        // variable. Shell mode deliberately keeps command-name precedence.
+        if (!forceShell && NodeTransferCommand.IsCSharp(text, argument)) return false;
         var paths = NodePathInput.Find(argument);
         if (paths.Any(path => path.Search))
         {

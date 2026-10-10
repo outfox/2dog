@@ -14,7 +14,7 @@ dotnet run --project MyGame.repl
 ```
 
 For a new project, use `dnx 2dog new MyGame --repl`. The dotnet template also
-supports `dotnet new 2dog -n MyGame --repl true --web false --tests false`.
+supports `dotnet new 2dog -n MyGame --repl true --web false`.
 The host is opt-in, uses `2dog.repl`, and keeps a console in every configuration.
 
 ## Modes
@@ -227,6 +227,8 @@ and normal await continuations run on the thread that owns Godot. Synchronous
 blocking code also blocks the game. Keep scene access on that thread; use `ct`
 in waits or long loops to support cancellation, and avoid `Task.Run` and
 `ConfigureAwait(false)` around Godot calls.
+Shutdown waits for running submissions and their asynchronous cleanup before
+disposing Godot. Code that ignores `ct` can prevent shutdown.
 
 ## Change Scenes and Open a Scratch World
 
@@ -286,8 +288,12 @@ while you fill in a call; Up and Down select overloads when that menu is active.
 
 After accepting a completion, Tab and Shift+Tab cycle the matches for the
 prefix you originally typed, wrapping at the ends. Backspace restores that
-prefix and removes any automatically inserted parentheses. Typing a word break
-such as `.`, `/`, a space or `(` accepts the current choice and ends cycling.
+prefix and removes any automatically inserted parentheses. Word breaks finish
+completion cycling. With the suggestion menu open, `.` or `(` accepts a
+selection outside quoted path text. `/` accepts a selection for a nonempty
+relative path outside quoted path text; absolute-path slashes stay separators.
+Inside `$["..."]`, these characters stay literal path text. Space inserts a
+space and ends any existing completion cycle.
 Typing more letters refines the prefix. Type `.` to inspect members of an
 object such as `world.Scene`, or `/` to explore children of an unquoted `$` path.
 Quoted paths use `.` to continue into C# members.

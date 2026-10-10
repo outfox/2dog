@@ -48,8 +48,21 @@ public class TransferCommandTests
     [InlineData("mv ? here : root")]
     [InlineData("cp(root); root.GetChild(0);")]
     [InlineData("cp / 2")]
+    [InlineData("cp;")]
+    [InlineData("mv;")]
+    [InlineData("  cp ;  ")]
     public void CommandNamesStillSupportOrdinaryCSharp(string text)
         => Assert.False(NavigationCommand.TryParse(text, out _));
+
+    [Theory]
+    [InlineData("cp;")]
+    [InlineData("mv;")]
+    public void ShellAndExplicitTransferFormsKeepCommandPrecedence(string text)
+    {
+        Assert.True(NavigationCommand.TryParse(text, out _, forceShell: true));
+        Assert.True(NavigationCommand.TryParse(":" + text, out var explicitCommand));
+        Assert.True(explicitCommand.Explicit);
+    }
 
     [Theory]
     [InlineData("cp $Source $Parent extra")]
@@ -188,6 +201,21 @@ public class TransferNodeIntegrationTests
         Assert.Equal("true", Success("@cp[0] == source && @mv(root) == root").Value);
         Assert.True(Success("mv").Committed);
         Assert.True(Success("cp").Committed);
+        IPromptCallbacks callbacks = new ReplPromptCallbacks(session);
+        foreach (var statement in new[] { "cp;", "mv;" })
+        {
+            // Roslyn parses an identifier statement, then rejects its expression
+            // kind semantically. It must not become a shell command or mutate nodes.
+            var result = Eval(statement);
+            Assert.Contains("CS0201", result.Error!);
+            Assert.DoesNotContain("Usage:", result.Error!, StringComparison.Ordinal);
+            Assert.False(result.Committed);
+            var prepared = Pump(Task.Run(() => session.PrepareAsync(statement, token)));
+            Assert.Equal(statement, prepared.Input.Code);
+            var highlighting = Pump(Task.Run(() => callbacks.HighlightCallbackAsync(statement, token)));
+            Assert.DoesNotContain(highlighting, span => span.Start == 0 && span.Formatting.Foreground == PrettyPrompt.Highlighting.AnsiColor.BrightMagenta);
+        }
+        Assert.Equal("true", Success("cp[0] == source && mv(root) == root && source.GetParent() == other && destination.GetChildCount() == 1").Value);
         Assert.Equal("mv.Invoke()", Complete("mv.Inv"));
         Assert.Equal("cp.Length", Complete("cp.Len"));
         Success(":mv source transfer");

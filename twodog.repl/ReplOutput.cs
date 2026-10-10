@@ -7,7 +7,7 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
 {
     internal static ReplOutput ForConsole() => new(Console.Out, Console.Error,
         !Console.IsOutputRedirected && !PromptConfiguration.HasUserOptedOutFromColor,
-        !Console.IsOutputRedirected && !Console.IsErrorRedirected && !PromptConfiguration.HasUserOptedOutFromColor);
+        !Console.IsErrorRedirected && !PromptConfiguration.HasUserOptedOutFromColor);
     public void Message(string text) => output.WriteLine(text);
     private string Paint(string text, string style) => color ? $"\x1b[{style}m{text}\x1b[0m" : text;
 

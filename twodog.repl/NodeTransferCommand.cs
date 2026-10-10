@@ -11,7 +11,10 @@ internal static class NodeTransferCommand
 {
     public static bool IsCSharp(string text, string argument)
     {
-        if (argument.Length == 0 || argument[0] == '$' ||
+        // A bare command still asks for operands. A semicolon-terminated
+        // identifier belongs to C# highlighting and Roslyn diagnostics.
+        if (argument.Length == 0) return text.TrimEnd().EndsWith(';');
+        if (argument[0] == '$' ||
             argument[0] == '?' && !argument.StartsWith("??", StringComparison.Ordinal) && !argument.Contains(':')) return false;
         // Preserve unfinished calls/member/index access while editing, too.
         if (argument[0] is '(' or '.' or '[' or '=' or '+' or '-' or '*' or '/' or '%' or

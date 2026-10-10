@@ -51,19 +51,21 @@ internal static class NodeColors
     {
         var text = node.GetTreeStringPretty();
         var spans = new List<FormatSpan>();
-        var stack = new Stack<(Node Node, int Depth)>();
-        stack.Push((node, 0));
+        var stack = new Stack<Node>();
+        stack.Push(node);
         var offset = 0;
-        while (stack.TryPop(out var entry))
+        while (stack.TryPop(out var current))
         {
-            var prefix = 3 * (entry.Depth + 1);
-            var name = entry.Node.Name.ToString();
-            spans.Add(new(offset, prefix, Grey));
-            spans.Add(new(offset + prefix, name.Length, Color(Family(entry.Node))));
-            offset += prefix + name.Length + 1;
+            var name = current.Name.ToString();
+            // Locate the node name at its actual line ending. Do not assume a
+            // particular width for Godot's tree connectors or indentation.
+            var nameStart = text.IndexOf(name + "\n", offset, StringComparison.Ordinal);
+            spans.Add(new(offset, nameStart - offset, Grey));
+            spans.Add(new(nameStart, name.Length, Color(Family(current))));
+            offset = nameStart + name.Length + 1;
             // Native GetTreeStringPretty includes internal children too.
-            var children = entry.Node.GetChildren(includeInternal: true);
-            for (var i = children.Count - 1; i >= 0; i--) stack.Push((children[i], entry.Depth + 1));
+            var children = current.GetChildren(includeInternal: true);
+            for (var i = children.Count - 1; i >= 0; i--) stack.Push(children[i]);
         }
         return new(text, spans);
     }
