@@ -372,9 +372,15 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - name: Test NUnit rendering (Windows)
+      # Windows VMs have no usable OpenGL driver. Render real frames with CPU Vulkan.
+      - name: Setup Windows software rendering
         if: runner.os == 'Windows' && matrix.config == 'Release'
         timeout-minutes: 5
+        run: .github/scripts/setup-windows-software-rendering.ps1
+
+      - name: Test NUnit rendering (Windows)
+        if: runner.os == 'Windows' && matrix.config == 'Release'
+        timeout-minutes: 10
         env:
           TWODOG_GODOT_LOG_DIR: ${{ github.workspace }}/tests/nunit-rendering/TestResults/godot
         run: >-
@@ -386,7 +392,7 @@ jobs:
 
       - name: Test NUnit rendering (Linux)
         if: runner.os == 'Linux' && matrix.config == 'Release'
-        timeout-minutes: 5
+        timeout-minutes: 10
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb
