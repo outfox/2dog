@@ -10,11 +10,55 @@
 
 Godot normally loads .NET, now .NET loads Godot.
 
-2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) that .NET applications can host. Because .NET is in charge, you get browser publishing, the ordinary `dotnet` tooling, and automation such as unit tests.
-
-We ship pre-built native libraries, so you do not have to compile Godot yourself.
+2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863)) that .NET applications can host. Your game will run on the desktop, in a browser, inside a .NET UI, or under **xUnit and NUnit with a real Godot engine**. All through the convenient `dotnet` tooling or your IDE of choice.
 
 Oh btw., this means you can [export Godot C# to the web](https://2dog.dev/web.html) using 2dog.
+
+2dog ships with pre-built native libraries, so you do not have to compile Godot yourself.
+
+## One Godot project, plenty of ways to run
+
+Keep your scenes, scripts and assets together. Add the hosts you want, each with its own .NET entry point:
+
+| Host | What you can do | Add it with |
+| --- | --- | --- |
+| [Desktop](https://2dog.dev/hosts/generic) | Run Godot from your own `Main` on Windows, Linux and macOS. | `--generic` |
+| [Web](https://2dog.dev/hosts/web) | Publish your Godot C# game to the browser with WebAssembly. | `--web` |
+| [WebXR](https://2dog.dev/hosts/webxr) | Take your game into browser VR and AR. | `--webxr` |
+| [Avalonia](https://2dog.dev/hosts/avalonia) | Embed Godot in a cross-platform desktop UI, with controls over the game. | `--avalonia` |
+| [Blazor](https://2dog.dev/hosts/blazor) | Put Godot in a Blazor page; access game objects from Razor components. | `--blazor` |
+| [WinForms](https://2dog.dev/hosts/winforms) | Embed Godot in a Windows Forms application. | `--winforms` |
+| [WinUI 3](https://2dog.dev/hosts/winui) | Embed Godot in a Windows App SDK application. | `--winui` |
+| [Android](https://2dog.dev/hosts/android) · experimental | Build an APK with `dotnet publish`. | `--android` |
+| [xUnit](https://2dog.dev/hosts/xunit) | Test your game with Godot fixtures and xUnit collections. | `--xunit` |
+| [NUnit](https://2dog.dev/hosts/nunit) | Test your game with Godot fixtures and NUnit's familiar test runner. | `--nunit` |
+| [C# REPL](https://2dog.dev/hosts/repl) | Explore and change your running game from an interactive prompt. | `--repl` |
+
+Use these flags with `dnx 2dog add`, or run it without flags to pick hosts interactively.
+See the [showcase](demos/showcase/README.md) for the same Godot project running across desktop, web, UI and Android hosts.
+
+
+## 🦴 Your game deserves ~~treats~~ tests, too
+
+(ok, it also deserves treats!)
+
+**Unit testing with xUnit and NUnit is a first-class feature of 2dog.** Run tests against a real Godot engine, load your scenes, exercise your game code, and check what happens as frames advance.
+
+- **Headless tests for CI.** Both hosts run with `dotnet test`, without opening a game window or needing the Godot editor.
+- **Godot-aware assertions.** Check signal counts and arguments, wait for conditions as frames advance, and verify that `QueueFree()` actually frees a node.
+- **Async tests on Godot's thread.** Fixtures keep setup, tests, `await` continuations and teardown on the engine's owner thread.
+- **Engine errors fail tests.** Godot warnings, errors and exceptions caught in C# callbacks fail tests by default. Assert expected reports explicitly.
+
+Add either framework, or both, from your Godot project directory:
+
+```bash
+dnx 2dog add --xunit --nunit
+dotnet test MyGame.xunit
+dotnet test MyGame.nunit
+```
+
+Each test host comes with eight examples covering scenes, async work, signals, timers and deferred deletion.
+Rendering fixtures are available too; see the [testing guide](https://2dog.dev/testing), [xUnit package](twodog.xunit/README.md) and [NUnit package](twodog.nunit/README.md) for examples and platform details.
 
 
 ## Getting started
@@ -70,7 +114,7 @@ See the [Web host](https://2dog.dev/hosts/web) for building and deployment.
 
 ## Project structure
 
-2dog mainly adds subdirectories with "hosts" that run your Godot project. The hosts use `libgodot` instead of the export templates or the editor executable.
+2dog adds subdirectories with "hosts" that run your Godot project. For example, a project with desktop, web, Avalonia and both test hosts looks like this:
 
 ```text
 MyGame/                       Godot project and solution root
@@ -78,7 +122,9 @@ MyGame/                       Godot project and solution root
 ├── MyGame.csproj             Godot C# game assembly
 ├── MyGame.2dog/              Desktop .NET host
 ├── MyGame.web/               Browser WebAssembly host
-└── MyGame.xunit/             Headless xUnit host
+├── MyGame.avalonia/           Avalonia UI host
+├── MyGame.xunit/             Headless xUnit host
+└── MyGame.nunit/             Headless NUnit host
 ```
 
 Each nested host carries a `.gdignore`, so Godot ignores it. Your game project stays as it was, and each host
@@ -98,10 +144,6 @@ Experimental Android arm64/x64 support: `dnx 2dog add --android` scaffolds a hos
 whose `dotnet publish` makes an APK.
 See the [Android host](https://2dog.dev/hosts/android) and [2dog.android](platforms/twodog.android/README.md).
 Device validation is still required before Android joins the supported RID list.
-
-NUnit testing: `dnx 2dog add --nunit` adds a headless test host with signal
-expectations, frame waits and deferred-deletion assertions. Run it with
-`dotnet test MyGame.nunit`. See the [NUnit host](https://2dog.dev/hosts/nunit).
 
 
 ## Dogs and robots are nice
