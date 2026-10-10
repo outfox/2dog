@@ -57,7 +57,7 @@ const menus = computed<{ label: string; items: MenuItem[] }[]>(() => [
   {
     label: 'Debug',
     items: [
-      { text: 'Testing with xUnit', link: '/testing' },
+      { text: 'Testing with xUnit', link: '/testing/xunit' },
       { text: 'Known Issues', link: '/known-issues/' },
       { text: 'GD.Print in Tests', link: '/known-issues/gd-print-output' },
       { sep: true },

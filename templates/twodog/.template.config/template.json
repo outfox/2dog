@@ -72,11 +72,11 @@
       "replaces": "ASPNETCORE_PKG_VERSION",
       "description": "Version of the ASP.NET Core (Blazor) packages to reference."
     },
-    "tests": {
+    "xunit": {
       "type": "parameter",
       "datatype": "bool",
-      "description": "Include a test project with xUnit (v3) and the 2dog.xunit collection fixtures. Included by default; pass '--tests false' to omit.",
-      "defaultValue": "true"
+      "description": "Include a test project with xUnit (v3) and the 2dog.xunit collection fixtures. Omitted by default; pass '--xunit true' to include.",
+      "defaultValue": "false"
     },
     "repl": {
       "type": "parameter",
@@ -189,7 +189,7 @@
     {
       "modifiers": [
         {
-          "condition": "(!tests)",
+          "condition": "(!xunit)",
           "exclude": [
             "Company.Product1.xunit/**/*"
           ]
@@ -276,7 +276,7 @@
       "path": "Company.Product1.2dog/Company.Product1.2dog.csproj"
     },
     {
-      "condition": "(tests)",
+      "condition": "(xunit)",
       "path": "Company.Product1.xunit/Company.Product1.xunit.csproj"
     },
     {

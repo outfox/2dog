@@ -17,7 +17,10 @@ public sealed class FailOnGodotErrorsAttribute : BeforeAfterTestAttribute
     public override void Before(MethodInfo methodUnderTest, IXunitTest test)
     {
         if (FixtureOf(test) is { } fixture)
+        {
+            fixture.CheckErrorsOnDispose = true;
             ThrowIfAny(fixture.Errors, "before this test started (engine startup, or deferred work of an earlier test)");
+        }
     }
 
     public override void After(MethodInfo methodUnderTest, IXunitTest test)

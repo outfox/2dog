@@ -11,7 +11,8 @@ importer, and exporter skip them:
 
 - **Sample Godot project** - project.godot, the `Godot.NET.Sdk` csproj, and a simple scene at the root
 - **Desktop host** (`<Name>.2dog/`) - Minimal working 2dog application (Program.cs with Main)
-- **Test project** (`<Name>.xunit/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (included by default; `--tests false` to omit)
+- **xUnit test project** (`<Name>.xunit/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (opt-in: `--xunit true`)
+- **NUnit test project** (`<Name>.nunit/`) - NUnit tests with 2dog.nunit (opt-in: `--nunit true`)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
 - **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
@@ -40,11 +41,11 @@ raw `templates/twodog` directory leaves those placeholders unresolved.
 ### Creating Projects
 
 ```bash
-# Full project (app + Godot project + tests + web host)
+# Default project (app + Godot project + web host)
 dotnet new 2dog -n MyGame
 
-# Without the test project
-dotnet new 2dog -n MyGame --tests false
+# With an xUnit test project
+dotnet new 2dog -n MyGame --xunit true
 
 # Without the web host (all hosts require .NET 10; only browser builds need wasm-tools)
 dotnet new 2dog -n MyGame --web false
@@ -83,7 +84,7 @@ templates/
     │   ├── Company.Product1.2dog.csproj
     │   ├── Program.cs
     │   └── app.manifest
-    ├── Company.Product1.xunit/    # Test project (default; --tests false to omit)
+    ├── Company.Product1.xunit/    # xUnit test project (opt-in: --xunit true)
     │   ├── .gdignore
     │   ├── Company.Product1.xunit.csproj
     │   ├── BasicTests.cs
@@ -141,7 +142,8 @@ wasm-tools workload – the web host is built explicitly with `dotnet publish`.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `--tests` | bool | true | Include a test project with xUnit (v3) and 2dog.xunit collection fixtures |
+| `--xunit` | bool | false | Include a test project with xUnit (v3) and 2dog.xunit collection fixtures |
+| `--nunit` | bool | false | Include an NUnit test project with 2dog.nunit |
 | `--web` | bool | true | Include a browser (WebAssembly) host project (building it requires a .NET 10+ SDK with the wasm-tools workload) |
 | `--webxr` | bool | false | Include a browser host preconfigured for WebXR: its page ships the WebXR Layers polyfill (same wasm-tools requirement as `--web`) |
 | `--blazor` | bool | false | Include a Blazor Web App host (server + WebAssembly client embedding the game; same wasm-tools requirement as `--web`) |
@@ -177,7 +179,7 @@ dotnet new install 2dog
 
 ### Test Project Requires 2dog.xunit Package
 
-The test project (included by default) references `2dog.xunit`, which needs to be packaged and published separately.
+The optional xUnit test project references `2dog.xunit`, which needs to be packaged and published separately.
 
 **To make it resolve:**
 
@@ -187,7 +189,7 @@ The test project (included by default) references `2dog.xunit`, which needs to b
 
 **Alternatively**, for local development:
 
-- Create the project with `--tests false`
+- Omit `--xunit` and `--nunit` when creating the project
 - Manually add a test project with project references to local 2dog projects
 
 ### Web Host Requires .NET 10+ and wasm-tools

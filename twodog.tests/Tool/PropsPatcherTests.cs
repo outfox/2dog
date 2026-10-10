@@ -32,7 +32,7 @@ public class PropsPatcherTests
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--tests", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--xunit", "--no-restore").ExitCode);
 
         var props = File.ReadAllText(Path.Combine(dir, "Directory.Build.props"));
         Assert.Contains("Label=\"2dog\"", props);

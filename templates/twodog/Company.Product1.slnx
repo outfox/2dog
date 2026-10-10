@@ -6,7 +6,7 @@
   </Configurations>
   <Project Path="TPLRAWNAME.csproj" />
   <Project Path="TPLRAWNAME.2dog/TPLRAWNAME.2dog.csproj" />
-#if (tests)
+#if (xunit)
   <Project Path="TPLRAWNAME.xunit/TPLRAWNAME.xunit.csproj" />
 #endif
 #if (repl)

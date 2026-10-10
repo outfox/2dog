@@ -85,7 +85,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void FreshScaffold_IsClean()
     {
-        var dir = Scaffold("--generic", "--web", "--tests");
+        var dir = Scaffold("--generic", "--web", "--xunit");
 
         var run = Doctor(dir);
         Assert.Equal(0, run.ExitCode);
@@ -105,7 +105,7 @@ public class DoctorTests : IDisposable
     [InlineData("Game.integration")]
     public void XunitHostNames_RemainRecognizedAndAreNotDuplicated(string folder)
     {
-        var dir = Scaffold("--generic", "--web", "--tests", folder);
+        var dir = Scaffold("--generic", "--web", "--xunit", folder);
         var host = Assert.Single(ProjectModel.Load(dir).Hosts, h => h.Kind == HostKind.Tests);
         Assert.Equal(folder, host.Folder);
         Assert.Equal(ExitCodes.Ok, Doctor(dir, null, "--json", "--strict").ExitCode);
@@ -120,7 +120,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void AllOptInHosts_AreCleanToo()
     {
-        var dir = Scaffold("--generic", "--webxr", "--avalonia", "--blazor", "--winforms", "--winui", "--tests");
+        var dir = Scaffold("--generic", "--webxr", "--avalonia", "--blazor", "--winforms", "--winui", "--xunit");
         var run = Doctor(dir, null, "--json");
         var issues = Findings(run.Stdout).EnumerateArray()
             .Where(f => f.GetProperty("severity").GetString() is "warn" or "fail")
@@ -131,7 +131,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void Verbose_ListsEveryCheck()
     {
-        var dir = Scaffold("--generic", "--web", "--tests");
+        var dir = Scaffold("--generic", "--web", "--xunit");
         var run = Doctor(dir, null, "-v");
         Assert.Contains("  ok", run.Stdout);
         var ids = Findings(Doctor(dir, null, "--json").Stdout).EnumerateArray().Select(f => f.GetProperty("id").GetString()).ToHashSet();
@@ -166,7 +166,7 @@ public class DoctorTests : IDisposable
     [MemberData(nameof(SafeBreakers))]
     public void SafeBreaker_IsFound_FixedAndIdempotent(string id, string severity, Action<string> breaker)
     {
-        var dir = Scaffold("--generic", "--web", "--webxr", "--blazor", "--tests");
+        var dir = Scaffold("--generic", "--web", "--webxr", "--blazor", "--xunit");
         breaker(dir);
 
         var broken = Doctor(dir, null, "--json");
@@ -189,7 +189,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void ManualFindings_HaveRemedies_AndNoFix()
     {
-        var dir = Scaffold("--generic", "--tests");
+        var dir = Scaffold("--generic", "--xunit");
         Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><PublishSingleFile>true</PublishSingleFile>");
         Edit(dir, "Game.csproj", $"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", "Godot.NET.Sdk/4.7.1");
 
@@ -410,7 +410,7 @@ public class DoctorTests : IDisposable
     [InlineData("Game.android", "info", "fail")]
     public void WorkloadRequirements_FollowTheBuildTarget(string? target, string wasm, string android)
     {
-        var dir = Scaffold("--generic", "--tests", "--web", "--blazor", "--android");
+        var dir = Scaffold("--generic", "--xunit", "--web", "--blazor", "--android");
         var runner = Runner(wasmTools: false, android: false);
         var args = target is null ? new[] { "--json", "--strict", "--fix-all" }
             : target.Length == 0 ? new[] { "--json", "--strict", "--build" }
@@ -679,7 +679,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void FixAll_ComposesTheTargetFrameworkUpgrade_WithSafePatches()
     {
-        var dir = Scaffold("--generic", "--tests");
+        var dir = Scaffold("--generic", "--xunit");
         Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>", "<TargetFramework>net8.0</TargetFramework>");
         Edit(dir, "Game.csproj", ";Game.xunit/**", "");
 

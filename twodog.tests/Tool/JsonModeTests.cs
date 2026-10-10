@@ -43,7 +43,7 @@ public class JsonModeTests
 
         var run = CliConsole.Run("add", tmp.Dir, "--dry-run", "--no-restore", "--json");
         var doc = Parse(run);
-        Assert.Equal(3, doc.GetProperty("hosts").GetArrayLength());
+        Assert.Equal(["generic", "browser"], doc.GetProperty("hosts").EnumerateArray().Select(h => h.GetProperty("kind").GetString()!).ToArray());
         Assert.DoesNotContain(doc.GetProperty("notes").EnumerateArray(), n => n.GetString()!.Contains("no terminal"));
     }
 

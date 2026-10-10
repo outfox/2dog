@@ -35,6 +35,19 @@ public class DocsDriftTests
     }
 
     [Fact]
+    public void DocumentationUsesExplicitTestFrameworkFlags()
+    {
+        var packageReadme = Doc("twodog/README.md");
+        var pages = Directory.GetFiles(Path.Combine(HelperToolTestBed.RepoRoot, "docs/content"), "*.md",
+            SearchOption.AllDirectories).Select(File.ReadAllText);
+        var text = string.Join("\n", pages.Prepend(packageReadme).Prepend(Doc("templates/README.md")));
+        Assert.DoesNotContain("--tests", text);
+        Assert.DoesNotContain("--no-tests", text);
+        Assert.Contains("--xunit", text);
+        Assert.Contains("--nunit", text);
+    }
+
+    [Fact]
     public void DoctorVerbPage_ListsEveryCheckId()
     {
         var text = Doc($"{VerbPages}/doctor.md");

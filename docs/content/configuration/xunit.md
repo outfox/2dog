@@ -5,16 +5,13 @@ description: "MSBuild configuration for xUnit hosts: engine variants, resource i
 
 # xUnit Configuration
 
-Set properties in `MyGame.xunit.csproj`. Reference `2dog.xunit`, which brings
+Set properties in `MyGame.xunit/MyGame.xunit.csproj`. Reference `2dog.xunit`, which brings
 in `2dog.engine` and the compile-in collection definitions.
 The [global settings](/configuration#properties) control the game directory,
 resource import, analyzers, and native variant.
 
-| Configuration | Default native | Use |
-| --- | --- | --- |
-| Debug | `debug` | Development tests with assertions |
-| Release | `release` | Tests against the production engine |
-| Editor | `editor` | Tests using Editor APIs and `[Tool]` scripts |
+Debug, Release, and Editor select the matching [engine variant](/build-configurations).
+For tests that use Editor APIs:
 
 ```bash
 dotnet test MyGame.xunit -c Editor
@@ -27,4 +24,4 @@ does not add it.
 
 Tests use the game directory and its imported resource cache. See
 [Resource Import](/import-tool) to require or force an import, and
-[Testing with xUnit](/testing) for fixture and runner settings.
+[Testing with xUnit](/testing/xunit) for fixture and runner settings.

@@ -44,11 +44,12 @@ internal static class Hosts
     /// <summary>
     /// Whether a bare run without host flags creates this kind. Opt-in: WinForms/WinUI (Windows-only), Avalonia
     /// (pulls in the whole UI framework), WebXr (needs project-side XR setup), Blazor (a server + client pair),
-    /// Android (needs the android workload), REPL (runtime C# compiler), NUnit (alternative tests). All remain available via flags/prompts.
+    /// Android (needs the android workload), REPL (runtime C# compiler), xUnit and NUnit (choose a test framework explicitly).
+    /// All remain available via flags/prompts.
     /// </summary>
     public static bool InDefaultSet(HostKind kind) =>
         kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Blazor
-            or HostKind.Android or HostKind.NUnit or HostKind.Repl);
+            or HostKind.Android or HostKind.Tests or HostKind.NUnit or HostKind.Repl);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -88,6 +89,8 @@ internal static class Hosts
     {
         HostKind.Desktop => ".NET (generic)",
         HostKind.Web => "web",
+        HostKind.Tests => "xUnit",
+        HostKind.NUnit => "NUnit",
         _ => Id(kind),
     };
 
@@ -113,7 +116,7 @@ internal static class Hosts
         HostKind.Desktop => "--generic",
         HostKind.Web => "--web",
         HostKind.WebXr => "--webxr",
-        HostKind.Tests => "--tests",
+        HostKind.Tests => "--xunit",
         HostKind.NUnit => "--nunit",
         HostKind.Repl => "--repl",
         HostKind.WinForms => "--winforms",
@@ -129,7 +132,7 @@ internal static class Hosts
     {
         HostKind.Desktop => ["--2dog"],
         HostKind.Web => ["--browser"],
-        HostKind.Tests => ["--test"],
+        HostKind.Tests => ["--tests", "--test"],
         _ => [],
     };
 
@@ -152,7 +155,7 @@ internal static class Hosts
         HostKind.Desktop => "Generic .NET host (your own Main entry point)",
         HostKind.Web => "Browser (WebAssembly) host",
         HostKind.WebXr => "Browser host with the WebXR Layers polyfill wired into its page (opt-in)",
-        HostKind.Tests => "xUnit test project",
+        HostKind.Tests => "xUnit test project (opt-in)",
         HostKind.NUnit => "NUnit test project (opt-in)",
         HostKind.Repl => "Interactive C# REPL host with highlighting and completion (opt-in)",
         HostKind.WinForms => "WinForms host embedding the game window (Windows-only; never part of the default set)",

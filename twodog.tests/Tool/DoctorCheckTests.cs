@@ -192,7 +192,7 @@ public class DoctorCheckTests : IDisposable
     [Fact]
     public void PublishAot_FailsOnlyWhereNativeAotCannotWork()
     {
-        var dir = Scaffold("--generic", "--avalonia", "--winforms", "--android", "--web", "--blazor", "--tests");
+        var dir = Scaffold("--generic", "--avalonia", "--winforms", "--android", "--web", "--blazor", "--xunit");
         foreach (var host in new[] { "Game.2dog", "Game.avalonia", "Game.winforms", "Game.android", "Game.web", "Game.xunit" })
             Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
                 "<GodotProjectDir>..</GodotProjectDir><PublishAot>true</PublishAot>");

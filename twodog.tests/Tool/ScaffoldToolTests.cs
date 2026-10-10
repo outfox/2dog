@@ -887,7 +887,10 @@ public class AddEndToEndTests
         var excluded = new List<HostKind>();
         if (!web) excluded.Add(HostKind.Web);
         if (!tests) excluded.Add(HostKind.Tests);
-        options.Hosts = HostSelection.Defaults(excluded, ScaffoldCommand.Open(options));
+        var project = ScaffoldCommand.Open(options);
+        options.Hosts = HostSelection.Defaults(excluded, project);
+        if (tests && !project.ExistingHosts.Any(h => h.Kind == HostKind.Tests))
+            options.Hosts.Add(new(HostKind.Tests, Hosts.AllocateFolder(HostKind.Tests, project.BaseName, project.TakenFolders)));
         return options;
     }
 
@@ -911,7 +914,7 @@ public class AddEndToEndTests
 
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
-        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--tests", "--blazor"]), project);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--xunit", "--blazor"]), project);
         Assert.Equal(0, RunCaptured(options).ExitCode);
 
         var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "GWJ-97.xunit", "BasicTests.cs"));
@@ -955,7 +958,7 @@ public class AddEndToEndTests
 
         var options = new ScaffoldOptions { ProjectPath = tmp.Dir, Restore = false };
         var project = ScaffoldCommand.Open(options);
-        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--tests"]), project);
+        options.Hosts = HostSelection.FromFlags(CommandLine.Parse(["add", "--generic", "--xunit"]), project);
         Assert.Equal(0, RunCaptured(options).ExitCode);
 
         var tests = File.ReadAllText(System.IO.Path.Combine(tmp.Dir, "event.xunit", "BasicTests.cs"));
@@ -1659,7 +1662,7 @@ public class CommandLineTests
     [Fact]
     public void HostFlags_TakeAnOptionalFolderName()
     {
-        var cmd = CommandLine.Parse(["add", "--generic", "--web", "MyGame.web2", "--tests"]);
+        var cmd = CommandLine.Parse(["add", "--generic", "--web", "MyGame.web2", "--xunit"]);
 
         Assert.True(cmd.HostFlagsSeen);
         Assert.Equal(
@@ -1686,7 +1689,7 @@ public class CommandLineTests
     public void NegativeHostFlags_CountAsAChoice()
     {
         var cmd = CommandLine.Parse(
-            ["convert", "--no-web", "--no-webxr", "--no-tests", "--no-winforms", "--no-winui", "--no-avalonia", "--no-blazor"]);
+            ["convert", "--no-web", "--no-webxr", "--no-xunit", "--no-winforms", "--no-winui", "--no-avalonia", "--no-blazor"]);
         Assert.True(cmd.HostFlagsSeen);
         Assert.Empty(cmd.Requested);
         Assert.Equal([HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor],
@@ -1741,7 +1744,7 @@ public class CommandLineTests
     [InlineData(false, "add", "--generic")]
     [InlineData(false, "add", "--generic", "MyGame.editor")]
     [InlineData(false, "convert", "--no-web")]
-    [InlineData(false, "new", "MyGame", "--tests")]
+    [InlineData(false, "new", "MyGame", "--xunit")]
     [InlineData(false, "add", "--yes")]
     [InlineData(false, "add", "--non-interactive")]
     // --dry-run answers nothing, so it still gathers choices - it just prints
@@ -1778,7 +1781,7 @@ public class HostSelectionTests
     {
         var hosts = HostSelection.Defaults([], Project((HostKind.Desktop, "MyGame.2dog")));
         Assert.Equal(
-            [(HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.xunit")],
+            [(HostKind.Web, "MyGame.web")],
             hosts.Select(h => (h.Kind, h.Folder)).ToArray());
     }
 
@@ -1786,7 +1789,7 @@ public class HostSelectionTests
     public void Defaults_HonorExclusions()
     {
         var hosts = HostSelection.Defaults([HostKind.Web], Project());
-        Assert.Equal([HostKind.Desktop, HostKind.Tests], hosts.Select(h => h.Kind).ToArray());
+        Assert.Equal([HostKind.Desktop], hosts.Select(h => h.Kind).ToArray());
     }
 
     // WinForms and WinUI (Windows-only) and Avalonia (heavy dependency set) are never
@@ -1795,6 +1798,8 @@ public class HostSelectionTests
     public void Defaults_NeverIncludeOptInHosts()
     {
         var kinds = HostSelection.Defaults([], Project()).Select(h => h.Kind).ToArray();
+        Assert.DoesNotContain(HostKind.Tests, kinds);
+        Assert.DoesNotContain(HostKind.NUnit, kinds);
         Assert.DoesNotContain(HostKind.WinForms, kinds);
         Assert.DoesNotContain(HostKind.WinUi, kinds);
         Assert.DoesNotContain(HostKind.Avalonia, kinds);
@@ -1835,7 +1840,7 @@ public class HostSelectionTests
     [Fact]
     public void FromFlags_RejectsAFolderThatIsTaken()
     {
-        var cmd = CommandLine.Parse(["add", "--tests", "MyGame.xunit"]);
+        var cmd = CommandLine.Parse(["add", "--xunit", "MyGame.xunit"]);
         var ex = Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, Project((HostKind.Tests, "MyGame.xunit"))));
         Assert.Contains("already exists", ex.Message);
     }
@@ -1852,23 +1857,23 @@ public class HostSelectionTests
     [Fact]
     public void Defaults_AvoidDirectoriesThatAreNotHosts()
     {
-        var hosts = HostSelection.Defaults([], ProjectWithFolders("MyGame.xunit", "assets"));
+        var hosts = HostSelection.Defaults([], ProjectWithFolders("MyGame.2dog", "assets"));
         Assert.Equal(
-            [(HostKind.Desktop, "MyGame.2dog"), (HostKind.Web, "MyGame.web"), (HostKind.Tests, "MyGame.xunit2")],
+            [(HostKind.Desktop, "MyGame.2dog2"), (HostKind.Web, "MyGame.web")],
             hosts.Select(h => (h.Kind, h.Folder)).ToArray());
     }
 
     [Fact]
     public void FromFlags_AllocatesAroundDirectoriesThatAreNotHosts()
     {
-        var cmd = CommandLine.Parse(["add", "--tests"]);
+        var cmd = CommandLine.Parse(["add", "--xunit"]);
         Assert.Equal("MyGame.xunit2", HostSelection.FromFlags(cmd, ProjectWithFolders("MyGame.xunit")).Single().Folder);
     }
 
     [Fact]
     public void FromFlags_RejectsAFolderNameAnyDirectoryAlreadyUses()
     {
-        var cmd = CommandLine.Parse(["add", "--tests", "docs"]);
+        var cmd = CommandLine.Parse(["add", "--xunit", "docs"]);
         var ex = Assert.Throws<ToolException>(() => HostSelection.FromFlags(cmd, ProjectWithFolders("docs")));
         Assert.Contains("already exists", ex.Message);
     }
@@ -1895,7 +1900,10 @@ public class ScaffoldEndToEndTests
         using var tmp = new TempProjectDir();
         var dir = System.IO.Path.Combine(tmp.Dir, "MyGame");
 
-        Assert.Equal(0, Run(NewProject(dir)));
+        var options = NewProject(dir);
+        options.Hosts = [new(HostKind.Desktop, "MyGame.2dog"), new(HostKind.Web, "MyGame.web"),
+            new(HostKind.Tests, "MyGame.xunit")];
+        Assert.Equal(0, Run(options));
 
         foreach (var expected in new[]
                  {
@@ -1933,7 +1941,8 @@ public class ScaffoldEndToEndTests
     {
         using var tmp = new TempProjectDir();
         var dir = System.IO.Path.Combine(tmp.Dir, "GWJ-97");
-        var options = new ScaffoldOptions { ProjectPath = dir, NameOverride = "GWJ-97", CreateProject = true, Restore = false };
+        var options = new ScaffoldOptions { ProjectPath = dir, NameOverride = "GWJ-97", CreateProject = true, Restore = false,
+            Hosts = [new(HostKind.Web, "GWJ_97.web"), new(HostKind.Tests, "GWJ_97.xunit")] };
 
         Assert.Equal(0, Run(options));
 

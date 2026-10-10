@@ -12,6 +12,8 @@ The fixtures themselves (`Fixture`, `HeadlessFixture`, and `FixtureBase`) ship i
 
 Both set `DisableParallelization = true`, because normal hosting allows one active Godot instance
 per assembly load context. These collections share that context and run sequentially.
+Keep headless and rendering collections in separate test projects: switching
+display modes across native restarts can crash Godot, so the fixtures reject it.
 
 New test hosts scaffold as `<Name>.xunit`; existing `.tests` hosts and custom names
 remain supported. The template includes eight examples covering async/await,
@@ -116,7 +118,8 @@ public void RejectsNegativeHealth()
 ```
 
 Errors reported between tests (engine startup, or deferred work an earlier test left behind) fail the next
-test that runs on a fixture, with a message saying so.
+test that runs on a fixture, with a message saying so. Remaining reports from
+fixture cleanup or engine shutdown fail the collection after releasing the engine.
 
 To opt out, mark a test or class `[AllowGodotErrors]`, or turn the check off for the whole project:
 
@@ -137,6 +140,24 @@ using Xunit;
 
 public class OpenGl3Fixture() : FixtureBase("--rendering-driver", "opengl3");
 
-[CollectionDefinition(nameof(OpenGl3Collection), DisableParallelization = true)]
+[CollectionDefinition(DisableParallelization = true)]
 public class OpenGl3Collection : ICollectionFixture<OpenGl3Fixture>;
 ```
+
+## Test data and async lifecycle
+
+Use xUnit's `IAsyncLifetime` for async setup and cleanup; the 2dog runner keeps
+those continuations on the engine's owner thread.
+
+`TestMatrix.Combinatorial(...)` and `TestMatrix.Pairwise(...)` return managed
+`object?[]` rows for `[MemberData]`:
+
+```csharp
+public static IEnumerable<object?[]> Cases => TestMatrix.Pairwise(
+    ["easy", "hard"], [1, 2, 4], [true, false]);
+```
+
+Combinatorial rows cover every combination. Pairwise rows deterministically
+cover every pair of input values, without guaranteeing the smallest possible
+set. Keep Godot objects out of discovery data. Class-wide engine matrices still
+use separate fixture types and collections.

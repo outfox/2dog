@@ -26,7 +26,8 @@ on terminals, a missing workload (`wasm-tools`, `android`) can still be offered.
 highlighting, completion and live access to the running game.
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
-generic, browser and tests, minus the `--no-<host>` ones. Existing hosts are
+generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
+`--xunit` or `--nunit`. Existing hosts are
 recognized and skipped.
 
 The new hosts are built for the running tool's versions, so the game project's
@@ -82,6 +83,7 @@ Choose hosts interactively, or supply host flags:
 2dog add                           # interactive, here
 2dog add --generic MyGame.editor   # a second generic host, named
 2dog add --android                 # an Android host
+2dog add --xunit                   # an xUnit test host
 2dog add --nunit                   # an NUnit test host
 2dog add path/to/project --no-web
 2dog add --rename MyGame           # fix a spaced .NET name first
