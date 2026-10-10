@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 
@@ -13,18 +14,24 @@ public abstract class GodotTestFixture
     private FixtureBase? _godot;
 
     /// <summary>The engine fixture, available from derived setup through derived teardown.</summary>
-    protected FixtureBase Godot => _godot ?? throw new InvalidOperationException("Godot has not started.");
+    protected FixtureBase EngineFixture => _godot ?? throw new InvalidOperationException("Godot has not started.");
+
+    /// <summary>Compatibility alias for EngineFixture. Use EngineFixture in new tests.</summary>
+    protected FixtureBase Godot => EngineFixture;
 
     /// <summary>Override to configure a headless engine. NUnit runners do not own macOS's process main thread.</summary>
     protected virtual FixtureBase CreateFixture() => new HeadlessFixture();
 
-    /// <summary>Whether unconsumed native errors and warnings fail tests. Prefer Godot.Errors.Expect.</summary>
+    internal virtual void ValidateRunner() { }
+
+    /// <summary>Whether unconsumed native errors and warnings fail tests. Prefer EngineFixture.Errors.Expect.</summary>
     protected virtual bool FailOnGodotErrors => true;
 
     /// <summary>Starts the engine on the thread NUnit uses for this fixture.</summary>
     [OneTimeSetUp]
     public void StartGodot()
     {
+        ValidateRunner();
         var context = SynchronizationContext.Current;
         try { _godot = CreateFixture(); }
         finally
@@ -41,12 +48,20 @@ public abstract class GodotTestFixture
 
     /// <summary>Checks errors after derived teardown has cleaned up native objects.</summary>
     [TearDown]
-    public void CheckGodotAfterTest() => CheckErrors("during this test");
+    public void CheckGodotAfterTest()
+    {
+        if (!FailOnGodotErrors) return;
+        if (AllowsErrors()) EngineFixture.Errors.Drain();
+        else CheckErrors("during this test");
+    }
+
+    private static bool AllowsErrors() => TestContext.CurrentContext.Test
+        .AllPropertyValues(AllowGodotErrorsAttribute.PropertyName).Any(value => value is "true");
 
     private void CheckErrors(string when)
     {
         if (!FailOnGodotErrors) return;
-        var errors = Godot.Errors.Drain();
+        var errors = EngineFixture.Errors.Drain();
         if (errors.Length > 0)
             throw new AssertionException($"Godot reported {errors.Length} error(s) {when}:\n{string.Join("\n", errors)}");
     }
@@ -56,11 +71,18 @@ public abstract class GodotTestFixture
     public void StopGodot()
     {
         if (_godot is not { } godot) return;
-        try { CheckErrors("during fixture setup or teardown"); }
+        try
+        {
+            godot.Dispose();
+            // Capture stays active through native shutdown. Check once after disposal so both user
+            // one-time teardown and engine teardown reports appear in the same failure.
+            if (!FailOnGodotErrors) return;
+            if (GetType().IsDefined(typeof(AllowGodotErrorsAttribute), inherit: true)) godot.Errors.Drain();
+            else CheckErrors("during fixture setup, teardown or engine shutdown");
+        }
         finally
         {
-            try { godot.Dispose(); }
-            finally { _godot = null; }
+            _godot = null;
         }
     }
 }

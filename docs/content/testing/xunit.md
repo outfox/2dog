@@ -54,7 +54,9 @@ Tests in the collection share these objects, so clean up what each test creates.
 | `RenderingCollection` | `Fixture godot` | Tests that need rendering |
 
 Keep Godot collections non-parallel. You can use several; xUnit disposes one
-collection's engine before starting the next.
+collection's engine before starting the next. Keep headless and rendering
+collections in separate test projects. Switching display modes within one
+process can crash native Godot, so 2dog's fixtures reject the switch.
 
 ::: details Custom engine arguments
 Derive from `FixtureBase` and define a non-parallel collection in your test
@@ -67,7 +69,7 @@ using Xunit;
 public class OpenGl3Fixture()
     : FixtureBase("--rendering-driver", "opengl3");
 
-[CollectionDefinition(nameof(OpenGl3Collection), DisableParallelization = true)]
+[CollectionDefinition(DisableParallelization = true)]
 public class OpenGl3Collection : ICollectionFixture<OpenGl3Fixture>;
 ```
 
@@ -80,6 +82,35 @@ xUnit does not discover them in an ordinary referenced DLL.
 Use [Writing engine tests](./writing-tests) for frame waits, signal expectations,
 cleanup, and expected errors. Use [Simulating input](./input) for UI tests.
 Both guides work with xUnit and NUnit.
+
+## Setup and test data
+
+| Scope | Setup | Cleanup |
+| --- | --- | --- |
+| Each test | Constructor or `IAsyncLifetime.InitializeAsync()` | `IDisposable.Dispose()` or `IAsyncLifetime.DisposeAsync()` |
+| Shared engine | A custom collection fixture | Fixture disposal |
+
+Async lifecycle methods run on the engine's owner thread too. See
+[xUnit's shared context guide](https://xunit.net/docs/shared-context).
+
+::: details Combinatorial and pairwise cases
+Use `TestMatrix` to build managed rows for a theory's `[MemberData]`:
+
+```csharp
+public static IEnumerable<object?[]> Cases => TestMatrix.Pairwise(
+    ["easy", "hard"],
+    [1, 2, 4],
+    [true, false]);
+```
+
+Add `[MemberData(nameof(Cases))]` to a `[Theory]` taking a `string`, `int`,
+and `bool`. `Pairwise` covers every pair of input values with a reduced set
+of rows. Use `Combinatorial` for every combination. Both are deterministic;
+pairwise output is not guaranteed to be the smallest possible set.
+
+These are method inputs. For different engine configurations across an entire
+class, use separate fixture types and non-parallel collections.
+:::
 
 ::: warning Test data runs before the engine
 Godot types such as `NodePath` and `StringName` in `MemberData` can crash

@@ -14,7 +14,7 @@ The examples use `godot` for the shared fixture:
 | Framework | Fixture | Helpers namespace |
 | --- | --- | --- |
 | xUnit | Constructor argument `godot` | `twodog.Testing.Xunit` |
-| NUnit | Use `var godot = Godot;` inside a test | `twodog.Testing.NUnit` |
+| NUnit | Use `var godot = EngineFixture;` inside a test | `twodog.Testing.NUnit` |
 
 ## Wait for frames
 
@@ -112,8 +112,9 @@ godot.Errors.Expect("Health must not be negative");
 ```
 
 Errors from startup or deferred work between tests fail the next test on that
-fixture. NUnit also checks after user fixture teardown, before shutting down
-the engine. Tests without a 2dog fixture are not checked.
+fixture. Both integrations also check remaining reports after engine shutdown.
+xUnit can report late cleanup errors as collection failures. Tests without a
+2dog fixture are not checked.
 
 ::: details Opting out of automatic error checks
 Prefer expecting a known error so unrelated failures still surface.
@@ -121,9 +122,10 @@ Prefer expecting a known error so unrelated failures still surface.
 | Framework | Opt out |
 | --- | --- |
 | xUnit | Mark a test or class `[AllowGodotErrors]`, or set `<TwoDogFailOnGodotErrors>false</TwoDogFailOnGodotErrors>` in the test project |
-| NUnit | Override `FailOnGodotErrors` to return `false` in your fixture |
+| NUnit | Mark a test or class `[AllowGodotErrors]`, or override `FailOnGodotErrors` to return `false` for the whole fixture |
 
-The fixture's error log remains available for inspection.
+`AllowGodotErrors` clears reports after the allowed test. Disabling automatic
+checks for the whole project or fixture leaves the log available for inspection.
 :::
 
 ## Run locally or in CI

@@ -47,7 +47,9 @@ In a browser, call `RequestQuit()` while `Run()` pumps frames and await
 before creating the new `Engine`; browser teardown is asynchronous.
 
 This allows xUnit collections to use fresh engines sequentially in one test
-process. Collections that share an engine must disable parallelization; see
+process with the same display mode. Keep headless and rendering fixtures in
+separate test projects; switching modes across native restarts can crash Godot,
+so the fixtures reject it. Collections must disable parallelization; see
 [Testing](/testing/).
 
 Shutdown releases every Godot object the engine created before it returns,

@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <!-- Programming & Linkage Characteristics -->
+    <ItemGroup>
+        <EmbeddedResource Include="TestingControls.manifest" LogicalName="twodog.Testing.Controls.manifest" />
+    </ItemGroup>
+
     <PropertyGroup>
         <!-- Historical assembly name; consumers and the browser-wasm trimmer roots reference it as twodog. -->
         <AssemblyName>twodog</AssemblyName>

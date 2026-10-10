@@ -338,6 +338,19 @@ jobs:
       - name: Test (${{ matrix.config }})
         run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
 
+      - name: Test NUnit rendering (Windows)
+        if: runner.os == 'Windows' && matrix.config == 'Release'
+        timeout-minutes: 5
+        run: dotnet test tests/nunit-rendering -c Release --blame --results-directory tests/nunit-rendering/TestResults
+
+      - name: Test NUnit rendering (Linux)
+        if: runner.os == 'Linux' && matrix.config == 'Release'
+        timeout-minutes: 5
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          xvfb-run -a dotnet test tests/nunit-rendering -c Release --blame --results-directory tests/nunit-rendering/TestResults
+
       # The suite above is headless. This starts the stock windowed fixture on the 2dog test thread, as consumers'
       # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
       - name: Test windowed fixture

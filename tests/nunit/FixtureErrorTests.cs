@@ -10,6 +10,20 @@ namespace twodog.nunit.tests;
 public class FixtureErrorTests
 {
     [Test]
+    public void ShutdownErrorsFailAndStillAllowRestart()
+    {
+        var fixture = new Harness();
+        fixture.StartGodot();
+        var node = new Node();
+        fixture.Root.AddChild(node);
+        node.TreeExiting += () => GD.PushWarning("NUnit expected shutdown warning");
+        var failure = Assert.Throws<AssertionException>(fixture.StopGodot);
+        Assert.That(failure!.Message, Does.Contain("NUnit expected shutdown warning"));
+        fixture.StartGodot();
+        fixture.StopGodot();
+    }
+
+    [Test]
     public void FinalTeardownErrorsFailAndStillDisposeTheEngine()
     {
         var fixture = new Harness();
@@ -47,5 +61,6 @@ public class FixtureErrorTests
         public bool CheckErrors { get; init; } = true;
         protected override bool FailOnGodotErrors => CheckErrors;
         public GodotErrorLog Errors => Godot.Errors;
+        public Node Root => EngineFixture.Tree.Root;
     }
 }

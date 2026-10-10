@@ -1,4 +1,5 @@
 using Godot;
+using Timer = Godot.Timer;
 using twodog.Testing;
 using twodog.Testing.NUnit;
 using NUnit.Framework;
@@ -18,9 +19,9 @@ public class BasicTests : GodotTestFixture
         var instance = scene.Instantiate();
         try
         {
-            Godot.Tree.Root.AddChild(instance);
+            EngineFixture.Tree.Root.AddChild(instance);
             Assert.That(instance.IsInsideTree(), Is.True);
-            Assert.That(instance.GetParent(), Is.SameAs(Godot.Tree.Root));
+            Assert.That(instance.GetParent(), Is.SameAs(EngineFixture.Tree.Root));
         }
         finally { instance.Free(); } // Frees the native subtree, even when an assertion fails.
     }
@@ -33,7 +34,7 @@ public class BasicTests : GodotTestFixture
         await Task.Delay(1, TestContext.CurrentContext.CancellationToken);
 
         Assert.That(System.Environment.CurrentManagedThreadId, Is.EqualTo(ownerThread));
-        Godot.Engine.Iteration(); // Lifecycle calls also enforce the owner thread.
+        EngineFixture.Engine.Iteration(); // Lifecycle calls also enforce the owner thread.
     }
 
     [Test]
@@ -42,12 +43,12 @@ public class BasicTests : GodotTestFixture
         var ownerThread = System.Environment.CurrentManagedThreadId;
         async Task<int> NextFrame()
         {
-            await Godot.Tree.ToSignal(Godot.Tree, SceneTree.SignalName.ProcessFrame);
+            await EngineFixture.Tree.ToSignal(EngineFixture.Tree, SceneTree.SignalName.ProcessFrame);
             return System.Environment.CurrentManagedThreadId;
         }
 
         // A raw signal await needs engine frames. AwaitAsync pumps them with a bounded timeout.
-        var resumedOn = await Godot.AwaitAsync(NextFrame(), cancellationToken: TestContext.CurrentContext.CancellationToken);
+        var resumedOn = await EngineFixture.AwaitAsync(NextFrame(), cancellationToken: TestContext.CurrentContext.CancellationToken);
         Assert.That(resumedOn, Is.EqualTo(ownerThread));
     }
 
@@ -57,21 +58,21 @@ public class BasicTests : GodotTestFixture
         var result = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
         Callable.From(() => result.SetResult(42)).CallDeferred();
 
-        Assert.That(await Godot.AwaitAsync(result.Task, cancellationToken: TestContext.CurrentContext.CancellationToken), Is.EqualTo(42));
+        Assert.That(await EngineFixture.AwaitAsync(result.Task, cancellationToken: TestContext.CurrentContext.CancellationToken), Is.EqualTo(42));
     }
 
     [Test]
     public async Task Timer_EmitsTimeout()
     {
-        var timer = new global::Godot.Timer { OneShot = true, WaitTime = 0.01 };
+        var timer = new Timer { OneShot = true, WaitTime = 0.01 };
         try
         {
-            Godot.Tree.Root.AddChild(timer);
+            EngineFixture.Tree.Root.AddChild(timer);
             // Subscribe before triggering the behavior, so synchronous emissions cannot be missed.
-            using var timeout = GodotAssert.ExpectSignal(timer, global::Godot.Timer.SignalName.Timeout);
+            using var timeout = GodotAssert.ExpectSignal(timer, Timer.SignalName.Timeout);
             timer.Start();
 
-            await timeout.WaitAsync(Godot, cancellationToken: TestContext.CurrentContext.CancellationToken);
+            await timeout.WaitAsync(EngineFixture, cancellationToken: TestContext.CurrentContext.CancellationToken);
             timeout.AssertEmitted();
         }
         finally { timer.Free(); }
@@ -84,7 +85,7 @@ public class BasicTests : GodotTestFixture
         var child = new Node();
         try
         {
-            Godot.Tree.Root.AddChild(parent);
+            EngineFixture.Tree.Root.AddChild(parent);
             using var entered = GodotAssert.ExpectSignal<Node>(parent, Node.SignalName.ChildEnteredTree);
             parent.AddChild(child);
 
@@ -113,10 +114,10 @@ public class BasicTests : GodotTestFixture
             node.TreeExiting += () => insideWhileExiting = node.IsInsideTree();
             node.TreeExited += () => outsideWhenExited = !node.IsInsideTree();
 
-            Godot.Tree.Root.AddChild(node);
+            EngineFixture.Tree.Root.AddChild(node);
             entered.AssertEmitted();
             Assert.That(node.IsInsideTree(), Is.True);
-            Godot.Tree.Root.RemoveChild(node);
+            EngineFixture.Tree.Root.RemoveChild(node);
 
             exiting.AssertEmitted();
             exited.AssertEmitted();
@@ -133,14 +134,14 @@ public class BasicTests : GodotTestFixture
         var node = new Node();
         try
         {
-            Godot.Tree.Root.AddChild(node);
+            EngineFixture.Tree.Root.AddChild(node);
             using var exited = GodotAssert.ExpectSignal(node, Node.SignalName.TreeExited);
 
             node.QueueFree();
             Assert.That(GodotObject.IsInstanceValid(node), Is.True);
             Assert.That(node.IsQueuedForDeletion(), Is.True);
 
-            await GodotAssert.FreedAsync(Godot, node, cancellationToken: TestContext.CurrentContext.CancellationToken);
+            await GodotAssert.FreedAsync(EngineFixture, node, cancellationToken: TestContext.CurrentContext.CancellationToken);
             exited.AssertEmitted();
             Assert.That(GodotObject.IsInstanceValid(node), Is.False);
         }

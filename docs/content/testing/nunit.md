@@ -1,6 +1,6 @@
 ---
 title: Testing with NUnit
-description: "Write your first Godot test with NUnit's shared headless fixture."
+description: "Write Godot tests with NUnit's headless or rendering fixture."
 ---
 
 # Testing with NUnit
@@ -17,11 +17,12 @@ and deletion. Extend them with tests for your game.
 
 ## Your first test
 
-Derive from `GodotTestFixture`. Its `Godot` property gives your test class a
-shared headless engine. This test waits for a real Godot timer:
+Derive from `GodotTestFixture`. Its `EngineFixture` property gives your test
+class a shared headless engine. This test waits for a real Godot timer:
 
 ```csharp
 using Godot;
+using Timer = Godot.Timer;
 using NUnit.Framework;
 using twodog.Testing.NUnit;
 
@@ -30,14 +31,14 @@ public class TimerTests : GodotTestFixture
     [Test]
     public async Task TimerEmitsTimeout()
     {
-        var timer = new global::Godot.Timer { OneShot = true, WaitTime = 0.01 };
+        var timer = new Timer { OneShot = true, WaitTime = 0.01 };
         try
         {
-            Godot.Tree.Root.AddChild(timer);
+            EngineFixture.Tree.Root.AddChild(timer);
             using var timeout = GodotAssert.ExpectSignal(
-                timer, global::Godot.Timer.SignalName.Timeout);
+                timer, Timer.SignalName.Timeout);
             timer.Start();
-            await timeout.WaitAsync(Godot);
+            await timeout.WaitAsync(EngineFixture);
             timeout.AssertEmitted();
         }
         finally { timer.Free(); }
@@ -45,8 +46,15 @@ public class TimerTests : GodotTestFixture
 }
 ```
 
-`Godot` exposes `Engine`, `GodotInstance`, `Tree`, `Input`, and `Errors`.
+`EngineFixture` exposes `Engine`, `GodotInstance`, `Tree`, `Input`, and `Errors`.
 Each derived test class gets one engine; clean up the objects each test creates.
+
+::: details Why the Timer alias?
+`using Timer = Godot.Timer;` distinguishes Godot's timer from .NET's timer.
+The older fixture property named `Godot` remains a compatibility alias for
+`EngineFixture`; inside a derived class it also shadows the `Godot` namespace.
+The type alias avoids needing `global::Godot.Timer` in the test body.
+:::
 
 ## Setup and teardown
 
@@ -63,28 +71,50 @@ Preserve the inherited `SingleThreaded`, `NonParallelizable`, and
 
 ## Rendering tests
 
-`CreateFixture()` can return a rendering `twodog.Testing.Fixture` instead of
-`HeadlessFixture`. Inside a derived test fixture, with `using twodog.Testing`:
+Derive from `GodotRenderingTestFixture` to open a window and render frames:
 
 ```csharp
-protected override FixtureBase CreateFixture() => new Fixture();
+public class RenderingTests : GodotRenderingTestFixture
+{
+    [Test]
+    public void WindowIsVisible()
+        => Assert.That(EngineFixture.Tree.Root.Visible, Is.True);
+}
 ```
 
 Each NUnit fixture owns its engine; this integration does not share an engine
-across test classes like an xUnit collection. Rendering also has runner
-requirements:
+across test classes like an xUnit collection.
 
 | Platform | Requirement |
 | --- | --- |
 | Linux | A display and a compatible renderer |
-| Windows | STA for the whole fixture, plus common-controls v6 activation in the test host |
-| macOS | Engine startup, tests, and teardown on the process main thread |
+| Windows | A display; the fixture supplies STA and common-controls activation |
+| macOS | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
 
-::: warning Rendering is not configured by the NUnit scaffold
-The standard host runs headless on all three platforms. An STA fixture alone
-does not supply Windows common-controls activation, and the host does not
-reserve macOS's main thread. Changing `CreateFixture()` alone is not enough
-on these platforms. Use xUnit's rendering collection for the supported setup.
+::: warning Use a separate rendering test project
+The scaffold uses headless fixtures. Keep rendering fixtures in another test
+project so each mode runs in its own process. Switching display modes during
+native Godot restarts can crash; 2dog's fixtures reject the switch.
+For windowed macOS tests, use xUnit's rendering collection for now.
+:::
+
+::: details Custom engine arguments
+Override `CreateFixture()` in either base class. Define a fixture with the
+arguments you need, such as a compatibility renderer:
+
+```csharp
+public class OpenGlFixture()
+    : twodog.Testing.FixtureBase("--rendering-driver", "opengl3");
+
+public class UiTests : GodotRenderingTestFixture
+{
+    protected override twodog.Testing.FixtureBase CreateFixture()
+        => new OpenGlFixture();
+}
+```
+
+Use `GodotRenderingTestFixture` only on Windows/Linux. An override does not
+remove macOS's requirement for the process main thread.
 :::
 
 ## Parameterized fixtures and test cases

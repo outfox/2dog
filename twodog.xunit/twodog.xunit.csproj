@@ -37,6 +37,7 @@
         <None Include="build\HeadlessCollection.cs"      Pack="true" PackagePath="build\"/>
         <None Include="build\GodotErrorChecks.cs"        Pack="true" PackagePath="build\"/>
         <None Include="build\GodotAssert.cs"             Pack="true" PackagePath="build\"/>
+        <None Include="build\TestMatrix.cs"              Pack="true" PackagePath="build\"/>
         <None Include="build\FailOnGodotErrors.Assembly.cs" Pack="true" PackagePath="build\"/>
         <None Include="build\GodotTestFramework.cs"       Pack="true" PackagePath="build\"/>
         <None Include="build\GodotTestFramework.Assembly.cs" Pack="true" PackagePath="build\"/>

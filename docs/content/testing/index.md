@@ -18,10 +18,12 @@ Test hosts are opt-in. Choose `--xunit` or `--nunit` when adding one.
 - Headless and rendering collections
 - One engine shared across several test classes
 - Custom engine arguments
+- Combinatorial and pairwise rows through `TestMatrix`
 - Windowed tests on macOS through the main-thread runner
 :::
 ::: column NUnit
-- Headless engine fixtures
+- Headless fixtures on all desktop platforms
+- Rendering fixtures on Windows and Linux
 - One engine per test class or parameterized fixture
 - Async setup and teardown hooks
 - Built-in combinatorial and pairwise test cases
@@ -29,7 +31,20 @@ Test hosts are opt-in. Choose `--xunit` or `--nunit` when adding one.
 ::::
 
 Both integrations provide frame waits, signal expectations, input simulation,
-and automatic checks for Godot errors and warnings.
+async lifecycle support, and automatic checks for Godot errors and warnings.
+
+::: details Where they still differ
+| Capability | xUnit | NUnit |
+| --- | --- | --- |
+| Engine shared across test classes | Collection fixture | One engine per fixture; no cross-class sharing |
+| Rendering on macOS | Main-thread runner included | Needs a dedicated runner; use headless tests for now |
+| Class-wide configuration matrix | Separate fixture types and collections | `[TestFixture(...)]` |
+| Method input combinations | `TestMatrix` with `[MemberData]` | `[Combinatorial]` and `[Pairwise]` |
+
+xUnit already supports async setup and cleanup through `IAsyncLifetime`.
+NUnit's attributes make those hooks more explicit; this is a difference in
+style, rather than missing async support.
+:::
 
 ## Find a guide
 

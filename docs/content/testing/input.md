@@ -6,7 +6,7 @@ description: "Click Godot controls and send keyboard events in xUnit and NUnit t
 # Simulating input
 
 Use the fixture's `Input` helper to interact with your game through Godot's
-input system. The examples use `godot`; in NUnit, add `var godot = Godot;`
+input system. The examples use `godot`; in NUnit, add `var godot = EngineFixture;`
 inside your test.
 
 ## Click a control
