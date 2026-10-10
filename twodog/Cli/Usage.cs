@@ -215,7 +215,7 @@ internal static class Usage
             [
                 ("2dog add", "interactive, here"),
                 ("2dog new MyGame", "interactive host choice, new project"),
-                ("2dog new MyGame --generic --tests", ""),
+                ("2dog new MyGame --generic --xunit", ""),
                 ("2dog add --generic MyGame.editor", ""),
                 ("2dog add path/to/project --no-web", ""),
                 ("2dog doctor", "check the project; offers fixes"),
@@ -225,7 +225,7 @@ internal static class Usage
             Verb.New =>
             [
                 ("2dog new MyGame", "interactive host choice"),
-                ("2dog new MyGame --generic --tests", "unattended"),
+                ("2dog new MyGame --generic --xunit", "unattended"),
                 ("2dog new \"My Game\" -o games/mine --no-web", "name adjusted to MyGame"),
             ],
             Verb.Add =>

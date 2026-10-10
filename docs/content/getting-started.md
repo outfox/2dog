@@ -44,7 +44,7 @@ Keep editing scenes and scripts in Godot as usual! Continue using the official
 
 2dog's Hosts import changed resources automatically, you won't need `godot --import`. (you may still run it, of course)
 
-See [Hosts](/hosts/) for more .NET app types, and [Testing with xUnit](/testing) for tests... 
+See [Hosts](/hosts/) for more .NET app types, and [Testing with xUnit](/testing/xunit) for tests.
 *(it's awesome!)*
 
 

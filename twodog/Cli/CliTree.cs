@@ -242,11 +242,16 @@ internal static class CliTree
         return option;
     }
 
-    private static Option<bool> NoHostOption(HostKind kind) => new(Hosts.NoFlag(kind))
+    private static Option<bool> NoHostOption(HostKind kind)
     {
-        Hidden = !Hosts.InDefaultSet(kind),
-        Description = "Leave a host out of the default set",
-    };
+        var option = new Option<bool>(Hosts.NoFlag(kind))
+        {
+            Hidden = !Hosts.InDefaultSet(kind),
+            Description = "Leave a host out of the default set",
+        };
+        if (kind == HostKind.Tests) option.Aliases.Add("--no-tests");
+        return option;
+    }
 
     public static Verb? VerbOf(Command command)
     {

@@ -5,13 +5,52 @@ namespace twodog.tests.ToolTests;
 public class NUnitHostTests
 {
     [Fact]
-    public void NUnitIsOptInAndCanCoexistWithXunit()
+    public void TestFrameworksAreOptInAndCanCoexist()
     {
+        Assert.False(Hosts.InDefaultSet(HostKind.Tests));
         Assert.False(Hosts.InDefaultSet(HostKind.NUnit));
-        var command = CommandLine.Parse(["new", "Game", "--nunit", "Game.integration", "--tests"]);
+        var command = CommandLine.Parse(["new", "Game", "--nunit", "Game.integration", "--xunit"]);
         var hosts = HostSelection.FromFlags(command, new ProjectContext { Dir = ".", BaseName = "Game" });
         Assert.Equal([(HostKind.Tests, "Game.xunit"), (HostKind.NUnit, "Game.integration")],
             hosts.Select(h => (h.Kind, h.Folder)).OrderBy(h => h.Kind).ToArray());
+    }
+
+    [Theory]
+    [InlineData("--xunit")]
+    [InlineData("--tests")]
+    [InlineData("--test")]
+    public void XunitFlagAndLegacyAliasesSelectTheSameHost(string flag)
+    {
+        var command = CommandLine.Parse(["add", flag, "Game.integration", flag]);
+        Assert.Equal([(HostKind.Tests, "Game.integration"), (HostKind.Tests, (string?)null)],
+            command.Requested.Select(h => (h.Kind, h.Folder)).ToArray());
+        var help = Usage.Render(Verb.Add);
+        Assert.Contains("--xunit", help);
+        Assert.Contains("--nunit", help);
+        Assert.DoesNotContain("--tests", help);
+        Assert.DoesNotContain("--no-tests", help);
+    }
+
+    [Theory]
+    [InlineData("new")]
+    [InlineData("add")]
+    public void UnattendedDefaultsDoNotCreateTestHosts(string verb)
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        string[] args;
+        if (verb == "new") args = ["new", "Game", dir, "--yes", "--no-restore"];
+        else
+        {
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(Path.Combine(dir, "project.godot"), "[application]\nconfig/name=\"Game\"\n");
+            args = ["add", dir, "--yes", "--no-restore"];
+        }
+
+        Assert.Equal(0, CliConsole.Run(args).ExitCode);
+        Assert.Equal([HostKind.Desktop, HostKind.Web], HostScan.Find(dir).Select(h => h.Kind).Order().ToArray());
+        Assert.False(Directory.Exists(Path.Combine(dir, "Game.xunit")));
+        Assert.False(Directory.Exists(Path.Combine(dir, "Game.nunit")));
     }
 
     [Fact]

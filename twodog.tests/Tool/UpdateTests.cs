@@ -10,7 +10,7 @@ public class UpdateTests
     private static string AgedProject(TempProjectDir tmp)
     {
         var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--tests", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--xunit", "--no-restore").ExitCode);
         File.Delete(Path.Combine(dir, "Directory.Build.props"));
         foreach (var csproj in Directory.EnumerateFiles(dir, "*.csproj", SearchOption.AllDirectories))
         {

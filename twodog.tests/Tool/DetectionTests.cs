@@ -136,7 +136,7 @@ public class DetectionTests
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
 
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--tests", "--no-restore").ExitCode);
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--xunit", "--no-restore").ExitCode);
         // The default set minus web is exactly what exists; a host flag would ask for a second host of that kind.
         var again = CliConsole.Run("add", dir, "--no-web", "--no-restore");
         Assert.Equal(0, again.ExitCode);

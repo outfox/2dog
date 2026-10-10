@@ -48,7 +48,7 @@ before creating the new `Engine`; browser teardown is asynchronous.
 
 This allows xUnit collections to use fresh engines sequentially in one test
 process. Collections that share an engine must disable parallelization; see
-[Testing](../testing).
+[Testing](/testing/).
 
 Shutdown releases every Godot object the engine created before it returns,
 including wrappers the garbage collector dropped but had not finalized yet, so

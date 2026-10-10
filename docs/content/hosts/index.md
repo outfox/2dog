@@ -59,4 +59,4 @@ See [Project Layout](/project-layout) for files and
 | Host | Flag | Purpose |
 | --- | --- | --- |
 | [NUnit](./nunit) | `--nunit` | NUnit tests using the Godot engine (opt-in) |
-| [xUnit](./xunit) | `--tests` | xUnit tests using the Godot engine |
+| [xUnit](./xunit) | `--xunit` | xUnit tests using the Godot engine (opt-in) |

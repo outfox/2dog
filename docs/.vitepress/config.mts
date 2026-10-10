@@ -156,6 +156,7 @@ export default defineConfig({
             items: [
               {
                 text: 'Scaffold',
+                collapsed: true,
                 items: [
                   { text: gd('bone') + 'add', link: '/cli/add' },
                   { text: gd('sprout') + 'new', link: '/cli/new' }
@@ -163,6 +164,7 @@ export default defineConfig({
               },
               {
                 text: 'Maintain',
+                collapsed: true,
                 items: [
                   { text: gd('wrench') + 'doctor', link: '/cli/doctor' },
                   { text: gd('arrows_clockwise') + 'update', link: '/cli/update' }
@@ -170,6 +172,7 @@ export default defineConfig({
               },
               {
                 text: 'Inspect',
+                collapsed: true,
                 items: [
                   { text: gd('help') + 'help', link: '/cli/help' },
                   { text: gd('box') + 'pack', link: '/cli/pack' }
@@ -177,6 +180,7 @@ export default defineConfig({
               },
               {
                 text: 'Version',
+                collapsed: true,
                 items: [
                   { text: gd('tag') + 'pinning', link: '/cli/pinning' },
                   { text: gd('tag') + 'version', link: '/cli/version' }
@@ -191,6 +195,7 @@ export default defineConfig({
             items: [
               {
                 text: 'Godot',
+                collapsed: true,
                 items: [
                   { text: gd('arrows_clockwise') + 'GodotInstance', link: '/api/godot-instance' },
                   { text: gd('gobot') + 'GodotSharp', link: '/api/godotsharp' }
@@ -198,18 +203,21 @@ export default defineConfig({
               },
               {
                 text: 'twodog',
+                collapsed: true,
                 items: [
                   { text: gd('script') + 'Engine', link: '/api/engine' }
                 ]
               },
               {
                 text: 'twodog.fixture',
+                collapsed: true,
                 items: [
                   { text: gd('script') + 'AssemblyPreloader', link: '/api/assembly-preloader' }
                 ]
               },
               {
                 text: 'twodog.Testing',
+                collapsed: true,
                 items: [
                   { text: gd('test_tube') + 'FixtureBase', link: '/api/fixture-base' },
                   { text: gd('test_tube') + 'Fixture', link: '/api/fixture' },
@@ -218,6 +226,7 @@ export default defineConfig({
               },
               {
                 text: 'twodog.Testing.Xunit',
+                collapsed: true,
                 items: [
                   { text: gd('layers') + 'HeadlessCollection', link: '/api/headless-collection' },
                   { text: gd('layers') + 'RenderingCollection', link: '/api/rendering-collection' }
@@ -225,12 +234,22 @@ export default defineConfig({
               }
             ]
           },
-          { text: gd('file_arrow_up') + 'Resource Import', link: '/import-tool' },
           {
-            text: 'Testing',
+            text: gd('file_arrow_up') + 'Resources',
+            collapsed: true,
             items: [
+              { text: 'Resource Import', link: '/import-tool' }
+            ]
+          },
+          {
+            text: gd('test_tube') + 'Testing',
+            link: '/testing/',
+            collapsed: true,
+            items: [
+              { text: 'Overview', link: '/testing/' },
               { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
-              { text: gd('test_tube') + 'xUnit', link: '/testing' },
+              { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' },
+              { text: gd('script') + 'Writing Engine Tests', link: '/testing/writing-tests' },
               { text: gd('mouse') + 'Simulating Input', link: '/testing/input' }
             ]
           }

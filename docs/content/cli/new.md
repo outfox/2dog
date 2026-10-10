@@ -21,7 +21,8 @@ hosts to create. Host flags skip that wizard; a missing workload (`wasm-tools`,
 ## Hosts
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
-generic, browser and tests, minus the `--no-<host>` ones.
+generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
+`--xunit` or `--nunit`.
 
 ## Options
 
@@ -64,7 +65,7 @@ Choose hosts interactively, or supply host flags:
 
 ```bash
 2dog new MyGame                            # interactive host choice
-2dog new MyGame --generic --tests          # unattended
+2dog new MyGame --generic --xunit          # unattended
 2dog new "My Game" -o games/mine --no-web  # name adjusted to MyGame
 ```
 
@@ -79,11 +80,11 @@ dotnet new install 2dog
 dotnet new 2dog -n MyGame --web false
 ```
 
-This creates generic .NET and xUnit hosts. Omit `--web false` to include Web;
+This creates a generic .NET host. Omit `--web false` to include Web;
 install `wasm-tools` when you want to build or publish that host.
 
-For NUnit tests, use `2dog new MyGame --nunit`, or pass
-`--nunit true --tests false` to `dotnet new 2dog` to select NUnit instead of xUnit.
+Test hosts are opt-in. Pass `--xunit true` or `--nunit true` to
+`dotnet new 2dog`, or use `2dog new MyGame --xunit` or `--nunit`.
 
 ## Debugging the Godot project in VS Code
 

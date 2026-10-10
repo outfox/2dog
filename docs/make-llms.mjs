@@ -68,7 +68,8 @@ const SECTIONS = [
     'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'build-configurations.md',
   ]],
   ['Testing', [
-    'testing/nunit.md', 'testing.md', 'testing/input.md',
+    'testing/index.md', 'testing/nunit.md', 'testing/xunit.md',
+    'testing/writing-tests.md', 'testing/input.md',
   ]],
   ['MSBuild Configuration', [
     'configuration.md',
@@ -99,7 +100,7 @@ const SECTIONS = [
 ];
 
 // Redirect stubs and other pages that should not be indexed.
-const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md']);
+const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md', 'testing.md']);
 
 const inventory = loadPages(content, SECTIONS, EXCLUDE);
 const prepare = (page) => ({ ...page, url: `${HOST}/${page.rel}`, body: resolveMarkers(page.body) });

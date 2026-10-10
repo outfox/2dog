@@ -30,7 +30,7 @@ const features = [
     tint: 'gui',
     name: 'Automation-Test like a Pro',
     detail: "Test scenes, scripts, and resources.",
-    link: '/testing',
+    link: '/testing/',
     linkText: "Read more",
   },
   {

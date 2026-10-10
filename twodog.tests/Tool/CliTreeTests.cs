@@ -57,7 +57,7 @@ public class CliTreeTests
     [Theory]
     [InlineData("--generc", "--generic")]
     [InlineData("--andriod", "--android")]
-    [InlineData("--tets", "--tests")]
+    [InlineData("--xunt", "--xunit")]
     [InlineData("--dry", "--dry-run")]
     [InlineData("--forc", "--force")]
     public void UnknownOption_SuggestsTheClosestOne(string typo, string suggestion)
@@ -308,8 +308,8 @@ public class OptionalValueTokensTests
     [Fact]
     public void Normalize_AttachesFolderNamesAndMarksBareFlags()
     {
-        Assert.Equal(["add", "--generic=*", "--web=Site", "--tests=*", "./proj"],
-            OptionalValueTokens.Normalize(["add", "--generic", "--web", "Site", "--tests", "./proj"]));
+        Assert.Equal(["add", "--generic=*", "--web=Site", "--xunit=*", "./proj"],
+            OptionalValueTokens.Normalize(["add", "--generic", "--web", "Site", "--xunit", "./proj"]));
     }
 
     [Fact]

@@ -1,37 +1,25 @@
 ---
 title: xUnit
-description: "Run tests against your Godot project with the 2dog.xunit host."
+description: "Add an xUnit test project alongside your Godot game."
 ---
 
 # xUnit
 
-The xUnit host runs tests against your Godot project using a real engine.
-Tests run headless by default; an xUnit fixture owns the engine's lifetime.
-
-## Use It
+The xUnit host is a .NET test project that runs your game in a real Godot
+engine. The scaffold uses a headless fixture; rendering is available too.
 
 From your Godot project directory:
 
 ```bash
-dnx 2dog add --tests
+dnx 2dog add --xunit
 dotnet test MyGame.xunit
 ```
 
-Edit `MyGame.xunit/BasicTests.cs` to add tests. The template includes async/await,
-signal arguments and expectations, enter/exit-tree signals, timers and deferred
-deletion examples. See
-[Testing with xUnit](/testing#async-work-signals-and-deferred-deletion) for the helpers.
+Start with `MyGame.xunit/BasicTests.cs`, then follow
+[Testing with xUnit](/testing/xunit) to write your own tests.
+See [xUnit configuration](/configuration/xunit) for build settings.
 
-Existing `.tests` hosts and custom project names remain supported; adding or
-updating hosts does not rename them. Use their existing paths with `dotnet test`.
-
-Use `HeadlessFixture` for headless tests or `Fixture` for rendered tests. See
-[Testing with xUnit](/testing) for examples, collections, and CI setup.
-
-See [xUnit Configuration](/configuration/xunit) for native variants and Editor tests.
-
-## Shared State
-
-Tests in a collection share one engine. Keep collection parallelism disabled
-and free nodes you create. See [Single Godot Instance](/known-issues/single-instance)
-for engine lifetime rules.
+::: info Existing test projects
+Older `.tests` hosts and custom names still work. Use their existing paths
+with `dotnet test`; adding or updating a host does not rename them.
+:::
