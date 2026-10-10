@@ -32,11 +32,11 @@ $loaderDirectory = Join-Path $Destination 'VulkanRT-X64-1.4.363.0-Components/x64
 
 # Force the CPU driver even when a runner happens to expose a hardware GPU.
 $env:VK_DRIVER_FILES = Join-Path $Destination 'x64/lvp_icd.x86_64.json'
-$env:PATH = "$loaderDirectory;$env:PATH"
+$env:TWODOG_TEST_VULKAN_LOADER = Join-Path $loaderDirectory 'vulkan-1.dll'
 & (Join-Path $loaderDirectory 'vulkaninfo.exe') --summary
 if ($LASTEXITCODE -ne 0) { throw 'Mesa lavapipe could not initialize Vulkan.' }
 
 if ($env:GITHUB_ENV) {
     "VK_DRIVER_FILES=$env:VK_DRIVER_FILES" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-    $loaderDirectory | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    "TWODOG_TEST_VULKAN_LOADER=$env:TWODOG_TEST_VULKAN_LOADER" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 }
