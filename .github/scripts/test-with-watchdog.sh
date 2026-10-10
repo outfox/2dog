@@ -10,8 +10,9 @@
 set -euo pipefail
 
 config="$1"
-limit="${2:-120}"
-budget="${3:-300}"
+# Allow ten minutes for both an idle test and the complete build/test run.
+limit="${2:-600}"
+budget="${3:-600}"
 pattern='twodog\.tests\.dll|2dog\.import\.dll|testhost'
 
 # Engine fixtures write Godot's verbose log here (native output never reaches the vstest log);

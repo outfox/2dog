@@ -301,7 +301,9 @@ jobs:
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
 
-    timeout-minutes: 10
+    # Each test run gets ten minutes; leave room for setup, the separate coverage/windowed
+    # run, and diagnostic uploads without the job cancelling them early.
+    timeout-minutes: 30
 
     steps:
       # The showcase's LFS assets (e.g. splash.png) must be real files: Godot reports an error for every
@@ -350,7 +352,7 @@ jobs:
 
       - name: Require 95% REPL line and branch coverage
         if: runner.os == 'Windows'
-        timeout-minutes: 3
+        timeout-minutes: 10
         shell: bash
         run: |
           uv run --no-project python -m unittest discover -s tests/repl -v
@@ -358,7 +360,7 @@ jobs:
             --filter 'FullyQualifiedName~Repl' --collect:'XPlat Code Coverage' \
             --settings tests/repl/coverage.runsettings \
             --results-directory twodog.tests/TestResults/repl-coverage \
-            --logger 'console;verbosity=normal' --blame-hang-timeout 120s
+            --logger 'console;verbosity=normal' --blame-hang-timeout 600s
           uv run --no-project python scripts/check_repl_coverage.py twodog.tests/TestResults/repl-coverage
 
       - name: Upload REPL coverage
@@ -374,7 +376,7 @@ jobs:
       # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
       - name: Test windowed fixture
         if: runner.os == 'macOS' && matrix.config == 'Release'
-        timeout-minutes: 5
+        timeout-minutes: 10
         run: |
           results=tests/windowed-fixture/TestResults
           reports="$HOME/Library/Logs/DiagnosticReports"

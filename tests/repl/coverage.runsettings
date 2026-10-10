@@ -7,6 +7,9 @@
           <!-- Measure the entire packaged host, including terminal I/O and lifetime. -->
           <Include>[twodog.repl]*</Include>
           <IncludeTestAssembly>false</IncludeTestAssembly>
+          <!-- Packed on Linux, measured on Windows: the PDB source paths do not exist here.
+               Keep the entire assembly eligible for instrumentation regardless of source paths. -->
+          <ExcludeAssembliesWithoutSources>None</ExcludeAssembliesWithoutSources>
         </Configuration>
       </DataCollector>
     </DataCollectors>
