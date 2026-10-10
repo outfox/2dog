@@ -14,7 +14,7 @@ Teaching an old robot new tricks! *(and it won't forget any of the older ones)*
 Your original Godot project stays and works the same. Simply continue developing it using the official Godot editor if you like. 
 
 
-## 2dog is Godot, backward!
+## 2dog is Godot, backwards!
 But the side car projects allow us to do things quite differently!
 
 Traditional Godot applications have Godot control the process lifecycle:
@@ -57,9 +57,18 @@ error checking), `release` (optimized for production), and `editor`
 Debug, Release, and Editor .NET configurations by default;
 [Build Variants](./build-configurations) is the complete guide.
 
-## GodotSharp ... !
+## Lookin' sharp... GodotSharp ... !
 
-That's the current official C# API for Godot. Your game needs it, and 2dog has us covered. After startup, the full GodotSharp API is accessible:
+That's the current official C# API for Godot. 
+::: note ...but what about ❓
+<details><summary><i>🔜 <a href="https://github.com/godotengine/godot-dotnet">Godot .NET</a></i></summary>
+Made you look! 😃 Godot's shiny new C# integration is going to come in due time, and it will make many things nicer for game developers. Even some of the moving parts of Godot become simpler, but you will still have a reason to keep 2dog around as a faithful <s>fool</s> tool. 
+
+It still get us all the hosts, application embedding, custom imports &amp; exports, and most of all, <b>solid unit and integration testing</b> in popular frameworks. And oh, that REPL Reddit had been talking about for a week or a half in November '26...
+</details>
+:::
+
+Your C# game needs GodotSharp, and 2dog has us covered. After application startup, the full GodotSharp API is accessible:
 
 ```csharp
 using var engine = new Engine("MyGame", args: args);
@@ -96,13 +105,3 @@ wants to quit, such as when the window closes; `RequestQuit()` asks it to stop.
 After teardown, `Completion` completes and `Exited` fires on every platform.
 Desktop disposal is synchronous; browser disposal is asynchronous.
 
-## Still Single Instance only... (for now)
-
-The way Godot is written, unfortunately we can't run multiple Godot instances in one Assembly Load Context. 
-
-2dog builds and expands on recent changes to the engine's init and teardown code, and you can now sequentially start new instances. Just wait for completion and create a new `twodog.Engine`. 
-
-### ... didn't mean you can't run multipe Godot engines *per process.*
-
-If you're a goated coder and know the ins and outs of juggling Assembly Load Contexts, read deeper into
-[Single Godot Instance](./known-issues/single-instance) for examples and an experimental isolated-hosting path to kind of get multiple engines after all.

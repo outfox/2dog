@@ -241,11 +241,10 @@ export default defineConfig({
             link: '/testing/',
             collapsed: true,
             items: [
-              { text: 'Overview', link: '/testing/' },
-              { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
-              { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' },
               { text: gd('script') + 'Writing Engine Tests', link: '/testing/writing-tests' },
-              { text: gd('mouse') + 'Simulating Input', link: '/testing/input' }
+              { text: gd('mouse') + 'Simulating Input', link: '/testing/input' },
+              { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
+              { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' }
             ]
           }
         ]
