@@ -109,12 +109,7 @@ export default defineConfig({
         text: 'Hosts',
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
-          {
-            text: 'Console',
-            items: [
-              { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' }
-            ]
-          },
+          { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
           {
             text: 'Desktop',
             items: [
