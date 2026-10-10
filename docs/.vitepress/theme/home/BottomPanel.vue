@@ -13,8 +13,8 @@ const godotVersion = computed(() => (theme.value as any).godotVersion ?? '')
 
 /* The retired hero carousel's pun inventory, evolved into console log material. */
 const puns: string[] = [
-  'What if Godot... but backward?',
-  "Let's take Godot for walkies!",
+  'What if Godot... but backwards?',
+  "Let's take Godot walkies!",
   "Who's a good engine? Godot is! Yes it is!",
   'Sit, Godot! Good engine. Now render.',
   'Teaching old Godot new tricks',

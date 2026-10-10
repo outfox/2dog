@@ -109,13 +109,8 @@ export default defineConfig({
         text: 'Hosts',
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
-          {
-            text: 'Console',
-            items: [
-              { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
-              { text: gd('script') + 'REPL', link: '/hosts/repl' }
-            ]
-          },
+          { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
+          { text: gd('script') + 'REPL', link: '/hosts/repl' },
           {
             text: 'Desktop',
             items: [
@@ -247,11 +242,10 @@ export default defineConfig({
             link: '/testing/',
             collapsed: true,
             items: [
-              { text: 'Overview', link: '/testing/' },
-              { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
-              { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' },
               { text: gd('script') + 'Writing Engine Tests', link: '/testing/writing-tests' },
-              { text: gd('mouse') + 'Simulating Input', link: '/testing/input' }
+              { text: gd('mouse') + 'Simulating Input', link: '/testing/input' },
+              { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
+              { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' }
             ]
           }
         ]
