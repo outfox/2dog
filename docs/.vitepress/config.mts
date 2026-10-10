@@ -311,7 +311,7 @@ export default defineConfig({
     ],
 
     footer: {
-      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>. <br/>Godot is licensed under the <a href="https://godotengine.org/license/">MIT License</a>. <b>2dog</b> is not affiliated with or endorsed by the Godot Foundation.<br/><b>@icons</b> made by <a href="https://www.voxy.space">Voxy</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.',
+      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>. <br/>Godot is licensed under the <a href="https://godotengine.org/license/">MIT License</a>.<br/><b>2dog</b> is not affiliated with or endorsed by the Godot Foundation.<br/><b>@icons</b> made by <a href="https://www.voxy.space">Voxy</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.',
       copyright: '<b>2dog</b> is Copyright © 2025-2026 <a href="https://github.com/outfox/2dog/graphs/contributors">its contributors</a>'
     },
   }
