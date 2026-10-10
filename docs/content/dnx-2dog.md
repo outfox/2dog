@@ -53,6 +53,7 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | `--web [folder]` | [Web host](/hosts/web) |
 | `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
 | `--xunit [folder]` | [xUnit test project](/hosts/xunit) (opt-in) |
+| `--repl [folder]` | [C# REPL host](/hosts/repl); opt-in |
 | `--nunit [folder]` | [NUnit test project](/hosts/nunit) (opt-in) |
 | `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only, opt-in |
 | `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |

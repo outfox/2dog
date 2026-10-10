@@ -1,0 +1,348 @@
+using System.Reflection;
+using System.Text;
+using PrettyPrompt;
+using PrettyPrompt.Highlighting;
+using twodog.Repl;
+using twodog.tests.EngineTests;
+
+namespace twodog.tests.ReplTests;
+
+[Collection(nameof(EngineRestartCollection))]
+public class HostLifecycleTests
+{
+    private static readonly ConsoleKeyInfo RunKey = new('\r', ConsoleKey.Enter, false, false, true);
+    private static IEnumerable<ConsoleKeyInfo> Type(string text) => text.Select(c => new ConsoleKeyInfo(c,
+        char.IsLetterOrDigit(c) ? (ConsoleKey)char.ToUpperInvariant(c) : ConsoleKey.NoName, false, false, false));
+    private static IEnumerable<ConsoleKeyInfo> Command(string text) => Type(text).Append(new('\r', ConsoleKey.Enter, false, false, false));
+    private static IEnumerable<ConsoleKeyInfo> Code(string text) => Type(text).Append(RunKey);
+
+    private static (int Exit, Terminal Terminal) Run(string? input, IEnumerable<ConsoleKeyInfo>? keys = null, bool wait = false, Action<Terminal>? created = null)
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-host-lifetime", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        Terminal? terminal = null;
+        var exit = ReplHost.Run(engine, token =>
+        {
+            terminal = new Terminal(input, keys ?? [], wait ? token : null);
+            created?.Invoke(terminal);
+            return terminal;
+        }, game);
+        Assert.True(terminal!.Restored);
+        Assert.Empty(engine.Errors.Drain());
+        return (exit, terminal);
+    }
+
+    [Fact]
+    public void InteractiveHostRunsCommandsChangesScopeResetsCSharpAndRestoresTerminal()
+    {
+        var keys = Command(":help").Concat(Command(":multiline")).Concat(Command(":help"))
+            .Concat(Command(":multiline")).Concat(Command(":clear"))
+            .Concat(Code("")).Append(new('\x03', ConsoleKey.C, false, false, true))
+            .Concat(Code("int retained = 42;")).Concat(Code("retained"))
+            .Concat(Code("cd $Control")).Concat(Command("pwd")).Concat(Command("ls"))
+            .Concat(Code("throw new OperationCanceledException();"))
+            .Concat(Command(":reset")).Concat(Code("retained")).Concat(Command(":exit"));
+        var (exit, terminal) = Run(null, keys);
+        Assert.Equal(0, exit);
+        Assert.Equal(1, terminal.Prompt.Clears);
+        Assert.Contains("C# REPL", terminal.Stdout.ToString());
+        Assert.Contains("42", terminal.Stdout.ToString());
+        Assert.Contains("/root/Control", terminal.Stdout.ToString());
+        Assert.Contains("CenterContainer", terminal.Stdout.ToString());
+        Assert.Contains("Submission cancelled.", terminal.Stdout.ToString());
+        Assert.Contains("C# session reset", terminal.Stdout.ToString());
+        Assert.Contains("CS0103", terminal.Stderr.ToString());
+        Assert.True(File.Exists(terminal.HistoryFile));
+        var history = File.ReadAllLines(terminal.HistoryFile)
+            .Select(line => Encoding.UTF8.GetString(Convert.FromBase64String(line))).ToArray();
+        Assert.Contains("int retained = 42;", history);
+        Assert.Contains("cd $Control", history);
+        Assert.Contains(":exit", history);
+        Assert.Equal(2, history.Count(entry => entry == ":help"));
+        Assert.Equal(2, history.Count(entry => entry == ":multiline"));
+        Assert.Contains(":clear", history);
+        Assert.Contains("Enter  newline", terminal.Stdout.ToString());
+        terminal.Dispose();
+    }
+
+    [Theory]
+    [InlineData(":help\n:clear\n:multiline\n:reset\n40+2\n:exit\n", 0)]
+    [InlineData(":auto\n:exit\nthis must not execute\n", 0)]
+    [InlineData(":sh\n:exit\nthis must not execute\n", 0)]
+    [InlineData(":cs\n:exit\nthis must not execute\n", 0)]
+    [InlineData(":ai\n:exit\nthis must not execute\n", 0)]
+    [InlineData("\n40+2\nls\nexit\n", 0)]
+    [InlineData("var broken = ;\n40+2\n", 1)]
+    [InlineData("if (true) {", 1)]
+    [InlineData("", 0)]
+    [InlineData("throw new OperationCanceledException();\n", 0)]
+    public void RedirectedHostHandlesEofMultilineCommandsAndExitStatus(string input, int expected)
+    {
+        var (exit, terminal) = Run(input);
+        using (terminal)
+        {
+            Assert.Equal(expected, exit);
+            Assert.Equal(0, terminal.Prompt.Clears);
+            Assert.DoesNotContain("Preparing C# completion...", terminal.Stdout.ToString());
+            if (expected != 0) Assert.NotEmpty(terminal.Stderr.ToString());
+            else Assert.Empty(terminal.Stderr.ToString());
+            Assert.DoesNotContain("this must not execute", terminal.Stdout.ToString());
+            if (input.Contains("40+2")) Assert.Contains("42", terminal.Stdout.ToString());
+        }
+    }
+
+    [Fact]
+    public void EngineQuitCancelsBlockedTerminalInputAndJoinsCleanup()
+    {
+        var (exit, terminal) = Run(null, Code("tree.Quit();"), wait: true);
+        using (terminal) Assert.Equal(0, exit);
+    }
+
+    [Theory]
+    [InlineData("40+2", 0)]
+    [InlineData("var broken = ;", 1)]
+    public void EngineQuitPreservesRedirectedExitStatusWhileInputRemainsOpen(string submission, int expected)
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-open-stdin", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        using var input = new OpenInput(submission + "\n");
+        Terminal? terminal = null;
+        var quitRequested = false;
+        var exit = ReplHost.Run(engine, _ =>
+        {
+            engine.Tree.ProcessFrame += () =>
+            {
+                if (!input.Waiting) return;
+                quitRequested = true;
+                engine.RequestQuit();
+            };
+            return terminal = new Terminal("", [], null, input);
+        }, game);
+        using (var completedTerminal = Assert.IsType<Terminal>(terminal))
+        {
+            Assert.True(quitRequested);
+            Assert.True(input.Cancelled);
+            Assert.True(completedTerminal.Restored);
+            Assert.Equal(expected, exit);
+            if (expected != 0) Assert.Contains("CS", completedTerminal.Stderr.ToString());
+            else Assert.Contains("42", completedTerminal.Stdout.ToString());
+        }
+        Assert.Empty(engine.Errors.Drain());
+    }
+
+    [Fact]
+    public void EngineQuitDrainsAwaitedSubmissionCleanupBeforeDisposingTheEngine()
+    {
+        var owner = Environment.CurrentManagedThreadId;
+        var cleanupThread = 0;
+        var liveRoot = false;
+        ReplLifetimeProbe.OnCleanup = root =>
+        {
+            cleanupThread = Environment.CurrentManagedThreadId;
+            liveRoot = Godot.GodotObject.IsInstanceValid(root) && root.IsInsideTree() && root.GetTree() is not null;
+        };
+        try
+        {
+            var (exit, terminal) = Run(null, Code("try { tree.Quit(); await Task.Delay(Timeout.Infinite, ct); } finally { await Task.Yield(); twodog.tests.ReplTests.ReplLifetimeProbe.Cleanup(root); }"), wait: true);
+            using (terminal)
+            {
+                Assert.Equal(0, exit);
+                Assert.Empty(terminal.Stderr.ToString());
+                Assert.Equal(owner, cleanupThread);
+                Assert.True(liveRoot);
+            }
+        }
+        finally { ReplLifetimeProbe.OnCleanup = null; }
+    }
+
+    [Fact]
+    public async Task ControlCCancelsAnInFlightSubmissionThroughPrettyPromptConsoleEvent()
+    {
+        using var started = new ManualResetEventSlim();
+        ReplLifetimeProbe.OnStarted = started.Set;
+        Task? cancel = null;
+        try
+        {
+            var keys = Code("twodog.tests.ReplTests.ReplLifetimeProbe.Started(); await Task.Delay(TimeSpan.FromSeconds(5), ct);")
+                .Concat(Command(":exit"));
+            var (exit, terminal) = Run(null, keys, created: terminal => cancel = Task.Run(() =>
+            {
+                Assert.True(started.Wait(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken), "Submission did not begin.");
+                Assert.False(terminal.Prompt.CaptureControlC);
+                Assert.True(terminal.Prompt.CancelExecution());
+            }));
+            using (terminal)
+            {
+                await cancel!;
+                Assert.Equal(0, exit);
+                Assert.Contains("Submission cancelled.", terminal.Stdout.ToString());
+                Assert.Empty(terminal.Stderr.ToString());
+            }
+        }
+        finally { ReplLifetimeProbe.OnStarted = null; }
+    }
+
+    [Fact]
+    public void PublicEntryPointUsesTheRedirectedSystemTerminal()
+    {
+        Assert.SkipUnless(Console.IsInputRedirected && Console.IsOutputRedirected,
+            "The public system terminal requires redirected process streams; Console.SetIn does not redirect a terminal.");
+        var original = Console.In;
+        try
+        {
+            Console.SetIn(new StringReader(":exit\n"));
+            var game = typeof(showcase.CSharpTicker).Assembly;
+            using var engine = new Engine("repl-public-entry", Engine.ResolveProjectDir(), "--headless");
+            Assert.Equal(0, ReplHost.Run(engine, game));
+        }
+        finally { Console.SetIn(original); }
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void HostSwitchesModesAndPreservesModeThroughReset(bool interactive)
+    {
+        var inputs = new[] { "var ls = 42; var exit = 43;", ":cs", "ls", "exit", ":sh", "ls", ":ai", "tree.Quit();", ":reset", "tree.Quit();", ":auto", "exit" };
+        var (exit, terminal) = interactive
+            ? Run(null, inputs.SelectMany(Code))
+            : Run(string.Join("\n", inputs) + "\n");
+        using (terminal)
+        {
+            Assert.Equal(0, exit);
+            Assert.Empty(terminal.Stderr.ToString());
+            Assert.Contains("42", terminal.Stdout.ToString());
+            Assert.Contains("43", terminal.Stdout.ToString());
+            Assert.Contains("CenterContainer", terminal.Stdout.ToString());
+            Assert.Equal(2, terminal.Stdout.ToString().Split(ReplModes.AgentReply).Length - 1);
+            foreach (var mode in new[] { "cs", "sh", "ai", "auto" })
+                Assert.Contains("Mode: :" + mode, terminal.Stdout.ToString());
+        }
+    }
+
+    // Keep stdin open after its submitted line, as a pipe whose writer is still alive.
+    private sealed class OpenInput(string text) : StringReader(text)
+    {
+        private bool waiting;
+        public bool Waiting => Volatile.Read(ref waiting);
+        public bool Cancelled { get; private set; }
+        public override async ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
+        {
+            var line = await base.ReadLineAsync(cancellationToken);
+            if (line is not null) return line;
+            Volatile.Write(ref waiting, true);
+            // Bound a broken regression without pretending that an open pipe reached EOF.
+            try { await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken); }
+            finally { Cancelled = cancellationToken.IsCancellationRequested; }
+            return null;
+        }
+    }
+
+    private sealed class Terminal : IReplTerminal, IDisposable
+    {
+        public PromptConsole Prompt { get; }
+        public PrettyPrompt.Consoles.IConsole Editor => Prompt;
+        public bool Interactive { get; }
+        public TextReader Input { get; }
+        public StringWriter Stdout { get; } = new();
+        public StringWriter Stderr { get; } = new();
+        public ReplOutput Output { get; }
+        public string HistoryFile { get; } = Path.Combine(Path.GetTempPath(), "2dog-repl-" + Guid.NewGuid(), "history");
+        public bool Restored { get; private set; }
+        public Terminal(string? input, IEnumerable<ConsoleKeyInfo> keys, CancellationToken? token, TextReader? reader = null)
+        {
+            Interactive = input is null;
+            Input = reader ?? new StringReader(input ?? "");
+            Prompt = new PromptConsole(keys, waitForInput: token);
+            Output = new ReplOutput(Stdout, Stderr, color: false, errorColor: false);
+        }
+        public string? TakePaste() => null;
+        public void Restore() => Restored = true;
+        public void Dispose()
+        {
+            Input.Dispose();
+            Stdout.Dispose();
+            Stderr.Dispose();
+            var directory = Path.GetDirectoryName(HistoryFile)!;
+            // The test creates only this unique history file and directory.
+            if (File.Exists(HistoryFile)) File.Delete(HistoryFile);
+            if (Directory.Exists(directory)) Directory.Delete(directory);
+        }
+    }
+}
+
+public class TerminalOutputTests
+{
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    public void OutputKeepsContentAndSeparatesOutputAndErrorColor(bool color, bool errorColor)
+    {
+        using var stdout = new StringWriter();
+        using var stderr = new StringWriter();
+        var output = new ReplOutput(stdout, stderr, color, errorColor);
+        output.Banner("res://main.tscn");
+        output.Result("42");
+        output.Result("/root/Control", NodeColors.Path("/root/Control"));
+        output.Tree("tree\n");
+        output.Tree("tree\n", new FormattedString("tree\n"));
+        output.InputMode(false);
+        output.InputMode(true);
+        output.Help(false);
+        output.Help(true);
+        output.Message("session message");
+        output.Error("test error");
+        Assert.Contains("Game scene", stdout.ToString());
+        Assert.Contains("res://main.tscn", stdout.ToString());
+        Assert.Contains("cp $Source $Parent", stdout.ToString());
+        Assert.Contains("mv(...)", stdout.ToString());
+        Assert.Contains("Accept a selection outside quoted path text", stdout.ToString());
+        Assert.Contains("nonempty relative path outside quotes", stdout.ToString());
+        Assert.Contains("Insert literally and finish any completion cycle", stdout.ToString());
+        Assert.Equal(color, stdout.ToString().Contains('\x1b'));
+        Assert.Equal(errorColor, stderr.ToString().Contains('\x1b'));
+        Assert.Contains("test error", stderr.ToString());
+        Assert.EndsWith(Environment.NewLine + Environment.NewLine, stderr.ToString());
+    }
+
+    [Theory]
+    [InlineData("", null)]
+    [InlineData("40+2", "40+2")]
+    [InlineData("if (true) {\n40+2;\n}", "if (true) {\n40+2;\n}")]
+    [InlineData("if (true) {", "if (true) {")]
+    [InlineData(":help\n42", ":help")]
+    public async Task RedirectedSubmissionUsesSyntaxAndPreservesIncompleteEof(string input, string? expected)
+    {
+        using var reader = new StringReader(input);
+        var result = await ReplHost.ReadSubmissionAsync(reader, TestContext.Current.CancellationToken);
+        Assert.Equal(expected, result?.TrimEnd().Replace("\r\n", "\n"));
+    }
+
+    [Fact]
+    public async Task DispatcherPropagatesFailuresAndCallerCancellationWithoutExecutingCancelledActions()
+    {
+        using var dispatcher = new EngineDispatcher();
+        var failure = dispatcher.InvokeAsync<int>(() => throw new InvalidOperationException("owner failure"), TestContext.Current.CancellationToken);
+        var cancelled = dispatcher.InvokeAsync<int>(() => throw new OperationCanceledException(), TestContext.Current.CancellationToken);
+        using var stop = new CancellationTokenSource();
+        stop.Cancel();
+        var called = false;
+        var skipped = dispatcher.InvokeAsync(() => { called = true; return Task.FromResult(1); }, stop.Token);
+        dispatcher.Pump();
+        Assert.Equal("owner failure", (await Assert.ThrowsAsync<InvalidOperationException>(() => failure)).Message);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => cancelled);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => skipped);
+        Assert.False(called);
+    }
+}
+
+// Public so a real Roslyn submission can report its lifecycle without replacing the engine dispatcher.
+public static class ReplLifetimeProbe
+{
+    public static Action? OnStarted { get; set; }
+    public static Action<Godot.Node>? OnCleanup { get; set; }
+    public static void Started() => OnStarted?.Invoke();
+    public static void Cleanup(Godot.Node root) => OnCleanup?.Invoke(root);
+}

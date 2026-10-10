@@ -32,7 +32,9 @@
       "twodog.tests\\twodog.tests.csproj",
       "twodog.xunit\\twodog.xunit.csproj",
       "twodog.nunit\\twodog.nunit.csproj",
-      "tests\\nunit\\nunit.csproj"
+      "tests\\nunit\\nunit.csproj",
+      "twodog.repl\\twodog.repl.csproj",
+      "demos\\showcase\\showcase.repl\\showcase.repl.csproj"
     ]
   }
 }

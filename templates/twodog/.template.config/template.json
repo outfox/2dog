@@ -78,6 +78,12 @@
       "description": "Include a test project with xUnit (v3) and the 2dog.xunit collection fixtures. Omitted by default; pass '--xunit true' to include.",
       "defaultValue": "false"
     },
+    "repl": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include an interactive C# REPL host inside the running Godot process. Omitted by default; pass '--repl true' to include.",
+      "defaultValue": "false"
+    },
     "nunit": {
       "type": "parameter",
       "datatype": "bool",
@@ -189,6 +195,10 @@
           ]
         },
         {
+          "condition": "(!repl)",
+          "exclude": ["Company.Product1.repl/**/*"]
+        },
+        {
           "condition": "(!nunit)",
           "exclude": ["Company.Product1.nunit/**/*"]
         },
@@ -268,6 +278,10 @@
     {
       "condition": "(xunit)",
       "path": "Company.Product1.xunit/Company.Product1.xunit.csproj"
+    },
+    {
+      "condition": "(repl)",
+      "path": "Company.Product1.repl/Company.Product1.repl.csproj"
     },
     {
       "condition": "(nunit)",

@@ -15,7 +15,8 @@ func _ready() -> void:
 	if failure.is_empty():
 		set_meta(PASSED_META, true)
 		text = "This text comes from a GDExtension: " + _description
-		print("2DOG_GDEXTENSION_SMOKE_PASSED ", _description)
+		if OS.get_cmdline_user_args().has("--2dog-smoke-markers"):
+			print("2DOG_GDEXTENSION_SMOKE_PASSED ", _description)
 	else:
 		set_meta(FAILURE_META, failure)
 		text = "GDExtension probe failed: " + failure

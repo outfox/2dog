@@ -10,9 +10,11 @@
 set -euo pipefail
 
 config="$1"
-limit="${2:-120}"
-budget="${3:-300}"
-pattern='twodog\.tests\.dll|2dog\.import\.dll|testhost'
+# Allow ten minutes for both an idle test and the complete build/test run.
+limit="${2:-600}"
+budget="${3:-600}"
+# xunit v3 runs an apphost on Unix; match both executable and dotnet-hosted forms.
+pattern='twodog\.tests(\.dll)?([[:space:]]|$)|2dog\.import(\.dll)?([[:space:]]|$)|testhost'
 
 # Engine fixtures write Godot's verbose log here (native output never reaches the vstest log);
 # the workflow uploads TestResults on failure. Godot on Windows needs a native path.

@@ -15,4 +15,11 @@
         <PackageReference Include="NUnit3TestAdapter" Version="6.*" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
     </ItemGroup>
+    <!-- VSTest launches testhost.exe in this output directory on Windows. Stage the
+         CI loader beside it: Windows searches System32 before PATH, so PATH alone
+         would silently select a preinstalled, potentially older Vulkan loader. -->
+    <ItemGroup Condition="'$(TWODOG_TEST_VULKAN_LOADER)' != '' and $([MSBuild]::IsOSPlatform('Windows'))">
+        <None Include="$(TWODOG_TEST_VULKAN_LOADER)" Link="vulkan-1.dll" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
 </Project>

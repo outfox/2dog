@@ -1,0 +1,42 @@
+2dog.repl uses these unmodified third-party NuGet libraries:
+
+PrettyPrompt 6.0.4
+Copyright Will Fuqua and contributors.
+License: Mozilla Public License 2.0 (licenses/PrettyPrompt-MPL-2.0.txt).
+Source: https://github.com/waf/PrettyPrompt/tree/9d22b9d080bc928a85b919c5cc4368aa25f98e90
+The source for the covered library is available from that repository.
+
+Microsoft.CodeAnalysis.CSharp.Scripting and Microsoft.CodeAnalysis.CSharp.Features 5.3.0
+(and their Microsoft.CodeAnalysis dependencies)
+Copyright (c) .NET Foundation and Contributors.
+License: MIT (licenses/Roslyn-MIT.txt).
+Source: https://github.com/dotnet/roslyn
+
+The design was inspired by CSharpRepl (https://github.com/waf/CSharpRepl),
+which uses PrettyPrompt and Roslyn. No CSharpRepl source files are included.
+
+Transitive libraries redistributed with a published REPL host:
+
+Humanizer.Core 2.14.1
+Copyright (c) .NET Foundation and Contributors; Scott Kirkland; Omar Khudeira.
+License: MIT (licenses/Humanizer-MIT.txt, including embedded component notices).
+Source: https://github.com/Humanizr/Humanizer/tree/3ebc38de585fc641a04b0e78ed69468453b0f8a1
+
+TextCopy 6.2.1
+Copyright (c) 2018 Simon Cropp.
+License: MIT (licenses/TextCopy-MIT.txt).
+Source: https://github.com/CopyText/TextCopy/tree/409eda72dd615c1ff2cd7327d5a294553eaa9b81
+
+Microsoft.CodeAnalysis.Elfie 1.0.0 and Microsoft.DiaSymReader 2.0.0
+Copyright (c) Microsoft Corporation. All rights reserved.
+License: MIT (permission and disclaimer in licenses/Roslyn-MIT.txt).
+Sources: https://github.com/microsoft/elfie-arriba and https://github.com/dotnet/symreader
+
+Microsoft.Extensions.DependencyInjection.Abstractions 7.0.0,
+System.Composition and its components 9.0.0,
+System.Configuration.ConfigurationManager, System.Diagnostics.EventLog,
+System.Security.Cryptography.ProtectedData 9.0.0,
+and System.Data.DataSetExtensions 4.5.0
+Copyright (c) .NET Foundation and Contributors. All rights reserved.
+License: MIT (licenses/Roslyn-MIT.txt).
+Sources: https://github.com/dotnet/runtime and https://github.com/dotnet/extensions

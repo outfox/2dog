@@ -9,7 +9,8 @@ func _ready() -> void:
 	var failure := _exercise_gdscript_only_engine_features()
 	if failure.is_empty():
 		set_meta(PASSED_META, true)
-		print("2DOG_GDSCRIPT_LINKER_SMOKE_PASSED")
+		if OS.get_cmdline_user_args().has("--2dog-smoke-markers"):
+			print("2DOG_GDSCRIPT_LINKER_SMOKE_PASSED")
 	else:
 		set_meta(FAILURE_META, failure)
 		push_error("GDScript linker smoke failed: " + failure)

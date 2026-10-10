@@ -136,6 +136,7 @@ public class HostsCoverageTests
     [InlineData("webxr", "webxr", "WebAssembly host with the WebXR Layers polyfill for VR", "--webxr")]
     [InlineData("xunit", "xUnit", "xUnit project driving a headless engine", "--xunit")]
     [InlineData("nunit", "NUnit", "NUnit project driving a headless engine", "--nunit")]
+    [InlineData("repl", "repl", "interactive C# prompt inside the running game", "--repl")]
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]
     [InlineData("winui", "winui", "game embedded in a WinUI 3 window (Windows-only)", "--winui")]
     [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]

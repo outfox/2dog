@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.avalonia", "showca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.winui", "showcase.winui\showcase.winui.csproj", "{F6A7B8C9-D0E1-4F2A-B3C4-D5E6F70A8192}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.repl", "showcase.repl\showcase.repl.csproj", "{329C14A4-72B8-40E3-96C2-864CE676CCDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,5 +53,11 @@ Global
 		{F6A7B8C9-D0E1-4F2A-B3C4-D5E6F70A8192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F6A7B8C9-D0E1-4F2A-B3C4-D5E6F70A8192}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6A7B8C9-D0E1-4F2A-B3C4-D5E6F70A8192}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Editor|Any CPU.Build.0 = Editor|Any CPU
 	EndGlobalSection
 EndGlobal

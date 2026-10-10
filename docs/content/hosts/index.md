@@ -31,6 +31,7 @@ See [Project Layout](/project-layout) for files and
 | Host | Flag | Purpose |
 | --- | --- | --- |
 | [2dog (generic .NET)](./generic) | `--generic` | .NET console application (desktop or headless) |
+| [REPL](./repl) | `--repl` | Interactive C# inside the running game (opt-in) |
 
 ### Desktop
 

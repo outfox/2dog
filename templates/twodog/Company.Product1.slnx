@@ -9,6 +9,9 @@
 #if (xunit)
   <Project Path="TPLRAWNAME.xunit/TPLRAWNAME.xunit.csproj" />
 #endif
+#if (repl)
+  <Project Path="TPLRAWNAME.repl/TPLRAWNAME.repl.csproj" />
+#endif
 #if (nunit)
   <Project Path="TPLRAWNAME.nunit/TPLRAWNAME.nunit.csproj" />
 #endif

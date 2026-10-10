@@ -110,6 +110,7 @@ export default defineConfig({
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
           { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
+          { text: gd('script') + 'REPL', link: '/hosts/repl' },
           {
             text: 'Desktop',
             items: [
@@ -261,7 +262,8 @@ export default defineConfig({
               {
                 text: 'Console',
                 items: [
-                  { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' }
+                  { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' },
+                  { text: gd('script') + 'REPL', link: '/configuration/repl' }
                 ]
               },
               {

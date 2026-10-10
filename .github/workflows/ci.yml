@@ -245,6 +245,7 @@ jobs:
           dotnet pack twodog.blazor
           dotnet pack twodog.xunit
           dotnet pack twodog.nunit
+          dotnet pack twodog.repl
           dotnet pack twodog
 
       - name: Test managed binding packages
@@ -300,7 +301,9 @@ jobs:
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
 
-    timeout-minutes: 10
+    # Each test run gets ten minutes; leave room for setup, the separate coverage/windowed
+    # run, and diagnostic uploads without the job cancelling them early.
+    timeout-minutes: 30
 
     steps:
       # The showcase's LFS assets (e.g. splash.png) must be real files: Godot reports an error for every
@@ -338,14 +341,58 @@ jobs:
       - name: Test (${{ matrix.config }})
         run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
 
-      - name: Test NUnit rendering (Windows)
+      # Instrument the actual packed assembly, not a special source-project build.
+      # Windows is the coverage baseline; behavior runs in all nine OS/config jobs.
+      - name: Setup uv for REPL coverage
+        if: runner.os == 'Windows'
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Require 95% REPL line and branch coverage
+        if: runner.os == 'Windows'
+        timeout-minutes: 10
+        shell: bash
+        run: |
+          uv run --no-project python -m unittest discover -s tests/repl -v
+          dotnet test twodog.tests -c ${{ matrix.config }} --no-build --no-restore \
+            --filter 'FullyQualifiedName~Repl' --collect:'XPlat Code Coverage' \
+            --settings tests/repl/coverage.runsettings \
+            --results-directory twodog.tests/TestResults/repl-coverage \
+            --logger 'console;verbosity=normal' --blame-hang-timeout 600s
+          uv run --no-project python scripts/check_repl_coverage.py twodog.tests/TestResults/repl-coverage
+
+      - name: Upload REPL coverage
+        if: always() && runner.os == 'Windows'
+        uses: actions/upload-artifact@v7
+        with:
+          name: repl-coverage-${{ matrix.config }}
+          path: twodog.tests/TestResults/repl-coverage/**/coverage.cobertura.xml
+          if-no-files-found: error
+          retention-days: 7
+
+      # Windows VMs have no usable OpenGL driver. Render real frames with CPU Vulkan.
+      - name: Setup Windows software rendering
         if: runner.os == 'Windows' && matrix.config == 'Release'
         timeout-minutes: 5
-        run: dotnet test tests/nunit-rendering -c Release --blame --results-directory tests/nunit-rendering/TestResults
+        run: .github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver
+
+      - name: Test NUnit rendering (Windows)
+        if: runner.os == 'Windows' && matrix.config == 'Release'
+        timeout-minutes: 10
+        env:
+          TWODOG_GODOT_LOG_DIR: ${{ github.workspace }}/tests/nunit-rendering/TestResults/godot
+        run: >-
+          dotnet test tests/nunit-rendering -c Release
+          --logger 'console;verbosity=normal' --blame-hang-timeout 90s --blame-hang-dump-type full
+          --diag tests/nunit-rendering/TestResults/vstest.log
+          --results-directory tests/nunit-rendering/TestResults
+          -- NUnit.InternalTraceLevel=Debug NUnit.WorkDirectory=${{ github.workspace }}/tests/nunit-rendering/TestResults
 
       - name: Test NUnit rendering (Linux)
         if: runner.os == 'Linux' && matrix.config == 'Release'
-        timeout-minutes: 5
+        timeout-minutes: 10
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb
@@ -355,7 +402,7 @@ jobs:
       # rendering suites do; AppKit aborts the process when the window server is set up off the main thread.
       - name: Test windowed fixture
         if: runner.os == 'macOS' && matrix.config == 'Release'
-        timeout-minutes: 5
+        timeout-minutes: 10
         run: |
           results=tests/windowed-fixture/TestResults
           reports="$HOME/Library/Logs/DiagnosticReports"
@@ -566,13 +613,14 @@ jobs:
         shell: bash
         run: rm -rf demos/showcase/.godot/mono/temp/bin
 
+      # Scene probes always run; opt into their success markers for the log assertions below.
       - name: Run published host (headless, RID)
         id: run
         shell: bash
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -583,7 +631,7 @@ jobs:
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-norid.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-norid.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -594,7 +642,7 @@ jobs:
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-fdd.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-fdd.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -605,7 +653,7 @@ jobs:
         run: |
           set +e
           demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot/${{ matrix.exe }} \
-            --headless --quit-after 120 2>&1 | tee smoke-aot.log
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-aot.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -641,7 +689,7 @@ jobs:
             -o "bt all" \
             -o quit \
             -- "$publish/${{ matrix.exe }}" \
-               --headless --quit-after 120 2>&1 | tail -150 || true
+               --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tail -150 || true
 
       - name: Assert scripts bound
         shell: bash
@@ -1253,7 +1301,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor"; do
+          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.repl"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

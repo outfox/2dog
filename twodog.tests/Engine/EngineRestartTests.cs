@@ -14,6 +14,31 @@ public class EngineRestartCollection;
 public class EngineRestartTests
 {
     [Fact]
+    public void FirstFrameDoesNotWaitForThePreviousLifetimeFrameDeadline()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+        using (var first = new Engine("paced-lifetime", projectDir, "--headless"))
+        {
+            first.Start();
+            // Leave a deadline at least two seconds into this lifetime's clock.
+            Godot.Engine.MaxFps = 1;
+            Assert.False(first.Iteration());
+            Assert.False(first.Iteration());
+        }
+
+        using var second = new Engine("fresh-frame-clock", projectDir, "--headless");
+        second.Start();
+        Assert.Equal(0, Godot.Engine.MaxFps);
+        var frame = System.Diagnostics.Stopwatch.StartNew();
+        Assert.False(second.Iteration());
+        // The headless pacing delay is only milliseconds. Unix used to retain the
+        // previous deadline after resetting its clock, sleeping for seconds here.
+        Assert.True(frame.Elapsed < TimeSpan.FromSeconds(1),
+            $"The first frame waited {frame.Elapsed} for the previous engine's deadline.");
+    }
+
+    [Fact]
     public void Start_WhileRunningThrows_AndSequentialRestartWorks()
     {
         var projectDir = Engine.ResolveProjectDir();

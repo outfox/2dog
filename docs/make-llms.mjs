@@ -44,7 +44,7 @@ const SECTIONS = [
     'hosts/index.md',
   ]],
   ['Console Hosts', [
-    'hosts/generic.md',
+    'hosts/generic.md', 'hosts/repl.md',
   ]],
   ['Desktop Hosts', [
     'hosts/avalonia.md', 'hosts/winforms.md', 'hosts/winui.md',
@@ -75,7 +75,7 @@ const SECTIONS = [
     'configuration.md',
   ]],
   ['Console Configuration', [
-    'configuration/generic.md',
+    'configuration/generic.md', 'configuration/repl.md',
   ]],
   ['Desktop Configuration', [
     'configuration/avalonia.md', 'configuration/winforms.md', 'configuration/winui.md',

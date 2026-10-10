@@ -8,6 +8,7 @@ internal enum HostKind
     WebXr,
     Tests,
     NUnit,
+    Repl,
     WinForms,
     WinUi,
     Avalonia,
@@ -37,18 +38,18 @@ internal sealed record ExistingHost(HostKind Kind, string Folder);
 internal static class Hosts
 {
     public static readonly IReadOnlyList<HostKind> All =
-        [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.NUnit, HostKind.WinForms, HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor,
-         HostKind.Android];
+        [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.NUnit, HostKind.Repl, HostKind.WinForms,
+         HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor, HostKind.Android];
 
     /// <summary>
     /// Whether a bare run without host flags creates this kind. Opt-in: WinForms/WinUI (Windows-only), Avalonia
     /// (pulls in the whole UI framework), WebXr (needs project-side XR setup), Blazor (a server + client pair),
-    /// Android (needs the android workload), xUnit and NUnit (choose a test framework explicitly).
+    /// Android (needs the android workload), REPL (runtime C# compiler), xUnit and NUnit (choose a test framework explicitly).
     /// All remain available via flags/prompts.
     /// </summary>
     public static bool InDefaultSet(HostKind kind) =>
         kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Blazor
-            or HostKind.Android or HostKind.Tests or HostKind.NUnit);
+            or HostKind.Android or HostKind.Tests or HostKind.NUnit or HostKind.Repl);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -58,6 +59,7 @@ internal static class Hosts
         HostKind.WebXr => "webxr",
         HostKind.Tests => "xunit",
         HostKind.NUnit => "nunit",
+        HostKind.Repl => "repl",
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
@@ -74,6 +76,7 @@ internal static class Hosts
         HostKind.WebXr => "webxr",
         HostKind.Tests => "tests",
         HostKind.NUnit => "nunit",
+        HostKind.Repl => "repl",
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
@@ -98,6 +101,7 @@ internal static class Hosts
         HostKind.WebXr => "WebAssembly host with the WebXR Layers polyfill for VR",
         HostKind.Tests => "xUnit project driving a headless engine",
         HostKind.NUnit => "NUnit project driving a headless engine",
+        HostKind.Repl => "interactive C# prompt inside the running game",
         HostKind.WinForms => "game embedded in a WinForms window (Windows-only)",
         HostKind.WinUi => "game embedded in a WinUI 3 window (Windows-only)",
         HostKind.Avalonia => "game embedded in an Avalonia app (cross-platform GUI)",
@@ -114,6 +118,7 @@ internal static class Hosts
         HostKind.WebXr => "--webxr",
         HostKind.Tests => "--xunit",
         HostKind.NUnit => "--nunit",
+        HostKind.Repl => "--repl",
         HostKind.WinForms => "--winforms",
         HostKind.WinUi => "--winui",
         HostKind.Avalonia => "--avalonia",
@@ -152,6 +157,7 @@ internal static class Hosts
         HostKind.WebXr => "Browser host with the WebXR Layers polyfill wired into its page (opt-in)",
         HostKind.Tests => "xUnit test project (opt-in)",
         HostKind.NUnit => "NUnit test project (opt-in)",
+        HostKind.Repl => "Interactive C# REPL host with highlighting and completion (opt-in)",
         HostKind.WinForms => "WinForms host embedding the game window (Windows-only; never part of the default set)",
         HostKind.WinUi => "WinUI 3 host embedding the game window (Windows-only, like --winforms; builds only on Windows)",
         HostKind.Avalonia => "Avalonia host embedding the game in a cross-platform GUI (opt-in, like --winforms)",
@@ -164,7 +170,7 @@ internal static class Hosts
     /// <summary>How the interactive picker groups the kinds.</summary>
     public static HostGroup Group(HostKind kind) => kind switch
     {
-        HostKind.Desktop or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia => HostGroup.Desktop,
+        HostKind.Desktop or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Repl => HostGroup.Desktop,
         HostKind.Web or HostKind.WebXr or HostKind.Blazor => HostGroup.Browser,
         HostKind.Android => HostGroup.Mobile,
         HostKind.Tests or HostKind.NUnit => HostGroup.Testing,
@@ -322,10 +328,11 @@ internal static class HostScan
         bool PropertyTrue(string name) => Property(name)?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
         var sdk = (string?)root.Attribute("Sdk") ?? "";
 
-        var isTwoDog = Package("2dog.engine") || Package("2dog.xunit") || Package("2dog.nunit") || Package("2dog.avalonia")
+        var isTwoDog = Package("2dog.engine") || Package("2dog.repl") || Package("2dog.xunit") || Package("2dog.nunit") || Package("2dog.avalonia")
                        || Property("TwoDogBlazor") != null || Property("GodotProjectDir") != null;
         if (!isTwoDog) return null;
 
+        if (Package("2dog.repl")) return HostKind.Repl;
         if (PropertyTrue("TwoDogBlazor")) return HostKind.Blazor;
         if (PropertyTrue("TwoDogWebXR")) return HostKind.WebXr;
         if ((Property("RuntimeIdentifier") ?? "").Contains("browser-wasm", StringComparison.OrdinalIgnoreCase)
@@ -353,12 +360,15 @@ internal static class HostScan
     internal static HostKind? ClassifyText(string csproj, string folder)
     {
         var isTwoDog = csproj.Contains("2dog.engine", StringComparison.OrdinalIgnoreCase)
+                       || csproj.Contains("2dog.repl", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.xunit", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.nunit", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<TwoDogBlazor", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<GodotProjectDir>", StringComparison.OrdinalIgnoreCase);
         if (!isTwoDog) return null;
+
+        if (csproj.Contains("2dog.repl", StringComparison.OrdinalIgnoreCase)) return HostKind.Repl;
 
         // Before the plain Web check: Blazor (server csproj marked TwoDogBlazor; its client is browser-wasm) and
         // WebXR hosts (browser-wasm too, marked by the TwoDogWebXR property). Tolerant of whitespace and

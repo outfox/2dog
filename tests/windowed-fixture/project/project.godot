@@ -10,6 +10,9 @@ driver/driver="Dummy"
 
 [rendering]
 renderer/rendering_method="gl_compatibility"
+; Windows rendering tests use Vulkan, including Mesa lavapipe on CI.
+renderer/rendering_method.windows="mobile"
+rendering_device/driver.windows="vulkan"
 ; The macOS CI VM exposes Metal but cannot initialize native OpenGL.
 renderer/rendering_method.macos="mobile"
 rendering_device/driver.macos="metal"

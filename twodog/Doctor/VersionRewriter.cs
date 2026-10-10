@@ -32,6 +32,7 @@ internal static class VersionRewriter
             ["2dog.godotsharp.editor"] = ("TwoDogVersion", false),
             ["2dog.engine"] = ("TwoDogVersion", false),
             ["2dog.xunit"] = ("TwoDogVersion", false),
+            ["2dog.repl"] = ("TwoDogVersion", false),
             ["2dog.nunit"] = ("TwoDogVersion", false),
             ["2dog.avalonia"] = ("TwoDogVersion", false),
             ["2dog.blazor"] = ("TwoDogVersion", false),
