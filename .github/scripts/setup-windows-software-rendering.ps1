@@ -46,6 +46,42 @@ if ($RegisterDriver) {
     if (-not (Test-Path -LiteralPath $driverKey)) { New-Item -Path $driverKey -Force | Out-Null }
     New-ItemProperty -Path $driverKey -Name $env:VK_DRIVER_FILES -PropertyType DWord -Value 0 -Force | Out-Null
 }
+# Diagnostic: lavapipe presents through GDI StretchBlt, which fails without an interactive window station.
+function Write-SessionDiagnostics {
+    Add-Type -Namespace TwoDog -Name WinSta -MemberDefinition @'
+[DllImport("user32.dll")] public static extern IntPtr GetProcessWindowStation();
+[DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+public static extern bool GetUserObjectInformation(IntPtr obj, int index, byte[] info, int length, out int needed);
+'@
+    function Get-ObjectInfo([int] $Index) {
+        $buffer = [byte[]]::new(512)
+        $needed = 0
+        if (-not [TwoDog.WinSta]::GetUserObjectInformation([TwoDog.WinSta]::GetProcessWindowStation(), $Index, $buffer, $buffer.Length, [ref] $needed)) {
+            return $null
+        }
+        return $buffer[0..($needed - 1)]
+    }
+    $name = [Text.Encoding]::Unicode.GetString((Get-ObjectInfo 2)).TrimEnd([char] 0)
+    $flags = [BitConverter]::ToInt32([byte[]] (Get-ObjectInfo 1), 8)
+    "Session $((Get-Process -Id $PID).SessionId), UserInteractive=$([Environment]::UserInteractive), " +
+        "window station '$name' visible=$(($flags -band 1) -ne 0)"
+    $ancestors = @()
+    $process = Get-CimInstance Win32_Process -Filter "ProcessId = $PID"
+    while ($process -and $ancestors.Count -lt 12) {
+        $ancestors += "$($process.Name)[$($process.ProcessId)]"
+        if ($process.ParentProcessId -eq $process.ProcessId) { break }
+        $process = Get-CimInstance Win32_Process -Filter "ProcessId = $($process.ParentProcessId)"
+    }
+    "Process ancestry: $($ancestors -join ' <- ')"
+    Get-CimInstance Win32_Service | Where-Object { $_.PathName -match 'Runner' } |
+        ForEach-Object { "Runner service: $($_.Name) as $($_.StartName), $($_.State), $($_.PathName)" }
+    Get-Process explorer -ErrorAction SilentlyContinue | ForEach-Object { "explorer.exe in session $($_.SessionId)" }
+    Get-CimInstance Win32_VideoController |
+        ForEach-Object { "Display adapter: $($_.Name), $($_.CurrentHorizontalResolution)x$($_.CurrentVerticalResolution)" }
+    & query session 2>&1
+}
+try { Write-SessionDiagnostics } catch { "Session diagnostics failed: $_" }
+
 & (Join-Path $loaderDirectory 'vulkaninfo.exe') --summary
 if ($LASTEXITCODE -ne 0) { throw 'Mesa lavapipe could not initialize Vulkan.' }
 
