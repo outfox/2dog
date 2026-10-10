@@ -1,59 +1,36 @@
 ---
 title: REPL Configuration
-description: "Configure a C# REPL host for Debug, Editor and Release Godot natives and JIT publishing."
+description: "Run the REPL with different Godot native variants, headless mode or a regular .NET publish."
 ---
 
 # REPL Configuration
 
-The host in `MyGame.repl/` references `2dog.repl`, your game project, and
-`2dog.godotsharp.editor`. The Editor binding reference is restored in every
-configuration so switching to Editor does not require another restore.
+The generated `MyGame.repl/` host references your game and `2dog.repl`.
+Choose the Godot native variant with the build configuration:
 
 | Configuration | Native variant |
 | --- | --- |
-| Debug | `debug` |
+| Debug (default) | `debug` |
 | Editor | `editor` |
 | Release | `release` |
 
 ```bash
 dotnet run --project MyGame.repl -c Editor
-dotnet run --project MyGame.repl -c Release
 dotnet run --project MyGame.repl -- --headless
 ```
 
-Arguments after `--` are passed to Godot. The global [engine properties](/configuration#properties), including `GodotProjectDir` and `TwoDogVariant`,
-apply. The host always uses `OutputType=Exe`, including Release.
+Editor runs the game with editor natives; it does not open the Godot editor.
+Arguments after `--` go to Godot. The shared
+[engine properties](/configuration#properties) also apply.
 
 ## Publishing
 
-The REPL compiles C# at runtime and reads assembly metadata from disk.
-`PublishAot`, `PublishTrimmed` and `PublishSingleFile` must be `false`; package
-targets reject incompatible settings with an explanation. A regular JIT
-folder publish, including the default self-contained publish, is supported.
+The REPL compiles C# at runtime. Use a regular folder publish; `PublishAot`,
+`PublishTrimmed` and `PublishSingleFile` must be `false`.
 
 ```bash
 dotnet publish MyGame.repl -c Release
 ```
 
-## Embed the Prompt Yourself
-
-Call `ReplHost.Run` on the main thread, with an unstarted engine and an eagerly
-loaded game assembly. It starts, pumps and disposes that engine. Load the game
-before startup so Roslyn and Godot share the same managed types:
-
-```csharp
-using System.Reflection;
-using twodog.Repl;
-
-internal static class Program
-{
-    [STAThread]
-    private static int Main(string[] args) => ReplHost.Run(
-        new twodog.Engine("MyGame", args: args), Assembly.Load("MyGame"));
-}
-```
-
-The prompt's history lives in `2dog/repl-history` under .NET's local application
-data directory. `:reset` clears the scripting session while keeping that
-history, the selected node, the active mode and the engine alive. The default
-mode is `:auto`; `:sh`, `:cs` and `:ai` switch interpretation at runtime. See [REPL](/hosts/repl) for threading and controls.
+See [REPL](/hosts/repl) to get started, and type `:help` in the prompt for
+commands and controls.
