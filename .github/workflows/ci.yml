@@ -372,24 +372,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      # Windows VMs have no usable OpenGL driver. Render real frames with CPU Vulkan.
-      - name: Setup Windows software rendering
-        if: runner.os == 'Windows' && matrix.config == 'Release'
-        timeout-minutes: 5
-        run: .github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver
-
-      - name: Test NUnit rendering (Windows)
-        if: runner.os == 'Windows' && matrix.config == 'Release'
-        timeout-minutes: 10
-        env:
-          TWODOG_GODOT_LOG_DIR: ${{ github.workspace }}/tests/nunit-rendering/TestResults/godot
-        run: >-
-          dotnet test tests/nunit-rendering -c Release
-          --logger 'console;verbosity=normal' --blame-hang-timeout 90s --blame-hang-dump-type full
-          --diag tests/nunit-rendering/TestResults/vstest.log
-          --results-directory tests/nunit-rendering/TestResults
-          -- NUnit.InternalTraceLevel=Debug NUnit.WorkDirectory=${{ github.workspace }}/tests/nunit-rendering/TestResults
-
+      # Windows rendering runs in the windows-rendering job: this runner is a session-0 service without a desktop.
       - name: Test NUnit rendering (Linux)
         if: runner.os == 'Linux' && matrix.config == 'Release'
         timeout-minutes: 10
@@ -431,6 +414,68 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: test-dumps-${{ matrix.name }}-${{ matrix.config }}
+          path: '**/TestResults/**'
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # Blacksmith's Windows runner is an nssm service in session 0, whose window station cannot display
+  # windows, so presenting a frame fails there. Windowed rendering needs a runner with an interactive desktop.
+  windows-rendering:
+    name: Test Rendering (win-x64, Release)
+    needs: [pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
+    runs-on: windows-2025
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin
+          path: godot
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: packages
+
+      # The test build triggers the automatic Godot import, which runs the in-process import helper.
+      - name: Build import helper
+        run: dotnet build twodog.import -c Release
+
+      # Windows VMs have no usable OpenGL driver. Render real frames with CPU Vulkan.
+      - name: Setup Windows software rendering
+        timeout-minutes: 5
+        run: .github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver
+
+      - name: Test NUnit rendering
+        timeout-minutes: 10
+        env:
+          TWODOG_GODOT_LOG_DIR: ${{ github.workspace }}/tests/nunit-rendering/TestResults/godot
+        run: >-
+          dotnet test tests/nunit-rendering -c Release
+          --logger 'console;verbosity=normal' --blame-hang-timeout 90s --blame-hang-dump-type full
+          --diag tests/nunit-rendering/TestResults/vstest.log
+          --results-directory tests/nunit-rendering/TestResults
+          -- NUnit.InternalTraceLevel=Debug NUnit.WorkDirectory=${{ github.workspace }}/tests/nunit-rendering/TestResults
+
+      - name: Upload test dumps and logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-dumps-win-x64-rendering
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7
@@ -1272,7 +1317,7 @@ jobs:
     # published; desktop-smoke gates it because it is the only check that runs
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it.
-    needs: [test, desktop-smoke, web-smoke, android-smoke, tool-smoke]
+    needs: [test, windows-rendering, desktop-smoke, web-smoke, android-smoke, tool-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -1281,7 +1326,8 @@ jobs:
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
-      needs.test.result == 'success' && needs.desktop-smoke.result == 'success' &&
+      needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
+      needs.desktop-smoke.result == 'success' &&
       needs.web-smoke.result == 'success' && needs.android-smoke.result == 'success' &&
       needs.tool-smoke.result == 'success')
     permissions:

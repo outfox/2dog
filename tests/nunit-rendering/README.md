@@ -16,7 +16,9 @@ lavapipe CPU driver and portable Vulkan loader through
 `.github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver`. Elevated Windows
 runners ignore Vulkan's driver-path environment overrides, so the script registers the
 verified driver on the disposable CI VM. The loader is staged beside `testhost.exe`;
-neither DLL is shipped in 2dog packages. This still exercises real windows, rendering, STA, and
+neither DLL is shipped in 2dog packages. Lavapipe presents through GDI, which needs an
+interactive desktop, so this job runs on a GitHub-hosted Windows runner: Blacksmith's Windows
+runner is a session-0 service whose window station cannot display windows. This still exercises real windows, rendering, STA, and
 engine restart. Without a graphics driver, Godot can block in an invisible error dialog;
 the Windows job captures native logs and a full hang dump after 90 seconds.
 
