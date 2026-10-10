@@ -64,7 +64,8 @@ public class BasicTests : GodotTestFixture
     [Test]
     public async Task Timer_EmitsTimeout()
     {
-        var timer = new Timer { OneShot = true, WaitTime = 0.01 };
+        // The game may pause its scene tree during startup (for example, at a main menu).
+        var timer = new Timer { OneShot = true, WaitTime = 0.01, ProcessMode = Node.ProcessModeEnum.Always };
         try
         {
             EngineFixture.Tree.Root.AddChild(timer);
