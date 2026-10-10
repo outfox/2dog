@@ -110,7 +110,13 @@ export default defineConfig({
         items: [
           { text: gd('container') + "What's a Host?", link: '/hosts/' },
           { text: gd('margincontainer') + '2dog (generic .NET)', link: '/hosts/generic' },
-          { text: gd('script') + 'REPL', link: '/hosts/repl' },
+          {
+            text: 'Testing',
+            items: [
+              { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
+              { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
+            ]
+          },
           {
             text: 'Desktop',
             items: [
@@ -120,11 +126,9 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Web',
+            text: 'Experimental',
             items: [
-              { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
-              { text: gd('globe') + 'Web', link: '/hosts/web' },
-              { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' }
+              { text: gd('script') + 'REPL', link: '/hosts/repl' }
             ]
           },
           {
@@ -134,10 +138,11 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Testing',
+            text: 'Web',
             items: [
-              { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
-              { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
+              { text: gd('globe') + 'Web (HTML5)', link: '/hosts/web' },
+              { text: gd('globe') + 'Blazor', link: '/hosts/blazor' },
+              { text: gd('vr_headset') + 'WebXR', link: '/hosts/webxr' }
             ]
           }
         ]
