@@ -264,11 +264,12 @@ export default defineConfig({
             link: '/configuration',
             collapsed: true,
             items: [
+              { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' },
               {
-                text: 'Console',
+                text: 'Testing',
                 items: [
-                  { text: gd('margincontainer') + '2dog (generic)', link: '/configuration/generic' },
-                  { text: gd('script') + 'REPL', link: '/configuration/repl' }
+                  { text: gd('test_tube') + 'NUnit', link: '/configuration/nunit' },
+                  { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
                 ]
               },
               {
@@ -280,10 +281,16 @@ export default defineConfig({
                 ]
               },
               {
+                text: 'Experimental',
+                items: [
+                  { text: gd('script') + 'REPL', link: '/configuration/repl' }
+                ]
+              },
+              {
                 text: 'Web',
                 items: [
+                  { text: gd('globe') + 'Web (HTML5)', link: '/configuration/web' },
                   { text: gd('globe') + 'Blazor', link: '/configuration/blazor' },
-                  { text: gd('globe') + 'Web', link: '/configuration/web' },
                   { text: gd('vr_headset') + 'WebXR', link: '/configuration/webxr' }
                 ]
               },
@@ -291,13 +298,6 @@ export default defineConfig({
                 text: 'Mobile',
                 items: [
                   { text: gd('mobile_phone') + 'Android', link: '/configuration/android' }
-                ]
-              },
-              {
-                text: 'Testing',
-                items: [
-                  { text: gd('test_tube') + 'NUnit', link: '/configuration/nunit' },
-                  { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
                 ]
               }
             ]
