@@ -1,10 +1,14 @@
 param(
-    [string] $Destination = (Join-Path $env:RUNNER_TEMP 'software-vulkan')
+    [string] $Destination = (Join-Path $env:RUNNER_TEMP 'software-vulkan'),
+    [switch] $RegisterDriver
 )
 
 $ErrorActionPreference = 'Stop'
+if ($RegisterDriver -and $env:GITHUB_ACTIONS -ne 'true') {
+    throw 'Driver registration is only for disposable CI VMs.'
+}
 
-# These CI-only downloads do not install a system-wide driver or enter our packages.
+# These CI-only DLLs stay in the job temp directory and never enter our packages.
 # Pin both archives and verify the publishers' SHA256 values before extracting DLLs.
 function Get-VerifiedArchive([string] $Uri, [string] $Path, [string] $Sha256) {
     Invoke-WebRequest -Uri $Uri -OutFile $Path
@@ -33,10 +37,22 @@ $loaderDirectory = Join-Path $Destination 'VulkanRT-X64-1.4.363.0-Components/x64
 # Force the CPU driver even when a runner happens to expose a hardware GPU.
 $env:VK_DRIVER_FILES = Join-Path $Destination 'x64/lvp_icd.x86_64.json'
 $env:TWODOG_TEST_VULKAN_LOADER = Join-Path $loaderDirectory 'vulkan-1.dll'
+$env:VK_LOADER_DRIVERS_SELECT = 'lvp_icd.x86_64.json'
+if ($RegisterDriver) {
+    # Elevated runners ignore VK_DRIVER_FILES. Register the verified software ICD
+    # through Vulkan's standard machine registry location on this disposable VM.
+    # https://github.com/KhronosGroup/Vulkan-Loader/blob/main/docs/LoaderDriverInterface.md#driver-discovery-on-windows
+    $driverKey = 'HKLM:\SOFTWARE\Khronos\Vulkan\Drivers'
+    if (-not (Test-Path -LiteralPath $driverKey)) { New-Item -Path $driverKey -Force | Out-Null }
+    New-ItemProperty -Path $driverKey -Name $env:VK_DRIVER_FILES -PropertyType DWord -Value 0 -Force | Out-Null
+}
 & (Join-Path $loaderDirectory 'vulkaninfo.exe') --summary
 if ($LASTEXITCODE -ne 0) { throw 'Mesa lavapipe could not initialize Vulkan.' }
 
 if ($env:GITHUB_ENV) {
-    "VK_DRIVER_FILES=$env:VK_DRIVER_FILES" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    @(
+        "VK_DRIVER_FILES=$env:VK_DRIVER_FILES"
+        "VK_LOADER_DRIVERS_SELECT=$env:VK_LOADER_DRIVERS_SELECT"
+    ) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     "TWODOG_TEST_VULKAN_LOADER=$env:TWODOG_TEST_VULKAN_LOADER" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 }

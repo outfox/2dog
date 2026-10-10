@@ -13,8 +13,10 @@ Two fixture classes also check sequential rendering-engine restart.
 
 Windows uses the Mobile renderer with Vulkan. CI provisions a checksum-verified Mesa
 lavapipe CPU driver and portable Vulkan loader through
-`.github/scripts/setup-windows-software-rendering.ps1`; they are not installed system-wide
-or shipped in 2dog packages. This still exercises real windows, rendering, STA, and
+`.github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver`. Elevated Windows
+runners ignore Vulkan's driver-path environment overrides, so the script registers the
+verified driver on the disposable CI VM. The loader is staged beside `testhost.exe`;
+neither DLL is shipped in 2dog packages. This still exercises real windows, rendering, STA, and
 engine restart. Without a graphics driver, Godot can block in an invisible error dialog;
 the Windows job captures native logs and a full hang dump after 90 seconds.
 

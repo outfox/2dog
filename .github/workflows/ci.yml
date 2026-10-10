@@ -376,7 +376,7 @@ jobs:
       - name: Setup Windows software rendering
         if: runner.os == 'Windows' && matrix.config == 'Release'
         timeout-minutes: 5
-        run: .github/scripts/setup-windows-software-rendering.ps1
+        run: .github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver
 
       - name: Test NUnit rendering (Windows)
         if: runner.os == 'Windows' && matrix.config == 'Release'
