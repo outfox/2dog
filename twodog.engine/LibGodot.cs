@@ -26,6 +26,13 @@ internal struct GDExtensionInitialization
     public nint deinitialize;
 }
 
+[StructLayout(LayoutKind.Sequential)]
+internal struct GDExtensionLibGodotCallbacks
+{
+    public nint project_settings_func;
+    public nint world_init_func;
+}
+
 internal static unsafe partial class LibGodot
 {
     // Logical name only: LibGodotLoader's DllImportResolver maps it to the
@@ -70,6 +77,17 @@ internal static unsafe partial class LibGodot
 
     [UnmanagedCallersOnly]
     public static byte InitCallback(nint p_get_proc_address, nint p_library, GDExtensionInitialization* r_initialization)
+        => InitializeExtension(p_get_proc_address, p_library, r_initialization, loadMainScene: true);
+
+    [UnmanagedCallersOnly]
+    public static byte FixtureInitCallback(nint p_get_proc_address, nint p_library, GDExtensionInitialization* r_initialization)
+        => InitializeExtension(p_get_proc_address, p_library, r_initialization, loadMainScene: false);
+
+    [UnmanagedCallersOnly]
+    private static void SkipMainScene() { }
+
+    private static byte InitializeExtension(nint p_get_proc_address, nint p_library,
+        GDExtensionInitialization* r_initialization, bool loadMainScene)
     {
         r_initialization->minimum_initialization_level = GDExtensionInitializationLevel.GDEXTENSION_INITIALIZATION_CORE;
         r_initialization->initialize = (nint) (delegate* unmanaged<nint, GDExtensionInitializationLevel, void>) &InitializeCallback;
@@ -77,6 +95,19 @@ internal static unsafe partial class LibGodot
 
         // Load the GDExtension interface functions we need
         var getProcAddress = (delegate* unmanaged<nint, nint>) p_get_proc_address;
+
+        if (!loadMainScene)
+        {
+            // Register before Main::start(): a world callback replaces automatic main-scene loading.
+            // Native code copies the function pointers; the callback has static lifetime.
+            var callbacks = new GDExtensionLibGodotCallbacks
+            {
+                world_init_func = (nint)(delegate* unmanaged<void>)&SkipMainScene
+            };
+            var registerCallbacks = (delegate* unmanaged<nint, GDExtensionLibGodotCallbacks*, void>)
+                GetProcAddress(getProcAddress, "register_libgodot_callbacks"u8);
+            registerCallbacks(p_library, &callbacks);
+        }
 
         // Load object_get_instance_id
         objectGetInstanceId = (delegate* unmanaged<nint, ulong>) GetProcAddress(getProcAddress, "object_get_instance_id"u8);

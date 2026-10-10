@@ -49,6 +49,10 @@ public class TimerTests : GodotTestFixture
 `EngineFixture` exposes `Engine`, `GodotInstance`, `Tree`, `Input`, and `Errors`.
 Each derived test class gets one engine; clean up the objects each test creates.
 
+Fixtures skip the configured main scene. Load and instantiate scenes explicitly
+in tests; project autoloads still initialize. Restore shared state such as
+`SceneTree.Paused` if a scene changes it.
+
 ::: details Why the Timer alias?
 `using Timer = Godot.Timer;` distinguishes Godot's timer from .NET's timer.
 The older fixture property named `Godot` remains a compatibility alias for

@@ -113,28 +113,35 @@ public class GodotSignalTests(HeadlessFixture godot)
     [Fact]
     public void ShowcaseSignalTable_SourcesTickOnTheirOwn()
     {
-        // The showcase's signal sources emit once per second from their own clocks: C# and GDScript _process, an
-        // engine Timer, and the GDExtension's _process override. Every counter must advance without manual ticks.
-        var table = godot.Tree.CurrentScene.GetNode("Signals/Table");
-        string[] sources = ["CSharpTicker", "GDScriptTicker", "EngineTimer", "GDExtensionTicker"];
-        var counters = sources.SelectMany(source => new[] { source + "InCSharp", source + "InGDScript" }).ToArray();
-
-        int Received(string counter)
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
+        var instance = scene.Instantiate();
+        try
         {
-            if (table.GetNode(counter) is showcase.SignalCounter inCSharp) return inCSharp.Received;
-            using var received = table.GetNode(counter).Get("received");
-            return received.AsInt32();
+            godot.Tree.Root.AddChild(instance);
+            // The showcase's signal sources emit once per second from their own clocks: C# and GDScript _process, an
+            // engine Timer, and the GDExtension's _process override. Every counter must advance without manual ticks.
+            var table = instance.GetNode("Signals/Table");
+            string[] sources = ["CSharpTicker", "GDScriptTicker", "EngineTimer", "GDExtensionTicker"];
+            var counters = sources.SelectMany(source => new[] { source + "InCSharp", source + "InGDScript" }).ToArray();
+
+            int Received(string counter)
+            {
+                if (table.GetNode(counter) is showcase.SignalCounter inCSharp) return inCSharp.Received;
+                using var received = table.GetNode(counter).Get("received");
+                return received.AsInt32();
+            }
+
+            var before = counters.ToDictionary(counter => counter, Received);
+            var timeout = TimeSpan.FromSeconds(10);
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            while (counters.Any(counter => Received(counter) <= before[counter]) && clock.Elapsed < timeout)
+                godot.Engine.Iteration();
+
+            var stalled = counters.Where(counter => Received(counter) <= before[counter]).ToList();
+            Assert.True(stalled.Count == 0,
+                $"no signal arrived within {timeout.TotalSeconds} s at: {string.Join(", ", stalled)}");
         }
-
-        var before = counters.ToDictionary(counter => counter, Received);
-        var timeout = TimeSpan.FromSeconds(10);
-        var clock = System.Diagnostics.Stopwatch.StartNew();
-        while (counters.Any(counter => Received(counter) <= before[counter]) && clock.Elapsed < timeout)
-            godot.Engine.Iteration();
-
-        var stalled = counters.Where(counter => Received(counter) <= before[counter]).ToList();
-        Assert.True(stalled.Count == 0,
-            $"no signal arrived within {timeout.TotalSeconds} s at: {string.Join(", ", stalled)}");
+        finally { instance.Free(); }
     }
 
     [Fact]

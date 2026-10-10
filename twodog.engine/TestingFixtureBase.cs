@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace twodog.Testing;
 
-/// <summary>Base class for test fixtures that own one Godot engine instance.</summary>
+/// <summary>Base class for test fixtures that own one Godot engine instance without loading its configured main scene.</summary>
 public abstract class FixtureBase : IDisposable
 {
     private readonly WindowsControlsContext? _controlsContext;
@@ -34,7 +34,11 @@ public abstract class FixtureBase : IDisposable
         global::twodog.fixture.AssemblyPreloader.PreloadGameAssemblies(projectPath);
 
         Console.WriteLine("Godot project: " + projectPath);
-        Engine = new Engine("twodog.tests", projectPath, WithLogFile(cmdLineArgs)) { CaptureErrors = true };
+        Engine = new Engine("twodog.tests", projectPath, WithLogFile(cmdLineArgs))
+        {
+            CaptureErrors = true,
+            LoadMainScene = false
+        };
         // NUnit runs inside testhost.exe, whose manifest is outside the test project's control.
         // Activate common-controls on the owner thread instead of relying on the host executable.
         _controlsContext = OperatingSystem.IsWindows() && !headless

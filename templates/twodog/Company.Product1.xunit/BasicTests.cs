@@ -15,6 +15,7 @@ public class BasicTests(HeadlessFixture godot)
         using var scene = GD.Load<PackedScene>(mainScene);
 
         Assert.NotNull(scene);
+        var wasPaused = godot.Tree.Paused;
         var instance = scene.Instantiate();
         try
         {
@@ -22,7 +23,11 @@ public class BasicTests(HeadlessFixture godot)
             Assert.True(instance.IsInsideTree());
             Assert.Same(godot.Tree.Root, instance.GetParent());
         }
-        finally { instance.Free(); } // Frees the native subtree, even when an assertion fails.
+        finally
+        {
+            try { instance.Free(); } // Frees the native subtree, even when an assertion fails.
+            finally { godot.Tree.Paused = wasPaused; } // Scene scripts may have paused the shared tree.
+        }
     }
 
     [Fact]
@@ -63,8 +68,7 @@ public class BasicTests(HeadlessFixture godot)
     [Fact]
     public async Task Timer_EmitsTimeout()
     {
-        // The game may pause its scene tree during startup (for example, at a main menu).
-        var timer = new Godot.Timer { OneShot = true, WaitTime = 0.01, ProcessMode = Node.ProcessModeEnum.Always };
+        var timer = new Godot.Timer { OneShot = true, WaitTime = 0.01 };
         try
         {
             godot.Tree.Root.AddChild(timer);

@@ -30,6 +30,9 @@ public class Engine : IDisposable, IAsyncDisposable
     private readonly string[] _args;
     private readonly string? _projectPath;
 
+    // Fixtures provide their own scenes; normal application hosts run the configured main scene.
+    internal bool LoadMainScene { get; init; } = true;
+
     // Only the Engine that started the process-wide instance may destroy it: disposing one whose Start()
     // failed or never ran must not tear down another Engine's instance.
     private readonly object _sync = new();
@@ -341,7 +344,7 @@ public class Engine : IDisposable, IAsyncDisposable
         godotArgs.AddRange(_args);
 
         // Create a Godot instance via P/Invoke (without starting)
-        var instancePtr = CreateGodotInstance(godotArgs.ToArray());
+        var instancePtr = CreateGodotInstance(godotArgs.ToArray(), LoadMainScene);
 
         if (instancePtr == IntPtr.Zero)
             throw new NullReferenceException($"{nameof(Engine)}: Error creating Godot instance, returned IntPtr.Zero");
@@ -738,7 +741,7 @@ public class Engine : IDisposable, IAsyncDisposable
         return ResolveProjectDir();
     }
 
-    private static unsafe IntPtr CreateGodotInstance(string[] args)
+    private static unsafe IntPtr CreateGodotInstance(string[] args, bool loadMainScene)
     {
         // Manual UTF-8 argv marshalling: the P/Invoke must stay fully
         // blittable for browser-wasm (see note in LibGodot.cs).
@@ -750,10 +753,13 @@ public class Engine : IDisposable, IAsyncDisposable
 
             fixed (nint* argvPtr = argv)
             {
+                var initCallback = loadMainScene
+                    ? (nint)(delegate* unmanaged<nint, nint, GDExtensionInitialization*, byte>)&LibGodot.InitCallback
+                    : (nint)(delegate* unmanaged<nint, nint, GDExtensionInitialization*, byte>)&LibGodot.FixtureInitCallback;
                 return LibGodot.libgodot_create_godot_instance(
                     args.Length,
                     argvPtr,
-                    (nint)(delegate* unmanaged<nint, nint, GDExtensionInitialization*, byte>)&LibGodot.InitCallback
+                    initCallback
                 );
             }
         }

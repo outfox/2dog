@@ -82,4 +82,6 @@ internal static class WebTrampolines
     internal delegate void string_name_new_with_latin1_chars_sig(IntPtr _0, IntPtr _1, byte _2);
     [UnmanagedFunctionPointer(CallingConvention.Winapi)]
     internal delegate IntPtr get_proc_address_sig(IntPtr _0);
+    [UnmanagedFunctionPointer(CallingConvention.Winapi)]
+    internal delegate void register_libgodot_callbacks_sig(IntPtr _0, IntPtr _1);
 }

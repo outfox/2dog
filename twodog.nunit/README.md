@@ -34,6 +34,9 @@ public class MyTests : GodotTestFixture
 ```
 
 `GodotTestFixture` shares an engine across the tests in each derived fixture.
+It starts without the configured main scene; load and instantiate scenes explicitly in tests.
+Project autoloads still initialize. Clean up scene instances and restore shared state, such as
+`SceneTree.Paused`, when a test changes it.
 NUnit's inherited `SingleThreaded`, `NonParallelizable` and
 `FixtureLifeCycle(LifeCycle.SingleInstance)`
 attributes keep setup, tests, async continuations and teardown on the engine's

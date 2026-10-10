@@ -5,6 +5,10 @@ xUnit collection definitions for testing Godot applications with [2dog](https://
 The fixtures themselves (`Fixture`, `HeadlessFixture`, and `FixtureBase`) ship in the
 **`2dog.engine`** package under `twodog.Testing`. This package adds the xUnit-specific glue.
 
+Fixtures start without the configured main scene; load and instantiate scenes explicitly in tests.
+Project autoloads still initialize. Clean up scene instances and restore shared state, such as
+`SceneTree.Paused`, when a test changes it.
+
 ## What it provides
 
 - **`RenderingCollection`** - binds the rendering-enabled `Fixture`

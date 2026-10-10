@@ -46,6 +46,10 @@ public class SceneTests(HeadlessFixture godot)
 The fixture exposes `Engine`, `GodotInstance`, `Tree`, `Input`, and `Errors`.
 Tests in the collection share these objects, so clean up what each test creates.
 
+Fixtures skip the configured main scene. Load and instantiate scenes explicitly
+in tests; project autoloads still initialize. Restore shared state such as
+`SceneTree.Paused` if a scene changes it.
+
 ## Choose a fixture
 
 | Collection | Constructor argument | Use |

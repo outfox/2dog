@@ -16,6 +16,7 @@ public class BasicTests : GodotTestFixture
         using var scene = GD.Load<PackedScene>(mainScene);
 
         Assert.That(scene, Is.Not.Null);
+        var wasPaused = EngineFixture.Tree.Paused;
         var instance = scene.Instantiate();
         try
         {
@@ -23,7 +24,11 @@ public class BasicTests : GodotTestFixture
             Assert.That(instance.IsInsideTree(), Is.True);
             Assert.That(instance.GetParent(), Is.SameAs(EngineFixture.Tree.Root));
         }
-        finally { instance.Free(); } // Frees the native subtree, even when an assertion fails.
+        finally
+        {
+            try { instance.Free(); } // Frees the native subtree, even when an assertion fails.
+            finally { EngineFixture.Tree.Paused = wasPaused; } // Scene scripts may have paused the shared tree.
+        }
     }
 
     [Test]
@@ -64,8 +69,7 @@ public class BasicTests : GodotTestFixture
     [Test]
     public async Task Timer_EmitsTimeout()
     {
-        // The game may pause its scene tree during startup (for example, at a main menu).
-        var timer = new Timer { OneShot = true, WaitTime = 0.01, ProcessMode = Node.ProcessModeEnum.Always };
+        var timer = new Timer { OneShot = true, WaitTime = 0.01 };
         try
         {
             EngineFixture.Tree.Root.AddChild(timer);

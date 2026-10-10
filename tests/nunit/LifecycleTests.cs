@@ -24,7 +24,12 @@ public class LifecycleTests : GodotTestFixture
     }
 
     [OneTimeSetUp]
-    public Task DerivedOneTimeSetUp() => CheckThreadAsync();
+    public Task DerivedOneTimeSetUp()
+    {
+        Assert.That(EngineFixture.Tree.CurrentScene, Is.Null);
+        Assert.That(EngineFixture.Tree.Root.GetChildren(), Is.Empty);
+        return CheckThreadAsync();
+    }
 
     [SetUp]
     public Task DerivedSetUp() => CheckThreadAsync();

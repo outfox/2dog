@@ -17,6 +17,8 @@ public class WindowedFixtureTests(Fixture godot)
     {
         Assert.NotEqual("headless", DisplayServer.GetName());
         Assert.True(godot.Tree.Root.Size is { X: > 0, Y: > 0 });
+        Assert.Null(godot.Tree.CurrentScene);
+        Assert.Empty(godot.Tree.Root.GetChildren());
 
         for (var frame = 0; frame < 10; frame++)
             godot.Engine.Iteration();

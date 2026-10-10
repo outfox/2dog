@@ -1,3 +1,4 @@
+using Godot;
 using showcase;
 using twodog.Testing;
 using twodog.Testing.Xunit;
@@ -43,13 +44,26 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
 
     [Fact]
     public void GDScriptOnlyEngineFeatures_RunWithoutManagedReferences() =>
-        GodotApiSmoke.GDScriptOnlyEngineFeatures(godot.Tree);
+        WithMainScene(GodotApiSmoke.GDScriptOnlyEngineFeatures);
 
     [Fact]
     public void GDExtensionProbe_LoadsAndAnswersEveryCallPath() =>
-        GodotApiSmoke.GDExtensionProbe(godot.Tree);
+        WithMainScene(GodotApiSmoke.GDExtensionProbe);
 
     [Fact]
     public void SignalTable_EverySourceReachesCSharpAndGDScript() =>
-        GodotApiSmoke.SignalTable(godot.Tree);
+        WithMainScene(GodotApiSmoke.SignalTable);
+
+    private void WithMainScene(Action<SceneTree> test)
+    {
+        using var scene = GD.Load<PackedScene>("res://main.tscn");
+        var instance = scene.Instantiate();
+        try
+        {
+            godot.Tree.Root.AddChild(instance);
+            godot.Tree.CurrentScene = instance;
+            test(godot.Tree);
+        }
+        finally { instance.Free(); }
+    }
 }

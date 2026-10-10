@@ -14,6 +14,38 @@ public class EngineRestartCollection;
 public class EngineRestartTests
 {
     [Fact]
+    public void FixturesSkipMainSceneWithoutChangingNormalEngineStartup()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+        for (var lifetime = 0; lifetime < 2; lifetime++)
+        {
+            using (var fixture = new twodog.Testing.HeadlessFixture())
+            {
+                Assert.Null(fixture.Tree.CurrentScene);
+                Assert.Empty(fixture.Tree.Root.GetChildren());
+                Assert.False(fixture.Engine.Iteration());
+                Assert.Empty(fixture.Tree.Root.GetChildren());
+
+                using var scene = Godot.GD.Load<Godot.PackedScene>("res://main.tscn");
+                var instance = scene.Instantiate();
+                try
+                {
+                    fixture.Tree.Root.AddChild(instance);
+                    Assert.Same(instance, Assert.Single(fixture.Tree.Root.GetChildren()));
+                }
+                finally { instance.Free(); }
+                Assert.Empty(fixture.Errors.Drain());
+            }
+
+            using var engine = new Engine("normal-startup", projectDir, "--headless");
+            engine.Start();
+            Assert.NotNull(engine.Tree.CurrentScene);
+            Assert.Equal("res://main.tscn", engine.Tree.CurrentScene.SceneFilePath);
+        }
+    }
+
+    [Fact]
     public void FirstFrameDoesNotWaitForThePreviousLifetimeFrameDeadline()
     {
         var projectDir = Engine.ResolveProjectDir();
