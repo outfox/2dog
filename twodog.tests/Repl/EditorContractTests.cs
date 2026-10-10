@@ -303,6 +303,20 @@ public class EditorContractIntegrationTests
     }
 
     [Fact]
+    public void QualifiedConstructorsContinueWithCallParentheses()
+    {
+        using var bed = new Bed();
+        foreach (var name in new[] { "Node", "Godot.Node", "global::Godot.Node", "System.Collections.Generic.List<Node>" })
+        {
+            var text = "new " + name;
+            Assert.Equal('(', bed.Pump(ReplCompletion.ContinuationAsync(bed.Prepare(text), text.Length, bed.Token)));
+            Assert.Equal(text + "()", bed.Read(text, new('\x1b', ConsoleKey.Escape, false, false, false), Bed.Tab, Bed.Submit));
+        }
+        const string argument = "new Godot.Node(root";
+        Assert.Equal('.', bed.Pump(ReplCompletion.ContinuationAsync(bed.Prepare(argument), argument.Length, bed.Token)));
+    }
+
+    [Fact]
     public void MethodCompletionPreservesExistingGenericTypeArgumentsAndCalls()
     {
         using var bed = new Bed();
@@ -459,8 +473,8 @@ public class EditorContractIntegrationTests
             Session.Dispose();
             globals.world.Dispose();
             dispatcher.Dispose();
-            Assert.Empty(engine.Errors.Drain());
             engine.Dispose();
+            Assert.Empty(engine.Errors.Drain());
         }
     }
 }

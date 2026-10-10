@@ -43,7 +43,6 @@ public static class ReplHost
                     dispatcher.Pump();
                     Thread.Sleep(1);
                 }
-                return terminal.IsCompleted ? terminal.GetAwaiter().GetResult() : 0;
             }
             finally
             {
@@ -59,6 +58,9 @@ public static class ReplHost
                     }
                 }
             }
+            // Cancellation and cleanup may complete a terminal still waiting on stdin.
+            // Preserve errors accumulated before an independent engine quit.
+            return terminal.GetAwaiter().GetResult();
         }
     }
 

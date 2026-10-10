@@ -58,6 +58,10 @@ public class HostLifecycleTests
         Assert.Contains("int retained = 42;", history);
         Assert.Contains("cd $Control", history);
         Assert.Contains(":exit", history);
+        Assert.Equal(2, history.Count(entry => entry == ":help"));
+        Assert.Equal(2, history.Count(entry => entry == ":multiline"));
+        Assert.Contains(":clear", history);
+        Assert.Contains("Enter  newline", terminal.Stdout.ToString());
         terminal.Dispose();
     }
 
@@ -92,6 +96,38 @@ public class HostLifecycleTests
     {
         var (exit, terminal) = Run(null, Code("tree.Quit();"), wait: true);
         using (terminal) Assert.Equal(0, exit);
+    }
+
+    [Theory]
+    [InlineData("40+2", 0)]
+    [InlineData("var broken = ;", 1)]
+    public void EngineQuitPreservesRedirectedExitStatusWhileInputRemainsOpen(string submission, int expected)
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-open-stdin", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        using var input = new OpenInput(submission + "\n");
+        Terminal? terminal = null;
+        var quitRequested = false;
+        var exit = ReplHost.Run(engine, _ =>
+        {
+            engine.Tree.ProcessFrame += () =>
+            {
+                if (!input.Waiting) return;
+                quitRequested = true;
+                engine.RequestQuit();
+            };
+            return terminal = new Terminal("", [], null, input);
+        }, game);
+        using (var completedTerminal = Assert.IsType<Terminal>(terminal))
+        {
+            Assert.True(quitRequested);
+            Assert.True(input.Cancelled);
+            Assert.True(completedTerminal.Restored);
+            Assert.Equal(expected, exit);
+            if (expected != 0) Assert.Contains("CS", completedTerminal.Stderr.ToString());
+            else Assert.Contains("42", completedTerminal.Stdout.ToString());
+        }
+        Assert.Empty(engine.Errors.Drain());
     }
 
     [Fact]
@@ -184,6 +220,24 @@ public class HostLifecycleTests
         }
     }
 
+    // Keep stdin open after its submitted line, as a pipe whose writer is still alive.
+    private sealed class OpenInput(string text) : StringReader(text)
+    {
+        private bool waiting;
+        public bool Waiting => Volatile.Read(ref waiting);
+        public bool Cancelled { get; private set; }
+        public override async ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
+        {
+            var line = await base.ReadLineAsync(cancellationToken);
+            if (line is not null) return line;
+            Volatile.Write(ref waiting, true);
+            // Bound a broken regression without pretending that an open pipe reached EOF.
+            try { await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken); }
+            finally { Cancelled = cancellationToken.IsCancellationRequested; }
+            return null;
+        }
+    }
+
     private sealed class Terminal : IReplTerminal, IDisposable
     {
         public PromptConsole Prompt { get; }
@@ -195,10 +249,10 @@ public class HostLifecycleTests
         public ReplOutput Output { get; }
         public string HistoryFile { get; } = Path.Combine(Path.GetTempPath(), "2dog-repl-" + Guid.NewGuid(), "history");
         public bool Restored { get; private set; }
-        public Terminal(string? input, IEnumerable<ConsoleKeyInfo> keys, CancellationToken? token)
+        public Terminal(string? input, IEnumerable<ConsoleKeyInfo> keys, CancellationToken? token, TextReader? reader = null)
         {
             Interactive = input is null;
-            Input = new StringReader(input ?? "");
+            Input = reader ?? new StringReader(input ?? "");
             Prompt = new PromptConsole(keys, waitForInput: token);
             Output = new ReplOutput(Stdout, Stderr, color: false, errorColor: false);
         }
@@ -244,6 +298,9 @@ public class TerminalOutputTests
         Assert.Contains("res://main.tscn", stdout.ToString());
         Assert.Contains("cp $Source $Parent", stdout.ToString());
         Assert.Contains("mv(...)", stdout.ToString());
+        Assert.Contains("Accept a selection outside quoted path text", stdout.ToString());
+        Assert.Contains("nonempty relative path outside quotes", stdout.ToString());
+        Assert.Contains("Insert literally and finish any completion cycle", stdout.ToString());
         Assert.Equal(color, stdout.ToString().Contains('\x1b'));
         Assert.Equal(errorColor, stderr.ToString().Contains('\x1b'));
         Assert.Contains("test error", stderr.ToString());

@@ -84,6 +84,7 @@ are ordinary C# identifiers; colon-prefixed shell commands are also disabled.
 `ls` lists the selected node and its descendants (initially the whole tree).
 `ls $Control/Child` lists that node and its descendants. Tab completes node paths, including after `ls `, and fills in
 the exact casing. `$["Control/My Node"]` supports spaces and punctuation.
+`:ls` and `:ls $Child` explicitly select the listing command in `:auto` and `:sh`.
 `cd $Control/Signals/Table/` selects a node: subsequent `ls` and `$Child`
 paths start there. `here` is that node, `pwd` prints its absolute path, and the
 prompt shows it. `cd ..` selects the parent; `cd /` or `cd` returns to `root`.

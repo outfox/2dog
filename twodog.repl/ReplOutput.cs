@@ -102,7 +102,10 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         output.WriteLine("  Enter runs exact bare commands with no trailing space; shell commands apply in :auto and :sh.");
         Row(":multiline", "Swap Enter and Shift+Enter for this session; Ctrl+Enter always runs.");
         Row("Tab / Shift+Tab", "Accept, then cycle matching completions forward / backward. Backspace restores your prefix.");
-        Row(". / space / ( / /", "Finish cycling and continue editing. $Name completes paths, then searches node names.");
+        Row(". / (", "Accept a selection outside quoted path text and finish cycling.");
+        Row("/", "Accept only for a nonempty relative path outside quotes; absolute-path slashes stay literal.");
+        Row("Space", "Insert literally and finish any completion cycle.");
+        Row("$Name", "Complete matching paths first, then search node names anywhere in the tree.");
         Row("Shift+Backspace", "Delete backward to a word break, like Ctrl+Backspace. Dots and slashes are breaks.");
         Row("Ctrl+Space", "Open suggestions. Ctrl+Shift+Space shows method signatures and arguments.");
         Row("Up / Down", "History. Ctrl+C cancels input or cooperatively cancels code; pass ct to waits.");

@@ -34,7 +34,9 @@ internal static class ReplCompletion
         if (expression is null) return null;
         var model = (await prepared.Document.GetSemanticModelAsync(token))!;
         if (expression is not InvocationExpressionSyntax && model.GetMemberGroup(expression, token).OfType<IMethodSymbol>().Any()) return '(';
-        if (expression.Parent is ObjectCreationExpressionSyntax creation && creation.Type == expression) return '(';
+        // Qualified names wrap the final identifier before the object creation.
+        var creation = expression.Ancestors().OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
+        if (creation is not null && creation.Type.Span.End == position) return '(';
         var info = model.GetSymbolInfo(expression, token);
         // A bare namespace/type is not a C# value. Roslyn reports it as a
         // candidate, but Tab should still let the user continue with a member.

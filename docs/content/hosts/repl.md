@@ -114,6 +114,7 @@ cd /
 paths and completion start there. `here` exposes the selected node to C#;
 `root` always refers to the engine's root Window. The prompt shows your current
 path (shortened in narrow terminals; `pwd` always prints it in full).
+`:ls` and `:ls $Child` explicitly select the listing command in `:auto` and `:sh`.
 `cd ..` selects the parent, while `cd /` or bare `cd` returns to root.
 Use `cd $/root/Control` or `:cd /root/Control` for absolute paths. Quoted paths
 such as `cd $["My Node"]` support spaces and punctuation.

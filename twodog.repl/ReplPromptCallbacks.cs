@@ -246,10 +246,10 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         if (navigation is { Expression: null })
             return new[] { new FormatSpan(navigation.Start, navigation.Length, AnsiColor.BrightMagenta) }
                 .Concat(paths).ToArray();
-        if (navigation is null && text.TrimStart().StartsWith(':')) return [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)];
         if (session.Mode.TryListing(text, out var listing))
-            return new[] { new FormatSpan(listing.Start, 2, AnsiColor.BrightMagenta) }
+            return new[] { new FormatSpan(listing.Start, listing.Length, AnsiColor.BrightMagenta) }
                 .Concat(paths).ToArray();
+        if (navigation is null && text.TrimStart().StartsWith(':')) return [new FormatSpan(0, text.Length, AnsiColor.BrightMagenta)];
         var spans = await Classifier.GetClassifiedSpansAsync(prepared.Document, new TextSpan(0, prepared.Input.Code.Length), cancellationToken);
         var result = new List<FormatSpan>();
         if (navigation is not null) result.Add(new FormatSpan(navigation.Start, navigation.Length, AnsiColor.BrightMagenta));
@@ -280,7 +280,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
     protected override async Task<PromptSpan> GetSpanToReplaceByCompletionAsync(string text, int caret, CancellationToken cancellationToken)
     {
         if (AwaitingNodeArgument(text, caret)) return new PromptSpan(caret, 0);
-        if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
+        if (text.TrimStart().StartsWith(':') && !CommandArgument(text, caret))
             return new PromptSpan(text.IndexOf(':'), text.Length - text.IndexOf(':'));
         var prepared = await PrepareInputAsync(text, cancellationToken);
         if (prepared.Input.CompletionAt(caret) is { } path) return new PromptSpan(path.Span.Start, path.Span.Length);
@@ -334,8 +334,9 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             => inner.GetCompletionItemPriority(text, caret, span);
     }
 
-    private bool NavigationArgument(string text, int caret)
-        => session.Mode.TryNavigation(text, out var command) && command.InArgument(caret);
+    private bool CommandArgument(string text, int caret)
+        => session.Mode.TryNavigation(text, out var command) && command.InArgument(caret) ||
+            session.Mode.TryListing(text, out var listing) && listing.InArgument(caret);
 
     private bool AwaitingNodeArgument(string text, int caret)
         => session.Mode.TryListing(text, out var listing) && listing.AwaitingTarget && caret >= listing.ArgumentStart ||
@@ -343,8 +344,8 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     private async Task<IReadOnlyList<CompletionItem>> CreateCompletionItemsAsync(string text, int caret, PromptSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
-        if (text.TrimStart().StartsWith(':') && !NavigationArgument(text, caret))
-            return ReplModes.Controls.Concat(session.Mode.HasShell() ? new[] { ":cd", ":pwd", ":rm", ":cp", ":mv" } : [])
+        if (text.TrimStart().StartsWith(':') && !CommandArgument(text, caret))
+            return ReplModes.Controls.Concat(session.Mode.HasShell() ? new[] { ":ls", ":cd", ":pwd", ":rm", ":cp", ":mv" } : [])
                 .Select(c => new CompletionItem(c)).ToArray();
         if (session.Mode == ReplMode.Agent) return [];
         var prepared = await PrepareInputAsync(text, cancellationToken);

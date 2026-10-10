@@ -76,6 +76,8 @@ public class NodePathTests
         };
         var input = new NodePathInput(text, nodes);
         Assert.Contains("(root.GetNode<global::Godot.Control>(\"Control\")).Size", input.Code);
+        Assert.Contains("(root.GetNode<global::Godot.Node2D>(\"Other\")).Position", input.Code);
+        Assert.DoesNotContain("$", input.Code);
         var generated = input.Code.IndexOf("Position", StringComparison.Ordinal);
         var original = text.IndexOf("Position", StringComparison.Ordinal);
         Assert.Equal(generated, input.ToGenerated(original));

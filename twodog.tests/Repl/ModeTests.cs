@@ -17,6 +17,8 @@ public class ModeIntegrationTests
         Assert.Equal(ReplMode.Auto, bed.Session.Mode);
         bed.Ok("var ls = 41; var cd = 42; var pwd = 43; var rm = 44; var cp = 45; var mv = 46; var exit = 47;");
         Assert.Equal("46", bed.Ok("mv").Value);
+        Assert.Equal(bed.Globals.root.GetTreeStringPretty(), bed.Ok(":ls").Tree);
+        Assert.Equal(":ls", bed.Read(":ls", Bed.Enter));
         bed.Ok("cd $Control");
         var selected = bed.Globals.here;
         bed.Ok(":cs");
@@ -24,6 +26,7 @@ public class ModeIntegrationTests
             Assert.Equal(value, bed.Ok(name).Value);
         Assert.Contains("CS", bed.Eval("cd $CenterContainer").Error!);
         Assert.Contains("no shell commands", bed.Eval(":cd /").Error!);
+        Assert.Contains("no shell commands", bed.Eval(":ls").Error!);
         Assert.Same(selected, bed.Globals.here);
         Assert.Equal("\"Control\"", bed.Ok("here.Name.ToString()").Value);
         Assert.Contains(bed.Items("$CenterContainer."), i => i.DisplayText == "GetChild");
@@ -37,6 +40,10 @@ public class ModeIntegrationTests
 
         bed.Ok(":sh");
         Assert.Contains("CenterContainer", bed.Ok("ls").Tree!);
+        Assert.Contains("TargetLabel", bed.Ok(":ls $CenterContainer").Tree!);
+        Assert.Contains(bed.Items(":ls "), item => item.DisplayText.StartsWith("$CenterContainer", StringComparison.Ordinal));
+        Assert.Equal(":ls $CenterContainer", bed.Read(":ls $Cent", Bed.Tab, Bed.Run));
+        Assert.Contains(bed.Items(":"), item => item.DisplayText == ":ls");
         Assert.Equal("/root/Control", bed.Ok("pwd").Value);
         Assert.Contains("Usage:", bed.Eval("mv").Error!);
         Assert.Contains("Usage:", bed.Eval("cp").Error!);
