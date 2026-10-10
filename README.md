@@ -18,9 +18,13 @@ Oh btw., this means you can [export Godot C# to the web](https://2dog.dev/web.ht
 
 ## One Godot project, plenty of ways to run
 
-Keep your scenes, scripts and assets together. Add the hosts you want, each with its own .NET entry point:
+Keep your scenes, scripts and assets as you had them, in your normal Godot project. No change needed.
 
-| Host | What you can do | Add it with |
+### Easy to use dotnet tool: just run `dnx 2dog add`
+
+The tool adds hosts you want as small 'sidecar' projects, each with its own .NET entry point:
+
+| Host | Purpose | Argument |
 | --- | --- | --- |
 | [Desktop](https://2dog.dev/hosts/generic) | Run Godot from your own `Main` on Windows, Linux and macOS. | `--generic` |
 | [Web](https://2dog.dev/hosts/web) | Publish your Godot C# game to the browser with WebAssembly. | `--web` |
