@@ -269,7 +269,7 @@ internal static class CommandLine
 
         var session = result.GetValue(CliTree.ReplSession);
         if (session is not null && !ReplDiscovery.IsValidName(session))
-            throw new UsageException($"'{session}' is not a session name (up to 64 letters, digits, '-', '_' and '.')", Verb.Repl);
+            throw new UsageException($"'{session}' is not a session name (up to 40 letters, digits, '-', '_' and '.')", Verb.Repl);
         double? timeout = null;
         if (result.GetValue(CliTree.ReplTimeout) is { } text)
         {

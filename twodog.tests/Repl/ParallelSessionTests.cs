@@ -16,7 +16,7 @@ public class ParallelSessionTests
     {
         using var engine = new Engine("repl-unused-listener", Engine.ResolveProjectDir(), "--headless");
         using var dispatcher = new EngineDispatcher();
-        using var server = new ReplPipeServer("2dog-test-" + Guid.NewGuid().ToString("N"), engine, [], dispatcher, new CancellationToken(true));
+        using var server = new ReplPipeServer(ReplDiscoveryInit.PipeName(), engine, [], dispatcher, new CancellationToken(true));
         server.Dispose();
     }
 
@@ -30,7 +30,7 @@ public class ParallelSessionTests
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(45));
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game, typeof(ReplLifetimeProbe).Assembly], dispatcher, lifetime.Token);
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var owner = Environment.CurrentManagedThreadId;
@@ -223,7 +223,7 @@ public class ParallelSessionTests
         Assert.False(engine.Iteration());
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
         using var input = new StringReader("int answer = 0;\nfor (int n = 0; n < 7; n++) {\nanswer += 6;\n}\nanswer\n");
         using var output = new StringWriter();
@@ -266,7 +266,7 @@ public class ParallelSessionTests
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
         var keys = PromptOutputTests.Type("40+2").Append(new('\r', ConsoleKey.Enter, false, false, false))
             .Append(new('\x04', ConsoleKey.D, false, false, true));
@@ -295,7 +295,7 @@ public class ParallelSessionTests
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(45));
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
         ConsoleKeyInfo run = new('\r', ConsoleKey.Enter, false, false, true);
         ConsoleKeyInfo tab = new('\t', ConsoleKey.Tab, false, false, false);
@@ -343,7 +343,7 @@ public class ParallelSessionTests
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
         var keys = PromptOutputTests.Type(":exit").Append(new('\r', ConsoleKey.Enter, false, false, true));
         using var terminal = new HostLifecycleTests.Terminal(null, keys, lifetime.Token);
@@ -371,7 +371,7 @@ public class ParallelSessionTests
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
         ConsoleKeyInfo paste = new('\0', ConsoleKey.Insert, true, false, false);
         ConsoleKeyInfo enter = new('\r', ConsoleKey.Enter, false, false, false);
@@ -405,7 +405,7 @@ public class ParallelSessionTests
         using var terminal = new HostLifecycleTests.Terminal(null, [], lifetime.Token);
         using var input = new StringReader("");
         using var output = new StringWriter();
-        var name = "2dog-unavailable-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName("2dog-gone");
         var client = ReplPipeClient.RunAsync(name, input, output, lifetime.Token, interactive ? _ => terminal : null);
         if (interactive)
         {
@@ -550,7 +550,7 @@ public class ReplPipeOptionTests
     [InlineData("--repl-connect", "x", "--headless")]
     [InlineData("--repl-listen", "no/slashes")]
     [InlineData("--repl-connect", ".hidden")]
-    [InlineData("--repl-connect", "a-pipe-name-of-sixty-five-characters-is-one-too-long-for-the-host")]
+    [InlineData("--repl-connect", "a-pipe-name-of-41-characters-is-much-long")]
     public void RejectsMalformedOptions(params string[] args) => Assert.Throws<ArgumentException>(() => ReplPipeOptions.Parse(args));
 
     [Fact]
@@ -562,6 +562,7 @@ public class ReplPipeOptionTests
         Assert.Equal("2dog-" + Environment.ProcessId, ReplHost.ListenName(null, inputRedirected: false, outputRedirected: false));
         Assert.False(ReplDiscovery.IsValidName(""));
         Assert.True(ReplDiscovery.IsValidName("my_game.repl-2"));
+        Assert.True(ReplDiscovery.IsValidName(new string('p', 40)));
         var entry = typeof(ReplHost).Assembly;
         Assert.Equal(["/opt/dotnet/dotnet", entry.Location], ReplHost.ClientCommand("/opt/dotnet/dotnet", entry));
         Assert.Equal(["C:/game/Game.repl.exe"], ReplHost.ClientCommand("C:/game/Game.repl.exe", entry));

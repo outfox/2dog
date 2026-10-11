@@ -58,7 +58,8 @@ internal static class ReplDiscovery
 
     internal static string PathOf(string pipe) => Path.Combine(Root, pipe + ".json");
 
-    /// <summary>Pipe and session names: pipe names double as file names, so both stay portable.</summary>
+    /// <summary>Pipe and session names: pipe names double as file names, so both stay portable. macOS limits a
+    /// pipe's socket path under $TMPDIR to 104 characters; 40 leaves room for long temporary directories.</summary>
     internal static bool IsValidName(string name)
-        => name.Length is > 0 and <= 64 && name.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_' or '.') && name[0] != '.';
+        => name.Length is > 0 and <= 40 && name.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_' or '.') && name[0] != '.';
 }

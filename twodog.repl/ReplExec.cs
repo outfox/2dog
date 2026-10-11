@@ -148,7 +148,7 @@ internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineD
     {
         if (request.Session is { } name && !ReplDiscovery.IsValidName(name))
         {
-            fail($"'{name}' is not a session name (up to 64 letters, digits, '-', '_' and '.')");
+            fail($"'{name}' is not a session name (up to 40 letters, digits, '-', '_' and '.')");
             return;
         }
         if (request.Timeout is { } seconds && !(seconds > 0 && seconds <= int.MaxValue / 1000))

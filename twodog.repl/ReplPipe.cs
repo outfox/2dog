@@ -19,7 +19,7 @@ internal sealed record ReplPipeOptions(string? Listen, string? Connect, string[]
             if (++i == args.Length || string.IsNullOrWhiteSpace(args[i]) || args[i].StartsWith('-'))
                 throw new ArgumentException(option + " requires a local pipe name.");
             if (!ReplDiscovery.IsValidName(args[i]))
-                throw new ArgumentException($"Invalid pipe name '{args[i]}'. Use up to 64 letters, digits, '-', '_' or '.'.");
+                throw new ArgumentException($"Invalid pipe name '{args[i]}'. Use up to 40 letters, digits, '-', '_' or '.'.");
             if (option == "--repl-listen")
             {
                 if (listen is not null) throw new ArgumentException("--repl-listen was specified twice.");

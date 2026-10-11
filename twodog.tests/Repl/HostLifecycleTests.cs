@@ -38,7 +38,7 @@ public class HostLifecycleTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-listener-exit", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         using var terminal = new Terminal(":exit\n", [], null);
-        Assert.Equal(0, ReplHost.Run(engine, _ => terminal, "2dog-test-" + Guid.NewGuid().ToString("N"), game));
+        Assert.Equal(0, ReplHost.Run(engine, _ => terminal, ReplDiscoveryInit.PipeName(), game));
         Assert.True(terminal.Restored);
         Assert.Empty(engine.Errors.Drain());
     }
@@ -245,7 +245,7 @@ public class HostLifecycleTests
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-listen-lifetime", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(30));
         using var output = new StringWriter();
@@ -287,7 +287,7 @@ public class HostLifecycleTests
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-publish", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
-        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var name = ReplDiscoveryInit.PipeName();
         var file = ReplDiscovery.PathOf(name);
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(30));
@@ -327,7 +327,7 @@ public class HostLifecycleTests
             ReplDiscovery.Root = blocked;
             using var engine = new Engine("repl-publish-failure", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
             using var terminal = new Terminal(":exit\n", [], null);
-            Assert.Equal(0, ReplHost.Run(engine, _ => terminal, "2dog-test-" + Guid.NewGuid().ToString("N"), game));
+            Assert.Equal(0, ReplHost.Run(engine, _ => terminal, ReplDiscoveryInit.PipeName(), game));
             Assert.Contains("Could not publish the REPL host", terminal.Stderr.ToString());
             Assert.Empty(engine.Errors.Drain());
         }

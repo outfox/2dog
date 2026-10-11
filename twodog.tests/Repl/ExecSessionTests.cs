@@ -285,7 +285,7 @@ internal sealed class LiveHost : IDisposable
     public Engine Engine { get; }
     public EngineDispatcher Dispatcher { get; } = new();
     public CancellationTokenSource Lifetime { get; }
-    public string Pipe { get; } = "2dog-test-" + Guid.NewGuid().ToString("N");
+    public string Pipe { get; } = ReplDiscoveryInit.PipeName();
     public ReplPipeServer Server { get; }
 
     public LiveHost(string name)
