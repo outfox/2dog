@@ -32,8 +32,34 @@ not advance frames.
 | A point in another viewport | `godot.Input.Click(new Vector2(80, 40), viewport: gameViewport)` |
 
 ::: tip Give headless UI tests enough room
-The root viewport can be small in headless mode. Check `GetVisibleRect()` or
-create a `SubViewport` with an explicit size:
+The headless display server reports no native window size, so the root window
+can start at its minimum size. Stretch settings can make `GetVisibleRect()`
+larger while still giving the UI an unexpected aspect ratio. This affects
+layout and hit testing; it does not mean input simulation is unavailable.
+
+For root-viewport UI tests, set the root window to the project's configured
+viewport dimensions before loading your scene, then settle the layout:
+
+```csharp
+var root = godot.Tree.Root;
+var originalSize = root.Size;
+try
+{
+    root.Size = new Vector2I(
+        ProjectSettings.GetSettingWithOverride("display/window/size/viewport_width").AsInt32(),
+        ProjectSettings.GetSettingWithOverride("display/window/size/viewport_height").AsInt32());
+    // Add your scene here.
+    godot.Engine.Iteration();
+    // Click controls and assert the results.
+}
+finally { root.Size = originalSize; }
+```
+
+Use an explicit test size instead when testing another resolution or a window
+size override. The fixture is shared, so remove your scene and restore the
+size after the test. Input helpers leave viewport sizes unchanged.
+
+For isolated controls, create a `SubViewport` with an explicit size:
 
 ```csharp
 var viewport = new SubViewport { Size = new Vector2I(400, 300) };
@@ -104,6 +130,33 @@ try
 finally { godot.Input.Send(up); }
 ```
 
+## Spoof mouse movement
+
+Send a mouse-motion event to test hover, `_Input`, or code that polls the
+root viewport's mouse position:
+
+```csharp
+using var motion = new InputEventMouseMotion
+{
+    Position = new Vector2(80, 40),
+    GlobalPosition = new Vector2(80, 40),
+    Relative = new Vector2(10, 0),
+    ScreenRelative = new Vector2(10, 0)
+};
+godot.Input.Send(motion);
+```
+
+`Send` uses window coordinates. With stretch scaling, convert a logical
+viewport point using `godot.Tree.Root.GetFinalTransform() * viewportPosition`.
+Set `Relative` when testing code that uses movement deltas, such as a camera.
+
+`PushToViewport(motion, viewport)` uses viewport coordinates and delivers
+motion and hover too. It leaves global `Input` state unchanged, including the
+mouse position used by the headless root's `GetMousePosition()`. A standalone
+`SubViewport` tracks its local mouse position from the events it receives.
+Neither method moves the OS cursor; mouse warping is unnecessary for these
+tests.
+
 ::: warning Release held input
 The fixture is shared between tests. Always release keys, actions, and mouse
 buttons in `finally`, and use a fresh event for each press and release. Sending
@@ -115,6 +168,11 @@ one event through both delivery methods delivers it twice.
 including other pending events. Project input emulation and window routing
 apply; coordinates use Godot's device/window conventions. GUI event consumption
 does not clear global polling state.
+
+Current Godot natives support headless input-server delivery. The older
+limitation discussed in [Godot issue #73557](https://github.com/godotengine/godot/issues/73557)
+was addressed by [PR #92806](https://github.com/godotengine/godot/pull/92806).
+Viewport sizing remains a separate concern.
 
 See Godot's [viewport delivery](https://docs.godotengine.org/en/stable/classes/class_viewport.html#class-viewport-method-push-input)
 and [input server](https://docs.godotengine.org/en/stable/classes/class_input.html#class-input-method-parse-input-event)
