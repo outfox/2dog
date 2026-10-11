@@ -33,6 +33,39 @@ public class HostLifecycleTests
     }
 
     [Fact]
+    public void ListeningHostExitsThroughItsLocalExitCommand()
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-listener-exit", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        using var terminal = new Terminal(":exit\n", [], null);
+        Assert.Equal(0, ReplHost.Run(engine, _ => terminal, "2dog-test-" + Guid.NewGuid().ToString("N"), game));
+        Assert.True(terminal.Restored);
+        Assert.Empty(engine.Errors.Drain());
+    }
+
+    [Fact]
+    public void EngineCanQuitBeforeTheTerminalStarts()
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-early-quit", Engine.ResolveProjectDir(), "--headless", "--quit") { CaptureErrors = true };
+        using var terminal = new Terminal(":exit\n", [], null);
+        Assert.Equal(0, ReplHost.Run(engine, _ => terminal, game));
+        Assert.Empty(engine.Errors.Drain());
+    }
+
+    [Fact]
+    public void InteractiveCustomTerminalCanUseItsOwnOutputCoordination()
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-custom-terminal", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        using var terminal = new Terminal(null, Code("40+2").Concat(Command(":exit")), null, coordinateOutput: false);
+        Assert.Equal(0, ReplHost.Run(engine, _ => terminal, game));
+        Assert.Contains("42", terminal.Stdout.ToString());
+        Assert.True(terminal.Restored);
+        Assert.Empty(engine.Errors.Drain());
+    }
+
+    [Fact]
     public void InteractiveHostRunsCommandsChangesScopeResetsCSharpAndRestoresTerminal()
     {
         var keys = Command(":help").Concat(Command(":multiline")).Concat(Command(":help"))
@@ -112,7 +145,10 @@ public class HostLifecycleTests
         {
             engine.Tree.ProcessFrame += () =>
             {
-                if (!input.Waiting) return;
+                // Input now reads ahead while work runs. Quit only after the first result,
+                // preserving the test's independent-engine-quit scenario.
+                if (!input.Waiting || terminal is null ||
+                    !(expected == 0 ? terminal.Stdout.ToString().Contains("42") : terminal.Stderr.ToString().Contains("CS"))) return;
                 quitRequested = true;
                 engine.RequestQuit();
             };
@@ -194,8 +230,78 @@ public class HostLifecycleTests
             var game = typeof(showcase.CSharpTicker).Assembly;
             using var engine = new Engine("repl-public-entry", Engine.ResolveProjectDir(), "--headless");
             Assert.Equal(0, ReplHost.Run(engine, game));
+            Console.SetIn(new StringReader(":exit\n"));
+            Assert.Equal(0, ReplHost.Run(["--headless"], args =>
+            {
+                Assert.Equal(["--headless"], args);
+                return new Engine("repl-public-options", Engine.ResolveProjectDir(), args);
+            }, game));
         }
         finally { Console.SetIn(original); }
+    }
+
+    [Fact]
+    public async Task ListeningHostSurvivesConsoleEofAndClientExitUntilTheEngineQuits()
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-listen-lifetime", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(30));
+        using var output = new StringWriter();
+        Task? clients = null;
+        Terminal? terminal = null;
+        var exit = ReplHost.Run(engine, _ =>
+        {
+            terminal = new Terminal("", [], null);
+            clients = Task.Run(async () =>
+            {
+                using var first = new StringReader("40+2\n");
+                var originalInput = Console.In;
+                var originalOutput = Console.Out;
+                try
+                {
+                    Console.SetIn(first);
+                    Console.SetOut(output);
+                    Assert.Equal(0, ReplHost.Run(["--repl-connect", name], _ => throw new InvalidOperationException("A client must not create an engine.")));
+                }
+                finally { Console.SetIn(originalInput); Console.SetOut(originalOutput); }
+                Assert.Contains("42", output.ToString());
+                using var second = new StringReader("worlds.Add(\"lab\", \"res://playground.tscn\"); tree.Quit();\n");
+                await ReplPipeClient.RunAsync(name, second, output, timeout.Token);
+            }, timeout.Token);
+            return terminal;
+        }, name, game);
+        await clients!;
+        using (terminal!)
+        {
+            Assert.Equal(0, exit);
+            Assert.True(terminal!.Restored);
+            Assert.Contains("REPL listening", terminal.Stdout.ToString());
+        }
+        Assert.Empty(engine.Errors.Drain());
+    }
+
+    [Fact]
+    public async Task ShutdownCanCancelAReadFromAnOpenSynchronousConsoleInput()
+    {
+        var original = Console.In;
+        using var input = new BlockingInput();
+        using var stop = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        try
+        {
+            Console.SetIn(input);
+            var read = ReplHost.ReadSubmissionAsync(Console.In, stop.Token);
+            await input.Started.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+            stop.Cancel();
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => read);
+        }
+        finally
+        {
+            input.Release.Set();
+            Console.SetIn(original);
+            await input.Completed.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+        }
     }
 
     [Theory]
@@ -238,7 +344,25 @@ public class HostLifecycleTests
         }
     }
 
-    private sealed class Terminal : IReplTerminal, IDisposable
+    private sealed class BlockingInput : TextReader
+    {
+        public TaskCompletionSource Started { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource Completed { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public ManualResetEventSlim Release { get; } = new();
+        public override string? ReadLine()
+        {
+            Started.TrySetResult();
+            try { Release.Wait(); return null; }
+            finally { Completed.TrySetResult(); }
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) Release.Dispose();
+            base.Dispose(disposing);
+        }
+    }
+
+    internal sealed class Terminal : IReplTerminal, IDisposable
     {
         public PromptConsole Prompt { get; }
         public PrettyPrompt.Consoles.IConsole Editor => Prompt;
@@ -247,16 +371,26 @@ public class HostLifecycleTests
         public StringWriter Stdout { get; } = new();
         public StringWriter Stderr { get; } = new();
         public ReplOutput Output { get; }
+        public ReplPromptOutput? PromptOutput { get; }
         public string HistoryFile { get; } = Path.Combine(Path.GetTempPath(), "2dog-repl-" + Guid.NewGuid(), "history");
         public bool Restored { get; private set; }
-        public Terminal(string? input, IEnumerable<ConsoleKeyInfo> keys, CancellationToken? token, TextReader? reader = null)
+        public string? Paste { get; set; }
+        public bool Color { get; set; } = true;
+        public Terminal(string? input, IEnumerable<ConsoleKeyInfo> keys, CancellationToken? token, TextReader? reader = null, bool coordinateOutput = true)
         {
             Interactive = input is null;
             Input = reader ?? new StringReader(input ?? "");
             Prompt = new PromptConsole(keys, waitForInput: token);
-            Output = new ReplOutput(Stdout, Stderr, color: false, errorColor: false);
+            PromptOutput = Interactive && coordinateOutput ? new ReplPromptOutput(Prompt) : null;
+            Prompt.Output = PromptOutput;
+            Output = new ReplOutput(PromptOutput?.Wrap(Stdout) ?? Stdout, PromptOutput?.Wrap(Stderr) ?? Stderr, color: false, errorColor: false);
         }
-        public string? TakePaste() => null;
+        public string? TakePaste()
+        {
+            var paste = Paste;
+            Paste = null;
+            return paste;
+        }
         public void Restore() => Restored = true;
         public void Dispose()
         {
@@ -313,6 +447,7 @@ public class TerminalOutputTests
     [InlineData("if (true) {\n40+2;\n}", "if (true) {\n40+2;\n}")]
     [InlineData("if (true) {", "if (true) {")]
     [InlineData(":help\n42", ":help")]
+    [InlineData("if (true) {\n:cancel\n42", ":cancel")]
     public async Task RedirectedSubmissionUsesSyntaxAndPreservesIncompleteEof(string input, string? expected)
     {
         using var reader = new StringReader(input);

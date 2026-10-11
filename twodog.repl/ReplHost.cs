@@ -17,8 +17,23 @@ public static class ReplHost
     public static int Run(Engine engine, params Assembly[] references)
         => Run(engine, token => new ReplConsole(token), references);
 
+    /// <summary>Runs a host, or connects stdin/stdout to a host with --repl-connect NAME.
+    /// --repl-listen NAME accepts concurrent local pipe sessions; remaining arguments go to Godot.</summary>
+    public static int Run(string[] args, Func<string[], Engine> createEngine, params Assembly[] references)
+    {
+        var options = ReplPipeOptions.Parse(args);
+        if (options.Connect is { } connect) return ReplPipeClient.RunAsync(connect).GetAwaiter().GetResult();
+        return RunCore(createEngine(options.EngineArgs), token => new ReplConsole(token), options.Listen, references);
+    }
+
     // Drive the same lifetime and editor loop with a scripted terminal in tests.
     internal static int Run(Engine engine, Func<CancellationToken, IReplTerminal> createTerminal, params Assembly[] references)
+        => RunCore(engine, createTerminal, null, references);
+
+    internal static int Run(Engine engine, Func<CancellationToken, IReplTerminal> createTerminal, string pipeName, params Assembly[] references)
+        => RunCore(engine, createTerminal, pipeName, references);
+
+    private static int RunCore(Engine engine, Func<CancellationToken, IReplTerminal> createTerminal, string? pipeName, Assembly[] references)
     {
         if (!RuntimeFeature.IsDynamicCodeSupported)
             throw new PlatformNotSupportedException("The C# REPL requires a JIT runtime; NativeAOT is unsupported.");
@@ -31,14 +46,18 @@ public static class ReplHost
             if (engine.Iteration()) return 0;
             using var dispatcher = new EngineDispatcher();
             var globals = new ReplGlobals(engine);
-            using var scratch = globals.world;
+            using var scratch = globals.worlds;
             var scenePath = engine.Tree.CurrentScene?.SceneFilePath ?? "(no game scene loaded)";
             using var lifetime = new CancellationTokenSource();
             var console = createTerminal(lifetime.Token);
-            var terminal = Task.Run(() => ReadEvalPrintAsync(globals, scenePath, references, dispatcher, console, lifetime.Token));
+            using var server = pipeName is null ? null : new ReplPipeServer(pipeName, engine, references, dispatcher, lifetime.Token);
+            if (pipeName is not null) console.Output.Message($"REPL listening on local pipe '{pipeName}'. Connect with --repl-connect {pipeName}.");
+            var terminal = Task.Run(() => ReadEvalPrintAsync(globals, scenePath, references, dispatcher, console, lifetime.Token,
+                requestHostExit: pipeName is null ? null : () => dispatcher.InvokeAsync(() => { engine.RequestQuit(); return Task.FromResult(true); })));
             try
             {
-                while (!terminal.IsCompleted && !engine.Iteration())
+                // A listening host survives stdin EOF so it can also be launched by a process.
+                while ((!terminal.IsCompleted || server is not null && terminal.IsCompletedSuccessfully) && !engine.Iteration())
                 {
                     dispatcher.Pump();
                     Thread.Sleep(1);
@@ -64,14 +83,15 @@ public static class ReplHost
         }
     }
 
-    private static async Task<int> ReadEvalPrintAsync(ReplGlobals globals, string scenePath, Assembly[] references, EngineDispatcher dispatcher,
-        IReplTerminal console, CancellationToken lifetime)
+    internal static async Task<int> ReadEvalPrintAsync(ReplGlobals globals, string scenePath, Assembly[] references, EngineDispatcher dispatcher,
+        IReplTerminal console, CancellationToken lifetime, bool cancelOnEof = false, Func<Task>? requestHostExit = null)
     {
         var interactive = console.Interactive;
         var output = console.Output;
         if (interactive) output.Message("Preparing C# completion...");
         var assemblies = AppDomain.CurrentDomain.GetAssemblies().Concat(references).ToArray();
-        var session = new ReplSession(globals, assemblies, dispatcher);
+        using var session = new ReplSession(globals, assemblies, dispatcher) { DetachedInput = true };
+        using var work = new ReplWorkQueue(lifetime);
         Prompt? prompt = null;
         var exitCode = 0;
         var multiline = false;
@@ -79,44 +99,93 @@ public static class ReplHost
         var promptMode = session.Mode;
         string? promptScope = "/root";
         IReadOnlyDictionary<string, NodeFamily>? promptFamilies = null;
+        var readMode = session.Mode;
+        void Cancel()
+        {
+            try { work.Cancel(); }
+            catch (AggregateException error) { output.Error("Cancellation callback failed: " + error.Message); }
+            readMode = session.Mode;
+        }
+        void CancelKeyPress(object? sender, ConsoleCancelEventArgs args) { args.Cancel = true; Cancel(); }
+        console.SetCancellationHandler(Cancel);
+        var consoleSignals = interactive || console is ReplConsole;
+        if (consoleSignals) console.Editor.CancelKeyPress += CancelKeyPress;
+        async Task DrainAsync()
+        {
+            work.Complete();
+            if (interactive) { await work.Completion; return; }
+            // EOF from the client is an orderly drain. Keep reading control lines so
+            // Ctrl+C/:cancel still works if the final submitted item loops forever.
+            using var draining = CancellationTokenSource.CreateLinkedTokenSource(lifetime);
+            var drainToken = draining.Token;
+            var controls = Task.Run(async () =>
+            {
+                try
+                {
+                    while (await console.Input.ReadLineAsync(drainToken).ConfigureAwait(false) is { } line)
+                        if (line.Trim() == ":cancel") Cancel();
+                    if (cancelOnEof) Cancel();
+                }
+                catch (OperationCanceledException) when (drainToken.IsCancellationRequested) { }
+                catch (IOException) { Cancel(); }
+            });
+            try { await work.Completion; }
+            finally
+            {
+                draining.Cancel();
+                try { await controls.WaitAsync(draining.Token); }
+                catch (OperationCanceledException) when (draining.IsCancellationRequested) { }
+            }
+        }
         try
         {
+            await session.RefreshAsync(lifetime);
             if (interactive)
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(history)!);
+                if (history.Length > 0) Directory.CreateDirectory(Path.GetDirectoryName(history)!);
                 var initialScope = await session.ScopeStyleAsync(lifetime);
                 promptScope = initialScope.Path;
                 promptFamilies = initialScope.Families;
-                prompt = await CreatePromptAsync(session, console, history, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
+                prompt = await CreatePromptAsync(session, console, history, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies, cancel: Cancel);
                 output.Banner(scenePath);
             }
             while (!lifetime.IsCancellationRequested)
             {
                 string? text;
-                CancellationToken submissionToken = lifetime;
                 if (prompt is not null)
                 {
                     var scope = await session.ScopeStyleAsync(lifetime);
                     if (session.Mode != promptMode || scope.Path != promptScope || promptFamilies is null || !scope.Families.SequenceEqual(promptFamilies))
                     {
                         await prompt.DisposeAsync();
-                        prompt = await CreatePromptAsync(session, console, history, multiline, warmUp: false, cancellationToken: lifetime, scopePath: scope.Path, scopeFamilies: scope.Families);
+                        prompt = await CreatePromptAsync(session, console, history, multiline, warmUp: false, cancellationToken: lifetime, scopePath: scope.Path, scopeFamilies: scope.Families, cancel: Cancel);
                         promptMode = session.Mode;
                         promptScope = scope.Path;
                         promptFamilies = scope.Families;
                     }
-                    var response = await prompt.ReadLineAsync().ConfigureAwait(false);
+                    var response = await (console.PromptOutput is { } promptOutput
+                        ? promptOutput.ReadLineAsync(prompt, CreatePromptText(promptScope, console.Editor.BufferWidth, promptFamilies, false, promptMode).Length)
+                        : prompt.ReadLineAsync()).ConfigureAwait(false);
                     if (!response.IsSuccess) continue;
                     text = response.Text;
-                    submissionToken = response.CancellationToken;
                 }
-                else text = await ReadSubmissionAsync(console.Input, lifetime, session.Mode).ConfigureAwait(false);
-                if (text is null) break;
+                else text = await ReadSubmissionAsync(console.Input, lifetime, readMode).ConfigureAwait(false);
+                if (text is null)
+                {
+                    if (cancelOnEof) Cancel();
+                    break;
+                }
                 if (string.IsNullOrWhiteSpace(text)) continue;
                 switch (text.Trim())
                 {
-                    case ":exit": return exitCode;
-                    case "exit" when session.Mode.HasShell(): return exitCode;
+                    case ":exit":
+                    case "exit" when readMode.HasShell():
+                        await DrainAsync();
+                        if (requestHostExit is not null) await requestHostExit();
+                        return exitCode;
+                    case ":cancel":
+                        Cancel();
+                        continue;
                     case ":help":
                         output.Help(multiline, session.Mode);
                         continue;
@@ -129,63 +198,71 @@ public static class ReplHost
                         {
                             await prompt.DisposeAsync();
                             prompt = await CreatePromptAsync(session, console, history,
-                                multiline, warmUp: false, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
+                                multiline, warmUp: false, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies, cancel: Cancel);
                         }
                         output.InputMode(multiline);
                         continue;
                     case ":reset":
-                        if (interactive) output.Message("Preparing C# completion...");
-                        var mode = session.Mode;
-                        session.Dispose();
-                        session = new ReplSession(globals, assemblies, dispatcher);
-                        await session.EvaluateAsync(":" + mode.Name(), lifetime);
-                        if (prompt is not null)
+                        _ = work.Enqueue(_ =>
                         {
-                            await prompt.DisposeAsync();
-                            prompt = await CreatePromptAsync(session, console, history,
-                                multiline, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies);
-                        }
-                        output.Message("C# session reset. The running scene is preserved.");
+                            session.Reset();
+                            output.Message("C# session reset. The running scene is preserved.");
+                            return Task.CompletedTask;
+                        });
                         continue;
                 }
-                using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(lifetime, submissionToken);
-                try
+                if (ReplModes.TryParse(text.Trim(), out var selectedMode)) readMode = selectedMode;
+                var submitted = text;
+                _ = work.Enqueue(async token =>
                 {
-                    var result = await session.EvaluateAsync(text, cancellation.Token).ConfigureAwait(false);
-                    if (result.Cancelled)
+                    try
                     {
-                        output.Message("Submission cancelled.");
-                        continue;
+                        token.ThrowIfCancellationRequested();
+                        var result = await session.EvaluateAsync(submitted, token).ConfigureAwait(false);
+                        if (result.Cancelled) output.Message("Submission cancelled.");
+                        else if (result.Error is { } error)
+                        {
+                            output.Error(error);
+                            if (!interactive) exitCode = 1;
+                        }
+                        else if (result.Tree is { } hierarchy) output.Tree(hierarchy, result.Styled);
+                        else if (result.Value is { } value) output.Result(value, result.Styled);
+                        await session.RefreshAsync(lifetime).ConfigureAwait(false);
                     }
-                    if (result.Error is { } error)
+                    catch (OperationCanceledException) { output.Message("Submission cancelled."); }
+                    catch (Exception error)
                     {
-                        output.Error(error);
+                        output.Error(error.ToString());
                         if (!interactive) exitCode = 1;
                     }
-                    else if (result.Tree is { } hierarchy) output.Tree(hierarchy, result.Styled);
-                    else if (result.Value is { } value) output.Result(value, result.Styled);
-                }
-                catch (OperationCanceledException) when (!lifetime.IsCancellationRequested)
-                {
-                    output.Message("Submission cancelled.");
-                }
+                });
             }
+            work.Complete();
+            await work.Completion;
             return exitCode;
         }
         catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { return exitCode; }
+        catch
+        {
+            Cancel();
+            throw;
+        }
         finally
         {
-            session.Dispose();
+            console.SetCancellationHandler(null);
+            if (consoleSignals) console.Editor.CancelKeyPress -= CancelKeyPress;
+            work.Complete();
+            await work.Completion;
             if (prompt is not null) await prompt.DisposeAsync();
         }
     }
 
     private static async Task<Prompt> CreatePromptAsync(ReplSession session, IReplTerminal console, string history, bool multiline = false,
-        bool warmUp = true, CancellationToken cancellationToken = default, string? scopePath = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null)
+        bool warmUp = true, CancellationToken cancellationToken = default, string? scopePath = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null, Action? cancel = null)
     {
-        var callbacks = new ReplPromptCallbacks(session, console.TakePaste);
+        var callbacks = new ReplPromptCallbacks(session, console.TakePaste, cancel, console.PromptOutput);
         if (warmUp) await callbacks.WarmUpAsync(cancellationToken);
-        return new Prompt(persistentHistoryFilepath: history, callbacks: callbacks, console: console.Editor,
+        return new Prompt(persistentHistoryFilepath: history.Length > 0 ? history : null, callbacks: callbacks, console: console.Editor,
             configuration: CreatePromptConfiguration(multiline, scopePath, console.Editor.BufferWidth, scopeFamilies, session.Mode));
     }
 
@@ -236,8 +313,14 @@ public static class ReplHost
         var text = new StringBuilder();
         while (true)
         {
-            var line = await input.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+            // Console.In uses a synchronous reader even through ReadLineAsync.
+            // Keep an open redirected stdin from holding up engine shutdown.
+            var line = ReferenceEquals(input, Console.In)
+                ? await Task.Run(input.ReadLine, cancellationToken).WaitAsync(cancellationToken).ConfigureAwait(false)
+                : await input.ReadLineAsync(cancellationToken).ConfigureAwait(false);
             if (line is null) return text.Length == 0 ? null : text.ToString();
+            // Control input must remain reachable even while assembling an unfinished block.
+            if (line.Trim() is ":cancel" or ":exit") return line;
             text.AppendLine(line);
             if (line.TrimStart().StartsWith(':') || ReplSession.IsComplete(text.ToString(), mode)) return text.ToString();
         }
@@ -250,6 +333,9 @@ internal interface IReplTerminal
     bool Interactive { get; }
     TextReader Input { get; }
     ReplOutput Output { get; }
+    ReplPromptOutput? PromptOutput => null;
+    bool Color => !PromptConfiguration.HasUserOptedOutFromColor;
+    void SetCancellationHandler(Action? cancel) { }
     string HistoryFile { get; }
     string? TakePaste();
     void Restore();
@@ -260,7 +346,8 @@ internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
     public IConsole Editor => this;
     public bool Interactive => !Console.IsInputRedirected && !Console.IsOutputRedirected;
     public TextReader Input => Console.In;
-    public ReplOutput Output { get; } = ReplOutput.ForConsole();
+    public ReplOutput Output { get; }
+    public ReplPromptOutput? PromptOutput { get; }
     public string HistoryFile => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history");
     private readonly CancellationToken lifetime;
     private readonly ReplInputBuffer input;
@@ -268,6 +355,8 @@ internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
     public ReplConsole(CancellationToken lifetime)
     {
         this.lifetime = lifetime;
+        PromptOutput = Interactive ? new ReplPromptOutput(this) : null;
+        Output = ReplOutput.ForConsole(PromptOutput);
         input = new ReplInputBuffer(() => Console.KeyAvailable, ReadConsoleKey, OperatingSystem.IsWindows());
     }
 
@@ -276,7 +365,7 @@ internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
         get
         {
             lifetime.ThrowIfCancellationRequested();
-            return input.KeyAvailable;
+            return PromptOutput?.Restoring != true && input.KeyAvailable;
         }
     }
 
@@ -285,6 +374,7 @@ internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
     public override ConsoleKeyInfo ReadKey(bool intercept)
     {
         lifetime.ThrowIfCancellationRequested();
+        if (PromptOutput?.ReadRestoreKey() is { } key) return key;
         return input.ReadKey();
     }
 
@@ -304,6 +394,7 @@ internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
         while (!Console.KeyAvailable)
         {
             lifetime.ThrowIfCancellationRequested();
+            PromptOutput?.CheckForOutput();
             Thread.Sleep(15);
         }
         lifetime.ThrowIfCancellationRequested();

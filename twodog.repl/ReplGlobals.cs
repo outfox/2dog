@@ -3,8 +3,15 @@ using Godot;
 namespace twodog.Repl;
 
 /// <summary>Live objects available by name in every submission. Access them on the Godot thread.</summary>
-public sealed class ReplGlobals(Engine owner)
+public sealed class ReplGlobals
 {
+    private readonly Engine owner;
+    public ReplGlobals(Engine owner)
+    {
+        this.owner = owner;
+        worlds = new ReplWorlds(owner);
+        world = worlds.Default();
+    }
     /// <summary>The engine owned by this host.</summary>
     public Engine engine => owner;
     /// <summary>The running scene tree.</summary>
@@ -27,7 +34,9 @@ public sealed class ReplGlobals(Engine owner)
     }
     internal void SelectNode(Node node) => currentNode = node;
     /// <summary>An isolated scratch viewport beside the game. All calls belong on Godot's thread.</summary>
-    public ReplWorld world { get; } = new(owner);
+    public ReplWorld world { get; }
+    /// <summary>This session's named scratch viewports, including its default world.</summary>
+    public ReplWorlds worlds { get; }
     /// <summary>Cooperative cancellation for the current submission (Ctrl+C).</summary>
     public CancellationToken ct { get; internal set; }
 }

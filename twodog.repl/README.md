@@ -6,7 +6,7 @@ An interactive C# prompt inside a running Godot process. Add a host with
 Syntax highlighting, Tab/Ctrl+Space completion with documentation, multiline
 input, persistent history and cancellation use PrettyPrompt and Roslyn, the
 libraries underlying CSharpRepl. The live globals are `engine`, `tree`, `root`,
-`here`, `scene`, `world` and `ct`. Variables and using directives persist
+`here`, `scene`, `world`, `worlds` and `ct`. Variables and using directives persist
 between submissions.
 The host prepares completion and highlighting before displaying `godot>`.
 Keys typed during startup remain queued, and buffered Enter/Tab/Escape keys
@@ -163,6 +163,63 @@ with independent 2D and 3D worlds. Inspect `world.Scene` or `world.Viewport`,
 use `world.Clear()` for an empty scene and `world.Close()` to close it.
 The SceneTree, autoloads and singletons are shared with the game.
 
+Create several named worlds with `worlds.Add("lab", "res://other.tscn")` or
+`worlds.Add("empty")`. Look them up with `worlds["lab"]`, list `worlds.Names`,
+and close and remove one with `worlds.Remove("lab")`. Names are unique within
+each session. `world` is that session's lazy default world; closing it leaves
+it available to reopen. Resetting C# preserves all worlds.
+
+Tab completes `res://` paths in C# strings, including scene loading and the
+path argument to `worlds.Add`. Scene calls offer scene files; general resource
+loading offers every recognized resource. Import sidecars, hidden directories
+and `.gdignore` trees are excluded. In the showcase, try
+`world.Open("res://playground.tscn")`: a spinning cube and a physics ball provide
+live nodes to inspect and change alongside the main demo.
+
+## Local connections
+
+Start a host accepting concurrent named-pipe connections:
+
+```text
+dotnet run --project MyGame.repl -- --repl-listen mygame
+```
+
+Connect from another terminal or process, including an agent:
+
+```text
+dotnet run --project MyGame.repl -- --repl-connect mygame
+```
+
+PowerShell can submit a script and collect its output:
+
+```powershell
+'var answer = 40 + 2;', 'answer' | dotnet run --project MyGame.repl -- --repl-connect mygame
+```
+
+The client starts no engine. Each connection has independent C# variables,
+imports, mode, selected node, cancellation queue and named worlds. Submissions
+run in order within a session; asynchronous submissions from different sessions
+can overlap. Godot work still shares one owner thread, SceneTree and singletons.
+Redirected clients use plain UTF-8 text, with complete C# submissions or multiline
+blocks as input and the usual REPL results as output. Interactive clients use
+the host's full editor: syntax colors, Tab completion, documentation, multiline
+editing and node navigation. Completion sees the connection's own variables
+and eligible `res://` resources. `NO_COLOR` disables terminal colors.
+History in a connected terminal lasts for that connection.
+Result values and errors return to the connection; `Console.WriteLine` and
+Godot logs still go to the host console.
+
+`:cancel` cancels that connection's running and queued work, leaving it ready
+for new input. A disconnected client cancels its work and closes its worlds.
+Client EOF and `:exit` drain submitted work and disconnect without stopping the
+host. The listening host stays alive after its own stdin reaches EOF; its local
+`:exit` or `tree.Quit()` stops the host. The local pipe is restricted to the
+current OS user. This remains a trusted, experimental execution tool.
+
+Custom entry points use `ReplHost.Run(args, godotArgs => new Engine(...,
+args: godotArgs), gameAssembly)` to enable the connection options. The original
+`Run(engine, gameAssembly)` overload remains a local terminal host.
+
 Type `:help` for examples and keyboard shortcuts, `:exit` to stop both the
 prompt and the game, or `:reset` to clear C# state without restarting Godot.
 
@@ -171,10 +228,15 @@ trimming, single-file publishing and NativeAOT disabled. Game assemblies must
 remain on disk so Roslyn can read their metadata. Editor APIs are available
 with the Editor configuration's `2dog.godotsharp.editor` reference.
 
-The calling main thread owns Godot. Terminal editing and compilation run in
-the background; submissions, object formatting and normal await continuations
-run on the owner thread while the host pumps frames. Synchronous blocking C#
-blocks the game too. Cancellation is cooperative: use `ct` in waits and loops.
+The calling main thread owns Godot. Terminal editing, input and compilation run
+independently of the submitted work queue. Submissions, object formatting and
+normal await continuations run on the owner thread while the host pumps frames.
+Ctrl+C or `:cancel` cancels running and queued work in the current session.
+Submitted `while`, `do`, `for` and `foreach` loops receive cancellation
+checkpoints, so an accidental `while (true) { }` can be interrupted. Pass `ct`
+to asynchronous waits. Synchronous C# pauses the shared engine until it returns
+or reaches a cancelled checkpoint. Blocking native/library calls, recursion,
+`goto` loops and code in `#load` files are not forcibly interrupted.
 Avoid `Task.Run` or `ConfigureAwait(false)` when accessing Godot objects.
 Shutdown waits for running submissions and their asynchronous cleanup before
 disposing Godot. Code that ignores `ct` can prevent shutdown.
@@ -182,7 +244,7 @@ disposing Godot. Code that ignores `ct` can prevent shutdown.
 Redirected input supports complete C# submissions, multiline blocks and EOF
 shutdown, and returns a nonzero exit code if any submission fails.
 `#r` and `#load` support local assemblies and scripts; NuGet installation from
-the prompt and attaching to other processes are outside this host's scope.
+the prompt is outside this host's scope.
 
 Third-party license texts and source links ship in this package. See
 `THIRD-PARTY-NOTICES.txt`.

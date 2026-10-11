@@ -5,10 +5,11 @@ namespace twodog.Repl;
 
 internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color, bool errorColor)
 {
-    internal static ReplOutput ForConsole() => new(Console.Out, Console.Error,
+    internal static ReplOutput ForConsole(ReplPromptOutput? prompt = null) => new(prompt?.Wrap(Console.Out) ?? Console.Out, prompt?.Wrap(Console.Error) ?? Console.Error,
         !Console.IsOutputRedirected && !PromptConfiguration.HasUserOptedOutFromColor,
         !Console.IsErrorRedirected && !PromptConfiguration.HasUserOptedOutFromColor);
     public void Message(string text) => output.WriteLine(text);
+    internal void Write(string? text, bool isError = false) => (isError ? error : output).Write(text);
     private string Paint(string text, string style) => color ? $"\x1b[{style}m{text}\x1b[0m" : text;
 
     public void Banner(string scenePath)
@@ -90,12 +91,17 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Example("await tree.ToSignal(tree, SceneTree.SignalName.SceneChanged);");
         output.WriteLine("  scene follows the new game scene after the change finishes.");
         output.WriteLine();
-        Section("Scratch world beside the game");
+        Section("Scratch worlds beside the game");
         Example("world.Open(\"res://other_scene.tscn\");");
         Example("world.Scene.GetChildren()");
         Example("world.Clear();  // empty scratch scene");
         Example("world.Close();");
+        Example("worlds.Add(\"lab\", \"res://other_scene.tscn\");");
+        Example("worlds[\"lab\"].Scene.GetChildren()");
+        Example("worlds.Names  // names belong to this session");
+        Example("worlds.Remove(\"lab\");");
         output.WriteLine("  Independent 2D/3D worlds in a separate window. The SceneTree and singletons are shared.");
+        output.WriteLine("  Tab completes eligible res:// paths in resource strings; scene calls offer scenes.");
         output.WriteLine();
         Section("Editing and session");
         Row("Enter", "Accept a selected completion; otherwise " + (multiline ? "insert a newline. Shift+Enter runs." : "run the input. Shift+Enter inserts a newline."));
@@ -108,11 +114,13 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Row("$Name", "Complete matching paths first, then search node names anywhere in the tree.");
         Row("Shift+Backspace", "Delete backward to a word break, like Ctrl+Backspace. Dots and slashes are breaks.");
         Row("Ctrl+Space", "Open suggestions. Ctrl+Shift+Space shows method signatures and arguments.");
-        Row("Up / Down", "History. Ctrl+C cancels input or cooperatively cancels code; pass ct to waits.");
+        Row("Up / Down", "History. Ctrl+C cancels input and the session's running/queued work; pass ct to waits.");
+        Row(":cancel", "Cancel running and queued work. Submitted C# loops have cancellation checkpoints.");
         Row(":reset / :clear", "Clear C# variables / screen. :exit or Ctrl+D on empty input exits.");
         output.WriteLine("  #r \"assembly.dll\" and #load \"script.csx\" load local code.");
         output.WriteLine("  C# and normal await continuations run on Godot's thread; frames advance while awaiting.");
         output.WriteLine("  Keep Godot calls off Task.Run/ConfigureAwait(false). Synchronous code blocks the game.");
+        output.WriteLine("  --repl-listen NAME accepts local sessions; --repl-connect NAME pipes stdin/stdout to one.");
         output.WriteLine();
     }
 

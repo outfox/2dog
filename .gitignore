@@ -49,6 +49,7 @@ wheels/
 
 
 # Unit test / coverage reports
+output/
 htmlcov/
 .tox/
 .coverage

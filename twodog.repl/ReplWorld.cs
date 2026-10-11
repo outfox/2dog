@@ -3,8 +3,12 @@ using Godot;
 namespace twodog.Repl;
 
 /// <summary>A scratch viewport with its own 2D and 3D worlds, beside the running game.</summary>
-public sealed class ReplWorld(Engine owner) : IDisposable
+public sealed class ReplWorld(Engine owner, string name) : IDisposable
 {
+    /// <summary>Creates a lazy default scratch world.</summary>
+    public ReplWorld(Engine owner) : this(owner, "default") { }
+    /// <summary>The world name within its session.</summary>
+    public string Name { get; } = name;
     private Window? window;
     private Node? current;
 
@@ -38,7 +42,8 @@ public sealed class ReplWorld(Engine owner) : IDisposable
         {
             window = new Window
             {
-                Visible = false, Name = "ReplWorld", Title = "2dog REPL - scratch world", Size = new Vector2I(960, 640),
+                Visible = false, Name = Name == "default" ? "ReplWorld" : "ReplWorld_" + Name.ValidateNodeName(),
+                Title = "2dog REPL - " + Name, Size = new Vector2I(960, 640),
                 ForceNative = true, World2D = new World2D(), World3D = new World3D(),
             };
             window.CloseRequested += Close;

@@ -10,7 +10,8 @@ using PromptSpan = PrettyPrompt.Documents.TextSpan;
 
 namespace twodog.Repl;
 
-internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? takePaste = null) : PromptCallbacks
+internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? takePaste = null, Action? cancel = null,
+    ReplPromptOutput? terminalOutput = null) : PromptCallbacks
 {
     private bool completionWindowOpen;
     private (string Text, int Caret)? bareCommand;
@@ -69,6 +70,16 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     protected override async Task<KeyPress> TransformKeyPressAsync(string text, int caret, KeyPress keyPress, CancellationToken cancellationToken)
     {
+        if (terminalOutput?.Restoring == true)
+        {
+            completionWindowOpen = false;
+            bareCommand = null;
+            pairCall = refineCycle = false;
+            cycle = null;
+            pendingEdit = null;
+            return IgnoreKey();
+        }
+        if (keyPress.ConsoleKeyInfo is { Key: ConsoleKey.C, Modifiers: ConsoleModifiers.Control }) cancel?.Invoke();
         preparedTask = null;
         pendingEdit = null;
         // Submit through a callback, leaving the buffer intact in both input
@@ -134,6 +145,8 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
         if (!completionWindowOpen && keyPress.ConsoleKeyInfo is { Key: ConsoleKey.Tab, Modifiers: 0 })
         {
             if (session.Mode == ReplMode.Agent && !text.TrimStart().StartsWith(':')) return IgnoreKey();
+            if (ResourcePathCompletion.Span(text, caret) is not null)
+                return new KeyPress(new ConsoleKeyInfo(' ', ConsoleKey.Spacebar, false, false, true));
             var prepared = await PrepareInputAsync(text, cancellationToken);
             var continuation = await ReplCompletion.ContinuationAsync(prepared, caret, cancellationToken);
             if (continuation is { } character && (caret == text.Length || text[caret] != character) &&
@@ -178,10 +191,16 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             (path.Path.Length == 0 || path.Path.StartsWith('/'))) return Task.FromResult(false);
         var insideQuotedPath = path is not null && text.AsSpan(path.Span.Start).StartsWith("$[") &&
             (!path.Complete || caret < path.Span.End);
-        return Task.FromResult(callOnCommit || !insideQuotedPath);
+        return Task.FromResult(callOnCommit || !insideQuotedPath && ResourcePathCompletion.Span(text, caret) is null);
     }
 
-    protected override Task<(string Text, int Caret)> FormatInput(string text, int caret, KeyPress keyPress, CancellationToken cancellationToken)
+    protected override async Task<(string Text, int Caret)> FormatInput(string text, int caret, KeyPress keyPress, CancellationToken cancellationToken)
+    {
+        var edit = await FormatInputCore(text, caret, keyPress, cancellationToken);
+        return terminalOutput?.Remember(edit.Text, edit.Caret) ?? edit;
+    }
+
+    private Task<(string Text, int Caret)> FormatInputCore(string text, int caret, KeyPress keyPress, CancellationToken cancellationToken)
     {
         // A rejected completion can reach the editor's newline binding. Restore
         // the exact command before rendering, history and the submit callback.
@@ -279,6 +298,7 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     protected override async Task<PromptSpan> GetSpanToReplaceByCompletionAsync(string text, int caret, CancellationToken cancellationToken)
     {
+        if (ResourcePathCompletion.Span(text, caret) is { } resource) return resource;
         if (AwaitingNodeArgument(text, caret)) return new PromptSpan(caret, 0);
         if (text.TrimStart().StartsWith(':') && !CommandArgument(text, caret))
             return new PromptSpan(text.IndexOf(':'), text.Length - text.IndexOf(':'));
@@ -344,6 +364,8 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
 
     private async Task<IReadOnlyList<CompletionItem>> CreateCompletionItemsAsync(string text, int caret, PromptSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
+        if (ResourcePathCompletion.Span(text, caret) is not null)
+            return ResourcePathCompletion.Items(text, caret, session.DetachedInput || session.Resources.Length > 0 ? session.Resources : await session.ResourcePathsAsync(cancellationToken), session.SceneResources);
         if (text.TrimStart().StartsWith(':') && !CommandArgument(text, caret))
             return ReplModes.Controls.Concat(session.Mode.HasShell() ? new[] { ":ls", ":cd", ":pwd", ":rm", ":cp", ":mv" } : [])
                 .Select(c => new CompletionItem(c)).ToArray();

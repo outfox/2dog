@@ -20,8 +20,50 @@ dotnet run --project MyGame.repl -- --headless
 ```
 
 Editor runs the game with editor natives; it does not open the Godot editor.
-Arguments after `--` go to Godot. The shared
+Arguments after `--` go to Godot, except the REPL connection options below. The shared
 [engine properties](/configuration#properties) also apply.
+
+## Local connections
+
+Run a listening host in one terminal, then connect from others:
+
+```bash
+dotnet run --project MyGame.repl -- --repl-listen mygame
+dotnet run --project MyGame.repl -- --repl-connect mygame
+```
+
+| Option | Behavior |
+| --- | --- |
+| `--repl-listen NAME` | Accept concurrent sessions over a local named pipe. |
+| `--repl-connect NAME` | Pipe stdin/stdout to a running host without starting another engine. |
+
+The options are mutually exclusive. Connecting accepts no Godot arguments and
+times out after five seconds if the host is unavailable. The generated host
+supports both options; custom hosts use the `ReplHost.Run(args, createEngine,
+references)` overload.
+
+PowerShell example for a second process or agent:
+
+```powershell
+'var answer = 40 + 2;', 'answer' | dotnet run --project MyGame.repl -- --repl-connect mygame
+```
+
+Each connection owns its variables, node selection, cancellation queue and
+named scratch worlds. All sessions share the engine's owner thread and live
+scene tree. Pipe input is UTF-8 text with complete submissions or multiline C#
+blocks. Interactive clients use the host's full editor, with syntax colors,
+Tab completion, multiline input and Ctrl+C cancellation. Completion sees each
+connection's variables, selected node and eligible `res://` paths. Redirected
+input and output stay plain text; `NO_COLOR` disables colors in a terminal.
+Results and errors return to the client; `Console.WriteLine` and Godot logs
+remain on the host console.
+
+Use `:cancel` to interrupt a connection's running and queued work. Client EOF
+or `:exit` waits for submitted work and disconnects. Disconnecting abruptly
+cancels its work and closes its worlds. A listening host remains available
+after its own stdin reaches EOF; local `:exit` or `tree.Quit()` stops it.
+The pipe accepts only the current OS user. The REPL is a trusted experimental
+tool that executes arbitrary code in the host process.
 
 ## Publishing
 

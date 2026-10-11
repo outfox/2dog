@@ -16,6 +16,24 @@ internal sealed class ReplSession : IDisposable
     private readonly ScriptOptions options;
     private readonly ReplGlobals globals;
     private readonly EngineDispatcher dispatcher;
+    private readonly object editingGate = new();
+    internal bool DetachedInput { get; set; }
+    private IReadOnlyDictionary<string, NodePathTarget> nodeSnapshot = new Dictionary<string, NodePathTarget>();
+    private NodePathStyle scopeSnapshot = new("/root", new Dictionary<string, NodeFamily>());
+    internal string[] Resources { get; private set; } = [];
+    internal IReadOnlySet<string> SceneResources { get; private set; } = new HashSet<string>();
+    internal async Task<string[]> ResourcePathsAsync(CancellationToken token)
+    {
+        await dispatcher.InvokeAsync(() => { CaptureResources(); return Task.FromResult(true); }, token);
+        return Resources;
+    }
+
+    private void CaptureResources()
+    {
+        Resources = ResourcePathCompletion.Capture();
+        var extensions = Godot.ResourceLoader.GetRecognizedExtensionsForType("PackedScene").ToHashSet(StringComparer.OrdinalIgnoreCase);
+        SceneResources = Resources.Where(path => extensions.Contains(Path.GetExtension(path).TrimStart('.'))).ToHashSet(StringComparer.Ordinal);
+    }
     private ScriptState<object>? state;
     private ProjectId? previous;
     private int submission;
@@ -24,7 +42,7 @@ internal sealed class ReplSession : IDisposable
     internal int Version => submission + navigationVersion;
     public ReplMode Mode { get; private set; } = ReplMode.Auto;
     public Task<NodePathStyle> ScopeStyleAsync(CancellationToken token)
-        => dispatcher.InvokeAsync(() => Task.FromResult(NodeColors.CapturePath(globals.here)), token);
+        => DetachedInput ? Task.FromResult(scopeSnapshot) : dispatcher.InvokeAsync(() => Task.FromResult(NodeColors.CapturePath(globals.here)), token);
     public Task<string> ScopePathAsync(CancellationToken token)
         => dispatcher.InvokeAsync(() => Task.FromResult(globals.here.GetPath().ToString()), token);
 
@@ -55,18 +73,43 @@ internal sealed class ReplSession : IDisposable
             SyntaxFactory.IsCompleteSubmission(CSharpSyntaxTree.ParseText(input.Code, ParseOptions));
     }
 
-    public async Task<PreparedInput> PrepareAsync(string text, CancellationToken cancellationToken)
+    internal Task RefreshAsync(CancellationToken token) => dispatcher.InvokeAsync(() =>
+    {
+        nodeSnapshot = NodePathInput.Capture(globals.root, token, globals.here);
+        scopeSnapshot = NodeColors.CapturePath(globals.here);
+        CaptureResources();
+        Interlocked.Increment(ref navigationVersion);
+        return Task.FromResult(true);
+    }, token);
+
+    internal void Reset()
+    {
+        state = null;
+        lock (editingGate)
+        {
+            previous = null;
+            editingDocument = null;
+            submission++;
+        }
+    }
+
+    public async Task<PreparedInput> PrepareAsync(string text, CancellationToken cancellationToken, bool live = false)
     {
         Mode.TryNavigation(text, out var navigation);
         IReadOnlyDictionary<string, NodePathTarget> nodes = new Dictionary<string, NodePathTarget>();
         if (NodePathInput.Find(text).Count > 0 || Mode.TryListing(text, out var listing) && listing.AwaitingTarget ||
             navigation?.AwaitingTarget == true)
-            nodes = await dispatcher.InvokeAsync(() => Task.FromResult(NodePathInput.Capture(globals.root, cancellationToken, globals.here)), cancellationToken).ConfigureAwait(false);
+            nodes = DetachedInput && !live ? nodeSnapshot : await dispatcher.InvokeAsync(() => Task.FromResult(NodePathInput.Capture(globals.root, cancellationToken, globals.here)), cancellationToken).ConfigureAwait(false);
         var input = new NodePathInput(text, nodes, navigation?.ExpressionSpan, navigation?.DestinationSpan);
         return new(Document(input.Code), input, nodes, nodes.ToDictionary(n => n.Key, n => n.Value.Family, StringComparer.Ordinal), Mode);
     }
 
     private Document Document(string text)
+    {
+        lock (editingGate) return DocumentCore(text);
+    }
+
+    private Document DocumentCore(string text)
     {
         var source = SourceText.From(text);
         if (editingDocument is { } editor)
@@ -136,7 +179,7 @@ internal sealed class ReplSession : IDisposable
                 return Task.FromResult(new ReplResult(null, null, false, Tree: hierarchy.Text, Styled: hierarchy));
             }, cancellationToken).ConfigureAwait(false);
         }
-        var prepared = await PrepareAsync(text, cancellationToken).ConfigureAwait(false);
+        var prepared = await PrepareAsync(text, cancellationToken, live: true).ConfigureAwait(false);
         if (Mode == ReplMode.Shell && navigation is null)
         {
             var expression = SyntaxFactory.ParseExpression(prepared.Input.Code.Trim().TrimEnd(';'), consumeFullText: true);
@@ -159,11 +202,18 @@ internal sealed class ReplSession : IDisposable
         if (diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error))
             return new(null, string.Join(Environment.NewLine, diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).Select(d => Diagnostic(d, prepared.Input))), false);
 
+        // Validate the original text for accurate diagnostics, then execute with loop checkpoints.
+        var instrumented = ReplCancellation.Instrument(prepared.Input.Code);
+        if (instrumented != prepared.Input.Code)
+            script = state is null ? CSharpScript.Create(instrumented, options, typeof(ReplGlobals))
+                : state.Script.ContinueWith<object>(instrumented, options);
+
         var document = prepared.Document;
         var hasResult = HasResult(script);
         var result = await dispatcher.InvokeAsync(async executionToken =>
         {
             globals.ct = executionToken;
+            using var checkpoints = ReplCancellation.Enter(executionToken);
             var next = state is null
                 ? await script.RunAsync(globals, catchException: _ => true, cancellationToken: executionToken)
                 : await script.RunFromAsync(state, catchException: _ => true, cancellationToken: executionToken);
@@ -196,10 +246,13 @@ internal sealed class ReplSession : IDisposable
 
         if (result.Committed)
         {
-            workspace.TryApplyChanges(document.Project.Solution);
-            previous = document.Project.Id;
-            submission++;
-            editingDocument = null;
+            lock (editingGate)
+            {
+                workspace.TryApplyChanges(document.Project.Solution);
+                previous = document.Project.Id;
+                submission++;
+                editingDocument = null;
+            }
         }
         return result;
     }

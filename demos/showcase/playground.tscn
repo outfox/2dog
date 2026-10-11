@@ -1,0 +1,89 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://SpinningCube.cs" id="1_spin"]
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.035, 0.05, 0.09, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.7, 0.8, 1, 1)
+ambient_light_energy = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Blue"]
+albedo_color = Color(0.18, 0.55, 0.95, 1)
+metallic = 0.3
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Orange"]
+albedo_color = Color(1, 0.4, 0.12, 1)
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="FloorMaterial"]
+albedo_color = Color(0.12, 0.17, 0.24, 1)
+
+[sub_resource type="BoxMesh" id="CubeMesh"]
+material = SubResource("Blue")
+
+[sub_resource type="SphereMesh" id="BallMesh"]
+material = SubResource("Orange")
+
+[sub_resource type="SphereShape3D" id="BallShape"]
+radius = 0.5
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMaterial")
+size = Vector3(12, 0.2, 10)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(12, 0.2, 10)
+
+[node name="Playground" type="Node3D"]
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="Camera" type="Camera3D" parent="."]
+position = Vector3(0, 4, 8)
+rotation_degrees = Vector3(-22, 0, 0)
+current = true
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -30, 0)
+light_energy = 1.4
+
+[node name="Floor" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="Spinner" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, 1, 0)
+mesh = SubResource("CubeMesh")
+script = ExtResource("1_spin")
+SpinAxis = Vector3(0.3, 1, 0.1)
+SpinSpeed = 0.8
+
+[node name="Ball" type="RigidBody3D" parent="."]
+position = Vector3(1.4, 3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Ball"]
+mesh = SubResource("BallMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Ball"]
+shape = SubResource("BallShape")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 850.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 20
+text = "2dog REPL playground
+Try: cd world.Scene   |   $Spinner.SpinSpeed = 3
+Try: $Ball.Position = new Vector3(1.4f, 4, 0)"

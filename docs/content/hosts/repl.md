@@ -48,8 +48,8 @@ cd /
 to refer to a node relative to your selection. Tab completes commands,
 node paths and C# members.
 
-C# has access to `engine`, `tree`, `root`, `scene`, `here`, the scratch world
-`world`, and the cancellation token `ct`. Godot and common .NET namespaces
+C# has access to `engine`, `tree`, `root`, `scene`, `here`, the default scratch
+world `world`, named `worlds`, and the cancellation token `ct`. Godot and common .NET namespaces
 are already imported. For example:
 
 ```csharp
@@ -59,9 +59,31 @@ node.Name
 node.QueueFree();
 ```
 
-The game keeps running while you type or await. Code runs on Godot's owner
-thread, so blocking code pauses the game. Keep Godot calls on that thread
-and use `ct` to make long waits cancellable.
+The game keeps running while you type or await. Input and editing remain
+available while submissions run. Use Ctrl+C or `:cancel` to cancel running and
+queued work. Submitted C# loops receive cancellation checkpoints; pass `ct`
+to long asynchronous waits. Blocking library or native calls still need their
+own cancellation support. Keep Godot calls on the engine's owner thread.
+
+Create several named scratch worlds alongside the game:
+
+```csharp
+worlds.Add("lab", "res://other.tscn");
+worlds.Add("empty");
+worlds["lab"].Scene.GetChildren()
+worlds.Names
+worlds.Remove("empty");
+```
+
+`world` is your session's default world. Each world has its own viewport and
+2D/3D physics worlds, while sharing the SceneTree and singletons. Tab completes
+eligible `res://` paths inside resource strings. The showcase includes
+`res://playground.tscn` with a spinning cube and a physics ball to experiment on.
+
+For multiple terminals or agent processes, start with `--repl-listen mygame`
+and connect with `--repl-connect mygame`. Each connection gets independent C#
+state and scratch worlds. See [local connections](/configuration/repl#local-connections)
+for piping examples and lifecycle details.
 
 See [REPL configuration](/configuration/repl) for native variants, headless
 use and publishing.

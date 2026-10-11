@@ -7,7 +7,7 @@ internal enum ReplMode { Auto, Shell, CSharp, Agent }
 internal static class ReplModes
 {
     internal const string AgentReply = "the lights are on, but there's no one home";
-    internal static readonly string[] Controls = [":auto", ":sh", ":cs", ":ai", ":help", ":exit", ":clear", ":reset", ":multiline"];
+    internal static readonly string[] Controls = [":auto", ":sh", ":cs", ":ai", ":help", ":exit", ":clear", ":reset", ":multiline", ":cancel"];
     internal static readonly string[] ShellCommands = ["ls", "cd", "pwd", "rm", "cp", "mv", "exit"];
     public static string Name(this ReplMode mode) => mode switch
     {
