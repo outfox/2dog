@@ -49,6 +49,7 @@ public class Engine : IDisposable, IAsyncDisposable
     private int _ownerThreadId;
     private SynchronizationContext? _hostSynchronizationContext;
     private IDisposable? _errorCapture;
+    private WindowsLifecycleTrace? _lifecycleTrace;
 
     /// <summary>Creates an engine and resolves its content when no path is supplied.</summary>
     /// <param name="project">Label passed as Godot's first argument.</param>
@@ -385,6 +386,7 @@ public class Engine : IDisposable, IAsyncDisposable
             _godotInstance = godotInstance;
             _startedLifetime = true;
         }
+        _lifecycleTrace = WindowsLifecycleTrace.TryStart();
         return godotInstance;
     }
 
@@ -520,13 +522,16 @@ public class Engine : IDisposable, IAsyncDisposable
         EnsureOwnedInstance();
 
         _iterationActive = true;
+        _lifecycleTrace?.IterationStarted();
         try
         {
             var quit = OperatingSystem.IsBrowser() ? WebHost.Iteration() : instance.Iteration();
+            if (quit) _lifecycleTrace?.Log("quit-returned");
             return quit || _disposeRequested;
         }
         finally
         {
+            _lifecycleTrace?.IterationEnded();
             _iterationActive = false;
             if (_disposeRequested)
                 BeginStartedInstanceDisposal();
@@ -545,6 +550,7 @@ public class Engine : IDisposable, IAsyncDisposable
 
         try
         {
+            _lifecycleTrace?.Log("quit-requested");
             RequestQuitCore();
         }
         catch
@@ -635,6 +641,7 @@ public class Engine : IDisposable, IAsyncDisposable
         {
             try
             {
+                Interlocked.Exchange(ref _lifecycleTrace, null)?.Dispose();
                 LibGodot.libgodot_destroy_godot_instance(instancePtr);
                 Console.WriteLine($"{nameof(Engine)}: Godot instance destroyed.");
             }
