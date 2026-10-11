@@ -66,6 +66,7 @@ const SECTIONS = [
   ['Develop and Configure', [
     'dnx-2dog.md', 'cli/add.md', 'cli/new.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md',
     'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'build-configurations.md',
+    'configuration/environment-variables.md',
   ]],
   ['Testing', [
     'testing/index.md', 'testing/nunit.md', 'testing/xunit.md',
