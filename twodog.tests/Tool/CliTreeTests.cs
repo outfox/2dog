@@ -17,7 +17,8 @@ public class CliTreeTests
             foreach (var spelling in CliTree.NamesOf(option))
             {
                 var args = PathTo(command).Concat(ArgsFor(command)).Append(spelling)
-                    .Concat(option.ValueType == typeof(bool) || CliTree.HostKindOf(option) != null ? [] : ["value"])
+                    .Concat(option.ValueType == typeof(bool) || CliTree.HostKindOf(option) != null ? []
+                        : [option == CliTree.ReplTimeout ? "1" : "value"])
                     .ToArray();
                 var parsed = CommandLine.Parse(args);
                 var expected = option == CliTree.HelpOption ? Verb.Help
@@ -29,10 +30,12 @@ public class CliTreeTests
     }
 
     private static string[] PathTo(Command command) =>
-        command == CliTree.PackList ? ["pack", "list"] : [command.Name];
+        command.Parents.OfType<Command>().FirstOrDefault() is { } parent && parent != CliTree.Root
+            ? [.. PathTo(parent), command.Name]
+            : [command.Name];
 
     private static string[] ArgsFor(Command command) =>
-        command == CliTree.PackList ? ["some.pck"] : [];
+        command == CliTree.PackList ? ["some.pck"] : command == CliTree.ReplClose ? ["agent"] : [];
 
     [Theory]
     [InlineData("new", "--rename", "X")]

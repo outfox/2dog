@@ -49,6 +49,8 @@ internal static class Program
                     return UpdateCommand.Run(cmd, report);
                 case Verb.Pack:
                     return PackCommand.Run(cmd, report);
+                case Verb.Repl:
+                    return ReplCommand.Run(cmd.Repl!, report);
                 default:
                     return Execute(cmd, report);
             }

@@ -548,7 +548,26 @@ public class ReplPipeOptionTests
     [InlineData("--repl-listen", "x", "--repl-listen", "x")]
     [InlineData("--repl-connect", "x", "--repl-connect", "x")]
     [InlineData("--repl-connect", "x", "--headless")]
+    [InlineData("--repl-listen", "no/slashes")]
+    [InlineData("--repl-connect", ".hidden")]
+    [InlineData("--repl-connect", "a-pipe-name-of-sixty-five-characters-is-one-too-long-for-the-host")]
     public void RejectsMalformedOptions(params string[] args) => Assert.Throws<ArgumentException>(() => ReplPipeOptions.Parse(args));
+
+    [Fact]
+    public void TerminalHostsListenUnderTheirProcessAndPublishTheirOwnClient()
+    {
+        Assert.Equal("chosen", ReplHost.ListenName("chosen", inputRedirected: true, outputRedirected: true));
+        Assert.Null(ReplHost.ListenName(null, inputRedirected: true, outputRedirected: false));
+        Assert.Null(ReplHost.ListenName(null, inputRedirected: false, outputRedirected: true));
+        Assert.Equal("2dog-" + Environment.ProcessId, ReplHost.ListenName(null, inputRedirected: false, outputRedirected: false));
+        Assert.False(ReplDiscovery.IsValidName(""));
+        Assert.True(ReplDiscovery.IsValidName("my_game.repl-2"));
+        var entry = typeof(ReplHost).Assembly;
+        Assert.Equal(["/opt/dotnet/dotnet", entry.Location], ReplHost.ClientCommand("/opt/dotnet/dotnet", entry));
+        Assert.Equal(["C:/game/Game.repl.exe"], ReplHost.ClientCommand("C:/game/Game.repl.exe", entry));
+        Assert.Equal(["dotnet"], ReplHost.ClientCommand("dotnet", null));
+        Assert.Equal([""], ReplHost.ClientCommand(null, null));
+    }
 
     [Fact]
     public void OnlyHostOptionsAreRemovedFromGodotArguments()

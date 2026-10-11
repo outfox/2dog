@@ -176,7 +176,8 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: gd('help') + 'help', link: '/cli/help' },
-                  { text: gd('box') + 'pack', link: '/cli/pack' }
+                  { text: gd('box') + 'pack', link: '/cli/pack' },
+                  { text: gd('script') + 'repl', link: '/cli/repl' }
                 ]
               },
               {

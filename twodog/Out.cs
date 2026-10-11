@@ -14,6 +14,7 @@ internal static class Out
     private static IAnsiConsole _stdout = null!;
     private static IAnsiConsole _stderr = null!;
     private static readonly TextWriter StdoutWriter = new ForwardingWriter(stdErr: false);
+    private static readonly TextWriter StderrWriter = new ForwardingWriter(stdErr: true);
 
     /// <summary>The active mode: Main configures it from the command line, tests pin a redirected one.</summary>
     public static OutputMode Mode { get; private set; } = null!;
@@ -31,6 +32,9 @@ internal static class Out
 
     /// <summary>A plain stdout writer for output produced outside Spectre (the pack listing).</summary>
     public static TextWriter Writer => StdoutWriter;
+
+    /// <summary>A plain stderr writer for diagnostics relayed verbatim (REPL errors and Godot logs).</summary>
+    public static TextWriter ErrorWriter => StderrWriter;
 
     /// <summary>
     /// Everything a run reported, for the --json envelope. Flow-local: tests run several commands in parallel in one

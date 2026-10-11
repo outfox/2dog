@@ -148,6 +148,25 @@ internal static class CliTree
     public static readonly Option<bool> ListChecks = new("--list-checks")
         { Description = "List every check and build-log signature" };
 
+    // REPL options.
+    public static readonly Option<string> ReplSession = new("--session", "-s")
+    {
+        HelpName = "name",
+        Description = "Run in a named session: variables, the selected node and worlds persist between calls until " +
+                      "'2dog repl close'. Without it, each call gets a fresh session",
+    };
+
+    /// <summary>Parsed as text: a malformed number gets its own message instead of "requires a value".</summary>
+    public static readonly Option<string> ReplTimeout = new("--timeout")
+        { HelpName = "seconds", Description = "Cancel the submission after this many seconds (exit code 124); the session survives" };
+
+    public static readonly Option<string> ReplPipe = new("--pipe")
+    {
+        Recursive = true,
+        HelpName = "name",
+        Description = "The REPL host to use, by its pipe name, when several are running",
+    };
+
     /// <summary>Flags whose value is optional; the pre-pass attaches or invents one.</summary>
     public static IEnumerable<Option> OptionalValueOptions => HostOptions.Values.Cast<Option>().Append(Build);
 
@@ -168,6 +187,8 @@ internal static class CliTree
     public static readonly Argument<string?> ProjectPathArg = new("path") { Arity = ArgumentArity.ZeroOrOne };
     public static readonly Argument<string> PackFileArg = new("pck");
     public static readonly Argument<string?> HelpVerbArg = new("verb") { Arity = ArgumentArity.ZeroOrOne };
+    public static readonly Argument<string[]> ReplCodeArg = new("code") { Arity = ArgumentArity.ZeroOrMore };
+    public static readonly Argument<string> ReplSessionArg = new("session");
 
     // Verbs.
     public static readonly Command New = new("new", "Create a new Godot project with 2dog hosts");
@@ -176,9 +197,16 @@ internal static class CliTree
     public static readonly Command Doctor = new("doctor", "Check the project and this machine, fix what can be fixed");
     public static readonly Command Pack = new("pack", "Inspect exported .pck files (no engine needed)");
     public static readonly Command PackList = new("list", "List a .pck's contents by size (no engine needed)");
+    public static readonly Command Repl = new("repl", "Attach this terminal to a running REPL host");
+    public static readonly Command ReplExec = new("exec", "Run C# and node commands in a running REPL host");
+    public static readonly Command ReplSessions = new("sessions", "List a REPL host's named sessions");
+    public static readonly Command ReplClose = new("close", "Close a named REPL session and its worlds");
     public static readonly Command VersionCommand = new("version", "Print tool and package versions");
     public static readonly Command HelpCommand = new("help", "Show help, for one verb when named");
     public static readonly RootCommand Root = new("2dog");
+
+    /// <summary>A verb with operations that also does something by itself (2dog repl attaches a terminal).</summary>
+    public static bool RunsWithoutOperation(Command command) => command == Repl;
 
     /// <summary>Verb aliases get their own row in the verb table, with their own wording.</summary>
     public static readonly IReadOnlyDictionary<string, string> AliasDescriptions = new Dictionary<string, string>
@@ -226,7 +254,16 @@ internal static class CliTree
         Pack.Subcommands.Add(PackList);
         HelpCommand.Arguments.Add(HelpVerbArg);
 
-        foreach (var command in new[] { New, Add, Doctor, Update, Pack, VersionCommand, HelpCommand }) Root.Subcommands.Add(command);
+        Repl.Options.Add(ReplPipe);
+        ReplExec.Arguments.Add(ReplCodeArg);
+        ReplExec.Options.Add(ReplSession);
+        ReplExec.Options.Add(ReplTimeout);
+        ReplClose.Arguments.Add(ReplSessionArg);
+        foreach (var command in new[] { ReplExec, ReplSessions, ReplClose }) Repl.Subcommands.Add(command);
+        // Never invoked (Program dispatches); without an action the parser demands an operation.
+        Repl.SetAction(_ => 0);
+
+        foreach (var command in new[] { New, Add, Doctor, Update, Pack, Repl, VersionCommand, HelpCommand }) Root.Subcommands.Add(command);
     }
 
     private static Option<string[]> HostOption(HostKind kind)
@@ -260,6 +297,7 @@ internal static class CliTree
         if (command == Doctor) return Verb.Doctor;
         if (command == Update) return Verb.Update;
         if (command == Pack || command == PackList) return Verb.Pack;
+        if (command == Repl || command.Parents.Contains(Repl)) return Verb.Repl;
         if (command == VersionCommand) return Verb.Version;
         if (command == HelpCommand) return Verb.Help;
         return null;
@@ -272,6 +310,7 @@ internal static class CliTree
         Verb.Doctor => Doctor,
         Verb.Update => Update,
         Verb.Pack => Pack,
+        Verb.Repl => Repl,
         Verb.Version => VersionCommand,
         Verb.Help => HelpCommand,
         _ => null,

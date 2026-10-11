@@ -316,6 +316,23 @@ public class EngineRestartTests
     }
 
     [Fact]
+    public void ManyLifetimesNeverExhaustProcessWideRegistrations()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+
+        // Every boot registers the scene types again; their SceneTree idle callbacks once filled 256 static slots
+        // after 85 lifetimes, and every later boot reported an error.
+        for (var lifetime = 0; lifetime < 90; lifetime++)
+        {
+            using var engine = new Engine($"lifetimes-{lifetime}", projectDir, "--headless") { CaptureErrors = true };
+            engine.Start();
+            Assert.False(engine.Iteration());
+            Assert.Empty(engine.Errors.Drain());
+        }
+    }
+
+    [Fact]
     public void IndexedPropertiesWorkInEveryLifetime()
     {
         var projectDir = Engine.ResolveProjectDir();

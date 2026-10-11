@@ -91,6 +91,9 @@ internal static class Usage
         yield return new Line("doctor, update", Kind.Section);
         foreach (var line in Rows(VerbOnlyOptions.Select(OptionRow))) yield return line;
         yield return new Line("");
+        yield return new Line("repl", Kind.Section);
+        foreach (var line in Rows(ReplOptions.Select(OptionRow))) yield return line;
+        yield return new Line("");
         yield return new Line("output", Kind.Section);
         foreach (var line in Rows(CliTree.OutputOptions.Select(OptionRow))) yield return line;
         yield return new Line("");
@@ -104,18 +107,33 @@ internal static class Usage
             .Where(o => !o.Hidden && !GeneralOptions.Contains(o) && !CliTree.OutputOptions.Contains(o))
             .Distinct();
 
+    /// <summary>Options of the repl verb and its operations, for the general help's own section.</summary>
+    private static IEnumerable<Option> ReplOptions =>
+        CliTree.Repl.Options.Concat(CliTree.Repl.Subcommands.SelectMany(s => s.Options)).Where(o => !o.Hidden).Distinct();
+
     private static IEnumerable<Line> VerbLines(Verb verb, Command command)
     {
         var leaf = command.Subcommands.Count == 1 ? command.Subcommands[0] : command;
+        // A verb with several operations lists them; their options join the verb's own.
+        var operations = command.Subcommands.Count > 1 ? command.Subcommands.Where(s => !s.Hidden).ToList() : [];
         var signature = command.Subcommands.Count == 1
             ? $"{command.Name} {CliTree.Signature(leaf)}"
-            : CliTree.Signature(command);
+            : CliTree.Signature(command) + (operations.Count > 0 ? " [operation]" : "");
         var hosts = leaf.Options.Where(CliTree.IsHostOption).Any();
-        var usage = $"usage: 2dog {signature}" + (hosts ? " [hosts]" : "") + (leaf.Options.Count > 0 || hosts ? " [options]" : "");
+        var verbOptions = leaf.Options.Concat(operations.SelectMany(o => o.Options)).Distinct().ToList();
+        var usage = $"usage: 2dog {signature}" + (hosts ? " [hosts]" : "") + (verbOptions.Count > 0 || hosts ? " [options]" : "");
         yield return new Line(usage, Kind.Usage);
         yield return new Line("");
         foreach (var line in Wrap($"{leaf.Description}. {Prose(verb)}".TrimEnd(), Width))
             yield return new Line(line);
+
+        if (operations.Count > 0)
+        {
+            yield return new Line("");
+            yield return new Line("operations", Kind.Section);
+            foreach (var line in Rows(operations.Select(o => new Row($"{command.Name} {CliTree.Signature(o)}", o.Description ?? ""))))
+                yield return line;
+        }
 
         if (hosts)
         {
@@ -124,7 +142,7 @@ internal static class Usage
             foreach (var line in Rows(HostRows())) yield return line;
         }
 
-        var options = leaf.Options.Where(o => !o.Hidden && !CliTree.IsHostOption(o))
+        var options = verbOptions.Where(o => !o.Hidden && !CliTree.IsHostOption(o))
             .Concat(CliTree.Root.Options.Where(o => !o.Hidden && !CliTree.OutputOptions.Contains(o)))
             .ToList();
         if (options.Count > 0)
@@ -163,6 +181,10 @@ internal static class Usage
                        "still in host csprojs move to the root Directory.Build.props first; the game project's " +
                        "Godot.NET.Sdk follows. Never downgrades; refuses a dirty git tree without --allow-dirty.",
         Verb.Pack => "Reads the pack directly, so it works on any exported .pck without a project or engine.",
+        Verb.Repl => "Talks to a REPL host started with 'dotnet run --project <Game>.repl', found through the file " +
+                     "it publishes while listening; the host for the current project directory wins, --pipe picks " +
+                     "another. exec prints values on stdout and errors and Godot warnings on stderr; exit code 3 " +
+                     "when a submission fails. Lines run in order and stop at the first failure.",
         Verb.Version => "Asks nuget.org (best effort, 2.5 s) whether newer stable packages exist.",
         _ => "",
     };
@@ -173,6 +195,7 @@ internal static class Usage
         {
             if (command.Subcommands.Count > 0)
             {
+                if (CliTree.RunsWithoutOperation(command)) yield return new Row(CliTree.Signature(command), command.Description ?? "");
                 foreach (var sub in command.Subcommands.Where(s => !s.Hidden))
                     yield return new Row($"{command.Name} {CliTree.Signature(sub)}", sub.Description ?? "");
                 continue;
@@ -221,6 +244,7 @@ internal static class Usage
                 ("2dog doctor", "check the project; offers fixes"),
                 ("2dog update", "packages to this tool's versions"),
                 ("2dog pack list MyGame.web/AppBundle/godot.pck", ""),
+                ("2dog repl exec -s agent 'ls'", "code in a running REPL host"),
             ],
             Verb.New =>
             [
@@ -250,6 +274,15 @@ internal static class Usage
                 ("dnx 2dog@4.7.2.80 update", "a specific tool version"),
             ],
             Verb.Pack => [("2dog pack list MyGame.web/AppBundle/godot.pck", "")],
+            Verb.Repl =>
+            [
+                ("2dog repl", "attach this terminal"),
+                ("2dog repl exec -s agent 'cd $Main'", "a named session keeps its state"),
+                ("2dog repl exec -s agent '$Player.Position'", ""),
+                ("2dog repl exec --timeout 30 - < script.csx", "piped lines, one at a time"),
+                ("2dog repl sessions", ""),
+                ("2dog repl close agent", ""),
+            ],
             Verb.Version => [("2dog version", "")],
             Verb.Help => [("2dog help new", "")],
             _ => [],

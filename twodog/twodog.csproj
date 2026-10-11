@@ -42,6 +42,14 @@
         <Compile Include="../twodog.import/GdpcPack.cs" Link="GdpcPack.cs"/>
     </ItemGroup>
 
+    <!-- The REPL pipe protocol behind `2dog repl`, shared with 2dog.repl; TWODOG_CLI gives it this tool's namespace. -->
+    <PropertyGroup>
+        <DefineConstants>$(DefineConstants);TWODOG_CLI</DefineConstants>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="../twodog.repl/ReplProtocol.cs" Link="Repl/ReplProtocol.cs"/>
+    </ItemGroup>
+
     <!-- The versions the tool scaffolds with, baked in at build time; an empty one would only surface at runtime -->
     <Target Name="TwoDogRequireVersions" BeforeTargets="CoreCompile">
         <Error Condition="'$(TwoDogVersion)' == '' Or '$(NativesVersion)' == '' Or '$(GodotVersion)' == ''"

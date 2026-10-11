@@ -86,6 +86,9 @@ Commands:
 | `2dog doctor [path]` | Check the project and this machine; `--fix` applies the safe fixes; `--build` / `--log` explain build failures |
 | `2dog update [path]` | Update the project's 2dog packages to this tool's versions (never downgrades) |
 | `2dog pack list <file.pck>` | List a `.pck`'s contents by size (no engine involved) |
+| `2dog repl` | Attach this terminal to a running REPL host (`dotnet run --project MyGame.repl`) |
+| `2dog repl exec [code]` | Run C# and node commands in a running REPL host; prints values, exits nonzero on failure |
+| `2dog repl sessions`, `2dog repl close <session>` | List a REPL host's named sessions, close one |
 | `2dog version` | Print the tool and package versions |
 | `2dog help [verb]` | Usage, or the help for one verb |
 
@@ -107,11 +110,12 @@ Options:
 | `--update-workloads` | `update`: install missing workloads the hosts need, then update all installed workloads for the project's SDK |
 | `--allow-dirty` | `update`: proceed with uncommitted git changes |
 | `--fix`, `--fix-all`, `--build [target]`, `-c, --configuration <Cfg>`, `--log <file>`, `--ignore <id>`, `--strict`, `--offline`, `--list-checks` | `doctor` options; see `2dog doctor --help` |
+| `-s, --session <name>`, `--timeout <seconds>`, `--pipe <name>` | `repl exec` options: a named session that keeps its state, a time limit, and which host to use; see `2dog repl --help` |
 | `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |
 | `-h, --help`, `--version` | Help (per verb after a verb), versions |
 
-Exit codes: `0` ok, `1` usage error, `2` tool error, `3` doctor findings remain,
-`130` cancelled. The report goes to stdout, diagnostics to stderr; nothing
+Exit codes: `0` ok, `1` usage error, `2` tool error, `3` doctor findings remain
+or a `repl exec` submission failed, `124` `repl exec` timed out, `130` cancelled. The report goes to stdout, diagnostics to stderr; nothing
 prompts in a pipe or in CI. Full reference: https://2dog.dev/dnx-2dog
 
 ## Using the library directly

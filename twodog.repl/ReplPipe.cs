@@ -18,6 +18,8 @@ internal sealed record ReplPipeOptions(string? Listen, string? Connect, string[]
             var option = args[i];
             if (++i == args.Length || string.IsNullOrWhiteSpace(args[i]) || args[i].StartsWith('-'))
                 throw new ArgumentException(option + " requires a local pipe name.");
+            if (!ReplDiscovery.IsValidName(args[i]))
+                throw new ArgumentException($"Invalid pipe name '{args[i]}'. Use up to 64 letters, digits, '-', '_' or '.'.");
             if (option == "--repl-listen")
             {
                 if (listen is not null) throw new ArgumentException("--repl-listen was specified twice.");
@@ -35,8 +37,8 @@ internal sealed record ReplPipeOptions(string? Listen, string? Connect, string[]
     }
 }
 
-// A deliberately small, local transport: UTF-8 text submissions in, ordinary REPL output out.
-// Each accepted stream owns a session. The evaluator has no dependency on named pipes.
+// A deliberately small, local transport. Terminal and plain text streams own a session per connection;
+// exec requests address named sessions that outlive their connections. The evaluator has no dependency on pipes.
 internal sealed class ReplPipeServer : IDisposable
 {
     private readonly string name;
@@ -46,6 +48,7 @@ internal sealed class ReplPipeServer : IDisposable
     private readonly CancellationTokenSource stopped;
     private readonly ConcurrentDictionary<int, Task> sessions = new();
     private readonly ConcurrentDictionary<int, ReplWorlds> worlds = new();
+    private readonly ReplExecHost exec;
     private readonly Task accepting;
     private int nextId;
     private bool disposed;
@@ -57,6 +60,7 @@ internal sealed class ReplPipeServer : IDisposable
         this.references = references;
         this.dispatcher = dispatcher;
         stopped = CancellationTokenSource.CreateLinkedTokenSource(lifetime);
+        exec = new ReplExecHost(engine, references, dispatcher, stopped.Token);
         var first = CreatePipe();
         accepting = Task.Run(() => AcceptAsync(first));
     }
@@ -84,8 +88,7 @@ internal sealed class ReplPipeServer : IDisposable
     private async Task ServeAsync(int id, NamedPipeServerStream pipe)
     {
         using var sessionLifetime = CancellationTokenSource.CreateLinkedTokenSource(stopped.Token);
-        var globals = new ReplGlobals(engine);
-        worlds[id] = globals.worlds;
+        ReplGlobals? globals = null;
         try
         {
             using (pipe)
@@ -95,6 +98,13 @@ internal sealed class ReplPipeServer : IDisposable
                 await using var output = new ReplPipeOutput(writer, sessionLifetime);
                 var first = await reader.ReadLineAsync(sessionLifetime.Token).ConfigureAwait(false);
                 if (first is null) return;
+                if (first.StartsWith(ReplProtocol.ExecHello, StringComparison.Ordinal))
+                {
+                    await exec.ServeAsync(first, reader, output, sessionLifetime.Token).ConfigureAwait(false);
+                    return;
+                }
+                globals = new ReplGlobals(engine);
+                worlds[id] = globals.worlds;
                 if (first == ReplRemoteTerminal.Hello + ";ansi" || first == ReplRemoteTerminal.Hello + ";plain")
                 {
                     await using var terminal = new ReplRemoteTerminal(reader, output, sessionLifetime, first.EndsWith(";ansi", StringComparison.Ordinal));
@@ -118,7 +128,8 @@ internal sealed class ReplPipeServer : IDisposable
         {
             try
             {
-                await dispatcher.InvokeAsync(() => { globals.worlds.Dispose(); return Task.FromResult(true); }).ConfigureAwait(false);
+                if (globals is not null)
+                    await dispatcher.InvokeAsync(() => { globals.worlds.Dispose(); return Task.FromResult(true); }).ConfigureAwait(false);
                 worlds.TryRemove(id, out _);
             }
             catch (OperationCanceledException) { /* Host disposal closes remaining worlds on the owner thread. */ }
@@ -136,7 +147,7 @@ internal sealed class ReplPipeServer : IDisposable
             try
             {
                 accepting.GetAwaiter().GetResult();
-                var cleanup = Task.WhenAll(sessions.Values);
+                var cleanup = Task.WhenAll(sessions.Values.Append(exec.CloseAllAsync()));
                 while (!cleanup.IsCompleted)
                 {
                     dispatcher.Pump();
@@ -147,7 +158,11 @@ internal sealed class ReplPipeServer : IDisposable
             }
             finally
             {
-                try { foreach (var owned in worlds.Values) owned.Dispose(); }
+                try
+                {
+                    foreach (var owned in worlds.Values) owned.Dispose();
+                    exec.Dispose();
+                }
                 finally { stopped.Dispose(); }
             }
         }

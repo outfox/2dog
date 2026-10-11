@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
+using twodog.cli.Repl;
 
 namespace twodog.cli;
 
@@ -12,9 +13,16 @@ internal enum Verb
     Doctor,
     Update,
     Pack,
+    Repl,
     Help,
     Version,
 }
+
+/// <summary>What the repl verb does: attach a terminal, or one request.</summary>
+internal enum ReplOp { Attach, Exec, Sessions, Close }
+
+/// <summary>The repl verb's command line.</summary>
+internal sealed record ReplOptions(ReplOp Op, string? Pipe, string? Session = null, double? Timeout = null, string? Code = null);
 
 /// <summary>A host asked for on the command line; a null folder means "pick one".</summary>
 internal sealed record HostRequest(HostKind Kind, string? Folder);
@@ -30,6 +38,9 @@ internal sealed class ParsedCommand
 
     /// <summary>The .pck file a pack operation works on.</summary>
     public string? PackFile;
+
+    /// <summary>repl: the operation and its target.</summary>
+    public ReplOptions? Repl;
 
     /// <summary>For <see cref="Verb.Help"/>: the verb to show help for, null for the general help.</summary>
     public Verb? HelpVerb;
@@ -116,6 +127,9 @@ internal static class CommandLine
             case Verb.Pack:
                 cmd.PackFile = result.GetValue(CliTree.PackFileArg);
                 break;
+            case Verb.Repl:
+                cmd.Repl = ReadReplOptions(result, result.CommandResult.Command);
+                break;
             case Verb.Help:
                 if (result.GetValue(CliTree.HelpVerbArg) is { } name)
                     cmd.HelpVerb = CliTree.VerbNamed(name) ?? throw new UsageException(UnknownVerb(name), Verb.Help);
@@ -188,6 +202,8 @@ internal static class CommandLine
                         $"{option.IdentifierToken?.Value ?? option.Option.Name} requires a value", verb);
                 case ArgumentResult { Argument: var argument } when argument == CliTree.PackFileArg:
                     return new UsageException("2dog pack list needs a .pck file", verb);
+                case ArgumentResult { Argument: var argument } when argument == CliTree.ReplSessionArg:
+                    return new UsageException("2dog repl close needs a session name", verb);
                 case CommandResult { Command: var at }:
                     if (result.UnmatchedTokens.Count > 0) return Unmatched(at, result.UnmatchedTokens[0], verb);
                     if (at == CliTree.Root) return new UsageException($"a verb is required: {VerbList}");
@@ -206,6 +222,10 @@ internal static class CommandLine
         if (at == CliTree.Add) return new UsageException("more than one project path given", verb);
         if (at == CliTree.Pack) return new UsageException($"unknown pack operation '{token}' (supported: {PackOperations})", verb);
         if (at == CliTree.PackList) return new UsageException("2dog pack list takes one .pck file", verb);
+        if (at == CliTree.Repl)
+            return new UsageException($"unknown repl operation '{token}' (supported: {ReplOperations}); code runs with '2dog repl exec'", verb);
+        if (at == CliTree.ReplSessions) return new UsageException("2dog repl sessions takes no arguments", verb);
+        if (at == CliTree.ReplClose) return new UsageException("2dog repl close takes one session name", verb);
         if (at == CliTree.HelpCommand) return new UsageException("2dog help takes at most one verb", verb);
         return new UsageException($"unexpected argument '{token}'", verb);
     }
@@ -222,6 +242,8 @@ internal static class CommandLine
 
     private static string PackOperations => string.Join(", ", CliTree.Pack.Subcommands.Select(s => s.Name));
 
+    private static string ReplOperations => string.Join(", ", CliTree.Repl.Subcommands.Select(s => s.Name));
+
     /// <summary>Which tool version runs is decided by the launcher before 2dog starts.</summary>
     private static UsageException PinError(string? version)
     {
@@ -230,6 +252,37 @@ internal static class CommandLine
             "2dog cannot pin its own version - by the time it runs, the version is already chosen. " +
             $"Pin it where the tool is launched: 'dnx 2dog@{version}' " +
             $"or 'dotnet tool install -g 2dog --version {version}'.");
+    }
+
+    private static ReplOptions ReadReplOptions(ParseResult result, Command command)
+    {
+        var pipe = result.GetValue(CliTree.ReplPipe);
+        if (pipe is not null && !ReplDiscovery.IsValidName(pipe))
+            throw new UsageException($"'{pipe}' is not a REPL pipe name (letters, digits, '-', '_' and '.')", Verb.Repl);
+        if (command == CliTree.ReplSessions) return new ReplOptions(ReplOp.Sessions, pipe);
+        if (command == CliTree.ReplClose) return new ReplOptions(ReplOp.Close, pipe, result.GetValue(CliTree.ReplSessionArg));
+        if (command != CliTree.ReplExec)
+        {
+            if (Out.Mode.Json) throw new UsageException("2dog repl attaches a terminal; use '2dog repl exec' for --json", Verb.Repl);
+            return new ReplOptions(ReplOp.Attach, pipe);
+        }
+
+        var session = result.GetValue(CliTree.ReplSession);
+        if (session is not null && !ReplDiscovery.IsValidName(session))
+            throw new UsageException($"'{session}' is not a session name (up to 64 letters, digits, '-', '_' and '.')", Verb.Repl);
+        double? timeout = null;
+        if (result.GetValue(CliTree.ReplTimeout) is { } text)
+        {
+            if (!double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var seconds)
+                || !(seconds > 0 && seconds <= int.MaxValue / 1000))
+                throw new UsageException($"--timeout takes a positive number of seconds, not '{text}'", Verb.Repl);
+            timeout = seconds;
+        }
+
+        // Several words are one submission ('2dog repl exec ls $Player'); '-' or no code reads stdin.
+        var words = result.GetValue(CliTree.ReplCodeArg) ?? [];
+        var code = words is [] or ["-"] ? null : string.Join(' ', words);
+        return new ReplOptions(ReplOp.Exec, pipe, session, timeout, code);
     }
 
     private static DoctorOptions ReadDoctorOptions(ParseResult result)

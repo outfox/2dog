@@ -31,6 +31,7 @@ dotnet tool install -g 2dog   # or install it globally
 | [`2dog doctor`](/cli/doctor) | Check the project and this machine, fix what can be fixed, explain build failures |
 | [`2dog update`](/cli/update) | Bring the project's 2dog packages to this tool's versions |
 | [`2dog pack`](/cli/pack) | List a `.pck`'s contents |
+| [`2dog repl`](/cli/repl) | Attach to a running REPL host, or run code in it from scripts and agents (`--session`, `--timeout`, `--pipe`) |
 | [`2dog version`](/cli/version) | Print the tool and package versions |
 | [`2dog help`](/cli/help) | Show the usage, or the help for one verb |
 
@@ -101,7 +102,8 @@ colour in a pipe.
 | `0` | Success, including `--dry-run`, "Nothing to do", and a declined plan |
 | `1` | Usage error: unknown option or verb, missing value, wrong positional count; the error names the verb's `--help` |
 | `2` | Tool error: project state, I/O, invalid XML, a failed subprocess, a plan that stopped half-way (the report says which steps stand), an unexpected exception (`--verbose` adds the stack trace) |
-| `3` | `doctor`: findings remain after the fixes (errors; warnings too under `--strict`), or the `--build` failed |
+| `3` | `doctor`: findings remain after the fixes (errors; warnings too under `--strict`), or the `--build` failed; `repl exec`: a submission failed |
+| `124` | `repl exec`: `--timeout` cancelled a submission |
 | `130` | Cancelled with Ctrl+C |
 
 ## Versions

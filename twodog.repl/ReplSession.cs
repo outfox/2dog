@@ -132,7 +132,7 @@ internal sealed class ReplSession : IDisposable
             .GetProject(id)!.Documents.Single();
     }
 
-    public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken)
+    public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken, ReplCapture? capture = null)
     {
         if (ReplModes.TryParse(text.Trim(), out var mode))
         {
@@ -151,6 +151,7 @@ internal sealed class ReplSession : IDisposable
         {
             return await dispatcher.InvokeAsync(() =>
             {
+                using var captured = ReplCapture.Enter(capture);
                 var current = globals.here;
                 if (navigation.Name == "pwd")
                 {
@@ -171,6 +172,7 @@ internal sealed class ReplSession : IDisposable
             if (listing.Error is { } error) return new(null, error, false);
             return await dispatcher.InvokeAsync(() =>
             {
+                using var captured = ReplCapture.Enter(capture);
                 var current = globals.here;
                 var node = listing.Path is null ? current : current.GetNodeOrNull<Godot.Node>(listing.Path);
                 if (node is null || !Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion())
@@ -214,6 +216,7 @@ internal sealed class ReplSession : IDisposable
         {
             globals.ct = executionToken;
             using var checkpoints = ReplCancellation.Enter(executionToken);
+            using var captured = ReplCapture.Enter(capture);
             var next = state is null
                 ? await script.RunAsync(globals, catchException: _ => true, cancellationToken: executionToken)
                 : await script.RunFromAsync(state, catchException: _ => true, cancellationToken: executionToken);

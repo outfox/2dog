@@ -283,6 +283,62 @@ public class HostLifecycleTests
     }
 
     [Fact]
+    public async Task ListeningHostPublishesItselfForClientsUntilItExits()
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        using var engine = new Engine("repl-publish", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+        var name = "2dog-test-" + Guid.NewGuid().ToString("N");
+        var file = ReplDiscovery.PathOf(name);
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(30));
+        Task? client = null;
+        Terminal? terminal = null;
+        var exit = ReplHost.Run(engine, _ =>
+        {
+            terminal = new Terminal("", [], null);
+            client = Task.Run(async () =>
+            {
+                while (!File.Exists(file)) await Task.Delay(10, timeout.Token);
+                var host = twodog.cli.ReplHosts.Find(name, Environment.CurrentDirectory, ReplDiscovery.Root);
+                Assert.Equal((ReplProtocol.Version, Environment.ProcessId), (host.Protocol, host.Pid));
+                Assert.True(twodog.cli.ReplHosts.Contains(host.Project, Engine.ResolveProjectDir()), host.Project);
+                Assert.Equal(Environment.ProcessPath, host.Client[0]);
+                // Quit after answering, so the reply cannot race the host's shutdown. The named session and
+                // its world stay open until the host closes them after its dispatcher has stopped.
+                await ExecSessionTests.Request(name, new(ReplOps.Exec, "kept", "world.Clear(); tree.CreateTimer(0.2).Timeout += () => tree.Quit();"), timeout.Token);
+            }, timeout.Token);
+            return terminal;
+        }, name, game);
+        await client!;
+        using (terminal!) Assert.Equal(0, exit);
+        Assert.False(File.Exists(file));
+        Assert.Empty(engine.Errors.Drain());
+    }
+
+    [Fact]
+    public void UnwritableDiscoveryDirectoryOnlyCostsTheHostItsListing()
+    {
+        var game = typeof(showcase.CSharpTicker).Assembly;
+        var root = ReplDiscovery.Root;
+        var blocked = Path.Combine(Path.GetTempPath(), "2dog-blocked-" + Guid.NewGuid().ToString("N"));
+        File.WriteAllText(blocked, "a file where the directory belongs");
+        try
+        {
+            ReplDiscovery.Root = blocked;
+            using var engine = new Engine("repl-publish-failure", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
+            using var terminal = new Terminal(":exit\n", [], null);
+            Assert.Equal(0, ReplHost.Run(engine, _ => terminal, "2dog-test-" + Guid.NewGuid().ToString("N"), game));
+            Assert.Contains("Could not publish the REPL host", terminal.Stderr.ToString());
+            Assert.Empty(engine.Errors.Drain());
+        }
+        finally
+        {
+            ReplDiscovery.Root = root;
+            File.Delete(blocked);
+        }
+    }
+
+    [Fact]
     public async Task ShutdownCanCancelAReadFromAnOpenSynchronousConsoleInput()
     {
         var original = Console.In;

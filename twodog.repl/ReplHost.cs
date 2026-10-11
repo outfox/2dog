@@ -18,13 +18,24 @@ public static class ReplHost
         => Run(engine, token => new ReplConsole(token), references);
 
     /// <summary>Runs a host, or connects stdin/stdout to a host with --repl-connect NAME.
-    /// --repl-listen NAME accepts concurrent local pipe sessions; remaining arguments go to Godot.</summary>
+    /// A terminal host accepts local pipe sessions (2dog repl) under a per-process name; --repl-listen NAME
+    /// chooses the name and also keeps a scripted host listening. Remaining arguments go to Godot.</summary>
     public static int Run(string[] args, Func<string[], Engine> createEngine, params Assembly[] references)
     {
         var options = ReplPipeOptions.Parse(args);
         if (options.Connect is { } connect) return ReplPipeClient.RunAsync(connect).GetAwaiter().GetResult();
-        return RunCore(createEngine(options.EngineArgs), token => new ReplConsole(token), options.Listen, references);
+        var listen = ListenName(options.Listen, Console.IsInputRedirected, Console.IsOutputRedirected);
+        return RunCore(createEngine(options.EngineArgs), token => new ReplConsole(token), listen, references);
     }
+
+    internal static string? ListenName(string? requested, bool inputRedirected, bool outputRedirected)
+        => requested ?? (inputRedirected || outputRedirected ? null : "2dog-" + Environment.ProcessId);
+
+    /// <summary>How another terminal starts this host's client: the apphost, or dotnet with the entry assembly.</summary>
+    internal static string[] ClientCommand(string? processPath, Assembly? entry)
+        => Path.GetFileNameWithoutExtension(processPath) == "dotnet" && entry?.Location is { Length: > 0 } location
+            ? [processPath!, location]
+            : [processPath ?? ""];
 
     // Drive the same lifetime and editor loop with a scripted terminal in tests.
     internal static int Run(Engine engine, Func<CancellationToken, IReplTerminal> createTerminal, params Assembly[] references)
@@ -51,7 +62,9 @@ public static class ReplHost
             using var lifetime = new CancellationTokenSource();
             var console = createTerminal(lifetime.Token);
             using var server = pipeName is null ? null : new ReplPipeServer(pipeName, engine, references, dispatcher, lifetime.Token);
-            if (pipeName is not null) console.Output.Message($"REPL listening on local pipe '{pipeName}'. Connect with --repl-connect {pipeName}.");
+            using var published = pipeName is null ? null : Publish(pipeName, console.Output);
+            if (pipeName is not null)
+                console.Output.Message($"REPL listening on local pipe '{pipeName}'. Connect with 2dog repl, or run code with 2dog repl exec -s NAME CODE.");
             var terminal = Task.Run(() => ReadEvalPrintAsync(globals, scenePath, references, dispatcher, console, lifetime.Token,
                 requestHostExit: pipeName is null ? null : () => dispatcher.InvokeAsync(() => { engine.RequestQuit(); return Task.FromResult(true); })));
             try
@@ -80,6 +93,35 @@ public static class ReplHost
             // Cancellation and cleanup may complete a terminal still waiting on stdin.
             // Preserve errors accumulated before an independent engine quit.
             return terminal.GetAwaiter().GetResult();
+        }
+    }
+
+    // Clients find listening hosts through these files; a stale file is ignored once its process is gone.
+    private static IDisposable? Publish(string pipeName, ReplOutput output)
+    {
+        var path = ReplDiscovery.PathOf(pipeName);
+        try
+        {
+            using var process = System.Diagnostics.Process.GetCurrentProcess();
+            var info = new ReplHostInfo(ReplProtocol.Version, pipeName, Environment.ProcessId, new DateTimeOffset(process.StartTime),
+                Godot.ProjectSettings.GlobalizePath("res://"), ClientCommand(Environment.ProcessPath, Assembly.GetEntryAssembly()));
+            Directory.CreateDirectory(ReplDiscovery.Root);
+            File.WriteAllText(path, ReplProtocol.Serialize(info));
+            return new Published(path);
+        }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+        {
+            output.Error($"Could not publish the REPL host for 2dog repl ({error.Message}). Use --repl-connect {pipeName} instead.");
+            return null;
+        }
+    }
+
+    private sealed class Published(string path) : IDisposable
+    {
+        public void Dispose()
+        {
+            try { File.Delete(path); }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException) { /* Clients skip files of exited hosts. */ }
         }
     }
 

@@ -35,6 +35,9 @@ internal sealed class Report
     // pack list
     public ReportPack? Pack { get; set; }
 
+    // repl
+    public ReportRepl? Repl { get; set; }
+
     // doctor
     public ReportDoctor? Doctor { get; set; }
     public List<ReportCheck>? Checks { get; set; }
@@ -79,6 +82,19 @@ internal sealed record ReportVersion(string Label, string Version, string Packag
 internal sealed record ReportPack(string Path, uint FormatVersion, string Godot, ulong TotalBytes, List<ReportPackEntry> Entries);
 
 internal sealed record ReportPackEntry(string Path, ulong Size);
+
+internal sealed class ReportRepl(string pipe, string project)
+{
+    public string Pipe { get; } = pipe;
+    public string Project { get; } = project;
+    public string? Session { get; set; }
+    public string? Status { get; set; }
+    public List<ReportReplResult>? Results { get; set; }
+    public List<twodog.cli.Repl.ReplSessionInfo>? Sessions { get; set; }
+}
+
+/// <summary>One submission: its value or error, and what it printed through Console and Godot's log.</summary>
+internal sealed record ReportReplResult(string Input, string Status, string? Value, string? Error, string? Output, string? Log);
 
 [JsonSourceGenerationOptions(
     WriteIndented = true,

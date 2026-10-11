@@ -120,7 +120,7 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         output.WriteLine("  #r \"assembly.dll\" and #load \"script.csx\" load local code.");
         output.WriteLine("  C# and normal await continuations run on Godot's thread; frames advance while awaiting.");
         output.WriteLine("  Keep Godot calls off Task.Run/ConfigureAwait(false). Synchronous code blocks the game.");
-        output.WriteLine("  --repl-listen NAME accepts local sessions; --repl-connect NAME pipes stdin/stdout to one.");
+        output.WriteLine("  Other terminals and agents: 2dog repl attaches; 2dog repl exec -s NAME CODE runs code in a named session.");
         output.WriteLine();
     }
 

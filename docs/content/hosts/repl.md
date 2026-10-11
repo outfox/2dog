@@ -80,10 +80,23 @@ worlds.Remove("empty");
 eligible `res://` paths inside resource strings. The showcase includes
 `res://playground.tscn` with a spinning cube and a physics ball to experiment on.
 
-For multiple terminals or agent processes, start with `--repl-listen mygame`
-and connect with `--repl-connect mygame`. Each connection gets independent C#
-state and scratch worlds. See [local connections](/configuration/repl#local-connections)
-for piping examples and lifecycle details.
+## Work Together
+
+The running game is shared: other terminals and coding agents can join it
+while you type. Attach another terminal with `2dog repl`. Scripts and agents
+run code with [`2dog repl exec`](/cli/repl), one shell command per step:
+
+```bash
+2dog repl exec -s agent 'cd $Main'
+2dog repl exec -s agent '$Player.Position += Vector3.Up; $Player.Position'
+```
+
+Each call prints its result and exits with a status, so it works from any
+shell tool. The named session `agent` keeps its variables, selected node and
+worlds between calls. Everyone edits the same live scene tree; use
+`worlds.Add` to experiment without touching the game. See
+[local connections](/configuration/repl#local-connections) for how hosts are
+found and how long sessions live.
 
 See [REPL configuration](/configuration/repl) for native variants, headless
 use and publishing.

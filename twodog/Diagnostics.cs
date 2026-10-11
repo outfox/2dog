@@ -16,6 +16,12 @@ internal static class ExitCodes
     /// <summary>doctor: findings remain.</summary>
     public const int Findings = 3;
 
+    /// <summary>repl exec: a submission failed to compile or run (the same code as doctor findings).</summary>
+    public const int SubmissionFailed = 3;
+
+    /// <summary>repl exec: --timeout cancelled the submission (timeout(1)'s code).</summary>
+    public const int TimedOut = 124;
+
     /// <summary>Ctrl+C.</summary>
     public const int Cancelled = 130;
 }

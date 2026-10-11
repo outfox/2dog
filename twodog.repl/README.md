@@ -178,26 +178,36 @@ live nodes to inspect and change alongside the main demo.
 
 ## Local connections
 
-Start a host accepting concurrent named-pipe connections:
+A host running in a terminal also listens on a local named pipe under a
+per-process name, and publishes itself for the `2dog` tool. Attach another
+terminal with `2dog repl`. Scripts and coding agents run code with one
+command per call:
 
 ```text
-dotnet run --project MyGame.repl -- --repl-listen mygame
+2dog repl exec -s agent 'cd $Main'
+2dog repl exec -s agent '$Player.Position'
 ```
 
-Connect from another terminal or process, including an agent:
+Each call prints values on stdout and compile errors, exceptions and Godot
+errors on stderr. It exits with `3` when a submission fails and `124` when
+`--timeout SECONDS` cancels one. A named session (`-s`) keeps its variables,
+imports, mode, selected node and worlds between calls until
+`2dog repl close agent` or the host stops; without `-s`, each call gets a
+fresh session. `Console` and Godot output raised by a submission returns with
+its result. `2dog repl sessions` lists the named sessions. See the
+[`2dog repl` reference](https://2dog.dev/cli/repl).
+
+A host started by a script needs an explicit name, which also keeps it
+listening after its own input ends. Its own client connects by that name:
 
 ```text
+dotnet run --project MyGame.repl -- --headless --repl-listen mygame
 dotnet run --project MyGame.repl -- --repl-connect mygame
 ```
 
-PowerShell can submit a script and collect its output:
-
-```powershell
-'var answer = 40 + 2;', 'answer' | dotnet run --project MyGame.repl -- --repl-connect mygame
-```
-
-The client starts no engine. Each connection has independent C# variables,
-imports, mode, selected node, cancellation queue and named worlds. Submissions
+`--repl-connect` starts no engine. An attached terminal or piped connection
+has its own C# variables, imports, mode, selected node, cancellation queue and
+named worlds, which end with the connection. Submissions
 run in order within a session; asynchronous submissions from different sessions
 can overlap. Godot work still shares one owner thread, SceneTree and singletons.
 Redirected clients use plain UTF-8 text, with complete C# submissions or multiline
@@ -206,8 +216,8 @@ the host's full editor: syntax colors, Tab completion, documentation, multiline
 editing and node navigation. Completion sees the connection's own variables
 and eligible `res://` resources. `NO_COLOR` disables terminal colors.
 History in a connected terminal lasts for that connection.
-Result values and errors return to the connection; `Console.WriteLine` and
-Godot logs still go to the host console.
+Result values and errors return to the connection; for these connections,
+`Console.WriteLine` and Godot logs still go to the host console.
 
 `:cancel` cancels that connection's running and queued work, leaving it ready
 for new input. A disconnected client cancels its work and closes its worlds.
