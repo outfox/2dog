@@ -86,6 +86,16 @@ uses Godot's input server, flushes buffered input and updates global polling
 state. Use these methods on the engine's owner thread. See
 [Simulating Input](https://2dog.dev/testing/input) for examples and routing limits.
 
+## Windows window lifecycle diagnostics
+
+Set `TWODOG_LIFECYCLE_LOG` to a log file path before starting a windowed engine
+to record Windows activation/minimize/restore messages, Godot window signals
+and an independent frame-loop heartbeat. The trace appends to the file and
+flushes once per second, including while the owner thread is stalled. Unset
+the variable to disable tracing. See the
+[windowed test instructions](../tests/windowed-fixture/README.md) for a showcase
+reproduction command and the separate native window-state capture script.
+
 ## Documentation
 
 - [Getting Started](https://github.com/outfox/2dog)

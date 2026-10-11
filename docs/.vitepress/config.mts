@@ -259,6 +259,7 @@ export default defineConfig({
         text: 'Configure',
         items: [
           { text: gd('layers') + 'Build Variants', link: '/build-configurations' },
+          { text: gd('wrench') + 'Environment Variables', link: '/configuration/environment-variables' },
           {
             text: gd('wrench') + 'MSBuild Config',
             link: '/configuration',
