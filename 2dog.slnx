@@ -105,6 +105,7 @@
   <Project Path="twodog.repl/twodog.repl.csproj" />
   <Project Path="demos/showcase/showcase.repl/showcase.repl.csproj" />
   <Project Path="tests/nunit/nunit.csproj" />
+  <Project Path="tests/gdscript-host/gdscript-host.csproj" />
   <Project Path="twodog/twodog.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
   </Project>
