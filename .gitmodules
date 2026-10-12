@@ -1,3 +1,7 @@
 [submodule "godot"]
 	path = godot
 	url = git@github.com:thygrrr/godot.git
+[submodule "gdunit"]
+	path = gdunit
+	url = https://github.com/thygrrr/gdunit
+	branch = master
