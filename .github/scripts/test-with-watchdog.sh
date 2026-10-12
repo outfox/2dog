@@ -37,16 +37,25 @@ fi
 output="twodog.tests/TestResults/test-$config.log"
 mkdir -p "$(dirname "$output")"
 : > "$output"
+
+run_tests() {
+  # Finish every project's import before any test host reads the shared Godot cache.
+  # A solution-level dotnet test otherwise overlaps one project's tests with another's build.
+  dotnet build 2dog.tests.slnf -c "$config" --no-restore || return $?
+  dotnet test 2dog.tests.slnf -c "$config" --no-build --no-restore \
+    --logger 'console;verbosity=normal' "$@"
+}
+
 case "${RUNNER_OS:-}" in
   Windows)
-    dotnet test 2dog.tests.slnf -c "$config" --no-restore --logger 'console;verbosity=normal' \
+    run_tests \
       --blame-crash --blame-crash-dump-type full \
       --blame-hang-timeout "${limit}s" --blame-hang-dump-type full > >(tee "$output") 2>&1 & ;;
   macOS)
-    dotnet test 2dog.tests.slnf -c "$config" --no-restore --logger 'console;verbosity=normal' \
+    run_tests \
       --blame > >(tee "$output") 2>&1 & ;;
   *)
-    dotnet test 2dog.tests.slnf -c "$config" --no-restore --logger 'console;verbosity=normal' \
+    run_tests \
       --blame-crash --blame-crash-dump-type full > >(tee "$output") 2>&1 & ;;
 esac
 test_pid=$!
