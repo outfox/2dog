@@ -11,6 +11,23 @@ namespace twodog.tests.ToolTests;
 
 public class ReplCommandLineTests
 {
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void ParsingUsesItsOwnJsonFlagInsteadOfTheActiveOutputMode(bool activeJson)
+    {
+        CliConsole.Capture(() =>
+        {
+            Out.Configure(OutputMode.Resolve(activeJson ? ["--json"] : [], _ => null, ConsoleFacts.Redirected));
+            Assert.Equal(new ReplOptions(ReplOp.Attach, null), CommandLine.Parse(["repl"]).Repl);
+            var error = Assert.Throws<UsageException>(() => CommandLine.Parse(["--json", "repl"]));
+            Assert.Contains("use '2dog repl exec' for --json", error.Message);
+            Assert.Equal(new ReplOptions(ReplOp.Exec, null, Code: "1"),
+                CommandLine.Parse(["--json", "repl", "exec", "1"]).Repl);
+            return 0;
+        });
+    }
+
     [Fact]
     public void OperationsParseIntoTheirRequests()
     {

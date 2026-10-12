@@ -263,7 +263,7 @@ internal static class CommandLine
         if (command == CliTree.ReplClose) return new ReplOptions(ReplOp.Close, pipe, result.GetValue(CliTree.ReplSessionArg));
         if (command != CliTree.ReplExec)
         {
-            if (Out.Mode.Json) throw new UsageException("2dog repl attaches a terminal; use '2dog repl exec' for --json", Verb.Repl);
+            if (result.GetValue(CliTree.Json)) throw new UsageException("2dog repl attaches a terminal; use '2dog repl exec' for --json", Verb.Repl);
             return new ReplOptions(ReplOp.Attach, pipe);
         }
 
