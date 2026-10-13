@@ -167,6 +167,33 @@ They need a prior desktop double glue build for bindings and resource import.
 The local package tasks use the same empty non-host native stubs as the normal
 build; build real payloads on each target platform before distributing them.
 
+### Double-Precision Showcase
+
+The repository includes a desktop host with an explicit
+`2dog.engine.double` reference. Once matching double packages are available
+in the local feed, run it from the repository root:
+
+```bash
+dotnet run --project demos/showcase/showcase.double
+dotnet run --project demos/showcase/showcase.double -c Release
+```
+
+For a short headless check:
+
+```bash
+dotnet run --project demos/showcase/showcase.double -- --headless --quit-after 10
+```
+
+The host selects double precision without a command-line property. Its
+separate game project compiles the existing showcase scripts against
+`2dog.godotsharp.double`, while sharing the same scenes and resources.
+Both projects have separate intermediate and assembly output directories,
+so the standard showcase can still build against single precision.
+
+Startup checks verify native double support, large-coordinate math and
+Variant marshalling, then print `2DOG_API_SMOKE_PASSED`. The example lives in
+[`demos/showcase/showcase.double`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.double).
+
 ### CI Coverage
 
 CI builds and tests both precisions. Native cache releases use

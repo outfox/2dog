@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Configurations>Debug;Release;Editor</Configurations>
+        <OutputType>Exe</OutputType>
+        <OutputType Condition="'$(Configuration)' == 'Release'">WinExe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <DefaultItemExcludes>$(DefaultItemExcludes);game/**</DefaultItemExcludes>
+        <RootNamespace>showcase</RootNamespace>
+        <ApplicationManifest>../showcase.2dog/app.manifest</ApplicationManifest>
+        <PublishSelfContained>true</PublishSelfContained>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine.double" Version="$(TwoDogVersion)" />
+        <!-- Reuse the same scene, scripts and loop, compiled against double bindings. -->
+        <Compile Include="../showcase.2dog/Program.cs" Link="Program.cs" />
+        <ProjectReference Include="game/showcase.double.game.csproj" />
+    </ItemGroup>
+</Project>

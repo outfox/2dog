@@ -1,0 +1,30 @@
+<Project>
+    <!-- Set the scene root before Godot's SDK reads it. -->
+    <PropertyGroup>
+        <GodotProjectDir>$(MSBuildThisFileDirectory)../../</GodotProjectDir>
+    </PropertyGroup>
+    <Import Project="Sdk.props" Sdk="Godot.NET.Sdk" Version="4.7.2" />
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Configurations>Debug;Release;Editor</Configurations>
+        <AssemblyName>showcase</AssemblyName>
+        <RootNamespace>showcase</RootNamespace>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <IsTrimmable>true</IsTrimmable>
+        <IsPackable>false</IsPackable>
+        <VerifyReferenceTrimCompatibility>true</VerifyReferenceTrimCompatibility>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <OutputPath>$(MSBuildThisFileDirectory)bin/double/$(Configuration)/</OutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- Share game source and scene paths, but restore and compile a separate precision graph. -->
+        <Compile Include="../../*.cs;../../signals/**/*.cs" />
+        <PackageReference Include="2dog.godotsharp.double" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor.double" Version="$(TwoDogVersion)"
+                          Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'" />
+    </ItemGroup>
+    <Import Project="../../gdextension/TwoDogProbe.targets" />
+    <Import Project="Sdk.targets" Sdk="Godot.NET.Sdk" Version="4.7.2" />
+</Project>
