@@ -14,7 +14,7 @@
     <!-- Loaded per instance-ALC (references Godot types); never in the shared list. -->
     <ItemGroup>
         <ProjectReference Include="..\twodog.hosting\twodog.hosting.csproj" />
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
     </ItemGroup>
 
 </Project>

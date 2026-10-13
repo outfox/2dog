@@ -6,10 +6,15 @@ import test, { before } from 'node:test';
 
 const run = promisify(execFile);
 const project = fileURLToPath(new URL('../../tests/browser-exceptions/browser-exceptions.csproj', import.meta.url));
-const assembly = fileURLToPath(new URL('../../tests/browser-exceptions/bin/Release/net10.0/browser-exceptions.dll', import.meta.url));
+let assembly;
 const config = fileURLToPath(new URL('../../nuget.config', import.meta.url));
 before(async () => {
     await run('dotnet', ['build', project, '-c', 'Release', '--configfile', config, '-v:quiet'], { timeout: 60000 });
+    // Precision and other MSBuild settings can relocate the output. Launch the same
+    // target that was built rather than assuming the SDK's default bin directory.
+    const { stdout } = await run('dotnet', ['msbuild', project, '-nologo', '-p:Configuration=Release', '-getProperty:TargetPath'], { timeout: 15000 });
+    assembly = stdout.trim();
+    assert(assembly, 'MSBuild did not resolve the exception probe assembly');
 });
 const probe = (mode) => run('dotnet', [assembly, mode], { timeout: 15000 });
 

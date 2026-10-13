@@ -83,6 +83,7 @@ def pack_local_feed(args, arch, feed, properties):
     if not args.skip_native:
         command = [sys.executable, REPO / "build-godot.py", "--platform", "android", "--arch", arch,
                    "--debug-symbols", "no", "--dev-build", "no"]
+        command += ["--precision", getattr(args, "precision", "single")]
         if args.cache_path:
             command += ["--cache-path", args.cache_path.resolve()]
         run(command)
@@ -91,7 +92,8 @@ def pack_local_feed(args, arch, feed, properties):
     validate_java_payloads()
     for target in ("template_debug", "template_release"):
         for library in ("libgodot_android.so", "libc++_shared.so"):
-            if not (REPO / f"godot/bin/android/{target}/{arch}/{library}").is_file():
+            subdir = "double/" if getattr(args, "precision", "single") == "double" else ""
+            if not (REPO / f"godot/bin/{subdir}android/{target}/{arch}/{library}").is_file():
                 raise ValueError(f"Missing {target}/{arch}/{library}; build both native variants first")
     # Local-only desktop stubs satisfy 2dog.engine's desktop dependencies.
     # This feed is an APK build artifact and must never be published.
@@ -117,10 +119,13 @@ def build_with_packages(args, output, feed, config, restore):
     app = APPS[args.app]
     arch = "x86_64" if args.rid == "android-x64" else "arm64"
     properties = [f"-p:RestoreConfigFile={config}", f"-p:RestorePackagesPath={restore}", "-p:NuGetAudit=false"]
+    precision = getattr(args, "precision", "single")
+    properties.append(f"-p:TwoDogPrecision={precision}")
     if args.feed is None:
         pack_local_feed(args, arch, feed, properties)
     # The selected variant's natives, which the APK must carry byte for byte.
-    native = REPO / f"godot/bin/android/template_{args.configuration.lower()}/{arch}"
+    subdir = "double/" if precision == "double" else ""
+    native = REPO / f"godot/bin/{subdir}android/template_{args.configuration.lower()}/{arch}"
     for library in ("libgodot_android.so", "libc++_shared.so"):
         if not (native / library).is_file():
             raise ValueError(f"Missing {native / library}; stage the Android natives first")
@@ -160,6 +165,7 @@ def main():
     parser.add_argument("--app", choices=APPS, default="smoke")
     parser.add_argument("--rid", choices=("android-x64", "android-arm64"), default="android-x64")
     parser.add_argument("--configuration", choices=("Debug", "Release"), default="Debug")
+    parser.add_argument("--precision", choices=("single", "double"), default=os.environ.get("TwoDogPrecision", "single"))
     parser.add_argument("--editor", type=Path, help="Source-matched Godot Mono editor executable for the pck "
                         "export (default: the editor libgodot from the 2dog.<build-machine-rid>.editor package)")
     parser.add_argument("--dotnet", default="dotnet")

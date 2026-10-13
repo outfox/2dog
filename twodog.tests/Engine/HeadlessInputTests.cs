@@ -1,3 +1,9 @@
+#if REAL_T_IS_DOUBLE
+using Real = System.Double;
+#else
+using Real = System.Single;
+#endif
+
 using Godot;
 using twodog.Testing;
 using twodog.Testing.Xunit;
@@ -305,7 +311,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
         private readonly Vector2I _contentSize = window.ContentScaleSize;
         private readonly Window.ContentScaleModeEnum _mode = window.ContentScaleMode;
         private readonly Window.ContentScaleAspectEnum _aspect = window.ContentScaleAspect;
-        private readonly float _factor = window.ContentScaleFactor;
+        private readonly Real _factor = window.ContentScaleFactor;
 
         public void Dispose()
         {

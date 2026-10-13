@@ -12,6 +12,7 @@ public static class GodotApiSmoke
 {
     public static void RunAll(SceneTree tree)
     {
+        MathPrecision();
         CoreTypesAndNativeHelpers(tree);
         ManagedCallables();
         ErrorReportingAndTypedCollections();
@@ -22,6 +23,62 @@ public static class GodotApiSmoke
         GDScriptOnlyEngineFeatures(tree);
         GDExtensionProbe(tree);
         SignalTable(tree);
+    }
+
+    public static void MathPrecision()
+    {
+#if REAL_T_IS_DOUBLE
+        const double coordinate = 1_000_000_000.125;
+        Require(OS.HasFeature("double"), "Double bindings loaded with single-precision natives");
+#else
+        const float coordinate = 1_000_000_000.125f;
+        Require(!OS.HasFeature("double"), "Single bindings loaded with double-precision natives");
+#endif
+        Console.WriteLine($"Godot native double precision: {OS.HasFeature("double")}");
+        var node = new Node2D();
+        var node3D = new Node3D();
+        try
+        {
+            node.Position = new Vector2(coordinate, -coordinate);
+            Require(node.Position.X == coordinate && node.Position.Y == -coordinate,
+                "Math coordinates lost precision across native property access");
+            using Variant value = node.Position;
+            Require(value.AsVector2() == node.Position, "Vector Variant marshalling changed precision");
+
+            node3D.Transform = new Transform3D(Basis.Identity, new Vector3(coordinate, -coordinate, coordinate));
+            var transform = node3D.Transform;
+            Require(transform.Origin == new Vector3(coordinate, -coordinate, coordinate),
+                "3D transform lost precision across native property access");
+            using Variant transformValue = transform;
+            Require(transformValue.AsTransform3D() == transform, "Transform Variant marshalling changed precision");
+
+            // Infer T from actual components: no conversion to double and no reflection metadata needed for AOT.
+            InspectScalar("Node2D.Position.X", node.Position.X);
+            InspectScalar("Node2D.Transform.Origin.X", node.Transform.Origin.X);
+            InspectScalar("Node2D.Transform.X.X", node.Transform.X.X);
+            InspectScalar("Node3D.Position.X", node3D.Position.X);
+            InspectScalar("Node3D.Transform.Origin.X", transform.Origin.X);
+            InspectScalar("Node3D.Transform.Basis.X.X", transform.Basis.X.X);
+            Console.WriteLine(FormattableString.Invariant(
+                $"Single conversion of the same coordinate: {(float)coordinate:R}"));
+            Console.WriteLine("2DOG_PRECISION_INSPECTION_PASSED");
+        }
+        finally
+        {
+            node.Free();
+            node3D.Free();
+        }
+    }
+
+    private static void InspectScalar<T>(string component, T value) where T : unmanaged
+    {
+#if REAL_T_IS_DOUBLE
+        Require(typeof(T) == typeof(double), $"{component} is not System.Double");
+#else
+        Require(typeof(T) == typeof(float), $"{component} is not System.Single");
+#endif
+        Console.WriteLine(FormattableString.Invariant(
+            $"{component}: {typeof(T).FullName}, {System.Runtime.CompilerServices.Unsafe.SizeOf<T>()} bytes, value={value:R}"));
     }
 
     public static void CoreTypesAndNativeHelpers(SceneTree tree)

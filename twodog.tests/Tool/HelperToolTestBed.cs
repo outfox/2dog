@@ -11,6 +11,13 @@ namespace twodog.tests.ToolTests;
 /// </summary>
 internal static class HelperToolTestBed
 {
+#if REAL_T_IS_DOUBLE
+    private const string PrecisionSubdir = "double";
+    private const string PrecisionSuffix = ".double";
+#else
+    private const string PrecisionSubdir = "";
+    private const string PrecisionSuffix = "";
+#endif
     public static string RepoRoot
     {
         get
@@ -28,12 +35,12 @@ internal static class HelperToolTestBed
         get
         {
             var candidates = new[] { "Release", "Debug", "Editor" }
-                .Select(c => Path.Combine(RepoRoot, "twodog.import", "bin", c, "net10.0", "2dog.import.dll"))
+                .Select(c => Path.Combine(RepoRoot, "twodog.import", "bin", PrecisionSubdir, c, "net10.0", "2dog.import.dll"))
                 .ToList();
 
             // Fall back to the helper packaged inside the restored 2dog.engine package
             // (CI test jobs restore from the local feed without building twodog.import).
-            var packageDir = Path.Combine(RepoRoot, ".packages", "2dog.engine");
+            var packageDir = Path.Combine(RepoRoot, ".packages", "2dog.engine" + PrecisionSuffix);
             if (Directory.Exists(packageDir))
             {
                 candidates.AddRange(Directory.EnumerateDirectories(packageDir)
@@ -51,12 +58,12 @@ internal static class HelperToolTestBed
     {
         get
         {
-            var bin = Path.Combine(RepoRoot, "godot", "bin");
+            var bin = Path.Combine(RepoRoot, "godot", "bin", PrecisionSubdir);
             var name =
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "godot.windows.editor.x86_64.shared_library.dll" :
                 RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "libgodot.linuxbsd.editor.x86_64.shared_library.so" :
                 "libgodot.macos.editor.arm64.shared_library.dylib";
-            var path = Path.Combine(bin, name);
+            var path = Path.Combine(bin, name.Replace(".editor.", ".editor" + PrecisionSuffix + "."));
             Assert.SkipWhen(!File.Exists(path), $"Editor libgodot not found: {path}");
             return path;
         }
@@ -64,8 +71,8 @@ internal static class HelperToolTestBed
 
     public static (string apiDir, string toolsDir) GodotSharpDirs()
     {
-        var apiDir = Path.Combine(RepoRoot, "godot", "bin", "GodotSharp", "Api", "Debug");
-        var toolsDir = Path.Combine(RepoRoot, "godot", "bin", "GodotSharp", "Tools");
+        var apiDir = Path.Combine(RepoRoot, "godot", "bin", PrecisionSubdir, "GodotSharp", "Api", "Debug");
+        var toolsDir = Path.Combine(RepoRoot, "godot", "bin", PrecisionSubdir, "GodotSharp", "Tools");
         Assert.SkipWhen(!File.Exists(Path.Combine(apiDir, "GodotPlugins.dll")), "GodotPlugins.dll not found");
         Assert.SkipWhen(!File.Exists(Path.Combine(toolsDir, "GodotTools.dll")), "GodotTools.dll not found");
         return (apiDir, toolsDir);

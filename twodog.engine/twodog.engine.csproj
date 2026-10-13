@@ -22,7 +22,7 @@
     </PropertyGroup>
     <!-- NuGet Package Metadata -->
     <PropertyGroup>
-        <PackageId>2dog.engine</PackageId>
+        <PackageId>2dog.engine$(TwoDogPackageSuffix)</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Description>Embed the Godot engine in your .NET applications. Reference the 2dog.engine package and it will pull in the appropriate platform-specific package (2dog.win-x64, 2dog.linux-x64, or 2dog.osx-arm64) for native library support.</Description>
         <PackageIcon>icon.png</PackageIcon>
@@ -38,17 +38,17 @@
 
     <!-- Exact-pinned managed bindings are shared with game and library projects. -->
     <ItemGroup>
-        <PackageReference Include="2dog.godotsharp" Version="[$(TwoDogVersion)]" />
+        <PackageReference Include="2dog.godotsharp$(TwoDogPackageSuffix)" Version="[$(TwoDogVersion)]" />
     </ItemGroup>
 
     <!-- All platform natives are dependencies regardless of pack OS; only the matching platform's targets copy.
          Exact-pinned ([x]) so a given 2dog.engine always resolves the natives it was built against. -->
     <ItemGroup>
-        <PackageReference Include="2dog.win-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
-        <PackageReference Include="2dog.linux-x64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
-        <PackageReference Include="2dog.osx-arm64" Version="[$(NativesVersion)]" PrivateAssets="none"/>
+        <PackageReference Include="2dog.win-x64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]" PrivateAssets="none"/>
+        <PackageReference Include="2dog.linux-x64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]" PrivateAssets="none"/>
+        <PackageReference Include="2dog.osx-arm64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]" PrivateAssets="none"/>
         <!-- GodotTools assemblies for the automatic import (editor C# init requires them) -->
-        <PackageReference Include="2dog.tools" Version="[$(NativesVersion)]" PrivateAssets="none"/>
+        <PackageReference Include="2dog.tools$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]" PrivateAssets="none"/>
     </ItemGroup>
 
     <!-- Include MSBuild targets in the package -->
@@ -85,10 +85,10 @@
                  Properties="Configuration=Release"/>
         <MSBuild Projects="../twodog.import/twodog.import.csproj"
                  Targets="Publish"
-                 Properties="Configuration=Release;PublishDir=bin/tools-publish/"/>
+                 Properties="Configuration=Release;PublishDir=bin/$(TwoDogNativeOutputSubdir)tools-publish/"/>
         <ItemGroup>
-            <None Include="../twodog.import/bin/tools-publish/**/*"
-                  Exclude="../twodog.import/bin/tools-publish/**/*.pdb;../twodog.import/bin/tools-publish/**/*.xml;../twodog.import/bin/tools-publish/**/*.exe"
+            <None Include="../twodog.import/bin/$(TwoDogNativeOutputSubdir)tools-publish/**/*"
+                  Exclude="../twodog.import/bin/$(TwoDogNativeOutputSubdir)tools-publish/**/*.pdb;../twodog.import/bin/$(TwoDogNativeOutputSubdir)tools-publish/**/*.xml;../twodog.import/bin/$(TwoDogNativeOutputSubdir)tools-publish/**/*.exe"
                   Pack="true" PackagePath="tools\net10.0\" Visible="false"/>
         </ItemGroup>
     </Target>

@@ -46,6 +46,8 @@ class EditorToolsTests(unittest.TestCase):
         project = self.scratch / "consumer.proj"
         project.write_text(f'''<Project>
   <PropertyGroup>
+    <!-- This fixture tests tools deployment, independently of built GodotPlugins in the checkout. -->
+    <TwoDogSkipGodotApiCopy>true</TwoDogSkipGodotApiCopy>
     <OutputPath>{escape(self.output.as_posix())}/</OutputPath>
     <PublishDir>{escape(self.publish.as_posix())}/</PublishDir>
   </PropertyGroup>

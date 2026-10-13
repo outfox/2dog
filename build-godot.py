@@ -9,6 +9,8 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 
+from scripts.dotnet_build import get_job_limit
+
 if sys.platform == "win32":
     os.system("chcp 65001 > NUL")
     sys.stdout.reconfigure(encoding="utf-8")
@@ -77,7 +79,7 @@ def detect_arch() -> Arch:
     return Arch.X86_64
 
 
-def get_platform_config(platform_override: str | None = None, arch_override: str | None = None) -> PlatformConfig:
+def get_platform_config(platform_override: str | None = None, arch_override: str | None = None, precision: str = "single") -> PlatformConfig:
     """Get platform configuration, with optional overrides for CI/cross-compilation."""
 
     # Determine platform
@@ -103,6 +105,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         arch = detect_arch()
 
     arch_str = arch.value
+    precision_suffix = ".double" if precision == "double" else ""
 
     if plat == Platform.ANDROID:
         # Prefer devices over the build machine's architecture when cross-compiling.
@@ -120,7 +123,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         return PlatformConfig(
             godot_platform=Platform.WINDOWS.value,
             godot_arch=arch_str,
-            godot_exe=os.path.abspath(f"godot/bin/godot.windows.editor.{arch_str}.executable.mono.exe"),
+            godot_exe=os.path.abspath(f"godot/bin/godot.windows.editor{precision_suffix}.{arch_str}.executable.mono.exe"),
             lib_path_var="PATH",
             path_separator=";",
             lib_extension=".dll",
@@ -132,7 +135,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         return PlatformConfig(
             godot_platform=Platform.LINUX.value,
             godot_arch=arch_str,
-            godot_exe=f"./bin/godot.linuxbsd.editor.{arch_str}.executable.mono",
+            godot_exe=f"./bin/godot.linuxbsd.editor{precision_suffix}.{arch_str}.executable.mono",
             lib_path_var="LD_LIBRARY_PATH",
             path_separator=":",
             lib_extension=".so",
@@ -144,7 +147,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         return PlatformConfig(
             godot_platform=Platform.MACOS.value,
             godot_arch=arch_str,
-            godot_exe=f"./bin/godot.macos.editor.{arch_str}.executable.mono",
+            godot_exe=f"./bin/godot.macos.editor{precision_suffix}.{arch_str}.executable.mono",
             lib_path_var="DYLD_LIBRARY_PATH",
             path_separator=":",
             lib_extension=".dylib",
@@ -197,6 +200,11 @@ def parse_arguments():
         choices=["yes", "no"],
         default="yes",
         help="Enable Single Compilation Unit build",
+    )
+
+    parser.add_argument(
+        "--precision", choices=["single", "double"], default="single",
+        help="Floating-point precision; double builds require matching .double packages",
     )
 
     # Build steps control
@@ -340,6 +348,8 @@ def show_build_config(args, platform_config: PlatformConfig):
 
     table.add_row("Platform", platform_config.godot_platform)
     table.add_row("Architecture", platform_config.godot_arch)
+    table.add_row("Precision", getattr(args, "precision", "single"))
+    table.add_row("Maximum build jobs", str(get_job_limit() or "SCons default"))
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Dev Build", args.dev_build)
@@ -360,10 +370,12 @@ def build_editor(args, platform_config: PlatformConfig):
     task_desc = "Building Godot Editor"
     cmd = [
         "scons",
+        *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
         f"platform={platform_config.godot_platform}",
         f"arch={platform_config.godot_arch}",
         "target=editor",
         "module_mono_enabled=yes",
+        f"precision={getattr(args, 'precision', 'single')}",
         "extra_suffix=executable",
         "d3d12=no",
         f"dev_build={args.dev_build}",
@@ -423,7 +435,7 @@ def build_libgodot_web(args):
     else:
         targets = [args.target]
 
-    web_dir = "web"
+    web_dir = os.path.join("double", "web") if getattr(args, "precision", "single") == "double" else "web"
 
     import shutil
 
@@ -436,10 +448,12 @@ def build_libgodot_web(args):
         task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32)"
         cmd = [
             "scons",
+            *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
             "platform=web",
             "arch=wasm32",
             f"target={target}",
             "module_mono_enabled=yes",
+            f"precision={getattr(args, 'precision', 'single')}",
             "library_type=static_library",
             "extra_suffix=static_library",
             "threads=no",
@@ -512,10 +526,12 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
         cmd = [
             "scons",
+            *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
             f"platform={platform_config.godot_platform}",
             f"arch={platform_config.godot_arch}",
             f"target={target}",
             "module_mono_enabled=yes",
+            f"precision={getattr(args, 'precision', 'single')}",
             "d3d12=no",
             "library_type=shared_library",
             "extra_suffix=shared_library",
@@ -539,24 +555,34 @@ def build_libgodot(args, platform_config: PlatformConfig):
             variant = "release" if target == "template_release" else "debug"
             abi = "arm64-v8a" if platform_config.godot_arch == "arm64" else "x86_64"
             source = Path("godot/platform/android/java/lib/libs") / variant / abi
-            destination = Path("godot/bin/android") / target / platform_config.godot_arch
+            destination = native_output_dir(getattr(args, "precision", "single")) / "android" / target / platform_config.godot_arch
             destination.mkdir(parents=True, exist_ok=True)
             for name in ("libgodot_android.so", "libc++_shared.so"):
                 shutil.copy2(source / name, destination / name)
 
+        elif getattr(args, "precision", "single") == "double":
+            # SCons names double binaries separately; stage all double payloads together.
+            import shutil
+            from pathlib import Path
 
-def generate_glue(platform_config: PlatformConfig):
+            prefix = "godot" if platform_config.godot_platform == "windows" else "libgodot"
+            name = (f"{prefix}.{platform_config.godot_platform}.{target}.double."
+                    f"{platform_config.godot_arch}.shared_library{platform_config.lib_extension}")
+            native_output_dir("double").mkdir(parents=True, exist_ok=True)
+            shutil.copy2(Path("godot/bin") / name, native_output_dir("double") / name)
+
+
+def native_output_dir(precision):
+    from pathlib import Path
+    return Path("godot/bin/double" if precision == "double" else "godot/bin")
+
+
+def generate_glue(platform_config: PlatformConfig, precision: str = "single"):
     """Generate Mono glue files."""
     console.print("\n[bold yellow]┌── Generating Mono Glue ──┐[/bold yellow]")
 
     task_desc = "Creating NuGet packages directory"
     os.makedirs("godot/bin/GodotSharp/Tools/nupkgs", exist_ok=True)
-
-    task_desc = "Clear NuGet locals"
-    run_with_live_output(
-        ["dotnet", "nuget", "locals", "all", "--clear"],
-        description=task_desc,
-    )
 
     task_desc = "Generating Mono glue files"
     run_with_live_output(
@@ -573,18 +599,21 @@ def generate_glue(platform_config: PlatformConfig):
     task_desc = "Building C# assemblies and NuGet packages"
     run_with_live_output(
         [
-            "python",
+            "uv", "run", "--project", "..", "python",
             "./modules/mono/build_scripts/build_assemblies.py",
             "--godot-platform",
             platform_config.godot_platform,
             "--godot-output-dir",
             "./bin",
-            "--push-nupkgs-local",
-            "./bin/packages",
+            "--precision", precision,
         ],
         cwd="godot",
         description=task_desc,
     )
+    if precision == "double":
+        import shutil
+        shutil.copytree("godot/bin/GodotSharp", "godot/bin/double/GodotSharp", dirs_exist_ok=True)
+
 
 def main():
     args = parse_arguments()
@@ -594,6 +623,7 @@ def main():
     platform_config = get_platform_config(
         platform_override=args.platform,
         arch_override=args.arch,
+        precision=args.precision,
     )
 
     if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value):
@@ -616,7 +646,7 @@ def main():
         build_editor(args, platform_config)
 
     if not args.no_glue:
-        generate_glue(platform_config)
+        generate_glue(platform_config, args.precision)
 
     if not args.no_library:
         build_libgodot(args, platform_config)

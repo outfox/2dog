@@ -1,0 +1,127 @@
+<Project>
+    <PropertyGroup>
+        <TwoDogPrecisionAssetDir>$([System.IO.Path]::GetFullPath('$(BaseIntermediateOutputPath)precision-assets', '$(MSBuildProjectDirectory)'))</TwoDogPrecisionAssetDir>
+    </PropertyGroup>
+
+    <!-- Stage package integration files under their actual package IDs. NuGet imports only files whose
+         names match the ID; the committed sources keep one name for both precision modes. -->
+    <UsingTask TaskName="StageTwoDogPrecisionAssets" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <ProjectDir ParameterType="System.String" Required="true" />
+            <AssetDir ParameterType="System.String" Required="true" />
+            <PackageId ParameterType="System.String" Required="true" />
+            <MarkerTemplatePath ParameterType="System.String" Required="true" />
+            <Precision ParameterType="System.String" Required="true" />
+            <Assets ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Collections.Generic" />
+            <Using Namespace="System.Xml.Linq" />
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                var suffix = Precision == "double" ? ".double" : "";
+                var baseId = suffix.Length == 0 ? PackageId : PackageId.Substring(0, PackageId.Length - suffix.Length);
+                var assets = new List<Microsoft.Build.Framework.ITaskItem>();
+                var imported = "_TwoDogPrecisionImported_" + PackageId.Replace('.', '_').Replace('-', '_');
+                Func<XElement> importMarker = () => new XElement("Import",
+                    new XAttribute("Project", "$" + "(MSBuildThisFileDirectory)2dog.precision.props"),
+                    new XAttribute("Condition", "'$" + "(" + imported + ")' != 'true'"));
+                var marker = File.ReadAllText(MarkerTemplatePath)
+                    .Replace("__TWODOG_IMPORT_KEY__", imported)
+                    .Replace("__TWODOG_PACKAGE_ID__", PackageId)
+                    .Replace("__TWODOG_PRECISION__", Precision);
+                foreach (var folder in new [] { "build", "buildTransitive" })
+                {
+                    var destination = Path.Combine(AssetDir, folder);
+                    Directory.CreateDirectory(destination);
+                    foreach (var stale in Directory.GetFiles(destination))
+                        File.Delete(stale);
+                    var files = new List<string>();
+                    var source = Path.Combine(ProjectDir, folder);
+                    if (File.Exists(Path.Combine(source, baseId + ".props")) || File.Exists(Path.Combine(source, baseId + ".targets")))
+                        foreach (var file in Directory.GetFiles(source))
+                            if (Path.GetExtension(file) == ".props" || Path.GetExtension(file) == ".targets")
+                                files.Add(file);
+                    // Native metapackage nuspecs use one shared resolver copied beside their own targets.
+                    var common = Path.GetFullPath(Path.Combine(ProjectDir, "../common"));
+                    if (folder == "build" && files.Count > 0 && Directory.Exists(common))
+                        files.AddRange(Directory.GetFiles(common, "*.targets"));
+                    foreach (var file in files)
+                    {
+                        var name = Path.GetFileName(file);
+                        var text = File.ReadAllText(file);
+                        foreach (var ext in new [] { ".props", ".targets" })
+                        {
+                            text = text.Replace(baseId + ext, PackageId + ext);
+                            name = name.Replace(baseId + ext, PackageId + ext);
+                        }
+                        var doc = XDocument.Parse(text, LoadOptions.PreserveWhitespace);
+                        doc.Root.AddFirst(importMarker());
+                        File.WriteAllText(Path.Combine(destination, name), doc.ToString());
+                    }
+                    var primaryProps = Path.Combine(destination, PackageId + ".props");
+                    if (!File.Exists(primaryProps))
+                        File.WriteAllText(primaryProps, new XElement("Project", importMarker()).ToString());
+                    File.WriteAllText(Path.Combine(destination, "2dog.precision.props"), marker.ToString());
+                    foreach (var file in Directory.GetFiles(destination))
+                    {
+                        var item = new Microsoft.Build.Utilities.TaskItem(file);
+                        item.SetMetadata("Pack", "true");
+                        item.SetMetadata("PackagePath", folder + "/" + Path.GetFileName(file));
+                        item.SetMetadata("Visible", "false");
+                        assets.Add(item);
+                    }
+                }
+                Assets = assets.ToArray();
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <UsingTask TaskName="ValidateTwoDogManagedPrecision" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <AssemblyPath ParameterType="System.String" Required="true" />
+            <Precision ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                // Load bytes to avoid locking glue output in reusable MSBuild nodes. Metadata reads do not initialize Godot.
+                var assembly = System.Reflection.Assembly.Load(File.ReadAllBytes(AssemblyPath));
+                var scalar = assembly.GetType("Godot.Vector2", true).GetField("X").FieldType;
+                var expected = Precision == "double" ? typeof(double) : typeof(float);
+                if (scalar != expected)
+                    Log.LogError(null, "TDG006", null, AssemblyPath, 0, 0, 0, 0,
+                        "TwoDog: GodotSharp uses {0}, but this build requests {1} precision. Regenerate glue with build-godot.py --precision {1} before building or packing.", scalar, Precision);
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <Target Name="TwoDogValidateManagedPrecision" BeforeTargets="CoreCompile;GenerateNuspec"
+            Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(MSBuildProjectName)', '^twodog\.(godotsharp(\.editor)?|engine|import)$'))">
+        <ValidateTwoDogManagedPrecision AssemblyPath="$(TwoDogGodotSharpApiDir)Release/GodotSharp.dll"
+                                        Precision="$(TwoDogPrecision)" />
+    </Target>
+
+    <Target Name="TwoDogValidatePrecision" BeforeTargets="PrepareForBuild;GenerateNuspec">
+        <Error Condition="'$(TwoDogPrecision)' != 'single' And '$(TwoDogPrecision)' != 'double'"
+               Text="TwoDogPrecision must be single or double." />
+    </Target>
+
+    <Target Name="TwoDogStagePrecisionAssets" BeforeTargets="_GetPackageFiles;GenerateNuspec"
+            Condition="'$(IsPackable)' == 'true' And $(PackageId.StartsWith('2dog.')) And '$(PackageId)' != '2dog.android' And '$(TwoDogPrecisionNeutral)' != 'true'">
+        <StageTwoDogPrecisionAssets ProjectDir="$(MSBuildProjectDirectory)" AssetDir="$(TwoDogPrecisionAssetDir)"
+                                   PackageId="$(PackageId)" Precision="$(TwoDogPrecision)"
+                                   MarkerTemplatePath="$(MSBuildThisFileDirectory)2dog.precision.props">
+            <Output TaskParameter="Assets" ItemName="_TwoDogPrecisionAsset" />
+        </StageTwoDogPrecisionAssets>
+        <PropertyGroup Condition="'$(NuspecFile)' != ''">
+            <NuspecProperties>$(NuspecProperties);assetDir=$(TwoDogPrecisionAssetDir)</NuspecProperties>
+        </PropertyGroup>
+        <ItemGroup>
+            <_TwoDogOriginalBuildAsset Include="@(None)"
+                Condition="'%(None.Pack)' == 'true' And ('%(None.Extension)' == '.targets' Or '%(None.Extension)' == '.props')" />
+            <None Remove="@(_TwoDogOriginalBuildAsset)" />
+            <None Include="@(_TwoDogPrecisionAsset)" />
+        </ItemGroup>
+    </Target>
+</Project>

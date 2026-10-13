@@ -8,13 +8,13 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <PackageId>2dog.browser-wasm</PackageId>
+        <PackageId>2dog.browser-wasm$(TwoDogPackageSuffix)</PackageId>
         <Description>Browser (wasm) meta package for twodog. Statically links the Godot engine into your .NET browser-wasm publish and ships the Godot web boot shell. Reference this package alongside twodog (2dog) in a net10.0+ browser-wasm host project. Requires the wasm-tools workload.</Description>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <!-- Use custom nuspec for explicit dependency control -->
         <NuspecFile>twodog.browser-wasm.nuspec</NuspecFile>
-        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description);precision=$(TwoDogPackageSuffix)</NuspecProperties>
     </PropertyGroup>
 
     <!-- Project references for local development builds -->

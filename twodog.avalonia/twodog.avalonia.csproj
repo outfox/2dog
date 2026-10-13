@@ -13,6 +13,8 @@
     <PropertyGroup>
         <PackageId>2dog.avalonia</PackageId>
         <Version>$(TwoDogVersion)</Version>
+        <!-- One package works with either engine precision; the host selects its engine explicitly. -->
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
         <Description>Embed a Godot viewport inside an Avalonia application with 2dog. GodotControl composites the engine's output through Avalonia's compositor, so ordinary Avalonia controls render on top of the running game.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -24,10 +26,10 @@
 
     <!-- Managed bindings flow transitively from the engine ProjectReference. -->
 
-    <!-- The ProjectReference packs as a same-version 2dog.engine dependency. Only Avalonia core is referenced;
-         backend selection (Avalonia.Desktop) belongs to the application. -->
+    <!-- The engine is a private build dependency. The host selects 2dog.engine or 2dog.engine.double.
+         Only Avalonia core is referenced; backend selection belongs to the application. -->
     <ItemGroup>
-        <ProjectReference Include="..\twodog.engine\twodog.engine.csproj"/>
+        <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" PrivateAssets="all"/>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
     </ItemGroup>
 

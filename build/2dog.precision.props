@@ -1,0 +1,33 @@
+<Project>
+    <PropertyGroup>
+        <__TWODOG_IMPORT_KEY__>true</__TWODOG_IMPORT_KEY__>
+        <TwoDogPrecision Condition="'$(TwoDogPrecision)' == ''">__TWODOG_PRECISION__</TwoDogPrecision>
+        <DefineConstants Condition="'$(TwoDogPrecision)' == 'double' And '$(_TwoDogDoubleConstants)' != 'true'">$(DefineConstants);REAL_T_IS_DOUBLE</DefineConstants>
+        <_TwoDogDoubleConstants Condition="'$(TwoDogPrecision)' == 'double'">true</_TwoDogDoubleConstants>
+        <TwoDogPackageSuffix Condition="'$(TwoDogPrecision)' == 'double'">.double</TwoDogPackageSuffix>
+        <TwoDogNativePrecisionSuffix Condition="'$(TwoDogPrecision)' == 'double'">.double</TwoDogNativePrecisionSuffix>
+        <TwoDogNativeOutputSubdir Condition="'$(TwoDogPrecision)' == 'double'">double/</TwoDogNativeOutputSubdir>
+        <GodotFloat64 Condition="'$(TwoDogPrecision)' == 'double'">true</GodotFloat64>
+    </PropertyGroup>
+    <ItemGroup>
+        <_TwoDogPackagePrecision Include="__TWODOG_PACKAGE_ID__" Precision="__TWODOG_PRECISION__" />
+    </ItemGroup>
+    <Target Name="TwoDogValidatePackagePrecision" BeforeTargets="PrepareForBuild;CoreCompile;Publish">
+        <Error Code="TDG005" Condition="'%(_TwoDogPackagePrecision.Precision)' != '$(TwoDogPrecision)'"
+               Text="TwoDog: %(_TwoDogPackagePrecision.Identity) uses %(_TwoDogPackagePrecision.Precision) precision, but this project uses $(TwoDogPrecision). Rebuild every Godot game/library and use matching .double packages throughout the dependency graph." />
+    </Target>
+
+    <!-- The resolved graph also catches old single packages that predate precision stamps, including
+         native-only packages and dependencies introduced by third-party libraries. -->
+    <Target Name="TwoDogValidateResolvedPackagePrecision" AfterTargets="ResolvePackageAssets">
+        <ItemGroup>
+            <_TwoDogAbiPackage Include="@(PackageDependencies)"
+                Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(PackageDependencies.Identity)', '(?i)^2dog\.(engine|godotsharp(\.editor)?|tools|(win-x64|linux-x64|osx-arm64|browser-wasm|android-arm64|android-x64)(\.(release|debug|editor))?)(\.double)?$'))">
+                <Precision>single</Precision>
+                <Precision Condition="$([System.String]::Copy('%(Identity)').EndsWith('.double'))">double</Precision>
+            </_TwoDogAbiPackage>
+        </ItemGroup>
+        <Error Code="TDG005" Condition="'@(_TwoDogAbiPackage)' != '' And '%(_TwoDogAbiPackage.Precision)' != '$(TwoDogPrecision)'"
+               Text="TwoDog: resolved package %(_TwoDogAbiPackage.Identity) uses %(_TwoDogAbiPackage.Precision) precision, but this project uses $(TwoDogPrecision). Use matching .double packages throughout the dependency graph." />
+    </Target>
+</Project>

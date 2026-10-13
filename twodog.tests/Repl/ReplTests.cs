@@ -53,6 +53,11 @@ public class ReplIntegrationTests
         }));
 
         Success("var ownerThread = System.Environment.CurrentManagedThreadId; var startFrame = Godot.Engine.GetProcessFrames();");
+#if REAL_T_IS_DOUBLE
+        Assert.Equal("true", Success("typeof(Vector2).GetField(\"X\").FieldType == typeof(double) && new Vector2(1000000000.125, 0).X == 1000000000.125").Value);
+#else
+        Assert.Equal("true", Success("typeof(Vector2).GetField(\"X\").FieldType == typeof(float) && new Vector2(10.125f, 0).X == 10.125f").Value);
+#endif
         Success("var madeNode = new Node { Name = \"ReplLive\" }; root.AddChild(madeNode);");
         Assert.Equal("\"ReplLive\"", Success("madeNode.Name.ToString()").Value);
         Assert.Equal("true", Success("await Task.Delay(50, ct); System.Environment.CurrentManagedThreadId == ownerThread && Godot.Engine.GetProcessFrames() > startFrame").Value);

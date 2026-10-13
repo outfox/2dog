@@ -9,8 +9,41 @@ namespace twodog.tests.EngineTests;
 public class GodotApiCoverageTests(HeadlessFixture godot)
 {
     [Fact]
+    public void MathStructs_PreserveConfiguredPrecisionAcrossNativeProperties()
+    {
+#if REAL_T_IS_DOUBLE
+        const double coordinate = 1_000_000_000.125;
+        Assert.Equal(typeof(double), typeof(Vector2).GetField(nameof(Vector2.X))!.FieldType);
+#else
+        const float coordinate = 1_000_000_000.125f;
+        Assert.Equal(typeof(float), typeof(Vector2).GetField(nameof(Vector2.X))!.FieldType);
+#endif
+        var node2D = new Node2D();
+        var node3D = new Node3D();
+        try
+        {
+            node2D.Position = new Vector2(coordinate, -coordinate);
+            node3D.Position = new Vector3(coordinate, -coordinate, coordinate);
+            Assert.Equal(coordinate, node2D.Position.X);
+            Assert.Equal(-coordinate, node2D.Position.Y);
+            Assert.Equal(coordinate, node3D.Position.X);
+            Assert.Equal(-coordinate, node3D.Position.Y);
+            Assert.Equal(coordinate, node3D.Position.Z);
+        }
+        finally
+        {
+            node2D.Free();
+            node3D.Free();
+        }
+    }
+
+    [Fact]
     public void CoreTypesAndNativeHelpers_RoundTripAcrossInterop() =>
         GodotApiSmoke.CoreTypesAndNativeHelpers(godot.Tree);
+
+    [Fact]
+    public void NativeFeatureAndMathMarshalling_MatchConfiguredPrecision() =>
+        GodotApiSmoke.MathPrecision();
 
     [Fact]
     public void ManagedCallables_PreserveInvocationAndSignalIdentity() =>

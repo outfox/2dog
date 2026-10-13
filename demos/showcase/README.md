@@ -13,6 +13,10 @@ a `.gdignore`):
   `signal`, an engine `Timer` and the GDExtension's `TwoDogTicker`), and each row counts what a C# (`SignalCounter.cs`)
   and a GDScript (`signal_counter.gd`) listener received. Both columns should advance in lockstep on every host
 - `showcase.2dog/` - desktop host: `dotnet run --project demos/showcase/showcase.2dog`
+- `showcase.double/` - double-precision desktop host: `dotnet run --project demos/showcase/showcase.double`.
+  Explicitly references `2dog.engine.double` and builds the shared game against double bindings. Requires the
+  matching `.double` packages in the local feed until they are published. The API smoke checks native double
+  support and large-coordinate round trips on startup; use `-- --headless --quit-after 10` for a short smoke run.
 - `showcase.web/` - browser (wasm) host: `dotnet publish` from that folder (defaults to Release; needs the wasm-tools workload)
 - `showcase.webxr/` - WebXR browser host (its page ships the WebXR Layers polyfill): same publish flow; VR needs a secure context (localhost or HTTPS)
 - `showcase.blazor/` - Blazor Web App host (ASP.NET Core server + `Client/` WebAssembly page embedding the game via `2dog.blazor`): `dotnet run --project demos/showcase/showcase.blazor` (needs the wasm-tools workload)

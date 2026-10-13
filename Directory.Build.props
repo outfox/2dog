@@ -7,7 +7,7 @@
         <TwoDogRevision>118</TwoDogRevision>
         <!-- Bump when the godot submodule or the natives package layout changes (deploy skips duplicates);
              reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0 (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>24</NativesRevision>
+        <NativesRevision>26</NativesRevision>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
@@ -26,10 +26,25 @@
         <RollForward>LatestMajor</RollForward>
     </PropertyGroup>
 
+    <!-- Precision is independent of Debug/Release/Editor. Only ABI-dependent packages get a suffix. -->
+    <PropertyGroup>
+        <TwoDogPrecision Condition="'$(TwoDogPrecision)' == ''">single</TwoDogPrecision>
+        <TwoDogPackageSuffix Condition="'$(TwoDogPrecision)' == 'double'">.double</TwoDogPackageSuffix>
+        <TwoDogNativePrecisionSuffix Condition="'$(TwoDogPrecision)' == 'double'">.double</TwoDogNativePrecisionSuffix>
+        <TwoDogNativeOutputSubdir Condition="'$(TwoDogPrecision)' == 'double'">double/</TwoDogNativeOutputSubdir>
+        <GodotFloat64 Condition="'$(TwoDogPrecision)' == 'double'">true</GodotFloat64>
+        <DefineConstants Condition="'$(TwoDogPrecision)' == 'double'">$(DefineConstants);REAL_T_IS_DOUBLE</DefineConstants>
+        <BaseIntermediateOutputPath Condition="'$(TwoDogPrecision)' == 'double'">obj/double/</BaseIntermediateOutputPath>
+        <BaseOutputPath Condition="'$(TwoDogPrecision)' == 'double'">bin/double/</BaseOutputPath>
+        <!-- Both precision trees can exist in one checkout. Exclude the whole artifact roots,
+             even when the SDK's default exclusion follows obj/double or bin/double. -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+    </PropertyGroup>
+
     <!-- Fork build output consumed by twodog.engine, twodog.import, and twodog.avalonia.
          Consumers append the API config flavor (Release/, Debug/) themselves. -->
     <PropertyGroup>
-        <TwoDogGodotBinDir Condition="'$(TwoDogGodotBinDir)' == ''">$(MSBuildThisFileDirectory)godot/bin/</TwoDogGodotBinDir>
+        <TwoDogGodotBinDir Condition="'$(TwoDogGodotBinDir)' == ''">$(MSBuildThisFileDirectory)godot/bin/$(TwoDogNativeOutputSubdir)</TwoDogGodotBinDir>
         <TwoDogGodotSharpApiDir Condition="'$(TwoDogGodotSharpApiDir)' == ''">$(TwoDogGodotBinDir)GodotSharp/Api/</TwoDogGodotSharpApiDir>
     </PropertyGroup>
 

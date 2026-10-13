@@ -1,5 +1,8 @@
 # 2dog.nunit
 
+Reference `2dog.engine` or `2dog.engine.double` explicitly in the host project.
+This integration package works with either precision.
+
 Run [NUnit](https://nunit.org/) tests against a real Godot engine.
 Reference `2dog.nunit`, `NUnit3TestAdapter` and `Microsoft.NET.Test.Sdk`, or scaffold:
 
