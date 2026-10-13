@@ -25,23 +25,6 @@ production runtime; `editor`
 enables `TOOLS_ENABLED`, including editor types, import plugins, and `[Tool]`
 scripts.
 
-::: tip Opening the editor
-The editor variant enables editor APIs; pass `--editor` to start the interactive
-editor and initialize editor runtime singletons such as `EditorInterface`:
-
-```bash
-dotnet run --project MyGame.2dog -c Editor -- --editor
-```
-
-The generic host forwards these arguments and pumps the editor's main loop.
-Editor builds and publishes copy GodotTools and its dependencies into
-`GodotSharp/Tools` beside the host executable. Custom hosts must keep pumping
-the engine and avoid assuming that a game scene is running in editor mode.
-
-Resource import also runs separately and automatically at build time; see
-[Resource Import](./import-tool).
-:::
-
 ## Selecting a Variant
 
 `TwoDogVariant` defaults to `debug` in Debug, `editor` in Editor, and `release`
@@ -102,15 +85,28 @@ bindings; single- and double-precision Godot types cannot be mixed.
 Keep `2dog.avalonia`, `2dog.blazor`, `2dog.xunit`, `2dog.nunit` and `2dog.repl`
 under their ordinary names. Native dependencies are selected automatically;
 if referenced explicitly, append `.double` to the entire ID, such as
-`2dog.win-x64.release.double`. GDExtensions must also match the precision.
+`2dog.win-x64.release.double`. 
 
-After CLI scaffolding, change the package references as described above.
-`2dog update` currently assumes the ordinary package IDs.
+::: danger GDExtensions + Double Precision
+GDExtensions must also match the precision!
+:::
 
-The repository's double-precision showcase prints the CLR types and sizes of
-position and transform components, and checks native large-coordinate
-round trips:
+## Editor Variants
+
+::: tip Opening the editor
+The editor variant enables editor APIs; pass `--editor` to start the interactive
+editor and initialize editor runtime singletons such as `EditorInterface`:
 
 ```bash
-dotnet run --project demos/showcase/showcase.double
+dotnet run --project MyGame.2dog -c Editor -- --editor
 ```
+
+The generic host forwards these arguments and pumps the editor's main loop.
+Editor builds and publishes copy GodotTools and its dependencies into
+`GodotSharp/Tools` beside the host executable. Custom hosts must keep pumping
+the engine and avoid assuming that a game scene is running in editor mode.
+
+Resource import also runs separately and automatically at build time; see
+[Resource Import](./import-tool).
+:::
+
