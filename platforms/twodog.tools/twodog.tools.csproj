@@ -2,7 +2,7 @@
     <!-- GodotTools assemblies: managed, but built from the godot submodule and versioned with the natives. The import
          helper needs them (editor C# init hard-aborts without GodotTools.dll). -->
     <PropertyGroup>
-        <PackageId>2dog.tools</PackageId>
+        <PackageId>2dog.tools$(TwoDogPackageSuffix)</PackageId>
         <Description>Godot editor tooling assemblies (GodotTools) for twodog. Required for the automatic resource import that runs against the editor-variant libgodot.</Description>
 
         <GodotToolsDir>$(GodotBinDir)GodotSharp/Tools/</GodotToolsDir>

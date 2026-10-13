@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.winui", "showcase.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.repl", "showcase.repl\showcase.repl.csproj", "{329C14A4-72B8-40E3-96C2-864CE676CCDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.double", "showcase.double\showcase.double.csproj", "{60EF8DDC-B922-4803-9398-53372E47BFA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "showcase.double.game", "showcase.double\game\showcase.double.game.csproj", "{790019E4-A1E6-4B99-B621-6183FDC7C5E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,5 +63,17 @@ Global
 		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
 		{329C14A4-72B8-40E3-96C2-864CE676CCDF}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{60EF8DDC-B922-4803-9398-53372E47BFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EF8DDC-B922-4803-9398-53372E47BFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EF8DDC-B922-4803-9398-53372E47BFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EF8DDC-B922-4803-9398-53372E47BFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60EF8DDC-B922-4803-9398-53372E47BFA1}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{60EF8DDC-B922-4803-9398-53372E47BFA1}.Editor|Any CPU.Build.0 = Editor|Any CPU
+		{790019E4-A1E6-4B99-B621-6183FDC7C5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{790019E4-A1E6-4B99-B621-6183FDC7C5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{790019E4-A1E6-4B99-B621-6183FDC7C5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{790019E4-A1E6-4B99-B621-6183FDC7C5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{790019E4-A1E6-4B99-B621-6183FDC7C5E1}.Editor|Any CPU.ActiveCfg = Editor|Any CPU
+		{790019E4-A1E6-4B99-B621-6183FDC7C5E1}.Editor|Any CPU.Build.0 = Editor|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>2dog.browser-wasm</id>
+        <id>2dog.browser-wasm$precision$</id>
         <version>$version$</version>
         <authors>$authors$</authors>
         <license type="expression">MIT</license>
@@ -11,8 +11,8 @@
         <description>$description$</description>
         <dependencies>
             <group targetFramework=".NETStandard2.0">
-                <dependency id="2dog.browser-wasm.release" version="[$version$]"/>
-                <dependency id="2dog.browser-wasm.debug" version="[$version$]"/>
+                <dependency id="2dog.browser-wasm.release$precision$" version="[$version$]"/>
+                <dependency id="2dog.browser-wasm.debug$precision$" version="[$version$]"/>
             </group>
         </dependencies>
     </metadata>
@@ -22,10 +22,12 @@
         <file src="../../nuget/GODOT_LICENSE.txt" target="LICENSE.txt"/>
         <file src="../../nuget/GODOT_AUTHORS.md" target="AUTHORS.md"/>
         <!-- MSBuild targets wiring the static link + content pipeline -->
-        <file src="build/2dog.browser-wasm.props" target="build/2dog.browser-wasm.props"/>
-        <file src="build/2dog.browser-wasm.defaults.props" target="build/2dog.browser-wasm.defaults.props"/>
-        <file src="build/2dog.browser-wasm.targets" target="build/2dog.browser-wasm.targets"/>
-        <file src="buildTransitive/2dog.browser-wasm.props" target="buildTransitive/2dog.browser-wasm.props"/>
-        <file src="buildTransitive/2dog.browser-wasm.targets" target="buildTransitive/2dog.browser-wasm.targets"/>
+        <file src="$assetDir$/build/2dog.browser-wasm$precision$.props" target="build/2dog.browser-wasm$precision$.props"/>
+        <file src="$assetDir$/build/2dog.browser-wasm.defaults.props" target="build/2dog.browser-wasm.defaults.props"/>
+        <file src="$assetDir$/build/2dog.browser-wasm$precision$.targets" target="build/2dog.browser-wasm$precision$.targets"/>
+        <file src="$assetDir$/buildTransitive/2dog.browser-wasm$precision$.props" target="buildTransitive/2dog.browser-wasm$precision$.props"/>
+        <file src="$assetDir$/buildTransitive/2dog.browser-wasm$precision$.targets" target="buildTransitive/2dog.browser-wasm$precision$.targets"/>
+        <file src="$assetDir$/build/2dog.precision.props" target="build/"/>
+        <file src="$assetDir$/buildTransitive/2dog.precision.props" target="buildTransitive/"/>
     </files>
 </package>

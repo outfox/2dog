@@ -147,12 +147,14 @@ entry-point wrapper. For windowed macOS fixtures, your entry point must call
 The scaffold sets this up for you. For an existing test project:
 
 ```bash
+dotnet add package 2dog.engine
 dotnet add package 2dog.xunit
 dotnet add package xunit.v3
 dotnet add package Microsoft.NET.Test.Sdk
 dotnet add package xunit.runner.visualstudio
 ```
 
-`2dog.xunit` brings in `2dog.engine`. See
+Select `2dog.engine.double` instead for double precision; `2dog.xunit` stays
+the same. See
 [xUnit configuration](/configuration/xunit) for game paths and Editor bindings.
 :::

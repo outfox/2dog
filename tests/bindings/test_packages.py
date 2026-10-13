@@ -1,7 +1,8 @@
 """Integration tests against packed bindings; no native engine or window is started.
 
-Run after packing both managed packages and 2dog.engine:
-    python tests/bindings/test_packages.py [--feed packages] [--version VERSION]
+Run after packing bindings, engine and the precision-neutral integrations (poe build-managed
+or poe pack-double):
+    uv run tests/bindings/test_packages.py [--precision double] [--feed packages] [--version VERSION]
 """
 import argparse
 import platform
@@ -17,6 +18,7 @@ REPO = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser()
 parser.add_argument("--feed", type=Path, default=REPO / "packages")
 parser.add_argument("--version")
+parser.add_argument("--precision", choices=["single", "double"], default="single")
 args, remaining = parser.parse_known_args()
 if not args.version:
     props = ET.parse(REPO / "Directory.Build.props")
@@ -24,8 +26,10 @@ if not args.version:
 FEED = args.feed.resolve()
 VERSION = args.version
 GODOT = ET.parse(REPO / "Directory.Build.props").findtext(".//GodotVersion")
-CORE = "2dog.godotsharp"
-EDITOR = CORE + ".editor"
+SUFFIX = ".double" if args.precision == "double" else ""
+CORE = "2dog.godotsharp" + SUFFIX
+EDITOR = "2dog.godotsharp.editor" + SUFFIX
+ENGINE = "2dog.engine" + SUFFIX
 
 
 def xml(value):
@@ -102,6 +106,65 @@ class BindingPackages(unittest.TestCase):
         (directory / "Code.cs").write_text(source or "public class Api { public Godot.Vector2 Value; }")
         return csproj
 
+    def test_math_struct_precision_matches_package(self):
+        expected = "System.Double" if SUFFIX else "System.Single"
+        project = self.project(extra="<PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>",
+            source='System.Console.Write(typeof(Godot.Vector2).GetField("X").FieldType.FullName);')
+        self.dotnet("build", project)
+        output = subprocess.run(["dotnet", str(self.dir / "Consumer/bin/Debug/net10.0/Consumer.dll")],
+                                capture_output=True, text=True, check=True)
+        self.assertEqual(expected, output.stdout)
+
+    def test_neutral_integrations_have_no_precision_dependency(self):
+        for name in ("avalonia", "blazor", "xunit", "nunit", "repl"):
+            with self.subTest(package=name):
+                with zipfile.ZipFile(FEED / f"2dog.{name}.{VERSION}.nupkg") as archive:
+                    spec = ET.fromstring(archive.read(next(p for p in archive.namelist() if p.endswith(".nuspec"))))
+                    dependencies = [e.attrib["id"] for e in spec.iter() if e.tag.split("}")[-1] == "dependency"]
+                    self.assertFalse(any(p.startswith("2dog.") or p.startswith("GodotSharp") for p in dependencies), dependencies)
+                    self.assertFalse(any(p.endswith("2dog.precision.props") for p in archive.namelist()))
+
+    def test_same_integration_binaries_run_with_selected_precision(self):
+        names = ("avalonia", "blazor", "nunit", "repl")
+        expected = "1_000_000_000.125" if SUFFIX else "(double)(float)1_000_000_000.125"
+        project = self.project(packages=[(ENGINE, VERSION), *[(f"2dog.{name}", VERSION) for name in names]],
+            extra='<PropertyGroup><OutputType>Exe</OutputType><AssemblyName>twodog.tests</AssemblyName>'
+                  '<TwoDogAutoImport>false</TwoDogAutoImport><TwoDogExportPack>false</TwoDogExportPack>'
+                  '</PropertyGroup><ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App"/></ItemGroup>',
+            source='''using System;
+using Avalonia;
+using twodog;
+using Godot;
+using twodog.Repl;
+using twodog.Testing.NUnit;
+using var session = new GodotSession(new GodotSessionOptions { Project = "precision-probe" });
+using var forwarder = new GodotInputForwarder(new GodotControl(), session);
+var position = forwarder.ToViewport(new Point(1_000_000_000.125, -20.25));
+if ((double)position.X != EXPECTED || (double)position.Y != -20.25) throw new Exception("Lost coordinate precision");
+if (!ReplSession.IsComplete("new Vector2(1, 2)")) throw new Exception("REPL did not load");
+if (typeof(SignalExpectation<Vector2>).GetProperty("Values") is null) throw new Exception("NUnit did not load");
+var component = Activator.CreateInstance(typeof(GodotView));
+if (component is null) throw new Exception("Blazor did not load");
+Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).GetField("X").FieldType);
+'''.replace("EXPECTED", expected))
+        self.dotnet("build", project, "-c", "Release")
+        output = project.parent / "bin/Release/net10.0"
+        for name in names:
+            with zipfile.ZipFile(FEED / f"2dog.{name}.{VERSION}.nupkg") as archive:
+                self.assertEqual(archive.read(f"lib/net10.0/twodog.{name}.dll"),
+                                 (output / f"twodog.{name}.dll").read_bytes())
+        result = self.dotnet(output / "twodog.tests.dll")
+        self.assertIn("System.Double" if SUFFIX else "System.Single", result)
+
+    def test_source_pack_rejects_wrong_precision_label(self):
+        api = self.dir / "api/Release"
+        api.mkdir(parents=True)
+        (api / "GodotSharp.dll").write_bytes(self.core_bytes)
+        wrong = "single" if SUFFIX else "double"
+        self.dotnet("msbuild", REPO / "twodog.godotsharp/twodog.godotsharp.csproj",
+            "-t:TwoDogValidateManagedPrecision", f"-p:TwoDogPrecision={wrong}",
+            f"-p:TwoDogGodotSharpApiDir={(self.dir / 'api').as_posix()}/", error="TDG006")
+
     def test_package_payload_and_dependencies(self):
         for pkg, assembly in ((CORE, "GodotSharp"), (EDITOR, "GodotSharpEditor")):
             with zipfile.ZipFile(self.local / f"{pkg}.{VERSION}.nupkg") as z:
@@ -119,6 +182,7 @@ class BindingPackages(unittest.TestCase):
         game_dir = self.dir / "Game"
         game_dir.mkdir()
         template = (REPO / "templates/twodog/Company.Product1.csproj").read_text(encoding="utf-8-sig")
+        template = template.replace("2dog.godotsharp.editor\"", EDITOR + "\"").replace("2dog.godotsharp\"", CORE + "\"")
         template = template.replace("GODOT_SDK_VERSION", GODOT).replace("TPLRAWNAME", "Game")
         template = template.replace("$(TwoDogVersion)", VERSION).replace("</Project>",
             '<ItemGroup><ProjectReference Include="../Library/Library.csproj"/></ItemGroup>'
@@ -172,7 +236,7 @@ class BindingPackages(unittest.TestCase):
 
     def test_legacy_game_host_accepts_sdk_dependencies(self):
         game = self.project("Legacy", packages=[], sdk=f"Godot.NET.Sdk/{GODOT}")
-        host = self.project("Host", packages=[("2dog.engine", VERSION)],
+        host = self.project("Host", packages=[(ENGINE, VERSION)],
                             extra='<ItemGroup><ProjectReference Include="../Legacy/Legacy.csproj"/></ItemGroup>'
                             '<PropertyGroup><TwoDogAutoImport>false</TwoDogAutoImport>'
                             '<TwoDogExportPack>false</TwoDogExportPack></PropertyGroup>')
@@ -229,8 +293,8 @@ class BindingPackages(unittest.TestCase):
         self.dotnet("build", project, error="TDG004")
 
     def test_engine_package_build_publish_and_version_guard(self):
-        self.assertTrue((FEED / f"2dog.engine.{VERSION}.nupkg").exists(), "Pack 2dog.engine before running these tests")
-        project = self.project(packages=[("2dog.engine", VERSION), (EDITOR, VERSION)],
+        self.assertTrue((FEED / f"{ENGINE}.{VERSION}.nupkg").exists(), "Pack 2dog.engine before running these tests")
+        project = self.project(packages=[(ENGINE, VERSION), (EDITOR, VERSION)],
                                extra="<PropertyGroup><TwoDogAutoImport>false</TwoDogAutoImport>"
                                "<TwoDogExportPack>false</TwoDogExportPack></PropertyGroup>")
         self.dotnet("build", project, "-c", "Release")

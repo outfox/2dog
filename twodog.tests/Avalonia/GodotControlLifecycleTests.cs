@@ -27,6 +27,27 @@ public class GodotControlLifecycleTests
     }
 
     [Fact]
+    public void ViewportCoordinates_UseTheSelectedEnginePrecision() => Dispatch(() =>
+    {
+        using var session = new GodotSession(new GodotSessionOptions { Project = "test" });
+        var control = new GodotControl();
+        using var forwarder = new GodotInputForwarder(control, session);
+        var fractional = forwarder.ToViewport(new Point(10.125, -20.25));
+        Assert.Equal(10.125, (double)fractional.X);
+        Assert.Equal(-20.25, (double)fractional.Y);
+
+        const double coordinate = 1_000_000_000.125;
+        var position = forwarder.ToViewport(new Point(coordinate, -coordinate));
+#if REAL_T_IS_DOUBLE
+        Assert.Equal(coordinate, position.X);
+        Assert.Equal(-coordinate, position.Y);
+#else
+        Assert.Equal((float)coordinate, position.X);
+        Assert.Equal((float)-coordinate, position.Y);
+#endif
+    });
+
+    [Fact]
     public void Attach_ResolvesPresenter_WithoutEngine() => Dispatch(() =>
     {
         using var session = new GodotSession(new GodotSessionOptions { Project = "test" });

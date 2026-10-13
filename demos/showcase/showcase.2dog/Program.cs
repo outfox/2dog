@@ -11,6 +11,27 @@ internal static class Program
     [STAThread]
     private static void Main(string[] args)
     {
+        // The console event runs on another thread. Only signal the owner thread;
+        // calling Godot here, or terminating immediately, skips orderly teardown.
+        var quitRequested = 0;
+        ConsoleCancelEventHandler requestQuit = (_, e) =>
+        {
+            e.Cancel = true;
+            Interlocked.Exchange(ref quitRequested, 1);
+        };
+        Console.CancelKeyPress += requestQuit;
+        try
+        {
+            Run(args, () => Volatile.Read(ref quitRequested) != 0);
+        }
+        finally
+        {
+            Console.CancelKeyPress -= requestQuit;
+        }
+    }
+
+    private static void Run(string[] args, Func<bool> quitRequested)
+    {
         // Touch the game assembly before Start() so it loads into the default
         // AssemblyLoadContext and the engine reuses it for script binding
         // instead of loading a second copy (type identity across contexts).
@@ -45,6 +66,9 @@ internal static class Program
         // closed, SceneTree.Quit(), --quit-after N, ...).
         while (!engine.Iteration())
         {
+            if (quitRequested())
+                engine.Tree.Quit();
+
             var delta = (float)engine.Tree.Root.GetProcessDeltaTime();
             foreach (var cube in whiteCubes)
                 cube.Rotate(whiteSpinAxis, 1.8f * delta);

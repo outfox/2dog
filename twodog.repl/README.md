@@ -1,5 +1,8 @@
 # 2dog.repl
 
+Reference `2dog.engine` or `2dog.engine.double` explicitly in the host project.
+This integration package works with either precision.
+
 An interactive C# prompt inside a running Godot process. Add a host with
 `dnx 2dog add --repl`, then run `dotnet run --project MyGame.repl`.
 

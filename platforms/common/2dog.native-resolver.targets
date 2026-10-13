@@ -23,7 +23,7 @@
                 <Resolved></Resolved>
             </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>
-                <PkgPath>$(NuGetPackageRoot)/%(PackageId).$(_TwoDogNativeVariant)/%(PackageVersion)/runtimes/%(Identity)/native/%(OutName)</PkgPath>
+                <PkgPath>$(NuGetPackageRoot)/%(PackageId).$(_TwoDogNativeVariant)$(TwoDogPackageSuffix)/%(PackageVersion)/runtimes/%(Identity)/native/%(OutName)</PkgPath>
                 <LocalPath>%(LocalBin)%(LocalFile)</LocalPath>
             </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>

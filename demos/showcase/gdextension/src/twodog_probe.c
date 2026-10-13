@@ -39,9 +39,10 @@ typedef struct {
 	void *opaque;
 } String;
 
-// Variant is 24 bytes in single-precision builds, on 32- and 64-bit platforms alike.
+// Variant needs 24 bytes with single precision and 40 with double precision.
+// Reserve the larger opaque storage so this scalar-only probe supports either engine ABI.
 typedef struct {
-	uint64_t opaque[3];
+	uint64_t opaque[5];
 } Variant;
 
 typedef struct {

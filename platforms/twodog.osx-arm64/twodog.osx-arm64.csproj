@@ -8,13 +8,13 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <PackageId>2dog.osx-arm64</PackageId>
+        <PackageId>2dog.osx-arm64$(TwoDogPackageSuffix)</PackageId>
         <Description>macOS arm64 meta package for twodog. Includes release, debug, and editor native libraries. Reference this package alongside twodog for complete macOS support.</Description>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <!-- Use custom nuspec for explicit dependency control -->
         <NuspecFile>twodog.osx-arm64.nuspec</NuspecFile>
-        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description)</NuspecProperties>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description);precision=$(TwoDogPackageSuffix)</NuspecProperties>
     </PropertyGroup>
 
     <!-- Project references for local development builds -->

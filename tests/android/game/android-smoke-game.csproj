@@ -6,6 +6,6 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog.godotsharp" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.godotsharp$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
     </ItemGroup>
 </Project>

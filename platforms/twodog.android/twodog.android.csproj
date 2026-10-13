@@ -3,7 +3,7 @@
         <PackageId>2dog.android</PackageId>
         <Description>Experimental Android Java host and APK build targets for 2dog. Requires an Android runtime meta package and 2dog.engine.</Description>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <AndroidJavaPayloadDir>$(GodotBinDir)android/java/</AndroidJavaPayloadDir>
+        <AndroidJavaPayloadDir>$(GodotDir)bin/android/java/</AndroidJavaPayloadDir>
         <IsPackable Condition="!Exists('$(AndroidJavaPayloadDir)debug/godot.aar') Or !Exists('$(AndroidJavaPayloadDir)release/godot.aar')">false</IsPackable>
     </PropertyGroup>
     <ItemGroup>

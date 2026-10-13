@@ -10,8 +10,8 @@
 
     <!-- Select the requested variant independently of which payloads have been restored. -->
     <PropertyGroup>
-        <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebDebugPackageDir>
-        <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebReleasePackageDir>
+        <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebDebugPackageDir>
+        <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebReleasePackageDir>
 
         <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogWebVariant>
         <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogWebVariant>
@@ -23,7 +23,7 @@
         <!-- Resolve payload dir: NuGet package first, source checkout fallback -->
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'debug' And Exists('$(_TwoDogWebDebugPackageDir)libgodot/libgodot.a')">$(_TwoDogWebDebugPackageDir)</TwoDogWebNativeDir>
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'release' And Exists('$(_TwoDogWebReleasePackageDir)libgodot/libgodot.a')">$(_TwoDogWebReleasePackageDir)</TwoDogWebNativeDir>
-        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(_TwoDogWebBuildVariant)' != '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/web/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/web/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
+        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(_TwoDogWebBuildVariant)' != '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/web/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/web/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
     </PropertyGroup>
 
     <!-- Wasm build configuration -->

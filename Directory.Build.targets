@@ -50,4 +50,5 @@
         <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
         <RemoveDir Directories="$(BaseOutputPath)" />
     </Target>
+    <Import Project="build/2dog.precision-pack.targets" />
 </Project>

@@ -13,6 +13,8 @@
     <PropertyGroup>
         <PackageId>2dog.xunit</PackageId>
         <Version>$(TwoDogVersion)</Version>
+        <!-- One package works with either engine precision; the host selects its engine explicitly. -->
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
         <Description>xUnit collections, bounded frame waits, signal expectations and deferred-deletion assertions for testing real Godot applications with 2dog. Collections and helpers compile into your test assembly; fixtures come from 2dog.engine.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -25,7 +27,7 @@
     <!-- 2dog.engine provides the fixtures; xunit.v3.extensibility.core (not the metapackage, which requires
          OutputType=Exe) provides ICollectionFixture<>/CollectionDefinition for the compiled-in source. -->
     <ItemGroup>
-        <ProjectReference Include="..\twodog.engine\twodog.engine.csproj"/>
+        <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" PrivateAssets="all"/>
         <PackageReference Include="xunit.v3.extensibility.core" Version="3.*"/>
     </ItemGroup>
 

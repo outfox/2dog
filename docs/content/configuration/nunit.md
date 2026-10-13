@@ -5,8 +5,9 @@ description: "Configure NUnit hosts, engine variants, Editor bindings and headle
 
 # NUnit Configuration
 
-Set properties in `MyGame.nunit/MyGame.nunit.csproj`. Reference `2dog.nunit`,
-which brings in `2dog.engine` and NUnit. The scaffold also references
+Set properties in `MyGame.nunit/MyGame.nunit.csproj`. Reference `2dog.nunit`
+and explicitly select `2dog.engine` or `2dog.engine.double`.
+The scaffold also references
 `NUnit3TestAdapter`, `Microsoft.NET.Test.Sdk` and `coverlet.collector` for
 `dotnet test` and coverage collection.
 

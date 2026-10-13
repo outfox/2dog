@@ -8,9 +8,9 @@
         <RootNamespace>Company.Product1.Tests</RootNamespace>
     </PropertyGroup>
 
-    <!-- 2dog packages (2dog.xunit pulls in 2dog.engine for the fixtures and ships the xUnit
-         collection definitions as compile-in source) -->
+    <!-- The host chooses the engine precision; 2dog.xunit ships compile-in collection definitions. -->
     <ItemGroup>
+        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
         <PackageReference Include="2dog.xunit" Version="$(TwoDogVersion)"/>
     </ItemGroup>
 

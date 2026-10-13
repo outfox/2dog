@@ -1,0 +1,7 @@
+<Project>
+    <!-- Select precision before the repository props derive package names and output paths. -->
+    <PropertyGroup>
+        <TwoDogPrecision>double</TwoDogPrecision>
+    </PropertyGroup>
+    <Import Project="../../../Directory.Build.props" />
+</Project>

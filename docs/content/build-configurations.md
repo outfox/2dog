@@ -1,39 +1,29 @@
 ---
 title: Build Variants
-description: "Choosing between the debug, release, and editor native Godot variants in 2dog, and how the Debug, Release, and Editor .NET configurations map onto them."
+description: "Choosing debug, release and editor variants with single or double precision."
 ---
 
 # Build Variants
 
 2dog selects the native Godot variant from your .NET build configuration.
+Each desktop variant is available with single or double precision:
 
-| .NET configuration | Default variant | Godot build | `TOOLS_ENABLED` | Use |
-| --- | --- | --- | --- | --- |
-| **Debug** | `debug` | `template_debug` | No | Development, debugging, tests |
-| **Release** | `release` | `template_release` | No | Production and final validation |
-| **Editor** | `editor` | `editor` | Yes | Editor types and `[Tool]` scripts |
+| .NET configuration | `TwoDogVariant` | Precision | Use |
+| --- | --- | --- | --- |
+| **Debug** | `debug` | Single | Development, debugging, tests |
+| **Release** | `release` | Single | Production |
+| **Editor** | `editor` | Single | Editor types and `[Tool]` scripts |
+| **Debug** | `debug` | Double (`.double` packages) | Development, debugging, tests |
+| **Release** | `release` | Double (`.double` packages) | Production |
+| **Editor** | `editor` | Double (`.double` packages) | Editor types and `[Tool]` scripts |
+
+Single precision is the default. Select double precision through the
+[package references below](#double-precision); `TwoDogVariant` stays the same.
 
 `debug` includes assertions and debugging support; `release` is the optimized
 production runtime; `editor`
 enables `TOOLS_ENABLED`, including editor types, import plugins, and `[Tool]`
 scripts.
-
-::: tip Opening the editor
-The editor variant enables editor APIs; pass `--editor` to start the interactive
-editor and initialize editor runtime singletons such as `EditorInterface`:
-
-```bash
-dotnet run --project MyGame.2dog -c Editor -- --editor
-```
-
-The generic host forwards these arguments and pumps the editor's main loop.
-Editor builds and publishes copy GodotTools and its dependencies into
-`GodotSharp/Tools` beside the host executable. Custom hosts must keep pumping
-the engine and avoid assuming that a game scene is running in editor mode.
-
-Resource import also runs separately and automatically at build time; see
-[Resource Import](./import-tool).
-:::
 
 ## Selecting a Variant
 
@@ -80,3 +70,43 @@ dotnet build -c Debug
 ```
 
 See [Configuration](./configuration) for the property and package reference.
+
+## Double Precision
+
+Reference `2dog.engine.double` in the host and `2dog.godotsharp.double` in
+every game or library that uses Godot APIs. Editor builds also use
+`2dog.godotsharp.editor.double`. Rebuild those projects against the matching
+bindings; single- and double-precision Godot types cannot be mixed.
+
+```xml
+<PackageReference Include="2dog.engine.double" Version=":2dog-version:" />
+```
+
+Keep `2dog.avalonia`, `2dog.blazor`, `2dog.xunit`, `2dog.nunit` and `2dog.repl`
+under their ordinary names. Native dependencies are selected automatically;
+if referenced explicitly, append `.double` to the entire ID, such as
+`2dog.win-x64.release.double`. 
+
+::: danger GDExtensions + Double Precision
+GDExtensions must also match the precision!
+:::
+
+## Editor Variants
+
+::: tip Opening the editor
+The editor variant enables editor APIs; pass `--editor` to start the interactive
+editor and initialize editor runtime singletons such as `EditorInterface`:
+
+```bash
+dotnet run --project MyGame.2dog -c Editor -- --editor
+```
+
+The generic host forwards these arguments and pumps the editor's main loop.
+Editor builds and publishes copy GodotTools and its dependencies into
+`GodotSharp/Tools` beside the host executable. Custom hosts must keep pumping
+the engine and avoid assuming that a game scene is running in editor mode.
+
+Resource import also runs separately and automatically at build time; see
+[Resource Import](./import-tool).
+:::
+

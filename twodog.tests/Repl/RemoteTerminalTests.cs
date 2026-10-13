@@ -142,12 +142,15 @@ public class RemoteTerminalTests
         using var writer = new MessageWriter(outputFrames);
         var output = new ReplPipeOutput(writer, lifetime);
         await using var connection = new ReplTerminalConnection(input, output, lifetime);
-        var request = connection.RequestAsync("state");
-        await outputFrames.ReadLineAsync(lifetime.Token);
+        var requests = new[] { connection.RequestAsync("state"), connection.RequestAsync("available") };
+        foreach (var request in requests) await outputFrames.ReadLineAsync(lifetime.Token);
         if (frame is null) input.Complete();
         else input.Send(frame);
-        await Assert.ThrowsAnyAsync<Exception>(() => request);
-        Assert.True(lifetime.IsCancellationRequested);
+        foreach (var request in requests)
+        {
+            await Assert.ThrowsAnyAsync<Exception>(() => request);
+            Assert.True(lifetime.IsCancellationRequested);
+        }
         try { await output.DisposeAsync(); }
         catch (OperationCanceledException) { }
     }

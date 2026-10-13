@@ -29,8 +29,8 @@
         <ProjectReference Include="../showcase.csproj"/>
     </ItemGroup>
     <ItemGroup Condition="'$(Official)' == 'true'">
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
-        <PackageReference Include="2dog.browser-wasm" Version="[$(NativesVersion)]"/>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.browser-wasm$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]"/>
     </ItemGroup>
 
     <!-- Root the game assembly: scripts are resolved by reflection.

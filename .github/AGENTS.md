@@ -4,8 +4,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 
 ## Workflows
 
-- `ci.yml` reuses `godot-<submodule-hash>` native releases or builds missing natives through
-  `build-natives.yml`, then packs, tests three OSes in Debug/Release/Editor and runs smoke jobs. `v*` tags
+- `ci.yml` reuses `godot-<submodule-hash>` and `godot-<submodule-hash>-double` native releases or builds missing natives through
+  `build-natives.yml`, then packs and tests both precisions on three OSes in Debug/Release/Editor and runs smoke jobs. `v*` tags
   also deploy to NuGet. Pushes that only touch `docs/**`, root Markdown or `AGENTS.md` files skip it.
 - Each OS/configuration pair is its own test job in a fresh workspace, so no configuration relies on files
   another one built. Do not merge configurations back into one job: together they exceed the job timeout.

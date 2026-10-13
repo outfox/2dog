@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="2dog.avalonia" Version="$(TwoDogVersion)"/>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.repl" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.xunit" Version="$(TwoDogVersion)"/>
         <PackageReference Include="Avalonia.Headless" Version="$(AvaloniaVersion)"/>
@@ -50,7 +50,7 @@
 
     <!-- Keep this restored in every configuration: CI restores once before its configuration matrix. -->
     <ItemGroup>
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
     </ItemGroup>
 
 </Project>

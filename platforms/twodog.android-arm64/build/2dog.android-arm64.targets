@@ -2,7 +2,7 @@
     <PropertyGroup>
         <_TwoDogAndroidTargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogAndroidTargetsDir>
         <_TwoDogAndroidPackageVersion>$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogAndroidTargetsDir)'))))</_TwoDogAndroidPackageVersion>
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
     </PropertyGroup>
     <ItemGroup>
         <TwoDogAndroidNative Include="android-arm64" PackageVersion="$(_TwoDogAndroidPackageVersion)" Abi="arm64-v8a" Arch="arm64"/>

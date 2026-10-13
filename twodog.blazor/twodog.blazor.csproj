@@ -12,6 +12,8 @@
     <PropertyGroup>
         <PackageId>2dog.blazor</PackageId>
         <Version>$(TwoDogVersion)</Version>
+        <!-- One package works with either engine precision; the host selects its engine explicitly. -->
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
         <Description>Embed a Godot viewport in a Blazor WebAssembly page with 2dog. GodotView owns a canvas and starts the statically linked engine inside the .NET runtime Blazor already booted, so Razor code calls Godot directly - no JavaScript interop layer.</Description>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
