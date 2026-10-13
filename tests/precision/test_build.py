@@ -245,5 +245,24 @@ class BuildWorkerLimitTests(unittest.TestCase):
         self.assertIn("--jobs=20", run.call_args.args[0])
 
 
+class PrecisionOutputIsolationTests(unittest.TestCase):
+    def test_switching_precision_does_not_compile_other_generated_outputs(self):
+        with tempfile.TemporaryDirectory(prefix="2dog-output-isolation-") as scratch:
+            root = Path(scratch)
+            shutil.copyfile(ROOT / "global.json", root / "global.json")
+            (root / "Directory.Build.props").write_text(
+                f'<Project><Import Project="{escape(str(ROOT / "Directory.Build.props"))}"/></Project>')
+            (root / "Probe.csproj").write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup>'
+                '<TargetFramework>net10.0</TargetFramework></PropertyGroup></Project>')
+            (root / "Code.cs").write_text('public class Probe {}')
+            for precision in ("single", "double", "single"):
+                result = subprocess.run(["dotnet", "build", str(root / "Probe.csproj"),
+                    f"-p:TwoDogPrecision={precision}", "-nologo", "-m:2"],
+                    capture_output=True, text=True, timeout=120)
+                self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertTrue((root / "bin/Debug/net10.0/Probe.dll").is_file())
+            self.assertTrue((root / "bin/double/Debug/net10.0/Probe.dll").is_file())
+
+
 if __name__ == "__main__":
     unittest.main()

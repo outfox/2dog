@@ -36,6 +36,9 @@
         <DefineConstants Condition="'$(TwoDogPrecision)' == 'double'">$(DefineConstants);REAL_T_IS_DOUBLE</DefineConstants>
         <BaseIntermediateOutputPath Condition="'$(TwoDogPrecision)' == 'double'">obj/double/</BaseIntermediateOutputPath>
         <BaseOutputPath Condition="'$(TwoDogPrecision)' == 'double'">bin/double/</BaseOutputPath>
+        <!-- Both precision trees can exist in one checkout. Exclude the whole artifact roots,
+             even when the SDK's default exclusion follows obj/double or bin/double. -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
     </PropertyGroup>
 
     <!-- Fork build output consumed by twodog.engine, twodog.import, and twodog.avalonia.

@@ -42,6 +42,10 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
         GodotApiSmoke.CoreTypesAndNativeHelpers(godot.Tree);
 
     [Fact]
+    public void NativeFeatureAndMathMarshalling_MatchConfiguredPrecision() =>
+        GodotApiSmoke.MathPrecision();
+
+    [Fact]
     public void ManagedCallables_PreserveInvocationAndSignalIdentity() =>
         GodotApiSmoke.ManagedCallables();
 

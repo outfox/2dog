@@ -31,6 +31,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       ready: ${{ steps.check.outputs.ready }}
+      double-ready: ${{ steps.check.outputs.double-ready }}
       hash: ${{ steps.check.outputs.hash }}
     steps:
       - name: Checkout repository
@@ -50,6 +51,12 @@ jobs:
           else
             echo "::notice::No complete natives release for godot submodule $HASH — building inline."
             echo "ready=false" >> $GITHUB_OUTPUT
+          fi
+          if bash scripts/check_natives_release.sh "godot-$HASH-double"; then
+            echo "double-ready=true" >> $GITHUB_OUTPUT
+          else
+            echo "::notice::No double-precision natives for $HASH; building inline."
+            echo "double-ready=false" >> $GITHUB_OUTPUT
           fi
 
   # Build missing natives inline via the reusable workflow. The concurrency
@@ -71,20 +78,46 @@ jobs:
     with:
       create_release: true
 
+  build-double-natives:
+    name: Build Double Natives
+    needs: [check-natives]
+    if: github.repository == 'outfox/2dog' && (needs.check-natives.outputs.double-ready != 'true')
+    permissions:
+      contents: write
+    concurrency:
+      group: natives-build-double-${{ needs.check-natives.outputs.hash }}
+      cancel-in-progress: false
+    uses: ./.github/workflows/build-natives.yml
+    with:
+      precision: double
+      create_release: true
+
   # Download pre-built native libraries, stage godot/bin, and pack all
   # NuGet packages for the test jobs. The game project is imported by the
   # test jobs themselves via the automatic MSBuild import step.
   pack:
-    name: Pack NuGet Packages
-    needs: [check-natives, build-natives]
+    name: Pack NuGet Packages (${{ matrix.precision }})
+    needs: [check-natives, build-natives, build-double-natives]
     # Skip-tolerant gate, not always(): run when build-natives succeeded or was
     # skipped (natives already existed), never after a failed natives build.
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && needs.check-natives.result == 'success' &&
-      (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped'))
+      (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped') &&
+      (needs.build-double-natives.result == 'success' || needs.build-double-natives.result == 'skipped'))
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        precision: [single, double]
+
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
+      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
+      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
       - name: Checkout repository
@@ -131,7 +164,8 @@ jobs:
           # and pushed together. Must be a variant package (.debug/.release/
           # .editor) — the meta packages use a custom NuspecFile and carry no
           # repository stamp.
-          URL="https://api.nuget.org/v3-flatcontainer/2dog.win-x64.debug/$NORMALIZED/2dog.win-x64.debug.$NORMALIZED.nupkg"
+          ID="2dog.win-x64.debug${TWODOG_NATIVE_SUFFIX}"
+          URL="https://api.nuget.org/v3-flatcontainer/$ID/$NORMALIZED/$ID.$NORMALIZED.nupkg"
           if ! curl -fsSL -o /tmp/published-natives.nupkg "$URL"; then
             echo "Natives $NORMALIZED not on nuget.org yet — nothing to collide with."
             exit 0
@@ -155,72 +189,21 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="godot-${{ needs.check-natives.outputs.hash }}"
+          TAG="godot-${{ needs.check-natives.outputs.hash }}${TWODOG_RELEASE_SUFFIX}"
           echo "Looking for release: $TAG"
           mkdir -p release-assets
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir release-assets
           echo "Downloaded assets:"
           ls -lh release-assets/
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
       - name: Stage godot/bin directory
-        run: |
-          # The godot submodule is not checked out here, so the target tree
-          # must exist before unzip (-d only creates the last path component).
-          mkdir -p godot/bin/GodotSharp/Tools/nupkgs \
-                   godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0
-
-          unzip -o release-assets/godotsharp.zip -d godot/bin/GodotSharp/
-          unzip -o release-assets/godotsharp-nupkgs.zip -d godot/bin/GodotSharp/Tools/nupkgs/
-          unzip -o release-assets/godot-source-generators.zip -d godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
-          unzip -o release-assets/godot-editor-linux-x64.zip -d godot/bin/
-          chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono
-
-          # Native library zips contain the libraries under their original
-          # Godot file names (e.g. godot.windows.editor.x86_64.shared_library.dll).
-          # Web (browser-wasm) zips contain the whole payload directory and are
-          # staged under godot/bin/web/<target>/ (the 2dog.browser-wasm pack
-          # location and the local-fallback path of its consumer targets).
-          # Android zips hold one ABI's libgodot_android.so + libc++_shared.so,
-          # staged where build-godot.py puts them (godot/bin/android/<target>/<arch>/).
-          for z in release-assets/libgodot-*.zip; do
-            base=$(basename "$z" .zip)
-            case "$base" in
-              libgodot-browser-wasm-*)
-                target="${base#libgodot-browser-wasm-}"
-                mkdir -p "godot/bin/web/$target"
-                unzip -o "$z" -d "godot/bin/web/$target/"
-                ;;
-              libgodot-android-*)
-                abi_target="${base#libgodot-android-}"
-                arch="${abi_target%%-*}"
-                [ "$arch" = x64 ] && arch=x86_64
-                target="${abi_target#*-}"
-                mkdir -p "godot/bin/android/$target/$arch"
-                unzip -o "$z" -d "godot/bin/android/$target/$arch/"
-                ;;
-              *)
-                unzip -o "$z" -d godot/bin/
-                ;;
-            esac
-          done
-          # Godot's Android Java host (debug/ and release/ godot.aar) for the 2dog.android package.
-          unzip -o release-assets/godot-android-java.zip -d godot/bin/android/java/
-
-          # Releases created before the zips carried the Godot file names hold a
-          # single generically named library each — fail early with a pointer
-          # instead of letting the platform pack fail cryptically.
-          for f in godot/bin/libgodot.so godot/bin/libgodot.dll godot/bin/libgodot.dylib; do
-            if [ -e "$f" ]; then
-              echo "::error::Release godot-${{ needs.check-natives.outputs.hash }} uses the old asset layout (generic ${f##*/} inside the native zips). Re-run the '2dog Build Natives' workflow with force=true to regenerate it."
-              exit 1
-            fi
-          done
-
-          echo "Staged godot/bin contents:"
-          find godot/bin -type f | sort
-          echo ""
-          echo "Source generators:"
-          find godot/modules -type f | sort
+        run: uv run scripts/stage_natives_release.py release-assets --precision ${{ matrix.precision }}
 
       - name: Pack platform NuGet packages
         run: |
@@ -249,16 +232,22 @@ jobs:
           dotnet pack twodog
 
       - name: Test managed binding packages
-        run: python3 tests/bindings/test_packages.py
+        run: uv run tests/bindings/test_packages.py --precision ${{ matrix.precision }}
 
       # The Android natives travel separately (android-natives): only android-smoke needs them, to compare the
       # APKs against. Their packages are in nuget-packages like every other published package.
+      - name: Test precision build configuration
+        env:
+          TwoDogPrecision: ''
+        run: uv run python -m unittest discover -s tests/precision -v
+
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
         with:
-          name: godot-bin
+          name: godot-bin-${{ matrix.precision }}
           path: |
             godot/bin/
+            !godot/bin/**/android/**
             !godot/bin/android/**
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
@@ -266,22 +255,22 @@ jobs:
       - name: Upload NuGet packages
         uses: actions/upload-artifact@v7
         with:
-          name: nuget-packages
+          name: nuget-packages-${{ matrix.precision }}
           path: packages/
           retention-days: 7
 
       - name: Upload Android natives
         uses: actions/upload-artifact@v7
         with:
-          name: android-natives
-          path: godot/bin/android/
+          name: android-natives-${{ matrix.precision }}
+          path: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}android/
           if-no-files-found: error
           retention-days: 7
 
   # Run tests on each platform, one job per configuration: a single job running all three back to back
   # took 8-10 minutes and hit the job timeout.
   test:
-    name: Test (${{ matrix.name }}, ${{ matrix.config }})
+    name: Test (${{ matrix.name }}, ${{ matrix.config }}) [${{ matrix.precision }}]
     needs: [pack]
     # Explicit result check: the implicit success() evaluates the transitive
     # needs chain, and the (usually) skipped build-natives job would skip this
@@ -291,6 +280,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        precision: [single, double]
         name: [linux-x64, win-x64, osx-arm64]
         config: [Debug, Release, Editor]
         include:
@@ -304,6 +294,12 @@ jobs:
     # Each test run gets ten minutes; leave room for setup, the separate coverage/windowed
     # run, and diagnostic uploads without the job cancelling them early.
     timeout-minutes: 30
+
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
+      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
+      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
       # The showcase's LFS assets (e.g. splash.png) must be real files: Godot reports an error for every
@@ -321,13 +317,13 @@ jobs:
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
         with:
-          name: godot-bin
+          name: godot-bin-${{ matrix.precision }}
           path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-${{ matrix.precision }}
           path: packages
 
       # 2dog.tests.slnf excludes showcase.web: its browser-wasm RuntimeIdentifier
@@ -367,7 +363,7 @@ jobs:
         if: always() && runner.os == 'Windows'
         uses: actions/upload-artifact@v7
         with:
-          name: repl-coverage-${{ matrix.config }}
+          name: repl-coverage-${{ matrix.config }}-${{ matrix.precision }}
           path: twodog.tests/TestResults/repl-coverage/**/coverage.cobertura.xml
           if-no-files-found: error
           retention-days: 7
@@ -413,7 +409,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-dumps-${{ matrix.name }}-${{ matrix.config }}
+          name: test-dumps-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7
@@ -421,12 +417,23 @@ jobs:
   # Blacksmith's Windows runner is an nssm service in session 0, whose window station cannot display
   # windows, so presenting a frame fails there. Windowed rendering needs a runner with an interactive desktop.
   windows-rendering:
-    name: Test Rendering (win-x64, Release)
+    name: Test Rendering (win-x64, Release) [${{ matrix.precision }}]
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: windows-2025
     timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        precision: [single, double]
+
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
+      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
+      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
       - name: Checkout repository
@@ -442,13 +449,13 @@ jobs:
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
         with:
-          name: godot-bin
+          name: godot-bin-${{ matrix.precision }}
           path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-${{ matrix.precision }}
           path: packages
 
       # The test build triggers the automatic Godot import, which runs the in-process import helper.
@@ -475,7 +482,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-dumps-win-x64-rendering
+          name: test-dumps-win-x64-rendering-${{ matrix.precision }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7
@@ -486,7 +493,7 @@ jobs:
   # build or publish silently bound no C# script classes (masked in the test
   # jobs by the Debug run that precedes them in the same workspace).
   desktop-smoke:
-    name: Desktop Smoke (${{ matrix.name }})
+    name: Desktop Smoke (${{ matrix.name }}) [${{ matrix.precision }}]
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
@@ -494,6 +501,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        precision: [single, double]
+        name: [linux-x64, win-x64, osx-arm64]
         include:
           - name: linux-x64
             runner: blacksmith-4vcpu-ubuntu-2404
@@ -514,6 +523,10 @@ jobs:
     timeout-minutes: 15
 
     env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
+      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
+      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
       # Release hosts are WinExe: a host startup error would otherwise block on a message box until the job times out.
       DOTNET_DISABLE_GUI_ERRORS: '1'
 
@@ -531,13 +544,13 @@ jobs:
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
         with:
-          name: godot-bin
+          name: godot-bin-${{ matrix.precision }}
           path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-${{ matrix.precision }}
           path: packages
 
       # The publish triggers the automatic Godot import, which runs the
@@ -559,7 +572,7 @@ jobs:
       - name: Publish showcase desktop host (Release, no RID)
         run: >-
           dotnet publish demos/showcase/showcase.2dog -c Release
-          -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid
+          -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-norid
 
       # Framework-dependent opt-out: the only publish that stays truly RID-less,
       # so it takes the host-OS gated native-copy path in the platform targets
@@ -568,7 +581,7 @@ jobs:
         run: >-
           dotnet publish demos/showcase/showcase.2dog -c Release
           -p:PublishSelfContained=false
-          -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd
+          -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-fdd
 
       # NativeAOT links ILC output with the platform toolchain (clang + zlib on
       # Linux); install them only when the runner image lacks them.
@@ -589,12 +602,12 @@ jobs:
         run: >-
           dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
           -p:PublishAot=true -p:TrimmerSingleWarn=false -warnaserror
-          -o demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
+          -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot
 
       - name: Test delegate serialization (JIT and NativeAOT)
         shell: bash
         run: |
-          NATIVE=$(find demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot \
+          NATIVE=$(find demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot \
             -maxdepth 1 -type f -name 'libgodot-release.*' -print -quit)
           if [ -z "$NATIVE" ]; then
             echo "::error::Release libgodot library missing from the NativeAOT publish"
@@ -620,11 +633,11 @@ jobs:
       - name: Verify exported pck
         shell: bash
         run: |
-          fdd=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd
-          aot=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
+          fdd=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-fdd
+          aot=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot
           for dir in \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish" \
-            "demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid" \
+            "demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish" \
+            "demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-norid" \
             "$fdd" "$aot"; do
             if [ ! -f "$dir/showcase.2dog.pck" ]; then
               echo "::error::Missing $dir/showcase.2dog.pck - the desktop publish did not export the game pck"
@@ -664,7 +677,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
             --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -675,7 +688,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/Release/net10.0/publish-norid/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-norid/${{ matrix.exe }} \
             --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-norid.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -686,7 +699,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/Release/net10.0/publish-fdd/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-fdd/${{ matrix.exe }} \
             --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-fdd.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -697,7 +710,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot/${{ matrix.exe }} \
+          demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot/${{ matrix.exe }} \
             --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-aot.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -725,9 +738,9 @@ jobs:
         if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_aot.outputs.status != '0')
         shell: bash
         run: |
-          publish=demos/showcase/showcase.2dog/bin/Release/net10.0/${{ matrix.rid }}/publish
+          publish=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish
           if [ "${{ steps.run_aot.outputs.status }}" != "0" ]; then
-            publish=demos/showcase/showcase.2dog/bin/Release/net10.0/publish-aot
+            publish=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot
           fi
           lldb -b \
             -o run \
@@ -778,7 +791,7 @@ jobs:
   # is complete. Consumers never install emsdk — the workload ships the
   # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
   web-smoke:
-    name: Web Smoke (AOT=${{ matrix.aot }})
+    name: Web Smoke (AOT=${{ matrix.aot }}) [${{ matrix.precision }}]
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
@@ -787,9 +800,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        precision: [single, double]
         # AOT is the slowest smoke build; keep it as a release gate for both
         # pushed v* tags and release.yml's workflow_dispatch on the new tag.
-        aot: ${{ fromJSON(startsWith(github.ref, 'refs/tags/v') && '[false, true]' || '[false]') }}
+        aot: ${{ fromJSON((startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/double-precision') && '[false, true]' || '[false]') }}
+
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
+      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
+      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
       - name: Checkout repository
@@ -802,6 +822,12 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
@@ -812,22 +838,24 @@ jobs:
         run: dotnet workload install wasm-tools
 
       - name: Verify MSBuild configuration defaults
-        run: python3 -m unittest discover -s tests/msbuild -v
+        env:
+          TwoDogPrecision: ''
+        run: uv run python -m unittest discover -s tests/msbuild -v
 
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
         with:
-          name: godot-bin
+          name: godot-bin-${{ matrix.precision }}
           path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-${{ matrix.precision }}
           path: packages
 
       - name: Make Linux editor executable
-        run: chmod +x godot/bin/godot.linuxbsd.editor.x86_64.executable.mono || true
+        run: chmod +x godot/bin/godot.linuxbsd.editor${{ env.TWODOG_NATIVE_SUFFIX }}.x86_64.executable.mono
 
       # The publish exports the showcase Godot project as godot.pck via the
       # in-process import helper, discovered at twodog.import/bin/Release in
@@ -917,7 +945,7 @@ jobs:
 
       - name: Verify blazor publish
         run: |
-          PUB=demos/showcase/showcase.blazor/bin/Release/net10.0/publish
+          PUB=demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish
           WWW=$PUB/wwwroot
           # Blazor fingerprints its framework files; match by pattern.
           for pattern in "$PUB/showcase.blazor.dll" "$WWW/godot.pck" "$WWW/godot.audio.worklet.js" \
@@ -978,7 +1006,7 @@ jobs:
               EXTRA_ATTR="data-twodog-xr-layers=polyfilled"
             fi
 
-            python3 -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+            uv run python -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
             SERVER_PID=$!
 
             for attempt in $(seq 1 30); do
@@ -1032,14 +1060,14 @@ jobs:
       # started the engine and marks the DOM.
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
         env:
-          GODOT_WEB_JS_LIB_DIR: godot/bin/web/template_release/libgodot/js_library
+          GODOT_WEB_JS_LIB_DIR: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/template_release/libgodot/js_library
         run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
 
       - name: Test managed exception reporting in browser-wasm
         run: |
           dotnet publish tests/browser-exceptions -c Release -r browser-wasm --configfile nuget.config \
             -p:WasmAppDir="$PWD/browser-exceptions-probe" -v:quiet
-          python3 -m http.server 8091 --bind 127.0.0.1 --directory browser-exceptions-probe > /tmp/2dog-exceptions-server.log 2>&1 &
+          uv run python -m http.server 8091 --bind 127.0.0.1 --directory browser-exceptions-probe > /tmp/2dog-exceptions-server.log 2>&1 &
           SERVER_PID=$!
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           "$CHROME" --headless=new --no-sandbox --disable-dev-shm-usage \
@@ -1062,7 +1090,7 @@ jobs:
           }
           trap cleanup EXIT
 
-          PUB=demos/showcase/showcase.blazor/bin/Release/net10.0/publish
+          PUB=demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish
           # The content root must be the publish folder: static web assets resolve relative to it.
           ASPNETCORE_ENVIRONMENT=Production dotnet "$PUB/showcase.blazor.dll" --urls http://127.0.0.1:8000 \
             --contentroot "$(pwd)/$PUB" > /tmp/2dog-blazor-server.log 2>&1 &
@@ -1130,9 +1158,9 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: blazor-browser-failure-aot-${{ matrix.aot }}-${{ github.run_attempt }}
+          name: blazor-browser-failure-aot-${{ matrix.aot }}-${{ github.run_attempt }}-${{ matrix.precision }}
           path: |
-            demos/showcase/showcase.blazor/bin/Release/net10.0/publish/
+            demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish/
             /tmp/2dog-blazor-server.log
             /tmp/2dog-blazor-browser.log
             /tmp/2dog-blazor-restart.log
@@ -1170,13 +1198,13 @@ jobs:
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
         with:
-          name: godot-bin
+          name: godot-bin-single
           path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-single
           path: packages
 
       - name: Run tool smoke
@@ -1187,12 +1215,23 @@ jobs:
   # then runs the x64 APKs on an emulator. The Release showcase builds are trimmed and AOT-compiled (.NET for
   # Android's Release defaults); the arm64 one is built and inspected for devices only.
   android-smoke:
-    name: Android Smoke
+    name: Android Smoke [${{ matrix.precision }}]
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 45
+
+    strategy:
+      fail-fast: false
+      matrix:
+        precision: [single, double]
+
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
+      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
+      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
       # The showcase's LFS assets (e.g. splash.png) must be real files for its pck export.
@@ -1201,10 +1240,11 @@ jobs:
         with:
           lfs: true
 
-      - name: Setup Python
-        uses: actions/setup-python@v7
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
+          enable-cache: false
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -1230,34 +1270,34 @@ jobs:
       - name: Download godot-bin artifact
         uses: actions/download-artifact@v8
         with:
-          name: godot-bin
+          name: godot-bin-${{ matrix.precision }}
           path: godot
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-${{ matrix.precision }}
           path: packages
 
       # The natives the APK inspection compares against.
       - name: Download Android natives
         uses: actions/download-artifact@v8
         with:
-          name: android-natives
-          path: godot/bin/android
+          name: android-natives-${{ matrix.precision }}
+          path: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}android
 
       # Each is one `dotnet publish` of the host: it builds the game, imports and exports its pck with the packaged
       # editor libgodot (2dog.linux-x64.editor), and packages the APK; the script then inspects the APK.
       - name: Build and inspect APKs
         run: |
-          python scripts/build_android_apk.py --app smoke --feed packages --rid android-x64
-          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64
-          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
+          uv run scripts/build_android_apk.py --app smoke --feed packages --rid android-x64
+          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-x64
+          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
             --configuration Release --output artifacts/android-showcase-release-apk
-          python scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
+          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
             --configuration Release --output artifacts/android-showcase-arm64-apk
           # Experimental NativeAOT; links with the NDK installed above.
-          python scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
+          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
             --configuration Release --aot --output artifacts/android-showcase-aot-apk
           for apk in artifacts/android-*apk/apk/*-Signed.apk; do
             "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"
@@ -1266,7 +1306,7 @@ jobs:
       - name: Upload APKs
         uses: actions/upload-artifact@v7
         with:
-          name: android-apks
+          name: android-apks-${{ matrix.precision }}
           path: |
             artifacts/android-*apk/apk/*-Signed.apk
             artifacts/android-*apk/apk-report.json
@@ -1287,13 +1327,13 @@ jobs:
           emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none
           # The action runs each script line separately; folding keeps this one shell command.
           script: >-
-            python scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk
+            uv run scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk
             --serial emulator-5554 --timeout 120
-            && python scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
+            && uv run scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
-            && python scripts/test_android_device.py artifacts/android-showcase-release-apk/apk/dev.twodog.showcase-Signed.apk
+            && uv run scripts/test_android_device.py artifacts/android-showcase-release-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
-            && python scripts/test_android_device.py artifacts/android-showcase-aot-apk/apk/dev.twodog.showcase-Signed.apk
+            && uv run scripts/test_android_device.py artifacts/android-showcase-aot-apk/apk/dev.twodog.showcase-Signed.apk
             --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
             status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
 
@@ -1301,7 +1341,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: android-emulator-logcat
+          name: android-emulator-logcat-${{ matrix.precision }}
           path: artifacts/android-apk/logcat.txt
           if-no-files-found: ignore
           retention-days: 7
@@ -1338,8 +1378,17 @@ jobs:
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages
+          name: nuget-packages-single
           path: packages
+
+      - name: Download double NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-double
+          path: packages-double
+
+      - name: Include precision-specific double packages
+        run: cp packages-double/2dog.*.double.*nupkg packages/
 
       # Defense in depth: the pack job already verified the tag against the props
       # file, but refuse to publish unless the artifact really contains packages

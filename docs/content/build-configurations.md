@@ -167,6 +167,27 @@ They need a prior desktop double glue build for bindings and resource import.
 The local package tasks use the same empty non-host native stubs as the normal
 build; build real payloads on each target platform before distributing them.
 
+### CI Coverage
+
+CI builds and tests both precisions. Native cache releases use
+`godot-<submodule-hash>` for single precision and
+`godot-<submodule-hash>-double` for double precision. Missing releases trigger
+native builds for Linux x64, Windows x64, macOS arm64, browser wasm32 and
+Android arm64/x64. SCons caches and workflow artifacts also include precision.
+The native workflow's manual `precision` input selects which family to rebuild.
+
+Each precision runs desktop tests in Debug, Release and Editor, desktop
+publish and Native AOT smoke tests, Web/WebXR/Blazor browser smoke tests, and
+Android APK build/inspection and emulator tests. Browser AOT runs on release
+tags and the `double-precision` branch. Shared runtime probes check Godot's
+precision feature and math marshalling, so single natives cannot silently pass
+a double smoke test. CLI scaffolding smoke tests use standard packages.
+
+CI requires every platform payload before packing. Local empty native stubs
+are not accepted by the release staging step. Version-tag deployment requires
+both precision matrices to pass and retains the standard build's shared
+integration packages when combining the two feeds.
+
 ### Limiting Local Build Parallelism
 
 Set the machine's `TWODOG_MAX_BUILD_JOBS` environment variable to a positive

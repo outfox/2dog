@@ -12,6 +12,7 @@ public static class GodotApiSmoke
 {
     public static void RunAll(SceneTree tree)
     {
+        MathPrecision();
         CoreTypesAndNativeHelpers(tree);
         ManagedCallables();
         ErrorReportingAndTypedCollections();
@@ -22,6 +23,27 @@ public static class GodotApiSmoke
         GDScriptOnlyEngineFeatures(tree);
         GDExtensionProbe(tree);
         SignalTable(tree);
+    }
+
+    public static void MathPrecision()
+    {
+#if REAL_T_IS_DOUBLE
+        const double coordinate = 1_000_000_000.125;
+        Require(OS.HasFeature("double"), "Double bindings loaded with single-precision natives");
+#else
+        const float coordinate = 1_000_000_000.125f;
+        Require(!OS.HasFeature("double"), "Single bindings loaded with double-precision natives");
+#endif
+        var node = new Node2D();
+        try
+        {
+            node.Position = new Vector2(coordinate, -coordinate);
+            Require(node.Position.X == coordinate && node.Position.Y == -coordinate,
+                "Math coordinates lost precision across native property access");
+            using Variant value = node.Position;
+            Require(value.AsVector2() == node.Position, "Vector Variant marshalling changed precision");
+        }
+        finally { node.Free(); }
     }
 
     public static void CoreTypesAndNativeHelpers(SceneTree tree)
