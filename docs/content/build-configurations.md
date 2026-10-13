@@ -190,8 +190,22 @@ separate game project compiles the existing showcase scripts against
 Both projects have separate intermediate and assembly output directories,
 so the standard showcase can still build against single precision.
 
-Startup checks verify native double support, large-coordinate math and
-Variant marshalling, then print `2DOG_API_SMOKE_PASSED`. The example lives in
+Startup prints the inferred CLR type and size of actual position, transform
+origin and basis components, together with values read back from Godot:
+
+```text
+Godot native double precision: True
+Node2D.Position.X: System.Double, 8 bytes, value=1000000000.125
+Node3D.Transform.Origin.X: System.Double, 8 bytes, value=1000000000.125
+Node3D.Transform.Basis.X.X: System.Double, 8 bytes, value=1
+Single conversion of the same coordinate: 1E+09
+2DOG_PRECISION_INSPECTION_PASSED
+```
+
+The checks require the expected scalar type and verify native position and
+transform property access and Variant marshalling. The ordinary showcase
+prints `System.Single, 4 bytes` for comparison. The full API smoke finishes
+with `2DOG_API_SMOKE_PASSED`. The example lives in
 [`demos/showcase/showcase.double`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.double).
 
 ### CI Coverage
