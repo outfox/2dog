@@ -138,9 +138,11 @@ internal sealed class ReplTerminalConnection : IAsyncDisposable
             catch (Exception error) when (error is IOException or OperationCanceledException or JsonException) { failure = error; }
             finally
             {
-                foreach (var request in requests.Values) request.TrySetException(failure);
+                // Publish the ended session before waking request continuations. Otherwise a
+                // failed request can resume while its session still appears live.
                 try { session.Cancel(); }
                 catch (AggregateException) { /* A user cancellation callback cannot prevent disconnect cleanup. */ }
+                foreach (var request in requests.Values) request.TrySetException(failure);
             }
         });
     }
