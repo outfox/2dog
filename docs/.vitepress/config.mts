@@ -61,6 +61,8 @@ export default defineConfig({
     ['link', { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     ['link', { rel: "icon", type: "image/svg+xml", href: "/favicon.ico" }],
     ['link', { rel: "manifest", href: "/site.webmanifest" }],
+    ['link', { rel: "me", href: "https://mastodon.gamedev.place/@jupiter" }],
+    ['link', { rel: "me", href: "https://tiggi.es/@thygrrr" }],
     ['meta', { name: "author", content: "outfox" }],
     ['meta', { name: "theme-color", content: "#478cbf" }],
     ['meta', { name: "twitter:card", content: "summary_large_image" }],
