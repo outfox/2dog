@@ -15,12 +15,14 @@ resource import, analyzers, and native variant.
 | `TwoDogExportPack` | `true` | Export content to an executable-adjacent `.pck`; `false` skips export, so supply game content separately |
 | `TwoDogDesktopExportPreset` | `Windows Desktop` | Preset in `export_presets.cfg` for the Windows game pack |
 | `PublishSelfContained` | `true` in the generated host | Bundle the .NET runtime; `false` requires an installed runtime |
+| `PublishReadyToRun` | `false` | Precompile the engine and host assemblies for faster startup; [ReadyToRun](/configuration#readytorun) |
 
 ```bash
 dotnet publish MyGame.winforms -c Release -r win-x64
 ```
 
-WinForms does not support trimming or Native AOT. Keep the generated
+WinForms does not support trimming or Native AOT; ReadyToRun needs neither
+and works. Keep the generated
 `ApplicationHighDpiMode=SystemAware` and app manifest so WinForms and Godot use
 the same DPI mode. The host uses `OutputType=WinExe`; choose `Exe` to see
 console diagnostics.
