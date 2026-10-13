@@ -7,7 +7,7 @@
         <DefaultItemExcludes>$(DefaultItemExcludes);Mixed.gdtest/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog.godotsharp" Version="$(TwoDogVersion)" />
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
     </ItemGroup>
 </Project>

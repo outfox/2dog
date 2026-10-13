@@ -69,7 +69,7 @@ const SECTIONS = [
     'configuration/environment-variables.md',
   ]],
   ['Testing', [
-    'testing/index.md', 'testing/nunit.md', 'testing/xunit.md',
+    'testing/index.md', 'testing/gdunit.md', 'testing/nunit.md', 'testing/xunit.md',
     'testing/writing-tests.md', 'testing/input.md',
   ]],
   ['MSBuild Configuration', [

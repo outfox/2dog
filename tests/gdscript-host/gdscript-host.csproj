@@ -11,16 +11,15 @@
         <DefaultItemExcludes>$(DefaultItemExcludes);fixtures/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.gdunit$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
         <ProjectReference Include="fixtures/mixed/GdScriptHostFixture.csproj" />
         <AssemblyMetadata Include="ProbeSource" Value="$(MSBuildProjectDirectory)" />
-        <AssemblyMetadata Include="GdUnitSource" Value="$(MSBuildProjectDirectory)/../../gdunit" />
     </ItemGroup>
-    <Target Name="WriteProbeImportPaths" AfterTargets="Build" DependsOnTargets="TwoDogResolveContentCapability">
-        <Error Condition="'$(TwoDogCanUseImportHelper)' != 'true'" Text="The GDScript host probe requires packed editor natives and 2dog.tools for resource import." />
-        <WriteLinesToFile File="$(TargetDir)import.paths"
-                          Lines="$(TwoDogImportHelperPath);$(TwoDogEditorLibGodotPath);$(_TwoDogApiDirArg);$(_TwoDogToolsDirArg)"
-                          Overwrite="true" WriteOnlyWhenDifferent="true" />
-    </Target>
+    <!-- This executable verifies fixture contracts, including expected failures; it is not itself an MTP application. -->
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
+        <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
+    </PropertyGroup>
 </Project>

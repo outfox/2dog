@@ -1,9 +1,10 @@
 # GDScript host integration proof
 
 This executable implements the first two GDScript test host milestones: isolated
-resource importing and GdUnit execution through embedded libgodot. The public host
-name and MTP integration are subsequent work. The `.gdtest` fixture suffix is a
-placeholder.
+resource importing and GdUnit execution through embedded libgodot. The shared
+implementation now ships in [`2dog.gdunit`](../../twodog.gdunit/README.md), with
+MTP discovery and execution tested by [`tests/gdunit-mtp`](../gdunit-mtp/README.md).
+The `.gdtest` fixture suffix remains an internal fixture name.
 
 Validated on Windows in Debug, Release, and Editor with the `thygrrr/gdunit`
 fork's `2dog-4.7.2` branch pinned to
@@ -15,6 +16,7 @@ From the repository root, after packing the current bindings and engine:
 
 ```text
 git submodule update --init gdunit
+dotnet pack twodog.gdunit
 dotnet run --project tests/gdscript-host -c Debug
 dotnet run --project tests/gdscript-host -c Release
 dotnet run --project tests/gdscript-host -c Editor
@@ -24,13 +26,13 @@ The executable returns zero only when every check passes. Its GDScript fixture
 intentionally contains one failed assertion and one skipped test; those outcomes
 are verified as part of the proof. An unexpected native warning/error, missing
 event, changed source file, or incorrect result fails the executable. This is an
-integration verification executable; MTP discovery and `dotnet test` support are
-milestone 3.
+integration verification executable. The separate MTP host tests verify
+`dotnet test` support and its result/exit-code contracts.
 
 The test requires the current packed `2dog.engine`, bindings, desktop natives and
 `2dog.tools`. It obtains import paths from those packages at build time and runs
 the import helper in a separate process. No external Godot executable or
-`GODOT_BIN` is required. An initialized `gdunit` submodule supplies the pinned
+`GODOT_BIN` is required. The packed `2dog.gdunit` supplies the pinned
 framework files. It runs headless; rendering remains a separate experiment.
 
 Artifacts are retained under `bin/probe-artifacts/<run>/`. Pass a new output
@@ -64,7 +66,7 @@ build output still goes to its SDK-managed `.godot/mono` directory.
 ## Integration decision
 
 Use the fork pinned by `gdunit` with a thin host adapter. No changes to the fork
-are required for these milestones. `bridge/runner.gd` extends GdUnit's session
+are required for these milestones. `twodog.gdunit/runtime/bridge/runner.gd` extends GdUnit's session
 runner, uses its discovery callback and serialized events, disables retries,
 preserves session hooks, and replaces process quit with a completion message.
 .NET pumps on the thread that started the engine, disposes it, and waits for
@@ -85,5 +87,6 @@ The adapter currently depends on internal GdUnit session APIs at the pinned
 revision. Keep compatibility checks when updating that revision. Each invocation
 uses fresh copies; snapshot caching is future work. The pump timeout is
 cooperative and cannot interrupt a native call that hangs. MTP IDs, selection,
-IDE support, cancellation, distribution, and host scaffolding belong to the
-remaining milestones.
+cancellation and NuGet distribution now live in `2dog.gdunit`. Verified IDE
+support, rendering, published host relocation and CLI scaffolding remain future
+work.

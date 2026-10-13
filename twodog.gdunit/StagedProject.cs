@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace GdScriptHost;
+namespace twodog.GdUnit;
 
 /// <summary>A writable copy whose resource paths match the source game, including selected ignored test roots.</summary>
 internal sealed class StagedProject
@@ -15,8 +15,10 @@ internal sealed class StagedProject
     public string SourceRoot { get; }
     public string Root { get; }
 
-    public StagedProject(string sourceRoot, IEnumerable<string> testRoots, string gdunitRoot, string bridgeRoot, string destination)
+    public StagedProject(string sourceRoot, IEnumerable<string> testRoots, string gdunitRoot, string bridgeRoot, string destination,
+        bool pauseAfterDiscovery = false, CancellationToken cancellationToken = default)
     {
+        _cancellationToken = cancellationToken;
         SourceRoot = Path.GetFullPath(sourceRoot);
         Root = Path.GetFullPath(destination);
         if (!File.Exists(Path.Combine(SourceRoot, "project.godot")))
@@ -26,7 +28,8 @@ internal sealed class StagedProject
         if (IsWithin(Root, SourceRoot))
             throw new ArgumentException("Staging destination cannot contain the source project.", nameof(destination));
 
-        var selectedRoots = testRoots.Select(path => ResolveSource(path)).ToArray();
+        var selectedRoots = testRoots.Select(path => ResolveSource(path)).Distinct(StringComparer.Ordinal).ToArray();
+        if (selectedRoots.Length == 0) throw new ArgumentException("Select at least one test root.", nameof(testRoots));
         foreach (var selected in selectedRoots)
             if (!Directory.Exists(selected)) throw new DirectoryNotFoundException(selected);
         CopyTree(SourceRoot, Root);
@@ -52,7 +55,8 @@ internal sealed class StagedProject
         File.WriteAllText(settingsPath, settings, Utf8);
         File.WriteAllText(Path.Combine(bridgeDestination, "request.json"), JsonSerializer.Serialize(new
         {
-            roots = selectedRoots.Select(path => "res://" + Path.GetRelativePath(SourceRoot, path).Replace('\\', '/'))
+            roots = selectedRoots.Select(path => "res://" + Path.GetRelativePath(SourceRoot, path).Replace('\\', '/')),
+            pause_after_discovery = pauseAfterDiscovery
         }), Utf8);
     }
 
@@ -68,8 +72,11 @@ internal sealed class StagedProject
         return resolved;
     }
 
+    private readonly CancellationToken _cancellationToken;
+
     private void CopyTree(string source, string destination, bool selectedRoot = false, bool framework = false)
     {
+        _cancellationToken.ThrowIfCancellationRequested();
         if (!Directory.Exists(source)) throw new DirectoryNotFoundException(source);
         if (File.GetAttributes(source).HasFlag(FileAttributes.ReparsePoint))
             throw new IOException($"Staging linked directories is unsupported: {source}");
@@ -79,6 +86,7 @@ internal sealed class StagedProject
         Directory.CreateDirectory(destination);
         foreach (var file in Directory.EnumerateFiles(source).Order(StringComparer.Ordinal))
         {
+            _cancellationToken.ThrowIfCancellationRequested();
             var name = Path.GetFileName(file);
             if ((name == ".gdignore" && !framework) || name == ".git" || name.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase)
                 || name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || name.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase)) continue;

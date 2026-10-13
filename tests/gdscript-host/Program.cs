@@ -1,14 +1,14 @@
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text.Json;
-using GdScriptHost;
+using twodog.GdUnit;
 
 // An executable integration proof for milestones 1 and 2. Its expected failing GDScript case must be reported
 // as a failure by GdUnit; this executable succeeds only when every observed result matches the fixture contract.
 try
 {
     var source = Metadata("ProbeSource");
-    var gdunit = Metadata("GdUnitSource");
+    var gdunit = Path.Combine(AppContext.BaseDirectory, "gdunit-runtime");
     var artifacts = Path.GetFullPath(args.Length == 0
         ? Path.Combine(source, "bin", "probe-artifacts", DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + "-" + Guid.NewGuid().ToString("N"))
         : args.Single());
@@ -35,12 +35,12 @@ try
         var before = Fingerprint(original);
         try
         {
-            _ = new StagedProject(original, ["../outside"], gdunit, Path.Combine(source, "bridge"), Path.Combine(output, "invalid"));
+            _ = new StagedProject(original, ["../outside"], gdunit, Path.Combine(gdunit, "bridge"), Path.Combine(output, "invalid"));
             throw new InvalidOperationException("Staging accepted a test root outside the game.");
         }
         catch (ArgumentException) { }
         // The stage itself lives beneath the ignored host, as it would in a real scaffold.
-        var project = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(source, "bridge"),
+        var project = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(gdunit, "bridge"),
             Path.Combine(original, host, "obj", "run-1", "project"));
         Require(File.Exists(Path.Combine(project.Root, "addons", "gdUnit4", "LICENSE")), "The framework license is missing.");
         Require(!Directory.Exists(Path.Combine(project.Root, "addons", "gdUnit4", "test")), "Upstream self-tests leaked into the stage.");
@@ -98,11 +98,11 @@ try
             Require(state.GetProperty("suite_finished").GetBoolean(), "The suite teardown did not finish.");
             // A fresh stage must reflect deletions and preserve the earlier snapshot.
             File.WriteAllText(Path.Combine(original, host, "tests", "transient.txt"), "added asset");
-            var next = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(source, "bridge"),
+            var next = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(gdunit, "bridge"),
                 Path.Combine(original, host, "obj", "run-2", "project"));
             Require(File.Exists(Path.Combine(next.Root, host, "tests", "transient.txt")), "A new resource was missed.");
             File.Delete(Path.Combine(original, host, "tests", "transient.txt"));
-            var last = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(source, "bridge"),
+            var last = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(gdunit, "bridge"),
                 Path.Combine(original, host, "obj", "run-3", "project"));
             Require(!File.Exists(Path.Combine(last.Root, host, "tests", "transient.txt")), "A deleted resource survived staging.");
             Require(File.Exists(Path.Combine(next.Root, host, "tests", "transient.txt")), "Stages share writable source content.");

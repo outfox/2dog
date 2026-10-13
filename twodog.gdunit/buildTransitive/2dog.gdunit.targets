@@ -1,0 +1,24 @@
+<Project>
+    <PropertyGroup>
+        <IsTestProject Condition="'$(IsTestProject)' == ''">true</IsTestProject>
+        <IsTestingPlatformApplication Condition="'$(IsTestingPlatformApplication)' == ''">true</IsTestingPlatformApplication>
+        <GenerateTestingPlatformEntryPoint>false</GenerateTestingPlatformEntryPoint>
+        <GenerateTestingPlatformApplicationHelper Condition="'$(IsTestingPlatformApplication)' == 'true'">true</GenerateTestingPlatformApplicationHelper>
+        <TwoDogAutoImport>false</TwoDogAutoImport>
+        <TwoDogExportPack>false</TwoDogExportPack>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)../runtime/**/*">
+            <Link>gdunit-runtime/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+    <Target Name="TwoDogGdUnitImportPaths" AfterTargets="Build" DependsOnTargets="TwoDogResolveContentCapability">
+        <Error Condition="'$(TwoDogCanUseImportHelper)' != 'true'"
+               Text="2dog.gdunit requires editor natives and 2dog.tools for private resource imports." />
+        <WriteLinesToFile File="$(TargetDir)gdunit.import.paths"
+                          Lines="$(TwoDogImportHelperPath);$(TwoDogEditorLibGodotPath);$(_TwoDogApiDirArg);$(_TwoDogToolsDirArg)"
+                          Overwrite="true" WriteOnlyWhenDifferent="true" />
+    </Target>
+</Project>

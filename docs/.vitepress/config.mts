@@ -252,6 +252,7 @@ export default defineConfig({
             items: [
               { text: gd('script') + 'Writing Engine Tests', link: '/testing/writing-tests' },
               { text: gd('mouse') + 'Simulating Input', link: '/testing/input' },
+              { text: gd('test_tube') + 'gdUnit (GDScript)', link: '/testing/gdunit' },
               { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
               { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' }
             ]

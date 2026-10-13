@@ -1,7 +1,8 @@
 extends "res://addons/gdUnit4/src/core/runners/GdUnitTestSessionRunner.gd"
-## Prototype integration with the upstream session lifecycle; .NET owns engine shutdown.
+## Embedded session lifecycle; .NET owns selection and engine shutdown.
 
 var bridge_done := false
+var discovery_done := false
 var _messages: Array[String] = []
 var _has_failures := false
 
@@ -16,18 +17,49 @@ func init_runner() -> void:
 	var request: Dictionary = JSON.parse_string(request_text)
 	var collector := GdUnitScriptErrorCollector.new()
 	var scanner := GdUnitTestSuiteScanner.new()
+	var scanned: Dictionary = {}
 	for resource_path: String in request["roots"]:
 		for script in scanner.scan(resource_path):
+			if scanned.has(script.resource_path):
+				continue
+			scanned[script.resource_path] = true
 			GdUnitTestDiscoverer.discover_tests(script, func(test: GdUnitTestCase) -> void:
 				_test_cases.append(test)
 				_messages.append(JSON.stringify({"kind": "discovered", "test": GdUnitTestCase.to_dict(test)}))
 			)
-	if collector.has_errors() or _test_cases.is_empty():
+	if collector.has_errors():
 		_messages.append(JSON.stringify({"kind": "discovery_error", "message": str(collector.errors())}))
 		await quit(RETURN_ERROR_SCRIPT_ERRORS_DETECTED)
 		return
+	discovery_done = true
+	if request.get("pause_after_discovery", false):
+		return
+	if _test_cases.is_empty():
+		await finish_discovery()
+		return
 	_state = RUN
 	set_process(true)
+
+
+func begin_run(ids: PackedStringArray) -> void:
+	_test_cases = _test_cases.filter(func(test: GdUnitTestCase) -> bool:
+		return ids.has(test.guid._guid)
+	)
+	if _test_cases.is_empty():
+		await finish_discovery()
+		return
+	_state = RUN
+	set_process(true)
+
+
+func finish_discovery() -> void:
+	await quit(RETURN_SUCCESS)
+
+
+func cancel_run() -> void:
+	GdUnitSignals.instance().gdunit_test_session_terminate.emit()
+	if _state == INIT or _state == READY:
+		await quit(RETURN_SUCCESS)
 
 
 func _on_gdunit_event(event: GdUnitEvent) -> void:

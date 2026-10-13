@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>GdUnitMtp</RootNamespace>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.gdunit$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <Compile Include="../Program.cs" Link="Program.cs" />
+        <AssemblyMetadata Include="GameProject" Value="$(MSBuildProjectDirectory)/../../gdscript-host/fixtures/pure" />
+        <AssemblyMetadata Include="TestRoot" Value="Pure.gdtest/tests" />
+    </ItemGroup>
+</Project>

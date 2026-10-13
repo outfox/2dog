@@ -1,6 +1,6 @@
 ---
 title: Testing
-description: "Test your Godot game with xUnit or NUnit, from a first test to signals and simulated input."
+description: "Test your Godot game with gdUnit, xUnit or NUnit, from a first test to signals and simulated input."
 ---
 
 # Testing
@@ -10,6 +10,10 @@ Load scenes, click buttons, and check signals from a normal .NET test runner.
 and resources.
 
 ## Choose your framework
+
+For GDScript suites, use the [gdUnit MTP host](./gdunit). It imports a private
+copy of the game, supports parameter rows and runs with `dotnet test`. Create
+this host manually; CLI scaffolding is planned.
 
 Test hosts are opt-in. Choose `--xunit` or `--nunit` when adding one.
 
@@ -51,6 +55,7 @@ style, rather than missing async support.
 | Task | Guide |
 | --- | --- |
 | Set up a test project | [xUnit](./xunit) or [NUnit](./nunit) |
+| Run GDScript suites through `dotnet test` | [gdUnit](./gdunit) |
 | Wait for frames, check signals, or verify deletion | [Writing engine tests](./writing-tests) |
 | Click controls or send keyboard events | [Simulating input](./input) |
 | Change packages, build variants, or import settings | [xUnit configuration](/configuration/xunit) or [NUnit configuration](/configuration/nunit) |
