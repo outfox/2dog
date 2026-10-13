@@ -5,8 +5,9 @@ description: "MSBuild configuration for xUnit hosts: engine variants, resource i
 
 # xUnit Configuration
 
-Set properties in `MyGame.xunit/MyGame.xunit.csproj`. Reference `2dog.xunit`, which brings
-in `2dog.engine` and the compile-in collection definitions.
+Set properties in `MyGame.xunit/MyGame.xunit.csproj`. Reference `2dog.xunit`
+for the compile-in collection definitions and explicitly select
+`2dog.engine` or `2dog.engine.double`.
 The [global settings](/configuration#properties) control the game directory,
 resource import, analyzers, and native variant.
 

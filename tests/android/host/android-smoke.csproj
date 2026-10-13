@@ -23,11 +23,11 @@
         <TwoDogAndroidGameAssembly>android-smoke-game</TwoDogAndroidGameAssembly>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.android" Version="$(NativesVersion)"/>
-        <PackageReference Include="2dog.android-arm64" Version="$(NativesVersion)"
+        <PackageReference Include="2dog.android-arm64$(TwoDogPackageSuffix)" Version="$(NativesVersion)"
                           Condition="$([System.String]::Copy('$(_TwoDogAndroidHostRids)').Contains(';android-arm64;'))"/>
-        <PackageReference Include="2dog.android-x64" Version="$(NativesVersion)"
+        <PackageReference Include="2dog.android-x64$(TwoDogPackageSuffix)" Version="$(NativesVersion)"
                           Condition="$([System.String]::Copy('$(_TwoDogAndroidHostRids)').Contains(';android-x64;'))"/>
         <_TwoDogAndroidHostRid Include="$(RuntimeIdentifier);$(RuntimeIdentifiers)"/>
         <!-- Match the Java dependencies of Godot's lib/build.gradle. -->

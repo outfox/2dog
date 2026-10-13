@@ -4,15 +4,15 @@
     <PropertyGroup>
         <_TwoDogLinuxX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogLinuxX64TargetsDir>
         <TwoDogLinuxX64PackageVersion Condition="'$(TwoDogLinuxX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogLinuxX64TargetsDir)'))))</TwoDogLinuxX64PackageVersion>
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
     </PropertyGroup>
 
     <!-- Editor libgodot location for 2dog.engine's TwoDogImportGodotProject; host-OS guarded (not RID) because the
          import runs on the build machine. -->
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-        <_TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-editor.so</_TwoDogLinuxX64EditorPackage>
+        <_TwoDogLinuxX64EditorPackage>$(NuGetPackageRoot)/2dog.linux-x64.editor$(TwoDogPackageSuffix)/$(TwoDogLinuxX64PackageVersion)/runtimes/linux-x64/native/libgodot-editor.so</_TwoDogLinuxX64EditorPackage>
         <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(_TwoDogLinuxX64EditorPackage)')">$(_TwoDogLinuxX64EditorPackage)</TwoDogEditorLibGodotPath>
-        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.shared_library.so')">$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor.x86_64.shared_library.so</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor$(TwoDogNativePrecisionSuffix).x86_64.shared_library.so')">$(TwoDogLocalGodotBin)libgodot.linuxbsd.editor$(TwoDogNativePrecisionSuffix).x86_64.shared_library.so</TwoDogEditorLibGodotPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,9 +24,9 @@
             <HostOs>Linux</HostOs>
             <RidPrefix>linux</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
-            <LocalRelease>libgodot.linuxbsd.template_release.x86_64.shared_library.so</LocalRelease>
-            <LocalDebug>libgodot.linuxbsd.template_debug.x86_64.shared_library.so</LocalDebug>
-            <LocalEditor>libgodot.linuxbsd.editor.x86_64.shared_library.so</LocalEditor>
+            <LocalRelease>libgodot.linuxbsd.template_release$(TwoDogNativePrecisionSuffix).x86_64.shared_library.so</LocalRelease>
+            <LocalDebug>libgodot.linuxbsd.template_debug$(TwoDogNativePrecisionSuffix).x86_64.shared_library.so</LocalDebug>
+            <LocalEditor>libgodot.linuxbsd.editor$(TwoDogNativePrecisionSuffix).x86_64.shared_library.so</LocalEditor>
         </TwoDogNativeResolver>
     </ItemGroup>
 

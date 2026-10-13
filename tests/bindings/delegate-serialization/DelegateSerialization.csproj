@@ -11,7 +11,7 @@
   <ItemGroup>
     <Reference Include="GodotSharp" HintPath="$(GodotSharpPath)" Condition="'$(GodotSharpPath)' != ''"/>
     <Reference Include="twodog" HintPath="$(TwoDogEnginePath)" Condition="'$(TwoDogEnginePath)' != ''"/>
-    <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" Condition="'$(TwoDogEnginePath)' == ''"/>
+    <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" Condition="'$(TwoDogEnginePath)' == ''"/>
     <!-- Exercise the same whole-binding root as the desktop hosts, including private serialization callbacks. -->
     <TrimmerRootAssembly Include="GodotSharp"/>
     <TrimmerRootAssembly Include="$(AssemblyName)"/>

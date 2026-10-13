@@ -62,8 +62,8 @@
 
     <Target Name="TwoDogCheckEngineBindingVersion" AfterTargets="ResolvePackageAssets">
         <ItemGroup>
-            <_TwoDogEnginePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.engine' And '%(Filename)' == 'twodog'" />
-            <_TwoDogEngineCoreBinding Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp' And '%(Filename)' == 'GodotSharp'" />
+            <_TwoDogEnginePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.engine$(TwoDogPackageSuffix)' And '%(Filename)' == 'twodog'" />
+            <_TwoDogEngineCoreBinding Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)' And '%(Filename)' == 'GodotSharp'" />
         </ItemGroup>
         <PropertyGroup>
             <_TwoDogRequiredBindingVersion>%(_TwoDogEnginePackage.NuGetPackageVersion)</_TwoDogRequiredBindingVersion>
@@ -88,7 +88,7 @@
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_Package)GodotPlugins.dll')">$(TwoDogGodotApiSourcePath_Package)</TwoDogGodotApiSourcePath>
 
         <!-- 3. Path for project reference consumers (source checkout) -->
-        <TwoDogGodotApiSourcePath_ProjectRef>$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Api/Debug/</TwoDogGodotApiSourcePath_ProjectRef>
+        <TwoDogGodotApiSourcePath_ProjectRef>$(MSBuildThisFileDirectory)../../godot/bin/$(TwoDogNativeOutputSubdir)GodotSharp/Api/Debug/</TwoDogGodotApiSourcePath_ProjectRef>
         <TwoDogGodotApiSourcePath Condition="'$(TwoDogGodotApiSourcePath)' == '' And Exists('$(TwoDogGodotApiSourcePath_ProjectRef)')">$(TwoDogGodotApiSourcePath_ProjectRef)</TwoDogGodotApiSourcePath>
 
         <!-- editor (TOOLS_ENABLED) expects GodotSharp/Api/Debug/; template natives resolve the API dir as exe_dir,
@@ -235,7 +235,7 @@
             <!-- Ambient GODOT_EDITOR/GODOT4 settings belong to IDEs, not this content pipeline. -->
             <!-- GodotTools: 2dog.tools package, or the source checkout -->
             <_TwoDogToolsDir>$(TwoDogGodotToolsDir)</_TwoDogToolsDir>
-            <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../godot/bin/GodotSharp/Tools/</_TwoDogToolsDir>
+            <_TwoDogToolsDir Condition="'$(_TwoDogToolsDir)' == '' And Exists('$(MSBuildThisFileDirectory)../../godot/bin/$(TwoDogNativeOutputSubdir)GodotSharp/Tools/GodotTools.dll')">$(MSBuildThisFileDirectory)../../godot/bin/$(TwoDogNativeOutputSubdir)GodotSharp/Tools/</_TwoDogToolsDir>
             <TwoDogCanUseImportHelper>false</TwoDogCanUseImportHelper>
             <TwoDogCanUseImportHelper Condition="'$(TwoDogImportHelperPath)' != '' And '$(TwoDogEditorLibGodotPath)' != '' And Exists('$(TwoDogEditorLibGodotPath)') And '$(_TwoDogToolsDir)' != '' And '$(TwoDogGodotApiSourcePath)' != ''">true</TwoDogCanUseImportHelper>
             <!-- Directory args must not end in a backslash: a trailing '\'

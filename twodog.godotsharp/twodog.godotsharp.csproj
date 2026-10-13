@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <PackageId>2dog.godotsharp</PackageId>
+        <PackageId>2dog.godotsharp$(TwoDogPackageSuffix)</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <Description>2dog fork core C# bindings. No native engine dependencies.</Description>
         <IncludeBuildOutput>false</IncludeBuildOutput>

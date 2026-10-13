@@ -4,15 +4,15 @@
     <PropertyGroup>
         <_TwoDogOsxArm64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogOsxArm64TargetsDir>
         <TwoDogOsxArm64PackageVersion Condition="'$(TwoDogOsxArm64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogOsxArm64TargetsDir)'))))</TwoDogOsxArm64PackageVersion>
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
     </PropertyGroup>
 
     <!-- Editor libgodot location for 2dog.engine's TwoDogImportGodotProject; host-OS guarded (not RID) because the
          import runs on the build machine. -->
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-        <_TwoDogOsxArm64EditorPackage>$(NuGetPackageRoot)/2dog.osx-arm64.editor/$(TwoDogOsxArm64PackageVersion)/runtimes/osx-arm64/native/libgodot-editor.dylib</_TwoDogOsxArm64EditorPackage>
+        <_TwoDogOsxArm64EditorPackage>$(NuGetPackageRoot)/2dog.osx-arm64.editor$(TwoDogPackageSuffix)/$(TwoDogOsxArm64PackageVersion)/runtimes/osx-arm64/native/libgodot-editor.dylib</_TwoDogOsxArm64EditorPackage>
         <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(_TwoDogOsxArm64EditorPackage)')">$(_TwoDogOsxArm64EditorPackage)</TwoDogEditorLibGodotPath>
-        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)libgodot.macos.editor.arm64.shared_library.dylib')">$(TwoDogLocalGodotBin)libgodot.macos.editor.arm64.shared_library.dylib</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)libgodot.macos.editor$(TwoDogNativePrecisionSuffix).arm64.shared_library.dylib')">$(TwoDogLocalGodotBin)libgodot.macos.editor$(TwoDogNativePrecisionSuffix).arm64.shared_library.dylib</TwoDogEditorLibGodotPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,9 +24,9 @@
             <HostOs>OSX</HostOs>
             <RidPrefix>osx</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
-            <LocalRelease>libgodot.macos.template_release.arm64.shared_library.dylib</LocalRelease>
-            <LocalDebug>libgodot.macos.template_debug.arm64.shared_library.dylib</LocalDebug>
-            <LocalEditor>libgodot.macos.editor.arm64.shared_library.dylib</LocalEditor>
+            <LocalRelease>libgodot.macos.template_release$(TwoDogNativePrecisionSuffix).arm64.shared_library.dylib</LocalRelease>
+            <LocalDebug>libgodot.macos.template_debug$(TwoDogNativePrecisionSuffix).arm64.shared_library.dylib</LocalDebug>
+            <LocalEditor>libgodot.macos.editor$(TwoDogNativePrecisionSuffix).arm64.shared_library.dylib</LocalEditor>
         </TwoDogNativeResolver>
     </ItemGroup>
 

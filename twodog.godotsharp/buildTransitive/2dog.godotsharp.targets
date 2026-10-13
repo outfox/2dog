@@ -22,8 +22,8 @@
                 Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'">
                 <GodotLine>$([System.Text.RegularExpressions.Regex]::Match('%(NuGetPackageVersion)', '^\d+\.\d+\.\d+').Value)</GodotLine>
             </_TwoDogStockBinding>
-            <_TwoDogCorePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp'" />
-            <_TwoDogEditorPackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp.editor'" />
+            <_TwoDogCorePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)'" />
+            <_TwoDogEditorPackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp.editor$(TwoDogPackageSuffix)'" />
         </ItemGroup>
         <PropertyGroup>
             <_TwoDogCorePackageVersion>%(_TwoDogCorePackage.NuGetPackageVersion)</_TwoDogCorePackageVersion>

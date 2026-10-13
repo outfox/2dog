@@ -41,7 +41,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="$(WindowsAppSdkVersion)"/>
     </ItemGroup>
     <ItemGroup>

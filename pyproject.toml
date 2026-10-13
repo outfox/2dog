@@ -29,22 +29,22 @@ sequence = [
 [tool.poe.tasks.build-managed]
 help = "dotnet pack: bindings, engine, Avalonia, Blazor, xUnit, NUnit, REPL, tool and restore"
 sequence = [
-    { cmd = "dotnet pack twodog.godotsharp" },
-    { cmd = "dotnet pack twodog.godotsharp.editor" },
-    { cmd = "dotnet pack twodog.engine" },
-    { cmd = "dotnet pack twodog.avalonia" },
-    { cmd = "dotnet pack twodog.blazor" },
-    { cmd = "dotnet pack twodog.xunit" },
-    { cmd = "dotnet pack twodog.nunit" },
-    { cmd = "dotnet pack twodog.repl" },
-    { cmd = "dotnet pack twodog" },
-    { cmd = "dotnet restore" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp.editor" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.engine" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.avalonia" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.blazor" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.xunit" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.nunit" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.repl" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog" },
+    { cmd = "uv run scripts/dotnet_build.py restore" },
 ]
 
 [tool.poe.tasks.build]
 help = "dotnet build: Platform packages (all platforms), twodog library, and NuGet packages"
 sequence = [
-    { cmd = "dotnet pack platforms -p:ForcePackAllPlatforms=true" },
+    { cmd = "uv run scripts/dotnet_build.py pack platforms -p:ForcePackAllPlatforms=true" },
     { ref = "build-managed" },
 ]
 
@@ -86,9 +86,9 @@ sequence = [
 [tool.poe.tasks.pack-android]
 help = "Pack experimental Android runtime and Java host packages"
 sequence = [
-    { cmd = "dotnet pack platforms/twodog.android-arm64/twodog.android-arm64.csproj" },
-    { cmd = "dotnet pack platforms/twodog.android-x64/twodog.android-x64.csproj" },
-    { cmd = "dotnet pack platforms/twodog.android/twodog.android.csproj" },
+    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android-arm64/twodog.android-arm64.csproj" },
+    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android-x64/twodog.android-x64.csproj" },
+    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android/twodog.android.csproj" },
 ]
 
 [tool.poe.tasks.test-android-build]
@@ -103,3 +103,30 @@ cmd = "uv run scripts/build_android_apk.py"
 help = "Publish an experimental Android host to APK/AAB; pass project and --pack"
 cmd = "uv run scripts/publish_android.py"
 
+
+# Double precision builds keep native and managed ABIs together. The CLI/template is precision-neutral.
+[tool.poe.tasks.build-double-godot]
+help = "Build host natives, editor and C# glue with double precision"
+cmd = "uv run build-godot.py --precision double"
+
+[tool.poe.tasks.pack-double]
+help = "Pack .double engine/bindings/natives and ordinary precision-neutral integrations"
+sequence = [
+    { cmd = "uv run scripts/dotnet_build.py pack platforms -p:TwoDogPrecision=double -p:ForcePackAllPlatforms=true" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp.editor -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.engine -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.avalonia -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.blazor -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.xunit -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.nunit -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.repl -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py restore -p:TwoDogPrecision=double" },
+]
+
+[tool.poe.tasks.build-double]
+help = "Build and pack a complete host-platform double-precision 2dog distribution"
+sequence = [
+    { ref = "build-double-godot" },
+    { ref = "pack-double" },
+]

@@ -1,5 +1,8 @@
 # 2dog.xunit
 
+Reference `2dog.engine` or `2dog.engine.double` explicitly in the host project.
+This integration package works with either precision.
+
 xUnit collection definitions for testing Godot applications with [2dog](https://github.com/outfox/2dog).
 
 The fixtures themselves (`Fixture`, `HeadlessFixture`, and `FixtureBase`) ship in the

@@ -5,7 +5,9 @@ description: "Run the REPL with different Godot native variants, headless mode o
 
 # REPL Configuration
 
-The generated `MyGame.repl/` host references your game and `2dog.repl`.
+The generated `MyGame.repl/` host references your game, `2dog.repl` and
+`2dog.engine`. Select `2dog.engine.double` for double precision;
+the REPL compiles submissions against the bindings loaded by the host.
 Choose the Godot native variant with the build configuration:
 
 | Configuration | Native variant |

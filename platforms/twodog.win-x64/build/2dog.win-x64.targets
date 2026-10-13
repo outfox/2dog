@@ -4,15 +4,15 @@
     <PropertyGroup>
         <_TwoDogWinX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogWinX64TargetsDir>
         <TwoDogWinX64PackageVersion Condition="'$(TwoDogWinX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogWinX64TargetsDir)'))))</TwoDogWinX64PackageVersion>
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/</TwoDogLocalGodotBin>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
     </PropertyGroup>
 
     <!-- Editor libgodot location for 2dog.engine's TwoDogImportGodotProject; host-OS guarded (not RID) because the
          import runs on the build machine. -->
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <_TwoDogWinX64EditorPackage>$(NuGetPackageRoot)/2dog.win-x64.editor/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot-editor.dll</_TwoDogWinX64EditorPackage>
+        <_TwoDogWinX64EditorPackage>$(NuGetPackageRoot)/2dog.win-x64.editor$(TwoDogPackageSuffix)/$(TwoDogWinX64PackageVersion)/runtimes/win-x64/native/libgodot-editor.dll</_TwoDogWinX64EditorPackage>
         <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(_TwoDogWinX64EditorPackage)')">$(_TwoDogWinX64EditorPackage)</TwoDogEditorLibGodotPath>
-        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)godot.windows.editor.x86_64.shared_library.dll')">$(TwoDogLocalGodotBin)godot.windows.editor.x86_64.shared_library.dll</TwoDogEditorLibGodotPath>
+        <TwoDogEditorLibGodotPath Condition="'$(TwoDogEditorLibGodotPath)' == '' And Exists('$(TwoDogLocalGodotBin)godot.windows.editor$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll')">$(TwoDogLocalGodotBin)godot.windows.editor$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll</TwoDogEditorLibGodotPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,9 +24,9 @@
             <HostOs>Windows</HostOs>
             <RidPrefix>win</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
-            <LocalRelease>godot.windows.template_release.x86_64.shared_library.dll</LocalRelease>
-            <LocalDebug>godot.windows.template_debug.x86_64.shared_library.dll</LocalDebug>
-            <LocalEditor>godot.windows.editor.x86_64.shared_library.dll</LocalEditor>
+            <LocalRelease>godot.windows.template_release$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll</LocalRelease>
+            <LocalDebug>godot.windows.template_debug$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll</LocalDebug>
+            <LocalEditor>godot.windows.editor$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll</LocalEditor>
         </TwoDogNativeResolver>
     </ItemGroup>
 

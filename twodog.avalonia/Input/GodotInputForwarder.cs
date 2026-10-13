@@ -79,10 +79,10 @@ internal sealed class GodotInputForwarder : IDisposable
 
     private double Scaling => _control.RenderScaling;
 
-    private Vector2 ToViewport(Avalonia.Point p)
+    internal Vector2 ToViewport(Avalonia.Point p)
     {
-        var scale = (float)Scaling;
-        return new Vector2((float)p.X * scale, (float)p.Y * scale);
+        var scale = Scaling;
+        return GodotMath.CreateVector2(p.X * scale, p.Y * scale);
     }
 
     private static void ApplyModifiers(InputEventWithModifiers e, KeyModifiers modifiers)

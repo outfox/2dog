@@ -7,6 +7,26 @@ namespace twodog.nunit.tests;
 public class GodotAssertionTests : GodotTestFixture
 {
     [Test]
+    public void VectorSignal_UsesTheSelectedBindingsForGenericMarshalling()
+    {
+        var node = new Node();
+        using var name = new StringName("coordinates");
+        try
+        {
+            node.AddUserSignal(name, [new Godot.Collections.Dictionary
+            {
+                ["name"] = "position", ["type"] = (int)Variant.Type.Vector2,
+            }]);
+            using var signal = GodotAssert.ExpectSignal<Vector2>(node, name);
+            var position = GodotMath.CreateVector2(1_000_000_000.125, -20.25);
+            node.EmitSignal(name, position);
+            signal.AssertEmitted();
+            Assert.That(signal.Values, Is.EqualTo(new[] { position }));
+        }
+        finally { node.Free(); }
+    }
+
+    [Test]
     public void SignalCountsAndArgumentsAreRecordedInOrder()
     {
         var parent = new Node();

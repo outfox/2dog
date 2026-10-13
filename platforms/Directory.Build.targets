@@ -3,13 +3,13 @@
     <!-- Skip for meta packages that already define their own PackageId -->
     <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' != 'web'">
         <!-- Package ID: 2dog.<rid>[.suffix] -->
-        <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
+        <PackageId>2dog.$(PlatformRID)$(PackageSuffix)$(TwoDogPackageSuffix)</PackageId>
 
         <!-- Native library source path -->
         <NativeLibPrefix Condition="'$(PlatformOS)' == 'windows'">godot</NativeLibPrefix>
         <NativeLibPrefix Condition="'$(PlatformOS)' != 'windows'">libgodot</NativeLibPrefix>
         <PlatformArch Condition="'$(PlatformArch)' == ''">x86_64</PlatformArch>
-        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant).$(PlatformArch).shared_library.$(NativeLibExt)</NativeLibPath>
+        <NativeLibPath>$(GodotBinDir)$(NativeLibPrefix).$(PlatformOS).$(BuildVariant)$(TwoDogNativePrecisionSuffix).$(PlatformArch).shared_library.$(NativeLibExt)</NativeLibPath>
 
         <!-- libgodot-<variant>.<ext>: variants coexist in one project and the DllImportResolver (keyed on
              TwoDogVariant) fails loudly on a mismatch -->
@@ -30,7 +30,7 @@
     <!-- Web variants pack a payload directory (static archive + JS glue + boot shell) under godot-web/; the runtime
          host never loads it, so the runtimes/<rid>/native convention does not apply. -->
     <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
-        <PackageId>2dog.$(PlatformRID)$(PackageSuffix)</PackageId>
+        <PackageId>2dog.$(PlatformRID)$(PackageSuffix)$(TwoDogPackageSuffix)</PackageId>
         <WebPayloadDir>$(GodotBinDir)web/$(BuildVariant)/</WebPayloadDir>
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
     </PropertyGroup>
@@ -70,10 +70,14 @@
                Text="2dog: Android payload is missing libc++_shared.so. Rebuild with build-godot.py --platform android."/>
     </Target>
 
+    <PropertyGroup>
+        <_TwoDogIntegrationPackageId>$([System.String]::Copy('$(PackageId)').Replace('.double', ''))</_TwoDogIntegrationPackageId>
+    </PropertyGroup>
+
     <!-- Only meta packages (no PackageSuffix) ship targets; variant packages are DLL-only -->
     <ItemGroup Condition="'$(PackageSuffix)' == ''">
-        <None Include="build/$(PackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(PackageId).targets')"/>
-        <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(PackageId).targets')"/>
+        <None Include="build/$(_TwoDogIntegrationPackageId).targets" Pack="true" PackagePath="build/" Condition="Exists('build/$(_TwoDogIntegrationPackageId).targets')"/>
+        <None Include="buildTransitive/$(_TwoDogIntegrationPackageId).targets" Pack="true" PackagePath="buildTransitive/" Condition="Exists('buildTransitive/$(_TwoDogIntegrationPackageId).targets')"/>
     </ItemGroup>
 
     <!-- Stamp the committed submodule pointer (HEAD:godot) into repository metadata; CI reads it back from nuget.org
@@ -96,4 +100,5 @@
         <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
         <RemoveDir Directories="$(BaseOutputPath)"/>
     </Target>
+    <Import Project="../Directory.Build.targets" />
 </Project>

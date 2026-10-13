@@ -2,7 +2,7 @@
 
 Embed a Godot viewport inside an [Avalonia](https://avaloniaui.net) application.
 `GodotControl` brings the engine's rendered output into Avalonia's compositor, so ordinary
-Avalonia controls  –  panels, buttons, popups  –  render **on top of** the running game.
+Avalonia controls – panels, buttons, popups – render **on top of** the running game.
 
 ```csharp
 var session = new GodotSession(new GodotSessionOptions
@@ -21,7 +21,7 @@ session.Start();
   otherwise a CPU readback fallback is used automatically (`GodotSessionOptions.PresentationMode`).
 - Dispose the session before the application exits (e.g. in `Window.OnClosing`).
 
-Requires the `2dog.engine` package (pulled in automatically) and Avalonia 12.1.1+.
+Requires an explicit reference to `2dog.engine` or `2dog.engine.double`, and Avalonia 12.1.1+.
 On Windows, declare DPI awareness in your app manifest (the scaffolded host does) so the
 engine's own DPI call cannot desync Avalonia's scaling mid-run.
 

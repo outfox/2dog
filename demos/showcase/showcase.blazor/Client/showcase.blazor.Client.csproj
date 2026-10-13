@@ -32,9 +32,9 @@
         <ProjectReference Include="../../showcase.csproj" PrivateAssets="all"/>
     </ItemGroup>
     <ItemGroup Condition="'$(Official)' == 'true'">
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" PrivateAssets="all" Publish="true"/>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" PrivateAssets="all" Publish="true"/>
         <PackageReference Include="2dog.blazor" Version="$(TwoDogVersion)"/>
-        <PackageReference Include="2dog.browser-wasm" Version="[$(NativesVersion)]" PrivateAssets="all"/>
+        <PackageReference Include="2dog.browser-wasm$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]" PrivateAssets="all"/>
     </ItemGroup>
 
     <!-- Root the game assembly: scripts are resolved by reflection.

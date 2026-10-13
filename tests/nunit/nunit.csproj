@@ -13,11 +13,12 @@
         <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
         <PackageReference Include="2dog.nunit" Version="$(TwoDogVersion)" />
         <PackageReference Include="NUnit" Version="4.*" />
         <PackageReference Include="NUnit3TestAdapter" Version="6.*" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
         <ProjectReference Include="../../demos/showcase/showcase.csproj" />
         <Compile Include="../../templates/twodog/Company.Product1.nunit/BasicTests.cs" Link="TemplateExamples.cs" />
     </ItemGroup>
