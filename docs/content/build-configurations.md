@@ -1,17 +1,24 @@
 ---
 title: Build Variants
-description: "Choosing native debug, release and editor variants, and building matching single- or double-precision 2dog packages."
+description: "Choosing debug, release and editor variants with single or double precision."
 ---
 
 # Build Variants
 
 2dog selects the native Godot variant from your .NET build configuration.
+Each desktop variant is available with single or double precision:
 
-| .NET configuration | Default variant | Godot build | `TOOLS_ENABLED` | Use |
-| --- | --- | --- | --- | --- |
-| **Debug** | `debug` | `template_debug` | No | Development, debugging, tests |
-| **Release** | `release` | `template_release` | No | Production and final validation |
-| **Editor** | `editor` | `editor` | Yes | Editor types and `[Tool]` scripts |
+| .NET configuration | `TwoDogVariant` | Precision | Use |
+| --- | --- | --- | --- |
+| **Debug** | `debug` | Single | Development, debugging, tests |
+| **Release** | `release` | Single | Production |
+| **Editor** | `editor` | Single | Editor types and `[Tool]` scripts |
+| **Debug** | `debug` | Double (`.double` packages) | Development, debugging, tests |
+| **Release** | `release` | Double (`.double` packages) | Production |
+| **Editor** | `editor` | Double (`.double` packages) | Editor types and `[Tool]` scripts |
+
+Single precision is the default. Select double precision through the
+[package references below](#double-precision); `TwoDogVariant` stays the same.
 
 `debug` includes assertions and debugging support; `release` is the optimized
 production runtime; `editor`
@@ -83,158 +90,27 @@ See [Configuration](./configuration) for the property and package reference.
 
 ## Double Precision
 
-Double precision is independent of the Debug, Release and Editor variants.
-Build a matching native and managed distribution from a separate checkout or
-worktree:
-
-```bash
-uv run poe build-double
-```
-
-This builds the host editor and native variants with `precision=double`,
-generates C# glue with that editor, builds the assemblies with
-`--precision=double`, and packs the affected packages with a `.double` suffix.
-Use `uv run poe pack-double` to repack after an existing double glue build.
-The default build tasks continue to produce single-precision packages.
-
-For individual builds, use `uv run build-godot.py --precision double` and
-`dotnet pack <project> -p:TwoDogPrecision=double`. Double payloads are staged
-under `godot/bin/double/`, and managed intermediate/output directories are
-separate from the single-precision build. Generated Godot glue is shared within
-a checkout, so regenerate it when changing precision. Source builds reject
-bindings with the wrong scalar type using `TDG006`, preventing incorrectly
-labeled packages after a precision switch.
-
-| Packages | Double build required | Reason |
-| --- | --- | --- |
-| Desktop, browser and Android native variants and their meta packages | Yes | Native `real_t` layout and matching variant dependencies |
-| `2dog.godotsharp`, `2dog.godotsharp.editor` | Yes | Math struct layout, interop code and generated API signatures |
-| `2dog.tools` | Yes | GodotTools compiles against the matching editor/core bindings |
-| `2dog.engine` | Yes | Godot APIs, bundled GodotPlugins/import helper, native and binding dependencies |
-| `2dog.avalonia`, `2dog.blazor`, `2dog.nunit`, `2dog.repl` | No | Stable managed signatures; the host explicitly selects the engine package |
-| `2dog.xunit` | No | Helpers compile in the host against its selected bindings |
-| Stock `Godot.NET.Sdk` | No | The precision setting and fork binding replacement come from the double packages |
-| `2dog` CLI and templates | No | The tool has no Godot API/native dependency; scaffolded references require the changes below |
-| `2dog.android` | No | Java-only payload and host targets; JNI names remain the same |
-
-Append `.double` to the **entire** affected package ID, for example
-`2dog.win-x64.double` and `2dog.win-x64.release.double`. Managed package
-versions still use `:2dog-version:`; native packages and `2dog.tools.double`
-use `:natives-version:`.
-
-Reference the double bindings in every game/library project and the double
-engine in every host. Integration packages keep their ordinary names and do
-not pull in an engine transitively. Keep integrations and the selected engine
-on the same managed version. For example, an Avalonia host references:
+Reference `2dog.engine.double` in the host and `2dog.godotsharp.double` in
+every game or library that uses Godot APIs. Editor builds also use
+`2dog.godotsharp.editor.double`. Rebuild those projects against the matching
+bindings; single- and double-precision Godot types cannot be mixed.
 
 ```xml
-<ItemGroup>
-  <PackageReference Include="2dog.engine.double" Version=":2dog-version:" />
-  <PackageReference Include="2dog.avalonia" Version=":2dog-version:" />
-</ItemGroup>
+<PackageReference Include="2dog.engine.double" Version=":2dog-version:" />
 ```
 
-The game references `2dog.godotsharp.double` and, when needed,
-`2dog.godotsharp.editor.double`. Keep `2dog.avalonia`, `2dog.blazor`,
-`2dog.xunit`, `2dog.nunit` and `2dog.repl` unchanged. Switch explicitly
-referenced native platform packages to their `.double` counterparts.
-Avalonia uses the engine's stable `GodotMath.CreateVector2(double, double)`
-bridge; the precision-specific constructor call stays inside the engine.
-Rebuild your game and all libraries that use Godot APIs against the double
-bindings. Third-party binaries compiled against single-precision Godot may
-require their own double builds. GDExtensions must also match the engine's
-precision.
+Keep `2dog.avalonia`, `2dog.blazor`, `2dog.xunit`, `2dog.nunit` and `2dog.repl`
+under their ordinary names. Native dependencies are selected automatically;
+if referenced explicitly, append `.double` to the entire ID, such as
+`2dog.win-x64.release.double`. GDExtensions must also match the precision.
 
-The packages set `GodotFloat64` and `REAL_T_IS_DOUBLE` for consumers and reject
-mixed precision packages with `TDG005` before compilation. Set
-`TwoDogPrecision=double` explicitly when building this repository, for example:
+After CLI scaffolding, change the package references as described above.
+`2dog update` currently assumes the ordinary package IDs.
 
-```bash
-dotnet test 2dog.tests.slnf -c Debug -p:TwoDogPrecision=double
-uv run tests/bindings/test_packages.py --precision double
-```
-
-The experimental hosting projects are not currently packaged. Rebuild
-`twodog.hosting.runtime` and its consumers with `TwoDogPrecision=double`; the
-shared `twodog.hosting` contract has no Godot API dependency.
-
-The CLI's scaffolding and package-update commands currently select standard
-package IDs. After scaffolding, change the references as described above;
-avoid using `2dog update` to manage a double project's package identities.
-
-Cross-compiled web and Android builds also accept `--precision double`.
-They need a prior desktop double glue build for bindings and resource import.
-The local package tasks use the same empty non-host native stubs as the normal
-build; build real payloads on each target platform before distributing them.
-
-### Double-Precision Showcase
-
-The repository includes a desktop host with an explicit
-`2dog.engine.double` reference. Once matching double packages are available
-in the local feed, run it from the repository root:
+The repository's double-precision showcase prints the CLR types and sizes of
+position and transform components, and checks native large-coordinate
+round trips:
 
 ```bash
 dotnet run --project demos/showcase/showcase.double
-dotnet run --project demos/showcase/showcase.double -c Release
 ```
-
-For a short headless check:
-
-```bash
-dotnet run --project demos/showcase/showcase.double -- --headless --quit-after 10
-```
-
-The host selects double precision without a command-line property. Its
-separate game project compiles the existing showcase scripts against
-`2dog.godotsharp.double`, while sharing the same scenes and resources.
-Both projects have separate intermediate and assembly output directories,
-so the standard showcase can still build against single precision.
-
-Startup prints the inferred CLR type and size of actual position, transform
-origin and basis components, together with values read back from Godot:
-
-```text
-Godot native double precision: True
-Node2D.Position.X: System.Double, 8 bytes, value=1000000000.125
-Node3D.Transform.Origin.X: System.Double, 8 bytes, value=1000000000.125
-Node3D.Transform.Basis.X.X: System.Double, 8 bytes, value=1
-Single conversion of the same coordinate: 1E+09
-2DOG_PRECISION_INSPECTION_PASSED
-```
-
-The checks require the expected scalar type and verify native position and
-transform property access and Variant marshalling. The ordinary showcase
-prints `System.Single, 4 bytes` for comparison. The full API smoke finishes
-with `2DOG_API_SMOKE_PASSED`. The example lives in
-[`demos/showcase/showcase.double`](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.double).
-
-### CI Coverage
-
-CI builds and tests both precisions. Native cache releases use
-`godot-<submodule-hash>` for single precision and
-`godot-<submodule-hash>-double` for double precision. Missing releases trigger
-native builds for Linux x64, Windows x64, macOS arm64, browser wasm32 and
-Android arm64/x64. SCons caches and workflow artifacts also include precision.
-The native workflow's manual `precision` input selects which family to rebuild.
-
-Each precision runs desktop tests in Debug, Release and Editor, desktop
-publish and Native AOT smoke tests, Web/WebXR/Blazor browser smoke tests, and
-Android APK build/inspection and emulator tests. Browser AOT runs on release
-tags and the `double-precision` branch. Shared runtime probes check Godot's
-precision feature and math marshalling, so single natives cannot silently pass
-a double smoke test. CLI scaffolding smoke tests use standard packages.
-
-CI requires every platform payload before packing. Local empty native stubs
-are not accepted by the release staging step. Version-tag deployment requires
-both precision matrices to pass and retains the standard build's shared
-integration packages when combining the two feeds.
-
-### Limiting Local Build Parallelism
-
-Set the machine's `TWODOG_MAX_BUILD_JOBS` environment variable to a positive
-integer to cap native builds and the managed pack/restore commands in the Poe
-build tasks. The effective limit is capped at the machine's processor count.
-When unset, existing tool defaults apply. On Windows, the build scripts also
-read the user environment setting so it takes effect in existing terminals.
-Direct `dotnet` commands can use `-maxcpucount:20`, and direct SCons commands
-can use `--jobs=20`.
