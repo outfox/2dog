@@ -94,6 +94,26 @@ Android has [experimental Native AOT](./configuration/android#native-aot)
 with NDK requirements and different trimmer roots. Browser hosts use Mono's
 AOT compiler through `RunAOTCompilation`, described in their host references.
 
+## ReadyToRun
+
+ReadyToRun precompiles the published assemblies to native code, so the
+runtime starts with less JIT work. Unlike Native AOT it keeps the JIT and the
+IL, so reflection and dynamic loading behave as in a regular publish, and no
+native toolchain is required. Generic, Avalonia, WinForms, and WinUI hosts
+support it; it needs a runtime identifier:
+
+```bash
+dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishReadyToRun=true
+```
+
+The engine side, `GodotSharp` and `twodog`, runs precompiled code. Godot loads
+the game assembly into its own load context from a stream, where the runtime
+ignores precompiled code, so game scripts are still JIT-compiled.
+ReadyToRun assemblies are several times larger than IL-only ones.
+
+Browser and Android hosts run on Mono, which has no ReadyToRun; use
+`RunAOTCompilation` there.
+
 ## MSBuild Runtimes
 
 `Core`, `Full`, and `Mono` describe the runtime executing MSBuild. They are

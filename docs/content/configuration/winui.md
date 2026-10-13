@@ -16,6 +16,7 @@ resource import, analyzers, and native variant.
 | `TwoDogDesktopExportPreset` | `Windows Desktop` | Preset in `export_presets.cfg` for the Windows game pack |
 | `PublishSelfContained` | `true` in the generated host | Bundle the .NET runtime; `false` requires an installed runtime |
 | `PublishAot` | `false` | Compile the host and managed game code into a native executable |
+| `PublishReadyToRun` | `false` | Precompile the engine and host assemblies for faster startup; [ReadyToRun](/configuration#readytorun) |
 
 The generated host sets `RuntimeIdentifier=win-x64`, `WindowsPackageType=None`,
 and `WindowsAppSDKSelfContained=true` for an unpackaged app carrying its Windows

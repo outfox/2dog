@@ -54,6 +54,17 @@ The publish folder holds the executable, the engine, and the game pack. To
 make it the default, set `<PublishAot>true</PublishAot>` in the host's
 `.csproj`. See [Native AOT](/configuration#native-aot) for requirements.
 
+### ReadyToRun
+
+ReadyToRun keeps the regular .NET runtime but precompiles the engine
+assemblies, which shortens startup without Native AOT's restrictions:
+
+```bash
+dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishReadyToRun=true
+```
+
+See [ReadyToRun](/configuration#readytorun) for what it covers.
+
 See [Engine](/api/engine) to customize the frame loop and
 [Build Variants](/build-configurations) to select an engine build. See
 [Generic .NET Configuration](/configuration/generic) for build and publish settings.

@@ -583,6 +583,23 @@ jobs:
           -p:PublishSelfContained=false
           -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-fdd
 
+      # ReadyToRun precompiles GodotSharp, twodog and the host for faster startup; the JIT stays available.
+      - name: Publish showcase desktop host (Release, ReadyToRun)
+        run: >-
+          dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
+          -p:PublishReadyToRun=true
+          -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-r2r
+
+      # Startup hook that counts GodotSharp and twodog methods run from R2R code: the runtime ignores R2R code
+      # for some load paths, so precompiled files alone do not prove it is used.
+      - name: Build ReadyToRun probe
+        shell: bash
+        run: |
+          dotnet build tests/ready-to-run -c Release
+          probe="$PWD/tests/ready-to-run/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/ReadyToRunProbe.dll"
+          if [ "$RUNNER_OS" = "Windows" ]; then probe="$(cygpath -w "$probe")"; fi
+          echo "R2R_PROBE=$probe" >> "$GITHUB_ENV"
+
       # NativeAOT links ILC output with the platform toolchain (clang + zlib on
       # Linux); install them only when the runner image lacks them.
       - name: Install NativeAOT prerequisites (Linux)
@@ -638,6 +655,7 @@ jobs:
           for dir in \
             "demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish" \
             "demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-norid" \
+            "demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-r2r" \
             "$fdd" "$aot"; do
             if [ ! -f "$dir/showcase.2dog.pck" ]; then
               echo "::error::Missing $dir/showcase.2dog.pck - the desktop publish did not export the game pck"
@@ -672,12 +690,14 @@ jobs:
         run: rm -rf demos/showcase/.godot/mono/temp/bin
 
       # Scene probes always run; opt into their success markers for the log assertions below.
+      # The ReadyToRun probe also runs here, as the control that reports no R2R code.
       - name: Run published host (headless, RID)
         id: run
         shell: bash
         run: |
           set +e
-          demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
+          DOTNET_STARTUP_HOOKS="$R2R_PROBE" \
+            demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish/${{ matrix.exe }} \
             --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
@@ -705,6 +725,18 @@ jobs:
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
 
+      - name: Run published host (headless, ReadyToRun)
+        id: run_r2r
+        shell: bash
+        run: |
+          set +e
+          DOTNET_STARTUP_HOOKS="$R2R_PROBE" \
+            demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-r2r/${{ matrix.exe }} \
+            --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-r2r.log
+          status=${PIPESTATUS[0]}
+          echo "Host exit code: $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
       - name: Run published host (headless, NativeAOT)
         id: run_aot
         shell: bash
@@ -720,7 +752,7 @@ jobs:
       # (libgodot exit-time static destructors; see the twodog.Engine static
       # ctor comment) so it can be root-caused in the fork.
       - name: Dump crash report (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_aot.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_r2r.outputs.status != '0' || steps.run_aot.outputs.status != '0')
         shell: bash
         run: |
           # ReportCrash writes the .ips shortly after the abort
@@ -735,10 +767,13 @@ jobs:
       # all threads at the abort. This is the data source for fixing the
       # teardown crash in the fork.
       - name: Rerun under lldb for backtrace (macOS)
-        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_aot.outputs.status != '0')
+        if: runner.os == 'macOS' && (steps.run.outputs.status != '0' || steps.run_norid.outputs.status != '0' || steps.run_fdd.outputs.status != '0' || steps.run_r2r.outputs.status != '0' || steps.run_aot.outputs.status != '0')
         shell: bash
         run: |
           publish=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/${{ matrix.rid }}/publish
+          if [ "${{ steps.run_r2r.outputs.status }}" != "0" ]; then
+            publish=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-r2r
+          fi
           if [ "${{ steps.run_aot.outputs.status }}" != "0" ]; then
             publish=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot
           fi
@@ -783,7 +818,23 @@ jobs:
           check smoke.log "${{ steps.run.outputs.status }}" "rid"
           check smoke-norid.log "${{ steps.run_norid.outputs.status }}" "no-rid"
           check smoke-fdd.log "${{ steps.run_fdd.outputs.status }}" "framework-dependent"
+          check smoke-r2r.log "${{ steps.run_r2r.outputs.status }}" "readytorun"
           check smoke-aot.log "${{ steps.run_aot.outputs.status }}" "nativeaot"
+
+          # The R2R host must run GodotSharp and twodog from precompiled code; the plain RID host, as the control,
+          # proves the probe reports R2R use rather than any call.
+          r2r=$(grep -o "2DOG_R2R_PROBE godotsharp=[0-9]* twodog=[0-9]*" smoke-r2r.log)
+          control=$(grep -o "2DOG_R2R_PROBE godotsharp=[0-9]* twodog=[0-9]*" smoke.log)
+          echo "readytorun: $r2r"
+          echo "control: $control"
+          if ! echo "$r2r" | grep -Eq "godotsharp=[1-9][0-9]* twodog=[1-9][0-9]*$"; then
+            echo "::error::[readytorun] GodotSharp or twodog methods did not run ReadyToRun code: ${r2r:-probe output missing}"
+            fail=1
+          fi
+          if [ "$control" != "2DOG_R2R_PROBE godotsharp=0 twodog=0" ]; then
+            echo "::error::[rid] The ReadyToRun probe control did not report zero R2R methods: ${control:-probe output missing}"
+            fail=1
+          fi
           exit $fail
 
   # Publish the web showcase end-to-end: statically links the web libgodot.a into

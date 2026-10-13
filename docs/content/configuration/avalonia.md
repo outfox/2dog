@@ -16,6 +16,7 @@ resource import, analyzers, and native variant.
 | `TwoDogDesktopExportPreset` | RID-mapped | `Windows Desktop`, `Linux`, or `macOS`, according to the publish target |
 | `PublishSelfContained` | `true` in the generated host | Bundle the .NET runtime; `false` requires an installed runtime |
 | `PublishAot` | `false` | Compile the host and managed game code into a native executable |
+| `PublishReadyToRun` | `false` | Precompile the engine and host assemblies for faster startup; [ReadyToRun](/configuration#readytorun) |
 
 ```bash
 dotnet publish MyGame.avalonia -c Release -r win-x64 -p:PublishAot=true
