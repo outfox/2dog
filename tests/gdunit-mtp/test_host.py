@@ -95,8 +95,8 @@ class GdUnitHostTests(unittest.TestCase):
     def discover(self):
         result, events, _ = self.run_host("--list-tests", "json")
         self.assert_exit(result, 0)
-        # libgodot also writes its startup banner to native stdout.
-        document = json.loads(result.stdout[result.stdout.index('{\n  "schemaVersion"'):])
+        # Native stdout can flush before or after MTP's JSON document, especially in Release on Unix.
+        document, _ = json.JSONDecoder().raw_decode(result.stdout, result.stdout.index('{\n  "schemaVersion"'))
         self.assertEqual(5, len(document["tests"]))
         self.assertEqual([], self.terminal(events))
         self.assertEqual(0, self.state(events)["test_bodies"])

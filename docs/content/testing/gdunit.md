@@ -34,8 +34,9 @@ selects an exact ID, including a single parameter row. An empty selection
 follows MTP's no-test policy.
 
 `--list-tests json` includes IDs and original source locations. When running
-the executable directly, libgodot prints its startup banner before the JSON
-document.
+the executable directly, native Godot output can appear before or after the
+JSON document as its stdout buffers flush. Read the JSON document separately
+from those native messages.
 
 ## Test a private project copy
 
@@ -84,5 +85,5 @@ adapter is not loaded. Use the [xUnit](/hosts/xunit) or [NUnit](/hosts/nunit)
 hosts for C# test suites.
 
 Rendering, verified IDE integration, snapshot caching and relocatable
-published hosts remain follow-up work. Windows execution is validated locally;
-Linux and macOS execution still need validation.
+published hosts remain follow-up work. CI exercises headless execution on
+Windows, Linux and macOS in both precisions and all three build configurations.
