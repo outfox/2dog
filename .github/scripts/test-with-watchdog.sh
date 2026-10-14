@@ -7,6 +7,7 @@
 # A hang is a run that prints nothing for the idle limit (per-test console lines are the progress
 # signal; Windows uses vstest's per-test hang timeout); every run must also finish within the budget.
 # Usage: test-with-watchdog.sh <Configuration> [idle-seconds] [budget-seconds]
+# TWODOG_TEST_FILTER, when set, is passed to `dotnet test --filter`.
 set -euo pipefail
 
 config="$1"
@@ -43,7 +44,7 @@ run_tests() {
   # A solution-level dotnet test otherwise overlaps one project's tests with another's build.
   dotnet build 2dog.tests.slnf -c "$config" --no-restore || return $?
   dotnet test 2dog.tests.slnf -c "$config" --no-build --no-restore \
-    --logger 'console;verbosity=normal' "$@"
+    --logger 'console;verbosity=normal' ${TWODOG_TEST_FILTER:+--filter "$TWODOG_TEST_FILTER"} "$@"
 }
 
 case "${RUNNER_OS:-}" in

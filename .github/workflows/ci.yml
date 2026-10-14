@@ -29,13 +29,19 @@ jobs:
     name: Check Native Libraries
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read # find the CI run of a release tag's parent commit
     outputs:
       ready: ${{ steps.check.outputs.ready }}
       double-ready: ${{ steps.check.outputs.double-ready }}
       hash: ${{ steps.check.outputs.hash }}
+      tested-bump: ${{ steps.release.outputs.tested-bump }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 2 # a release tag is compared with its parent commit
 
       - name: Check native library availability
         id: check
@@ -58,6 +64,41 @@ jobs:
             echo "::notice::No double-precision natives for $HASH; building inline."
             echo "double-ready=false" >> $GITHUB_OUTPUT
           fi
+
+      # release.yml tags a commit that only bumps <TwoDogRevision> on top of main. When that parent already passed
+      # the test, desktop and Android jobs, the tag run skips them; it still packs, runs the web and tool smoke
+      # jobs against the versioned packages and deploys. Anything else gets the full run.
+      - name: Check for a tested revision bump
+        id: release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tested=false
+          parents=$(git rev-list --parents -n 1 HEAD | wc -w)
+          changed=$(git diff --name-only HEAD^ HEAD 2>/dev/null || true)
+          lines=$(git diff -U0 HEAD^ HEAD -- Directory.Build.props 2>/dev/null |
+            grep -E '^[+-]' | grep -vE '^(\+\+\+|---) ' || true)
+          if [ "$parents" -eq 2 ] && [ "$changed" = "Directory.Build.props" ] && [ "$(echo "$lines" | wc -l)" -eq 2 ] &&
+             ! echo "$lines" | grep -qv '<TwoDogRevision>'; then
+            parent=$(git rev-parse HEAD^)
+            runs="repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$parent&status=success"
+            for run in $(gh api "$runs" --jq '.workflow_runs[].id'); do
+              # A green run can hide skipped jobs: require every gated job family to have run and passed.
+              verdict=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/jobs?per_page=100" --jq '
+                [.jobs[] | select(.name | test("^(Test|Desktop Smoke|Android Smoke)( |$)"))] as $gated
+                | ($gated | all(.conclusion == "success"))
+                  and ([$gated[] | .name | capture("^(?<family>Test|Desktop Smoke|Android Smoke)( |$)").family]
+                       | unique | length) == 3')
+              if [ "$verdict" = "true" ]; then
+                echo "::notice::Parent ${parent:0:7} passed CI in run $run; skipping test, desktop and Android jobs."
+                tested=true
+                break
+              fi
+            done
+          fi
+          [ "$tested" = true ] || echo "::notice::Not a revision bump on a tested commit; running every job."
+          echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
   # Build missing natives inline via the reusable workflow. The concurrency
   # group makes a second run that needs the same hash wait instead of building
@@ -273,11 +314,13 @@ jobs:
   # took 8-10 minutes and hit the job timeout.
   test:
     name: Test (${{ matrix.name }}, ${{ matrix.config }}) [${{ matrix.precision }}]
-    needs: [pack]
+    needs: [check-natives, pack]
     # Explicit result check: the implicit success() evaluates the transitive
     # needs chain, and the (usually) skipped build-natives job would skip this
     # job too — a green run with zero testing.
-    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -285,6 +328,24 @@ jobs:
         precision: [single, double]
         name: [linux-x64, win-x64, osx-arm64]
         config: [Debug, Release, Editor]
+        # Linux runs every combination. Windows and macOS run each configuration and each precision at least once;
+        # desktop-smoke also boots Release double on all three.
+        exclude:
+          - name: win-x64
+            precision: double
+            config: Release
+          - name: win-x64
+            precision: double
+            config: Editor
+          - name: osx-arm64
+            precision: single
+            config: Editor
+          - name: osx-arm64
+            precision: double
+            config: Debug
+          - name: osx-arm64
+            precision: double
+            config: Release
         include:
           - name: linux-x64
             runner: blacksmith-4vcpu-ubuntu-2404
@@ -292,6 +353,11 @@ jobs:
             runner: blacksmith-4vcpu-windows-2025
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
+          # Pilot: GitHub-hosted macOS is free for public repositories, compared against the Blacksmith cells.
+          - name: osx-arm64
+            precision: single
+            config: Debug
+            runner: macos-15
 
     # Each test run gets ten minutes; leave room for setup, the separate coverage/windowed
     # run, and diagnostic uploads without the job cancelling them early.
@@ -336,18 +402,22 @@ jobs:
 
       # The watchdog dumps the xunit v3 child (and 2dog.import grandchildren) on a hang;
       # vstest's own --blame-hang only ever dumped its testhost. Crash dumps cover a segv.
+      # The CLI tool tests do not depend on the configuration; they run in the Debug jobs only.
       - name: Test (${{ matrix.config }})
+        env:
+          TWODOG_TEST_FILTER: ${{ matrix.config != 'Debug' && 'FullyQualifiedName!~twodog.tests.ToolTests.' || '' }}
         run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
 
-      # Instrument the actual packed assembly, not a special source-project build.
-      # Windows is the coverage baseline; behavior runs in all nine OS/config jobs.
       - name: Setup uv for MTP contracts and REPL coverage
+        if: matrix.config == 'Debug'
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
           enable-cache: false
 
+      # The contracts check the test adapters, not the configuration: the Debug jobs run them.
       - name: Test xUnit, NUnit and GdUnit MTP contracts
+        if: matrix.config == 'Debug'
         timeout-minutes: 5
         run: uv run --no-project python tests/mtp/test_hosts.py --configuration ${{ matrix.config }} --precision ${{ matrix.precision }}
 
@@ -366,8 +436,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      # Instrument the actual packed assembly, not a special source-project build. 2dog.repl is packed once for
+      # every configuration and precision, so one Windows job measures it; behavior runs in every job.
       - name: Require 95% REPL line and branch coverage
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         timeout-minutes: 10
         shell: bash
         run: |
@@ -380,7 +452,7 @@ jobs:
           uv run --no-project python scripts/check_repl_coverage.py twodog.tests/TestResults/repl-coverage
 
       - name: Upload REPL coverage
-        if: always() && runner.os == 'Windows'
+        if: always() && runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         uses: actions/upload-artifact@v7
         with:
           name: repl-coverage-${{ matrix.config }}-${{ matrix.precision }}
@@ -438,9 +510,11 @@ jobs:
   # windows, so presenting a frame fails there. Windowed rendering needs a runner with an interactive desktop.
   windows-rendering:
     name: Test Rendering (win-x64, Release) [${{ matrix.precision }}]
-    needs: [pack]
+    needs: [check-natives, pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
     runs-on: windows-2025
     timeout-minutes: 30
 
@@ -514,9 +588,11 @@ jobs:
   # jobs by the Debug run that precedes them in the same workspace).
   desktop-smoke:
     name: Desktop Smoke (${{ matrix.name }}) [${{ matrix.precision }}]
-    needs: [pack]
+    needs: [check-natives, pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -1287,9 +1363,11 @@ jobs:
   # Android's Release defaults); the arm64 one is built and inspected for devices only.
   android-smoke:
     name: Android Smoke [${{ matrix.precision }}]
-    needs: [pack]
+    needs: [check-natives, pack]
     # See the test job for why this cannot rely on the implicit success().
-    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 45
 
@@ -1427,8 +1505,9 @@ jobs:
     # 2dog.android packages they exercise are among the packages being
     # published; desktop-smoke gates it because it is the only check that runs
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
-    # tool the way users get it.
-    needs: [test, windows-rendering, desktop-smoke, web-smoke, android-smoke, tool-smoke]
+    # tool the way users get it. A tested revision bump (see check-natives) takes
+    # the test, desktop and Android verdicts from its parent commit's run.
+    needs: [check-natives, test, windows-rendering, desktop-smoke, web-smoke, android-smoke, tool-smoke]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -1437,10 +1516,10 @@ jobs:
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
-      needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
-      needs.desktop-smoke.result == 'success' &&
-      needs.web-smoke.result == 'success' && needs.android-smoke.result == 'success' &&
-      needs.tool-smoke.result == 'success')
+      (needs.check-natives.outputs.tested-bump == 'true' ||
+      (needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
+      needs.desktop-smoke.result == 'success' && needs.android-smoke.result == 'success')) &&
+      needs.web-smoke.result == 'success' && needs.tool-smoke.result == 'success')
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing
