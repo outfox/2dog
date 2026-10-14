@@ -9,9 +9,14 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   also deploy to NuGet. Pushes that only touch `docs/**`, root Markdown or `AGENTS.md` files skip it.
 - Each OS/configuration pair is its own test job in a fresh workspace, so no configuration relies on files
   another one built. Do not merge configurations back into one job: together they exceed the job timeout.
+- The test matrix is priced by runner: macOS minutes cost 5x Windows and 10x Linux. Linux runs every
+  configuration/precision pair; Windows and macOS cover each configuration and each precision at least once.
+  Configuration-independent suites (CLI tool tests, MTP contracts) run in the Debug jobs, REPL coverage in
+  Windows Debug single. Add new suites the same way rather than to every cell.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
-  tags pushed with `GITHUB_TOKEN` start no workflows. `android.yml` runs Android build and package tests;
-  `docs.yml` builds the documentation site.
+  tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
+  the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and
+  package tests; `docs.yml` builds the documentation site.
 - Keep the `github.repository == 'outfox/2dog'` gate on jobs that build, test or release.
 - Downstream jobs must tolerate skipped `build-natives` with explicit
   `!cancelled() && needs.<job>.result == 'success'` gates; implicit `success()` skips them transitively.
@@ -22,7 +27,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 
 - `test-with-watchdog.sh <Config> [idle-seconds] [budget-seconds]` runs `dotnet test` under a hang watchdog
   that dumps the test processes. It sets `TWODOG_GODOT_LOG_DIR` to `twodog.tests/TestResults/godot-<Config>`,
-  so failed runs upload Godot's native logs with the test results.
+  so failed runs upload Godot's native logs with the test results. `TWODOG_TEST_FILTER` adds a `--filter`.
 - After changing the web or Blazor smoke scripts, run `node --test .github/scripts/*.test.mjs`.
 
 ## Checking runs
