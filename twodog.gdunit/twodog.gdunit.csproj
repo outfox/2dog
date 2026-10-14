@@ -23,11 +23,7 @@
         <None Include="README.md" Pack="true" PackagePath="README.md" />
         <None Include="buildTransitive/**" Pack="true" PackagePath="buildTransitive/%(RecursiveDir)%(Filename)%(Extension)" />
         <None Include="runtime/**" Pack="true" PackagePath="runtime/" />
-        <None Include="../gdunit/addons/gdUnit4/**" Exclude="../gdunit/addons/gdUnit4/test/**"
-              Pack="true" PackagePath="runtime/addons/gdUnit4/" />
     </ItemGroup>
-    <Target Name="ValidateGdUnitRuntime" BeforeTargets="GenerateNuspec">
-        <Error Condition="!Exists('../gdunit/addons/gdUnit4/src/core/runners/GdUnitTestSessionRunner.gd')"
-               Text="Initialize the pinned gdUnit source before packing: git submodule update --init gdunit." />
-    </Target>
+    <Import Project="GdUnitRuntime.props" />
+    <Import Project="GdUnitRuntime.targets" />
 </Project>

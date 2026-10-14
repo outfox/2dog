@@ -228,7 +228,6 @@ jobs:
           dotnet pack twodog.blazor
           dotnet pack twodog.xunit
           dotnet pack twodog.nunit
-          git submodule update --init gdunit
           dotnet pack twodog.gdunit
           dotnet pack twodog.repl
           dotnet pack twodog

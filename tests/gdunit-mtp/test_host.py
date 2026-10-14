@@ -220,6 +220,34 @@ class GdUnitHostTests(unittest.TestCase):
                          "runtime/addons/gdUnit4/src/reporters/html/template/.gdignore"):
                 self.assertIn(name, names)
             self.assertFalse(any(name.startswith("runtime/addons/gdUnit4/test/") for name in names))
+            pin = ElementTree.parse(REPO / "twodog.gdunit" / "GdUnitRuntime.props").getroot()
+            version = pin.findtext(".//GdUnitVersion")
+            metadata = json.loads(archive.read("runtime/gdunit-release.json").decode("utf-8-sig"))
+            self.assertEqual({
+                "version": version,
+                "archiveUrl": pin.findtext(".//GdUnitArchiveUrl").replace("$(GdUnitVersion)", version),
+                "sha256": pin.findtext(".//GdUnitArchiveSha256"),
+            }, metadata)
+            plugin = archive.read("runtime/addons/gdUnit4/plugin.cfg").decode("utf-8")
+            self.assertIn(f'version="{version}"', plugin)
+
+    def test_corrupted_official_archive_is_rejected_before_extraction(self):
+        props = ElementTree.parse(REPO / "twodog.gdunit" / "GdUnitRuntime.props").getroot()
+        version = props.findtext(".//GdUnitVersion")
+        cache = self.output / "release-cache"
+        cache.mkdir()
+        (cache / f"GdUnit.{version}.zip").write_bytes(b"not the official release archive")
+        result = subprocess.run(
+            ["dotnet", "msbuild", str(REPO / "twodog.gdunit" / "twodog.gdunit.csproj"),
+             "-t:PrepareGdUnitRuntime", f"-p:_GdUnitCacheDirectory={cache}",
+             f"-p:TwoDogPrecision={PRECISION}"],
+            cwd=REPO, env=self.environment, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            encoding="utf-8", errors="replace", timeout=90,
+        )
+        (self.output / "pack.log").write_text(result.stdout, encoding="utf-8")
+        self.assertNotEqual(0, result.returncode, result.stdout)
+        self.assertIn("GDUNIT001", result.stdout)
+        self.assertFalse((cache / "unpacked").exists(), result.stdout)
 
     def test_documented_host_builds_outside_repository(self):
         # Keep the consumer for diagnosis. It inherits no repository props, targets, SDK source or package cache.

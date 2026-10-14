@@ -1,0 +1,32 @@
+<Project>
+    <PropertyGroup>
+        <_GdUnitCacheDirectory Condition="'$(_GdUnitCacheDirectory)' == ''">$([System.IO.Path]::GetFullPath('obj/gdunit-release/$(TwoDogPrecision)/$(GdUnitVersion)', '$(MSBuildProjectDirectory)'))</_GdUnitCacheDirectory>
+        <_GdUnitArchive>$(_GdUnitCacheDirectory)/GdUnit.$(GdUnitVersion).zip</_GdUnitArchive>
+        <_GdUnitExtractDirectory>$(_GdUnitCacheDirectory)/unpacked</_GdUnitExtractDirectory>
+        <_GdUnitAddonDirectory>$(_GdUnitExtractDirectory)/gdUnit4-$(GdUnitVersion)/addons/gdUnit4</_GdUnitAddonDirectory>
+        <_GdUnitReleaseMetadata>$(_GdUnitCacheDirectory)/gdunit-release.json</_GdUnitReleaseMetadata>
+    </PropertyGroup>
+
+    <Target Name="PrepareGdUnitRuntime" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+        <DownloadFile SourceUrl="$(GdUnitArchiveUrl)" DestinationFolder="$(_GdUnitCacheDirectory)"
+                      DestinationFileName="GdUnit.$(GdUnitVersion).zip" Condition="!Exists('$(_GdUnitArchive)')" />
+        <GetFileHash Files="$(_GdUnitArchive)" Algorithm="SHA256">
+            <Output TaskParameter="Items" ItemName="_GdUnitArchiveHash" />
+        </GetFileHash>
+        <Error Code="GDUNIT001" Condition="'%(_GdUnitArchiveHash.FileHash)' != '$(GdUnitArchiveSha256)'"
+               Text="Official GdUnit $(GdUnitVersion) archive checksum mismatch. Remove $(_GdUnitArchive) and pack again to download the pinned release." />
+        <!-- Recreate only this build-owned extraction directory; stale files must not enter the package. -->
+        <RemoveDir Directories="$(_GdUnitExtractDirectory)" />
+        <Unzip SourceFiles="$(_GdUnitArchive)" DestinationFolder="$(_GdUnitExtractDirectory)" />
+        <Error Condition="!Exists('$(_GdUnitAddonDirectory)/src/core/runners/GdUnitTestSessionRunner.gd') Or !Exists('$(_GdUnitAddonDirectory)/LICENSE') Or !Exists('$(_GdUnitAddonDirectory)/src/reporters/html/template/.gdignore')"
+               Text="The pinned official GdUnit archive is missing required runtime files." />
+        <WriteLinesToFile File="$(_GdUnitReleaseMetadata)" Encoding="UTF-8" Overwrite="true"
+                          Lines="{ &quot;version&quot;: &quot;$(GdUnitVersion)&quot;, &quot;archiveUrl&quot;: &quot;$(GdUnitArchiveUrl)&quot;, &quot;sha256&quot;: &quot;$(GdUnitArchiveSha256)&quot; }" />
+        <ItemGroup>
+            <None Include="$(_GdUnitAddonDirectory)/**" Exclude="$(_GdUnitAddonDirectory)/test/**"
+                  Pack="true" PackagePath="runtime/addons/gdUnit4/" />
+            <None Include="$(_GdUnitReleaseMetadata)" Pack="true" PackagePath="runtime/gdunit-release.json" />
+        </ItemGroup>
+        <Message Importance="high" Text="Packaging official GdUnit $(GdUnitVersion), verified with SHA-256." />
+    </Target>
+</Project>
