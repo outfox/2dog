@@ -865,7 +865,7 @@ jobs:
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
-    runs-on: blacksmith-8vcpu-ubuntu-2404
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 45
     strategy:
       fail-fast: false
