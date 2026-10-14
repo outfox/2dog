@@ -10,7 +10,8 @@ if ! assets=$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets -
 fi
 expected=(godotsharp.zip godotsharp-nupkgs.zip godot-source-generators.zip godot-editor-linux-x64.zip
   godot-android-java.zip
-  libgodot-browser-wasm-template_debug.zip libgodot-browser-wasm-template_release.zip)
+  libgodot-browser-wasm-template_debug.zip libgodot-browser-wasm-template_release.zip
+  libgodot-browser-wasm-threads-template_debug.zip libgodot-browser-wasm-threads-template_release.zip)
 for rid in linux-x64 win-x64 osx-arm64; do
   for target in template_debug template_release editor; do
     expected+=("libgodot-$rid-$target.zip")

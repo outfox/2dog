@@ -23,6 +23,8 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogWebPrecompress` | `true` with `dotnet publish` | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files |
 | `TwoDogWebPrecompressLevel` | `Optimal` | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive |
 | `TwoDogWebSideModuleExports` | `true` | Export native symbols used by GDExtensions |
+| `WasmEnableThreads` | `false` | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental) |
+| `TwoDogWebSideModuleTableSlots` | `16384` | With threads: function table slots reserved for GDExtension side modules |
 | `WasmEmitSymbolMap` | `false` in Release, `true` otherwise | Include native symbols for stack traces; explicit settings override the default |
 | `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
 

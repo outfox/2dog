@@ -184,7 +184,7 @@ jobs:
   # staging step; the zip attached to the release contains the library under
   # its original Godot file name (e.g. godot.windows.editor.x86_64.shared_library.dll).
   build-natives:
-    name: Build libgodot-${{ matrix.rid }}-${{ matrix.target }} (${{ inputs.precision }})
+    name: Build libgodot-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }} (${{ inputs.precision }})
     needs: preflight
     if: github.repository == 'outfox/2dog' && (needs.preflight.outputs.skip != 'true')
     runs-on: ${{ matrix.runner }}
@@ -248,6 +248,23 @@ jobs:
             arch: wasm32
             rid: browser-wasm
             lib_ext: a
+          # WasmEnableThreads hosts link a -pthread build staged under web-threads/ (build-godot.py --threads).
+          - platform: web
+            target: template_release
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -threads
+            build_args: --threads
+          - platform: web
+            target: template_debug
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -threads
+            build_args: --threads
 
     # From Godot upstream CI (windows_builds.yml): cache SCons's MSVC
     # environment detection, and keep Python console output UTF-8 clean on
@@ -336,9 +353,9 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: libgodot-${{ inputs.precision }}-${{ matrix.rid }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
+          key: libgodot-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
           restore-keys: |
-            libgodot-${{ inputs.precision }}-${{ matrix.rid }}-${{ matrix.target }}-
+            libgodot-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
 
       # Build using build-godot.py with platform/arch overrides
       - name: Build libgodot (${{ matrix.target }})
@@ -352,7 +369,7 @@ jobs:
             --dev-build no \
             --debug-symbols no \
             --scu-build yes \
-            --cache-path godot/.scons_cache
+            --cache-path godot/.scons_cache ${{ matrix.build_args }}
 
       # Upload the library under its original Godot file name; the release job
       # zips each artifact directory as-is.
@@ -372,8 +389,8 @@ jobs:
         if: matrix.platform == 'web'
         uses: actions/upload-artifact@v7
         with:
-          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
-          path: godot/bin/${{ env.NATIVE_SUBDIR }}web/${{ matrix.target }}/
+          name: libgodot-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ inputs.precision }}
+          path: godot/bin/${{ env.NATIVE_SUBDIR }}web${{ matrix.flavor }}/${{ matrix.target }}/
           if-no-files-found: error
           retention-days: 7
 
@@ -495,7 +512,7 @@ jobs:
           - Linux x64 (template_release, template_debug, editor)
           - Windows x64 (template_release, template_debug, editor)
           - macOS arm64 (template_release, template_debug, editor)
-          - Browser wasm32 (template_release, template_debug — static library payloads)
+          - Browser wasm32 (template_release, template_debug — static library payloads, single-threaded and WasmEnableThreads)
           - Android arm64 and x64 (template_release, template_debug — libgodot_android.so + libc++_shared.so; experimental)
 
           ### Additional assets

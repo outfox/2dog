@@ -1035,6 +1035,11 @@ jobs:
       - name: Publish showcase.webxr
         run: dotnet publish demos/showcase/showcase.webxr -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
+      # .NET's threaded runtime (WasmEnableThreads) linking the web-threads payload and the -pthread GDExtension
+      # probe; a separate link and pck export ('Web (threads)' preset).
+      - name: Publish showcase.webmt
+        run: dotnet publish demos/showcase/showcase.webmt -c Release -p:RunAOTCompilation=${{ matrix.aot }}
+
       # The Blazor flavor is a Blazor Web App (server + wasm client); the client
       # links the engine into Blazor's own dotnet.native.wasm and 2dog.blazor's
       # GodotView starts Godot in-process. Shares the pck export.
@@ -1135,7 +1140,8 @@ jobs:
       # resource, codec, server, scene, generated C# script, GDScript-only
       # engine-module and GDExtension side module (loaded from the pck) calls
       # succeed. The webxr flavor additionally asserts the
-      # WebXR interface is registered on XRServer (its Program.cs does).
+      # WebXR interface is registered on XRServer (its Program.cs does); webmt
+      # calls the GDExtension probe from worker threads.
       - name: Run browser API smoke
         run: |
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
@@ -1154,7 +1160,7 @@ jobs:
           }
           trap cleanup EXIT
 
-          for FLAVOR in web webxr; do
+          for FLAVOR in web webxr webmt; do
             BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
 
             # The webxr shell records whether Layers polyfill construction
@@ -1165,7 +1171,12 @@ jobs:
               EXTRA_ATTR="data-twodog-xr-layers=polyfilled"
             fi
 
-            uv run python -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+            if [ "$FLAVOR" = "webmt" ]; then
+              # SharedArrayBuffer, and so the threaded runtime, needs cross-origin isolation.
+              node .github/scripts/serve-isolated.mjs "$BUNDLE" 8000 > /tmp/2dog-web-server.log 2>&1 &
+            else
+              uv run python -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+            fi
             SERVER_PID=$!
 
             for attempt in $(seq 1 30); do

@@ -30,6 +30,7 @@ class NativeReleaseStagingTests(unittest.TestCase):
                 files[f"libgodot-{rid}-{target}"] = [f"{prefix}.{platform}.{target}{suffix}.{arch}.shared_library.{ext}"]
         for target in ("template_release", "template_debug"):
             files[f"libgodot-browser-wasm-{target}"] = ["libgodot/libgodot.a"]
+            files[f"libgodot-browser-wasm-threads-{target}"] = ["libgodot/libgodot.a"]
             for rid in ("android-arm64", "android-x64"):
                 files[f"libgodot-{rid}-{target}"] = ["libgodot_android.so", "libc++_shared.so"]
         assets.mkdir()
@@ -49,6 +50,7 @@ class NativeReleaseStagingTests(unittest.TestCase):
                 selected = root / "godot/bin" / subdir
                 self.assertEqual(precision.encode(), (selected / "GodotSharp/Api/Release/GodotSharp.dll").read_bytes())
                 self.assertEqual(precision.encode(), (selected / "web/template_release/libgodot/libgodot.a").read_bytes())
+                self.assertEqual(precision.encode(), (selected / "web-threads/template_debug/libgodot/libgodot.a").read_bytes())
                 self.assertEqual(precision.encode(), (selected / "android/template_debug/arm64/libgodot_android.so").read_bytes())
             self.assertTrue((root / "godot/bin/android/java/debug/godot.aar").is_file())
             self.assertTrue((root / "godot/bin/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.4.7.2.nupkg").is_file())

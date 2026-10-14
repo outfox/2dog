@@ -27,11 +27,13 @@
         <IsPackable Condition="'$(PlatformOS)' == 'android' And '$(ForcePackAllPlatforms)' == 'true' And (!Exists('$(NativeLibPath)') Or !Exists('$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so'))">false</IsPackable>
     </PropertyGroup>
 
-    <!-- Web variants pack a payload directory (static archive + JS glue + boot shell) under godot-web/; the runtime
-         host never loads it, so the runtimes/<rid>/native convention does not apply. -->
+    <!-- Web variants pack a payload directory (static archive + JS glue + boot shell) under godot-web/, and the
+         WasmEnableThreads build under godot-web-threads/; the runtime host never loads them, so the
+         runtimes/<rid>/native convention does not apply. -->
     <PropertyGroup Condition="'$(PlatformRID)' != '' And '$(PlatformOS)' == 'web'">
         <PackageId>2dog.$(PlatformRID)$(PackageSuffix)$(TwoDogPackageSuffix)</PackageId>
         <WebPayloadDir>$(GodotBinDir)web/$(BuildVariant)/</WebPayloadDir>
+        <WebThreadsPayloadDir>$(GodotBinDir)web-threads/$(BuildVariant)/</WebThreadsPayloadDir>
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(WebPayloadDir)libgodot/libgodot.a')">false</IsPackable>
     </PropertyGroup>
 
@@ -39,6 +41,10 @@
         <None Include="$(WebPayloadDir)**"
               Pack="true"
               PackagePath="godot-web/"
+              Visible="false"/>
+        <None Include="$(WebThreadsPayloadDir)**"
+              Pack="true"
+              PackagePath="godot-web-threads/"
               Visible="false"/>
     </ItemGroup>
 

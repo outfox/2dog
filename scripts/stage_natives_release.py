@@ -29,6 +29,8 @@ def stage(assets, root, precision):
             manifest.append((f"libgodot-{rid}-{target}", selected, [name]))
     for target in ("template_release", "template_debug"):
         manifest.append((f"libgodot-browser-wasm-{target}", selected / f"web/{target}", ["libgodot/libgodot.a"]))
+        manifest.append((f"libgodot-browser-wasm-threads-{target}", selected / f"web-threads/{target}",
+                         ["libgodot/libgodot.a"]))
         for rid, arch in (("android-arm64", "arm64"), ("android-x64", "x86_64")):
             manifest.append((f"libgodot-{rid}-{target}", selected / f"android/{target}/{arch}",
                              ["libgodot_android.so", "libc++_shared.so"]))
