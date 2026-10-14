@@ -22,6 +22,9 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   `!cancelled() && needs.<job>.result == 'success'` gates; implicit `success()` skips them transitively.
 - New Linux jobs run on `blacksmith-4vcpu-ubuntu-2404`. Do not change an existing job's runner size; the
   maintainer sizes runners from usage stats. Matrix jobs keep `${{ matrix.runner }}`.
+- Blacksmith runs the jobs that set the workflow's duration: pack, the Debug test jobs, web and Android
+  smoke. Jobs that finish well before them (Release/Editor tests, macOS Release excepted, desktop and tool
+  smoke) run on GitHub-hosted runners, which are free for this public repository but take about twice as long.
 
 ## Scripts
 

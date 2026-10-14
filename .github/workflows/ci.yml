@@ -352,10 +352,22 @@ jobs:
             runner: blacksmith-4vcpu-windows-2025
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
-          # Pilot: GitHub-hosted macOS is free for public repositories, compared against the Blacksmith cells.
+          # The Debug jobs also run the CLI tool tests and MTP contracts and set the workflow's duration. Shorter
+          # jobs still finish before them on free GitHub-hosted runners, which take about twice as long.
+          - name: linux-x64
+            config: Release
+            runner: ubuntu-24.04
+          - name: linux-x64
+            config: Editor
+            runner: ubuntu-24.04
+          - name: win-x64
+            config: Release
+            runner: windows-2025
+          - name: win-x64
+            config: Editor
+            runner: windows-2025
           - name: osx-arm64
-            precision: single
-            config: Debug
+            config: Editor
             runner: macos-15
 
     # Each test run gets ten minutes; leave room for setup, the separate coverage/windowed
@@ -598,19 +610,20 @@ jobs:
       matrix:
         precision: [single, double]
         name: [linux-x64, win-x64, osx-arm64]
+        # Free GitHub-hosted runners: these jobs finish well before the Debug test jobs.
         include:
           - name: linux-x64
-            runner: blacksmith-4vcpu-ubuntu-2404
+            runner: ubuntu-24.04
             rid: linux-x64
             exe: showcase.2dog
             gdextension: libtwodog_probe.linux.x86_64.so
           - name: win-x64
-            runner: blacksmith-4vcpu-windows-2025
+            runner: windows-2025
             rid: win-x64
             exe: showcase.2dog.exe
             gdextension: twodog_probe.windows.x86_64.dll
           - name: osx-arm64
-            runner: blacksmith-6vcpu-macos-latest
+            runner: macos-15
             rid: osx-arm64
             exe: showcase.2dog
             gdextension: libtwodog_probe.macos.dylib
@@ -1324,11 +1337,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Free GitHub-hosted runners: these jobs finish well before the Debug test jobs.
         include:
           - name: linux-x64
-            runner: blacksmith-4vcpu-ubuntu-2404
+            runner: ubuntu-24.04
           - name: win-x64
-            runner: blacksmith-4vcpu-windows-2025
+            runner: windows-2025
 
     timeout-minutes: 20
 
