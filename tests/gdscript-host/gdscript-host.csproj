@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <TwoDogAutoImport>false</TwoDogAutoImport>
+        <TwoDogExportPack>false</TwoDogExportPack>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <DefaultItemExcludes>$(DefaultItemExcludes);fixtures/**</DefaultItemExcludes>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editor$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.gdunit$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <ProjectReference Include="fixtures/mixed/GdScriptHostFixture.csproj" />
+        <AssemblyMetadata Include="ProbeSource" Value="$(MSBuildProjectDirectory)" />
+    </ItemGroup>
+    <!-- This executable verifies fixture contracts, including expected failures; it is not itself an MTP application. -->
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
+        <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
+    </PropertyGroup>
+</Project>

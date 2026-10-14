@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://GameValue.cs" id="1"]
+[ext_resource type="Script" path="res://script_value.gd" id="2"]
+
+[node name="ManagedValue" type="Node"]
+script = ExtResource("1")
+Value = 21
+
+[node name="ScriptValue" type="Node" parent="."]
+script = ExtResource("2")

@@ -1,0 +1,10 @@
+config_version=5
+
+[application]
+config/name="Mixed CSharp and GDScript fixture"
+
+[dotnet]
+project/assembly_name="GdScriptHostFixture"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"

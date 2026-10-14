@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+        <GodotProjectDir>../game</GodotProjectDir>
+        <TwoDogExportPack>false</TwoDogExportPack>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.xunit" Version="$(TwoDogVersion)" />
+        <PackageReference Include="xunit.v3.mtp-v2" Version="3.*" />
+        <PackageReference Include="Microsoft.Testing.Platform" Version="2.4.1" />
+    </ItemGroup>
+</Project>

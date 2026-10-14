@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>2dog.gdunit$(TwoDogPackageSuffix)</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>Run isolated GDScript gdUnit tests through embedded Godot and Microsoft.Testing.Platform.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IsPackable>true</IsPackable>
+        <NoDefaultExcludes>true</NoDefaultExcludes>
+        <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+        <PackageReference Include="Microsoft.Testing.Platform" Version="2.4.0" />
+        <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="2.4.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="gdscript-host" />
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false" />
+        <None Include="README.md" Pack="true" PackagePath="README.md" />
+        <None Include="buildTransitive/**" Pack="true" PackagePath="buildTransitive/%(RecursiveDir)%(Filename)%(Extension)" />
+        <None Include="runtime/**" Pack="true" PackagePath="runtime/" />
+        <None Include="../gdunit/addons/gdUnit4/**" Exclude="../gdunit/addons/gdUnit4/test/**"
+              Pack="true" PackagePath="runtime/addons/gdUnit4/" />
+    </ItemGroup>
+    <Target Name="ValidateGdUnitRuntime" BeforeTargets="GenerateNuspec">
+        <Error Condition="!Exists('../gdunit/addons/gdUnit4/src/core/runners/GdUnitTestSessionRunner.gd')"
+               Text="Initialize the pinned gdUnit source before packing: git submodule update --init gdunit." />
+    </Target>
+</Project>

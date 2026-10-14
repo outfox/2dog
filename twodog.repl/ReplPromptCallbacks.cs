@@ -75,7 +75,8 @@ internal sealed class ReplPromptCallbacks(ReplSession session, Func<string?>? ta
             completionWindowOpen = false;
             bareCommand = null;
             pairCall = refineCycle = false;
-            cycle = null;
+            // The restored draft still belongs to its completion cycle. Dropping it makes
+            // the next Tab insert a continuation instead of cycling the selected item.
             pendingEdit = null;
             return IgnoreKey();
         }

@@ -4,4 +4,4 @@
 [submodule "gdunit"]
 	path = gdunit
 	url = https://github.com/thygrrr/gdunit
-	branch = master
+	branch = 2dog-4.7.2

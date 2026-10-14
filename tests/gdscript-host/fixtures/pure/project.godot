@@ -1,0 +1,11 @@
+config_version=5
+
+[application]
+config/name="GDScript import isolation fixture"
+run/main_scene="res://game_main.tscn"
+
+[autoload]
+ProbeState="*res://probe_state.gd"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"

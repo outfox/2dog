@@ -1,6 +1,6 @@
 ---
 title: Testing
-description: "Test your Godot game with xUnit or NUnit, from a first test to signals and simulated input."
+description: "Test your Godot game with GdUnit, xUnit or NUnit, from a first test to signals and simulated input."
 ---
 
 # Testing
@@ -11,7 +11,7 @@ and resources.
 
 ## Choose your framework
 
-Test hosts are opt-in. Choose `--xunit` or `--nunit` when adding one.
+Test hosts are opt-in. Choose `--xunit`, `--gdunit` or `--nunit` when adding one.
 
 :::: columns
 ::: column xUnit
@@ -46,11 +46,27 @@ NUnit's attributes make those hooks more explicit; this is a difference in
 style, rather than missing async support.
 :::
 
+## Test runners
+
+All three hosts support Microsoft.Testing.Platform (MTP):
+
+| Host | MTP integration | Setup |
+| --- | --- | --- |
+| GdUnit | 2dog's framework drives the embedded GDScript runner | [Configuration](/configuration/gdunit) |
+| NUnit | Official NUnit adapter bridge | [Opt in](/configuration/nunit#microsofttestingplatform) |
+| xUnit | Upstream xUnit runner with 2dog's owner-thread entry point | [Opt in](/configuration/xunit#microsofttestingplatform) |
+
+Scaffolded C# hosts use VSTest by default. NUnit's adapter has a
+[session cancellation limitation](/configuration/nunit#cancellation);
+use its cooperative test timeout before any outer runner timeout.
+
+
 ## Find a guide
 
 | Task | Guide |
 | --- | --- |
 | Set up a test project | [xUnit](./xunit) or [NUnit](./nunit) |
+| Run GDScript suites through `dotnet test` | [GdUnit](./gdunit) |
 | Wait for frames, check signals, or verify deletion | [Writing engine tests](./writing-tests) |
 | Click controls or send keyboard events | [Simulating input](./input) |
 | Change packages, build variants, or import settings | [xUnit configuration](/configuration/xunit) or [NUnit configuration](/configuration/nunit) |

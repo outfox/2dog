@@ -56,7 +56,7 @@ const SECTIONS = [
     'hosts/android.md',
   ]],
   ['Testing Hosts', [
-    'hosts/nunit.md', 'hosts/xunit.md',
+    'hosts/gdunit.md', 'hosts/nunit.md', 'hosts/xunit.md',
   ]],
   ['API Reference', [
     'api-reference.md', 'api/engine.md', 'api/godot-instance.md', 'api/godotsharp.md',
@@ -69,7 +69,7 @@ const SECTIONS = [
     'configuration/environment-variables.md',
   ]],
   ['Testing', [
-    'testing/index.md', 'testing/nunit.md', 'testing/xunit.md',
+    'testing/index.md', 'testing/gdunit.md', 'testing/nunit.md', 'testing/xunit.md',
     'testing/writing-tests.md', 'testing/input.md',
   ]],
   ['MSBuild Configuration', [
@@ -88,7 +88,7 @@ const SECTIONS = [
     'configuration/android.md',
   ]],
   ['Testing Configuration', [
-    'configuration/nunit.md', 'configuration/xunit.md',
+    'configuration/gdunit.md', 'configuration/nunit.md', 'configuration/xunit.md',
   ]],
   ['Known Issues', [
     'known-issues/index.md', 'known-issues/single-instance.md',
