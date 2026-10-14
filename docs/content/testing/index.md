@@ -11,7 +11,7 @@ and resources.
 
 ## Choose your framework
 
-For GDScript suites, use the [gdUnit MTP host](./gdunit). It imports a private
+For GDScript suites, use the [gdUnit MTP host](/hosts/gdunit). It imports a private
 copy of the game, supports parameter rows and runs with `dotnet test`. Create
 this host manually; CLI scaffolding is planned.
 

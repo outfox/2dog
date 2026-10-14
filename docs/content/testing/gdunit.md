@@ -1,139 +1,88 @@
 ---
 title: Testing GDScript with gdUnit
-description: "Run isolated GDScript gdUnit tests with embedded Godot and Microsoft.Testing.Platform."
+description: "Understand how the 2dog host changes gdUnit execution, resource isolation and test reporting."
 ---
 
 # Testing GDScript with gdUnit
 
-Run GDScript gdUnit tests in a private copy of a Godot project with embedded
-libgodot. Microsoft.Testing.Platform handles discovery, test selection and results.
+Use [gdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/)
+for writing suites, assertions, hooks, mocks and scene tests. Its
+[test suite guide](https://godot-gdunit-labs.github.io/gdUnit4/latest/testing/test-suite/)
+and [parameterized test guide](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/paramerized_tests/)
+describe the framework APIs. This page covers only the differences introduced
+by 2dog. To create the .NET project, follow the [gdUnit host guide](/hosts/gdunit).
 
-The package includes the gdUnit 7.0.0 runtime from `thygrrr/gdunit`, pinned to
-`5abb20d457de50145273956f28d6792f28862c83`, its MIT license, and the embedded
-bridge. Consumers need the .NET 10 SDK and the normal `2dog.engine` native and
-editor-tool dependencies. No separate Godot executable or addon installation is
-needed. Use `2dog.gdunit.double` for a double precision game.
+## Run through .NET
 
-## Create a host
+The 2dog host uses Microsoft.Testing.Platform (MTP) and `dotnet test`. Run
+commands inside the host directory containing its MTP `global.json`:
 
-Under a game directory containing `project.godot`, create `MyGame.gdunit/`, put
-an empty `.gdignore` in it, and add `tests/`. Create `MyGame.gdunit.csproj`:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RootNamespace>MyGame.GdUnit</RootNamespace>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="2dog.gdunit" Version=":2dog-version:" />
-    <AssemblyMetadata Include="GodotProject" Value="$(MSBuildProjectDirectory)/.." />
-  </ItemGroup>
-</Project>
-```
-
-Replace `:2dog-version:` with the version used by the game. For a mixed C#
-game, add a `ProjectReference` to its project so the game assembly and its
-dependencies are copied into the host output. Exclude `MyGame.gdunit/**` from
-the game's C# compile glob.
-
-Add `Program.cs`:
-
-```csharp
-using System.Reflection;
-using Microsoft.Testing.Platform.Builder;
-using MyGame.GdUnit;
-using twodog.GdUnit;
-
-var project = Assembly.GetExecutingAssembly()
-    .GetCustomAttributes<AssemblyMetadataAttribute>()
-    .Single(attribute => attribute.Key == "GodotProject").Value!;
-var builder = await TestApplication.CreateBuilderAsync(args);
-builder.AddSelfRegisteredExtensions(args);
-builder.AddGdUnit(new GdUnitOptions
-{
-    ProjectPath = project,
-    TestRoots = ["MyGame.gdunit/tests"]
-});
-using var application = await builder.BuildAsync();
-return await application.RunAsync();
-```
-
-`AddSelfRegisteredExtensions` is generated in the project's `RootNamespace` and
-registers MTP extensions referenced by the host, including MSBuild integration.
-
-Place this `global.json` in `MyGame.gdunit/` to select the .NET 10 MTP runner for
-commands issued inside that directory:
-
-```json
-{
-  "sdk": { "version": "10.0.100", "rollForward": "latestFeature" },
-  "test": { "runner": "Microsoft.Testing.Platform" }
-}
-```
-
-Add `tests/example_test.gd`:
-
-```gdscript
-extends GdUnitTestSuite
-
-
-func test_answer() -> void:
-	assert_int(21 * 2).is_equal(42)
-```
-
-## Run and select tests
-
-```text
-cd MyGame.gdunit
+```bash
 dotnet test --project MyGame.gdunit.csproj
 dotnet test --project MyGame.gdunit.csproj --list-tests
 dotnet test --project MyGame.gdunit.csproj --gdunit-filter "*test_answer"
 ```
 
-`--gdunit-filter` matches gdUnit's fully qualified name, including a parameter
-row's display name. Matching is case-sensitive; `*` and `?` are wildcards. MTP's
-`--filter-uid` selects exact test IDs. IDs depend on the resource path, method,
-and row index, so a newly imported stage has the same IDs. `--list-tests json`
-includes IDs and original source locations; libgodot writes its startup banner
-before the JSON document when the executable is run directly.
+Use the host's MTP options for these commands. gdUnit's
+[standalone command-line options](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/cmd/)
+belong to its own runner.
 
-Discovery imports a private stage and starts Godot, including game autoloads,
-but executes no test bodies or suite hooks. Running uses the same discovery
-session and executes only selected cases. Empty selection follows MTP's no-test
-policy. Assertions, skips, test errors, and suite teardown errors affect MTP
-results; native warnings/errors also fail the host.
+`--gdunit-filter` matches the fully qualified test name with case-sensitive
+`*` and `?` wildcards. Each parameter row has its own MTP result and stable ID,
+derived from the resource path, method and row index. MTP's `--filter-uid`
+selects an exact ID, including a single parameter row. An empty selection
+follows MTP's no-test policy.
 
-## Execution options
+`--list-tests json` includes IDs and original source locations. When running
+the executable directly, libgodot prints its startup banner before the JSON
+document.
 
-Set these properties on `GdUnitOptions` in `Program.cs`:
+## Test a private project copy
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `ProjectPath` | Required | Directory containing `project.godot` |
-| `TestRoots` | `tests` | Directories relative to the game |
-| `ArtifactsDirectory` | Output `TestResults/gdunit` | Parent of fresh stages and logs |
-| `ProjectAssemblyDirectory` | Host output | Built game assemblies and dependencies |
-| `ImportTimeout` | Two minutes | Limit for the separate import process |
-| `SessionTimeout` | Five minutes | Limit for pumping the embedded session |
+Each discovery or execution request imports a fresh, writable copy of the
+game. Original `res://` paths, game resource UIDs and autoload settings are
+preserved. Test scenes and assets can live beneath the host's `.gdignore`;
+only configured test roots become visible in the private copy. Nested ignored
+trees remain excluded.
 
-Each request keeps `project/`, `import.log`, `godot.log`, and `events.json` in a
-fresh artifact directory. The source game and its import cache are unchanged.
-Selected test roots become visible only in the stage; nested `.gdignore` trees
-remain excluded. Symlinks and an existing game copy of `addons/gdUnit4` are
-rejected. Source edits appear in the next fresh stage.
+The source game, settings, sidecars and import cache stay unchanged. Changes
+to tests or assets appear in the next request. Point tools that inspect runtime
+files at the [artifact directory](/configuration/gdunit#artifacts), rather
+than expecting test-generated files in the source game.
 
-The host is headless and serializes requests within its load context. It pumps
-and destroys Godot on the thread that started it, then waits for engine
-completion. MTP cancellation interrupts the import process or asks gdUnit to
-terminate the session and finish teardown, with a five-second cleanup grace
-period. A host timeout or cancellation cannot interrupt a blocked native call.
+The bridge replaces the game's main scene. Load game scenes explicitly in
+tests. Discovery starts the engine and game autoloads, but runs no test bodies
+or suite hooks. Execution uses that same engine session and runs only selected
+cases.
 
-CLI scaffolding, rendering support, snapshot caching, relocatable published
-hosts, and verified IDE integration remain future work. The adapter depends on
-gdUnit session internals at the pinned revision; rerun its compatibility tests
-when updating the fork. See [MTP's dotnet test documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)
-for runner selection and extensions.
+The package supplies a pinned gdUnit runtime. A source project containing its
+own `addons/gdUnit4` copy is rejected to avoid combining framework versions.
+
+## Results and lifecycle
+
+Assertions, skips and test errors become MTP outcomes. Suite lifecycle failures
+also fail the run, even when every test body passes. Unexpected native Godot
+warnings and errors fail the host. The private project enables GDScript call
+stack tracking so Release builds retain assertion source lines.
+
+The host disables gdUnit's flaky-test retries and fail-fast execution. It
+preserves gdUnit session hooks; reports they generate remain in the private
+project. Add MTP reporting extensions to the .NET host when you need their
+formats or options.
+
+MTP cancellation terminates an active import process or asks gdUnit to stop
+execution and finish teardown. The embedded session gets a five-second cleanup
+grace period. [Host timeouts](/configuration/gdunit#execution-options) bound
+importing and engine pumping; neither can interrupt a blocked native call.
+
+## Current host scope
+
+The host executes GDScript suites headlessly and serializes requests within
+its load context. Godot starts, pumps and shuts down on its owner thread.
+Ordinary C# game components can be loaded in scenes; GdUnit4Net's C# test
+adapter is not loaded. Use the [xUnit](/hosts/xunit) or [NUnit](/hosts/nunit)
+hosts for C# test suites.
+
+Rendering, verified IDE integration, snapshot caching and relocatable
+published hosts remain follow-up work. Windows execution is validated locally;
+Linux and macOS execution still need validation.

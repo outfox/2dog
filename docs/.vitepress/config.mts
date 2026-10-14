@@ -115,6 +115,7 @@ export default defineConfig({
           {
             text: 'Testing',
             items: [
+              { text: gd('test_tube') + 'gdUnit', link: '/hosts/gdunit' },
               { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
               { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
             ]
@@ -130,7 +131,7 @@ export default defineConfig({
           {
             text: 'Experimental',
             items: [
-              { text: gd('script') + 'REPL', link: '/hosts/repl' }
+              { text: gd('codeedit') + 'REPL', link: '/hosts/repl' }
             ]
           },
           {
@@ -179,7 +180,7 @@ export default defineConfig({
                 items: [
                   { text: gd('help') + 'help', link: '/cli/help' },
                   { text: gd('box') + 'pack', link: '/cli/pack' },
-                  { text: gd('script') + 'repl', link: '/cli/repl' }
+                  { text: gd('codeedit') + 'repl', link: '/cli/repl' }
                 ]
               },
               {
@@ -273,6 +274,7 @@ export default defineConfig({
               {
                 text: 'Testing',
                 items: [
+                  { text: gd('test_tube') + 'gdUnit', link: '/configuration/gdunit' },
                   { text: gd('test_tube') + 'NUnit', link: '/configuration/nunit' },
                   { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
                 ]
@@ -288,7 +290,7 @@ export default defineConfig({
               {
                 text: 'Experimental',
                 items: [
-                  { text: gd('script') + 'REPL', link: '/configuration/repl' }
+                  { text: gd('codeedit') + 'REPL', link: '/configuration/repl' }
                 ]
               },
               {

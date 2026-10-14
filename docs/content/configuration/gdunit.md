@@ -1,0 +1,144 @@
+---
+title: gdUnit Configuration
+description: "Configure gdUnit host packages, private resource roots, execution limits and artifacts."
+---
+
+# gdUnit Configuration
+
+The [gdUnit host](/hosts/gdunit) uses the .NET 10 SDK and MTP runner. Reference
+`2dog.gdunit` at the same 2dog version as the game. Choose
+`2dog.gdunit.double` for a double precision game. The package brings the engine
+and editor-tool dependencies needed for private resource imports.
+
+Debug, Release and Editor select the corresponding
+[engine variant](/build-configurations). The host always runs headlessly.
+Normal game importing and pack export are disabled for the host project;
+discovery and execution import their own private stages.
+
+## Create the host
+
+Create this host manually; `dnx 2dog add` does not scaffold it yet. From the
+directory containing `project.godot`, create this layout:
+
+```text
+MyGame.gdunit/
+  .gdignore
+  global.json
+  MyGame.gdunit.csproj
+  Program.cs
+  tests/
+```
+
+Leave `.gdignore` empty. It keeps the host and its test resources out of the
+game's normal import and export. The host imports a private copy when running.
+
+## Project and entry point
+
+Create `MyGame.gdunit/MyGame.gdunit.csproj`:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>MyGame.GdUnit</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="2dog.gdunit" Version=":2dog-version:" />
+    <AssemblyMetadata Include="GodotProject" Value="$(MSBuildProjectDirectory)/.." />
+  </ItemGroup>
+</Project>
+```
+
+For a C# game, add a `ProjectReference` to `../MyGame.csproj` so its built
+assembly and dependencies reach the host output. Exclude `MyGame.gdunit/**`
+from the game's C# compile glob.
+
+Add `Program.cs`:
+
+```csharp
+using System.Reflection;
+using Microsoft.Testing.Platform.Builder;
+using MyGame.GdUnit;
+using twodog.GdUnit;
+
+var project = Assembly.GetExecutingAssembly()
+    .GetCustomAttributes<AssemblyMetadataAttribute>()
+    .Single(attribute => attribute.Key == "GodotProject").Value!;
+var builder = await TestApplication.CreateBuilderAsync(args);
+builder.AddSelfRegisteredExtensions(args);
+builder.AddGdUnit(new GdUnitOptions
+{
+    ProjectPath = project,
+    TestRoots = ["MyGame.gdunit/tests"]
+});
+using var application = await builder.BuildAsync();
+return await application.RunAsync();
+```
+
+`AddSelfRegisteredExtensions` is generated in the project's `RootNamespace`.
+It registers the host's MTP extensions, including MSBuild integration.
+`AddGdUnit` registers the GDScript test framework.
+
+## Select the runner
+
+Put this `global.json` inside `MyGame.gdunit/`:
+
+```json
+{
+  "sdk": { "version": "10.0.100", "rollForward": "latestFeature" },
+  "test": { "runner": "Microsoft.Testing.Platform" }
+}
+```
+
+Run commands from that directory so the .NET SDK selects MTP:
+
+```bash
+cd MyGame.gdunit
+dotnet test --project MyGame.gdunit.csproj
+dotnet test --project MyGame.gdunit.csproj --list-tests
+```
+
+## Execution options
+
+Set these properties on `GdUnitOptions` in `Program.cs`:
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `ProjectPath` | Required | Directory containing `project.godot` |
+| `TestRoots` | `tests` | Directories relative to the game |
+| `ArtifactsDirectory` | Host output `TestResults/gdunit` | Parent of fresh stages and logs |
+| `ProjectAssemblyDirectory` | Host output | Built game assemblies and dependencies |
+| `ImportTimeout` | Two minutes | Limit for the separate import process |
+| `SessionTimeout` | Five minutes | Limit for pumping one embedded session |
+
+For tests under a nested host, include that host in each root, for example
+`MyGame.gdunit/tests`. Roots must remain inside the source game. Selected roots
+can be ignored in the game; nested `.gdignore` trees remain excluded. Linked
+files and directories are unsupported. Timeouts must be positive.
+
+For a mixed C#/GDScript game, build the game through a `ProjectReference` from
+the host. Keep `ProjectAssemblyDirectory` at the host output unless its game
+assemblies and dependencies are staged elsewhere.
+
+## Artifacts
+
+Each request creates a fresh subdirectory beneath `ArtifactsDirectory`:
+
+| Artifact | Contents |
+| --- | --- |
+| `project/` | Writable game copy, selected tests, pinned framework and bridge |
+| `import.log` | Resource import helper output |
+| `godot.log` | Embedded engine's native log |
+| `events.json` | Serialized discovery, lifecycle and result events |
+
+Reports from gdUnit's session hooks live under
+`project/twodog_test_host/reports/`. The host retains artifacts for inspection.
+On Windows, choose a short artifact path for deeply nested projects because
+native directory operations can reach Windows path length limits.
+
+For assertions, suites and other framework settings, use
+[gdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/).
+See [Testing with gdUnit](/testing/gdunit) for the host's execution differences.
