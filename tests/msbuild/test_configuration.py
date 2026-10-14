@@ -37,8 +37,8 @@ class ConfigurationTests(unittest.TestCase):
             archive.parent.mkdir(parents=True)
             archive.write_bytes(b"fixture archive; no native linking required")
 
-    def archive(self, variant):
-        return self.cache / f"2dog.browser-wasm.{variant}/1.0.0/godot-web/libgodot/libgodot.a"
+    def archive(self, variant, payload="web"):
+        return self.cache / f"2dog.browser-wasm.{variant}/1.0.0/godot-{payload}/libgodot/libgodot.a"
 
     def project(self, properties="", early_hook=False):
         path = self.scratch / "consumer.csproj"
@@ -230,6 +230,34 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(values["TwoDogWebNativeDir"], "")
         output = self.run_msbuild(project, "-p:Configuration=Debug", "-t:TwoDogWebCheckNativeDir", success=False)
         self.assertIn("debug web payload (libgodot.a) not found", output)
+
+    def test_threaded_hosts_select_the_threaded_payload_only(self):
+        threaded = self.archive("release", "web-threads")
+        threaded.parent.mkdir(parents=True)
+        threaded.write_bytes(b"fixture archive; no native linking required")
+        project = self.project("<WasmEnableThreads>true</WasmEnableThreads>")
+        output = json.loads(self.run_msbuild(
+            project, "-p:Configuration=Release", "-getProperty:TwoDogWebNativeDir",
+            "-getItem:TwoDogGodotEmccExtraLDFlag",
+        ))
+        selected = Path(output["Properties"]["TwoDogWebNativeDir"]) / "libgodot/libgodot.a"
+        self.assertEqual(selected.resolve(), threaded.resolve())
+        self.assertIn("-sDEFAULT_PTHREAD_STACK_SIZE=5120KB", self.link_flags(output))
+
+        # A single-threaded archive cannot link into the threaded runtime, so it is never substituted.
+        values = self.evaluate(project, "Debug")
+        self.assertEqual(values["TwoDogWebNativeDir"], "")
+        output = self.run_msbuild(project, "-p:Configuration=Debug", "-t:TwoDogWebCheckNativeDir", success=False)
+        self.assertIn("godot/bin/web-threads/template_debug/", output)
+
+        output = json.loads(self.run_msbuild(
+            self.project(), "-p:Configuration=Release", "-getItem:TwoDogGodotEmccExtraLDFlag",
+        ))
+        self.assertFalse([flag for flag in self.link_flags(output) if "PTHREAD" in flag])
+
+    @staticmethod
+    def link_flags(output):
+        return [item["Identity"] for item in output["Items"]["TwoDogGodotEmccExtraLDFlag"]]
 
     def test_web_editor_and_invalid_variant_fail_clearly(self):
         project = self.project()

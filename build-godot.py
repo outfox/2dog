@@ -206,6 +206,10 @@ def parse_arguments():
         "--precision", choices=["single", "double"], default="single",
         help="Floating-point precision; double builds require matching .double packages",
     )
+    parser.add_argument(
+        "--threads", action="store_true",
+        help="Web only: multithreaded payload for WasmEnableThreads hosts, staged under bin/web-threads/",
+    )
 
     # Build steps control
     parser.add_argument(
@@ -260,6 +264,8 @@ def parse_arguments():
         "auto", Arch.ARM64.value, Arch.X86_64.value,
     ):
         parser.error("Android .NET hosts support --arch arm64 or x86_64 only (or auto)")
+    if args.threads and args.platform != Platform.WEB.value:
+        parser.error("--threads requires --platform web")
     return args
 
 
@@ -349,6 +355,8 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Platform", platform_config.godot_platform)
     table.add_row("Architecture", platform_config.godot_arch)
     table.add_row("Precision", getattr(args, "precision", "single"))
+    if args.threads:
+        table.add_row("Threads", "yes (proxy_to_pthread)")
     table.add_row("Maximum build jobs", str(get_job_limit() or "SCons default"))
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
@@ -435,7 +443,9 @@ def build_libgodot_web(args):
     else:
         targets = [args.target]
 
-    web_dir = os.path.join("double", "web") if getattr(args, "precision", "single") == "double" else "web"
+    web_dir = "web-threads" if args.threads else "web"
+    if getattr(args, "precision", "single") == "double":
+        web_dir = os.path.join("double", web_dir)
 
     import shutil
 
@@ -456,7 +466,9 @@ def build_libgodot_web(args):
             f"precision={getattr(args, 'precision', 'single')}",
             "library_type=static_library",
             "extra_suffix=static_library",
-            "threads=no",
+            # .NET's threaded runtime runs Main, and so Godot's main loop, on a worker (the deputy thread);
+            # mono's config requires proxy_to_pthread to match.
+            *(["threads=yes", "proxy_to_pthread=yes"] if args.threads else ["threads=no"]),
             # LTO is blocked for web+mono: modules/mono/config.py rejects it,
             # and emscripten < 4.0.9 (the pinned 3.1.56 matches the .NET
             # runtime pack) has no thin-LTO. Revisit when the runtime pack's

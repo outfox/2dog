@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Multithreaded browser-wasm proof of concept: showcase.web on .NET's threaded runtime and the threaded Godot
+         payload (build-godot.py for the web platform with threads). Publish from the repo root, then serve AppBundle/
+         with COOP/COEP headers (SharedArrayBuffer needs cross-origin isolation):
+         dotnet publish demos/showcase/showcase.webmt -->
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- Experimental in .NET 10: Main runs on a worker (the deputy thread), and so does Godot's main loop -->
+        <WasmEnableThreads>true</WasmEnableThreads>
+    </PropertyGroup>
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <!-- Uses showcase.web's TwoDogWebBoot, which the game project compiles -->
+    <ItemGroup>
+        <ProjectReference Include="../../../twodog.engine/twodog.engine.csproj"/>
+        <ProjectReference Include="../showcase.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <TrimmerRootAssembly Include="showcase"/>
+        <TrimmerRootAssembly Include="$(TargetName)"/>
+    </ItemGroup>
+
+    <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.props"/>
+    <Import Project="../../../twodog.engine/build/2dog.engine.targets"/>
+    <Import Project="../../../platforms/twodog.win-x64/build/2dog.win-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
+    <Import Project="../../../platforms/twodog.linux-x64/build/2dog.linux-x64.targets" Condition="$([MSBuild]::IsOSPlatform('Linux'))"/>
+    <Import Project="../../../platforms/twodog.osx-arm64/build/2dog.osx-arm64.targets" Condition="$([MSBuild]::IsOSPlatform('OSX'))"/>
+    <Import Project="../../../platforms/twodog.browser-wasm/build/2dog.browser-wasm.targets"/>
+
+    <Target Name="DeepClean" AfterTargets="Clean">
+        <RemoveDir Directories="AppBundle"/>
+    </Target>
+</Project>

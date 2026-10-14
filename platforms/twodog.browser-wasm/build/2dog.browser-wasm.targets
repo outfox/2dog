@@ -10,8 +10,13 @@
 
     <!-- Select the requested variant independently of which payloads have been restored. -->
     <PropertyGroup>
-        <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebDebugPackageDir>
-        <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-web/</_TwoDogWebReleasePackageDir>
+        <!-- WasmEnableThreads selects .NET's multithreaded runtime pack, which runs Main on a worker (the deputy
+             thread); it needs the matching Godot build (threads=yes proxy_to_pthread=yes, see build-godot.py).
+             The two cannot be mixed: a -pthread archive only links into a threaded runtime. -->
+        <_TwoDogWebPayloadName Condition="'$(WasmEnableThreads)' == 'true'">web-threads</_TwoDogWebPayloadName>
+        <_TwoDogWebPayloadName Condition="'$(WasmEnableThreads)' != 'true'">web</_TwoDogWebPayloadName>
+        <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-$(_TwoDogWebPayloadName)/</_TwoDogWebDebugPackageDir>
+        <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-$(_TwoDogWebPayloadName)/</_TwoDogWebReleasePackageDir>
 
         <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogWebVariant>
         <TwoDogWebVariant Condition="'$(TwoDogWebVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogWebVariant>
@@ -23,7 +28,7 @@
         <!-- Resolve payload dir: NuGet package first, source checkout fallback -->
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'debug' And Exists('$(_TwoDogWebDebugPackageDir)libgodot/libgodot.a')">$(_TwoDogWebDebugPackageDir)</TwoDogWebNativeDir>
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'release' And Exists('$(_TwoDogWebReleasePackageDir)libgodot/libgodot.a')">$(_TwoDogWebReleasePackageDir)</TwoDogWebNativeDir>
-        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(_TwoDogWebBuildVariant)' != '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/web/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/web/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
+        <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(_TwoDogWebBuildVariant)' != '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/$(_TwoDogWebPayloadName)/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/$(_TwoDogWebPayloadName)/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
     </PropertyGroup>
 
     <!-- Wasm build configuration -->
@@ -106,6 +111,9 @@
         <TwoDogGodotEmccExtraLDFlag Include="-sGL_WORKAROUND_SAFARI_GETCONTEXT_BUG=0"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sTEXTDECODER=1"/>
         <TwoDogGodotEmccExtraLDFlag Include="-lidbfs.js"/>
+        <!-- .NET creates the deputy thread, which runs Godot's main loop, with default pthread attributes: size
+             the default like the single-threaded main stack (emscripten's own default is 64KB) -->
+        <TwoDogGodotEmccExtraLDFlag Include="-sDEFAULT_PTHREAD_STACK_SIZE=$(EmccStackSize)" Condition="'$(WasmEnableThreads)' == 'true'"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotJsLibraries->'--js-library &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotPreJs->'--pre-js &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotPostJs->'--post-js &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
@@ -128,6 +136,17 @@
         <EmccExtraLDFlags>$(EmccExtraLDFlags) @(TwoDogGodotEmccExtraLDFlag->'%(Identity)', ' ')</EmccExtraLDFlags>
     </PropertyGroup>
 
+    <!-- The platform analyzer's 'browser' profile is the single-threaded runtime, which marks Thread.Start and blocking
+         waits [UnsupportedOSPlatform("browser")]. The threaded runtime supports them, but the analyzer has no profile
+         for it, so threaded hosts drop 'browser' (CA1416 then no longer flags APIs unsupported on both runtimes). -->
+    <Target Name="TwoDogWebThreadsAnalyzerPlatforms"
+            BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(WasmEnableThreads)' == 'true'">
+        <ItemGroup>
+            <SupportedPlatform Remove="browser"/>
+        </ItemGroup>
+    </Target>
+
     <Target Name="TwoDogWebCheckNativeDir"
             BeforeTargets="PrepareForBuild;Build;Publish"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true'">
@@ -136,7 +155,7 @@
         <Error Condition="'$(TwoDogWebVariant)' != 'release' And '$(TwoDogWebVariant)' != 'debug'"
                Text="TwoDog: invalid TwoDogWebVariant '$(TwoDogWebVariant)'. Allowed values for Web hosts: release, debug."/>
         <Error Condition="'$(TwoDogWebNativeDir)' == '' Or !Exists('$(TwoDogWebNativeDir)libgodot/libgodot.a')"
-               Text="TwoDog: $(TwoDogWebVariant) web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.$(TwoDogWebVariant) package v$(TwoDogWebPackageVersion) and the source checkout (godot/bin/web/$(_TwoDogWebBuildVariant)/). Restore the 2dog.browser-wasm package or build the matching web natives; another variant will not be substituted."/>
+               Text="TwoDog: $(TwoDogWebVariant) web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.$(TwoDogWebVariant) package v$(TwoDogWebPackageVersion) and the source checkout (godot/bin/$(_TwoDogWebPayloadName)/$(_TwoDogWebBuildVariant)/). Restore the 2dog.browser-wasm package or build the matching web natives; another variant will not be substituted."/>
     </Target>
 
     <!-- The engine preloader fetches <executable>.wasm (outside _framework) and hands it to dotnet.js; also prunes the
