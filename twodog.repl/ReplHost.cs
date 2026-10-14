@@ -1,9 +1,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using PrettyPrompt;
-using PrettyPrompt.Consoles;
-using PrettyPrompt.Highlighting;
 
 namespace twodog.Repl;
 
@@ -66,7 +63,8 @@ public static class ReplHost
             if (pipeName is not null)
                 console.Output.Message($"REPL listening on local pipe '{pipeName}'. Connect with 2dog repl, or run code with 2dog repl exec -s NAME CODE.");
             var terminal = Task.Run(() => ReadEvalPrintAsync(globals, scenePath, references, dispatcher, console, lifetime.Token,
-                requestHostExit: pipeName is null ? null : () => dispatcher.InvokeAsync(() => { engine.RequestQuit(); return Task.FromResult(true); })));
+                requestHostExit: pipeName is null ? null : () => dispatcher.InvokeAsync(() => { engine.RequestQuit(); return Task.FromResult(true); }),
+                pipe: pipeName));
             try
             {
                 // A listening host survives stdin EOF so it can also be launched by a process.
@@ -126,7 +124,7 @@ public static class ReplHost
     }
 
     internal static async Task<int> ReadEvalPrintAsync(ReplGlobals globals, string scenePath, Assembly[] references, EngineDispatcher dispatcher,
-        IReplTerminal console, CancellationToken lifetime, bool cancelOnEof = false, Func<Task>? requestHostExit = null)
+        IReplTerminal console, CancellationToken lifetime, bool cancelOnEof = false, Func<Task>? requestHostExit = null, string? pipe = null)
     {
         var interactive = console.Interactive;
         var output = console.Output;
@@ -134,13 +132,9 @@ public static class ReplHost
         var assemblies = AppDomain.CurrentDomain.GetAssemblies().Concat(references).ToArray();
         using var session = new ReplSession(globals, assemblies, dispatcher) { DetachedInput = true };
         using var work = new ReplWorkQueue(lifetime);
-        Prompt? prompt = null;
+        ReplFrontEnd? frontEnd = null;
         var exitCode = 0;
         var multiline = false;
-        var history = console.HistoryFile;
-        var promptMode = session.Mode;
-        string? promptScope = "/root";
-        IReadOnlyDictionary<string, NodeFamily>? promptFamilies = null;
         var readMode = session.Mode;
         void Cancel()
         {
@@ -148,10 +142,17 @@ public static class ReplHost
             catch (AggregateException error) { output.Error("Cancellation callback failed: " + error.Message); }
             readMode = session.Mode;
         }
+        // A redirected process console still cancels its work on Ctrl+C. Interactive terminals read it as a key.
         void CancelKeyPress(object? sender, ConsoleCancelEventArgs args) { args.Cancel = true; Cancel(); }
         console.SetCancellationHandler(Cancel);
-        var consoleSignals = interactive || console is ReplConsole;
-        if (consoleSignals) console.Editor.CancelKeyPress += CancelKeyPress;
+        var consoleSignals = !interactive && console is ReplConsole;
+        if (consoleSignals) Console.CancelKeyPress += CancelKeyPress;
+        async Task UpdatePromptAsync()
+        {
+            if (frontEnd is null) return;
+            var scope = await session.ScopeStyleAsync(lifetime).ConfigureAwait(false);
+            frontEnd.SetPrompt(scope.Path, scope.Families, session.Mode);
+        }
         async Task DrainAsync()
         {
             work.Complete();
@@ -184,69 +185,76 @@ public static class ReplHost
             await session.RefreshAsync(lifetime);
             if (interactive)
             {
-                if (history.Length > 0) Directory.CreateDirectory(Path.GetDirectoryName(history)!);
-                var initialScope = await session.ScopeStyleAsync(lifetime);
-                promptScope = initialScope.Path;
-                promptFamilies = initialScope.Families;
-                prompt = await CreatePromptAsync(session, console, history, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies, cancel: Cancel);
+                var language = new ReplLanguage(session);
+                await language.WarmUpAsync(lifetime);
+                frontEnd = new ReplFrontEnd(console, language, work, pipe);
+                await UpdatePromptAsync();
                 output.Banner(scenePath);
             }
             while (!lifetime.IsCancellationRequested)
             {
                 string? text;
-                if (prompt is not null)
+                ReplSubmission? submission = null;
+                // Queued submissions appear in the scrollback when they run, directly above their results.
+                void Echo()
                 {
-                    var scope = await session.ScopeStyleAsync(lifetime);
-                    if (session.Mode != promptMode || scope.Path != promptScope || promptFamilies is null || !scope.Families.SequenceEqual(promptFamilies))
+                    if (submission is not null) frontEnd!.Echo(submission);
+                }
+                if (frontEnd is not null)
+                {
+                    submission = await frontEnd.ReadLineAsync(lifetime).ConfigureAwait(false);
+                    // Ctrl+C abandons the draft and cancels the session's running and queued work.
+                    if (submission is null)
                     {
-                        await prompt.DisposeAsync();
-                        prompt = await CreatePromptAsync(session, console, history, multiline, warmUp: false, cancellationToken: lifetime, scopePath: scope.Path, scopeFamilies: scope.Families, cancel: Cancel);
-                        promptMode = session.Mode;
-                        promptScope = scope.Path;
-                        promptFamilies = scope.Families;
+                        Cancel();
+                        continue;
                     }
-                    var response = await (console.PromptOutput is { } promptOutput
-                        ? promptOutput.ReadLineAsync(prompt, CreatePromptText(promptScope, console.Editor.BufferWidth, promptFamilies, false, promptMode).Length)
-                        : prompt.ReadLineAsync()).ConfigureAwait(false);
-                    if (!response.IsSuccess) continue;
-                    text = response.Text;
+                    text = submission.Text;
                 }
-                else text = await ReadSubmissionAsync(console.Input, lifetime, readMode).ConfigureAwait(false);
-                if (text is null)
+                else
                 {
-                    if (cancelOnEof) Cancel();
-                    break;
+                    text = await ReadSubmissionAsync(console.Input, lifetime, readMode).ConfigureAwait(false);
+                    if (text is null)
+                    {
+                        if (cancelOnEof) Cancel();
+                        break;
+                    }
                 }
-                if (string.IsNullOrWhiteSpace(text)) continue;
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    Echo();
+                    continue;
+                }
                 switch (text.Trim())
                 {
                     case ":exit":
                     case "exit" when readMode.HasShell():
                         await DrainAsync();
+                        Echo();
                         if (requestHostExit is not null) await requestHostExit();
                         return exitCode;
                     case ":cancel":
+                        Echo();
                         Cancel();
                         continue;
                     case ":help":
+                        Echo();
                         output.Help(multiline, session.Mode);
                         continue;
                     case ":clear":
-                        if (interactive) console.Editor.Clear();
+                        console.Screen?.Clear();
                         continue;
                     case ":multiline":
+                        Echo();
                         multiline = !multiline;
-                        if (prompt is not null)
-                        {
-                            await prompt.DisposeAsync();
-                            prompt = await CreatePromptAsync(session, console, history,
-                                multiline, warmUp: false, cancellationToken: lifetime, scopePath: promptScope, scopeFamilies: promptFamilies, cancel: Cancel);
-                        }
+                        frontEnd?.SetMultiline(multiline);
                         output.InputMode(multiline);
                         continue;
                     case ":reset":
+                        var reset = submission;
                         _ = work.Enqueue(_ =>
                         {
+                            if (reset is not null) frontEnd!.Echo(reset);
                             session.Reset();
                             output.Message("C# session reset. The running scene is preserved.");
                             return Task.CompletedTask;
@@ -255,8 +263,10 @@ public static class ReplHost
                 }
                 if (ReplModes.TryParse(text.Trim(), out var selectedMode)) readMode = selectedMode;
                 var submitted = text;
+                var queued = submission;
                 _ = work.Enqueue(async token =>
                 {
+                    if (queued is not null) frontEnd!.Echo(queued);
                     try
                     {
                         token.ThrowIfCancellationRequested();
@@ -270,6 +280,7 @@ public static class ReplHost
                         else if (result.Tree is { } hierarchy) output.Tree(hierarchy, result.Styled);
                         else if (result.Value is { } value) output.Result(value, result.Styled);
                         await session.RefreshAsync(lifetime).ConfigureAwait(false);
+                        await UpdatePromptAsync().ConfigureAwait(false);
                     }
                     catch (OperationCanceledException) { output.Message("Submission cancelled."); }
                     catch (Exception error)
@@ -277,6 +288,10 @@ public static class ReplHost
                         output.Error(error.ToString());
                         if (!interactive) exitCode = 1;
                     }
+                }, skipped: queued is null ? null : () =>
+                {
+                    frontEnd!.Echo(queued);
+                    output.Message("Submission cancelled.");
                 });
             }
             work.Complete();
@@ -292,36 +307,13 @@ public static class ReplHost
         finally
         {
             console.SetCancellationHandler(null);
-            if (consoleSignals) console.Editor.CancelKeyPress -= CancelKeyPress;
+            if (consoleSignals) Console.CancelKeyPress -= CancelKeyPress;
             work.Complete();
             await work.Completion;
-            if (prompt is not null) await prompt.DisposeAsync();
         }
     }
 
-    private static async Task<Prompt> CreatePromptAsync(ReplSession session, IReplTerminal console, string history, bool multiline = false,
-        bool warmUp = true, CancellationToken cancellationToken = default, string? scopePath = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null, Action? cancel = null)
-    {
-        var callbacks = new ReplPromptCallbacks(session, console.TakePaste, cancel, console.PromptOutput);
-        if (warmUp) await callbacks.WarmUpAsync(cancellationToken);
-        return new Prompt(persistentHistoryFilepath: history.Length > 0 ? history : null, callbacks: callbacks, console: console.Editor,
-            configuration: CreatePromptConfiguration(multiline, scopePath, console.Editor.BufferWidth, scopeFamilies, session.Mode));
-    }
-
-    internal static PromptConfiguration CreatePromptConfiguration(bool multiline = false, string? scopePath = null, int? terminalWidth = null, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies = null, ReplMode mode = ReplMode.Auto) => new(
-        prompt: CreatePromptText(scopePath, terminalWidth, scopeFamilies, color: !PromptConfiguration.HasUserOptedOutFromColor, mode),
-        keyBindings: new KeyBindings(
-            commitCompletion: new KeyPressPatterns(new KeyPressPattern(ConsoleKey.Tab), new KeyPressPattern(ConsoleModifiers.Shift, ConsoleKey.Tab),
-                new KeyPressPattern(ConsoleKey.Enter), new KeyPressPattern('.'), new KeyPressPattern('(')),
-            newLine: new KeyPressPatterns(multiline ? new KeyPressPattern(ConsoleKey.Enter) : new KeyPressPattern(ConsoleModifiers.Shift, ConsoleKey.Enter),
-                new KeyPressPattern(ConsoleModifiers.Alt, ConsoleKey.Enter)),
-            submitPrompt: new KeyPressPatterns(multiline ? new KeyPressPattern(ConsoleModifiers.Shift, ConsoleKey.Enter) : new KeyPressPattern(ConsoleKey.Enter),
-                new KeyPressPattern(ConsoleModifiers.Control, ConsoleKey.Enter)),
-            triggerCompletionList: new KeyPressPatterns(new KeyPressPattern(ConsoleModifiers.Control, ConsoleKey.Spacebar)),
-            triggerOverloadList: new KeyPressPatterns(new KeyPressPattern('('), new KeyPressPattern(','), new KeyPressPattern(ConsoleKey.Tab),
-                new KeyPressPattern(ConsoleModifiers.Control | ConsoleModifiers.Shift, ConsoleKey.Spacebar))));
-
-    internal static FormattedString CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies, bool color, ReplMode mode = ReplMode.Auto)
+    internal static StyledText CreatePromptText(string? scopePath, int? terminalWidth, IReadOnlyDictionary<string, NodeFamily>? scopeFamilies, bool color, ReplMode mode = ReplMode.Auto)
     {
         // Leave room for code and completion even in narrow terminals. pwd always
         // shows the full path; the prompt keeps the end of a long scope visible.
@@ -335,19 +327,19 @@ public static class ReplHost
         }
         var prefix = mode == ReplMode.Auto ? "godot" : "godot:" + mode.Name();
         var text = scopePath is null or "/root" ? prefix + "> " : $"{prefix} [{scopePath}]> ";
-        if (!color) return new FormattedString(text);
+        if (!color) return new StyledText(text);
         var family = scopeFamilies is not null && fullPath is not null && scopeFamilies.TryGetValue(fullPath, out var known) ? known : NodeFamily.Node;
-        var spans = new List<FormatSpan> { new(0, 5, NodeColors.Color(family)) };
-        if (mode != ReplMode.Auto) spans.Add(new(5, prefix.Length - 5, AnsiColor.BrightMagenta));
+        var spans = new List<StyledSpan> { new(0, 5, NodeColors.Color(family)) };
+        if (mode != ReplMode.Auto) spans.Add(new(5, prefix.Length - 5, TermColor.BrightMagenta));
         if (scopePath is not null && scopePath != "/root")
         {
             var full = NodeColors.Path(fullPath!, scopeFamilies);
             var hidden = scopePath.StartsWith("...", StringComparison.Ordinal) ? 3 : 0;
             var visibleLength = scopePath.Length - hidden;
             if (hidden > 0) spans.Add(new(prefix.Length + 2, hidden, NodeColors.Grey));
-            spans.AddRange(full.Substring(full.Length - visibleLength, visibleLength).FormatSpans.ToArray().Select(s => s.Offset(prefix.Length + 2 + hidden)));
+            spans.AddRange(full.Substring(full.Length - visibleLength, visibleLength).Spans.Select(s => s.Offset(prefix.Length + 2 + hidden)));
         }
-        return new FormattedString(text, spans);
+        return new StyledText(text, spans);
     }
 
     internal static async Task<string?> ReadSubmissionAsync(TextReader input, CancellationToken cancellationToken, ReplMode mode = ReplMode.Auto)
@@ -366,90 +358,5 @@ public static class ReplHost
             text.AppendLine(line);
             if (line.TrimStart().StartsWith(':') || ReplSession.IsComplete(text.ToString(), mode)) return text.ToString();
         }
-    }
-}
-
-internal interface IReplTerminal
-{
-    IConsole Editor { get; }
-    bool Interactive { get; }
-    TextReader Input { get; }
-    ReplOutput Output { get; }
-    ReplPromptOutput? PromptOutput => null;
-    bool Color => !PromptConfiguration.HasUserOptedOutFromColor;
-    void SetCancellationHandler(Action? cancel) { }
-    string HistoryFile { get; }
-    string? TakePaste();
-    void Restore();
-}
-
-internal sealed class ReplConsole : SystemConsole, IConsole, IReplTerminal
-{
-    public IConsole Editor => this;
-    public bool Interactive => !Console.IsInputRedirected && !Console.IsOutputRedirected;
-    public TextReader Input => Console.In;
-    public ReplOutput Output { get; }
-    public ReplPromptOutput? PromptOutput { get; }
-    public string HistoryFile => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2dog", "repl-history");
-    private readonly CancellationToken lifetime;
-    private readonly ReplInputBuffer input;
-
-    public ReplConsole(CancellationToken lifetime)
-    {
-        this.lifetime = lifetime;
-        PromptOutput = Interactive ? new ReplPromptOutput(this) : null;
-        Output = ReplOutput.ForConsole(PromptOutput);
-        input = new ReplInputBuffer(() => Console.KeyAvailable, ReadConsoleKey, OperatingSystem.IsWindows());
-    }
-
-    bool IConsole.KeyAvailable
-    {
-        get
-        {
-            lifetime.ThrowIfCancellationRequested();
-            return PromptOutput?.Restoring != true && input.KeyAvailable;
-        }
-    }
-
-    public string? TakePaste() => input.TakePaste();
-
-    public override ConsoleKeyInfo ReadKey(bool intercept)
-    {
-        lifetime.ThrowIfCancellationRequested();
-        if (PromptOutput?.ReadRestoreKey() is { } key) return key;
-        return input.ReadKey();
-    }
-
-    // Supported terminals frame paste text so its newlines never act as submit keys.
-    void IConsole.SetModifyOtherKeys(bool enabled)
-    {
-        SetModifyOtherKeys(enabled);
-        // Windows Console.ReadKey strips paste markers in Win32 input mode. Keep
-        // native modified-key handling there; Unix can distinguish literal paste.
-        if (!OperatingSystem.IsWindows()) Write(enabled ? "\x1b[?2004h" : "\x1b[?2004l");
-    }
-
-    private readonly bool originalControlC = !Console.IsInputRedirected && Console.TreatControlCAsInput;
-
-    private ConsoleKeyInfo ReadConsoleKey()
-    {
-        while (!Console.KeyAvailable)
-        {
-            lifetime.ThrowIfCancellationRequested();
-            PromptOutput?.CheckForOutput();
-            Thread.Sleep(15);
-        }
-        lifetime.ThrowIfCancellationRequested();
-        return base.ReadKey(intercept: true);
-    }
-
-    public void Restore()
-    {
-        if (Console.IsInputRedirected || Console.IsOutputRedirected) return;
-        CaptureControlC = originalControlC;
-        SetNewlineAutoReturn(true);
-        SetModifyOtherKeys(false);
-        if (!OperatingSystem.IsWindows()) Write("\x1b[?2004l");
-        ShowCursor();
     }
 }

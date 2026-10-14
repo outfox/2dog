@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using Godot;
-using PrettyPrompt;
-using PrettyPrompt.Completion;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -73,11 +71,11 @@ public class ModeIntegrationTests
             Assert.False(result.Committed);
         }
         Assert.Empty(bed.Items("root."));
-        IPromptCallbacks agentCallbacks = new ReplPromptCallbacks(bed.Session);
-        Assert.Empty(bed.Pump(agentCallbacks.GetOverloadsAsync("root.GetNode(", 13, bed.Token)).Item1);
-        Assert.Contains(bed.Pump(agentCallbacks.HighlightCallbackAsync(":cs", bed.Token)), span => span.Start == 0);
-        bed.Pump(Task.Run(async () => { await new ReplPromptCallbacks(bed.Session).WarmUpAsync(bed.Token); return true; }));
-        Assert.Empty(bed.Pump(((IPromptCallbacks)new ReplPromptCallbacks(bed.Session)).HighlightCallbackAsync("hello", bed.Token)));
+        var agentCallbacks = new ReplLanguage(bed.Session);
+        Assert.Empty(bed.Pump(agentCallbacks.SignaturesAsync("root.GetNode(", 13, bed.Token)).Items);
+        Assert.Contains(bed.Pump(agentCallbacks.HighlightAsync(":cs", bed.Token)), span => span.Start == 0);
+        bed.Pump(Task.Run(async () => { await new ReplLanguage(bed.Session).WarmUpAsync(bed.Token); return true; }));
+        Assert.Empty(bed.Pump((new ReplLanguage(bed.Session)).HighlightAsync("hello", bed.Token)));
         Assert.Equal("hello", bed.Read("hello", Bed.Tab, Bed.Enter));
         Assert.Equal(":cs", bed.Read(":cs", Bed.Enter));
         Assert.DoesNotContain(bed.Items(":"), i => i.DisplayText == ":rm");
@@ -160,10 +158,10 @@ public class ModeIntegrationTests
         Assert.Equal(":exit", bed.Read(":exit", Bed.Enter));
 
         const string prefix = "$Dogfood";
-        var span = new PrettyPrompt.Documents.TextSpan(0, prefix.Length);
+        var span = new TextRange(0, prefix.Length);
         var items = bed.Items(prefix);
-        var ranked = items.OrderByDescending(i => i.GetCompletionItemPriority(prefix, prefix.Length, span))
-            .Where(i => i.GetCompletionItemPriority(prefix, prefix.Length, span) >= 0).Select(i => i.ReplacementText).ToArray();
+        var ranked = items.OrderByDescending(i => i.Priority(prefix, prefix.Length, span))
+            .Where(i => i.Priority(prefix, prefix.Length, span) >= 0).Select(i => i.ReplacementText).ToArray();
         Assert.Equal(new[] { "$DogfoodPath", "$dogfoodLower", "$[\"Group/Dogfood With Space\"]",
             "$Group/DogfoodName/", "$/root/DogfoodOutside", "$Group/dogfoodCase" }, ranked);
         Assert.Equal("$DogfoodPath", bed.Read(prefix, Bed.Tab, Bed.Run));
@@ -185,14 +183,14 @@ public class ModeIntegrationTests
         // The menu retains the items created for an empty prefix as typing continues.
         var cached = bed.Items("$");
         Assert.DoesNotContain(cached, i => i.ReplacementText.StartsWith("$/", StringComparison.Ordinal) &&
-            i.GetCompletionItemPriority("$", 1, new PrettyPrompt.Documents.TextSpan(0, 1)) >= 0);
+            i.Priority("$", 1, new TextRange(0, 1)) >= 0);
         var branchItem = Assert.Single(cached, i => i.ReplacementText == "$Group/DogfoodName");
-        var edit = bed.Pump(branchItem.GetComplexTextEditAsync("$DogfoodNa", 10, bed.Token));
+        var edit = bed.Pump(new ReplLanguage(bed.Session).CommitAsync(branchItem, "$DogfoodNa", 10, CommitKey.Tab, bed.Token));
         Assert.Equal("$Group/DogfoodName/", edit.NewText);
         var narrowed = "$Group/DogfoodNa";
-        var narrowedSpan = new PrettyPrompt.Documents.TextSpan(0, narrowed.Length);
-        Assert.True(branchItem.GetCompletionItemPriority(narrowed, narrowed.Length, narrowedSpan) >= 0);
-        edit = bed.Pump(branchItem.GetComplexTextEditAsync(narrowed, narrowed.Length, bed.Token));
+        var narrowedSpan = new TextRange(0, narrowed.Length);
+        Assert.True(branchItem.Priority(narrowed, narrowed.Length, narrowedSpan) >= 0);
+        edit = bed.Pump(new ReplLanguage(bed.Session).CommitAsync(branchItem, narrowed, narrowed.Length, CommitKey.Tab, bed.Token));
         Assert.Equal("$Group/DogfoodName", edit.NewText);
         var left = new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, false);
         Assert.Equal("$Group/DogfoodName/Flair", bed.Read("$DogfoodNaFlair", [.. Enumerable.Repeat(left, 5), Bed.Tab, Bed.Run]));
@@ -251,21 +249,16 @@ public class ModeIntegrationTests
             return result;
         }
         public PreparedInput Prepare(string text) => Pump(Session.PrepareAsync(text, Token));
-        public IReadOnlyList<CompletionItem> Items(string text)
+        public IReadOnlyList<ReplCompletionItem> Items(string text)
         {
-            IPromptCallbacks callbacks = new ReplPromptCallbacks(Session);
-            var span = Pump(callbacks.GetSpanToReplaceByCompletionAsync(text, text.Length, Token));
-            return Pump(callbacks.GetCompletionItemsAsync(text, text.Length, span, Token));
+            var callbacks = new ReplLanguage(Session);
+            var span = Pump(callbacks.CompletionRangeAsync(text, text.Length, Token));
+            return Pump(callbacks.CompletionsAsync(text, text.Length, span, Token));
         }
         public string Read(string text, params ConsoleKeyInfo[] keys)
         {
             var typed = text.Select(c => new ConsoleKeyInfo(c, char.IsLetterOrDigit(c) ? (ConsoleKey)char.ToUpperInvariant(c) : ConsoleKey.NoName, false, false, false));
-            return Pump(Task.Run(async () =>
-            {
-                await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(Session), console: new PromptConsole(typed.Concat(keys)),
-                    configuration: ReplHost.CreatePromptConfiguration(mode: Session.Mode));
-                return (await prompt.ReadLineAsync()).Text;
-            }));
+            return Pump(Task.Run(() => EditorDriver.ReadAsync(new ReplLanguage(Session), typed.Concat(keys), token: Token)));
         }
         public void Dispose()
         {
@@ -288,12 +281,12 @@ public class ModeInputTests
     public void PromptShowsModeAndKeepsPathColorSpansInBounds(string command, string expected)
     {
         Assert.True(ReplModes.TryParse(":" + command, out var mode));
-        Assert.Equal(expected + " ", ReplHost.CreatePromptConfiguration(mode: mode).Prompt.Text);
+        Assert.Equal(expected + " ", ReplHost.CreatePromptText(null, null, null, color: false, mode).Text);
         foreach (var path in new[] { "/root", "/root/Control", "/root/LongName/LongerName/VeryLongName" })
         {
             var prompt = ReplHost.CreatePromptText(path, 60, null, color: true, mode);
-            Assert.All(prompt.FormatSpans.ToArray(), span => Assert.InRange(span.End, 0, prompt.Length));
-            Assert.Empty(ReplHost.CreatePromptText(path, 60, null, color: false, mode).FormatSpans.ToArray());
+            Assert.All(prompt.Spans.ToArray(), span => Assert.InRange(span.End, 0, prompt.Length));
+            Assert.Empty(ReplHost.CreatePromptText(path, 60, null, color: false, mode).Spans.ToArray());
         }
     }
 

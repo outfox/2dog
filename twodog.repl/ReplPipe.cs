@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.IO.Pipes;
 using System.Reflection;
 using System.Text;
-using PrettyPrompt.Consoles;
 
 namespace twodog.Repl;
 
@@ -170,12 +169,10 @@ internal sealed class ReplPipeServer : IDisposable
 
     private sealed class PipeTerminal(TextReader input, TextWriter output) : IReplTerminal
     {
-        public IConsole Editor { get; } = new SystemConsole();
         public bool Interactive => false;
         public TextReader Input => input;
         public ReplOutput Output { get; } = new(output, output, false, false);
         public string HistoryFile => "";
-        public string? TakePaste() => null;
         public void Restore() { }
     }
 }
@@ -183,28 +180,29 @@ internal sealed class ReplPipeServer : IDisposable
 internal static class ReplPipeClient
 {
     internal static Task<int> RunAsync(string name) => RunAsync(name, Console.In, Console.Out,
-        createTerminal: !Console.IsInputRedirected && !Console.IsOutputRedirected ? token => new ReplConsole(token) : null);
+        createTerminal: !Console.IsInputRedirected && !Console.IsOutputRedirected ? () => new ConsoleClientTerminal() : null);
 
     internal static async Task<int> RunAsync(string name, TextReader input, TextWriter destination, CancellationToken cancellationToken = default,
-        Func<CancellationToken, IReplTerminal>? createTerminal = null)
+        Func<IReplClientTerminal>? createTerminal = null)
     {
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        var lifetimeToken = lifetime.Token;
-        var terminal = createTerminal?.Invoke(lifetimeToken);
+        var terminal = createTerminal?.Invoke();
         try
         {
-            if (terminal is not null) terminal.Output.Message($"Connecting to REPL '{name}'...");
+            terminal?.Device.Write($"Connecting to REPL '{name}'...\r\n");
             return await ConnectAsync(name, input, destination, terminal, lifetime).ConfigureAwait(false);
         }
         catch (TimeoutException) when (terminal is not null)
         {
-            terminal.Output.Error($"Could not connect to REPL '{name}'. Start the host with --repl-listen {name}.");
+            terminal.Device.Write(Paint(terminal, $"Could not connect to REPL '{name}'. Start the host with --repl-listen {name}.", "31") + "\r\n");
             return 1;
         }
         finally { terminal?.Restore(); }
     }
 
-    private static async Task<int> ConnectAsync(string name, TextReader input, TextWriter destination, IReplTerminal? terminal,
+    private static string Paint(IReplClientTerminal terminal, string text, string style) => terminal.Color ? $"\x1b[{style}m{text}\x1b[0m" : text;
+
+    private static async Task<int> ConnectAsync(string name, TextReader input, TextWriter destination, IReplClientTerminal? terminal,
         CancellationTokenSource lifetime)
     {
         var lifetimeToken = lifetime.Token;
@@ -212,7 +210,7 @@ internal static class ReplPipeClient
         await pipe.ConnectAsync(5000, lifetimeToken).ConfigureAwait(false);
         using var reader = new StreamReader(pipe, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
         using var writer = new StreamWriter(pipe, new UTF8Encoding(false), leaveOpen: true) { AutoFlush = true };
-        terminal?.Output.Message($"Connected to REPL '{name}'. Enter submits; Shift+Enter adds a line; Ctrl+C cancels work; :exit disconnects.");
+        terminal?.Device.Write(Paint(terminal, $"Connected to REPL '{name}'.", "2") + " Enter submits; Shift+Enter adds a line; Ctrl+C cancels work; :exit disconnects.\r\n");
         if (terminal is not null) return await ReplRemoteTerminalClient.RunAsync(reader, writer, terminal, lifetime).ConfigureAwait(false);
         var output = Task.Run(async () =>
         {

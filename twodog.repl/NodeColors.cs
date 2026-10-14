@@ -1,27 +1,26 @@
 using System.Text;
 using Godot;
-using PrettyPrompt.Highlighting;
 
 namespace twodog.Repl;
 
 internal enum NodeFamily { Node, Control, Node2D, Node3D, Animation }
 internal sealed record NodePathStyle(string Path, IReadOnlyDictionary<string, NodeFamily> Families)
 {
-    public FormattedString Display => NodeColors.Path(Path, Families);
+    public StyledText Display => NodeColors.Path(Path, Families);
 }
 
 internal static class NodeColors
 {
     // Godot editor/icons/{Node,Control,Node2D,Node3D,AnimationPlayer}.svg.
     // Use RGB rather than terminal theme colors to retain the editor's palette.
-    internal static readonly AnsiColor Grey = AnsiColor.Rgb(0x91, 0x91, 0x91);
-    internal static AnsiColor Color(NodeFamily family) => family switch
+    internal static readonly TermColor Grey = TermColor.Rgb(0x91, 0x91, 0x91);
+    internal static TermColor Color(NodeFamily family) => family switch
     {
-        NodeFamily.Control => AnsiColor.Rgb(0x8e, 0xef, 0x97),
-        NodeFamily.Node2D => AnsiColor.Rgb(0x8d, 0xa5, 0xf3),
-        NodeFamily.Node3D => AnsiColor.Rgb(0xfc, 0x7f, 0x7f),
-        NodeFamily.Animation => AnsiColor.Rgb(0xc3, 0x8e, 0xf1),
-        _ => AnsiColor.Rgb(0xe0, 0xe0, 0xe0),
+        NodeFamily.Control => TermColor.Rgb(0x8e, 0xef, 0x97),
+        NodeFamily.Node2D => TermColor.Rgb(0x8d, 0xa5, 0xf3),
+        NodeFamily.Node3D => TermColor.Rgb(0xfc, 0x7f, 0x7f),
+        NodeFamily.Animation => TermColor.Rgb(0xc3, 0x8e, 0xf1),
+        _ => TermColor.Rgb(0xe0, 0xe0, 0xe0),
     };
 
     // Only call on Godot's owner thread. Custom scripts inherit their native family.
@@ -47,10 +46,10 @@ internal static class NodeColors
     }
 
     // Snapshot formatting on the owner thread; terminal rendering never touches nodes.
-    internal static FormattedString Tree(Node node)
+    internal static StyledText Tree(Node node)
     {
         var text = node.GetTreeStringPretty();
-        var spans = new List<FormatSpan>();
+        var spans = new List<StyledSpan>();
         var stack = new Stack<Node>();
         stack.Push(node);
         var offset = 0;
@@ -70,9 +69,9 @@ internal static class NodeColors
         return new(text, spans);
     }
 
-    internal static FormattedString Path(string display, IReadOnlyDictionary<string, NodeFamily>? families = null)
+    internal static StyledText Path(string display, IReadOnlyDictionary<string, NodeFamily>? families = null)
     {
-        var spans = new List<FormatSpan>();
+        var spans = new List<StyledSpan>();
         var start = display.StartsWith('$') || display.StartsWith('?') ? 1 : 0;
         var end = display.Length;
         var quoted = display.StartsWith("$[", StringComparison.Ordinal);
@@ -108,18 +107,4 @@ internal static class NodeColors
         return new(display, spans);
     }
 
-    internal static string Ansi(FormattedString text, bool color)
-    {
-        if (!color) return text.Text ?? "";
-        var result = new StringBuilder();
-        var position = 0;
-        foreach (var span in text.FormatSpans)
-        {
-            result.Append(text.Text.AsSpan(position, span.Start - position));
-            if (span.Formatting.Foreground is { } foreground) result.Append(foreground.GetEscapeSequence());
-            result.Append(text.Text.AsSpan(span.Start, span.Length)).Append("\x1b[0m");
-            position = span.End;
-        }
-        return result.Append(text.Text.AsSpan(position)).ToString();
-    }
 }

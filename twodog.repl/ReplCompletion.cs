@@ -4,13 +4,10 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using PrettyPrompt.Completion;
-using PrettyPrompt.Highlighting;
-using PromptSpan = PrettyPrompt.Documents.TextSpan;
 
 namespace twodog.Repl;
 
-// Language-aware edits on top of Roslyn's completion service and PrettyPrompt's editor.
+// Language-aware edits on top of Roslyn's completion service, independent of the terminal editor.
 // Semantic queries inspect metadata only; they never invoke a live object's getters.
 internal static class ReplCompletion
 {
@@ -67,7 +64,7 @@ internal static class ReplCompletion
         // The identifier's existing type arguments belong before its call parentheses.
         // Keep an unfinished type list editable rather than inserting () in front of it.
         if (generic is not null && generic.Identifier.Span.End == position && generic.TypeArgumentList.GreaterThanToken.IsMissing)
-            return new CompletionEdit(new PromptSpan(span.Start, span.Length), name, end);
+            return new CompletionEdit(new TextRange(span.Start, span.Length), name, end);
         var callEnd = generic is not null && generic.Identifier.Span.End == position
             ? input.ToOriginal(generic.Span.End) : end;
         var expression = ExpressionAt(root, input.ToGenerated(callEnd));
@@ -79,18 +76,18 @@ internal static class ReplCompletion
             SyntaxFactory.ParseName(name + text[end..], consumeFullText: false) is GenericNameSyntax suffix &&
             suffix.TypeArgumentList.GreaterThanToken.IsMissing &&
             (suffix.TypeArgumentList.Arguments.Any(type => !type.IsMissing) || suffix.Span.End == suffix.TypeArgumentList.LessThanToken.Span.End))
-            return new CompletionEdit(new PromptSpan(span.Start, span.Length), name, end);
+            return new CompletionEdit(new TextRange(span.Start, span.Length), name, end);
         var hasArguments = methods.Length == 0 || methods.Any(m => m.Parameters.Length > 0);
         var following = callEnd;
         while (following < text.Length && char.IsWhiteSpace(text[following])) following++;
         // Completing in the middle of existing code must preserve its argument list.
         return following < text.Length && text[following] == '('
-            ? new CompletionEdit(new PromptSpan(span.Start, span.Length), name, following + 1)
-            : new CompletionEdit(new PromptSpan(span.Start, span.Length + callEnd - end),
+            ? new CompletionEdit(new TextRange(span.Start, span.Length), name, following + 1)
+            : new CompletionEdit(new TextRange(span.Start, span.Length + callEnd - end),
                 name + text[end..callEnd] + "()", callEnd + (hasArguments ? 1 : 2));
     }
 
-    public static async Task<(IReadOnlyList<OverloadItem>, int ArgumentIndex)> OverloadsAsync(PreparedInput prepared, int caret, CancellationToken token)
+    public static async Task<(IReadOnlyList<SignatureItem> Items, int ArgumentIndex)> OverloadsAsync(PreparedInput prepared, int caret, CancellationToken token)
     {
         var position = prepared.Input.ToGenerated(caret);
         if (position == 0) return ([], 0);
@@ -116,9 +113,9 @@ internal static class ReplCompletion
                     try { documentation = XElement.Parse(xml); }
                     catch (System.Xml.XmlException) { /* Metadata documentation can be malformed. */ }
                 }
-                return new OverloadItem(Signature(method.ToMinimalDisplayParts(model, position)),
-                    Text(documentation?.Element("summary")), default,
-                    method.Parameters.Select(p => new OverloadItem.Parameter(p.Name,
+                return new SignatureItem(Signature(method.ToMinimalDisplayParts(model, position)),
+                    Text(documentation?.Element("summary")),
+                    method.Parameters.Select(p => new SignatureParameter(p.Name,
                         Text(documentation?.Elements("param").FirstOrDefault(e => (string?)e.Attribute("name") == p.Name)))).ToArray());
             }).ToArray();
         return (items, arguments.Arguments.GetSeparators().Count(s => s.SpanStart < position));
@@ -126,24 +123,24 @@ internal static class ReplCompletion
 
     private static string Text(XElement? element) => element is null ? "" : Regex.Replace(element.Value, @"\s+", " ").Trim();
 
-    private static FormattedString Signature(IEnumerable<SymbolDisplayPart> parts)
+    private static StyledText Signature(IEnumerable<SymbolDisplayPart> parts)
     {
         var text = new System.Text.StringBuilder();
-        var spans = new List<FormatSpan>();
+        var spans = new List<StyledSpan>();
         foreach (var part in parts)
         {
-            AnsiColor? color = part.Kind switch
+            TermColor? color = part.Kind switch
             {
-                SymbolDisplayPartKind.MethodName => AnsiColor.BrightYellow,
-                SymbolDisplayPartKind.Keyword => AnsiColor.BrightBlue,
-                SymbolDisplayPartKind.ClassName or SymbolDisplayPartKind.StructName or SymbolDisplayPartKind.InterfaceName => AnsiColor.BrightCyan,
-                SymbolDisplayPartKind.ParameterName => AnsiColor.Cyan,
+                SymbolDisplayPartKind.MethodName => TermColor.BrightYellow,
+                SymbolDisplayPartKind.Keyword => TermColor.BrightBlue,
+                SymbolDisplayPartKind.ClassName or SymbolDisplayPartKind.StructName or SymbolDisplayPartKind.InterfaceName => TermColor.BrightCyan,
+                SymbolDisplayPartKind.ParameterName => TermColor.Cyan,
                 _ => null,
             };
             var value = part.ToString();
-            if (color is { } c) spans.Add(new FormatSpan(text.Length, value.Length, c));
+            if (color is { } c) spans.Add(new StyledSpan(text.Length, value.Length, c));
             text.Append(value);
         }
-        return new FormattedString(text.ToString(), spans);
+        return new StyledText(text.ToString(), spans);
     }
 }

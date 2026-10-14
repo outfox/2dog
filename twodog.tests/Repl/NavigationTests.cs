@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using PrettyPrompt;
-using PrettyPrompt.Highlighting;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -45,15 +43,11 @@ public class NavigationIntegrationTests
         string Complete(string text, params ConsoleKeyInfo[] keys) => ReadPrompt(text, false, keys);
         string ReadPrompt(string text, bool buffered, params ConsoleKeyInfo[] keys)
         {
-            var console = new PromptConsole(text.Select(c => new ConsoleKeyInfo(c,
+            var typed = text.Select(c => new ConsoleKeyInfo(c,
                 char.IsLetterOrDigit(c) ? (ConsoleKey)char.ToUpperInvariant(c) : ConsoleKey.NoName,
-                false, false, false)).Concat(keys), buffered: buffered);
-            return Pump(Task.Run(async () =>
-            {
-                await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session), console: console,
-                    configuration: ReplHost.CreatePromptConfiguration(scopePath: scopeFromOwner));
-                return (await prompt.ReadLineAsync()).Text;
-            }));
+                false, false, false)).Concat(keys);
+            return Pump(Task.Run(() => buffered ? EditorDriver.ReadQueuedAsync(new ReplLanguage(session), typed)
+                : EditorDriver.ReadAsync(new ReplLanguage(session), typed)));
         }
         var tab = new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, false);
         var run = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, true);
@@ -63,8 +57,10 @@ public class NavigationIntegrationTests
 
         var left = new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, false);
         var leftFive = Enumerable.Repeat(left, 5).ToArray();
-        Assert.Equal("ls $Control/Flair", ReadPrompt("ls $ControlFlair", true, [.. leftFive, tab, run]));
-        Assert.Equal("ls $Control/CenterContainerFlair", ReadPrompt("ls $ContFlair", true, [.. leftFive, tab, tab, tab, run]));
+        // Keys typed ahead keep their editing meaning: the menu opens and filters as if typed live.
+        var escape = new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false);
+        Assert.Equal("ls $Control/Flair", ReadPrompt("ls $ControlFlair", true, [.. leftFive, escape, tab, run]));
+        Assert.Equal("ls $Control/CenterContainerFlair", ReadPrompt("ls $ContFlair", true, [.. leftFive, tab, tab, run]));
 
         Success("int retainedAnswer = 42;");
         Success("int ls = 6; int listingValue = 10;");
@@ -82,7 +78,7 @@ public class NavigationIntegrationTests
         Assert.Equal(":cd selectedContainer", Complete(":cd selectedCont", tab, run));
         Assert.Equal("cd x.GetParent()", Complete("cd x.GetPa", tab, run));
         Assert.Equal(":cd x.GetParent()", Complete(":cd x.GetPa", tab, run));
-        Assert.Equal("cd x.", ReadPrompt("cd x", true, tab, run));
+        Assert.Equal("cd x.", ReadPrompt("cd x", true, escape, tab, run));
         Assert.Equal("/root/Control", Success("cd x.GetParent()").Value);
         Assert.Equal("/root/Control/CenterContainer", Success(":cd x;").Value);
         Assert.Equal("/root/Control", Success("cd scene").Value);
@@ -185,49 +181,49 @@ public class NavigationIntegrationTests
             "familyRoot.AddChild(new Label { Name = \"HiddenFamily\" }, @internal: Node.InternalMode.Back);");
         var familyListing = Success("ls $FamilyRoot");
         Assert.Equal(globals.root.GetNode("FamilyRoot").GetTreeStringPretty(), familyListing.Tree);
-        var formatted = familyListing.Styled!.Value;
-        AnsiColor? At(FormattedString value, int position) => value.FormatSpans.ToArray().Single(s => s.Contains(position)).Formatting.Foreground;
-        Assert.Equal(NodeColors.Color(NodeFamily.Control), At(formatted, formatted.Text!.IndexOf("FamilyRoot", StringComparison.Ordinal)));
+        var formatted = familyListing.Styled!;
+        TermColor? At(StyledText value, int position) => value.Spans.Single(s => s.Contains(position)).Style.Foreground;
+        Assert.Equal(NodeColors.Color(NodeFamily.Control), At(formatted, formatted.Text.IndexOf("FamilyRoot", StringComparison.Ordinal)));
         Assert.Equal(NodeColors.Color(NodeFamily.Node2D), At(formatted, formatted.Text.IndexOf("BlueFamily", StringComparison.Ordinal)));
         Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(formatted, formatted.Text.IndexOf("RedFamily", StringComparison.Ordinal)));
         Assert.Equal(NodeColors.Color(NodeFamily.Animation), At(formatted, formatted.Text.IndexOf("AnimationFamily", StringComparison.Ordinal)));
         Assert.Equal(NodeColors.Color(NodeFamily.Control), At(formatted, formatted.Text.IndexOf("HiddenFamily", StringComparison.Ordinal)));
-        var callback = (IPromptCallbacks)new ReplPromptCallbacks(session);
+        var callback = new ReplLanguage(session);
         var coloredPath = "$FamilyRoot/RedFamily";
-        var highlighting = Pump(Task.Run(() => callback.HighlightCallbackAsync(coloredPath, token))).ToArray();
-        Assert.Equal(NodeColors.Color(NodeFamily.Control), highlighting.Single(s => s.Contains(2)).Formatting.Foreground);
-        Assert.Equal(NodeColors.Grey, highlighting.Single(s => s.Contains(coloredPath.IndexOf('/'))).Formatting.Foreground);
-        Assert.Equal(NodeColors.Color(NodeFamily.Node3D), highlighting.Single(s => s.Contains(coloredPath.Length - 1)).Formatting.Foreground);
-        var span = Pump(Task.Run(() => callback.GetSpanToReplaceByCompletionAsync(coloredPath, coloredPath.Length, token)));
-        var choices = Pump(Task.Run(() => callback.GetCompletionItemsAsync(coloredPath, coloredPath.Length, span, token)));
-        var redChoice = choices.Single(c => c.DisplayText == coloredPath).DisplayTextFormatted;
+        var highlighting = Pump(Task.Run(() => callback.HighlightAsync(coloredPath, token))).ToArray();
+        Assert.Equal(NodeColors.Color(NodeFamily.Control), highlighting.Single(s => s.Contains(2)).Style.Foreground);
+        Assert.Equal(NodeColors.Grey, highlighting.Single(s => s.Contains(coloredPath.IndexOf('/'))).Style.Foreground);
+        Assert.Equal(NodeColors.Color(NodeFamily.Node3D), highlighting.Single(s => s.Contains(coloredPath.Length - 1)).Style.Foreground);
+        var span = Pump(Task.Run(() => callback.CompletionRangeAsync(coloredPath, coloredPath.Length, token)));
+        var choices = Pump(Task.Run(() => callback.CompletionsAsync(coloredPath, coloredPath.Length, span, token)));
+        var redChoice = choices.Single(c => c.DisplayText == coloredPath).Display;
         Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(redChoice, redChoice.Length - 1));
         var changedFamily = Success("cd $FamilyRoot/RedFamily");
-        Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(changedFamily.Styled!.Value, changedFamily.Value!.Length - 1));
+        Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(changedFamily.Styled!, changedFamily.Value!.Length - 1));
         var capturedScope = Pump(Task.Run(() => session.ScopeStyleAsync(token)));
-        var promptStyle = ReplHost.CreatePromptConfiguration(scopePath: capturedScope.Path, terminalWidth: 80, scopeFamilies: capturedScope.Families).Prompt;
-        if (PromptConfiguration.HasUserOptedOutFromColor) Assert.Empty(promptStyle.FormatSpans.ToArray());
+        var promptStyle = ReplHost.CreatePromptText(capturedScope.Path, 80, capturedScope.Families, ReplOutput.ColorEnabled);
+        if (!ReplOutput.ColorEnabled) Assert.Empty(promptStyle.Spans.ToArray());
         else
         {
             Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(promptStyle, 1));
-            Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(promptStyle, promptStyle.Text!.LastIndexOf(']') - 1));
+            Assert.Equal(NodeColors.Color(NodeFamily.Node3D), At(promptStyle, promptStyle.Text.LastIndexOf(']') - 1));
         }
-        Assert.DoesNotContain("\x1b", NodeColors.Ansi(formatted, color: false), StringComparison.Ordinal);
-        Assert.Contains("\x1b[38;2;252;127;127mRedFamily", NodeColors.Ansi(formatted, color: true), StringComparison.Ordinal);
+        Assert.DoesNotContain("\x1b", formatted.ToAnsi(false), StringComparison.Ordinal);
+        Assert.Contains("\x1b[38;2;252;127;127mRedFamily", formatted.ToAnsi(true), StringComparison.Ordinal);
         // Exercise actual native tree layout across branches, internal nodes,
         // multi-code-unit names, and connector-like characters in a node name.
         Success("var layoutBranch = new Node2D { Name = \"枝😀 ┖╴\" }; familyRoot.AddChild(layoutBranch); " +
             "layoutBranch.AddChild(new Node3D { Name = \"DeepRed\" }); " +
             "familyRoot.AddChild(new Control { Name = \"NestedInternal\" }, @internal: Node.InternalMode.Front);");
-        var layout = Success("ls $/root/FamilyRoot").Styled!.Value;
+        var layout = Success("ls $/root/FamilyRoot").Styled!;
         Assert.Equal(globals.root.GetNode("FamilyRoot").GetTreeStringPretty(), layout.Text);
-        Assert.All(layout.FormatSpans.ToArray(), span => Assert.InRange(span.End, 0, layout.Length));
+        Assert.All(layout.Spans.ToArray(), span => Assert.InRange(span.End, 0, layout.Length));
         foreach (var (name, family) in new[] { ("枝😀 ┖╴", NodeFamily.Node2D), ("DeepRed", NodeFamily.Node3D), ("NestedInternal", NodeFamily.Control) })
         {
-            var nameStart = layout.Text!.IndexOf(name, StringComparison.Ordinal);
-            var nameSpan = Assert.Single(layout.FormatSpans.ToArray(), span => span.Start == nameStart && span.Length == name.Length);
-            Assert.Equal(NodeColors.Color(family), nameSpan.Formatting.Foreground);
-            Assert.Contains(NodeColors.Color(family).GetEscapeSequence() + name + "\x1b[0m", NodeColors.Ansi(layout, color: true), StringComparison.Ordinal);
+            var nameStart = layout.Text.IndexOf(name, StringComparison.Ordinal);
+            var nameSpan = Assert.Single(layout.Spans.ToArray(), span => span.Start == nameStart && span.Length == name.Length);
+            Assert.Equal(NodeColors.Color(family), nameSpan.Style.Foreground);
+            Assert.Contains(new TextStyle(NodeColors.Color(family)).Sgr() + name + "\x1b[0m", layout.ToAnsi(true), StringComparison.Ordinal);
         }
         Success("cd /");
         Success("familyRoot.QueueFree();");

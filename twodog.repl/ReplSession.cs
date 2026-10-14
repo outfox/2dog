@@ -272,7 +272,7 @@ internal sealed class ReplSession : IDisposable
             node.QueueFree();
             navigationVersion++;
             return new("Queued for deletion: " + removed.Path, null, false,
-                Styled: new PrettyPrompt.Highlighting.FormattedString("Queued for deletion: ") + removed.Display);
+                Styled: new StyledText("Queued for deletion: ") + removed.Display);
         }
         globals.SelectNode(node);
         navigationVersion++;
@@ -315,8 +315,8 @@ internal sealed class ReplSession : IDisposable
         var destination = NodeColors.CapturePath(result);
         var verb = command == "cp" ? "Copied: " : "Moved: ";
         return new(verb + original.Path + " -> " + destination.Path, null, false,
-            Styled: new PrettyPrompt.Highlighting.FormattedString(verb) + original.Display +
-                new PrettyPrompt.Highlighting.FormattedString(" -> ") + destination.Display);
+            Styled: new StyledText(verb) + original.Display +
+                new StyledText(" -> ") + destination.Display);
     }
 
     private ReplResult RenameNode(Godot.Node node, string name)
@@ -333,8 +333,8 @@ internal sealed class ReplSession : IDisposable
         navigationVersion++;
         var renamed = NodeColors.CapturePath(node);
         return new("Renamed: " + original.Path + " -> " + renamed.Path, null, false,
-            Styled: new PrettyPrompt.Highlighting.FormattedString("Renamed: ") + original.Display +
-                new PrettyPrompt.Highlighting.FormattedString(" -> ") + renamed.Display);
+            Styled: new StyledText("Renamed: ") + original.Display +
+                new StyledText(" -> ") + renamed.Display);
     }
 
     private static string Diagnostic(Diagnostic diagnostic, NodePathInput input)
@@ -388,4 +388,4 @@ internal sealed class ReplSession : IDisposable
 
 internal sealed record PreparedInput(Document Document, NodePathInput Input, IReadOnlyDictionary<string, NodePathTarget> Nodes, IReadOnlyDictionary<string, NodeFamily> Families, ReplMode Mode = ReplMode.Auto);
 
-internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null, PrettyPrompt.Highlighting.FormattedString? Styled = null);
+internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null, StyledText? Styled = null);

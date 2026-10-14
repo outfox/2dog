@@ -3,10 +3,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Godot;
 using Microsoft.CodeAnalysis.Text;
-using PrettyPrompt;
-using PrettyPrompt.Completion;
-using PrettyPrompt.Consoles;
-using PrettyPrompt.Highlighting;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -98,20 +94,20 @@ public class NodeMetadataContractTests
             var prompt = ReplHost.CreatePromptText(path, 60, new Dictionary<string, NodeFamily> { [path] = NodeFamily.Control }, color: true);
             Assert.Contains("godot [", prompt.Text!);
             Assert.EndsWith("]> ", prompt.Text!);
-            Assert.All(prompt.FormatSpans.ToArray(), span => Assert.InRange(span.End, 0, prompt.Length));
-            Assert.Equal(NodeColors.Color(NodeFamily.Control), prompt.FormatSpans[0].Formatting.Foreground);
-            Assert.Empty(ReplHost.CreatePromptText(path, 60, null, color: false).FormatSpans.ToArray());
+            Assert.All(prompt.Spans.ToArray(), span => Assert.InRange(span.End, 0, prompt.Length));
+            Assert.Equal(NodeColors.Color(NodeFamily.Control), prompt.Spans[0].Style.Foreground);
+            Assert.Empty(ReplHost.CreatePromptText(path, 60, null, color: false).Spans.ToArray());
         }
         foreach (var path in new string?[] { null, "/root", "", "/root/Short" })
-            Assert.NotEmpty(ReplHost.CreatePromptText(path, null, null, color: true).FormatSpans.ToArray());
-        Assert.NotEmpty(ReplHost.CreatePromptText(null, 160, new Dictionary<string, NodeFamily>(), color: true).FormatSpans.ToArray());
-        Assert.NotEmpty(ReplHost.CreatePromptText("/root/Unknown", 160, new Dictionary<string, NodeFamily>(), color: true).FormatSpans.ToArray());
+            Assert.NotEmpty(ReplHost.CreatePromptText(path, null, null, color: true).Spans.ToArray());
+        Assert.NotEmpty(ReplHost.CreatePromptText(null, 160, new Dictionary<string, NodeFamily>(), color: true).Spans.ToArray());
+        Assert.NotEmpty(ReplHost.CreatePromptText("/root/Unknown", 160, new Dictionary<string, NodeFamily>(), color: true).Spans.ToArray());
         foreach (var path in new[] { "$[", "$[\"Node", "$[ \"Node\"]", "?Name", "" })
             Assert.Equal(path, NodeColors.Path(path).Text);
-        Assert.Equal("", NodeColors.Ansi(default, color: false));
-        Assert.Equal("plain\x1b[0m", NodeColors.Ansi(new FormattedString("plain", new FormatSpan(0, 5, new ConsoleFormat())), color: true));
-        var cycle = new CompletionCycle("obj.pref suffix", 8, [new CompletionItem("prefix"), new CompletionItem("preferred")], -1);
-        var edit = new CompletionEdit(new PrettyPrompt.Documents.TextSpan(4, 4), "prefix");
+        Assert.Equal("", StyledText.Empty.ToAnsi(false));
+        Assert.Equal("plain", new StyledText("plain", [new StyledSpan(0, 5, new TextStyle())]).ToAnsi(true));
+        var cycle = new CompletionCycle("obj.pref suffix", 8, [new ReplCompletionItem("prefix"), new ReplCompletionItem("preferred")], -1);
+        var edit = new CompletionEdit(new TextRange(4, 4), "prefix");
         Assert.Equal("obj.prefix suffix", cycle.Apply(edit).Text);
         Assert.True(cycle.Matches(cycle.Text, cycle.Caret));
         Assert.False(cycle.Matches(cycle.Text, cycle.Caret - 1));
@@ -138,52 +134,6 @@ public class NodeMetadataContractTests
     public void ConditionalOperatorsAreNotSearchAliases(string source)
         => Assert.Empty(NodePathInput.Find(source));
 
-    [Fact]
-    public void APartialAnsiSequenceDoesNotWaitForeverOrConsumeTheNextEnter()
-    {
-        var keys = new Queue<ConsoleKeyInfo>(new[] {
-            new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false),
-            new ConsoleKeyInfo('[', ConsoleKey.NoName, false, false, false) });
-        var buffer = new ReplInputBuffer(() => keys.Count > 0, () => keys.Dequeue(), windows: false);
-        Assert.Equal(ConsoleKey.Escape, buffer.ReadKey().Key);
-        Assert.True(buffer.KeyAvailable);
-        Assert.Equal('[', buffer.ReadKey().KeyChar);
-        Assert.False(buffer.KeyAvailable);
-        keys.Enqueue(new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false));
-        Assert.Equal(ConsoleKey.Enter, buffer.ReadKey().Key);
-    }
-
-    [Fact]
-    public void UnixModifiedKeyWithoutBracketKeepsItsDigitPrefixAndFollowingEnter()
-    {
-        const string sequence = "\u001b27;2;13~";
-        var keys = new Queue<ConsoleKeyInfo>(sequence.Select(c => new ConsoleKeyInfo(c,
-            c == '\x1b' ? ConsoleKey.Escape : ConsoleKey.NoName, false, false, false))
-            .Append(new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false)));
-        var buffer = new ReplInputBuffer(() => keys.Count > 0, () => keys.Dequeue(), windows: false);
-        Assert.Equal(ConsoleKey.Escape, buffer.ReadKey().Key);
-        foreach (var character in sequence[1..])
-        {
-            Assert.True(buffer.KeyAvailable);
-            Assert.Equal(character, buffer.ReadKey().KeyChar);
-        }
-        Assert.False(buffer.KeyAvailable);
-        Assert.Equal(ConsoleKey.Enter, buffer.ReadKey().Key);
-    }
-
-    [Fact]
-    public void PasteEndingInATildeOrLookalikeMarkerIsPreservedUntilTheExactEndMarker()
-    {
-        const string content = "~ text \x1b[202~ and more ~";
-        var sequence = "\x1b[200~" + content + "\x1b[201~";
-        var keys = new Queue<ConsoleKeyInfo>(sequence.Select(c => new ConsoleKeyInfo(c,
-            c == '\x1b' ? ConsoleKey.Escape : ConsoleKey.NoName, false, false, false)));
-        var buffer = new ReplInputBuffer(() => keys.Count > 0, () => keys.Dequeue(), windows: false);
-        Assert.Equal(ConsoleKey.Insert, buffer.ReadKey().Key);
-        Assert.Equal(content, buffer.TakePaste());
-        Assert.Null(buffer.TakePaste());
-    }
-
     [Theory]
     [InlineData('P')]
     [InlineData('Q')]
@@ -192,19 +142,11 @@ public class NodeMetadataContractTests
     [InlineData('~')]
     public void UnixFunctionSequencesStopBeforeTheFollowingEnter(char terminator)
     {
-        var keys = new Queue<ConsoleKeyInfo>(new[] {
-            new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false),
-            new ConsoleKeyInfo('[', ConsoleKey.NoName, false, false, false),
-            new ConsoleKeyInfo(terminator, ConsoleKey.NoName, false, false, false),
-            new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false) });
-        var buffer = new ReplInputBuffer(() => keys.Count > 0, () => keys.Dequeue(), windows: false);
-        Assert.Equal(ConsoleKey.Escape, buffer.ReadKey().Key);
-        Assert.True(buffer.KeyAvailable);
-        Assert.Equal('[', buffer.ReadKey().KeyChar);
-        Assert.True(buffer.KeyAvailable);
-        Assert.Equal(terminator, buffer.ReadKey().KeyChar);
-        Assert.False(buffer.KeyAvailable);
-        Assert.Equal(ConsoleKey.Enter, buffer.ReadKey().Key);
+        var keys = new Queue<ConsoleKeyInfo>([Keys.Escape, new('[', ConsoleKey.NoName, false, false, false),
+            new(terminator, ConsoleKey.NoName, false, false, false), Keys.Enter]);
+        var reader = new ReplKeyReader(() => keys.Count > 0, keys.Dequeue, windows: false);
+        Assert.Equal(Keys.Enter, Assert.IsType<KeyInput>(reader.Read(idle: false)).Key);
+        Assert.Empty(keys);
     }
 }
 
@@ -231,24 +173,24 @@ public class EditorContractIntegrationTests
             "class Example : IThing { public int Value { get; set; } public int Field; " +
             "public int Map(int parameter) { var local = \"regular\"; var verbatim = @\"literal\"; int number = 42; " +
             "/* comment */ if (true) return parameter + number; return 0; } }";
-        var highlighting = bed.Pump(bed.Callbacks.HighlightCallbackAsync(source, bed.Token));
-        Assert.Contains(highlighting, span => span.Formatting.Foreground == AnsiColor.Yellow);
-        Assert.Contains(highlighting, span => span.Formatting.Foreground == AnsiColor.BrightMagenta);
-        Assert.Contains(highlighting, span => span.Formatting.Foreground == AnsiColor.Green);
-        Assert.Contains(highlighting, span => span.Formatting.Foreground == AnsiColor.BrightCyan);
-        Assert.Contains(highlighting, span => span.Formatting.Foreground == AnsiColor.BrightYellow);
-        Assert.Empty(bed.Pump(bed.Callbacks.HighlightCallbackAsync(" ", bed.Token)));
-        Assert.Equal(AnsiColor.BrightMagenta, Assert.Single(bed.Pump(bed.Callbacks.HighlightCallbackAsync(":help", bed.Token))).Formatting.Foreground);
-        Assert.Equal(AnsiColor.BrightMagenta, Assert.Single(bed.Pump(bed.Callbacks.HighlightCallbackAsync("cd ", bed.Token))).Formatting.Foreground);
+        var highlighting = bed.Pump(bed.Language.HighlightAsync(source, bed.Token));
+        Assert.Contains(highlighting, span => span.Style.Foreground == TermColor.Yellow);
+        Assert.Contains(highlighting, span => span.Style.Foreground == TermColor.BrightMagenta);
+        Assert.Contains(highlighting, span => span.Style.Foreground == TermColor.Green);
+        Assert.Contains(highlighting, span => span.Style.Foreground == TermColor.BrightCyan);
+        Assert.Contains(highlighting, span => span.Style.Foreground == TermColor.BrightYellow);
+        Assert.Empty(bed.Pump(bed.Language.HighlightAsync(" ", bed.Token)));
+        Assert.Equal(TermColor.BrightMagenta, Assert.Single(bed.Pump(bed.Language.HighlightAsync(":help", bed.Token))).Style.Foreground);
+        Assert.Equal(TermColor.BrightMagenta, Assert.Single(bed.Pump(bed.Language.HighlightAsync("cd ", bed.Token))).Style.Foreground);
         foreach (var prefix in new[] { "", "c", "r", "p", "cp", "mv" })
         {
             var commands = bed.Items(prefix).Where(item => item.DisplayText is "cd" or "rm" or "pwd" or "cp" or "mv").ToArray();
             Assert.NotEmpty(commands);
             foreach (var command in commands)
-                Assert.NotEmpty(bed.Pump(command.GetExtendedDescriptionAsync(bed.Token)).Text!);
+                Assert.NotEmpty(bed.Pump(command.DescriptionAsync(bed.Token)).Text!);
         }
         var awaited = bed.Items("ls ").Single(item => item.DisplayText == "$Control");
-        Assert.Equal("$Control", bed.Pump(awaited.GetComplexTextEditAsync("ls ", 3, bed.Token)).NewText);
+        Assert.Equal("$Control", bed.Edit(awaited, "ls ", 3).NewText);
         Assert.Equal("Control", NodePathInput.Capture(bed.Root, bed.Token)["Control"].Path);
         var missingCall = bed.Pump(ReplCompletion.CallEditAsync(bed.Prepare(""), new TextSpan(0, 0), "Unknown", bed.Token));
         Assert.Equal("Unknown()", missingCall.NewText);
@@ -256,50 +198,42 @@ public class EditorContractIntegrationTests
         var existingCall = bed.Pump(ReplCompletion.CallEditAsync(bed.Prepare("root.GetTree ()"), new TextSpan(5, 7), "GetTree", bed.Token));
         Assert.Equal("GetTree", existingCall.NewText);
         Assert.Equal(14, existingCall.NewCaret);
-        Assert.False(bed.Pump(bed.Callbacks.ShouldOpenCompletionWindowAsync("?Timer", 0,
-            new KeyPress(new ConsoleKeyInfo('?', ConsoleKey.Oem2, true, false, false)), bed.Token)));
-        var cdHighlight = bed.Pump(bed.Callbacks.HighlightCallbackAsync("cd root", bed.Token));
-        Assert.Contains(cdHighlight, span => span.Start == 0 && span.Length == 2 && span.Formatting.Foreground == AnsiColor.BrightMagenta);
+        Assert.False(bed.Language.ShouldOpenCompletion("?Timer", 0, '?'));
+        var cdHighlight = bed.Pump(bed.Language.HighlightAsync("cd root", bed.Token));
+        Assert.Contains(cdHighlight, span => span.Start == 0 && span.Length == 2 && span.Style.Foreground == TermColor.BrightMagenta);
         var ordinaryNode = bed.Items("$Cont").Single(item => item.DisplayText == "$Control");
-        Assert.Equal("$[\"Control", bed.Pump(ordinaryNode.GetComplexTextEditAsync("$[\"Cont\"]", 7, bed.Token)).NewText);
-        Assert.False(bed.Pump(bed.Callbacks.ConfirmCompletionCommit("$[\"Control\"]", 5,
-            new KeyPress(new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, true)), bed.Token)));
+        Assert.Equal("$[\"Control", bed.Edit(ordinaryNode, "$[\"Cont\"]", 7).NewText);
+        Assert.False(bed.Language.AcceptsCommit(ordinaryNode, "$[\"Control\"]", 5, '.'));
         var oldSize = bed.Items("root.Si").Single(item => item.DisplayText == "Size");
-        var changedContext = bed.Pump(oldSize.GetComplexTextEditAsync("world.Si", 8, bed.Token));
+        var changedContext = bed.Edit(oldSize, "world.Si", 8);
         Assert.Equal("Size", changedContext.NewText);
         var method = bed.Items("world.Op").Single(item => item.DisplayText == "Open");
-        Assert.True(bed.Pump(bed.Callbacks.ConfirmCompletionCommit("world.Op", 8,
-            new KeyPress(new ConsoleKeyInfo('.', ConsoleKey.OemPeriod, false, false, false)), bed.Token)));
-        Assert.Equal("Open", bed.Pump(method.GetComplexTextEditAsync("world.Op", 8, bed.Token)).NewText);
+        Assert.True(bed.Language.AcceptsCommit(method, "world.Op", 8, '.'));
+        Assert.Equal("Open", bed.Pump(bed.Language.CommitAsync(method, "world.Op", 8, CommitKey.Character, bed.Token)).NewText);
+        Assert.Equal("Open()", bed.Edit(method, "world.Op", 8).NewText);
         Assert.Equal(":exit", bed.Read("", new ConsoleKeyInfo('\x04', ConsoleKey.D, false, false, true)));
         Assert.Equal("x", bed.Read("x", new('\x04', ConsoleKey.D, false, false, true), Bed.Submit));
         Assert.Equal("$Controlzz", bed.Read("$Cont", Bed.Tab, new('z', ConsoleKey.Z, false, false, false),
             new('z', ConsoleKey.Z, false, false, false), Bed.Tab, Bed.Submit));
-        var close = new KeyPress(new ConsoleKeyInfo(')', ConsoleKey.D0, true, false, false));
-        Assert.Equal(ConsoleKey.RightArrow, bed.Pump(bed.Callbacks.TransformKeyPressAsync("root.GetTree()", 13, close, bed.Token)).ConsoleKeyInfo.Key);
-        Assert.Equal(')', bed.Pump(bed.Callbacks.TransformKeyPressAsync("\")\"", 1, close, bed.Token)).ConsoleKeyInfo.KeyChar);
+        Assert.True(bed.Pump(bed.Language.SkipsCloseParenAsync("root.GetTree()", 13, bed.Token)));
+        Assert.False(bed.Pump(bed.Language.SkipsCloseParenAsync("\")\"", 1, bed.Token)));
+        Assert.False(bed.Pump(bed.Language.SkipsCloseParenAsync("root", 4, bed.Token)));
         var quoted = bed.Items("$[\"Cont\"]").Single(item => item.DisplayText == "$[\"Control\"]");
-        var quotedEdit = bed.Pump(quoted.GetComplexTextEditAsync("$[\"Cont\"]", 8, bed.Token));
+        var quotedEdit = bed.Edit(quoted, "$[\"Cont\"]", 8);
         Assert.Equal("$[\"Control\"", quotedEdit.NewText);
-        var extensionColors = bed.Pump(bed.Callbacks.HighlightCallbackAsync("Enumerable.Range(0, 1).Select(item => item)", bed.Token));
-        Assert.Contains(extensionColors, span => span.Formatting.Foreground == AnsiColor.BrightYellow);
+        var extensionColors = bed.Pump(bed.Language.HighlightAsync("Enumerable.Range(0, 1).Select(item => item)", bed.Token));
+        Assert.Contains(extensionColors, span => span.Style.Foreground == TermColor.BrightYellow);
         var queued = new Node { Name = "ExcludedFromCompletion" };
         bed.Root.AddChild(queued);
         queued.QueueFree();
         Assert.DoesNotContain("ExcludedFromCompletion", NodePathInput.Capture(bed.Root, bed.Token).Keys);
         Assert.Equal("$Control/EnterVrButton.", bed.Read("$Control/EnterVrButton", new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false), Bed.Tab, Bed.Submit));
-        var tab = new KeyPress(Bed.Tab);
-        Assert.Equal(ConsoleKey.Spacebar, bed.Pump(bed.Callbacks.TransformKeyPressAsync("root.Size", 4, tab, bed.Token)).ConsoleKeyInfo.Key);
-        Assert.Equal(ConsoleKey.Spacebar, bed.Pump(bed.Callbacks.TransformKeyPressAsync("root.GetTree ()", 12, tab, bed.Token)).ConsoleKeyInfo.Key);
-        var pastedCallbacks = new ReplPromptCallbacks(bed.Session, () => "pasted");
-        Assert.Equal("pasted", bed.Read("", [new('\0', ConsoleKey.Insert, true, false, false), Bed.Submit], pastedCallbacks));
-        var noPaste = bed.Pump(bed.Callbacks.TransformKeyPressAsync("", 0,
-            new KeyPress(new ConsoleKeyInfo('\0', ConsoleKey.Insert, true, false, false)), bed.Token));
-        Assert.Null(noPaste.PastedText);
+        Assert.Same(TabAction.Open, bed.Pump(bed.Language.TabAsync("root.Size", 4, bed.Token)));
+        Assert.Same(TabAction.Open, bed.Pump(bed.Language.TabAsync("root.GetTree ()", 12, bed.Token)));
         using var cancelled = new CancellationTokenSource();
         cancelled.Cancel();
-        Assert.ThrowsAny<OperationCanceledException>(() => bed.Pump(bed.Callbacks.HighlightCallbackAsync("$Control", cancelled.Token)));
-        Assert.NotEmpty(bed.Pump(bed.Callbacks.HighlightCallbackAsync("$Control", bed.Token)));
+        Assert.ThrowsAny<OperationCanceledException>(() => bed.Pump(bed.Language.HighlightAsync("$Control", cancelled.Token)));
+        Assert.NotEmpty(bed.Pump(bed.Language.HighlightAsync("$Control", bed.Token)));
     }
 
     [Fact]
@@ -336,15 +270,14 @@ public class EditorContractIntegrationTests
             var start = source.IndexOf('.') + 1;
             var length = source[start..source.IndexOf('<')].TrimEnd().Length;
             var edit = bed.Pump(ReplCompletion.CallEditAsync(bed.Prepare(source), new TextSpan(start, length), name, bed.Token));
-            var result = source.Remove(edit.SpanToReplace.Start, edit.SpanToReplace.Length).Insert(edit.SpanToReplace.Start, edit.NewText);
+            var result = source.Remove(edit.Range.Start, edit.Range.Length).Insert(edit.Range.Start, edit.NewText);
             Assert.Equal(expected, result);
             Assert.Equal(caret, edit.NewCaret);
         }
         var completion = bed.Items("root.GetNo").Single(item => item.DisplayText == "GetNode");
         const string text = "root.GetNo<Node>";
-        var committed = bed.Pump(completion.GetComplexTextEditAsync(text, "root.GetNo".Length, bed.Token));
-        Assert.Equal("root.GetNode<Node>()", text.Remove(committed.SpanToReplace.Start, committed.SpanToReplace.Length)
-            .Insert(committed.SpanToReplace.Start, committed.NewText));
+        var committed = bed.Edit(completion, text, "root.GetNo".Length);
+        Assert.Equal("root.GetNode<Node>()", committed.Apply(text).Text);
     }
 
     [Fact]
@@ -367,7 +300,7 @@ public class EditorContractIntegrationTests
         Assert.Contains(overloads, item => item.Parameters.Count >= 3);
         const string comparison = "root == ?EnterVrB";
         var completion = bed.Items(comparison).Single(item => item.DisplayText == "$Control/EnterVrButton");
-        Assert.Equal("$Control/EnterVrButton", bed.Pump(completion.GetComplexTextEditAsync(comparison, comparison.Length, bed.Token)).NewText);
+        Assert.Equal("$Control/EnterVrButton", bed.Edit(completion, comparison, comparison.Length).NewText);
     }
 
     [Fact]
@@ -386,8 +319,8 @@ public class EditorContractIntegrationTests
         var call = bed.Prepare("new Docs(1).Call(");
         var (overloads, _) = bed.Pump(ReplCompletion.OverloadsAsync(call, call.Input.Original.Length, bed.Token));
         Assert.NotEmpty(overloads);
-        Assert.Equal("Describe a call.", overloads[0].Summary.Text);
-        Assert.Equal("How many.", overloads[0].Parameters[0].Description.Text);
+        Assert.Equal("Describe a call.", overloads[0].Summary);
+        Assert.Equal("How many.", overloads[0].Parameters[0].Documentation);
         Assert.Equal("null", bed.Success("(object)null").Value);
         Assert.Equal("7", bed.Success("return 7;").Value);
         Assert.Equal("[]", bed.Success("Array.Empty<object>()").Value);
@@ -415,32 +348,27 @@ public class EditorContractIntegrationTests
     [InlineData(8)]
     [InlineData(9)]
     [InlineData(10)]
-    public void OutputHandoffPreservesVariableCompletion(int interruptRead)
+    public void OutputWhileTypingPreservesVariableCompletion(int interruptRead)
     {
         using var bed = new Bed();
         bed.Success("var colorAnswer = 42;");
-        var keys = PromptOutputTests.Type("colorAns").Append(Bed.Tab).Append(Bed.Tab).Append(Bed.Submit);
-        var console = new PromptConsole(keys);
-        var output = new ReplPromptOutput(console);
-        console.Output = output;
-        using var transcript = new StringWriter();
-        using var progress = output.Wrap(transcript);
+        var keys = Keys.Type("colorAns").Append(Bed.Tab).Append(Bed.Tab).Append(Bed.Submit).ToArray();
+        var terminal = new VirtualTerminal(80, 12);
+        using var screen = new ReplScreen(terminal, color: true);
+        var editor = new ReplEditor(bed.Language);
+        editor.Changed += screen.Invalidate;
+        screen.SetRegion((width, height) => RegionLayout.Build("godot> ", editor.View, null, width, height, true));
         var reads = 0;
-        console.BeforeRead = () =>
+        var result = bed.Pump(Task.Run(() => editor.ReadLineAsync(_ =>
         {
-            if (reads++ == interruptRead) progress.WriteLine("background result");
-        };
-        var text = bed.Pump(Task.Run(async () =>
-        {
-            await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(bed.Session, terminalOutput: output),
-                console: console, configuration: ReplHost.CreatePromptConfiguration());
-            return (await output.ReadLineAsync(prompt, 7)).Text;
-        }, bed.Token));
-        Assert.Equal("colorAnswer", text);
-        Assert.Contains("background result", transcript.ToString());
-        Assert.Equal("42", bed.Success(text).Value);
+            if (reads == interruptRead) screen.Write("background result\n");
+            screen.Flush();
+            return Task.FromResult<TerminalInput>(new KeyInput(keys[reads++]));
+        }, bed.Token), bed.Token));
+        Assert.Equal("colorAnswer", result.Text);
+        Assert.Contains("background result", terminal.Text);
+        Assert.Equal("42", bed.Success(result.Text).Value);
     }
-
 
     private sealed class Bed : IDisposable
     {
@@ -449,7 +377,7 @@ public class EditorContractIntegrationTests
         private readonly ReplGlobals globals;
         public Window Root => globals.root;
         public ReplSession Session { get; }
-        public IPromptCallbacks Callbacks { get; }
+        public ReplLanguage Language { get; }
         public CancellationToken Token => TestContext.Current.CancellationToken;
         public static ConsoleKeyInfo Submit => new('\r', ConsoleKey.Enter, false, false, true);
         public static ConsoleKeyInfo Tab => new('\t', ConsoleKey.Tab, false, false, false);
@@ -462,7 +390,7 @@ public class EditorContractIntegrationTests
             globals = new ReplGlobals(engine);
             var dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("Transient" + Guid.NewGuid()), AssemblyBuilderAccess.Run);
             Session = new ReplSession(globals, [game, dynamicAssembly], dispatcher);
-            Callbacks = new ReplPromptCallbacks(Session);
+            Language = new ReplLanguage(Session);
         }
         public T Pump<T>(Task<T> task)
         {
@@ -485,21 +413,17 @@ public class EditorContractIntegrationTests
             return result;
         }
         public PreparedInput Prepare(string text) => Pump(Session.PrepareAsync(text, Token));
-        public IReadOnlyList<CompletionItem> Items(string text)
+        public IReadOnlyList<ReplCompletionItem> Items(string text)
         {
-            var span = Pump(Callbacks.GetSpanToReplaceByCompletionAsync(text, text.Length, Token));
-            return Pump(Callbacks.GetCompletionItemsAsync(text, text.Length, span, Token));
+            var span = Pump(Language.CompletionRangeAsync(text, text.Length, Token));
+            return Pump(Language.CompletionsAsync(text, text.Length, span, Token));
         }
-        public string Read(string text, params ConsoleKeyInfo[] keys) => Read(text, keys, new ReplPromptCallbacks(Session));
-        public string Read(string text, ConsoleKeyInfo[] keys, ReplPromptCallbacks callbacks)
+        /// <summary>The edit for accepting an item with Tab, which also completes calls with parentheses.</summary>
+        public CompletionEdit Edit(ReplCompletionItem item, string text, int caret) => Pump(Language.CommitAsync(item, text, caret, CommitKey.Tab, Token));
+        public string Read(string text, params ConsoleKeyInfo[] keys)
         {
             var typed = text.Select(c => new ConsoleKeyInfo(c, char.IsLetterOrDigit(c) ? (ConsoleKey)char.ToUpperInvariant(c) : ConsoleKey.NoName, false, false, false));
-            var console = new PromptConsole(typed.Concat(keys));
-            return Pump(Task.Run(async () =>
-            {
-                await using var prompt = new Prompt(callbacks: callbacks, console: console, configuration: ReplHost.CreatePromptConfiguration());
-                return (await prompt.ReadLineAsync()).Text;
-            }, Token));
+            return Pump(Task.Run(() => EditorDriver.ReadAsync(new ReplLanguage(Session), typed.Concat(keys), token: Token), Token));
         }
         public void Dispose()
         {

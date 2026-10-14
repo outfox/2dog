@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using PrettyPrompt;
-using PrettyPrompt.Consoles;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -48,7 +46,7 @@ public class ReplIntegrationTests
         // Warming language services must leave the user's submission chain untouched.
         Pump(Task.Run(async () =>
         {
-            await new ReplPromptCallbacks(session).WarmUpAsync(testCancellation);
+            await new ReplLanguage(session).WarmUpAsync(testCancellation);
             return true;
         }));
 
@@ -98,24 +96,24 @@ public class ReplIntegrationTests
         }
         finally { File.Delete(scriptPath); }
 
-        var callbacks = (IPromptCallbacks)new ReplPromptCallbacks(session);
+        var callbacks = new ReplLanguage(session);
         const string text = "madeNode.Na";
-        var span = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(text, text.Length, testCancellation)));
-        var items = Pump(Task.Run(() => callbacks.GetCompletionItemsAsync(text, text.Length, span, testCancellation)));
+        var span = Pump(Task.Run(() => callbacks.CompletionRangeAsync(text, text.Length, testCancellation)));
+        var items = Pump(Task.Run(() => callbacks.CompletionsAsync(text, text.Length, span, testCancellation)));
         Assert.Contains(items, item => item.DisplayText == "Name");
         var selected = items.First(item => item.DisplayText == "Name");
-        var edit = Pump(Task.Run(() => selected.GetComplexTextEditAsync(text, text.Length, testCancellation)));
+        var edit = Pump(Task.Run(() => callbacks.CommitAsync(selected, text, text.Length, CommitKey.Tab, testCancellation)));
         Assert.Equal("Name", edit.NewText);
         // The same menu item survives extra typing; accepting must replace the new filter.
         const string filtered = "madeNode.Name";
-        var filteredEdit = Pump(Task.Run(() => selected.GetComplexTextEditAsync(filtered, filtered.Length, testCancellation)));
-        Assert.Equal(4, filteredEdit.SpanToReplace.Length);
+        var filteredEdit = Pump(Task.Run(() => callbacks.CommitAsync(selected, filtered, filtered.Length, CommitKey.Tab, testCancellation)));
+        Assert.Equal(4, filteredEdit.Range.Length);
         Assert.Equal("Name", filteredEdit.NewText);
-        var commandSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(":he", 3, testCancellation)));
+        var commandSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(":he", 3, testCancellation)));
         Assert.Equal(0, commandSpan.Start);
         Assert.Equal(3, commandSpan.Length);
-        Assert.NotEmpty(Pump(Task.Run(() => selected.GetExtendedDescriptionAsync(testCancellation))).Text!);
-        Assert.NotEmpty(Pump(Task.Run(() => callbacks.HighlightCallbackAsync("var value = 123;", testCancellation))));
+        Assert.NotEmpty(Pump(Task.Run(() => selected.DescriptionAsync(testCancellation))).Text!);
+        Assert.NotEmpty(Pump(Task.Run(() => callbacks.HighlightAsync("var value = 123;", testCancellation))));
 
         string ReadPrompt(string input, bool multiline, params ConsoleKeyInfo[] extraKeys)
         {
@@ -129,25 +127,13 @@ public class ReplIntegrationTests
                     _ => ConsoleKey.NoName,
                 },
                 false, false, false)).Concat(extraKeys);
-            var console = new PromptConsole(keys);
-            return Pump(Task.Run(async () =>
-            {
-                await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session), console: console,
-                    configuration: ReplHost.CreatePromptConfiguration(multiline));
-                return (await prompt.ReadLineAsync()).Text;
-            }));
+            return Pump(Task.Run(() => EditorDriver.ReadAsync(new ReplLanguage(session), keys, multiline, testCancellation)));
         }
         var pastedCode = "if (true)\n{\n    GD.Print(42);\n}";
         var pasteKeys = ("\x1b[200~" + pastedCode + "\x1b[201~").Select(c => new ConsoleKeyInfo(c,
             c == '\x1b' ? ConsoleKey.Escape : ConsoleKey.NoName, false, false, false))
             .Append(new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false));
-        var pasteConsole = new PromptConsole(pasteKeys, buffered: true);
-        var pasted = Pump(Task.Run(async () =>
-        {
-            await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session, pasteConsole.TakePaste), console: pasteConsole,
-                configuration: ReplHost.CreatePromptConfiguration());
-            return (await prompt.ReadLineAsync()).Text;
-        }));
+        var pasted = Pump(Task.Run(() => EditorDriver.ReadQueuedAsync(new ReplLanguage(session), pasteKeys, windows: false)));
         Assert.Equal(pastedCode.Replace("\n", Environment.NewLine), pasted);
 
         var tab = new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, false);
@@ -281,68 +267,65 @@ public class ReplIntegrationTests
 
         foreach (var finish in new[] { controlEnter, new ConsoleKeyInfo('\x03', ConsoleKey.C, false, false, true) })
         {
-            var console = new PromptConsole("$Cont".Select(c => new ConsoleKeyInfo(c, (ConsoleKey)char.ToUpperInvariant(c), false, false, false))
-                .Concat([finish, tab, escape, enter]));
+            var editor = new ReplEditor(new ReplLanguage(session));
             var nextText = Pump(Task.Run(async () =>
             {
-                await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session), console: console,
-                    configuration: ReplHost.CreatePromptConfiguration());
-                await prompt.ReadLineAsync();
-                return (await prompt.ReadLineAsync()).Text;
+                await EditorDriver.RunAsync(editor, "$Cont".Select(c => new ConsoleKeyInfo(c, (ConsoleKey)char.ToUpperInvariant(c), false, false, false)).Append(finish), testCancellation);
+                return (await EditorDriver.RunAsync(editor, [tab, escape, enter], testCancellation)).Text;
             }));
             Assert.Equal("", nextText); // Tab opened suggestions rather than inserting indentation.
         }
 
         var existingCall = "world.Open(\"res://tool_test.tscn\")";
-        var openSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(existingCall, 10, testCancellation)));
-        var openItems = Pump(Task.Run(() => callbacks.GetCompletionItemsAsync(existingCall, 10, openSpan, testCancellation)));
-        var openEdit = Pump(Task.Run(() => openItems.First(i => i.DisplayText == "Open").GetComplexTextEditAsync(existingCall, 10, testCancellation)));
+        var openSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(existingCall, 10, testCancellation)));
+        var openItems = Pump(Task.Run(() => callbacks.CompletionsAsync(existingCall, 10, openSpan, testCancellation)));
+        var openEdit = Pump(Task.Run(() => callbacks.CommitAsync(openItems.First(i => i.DisplayText == "Open"), existingCall, 10, CommitKey.Tab, testCancellation)));
         Assert.Equal("Open", openEdit.NewText);
         Assert.Equal(11, openEdit.NewCaret);
-        var overloads = Pump(Task.Run(() => callbacks.GetOverloadsAsync("world.Open()", 11, testCancellation)));
-        Assert.Contains(overloads.Item1, o => o.Signature.Text!.Contains("Open(string path)", StringComparison.Ordinal));
-        Assert.Equal(0, overloads.ArgumentIndex);
-        var godotOverloads = Pump(Task.Run(() => callbacks.GetOverloadsAsync("$Control.GetNode(\"nested,(comma)\", ", 35, testCancellation)));
-        Assert.Equal(1, godotOverloads.ArgumentIndex);
+        var overloads = Pump(Task.Run(() => callbacks.SignaturesAsync("world.Open()", 11, testCancellation)));
+        Assert.Contains(overloads.Items, o => o.Signature.Text.Contains("Open(string path)", StringComparison.Ordinal));
+        Assert.Equal(0, overloads.Argument);
+        var godotOverloads = Pump(Task.Run(() => callbacks.SignaturesAsync("$Control.GetNode(\"nested,(comma)\", ", 35, testCancellation)));
+        Assert.Equal(1, godotOverloads.Argument);
 
         const string listInput = "ls $Cont";
-        var listSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(listInput, listInput.Length, testCancellation)));
+        var listSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(listInput, listInput.Length, testCancellation)));
         Assert.Equal(3, listSpan.Start);
-        Assert.Contains(Pump(Task.Run(() => callbacks.GetCompletionItemsAsync("l", 1, new PrettyPrompt.Documents.TextSpan(0, 1), testCancellation))),
+        Assert.Contains(Pump(Task.Run(() => callbacks.CompletionsAsync("l", 1, new TextRange(0, 1), testCancellation))),
             item => item.DisplayText == "ls");
-        var listColors = Pump(Task.Run(() => callbacks.HighlightCallbackAsync(listInput, testCancellation)));
+        var listColors = Pump(Task.Run(() => callbacks.HighlightAsync(listInput, testCancellation)));
         Assert.Contains(listColors, color => color.Start == 0 && color.Length == 2);
-        Assert.Contains(listColors, color => color.Start == 3 && color.Length == 1 && color.Formatting.Foreground == NodeColors.Grey);
+        Assert.Contains(listColors, color => color.Start == 3 && color.Length == 1 && color.Style.Foreground == NodeColors.Grey);
         Assert.Contains(listColors, color => color.Start == 4 && color.Length == 4);
 
         const string typedInput = "$Control.Si";
-        var typedSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(typedInput, typedInput.Length, testCancellation)));
-        var typedItems = Pump(Task.Run(() => callbacks.GetCompletionItemsAsync(typedInput, typedInput.Length, typedSpan, testCancellation)));
+        var typedSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(typedInput, typedInput.Length, testCancellation)));
+        var typedItems = Pump(Task.Run(() => callbacks.CompletionsAsync(typedInput, typedInput.Length, typedSpan, testCancellation)));
         var size = Assert.Single(typedItems, item => item.DisplayText == "Size");
-        var sizeEdit = Pump(Task.Run(() => size.GetComplexTextEditAsync(typedInput, typedInput.Length, testCancellation)));
-        Assert.Equal(typedInput.IndexOf("Si", StringComparison.Ordinal), sizeEdit.SpanToReplace.Start);
-        Assert.Equal(2, sizeEdit.SpanToReplace.Length);
+        var sizeEdit = Pump(Task.Run(() => callbacks.CommitAsync(size, typedInput, typedInput.Length, CommitKey.Tab, testCancellation)));
+        Assert.Equal(typedInput.IndexOf("Si", StringComparison.Ordinal), sizeEdit.Range.Start);
+        Assert.Equal(2, sizeEdit.Range.Length);
         Assert.Equal("Size", sizeEdit.NewText);
         const string nodeInput = "$Control/Signals/Sources/";
-        var nodeSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(nodeInput, nodeInput.Length, testCancellation)));
-        var nodeItems = Pump(Task.Run(() => callbacks.GetCompletionItemsAsync(nodeInput, nodeInput.Length, nodeSpan, testCancellation)));
+        var nodeSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(nodeInput, nodeInput.Length, testCancellation)));
+        var nodeItems = Pump(Task.Run(() => callbacks.CompletionsAsync(nodeInput, nodeInput.Length, nodeSpan, testCancellation)));
         Assert.Contains(nodeItems, item => item.DisplayText == "$Control/Signals/Sources/CSharpTicker");
         // The terminal caches items from '$'; they must re-rank correctly as paths deepen.
-        var initialSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync("$", 1, testCancellation)));
-        var initialItems = Pump(Task.Run(() => callbacks.GetCompletionItemsAsync("$", 1, initialSpan, testCancellation)));
+        var initialSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync("$", 1, testCancellation)));
+        var initialItems = Pump(Task.Run(() => callbacks.CompletionsAsync("$", 1, initialSpan, testCancellation)));
         var cachedTicker = Assert.Single(initialItems, item => item.DisplayText == "$Control/Signals/Sources/CSharpTicker");
         var cachedParent = Assert.Single(initialItems, item => item.DisplayText == "$Control");
-        Assert.True(cachedTicker.GetCompletionItemPriority(nodeInput, nodeInput.Length, nodeSpan) >
-            cachedParent.GetCompletionItemPriority(nodeInput, nodeInput.Length, nodeSpan));
+        Assert.True(cachedTicker.Priority(nodeInput, nodeInput.Length, nodeSpan) >
+            cachedParent.Priority(nodeInput, nodeInput.Length, nodeSpan));
         const string quotedInput = "$[\"Control/Signals/Sources/\"]";
-        var quotedSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(quotedInput, quotedInput.Length, testCancellation)));
-        Assert.True(cachedTicker.GetCompletionItemPriority(quotedInput, quotedInput.Length, quotedSpan) >= 0);
+        var quotedSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(quotedInput, quotedInput.Length, testCancellation)));
+        Assert.True(cachedTicker.Priority(quotedInput, quotedInput.Length, quotedSpan) >= 0);
         const string gameInput = "$Control/Signals/Sources/CSharpTicker.Ti";
-        var gameSpan = Pump(Task.Run(() => callbacks.GetSpanToReplaceByCompletionAsync(gameInput, gameInput.Length, testCancellation)));
-        Assert.Contains(Pump(Task.Run(() => callbacks.GetCompletionItemsAsync(gameInput, gameInput.Length, gameSpan, testCancellation))), item => item.DisplayText == "Tick");
-        var colors = Pump(Task.Run(() => callbacks.HighlightCallbackAsync(typedInput, testCancellation)));
-        Assert.Contains(colors, span => span.Start == 0 && span.Length == 1 && span.Formatting.Foreground == NodeColors.Grey);
-        Assert.Contains(colors, span => span.Start == 1 && span.Length == "Control".Length && span.Formatting.Foreground == NodeColors.Color(NodeFamily.Control));
+        var gameSpan = Pump(Task.Run(() => callbacks.CompletionRangeAsync(gameInput, gameInput.Length, testCancellation)));
+        Assert.Contains(Pump(Task.Run(() => callbacks.CompletionsAsync(gameInput, gameInput.Length, gameSpan, testCancellation))), item => item.DisplayText == "Tick");
+        var colors = Pump(Task.Run(() => callbacks.HighlightAsync(typedInput, testCancellation)));
+        Assert.Contains(colors, span => span.Start == 0 && span.Length == 1 && span.Style.Foreground == NodeColors.Grey);
+        Assert.Contains(colors, span => span.Start == 1 && span.Length == "Control".Length && span.Style.Foreground == NodeColors.Color(NodeFamily.Control));
         Assert.All(colors, span => Assert.True(span.Start >= 0 && span.End <= typedInput.Length));
         var mappedFailure = Eval("$Control.NoSuchProperty");
         Assert.StartsWith("(1,10): CS1061:", mappedFailure.Error);
@@ -403,23 +386,22 @@ public class ReplIntegrationTests
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public void InputModesKeepCompletionAndSubmitBindingsDistinct(bool multiline)
+    public async Task InputModesKeepCompletionAndSubmitKeysDistinct(bool multiline)
     {
-        var keys = ReplHost.CreatePromptConfiguration(multiline).KeyBindings;
-        var enter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, false);
-        var shiftEnter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, true, false, false);
-        var controlEnter = new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, true);
-        var tab = new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, false);
-        Assert.Equal(multiline, keys.NewLine.Matches(enter));
-        Assert.Equal(!multiline, keys.SubmitPrompt.Matches(enter));
-        Assert.Equal(!multiline, keys.NewLine.Matches(shiftEnter));
-        Assert.Equal(multiline, keys.SubmitPrompt.Matches(shiftEnter));
-        Assert.True(keys.SubmitPrompt.Matches(controlEnter));
-        Assert.False(keys.NewLine.Matches(controlEnter));
-        Assert.True(keys.CommitCompletion.Matches(enter));
-        Assert.False(keys.CommitCompletion.Matches(shiftEnter));
-        Assert.True(keys.CommitCompletion.Matches(tab));
-        Assert.False(keys.TriggerCompletionList.Matches(tab));
+        var words = new FixedWords("alpha");
+        Assert.Equal("a" + (multiline ? Environment.NewLine + "b" : ""), await EditorDriver.ReadAsync(words, [.. Keys.Type("a"), Keys.Escape, Keys.Enter, .. Keys.Type("b"), Keys.ShiftEnter], multiline, TestContext.Current.CancellationToken));
+        Assert.Equal("a" + (multiline ? "" : Environment.NewLine + "b"), await EditorDriver.ReadAsync(words, [.. Keys.Type("a"), Keys.Escape, Keys.ShiftEnter, .. Keys.Type("b"), Keys.Enter], multiline, TestContext.Current.CancellationToken));
+        Assert.Equal("a" + Environment.NewLine + "b", await EditorDriver.ReadAsync(words, [.. Keys.Type("a"), Keys.Escape, Keys.AltEnter, .. Keys.Type("b"), Keys.ControlEnter], multiline, TestContext.Current.CancellationToken));
+        // Enter accepts an open menu's selection; Shift+Enter and Ctrl+Enter never do.
+        Assert.Equal("alpha", await EditorDriver.ReadAsync(words, [.. Keys.Type("a"), Keys.Enter, Keys.ControlEnter], multiline, TestContext.Current.CancellationToken));
+        Assert.Equal("a", await EditorDriver.ReadAsync(words, [.. Keys.Type("a"), Keys.ControlEnter], multiline, TestContext.Current.CancellationToken));
+        Assert.Equal("alpha", await EditorDriver.ReadAsync(words, [.. Keys.Type("a"), Keys.Tab, Keys.ControlEnter], multiline, TestContext.Current.CancellationToken));
+    }
+
+    private sealed class FixedWords(params string[] words) : PlainLanguage
+    {
+        public override Task<IReadOnlyList<ReplCompletionItem>> CompletionsAsync(string text, int caret, TextRange range, CancellationToken token)
+            => Task.FromResult<IReadOnlyList<ReplCompletionItem>>(words.Select(w => new ReplCompletionItem(w)).ToArray());
     }
 
     [Theory]

@@ -1,180 +1,166 @@
-using System.Collections.Concurrent;
-using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using PrettyPrompt.Consoles;
+using System.Threading.Channels;
 
 namespace twodog.Repl;
 
-internal sealed record ReplTerminalMessage(int Id, string Method, string? Text = null, bool Value = false,
-    ReplTerminalState? State = null, ReplTerminalKey? Key = null);
-internal sealed record ReplTerminalState(int CursorTop, int BufferWidth, int WindowHeight, int WindowTop);
-internal sealed record ReplTerminalKey(char Character, ConsoleKey Key, ConsoleModifiers Modifiers, string? Paste);
+/// <summary>Client to host: "key", "text" (a paste), "size" and "cancel" (an interrupt signal).
+/// Host to client: "write" (terminal output) and "end".</summary>
+internal sealed record ReplTerminalMessage(string Method, string? Text = null, ReplTerminalKey? Key = null, int Width = 0, int Height = 0);
+internal sealed record ReplTerminalKey(char Character, ConsoleKey Key, ConsoleModifiers Modifiers);
 
-// Interactive clients forward terminal operations, so the real session supplies
-// highlighting, completion, navigation and all editing behavior. Raw connections
-// still exchange ordinary UTF-8 submissions/results without this protocol.
+// Interactive clients forward keys and draw what the host renders, so the session on the host supplies
+// highlighting, completion, navigation and all editing behavior. Raw connections exchange plain UTF-8 text instead.
 internal sealed class ReplRemoteTerminal : IReplTerminal, IAsyncDisposable
 {
-    internal const string Hello = "\u001e2dog.repl/terminal/1";
-    private readonly ReplTerminalConnection connection;
-    private readonly RemoteConsole console;
-    public IConsole Editor => console;
+    internal const string Hello = "\u001e2dog.repl/terminal/2";
+    private readonly Channel<TerminalInput> inputs = Channel.CreateUnbounded<TerminalInput>(new UnboundedChannelOptions { SingleReader = true });
+    private readonly RemoteDevice device;
+    private readonly CancellationTokenSource stopped;
+    private readonly Task receiving;
+    private Action? cancel;
     public bool Interactive => true;
     public TextReader Input => TextReader.Null;
     public ReplOutput Output { get; }
-    public ReplPromptOutput PromptOutput { get; }
+    public ReplScreen Screen { get; }
+    public bool Color { get; }
     public string HistoryFile => ""; // Per-connection in-memory history; no competing history-file writers.
 
     public ReplRemoteTerminal(TextReader reader, ReplPipeOutput writer, CancellationTokenSource lifetime, bool color)
     {
-        connection = new(reader, writer, lifetime);
-        console = new(connection, lifetime.Token);
-        PromptOutput = new(console);
-        console.Output = PromptOutput;
-        Output = new(PromptOutput.Wrap(new RemoteWriter(connection, false)), PromptOutput.Wrap(new RemoteWriter(connection, true)), color, color);
+        Color = color;
+        device = new RemoteDevice(writer);
+        Screen = new ReplScreen(device, color);
+        Output = new ReplOutput(new ScreenWriter(Screen, false), new ScreenWriter(Screen, true), color, color);
+        stopped = CancellationTokenSource.CreateLinkedTokenSource(lifetime.Token);
+        receiving = Task.Run(() => ReceiveAsync(reader, lifetime));
     }
 
-    public string? TakePaste() => console.TakePaste();
-    public void SetCancellationHandler(Action? cancel) => connection.Cancel = cancel;
-    public void Restore() { }
-    public void End() => connection.Send(new(0, "end"));
-    public ValueTask DisposeAsync() => connection.DisposeAsync();
-
-    private sealed class RemoteWriter(ReplTerminalConnection connection, bool error) : TextWriter
+    private async Task ReceiveAsync(TextReader reader, CancellationTokenSource lifetime)
     {
-        public override Encoding Encoding => Encoding.UTF8;
-        public override void Write(string? value) => connection.Send(new(0, "write", value, error));
-        public override void Write(char value) => Write(value.ToString());
-        public override void WriteLine(string? value) => Write(value + NewLine);
-    }
-
-    private sealed class RemoteConsole(ReplTerminalConnection connection, CancellationToken lifetime) : IConsole
-    {
-        public ReplPromptOutput Output { get; set; } = null!;
-        private Task<ReplTerminalMessage>? reading;
-        private string? paste;
-        private bool captureControlC;
-        private ReplTerminalState State => connection.RequestAsync("state").GetAwaiter().GetResult().State!;
-        public int CursorTop => State.CursorTop;
-        public int BufferWidth => State.BufferWidth;
-        public int WindowHeight => State.WindowHeight;
-        public int WindowTop => State.WindowTop;
-        public bool IsErrorRedirected => false;
-        public bool KeyAvailable => !Output.Restoring && connection.RequestAsync("available").GetAwaiter().GetResult().Value;
-        public bool CaptureControlC
-        {
-            get => captureControlC;
-            set { captureControlC = value; connection.Send(new(0, "capture", Value: value)); }
-        }
-        // Native Ctrl+C arrives separately from key input, including while draining work.
-        public event ConsoleCancelEventHandler CancelKeyPress { add { } remove { } }
-        public string? TakePaste() { var value = paste; paste = null; return value; }
-        public ConsoleKeyInfo ReadKey(bool intercept)
-        {
-            lifetime.ThrowIfCancellationRequested();
-            if (Output.ReadRestoreKey() is { } restored) return restored;
-            reading ??= connection.RequestAsync("read");
-            while (!reading.IsCompleted)
-            {
-                lifetime.ThrowIfCancellationRequested();
-                Output.CheckForOutput();
-                Thread.Sleep(5);
-            }
-            var key = reading.GetAwaiter().GetResult().Key!;
-            reading = null;
-            paste = key.Paste;
-            return new(key.Character, key.Key, key.Modifiers.HasFlag(ConsoleModifiers.Shift),
-                key.Modifiers.HasFlag(ConsoleModifiers.Alt), key.Modifiers.HasFlag(ConsoleModifiers.Control));
-        }
-        public void Write(string? value) => connection.Send(new(0, "write", value));
-        public void WriteLine(string? value) => Write(value + Environment.NewLine);
-        public void WriteError(string? value) => connection.Send(new(0, "write", value, true));
-        public void WriteErrorLine(string? value) => WriteError(value + Environment.NewLine);
-        public void Write(ReadOnlySpan<char> value) => Write(value.ToString());
-        public void WriteLine(ReadOnlySpan<char> value) => WriteLine(value.ToString());
-        public void WriteError(ReadOnlySpan<char> value) => WriteError(value.ToString());
-        public void WriteErrorLine(ReadOnlySpan<char> value) => WriteErrorLine(value.ToString());
-        public void Clear() => connection.Send(new(0, "clear"));
-        public void ShowCursor() => connection.Send(new(0, "cursor", Value: true));
-        public void HideCursor() => connection.Send(new(0, "cursor"));
-        public void InitVirtualTerminalProcessing() => connection.Send(new(0, "init"));
-        public void SetNewlineAutoReturn(bool enabled) => connection.Send(new(0, "newline", Value: enabled));
-        public void SetModifyOtherKeys(bool enabled) => connection.Send(new(0, "modify", Value: enabled));
-    }
-}
-
-internal sealed class ReplTerminalConnection : IAsyncDisposable
-{
-    private readonly ReplPipeOutput writer;
-    private readonly CancellationTokenSource session;
-    private readonly CancellationTokenSource stopped;
-    private readonly ConcurrentDictionary<int, TaskCompletionSource<ReplTerminalMessage>> requests = new();
-    private readonly Task receiving;
-    private int nextId;
-    public Action? Cancel { get; set; }
-
-    public ReplTerminalConnection(TextReader reader, ReplPipeOutput writer, CancellationTokenSource session)
-    {
-        this.writer = writer;
-        this.session = session;
-        stopped = CancellationTokenSource.CreateLinkedTokenSource(session.Token);
-        receiving = Task.Run(async () =>
-        {
-            Exception failure = new IOException("The connected terminal closed.");
-            try
-            {
-                while (await reader.ReadLineAsync(stopped.Token).ConfigureAwait(false) is { } line)
-                {
-                    var message = JsonSerializer.Deserialize<ReplTerminalMessage>(line) ?? throw new IOException("Empty terminal message.");
-                    if (message.Method == "cancel") Cancel?.Invoke();
-                    else if (requests.TryRemove(message.Id, out var request))
-                    {
-                        if (message.Method == "error") request.TrySetException(new IOException(message.Text));
-                        else request.TrySetResult(message);
-                    }
-                }
-            }
-            catch (Exception error) when (error is IOException or OperationCanceledException or JsonException) { failure = error; }
-            finally
-            {
-                // Publish the ended session before waking request continuations. Otherwise a
-                // failed request can resume while its session still appears live.
-                try { session.Cancel(); }
-                catch (AggregateException) { /* A user cancellation callback cannot prevent disconnect cleanup. */ }
-                foreach (var request in requests.Values) request.TrySetException(failure);
-            }
-        });
-    }
-
-    public void Send(ReplTerminalMessage message) => writer.WriteLine(JsonSerializer.Serialize(message));
-    public async Task<ReplTerminalMessage> RequestAsync(string method)
-    {
-        var id = Interlocked.Increment(ref nextId);
-        var result = new TaskCompletionSource<ReplTerminalMessage>(TaskCreationOptions.RunContinuationsAsynchronously);
-        requests[id] = result;
+        Exception failure = new IOException("The connected terminal closed.");
         try
         {
-            Send(new(id, method));
-            return await result.Task.WaitAsync(session.Token).ConfigureAwait(false);
+            while (await reader.ReadLineAsync(stopped.Token).ConfigureAwait(false) is { } line)
+            {
+                var message = JsonSerializer.Deserialize<ReplTerminalMessage>(line) ?? throw new IOException("Empty terminal message.");
+                switch (message.Method)
+                {
+                    case "key" when message.Key is { } key:
+                        inputs.Writer.TryWrite(new KeyInput(new ConsoleKeyInfo(key.Character, key.Key, key.Modifiers.HasFlag(ConsoleModifiers.Shift),
+                            key.Modifiers.HasFlag(ConsoleModifiers.Alt), key.Modifiers.HasFlag(ConsoleModifiers.Control))));
+                        break;
+                    case "text":
+                        inputs.Writer.TryWrite(new TextInput(message.Text ?? ""));
+                        break;
+                    case "size":
+                        device.Resize(message.Width, message.Height);
+                        Screen.Invalidate();
+                        break;
+                    case "cancel":
+                        Volatile.Read(ref cancel)?.Invoke();
+                        break;
+                    default:
+                        throw new IOException("Unknown terminal operation: " + message.Method);
+                }
+            }
         }
-        finally { requests.TryRemove(id, out _); }
+        catch (Exception error) when (error is IOException or OperationCanceledException or JsonException) { failure = error; }
+        finally
+        {
+            // Publish the ended session before waking the reader, so it never resumes into a live-looking session.
+            try { lifetime.Cancel(); }
+            catch (AggregateException) { /* A user cancellation callback cannot prevent disconnect cleanup. */ }
+            inputs.Writer.TryComplete(failure);
+        }
+    }
+
+    public async Task<TerminalInput> ReadAsync(CancellationToken token)
+    {
+        try { return await inputs.Reader.ReadAsync(token).ConfigureAwait(false); }
+        catch (ChannelClosedException closed) { throw closed.InnerException ?? new IOException("The connected terminal closed."); }
+    }
+
+    public void SetCancellationHandler(Action? handler) => Volatile.Write(ref cancel, handler);
+
+    public void Restore() => Screen.Dispose();
+
+    /// <summary>Tells the client that the session ended, after the screen's final output.</summary>
+    public void End()
+    {
+        Screen.Dispose();
+        device.Send(new ReplTerminalMessage("end"));
     }
 
     public async ValueTask DisposeAsync()
     {
-        stopped.Cancel();
+        Screen.Dispose();
+        await stopped.CancelAsync().ConfigureAwait(false);
         await receiving.ConfigureAwait(false);
         stopped.Dispose();
+    }
+
+    private sealed class RemoteDevice(ReplPipeOutput writer) : ITerminalDevice
+    {
+        // Width and height in one atomic value; the client reports its size after connecting.
+        private long size = 120L << 32 | 40;
+        public (int Width, int Height) Size => ((int)(Interlocked.Read(ref size) >> 32), (int)Interlocked.Read(ref size));
+        public void Resize(int width, int height) => Interlocked.Exchange(ref size, (long)Math.Max(1, width) << 32 | (uint)Math.Max(1, height));
+        public void Write(string ansi) => Send(new ReplTerminalMessage("write", ansi));
+        public void Send(ReplTerminalMessage message) => writer.WriteLine(JsonSerializer.Serialize(message));
+    }
+}
+
+/// <summary>The client end of an interactive connection: its own keys and terminal, the host's editor.</summary>
+internal interface IReplClientTerminal
+{
+    ITerminalDevice Device { get; }
+    bool Color { get; }
+    Task<TerminalInput> ReadAsync(CancellationToken token);
+    /// <summary>Raised for an interrupt that bypassed key input, such as SIGINT.</summary>
+    event Action? Interrupted;
+    void Restore();
+}
+
+internal sealed class ConsoleClientTerminal : IReplClientTerminal
+{
+    private readonly ITerminalDevice device;
+    private readonly ReplKeyReader keys;
+    private readonly bool? originalControlC;
+    public ITerminalDevice Device => device;
+    public bool Color => ReplOutput.ColorEnabled;
+    public event Action? Interrupted;
+
+    public ConsoleClientTerminal() : this(new ConsoleDevice(), ReplConsole.ConsoleKeys()) { }
+
+    internal ConsoleClientTerminal(ITerminalDevice device, ReplKeyReader keys)
+    {
+        this.device = device;
+        this.keys = keys;
+        originalControlC = ReplConsole.ControlCAsInput(true);
+        Console.CancelKeyPress += OnCancel;
+    }
+
+    internal void OnCancel(object? sender, ConsoleCancelEventArgs args)
+    {
+        args.Cancel = true;
+        Interrupted?.Invoke();
+    }
+
+    public Task<TerminalInput> ReadAsync(CancellationToken token) => ReplConsole.ReadKeysAsync(keys, token);
+
+    public void Restore()
+    {
+        Console.CancelKeyPress -= OnCancel;
+        if (originalControlC is { } controlC) ReplConsole.ControlCAsInput(controlC);
+        (device as IDisposable)?.Dispose();
     }
 }
 
 internal static class ReplRemoteTerminalClient
 {
-    public static async Task<int> RunAsync(TextReader reader, TextWriter writer, IReplTerminal terminal, CancellationTokenSource lifetime)
+    public static async Task<int> RunAsync(TextReader reader, TextWriter writer, IReplClientTerminal terminal, CancellationTokenSource lifetime)
     {
         var token = lifetime.Token;
-        var console = terminal.Editor;
         using var sendGate = new SemaphoreSlim(1, 1);
         async Task SendAsync(ReplTerminalMessage message)
         {
@@ -182,55 +168,53 @@ internal static class ReplRemoteTerminalClient
             try { await writer.WriteLineAsync(JsonSerializer.Serialize(message).AsMemory(), token).ConfigureAwait(false); }
             finally { sendGate.Release(); }
         }
-        Task? reading = null;
-        void Cancel(object? sender, ConsoleCancelEventArgs args)
+        void Interrupt() => _ = SendQuietlyAsync(new ReplTerminalMessage("cancel"));
+        async Task SendQuietlyAsync(ReplTerminalMessage message)
         {
-            args.Cancel = true;
-            _ = SendCancellationAsync();
-        }
-        async Task SendCancellationAsync()
-        {
-            try { await SendAsync(new(0, "cancel")).ConfigureAwait(false); }
+            try { await SendAsync(message).ConfigureAwait(false); }
             catch (Exception error) when (error is IOException or OperationCanceledException or ObjectDisposedException) { }
         }
-        console.CancelKeyPress += Cancel;
+        terminal.Interrupted += Interrupt;
+        Task? input = null;
         try
         {
             await writer.WriteLineAsync(ReplRemoteTerminal.Hello + (terminal.Color ? ";ansi" : ";plain")).ConfigureAwait(false);
+            var size = terminal.Device.Size;
+            await SendAsync(new ReplTerminalMessage("size", Width: size.Width, Height: size.Height)).ConfigureAwait(false);
+            input = Task.Run(async () =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        var read = terminal.ReadAsync(token);
+                        // Report resizes while waiting for keys.
+                        while (!read.IsCompleted)
+                        {
+                            await Task.WhenAny(read, Task.Delay(250, token)).ConfigureAwait(false);
+                            if (terminal.Device.Size is var current && current != size)
+                            {
+                                size = current;
+                                await SendAsync(new ReplTerminalMessage("size", Width: size.Width, Height: size.Height)).ConfigureAwait(false);
+                            }
+                        }
+                        await SendAsync(await read.ConfigureAwait(false) switch
+                        {
+                            KeyInput key => new ReplTerminalMessage("key", Key: new(key.Key.KeyChar, key.Key.Key, key.Key.Modifiers)),
+                            TextInput text => new ReplTerminalMessage("text", text.Text),
+                            _ => throw new InvalidOperationException(),
+                        }).ConfigureAwait(false);
+                    }
+                }
+                catch (OperationCanceledException) when (token.IsCancellationRequested) { }
+                catch (IOException) { lifetime.Cancel(); }
+            }, token);
             while (await reader.ReadLineAsync(token).ConfigureAwait(false) is { } line)
             {
                 var message = JsonSerializer.Deserialize<ReplTerminalMessage>(line) ?? throw new IOException("Empty terminal message.");
                 switch (message.Method)
                 {
-                    case "write":
-                        var text = terminal.Color ? message.Text : Regex.Replace(message.Text ?? "", @"\x1b\[[0-9;:]*m", "");
-                        terminal.Output.Write(text, message.Value);
-                        break;
-                    case "state":
-                        await SendAsync(new(message.Id, "response", State: new(console.CursorTop, console.BufferWidth, console.WindowHeight, console.WindowTop))).ConfigureAwait(false);
-                        break;
-                    case "available":
-                        await SendAsync(new(message.Id, "response", Value: console.KeyAvailable)).ConfigureAwait(false);
-                        break;
-                    case "read":
-                        reading = Task.Run(async () =>
-                        {
-                            try
-                            {
-                                var key = console.ReadKey(true);
-                                var paste = key is { Key: ConsoleKey.Insert, Modifiers: ConsoleModifiers.Shift } ? terminal.TakePaste() : null;
-                                await SendAsync(new(message.Id, "response", Key: new(key.KeyChar, key.Key, key.Modifiers, paste))).ConfigureAwait(false);
-                            }
-                            catch (OperationCanceledException) when (token.IsCancellationRequested) { }
-                            catch (Exception error) { await SendAsync(new(message.Id, "error", error.Message)).ConfigureAwait(false); }
-                        });
-                        break;
-                    case "capture": console.CaptureControlC = message.Value; break;
-                    case "newline": console.SetNewlineAutoReturn(message.Value); break;
-                    case "modify": console.SetModifyOtherKeys(message.Value); break;
-                    case "cursor": if (message.Value) console.ShowCursor(); else console.HideCursor(); break;
-                    case "clear": console.Clear(); break;
-                    case "init": console.InitVirtualTerminalProcessing(); break;
+                    case "write": terminal.Device.Write(message.Text ?? ""); break;
                     case "end": return 0;
                     default: throw new IOException("Unknown terminal operation: " + message.Method);
                 }
@@ -240,9 +224,13 @@ internal static class ReplRemoteTerminalClient
         catch (OperationCanceledException) when (token.IsCancellationRequested) { return 0; }
         finally
         {
-            console.CancelKeyPress -= Cancel;
+            terminal.Interrupted -= Interrupt;
             lifetime.Cancel();
-            if (reading is not null) await reading.ConfigureAwait(false);
+            if (input is not null)
+            {
+                try { await input.ConfigureAwait(false); }
+                catch (OperationCanceledException) { }
+            }
         }
     }
 }

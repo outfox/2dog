@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Godot;
-using PrettyPrompt;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -44,13 +43,7 @@ public class RemoveNodeIntegrationTests
         {
             var keys = text.Select(c => new ConsoleKeyInfo(c, char.IsLetterOrDigit(c) ? (ConsoleKey)char.ToUpperInvariant(c) : ConsoleKey.NoName,
                 false, false, false)).Concat([new('\t', ConsoleKey.Tab, false, false, false), new('\r', ConsoleKey.Enter, false, false, true)]);
-            var console = new PromptConsole(keys);
-            return Pump(Task.Run(async () =>
-            {
-                await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session), console: console,
-                    configuration: ReplHost.CreatePromptConfiguration());
-                return (await prompt.ReadLineAsync()).Text;
-            }));
+            return Pump(Task.Run(() => EditorDriver.ReadAsync(new ReplLanguage(session), keys)));
         }
         Success("int retained = 42; var removalParent = new Node { Name = \"ReplRemove\" }; root.AddChild(removalParent); " +
             "var savedRemoval = new Node { Name = \"Saved\" }; removalParent.AddChild(savedRemoval); " +

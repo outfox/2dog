@@ -8,7 +8,7 @@ namespace twodog.Repl;
 #endif
 
 // One-shot requests on the REPL pipe, shared by the host and the 2dog tool (linked source).
-// Keep this file free of Godot, Roslyn and PrettyPrompt types.
+// Keep this file free of Godot, Roslyn and terminal types.
 internal static class ReplProtocol
 {
     internal const int Version = 1;

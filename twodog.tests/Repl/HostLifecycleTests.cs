@@ -1,7 +1,5 @@
 using System.Reflection;
 using System.Text;
-using PrettyPrompt;
-using PrettyPrompt.Highlighting;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -16,14 +14,14 @@ public class HostLifecycleTests
     private static IEnumerable<ConsoleKeyInfo> Command(string text) => Type(text).Append(new('\r', ConsoleKey.Enter, false, false, false));
     private static IEnumerable<ConsoleKeyInfo> Code(string text) => Type(text).Append(RunKey);
 
-    private static (int Exit, Terminal Terminal) Run(string? input, IEnumerable<ConsoleKeyInfo>? keys = null, bool wait = false, Action<Terminal>? created = null)
+    private static (int Exit, ScriptedTerminal Terminal) Run(string? input, IEnumerable<ConsoleKeyInfo>? keys = null, bool wait = false, Action<ScriptedTerminal>? created = null)
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-host-lifetime", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
-        Terminal? terminal = null;
+        ScriptedTerminal? terminal = null;
         var exit = ReplHost.Run(engine, token =>
         {
-            terminal = new Terminal(input, keys ?? [], wait ? token : null);
+            terminal = new ScriptedTerminal(input, keys ?? [], wait ? token : null);
             created?.Invoke(terminal);
             return terminal;
         }, game);
@@ -37,7 +35,7 @@ public class HostLifecycleTests
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-listener-exit", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
-        using var terminal = new Terminal(":exit\n", [], null);
+        using var terminal = new ScriptedTerminal(":exit\n", [], null);
         Assert.Equal(0, ReplHost.Run(engine, _ => terminal, ReplDiscoveryInit.PipeName(), game));
         Assert.True(terminal.Restored);
         Assert.Empty(engine.Errors.Drain());
@@ -48,19 +46,24 @@ public class HostLifecycleTests
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-early-quit", Engine.ResolveProjectDir(), "--headless", "--quit") { CaptureErrors = true };
-        using var terminal = new Terminal(":exit\n", [], null);
+        using var terminal = new ScriptedTerminal(":exit\n", [], null);
         Assert.Equal(0, ReplHost.Run(engine, _ => terminal, game));
         Assert.Empty(engine.Errors.Drain());
     }
 
     [Fact]
-    public void InteractiveCustomTerminalCanUseItsOwnOutputCoordination()
+    public void InteractiveTerminalEchoesSubmissionsAboveTheirResultsAndRemovesTheRegionOnExit()
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-custom-terminal", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
-        using var terminal = new Terminal(null, Code("40+2").Concat(Command(":exit")), null, coordinateOutput: false);
+        using var terminal = new ScriptedTerminal(null, Code("40+2").Concat(Command(":exit")), null);
         Assert.Equal(0, ReplHost.Run(engine, _ => terminal, game));
-        Assert.Contains("42", terminal.Stdout.ToString());
+        var lines = terminal.Device.Text.Split('\n');
+        var echo = Array.IndexOf(lines, "godot> 40+2");
+        Assert.True(echo >= 0, terminal.Device.Text);
+        Assert.Equal("→ 42", lines[echo + 1]);
+        Assert.Equal("godot> :exit", lines[^1]);
+        Assert.DoesNotContain(lines, line => line.Contains("Tab complete", StringComparison.Ordinal));
         Assert.True(terminal.Restored);
         Assert.Empty(engine.Errors.Drain());
     }
@@ -77,7 +80,7 @@ public class HostLifecycleTests
             .Concat(Command(":reset")).Concat(Code("retained")).Concat(Command(":exit"));
         var (exit, terminal) = Run(null, keys);
         Assert.Equal(0, exit);
-        Assert.Equal(1, terminal.Prompt.Clears);
+        Assert.Equal(1, terminal.Device.Clears);
         Assert.Contains("C# REPL", terminal.Stdout.ToString());
         Assert.Contains("42", terminal.Stdout.ToString());
         Assert.Contains("/root/Control", terminal.Stdout.ToString());
@@ -115,7 +118,7 @@ public class HostLifecycleTests
         using (terminal)
         {
             Assert.Equal(expected, exit);
-            Assert.Equal(0, terminal.Prompt.Clears);
+            Assert.Equal(0, terminal.Device.Clears);
             Assert.DoesNotContain("Preparing C# completion...", terminal.Stdout.ToString());
             if (expected != 0) Assert.NotEmpty(terminal.Stderr.ToString());
             else Assert.Empty(terminal.Stderr.ToString());
@@ -139,7 +142,7 @@ public class HostLifecycleTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-open-stdin", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         using var input = new OpenInput(submission + "\n");
-        Terminal? terminal = null;
+        ScriptedTerminal? terminal = null;
         var quitRequested = false;
         var exit = ReplHost.Run(engine, _ =>
         {
@@ -152,9 +155,9 @@ public class HostLifecycleTests
                 quitRequested = true;
                 engine.RequestQuit();
             };
-            return terminal = new Terminal("", [], null, input);
+            return terminal = new ScriptedTerminal("", [], null, input);
         }, game);
-        using (var completedTerminal = Assert.IsType<Terminal>(terminal))
+        using (var completedTerminal = Assert.IsType<ScriptedTerminal>(terminal))
         {
             Assert.True(quitRequested);
             Assert.True(input.Cancelled);
@@ -192,26 +195,28 @@ public class HostLifecycleTests
     }
 
     [Fact]
-    public async Task ControlCCancelsAnInFlightSubmissionThroughPrettyPromptConsoleEvent()
+    public async Task ControlCCancelsAnInFlightSubmissionWhileTheEditorStaysLive()
     {
         using var started = new ManualResetEventSlim();
         ReplLifetimeProbe.OnStarted = started.Set;
         Task? cancel = null;
         try
         {
-            var keys = Code("twodog.tests.ReplTests.ReplLifetimeProbe.Started(); await Task.Delay(TimeSpan.FromSeconds(5), ct);")
-                .Concat(Command(":exit"));
-            var (exit, terminal) = Run(null, keys, created: terminal => cancel = Task.Run(() =>
+            var keys = Code("twodog.tests.ReplTests.ReplLifetimeProbe.Started(); await Task.Delay(TimeSpan.FromSeconds(5), ct);");
+            var (exit, terminal) = Run(null, keys, wait: true, created: terminal => cancel = Task.Run(() =>
             {
                 Assert.True(started.Wait(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken), "Submission did not begin.");
-                Assert.False(terminal.Prompt.CaptureControlC);
-                Assert.True(terminal.Prompt.CancelExecution());
+                // Typing continues while the submission runs. Ctrl+C abandons the draft and cancels the running and queued work.
+                foreach (var key in Code("40+2").Concat(Type("draft")).Append(Keys.ControlC).Concat(Command(":exit"))) terminal.Press(key);
             }));
             using (terminal)
             {
                 await cancel!;
                 Assert.Equal(0, exit);
-                Assert.Contains("Submission cancelled.", terminal.Stdout.ToString());
+                Assert.Equal(2, terminal.Stdout.ToString().Split("Submission cancelled.").Length - 1);
+                Assert.DoesNotContain("42", terminal.Stdout.ToString());
+                Assert.Contains("godot> 40+2", terminal.Device.Text);
+                Assert.Contains("godot> draft ^C", terminal.Device.Text);
                 Assert.Empty(terminal.Stderr.ToString());
             }
         }
@@ -250,10 +255,10 @@ public class HostLifecycleTests
         timeout.CancelAfter(TimeSpan.FromSeconds(30));
         using var output = new StringWriter();
         Task? clients = null;
-        Terminal? terminal = null;
+        ScriptedTerminal? terminal = null;
         var exit = ReplHost.Run(engine, _ =>
         {
-            terminal = new Terminal("", [], null);
+            terminal = new ScriptedTerminal("", [], null);
             clients = Task.Run(async () =>
             {
                 using var first = new StringReader("40+2\n");
@@ -292,10 +297,10 @@ public class HostLifecycleTests
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(30));
         Task? client = null;
-        Terminal? terminal = null;
+        ScriptedTerminal? terminal = null;
         var exit = ReplHost.Run(engine, _ =>
         {
-            terminal = new Terminal("", [], null);
+            terminal = new ScriptedTerminal("", [], null);
             client = Task.Run(async () =>
             {
                 while (!File.Exists(file)) await Task.Delay(10, timeout.Token);
@@ -326,7 +331,7 @@ public class HostLifecycleTests
         {
             ReplDiscovery.Root = blocked;
             using var engine = new Engine("repl-publish-failure", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
-            using var terminal = new Terminal(":exit\n", [], null);
+            using var terminal = new ScriptedTerminal(":exit\n", [], null);
             Assert.Equal(0, ReplHost.Run(engine, _ => terminal, ReplDiscoveryInit.PipeName(), game));
             Assert.Contains("Could not publish the REPL host", terminal.Stderr.ToString());
             Assert.Empty(engine.Errors.Drain());
@@ -417,48 +422,6 @@ public class HostLifecycleTests
             base.Dispose(disposing);
         }
     }
-
-    internal sealed class Terminal : IReplTerminal, IDisposable
-    {
-        public PromptConsole Prompt { get; }
-        public PrettyPrompt.Consoles.IConsole Editor => Prompt;
-        public bool Interactive { get; }
-        public TextReader Input { get; }
-        public StringWriter Stdout { get; } = new();
-        public StringWriter Stderr { get; } = new();
-        public ReplOutput Output { get; }
-        public ReplPromptOutput? PromptOutput { get; }
-        public string HistoryFile { get; } = Path.Combine(Path.GetTempPath(), "2dog-repl-" + Guid.NewGuid(), "history");
-        public bool Restored { get; private set; }
-        public string? Paste { get; set; }
-        public bool Color { get; set; } = true;
-        public Terminal(string? input, IEnumerable<ConsoleKeyInfo> keys, CancellationToken? token, TextReader? reader = null, bool coordinateOutput = true)
-        {
-            Interactive = input is null;
-            Input = reader ?? new StringReader(input ?? "");
-            Prompt = new PromptConsole(keys, waitForInput: token);
-            PromptOutput = Interactive && coordinateOutput ? new ReplPromptOutput(Prompt) : null;
-            Prompt.Output = PromptOutput;
-            Output = new ReplOutput(PromptOutput?.Wrap(Stdout) ?? Stdout, PromptOutput?.Wrap(Stderr) ?? Stderr, color: false, errorColor: false);
-        }
-        public string? TakePaste()
-        {
-            var paste = Paste;
-            Paste = null;
-            return paste;
-        }
-        public void Restore() => Restored = true;
-        public void Dispose()
-        {
-            Input.Dispose();
-            Stdout.Dispose();
-            Stderr.Dispose();
-            var directory = Path.GetDirectoryName(HistoryFile)!;
-            // The test creates only this unique history file and directory.
-            if (File.Exists(HistoryFile)) File.Delete(HistoryFile);
-            if (Directory.Exists(directory)) Directory.Delete(directory);
-        }
-    }
 }
 
 public class TerminalOutputTests
@@ -477,7 +440,7 @@ public class TerminalOutputTests
         output.Result("42");
         output.Result("/root/Control", NodeColors.Path("/root/Control"));
         output.Tree("tree\n");
-        output.Tree("tree\n", new FormattedString("tree\n"));
+        output.Tree("tree\n", new StyledText("tree\n"));
         output.InputMode(false);
         output.InputMode(true);
         output.Help(false);

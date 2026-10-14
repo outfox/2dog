@@ -1,7 +1,5 @@
 using Godot;
 using Microsoft.CodeAnalysis.CSharp;
-using PrettyPrompt.Completion;
-using PromptSpan = PrettyPrompt.Documents.TextSpan;
 
 namespace twodog.Repl;
 
@@ -28,7 +26,7 @@ internal static class ResourcePathCompletion
         return paths.Order(StringComparer.Ordinal).ToArray();
     }
 
-    internal static PromptSpan? Span(string text, int caret)
+    internal static TextRange? Span(string text, int caret)
     {
         if (caret <= 0) return null;
         var tree = CSharpSyntaxTree.ParseText(text, new CSharpParseOptions(kind: Microsoft.CodeAnalysis.SourceCodeKind.Script));
@@ -37,10 +35,10 @@ internal static class ResourcePathCompletion
         var start = token.SpanStart + (token.Text.StartsWith("@\"", StringComparison.Ordinal) ? 2 : 1);
         if (caret == token.Span.End && token.Text.EndsWith('"') && token.Text.Length > 1) return null;
         if (caret < start || !text.AsSpan(start, caret - start).StartsWith("res://", StringComparison.OrdinalIgnoreCase)) return null;
-        return new PromptSpan(start, caret - start);
+        return new TextRange(start, caret - start);
     }
 
-    internal static IReadOnlyList<CompletionItem> Items(string text, int caret, string[] resources, IReadOnlySet<string>? sceneResources = null)
+    internal static IReadOnlyList<ReplCompletionItem> Items(string text, int caret, string[] resources, IReadOnlySet<string>? sceneResources = null)
     {
         // Scene-specific APIs accept PackedScene paths; general loaders offer every resource.
         var before = text[..(Span(text, caret)?.Start ?? caret)];
@@ -49,13 +47,13 @@ internal static class ResourcePathCompletion
             System.Text.RegularExpressions.RegexOptions.CultureInvariant);
         return resources.Where(path => !scenes || (sceneResources?.Contains(path) ??
                 (path.EndsWith(".tscn", StringComparison.OrdinalIgnoreCase) || path.EndsWith(".scn", StringComparison.OrdinalIgnoreCase))))
-            .Select(path => (CompletionItem)new ResourceItem(path)).ToArray();
+            .Select(path => (ReplCompletionItem)new ResourceItem(path)).ToArray();
     }
 
-    private sealed class ResourceItem(string path) : CompletionItem(path,
-        getComplexTextEdit: (text, caret, _) => Task.FromResult(new CompletionEdit(Span(text, caret) ?? new PromptSpan(caret, 0), path)))
+    private sealed class ResourceItem(string path) : ReplCompletionItem(path,
+        edit: (text, caret, _) => Task.FromResult(new CompletionEdit(Span(text, caret) ?? new TextRange(caret, 0), path)))
     {
-        public override int GetCompletionItemPriority(string text, int caret, PromptSpan span)
+        public override int Priority(string text, int caret, TextRange span)
             => ReplacementText.StartsWith(text[span.Start..caret], StringComparison.OrdinalIgnoreCase) ? 1 : int.MinValue;
     }
 }

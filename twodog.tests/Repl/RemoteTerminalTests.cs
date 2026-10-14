@@ -9,7 +9,7 @@ public class RemoteTerminalTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task TerminalRelayPreservesKeysPasteModesDimensionsAndNegotiatedColors(bool color)
+    public async Task TerminalRelayForwardsKeysPastesSizeAndInterruptsAndDrawsTheHostScreen(bool color)
     {
         using var serverLifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var clientLifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
@@ -18,76 +18,44 @@ public class RemoteTerminalTests
         using var clientWriter = new MessageWriter(toServer);
         using var serverWriter = new MessageWriter(toClient);
         ConsoleKeyInfo letter = new('X', ConsoleKey.X, true, true, true);
-        ConsoleKeyInfo paste = new('\0', ConsoleKey.Insert, true, false, false);
-        using var client = new HostLifecycleTests.Terminal(null, [letter, paste], clientLifetime.Token) { Color = color, Paste = "a\nb" };
+        using var client = new ScriptedTerminal(null, [letter], clientLifetime.Token) { Color = color };
+        client.Paste("a\nb");
         var running = ReplRemoteTerminalClient.RunAsync(toClient, clientWriter, client, clientLifetime);
         Assert.Equal(ReplRemoteTerminal.Hello + (color ? ";ansi" : ";plain"), await toServer.ReadLineAsync(serverLifetime.Token));
         await using var output = new ReplPipeOutput(serverWriter, serverLifetime);
         await using var remote = new ReplRemoteTerminal(toServer, output, serverLifetime, color);
-        var console = remote.Editor;
         Assert.True(remote.Interactive);
         Assert.Same(TextReader.Null, remote.Input);
         Assert.Equal("", remote.HistoryFile);
-        remote.Restore();
-        Assert.Equal(0, console.CursorTop);
-        Assert.Equal(120, console.BufferWidth);
-        Assert.Equal(40, console.WindowHeight);
-        Assert.Equal(0, console.WindowTop);
-        Assert.False(console.IsErrorRedirected);
-        Assert.False(console.KeyAvailable);
-        console.CaptureControlC = true;
-        Assert.True(console.CaptureControlC);
-        console.CaptureControlC = false;
-        console.InitVirtualTerminalProcessing();
-        console.HideCursor();
-        console.ShowCursor();
-        console.Clear();
-        console.SetNewlineAutoReturn(false);
-        console.SetModifyOtherKeys(true);
-        console.SetModifyOtherKeys(false);
-        Assert.Equal(letter, console.ReadKey(true));
-        Assert.Null(remote.TakePaste());
-        Assert.Equal(paste, console.ReadKey(true));
-        Assert.Equal("a\nb", remote.TakePaste());
-        Assert.Null(remote.TakePaste());
-        console.Write("string");
-        console.WriteLine("line");
-        console.Write("span".AsSpan());
-        console.WriteLine("spanline".AsSpan());
-        console.WriteError("error");
-        console.WriteErrorLine("errorline");
-        console.WriteError("errorspan".AsSpan());
-        console.WriteErrorLine("errorspanline".AsSpan());
-        remote.Output.Result("42");
-        remote.Output.Error("failure");
-        // Even a colorless client needs cursor control sequences for the editor.
-        console.Write("\x1b[31mred\x1b[0m\x1b[2K");
-        console.Write((string?)null);
+        Assert.Equal(color, remote.Color);
+        Assert.Equal(letter, Assert.IsType<KeyInput>(await remote.ReadAsync(serverLifetime.Token)).Key);
+        Assert.Equal("a\nb", Assert.IsType<TextInput>(await remote.ReadAsync(serverLifetime.Token)).Text);
+        Assert.Equal((120, 40), remote.Screen.Size);
+        client.Device.Resize(90, 30);
+        var deadline = DateTime.UtcNow.AddSeconds(10);
+        while (remote.Screen.Size != (90, 30) && DateTime.UtcNow < deadline) await Task.Delay(10, serverLifetime.Token);
+        Assert.Equal((90, 30), remote.Screen.Size);
         var cancelled = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         remote.SetCancellationHandler(() => cancelled.TrySetResult());
-        Assert.True(client.Prompt.CancelExecution());
+        client.Interrupt();
         await cancelled.Task.WaitAsync(serverLifetime.Token);
         remote.SetCancellationHandler(null);
-        Assert.Equal(120, console.BufferWidth); // Barrier after the ordered terminal writes.
-        Assert.False(client.Prompt.CaptureControlC);
-        Assert.False(client.Prompt.NewlineAutoReturn);
-        Assert.Equal(1, client.Prompt.Clears);
-        Assert.Equal(["init", "hide", "show", "modify:True", "modify:False"], client.Prompt.Operations);
-        Assert.Contains("stringline" + Environment.NewLine + "spanspanline", client.Stdout.ToString());
-        Assert.Contains("→ ", client.Stdout.ToString());
-        Assert.Contains("42", client.Stdout.ToString());
-        Assert.Contains("failure", client.Stderr.ToString());
-        Assert.Contains("errorspan", client.Stderr.ToString());
-        Assert.Contains("\x1b[2K", client.Stdout.ToString());
-        Assert.Equal(color, client.Stdout.ToString().Contains("\x1b[31m", StringComparison.Ordinal));
-        Assert.Equal(color, client.Stderr.ToString().Contains("\x1b[31m", StringComparison.Ordinal));
+        remote.Output.Result("42");
+        remote.Output.Error("failure");
+        remote.Screen.SetRegion((width, height) => RegionLayout.Build("godot> ", new EditorView("draft", 5, null, [], null, null, false), null, width, height, color));
+        remote.Screen.Flush();
         remote.End();
         await output.DisposeAsync();
         Assert.Equal(0, await running.WaitAsync(serverLifetime.Token));
+        Assert.Contains("→ 42", client.Device.Text);
+        Assert.Contains("failure", client.Device.Text);
+        Assert.Equal(color, client.Device.Raw.Contains("\x1b[31m", StringComparison.Ordinal));
+        // The region is removed when the session ends.
+        Assert.DoesNotContain("godot> draft", client.Device.Screen);
     }
 
     [Fact]
-    public async Task KeyboardFailuresAreReportedToTheHostWithoutLosingTheConnection()
+    public async Task KeyboardFailuresEndTheClientAndTheHostSeesAClosedTerminal()
     {
         using var serverLifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var clientLifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
@@ -95,97 +63,84 @@ public class RemoteTerminalTests
         using var toClient = new Messages();
         using var clientWriter = new MessageWriter(toServer);
         using var serverWriter = new MessageWriter(toClient);
-        using var client = new HostLifecycleTests.Terminal(null, [], clientLifetime.Token);
-        client.Prompt.BeforeRead = () => throw new IOException("keyboard disconnected");
+        using var client = new ScriptedTerminal(null, [], clientLifetime.Token) { BeforeRead = () => throw new IOException("keyboard disconnected") };
         var running = ReplRemoteTerminalClient.RunAsync(toClient, clientWriter, client, clientLifetime);
         await toServer.ReadLineAsync(serverLifetime.Token);
-        await using var output = new ReplPipeOutput(serverWriter, serverLifetime);
-        await using var remote = new ReplRemoteTerminal(toServer, output, serverLifetime, true);
-        Assert.Equal("keyboard disconnected", (await Assert.ThrowsAsync<IOException>(() => Task.Run(() => remote.Editor.ReadKey(true)))).Message);
-        client.Prompt.BeforeRead = null;
-        remote.End();
-        await output.DisposeAsync();
-        Assert.Equal(0, await running.WaitAsync(serverLifetime.Token));
+        var output = new ReplPipeOutput(serverWriter, serverLifetime);
+        await using (var remote = new ReplRemoteTerminal(toServer, output, serverLifetime, true))
+        {
+            Assert.Equal(0, await running.WaitAsync(TestContext.Current.CancellationToken));
+            toServer.Complete();
+            await Assert.ThrowsAsync<IOException>(() => remote.ReadAsync(TestContext.Current.CancellationToken));
+            Assert.True(serverLifetime.IsCancellationRequested);
+        }
+        // The ended session also stops its output writer.
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await output.DisposeAsync());
     }
 
     [Theory]
     [InlineData("{broken", typeof(JsonException))]
     [InlineData("null", typeof(IOException))]
-    [InlineData("{\"Id\":1,\"Method\":\"unknown\"}", typeof(IOException))]
-    public async Task InvalidClientOperationsFailAndReleaseTheInputReader(string frame, Type error)
+    [InlineData("{\"Method\":\"unknown\"}", typeof(IOException))]
+    public async Task InvalidHostFramesFailTheClientAndReleaseItsKeyboard(string frame, Type error)
     {
         using var lifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var input = new Messages();
         using var output = new StringWriter();
-        using var terminal = new HostLifecycleTests.Terminal(null, [], lifetime.Token);
-        var reading = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        terminal.Prompt.BeforeRead = () => reading.TrySetResult();
+        using var terminal = new ScriptedTerminal(null, [], lifetime.Token);
         var running = ReplRemoteTerminalClient.RunAsync(input, output, terminal, lifetime);
-        input.Send(JsonSerializer.Serialize(new ReplTerminalMessage(2, "read")));
-        await reading.Task.WaitAsync(lifetime.Token);
         input.Send(frame);
         await Assert.ThrowsAsync(error, () => running);
         Assert.True(lifetime.IsCancellationRequested);
-        Assert.False(terminal.Prompt.CancelExecution());
     }
 
     [Theory]
     [InlineData("{broken")]
     [InlineData("null")]
+    [InlineData("{\"Method\":\"unknown\"}")]
+    [InlineData("{\"Method\":\"key\"}")]
     [InlineData(null)]
-    public async Task LostOrInvalidResponsesCancelTheSessionIncludingPendingRequests(string? frame)
+    public async Task LostOrInvalidClientFramesEndTheHostSession(string? frame)
     {
         using var lifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var registration = lifetime.Token.Register(() => throw new InvalidOperationException("user callback"));
         using var input = new Messages();
-        using var outputFrames = new Messages();
-        using var writer = new MessageWriter(outputFrames);
+        using var frames = new Messages();
+        using var writer = new MessageWriter(frames);
         var output = new ReplPipeOutput(writer, lifetime);
-        await using var connection = new ReplTerminalConnection(input, output, lifetime);
-        var requests = new[] { connection.RequestAsync("state"), connection.RequestAsync("available") };
-        foreach (var request in requests) await outputFrames.ReadLineAsync(lifetime.Token);
+        await using var remote = new ReplRemoteTerminal(input, output, lifetime, true);
+        var read = remote.ReadAsync(CancellationToken.None);
         if (frame is null) input.Complete();
         else input.Send(frame);
-        foreach (var request in requests)
-        {
-            await Assert.ThrowsAnyAsync<Exception>(() => request);
-            Assert.True(lifetime.IsCancellationRequested);
-        }
+        await Assert.ThrowsAnyAsync<Exception>(() => read);
+        Assert.True(lifetime.IsCancellationRequested);
         try { await output.DisposeAsync(); }
         catch (OperationCanceledException) { }
     }
 
     [Fact]
-    public async Task ClosingAnIdleClientCancelsAndJoinsItsWaitingKeyRead()
+    public async Task ClosingOrCancellingAnIdleClientEndsItsInputLoop()
     {
         using var lifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var input = new Messages();
         using var output = new StringWriter();
-        using var terminal = new HostLifecycleTests.Terminal(null, [], lifetime.Token);
-        var reading = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        terminal.Prompt.BeforeRead = () => reading.TrySetResult();
+        using var terminal = new ScriptedTerminal(null, [], lifetime.Token);
         var running = ReplRemoteTerminalClient.RunAsync(input, output, terminal, lifetime);
-        input.Send(JsonSerializer.Serialize(new ReplTerminalMessage(1, "read")));
-        await reading.Task.WaitAsync(lifetime.Token);
+        input.Send(JsonSerializer.Serialize(new ReplTerminalMessage("write", "hello")));
         input.Complete();
         Assert.Equal(0, await running);
         Assert.True(lifetime.IsCancellationRequested);
+        Assert.Contains("hello", terminal.Device.Text);
+
+        using var cancelled = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        using var idle = new Messages();
+        using var idleTerminal = new ScriptedTerminal(null, [], cancelled.Token);
+        var waiting = ReplRemoteTerminalClient.RunAsync(idle, output, idleTerminal, cancelled);
+        cancelled.Cancel();
+        Assert.Equal(0, await waiting);
     }
 
-    [Fact]
-    public async Task CancellingAnIdleClientEndsTheProtocolAndDetachesItsCancelHandler()
-    {
-        using var lifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
-        using var input = new Messages();
-        using var output = new StringWriter();
-        using var terminal = new HostLifecycleTests.Terminal(null, [], lifetime.Token);
-        var running = ReplRemoteTerminalClient.RunAsync(input, output, terminal, lifetime);
-        lifetime.Cancel();
-        Assert.Equal(0, await running);
-        Assert.False(terminal.Prompt.CancelExecution());
-    }
-
-    private sealed class Messages : TextReader
+    internal sealed class Messages : TextReader
     {
         private readonly Channel<string> lines = Channel.CreateUnbounded<string>();
         public void Send(string line) => lines.Writer.TryWrite(line);
@@ -198,7 +153,7 @@ public class RemoteTerminalTests
         }
     }
 
-    private sealed class MessageWriter(Messages destination) : StringWriter
+    internal sealed class MessageWriter(Messages destination) : StringWriter
     {
         public override Task WriteLineAsync(string? value) { destination.Send(value ?? ""); return Task.CompletedTask; }
         public override Task WriteLineAsync(ReadOnlyMemory<char> buffer, CancellationToken cancellationToken = default)

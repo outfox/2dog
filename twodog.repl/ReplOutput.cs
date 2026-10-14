@@ -1,13 +1,26 @@
-using PrettyPrompt;
-using PrettyPrompt.Highlighting;
+using System.Text.RegularExpressions;
 
 namespace twodog.Repl;
 
 internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color, bool errorColor)
 {
-    internal static ReplOutput ForConsole(ReplPromptOutput? prompt = null) => new(prompt?.Wrap(Console.Out) ?? Console.Out, prompt?.Wrap(Console.Error) ?? Console.Error,
-        !Console.IsOutputRedirected && !PromptConfiguration.HasUserOptedOutFromColor,
-        !Console.IsErrorRedirected && !PromptConfiguration.HasUserOptedOutFromColor);
+    /// <summary>False when NO_COLOR is set to any value, or TERM=dumb.</summary>
+    internal static bool ColorEnabled => Environment.GetEnvironmentVariable("NO_COLOR") is null &&
+        Environment.GetEnvironmentVariable("TERM") != "dumb";
+
+    internal static ReplOutput ForConsole() => new(Console.Out, Console.Error,
+        !Console.IsOutputRedirected && ColorEnabled, !Console.IsErrorRedirected && ColorEnabled);
+
+    /// <summary>Colors Godot's plain log lines from captured native output: errors red, warnings yellow, locations dim.</summary>
+    internal static string StyleLog(string text) => LogLinePattern.Replace(text, match => match.Groups["kind"].Value switch
+    {
+        "WARNING" or "USER WARNING" => "\x1b[33m" + match.Value + "\x1b[0m",
+        "" => "\x1b[2m" + match.Value + "\x1b[0m",
+        _ => "\x1b[31m" + match.Value + "\x1b[0m",
+    });
+
+    private static readonly Regex LogLinePattern = new(@"^(?:(?<kind>ERROR|WARNING|SCRIPT ERROR|SHADER ERROR|USER ERROR|USER WARNING):[^\r\n]*|[ \t]+at: [^\r\n]*)", RegexOptions.Multiline);
+
     public void Message(string text) => output.WriteLine(text);
     internal void Write(string? text, bool isError = false) => (isError ? error : output).Write(text);
     private string Paint(string text, string style) => color ? $"\x1b[{style}m{text}\x1b[0m" : text;
@@ -27,15 +40,15 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         output.WriteLine();
     }
 
-    public void Result(string value, FormattedString? styled = null)
+    public void Result(string value, StyledText? styled = null)
     {
-        output.WriteLine(Paint("\u2192 ", "36") + (styled is { } formatted ? NodeColors.Ansi(formatted, color) : Paint(value, "32")));
+        output.WriteLine(Paint("\u2192 ", "36") + (styled is { } formatted ? formatted.ToAnsi(color) : Paint(value, "32")));
         output.WriteLine();
     }
 
-    public void Tree(string hierarchy, FormattedString? styled = null)
+    public void Tree(string hierarchy, StyledText? styled = null)
     {
-        output.WriteLine(styled is { } formatted ? NodeColors.Ansi(formatted.Substring(0, hierarchy.TrimEnd().Length), color) : hierarchy.TrimEnd());
+        output.WriteLine(styled is { } formatted ? formatted.Substring(0, hierarchy.TrimEnd().Length).ToAnsi(color) : hierarchy.TrimEnd());
         output.WriteLine();
     }
 
@@ -114,9 +127,13 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Row("$Name", "Complete matching paths first, then search node names anywhere in the tree.");
         Row("Shift+Backspace", "Delete backward to a word break, like Ctrl+Backspace. Dots and slashes are breaks.");
         Row("Ctrl+Space", "Open suggestions. Ctrl+Shift+Space shows method signatures and arguments.");
-        Row("Up / Down", "History. Ctrl+C cancels input and the session's running/queued work; pass ct to waits.");
+        Row("Up / Down", "Move between lines, then browse history; typed text filters it.");
+        Row("Ctrl+C", "Clear the input and cancel running/queued work; pass ct to waits. Copies a selection instead.");
         Row(":cancel", "Cancel running and queued work. Submitted C# loops have cancellation checkpoints.");
-        Row(":reset / :clear", "Clear C# variables / screen. :exit or Ctrl+D on empty input exits.");
+        Row("Ctrl+Z / Ctrl+Y", "Undo / redo. Ctrl+A selects all; Ctrl+X / Ctrl+V cut and paste; Ctrl+K / Ctrl+U delete to line end / start.");
+        Row(":reset / :clear", "Clear C# variables / screen (also Ctrl+L). :exit or Ctrl+D on empty input exits.");
+        output.WriteLine("  Output scrolls above the input, which stays editable while submissions run; queue the next one any time.");
+        output.WriteLine("  Pasted code keeps its line breaks and waits for Enter.");
         output.WriteLine("  #r \"assembly.dll\" and #load \"script.csx\" load local code.");
         output.WriteLine("  C# and normal await continuations run on Godot's thread; frames advance while awaiting.");
         output.WriteLine("  Keep Godot calls off Task.Run/ConfigureAwait(false). Synchronous code blocks the game.");

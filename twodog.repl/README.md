@@ -6,26 +6,48 @@ This integration package works with either precision.
 An interactive C# prompt inside a running Godot process. Add a host with
 `dnx 2dog add --repl`, then run `dotnet run --project MyGame.repl`.
 
-Syntax highlighting, Tab/Ctrl+Space completion with documentation, multiline
-input, persistent history and cancellation use PrettyPrompt and Roslyn, the
-libraries underlying CSharpRepl. The live globals are `engine`, `tree`, `root`,
+Syntax highlighting, Tab/Ctrl+Space completion with documentation, signature
+help, multiline input, persistent history and cancellation use Roslyn and the
+package's own terminal editor. The live globals are `engine`, `tree`, `root`,
 `here`, `scene`, `world`, `worlds` and `ct`. Variables and using directives persist
 between submissions.
-The host prepares completion and highlighting before displaying `godot>`.
-Keys typed during startup remain queued, and buffered Enter/Tab/Escape keys
-keep their editing behavior rather than becoming pasted text. Unix terminals
-with bracketed paste support keep pasted multiline code in a single edit.
-For Windows terminal paste, use `:multiline` before pasting several lines,
-then Ctrl+Enter to run them.
-Enter runs the whole input; Shift+Enter inserts a newline. `:multiline`
-toggles those two keys for the current session. Ctrl+Enter always runs.
+
+## The terminal
+
+The input stays pinned at the bottom of the terminal, above a status line, and
+everything else scrolls above it into the terminal's normal scrollback:
+results, `Console` writes, `GD.Print`, Godot's errors and warnings, timers and
+background tasks. An interactive host redirects the whole process's standard
+output and error, including native writes, so no output can land inside the
+text being typed. Godot's error and warning lines keep their colors.
+
+Input stays live while submissions run: keep typing, or submit the next line
+to queue it. A submission appears in the scrollback, with its prompt, when it
+starts running, directly above its results. The status line shows running and
+queued work, the session's pipe and the main editing keys. Ctrl+C clears the
+draft and cancels the session's running and queued work; with a selection, it
+copies instead.
+
+Pasted text keeps its line breaks and tabs and waits for Enter. Unix terminals
+mark pastes with bracketed paste; on Windows, a burst of keys that arrives while
+the editor waits is treated as a paste, and a single pasted line ending in a
+line break runs like a typed command. Keys typed during startup or while the
+REPL is busy keep their editing behavior. The host prepares completion and
+highlighting before displaying `godot>`.
+
+Enter runs the whole input; Shift+Enter (or Alt+Enter) inserts a newline.
+`:multiline` swaps Enter and Shift+Enter for the current session. Ctrl+Enter
+always runs. Unix terminals report Shift+Enter through the xterm
+modifyOtherKeys or kitty keyboard protocols, which the REPL requests.
 Enter accepts the selected suggestion when the completion menu is open;
-otherwise it keeps the selected input mode. Ctrl+Enter always runs immediately.
+otherwise it keeps the selected input mode.
 In `:auto` and `:sh`, exact command names such as `ls`, `cd`, `pwd` and `exit` run immediately
 on Enter in either input mode, even with the completion menu open. This requires
 no trailing whitespace; `ls ` and `cd ` keep argument completion. Enter also
 accepts and runs a selected bare command, such as `l` completing to `ls`.
-Tab accepts a completion or opens suggestions. Further Tab presses cycle the
+
+Suggestions open as you type and list only matching items, best first, with
+the selected item's documentation beside them. Tab accepts a completion or opens suggestions. Further Tab presses cycle the
 matches for your original prefix; Shift+Tab cycles backward and wraps around.
 Backspace restores that prefix, including removing inserted parentheses.
 Shift+Backspace deletes backward to a word break, like Ctrl+Backspace;
@@ -42,8 +64,21 @@ name. Cycling and prefix restoration preserve that suffix too.
 Methods insert parentheses:
 `world.Op` then Tab becomes `world.Open()` with the caret inside the call.
 Parameterless calls leave the caret after `)`. Argument signatures appear
-automatically; Ctrl+Shift+Space reopens them.
-Typing `)` skips an existing closing parenthesis. The banner, help, code and
+below the input, with the current parameter underlined; Ctrl+Shift+Space reopens them.
+Typing `)` skips an existing closing parenthesis.
+
+| Keys | Action |
+| --- | --- |
+| Up / Down | Move between lines, then browse history; typed text filters it |
+| Ctrl+Z / Ctrl+Y | Undo / redo (Ctrl+Shift+Z also redoes) |
+| Shift+arrows, Shift+Home/End, Ctrl+A | Select |
+| Ctrl+X / Ctrl+C / Ctrl+V | Cut / copy (also to the terminal clipboard) / paste a selection |
+| Ctrl+K / Ctrl+U | Delete to the end / start of the line |
+| Ctrl+Left / Ctrl+Right | Move by word |
+| Ctrl+L | Clear the screen |
+| Ctrl+D | Exit on empty input; otherwise delete forward |
+
+The banner, help, code and
 results use color unless `NO_COLOR` is set or output is redirected.
 Trees and node paths use Godot's editor family colors: green for Control,
 blue for Node2D, red for Node3D, purple for Animation and neutral for other
@@ -264,8 +299,8 @@ Third-party license texts and source links ship in this package. See
 
 ## Tests and coverage
 
-The REPL tests drive real PrettyPrompt key events and a live headless Godot
-engine. They cover persistent C# state, completion and undo, node commands,
+The REPL tests drive the editor with key events, render the screen through a
+virtual terminal and use a live headless Godot engine. They cover persistent C# state, completion and undo, node commands,
 thread affinity, cancellation, scratch worlds, output and host cleanup.
 They consume the packed `2dog.repl` NuGet assembly, which carries embedded
 symbols. There are no source-file, member or branch coverage exclusions.

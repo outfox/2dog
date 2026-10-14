@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.RegularExpressions;
-using PrettyPrompt;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -148,10 +147,10 @@ public class ParallelSessionTests
                 var editAndCancel = Task.Run(async () =>
                 {
                     await started.Task.WaitAsync(cancel.Token);
-                    var callbacks = (IPromptCallbacks)new ReplPromptCallbacks(session);
+                    var callbacks = new ReplLanguage(session);
                     var text = "$Cont";
-                    var span = await callbacks.GetSpanToReplaceByCompletionAsync(text, text.Length, cancel.Token);
-                    var matches = await callbacks.GetCompletionItemsAsync(text, text.Length, span, cancel.Token);
+                    var span = await callbacks.CompletionRangeAsync(text, text.Length, cancel.Token);
+                    var matches = await callbacks.CompletionsAsync(text, text.Length, span, cancel.Token);
                     Assert.Contains(matches, item => item.ReplacementText == "$Control");
                     cancel.Cancel();
                 }, token);
@@ -178,20 +177,19 @@ public class ParallelSessionTests
         using var worlds = globals.worlds;
         using var session = new ReplSession(globals, [game], dispatcher);
         var token = TestContext.Current.CancellationToken;
-        var callbacks = (IPromptCallbacks)new ReplPromptCallbacks(session);
+        var callbacks = new ReplLanguage(session);
         foreach (var code in new[] { "world.Open(\"res://pl\")", "worlds.Add(\"test\", \"res://pl\")", "tree.ChangeSceneToFile(\"res://pl\")", "ResourceLoader.Load<PackedScene>(\"res://pl\")" })
         {
             var caret = code.IndexOf("res://pl", StringComparison.Ordinal) + 8;
             var completion = Task.Run(async () =>
             {
-                var span = await callbacks.GetSpanToReplaceByCompletionAsync(code, caret, token);
-                var items = await callbacks.GetCompletionItemsAsync(code, caret, span, token);
+                var span = await callbacks.CompletionRangeAsync(code, caret, token);
+                var items = await callbacks.CompletionsAsync(code, caret, span, token);
                 Assert.Contains(items, item => item.ReplacementText == "res://playground.tscn");
                 Assert.DoesNotContain(items, item => item.ReplacementText == "res://icon.svg");
                 var chosen = items.Single(item => item.ReplacementText == "res://playground.tscn");
-                var edit = await chosen.GetComplexTextEditAsync(code, caret, token);
-                Assert.Equal(code.Replace("res://pl", "res://playground.tscn", StringComparison.Ordinal),
-                    code.Remove(edit.SpanToReplace.Start, edit.SpanToReplace.Length).Insert(edit.SpanToReplace.Start, edit.NewText));
+                var edit = await callbacks.CommitAsync(chosen, code, caret, CommitKey.Tab, token);
+                Assert.Equal(code.Replace("res://pl", "res://playground.tscn", StringComparison.Ordinal), edit.Apply(code).Text);
             }, token);
             Pump(engine, dispatcher, completion, token);
         }
@@ -205,11 +203,7 @@ public class ParallelSessionTests
         var keys = "world.Open(\"RES://pl".Select(c => new ConsoleKeyInfo(c, ConsoleKey.NoName, false, false, false))
             .Concat(new[] { new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, false),
                 new ConsoleKeyInfo('\t', ConsoleKey.Tab, false, false, false), new ConsoleKeyInfo('\r', ConsoleKey.Enter, false, false, true) });
-        var typed = Task.Run(async () =>
-        {
-            await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session), console: new PromptConsole(keys), configuration: ReplHost.CreatePromptConfiguration());
-            return (await prompt.ReadLineAsync()).Text;
-        }, token);
+        var typed = Task.Run(() => EditorDriver.ReadAsync(new ReplLanguage(session), keys, token: token), token);
         Assert.Equal("world.Open(\"res://playground.tscn", Pump(engine, dispatcher, typed, token));
         Assert.Empty(engine.Errors.Drain());
     }
@@ -254,10 +248,8 @@ public class ParallelSessionTests
         Assert.Empty(engine.Errors.Drain());
     }
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void InteractivePipeClientShowsConnectionStatusAndAcceptsEditedInput(bool coordinateOutput)
+    [Fact]
+    public void InteractivePipeClientShowsConnectionStatusAndAcceptsEditedInput()
     {
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-interactive-client", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
@@ -268,15 +260,15 @@ public class ParallelSessionTests
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
         var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
-        var keys = PromptOutputTests.Type("40+2").Append(new('\r', ConsoleKey.Enter, false, false, false))
+        var keys = Keys.Type("40+2").Append(new('\r', ConsoleKey.Enter, false, false, false))
             .Append(new('\x04', ConsoleKey.D, false, false, true));
-        using var terminal = new HostLifecycleTests.Terminal(null, keys, lifetime.Token, coordinateOutput: coordinateOutput);
-        terminal.Prompt.BeforeRead = () => Assert.Contains("Connected to REPL '" + name, terminal.Stdout.ToString());
+        using var terminal = new ScriptedTerminal(null, keys, lifetime.Token);
+        terminal.BeforeRead = () => Assert.Contains("Connected to REPL '" + name, terminal.Device.Text);
         using var input = new StringReader("");
         using var redirected = new StringWriter();
-        Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, redirected, lifetime.Token, _ => terminal)), lifetime.Token));
-        Assert.Contains("Connecting to REPL", terminal.Stdout.ToString());
-        Assert.Contains("42", terminal.Stdout.ToString());
+        Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, redirected, lifetime.Token, () => terminal)), lifetime.Token));
+        Assert.Contains("Connecting to REPL", terminal.Device.Text);
+        Assert.Contains("godot> 40+2\n\u2192 42", terminal.Device.Text);
         Assert.Equal("", redirected.ToString());
         Assert.True(terminal.Restored);
         Assert.False(engine.Iteration());
@@ -300,20 +292,20 @@ public class ParallelSessionTests
         ConsoleKeyInfo run = new('\r', ConsoleKey.Enter, false, false, true);
         ConsoleKeyInfo tab = new('\t', ConsoleKey.Tab, false, false, false);
         const string first = "var colorAnswer = 42; \"color-ready\"";
-        var keys = PromptOutputTests.Type(first).Append(run)
-            .Concat(PromptOutputTests.Type("colorAns")).Append(tab).Append(tab).Append(run)
-            .Concat(PromptOutputTests.Type("$Contro")).Append(tab).Concat(PromptOutputTests.Type(".Name")).Append(run)
-            .Concat(PromptOutputTests.Type("worlds.Ad")).Append(tab).Append(tab)
-            .Concat(PromptOutputTests.Type("\"lab\", \"res://playg")).Append(tab).Append(tab)
-            .Concat(PromptOutputTests.Type("\");")).Append(run)
-            .Concat(PromptOutputTests.Type("worlds[\"lab\"].Scene.SceneFilePath")).Append(run)
-            .Concat(PromptOutputTests.Type(":exit")).Append(run);
-        using var terminal = new HostLifecycleTests.Terminal(null, keys, lifetime.Token) { Color = color };
+        var keys = Keys.Type(first).Append(run)
+            .Concat(Keys.Type("colorAns")).Append(tab).Append(tab).Append(run)
+            .Concat(Keys.Type("$Contro")).Append(tab).Concat(Keys.Type(".Name")).Append(run)
+            .Concat(Keys.Type("worlds.Ad")).Append(tab).Append(tab)
+            .Concat(Keys.Type("\"lab\", \"res://playg")).Append(tab).Append(tab)
+            .Concat(Keys.Type("\");")).Append(run)
+            .Concat(Keys.Type("worlds[\"lab\"].Scene.SceneFilePath")).Append(run)
+            .Concat(Keys.Type(":exit")).Append(run);
+        using var terminal = new ScriptedTerminal(null, keys, lifetime.Token) { Color = color };
         var reads = 0;
-        terminal.Prompt.BeforeRead = () =>
+        terminal.BeforeRead = () =>
         {
             if (reads++ != first.Length + 1) return;
-            while (!Regex.Replace(terminal.Stdout.ToString(), @"\x1b\[[0-?]*[ -/]*[@-~]", "").Contains("→ \"color-ready\"", StringComparison.Ordinal))
+            while (!terminal.Device.Text.Contains("→ \"color-ready\"", StringComparison.Ordinal))
             {
                 lifetime.Token.ThrowIfCancellationRequested();
                 Thread.Sleep(1);
@@ -321,13 +313,12 @@ public class ParallelSessionTests
         };
         using var input = new StringReader("");
         using var redirected = new StringWriter();
-        Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, redirected, lifetime.Token, _ => terminal)), lifetime.Token));
-        var output = Regex.Replace(terminal.Stdout.ToString(), @"\x1b\[[0-?]*[ -/]*[@-~]", "");
-        Assert.Equal("", terminal.Stderr.ToString());
+        Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, redirected, lifetime.Token, () => terminal)), lifetime.Token));
+        var output = terminal.Device.Text;
         Assert.Contains("→ 42", output);
         Assert.Contains("→ Control", output);
         Assert.Contains("→ \"res://playground.tscn\"", output);
-        Assert.Equal(color, terminal.Stdout.ToString().Contains("\x1b[36m→ ", StringComparison.Ordinal));
+        Assert.Equal(color, terminal.Device.Raw.Contains("\x1b[36m→ ", StringComparison.Ordinal));
         Assert.Empty(engine.Errors.Drain());
     }
 
@@ -345,17 +336,17 @@ public class ParallelSessionTests
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
         var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
-        var keys = PromptOutputTests.Type(":exit").Append(new('\r', ConsoleKey.Enter, false, false, true));
-        using var terminal = new HostLifecycleTests.Terminal(null, keys, lifetime.Token);
+        var keys = Keys.Type(":exit").Append(new('\r', ConsoleKey.Enter, false, false, true));
+        using var terminal = new ScriptedTerminal(null, keys, lifetime.Token);
         using var input = new StringReader("");
         using var output = new StringWriter();
         var connect = Task.Run(async () =>
         {
             using (var empty = await Client.ConnectAsync(name, lifetime.Token)) { }
-            return await ReplPipeClient.RunAsync(name, input, output, lifetime.Token, _ => terminal);
+            return await ReplPipeClient.RunAsync(name, input, output, lifetime.Token, () => terminal);
         });
         Assert.Equal(0, Pump(engine, dispatcher, connect, lifetime.Token));
-        Assert.Contains("(no game scene loaded)", terminal.Stdout.ToString());
+        Assert.Contains("(no game scene loaded)", terminal.Device.Text);
         server.Dispose();
         Assert.DoesNotContain(engine.Tree.Root.GetChildren(), node => node.Name.ToString().StartsWith("ReplWorld", StringComparison.Ordinal));
         Assert.Empty(engine.Errors.Drain());
@@ -373,23 +364,23 @@ public class ParallelSessionTests
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
         var name = ReplDiscoveryInit.PipeName();
         using var server = new ReplPipeServer(name, engine, [game], dispatcher, lifetime.Token);
-        ConsoleKeyInfo paste = new('\0', ConsoleKey.Insert, true, false, false);
         ConsoleKeyInfo enter = new('\r', ConsoleKey.Enter, false, false, false);
-        var keys = new[] { new ConsoleKeyInfo('\x03', ConsoleKey.C, false, false, true), paste,
-            new ConsoleKeyInfo('\x04', ConsoleKey.D, false, false, true), enter }
-            .Concat(PromptOutputTests.Type(":exit")).Append(enter);
-        using var terminal = new HostLifecycleTests.Terminal(null, keys, lifetime.Token) { Paste = "40+2" };
+        using var terminal = new ScriptedTerminal(null, [new ConsoleKeyInfo('\x03', ConsoleKey.C, false, false, true)], lifetime.Token);
+        terminal.Paste("40+2");
+        foreach (var key in new[] { new ConsoleKeyInfo('\x04', ConsoleKey.D, false, false, true), enter }.Concat(Keys.Type(":exit")).Append(enter))
+            terminal.Press(key);
         var nativeCancel = false;
-        terminal.Prompt.BeforeRead = () =>
+        terminal.BeforeRead = () =>
         {
             if (nativeCancel) return;
             nativeCancel = true;
-            Assert.True(terminal.Prompt.CancelExecution());
+            // An interrupt signal from outside the key input, e.g. SIGINT, reaches the host too.
+            terminal.Interrupt();
         };
         using var input = new StringReader("");
         using var redirected = new StringWriter();
-        Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, redirected, lifetime.Token, _ => terminal)), lifetime.Token));
-        Assert.True(terminal.Stdout.ToString().Contains("42", StringComparison.Ordinal), terminal.Stdout + "\n" + terminal.Stderr);
+        Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, redirected, lifetime.Token, () => terminal)), lifetime.Token));
+        Assert.True(terminal.Device.Text.Contains("\u2192 42", StringComparison.Ordinal), terminal.Device.Text);
         Assert.True(nativeCancel);
         Assert.True(terminal.Restored);
         Assert.Empty(engine.Errors.Drain());
@@ -402,16 +393,16 @@ public class ParallelSessionTests
     {
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(20));
-        using var terminal = new HostLifecycleTests.Terminal(null, [], lifetime.Token);
+        using var terminal = new ScriptedTerminal(null, [], lifetime.Token);
         using var input = new StringReader("");
         using var output = new StringWriter();
         var name = ReplDiscoveryInit.PipeName("2dog-gone");
-        var client = ReplPipeClient.RunAsync(name, input, output, lifetime.Token, interactive ? _ => terminal : null);
+        var client = ReplPipeClient.RunAsync(name, input, output, lifetime.Token, interactive ? () => terminal : null);
         if (interactive)
         {
             Assert.Equal(1, await client);
-            Assert.Contains("Connecting to REPL", terminal.Stdout.ToString());
-            Assert.Contains("--repl-listen " + name, terminal.Stderr.ToString());
+            Assert.Contains("Connecting to REPL", terminal.Device.Text);
+            Assert.Contains("--repl-listen " + name, terminal.Device.Text);
             Assert.True(terminal.Restored);
         }
         else await Assert.ThrowsAsync<TimeoutException>(() => client);

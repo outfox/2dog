@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Godot;
-using PrettyPrompt;
 using twodog.Repl;
 using twodog.tests.EngineTests;
 
@@ -129,13 +128,7 @@ public class TransferNodeIntegrationTests
                 false, false, false)).Concat([new('\t', ConsoleKey.Tab, false, false, false)]);
             if (suffix is not null) keys = keys.Concat(suffix.Select(c => new ConsoleKeyInfo(c,
                 char.IsLetterOrDigit(c) ? (ConsoleKey)char.ToUpperInvariant(c) : ConsoleKey.NoName, false, false, false)));
-            var console = new PromptConsole(keys.Concat([new('\r', ConsoleKey.Enter, false, false, true)]));
-            return Pump(Task.Run(async () =>
-            {
-                await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(session), console: console,
-                    configuration: ReplHost.CreatePromptConfiguration());
-                return (await prompt.ReadLineAsync()).Text;
-            }));
+            return Pump(Task.Run(() => EditorDriver.ReadAsync(new ReplLanguage(session), keys.Concat([new('\r', ConsoleKey.Enter, false, false, true)]))));
         }
         Success("int kept = 42; var transfer = new Node { Name = \"ReplTransfer\" }; root.AddChild(transfer); " +
             "var source = new Node2D { Name = \"Source\", Position = new Vector2(10, 20) }; transfer.AddChild(source); " +
@@ -201,7 +194,7 @@ public class TransferNodeIntegrationTests
         Assert.Equal("true", Success("@cp[0] == source && @mv(root) == root").Value);
         Assert.True(Success("mv").Committed);
         Assert.True(Success("cp").Committed);
-        IPromptCallbacks callbacks = new ReplPromptCallbacks(session);
+        var callbacks = new ReplLanguage(session);
         foreach (var statement in new[] { "cp;", "mv;" })
         {
             // Roslyn parses an identifier statement, then rejects its expression
@@ -212,8 +205,8 @@ public class TransferNodeIntegrationTests
             Assert.False(result.Committed);
             var prepared = Pump(Task.Run(() => session.PrepareAsync(statement, token)));
             Assert.Equal(statement, prepared.Input.Code);
-            var highlighting = Pump(Task.Run(() => callbacks.HighlightCallbackAsync(statement, token)));
-            Assert.DoesNotContain(highlighting, span => span.Start == 0 && span.Formatting.Foreground == PrettyPrompt.Highlighting.AnsiColor.BrightMagenta);
+            var highlighting = Pump(Task.Run(() => callbacks.HighlightAsync(statement, token)));
+            Assert.DoesNotContain(highlighting, span => span.Start == 0 && span.Style.Foreground == TermColor.BrightMagenta);
         }
         Assert.Equal("true", Success("cp[0] == source && mv(root) == root && source.GetParent() == other && destination.GetChildCount() == 1").Value);
         Assert.Equal("mv.Invoke()", Complete("mv.Inv"));

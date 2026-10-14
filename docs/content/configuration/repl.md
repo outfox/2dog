@@ -58,7 +58,9 @@ Tab completion, multiline input and Ctrl+C cancellation. Completion sees each
 connection's variables, selected node and eligible `res://` paths. Redirected
 input and output stay plain text; `NO_COLOR` disables colors in a terminal.
 Results and errors return to the client; `Console.WriteLine` and Godot logs
-remain on the host console.
+remain on the host console. An interactive host redirects its process's
+standard output and error, including native writes, and prints them above its
+own input line.
 
 Use `:cancel` to interrupt a connection's running and queued work. Client EOF
 or `:exit` waits for submitted work and disconnects. Disconnecting abruptly
