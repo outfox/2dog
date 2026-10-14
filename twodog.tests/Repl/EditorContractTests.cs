@@ -409,6 +409,39 @@ public class EditorContractIntegrationTests
         finally { File.Delete(path); }
     }
 
+    [Theory]
+    [InlineData(0)]
+    [InlineData(7)]
+    [InlineData(8)]
+    [InlineData(9)]
+    [InlineData(10)]
+    public void OutputHandoffPreservesVariableCompletion(int interruptRead)
+    {
+        using var bed = new Bed();
+        bed.Success("var colorAnswer = 42;");
+        var keys = PromptOutputTests.Type("colorAns").Append(Bed.Tab).Append(Bed.Tab).Append(Bed.Submit);
+        var console = new PromptConsole(keys);
+        var output = new ReplPromptOutput(console);
+        console.Output = output;
+        using var transcript = new StringWriter();
+        using var progress = output.Wrap(transcript);
+        var reads = 0;
+        console.BeforeRead = () =>
+        {
+            if (reads++ == interruptRead) progress.WriteLine("background result");
+        };
+        var text = bed.Pump(Task.Run(async () =>
+        {
+            await using var prompt = new Prompt(callbacks: new ReplPromptCallbacks(bed.Session, terminalOutput: output),
+                console: console, configuration: ReplHost.CreatePromptConfiguration());
+            return (await output.ReadLineAsync(prompt, 7)).Text;
+        }, bed.Token));
+        Assert.Equal("colorAnswer", text);
+        Assert.Contains("background result", transcript.ToString());
+        Assert.Equal("42", bed.Success(text).Value);
+    }
+
+
     private sealed class Bed : IDisposable
     {
         private readonly Engine engine;
