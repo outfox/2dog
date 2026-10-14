@@ -46,6 +46,21 @@ NUnit's attributes make those hooks more explicit; this is a difference in
 style, rather than missing async support.
 :::
 
+## Test runners
+
+All three hosts support Microsoft.Testing.Platform (MTP):
+
+| Host | MTP integration | Setup |
+| --- | --- | --- |
+| GdUnit | 2dog's framework drives the embedded GDScript runner | [Configuration](/configuration/gdunit) |
+| NUnit | Official NUnit adapter bridge | [Opt in](/configuration/nunit#microsofttestingplatform) |
+| xUnit | Upstream xUnit runner with 2dog's owner-thread entry point | [Opt in](/configuration/xunit#microsofttestingplatform) |
+
+Scaffolded C# hosts use VSTest by default. NUnit's adapter has a
+[session cancellation limitation](/configuration/nunit#cancellation);
+use its cooperative test timeout before any outer runner timeout.
+
+
 ## Find a guide
 
 | Task | Guide |

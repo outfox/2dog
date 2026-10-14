@@ -341,17 +341,30 @@ jobs:
 
       # Instrument the actual packed assembly, not a special source-project build.
       # Windows is the coverage baseline; behavior runs in all nine OS/config jobs.
-      - name: Setup uv for gdUnit contracts and REPL coverage
-        if: runner.os == 'Windows'
+      - name: Setup uv for MTP contracts and REPL coverage
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
           enable-cache: false
 
-      - name: Test embedded GDScript gdUnit host
-        if: runner.os == 'Windows'
+      - name: Test xUnit, NUnit and GdUnit MTP contracts
         timeout-minutes: 5
-        run: uv run --no-project python tests/gdunit-mtp/test_host.py --configuration ${{ matrix.config }} --precision ${{ matrix.precision }}
+        run: uv run --no-project python tests/mtp/test_hosts.py --configuration ${{ matrix.config }} --precision ${{ matrix.precision }}
+
+      - name: Upload MTP contract diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: mtp-contracts-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}
+          path: |
+            tests/mtp/bin/**/console.log
+            tests/mtp/bin/**/fixture.events
+            tests/mtp/bin/**/godot/*.log
+            tests/gdunit-mtp/bin/contracts/**/*.log
+            tests/gdunit-mtp/bin/contracts/**/events.json
+            tests/gdunit-mtp/bin/contracts/**/test-name.txt
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Require 95% REPL line and branch coverage
         if: runner.os == 'Windows'

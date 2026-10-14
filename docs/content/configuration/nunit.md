@@ -30,8 +30,8 @@ and [Writing engine tests](/testing/writing-tests) for waits and assertions.
 
 ## Microsoft.Testing.Platform
 
-The host uses the official NUnit adapter's MTP bridge. New projects enable
-it with these properties; add them to an existing project to opt in:
+The host supports the official NUnit adapter's MTP bridge. Scaffolded
+projects use VSTest by default. Add these properties to opt in to MTP:
 
 ```xml
 <PropertyGroup>

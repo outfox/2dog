@@ -1,0 +1,6 @@
+config_version=5
+
+[application]
+config/name="MTP host contracts"
+; Godot validates this during setup, before the fixture bypasses scene loading.
+run/main_scene="res://main.tscn"

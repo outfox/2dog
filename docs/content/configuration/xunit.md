@@ -29,11 +29,16 @@ Tests use the game directory and its imported resource cache. See
 
 ## Microsoft.Testing.Platform
 
-The host uses xUnit's own runner. New projects reference `xunit.v3.mtp-v2`
-and set `OutputType` to `Exe` and
-`UseMicrosoftTestingPlatformRunner` to `true`. This selects MTP v2 for
-direct execution. Existing projects using `xunit.v3` have MTP v1 support;
-switch the package to use MTP v2.
+The host uses xUnit's own runner. Scaffolded projects use VSTest by default;
+their `xunit.v3` package also supports MTP v1. For MTP v2, replace that
+package with `xunit.v3.mtp-v2` and add these properties:
+
+```xml
+<PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+</PropertyGroup>
+```
 
 To select native MTP integration for `dotnet test` on .NET 10, add this
 alongside your SDK settings in `global.json`:
