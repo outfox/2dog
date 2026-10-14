@@ -8,6 +8,9 @@
 temp
 todo
 
+# Optional GdUnit source checkout; packaging uses official release archives
+/gdunit/
+
 # Build Artifacts
 /packages
 /.packages

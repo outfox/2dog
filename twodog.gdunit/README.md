@@ -3,9 +3,10 @@
 Run GDScript gdUnit tests in a private copy of a Godot project with embedded
 libgodot. Microsoft.Testing.Platform handles discovery, test selection and results.
 
-The package includes the gdUnit 7.0.0 runtime from `thygrrr/gdunit`, pinned to
-`5abb20d457de50145273956f28d6792f28862c83`, its MIT license, and the embedded
-bridge. Consumers need the .NET 10 SDK and the normal `2dog.engine` native and
+The package includes the unmodified runtime from the official
+[GdUnit 6.2.2 release](https://github.com/godot-gdunit-labs/gdUnit4/releases/tag/v6.2.2),
+its MIT license, and the embedded bridge. Consumers need the .NET 10 SDK and
+the normal `2dog.engine` native and
 editor-tool dependencies. No separate Godot executable or addon installation is
 needed. Use `2dog.gdunit.double` for a double precision game.
 
@@ -93,8 +94,9 @@ dotnet test --project MyGame.gdunit.csproj --gdunit-filter "*test_answer"
 row's display name. Matching is case-sensitive; `*` and `?` are wildcards. MTP's
 `--filter-uid` selects exact test IDs. IDs depend on the resource path, method,
 and row index, so a newly imported stage has the same IDs. `--list-tests json`
-includes IDs and original source locations; libgodot writes its startup banner
-before the JSON document when the executable is run directly.
+includes IDs and original source locations. Native Godot output can appear
+before or after the JSON document when the executable is run directly; parse
+the JSON document separately from those native messages.
 
 Discovery imports a private stage and starts Godot, including game autoloads,
 but executes no test bodies or suite hooks. Running uses the same discovery
@@ -129,6 +131,20 @@ period. A host timeout or cancellation cannot interrupt a blocked native call.
 
 CLI scaffolding, rendering support, snapshot caching, relocatable published
 hosts, and verified IDE integration remain future work. The adapter depends on
-gdUnit session internals at the pinned revision; rerun its compatibility tests
-when updating the fork. See [MTP's dotnet test documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)
+GdUnit session internals at the pinned release; rerun its compatibility tests
+when updating that release. See [MTP's dotnet test documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)
 for runner selection and extensions.
+
+## Building this package
+
+`dotnet pack twodog.gdunit` downloads the official release archive pinned in
+`GdUnitRuntime.props` and checks its SHA-256 before extraction. The first pack
+needs access to GitHub; later packs reuse the verified archive under
+`obj/gdunit-release/<precision>/<version>/`. No GdUnit checkout is required.
+Each package records the release version, archive URL and checksum in
+`runtime/gdunit-release.json`.
+
+To update GdUnit, change the version and checksum together in
+`GdUnitRuntime.props`, repack, and run the integration and MTP contracts in
+Debug, Release and Editor. Builds use this explicit pin rather than resolving
+a moving latest-release URL.

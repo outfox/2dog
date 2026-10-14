@@ -8,7 +8,9 @@ description: "Configure GdUnit host packages, private resource roots, execution 
 The [GdUnit host](/hosts/gdunit) uses the .NET 10 SDK and MTP runner. Reference
 `2dog.gdunit` at the same 2dog version as the game. Choose
 `2dog.gdunit.double` for a double precision game. The package brings the engine
-and editor-tool dependencies needed for private resource imports.
+and editor-tool dependencies needed for private resource imports, together with
+a pinned official GdUnit runtime. Consumers do not need a GdUnit checkout or a
+separate addon installation.
 
 Debug, Release and Editor select the corresponding
 [engine variant](/build-configurations). The host always runs headlessly.

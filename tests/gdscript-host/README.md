@@ -6,16 +6,14 @@ implementation now ships in [`2dog.gdunit`](../../twodog.gdunit/README.md), with
 MTP discovery and execution tested by [`tests/gdunit-mtp`](../gdunit-mtp/README.md).
 The `.gdtest` fixture suffix remains an internal fixture name.
 
-Validated on Windows in Debug, Release, and Editor with the `thygrrr/gdunit`
-fork's `2dog-4.7.2` branch pinned to
-`5abb20d457de50145273956f28d6792f28862c83` (GdUnit 7.0.0). Each configuration
+The package uses official GdUnit 6.2.2, pinned by version and archive SHA-256 in
+`twodog.gdunit/GdUnitRuntime.props`. Each configuration
 reports five pure GDScript cases (three passes, one expected failure, one skip)
 and one passing mixed-scene case. GDScript lint and C# formatting checks pass.
 
 From the repository root, after packing the current bindings and engine:
 
 ```text
-git submodule update --init gdunit
 dotnet pack twodog.gdunit
 dotnet run --project tests/gdscript-host -c Debug
 dotnet run --project tests/gdscript-host -c Release
@@ -65,8 +63,9 @@ build output still goes to its SDK-managed `.godot/mono` directory.
 
 ## Integration decision
 
-Use the fork pinned by `gdunit` with a thin host adapter. No changes to the fork
-are required for these milestones. `twodog.gdunit/runtime/bridge/runner.gd` extends GdUnit's session
+Use the official release with a thin host adapter. Packaging downloads and
+verifies the release archive; no upstream source modifications or fork checkout
+are required. `twodog.gdunit/runtime/bridge/runner.gd` extends GdUnit's session
 runner, uses its discovery callback and serialized events, disables retries,
 preserves session hooks, and replaces process quit with a completion message.
 .NET pumps on the thread that started the engine, disposes it, and waits for
@@ -84,7 +83,7 @@ project files, so GdUnit4Net's C# test adapter is not loaded; ordinary C# game
 scripts still resolve from `ProjectAssemblyDir`.
 
 The adapter currently depends on internal GdUnit session APIs at the pinned
-revision. Keep compatibility checks when updating that revision. Each invocation
+release. Keep compatibility checks when updating that release. Each invocation
 uses fresh copies; snapshot caching is future work. The pump timeout is
 cooperative and cannot interrupt a native call that hangs. MTP IDs, selection,
 cancellation and NuGet distribution now live in `2dog.gdunit`. Verified IDE

@@ -1,0 +1,8 @@
+<Project>
+    <!-- Latest official release when this pin was updated. Keep version and archive hash together. -->
+    <PropertyGroup>
+        <GdUnitVersion>6.2.2</GdUnitVersion>
+        <GdUnitArchiveUrl>https://github.com/godot-gdunit-labs/gdUnit4/archive/refs/tags/v$(GdUnitVersion).zip</GdUnitArchiveUrl>
+        <GdUnitArchiveSha256>ddb44730ffb9cd77fd70d283753450759b00c5016143d7572bf63625f64d5433</GdUnitArchiveSha256>
+    </PropertyGroup>
+</Project>

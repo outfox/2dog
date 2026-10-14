@@ -56,8 +56,10 @@ tests. Discovery starts the engine and game autoloads, but runs no test bodies
 or suite hooks. Execution uses that same engine session and runs only selected
 cases.
 
-The package supplies a pinned GdUnit runtime. A source project containing its
-own `addons/gdUnit4` copy is rejected to avoid combining framework versions.
+The package supplies an unmodified, pinned official GdUnit release, with its
+license and release provenance. No separate addon download is needed. A source
+project containing its own `addons/gdUnit4` copy is rejected to avoid combining
+framework versions.
 
 ## Results and lifecycle
 
