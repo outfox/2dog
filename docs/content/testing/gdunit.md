@@ -1,16 +1,16 @@
 ---
-title: Testing GDScript with gdUnit
-description: "Understand how the 2dog host changes gdUnit execution, resource isolation and test reporting."
+title: Testing GDScript with GdUnit
+description: "Understand how the 2dog host changes GdUnit execution, resource isolation and test reporting."
 ---
 
-# Testing GDScript with gdUnit
+# Testing GDScript with GdUnit
 
-Use [gdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/)
+Use [GdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/)
 for writing suites, assertions, hooks, mocks and scene tests. Its
 [test suite guide](https://godot-gdunit-labs.github.io/gdUnit4/latest/testing/test-suite/)
 and [parameterized test guide](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/paramerized_tests/)
 describe the framework APIs. This page covers only the differences introduced
-by 2dog. To create the .NET project, follow the [gdUnit host guide](/hosts/gdunit).
+by 2dog. To create the .NET project, follow the [GdUnit host guide](/hosts/gdunit).
 
 ## Run through .NET
 
@@ -23,7 +23,7 @@ dotnet test --project MyGame.gdunit.csproj --list-tests
 dotnet test --project MyGame.gdunit.csproj --gdunit-filter "*test_answer"
 ```
 
-Use the host's MTP options for these commands. gdUnit's
+Use the host's MTP options for these commands. GdUnit's
 [standalone command-line options](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/cmd/)
 belong to its own runner.
 
@@ -55,7 +55,7 @@ tests. Discovery starts the engine and game autoloads, but runs no test bodies
 or suite hooks. Execution uses that same engine session and runs only selected
 cases.
 
-The package supplies a pinned gdUnit runtime. A source project containing its
+The package supplies a pinned GdUnit runtime. A source project containing its
 own `addons/gdUnit4` copy is rejected to avoid combining framework versions.
 
 ## Results and lifecycle
@@ -65,12 +65,12 @@ also fail the run, even when every test body passes. Unexpected native Godot
 warnings and errors fail the host. The private project enables GDScript call
 stack tracking so Release builds retain assertion source lines.
 
-The host disables gdUnit's flaky-test retries and fail-fast execution. It
-preserves gdUnit session hooks; reports they generate remain in the private
+The host disables GdUnit's flaky-test retries and fail-fast execution. It
+preserves GdUnit session hooks; reports they generate remain in the private
 project. Add MTP reporting extensions to the .NET host when you need their
 formats or options.
 
-MTP cancellation terminates an active import process or asks gdUnit to stop
+MTP cancellation terminates an active import process or asks GdUnit to stop
 execution and finish teardown. The embedded session gets a five-second cleanup
 grace period. [Host timeouts](/configuration/gdunit#execution-options) bound
 importing and engine pumping; neither can interrupt a blocked native call.

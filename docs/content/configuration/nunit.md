@@ -27,3 +27,45 @@ the managed reference needed to compile Editor API calls.
 
 See [Testing with NUnit](/testing/nunit) for fixture setup and runner rules,
 and [Writing engine tests](/testing/writing-tests) for waits and assertions.
+
+## Microsoft.Testing.Platform
+
+The host uses the official NUnit adapter's MTP bridge. New projects enable
+it with these properties; add them to an existing project to opt in:
+
+```xml
+<PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <EnableNUnitRunner>true</EnableNUnitRunner>
+</PropertyGroup>
+```
+
+Use `NUnit3TestAdapter` 6.x for MTP v2. The same project retains VSTest
+support. To use native MTP integration with `dotnet test` on .NET 10, add
+this alongside your SDK settings in `global.json`:
+
+```json
+"test": {
+  "runner": "Microsoft.Testing.Platform"
+}
+```
+
+Then run `dotnet test --project MyGame.nunit/MyGame.nunit.csproj`.
+2dog leaves discovery, filters and results to NUnit's bridge and keeps
+Godot setup, tests and teardown on NUnit's fixture thread. See
+[NUnit's official MTP documentation](https://docs.nunit.org/articles/vs-test-adapter/NUnit-And-Microsoft-Test-Platform.html)
+for runner options.
+
+### Cancellation
+
+The verified NUnit adapter 6.3.1 does not signal
+`TestContext.CurrentContext.CancellationToken` when MTP cancels the
+session. Its forced stop skips fixture teardown, even if the test later
+observes its own cancellation token. This can leave Godot active during
+process exit.
+
+Use NUnit's
+[cooperative cancellation](https://docs.nunit.org/articles/nunit/writing-tests/attributes/cancelafter.html)
+with `[CancelAfter(milliseconds)]`, and observe the NUnit token in async
+work and frame waits. Set that test timeout below any outer MTP or CI
+timeout. A forced process exit cannot guarantee engine cleanup.

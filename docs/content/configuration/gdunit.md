@@ -1,11 +1,11 @@
 ---
-title: gdUnit Configuration
-description: "Configure gdUnit host packages, private resource roots, execution limits and artifacts."
+title: GdUnit Configuration
+description: "Configure GdUnit host packages, private resource roots, execution limits and artifacts."
 ---
 
-# gdUnit Configuration
+# GdUnit Configuration
 
-The [gdUnit host](/hosts/gdunit) uses the .NET 10 SDK and MTP runner. Reference
+The [GdUnit host](/hosts/gdunit) uses the .NET 10 SDK and MTP runner. Reference
 `2dog.gdunit` at the same 2dog version as the game. Choose
 `2dog.gdunit.double` for a double precision game. The package brings the engine
 and editor-tool dependencies needed for private resource imports.
@@ -134,11 +134,11 @@ Each request creates a fresh subdirectory beneath `ArtifactsDirectory`:
 | `godot.log` | Embedded engine's native log |
 | `events.json` | Serialized discovery, lifecycle and result events |
 
-Reports from gdUnit's session hooks live under
+Reports from GdUnit's session hooks live under
 `project/twodog_test_host/reports/`. The host retains artifacts for inspection.
 On Windows, choose a short artifact path for deeply nested projects because
 native directory operations can reach Windows path length limits.
 
 For assertions, suites and other framework settings, use
-[gdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/).
+[GdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/).
 See [Testing with gdUnit](/testing/gdunit) for the host's execution differences.

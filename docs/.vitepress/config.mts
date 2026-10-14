@@ -115,7 +115,7 @@ export default defineConfig({
           {
             text: 'Testing',
             items: [
-              { text: gd('test_tube') + 'gdUnit', link: '/hosts/gdunit' },
+              { text: gd('test_tube') + 'GdUnit', link: '/hosts/gdunit' },
               { text: gd('test_tube') + 'NUnit', link: '/hosts/nunit' },
               { text: gd('test_tube') + 'xUnit', link: '/hosts/xunit' }
             ]
@@ -253,7 +253,7 @@ export default defineConfig({
             items: [
               { text: gd('script') + 'Writing Engine Tests', link: '/testing/writing-tests' },
               { text: gd('mouse') + 'Simulating Input', link: '/testing/input' },
-              { text: gd('test_tube') + 'gdUnit (GDScript)', link: '/testing/gdunit' },
+              { text: gd('test_tube') + 'GdUnit (GDScript)', link: '/testing/gdunit' },
               { text: gd('test_tube') + 'NUnit', link: '/testing/nunit' },
               { text: gd('test_tube') + 'xUnit', link: '/testing/xunit' }
             ]
@@ -274,7 +274,7 @@ export default defineConfig({
               {
                 text: 'Testing',
                 items: [
-                  { text: gd('test_tube') + 'gdUnit', link: '/configuration/gdunit' },
+                  { text: gd('test_tube') + 'GdUnit', link: '/configuration/gdunit' },
                   { text: gd('test_tube') + 'NUnit', link: '/configuration/nunit' },
                   { text: gd('test_tube') + 'xUnit', link: '/configuration/xunit' }
                 ]
