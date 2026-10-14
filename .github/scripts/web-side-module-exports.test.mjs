@@ -24,7 +24,7 @@ function sideModule(symbol, shared = false) {
     ]);
 }
 
-test('referenced side modules survive .gdignore, excluding shared-memory variants and ignored hosts', { timeout: 60000 }, async () => {
+test('referenced side modules survive .gdignore, matching the host threading and excluding ignored hosts', { timeout: 60000 }, async () => {
     const dir = await mkdtemp(join(tmpdir(), 'twodog-side-modules-'));
     try {
         const game = join(dir, 'game');
@@ -57,8 +57,8 @@ web = { "res://addons/probe/native libs/dependency.wasm": "" }
   </PropertyGroup>
   <Import Project="${xml(targets)}" />
   <Target Name="Probe" DependsOnTargets="TwoDogWebExportSideModuleImports">
-    <WriteLinesToFile File="exports.txt" Lines="@(EmccExportedFunction)" Overwrite="true" />
-    <WriteLinesToFile File="inputs.txt" Lines="@(TwoDogWebExportInputs)" Overwrite="true" />
+    <WriteLinesToFile File="$(ScanOut)exports.txt" Lines="@(EmccExportedFunction)" Overwrite="true" />
+    <WriteLinesToFile File="$(ScanOut)inputs.txt" Lines="@(TwoDogWebExportInputs)" Overwrite="true" />
   </Target>
 </Project>`);
         await run('dotnet', ['msbuild', 'scan.proj', '-t:Probe', '-v:minimal'], { cwd: dir, timeout: 45000 });
@@ -71,6 +71,16 @@ web = { "res://addons/probe/native libs/dependency.wasm": "" }
         const inputs = (await readFile(join(dir, 'inputs.txt'), 'utf8')).trim().split(/\r?\n/).map(p => resolve(p));
         assert(inputs.includes(resolve(libs, 'release.wasm')), 'changes to ignored native libraries must invalidate the pack');
         assert(inputs.includes(resolve(libs, 'dependency.wasm')));
+
+        // WasmEnableThreads hosts link shared memory: only the -pthread variant binds there.
+        await run('dotnet', ['msbuild', 'scan.proj', '-t:Probe', '-v:minimal', '-p:WasmEnableThreads=true', '-p:ScanOut=mt-'],
+            { cwd: dir, timeout: 45000 });
+        const threaded = (await readFile(join(dir, 'mt-exports.txt'), 'utf8')).trim().split(/\r?\n/);
+        assert(threaded.includes('_thread_only_function'));
+        assert(threaded.includes('_godot_web_sync_side_modules'));
+        assert(!threaded.includes('_hidden_cpp_function'));
+        assert(!threaded.includes('_hidden_dependency'));
+        assert(exports.every((symbol) => symbol !== '_godot_web_sync_side_modules'));
     } finally {
         assert(resolve(dir).startsWith(join(resolve(tmpdir()), 'twodog-side-modules-')));
         await rm(dir, { recursive: true, force: true });

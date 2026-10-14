@@ -31,16 +31,7 @@ internal static class Program
             Require(OS.HasFeature("threads"), "the engine does not report the 'threads' feature");
             GD.Print("Hello from GodotSharp (multithreaded browser).");
 
-            // The GDExtension probes are left out: side modules are not built for shared memory yet.
-            GodotApiSmoke.MathPrecision();
-            GodotApiSmoke.CoreTypesAndNativeHelpers(engine.Tree);
-            GodotApiSmoke.ManagedCallables();
-            GodotApiSmoke.ErrorReportingAndTypedCollections();
-            GodotApiSmoke.ImagesAndResources();
-            GodotApiSmoke.EngineSingletons();
-            GodotApiSmoke.LowLevelServers();
-            GodotApiSmoke.SceneAndGeneratedScript();
-            GodotApiSmoke.GDScriptOnlyEngineFeatures(engine.Tree);
+            GodotApiSmoke.RunAll(engine.Tree);
 
             // Start() installed Godot's SynchronizationContext: awaits below resume on this thread inside Godot frames,
             // so they need the frame loop running.
@@ -48,6 +39,7 @@ internal static class Program
 
             await ManagedThreadsRunConcurrently();
             GodotWorkerThreadPoolRunsOffMainThread();
+            await GDExtensionRunsOnEveryThread();
             await FramesRunAlongsideBackgroundWork();
         }
         catch (Exception exception)
@@ -148,6 +140,44 @@ internal static class Program
         Require(distinct.Any(id => id != godotMain), "every WorkerThreadPool element ran on Godot's main thread");
         Console.WriteLine($"2DOG_WASM_MT: WorkerThreadPool ran {elements} elements on {distinct.Length} thread(s) " +
                           $"[{string.Join(", ", distinct)}], main {godotMain}");
+    }
+
+    /// <summary>
+    /// Wasm function tables are per thread, so every thread instantiates the GDExtension side module itself: Godot's
+    /// pool threads were idle when it loaded and catch up when they wake, new managed threads at thread start.
+    /// </summary>
+    private static async Task GDExtensionRunsOnEveryThread()
+    {
+        var godotMain = OS.GetMainThreadId();
+        const int elements = 16;
+        var poolSums = new long[elements];
+        var poolIds = new ulong[elements];
+        var group = WorkerThreadPool.AddGroupTask(
+            Callable.From((int index) =>
+            {
+                poolIds[index] = OS.GetThreadCallerId();
+                poolSums[index] = ProbeAdd(index, 1);
+            }), elements, -1, true, "twodog multithreaded GDExtension probe");
+        WorkerThreadPool.WaitForGroupTaskCompletion(group);
+        Require(poolSums.Select((sum, index) => sum == index + 1).All(ok => ok),
+            $"TwoDogProbe.add on WorkerThreadPool threads returned [{string.Join(", ", poolSums)}]");
+
+        var managed = await Task.WhenAll(Enumerable.Range(0, Parallelism).Select(index => Task.Factory.StartNew(
+            () => (Id: OS.GetThreadCallerId(), Sum: ProbeAdd(index, 100)), TaskCreationOptions.LongRunning)));
+        Require(managed.Select((result, index) => result.Sum == index + 100).All(ok => ok),
+            $"TwoDogProbe.add on managed threads returned [{string.Join(", ", managed.Select(r => r.Sum))}]");
+
+        var threads = poolIds.Concat(managed.Select(r => r.Id)).Distinct().Where(id => id != godotMain).ToArray();
+        Require(threads.Length > 1, "the GDExtension probe never ran off Godot's main thread");
+        Console.WriteLine($"2DOG_WASM_MT: GDExtension TwoDogProbe.add ran on {threads.Length} threads besides main " +
+                          $"[{string.Join(", ", threads)}]");
+    }
+
+    private static long ProbeAdd(long a, long b)
+    {
+        using var instance = ClassDB.Instantiate("TwoDogProbe");
+        using var sum = instance.AsGodotObject().Call("add", a, b);
+        return sum.AsInt64();
     }
 
     /// <summary>

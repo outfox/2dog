@@ -74,6 +74,9 @@
         <!-- The Godot engine JS derives all file names from the 'executable' config value; the default shell uses
              'godot' -->
         <TwoDogWebPackName Condition="'$(TwoDogWebPackName)' == ''">godot.pck</TwoDogWebPackName>
+        <!-- WasmEnableThreads: function table slots for GDExtension side modules (their address-taken functions and
+             exports), reserved on every thread -->
+        <TwoDogWebSideModuleTableSlots Condition="'$(TwoDogWebSideModuleTableSlots)' == ''">16384</TwoDogWebSideModuleTableSlots>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
@@ -91,6 +94,7 @@
         <_MonoComponent Include="marshal-ilgen"/>
 
         <EmccExportedFunction Include="_malloc;_free"/>
+        <EmccExportedFunction Include="_godot_web_sync_side_modules" Condition="'$(WasmEnableThreads)' == 'true'"/>
         <EmccExportedRuntimeMethod Include="callMain;cwrap;HEAP8;HEAPU8;HEAP16;HEAPU16;HEAP32;HEAPU32;HEAP64;HEAPU64;HEAPF32;HEAPF64"/>
 
         <_TwoDogGodotJsLibraries Include="$(TwoDogWebNativeDir)libgodot/js_library/**/*.js"/>
@@ -114,6 +118,12 @@
         <!-- .NET creates the deputy thread, which runs Godot's main loop, with default pthread attributes: size
              the default like the single-threaded main stack (emscripten's own default is 64KB) -->
         <TwoDogGodotEmccExtraLDFlag Include="-sDEFAULT_PTHREAD_STACK_SIZE=$(EmccStackSize)" Condition="'$(WasmEnableThreads)' == 'true'"/>
+        <!-- Wasm function tables are per thread, so each thread instantiates GDExtension side modules itself: blocked
+             threads catch up when they wake (os_web.cpp wraps the futex wait), new ones at thread start -->
+        <TwoDogGodotEmccExtraLDFlag Include="-Wl,--wrap=emscripten_futex_wait" Condition="'$(WasmEnableThreads)' == 'true'"/>
+        <!-- ...in table slots reserved below the main module's functions: growing a table would shift the slots the
+             .NET jiterpreter reserves on each thread, which must have the same indices everywhere -->
+        <TwoDogGodotEmccExtraLDFlag Include="-sTABLE_BASE=$([MSBuild]::Add($(TwoDogWebSideModuleTableSlots), 1))" Condition="'$(WasmEnableThreads)' == 'true'"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotJsLibraries->'--js-library &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotPreJs->'--pre-js &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
         <TwoDogGodotEmccExtraLDFlag Include="@(_TwoDogGodotPostJs->'--post-js &quot;%(FullPath)&quot;'->Replace('\', '/'))"/>
@@ -306,6 +316,7 @@
             <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true"/>
             <ExtensionFiles ParameterType="Microsoft.Build.Framework.ITaskItem[]"/>
             <ProjectDir ParameterType="System.String"/>
+            <Threaded ParameterType="System.Boolean"/>
             <SideModules ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
             <Symbols ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
         </ParameterGroup>
@@ -390,9 +401,9 @@
                                 else if (kind == 1) { p++; Limits(b, ref p); }   // table: reftype, limits
                                 else if (kind == 2)                             // memory
                                 {
-                                    // The .NET host is single-threaded. A descriptor may also reference
-                                    // threaded variants, whose shared memory/TLS imports cannot bind here.
-                                    if ((b[p] & 2) != 0) return false;
+                                    // Only modules matching the host's memory bind: a descriptor lists threaded
+                                    // (shared memory) and single-threaded variants side by side.
+                                    if (((b[p] & 2) != 0) != Threaded) return false;
                                     Limits(b, ref p);
                                 }
                                 else if (kind == 3) p += 2;                      // global: valtype, mutability
@@ -432,6 +443,7 @@
         </ItemGroup>
         <TwoDogReadSideModuleImports Files="@(_TwoDogSideModuleCandidate)" ExtensionFiles="@(_TwoDogSideModuleExtension)"
                                     ProjectDir="$(TwoDogGodotProjectFullPath)"
+                                    Threaded="$([MSBuild]::ValueOrDefault('$(WasmEnableThreads)', 'false'))"
                                     Condition="'@(_TwoDogSideModuleCandidate)' != '' Or '@(_TwoDogSideModuleExtension)' != ''">
             <Output TaskParameter="SideModules" ItemName="_TwoDogSideModule"/>
             <Output TaskParameter="Symbols" ItemName="_TwoDogSideModuleSymbol"/>

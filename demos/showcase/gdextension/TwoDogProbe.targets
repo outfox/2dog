@@ -11,6 +11,11 @@
         <_TwoDogProbeBin>$(_TwoDogProbeDir)bin/</_TwoDogProbeBin>
         <_TwoDogProbeSource>$(_TwoDogProbeDir)src/twodog_probe.c</_TwoDogProbeSource>
         <_TwoDogProbeWasm>$(_TwoDogProbeBin)twodog_probe.web.wasm32.wasm</_TwoDogProbeWasm>
+        <!-- WasmEnableThreads hosts link Godot with shared memory, which only -pthread side modules can import. The
+             workload's emscripten cache has no -pthread PIC crtbegin.o; this C library needs nothing from it. -->
+        <_TwoDogProbeWasm Condition="'$(WasmEnableThreads)' == 'true'">$(_TwoDogProbeBin)twodog_probe.web.wasm32.threads.wasm</_TwoDogProbeWasm>
+        <_TwoDogProbeWasmFlags>-sSIDE_MODULE=1 -sWASM_BIGINT</_TwoDogProbeWasmFlags>
+        <_TwoDogProbeWasmFlags Condition="'$(WasmEnableThreads)' == 'true'">$(_TwoDogProbeWasmFlags) -pthread -nostartfiles -Wno-experimental</_TwoDogProbeWasmFlags>
         <_TwoDogProbeCFlags>-O2 -std=c11 -Wall -Wextra -fvisibility=hidden -I&quot;$(_TwoDogProbeDir)include&quot;</_TwoDogProbeCFlags>
     </PropertyGroup>
 
@@ -67,7 +72,7 @@
                Text="TwoDog showcase: building the web GDExtension probe needs the wasm-tools workload (dotnet workload install wasm-tools)."/>
         <PropertyGroup>
             <!-- Per project: the browser hosts may build in parallel and share the final output -->
-            <_TwoDogProbeWasmObj>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog_probe'))twodog_probe.web.wasm32.wasm</_TwoDogProbeWasmObj>
+            <_TwoDogProbeWasmObj>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog_probe'))$([System.IO.Path]::GetFileName('$(_TwoDogProbeWasm)'))</_TwoDogProbeWasmObj>
             <_TwoDogProbeEmcc>$(EmscriptenUpstreamEmscriptenPath)emcc</_TwoDogProbeEmcc>
             <_TwoDogProbeEmcc Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(EmscriptenUpstreamEmscriptenPath)emcc.bat</_TwoDogProbeEmcc>
             <_TwoDogProbeNode>$(EmscriptenNodeToolsPath)bin/node</_TwoDogProbeNode>
@@ -85,7 +90,7 @@
             <_TwoDogProbeEmccEnv Include="PYTHONHOME=" Condition="$([MSBuild]::IsOSPlatform('Windows'))"/>
         </ItemGroup>
         <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogProbeWasmObj)'))"/>
-        <Exec Command="&quot;$(_TwoDogProbeEmcc)&quot; $(_TwoDogProbeCFlags) -sSIDE_MODULE=1 -sWASM_BIGINT &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeWasmObj)&quot;"
+        <Exec Command="&quot;$(_TwoDogProbeEmcc)&quot; $(_TwoDogProbeCFlags) $(_TwoDogProbeWasmFlags) &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeWasmObj)&quot;"
               EnvironmentVariables="@(_TwoDogProbeEmccEnv)"/>
         <Copy SourceFiles="$(_TwoDogProbeWasmObj)" DestinationFiles="$(_TwoDogProbeWasm)" Retries="5" RetryDelayMilliseconds="200"/>
     </Target>

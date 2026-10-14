@@ -242,7 +242,11 @@ class ConfigurationTests(unittest.TestCase):
         ))
         selected = Path(output["Properties"]["TwoDogWebNativeDir"]) / "libgodot/libgodot.a"
         self.assertEqual(selected.resolve(), threaded.resolve())
-        self.assertIn("-sDEFAULT_PTHREAD_STACK_SIZE=5120KB", self.link_flags(output))
+        flags = self.link_flags(output)
+        self.assertIn("-sDEFAULT_PTHREAD_STACK_SIZE=5120KB", flags)
+        # Side modules load on every thread: blocked threads catch up after futex waits, in reserved table slots.
+        self.assertIn("-Wl,--wrap=emscripten_futex_wait", flags)
+        self.assertIn("-sTABLE_BASE=16385", flags)
 
         # A single-threaded archive cannot link into the threaded runtime, so it is never substituted.
         values = self.evaluate(project, "Debug")
@@ -253,7 +257,7 @@ class ConfigurationTests(unittest.TestCase):
         output = json.loads(self.run_msbuild(
             self.project(), "-p:Configuration=Release", "-getItem:TwoDogGodotEmccExtraLDFlag",
         ))
-        self.assertFalse([flag for flag in self.link_flags(output) if "PTHREAD" in flag])
+        self.assertFalse([flag for flag in self.link_flags(output) if "PTHREAD" in flag or "futex" in flag or "TABLE_BASE" in flag])
 
     @staticmethod
     def link_flags(output):
