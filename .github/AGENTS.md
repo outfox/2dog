@@ -18,10 +18,10 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and
   package tests; `docs.yml` builds the documentation site.
 - A branch push whose content already passed every job family in a recent successful run skips natives, pack,
-  test and smoke jobs; the run summary links the verifying run. Content means the tree without the paths CI
-  ignores, so merging a tested, up-to-date branch or adding docs-only commits costs one short job.
-  `scripts/find-tested-run.sh` does the matching for this rule and the tag rule; keep its family list and
-  ignored paths in step with the job names and `paths-ignore`. Manual dispatches always run in full.
+  test and smoke jobs; the run summary links the verifying run. Content means the tree without root Markdown
+  and `AGENTS.md` files, so merging a tested, up-to-date branch costs one short job. `docs/` counts, because
+  tool tests read it. `scripts/find-tested-run.sh` does the matching for this rule and the tag rule; keep its
+  family list in step with the job names, and never ignore files a test reads. Manual dispatches always run in full.
 - Keep the `github.repository == 'outfox/2dog'` gate on jobs that build, test or release.
 - Downstream jobs must tolerate skipped `build-natives` with explicit
   `!cancelled() && needs.<job>.result == 'success'` gates; implicit `success()` skips them transitively.

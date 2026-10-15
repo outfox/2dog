@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Finds a recent successful ci.yml run that already tested the content of <commit>: the same tree once the paths CI
-# ignores (docs/, root Markdown, AGENTS.md) are left out, with every given job family run and passed. Prints the run
-# id and the commit it ran on; exits 1 when there is none. Needs GH_TOKEN and GITHUB_REPOSITORY.
+# Finds a recent successful ci.yml run that already tested the content of <commit>: the same tree once root Markdown
+# and AGENTS.md files are left out, with every given job family run and passed. Prints the run id and the commit it
+# ran on; exits 1 when there is none. Needs GH_TOKEN and GITHUB_REPOSITORY.
 #   find-tested-run.sh <commit-sha> <family>...    e.g. find-tested-run.sh "$SHA" Test "Desktop Smoke"
 set -euo pipefail
 
@@ -12,11 +12,12 @@ api="repos/$GITHUB_REPOSITORY"
 # Longest first: a job belongs to the first family it matches, so "Test Rendering" is not counted as "Test".
 families="[$(printf '%s\n' "$@" | awk '{ print length "\t" $0 }' | sort -rn | cut -f2- | sed 's/.*/"&"/' | paste -sd,)]"
 
-# The recursive tree from the API, so candidate commits need no fetch. Mirrors ci.yml's paths-ignore.
+# The recursive tree from the API, so candidate commits need no fetch. Unlike ci.yml's paths-ignore, docs/ counts:
+# DocsDriftTests read its pages and sidebar.
 content_key() {
   gh api "$api/git/trees/$1?recursive=1" --jq '
     if .truncated then error("tree listing truncated") else . end
-    | .tree[] | select(.type != "tree" and (.path | test("^docs/|^[^/]+\\.md$|(^|/)AGENTS\\.md$") | not))
+    | .tree[] | select(.type != "tree" and (.path | test("^[^/]+\\.md$|(^|/)AGENTS\\.md$") | not))
     | "\(.mode) \(.type) \(.sha)\t\(.path)"' | sha256sum | cut -d' ' -f1
 }
 

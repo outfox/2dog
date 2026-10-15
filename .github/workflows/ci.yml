@@ -94,7 +94,7 @@ jobs:
           echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
       # A branch push whose content already passed every job family elsewhere (typically the merge of a tested,
-      # up-to-date branch, or docs-only commits on top of a tested one) skips natives, pack, test and smoke jobs.
+      # up-to-date branch) skips natives, pack, test and smoke jobs.
       # Tags keep their own rule above; manual dispatches always run in full.
       - name: Check for already-tested content
         id: content
