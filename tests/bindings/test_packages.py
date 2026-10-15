@@ -182,7 +182,7 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
         game_dir = self.dir / "Game"
         game_dir.mkdir()
         template = (REPO / "templates/twodog/Company.Product1.csproj").read_text(encoding="utf-8-sig")
-        template = template.replace("2dog.godotsharp.editor\"", EDITOR + "\"").replace("2dog.godotsharp\"", CORE + "\"")
+        template = template.replace("TWODOG_PRECISION_SUFFIX", SUFFIX)
         template = template.replace("GODOT_SDK_VERSION", GODOT).replace("TPLRAWNAME", "Game")
         template = template.replace("$(TwoDogVersion)", VERSION).replace("</Project>",
             '<ItemGroup><ProjectReference Include="../Library/Library.csproj"/></ItemGroup>'
