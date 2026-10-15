@@ -27,6 +27,7 @@ internal sealed class ReplScreen : IDisposable
     private bool dirty, clear, stopping;
     private RegionFrame? drawn;
     private (int Width, int Height) drawnSize;
+    private bool blockCursor;
     private Exception? failure;
 
     public ReplScreen(ITerminalDevice device, bool color)
@@ -191,12 +192,20 @@ internal sealed class ReplScreen : IDisposable
             if (up > 0) output.Append("\x1b[").Append(up).Append('A');
             output.Append('\r');
             if (frame.CaretColumn > 0) output.Append("\x1b[").Append(frame.CaretColumn).Append('C');
-            output.Append("\x1b[?25h");
+            output.Append(CursorShape(frame.BlockCursor)).Append("\x1b[?25h");
             drawn = frame;
             drawnSize = (width, height);
         }
-        else output.Append("\x1b[?25h");
+        else output.Append(CursorShape(false)).Append("\x1b[?25h");
         return output.Append(EndFrame).ToString();
+    }
+
+    // A steady block while it is wanted; switching back restores the user's configured cursor shape.
+    private string CursorShape(bool block)
+    {
+        if (block == blockCursor) return "";
+        blockCursor = block;
+        return block ? "\x1b[2 q" : "\x1b[0 q";
     }
 
     // The cursor rests on the caret. A narrower terminal may have rewrapped the rows above it.

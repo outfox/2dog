@@ -131,6 +131,44 @@ public class EditorTests
     }
 
     [Fact]
+    public async Task InsertTogglesOverwriteWhichReplacesCharactersButNeverLineBreaks()
+    {
+        var editor = new ReplEditor(PlainLanguage.Instance);
+        await Type(editor, "abcd");
+        await Press(editor, Keys.Left, Keys.Left, Keys.Left);
+        await Type(editor, "X");
+        Assert.Equal(("aXbcd", 2), (editor.Text, editor.Caret));
+        await Press(editor, Key(ConsoleKey.Insert));
+        Assert.True(editor.View.Overwrite);
+        await Type(editor, "YZ");
+        Assert.Equal(("aXYZd", 4), (editor.Text, editor.Caret));
+        // Past the end, and before a line break, typing appends; pastes and selections still insert or replace.
+        await Type(editor, "!");
+        await editor.HandleAsync(new TextInput("\nend"), Token);
+        await Press(editor, Key(ConsoleKey.Home), Keys.Up, Key(ConsoleKey.End));
+        await Type(editor, "?");
+        Assert.Equal("aXYZ!?\nend", editor.Text);
+        await Press(editor, Key(ConsoleKey.Home));
+        await editor.HandleAsync(new TextInput("--"), Token);
+        await Press(editor, Key(ConsoleKey.RightArrow, shift: true), Key(ConsoleKey.RightArrow, shift: true));
+        await Type(editor, "b");
+        Assert.Equal("--bYZ!?\nend", editor.Text);
+        // A surrogate pair is one character.
+        await editor.HandleAsync(new TextInput("🦊"), Token);
+        await Press(editor, Keys.Left);
+        await Type(editor, "f");
+        Assert.Equal("--bfYZ!?\nend", editor.Text);
+        // Delete and Backspace work on either side of the caret; Insert switches back.
+        await Press(editor, Key(ConsoleKey.Delete), Keys.Backspace, Key(ConsoleKey.Insert));
+        Assert.False(editor.View.Overwrite);
+        await Type(editor, "+");
+        Assert.Equal(("--b+Z!?\nend", 4), (editor.Text, editor.Caret));
+        // Modified Insert keys leave the mode alone.
+        await Press(editor, Key(ConsoleKey.Insert, shift: true), Key(ConsoleKey.Insert, control: true), Key(ConsoleKey.Insert, alt: true));
+        Assert.False(editor.Overwrite);
+    }
+
+    [Fact]
     public async Task MultilineDraftsMoveBetweenLinesAndHistoryKeepsTheUnsentDraft()
     {
         var path = Path.Combine(Path.GetTempPath(), "2dog-history-" + Guid.NewGuid() + ".txt");

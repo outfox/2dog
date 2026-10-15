@@ -48,6 +48,8 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="../twodog.repl/ReplProtocol.cs" Link="Repl/ReplProtocol.cs"/>
+        <!-- The agent guide 2dog skill writes, the same text as the host's ':help agents'. -->
+        <EmbeddedResource Include="../twodog.repl/Agents/repl-guide.md" LogicalName="twodog.repl-guide.md" Link="Repl/repl-guide.md"/>
     </ItemGroup>
 
     <!-- The versions the tool scaffolds with, baked in at build time; an empty one would only surface at runtime -->

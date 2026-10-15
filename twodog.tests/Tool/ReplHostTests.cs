@@ -40,5 +40,38 @@ public class ReplHostTests
         Assert.Contains("Game.repl/**", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
         Assert.Contains("Assembly.Load(\"Game\")", File.ReadAllText(Path.Combine(dir, "Game.repl", "Program.cs")));
         Assert.Equal(HostKind.Repl, Assert.Single(ProjectModel.Load(dir).Hosts).Kind);
+        // Agents get the guide with the host.
+        Assert.Equal(SkillCommand.Skill, File.ReadAllText(Path.Combine(dir, SkillCommand.SkillFile)));
+        Assert.Contains("2dog-repl/SKILL.md", CliConsole.Run("add", dir, "--repl", "Game.second", "--no-restore").Stdout);
+    }
+
+    [Fact]
+    public void SkillWritesTheGuideForClaudeAndCodexAndLeavesTheRestOfAgentsMdAlone()
+    {
+        using var tmp = new TempProjectDir();
+        // The tool and a running host's ':help agents' show the same guide.
+        Assert.Equal(twodog.Repl.ReplOutput.AgentGuide, SkillCommand.Guide);
+        Assert.StartsWith("---\nname: 2dog-repl\n", SkillCommand.Skill);
+
+        Assert.Contains("would: create .claude/skills/2dog-repl/SKILL.md", CliConsole.Run("skill", tmp.Dir, "--dry-run").Stdout);
+        Assert.False(Directory.Exists(Path.Combine(tmp.Dir, ".claude")));
+        Assert.Equal(0, CliConsole.Run("skill", tmp.Dir).ExitCode);
+        Assert.Contains("is up to date", CliConsole.Run("skill", tmp.Dir, "--claude").Stdout);
+
+        var agents = Path.Combine(tmp.Dir, "AGENTS.md");
+        File.WriteAllText(agents, "# Project rules\r\n\r\nKeep it tidy.\r\n");
+        var json = CliConsole.Run("skill", tmp.Dir, "--codex", "--json");
+        Assert.Contains("\"status\": \"updated\"", json.Stdout);
+        var text = File.ReadAllText(agents);
+        Assert.StartsWith("# Project rules\n\nKeep it tidy.\n\n" + SkillCommand.Begin, text);
+        // A later run replaces only the section.
+        File.WriteAllText(agents, text.Replace("Keep it tidy.", "Keep it tidier.").Replace("## Connect", "## Old"));
+        CliConsole.Run("skill", tmp.Dir, "--codex");
+        var replaced = File.ReadAllText(agents);
+        Assert.Contains("Keep it tidier.", replaced);
+        Assert.Contains("## Connect", replaced);
+        Assert.Single(replaced.Split(SkillCommand.Begin), part => part.Length > 0 && !part.StartsWith("# Project"));
+        Assert.Equal(SkillCommand.Section(null), SkillCommand.Section(""));
+        Assert.Equal(2, CliConsole.Run("skill", Path.Combine(tmp.Dir, "missing")).ExitCode);
     }
 }

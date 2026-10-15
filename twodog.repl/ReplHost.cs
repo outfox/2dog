@@ -241,6 +241,10 @@ public static class ReplHost
                         Echo();
                         output.Help(multiline, session.Mode);
                         continue;
+                    case ":help agents":
+                        Echo();
+                        output.Guide();
+                        continue;
                     case ":clear":
                         console.Screen?.Clear();
                         continue;

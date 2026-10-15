@@ -89,6 +89,10 @@ internal sealed class NodePathInput
         return position + delta;
     }
 
+    /// <summary>A bare absolute node path, such as the argument of 'cd /root/Main'.</summary>
+    internal static bool IsAbsolutePath(string argument)
+        => argument.StartsWith("/root", StringComparison.Ordinal) && (argument.Length == 5 || argument[5] == '/') && !argument.Any(char.IsWhiteSpace);
+
     internal static IReadOnlyList<NodePathReference> Find(string text)
     {
         // Roslyn knows comments, regular/verbatim/raw strings and interpolation holes.

@@ -54,7 +54,9 @@ internal static class ReplCommand
         var results = repl.Results = [];
         var output = new StringBuilder();
         var log = new StringBuilder();
-        var done = Request(host, new ReplRequest(ReplOps.Exec, options.Session, code, options.Timeout), message =>
+        // The host answers a timeout itself; this deadline only catches a host that cannot answer at all.
+        var deadline = options.Timeout is { } limit ? TimeSpan.FromSeconds(limit) + DeadlineMargin : (TimeSpan?)null;
+        var done = Request(host, new ReplRequest(ReplOps.Exec, options.Session, code, options.Timeout, options.Strict), deadline, message =>
         {
             if (message.Kind is ReplEvents.Output or ReplEvents.Log)
             {
@@ -66,16 +68,24 @@ internal static class ReplCommand
             if (message.Kind != ReplEvents.Result) return;
             var ok = message.Status == ReplStatus.Ok;
             results.Add(new ReportReplResult(message.Input ?? "", message.Status ?? ReplStatus.Error, ok ? message.Text : null,
-                ok ? null : message.Text, Take(output), Take(log)));
-            if (Out.Mode.Json) return;
+                ok ? null : message.Text, Take(output), Take(log), message.Tree));
+            if (Out.Mode.Json)
+            {
+                if (!ok) Out.Errors.Add(message.Text ?? $"submission {message.Status}");
+                return;
+            }
             if (ok && message.Text is { } value) Out.Writer.WriteLine(value);
             else if (message.Status == ReplStatus.Timeout)
-                Out.ErrorLine($"timed out after {options.Timeout?.ToString(System.Globalization.CultureInfo.InvariantCulture)} s and cancelled; " +
-                              "the session and its earlier results remain");
-            else if (message.Status == ReplStatus.Cancelled) Out.ErrorLine("the submission was cancelled");
+                Out.ErrorLine($"timed out after {options.Timeout?.ToString(System.Globalization.CultureInfo.InvariantCulture)} s; " +
+                              (message.Text ?? "cancelled, and the session and its earlier results remain"));
+            else if (message.Status == ReplStatus.Cancelled) Out.ErrorLine(message.Text ?? "the submission was cancelled");
             else if (!ok) Out.ErrorWriter.WriteLine(message.Text);
         });
         repl.Status = done.Status;
+        // Output that arrived after the last result, e.g. Godot's deferred errors, belongs to it.
+        if (results is [.., var last] && (output.Length > 0 || log.Length > 0))
+            results[^1] = last with { Output = Join(last.Output, Take(output)), Log = Join(last.Log, Take(log)) };
+        if (done.Text is { } unanswered) Out.ErrorLine(unanswered);
         return done.Status switch
         {
             ReplStatus.Ok => ExitCodes.Ok,
@@ -84,6 +94,8 @@ internal static class ReplCommand
             _ => ExitCodes.SubmissionFailed,
         };
     }
+
+    private static string? Join(string? first, string? second) => first is null ? second : second is null ? first : first + second;
 
     private static string? Take(StringBuilder text)
     {
@@ -96,7 +108,7 @@ internal static class ReplCommand
     private static int Sessions(ReplHostInfo host, ReportRepl repl)
     {
         ReplSessionInfo[] sessions = [];
-        Request(host, new ReplRequest(ReplOps.Sessions), message => sessions = message.Sessions ?? sessions);
+        Request(host, new ReplRequest(ReplOps.Sessions), null, message => sessions = message.Sessions ?? sessions);
         repl.Sessions = sessions.ToList();
         if (sessions.Length == 0) Out.Info($"no named sessions in REPL host '{host.Pipe}' - '2dog repl exec -s NAME' starts one");
         var rows = sessions.Select(s => new[]
@@ -119,25 +131,46 @@ internal static class ReplCommand
     private static int Close(ReplHostInfo host, string session, ReportRepl repl)
     {
         repl.Session = session;
-        var done = Request(host, new ReplRequest(ReplOps.Close, session), _ => { });
+        var done = Request(host, new ReplRequest(ReplOps.Close, session), null, _ => { });
         repl.Status = done.Status;
         Out.Plain(done.Text ?? $"closed session '{session}'");
         return ExitCodes.Ok;
     }
 
-    private static ReplEvent Request(ReplHostInfo host, ReplRequest request, Action<ReplEvent> onEvent)
-        => RequestAsync(host.Pipe, request, onEvent, Cancellation.Token).GetAwaiter().GetResult();
+    /// <summary>Beyond --timeout: the host's own grace period for work that ignores cancellation, plus slack.</summary>
+    internal static TimeSpan DeadlineMargin { get; set; } = TimeSpan.FromSeconds(10);
 
-    /// <summary>One request per connection; returns the final event. A failed request throws its message.</summary>
-    internal static async Task<ReplEvent> RequestAsync(string pipe, ReplRequest request, Action<ReplEvent> onEvent, CancellationToken token)
+    private static ReplEvent Request(ReplHostInfo host, ReplRequest request, TimeSpan? deadline, Action<ReplEvent> onEvent)
+        => RequestAsync(host.Pipe, request, onEvent, Cancellation.Token, deadline).GetAwaiter().GetResult();
+
+    /// <summary>One request per connection; returns the final event. A failed request throws its message. Past the
+    /// deadline, a synthetic timed-out "done" carries the explanation.</summary>
+    internal static async Task<ReplEvent> RequestAsync(string pipe, ReplRequest request, Action<ReplEvent> onEvent, CancellationToken token,
+        TimeSpan? deadline = null)
+    {
+        using var waiting = CancellationTokenSource.CreateLinkedTokenSource(token);
+        if (deadline is { } limit) waiting.CancelAfter(limit);
+        try { return await ExchangeAsync(pipe, request, onEvent, waiting.Token).ConfigureAwait(false); }
+        catch (OperationCanceledException) when (!token.IsCancellationRequested && deadline is { } expired)
+        {
+            return new ReplEvent(ReplEvents.Done, $"REPL host '{pipe}' gave no answer within {expired.TotalSeconds:0} s; its engine thread may be " +
+                                                  "blocked - '2dog repl sessions' shows whether it still responds", Status: ReplStatus.Timeout);
+        }
+        catch (IOException ex)
+        {
+            throw new ToolException($"the connection to REPL host '{pipe}' broke ({ex.Message}) - '2dog repl sessions' shows whether it still runs");
+        }
+    }
+
+    private static async Task<ReplEvent> ExchangeAsync(string pipe, ReplRequest request, Action<ReplEvent> onEvent, CancellationToken token)
     {
         await using var stream = new NamedPipeClientStream(".", pipe, PipeDirection.InOut, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
         try { await stream.ConnectAsync(5000, token).ConfigureAwait(false); }
         catch (TimeoutException) { throw new ToolException($"REPL host '{pipe}' did not accept a connection within 5 s"); }
         using var reader = new StreamReader(stream, new UTF8Encoding(false), detectEncodingFromByteOrderMarks: false, leaveOpen: true);
         await using var writer = new StreamWriter(stream, new UTF8Encoding(false), leaveOpen: true) { AutoFlush = true };
-        await writer.WriteLineAsync(ReplProtocol.ExecHello + ReplProtocol.Version).ConfigureAwait(false);
-        await writer.WriteLineAsync(ReplProtocol.Serialize(request)).ConfigureAwait(false);
+        await writer.WriteLineAsync((ReplProtocol.ExecHello + ReplProtocol.Version).AsMemory(), token).ConfigureAwait(false);
+        await writer.WriteLineAsync(ReplProtocol.Serialize(request).AsMemory(), token).ConfigureAwait(false);
         while (await reader.ReadLineAsync(token).ConfigureAwait(false) is { } line)
         {
             ReplEvent message;
@@ -151,7 +184,7 @@ internal static class ReplCommand
             if (message is { Error: true, Text: { } failure }) throw new ToolException(failure);
             return message;
         }
-        throw new ToolException($"REPL host '{pipe}' closed the connection before answering - did it exit?");
+        throw new ToolException($"REPL host '{pipe}' closed the connection before answering - '2dog repl sessions' shows whether it still runs");
     }
 }
 

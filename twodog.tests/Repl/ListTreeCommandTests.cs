@@ -17,12 +17,45 @@ public class ListTreeCommandTests
     [InlineData(":ls $Control", "Control")]
     [InlineData(":ls $Control/Child;", "Control/Child")]
     [InlineData(":ls $[\"Control/My Node\"]", "Control/My Node")]
+    [InlineData("ls /root", "/root")]
+    [InlineData("ls /root/Control/", "/root/Control")]
     public void ListingAcceptsRootAndSingleNodePaths(string text, string? path)
     {
         Assert.True(ListTreeCommand.TryParse(text, out var command));
         Assert.Null(command.Error);
         Assert.Equal(path, command.Path);
         Assert.True(ReplSession.IsComplete(text));
+    }
+
+    [Theory]
+    [InlineData("ls -d 1", null, 1)]
+    [InlineData("ls -d 2 $Control", "Control", 2)]
+    [InlineData(":ls -d 0 /root", "/root", 0)]
+    [InlineData("ls -d  3  $Control/Child;", "Control/Child", 3)]
+    public void DepthLimitsTheListing(string text, string? path, int depth)
+    {
+        Assert.True(ListTreeCommand.TryParse(text, out var command));
+        Assert.Null(command.Error);
+        Assert.Equal((path, depth), (command.Path, command.Depth));
+    }
+
+    [Fact]
+    public void ADepthAwaitsItsPathAfterWhitespace()
+    {
+        Assert.True(ListTreeCommand.TryParse("ls -d 1 ", out var command));
+        Assert.True(command.AwaitingTarget);
+        Assert.Equal("ls -d 1 ".Length, command.ArgumentStart);
+    }
+
+    [Theory]
+    [InlineData("ls -d")]
+    [InlineData("ls -d x")]
+    [InlineData("ls -d 2x")]
+    [InlineData("ls -d 99999999999")]
+    public void MalformedDepthsShowTheUsage(string text)
+    {
+        Assert.True(ListTreeCommand.TryParse(text, out var command));
+        Assert.StartsWith("Usage:", command.Error);
     }
 
     [Theory]
@@ -51,6 +84,8 @@ public class ListTreeCommandTests
     [InlineData("ls ?? root")]
     [InlineData("ls + $Control.GetIndex()")]
     [InlineData("ls is Node")]
+    [InlineData("ls / root")]
+    [InlineData("ls /rooted")]
     [InlineData("var ls = 1;")]
     [InlineData("\"ls $Control\"")]
     public void OrdinaryCSharpKeepsItsMeaning(string text)

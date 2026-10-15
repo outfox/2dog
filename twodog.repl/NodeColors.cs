@@ -45,29 +45,48 @@ internal static class NodeColors
         return new(path.ToString(), families);
     }
 
-    // Snapshot formatting on the owner thread; terminal rendering never touches nodes.
-    internal static StyledText Tree(Node node)
+    // Snapshot formatting on the owner thread; terminal rendering never touches nodes. Unlimited, the text equals
+    // Godot's GetTreeStringPretty; a depth limit ends cut-off branches with how many descendants they hide.
+    internal static StyledText Tree(Node node, int? depth = null)
     {
-        var text = node.GetTreeStringPretty();
+        var text = new System.Text.StringBuilder();
         var spans = new List<StyledSpan>();
-        var stack = new Stack<Node>();
-        stack.Push(node);
-        var offset = 0;
-        while (stack.TryPop(out var current))
+        Append(node, "", true, 0);
+        return new(text.ToString(), spans);
+
+        void Append(Node current, string prefix, bool last, int level)
         {
+            var connectors = prefix + (last ? " ┖╴" : " ┠╴");
+            spans.Add(new(text.Length, connectors.Length, Grey));
+            text.Append(connectors);
             var name = current.Name.ToString();
-            // Locate the node name at its actual line ending. Do not assume a
-            // particular width for Godot's tree connectors or indentation.
-            var nameStart = text.IndexOf(name + "\n", offset, StringComparison.Ordinal);
-            spans.Add(new(offset, nameStart - offset, Grey));
-            spans.Add(new(nameStart, name.Length, Color(Family(current))));
-            offset = nameStart + name.Length + 1;
-            // Native GetTreeStringPretty includes internal children too.
+            spans.Add(new(text.Length, name.Length, Color(Family(current))));
+            text.Append(name);
+            // Like GetTreeStringPretty, internal children are included.
             var children = current.GetChildren(includeInternal: true);
-            for (var i = children.Count - 1; i >= 0; i--) stack.Push(children[i]);
+            if (level == depth && children.Count > 0)
+            {
+                var hidden = $" (+{Descendants(current)})";
+                spans.Add(new(text.Length, hidden.Length, Grey));
+                text.Append(hidden).Append('\n');
+                return;
+            }
+            text.Append('\n');
+            for (var i = 0; i < children.Count; i++) Append(children[i], prefix + (last ? "   " : " ┃ "), i == children.Count - 1, level + 1);
         }
-        return new(text, spans);
     }
+
+    /// <summary>The structure behind <see cref="Tree"/>, for machine-readable listings.</summary>
+    internal static ReplTreeNode Model(Node node, int? depth = null, int level = 0)
+    {
+        var children = node.GetChildren(includeInternal: true);
+        var type = node.GetType().Namespace == "Godot" ? node.GetClass() : $"{node.GetType().Name}:{node.GetClass()}";
+        return level == depth && children.Count > 0
+            ? new(node.Name.ToString(), type, null, Descendants(node))
+            : new(node.Name.ToString(), type, children.Count == 0 ? null : children.Select(child => Model(child, depth, level + 1)).ToArray());
+    }
+
+    private static int Descendants(Node node) => node.GetChildren(includeInternal: true).Sum(child => 1 + Descendants(child));
 
     internal static StyledText Path(string display, IReadOnlyDictionary<string, NodeFamily>? families = null)
     {

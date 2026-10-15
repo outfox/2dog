@@ -39,10 +39,13 @@ internal static class ReplStatus
     internal const string Ok = "ok", Error = "error", Cancelled = "cancelled", Timeout = "timeout";
 }
 
-internal sealed record ReplRequest(string Op, string? Session = null, string? Code = null, double? Timeout = null);
+internal sealed record ReplRequest(string Op, string? Session = null, string? Code = null, double? Timeout = null, bool Strict = false);
 
 internal sealed record ReplEvent(string Kind, string? Text = null, bool Error = false, string? Status = null,
-    string? Input = null, string? Session = null, ReplSessionInfo[]? Sessions = null);
+    string? Input = null, string? Session = null, ReplSessionInfo[]? Sessions = null, ReplTreeNode? Tree = null);
+
+/// <summary>A listed node: Godot class, or script type and class. Hidden counts the descendants a depth limit cut off.</summary>
+internal sealed record ReplTreeNode(string Name, string Type, ReplTreeNode[]? Children = null, int? Hidden = null);
 
 /// <summary>Scope and worlds are null while a submission blocks the engine thread.</summary>
 internal sealed record ReplSessionInfo(string Name, string Mode, string? Scope, string[]? Worlds, bool Busy, double IdleSeconds);

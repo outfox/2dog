@@ -91,6 +91,7 @@ Commands:
 | `2dog repl` | Attach this terminal to a running REPL host (`dotnet run --project MyGame.repl`) |
 | `2dog repl exec [code]` | Run C# and node commands in a running REPL host; prints values, exits nonzero on failure |
 | `2dog repl sessions`, `2dog repl close <session>` | List a REPL host's named sessions, close one |
+| `2dog skill [path]` | Write the REPL working guide for coding agents: `--claude` (default, `.claude/skills/2dog-repl/SKILL.md`), `--codex` (a section of `AGENTS.md`) |
 | `2dog version` | Print the tool and package versions |
 | `2dog help [verb]` | Usage, or the help for one verb |
 
@@ -114,7 +115,7 @@ Options:
 | `--update-workloads` | `update`: install missing workloads the hosts need, then update all installed workloads for the project's SDK |
 | `--allow-dirty` | `update`: proceed with uncommitted git changes |
 | `--fix`, `--fix-all`, `--build [target]`, `-c, --configuration <Cfg>`, `--log <file>`, `--ignore <id>`, `--strict`, `--offline`, `--list-checks` | `doctor` options; see `2dog doctor --help` |
-| `-s, --session <name>`, `--timeout <seconds>`, `--pipe <name>` | `repl exec` options: a named session that keeps its state, a time limit, and which host to use; see `2dog repl --help` |
+| `-s, --session <name>`, `--timeout <seconds>`, `--strict`, `--pipe <name>` | `repl exec` options: a named session that keeps its state, a time limit, failing on logged Godot errors, and which host to use; see `2dog repl --help` |
 | `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |
 | `-h, --help`, `--version` | Help (per verb after a verb), versions |
 

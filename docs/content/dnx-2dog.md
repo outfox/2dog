@@ -32,6 +32,7 @@ dotnet tool install -g 2dog   # or install it globally
 | [`2dog update`](/cli/update) | Bring the project's 2dog packages to this tool's versions |
 | [`2dog pack`](/cli/pack) | List a `.pck`'s contents |
 | [`2dog repl`](/cli/repl) | Attach to a running REPL host, or run code in it from scripts and agents (`--session`, `--timeout`, `--pipe`) |
+| [`2dog skill`](/cli/skill) | Write the REPL working guide for coding agents (`--claude`, `--codex`) |
 | [`2dog version`](/cli/version) | Print the tool and package versions |
 | [`2dog help`](/cli/help) | Show the usage, or the help for one verb |
 

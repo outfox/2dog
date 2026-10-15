@@ -36,7 +36,7 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         output.WriteLine("  " + Paint(":auto / :sh / :cs / :ai", "36") + "  switch modes (default: auto)");
         output.WriteLine("  " + Paint(":multiline", "36") + "  swap Enter and Shift+Enter");
         output.WriteLine();
-        output.WriteLine("Explore  " + Paint("ls", "33") + "  or  " + Paint("$Control", "33") + "    Navigate  " + Paint("cd $Control", "33") + "    Find nodes  " + Paint("$Timer", "33"));
+        output.WriteLine("Explore  " + Paint("ls", "33") + "  or  " + Paint("$Control", "33") + "    Navigate  " + Paint("cd $Control", "33") + "    Find nodes  " + Paint("$Timer", "33") + " Tab");
         output.WriteLine();
     }
 
@@ -61,6 +61,18 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
     public void InputMode(bool multiline)
         => output.WriteLine("  " + Paint("Enter", "36") + (multiline ? "  newline     " : "  run         ") +
             Paint("Shift+Enter", "36") + (multiline ? "  run" : "  newline"));
+
+    /// <summary>The working guide for coding agents, shared with '2dog skill'.</summary>
+    internal static string AgentGuide { get; } = ReadGuide();
+
+    private static string ReadGuide()
+    {
+        using var stream = typeof(ReplOutput).Assembly.GetManifestResourceStream("twodog.repl.repl-guide.md")!;
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd().ReplaceLineEndings("\n").Trim();
+    }
+
+    public void Guide() => output.WriteLine(AgentGuide + Environment.NewLine);
 
     public void Help(bool multiline, ReplMode mode = ReplMode.Auto)
     {
@@ -90,10 +102,10 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Example("$Control.Size");
         Example("$Timer  // Tab: matching paths first, then node names anywhere in the tree");
         Example("$Control/Signals/Sources/CSharpTicker.Tick();");
-        output.WriteLine("  ls prints a node and all its descendants. Paths are case-sensitive; Tab fills them in.");
+        output.WriteLine("  ls prints a node and all its descendants; ls -d 1 stops one level down. Paths are case-sensitive; Tab fills them in.");
         output.WriteLine("  $ paths start at here and infer the live node's public C# type. cd selects here.");
         output.WriteLine("  The prompt shows your scope. :cd / :pwd force commands if C# variables have those names.");
-        output.WriteLine("  cd $/root/Control uses an absolute path; $Name also finds nodes across the whole tree.");
+        output.WriteLine("  cd /root/Control and $/root/Control use absolute paths. Tab also searches node names anywhere in the tree.");
         output.WriteLine("  cp/mv take source and existing parent expressions; mv also takes a string new name. Name collisions are rejected.");
         output.WriteLine("  mv(...), mv.Member, mv[index] stay C#. :mv forces the command; @mv selects the identifier.");
         output.WriteLine("  If the selected node leaves the tree, the scope returns to root.");
@@ -120,6 +132,7 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Row("Enter", "Accept a selected completion; otherwise " + (multiline ? "insert a newline. Shift+Enter runs." : "run the input. Shift+Enter inserts a newline."));
         output.WriteLine("  Enter runs exact bare commands with no trailing space; shell commands apply in :auto and :sh.");
         Row(":multiline", "Swap Enter and Shift+Enter for this session; Ctrl+Enter always runs.");
+        Row(":help agents", "The guide for coding agents working through '2dog repl exec'.");
         Row("Tab / Shift+Tab", "Accept, then cycle matching completions forward / backward. Backspace restores your prefix.");
         Row(". / (", "Accept a selection outside quoted path text and finish cycling.");
         Row("/", "Accept only for a nonempty relative path outside quotes; absolute-path slashes stay literal.");
@@ -128,6 +141,7 @@ internal sealed class ReplOutput(TextWriter output, TextWriter error, bool color
         Row("Shift+Backspace", "Delete backward to a word break, like Ctrl+Backspace. Dots and slashes are breaks.");
         Row("Ctrl+Space", "Open suggestions. Ctrl+Shift+Space shows method signatures and arguments.");
         Row("Up / Down", "Move between lines, then browse history; typed text filters it.");
+        Row("Insert", "Toggle overwrite: typing replaces the character at the caret. Backspace / Delete delete left / right.");
         Row("Ctrl+C", "Clear the input and cancel running/queued work; pass ct to waits. Copies a selection instead.");
         Row(":cancel", "Cancel running and queued work. Submitted C# loops have cancellation checkpoints.");
         Row("Ctrl+Z / Ctrl+Y", "Undo / redo. Ctrl+A selects all; Ctrl+X / Ctrl+V cut and paste; Ctrl+K / Ctrl+U delete to line end / start.");

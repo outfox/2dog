@@ -10,6 +10,9 @@ namespace twodog.Repl;
 internal sealed class ReplSession : IDisposable
 {
     private static readonly CSharpParseOptions ParseOptions = new(kind: SourceCodeKind.Script);
+    // Every chain starts here: in a Godot REPL, Timer means Godot's, not System.Threading's.
+    private const string Prelude = "using Timer = Godot.Timer;";
+    private Script<object>? root;
     private static readonly string[] Imports =
         ["System", "System.Collections.Generic", "System.Linq", "System.Threading", "System.Threading.Tasks", "Godot"];
     private readonly AdhocWorkspace workspace = new();
@@ -117,22 +120,28 @@ internal sealed class ReplSession : IDisposable
             if (editor.TryGetText(out var current) && current.ContentEquals(source)) return editor;
             return editingDocument = editor.WithText(source);
         }
+        // Each chain starts at the prelude, as the scripts do.
+        previous ??= workspace.AddProject(SubmissionProject(ProjectId.CreateNewId(), "Prelude", null, Prelude)).Id;
         var id = ProjectId.CreateNewId();
-        var project = ProjectInfo.Create(id, VersionStamp.Create(), $"Submission{submission}",
-            $"Submission{submission}", LanguageNames.CSharp, isSubmission: true,
-            parseOptions: ParseOptions,
-            compilationOptions: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
-                usings: Imports, metadataReferenceResolver: options.MetadataResolver,
-                sourceReferenceResolver: options.SourceResolver),
-            metadataReferences: options.MetadataReferences,
-            projectReferences: previous is null ? [] : [new ProjectReference(previous)],
-            hostObjectType: typeof(ReplGlobals));
-        return editingDocument = workspace.CurrentSolution.AddProject(project)
+        return editingDocument = workspace.CurrentSolution.AddProject(SubmissionProject(id, $"Submission{submission}", previous, null))
             .AddDocument(DocumentId.CreateNewId(id), "input.csx", source)
             .GetProject(id)!.Documents.Single();
     }
 
-    public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken, ReplCapture? capture = null)
+    private ProjectInfo SubmissionProject(ProjectId id, string name, ProjectId? previousProject, string? code) => ProjectInfo.Create(id,
+        VersionStamp.Create(), name, name, LanguageNames.CSharp, isSubmission: true,
+        parseOptions: ParseOptions,
+        compilationOptions: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
+            usings: Imports, metadataReferenceResolver: options.MetadataResolver,
+            sourceReferenceResolver: options.SourceResolver),
+        metadataReferences: options.MetadataReferences,
+        projectReferences: previousProject is null ? [] : [new ProjectReference(previousProject)],
+        documents: code is null ? null : [DocumentInfo.Create(DocumentId.CreateNewId(id), "prelude.csx", sourceCodeKind: SourceCodeKind.Script,
+            loader: TextLoader.From(TextAndVersion.Create(SourceText.From(code), VersionStamp.Create())))],
+        hostObjectType: typeof(ReplGlobals));
+
+    /// <param name="firstLine">The text's first line in a larger request, so diagnostics point into the request.</param>
+    public async Task<ReplResult> EvaluateAsync(string text, CancellationToken cancellationToken, ReplCapture? capture = null, int firstLine = 1)
     {
         if (ReplModes.TryParse(text.Trim(), out var mode))
         {
@@ -177,8 +186,8 @@ internal sealed class ReplSession : IDisposable
                 var node = listing.Path is null ? current : current.GetNodeOrNull<Godot.Node>(listing.Path);
                 if (node is null || !Godot.GodotObject.IsInstanceValid(node) || node.IsQueuedForDeletion())
                     return Task.FromResult(new ReplResult(null, $"Node '{listing.Path}' was not found from {current.GetPath()}. Paths are case-sensitive; use ls or Tab to explore.", false));
-                var hierarchy = NodeColors.Tree(node);
-                return Task.FromResult(new ReplResult(null, null, false, Tree: hierarchy.Text, Styled: hierarchy));
+                var hierarchy = NodeColors.Tree(node, listing.Depth);
+                return Task.FromResult(new ReplResult(null, null, false, Tree: hierarchy.Text, Styled: hierarchy, Nodes: NodeColors.Model(node, listing.Depth)));
             }, cancellationToken).ConfigureAwait(false);
         }
         var prepared = await PrepareAsync(text, cancellationToken, live: true).ConfigureAwait(false);
@@ -197,18 +206,15 @@ internal sealed class ReplSession : IDisposable
             if (!prepared.Nodes.ContainsKey(path.LookupPath))
                 return new(null, $"Node '{path.Path}' was not found in the current scope. Use ls or Tab to explore.", false);
         }
-        var script = state is null
-            ? CSharpScript.Create(prepared.Input.Code, options, typeof(ReplGlobals))
-            : state.Script.ContinueWith<object>(prepared.Input.Code, options);
+        var previousScript = state?.Script ?? (root ??= CSharpScript.Create(Prelude, options, typeof(ReplGlobals)));
+        var script = previousScript.ContinueWith<object>(prepared.Input.Code, options);
         var diagnostics = script.Compile(cancellationToken);
         if (diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error))
-            return new(null, string.Join(Environment.NewLine, diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).Select(d => Diagnostic(d, prepared.Input))), false);
+            return new(null, string.Join(Environment.NewLine, diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).Select(d => Diagnostic(d, prepared.Input, firstLine))), false);
 
         // Validate the original text for accurate diagnostics, then execute with loop checkpoints.
         var instrumented = ReplCancellation.Instrument(prepared.Input.Code);
-        if (instrumented != prepared.Input.Code)
-            script = state is null ? CSharpScript.Create(instrumented, options, typeof(ReplGlobals))
-                : state.Script.ContinueWith<object>(instrumented, options);
+        if (instrumented != prepared.Input.Code) script = previousScript.ContinueWith<object>(instrumented, options);
 
         var document = prepared.Document;
         var hasResult = HasResult(script);
@@ -339,12 +345,17 @@ internal sealed class ReplSession : IDisposable
                 new StyledText(" -> ") + renamed.Display);
     }
 
-    private static string Diagnostic(Diagnostic diagnostic, NodePathInput input)
+    private static string Diagnostic(Diagnostic diagnostic, NodePathInput input, int firstLine)
     {
         if (diagnostic.Location.SourceTree is not { FilePath: "" }) return diagnostic.ToString();
         var location = SourceText.From(input.Original).Lines.GetLinePosition(input.ToOriginal(diagnostic.Location.SourceSpan.Start));
-        return $"({location.Line + 1},{location.Character + 1}): {diagnostic.Id}: {diagnostic.GetMessage()}";
+        return $"({location.Line + firstLine},{location.Character + 1}): {diagnostic.Id}: {diagnostic.GetMessage()}{Hint(diagnostic)}";
     }
+
+    // Node code calls GetTree(); the REPL's globals spell it 'tree'.
+    private static string Hint(Diagnostic diagnostic)
+        => diagnostic.Id == "CS0103" && diagnostic.GetMessage(System.Globalization.CultureInfo.InvariantCulture).Contains("'GetTree'", StringComparison.Ordinal)
+            ? " - the REPL's SceneTree is 'tree'" : "";
 
     private static bool HasResult(Script<object> script)
     {
@@ -363,15 +374,30 @@ internal sealed class ReplSession : IDisposable
         return expression is not null && compilation.GetSemanticModel(syntax).GetTypeInfo(expression).Type?.SpecialType != SpecialType.System_Void;
     }
 
-    private static string Format(object? value) => value switch
+    // Strings read as C# literals; Godot objects name their type and where they live. Owner thread.
+    internal static string Format(object? value) => value switch
     {
         null => "null",
-        string text => System.Text.Json.JsonSerializer.Serialize(text),
+        string text => SymbolDisplay.FormatLiteral(text, quote: true),
         bool boolean => boolean ? "true" : "false",
+        Godot.GodotObject godot => FormatObject(godot),
         System.Collections.IEnumerable items => FormatItems(items),
         IFormattable number => number.ToString(null, System.Globalization.CultureInfo.InvariantCulture),
         _ => value.ToString() ?? "null",
     };
+
+    private static string FormatObject(Godot.GodotObject godot)
+    {
+        var type = godot.GetType().Name;
+        if (!Godot.GodotObject.IsInstanceValid(godot)) return $"<freed {type}>";
+        return godot switch
+        {
+            Godot.Node node when node.IsInsideTree() => $"<{type}> {node.GetPath()}",
+            Godot.Node node => $"<{type}> {node.Name} (not in the tree)",
+            Godot.Resource { ResourcePath.Length: > 0 } resource => $"<{type}> {resource.ResourcePath}",
+            _ => $"<{type}#{godot.GetInstanceId()}>",
+        };
+    }
 
     private static string FormatItems(System.Collections.IEnumerable items)
     {
@@ -380,7 +406,7 @@ internal sealed class ReplSession : IDisposable
         {
             if (values.Count == 20) { values.Add("..."); break; }
             // Keep nested/cyclic collections shallow and never traverse arbitrary object properties.
-            values.Add(item is string text ? System.Text.Json.JsonSerializer.Serialize(text) : item?.ToString() ?? "null");
+            values.Add(item is string or Godot.GodotObject ? Format(item) : item?.ToString() ?? "null");
         }
         return "[" + string.Join(", ", values) + "]";
     }
@@ -390,4 +416,5 @@ internal sealed class ReplSession : IDisposable
 
 internal sealed record PreparedInput(Document Document, NodePathInput Input, IReadOnlyDictionary<string, NodePathTarget> Nodes, IReadOnlyDictionary<string, NodeFamily> Families, ReplMode Mode = ReplMode.Auto);
 
-internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null, StyledText? Styled = null);
+internal sealed record ReplResult(string? Value, string? Error, bool Committed, bool Cancelled = false, string? Tree = null, StyledText? Styled = null,
+    ReplTreeNode? Nodes = null);

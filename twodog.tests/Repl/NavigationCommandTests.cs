@@ -15,6 +15,8 @@ public class NavigationCommandTests
     [InlineData(":cd $Child", "Child")]
     [InlineData("cd $/root/Control/", "/root/Control")]
     [InlineData(":cd /root/Control/", "/root/Control")]
+    [InlineData("cd /root/Control/", "/root/Control")]
+    [InlineData("cd /root", "/root")]
     [InlineData("rm", null)]
     [InlineData("rm $Child/", "Child")]
     [InlineData("rm $[\"My Node\"]", "My Node")]

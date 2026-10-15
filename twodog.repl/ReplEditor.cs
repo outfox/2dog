@@ -14,8 +14,9 @@ internal sealed record EditorResult(EditorAction Action, string Text = "", IRead
 }
 
 internal sealed record MenuView(IReadOnlyList<StyledText> Items, int? Selected, int First, int Total, StyledText Description);
+/// <param name="Overwrite">Typed characters replace the character at the caret.</param>
 internal sealed record EditorView(string Text, int Caret, TextRange? Selection, IReadOnlyList<StyledSpan> Highlights,
-    MenuView? Menu, StyledText? Signature, bool Multiline);
+    MenuView? Menu, StyledText? Signature, bool Multiline, bool Overwrite = false);
 
 /// <summary>The input line: text, caret, selection, undo, history, completion and signature help. It never touches a
 /// terminal: inputs come in one at a time and <see cref="View"/> describes what to draw.</summary>
@@ -57,6 +58,8 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
     private StyledText description = StyledText.Empty;
 
     public bool Multiline { get; set; }
+    /// <summary>Insert toggles it: typed characters replace the one at the caret instead of moving it right.</summary>
+    public bool Overwrite { get; private set; }
     /// <summary>How long typing must pause before the menu opens by itself; Tab and Ctrl+Space open it at once.
     /// Only <see cref="ReadLineAsync"/> opens a delayed menu.</summary>
     public TimeSpan MenuDelay { get; set; }
@@ -181,6 +184,9 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
             case ConsoleKey.Backspace:
                 dismissed = reopen;
                 await DeleteAsync(control || alt || shift ? WordLeft(caret) : PreviousCaret(caret), token).ConfigureAwait(false);
+                return null;
+            case ConsoleKey.Insert when !control && !alt && !shift:
+                Overwrite = !Overwrite;
                 return null;
             case ConsoleKey.Delete:
                 await DeleteAsync(control || alt ? WordRight(caret) : NextCaret(caret), token).ConfigureAwait(false);
@@ -374,7 +380,6 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         menuPending = false;
         await OpenMenuAsync(token).ConfigureAwait(false);
         Publish();
-        Changed?.Invoke();
     }
 
     private async Task<EditorResult?> PasteAsync(string pasted, CancellationToken token)
@@ -403,6 +408,8 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
             caret = replaced.Start;
             anchor = null;
         }
+        // A typed character replaces the one at the caret, but never a line break; pastes still insert.
+        else if (Overwrite && coalesce && caret < text.Length && text[caret] != '\n') text = text.Remove(caret, NextCaret(caret) - caret);
         SetText(text.Insert(caret, inserted), caret + inserted.Length);
     }
 
@@ -604,9 +611,11 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
     }
 
     // Snapshot the state for rendering, and start background highlighting and documentation lookups.
+    // Every input redraws: moving the caret or closing the menu changes nothing that background work reports.
     private void Publish()
     {
         var item = sorted is not null && selected is { } index ? sorted[index] : null;
+        bool highlight;
         lock (gate)
         {
             if (!ReferenceEquals(item, described))
@@ -616,10 +625,11 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
                 if (item is not null) _ = DescribeAsync(item);
             }
             view = Compose();
-            if (highlighted == text || requested == text) return;
-            requested = text;
+            highlight = highlighted != text && requested != text;
+            if (highlight) requested = text;
         }
-        _ = HighlightAsync(text);
+        Changed?.Invoke();
+        if (highlight) _ = HighlightAsync(text);
     }
 
     // Under the gate.
@@ -628,7 +638,7 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         var menu = sorted is not { Count: > 0 } ? null : new MenuView(sorted.Skip(first).Take(MenuRows).Select(i => i.Display).ToArray(),
             selected - first, first, sorted.Count, description);
         var spans = highlighted == text ? highlights : highlights.Where(s => s.End <= CommonPrefix(highlighted, text)).ToArray();
-        return new EditorView(text, caret, Selection(), spans, menu, Signature(), Multiline);
+        return new EditorView(text, caret, Selection(), spans, menu, Signature(), Multiline, Overwrite);
     }
 
     private static int CommonPrefix(string a, string b)

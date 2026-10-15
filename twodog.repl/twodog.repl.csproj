@@ -22,6 +22,10 @@
         <InternalsVisibleTo Include="twodog.tests" />
     </ItemGroup>
     <ItemGroup>
+        <!-- The agent guide behind ':help agents'; the 2dog tool links the same file for '2dog skill'. -->
+        <EmbeddedResource Include="Agents/repl-guide.md" LogicalName="twodog.repl.repl-guide.md" />
+    </ItemGroup>
+    <ItemGroup>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false" />
         <None Include="README.md" Pack="true" PackagePath="README.md" />
         <None Include="THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="" />

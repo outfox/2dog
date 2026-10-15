@@ -107,7 +107,7 @@ internal sealed class ScreenWriter(ReplScreen screen, bool error) : TextWriter
 /// Enables the terminal modes the editor relies on and restores them on disposal.</summary>
 internal sealed class ConsoleDevice : ITerminalDevice, IDisposable
 {
-    private const string UnixModes = "\x1b[?2004h\x1b[>4;1m\x1b[>1u", UnixRestore = "\x1b[<u\x1b[>4;0m\x1b[?2004l";
+    private const string UnixModes = "\x1b[?2004h\x1b[>4;1m\x1b[>1u", UnixRestore = "\x1b[<u\x1b[>4;0m\x1b[?2004l", CursorRestore = "\x1b[0 q";
     private readonly SafeFileHandle handle;
     private readonly FileStream? stream;
     private readonly uint originalMode;
@@ -166,6 +166,8 @@ internal sealed class ConsoleDevice : ITerminalDevice, IDisposable
     {
         try
         {
+            // A host that went away may have left an overwrite-mode block cursor behind.
+            Write(CursorRestore);
             if (OperatingSystem.IsWindows()) SetConsoleMode(handle, originalMode);
             else Write(UnixRestore);
         }
