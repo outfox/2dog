@@ -8,10 +8,7 @@ WebExceptionDiagnostics.Install();
 switch (args.Single())
 {
     case "forgotten":
-        var forgotten = FailAsync("forgotten-task");
-        forgotten.Forget();
-        await Task.Delay(100);
-        GC.KeepAlive(forgotten);
+        await ForgetFailure("forgotten-task", static task => task.Forget());
         break;
     case "forgotten-completed":
         Task.FromException(new AggregateException(
@@ -40,10 +37,9 @@ switch (args.Single())
         await Task.Delay(100);
         break;
     case "forgotten-value-task":
-        new ValueTask(FailAsync("value-task")).Forget();
         new ValueTask<int>(Task.FromException<int>(new InvalidOperationException("generic-value-task"))).Forget();
         ValueTask.CompletedTask.Forget();
-        await Task.Delay(100);
+        await ForgetFailure("value-task", static task => new ValueTask(task).Forget());
         break;
     case "unobserved":
         AbandonFaultedTask();
@@ -65,7 +61,7 @@ switch (args.Single())
         WebExceptionDiagnostics.LogFirstChanceExceptions = true;
         WebExceptionDiagnostics.LogFirstChanceExceptions = true;
         var task = FailAsync("retained-task");
-        await Task.Delay(50);
+        await Settled(task);
         WebExceptionDiagnostics.LogFirstChanceExceptions = false;
         WebExceptionDiagnostics.LogFirstChanceExceptions = false;
         try { throw new InvalidOperationException("caught-after-disable"); }
@@ -92,9 +88,27 @@ Console.WriteLine("PROBE_COMPLETE");
 [MethodImpl(MethodImplOptions.NoInlining)]
 static void AbandonFaultedTask() => _ = FailAsync("abandoned-task");
 
-static async Task FailAsync(string message)
+// FailAsync throws on a pool thread on desktop, so fixed delays race it. This completes after the throw and after
+// continuations registered earlier, without observing the exception.
+static Task Settled(Task task) => task.ContinueWith(static _ => { }, CancellationToken.None,
+    TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+
+// The task faults only once forget and the wait are both registered, so the wait ends after Forget's report.
+static async Task ForgetFailure(string message, Action<Task> forget)
 {
-    await Task.Yield();
+    var gate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+    var task = FailAsync(message, gate.Task);
+    forget(task);
+    var settled = Settled(task);
+    gate.SetResult();
+    await settled;
+    GC.KeepAlive(task);
+}
+
+static async Task FailAsync(string message, Task? gate = null)
+{
+    if (gate is null) await Task.Yield();
+    else await gate;
     throw new InvalidOperationException(message, new Exception("inner-failure"));
 }
 
