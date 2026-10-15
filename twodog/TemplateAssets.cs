@@ -136,6 +136,7 @@ internal static class TemplateAssets
         ("NATIVES_PKG_VERSION", ToolVersions.NativesVersion),
         ("GODOT_SDK_VERSION", ToolVersions.GodotSdkVersion),
         ("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion),
+        ("MAUI_PKG_VERSION", ToolVersions.MauiVersion),
         ("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion),
         ("ASPNETCORE_PKG_VERSION", ToolVersions.AspNetCoreVersion),
         ("TWODOG_PRECISION_SUFFIX", doublePrecision ? ".double" : ""),

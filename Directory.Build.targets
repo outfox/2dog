@@ -9,6 +9,7 @@
             <NativesVer ParameterType="System.String" Required="true" />
             <GodotVer ParameterType="System.String" Required="true" />
             <AvaloniaVer ParameterType="System.String" Required="true" />
+            <MauiVer ParameterType="System.String" Required="true" />
             <WinAppSdkVer ParameterType="System.String" Required="true" />
             <AspNetCoreVer ParameterType="System.String" Required="true" />
         </ParameterGroup>
@@ -22,6 +23,7 @@
                     ("nativesVersion", NativesVer),
                     ("godotVersion", GodotVer),
                     ("avaloniaVersion", AvaloniaVer),
+                    ("mauiVersion", MauiVer),
                     ("winAppSdkVersion", WinAppSdkVer),
                     ("aspNetCoreVersion", AspNetCoreVer),
                 };

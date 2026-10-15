@@ -49,6 +49,10 @@ sequence = [
     { ref = "build-managed" },
 ]
 
+[tool.poe.tasks.build-maui]
+help = "Pack the Windows/Android MAUI integration (requires maui-windows and maui-android workloads on Windows)"
+cmd = "uv run scripts/dotnet_build.py pack twodog.maui"
+
 [tool.poe.tasks.build-godot-local]
 help = "Fast incremental libgodot build for the host platform only (skips editor executable and mono glue; needs one prior full build-godot)"
 cmd = "uv run build-godot.py --no-editor --no-glue"

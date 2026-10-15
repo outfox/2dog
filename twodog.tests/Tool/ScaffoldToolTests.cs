@@ -708,6 +708,7 @@ public class TemplateAssetsTests
     [InlineData("repl")]
     [InlineData("winforms")]
     [InlineData("winui")]
+    [InlineData("maui")]
     [InlineData("avalonia")]
     [InlineData("blazor")]
     public void HostFiles_SubstituteTokensInPathsAndContent(string suffix)
@@ -734,6 +735,7 @@ public class TemplateAssetsTests
     [InlineData("repl")]
     [InlineData("winforms")]
     [InlineData("winui")]
+    [InlineData("maui")]
     [InlineData("avalonia")]
     [InlineData("blazor")]
     public void HostFiles_CustomFolder_RenamesFolderAndProject(string suffix)
@@ -1299,6 +1301,8 @@ public class AddEndToEndTests
         new[] { "Program.cs", "MainForm.cs", "app.manifest" })]
     [InlineData("--winui", "winui", "<UseWinUI>true</UseWinUI>",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
+    [InlineData("--maui", "maui", "<UseMaui>true</UseMaui>",
+        new[] { "MauiProgram.cs", "App.cs", "MainPage.cs", "Platforms/Windows/App.xaml", "Platforms/Android/MainActivity.cs", "Platforms/Android/MainApplication.cs" })]
     [InlineData("--avalonia", "avalonia", "2dog.avalonia",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
     [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",
@@ -1590,6 +1594,7 @@ public class HostScanTests
     [InlineData("repl")]
     [InlineData("winforms")]
     [InlineData("winui")]
+    [InlineData("maui")]
     [InlineData("avalonia")]
     [InlineData("blazor")]
     public void Classify_RecognizesScaffoldedHosts_ByContentNotName(string suffix)

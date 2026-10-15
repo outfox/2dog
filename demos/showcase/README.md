@@ -31,6 +31,11 @@ a `.gdignore`):
 - `showcase.winforms/` - Windows-only GUI embedding demo (`--wid`): `dotnet run --project demos/showcase/showcase.winforms`
 - `showcase.winui/` - Windows-only WinUI 3 embedding demo (`--wid`; builds only on Windows): `dotnet run --project demos/showcase/showcase.winui`
 - `showcase.avalonia/` - cross-platform Avalonia embedding demo (controls composite over the game): `dotnet run --project demos/showcase/showcase.avalonia`
+- `showcase.maui/` - Windows and Android MAUI embedding demo with pause, time scale, and presentation mode in an
+  overlay. Install `maui-windows` and `maui-android`, then run
+  `dotnet run --project demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0`, or publish
+  `dotnet publish demos/showcase/showcase.maui -f net10.0-android -r android-arm64`.
+  Pack `2dog.maui` first with `uv run poe build-maui`. Android also needs its native packages and the NDK as below.
 - `showcase.android/` - experimental Android host: `dotnet publish demos/showcase/showcase.android` (arm64; add
   `-r android-x64` for the emulator) builds the game, exports its pck and packages a signed APK with the GDExtension
   probe (built with the Android NDK). Godot's Activity owns the loop, so the host drives the white cubes and runs the

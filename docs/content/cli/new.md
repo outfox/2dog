@@ -23,6 +23,10 @@ hosts to create. Host flags skip that wizard; a missing workload (`wasm-tools`,
 `--repl [folder]` adds an opt-in [C# REPL host](/hosts/repl) with syntax
 highlighting, completion and live access to the running game.
 
+`--maui [folder]` adds a [MAUI host](/hosts/maui) for Windows and Android.
+Install `maui-windows` on Windows and `maui-android` for Android builds.
+The host is excluded from plain solution builds.
+
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
 `--xunit`, `--gdunit` or `--nunit`.

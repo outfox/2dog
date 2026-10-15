@@ -5,6 +5,8 @@ internal sealed record Workload(string Id, string NeededBy)
 {
     public static readonly Workload WasmTools = new("wasm-tools", "browser hosts");
     public static readonly Workload Android = new("android", "Android hosts");
+    public static readonly Workload MauiAndroid = new("maui-android", "MAUI Android hosts");
+    public static readonly Workload MauiWindows = new("maui-windows", "MAUI Windows hosts");
 
     public string InstallCommand => $"dotnet workload install {Id}";
 
@@ -14,6 +16,11 @@ internal sealed record Workload(string Id, string NeededBy)
         var list = kinds.ToList();
         if (list.Any(Hosts.IsWebLike)) yield return WasmTools;
         if (list.Contains(HostKind.Android)) yield return Android;
+        if (list.Contains(HostKind.Maui))
+        {
+            yield return MauiAndroid;
+            if (OperatingSystem.IsWindows()) yield return MauiWindows;
+        }
     }
 }
 

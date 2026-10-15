@@ -1,5 +1,5 @@
 {
-  "$comment": "Pins a .NET 10 SDK with the wasm-tools workload for the whole project, so the web host publishes from the project root too (global.json applies at or below its own directory).",
+  "$comment": "Pins the .NET 10 SDK for browser and MAUI workloads, including builds from the project root (global.json applies at or below its own directory).",
   "sdk": {
     "version": "10.0.100",
     "rollForward": "latestFeature"

@@ -17,6 +17,7 @@ internal static class ToolVersions
     public static string AvaloniaVersion => Metadata("AvaloniaVersion");
     public static string WindowsAppSdkVersion => Metadata("WindowsAppSdkVersion");
     public static string AspNetCoreVersion => Metadata("AspNetCoreVersion");
+    public static string MauiVersion => Metadata("MauiVersion");
 }
 
 /// <summary>Everything a scaffold run needs, once flags and prompts agree.</summary>
@@ -52,7 +53,7 @@ internal sealed class ScaffoldOptions
 
     /// <summary>Whether the workload's own --install-... flag asked for it.</summary>
     public bool InstallRequested(Workload workload) =>
-        workload == Workload.Android ? InstallAndroidWorkload : InstallWasmTools;
+        workload == Workload.Android ? InstallAndroidWorkload : workload == Workload.WasmTools && InstallWasmTools;
 }
 
 /// <summary>The project a run operates on, resolved before anything is planned.</summary>

@@ -13,6 +13,8 @@
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
              AVALONIA_PKG_VERSION token, substituted on pack and scaffold. -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>
+        <!-- MAUI controls shared by the library and generated hosts. -->
+        <MauiVersion>10.0.110</MauiVersion>
         <!-- Windows App SDK for the WinUI 3 host demo. (The template consumes it via its
              WINAPPSDK_PKG_VERSION token, substituted on pack and scaffold.) -->
         <WindowsAppSdkVersion>2.4.0</WindowsAppSdkVersion>

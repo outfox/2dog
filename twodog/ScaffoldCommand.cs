@@ -185,8 +185,8 @@ internal static class ScaffoldCommand
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
         var wantsWeb = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
-        var wantsAndroid = newHosts.Any(h => h.Kind == HostKind.Android) || existingHosts.Any(h => h.Kind == HostKind.Android);
-        if (newHosts.Any(h => h.Kind == HostKind.Android))
+        var wantsAndroid = newHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui) || existingHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui);
+        if (newHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui))
             warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
         // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
         var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
@@ -232,7 +232,8 @@ internal static class ScaffoldCommand
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
         PlanRootBuildProps(plan, projectDir);
         PlanPropsValues(plan, projectDir);
-        PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting);
+        var wantsMaui = newHosts.Any(h => h.Kind == HostKind.Maui) || existingHosts.Any(h => h.Kind == HostKind.Maui);
+        PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting, wantsMaui);
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
         PlanXrShaders(plan, project, newHosts);
@@ -502,23 +503,28 @@ internal static class ScaffoldCommand
             : csproj.Replace($"{baseName}.web/TwoDogWebBoot.cs", $"{webFolder}/TwoDogWebBoot.cs");
 
     private static void PlanRootGlobalJson(
-        List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting)
+        List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting, bool wantsMaui)
     {
-        if (!wantsWeb) return;
+        if (!wantsWeb && !wantsMaui) return;
 
         // global.json applies at or below its directory, so a root pin is what lets the web host publish from
         // there. An existing global.json is the user's SDK policy - never touch it, not even with --force.
         var path = Path.Combine(projectDir, "global.json");
         if (File.Exists(path))
         {
-            if (retrofitting)
+            if (retrofitting && wantsWeb)
                 warnings.Add("global.json already exists - left untouched. Publishing the web host from the " +
                              "project root needs it to pin a .NET 10 SDK with the wasm-tools workload " +
                              "(publishing from inside the web host folder works regardless: its own global.json wins there).");
+            else if (retrofitting && wantsMaui)
+                warnings.Add("global.json already exists - left untouched. MAUI builds from the project root need a .NET 10 SDK " +
+                             "with the MAUI workloads; building from inside the MAUI host folder uses its own SDK pin.");
             return;
         }
 
-        plan.Add(new PlannedAction("create global.json (pins a wasm-capable SDK for the whole project)", ActionKind.CreateFile,
+        plan.Add(new PlannedAction(wantsWeb
+            ? "create global.json (pins a wasm-capable SDK for the whole project)"
+            : "create global.json (pins a .NET 10 SDK for MAUI workloads)", ActionKind.CreateFile,
             () => File.WriteAllText(path, TemplateAssets.RootGlobalJson())));
     }
 
@@ -710,6 +716,7 @@ internal static class ScaffoldCommand
             {
                 HostKind.WinUi => ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems"),
                 HostKind.Blazor => ("needs wasm-tools; built via dotnet run", "requires the wasm-tools workload"),
+                HostKind.Maui => ("needs MAUI workloads; built directly with a target framework", "requires MAUI workloads"),
                 HostKind.Android => ("needs the android workload; built via dotnet publish", "requires the android workload"),
                 _ => ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload"),
             };
@@ -782,6 +789,9 @@ internal static class ScaffoldCommand
             HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
             HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
             HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
+            HostKind.Maui => (OperatingSystem.IsWindows()
+                ? $"dotnet run --project {host.Folder} -f net10.0-windows10.0.19041.0"
+                : $"dotnet build {host.Folder} -f net10.0-android", "MAUI host (Windows and Android; needs MAUI workloads)"),
             HostKind.Android => ($"dotnet publish {host.Folder}", "Android APK (needs the android workload)"),
             _ => (host.Folder, ""),
         }).ToList();

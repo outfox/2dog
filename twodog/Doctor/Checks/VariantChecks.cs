@@ -16,7 +16,7 @@ internal static class VariantChecks
         if (host.IsWebLike && CheckProperty(ctx, host, "TwoDogVariant", supportsEditor: true, useDefault: false) is { } generic)
             yield return generic;
         if (CheckProperty(ctx, host, host.IsWebLike ? "TwoDogWebVariant" : "TwoDogVariant",
-                supportsEditor: !host.IsWebLike && host.Kind != HostKind.Android, useDefault: true) is { } finding)
+                supportsEditor: !host.IsWebLike && host.Kind is not (HostKind.Android or HostKind.Maui), useDefault: true) is { } finding)
             yield return finding;
     }
 
