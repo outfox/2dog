@@ -29,15 +29,22 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
     private int? anchor;
     private readonly Stack<(string Text, int Caret)> undo = new(), redo = new();
     private bool typing, continuing;
+    // Typing asked for the menu, which opens once input pauses for MenuDelay.
+    private bool menuPending;
     private IReadOnlyList<ReplCompletionItem>? menuItems;
     // The open menu's matching items, best first; empty while nothing matches the typed word.
     private List<ReplCompletionItem>? sorted;
     private int? selected;
+    private bool browsed;
     private int first;
     private TextRange menuRange;
     private IReadOnlyList<SignatureItem>? signatures;
     private int argument;
     private CompletionCycle? cycle;
+    // The text before and after Tab's last continuation, which Backspace takes back.
+    private (string Before, int BeforeCaret, string After, int AfterCaret)? continued;
+    // Escape closed the menu: it stays closed while the word grows, until Tab asks for it.
+    private bool dismissed;
     private int historyIndex = -1;
     private string historyPrefix = "", historyDraft = "";
     private string clipboard = "";
@@ -50,6 +57,9 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
     private StyledText description = StyledText.Empty;
 
     public bool Multiline { get; set; }
+    /// <summary>How long typing must pause before the menu opens by itself; Tab and Ctrl+Space open it at once.
+    /// Only <see cref="ReadLineAsync"/> opens a delayed menu.</summary>
+    public TimeSpan MenuDelay { get; set; }
     public string Text => text;
     public int Caret => caret;
     /// <summary>Raised from any thread when background work changes <see cref="View"/>.</summary>
@@ -64,7 +74,10 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
     {
         while (true)
         {
-            var result = await HandleAsync(await read(token).ConfigureAwait(false), token).ConfigureAwait(false);
+            var next = read(token);
+            if (menuPending && !next.IsCompleted && await Task.WhenAny(next, Task.Delay(MenuDelay, token)).ConfigureAwait(false) != next)
+                await OpenPendingMenuAsync(token).ConfigureAwait(false);
+            var result = await HandleAsync(await next.ConfigureAwait(false), token).ConfigureAwait(false);
             if (result is { Action: EditorAction.Clear }) clear?.Invoke();
             else if (result is not null) return result;
         }
@@ -72,9 +85,11 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
 
     public async Task<EditorResult?> HandleAsync(TerminalInput input, CancellationToken token)
     {
+        var waiting = menuPending;
+        menuPending = false;
         var result = input is TextInput paste
             ? await PasteAsync(paste.Text, token).ConfigureAwait(false)
-            : await KeyAsync(((KeyInput)input).Key, token).ConfigureAwait(false);
+            : await KeyAsync(((KeyInput)input).Key, waiting, token).ConfigureAwait(false);
         if (result is { Action: EditorAction.Submit or EditorAction.Cancel })
         {
             lock (gate) result = result with { Spans = highlighted == text ? highlights : [] };
@@ -102,7 +117,7 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
 
     private EditorResult Submit(string submitted) => new(EditorAction.Submit, submitted.ReplaceLineEndings());
 
-    private async Task<EditorResult?> KeyAsync(ConsoleKeyInfo key, CancellationToken token)
+    private async Task<EditorResult?> KeyAsync(ConsoleKeyInfo key, bool waiting, CancellationToken token)
     {
         var control = key.Modifiers.HasFlag(ConsoleModifiers.Control);
         var shift = key.Modifiers.HasFlag(ConsoleModifiers.Shift);
@@ -110,6 +125,10 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         // Tab, Backspace and identifier characters may continue a completion cycle; everything else ends it.
         var active = cycle;
         cycle = null;
+        var continuation = continued;
+        continued = null;
+        var reopen = dismissed;
+        dismissed = false;
         // Consecutive typed characters form one undo step.
         continuing = typing;
         typing = false;
@@ -126,14 +145,19 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
             case ConsoleKey.Enter:
                 return await EnterAsync(control, shift, alt, token).ConfigureAwait(false);
             case ConsoleKey.Tab when !control && !alt:
-                await TabAsync(shift, active, token).ConfigureAwait(false);
+                await TabAsync(shift, active, reopen, token).ConfigureAwait(false);
                 return null;
             case ConsoleKey.Spacebar when control:
                 if (shift) await UpdateSignaturesAsync(open: true, token).ConfigureAwait(false);
                 else if (anchor is null) await OpenMenuAsync(token).ConfigureAwait(false);
                 return null;
             case ConsoleKey.Escape:
-                if (sorted is not null) CloseMenu();
+                // Also cancels a menu still waiting for a typing pause.
+                if (sorted is not null || waiting)
+                {
+                    CloseMenu();
+                    dismissed = true;
+                }
                 else signatures = null;
                 return null;
             case ConsoleKey.UpArrow or ConsoleKey.DownArrow when sorted is { Count: > 0 } && !shift && !alt:
@@ -148,7 +172,14 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
                 SetText(active.Original, active.OriginalCaret);
                 await AfterEditAsync(null, token).ConfigureAwait(false);
                 return null;
+            case ConsoleKey.Backspace when !control && !alt && !shift && continuation is { } step && step.After == text && step.AfterCaret == caret:
+                Checkpoint();
+                CloseMenu();
+                SetText(step.Before, step.BeforeCaret);
+                await AfterEditAsync(null, token).ConfigureAwait(false);
+                return null;
             case ConsoleKey.Backspace:
+                dismissed = reopen;
                 await DeleteAsync(control || alt || shift ? WordLeft(caret) : PreviousCaret(caret), token).ConfigureAwait(false);
                 return null;
             case ConsoleKey.Delete:
@@ -190,7 +221,7 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         }
         // AltGr arrives as Control+Alt on Windows and still types its character.
         if (char.IsControl(key.KeyChar) || key.KeyChar == '\0' || control != alt) return null;
-        await TypeAsync(key.KeyChar, active, token).ConfigureAwait(false);
+        await TypeAsync(key.KeyChar, active, waiting, reopen, token).ConfigureAwait(false);
         return null;
     }
 
@@ -203,10 +234,12 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
             if (language.IsBareCommand(text)) return Submit(text);
             if (sorted is not null && selected is { } index)
             {
+                // Accepting an item that is already typed out runs the input instead.
+                var draft = text;
                 await CommitAsync(sorted[index], CommitKey.Enter, remember: true, token).ConfigureAwait(false);
-                if (!language.IsBareCommand(text)) return null;
+                if (text != draft && !language.IsBareCommand(text)) return null;
                 cycle = null;
-                return Submit(text);
+                if (text != draft) return Submit(text);
             }
         }
         CloseMenu();
@@ -215,9 +248,15 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         return null;
     }
 
-    private async Task TabAsync(bool shift, CompletionCycle? active, CancellationToken token)
+    private async Task TabAsync(bool shift, CompletionCycle? active, bool reopen, CancellationToken token)
     {
         if (anchor is not null) return;
+        if (reopen && !shift)
+        {
+            await OpenMenuAsync(token).ConfigureAwait(false);
+            if (sorted is { Count: > 0 }) return;
+            CloseMenu();
+        }
         var direction = shift ? -1 : 1;
         if (active is not null && active.Matches(text, caret))
         {
@@ -245,19 +284,28 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         }
         if (sorted is not null)
         {
+            string? draft = text;
             if (selected is { } index) await CommitAsync(sorted[index], CommitKey.Tab, remember: true, token).ConfigureAwait(false);
-            else CloseMenu();
-            await UpdateSignaturesAsync(open: true, token).ConfigureAwait(false);
-            return;
+            else draft = null;
+            CloseMenu();
+            // An item that is already typed out has nothing to cycle: Tab moves on, as without a menu.
+            if (text != draft)
+            {
+                await UpdateSignaturesAsync(open: true, token).ConfigureAwait(false);
+                return;
+            }
+            cycle = null;
         }
         if (shift) return;
         var action = await language.TabAsync(text, caret, token).ConfigureAwait(false);
         if (action.Edit is { } continuation)
         {
             Checkpoint();
-            var (continued, continuedCaret) = continuation.Apply(text);
-            SetText(continued, continuedCaret);
-            if (continuation.NewText.Length == 1 && language.ShouldOpenCompletion(text, caret, continuation.NewText[0]))
+            var (before, beforeCaret) = (text, caret);
+            var (after, afterCaret) = continuation.Apply(text);
+            SetText(after, afterCaret);
+            continued = (before, beforeCaret, text, caret);
+            if (action.OpenMenu || continuation.NewText.Length == 1 && language.ShouldOpenCompletion(text, caret, continuation.NewText[0]))
                 await OpenMenuAsync(token).ConfigureAwait(false);
         }
         else if (action.OpenMenu) await OpenMenuAsync(token).ConfigureAwait(false);
@@ -279,13 +327,13 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
             cycle = new CompletionCycle(text, caret, matches, Array.IndexOf(matches, item));
             cycle.Apply(edit);
         }
-        Checkpoint();
         var (accepted, acceptedCaret) = edit.Apply(text);
+        if (accepted != text) Checkpoint();
         SetText(accepted, acceptedCaret);
         CloseMenu();
     }
 
-    private async Task TypeAsync(char typed, CompletionCycle? active, CancellationToken token)
+    private async Task TypeAsync(char typed, CompletionCycle? active, bool waiting, bool reopen, CancellationToken token)
     {
         if (typed == ')' && anchor is null && await language.SkipsCloseParenAsync(text, caret, token).ConfigureAwait(false))
         {
@@ -302,7 +350,8 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
             await AfterEditAsync(null, token).ConfigureAwait(false);
             return;
         }
-        if (sorted is not null && selected is { } index && anchor is null)
+        // Only an item picked by typing part of it, or with the arrows, takes a commit character.
+        if (sorted is not null && selected is { } index && anchor is null && (!menuRange.IsEmpty || browsed))
         {
             var item = sorted[index];
             if ((typed is '.' or '(' || item.CommitCharacters.Contains(typed)) && language.AcceptsCommit(item, text, caret, typed))
@@ -310,8 +359,22 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         }
         var before = sorted is null ? (TextRange?)null : menuRange;
         Insert(typed.ToString(), coalesce: true);
-        if (before is null && language.ShouldOpenCompletion(text, caret, typed)) await OpenMenuAsync(token).ConfigureAwait(false);
+        // A pending menu waits while the word grows; a dismissed one stays closed.
+        if (reopen && SyntaxFacts.IsIdentifierPartCharacter(typed)) dismissed = true;
+        else if (before is null && (waiting && SyntaxFacts.IsIdentifierPartCharacter(typed) || language.ShouldOpenCompletion(text, caret, typed)))
+        {
+            if (MenuDelay > TimeSpan.Zero) menuPending = true;
+            else await OpenMenuAsync(token).ConfigureAwait(false);
+        }
         await AfterEditAsync(before, token, signatures: typed is '(' or ',').ConfigureAwait(false);
+    }
+
+    private async Task OpenPendingMenuAsync(CancellationToken token)
+    {
+        menuPending = false;
+        await OpenMenuAsync(token).ConfigureAwait(false);
+        Publish();
+        Changed?.Invoke();
     }
 
     private async Task<EditorResult?> PasteAsync(string pasted, CancellationToken token)
@@ -389,6 +452,7 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         menuRange = range;
         sorted = Ranked(menuItems!, range, null).ToList();
         selected = sorted.Count > 0 ? 0 : null;
+        browsed = false;
         first = 0;
     }
 
@@ -397,6 +461,7 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         menuItems = null;
         sorted = null;
         selected = null;
+        browsed = false;
         first = 0;
     }
 
@@ -405,6 +470,7 @@ internal sealed class ReplEditor(IReplLanguage language, ReplHistory? history = 
         // A non-empty menu always has a selection.
         var index = Math.Clamp(selected!.Value + direction, 0, sorted!.Count - 1);
         selected = index;
+        browsed = true;
         first = Math.Clamp(first, index - MenuRows + 1, index);
     }
 

@@ -162,6 +162,9 @@ public class ParallelSessionTests
         }
         var recovery = Task.Run(() => session.EvaluateAsync("40+2", token), token);
         Assert.Equal("42", Pump(engine, dispatcher, recovery, token).Value);
+        // The prompt's scope follows cd before the next full refresh.
+        Pump(engine, dispatcher, Task.Run(() => session.EvaluateAsync("cd $Control", token), token), token);
+        Assert.Equal("/root/Control", Pump(engine, dispatcher, session.ScopeStyleAsync(token), token).Path);
         Assert.Empty(engine.Errors.Drain());
     }
 

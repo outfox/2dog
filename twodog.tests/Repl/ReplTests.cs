@@ -170,9 +170,10 @@ public class ReplIntegrationTests
         Assert.Equal("world.Close()x", ReadPrompt("world.Clo", false, tab,
             new ConsoleKeyInfo('x', ConsoleKey.X, false, false, false), enter));
         Assert.Equal("world.GetType()", ReadPrompt("world.GetTy", false, tab, tab, escape, enter));
-        Assert.Equal("new Node()", ReadPrompt("new Node", false, escape, tab, enter));
+        Assert.Equal("new Node()", ReadPrompt("new Node", false, tab, enter));
         Assert.Equal("world.Open()", ReadPrompt("world.Op(", false, closeParen, enter));
-        Assert.Equal("$[\"Control/My Node\"]", ReadPrompt("$[\"Control/My Node\"]", false, tab, tab, escape, enter));
+        // Tab on a path that is already typed out moves on to its members, as it does without a menu.
+        Assert.Equal("$[\"Control/My Node\"].", ReadPrompt("$[\"Control/My Node\"]", false, tab, escape, enter));
         Success("var dottedNode = new Node { Name = \"Repl(Child)\" }; root.AddChild(dottedNode);");
         Assert.Equal("$[\"Repl(Child)\"]", ReadPrompt("$[\"Repl(Child)\"]", false, enter, enter));
         Assert.Equal("$[\"Repl.Dot\"]", ReadPrompt("$[\"Repl.Dot\"]", false, enter));
@@ -182,8 +183,8 @@ public class ReplIntegrationTests
         Assert.Equal("world.Scene", ReadPrompt("world.Sce", false, tab, tab, escape, enter));
         Assert.Equal("$Control/CenterContainer", ReadPrompt("$Cont", false, tab, tab, escape, enter));
         Assert.Equal("ls $Control/CenterContainer", ReadPrompt("ls $Cont", false, tab, tab, escape, enter));
-        Assert.Equal("world.Open()", ReadPrompt("world.Open", false, escape, tab, enter));
-        Assert.Equal("world.Close()x", ReadPrompt("world.Close", false, escape, tab,
+        Assert.Equal("world.Open()", ReadPrompt("world.Open", false, tab, enter));
+        Assert.Equal("world.Close()x", ReadPrompt("world.Close", false, tab,
             new ConsoleKeyInfo('x', ConsoleKey.X, false, false, false), enter));
         Assert.Equal("Console.Write(world.Close())", ReadPrompt("Console.Write(world.Close)", false,
             new ConsoleKeyInfo('\0', ConsoleKey.LeftArrow, false, false, false), tab, enter));

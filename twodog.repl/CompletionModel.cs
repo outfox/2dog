@@ -45,11 +45,19 @@ internal class ReplCompletionItem(string replacementText, StyledText? display = 
         var (longer, shorter) = matches ? (FilterText, typed) : (typed, FilterText);
         var priority = longer.StartsWith(shorter, StringComparison.Ordinal) ? 4
             : longer.StartsWith(shorter, StringComparison.OrdinalIgnoreCase) ? 3
-            : longer.Contains(shorter, StringComparison.Ordinal) ? 2
-            : longer.Contains(shorter, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
+            : ContainsWord(longer, shorter, StringComparison.Ordinal) ? 2
+            : ContainsWord(longer, shorter, StringComparison.OrdinalIgnoreCase) ? 1 : 0;
         if (priority == 0) return int.MinValue;
         // Text longer than the item only contains it: still better than no match, but never selected.
         return matches ? priority : int.MinValue + priority;
+    }
+
+    // Inner matches start a word or camel-case hump, so "cd" finds AvxCD and CallConvCdecl but not IAsyncDisposable.
+    private static bool ContainsWord(string text, string part, StringComparison comparison)
+    {
+        for (var i = text.IndexOf(part, 1, comparison); i > 0; i = text.IndexOf(part, i + 1, comparison))
+            if (!char.IsLetterOrDigit(text[i - 1]) || char.IsUpper(text[i]) && !char.IsUpper(text[i - 1])) return true;
+        return false;
     }
 }
 
@@ -104,7 +112,8 @@ internal class PlainLanguage : IReplLanguage
 
     public virtual bool ShouldOpenCompletion(string text, int caret, char typed)
     {
-        if (caret > 0 && text[caret - 1] is '.' or '(') return true;
+        // A second dot forms a range or a parent path (cd ..), not member access.
+        if (caret > 0 && (text[caret - 1] == '(' || text[caret - 1] == '.' && (caret < 2 || text[caret - 2] != '.'))) return true;
         // A word starting the input, or any later word.
         if (caret == 1 && !char.IsWhiteSpace(text[0]) && (text.Length == 1 || !char.IsLetterOrDigit(text[1]))) return true;
         return caret >= 2 && char.IsWhiteSpace(text[caret - 2]) && char.IsLetter(text[caret - 1]);

@@ -6,6 +6,8 @@ internal sealed class ReplFrontEnd
 {
     private static readonly string[] Spinner = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
     private static readonly TextStyle Dim = new(Dim: true), Key = new(TermColor.Cyan), Busy = new(TermColor.Yellow);
+    // Fast typing never flashes a menu; a brief pause shows it.
+    private static readonly TimeSpan TypingPause = TimeSpan.FromMilliseconds(150);
     private readonly IReplTerminal terminal;
     private readonly ReplScreen screen;
     private readonly ReplWorkQueue work;
@@ -19,7 +21,7 @@ internal sealed class ReplFrontEnd
         screen = terminal.Screen!;
         this.work = work;
         this.pipe = pipe;
-        editor = new ReplEditor(language, new ReplHistory(terminal.HistoryFile));
+        editor = new ReplEditor(language, new ReplHistory(terminal.HistoryFile)) { MenuDelay = TypingPause };
         editor.Changed += screen.Invalidate;
         editor.Copied += text => screen.Control("\x1b]52;c;" + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(text)) + "\x07");
         screen.Animating = () => work.Pending > 0;

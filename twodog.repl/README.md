@@ -14,7 +14,7 @@ between submissions.
 
 ## The terminal
 
-The input stays pinned at the bottom of the terminal, above a status line, and
+The input stays pinned at the bottom of the terminal, below a status line, and
 everything else scrolls above it into the terminal's normal scrollback:
 results, `Console` writes, `GD.Print`, Godot's errors and warnings, timers and
 background tasks. An interactive host redirects the whole process's standard
@@ -40,20 +40,24 @@ Enter runs the whole input; Shift+Enter (or Alt+Enter) inserts a newline.
 always runs. Unix terminals report Shift+Enter through the xterm
 modifyOtherKeys or kitty keyboard protocols, which the REPL requests.
 Enter accepts the selected suggestion when the completion menu is open;
-otherwise it keeps the selected input mode.
+otherwise it keeps the selected input mode. A suggestion that is already typed
+out, such as `cd $Control` with `$Control` selected, runs the input instead.
 In `:auto` and `:sh`, exact command names such as `ls`, `cd`, `pwd` and `exit` run immediately
 on Enter in either input mode, even with the completion menu open. This requires
 no trailing whitespace; `ls ` and `cd ` keep argument completion. Enter also
 accepts and runs a selected bare command, such as `l` completing to `ls`.
 
-Suggestions open as you type and list only matching items, best first, with
-the selected item's documentation beside them. Tab accepts a completion or opens suggestions. Further Tab presses cycle the
+Suggestions open when you pause typing for a moment and list only matching items, best first, with
+the selected item's documentation beside them. A second dot, as in `cd ..` or a C# range, opens none. Tab accepts a completion or opens suggestions; on a
+command name such as `cd` or `ls` it adds the space and lists nodes. Further Tab presses cycle the
 matches for your original prefix; Shift+Tab cycles backward and wraps around.
-Backspace restores that prefix, including removing inserted parentheses.
+Backspace restores that prefix, including removing inserted parentheses; right after Tab adds a
+`.`, `()` or the space after a command, it takes that back too. Escape closes the menu, which then
+stays closed while you finish the word; Tab brings it back.
 Shift+Backspace deletes backward to a word break, like Ctrl+Backspace;
 dots and path slashes count as breaks. It also respects selections and undo.
 Word breaks finish completion cycling. With the suggestion menu open, `.` or
-`(` accepts a selection outside quoted path text. `/` accepts a selection for
+`(` accepts a selection outside quoted path text, once you have typed part of it or chosen it with the arrows. `/` accepts a selection for
 a nonempty relative path outside quoted path text; absolute-path slashes stay
 separators. Inside `$["..."]`, these characters stay literal path text. Space
 inserts a space and ends any existing completion cycle.

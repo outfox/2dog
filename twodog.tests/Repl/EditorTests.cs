@@ -18,6 +18,10 @@ public class EditorTests
         public TabAction Tab { get; set; } = TabAction.Open;
         public HashSet<string> Commands { get; } = [];
         public bool Accepts { get; set; } = true;
+        /// <summary>Overrides when typing opens the menu, e.g. on every letter as in node paths.</summary>
+        public Func<string, int, char, bool>? Opens { get; set; }
+        public override bool ShouldOpenCompletion(string text, int caret, char typed)
+            => Opens?.Invoke(text, caret, typed) ?? base.ShouldOpenCompletion(text, caret, typed);
         public override Task<IReadOnlyList<ReplCompletionItem>> CompletionsAsync(string text, int caret, TextRange range, CancellationToken token)
             => Task.FromResult<IReadOnlyList<ReplCompletionItem>>(Items);
         public override bool AcceptsCommit(ReplCompletionItem item, string text, int caret, char key) => Accepts;
@@ -375,6 +379,121 @@ public class EditorTests
         var keys = new Queue<TerminalInput>([new KeyInput(Keys.Control(ConsoleKey.L)), new KeyInput(Keys.ControlEnter)]);
         var result = await editor.ReadLineAsync(_ => Task.FromResult(keys.Dequeue()), Token, () => cleared++);
         Assert.Equal((1, EditorAction.Submit), (cleared, result.Action));
+    }
+
+    [Fact]
+    public async Task MenusWaitForATypingPauseAndEnterRunsAnAlreadyTypedItem()
+    {
+        var language = new FakeLanguage();
+        language.Items.AddRange([new ReplCompletionItem("cd"), new ReplCompletionItem("cdx")]);
+        var editor = new ReplEditor(language) { MenuDelay = TimeSpan.FromMilliseconds(20) };
+        var changed = 0;
+        editor.Changed += () => Interlocked.Increment(ref changed);
+        // Keys typed without a pause never open the menu, so Enter runs the input as typed.
+        var typed = new Queue<ConsoleKeyInfo>([.. Keys.Type("cd .."), Keys.Enter]);
+        Assert.Equal("cd ..", (await editor.ReadLineAsync(_ => Task.FromResult<TerminalInput>(new KeyInput(typed.Dequeue())), Token)).Text);
+        // A pause shows matches for the whole word typed so far; Enter on an exact match runs it.
+        var paused = new Queue<ConsoleKeyInfo>([.. Keys.Type("cd"), Keys.Enter]);
+        MenuView? menu = null;
+        var result = await editor.ReadLineAsync(async _ =>
+        {
+            if (paused.Count == 1)
+            {
+                await WaitFor(() => editor.View.Menu is not null);
+                menu = editor.View.Menu;
+            }
+            return new KeyInput(paused.Dequeue());
+        }, Token);
+        Assert.Equal("cd", result.Text);
+        Assert.Equal(["cd", "cdx"], menu!.Items.Select(i => i.Text));
+        Assert.True(changed > 0);
+    }
+
+    [Fact]
+    public async Task DotsAndParenthesesCommitOnlyAnItemTheUserPicked()
+    {
+        var language = new FakeLanguage();
+        language.Items.AddRange([new ReplCompletionItem("Member"), new ReplCompletionItem("Other")]);
+        var editor = new ReplEditor(language);
+        // A second dot is a range or a parent path: it neither accepts the first item nor opens suggestions.
+        await Type(editor, "x");
+        await Press(editor, Keys.Escape);
+        await Type(editor, ".");
+        Assert.NotNull(editor.View.Menu);
+        await Type(editor, ".");
+        Assert.Equal("x..", editor.Text);
+        await Press(editor, Keys.Backspace, Keys.Escape);
+        await Type(editor, ".");
+        Assert.Null(editor.View.Menu);
+        await Press(editor, Keys.Control(ConsoleKey.A), Keys.Backspace);
+        await Type(editor, ".");
+        Assert.NotNull(editor.View.Menu);
+        // Choosing with the arrows, or typing part of the item, lets '.' accept it.
+        await Press(editor, Keys.Down);
+        await Type(editor, ".");
+        Assert.Equal(".Other.", editor.Text);
+        await Type(editor, "Me.");
+        Assert.Equal(".Other.Member.", editor.Text);
+    }
+
+    [Fact]
+    public async Task TabOnAnAlreadyTypedItemMovesOnInsteadOfCyclingAndInnerMatchesStartWords()
+    {
+        var language = new FakeLanguage { Tab = new TabAction(new CompletionEdit(new TextRange(2, 0), " "), true) };
+        language.Items.AddRange([new ReplCompletionItem("cd"), new ReplCompletionItem("Ccdik3D")]);
+        var editor = new ReplEditor(language);
+        await Type(editor, "cd");
+        Assert.NotNull(editor.View.Menu);
+        await Press(editor, Keys.Tab);
+        Assert.Equal("cd ", editor.Text);
+        Assert.NotNull(editor.View.Menu);
+        // Only the start of a word or camel-case hump matches inside an item.
+        int Rank(string item, string typed) => new ReplCompletionItem(item).Priority(typed, typed.Length, new TextRange(0, typed.Length));
+        Assert.Equal(int.MinValue, Rank("IAsyncDisposable", "cd"));
+        Assert.Equal(int.MinValue, Rank("Ccdik3D", "cd"));
+        Assert.Equal(1, Rank("Avx512CD", "cd"));
+        Assert.Equal(2, Rank("CallConvCdecl", "Cd"));
+        Assert.Equal(2, Rank("my_cd", "cd"));
+    }
+
+    [Fact]
+    public async Task EscapeKeepsTheMenuClosedUntilTabAndBackspaceTakesBackACompletion()
+    {
+        var language = new FakeLanguage { Opens = (_, _, _) => true, Tab = new TabAction(new CompletionEdit(new TextRange(5, 0), "()", 6), false) };
+        language.Items.AddRange([new ReplCompletionItem("alpha"), new ReplCompletionItem("alphabet")]);
+        var editor = new ReplEditor(language);
+        await Type(editor, "al");
+        Assert.NotNull(editor.View.Menu);
+        // Escape closes the menu, which stays closed while the word grows or shrinks; Tab brings it back.
+        await Press(editor, Keys.Escape);
+        await Type(editor, "phx");
+        await Press(editor, Keys.Backspace);
+        Assert.Null(editor.View.Menu);
+        await Press(editor, Keys.Tab);
+        Assert.Equal(("alph", 2), (editor.Text, editor.View.Menu!.Total));
+        // Backspace takes back a Tab completion, and Tab's continuation, to the text as typed.
+        await Press(editor, Keys.Tab);
+        Assert.Equal("alpha", editor.Text);
+        await Press(editor, Keys.Backspace);
+        Assert.Equal("alph", editor.Text);
+        await Type(editor, "a");
+        await Press(editor, Keys.Tab);
+        Assert.Equal(("alpha()", 6), (editor.Text, editor.Caret));
+        await Press(editor, Keys.Backspace);
+        Assert.Equal(("alpha", 5), (editor.Text, editor.Caret));
+        await Press(editor, Keys.Backspace);
+        Assert.Equal("alph", editor.Text);
+
+        // Escape also cancels a menu that is still waiting for a typing pause.
+        var delayed = new ReplEditor(language) { MenuDelay = TimeSpan.FromHours(1) };
+        await Type(delayed, "a");
+        await Press(delayed, Keys.Escape, Keys.Tab);
+        Assert.Equal(("a", 2), (delayed.Text, delayed.View.Menu!.Total));
+        // With nothing to reopen, Tab does what it does without a menu.
+        language.Items.Clear();
+        language.Tab = TabAction.Ignore;
+        await Press(delayed, Keys.Escape, Keys.Tab);
+        Assert.Null(delayed.View.Menu);
     }
 
     private static async Task WaitFor(Func<bool> condition)

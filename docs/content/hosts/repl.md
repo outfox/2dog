@@ -67,14 +67,14 @@ own cancellation support. Keep Godot calls on the engine's owner thread.
 
 ## The Terminal
 
-Your input stays at the bottom of the terminal, above a status line. Results,
+Your input stays at the bottom of the terminal, below a status line. Results,
 `GD.Print`, Godot's errors and warnings, timers and other output scroll above
 it into the terminal's normal scrollback, so they never land in the line you
 are typing. Submit the next line while one runs to queue it; each submission
 appears in the scrollback when it starts, directly above its results, and the
 status line counts running and queued work.
 
-Suggestions open as you type, with documentation for the selected item and
+Suggestions open when you pause typing, with documentation for the selected item and
 signatures for the call you are in. Pasted code keeps its line breaks until you
 press Enter; Shift+Enter adds a line and Up/Down browse history.
 

@@ -279,6 +279,7 @@ public static class ReplHost
                         }
                         else if (result.Tree is { } hierarchy) output.Tree(hierarchy, result.Styled);
                         else if (result.Value is { } value) output.Result(value, result.Styled);
+                        await UpdatePromptAsync().ConfigureAwait(false);
                         await session.RefreshAsync(lifetime).ConfigureAwait(false);
                         await UpdatePromptAsync().ConfigureAwait(false);
                     }

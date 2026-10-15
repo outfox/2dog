@@ -78,7 +78,7 @@ public class NavigationIntegrationTests
         Assert.Equal(":cd selectedContainer", Complete(":cd selectedCont", tab, run));
         Assert.Equal("cd x.GetParent()", Complete("cd x.GetPa", tab, run));
         Assert.Equal(":cd x.GetParent()", Complete(":cd x.GetPa", tab, run));
-        Assert.Equal("cd x.", ReadPrompt("cd x", true, escape, tab, run));
+        Assert.Equal("cd x.", ReadPrompt("cd x", true, tab, run));
         Assert.Equal("/root/Control", Success("cd x.GetParent()").Value);
         Assert.Equal("/root/Control/CenterContainer", Success(":cd x;").Value);
         Assert.Equal("/root/Control", Success("cd scene").Value);

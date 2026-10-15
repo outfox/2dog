@@ -277,6 +277,8 @@ internal sealed class ReplSession : IDisposable
         globals.SelectNode(node);
         navigationVersion++;
         var selected = NodeColors.CapturePath(node);
+        // The prompt follows at once, ahead of the slower full refresh.
+        scopeSnapshot = selected;
         return new(selected.Path, null, false, Styled: selected.Display);
     }
 

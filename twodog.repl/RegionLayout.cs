@@ -73,11 +73,13 @@ internal static class RegionLayout
             caretRow -= start;
         }
         var rows = input.Concat(signature).Concat(menu).ToList();
+        // Above the input, the status line stays put while the menu and signature help come and go below.
         if (status is not null)
         {
             var row = new RowBuilder(width);
             Append(row, status, color);
-            rows.Add(row);
+            rows.Insert(0, row);
+            caretRow++;
         }
         return new(rows.Select(r => r.ToAnsi()).ToArray(), rows.Select(r => r.Plain).ToArray(), caretRow, caretColumn);
     }

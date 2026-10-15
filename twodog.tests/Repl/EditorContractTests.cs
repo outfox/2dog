@@ -215,6 +215,17 @@ public class EditorContractIntegrationTests
         Assert.Equal("x", bed.Read("x", new('\x04', ConsoleKey.D, false, false, true), Bed.Submit));
         Assert.Equal("$Controlzz", bed.Read("$Cont", Bed.Tab, new('z', ConsoleKey.Z, false, false, false),
             new('z', ConsoleKey.Z, false, false, false), Bed.Tab, Bed.Submit));
+        // Navigation runs on the first Enter: '..' opens no type list, and an exact node match is already typed.
+        foreach (var navigation in new[] { "cd ..", "cd $Control" })
+            Assert.Equal(navigation, bed.Read(navigation, Keys.Enter));
+        // Tab after a complete command name adds the space and lists nodes; the next Tab picks one.
+        foreach (var command in new[] { "cd", ":ls", "rm" })
+        {
+            Assert.Equal(command + " ", bed.Read(command, Bed.Tab, Bed.Submit));
+            Assert.StartsWith(command + " $", bed.Read(command, Bed.Tab, Bed.Tab, Bed.Submit), StringComparison.Ordinal);
+        }
+        Assert.DoesNotContain(bed.Items("cd"), item => item.DisplayText == "IAsyncDisposable" &&
+            item.Priority("cd", 2, new TextRange(0, 2)) >= 0);
         Assert.True(bed.Pump(bed.Language.SkipsCloseParenAsync("root.GetTree()", 13, bed.Token)));
         Assert.False(bed.Pump(bed.Language.SkipsCloseParenAsync("\")\"", 1, bed.Token)));
         Assert.False(bed.Pump(bed.Language.SkipsCloseParenAsync("root", 4, bed.Token)));
@@ -227,7 +238,7 @@ public class EditorContractIntegrationTests
         bed.Root.AddChild(queued);
         queued.QueueFree();
         Assert.DoesNotContain("ExcludedFromCompletion", NodePathInput.Capture(bed.Root, bed.Token).Keys);
-        Assert.Equal("$Control/EnterVrButton.", bed.Read("$Control/EnterVrButton", new ConsoleKeyInfo('\x1b', ConsoleKey.Escape, false, false, false), Bed.Tab, Bed.Submit));
+        Assert.Equal("$Control/EnterVrButton.", bed.Read("$Control/EnterVrButton", Bed.Tab, Bed.Submit));
         Assert.Same(TabAction.Open, bed.Pump(bed.Language.TabAsync("root.Size", 4, bed.Token)));
         Assert.Same(TabAction.Open, bed.Pump(bed.Language.TabAsync("root.GetTree ()", 12, bed.Token)));
         using var cancelled = new CancellationTokenSource();
@@ -244,7 +255,7 @@ public class EditorContractIntegrationTests
         {
             var text = "new " + name;
             Assert.Equal('(', bed.Pump(ReplCompletion.ContinuationAsync(bed.Prepare(text), text.Length, bed.Token)));
-            Assert.Equal(text + "()", bed.Read(text, new('\x1b', ConsoleKey.Escape, false, false, false), Bed.Tab, Bed.Submit));
+            Assert.Equal(text + "()", bed.Read(text, Bed.Tab, Bed.Submit));
         }
         const string argument = "new Godot.Node(root";
         Assert.Equal('.', bed.Pump(ReplCompletion.ContinuationAsync(bed.Prepare(argument), argument.Length, bed.Token)));

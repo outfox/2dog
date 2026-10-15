@@ -136,6 +136,10 @@ internal sealed class ReplLanguage(ReplSession session) : PlainLanguage
     public override async Task<TabAction> TabAsync(string text, int caret, CancellationToken token)
     {
         if (session.Mode == ReplMode.Agent && !text.TrimStart().StartsWith(':')) return TabAction.Ignore;
+        // A complete command name takes its operand next: Tab adds the space and lists nodes.
+        if (caret == text.Length && session.Mode.HasShell() && text.TrimStart() is var command &&
+            (command.StartsWith(':') ? command[1..] : command) is "cd" or "ls" or "rm" or "cp" or "mv")
+            return new TabAction(new CompletionEdit(new TextRange(caret, 0), " "), true);
         if (ResourcePathCompletion.Span(text, caret) is not null) return TabAction.Open;
         var prepared = await PrepareAsync(text, token);
         // Complete expressions advance with '.', '(' or '/', rather than opening suggestions.

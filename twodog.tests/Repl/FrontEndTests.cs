@@ -12,7 +12,9 @@ public class FrontEndTests
         using var work = new ReplWorkQueue(lifetime.Token);
         using var terminal = new ScriptedTerminal(null, [.. Keys.Type("draft"), Keys.ControlC, .. Keys.Type("40"), Keys.Enter, Keys.ControlEnter]) { Color = false };
         var frontEnd = new ReplFrontEnd(terminal, PlainLanguage.Instance, work, "repl-pipe");
-        string Status() => terminal.Device.Screen.LastOrDefault(line => line.Length > 0) ?? "";
+        // The status line sits directly above the prompt.
+        string Status() => Array.FindLastIndex(terminal.Device.Screen, line => line.StartsWith("godot>", StringComparison.Ordinal)) is var prompt and > 0
+            ? terminal.Device.Screen[prompt - 1] : "";
         async Task WaitFor(Func<bool> condition)
         {
             var deadline = DateTime.UtcNow.AddSeconds(10);

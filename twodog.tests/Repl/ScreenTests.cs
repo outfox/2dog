@@ -17,8 +17,8 @@ public class ScreenTests
         using var screen = new ReplScreen(terminal, color: true);
         screen.SetRegion(Region(() => Draft("abcdef", 3)));
         screen.Flush();
-        Assert.Equal(["godot> abcdef", "status"], terminal.Screen.Where(l => l.Length > 0));
-        Assert.Equal((0, 10), terminal.Cursor);
+        Assert.Equal(["status", "godot> abcdef"], terminal.Screen.Where(l => l.Length > 0));
+        Assert.Equal((1, 10), terminal.Cursor);
 
         screen.Write(null);
         screen.Write("");
@@ -34,9 +34,9 @@ public class ScreenTests
         Assert.Contains("two", lines);
         Assert.Contains("three", lines);
         Assert.Equal(4, lines.Count(l => l.StartsWith("thread ", StringComparison.Ordinal)));
-        Assert.Equal("godot> abcdef", lines[^2]);
-        Assert.Equal("status", lines[^1]);
-        Assert.Equal(lines.Length - 2, terminal.Cursor.Row + terminal.Scrollback.Length);
+        Assert.Equal("status", lines[^2]);
+        Assert.Equal("godot> abcdef", lines[^1]);
+        Assert.Equal(lines.Length - 1, terminal.Cursor.Row + terminal.Scrollback.Length);
         Assert.Equal(10, terminal.Cursor.Column);
         Assert.True(terminal.CursorVisible);
     }
@@ -51,8 +51,8 @@ public class ScreenTests
         screen.Flush();
         var all = terminal.Text.Split('\n');
         Assert.Equal(Enumerable.Range(0, 200).Select(i => $"line {i}"), all.Take(200));
-        Assert.Equal(["godot> draft", "status"], all[200..]);
-        Assert.Equal("status", terminal.Screen[^1]);
+        Assert.Equal(["status", "godot> draft"], all[200..]);
+        Assert.Equal("godot> draft", terminal.Screen[^1]);
     }
 
     [Fact]
@@ -64,11 +64,14 @@ public class ScreenTests
         screen.SetRegion(Region(() => view));
         screen.Flush();
         Assert.Contains(terminal.Screen, line => line.Contains("alpha", StringComparison.Ordinal) && line.Contains("first item", StringComparison.Ordinal));
+        // The status line keeps its row while the menu below the input opens and closes.
+        var statusRow = Array.IndexOf(terminal.Screen, "status");
         view = Draft("世界x", 2);
         screen.Invalidate();
         screen.Flush();
-        Assert.Equal(["godot> 世界x", "status"], terminal.Screen.Where(l => l.Length > 0));
-        Assert.Equal((0, 11), terminal.Cursor);
+        Assert.Equal(["status", "godot> 世界x"], terminal.Screen.Where(l => l.Length > 0));
+        Assert.Equal(statusRow, Array.IndexOf(terminal.Screen, "status"));
+        Assert.Equal((1, 11), terminal.Cursor);
     }
 
     [Fact]
@@ -81,11 +84,11 @@ public class ScreenTests
         screen.Flush();
         var rows = terminal.Screen.Where(l => l.Length > 0).ToArray();
         Assert.All(rows, row => Assert.True(row.Length < 20, row));
-        Assert.Equal("godot> " + new string('a', 12), rows[0]);
-        Assert.Equal("       " + new string('a', 12), rows[1]);
-        Assert.Equal("       " + new string('a', 6), rows[2]);
-        Assert.Equal("       end", rows[3]);
-        Assert.Equal((2, 7 + 1), terminal.Cursor);
+        Assert.Equal("godot> " + new string('a', 12), rows[1]);
+        Assert.Equal("       " + new string('a', 12), rows[2]);
+        Assert.Equal("       " + new string('a', 6), rows[3]);
+        Assert.Equal("       end", rows[4]);
+        Assert.Equal((3, 7 + 1), terminal.Cursor);
     }
 
     [Fact]
@@ -94,8 +97,9 @@ public class ScreenTests
         var menu = new MenuView(Enumerable.Range(0, 8).Select(i => (StyledText)$"item{i}").ToArray(), 2, 4, 40, "doc");
         var frame = RegionLayout.Build("> ", Draft("call(", menu: menu, signature: "void Call(int first, int second)\nfirst: the first"), "status", 80, 6, true);
         Assert.Equal(6, frame.Rows.Count);
-        Assert.Equal("status", frame.PlainRows[^1]);
-        Assert.Contains("void Call", frame.PlainRows[1], StringComparison.Ordinal);
+        Assert.Equal("status", frame.PlainRows[0]);
+        Assert.Equal(1, frame.CaretRow);
+        Assert.Contains("void Call", frame.PlainRows[2], StringComparison.Ordinal);
         Assert.Contains("▐", string.Concat(frame.PlainRows));
         var start = RegionLayout.Build("", Draft("x", 0), null, 40, 5, false);
         Assert.Equal((0, 0), (start.CaretRow, start.CaretColumn));
@@ -132,7 +136,7 @@ public class ScreenTests
         screen.Clear();
         screen.Flush();
         Assert.Equal(1, terminal.Clears);
-        Assert.Equal("godot>", terminal.Screen[0]);
+        Assert.Equal("godot>", terminal.Screen[1]);
         Assert.Contains("\x1b]52;c;dGV4dA==\x07", terminal.Raw, StringComparison.Ordinal);
     }
 
@@ -155,14 +159,14 @@ public class ScreenTests
         Assert.True(frames >= 3);
         busy = false;
         deadline = DateTime.UtcNow.AddSeconds(5);
-        while (terminal.Screen[1] != "idle" && DateTime.UtcNow < deadline) Thread.Sleep(10);
-        Assert.Equal("idle", terminal.Screen[1]);
+        while (terminal.Screen[0] != "idle" && DateTime.UtcNow < deadline) Thread.Sleep(10);
+        Assert.Equal("idle", terminal.Screen[0]);
         terminal.Resize(60, 8);
         deadline = DateTime.UtcNow.AddSeconds(5);
         var before = frames;
         while (frames == before && DateTime.UtcNow < deadline) Thread.Sleep(10);
         screen.Flush();
-        Assert.Equal(["> text", "idle"], terminal.Screen.Where(l => l.Length > 0));
+        Assert.Equal(["idle", "> text"], terminal.Screen.Where(l => l.Length > 0));
         Assert.Equal((60, 8), screen.Size);
     }
 
