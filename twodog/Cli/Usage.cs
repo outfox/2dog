@@ -95,6 +95,9 @@ internal static class Usage
         yield return new Line("repl", Kind.Section);
         foreach (var line in Rows(ReplOptions.Select(OptionRow))) yield return line;
         yield return new Line("");
+        yield return new Line("skill", Kind.Section);
+        foreach (var line in Rows(new Option[] { CliTree.SkillClaude, CliTree.SkillCodex }.Select(OptionRow))) yield return line;
+        yield return new Line("");
         yield return new Line("output", Kind.Section);
         foreach (var line in Rows(CliTree.OutputOptions.Select(OptionRow))) yield return line;
         yield return new Line("");
@@ -185,7 +188,10 @@ internal static class Usage
         Verb.Repl => "Talks to a REPL host started with 'dotnet run --project <Game>.repl', found through the file " +
                      "it publishes while listening; the host for the current project directory wins, --pipe picks " +
                      "another. exec prints values on stdout and errors and Godot warnings on stderr; exit code 3 " +
-                     "when a submission fails. Lines run in order and stop at the first failure.",
+                     "when a submission fails. Submissions run in order and stop at the first failure; " +
+                     "consecutive C# statements join into one.",
+        Verb.Skill => "Writes .claude/skills/2dog-repl/SKILL.md by default, and with --codex a marked section of " +
+                      "AGENTS.md that later runs update in place. Projects created with --repl get the skill already.",
         Verb.Version => "Asks nuget.org (best effort, 2.5 s) whether newer stable packages exist.",
         _ => "",
     };
@@ -280,9 +286,14 @@ internal static class Usage
                 ("2dog repl", "attach this terminal"),
                 ("2dog repl exec -s agent 'cd $Main'", "a named session keeps its state"),
                 ("2dog repl exec -s agent '$Player.Position'", ""),
-                ("2dog repl exec --timeout 30 - < script.csx", "piped lines, one at a time"),
+                ("2dog repl exec --timeout 30 - < script.csx", "piped code; C# statements join"),
                 ("2dog repl sessions", ""),
                 ("2dog repl close agent", ""),
+            ],
+            Verb.Skill =>
+            [
+                ("2dog skill", "for Claude Code"),
+                ("2dog skill --codex", "a section in AGENTS.md"),
             ],
             Verb.Version => [("2dog version", "")],
             Verb.Help => [("2dog help new", "")],

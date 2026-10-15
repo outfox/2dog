@@ -237,6 +237,7 @@ internal static class ScaffoldCommand
         PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
         PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
+        PlanAgentSkill(plan, skipped, options, projectDir, newHosts);
         BuildSettings.Plan(plan, project, options, allHostProjects.Prepend(godotCsproj));
         PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts, existingHosts,
             workloadRunner ?? ProcessRunner.Default);
@@ -377,6 +378,24 @@ internal static class ScaffoldCommand
         return Hosts.SanitizeName(godotProject.Get("application", "config/name"))
                ?? Hosts.SanitizeName(Path.GetFileName(projectDir))
                ?? throw new ToolException("could not derive a project name; pass --name");
+    }
+
+    // A REPL host is where coding agents work in the live game: give them the guide with it.
+    private static void PlanAgentSkill(List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir,
+        IReadOnlyList<HostSpec> newHosts)
+    {
+        if (newHosts.All(h => h.Kind != HostKind.Repl)) return;
+        var target = Path.Combine(projectDir, SkillCommand.SkillFile);
+        if (File.Exists(target) && !options.Force)
+        {
+            skipped.Add(SkillCommand.SkillFile);
+            return;
+        }
+        plan.Add(new PlannedAction($"create {SkillCommand.SkillFile}", ActionKind.CreateFile, () =>
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+            File.WriteAllText(target, SkillCommand.Skill);
+        }));
     }
 
     private static void PlanNewProject(

@@ -7,7 +7,7 @@ internal sealed class ReplWorkQueue : IDisposable
 {
     private readonly object gate = new();
     private readonly Channel<Func<CancellationToken, Task>> work = Channel.CreateUnbounded<Func<CancellationToken, Task>>(
-        new UnboundedChannelOptions { SingleReader = true, SingleWriter = true });
+        new UnboundedChannelOptions { SingleReader = true });
     private CancellationTokenSource cancellation;
     private readonly CancellationToken lifetime;
     private int pending;

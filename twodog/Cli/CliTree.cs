@@ -166,6 +166,15 @@ internal static class CliTree
     public static readonly Option<string> ReplTimeout = new("--timeout")
         { HelpName = "seconds", Description = "Cancel the submission after this many seconds (exit code 124); the session survives" };
 
+    public static readonly Option<bool> SkillClaude = new("--claude")
+        { Description = "Write .claude/skills/2dog-repl/SKILL.md for Claude Code (the default)" };
+
+    public static readonly Option<bool> SkillCodex = new("--codex")
+        { Description = "Write the guide into a marked section of AGENTS.md, which Codex and other agents read" };
+
+    public static readonly Option<bool> ReplStrict = new("--strict")
+        { Description = "Godot errors and warnings logged by a submission fail it (exit code 3)" };
+
     public static readonly Option<string> ReplPipe = new("--pipe")
     {
         Recursive = true,
@@ -207,6 +216,7 @@ internal static class CliTree
     public static readonly Command ReplExec = new("exec", "Run C# and node commands in a running REPL host");
     public static readonly Command ReplSessions = new("sessions", "List a REPL host's named sessions");
     public static readonly Command ReplClose = new("close", "Close a named REPL session and its worlds");
+    public static readonly Command Skill = new("skill", "Write the REPL working guide where coding agents look for it");
     public static readonly Command VersionCommand = new("version", "Print tool and package versions");
     public static readonly Command HelpCommand = new("help", "Show help, for one verb when named");
     public static readonly RootCommand Root = new("2dog");
@@ -264,12 +274,16 @@ internal static class CliTree
         ReplExec.Arguments.Add(ReplCodeArg);
         ReplExec.Options.Add(ReplSession);
         ReplExec.Options.Add(ReplTimeout);
+        ReplExec.Options.Add(ReplStrict);
         ReplClose.Arguments.Add(ReplSessionArg);
         foreach (var command in new[] { ReplExec, ReplSessions, ReplClose }) Repl.Subcommands.Add(command);
         // Never invoked (Program dispatches); without an action the parser demands an operation.
         Repl.SetAction(_ => 0);
 
-        foreach (var command in new[] { New, Add, Doctor, Update, Pack, Repl, VersionCommand, HelpCommand }) Root.Subcommands.Add(command);
+        Skill.Arguments.Add(ProjectPathArg);
+        foreach (var option in new Option[] { SkillClaude, SkillCodex, DryRun }) Skill.Options.Add(option);
+
+        foreach (var command in new[] { New, Add, Doctor, Update, Pack, Repl, Skill, VersionCommand, HelpCommand }) Root.Subcommands.Add(command);
     }
 
     private static Option<string[]> HostOption(HostKind kind)
@@ -304,6 +318,7 @@ internal static class CliTree
         if (command == Update) return Verb.Update;
         if (command == Pack || command == PackList) return Verb.Pack;
         if (command == Repl || command.Parents.Contains(Repl)) return Verb.Repl;
+        if (command == Skill) return Verb.Skill;
         if (command == VersionCommand) return Verb.Version;
         if (command == HelpCommand) return Verb.Help;
         return null;
@@ -317,6 +332,7 @@ internal static class CliTree
         Verb.Update => Update,
         Verb.Pack => Pack,
         Verb.Repl => Repl,
+        Verb.Skill => Skill,
         Verb.Version => VersionCommand,
         Verb.Help => HelpCommand,
         _ => null,

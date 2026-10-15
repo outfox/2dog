@@ -14,6 +14,7 @@ internal enum Verb
     Update,
     Pack,
     Repl,
+    Skill,
     Help,
     Version,
 }
@@ -22,7 +23,10 @@ internal enum Verb
 internal enum ReplOp { Attach, Exec, Sessions, Close }
 
 /// <summary>The repl verb's command line.</summary>
-internal sealed record ReplOptions(ReplOp Op, string? Pipe, string? Session = null, double? Timeout = null, string? Code = null);
+internal sealed record ReplOptions(ReplOp Op, string? Pipe, string? Session = null, double? Timeout = null, string? Code = null, bool Strict = false);
+
+/// <summary>The skill verb: which agents to write the guide for, and where.</summary>
+internal sealed record SkillOptions(bool Claude, bool Codex, string? Path, bool DryRun);
 
 /// <summary>A host asked for on the command line; a null folder means "pick one".</summary>
 internal sealed record HostRequest(HostKind Kind, string? Folder);
@@ -41,6 +45,9 @@ internal sealed class ParsedCommand
 
     /// <summary>repl: the operation and its target.</summary>
     public ReplOptions? Repl;
+
+    /// <summary>skill: where the agent guide goes.</summary>
+    public SkillOptions? Skill;
 
     /// <summary>For <see cref="Verb.Help"/>: the verb to show help for, null for the general help.</summary>
     public Verb? HelpVerb;
@@ -130,6 +137,10 @@ internal static class CommandLine
             case Verb.Repl:
                 cmd.Repl = ReadReplOptions(result, result.CommandResult.Command);
                 break;
+            case Verb.Skill:
+                cmd.Skill = new SkillOptions(result.GetValue(CliTree.SkillClaude), result.GetValue(CliTree.SkillCodex),
+                    result.GetValue(CliTree.ProjectPathArg), result.GetValue(CliTree.DryRun));
+                break;
             case Verb.Help:
                 if (result.GetValue(CliTree.HelpVerbArg) is { } name)
                     cmd.HelpVerb = CliTree.VerbNamed(name) ?? throw new UsageException(UnknownVerb(name), Verb.Help);
@@ -164,15 +175,23 @@ internal static class CommandLine
             // System.CommandLine would accept the next flag as the value of a value option; refuse that up front.
             var option = options.First(o => CliTree.NamesOf(o).Contains(name));
             var takesValue = option.Arity.MinimumNumberOfValues > 0 && !CliTree.OptionalValueOptions.Contains(option);
-            if (takesValue && name == arg && (i + 1 >= args.Length || args[i + 1] is ['-', _, ..]))
+            // A negative number is a value, which the option's own check then judges.
+            if (takesValue && name == arg && (i + 1 >= args.Length || args[i + 1] is ['-', _, ..] && !IsNumber(args[i + 1])))
                 throw new UsageException($"{name} requires a value", verb);
+            if (takesValue && name == arg) i++;
         }
     }
+
+    private static bool IsNumber(string text)
+        => double.TryParse(text, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out _);
 
     private static string UnknownOption(string name, List<Command> path, IEnumerable<Option> options)
     {
         if (path.Count == 1)
             return $"unknown option '{name}' here - a verb comes first: {VerbList}";
+        // Code such as '-1 + 2' is no option; System.CommandLine takes it as code only after '--'.
+        if (path[^1] == CliTree.ReplExec && (name.Contains(' ') || !char.IsAsciiLetter(name.TrimStart('-').FirstOrDefault())))
+            return $"'{name}' reads as an option - put code that starts with '-' after '--': 2dog repl exec -- {name}";
 
         var owners = CliTree.Commands
             .Where(c => c.Options.Any(o => CliTree.NamesOf(o).Contains(name)))
@@ -197,6 +216,8 @@ internal static class CommandLine
         {
             switch (error.SymbolResult)
             {
+                case OptionResult option when option.Tokens.Count > option.Option.Arity.MaximumNumberOfValues:
+                    return new UsageException($"{option.IdentifierToken?.Value ?? option.Option.Name} was given more than once", verb);
                 case OptionResult option:
                     return new UsageException(
                         $"{option.IdentifierToken?.Value ?? option.Option.Name} requires a value", verb);
@@ -282,7 +303,7 @@ internal static class CommandLine
         // Several words are one submission ('2dog repl exec ls $Player'); '-' or no code reads stdin.
         var words = result.GetValue(CliTree.ReplCodeArg) ?? [];
         var code = words is [] or ["-"] ? null : string.Join(' ', words);
-        return new ReplOptions(ReplOp.Exec, pipe, session, timeout, code);
+        return new ReplOptions(ReplOp.Exec, pipe, session, timeout, code, result.GetValue(CliTree.ReplStrict));
     }
 
     private static DoctorOptions ReadDoctorOptions(ParseResult result)

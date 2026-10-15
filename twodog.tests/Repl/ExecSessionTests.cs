@@ -64,19 +64,28 @@ public class ExecSessionTests
             var (done, events) = await Request(live.Pipe, Exec(script, "s"), token);
             Assert.Equal(Cli.ReplStatus.Error, done.Status);
             var results = Results(events);
-            Assert.Equal([":sh", "cd $Control", "here.Name", "ls $Signals/Sources", ":cs", "var n = 1;", "for (var i = 0; i < 3; i++)\n{\n    n += i;\n}",
+            // Consecutive C# statements join into one submission; commands and expressions without a semicolon stay apart.
+            Assert.Equal([":sh", "cd $Control", "here.Name", "ls $Signals/Sources", ":cs", "var n = 1;\nfor (var i = 0; i < 3; i++)\n{\n    n += i;\n}",
                 ":help", "n", ":reset", "n"], results.Select(r => r.Input!.ReplaceLineEndings("\n")));
-            Assert.Equal([.. Enumerable.Repeat(Cli.ReplStatus.Ok, 10), Cli.ReplStatus.Error], results.Select(r => r.Status));
+            Assert.Equal([.. Enumerable.Repeat(Cli.ReplStatus.Ok, 9), Cli.ReplStatus.Error], results.Select(r => r.Status));
             Assert.Equal("Mode: :sh", results[0].Text);
             Assert.Equal("/root/Control", results[1].Text);
             Assert.Equal("Control", results[2].Text);
             Assert.Contains("CSharpTicker", results[3].Text);
             Assert.Null(results[5].Text);
-            Assert.Contains("Modes (current: :cs)", results[7].Text);
-            Assert.Equal("4", results[8].Text);
-            Assert.Contains("C# session reset", results[9].Text);
-            Assert.True(results[10].Error);
-            Assert.Contains("CS0103", results[10].Text);
+            Assert.Contains("Modes (current: :cs)", results[6].Text);
+            Assert.Equal("4", results[7].Text);
+            Assert.Contains("C# session reset", results[8].Text);
+            Assert.True(results[9].Error);
+            // Diagnostics point at the line in the whole request.
+            Assert.StartsWith("(18,1): CS0103", results[9].Text);
+
+            // A joined run compiles as one: a compile error anywhere runs none of it.
+            var (atomic, atomicEvents) = await Request(live.Pipe, Exec("var a = 1;\nvar c = missing;", "j"), token);
+            Assert.Equal(Cli.ReplStatus.Error, atomic.Status);
+            Assert.StartsWith("(2,9): CS0103", Assert.Single(Results(atomicEvents)).Text);
+            Assert.Contains("CS0103", Assert.Single(Results((await Request(live.Pipe, Exec("a", "j"), token)).Events)).Text);
+            Assert.Equal("6", await Value(live.Pipe, "var x = 2;\nvar y = 3;\nx * y", "j", token));
 
             // Later requests keep the session's mode and scope; exit ends a request, never the session.
             var (stopped, stoppedEvents) = await Request(live.Pipe, Exec("1\n:exit\n2", "s"), token);
@@ -207,6 +216,106 @@ public class ExecSessionTests
     }
 
     [Fact]
+    public void WorkThatIgnoresCancellationTimesOutHonestlyAndClosingDoesNotWaitForIt()
+    {
+        using var live = new LiveHost("repl-exec-uncancellable");
+        var grace = ReplExecHost.CancelGrace;
+        ReplExecHost.CancelGrace = TimeSpan.FromMilliseconds(300);
+        try
+        {
+            live.Run(async token =>
+            {
+                // ToSignal ignores the token: the request reports a timeout instead of waiting for the timer.
+                const string ignoring = "await tree.ToSignal(tree.CreateTimer(4), SceneTreeTimer.SignalName.Timeout); \"late\"";
+                // A warm session compiles quickly, so the timeout lands while ToSignal waits.
+                Assert.Equal("1", await Value(live.Pipe, "1", "u", token));
+                var watch = Stopwatch.StartNew();
+                var (timedOut, events) = await Request(live.Pipe, Exec(ignoring, "u", timeout: 1), token);
+                Assert.Equal(Cli.ReplStatus.Timeout, timedOut.Status);
+                Assert.Contains("does not observe cancellation", Assert.Single(Results(events)).Text);
+                Assert.True(watch.Elapsed < TimeSpan.FromSeconds(3), watch.Elapsed.ToString());
+                Assert.True(Assert.Single(await Sessions(live.Pipe, token)).Busy);
+                // A later request waits behind it and says so.
+                var (queued, queuedEvents) = await Request(live.Pipe, Exec("1", "u", timeout: 0.3), token);
+                Assert.Equal(Cli.ReplStatus.Timeout, queued.Status);
+                Assert.Contains("still running in this session", Assert.Single(Results(queuedEvents)).Text);
+
+                // Closing gives up on the work after the grace period; meanwhile the name is reserved.
+                ReplExecHost.CancelGrace = TimeSpan.FromSeconds(1);
+                var closing = Request(live.Pipe, new(Cli.ReplOps.Close, "u"), token);
+                await Task.Delay(200, token);
+                Assert.Contains("is closing", (await Assert.ThrowsAsync<ToolException>(() => Request(live.Pipe, Exec("1", "u"), token))).Message);
+                var (closed, _) = await closing;
+                Assert.Contains("still running", closed.Text);
+                Assert.Equal("2", await Value(live.Pipe, "2", "u", token));
+                await Request(live.Pipe, new(Cli.ReplOps.Close, "u"), token);
+                // The abandoned work ends with its timer; its session is then released.
+                await Task.Delay(4000, token);
+            });
+        }
+        finally { ReplExecHost.CancelGrace = grace; }
+        live.Server.Dispose();
+        Assert.Empty(live.Engine.Errors.Drain());
+    }
+
+    [Fact]
+    public void ValuesReadAsCSharpAndStrictFailsSubmissionsThatLogGodotErrors()
+    {
+        using var live = new LiveHost("repl-exec-values");
+        live.Run(async token =>
+        {
+            Assert.Equal("\"a<b>+&é\\n\"", await Value(live.Pipe, "\"a<b>+&é\\n\"", null, token));
+            Assert.Equal("<Window> /root", await Value(live.Pipe, "root", null, token));
+            Assert.Equal("<freed Node>", await Value(live.Pipe, "var gone = new Node(); gone.Free(); gone", null, token));
+            Assert.Equal("<Node> Loose (not in the tree)", await Value(live.Pipe, "var loose = new Node { Name = \"Loose\" }; loose", "v", token));
+            await Value(live.Pipe, "loose.Free()", "v", token);
+            Assert.Equal("<PackedScene> res://playground.tscn", await Value(live.Pipe, "GD.Load<PackedScene>(\"res://playground.tscn\")", null, token));
+            Assert.StartsWith("<Resource#", await Value(live.Pipe, "new Resource()", null, token));
+            Assert.Equal("[\"x\", <Window> /root, 3]", await Value(live.Pipe, "new object[] { \"x\", root, 3 }", null, token));
+            // Bare absolute paths navigate and list; Godot's GetTree() habit gets a pointer to 'tree'.
+            Assert.Equal("/root/Control", await Value(live.Pipe, "cd /root/Control", "v", token));
+            Assert.Contains("┖╴Control", await Value(live.Pipe, "ls /root/Control", "v", token));
+            // A depth limit counts what it hides; the listing also arrives as a tree.
+            var (_, listed) = await Request(live.Pipe, Exec("ls -d 0 /root/Control", "v"), token);
+            var listing = Assert.Single(Results(listed));
+            Assert.Matches(@"^ ┖╴Control \(\+\d+\)$", listing.Text);
+            Assert.Equal(("Control", "Control", null), (listing.Tree!.Name, listing.Tree.Type, listing.Tree.Children));
+            Assert.True(listing.Tree.Hidden > 0);
+            var full = Assert.Single(Results((await Request(live.Pipe, Exec("ls /root/Control", "v"), token)).Events)).Tree!;
+            Assert.Equal(listing.Tree.Hidden, Count(full) - 1);
+            Assert.Contains("SceneTree is 'tree'", Assert.Single(Results((await Request(live.Pipe, Exec("GetTree()"), token)).Events)).Text);
+            Assert.Equal("\"Godot.Timer\"", await Value(live.Pipe, "var timer = new Timer(); var kind = timer.GetType().FullName; timer.Free(); kind", null, token));
+            Assert.StartsWith("# Working in a live 2dog game", await Value(live.Pipe, ":help agents", null, token));
+
+            Assert.Equal("1", await Value(live.Pipe, "GD.PushError(\"lenient\"); 1", null, token));
+            var (strict, events) = await Request(live.Pipe, Exec("GD.PushError(\"strict\"); 1\n2", strict: true), token);
+            Assert.Equal(Cli.ReplStatus.Error, strict.Status);
+            Assert.Contains("--strict", Assert.Single(Results(events)).Text);
+        });
+        live.Server.Dispose();
+        Assert.Equal(["lenient", "strict"], live.Engine.Errors.Drain().Select(error => error.Text));
+    }
+
+    [Fact]
+    public async Task AHostThatNeverAnswersEndsTheRequestAtItsDeadline()
+    {
+        var token = TestContext.Current.CancellationToken;
+        var pipe = ReplDiscoveryInit.PipeName();
+        await using var server = new NamedPipeServerStream(pipe, PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+        // Reads the request like a host whose engine thread then never answers.
+        var reading = Task.Run(async () =>
+        {
+            await server.WaitForConnectionAsync(token);
+            using var reader = new StreamReader(server, leaveOpen: true);
+            while (await reader.ReadLineAsync(token) is not null) { }
+        }, token);
+        var done = await ReplCommand.RequestAsync(pipe, Exec("1"), _ => { }, token, TimeSpan.FromMilliseconds(300));
+        await reading;
+        Assert.Equal((Cli.ReplEvents.Done, Cli.ReplStatus.Timeout), (done.Kind, done.Status));
+        Assert.Contains("gave no answer within", done.Text);
+    }
+
+    [Fact]
     public void MalformedRequestsFailAloneAndTheHostKeepsServing()
     {
         using var live = new LiveHost("repl-exec-malformed");
@@ -236,8 +345,8 @@ public class ExecSessionTests
 
     private const string Probe = "twodog.tests.ReplTests.ReplLifetimeProbe.Started(); ";
 
-    private static Cli.ReplRequest Exec(string code, string? session = null, double? timeout = null)
-        => new(Cli.ReplOps.Exec, session, code, timeout);
+    private static Cli.ReplRequest Exec(string code, string? session = null, double? timeout = null, bool strict = false)
+        => new(Cli.ReplOps.Exec, session, code, timeout, strict);
 
     internal static async Task<(Cli.ReplEvent Done, List<Cli.ReplEvent> Events)> Request(string pipe, Cli.ReplRequest request, CancellationToken token)
     {
@@ -257,6 +366,8 @@ public class ExecSessionTests
         => Assert.Single((await Request(pipe, new(Cli.ReplOps.Sessions), token)).Events).Sessions!;
 
     private static List<Cli.ReplEvent> Results(List<Cli.ReplEvent> events) => events.Where(e => e.Kind == Cli.ReplEvents.Result).ToList();
+
+    private static int Count(Cli.ReplTreeNode node) => 1 + (node.Children?.Sum(Count) ?? 0);
 
     private static string Text(List<Cli.ReplEvent> events, string kind, bool error)
         => string.Concat(events.Where(e => e.Kind == kind && e.Error == error).Select(e => e.Text));

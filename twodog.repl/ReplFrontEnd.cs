@@ -78,9 +78,9 @@ internal sealed class ReplFrontEnd
             ? new StyledText(Spinner[Environment.TickCount64 / 100 % Spinner.Length] + (pending > 1 ? $" running, {pending - 1} queued" : " running"), Busy) +
                 new StyledText("  Ctrl+C cancels", Dim)
             : new StyledText(pipe is null ? "" : "pipe " + pipe, Dim);
-        var hints = editor.Multiline
+        var hints = (editor.Overwrite ? new StyledText("overwrite  ", Busy) : StyledText.Empty) + (editor.Multiline
             ? Hint("Enter", "newline") + Hint("Ctrl+Enter", "run") + Hint(":help", "")
-            : Hint("Tab", "complete") + Hint("Shift+Enter", "newline") + Hint(":help", "");
+            : Hint("Tab", "complete") + Hint("Shift+Enter", "newline") + Hint(":help", ""));
         var gap = width - 1 - CellWidth.Of(left.Text) - CellWidth.Of(hints.Text);
         return gap > 1 ? left + new string(' ', gap) + hints : left;
     }

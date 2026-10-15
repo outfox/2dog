@@ -10,7 +10,10 @@ Syntax highlighting, Tab/Ctrl+Space completion with documentation, signature
 help, multiline input, persistent history and cancellation use Roslyn and the
 package's own terminal editor. The live globals are `engine`, `tree`, `root`,
 `here`, `scene`, `world`, `worlds` and `ct`. Variables and using directives persist
-between submissions.
+between submissions. `System`, `System.Linq`, `System.Threading(.Tasks)`,
+`System.Collections.Generic` and `Godot` are imported, and `Timer` means
+`Godot.Timer`. Values print as C# literals; nodes print as their type and path,
+such as `<Area2D> /root/Main/Player`.
 
 ## The terminal
 
@@ -73,6 +76,9 @@ Typing `)` skips an existing closing parenthesis.
 
 | Keys | Action |
 | --- | --- |
+| Left / Right, Home / End | Move the caret anywhere in the input; typing inserts there |
+| Insert | Toggle overwrite mode (block cursor, `overwrite` in the status line) |
+| Backspace / Delete | Delete left / right of the caret |
 | Up / Down | Move between lines, then browse history; typed text filters it |
 | Ctrl+Z / Ctrl+Y | Undo / redo (Ctrl+Shift+Z also redoes) |
 | Shift+arrows, Shift+Home/End, Ctrl+A | Select |
@@ -126,12 +132,14 @@ are ordinary C# identifiers; colon-prefixed shell commands are also disabled.
 `ls` lists the selected node and its descendants (initially the whole tree).
 `ls $Control/Child` lists that node and its descendants. Tab completes node paths, including after `ls `, and fills in
 the exact casing. `$["Control/My Node"]` supports spaces and punctuation.
+`ls -d 1` lists one level below the node; a cut-off branch shows how many
+descendants it hides, as in `Child (+12)`.
 `:ls` and `:ls $Child` explicitly select the listing command in `:auto` and `:sh`.
 `cd $Control/Signals/Table/` selects a node: subsequent `ls` and `$Child`
 paths start there. `here` is that node, `pwd` prints its absolute path, and the
 prompt shows it. `cd ..` selects the parent; `cd /` or `cd` returns to `root`.
-`root` always remains the engine's root Window. Use `cd $/root/Control` for
-absolute paths, or `:cd /root/Control`. `:cd` and `:pwd` force command handling
+`root` always remains the engine's root Window. Use `cd /root/Control` or
+`cd $/root/Control` for absolute paths; `ls /root/Control` lists one. `:cd` and `:pwd` force command handling
 when C# variables share those names; calls, assignments and arithmetic stay C#.
 Node variables and expressions work too: `var x = $Control/CenterContainer;`
 then `cd x`, `cd x.GetParent()` or `cd scene`. Tab completes C# variables and

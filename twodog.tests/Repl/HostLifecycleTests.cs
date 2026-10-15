@@ -103,6 +103,7 @@ public class HostLifecycleTests
 
     [Theory]
     [InlineData(":help\n:clear\n:multiline\n:reset\n40+2\n:exit\n", 0)]
+    [InlineData(":help agents\n:exit\n", 0)]
     [InlineData(":auto\n:exit\nthis must not execute\n", 0)]
     [InlineData(":sh\n:exit\nthis must not execute\n", 0)]
     [InlineData(":cs\n:exit\nthis must not execute\n", 0)]

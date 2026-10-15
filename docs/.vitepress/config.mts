@@ -131,7 +131,8 @@ export default defineConfig({
           {
             text: 'Experimental',
             items: [
-              { text: gd('codeedit') + 'REPL', link: '/hosts/repl' }
+              { text: gd('codeedit') + 'REPL', link: '/hosts/repl' },
+              { text: gd('codeedit') + 'Coding Agents', link: '/agents' }
             ]
           },
           {
@@ -163,7 +164,8 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: gd('bone') + 'add', link: '/cli/add' },
-                  { text: gd('sprout') + 'new', link: '/cli/new' }
+                  { text: gd('sprout') + 'new', link: '/cli/new' },
+                  { text: gd('lightbulb') + 'skill', link: '/cli/skill' }
                 ]
               },
               {

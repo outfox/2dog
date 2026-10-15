@@ -93,8 +93,10 @@ internal sealed class ReportRepl(string pipe, string project)
     public List<twodog.cli.Repl.ReplSessionInfo>? Sessions { get; set; }
 }
 
-/// <summary>One submission: its value or error, and what it printed through Console and Godot's log.</summary>
-internal sealed record ReportReplResult(string Input, string Status, string? Value, string? Error, string? Output, string? Log);
+/// <summary>One submission: its value or error, and what it printed through Console and Godot's log. A listing also
+/// carries its nodes as a tree.</summary>
+internal sealed record ReportReplResult(string Input, string Status, string? Value, string? Error, string? Output, string? Log,
+    twodog.cli.Repl.ReplTreeNode? Tree = null);
 
 [JsonSourceGenerationOptions(
     WriteIndented = true,
@@ -105,6 +107,10 @@ internal partial class ReportJsonContext : JsonSerializerContext;
 
 internal static class JsonReport
 {
+    // The report goes to a terminal or a program, never into HTML: '<', '+' and non-ASCII text stay as they are.
+    private static readonly ReportJsonContext Readable = new(new JsonSerializerOptions(ReportJsonContext.Default.Options)
+        { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+
     /// <summary>Completes the envelope from what the run reported and writes it to stdout.</summary>
     public static void Print(Report report, int exitCode)
     {
@@ -113,7 +119,7 @@ internal static class JsonReport
         report.Notes = Out.Notes.ToList();
         report.Errors = Out.Errors.ToList();
         report.Hints = Out.Hints.ToList();
-        Out.Writer.WriteLine(JsonSerializer.Serialize(report, ReportJsonContext.Default.Report));
+        Out.Writer.WriteLine(JsonSerializer.Serialize(report, Readable.Report));
     }
 
     /// <summary>Fills the scaffold section (new, add, update) from a run's project and result.</summary>

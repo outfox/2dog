@@ -42,7 +42,8 @@ internal sealed class RowBuilder(int width)
     public string ToAnsi() => current.IsPlain ? ansi.ToString() : ansi + "\x1b[0m";
 }
 
-internal sealed record RegionFrame(IReadOnlyList<string> Rows, IReadOnlyList<string> PlainRows, int CaretRow, int CaretColumn);
+/// <param name="BlockCursor">The caret shows as a block, as in overwrite mode.</param>
+internal sealed record RegionFrame(IReadOnlyList<string> Rows, IReadOnlyList<string> PlainRows, int CaretRow, int CaretColumn, bool BlockCursor = false);
 
 /// <summary>Lays out the input region: the prompt and draft, signature help, the completion menu and a status line.
 /// Rows are at most width - 1 cells, so no row ever triggers the terminal's own wrapping.</summary>
@@ -81,7 +82,7 @@ internal static class RegionLayout
             rows.Insert(0, row);
             caretRow++;
         }
-        return new(rows.Select(r => r.ToAnsi()).ToArray(), rows.Select(r => r.Plain).ToArray(), caretRow, caretColumn);
+        return new(rows.Select(r => r.ToAnsi()).ToArray(), rows.Select(r => r.Plain).ToArray(), caretRow, caretColumn, view.Overwrite);
     }
 
     private static (List<RowBuilder> Rows, int CaretRow, int CaretColumn) Input(StyledText prompt, int promptWidth, EditorView view, int width, bool color)

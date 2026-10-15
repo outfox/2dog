@@ -31,6 +31,17 @@ internal sealed class ReplExecSession : IDisposable
         return new Release(this);
     }
 
+    /// <summary>Keeps the session busy until work that a request gave up on really ends.</summary>
+    public void Hold(Task work)
+    {
+        var release = Use();
+        work.ContinueWith(ended =>
+        {
+            _ = ended.Exception;
+            release.Dispose();
+        }, TaskScheduler.Default);
+    }
+
     /// <summary>Live state (the selected node and open worlds) is read only on the owner thread.</summary>
     public ReplSessionInfo Describe(bool live)
     {
@@ -40,14 +51,18 @@ internal sealed class ReplExecSession : IDisposable
             active ? 0 : (Environment.TickCount64 - Interlocked.Read(ref lastUsed)) / 1000.0);
     }
 
-    /// <summary>Cancels running and queued work and waits for it, then releases worlds on the owner thread.</summary>
-    /// <returns>False if the dispatcher has stopped and the worlds still need releasing.</returns>
-    public async Task<bool> CloseAsync(EngineDispatcher dispatcher)
+    /// <summary>Cancels running and queued work and stops accepting more.</summary>
+    public void Cancel()
     {
         try { lifetime.Cancel(); }
         catch (AggregateException) { /* A submission's cancellation callback cannot keep its session open. */ }
         Work.Complete();
-        await Work.Completion.ConfigureAwait(false);
+    }
+
+    /// <summary>Releases worlds on the owner thread, once the work has ended.</summary>
+    /// <returns>False if the dispatcher has stopped and the worlds still need releasing.</returns>
+    public async Task<bool> ReleaseWorldsAsync(EngineDispatcher dispatcher)
+    {
         try { return await dispatcher.InvokeAsync(() => { Globals.worlds.Dispose(); return Task.FromResult(true); }).ConfigureAwait(false); }
         catch (OperationCanceledException) { return false; }
     }
@@ -73,7 +88,12 @@ internal sealed class ReplExecSession : IDisposable
 internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineDispatcher dispatcher, CancellationToken stopped) : IDisposable
 {
     private readonly ConcurrentDictionary<string, Lazy<ReplExecSession>> named = new(StringComparer.Ordinal);
+    // Names whose close is still waiting for work to stop; a request for one fails rather than reopening it.
+    private readonly ConcurrentDictionary<string, bool> closing = new(StringComparer.Ordinal);
     private readonly ConcurrentBag<ReplWorlds> unreleased = new();
+
+    /// <summary>How long cancelled work may take to stop before a request or close stops waiting for it.</summary>
+    internal static TimeSpan CancelGrace { get; set; } = TimeSpan.FromSeconds(2);
     private readonly Lock loggerGate = new();
     private Task? logger;
     private ReplCapture.GodotLog? godotLog;
@@ -113,9 +133,14 @@ internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineD
                     break;
                 case ReplOps.Close:
                     if (request.Session is not { } name) { Fail("close needs a session name"); break; }
-                    if (!named.TryRemove(name, out var closing)) { Fail($"no session named '{name}'"); break; }
-                    await CloseAsync(closing.Value).ConfigureAwait(false);
-                    Send(new(ReplEvents.Done, $"closed session '{name}'", Status: ReplStatus.Ok, Session: name));
+                    if (!named.TryGetValue(name, out var session)) { Fail($"no session named '{name}'"); break; }
+                    closing[name] = true;
+                    named.TryRemove(name, out _);
+                    var settled = await CloseAsync(session.Value).ConfigureAwait(false);
+                    closing.TryRemove(name, out _);
+                    Send(new(ReplEvents.Done, settled ? $"closed session '{name}'"
+                        : $"closed session '{name}'; a submission that ignores cancellation is still running, and its worlds close when it ends",
+                        Status: ReplStatus.Ok, Session: name));
                     break;
                 default: Fail($"unknown operation '{request.Op}'"); break;
             }
@@ -156,6 +181,11 @@ internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineD
             fail("the timeout must be a positive number of seconds");
             return;
         }
+        if (request.Session is { } closed && closing.ContainsKey(closed))
+        {
+            fail($"session '{closed}' is closing - wait for '2dog repl close' to finish, then run again");
+            return;
+        }
         await EnsureLoggerAsync(token).ConfigureAwait(false);
         var session = request.Session is { } existing
             ? named.GetOrAdd(existing, key => new(() => new ReplExecSession(key, engine, references, dispatcher, stopped))).Value
@@ -164,15 +194,18 @@ internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineD
         if (request.Timeout is { } limit) timeout.CancelAfter(TimeSpan.FromSeconds(limit));
         using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(token, timeout.Token);
         // Output from Godot's other threads may arrive after the client left; it is no longer anyone's.
+        var logged = 0;
         var capture = new ReplCapture((text, error, log) =>
         {
+            if (error && log) Interlocked.Increment(ref logged);
             try { send(new(log ? ReplEvents.Log : ReplEvents.Output, text, error)); }
             catch (IOException) { }
         });
+        Func<int>? errors = request.Strict ? () => Volatile.Read(ref logged) : null;
         try
         {
             string status;
-            using (session.Use()) status = await RunAsync(session, request.Code ?? "", capture, send, cancellation.Token, timeout.Token).ConfigureAwait(false);
+            using (session.Use()) status = await RunAsync(session, request.Code ?? "", capture, send, errors, cancellation.Token, timeout.Token).ConfigureAwait(false);
             capture.Close();
             send(new(ReplEvents.Done, Status: status, Session: session.Name));
         }
@@ -186,46 +219,100 @@ internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineD
         }
     }
 
+    /// <param name="errors">Under --strict, the count of Godot errors and warnings logged so far.</param>
     private static async Task<string> RunAsync(ReplExecSession session, string code, ReplCapture capture, Action<ReplEvent> send,
-        CancellationToken token, CancellationToken timeout)
+        Func<int>? errors, CancellationToken token, CancellationToken timeout)
     {
-        using var input = new StringReader(code);
-        var readMode = session.Session.Mode;
-        while (await ReplHost.ReadSubmissionAsync(input, token, readMode).ConfigureAwait(false) is { } text)
+        foreach (var (text, line, readMode) in await SubmissionsAsync(code, session.Session.Mode).ConfigureAwait(false))
         {
             var trimmed = text.Trim();
             if (trimmed.Length == 0 || trimmed is ":cancel" or ":clear" or ":multiline") continue;
             if (trimmed == ":exit" || trimmed == "exit" && readMode.HasShell()) break;
-            if (ReplModes.TryParse(trimmed, out var mode)) readMode = mode;
             ReplEvent? result = null;
+            var started = false;
+            var before = errors?.Invoke() ?? 0;
             try
             {
-                await session.Work.Enqueue(async queued =>
+                var queued = session.Work.Enqueue(async queuedToken =>
                 {
-                    using var linked = CancellationTokenSource.CreateLinkedTokenSource(queued, token);
+                    started = true;
+                    using var linked = CancellationTokenSource.CreateLinkedTokenSource(queuedToken, token);
                     linked.Token.ThrowIfCancellationRequested();
                     result = trimmed switch
                     {
                         ":reset" => Reset(session),
                         ":help" => Help(session),
-                        _ => Result(await session.Session.EvaluateAsync(text, linked.Token, capture).ConfigureAwait(false)),
+                        ":help agents" => new(ReplEvents.Result, ReplOutput.AgentGuide, Status: ReplStatus.Ok),
+                        _ => Result(await session.Session.EvaluateAsync(text, linked.Token, capture, line).ConfigureAwait(false)),
                     };
-                }).ConfigureAwait(false);
+                });
+                // Awaits that ignore the token, such as ToSignal, keep running; the request stops waiting for them.
+                if (!await SettledAsync(queued, token).ConfigureAwait(false))
+                {
+                    session.Hold(queued);
+                    result = new(ReplEvents.Result, started
+                        ? "the submission does not observe cancellation and keeps running; later requests to this session wait for it"
+                        : "a submission that does not observe cancellation is still running in this session", Error: true, Status: ReplStatus.Cancelled);
+                }
+                else await queued.ConfigureAwait(false);
             }
             catch (OperationCanceledException) { result = new(ReplEvents.Result, Status: ReplStatus.Cancelled); }
             catch (Exception error) { result = new(ReplEvents.Result, error.ToString(), Error: true, Status: ReplStatus.Error); }
             if (result!.Status == ReplStatus.Cancelled && timeout.IsCancellationRequested) result = result with { Status = ReplStatus.Timeout };
+            if (result.Status == ReplStatus.Ok && errors?.Invoke() - before is > 0 and var count)
+                result = new(ReplEvents.Result, $"Godot logged {count} error(s) or warning(s); --strict fails the submission", Error: true, Status: ReplStatus.Error);
             send(result with { Input = text.TrimEnd('\r', '\n') });
             if (result.Status != ReplStatus.Ok) return result.Status!;
         }
         return ReplStatus.Ok;
     }
 
+    /// <summary>Splits a request like piped input, then joins consecutive C# pieces that also parse together: such a
+    /// run compiles once, runs without frames in between, and runs not at all if any of it fails to compile.</summary>
+    /// <returns>Each submission with its first line in the request and the mode it is read in.</returns>
+    internal static async Task<List<(string Text, int Line, ReplMode Mode)>> SubmissionsAsync(string code, ReplMode mode)
+    {
+        var submissions = new List<(string Text, int Line, ReplMode Mode)>();
+        using var input = new StringReader(code);
+        var line = 1;
+        var joinable = false;
+        // The code is already in memory: reading never waits.
+        while (await ReplHost.ReadSubmissionAsync(input, CancellationToken.None, mode).ConfigureAwait(false) is { } text)
+        {
+            var isCode = IsCode(text, mode);
+            if (isCode && joinable && Parses(submissions[^1].Text + text)) submissions[^1] = submissions[^1] with { Text = submissions[^1].Text + text };
+            else submissions.Add((text, line, mode));
+            joinable = isCode;
+            if (ReplModes.TryParse(text.Trim(), out var next)) mode = next;
+            line += Math.Max(1, text.Count(c => c == '\n'));
+        }
+        return submissions;
+    }
+
+    private static bool IsCode(string text, ReplMode mode)
+    {
+        var trimmed = text.Trim();
+        return mode is ReplMode.Auto or ReplMode.CSharp && trimmed.Length > 0 && trimmed[0] != ':' && !(trimmed == "exit" && mode.HasShell()) &&
+               !mode.TryNavigation(text, out _) && !mode.TryListing(text, out _);
+    }
+
+    private static bool Parses(string code) => !Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText(
+            new NodePathInput(code, new Dictionary<string, NodePathTarget>()).Code,
+            new Microsoft.CodeAnalysis.CSharp.CSharpParseOptions(kind: Microsoft.CodeAnalysis.SourceCodeKind.Script))
+        .GetDiagnostics().Any(diagnostic => diagnostic.Severity == Microsoft.CodeAnalysis.DiagnosticSeverity.Error);
+
+    // True once the work has ended; after cancellation it gets a grace period to stop on its own.
+    private static async Task<bool> SettledAsync(Task work, CancellationToken token)
+    {
+        if (await Task.WhenAny(work, Task.Delay(Timeout.Infinite, token)).ConfigureAwait(false) == work) return true;
+        return await Task.WhenAny(work, Task.Delay(CancelGrace, CancellationToken.None)).ConfigureAwait(false) == work;
+    }
+
     private static ReplEvent Result(ReplResult result)
     {
         if (result.Cancelled) return new(ReplEvents.Result, Status: ReplStatus.Cancelled);
         if (result.Error is { } error) return new(ReplEvents.Result, error, Error: true, Status: ReplStatus.Error);
-        return new(ReplEvents.Result, result.Tree?.TrimEnd() ?? result.Value, Status: ReplStatus.Ok);
+        return new(ReplEvents.Result, result.Tree?.TrimEnd() ?? result.Value, Status: ReplStatus.Ok, Tree: result.Nodes);
     }
 
     private static ReplEvent Reset(ReplExecSession session)
@@ -254,11 +341,24 @@ internal sealed class ReplExecHost(Engine engine, Assembly[] references, EngineD
         return logger.WaitAsync(token);
     }
 
-    private async Task CloseAsync(ReplExecSession session)
+    /// <returns>False when work ignored cancellation: the session is released once that work ends.</returns>
+    private async Task<bool> CloseAsync(ReplExecSession session)
+    {
+        session.Cancel();
+        if (await Task.WhenAny(session.Work.Completion, Task.Delay(CancelGrace)).ConfigureAwait(false) == session.Work.Completion)
+        {
+            await ReleaseAsync(session).ConfigureAwait(false);
+            return true;
+        }
+        _ = session.Work.Completion.ContinueWith(_ => ReleaseAsync(session), TaskScheduler.Default).Unwrap();
+        return false;
+    }
+
+    private async Task ReleaseAsync(ReplExecSession session)
     {
         try
         {
-            if (!await session.CloseAsync(dispatcher).ConfigureAwait(false)) unreleased.Add(session.Globals.worlds);
+            if (!await session.ReleaseWorldsAsync(dispatcher).ConfigureAwait(false)) unreleased.Add(session.Globals.worlds);
         }
         finally { session.Dispose(); }
     }

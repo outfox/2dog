@@ -51,6 +51,8 @@ internal static class Program
                     return PackCommand.Run(cmd, report);
                 case Verb.Repl:
                     return ReplCommand.Run(cmd.Repl!, report);
+                case Verb.Skill:
+                    return SkillCommand.Run(cmd.Skill!, report);
                 default:
                     return Execute(cmd, report);
             }

@@ -44,7 +44,7 @@ const SECTIONS = [
     'hosts/index.md',
   ]],
   ['Console Hosts', [
-    'hosts/generic.md', 'hosts/repl.md',
+    'hosts/generic.md', 'hosts/repl.md', 'agents.md',
   ]],
   ['Desktop Hosts', [
     'hosts/avalonia.md', 'hosts/winforms.md', 'hosts/winui.md',
@@ -64,7 +64,7 @@ const SECTIONS = [
     'api/rendering-collection.md', 'api/headless-collection.md', 'api/assembly-preloader.md',
   ]],
   ['Develop and Configure', [
-    'dnx-2dog.md', 'cli/add.md', 'cli/new.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md', 'cli/repl.md',
+    'dnx-2dog.md', 'cli/add.md', 'cli/new.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md', 'cli/repl.md', 'cli/skill.md',
     'cli/pinning.md', 'cli/version.md', 'cli/help.md', 'import-tool.md', 'build-configurations.md',
     'configuration/environment-variables.md',
   ]],

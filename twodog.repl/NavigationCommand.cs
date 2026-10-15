@@ -54,9 +54,8 @@ internal sealed record NavigationCommand(string Name, int Start, int ArgumentSta
             command = new(name, start, argumentStart, argument.Length == 0 ? null : argument, null, explicitCommand);
             return true;
         }
-        // Slash is also C# division. Bare absolute paths therefore need either
-        // the $ decorator, :cd, or shell mode.
-        if ((explicitCommand || forceShell) && argument.StartsWith("/root", StringComparison.Ordinal) && !argument.Any(char.IsWhiteSpace))
+        // Slash is also C# division, but 'cd / root / Main' means nothing in C#: a bare absolute path navigates.
+        if (NodePathInput.IsAbsolutePath(argument))
         {
             command = new(name, start, argumentStart, argument.TrimEnd('/'), null, explicitCommand);
             return true;
