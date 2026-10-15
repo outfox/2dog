@@ -6,6 +6,7 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <WasmEnableThreads Condition="'$(WasmEnableThreads)' == ''">$(TwoDogWebThreads)</WasmEnableThreads>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
@@ -25,9 +26,9 @@
          and twodog.dll from the publish set while the browser-wasm targets still root them (ILLink IL1035). -->
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(TwoDogAspNetCoreVersion)"/>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" PrivateAssets="all" Publish="true"/>
+        <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" PrivateAssets="all" Publish="true"/>
         <PackageReference Include="2dog.blazor" Version="$(TwoDogVersion)"/>
-        <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]" PrivateAssets="all"/>
+        <PackageReference Include="2dog.browser-wasmTWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]" PrivateAssets="all"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../../TPLRAWNAME.csproj" PrivateAssets="all"/>

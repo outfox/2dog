@@ -12,6 +12,7 @@ importer, and exporter skip them:
 - **Sample Godot project** - project.godot, the `Godot.NET.Sdk` csproj, and a simple scene at the root
 - **Desktop host** (`<Name>.2dog/`) - Minimal working 2dog application (Program.cs with Main)
 - **xUnit test project** (`<Name>.xunit/`) - xUnit (v3) tests with 2dog.xunit collection fixtures (opt-in: `--xunit true`)
+- **GdUnit test project** (`<Name>.gdunit/`) - GDScript suites through embedded Godot and MTP (opt-in: `--gdunit true`)
 - **NUnit test project** (`<Name>.nunit/`) - NUnit tests with 2dog.nunit (opt-in: `--nunit true`)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
@@ -46,6 +47,9 @@ dotnet new 2dog -n MyGame
 
 # With an xUnit test project
 dotnet new 2dog -n MyGame --xunit true
+
+# GDScript tests, double precision and experimental threaded web
+dotnet new 2dog -n MyGame --gdunit true --double-precision true --web-threads true
 
 # Without the web host (all hosts require .NET 10; only browser builds need wasm-tools)
 dotnet new 2dog -n MyGame --web false

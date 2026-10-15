@@ -129,6 +129,8 @@ internal static class Program
             ? Tui.SelectHosts(project, HostSelection.Defaults(cmd.Excluded, project))
             : HostSelection.FromFlags(cmd, project);
 
+        if (interactive) Tui.SelectBuildSettings(project, cmd.Options);
+
         // Host flags skip the project wizard, but a missing machine prerequisite still gets its own offer.
         // --yes, JSON, CI and redirected input/output keep their unattended behavior.
         if (!cmd.NoInteractive && Tui.CanPrompt)
@@ -180,7 +182,7 @@ internal static class Program
     {
         var rows = new (string Label, string Version, string Probe, string Packages)[]
         {
-            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit, 2dog.nunit, 2dog.repl"),
+            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit, 2dog.nunit, 2dog.gdunit, 2dog.repl"),
             ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.tools"),
             ("GodotSharp", ToolVersions.TwoDogVersion, "2dog.godotsharp", "2dog.godotsharp, 2dog.godotsharp.editor"),
         };

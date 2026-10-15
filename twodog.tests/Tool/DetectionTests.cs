@@ -8,6 +8,13 @@ namespace twodog.tests.ToolTests;
 public class DetectionTests
 {
     [Theory]
+    [InlineData("<Project><PackageReference Include='2dog.gdunit'/><OutputType>Exe</OutputType></Project>")]
+    [InlineData("<Project><PackageReference Include='2dog.gdunit.double'/><OutputType>Exe</OutputType></Project>")]
+    [InlineData("<Project><PackageReference Include='2dog.gdunit'>")]
+    public void Classify_RecognizesGdUnitInCustomFolders(string project)
+        => Assert.Equal(HostKind.GdUnit, HostScan.Classify(project, "custom.verification"));
+
+    [Theory]
     [InlineData("<Project><ItemGroup><PackageReference Include=\"2dog.nunit\" /></ItemGroup></Project>")]
     [InlineData("<Project><PropertyGroup><GodotProjectDir>..</GodotProjectDir></PropertyGroup><ItemGroup><PackageReference Include=\"NUnit\" /></ItemGroup></Project>")]
     [InlineData("<Project><PackageReference Include='2dog.nunit'>")]

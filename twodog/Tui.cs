@@ -95,7 +95,7 @@ internal static class Tui
     {
         var taken = new List<string>(project.TakenFolders);
         var choices = new List<HostChoice>();
-        foreach (var kind in Hosts.All)
+        foreach (var kind in Hosts.All.OrderBy(Hosts.Group))
         {
             var chosen = preselected.FirstOrDefault(h => h.Kind == kind);
             var folder = chosen?.Folder ?? Hosts.AllocateFolder(kind, project.BaseName, taken);
@@ -118,7 +118,7 @@ internal static class Tui
         var prompt = new MultiSelectionPrompt<HostChoice>()
             .Title("Which [green]hosts[/] do you want?")
             .NotRequired()
-            .PageSize(13)
+            .PageSize(17)
             .Mode(SelectionMode.Leaf)
             .InstructionsText("[grey](space toggles, enter accepts, nothing selected is fine)[/]")
             .UseConverter(Describe);
@@ -133,6 +133,39 @@ internal static class Tui
         var selected = Ask(prompt).Where(c => !c.IsGroup).ToList();
         Out.Blank();
         return selected;
+    }
+
+    public static void SelectBuildSettings(ProjectContext project, ScaffoldOptions options)
+    {
+        var defaults = new Dictionary<string, bool>();
+        const string precision = "Double precision (--double-precision)";
+        const string threads = "Web multithreading, experimental (--web-threads; requires COOP/COEP headers)";
+        if (options.DoublePrecision is null) defaults.Add(precision, BuildSettings.IsDouble(project.Dir));
+        if (options.WebThreads is null && (options.Hosts.Any(h => Hosts.IsWebLike(h.Kind))
+            || project.ExistingHosts.Any(h => Hosts.IsWebLike(h.Kind))))
+            defaults.Add(threads, BuildSettings.HasWebThreads(project.Dir));
+        if (defaults.Count == 0) return;
+
+        List<string> selected;
+        if (Out.Mode.Accessible)
+            selected = defaults.Where(choice => Confirm(Markup.Escape(choice.Key) + "?", choice.Value))
+                .Select(choice => choice.Key).ToList();
+        else
+        {
+            var prompt = new MultiSelectionPrompt<string>()
+                .Title("Build options")
+                .NotRequired()
+                .InstructionsText("[grey](space toggles, enter accepts)[/]")
+                .UseConverter(Markup.Escape);
+            prompt.AddChoices(defaults.Keys);
+            foreach (var choice in defaults.Where(choice => choice.Value)) prompt.Select(choice.Key);
+            selected = Ask(prompt);
+        }
+        if (defaults.TryGetValue(precision, out var wasDouble) && selected.Contains(precision) != wasDouble)
+            options.DoublePrecision = selected.Contains(precision);
+        if (defaults.TryGetValue(threads, out var wasThreaded) && selected.Contains(threads) != wasThreaded)
+            options.WebThreads = selected.Contains(threads);
+        Out.Blank();
     }
 
     private static List<HostChoice> SelectSequentially(List<HostChoice> choices)
@@ -238,6 +271,7 @@ internal static class Tui
 
         public static HostChoice GroupRow(HostGroup group) => new(HostKind.Desktop, group switch
         {
+            HostGroup.Generic => "generic",
             HostGroup.Desktop => "desktop",
             HostGroup.Browser => "browser",
             HostGroup.Mobile => "mobile",

@@ -59,6 +59,6 @@ See [Project Layout](/project-layout) for files and
 
 | Host | Flag | Purpose |
 | --- | --- | --- |
-| [GdUnit](./gdunit) | Manual setup | GDScript suites through embedded Godot and MTP |
+| [GdUnit](./gdunit) | `--gdunit` | GDScript suites through embedded Godot and MTP |
 | [NUnit](./nunit) | `--nunit` | NUnit tests using the Godot engine (opt-in) |
 | [xUnit](./xunit) | `--xunit` | xUnit tests using the Godot engine (opt-in) |

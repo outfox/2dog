@@ -51,8 +51,8 @@ internal static class TemplateAssets
     }
 
     /// <summary>The template's Godot project csproj, tokens substituted.</summary>
-    public static string GodotCsproj(string baseName) =>
-        Substitute(ReadRaw("tpl/Company.Product1.csproj"), baseName);
+    public static string GodotCsproj(string baseName, bool doublePrecision = false) =>
+        Substitute(ReadRaw("tpl/Company.Product1.csproj"), baseName, doublePrecision);
 
     /// <summary>The web bootstrap source, copied verbatim (template copyOnly).</summary>
     public static string WebBootSource() => ReadRaw("tpl/Company.Product1.web/TwoDogWebBoot.cs");
@@ -87,7 +87,7 @@ internal static class TemplateAssets
     /// Relative target path -> content for every file of a host subtree, with the template's folder name replaced
     /// by the host's actual folder name and the usual rename/version tokens substituted.
     /// </summary>
-    public static IEnumerable<HostFile> HostFiles(HostKind kind, string baseName, string folder)
+    public static IEnumerable<HostFile> HostFiles(HostKind kind, string baseName, string folder, bool doublePrecision = false)
     {
         var sourceFolder = $"{SourceName}.{Hosts.Suffix(kind)}";
         var prefix = $"tpl/{sourceFolder}/";
@@ -105,16 +105,16 @@ internal static class TemplateAssets
                           || name.EndsWith(".png", StringComparison.Ordinal)
                           || name.EndsWith(".min.js", StringComparison.Ordinal)
                 ? ReadRawBytes(name)
-                : Encoding.UTF8.GetBytes(Rename(ReadRaw(name), sourceFolder, folder, baseName));
+                : Encoding.UTF8.GetBytes(Rename(ReadRaw(name), sourceFolder, folder, baseName, doublePrecision));
             yield return new HostFile(relative, content);
         }
     }
 
     /// <summary>The host folder tokens (they start with the project-wide tokens, so they match first), then the
     /// project-wide tokens.</summary>
-    private static string Rename(string text, string sourceFolder, string folder, string baseName) =>
+    private static string Rename(string text, string sourceFolder, string folder, string baseName, bool doublePrecision = false) =>
         ReplaceTokens(text, [(sourceFolder, folder), ($"TPLRAWNAME.{Hosts.Suffix(KindOf(sourceFolder))}", folder),
-            .. Tokens(baseName)]);
+            .. Tokens(baseName, doublePrecision)]);
 
     private static HostKind KindOf(string sourceFolder) =>
         Enum.GetValues<HostKind>().First(kind => $"{SourceName}.{Hosts.Suffix(kind)}" == sourceFolder);
@@ -125,9 +125,9 @@ internal static class TemplateAssets
     /// takes the base name verbatim. The two differ only for a name the project dictates (assembly_name
     /// "GWJ-97" -> namespace GWJ_97); SanitizeName-derived names are already namespace-safe.
     /// </summary>
-    public static string Substitute(string text, string baseName) => ReplaceTokens(text, Tokens(baseName));
+    public static string Substitute(string text, string baseName, bool doublePrecision = false) => ReplaceTokens(text, Tokens(baseName, doublePrecision));
 
-    private static (string Token, string Value)[] Tokens(string baseName) =>
+    private static (string Token, string Value)[] Tokens(string baseName, bool doublePrecision = false) =>
     [
         (SourceName, Hosts.NamespaceName(baseName)),
         ("TPLRAWNAME", baseName),
@@ -138,6 +138,9 @@ internal static class TemplateAssets
         ("AVALONIA_PKG_VERSION", ToolVersions.AvaloniaVersion),
         ("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion),
         ("ASPNETCORE_PKG_VERSION", ToolVersions.AspNetCoreVersion),
+        ("TWODOG_PRECISION_SUFFIX", doublePrecision ? ".double" : ""),
+        ("TWODOG_PRECISION", doublePrecision ? "double" : "single"),
+        ("TWODOG_WEB_THREADS", "false"),
     ];
 
     /// <summary>

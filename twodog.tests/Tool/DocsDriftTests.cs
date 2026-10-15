@@ -45,6 +45,7 @@ public class DocsDriftTests
         Assert.DoesNotContain("--no-tests", text);
         Assert.Contains("--xunit", text);
         Assert.Contains("--nunit", text);
+        Assert.Contains("--gdunit", text);
     }
 
     [Fact]

@@ -46,7 +46,7 @@ newly selected hosts before restore. `--yes`, pipes, and CI skip workload offers
 
 `new` and `add` take one flag per host. The folder is optional; a repeated
 flag adds a second host of the same kind. Test hosts are opt-in: choose
-`--xunit` or `--nunit`, or select a framework in the interactive picker.
+`--xunit`, `--gdunit` or `--nunit`, or select a framework in the interactive picker.
 
 | Flag | Host |
 | --- | --- |
@@ -55,6 +55,7 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
 | `--xunit [folder]` | [xUnit test project](/hosts/xunit) (opt-in) |
 | `--repl [folder]` | [C# REPL host](/hosts/repl); opt-in |
+| `--gdunit [folder]` | [GdUnit GDScript test project](/hosts/gdunit) (opt-in) |
 | `--nunit [folder]` | [NUnit test project](/hosts/nunit) (opt-in) |
 | `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only, opt-in |
 | `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |
@@ -62,6 +63,24 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); opt-in, needs wasm-tools |
 | `--android [folder]` | [Android host](/hosts/android); experimental, opt-in, needs the android workload |
 | `--no-generic`, `--no-web` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
+
+## Build options
+
+`new` and `add` offer build option toggles after the host picker. Flags use the
+same settings without a prompt:
+
+| Flag | Effect |
+| --- | --- |
+| `--double-precision [true\|false]` | Use matching `.double` engine, bindings and native packages across the game and all hosts |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients |
+
+New projects default to single precision and single-threaded web builds.
+Omitting these flags on `add` preserves the project's settings. Pass `false`
+to disable a setting. Double precision needs a matching double precision Godot
+editor. Threaded browser builds need cross-origin isolation headers:
+`Cross-Origin-Opener-Policy: same-origin` and
+`Cross-Origin-Embedder-Policy: require-corp`.
+See [web multithreading](/hosts/web#multithreading) for serving requirements.
 
 ## Global options
 

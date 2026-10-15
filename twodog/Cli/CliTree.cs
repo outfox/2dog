@@ -94,6 +94,12 @@ internal static class CliTree
     public static readonly Option<bool> NoRestore = new("--no-restore")
         { Description = "Skip the final 'dotnet restore'" };
 
+    public static readonly Option<bool> DoublePrecision = new("--double-precision")
+        { Description = "Use double precision bindings and natives for the game and all hosts (false selects single precision)" };
+
+    public static readonly Option<bool> WebThreads = new("--web-threads")
+        { Description = "Enable experimental multithreading for Web, WebXR and Blazor clients (requires COOP/COEP headers)" };
+
     public static readonly Option<bool> InstallWasmTools = new("--install-wasm-tools")
         { Description = "Install missing wasm-tools for Web, WebXR or Blazor hosts without prompting" };
 
@@ -234,7 +240,7 @@ internal static class CliTree
         {
             foreach (var kind in Hosts.All) command.Options.Add(HostOptions[kind]);
             foreach (var kind in Hosts.All) command.Options.Add(NoHostOptions[kind]);
-            foreach (var option in new Option[] { DryRun, Force, NoRestore, InstallWasmTools, InstallAndroidWorkload })
+            foreach (var option in new Option[] { DryRun, Force, NoRestore, DoublePrecision, WebThreads, InstallWasmTools, InstallAndroidWorkload })
                 command.Options.Add(option);
         }
 

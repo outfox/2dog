@@ -10,7 +10,7 @@
 
     <!-- The host chooses the engine precision; 2dog.xunit ships compile-in collection definitions. -->
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
         <PackageReference Include="2dog.xunit" Version="$(TwoDogVersion)"/>
     </ItemGroup>
 
@@ -51,6 +51,6 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Editor'">
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editorTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
     </ItemGroup>
 </Project>

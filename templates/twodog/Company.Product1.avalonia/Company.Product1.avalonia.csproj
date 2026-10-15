@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
         <PackageReference Include="2dog.avalonia" Version="$(TwoDogVersion)"/>
         <PackageReference Include="Avalonia.Desktop" Version="$(TwoDogAvaloniaVersion)"/>
         <!-- Native Wayland backend (experimental, not part of UsePlatformDetect);

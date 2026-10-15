@@ -63,6 +63,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
   MyGame.xunit/  (.gdignore) <- xUnit test project (opt-in: --xunit)
   MyGame.repl/   (.gdignore) <- interactive C# prompt in the running game (opt-in: --repl)
+  MyGame.gdunit/ (.gdignore) <- GDScript test host using MTP (opt-in: --gdunit)
   MyGame.nunit/  (.gdignore) <- NUnit test project (opt-in: --nunit)
   MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
@@ -96,7 +97,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, repl, webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |
@@ -104,6 +105,8 @@ Options:
 | `-y, --yes`, `--non-interactive` | Do not prompt; take the flags and defaults |
 | `--dry-run` | Print planned actions without changing anything |
 | `--force` | Overwrite files that already exist (never deletes/moves) |
+| `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients; serving requires COOP/COEP headers |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | `new`, `add`, `doctor`, `update`: install missing `wasm-tools` for browser hosts |
 | `--install-android-workload` | `new`, `add`, `doctor`, `update`: install the missing `android` workload for Android hosts |

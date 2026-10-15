@@ -19,8 +19,15 @@ discovery and execution import their own private stages.
 
 ## Create the host
 
-Create this host manually; `dnx 2dog add` does not scaffold it yet. From the
-directory containing `project.godot`, create this layout:
+From the directory containing `project.godot`, run:
+
+```bash
+dnx 2dog add --gdunit
+```
+
+Use `--gdunit MyGame.scripts` to choose a custom host folder. New projects
+can use `dnx 2dog new MyGame --gdunit`; the template accepts `--gdunit true`.
+The tool creates this layout, including a sample `tests/example_test.gd`:
 
 ```text
 MyGame.gdunit/
@@ -36,7 +43,7 @@ game's normal import and export. The host imports a private copy when running.
 
 ## Project and entry point
 
-Create `MyGame.gdunit/MyGame.gdunit.csproj`:
+For manual setup, create `MyGame.gdunit/MyGame.gdunit.csproj`:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">

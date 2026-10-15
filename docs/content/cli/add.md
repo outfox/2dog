@@ -27,7 +27,7 @@ highlighting, completion and live access to the running game.
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
-`--xunit` or `--nunit`. Existing hosts are
+`--xunit`, `--gdunit` or `--nunit`. Existing hosts are
 recognized and skipped.
 
 The new hosts are built for the running tool's versions, so the game project's
@@ -48,9 +48,15 @@ are kept; the `.sln` is removed only after conversion succeeds.
 | `--rename <NewName>` | Rename a .NET project name that [contains spaces](/known-issues/spaced-project-names), then scaffold; only before any hosts exist |
 | `--dry-run` | Print the plan; change nothing |
 | `--force` | Overwrite scaffolded files that exist; never deletes |
+| `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients; serving requires COOP/COEP headers |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
 | `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
+
+Build settings are also available as wizard toggles. Omitting these flags on
+`add` preserves existing settings. See [build options](/dnx-2dog#build-options)
+for precision and browser serving requirements.
 
 Plus the [global and output options](/dnx-2dog#global-options).
 
@@ -84,6 +90,7 @@ Choose hosts interactively, or supply host flags:
 2dog add --generic MyGame.editor   # a second generic host, named
 2dog add --android                 # an Android host
 2dog add --xunit                   # an xUnit test host
+2dog add --gdunit                  # a GDScript test host (MTP)
 2dog add --nunit                   # an NUnit test host
 2dog add path/to/project --no-web
 2dog add --rename MyGame           # fix a spaced .NET name first

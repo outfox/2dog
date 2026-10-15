@@ -26,11 +26,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.android" Version="[$(TwoDogNativesVersion)]"/>
-        <PackageReference Include="2dog.android-arm64" Version="[$(TwoDogNativesVersion)]"
+        <PackageReference Include="2dog.android-arm64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
                           Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-arm64;'))"/>
-        <PackageReference Include="2dog.android-x64" Version="[$(TwoDogNativesVersion)]"
+        <PackageReference Include="2dog.android-x64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
                           Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-x64;'))"/>
         <!-- The Java libraries Godot's Android host depends on -->
         <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6"/>

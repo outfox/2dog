@@ -51,6 +51,7 @@ public class NUnitHostTests
         Assert.Equal([HostKind.Desktop, HostKind.Web], HostScan.Find(dir).Select(h => h.Kind).Order().ToArray());
         Assert.False(Directory.Exists(Path.Combine(dir, "Game.xunit")));
         Assert.False(Directory.Exists(Path.Combine(dir, "Game.nunit")));
+        Assert.False(Directory.Exists(Path.Combine(dir, "Game.gdunit")));
     }
 
     [Fact]

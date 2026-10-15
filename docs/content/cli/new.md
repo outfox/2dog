@@ -25,7 +25,7 @@ highlighting, completion and live access to the running game.
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
-`--xunit` or `--nunit`.
+`--xunit`, `--gdunit` or `--nunit`.
 
 ## Options
 
@@ -35,9 +35,15 @@ generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
 | `-o, --output <dir>` | Directory; same as `dir` |
 | `--dry-run` | Print the plan; change nothing |
 | `--force` | Overwrite scaffolded files that exist; never deletes |
+| `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients; serving requires COOP/COEP headers |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
 | `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
+
+Build settings are also available as wizard toggles. Omitting these flags on
+`add` preserves existing settings. See [build options](/dnx-2dog#build-options)
+for precision and browser serving requirements.
 
 Plus the [global and output options](/dnx-2dog#global-options).
 
@@ -69,6 +75,8 @@ Choose hosts interactively, or supply host flags:
 ```bash
 2dog new MyGame                            # interactive host choice
 2dog new MyGame --generic --xunit          # unattended
+2dog new MyGame --gdunit                   # GDScript tests
+2dog new MyGame --web --double-precision --web-threads
 2dog new "My Game" -o games/mine --no-web  # name adjusted to MyGame
 ```
 
@@ -85,9 +93,10 @@ dotnet new 2dog -n MyGame --web false
 
 This creates a generic .NET host. Omit `--web false` to include Web;
 install `wasm-tools` when you want to build or publish that host.
+The template also accepts `--double-precision true` and `--web-threads true`.
 
-Test hosts are opt-in. Pass `--xunit true` or `--nunit true` to
-`dotnet new 2dog`, or use `2dog new MyGame --xunit` or `--nunit`.
+Test hosts are opt-in. Pass `--xunit true`, `--gdunit true` or `--nunit true` to
+`dotnet new 2dog`, or use `2dog new MyGame --xunit`, `--gdunit` or `--nunit`.
 
 ## Debugging the Godot project in VS Code
 

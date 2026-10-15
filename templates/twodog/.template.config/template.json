@@ -84,6 +84,37 @@
       "description": "Include an interactive C# REPL host inside the running Godot process. Omitted by default; pass '--repl true' to include.",
       "defaultValue": "false"
     },
+    "gdunit": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a GdUnit GDScript test host using Microsoft.Testing.Platform (opt-in).",
+      "defaultValue": "false"
+    },
+    "double-precision": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Use matching double precision bindings and natives throughout the project.",
+      "defaultValue": "false"
+    },
+    "web-threads": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Enable experimental web multithreading (requires COOP/COEP headers).",
+      "defaultValue": "false",
+      "replaces": "TWODOG_WEB_THREADS"
+    },
+    "precisionSuffix": {
+      "type": "generated",
+      "generator": "switch",
+      "parameters": { "cases": [{ "condition": "double-precision", "value": ".double" }, { "condition": "true", "value": "" }] },
+      "replaces": "TWODOG_PRECISION_SUFFIX"
+    },
+    "precision": {
+      "type": "generated",
+      "generator": "switch",
+      "parameters": { "cases": [{ "condition": "double-precision", "value": "double" }, { "condition": "true", "value": "single" }] },
+      "replaces": "TWODOG_PRECISION"
+    },
     "nunit": {
       "type": "parameter",
       "datatype": "bool",
@@ -199,6 +230,10 @@
           "exclude": ["Company.Product1.repl/**/*"]
         },
         {
+          "condition": "(!gdunit)",
+          "exclude": ["Company.Product1.gdunit/**/*"]
+        },
+        {
           "condition": "(!nunit)",
           "exclude": ["Company.Product1.nunit/**/*"]
         },
@@ -282,6 +317,10 @@
     {
       "condition": "(repl)",
       "path": "Company.Product1.repl/Company.Product1.repl.csproj"
+    },
+    {
+      "condition": "(gdunit)",
+      "path": "Company.Product1.gdunit/Company.Product1.gdunit.csproj"
     },
     {
       "condition": "(nunit)",

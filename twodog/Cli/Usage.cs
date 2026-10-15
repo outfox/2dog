@@ -37,6 +37,7 @@ internal static class Usage
     private static readonly Option[] GeneralOptions =
     [
         CliTree.Name, CliTree.Rename, CliTree.Output, CliTree.Yes, CliTree.DryRun, CliTree.Force, CliTree.NoRestore,
+        CliTree.DoublePrecision, CliTree.WebThreads,
         CliTree.InstallWasmTools, CliTree.InstallAndroidWorkload,
         CliTree.VersionOption, CliTree.HelpOption,
     ];

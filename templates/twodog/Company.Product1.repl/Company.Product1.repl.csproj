@@ -19,10 +19,10 @@
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
         <PackageReference Include="2dog.repl" Version="$(TwoDogVersion)" />
         <!-- Restore in every configuration so switching to Editor needs no extra restore. -->
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editorTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
         <ProjectReference Include="../TPLRAWNAME.csproj" />
     </ItemGroup>
 </Project>

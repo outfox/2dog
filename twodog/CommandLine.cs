@@ -310,6 +310,10 @@ internal static class CommandLine
         cmd.Options.DryRun = result.GetValue(CliTree.DryRun);
         cmd.Options.Force = result.GetValue(CliTree.Force);
         cmd.Options.Restore = !result.GetValue(CliTree.NoRestore);
+        if (result.GetResult(CliTree.DoublePrecision) is { Implicit: false })
+            cmd.Options.DoublePrecision = result.GetValue(CliTree.DoublePrecision);
+        if (result.GetResult(CliTree.WebThreads) is { Implicit: false })
+            cmd.Options.WebThreads = result.GetValue(CliTree.WebThreads);
         cmd.Options.InstallWasmTools = result.GetValue(CliTree.InstallWasmTools);
         cmd.Options.InstallAndroidWorkload = result.GetValue(CliTree.InstallAndroidWorkload);
 

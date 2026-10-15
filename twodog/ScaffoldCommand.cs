@@ -227,7 +227,8 @@ internal static class ScaffoldCommand
             if (rename.CsprojExists) renamedFrom = Path.Combine(projectDir, rename.OldName + ".csproj");
         }
 
-        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder, renamedFrom);
+        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder, renamedFrom,
+            options.DoublePrecision ?? BuildSettings.IsDouble(projectDir));
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
         PlanRootBuildProps(plan, projectDir);
         PlanPropsValues(plan, projectDir);
@@ -236,6 +237,7 @@ internal static class ScaffoldCommand
         PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
         PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
+        BuildSettings.Plan(plan, project, options, allHostProjects.Prepend(godotCsproj));
         PlanSolution(plan, options, projectDir, baseName, godotCsproj, allHostProjects, newHosts, existingHosts,
             workloadRunner ?? ProcessRunner.Default);
 
@@ -402,7 +404,8 @@ internal static class ScaffoldCommand
 
     private static void PlanGodotCsproj(
         List<PlannedAction> plan, List<string> warnings, ProjectContext project,
-        string godotCsproj, List<string> hostFolders, string? webBootFolder, string? renamedFrom = null)
+        string godotCsproj, List<string> hostFolders, string? webBootFolder, string? renamedFrom = null,
+        bool doublePrecision = false)
     {
         // With a rename planned the csproj still sits at the old path at plan time: read from there, write to the
         // new path where the earlier rename action put it.
@@ -412,7 +415,7 @@ internal static class ScaffoldCommand
             // GDScript-only or brand-new project: scaffold the csproj and declare the assembly so the editor finds
             // it (res://<name>.csproj).
             var content = SetWebBootInclude(
-                SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName), hostFolders),
+                SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName, doublePrecision), hostFolders),
                 project.BaseName, webBootFolder);
             plan.Add(new PlannedAction(
                 $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})", ActionKind.CreateFile,
@@ -640,7 +643,8 @@ internal static class ScaffoldCommand
         string projectDir, string baseName, IReadOnlyList<HostSpec> hosts)
     {
         foreach (var host in hosts)
-        foreach (var (relativePath, content) in TemplateAssets.HostFiles(host.Kind, baseName, host.Folder))
+        foreach (var (relativePath, content) in TemplateAssets.HostFiles(host.Kind, baseName, host.Folder,
+                     options.DoublePrecision ?? BuildSettings.IsDouble(projectDir)))
         {
             var target = Path.Combine(projectDir, relativePath);
             if (File.Exists(target) && !options.Force)
@@ -771,6 +775,7 @@ internal static class ScaffoldCommand
             HostKind.Tests => ($"dotnet test {host.Folder}", "xUnit tests (headless Godot)"),
             HostKind.Repl => ($"dotnet run --project {host.Folder}", "interactive C# REPL (live Godot)"),
             HostKind.NUnit => ($"dotnet test {host.Folder}", "NUnit tests (headless Godot)"),
+            HostKind.GdUnit => ($"dotnet run --project {host.Folder}", "GdUnit GDScript tests (MTP)"),
             HostKind.Web => ($"dotnet publish {host.Folder}", "browser bundle (needs wasm-tools workload)"),
             HostKind.WebXr => ($"dotnet publish {host.Folder}", "WebXR browser bundle (needs wasm-tools workload)"),
             HostKind.WinForms => ($"dotnet run --project {host.Folder}", "WinForms host (Windows only)"),

@@ -10,11 +10,11 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
              from the Godot editor) -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);TPLRAWNAME.2dog/**;TPLRAWNAME.web/**;TPLRAWNAME.webxr/**;TPLRAWNAME.xunit/**;TPLRAWNAME.nunit/**;TPLRAWNAME.repl/**;TPLRAWNAME.winforms/**;TPLRAWNAME.winui/**;TPLRAWNAME.avalonia/**;TPLRAWNAME.blazor/**;TPLRAWNAME.android/**</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);TPLRAWNAME.2dog/**;TPLRAWNAME.web/**;TPLRAWNAME.webxr/**;TPLRAWNAME.xunit/**;TPLRAWNAME.nunit/**;TPLRAWNAME.gdunit/**;TPLRAWNAME.repl/**;TPLRAWNAME.winforms/**;TPLRAWNAME.winui/**;TPLRAWNAME.avalonia/**;TPLRAWNAME.blazor/**;TPLRAWNAME.android/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="2dog.godotsharp" Version="$(TwoDogVersion)" />
-        <PackageReference Include="2dog.godotsharp.editor" Version="$(TwoDogVersion)"
+        <PackageReference Include="2dog.godotsharpTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
+        <PackageReference Include="2dog.godotsharp.editorTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)"
                           Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'" />
     </ItemGroup>
     <ItemGroup>

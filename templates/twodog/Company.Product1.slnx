@@ -15,6 +15,9 @@
 #if (nunit)
   <Project Path="TPLRAWNAME.nunit/TPLRAWNAME.nunit.csproj" />
 #endif
+#if (gdunit)
+  <Project Path="TPLRAWNAME.gdunit/TPLRAWNAME.gdunit.csproj" />
+#endif
 #if (winforms)
   <Project Path="TPLRAWNAME.winforms/TPLRAWNAME.winforms.csproj" />
 #endif

@@ -145,12 +145,15 @@ internal static class CsprojPatcher
         var root = doc.Root!;
         var ns = root.Name.Namespace;
         var changed = false;
+        var doublePrecision = root.Descendants(ns + "PackageReference").Any(e =>
+            ((string?)e.Attribute("Include"))?.Equals("2dog.godotsharp.double", StringComparison.OrdinalIgnoreCase) == true);
         foreach (var id in new[] { "2dog.godotsharp", "2dog.godotsharp.editor" })
         {
+            var packageId = id + (doublePrecision ? ".double" : "");
             if (root.Descendants(ns + "PackageReference").Any(e =>
-                string.Equals((string?)e.Attribute("Include"), id, StringComparison.OrdinalIgnoreCase))) continue;
+                string.Equals((string?)e.Attribute("Include"), packageId, StringComparison.OrdinalIgnoreCase))) continue;
             var reference = new XElement(ns + "PackageReference",
-                new XAttribute("Include", id), new XAttribute("Version", "$(TwoDogVersion)"));
+                new XAttribute("Include", packageId), new XAttribute("Version", "$(TwoDogVersion)"));
             if (id.EndsWith(".editor", StringComparison.Ordinal))
                 reference.SetAttributeValue("Condition", "'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'");
             root.Add(new XText("    "), new XElement(ns + "ItemGroup",

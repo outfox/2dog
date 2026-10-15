@@ -14,5 +14,8 @@
         <TwoDogAvaloniaVersion>AVALONIA_PKG_VERSION</TwoDogAvaloniaVersion>
         <TwoDogWindowsAppSdkVersion>WINAPPSDK_PKG_VERSION</TwoDogWindowsAppSdkVersion>
         <TwoDogAspNetCoreVersion>ASPNETCORE_PKG_VERSION</TwoDogAspNetCoreVersion>
+        <TwoDogPrecision Condition="'$(TwoDogPrecision)' == ''">TWODOG_PRECISION</TwoDogPrecision>
+        <GodotFloat64 Condition="'$(TwoDogPrecision)' == 'double'">true</GodotFloat64>
+        <TwoDogWebThreads Condition="'$(TwoDogWebThreads)' == ''">TWODOG_WEB_THREADS</TwoDogWebThreads>
     </PropertyGroup>
 </Project>

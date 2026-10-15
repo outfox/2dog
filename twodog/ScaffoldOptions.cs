@@ -44,6 +44,8 @@ internal sealed class ScaffoldOptions
     public bool InstallWasmTools;
     public bool InstallAndroidWorkload;
     public bool UpdateWorkloads;
+    public bool? DoublePrecision;
+    public bool? WebThreads;
 
     /// <summary>Only supplied for interactive terminals; a declined offer leaves workload installation to the user.</summary>
     public Func<Workload, bool>? ConfirmWorkloadInstall;

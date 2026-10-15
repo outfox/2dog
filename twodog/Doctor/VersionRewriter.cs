@@ -34,6 +34,7 @@ internal static class VersionRewriter
             ["2dog.xunit"] = ("TwoDogVersion", false),
             ["2dog.repl"] = ("TwoDogVersion", false),
             ["2dog.nunit"] = ("TwoDogVersion", false),
+            ["2dog.gdunit"] = ("TwoDogVersion", false),
             ["2dog.avalonia"] = ("TwoDogVersion", false),
             ["2dog.blazor"] = ("TwoDogVersion", false),
             ["2dog.browser-wasm"] = ("TwoDogNativesVersion", true),
@@ -49,19 +50,22 @@ internal static class VersionRewriter
             ["Microsoft.AspNetCore.Components.WebAssembly.Server"] = ("TwoDogAspNetCoreVersion", false),
         };
 
+    private static string BaseId(string id) => id.EndsWith(".double", StringComparison.OrdinalIgnoreCase)
+        && BuildSettings.PrecisionPackages.Contains(id[..^7]) ? id[..^7] : id;
+
     /// <summary>The 2dog package ids proper (one version, TwoDogVersion).</summary>
     public static bool IsTwoDogPackage(string id) =>
-        Managed.TryGetValue(id, out var m) && m.Property == "TwoDogVersion";
+        Managed.TryGetValue(BaseId(id), out var m) && m.Property == "TwoDogVersion";
 
-    public static string? PropertyFor(string id) => Managed.TryGetValue(id, out var m) ? m.Property : null;
+    public static string? PropertyFor(string id) => Managed.TryGetValue(BaseId(id), out var m) ? m.Property : null;
 
     /// <summary>Whether the package must be exact-pinned (the natives, which have to match the engine's build).</summary>
-    public static bool IsPinnedPackage(string id) => Managed.TryGetValue(id, out var m) && m.Pinned;
+    public static bool IsPinnedPackage(string id) => Managed.TryGetValue(BaseId(id), out var m) && m.Pinned;
 
     /// <summary>The property reference a managed package should carry, e.g. "[$(TwoDogNativesVersion)]".</summary>
     public static string Reference(string id)
     {
-        var (property, pinned) = Managed[id];
+        var (property, pinned) = Managed[BaseId(id)];
         return pinned ? $"[$({property})]" : $"$({property})";
     }
 
@@ -100,7 +104,7 @@ internal static class VersionRewriter
             if (!include.Success || !version.Success) return tag.Value;
             var id = include.Groups["id"].Value;
             var current = version.Groups["version"].Value;
-            if (!Managed.ContainsKey(id) || current.Contains("$(", StringComparison.Ordinal)) return tag.Value;
+            if (!Managed.ContainsKey(BaseId(id)) || current.Contains("$(", StringComparison.Ordinal)) return tag.Value;
             var reference = Reference(id);
             changes.Add($"{id} {current} -> {reference}");
             var group = version.Groups["version"];
