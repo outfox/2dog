@@ -279,6 +279,24 @@ public class UpdateTests
         Assert.Contains("dnx 2dog update", run.Stderr);
     }
 
+    [Theory]
+    [InlineData("10.0.99", "10.0.*")]
+    [InlineData("11.0.0", "11.0.0")]
+    public void Update_FloatsAspNetCoreUnlessTheProjectIsOnANewerLine(string literal, string expected)
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--blazor", "--no-restore").ExitCode);
+        Assert.Equal(ToolVersions.AspNetCoreVersion, PropsPatcher.Read(Path.Combine(dir, "Directory.Build.props"))["TwoDogAspNetCoreVersion"]);
+        var csproj = Path.Combine(dir, "Game.blazor", "Game.blazor.csproj");
+        File.WriteAllText(csproj, File.ReadAllText(csproj).Replace("Version=\"$(TwoDogAspNetCoreVersion)\"", $"Version=\"{literal}\""));
+
+        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, run.ExitCode);
+        Assert.Equal(expected, PropsPatcher.Read(Path.Combine(dir, "Directory.Build.props"))["TwoDogAspNetCoreVersion"]);
+        Assert.Contains("Version=\"$(TwoDogAspNetCoreVersion)\"", File.ReadAllText(csproj));
+    }
+
     [Fact]
     public void Update_KeepsANewerCompanionVersion()
     {

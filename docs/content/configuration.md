@@ -59,6 +59,10 @@ Hosts reference those properties:
 <PackageReference Include="2dog.browser-wasm" Version="[$(TwoDogNativesVersion)]"/>
 ```
 
+`TwoDogAspNetCoreVersion` floats on the patch level (`major.minor.*`), so every
+restore of a Blazor host takes the newest ASP.NET Core servicing release and
+its security fixes.
+
 [`2dog update`](/cli/update) rewrites the version block and the game project's
 `Godot.NET.Sdk` version, which cannot come from a property.
 [`2dog doctor`](/cli/doctor) reports remaining literal versions and mismatched
