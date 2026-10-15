@@ -154,7 +154,6 @@ export default defineConfig({
       {
         text: 'Develop',
         items: [
-          { text: gd('codeedit') + '2dog repl', link: '/cli/repl' },
           {
             text: gd('window_terminal') + '2dog (dotnet tool)',
             link: '/dnx-2dog',
@@ -182,7 +181,8 @@ export default defineConfig({
                 collapsed: true,
                 items: [
                   { text: gd('help') + 'help', link: '/cli/help' },
-                  { text: gd('box') + 'pack', link: '/cli/pack' }
+                  { text: gd('box') + 'pack', link: '/cli/pack' },
+                  { text: gd('codeedit') + 'repl', link: '/cli/repl' }
                 ]
               },
               {
