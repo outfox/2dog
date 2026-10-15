@@ -54,6 +54,7 @@ See [Project Layout](/project-layout) for files and
 | Host | Flag | Purpose |
 | --- | --- | --- |
 | [Android](./android) | `--android` | Android APK (experimental) |
+| [MAUI](./maui) | `--maui` | Windows and Android UI with an embedded Godot view |
 
 ### Testing
 

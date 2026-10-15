@@ -94,13 +94,14 @@ internal static class HostChecks
 
             // Test hosts are never published, so PublishAot there only adds analyzers.
             var nativeAot = host.Kind is HostKind.Desktop or HostKind.Avalonia or HostKind.WinUi or HostKind.Android;
-            if (Enables("PublishAot") && host.Kind is HostKind.Repl or HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor)
+            if (Enables("PublishAot") && host.Kind is HostKind.Repl or HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor or HostKind.Maui)
                 yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables PublishAot",
                     host.Kind switch
                     {
                         HostKind.Repl => "the C# REPL compiles and loads code at runtime, which requires the JIT",
                         HostKind.WinForms => "Windows Forms does not support trimming, so the SDK rejects NativeAOT (NETSDK1175)",
                         HostKind.Blazor => "Blazor does not support NativeAOT; its WebAssembly client can AOT-compile with Mono (RunAOTCompilation)",
+                        HostKind.Maui => "the MAUI host supports managed Windows builds and Mono AOT on Android",
                         _ => "NativeAOT cannot target the browser (NETSDK1203); Mono's AOT compiler (RunAOTCompilation) can",
                     },
                     host.Kind is HostKind.Web or HostKind.WebXr ? "replace PublishAot with RunAOTCompilation" : "remove PublishAot",

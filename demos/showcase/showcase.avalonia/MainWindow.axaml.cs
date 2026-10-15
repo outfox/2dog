@@ -25,8 +25,17 @@ public partial class MainWindow : Window
     {
         _extraArgs = args;
         InitializeComponent();
+        SetStatus("Starting", "#F2B84B");
         PauseButton.Click += OnPauseClicked;
         SpeedSlider.ValueChanged += OnSpeedChanged;
+    }
+
+    private void SetStatus(string text, string color)
+    {
+        var brush = Avalonia.Media.Brush.Parse(color);
+        StatusLabel.Text = text;
+        StatusLabel.Foreground = brush;
+        StatusDot.Fill = brush;
     }
 
     protected override void OnOpened(EventArgs e)
@@ -49,6 +58,7 @@ public partial class MainWindow : Window
         {
             if (_session is not { IsPresentationReady: true, ActiveMode: { } mode } || mode == _reportedMode) return;
             _reportedMode = mode;
+            ModeLabel.Text = mode == GodotPresentationMode.Gpu ? "GPU presentation" : "CPU readback presentation";
             Console.WriteLine($"2DOG_AVALONIA_MODE={mode}");
         }
         _session.ActiveModeChanged += (_, _) => ReportReadyMode();
@@ -58,12 +68,19 @@ public partial class MainWindow : Window
 
         // Host-created HUD on the Godot side: shows the render target following the control
         // through resizes, and the canvas scale the project's stretch settings derive from
-        // it (display/window/stretch: canvas_items, expand). Anchored top-left like the
-        // scene's own labels, whose style it borrows.
+        // it (display/window/stretch: canvas_items, expand). It borrows the style of the
+        // scene's caption and sits in the bottom-right corner, which the scene leaves free.
         var scene = _session.Engine.Tree.CurrentScene;
-        var hud = new Godot.Label { LabelSettings = scene.GetNode<Godot.Label>("CenterContainer/TargetLabel").LabelSettings };
+        var caption = scene.GetNode<Godot.Label>("CenterContainer/GDExtensionProbe");
+        var hud = new Godot.Label
+        {
+            LabelSettings = caption.LabelSettings,
+            GrowHorizontal = Godot.Control.GrowDirection.Begin,
+            GrowVertical = Godot.Control.GrowDirection.Begin,
+        };
+        hud.AddThemeStyleboxOverride("normal", caption.GetThemeStylebox("normal"));
         scene.AddChild(hud);
-        hud.SetAnchorsAndOffsetsPreset(Godot.Control.LayoutPreset.TopLeft,
+        hud.SetAnchorsAndOffsetsPreset(Godot.Control.LayoutPreset.BottomRight,
             Godot.Control.LayoutPresetMode.KeepSize, margin: 16);
         Vector2I hudSize = default;
         _session.FrameAdvanced += (_, _) =>
@@ -92,11 +109,12 @@ public partial class MainWindow : Window
                 cube.Rotate(whiteSpinAxis, 1.8f * delta);
         };
 
-        PauseButton.IsEnabled = true;
+        PauseButton.IsEnabled = SpeedSlider.IsEnabled = true;
+        SetStatus("Running", "#4ADE80");
         // The UI thread is the pump thread, so engine state is safe to touch from
         // event handlers and timers, including the scene tree via _session.Engine.Tree.
         _fpsTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background,
-            (_, _) => FpsLabel.Text = $"{GodotEngine.GetFramesPerSecond():0} fps ({_session?.ActiveMode})");
+            (_, _) => FpsLabel.Text = $"{GodotEngine.GetFramesPerSecond():0} fps");
         _fpsTimer.Start();
     }
 
@@ -117,10 +135,15 @@ public partial class MainWindow : Window
         if (_session is null) return;
         _session.IsPaused = !_session.IsPaused;
         PauseButton.Content = _session.IsPaused ? "Resume" : "Pause";
+        if (_session.IsPaused)
+            SetStatus("Paused", "#F2B84B");
+        else
+            SetStatus("Running", "#4ADE80");
     }
 
     private void OnSpeedChanged(object? sender, RoutedEventArgs e)
     {
+        SpeedLabel.Text = $"{SpeedSlider.Value:0.00}×";
         if (_session?.IsStarted == true)
             GodotEngine.TimeScale = SpeedSlider.Value;
     }

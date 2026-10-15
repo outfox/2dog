@@ -117,11 +117,13 @@ internal static class UpdateCommand
 
     /// <summary>
     /// The values the block should hold: the tool's, except that a companion (Avalonia, Windows App SDK, ASP.NET
-    /// Core) the project already has at a newer version keeps it - a migrated literal must never go backwards.
+    /// Core) the project already has at a newer version keeps it - a migrated literal must never go backwards. A
+    /// floating tool value ("10.0.*") that already admits the project's version replaces it.
     /// </summary>
     internal static List<(string Name, string Value)> Targets(Dictionary<string, Version> current) =>
         PropsPatcher.ToolValues
-            .Select(v => current.TryGetValue(v.Name, out var have) && Version.TryParse(v.Value, out var tool) && have > tool
+            .Select(v => current.TryGetValue(v.Name, out var have) && ToolVersions.Floor(v.Value) is { } tool && have > tool
+                         && !ToolVersions.Admits(v.Value, have)
                 ? (v.Name, have.ToString())
                 : v)
             .ToList();

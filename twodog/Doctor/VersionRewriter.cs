@@ -36,6 +36,8 @@ internal static class VersionRewriter
             ["2dog.nunit"] = ("TwoDogVersion", false),
             ["2dog.gdunit"] = ("TwoDogVersion", false),
             ["2dog.avalonia"] = ("TwoDogVersion", false),
+            ["2dog.maui"] = ("TwoDogVersion", false),
+            ["Microsoft.Maui.Controls"] = ("TwoDogMauiVersion", false),
             ["2dog.blazor"] = ("TwoDogVersion", false),
             ["2dog.browser-wasm"] = ("TwoDogNativesVersion", true),
             ["2dog.android"] = ("TwoDogNativesVersion", true),

@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net10.0-android</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>showcase.Maui</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <ApplicationTitle>showcase</ApplicationTitle>
+        <ApplicationId>com.companyname.showcase.maui</ApplicationId>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <ApplicationVersion>1</ApplicationVersion>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+        <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+        <ApplicationManifest>Platforms/Windows/app.manifest</ApplicationManifest>
+        <WindowsPackageType>None</WindowsPackageType>
+        <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+        <PublishSelfContained>true</PublishSelfContained>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+        <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' And '$(RuntimeIdentifiers)' == ''">android-arm64</RuntimeIdentifier>
+        <_TwoDogAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidRids>
+        <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
+        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <TwoDogAndroidGameAssembly>showcase</TwoDogAndroidGameAssembly>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.maui" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
+        <ProjectReference Include="../showcase.csproj"/>
+        <MauiIcon Include="Resources/AppIcon/appicon.svg" Color="#202B36"/>
+        <MauiSplashScreen Include="Resources/Splash/splash.svg" Color="#202B36" BaseSize="128,128"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+        <PackageReference Include="2dog.android" Version="[$(NativesVersion)]"/>
+        <PackageReference Include="2dog.android-arm64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]"
+                          Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-arm64;'))"/>
+        <PackageReference Include="2dog.android-x64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]"
+                          Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-x64;'))"/>
+        <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>
+    </ItemGroup>
+    <Import Project="../gdextension/TwoDogProbe.targets" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"/>
+</Project>

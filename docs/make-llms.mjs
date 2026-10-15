@@ -53,7 +53,7 @@ const SECTIONS = [
     'hosts/blazor.md', 'hosts/web.md', 'hosts/webxr.md',
   ]],
   ['Mobile Hosts', [
-    'hosts/android.md',
+    'hosts/android.md', 'hosts/maui.md',
   ]],
   ['Testing Hosts', [
     'hosts/gdunit.md', 'hosts/nunit.md', 'hosts/xunit.md',
@@ -85,7 +85,7 @@ const SECTIONS = [
     'configuration/blazor.md', 'configuration/web.md', 'configuration/webxr.md',
   ]],
   ['Mobile Configuration', [
-    'configuration/android.md',
+    'configuration/android.md', 'configuration/maui.md',
   ]],
   ['Testing Configuration', [
     'configuration/gdunit.md', 'configuration/nunit.md', 'configuration/xunit.md',

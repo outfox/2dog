@@ -12,6 +12,7 @@
         <TwoDogNativesVersion>NATIVES_PKG_VERSION</TwoDogNativesVersion>
         <TwoDogGodotVersion>GODOT_SDK_VERSION</TwoDogGodotVersion>
         <TwoDogAvaloniaVersion>AVALONIA_PKG_VERSION</TwoDogAvaloniaVersion>
+        <TwoDogMauiVersion>MAUI_PKG_VERSION</TwoDogMauiVersion>
         <TwoDogWindowsAppSdkVersion>WINAPPSDK_PKG_VERSION</TwoDogWindowsAppSdkVersion>
         <TwoDogAspNetCoreVersion>ASPNETCORE_PKG_VERSION</TwoDogAspNetCoreVersion>
         <TwoDogPrecision Condition="'$(TwoDogPrecision)' == ''">TWODOG_PRECISION</TwoDogPrecision>

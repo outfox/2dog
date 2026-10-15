@@ -1339,6 +1339,57 @@ jobs:
   # The packed `2dog` tool, installed from the artifacts the way a user gets
   # it: scaffolds into a path with a space, builds and tests the result
   # against the same artifacts, and runs `2dog doctor` on it.
+  maui:
+    name: MAUI Builds
+    needs: [pack]
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
+    runs-on: windows-2025
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+      - name: Install MAUI workloads
+        run: dotnet workload install maui-windows maui-android
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Download generated Godot APIs and editor
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin-single
+          path: godot
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-single
+          path: packages
+      - name: Pack MAUI integration
+        run: dotnet pack twodog.maui -c Release
+      - name: Build Windows showcase
+        run: dotnet build demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0 -c Release
+      - name: Build Android showcase
+        run: dotnet build demos/showcase/showcase.maui -f net10.0-android -r android-x64 -c Debug
+      - name: Upload MAUI package
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages-maui
+          path: packages/2dog.maui.*nupkg
+          if-no-files-found: error
+          retention-days: 7
+
   tool-smoke:
     name: Tool Smoke (${{ matrix.name }})
     needs: [pack]
@@ -1531,7 +1582,7 @@ jobs:
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it. A tested revision bump (see check-natives) takes
     # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test, windows-rendering, desktop-smoke, web-smoke, android-smoke, tool-smoke]
+    needs: [check-natives, test, windows-rendering, desktop-smoke, web-smoke, android-smoke, tool-smoke, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -1543,7 +1594,7 @@ jobs:
       (needs.check-natives.outputs.tested-bump == 'true' ||
       (needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
       needs.desktop-smoke.result == 'success' && needs.android-smoke.result == 'success')) &&
-      needs.web-smoke.result == 'success' && needs.tool-smoke.result == 'success')
+      needs.web-smoke.result == 'success' && needs.tool-smoke.result == 'success' && needs.maui.result == 'success')
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing
@@ -1564,13 +1615,19 @@ jobs:
       - name: Include precision-specific double packages
         run: cp packages-double/2dog.*.double.*nupkg packages/
 
+      - name: Download MAUI package
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-maui
+          path: packages
+
       # Defense in depth: the pack job already verified the tag against the props
       # file, but refuse to publish unless the artifact really contains packages
       # at the tag's version.
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.repl" "2dog.gdunit"; do
+          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.repl" "2dog.gdunit" "2dog.maui"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

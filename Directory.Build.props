@@ -13,12 +13,15 @@
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
              AVALONIA_PKG_VERSION token, substituted on pack and scaffold. -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>
+        <!-- MAUI controls shared by the library and generated hosts. -->
+        <MauiVersion>10.0.110</MauiVersion>
         <!-- Windows App SDK for the WinUI 3 host demo. (The template consumes it via its
              WINAPPSDK_PKG_VERSION token, substituted on pack and scaffold.) -->
         <WindowsAppSdkVersion>2.4.0</WindowsAppSdkVersion>
         <!-- ASP.NET Core (Blazor) packages for 2dog.blazor and the Blazor host. (The template consumes it via its
-             ASPNETCORE_PKG_VERSION token, substituted on pack and scaffold.) -->
-        <AspNetCoreVersion>10.0.11</AspNetCoreVersion>
+             ASPNETCORE_PKG_VERSION token, substituted on pack and scaffold.) Floats on the patch level, so every
+             restore takes the newest 10.0 servicing release and its security fixes. -->
+        <AspNetCoreVersion>10.0.*</AspNetCoreVersion>
         <!-- Must match the emscripten of the .NET browser-wasm runtime pack (libgodot.a links into dotnet.native.wasm).
              Source of truth: microsoft.net.workload.emscripten.current manifest of the net10.0 SDK band. -->
         <EmscriptenVersion>3.1.56</EmscriptenVersion>

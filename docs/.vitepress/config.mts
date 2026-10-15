@@ -138,7 +138,8 @@ export default defineConfig({
           {
             text: 'Mobile',
             items: [
-              { text: gd('mobile_phone') + 'Android', link: '/hosts/android' }
+              { text: gd('mobile_phone') + 'Android', link: '/hosts/android' },
+              { text: gd('mobile_phone') + 'MAUI', link: '/hosts/maui' }
             ]
           },
           {
@@ -306,7 +307,8 @@ export default defineConfig({
               {
                 text: 'Mobile',
                 items: [
-                  { text: gd('mobile_phone') + 'Android', link: '/configuration/android' }
+                  { text: gd('mobile_phone') + 'Android', link: '/configuration/android' },
+                  { text: gd('mobile_phone') + 'MAUI', link: '/configuration/maui' }
                 ]
               }
             ]

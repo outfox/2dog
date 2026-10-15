@@ -33,7 +33,7 @@ folder names, the plan, and a confirmation. Naming any host option (or passing
 `--install-wasm-tools` or `--install-android-workload` for explicit installation. The `dotnet new` template produces the
 same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
-Browser and Android hosts are excluded from ordinary solution builds. Install their
+Browser, Android, and MAUI hosts are excluded from ordinary solution builds. Install their
 workloads when building or publishing those hosts. Package updates and desktop/test
 builds do not require them. Doctor only requires them for its selected `--build`
 target, or installs them when explicitly requested with an install flag.
@@ -69,6 +69,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
   MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)
   MyGame.blazor/ (.gdignore) <- Blazor Web App host (opt-in: --blazor; server + Client/ WebAssembly page)
+  MyGame.maui/ (.gdignore)    <- MAUI host (opt-in: --maui; Windows and Android)
   MyGame.android/ (.gdignore) <- Android host (opt-in: --android; dotnet publish makes an APK)
 ```
 
@@ -98,7 +99,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, and android are opt-in and never in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, android, and maui are opt-in and never in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |
@@ -130,3 +131,9 @@ reference the engine instead:
 ```bash
 dotnet add package 2dog.engine
 ```
+
+MAUI: `dnx 2dog add --maui` creates a Windows/Android host using `2dog.maui`.
+Install `maui-windows` and `maui-android` with `dotnet workload install`.
+Windows prefers GPU sharing and falls back to CPU readback; Android renders
+directly to Godot's native surface. MAUI controls can overlap the game.
+`--no-maui` omits this opt-in host. See https://2dog.dev/hosts/maui.

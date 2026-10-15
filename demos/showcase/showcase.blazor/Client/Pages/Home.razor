@@ -1,16 +1,23 @@
 @page "/"
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
-<PageTitle>2dog showcase (Blazor)</PageTitle>
+<PageTitle>2dog showcase — Blazor host</PageTitle>
 
 <div class="layout">
     <aside class="panel">
-        <h1>2dog &middot; Blazor</h1>
-        <p class="status">@_status</p>
+        <header class="panel-header">
+            <div>
+                <h1>2dog showcase</h1>
+                <p class="subtitle">Blazor UI beside Godot</p>
+            </div>
+            <p class="status" data-state="@_state">@_status</p>
+        </header>
 
         <dl>
-            <dt>Engine</dt>
-            <dd>@_engineVersion</dd>
+            <dt>Godot</dt>
+            <dd>@_godotVersion</dd>
+            <dt>2dog</dt>
+            <dd>@_twodogVersion</dd>
             <dt>Scene</dt>
             <dd>@_sceneName</dd>
             <dt>FPS</dt>
@@ -19,16 +26,20 @@
             <dd>@_frames</dd>
         </dl>
 
-        <label>
-            White cube spin (driven by this page): @_spinSpeed.ToString("0.0") rad/s
+        <label class="field">
+            <span class="field-label">White cube spin <output>@_spinSpeed.ToString("0.0") rad/s</output></span>
             <input type="range" min="0" max="10" step="0.1" value="@_spinSpeed"
                    @oninput="OnSpinSpeed" disabled="@(!IsRunning)"/>
+            <span class="hint">The white cubes are driven by this page.</span>
         </label>
 
-        <button @onclick="TogglePause" disabled="@(!IsRunning)">@(_paused ? "Resume" : "Pause")</button>
-        <button @onclick="() => _view!.StartAsync()" disabled="@(_view is null || IsRunning)">Start engine</button>
-        <button @onclick="() => _view?.Quit()" disabled="@(!IsRunning)">Quit engine</button>
-        <button @onclick="RestartEngine" disabled="@(!IsRunning)">Restart engine</button>
+        <button class="primary" @onclick="TogglePause" disabled="@(!IsRunning)">@(_paused ? "Resume" : "Pause")</button>
+
+        <div class="actions">
+            <button @onclick="() => _view!.StartAsync()" disabled="@(_view is null || IsRunning)">Start engine</button>
+            <button @onclick="() => _view?.Quit()" disabled="@(!IsRunning)">Quit engine</button>
+            <button @onclick="RestartEngine" disabled="@(!IsRunning)">Restart engine</button>
+        </div>
     </aside>
 
     <main class="viewport">

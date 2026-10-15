@@ -35,7 +35,7 @@ internal static class VersionChecks
                 $"versions come from your own properties ({string.Join(", ", foreign.Take(3))}) - not checked");
 
         var malformed = PropsPatcher.ToolValues.Select(v => v.Name)
-            .Where(n => p.PropsValues.TryGetValue(n, out var v) && !v.Contains("$(") && !Version.TryParse(v.Trim('[', ']').Split('-')[0], out _))
+            .Where(n => p.PropsValues.TryGetValue(n, out var v) && !v.Contains("$(") && ToolVersions.Floor(v.Trim('[', ']').Split('-')[0]) == null)
             .Select(n => $"{n}='{p.PropsValues[n]}'").ToList();
         if (malformed.Count > 0)
             yield return new Finding("ver.props-invalid", c, Severity.Fail,

@@ -12,6 +12,10 @@ a `.gdignore`):
 - `signals/` - the signal table in the top-left corner: four sources tick once per second (a C# `[Signal]`, a GDScript
   `signal`, an engine `Timer` and the GDExtension's `TwoDogTicker`), and each row counts what a C# (`SignalCounter.cs`)
   and a GDScript (`signal_counter.gd`) listener received. Both columns should advance in lockstep on every host
+- `main.tscn` - three cube rows with a color-keyed legend: blue cubes run a C# script, red ones GDScript, and every
+  host drives the white ones itself. `camera_fit.gd` keeps the 3D rows aligned with the 2D legend at any window
+  shape. Host controls belong in the top-right corner (overlays) or a toolbar; GUI hosts share one dark style with
+  the `#579EFF` accent, a status chip, a game-speed control, Pause/Resume and an fps readout
 - `showcase.2dog/` - desktop host: `dotnet run --project demos/showcase/showcase.2dog`
 - `showcase.double/` - double-precision desktop host: `dotnet run --project demos/showcase/showcase.double`.
   Explicitly references `2dog.engine.double` and builds the shared game against double bindings. Requires the
@@ -31,6 +35,11 @@ a `.gdignore`):
 - `showcase.winforms/` - Windows-only GUI embedding demo (`--wid`): `dotnet run --project demos/showcase/showcase.winforms`
 - `showcase.winui/` - Windows-only WinUI 3 embedding demo (`--wid`; builds only on Windows): `dotnet run --project demos/showcase/showcase.winui`
 - `showcase.avalonia/` - cross-platform Avalonia embedding demo (controls composite over the game): `dotnet run --project demos/showcase/showcase.avalonia`
+- `showcase.maui/` - Windows and Android MAUI embedding demo with pause, time scale, and presentation mode in an
+  overlay. Install `maui-windows` and `maui-android`, then run
+  `dotnet run --project demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0`, or publish
+  `dotnet publish demos/showcase/showcase.maui -f net10.0-android -r android-arm64`.
+  Pack `2dog.maui` first with `uv run poe build-maui`. Android also needs its native packages and the NDK as below.
 - `showcase.android/` - experimental Android host: `dotnet publish demos/showcase/showcase.android` (arm64; add
   `-r android-x64` for the emulator) builds the game, exports its pck and packages a signed APK with the GDExtension
   probe (built with the Android NDK). Godot's Activity owns the loop, so the host drives the white cubes and runs the

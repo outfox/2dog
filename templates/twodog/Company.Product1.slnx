@@ -26,6 +26,12 @@
     <Build Project="false" />
   </Project>
 #endif
+#if (maui)
+  <Project Path="TPLRAWNAME.maui/TPLRAWNAME.maui.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+#endif
 #if (avalonia)
   <Project Path="TPLRAWNAME.avalonia/TPLRAWNAME.avalonia.csproj" />
 #endif

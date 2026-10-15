@@ -31,7 +31,7 @@ internal static class PresetChecks
         if (p.HasWebLikeHost)
             wanted.Add((ExportPresetOps.WebPresetName, "preset.web", "web publish exports the pck through it", Severity.Fail));
         // A host that ships a pre-exported pck (TwoDogAndroidPack) never exports; an unevaluable name is skipped.
-        foreach (var name in p.Hosts.Where(h => h.Kind == HostKind.Android && !h.HasProperty("TwoDogAndroidPack"))
+        foreach (var name in p.Hosts.Where(h => (h.Kind is HostKind.Android or HostKind.Maui) && !h.HasProperty("TwoDogAndroidPack"))
                      .Select(h => h.Property("TwoDogAndroidExportPreset") ?? ExportPresetOps.AndroidPresetName)
                      .Where(name => !name.Contains("$(")).Distinct())
             wanted.Add((name, "preset.android", "Android builds export the pck through it", Severity.Fail));

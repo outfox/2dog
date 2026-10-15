@@ -1,0 +1,7 @@
+<Project>
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'android'">
+        <AndroidJavaSource Include="$(MSBuildThisFileDirectory)../android/TwoDogMauiFragment.java" Bind="false"/>
+        <!-- JNI creates this fragment by name; preserve it through Java shrinking. -->
+        <ProguardConfiguration Include="$(MSBuildThisFileDirectory)../android/proguard.cfg"/>
+    </ItemGroup>
+</Project>

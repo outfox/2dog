@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net10.0-android</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'android'">24</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+        <PackageId>2dog.maui</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
+        <Description>Embed Godot in .NET MAUI on Windows and Android with GPU presentation and MAUI overlays.</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageTags>godot;2dog;maui;android;winui;game-engine</PackageTags>
+    </PropertyGroup>
+    <ItemGroup>
+        <AndroidJavaSource Remove="Platforms/Android/**/*.java"/>
+        <ProjectReference Include="../twodog.engine/twodog.engine.csproj" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+        <None Include="buildTransitive/2dog.maui.targets" Pack="true" PackagePath="buildTransitive/"/>
+        <None Include="Platforms/Android/TwoDogMauiFragment.java" Pack="true" PackagePath="android/"/>
+        <None Include="Platforms/Android/proguard.cfg" Pack="true" PackagePath="android/"/>
+    </ItemGroup>
+    <!-- Share the low-level DXGI ABI with Avalonia; no Avalonia dependency in this package. -->
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'windows'">
+        <Compile Include="../twodog.avalonia/Presentation/D3D11Interop.cs" Link="Platforms/Windows/D3D11Interop.cs"/>
+        <Compile Include="../twodog.avalonia/Presentation/DefaultAdapter.cs" Link="Platforms/Windows/DefaultAdapter.cs"/>
+    </ItemGroup>
+</Project>

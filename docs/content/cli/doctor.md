@@ -82,6 +82,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `env.dotnet-sdk` | a .NET 10 SDK is installed |
 | `env.global-json` | the root global.json pin is satisfied by an installed SDK |
 | `env.wasm-tools` | wasm-tools is available for the selected browser build; otherwise optional |
+| `env.maui-workload` | MAUI workloads are available for selected MAUI builds |
 | `env.android-workload` | android is available for the selected Android build; otherwise optional |
 | `env.android-sdk` | Android SDK paths and components are available for the selected Android build; otherwise optional |
 | `env.host-platform` | this OS and architecture have 2dog native packages |

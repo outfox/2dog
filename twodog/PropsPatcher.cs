@@ -18,6 +18,7 @@ internal static class PropsPatcher
         ("TwoDogNativesVersion", ToolVersions.NativesVersion),
         ("TwoDogGodotVersion", ToolVersions.GodotSdkVersion),
         ("TwoDogAvaloniaVersion", ToolVersions.AvaloniaVersion),
+        ("TwoDogMauiVersion", ToolVersions.MauiVersion),
         ("TwoDogWindowsAppSdkVersion", ToolVersions.WindowsAppSdkVersion),
         ("TwoDogAspNetCoreVersion", ToolVersions.AspNetCoreVersion),
     ];

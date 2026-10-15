@@ -16,6 +16,7 @@ importer, and exporter skip them:
 - **NUnit test project** (`<Name>.nunit/`) - NUnit tests with 2dog.nunit (opt-in: `--nunit true`)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
+- **MAUI host** (`<Name>.maui/`) - Embedded Godot view for Windows and Android with MAUI overlays (opt-in via `--maui true`; requires MAUI workloads)
 - **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
 - **Avalonia host** (`<Name>.avalonia/`) - Cross-platform GUI embedding the game (opt-in via `--avalonia true`)
 - **Android host** (`<Name>.android/`) - Experimental APK host (opt-in via `--android true`; building requires the Android workload, SDK and JDK 17)

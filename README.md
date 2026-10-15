@@ -34,6 +34,7 @@ The tool adds hosts you want as small 'sidecar' projects, each with its own .NET
 | [WinForms](https://2dog.dev/hosts/winforms) | Embed Godot in a Windows Forms application. | `--winforms` |
 | [WinUI 3](https://2dog.dev/hosts/winui) | Embed Godot in a Windows App SDK application. | `--winui` |
 | [Android](https://2dog.dev/hosts/android) · experimental | Build an APK with `dotnet publish`. | `--android` |
+| [MAUI](https://2dog.dev/hosts/maui) | Embed Godot in a Windows or Android MAUI page, with controls over the game. | `--maui` |
 | [xUnit](https://2dog.dev/hosts/xunit) | Test your game with Godot fixtures and xUnit collections. | `--xunit` |
 | [NUnit](https://2dog.dev/hosts/nunit) | Test your game with Godot fixtures and NUnit's familiar test runner. | `--nunit` |
 | [C# REPL](https://2dog.dev/hosts/repl) | Explore and change your running game from an interactive prompt. | `--repl` |

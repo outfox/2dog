@@ -14,6 +14,7 @@ internal static class EnvironmentChecks
         new("env.global-json", Category.Environment, "the root global.json pin is satisfied by an installed SDK"),
         new("env.wasm-tools", Category.Environment, "the wasm-tools workload is available for selected browser builds"),
         new("env.android-workload", Category.Environment, "the android workload is available for selected Android builds"),
+        new("env.maui-workload", Category.Environment, "MAUI workloads are available for selected MAUI builds"),
         new("env.android-sdk", Category.Environment, "Android SDK paths and components are available for selected Android builds"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot4", Category.Environment, "GODOT4 points at an existing Godot executable for IDE debugging"),
@@ -60,10 +61,15 @@ internal static class EnvironmentChecks
                      ctx.Options.InstallAndroidWorkload))
             yield return finding;
 
-        if (project.Hosts.Any(h => h.Kind == HostKind.Android))
+        foreach (var workload in Workload.For([HostKind.Maui]))
+        foreach (var finding in WorkloadFindings(ctx, workload, "env.maui-workload",
+                     project.Hosts.Where(h => h.Kind == HostKind.Maui), "MAUI hosts need platform MAUI workloads", false))
+            yield return finding;
+
+        if (project.Hosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui))
         {
             var sdk = AndroidSdk.Inspect(ctx.Env);
-            var required = ctx.BuildHosts.Any(h => h.Kind == HostKind.Android);
+            var required = ctx.BuildHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui);
             foreach (var warning in sdk.Warnings)
                 yield return new Finding("env.android-sdk", c, required ? sdk.Directory is null ? Severity.Fail : Severity.Warn : Severity.Info, warning,
                     Remedy: $"Android SDK setup: {AndroidSdk.SetupUrl}");

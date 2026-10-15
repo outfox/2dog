@@ -79,7 +79,20 @@ public class ErrorHandlingTests
                      ToolVersions.TwoDogVersion, ToolVersions.NativesVersion, ToolVersions.GodotSdkVersion,
                      ToolVersions.AvaloniaVersion, ToolVersions.WindowsAppSdkVersion, ToolVersions.AspNetCoreVersion,
                  })
-            Assert.True(Version.TryParse(value, out _), $"'{value}' is not a version");
+            Assert.True(ToolVersions.Floor(value) != null, $"'{value}' is not a version");
+        Assert.EndsWith(".*", ToolVersions.AspNetCoreVersion);
+    }
+
+    [Theory]
+    [InlineData("10.0.*", "10.0.0", true)]
+    [InlineData("10.0.*", "10.0.13", true)]
+    [InlineData("10.0.*", "10.1.0", false)]
+    [InlineData("10.0.*", "11.0.0", false)]
+    [InlineData("10.0.1", "10.0.1", false)]
+    public void FloatingVersions_AdmitTheirPatchLine(string floating, string version, bool admitted)
+    {
+        Assert.Equal(admitted, ToolVersions.Admits(floating, Version.Parse(version)));
+        Assert.Equal(new Version(10, 0, floating.EndsWith('*') ? 0 : 1), ToolVersions.Floor(floating));
     }
 
     // A cancelled subprocess (Ctrl+C during `doctor --build`) ends the run with the cancelled code, not with 3 or 2.

@@ -1,0 +1,7 @@
+{
+  "$comment": "Use the .NET 10 SDK whose MAUI workloads build this host.",
+  "sdk": {
+    "version": "10.0.100",
+    "rollForward": "latestFeature"
+  }
+}

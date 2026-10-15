@@ -10,7 +10,9 @@ public partial class Home : ComponentBase
 {
     private GodotView? _view;
     private string _status = "Starting Godot...";
-    private string _engineVersion = "-";
+    private string _state = "starting";
+    private string _godotVersion = "-";
+    private string _twodogVersion = "-";
     private string _sceneName = "-";
     private string _fps = "-";
     private long _frames;
@@ -26,7 +28,11 @@ public partial class Home : ComponentBase
     {
         var tree = engine.Tree;
         _status = "Running";
-        _engineVersion = $"Godot {Godot.Engine.GetVersionInfo()["string"]} / 2dog {Engine.Version}";
+        _state = "running";
+        _godotVersion = Godot.Engine.GetVersionInfo()["string"].AsString();
+        _twodogVersion = Engine.Version.ToString();
+        // Godot titles the page after application/config/name once it starts.
+        DisplayServer.WindowSetTitle("2dog showcase — Blazor host");
         _sceneName = tree.CurrentScene?.Name ?? "-";
         // CI's restart probe reads this to tell the second lifetime's smoke pass from the first.
         JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-lifetime', '{_view?.Lifetime ?? 0}')");
@@ -73,6 +79,7 @@ public partial class Home : ComponentBase
     private async Task OnExited()
     {
         _status = "Godot quit.";
+        _state = "stopped";
         _whiteCubes = [];
         _paused = false;
         if (!_restartOnExit || _view is null) return;
@@ -87,7 +94,11 @@ public partial class Home : ComponentBase
         _view.Quit();
     }
 
-    private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";
+    private void OnFailed(Exception exception)
+    {
+        _status = $"Failed: {exception.Message}";
+        _state = "failed";
+    }
 
     private void OnSpinSpeed(ChangeEventArgs e)
     {
@@ -101,5 +112,6 @@ public partial class Home : ComponentBase
         if (_view?.Tree is not { } tree) return;
         _paused = !_paused;
         tree.Paused = _paused;
+        (_status, _state) = _paused ? ("Paused", "paused") : ("Running", "running");
     }
 }

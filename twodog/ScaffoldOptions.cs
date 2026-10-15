@@ -16,7 +16,17 @@ internal static class ToolVersions
     public static string GodotSdkVersion => Metadata("GodotSdkVersion");
     public static string AvaloniaVersion => Metadata("AvaloniaVersion");
     public static string WindowsAppSdkVersion => Metadata("WindowsAppSdkVersion");
+    /// <summary>Floats on the patch level ("10.0.*"): restores take the newest servicing release.</summary>
     public static string AspNetCoreVersion => Metadata("AspNetCoreVersion");
+    public static string MauiVersion => Metadata("MauiVersion");
+
+    /// <summary>The lowest version a literal or floating NuGet version ("10.0.*") admits; null when unreadable.</summary>
+    public static Version? Floor(string text) =>
+        Version.TryParse(text.EndsWith(".*", StringComparison.Ordinal) ? text[..^1] + "0" : text, out var v) ? v : null;
+
+    /// <summary>Whether a floating NuGet version ("10.0.*") already admits <paramref name="version"/>.</summary>
+    public static bool Admits(string text, Version version) =>
+        text.EndsWith(".*", StringComparison.Ordinal) && $"{version}.".StartsWith(text[..^1], StringComparison.Ordinal);
 }
 
 /// <summary>Everything a scaffold run needs, once flags and prompts agree.</summary>
@@ -52,7 +62,7 @@ internal sealed class ScaffoldOptions
 
     /// <summary>Whether the workload's own --install-... flag asked for it.</summary>
     public bool InstallRequested(Workload workload) =>
-        workload == Workload.Android ? InstallAndroidWorkload : InstallWasmTools;
+        workload == Workload.Android ? InstallAndroidWorkload : workload == Workload.WasmTools && InstallWasmTools;
 }
 
 /// <summary>The project a run operates on, resolved before anything is planned.</summary>

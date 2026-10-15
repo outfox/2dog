@@ -40,6 +40,8 @@ internal static class Program
         // Content is resolved from the source project or published .pck.
         using var engine = new Engine("showcase", args: args);
         engine.Start();
+        // The window title defaults to application/config/name, which the API smoke pins to "showcase".
+        DisplayServer.WindowSetTitle("2dog showcase — desktop host");
         GD.Print("Hello from GodotSharp.");
         GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 
