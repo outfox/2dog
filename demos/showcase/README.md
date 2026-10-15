@@ -12,6 +12,10 @@ a `.gdignore`):
 - `signals/` - the signal table in the top-left corner: four sources tick once per second (a C# `[Signal]`, a GDScript
   `signal`, an engine `Timer` and the GDExtension's `TwoDogTicker`), and each row counts what a C# (`SignalCounter.cs`)
   and a GDScript (`signal_counter.gd`) listener received. Both columns should advance in lockstep on every host
+- `main.tscn` - three cube rows with a color-keyed legend: blue cubes run a C# script, red ones GDScript, and every
+  host drives the white ones itself. `camera_fit.gd` keeps the 3D rows aligned with the 2D legend at any window
+  shape. Host controls belong in the top-right corner (overlays) or a toolbar; GUI hosts share one dark style with
+  the `#579EFF` accent, a status chip, a game-speed control, Pause/Resume and an fps readout
 - `showcase.2dog/` - desktop host: `dotnet run --project demos/showcase/showcase.2dog`
 - `showcase.double/` - double-precision desktop host: `dotnet run --project demos/showcase/showcase.double`.
   Explicitly references `2dog.engine.double` and builds the shared game against double bindings. Requires the

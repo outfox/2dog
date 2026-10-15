@@ -1,5 +1,19 @@
 [gd_scene format=3]
 
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 44
+
+[sub_resource type="LabelSettings" id="LabelSettings_hint"]
+font_size = 18
+font_color = Color(0.6, 0.65, 0.72, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_accent"]
+bg_color = Color(0.341, 0.62, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -16,7 +30,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="CenterContainer"]
+[node name="Content" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_constants/separation = 14
+
+[node name="Label" type="Label" parent="CenterContainer/Content"]
+layout_mode = 2
 text = "Hello from 2dog!"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="Accent" type="Panel" parent="CenterContainer/Content"]
+custom_minimum_size = Vector2(56, 4)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBox_accent")
+
+[node name="Hint" type="Label" parent="CenterContainer/Content"]
+layout_mode = 2
+text = "Godot runs inside your .NET host. Edit main.tscn to make it yours."
+label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 1

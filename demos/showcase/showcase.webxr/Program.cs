@@ -20,6 +20,8 @@ internal static class Program
         try
         {
             engine.Start();
+            // Godot titles the page after application/config/name once it starts.
+            DisplayServer.WindowSetTitle("2dog showcase — WebXR host");
             GD.Print("Hello from GodotSharp (browser).");
             GD.Print("Scene Root: ", engine.Tree.CurrentScene.Name);
 

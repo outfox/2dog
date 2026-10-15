@@ -24,3 +24,7 @@ project/assembly_name="TPLRAWNAME"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.118, 0.149, 0.196, 1)

@@ -10,6 +10,14 @@
 [ext_resource type="Script" uid="uid://cs5cooybrprck" path="res://signals/gdscript_ticker.gd" id="9_gdscript_ticker"]
 [ext_resource type="Script" uid="uid://dov5je877svgy" path="res://signals/SignalCounter.cs" id="10_counter_cs"]
 [ext_resource type="Script" uid="uid://d1hcx2etqrtl6" path="res://signals/signal_counter.gd" id="11_counter_gd"]
+[ext_resource type="Script" path="res://camera_fit.gd" id="12_camera_fit"]
+
+[sub_resource type="Environment" id="Environment_backdrop"]
+background_mode = 1
+background_color = Color(0.118, 0.149, 0.196, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.62, 0.7, 0.85, 1)
+ambient_light_energy = 0.55
 
 [sub_resource type="BoxMesh" id="BoxMesh_cube"]
 
@@ -22,24 +30,81 @@ albedo_color = Color(1, 0.15, 0.2, 1)
 [sub_resource type="StandardMaterial3D" id="Mat_white"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1bvp3"]
-font_size = 20
-outline_size = 6
-outline_color = Color(0, 0, 0, 1)
+font_size = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_legend_blue"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.07, 0.094, 0.129, 0.8)
+border_width_right = 4
+border_color = Color(0.25, 0.45, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_legend_red"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.07, 0.094, 0.129, 0.8)
+border_width_right = 4
+border_color = Color(1, 0.25, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_legend_white"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.07, 0.094, 0.129, 0.8)
+border_width_right = 4
+border_color = Color(0.92, 0.94, 0.97, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_caption"]
+font_size = 15
+font_color = Color(0.82, 0.86, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_caption"]
+content_margin_left = 14.0
+content_margin_top = 6.0
+content_margin_right = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.07, 0.094, 0.129, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_signals"]
-content_margin_left = 12.0
-content_margin_top = 8.0
-content_margin_right = 12.0
-content_margin_bottom = 8.0
-bg_color = Color(0, 0, 0, 0.45)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.07, 0.094, 0.129, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.12)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [sub_resource type="LabelSettings" id="LabelSettings_signal_header"]
-font_size = 14
-font_color = Color(1, 1, 1, 0.7)
+font_size = 13
+font_color = Color(0.6, 0.65, 0.72, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_signal"]
 font_size = 16
@@ -56,6 +121,7 @@ grow_vertical = 2
 
 [node name="Camera3D" type="Camera3D" parent="Flair" unique_id=96111472]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+script = ExtResource("12_camera_fit")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="Flair" unique_id=1418263502]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 7)
@@ -65,8 +131,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 7)
 [node name="Sun" type="DirectionalLight3D" parent="Flair" unique_id=930966955]
 transform = Transform3D(0.8660248, -0.3535548, 0.3535535, 0, 0.7071055, 0.7071081, -0.5000011, -0.6123731, 0.6123709, 0, 0, 0)
 
+[node name="Backdrop" type="WorldEnvironment" parent="Flair" unique_id=1460893772]
+environment = SubResource("Environment_backdrop")
+
 [node name="BlueCubes" type="Node3D" parent="Flair" unique_id=1755341070]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 1.6, 0)
 
 [node name="BlueCube1" type="MeshInstance3D" parent="Flair/BlueCubes" unique_id=378968515]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
@@ -90,6 +159,7 @@ SpinAxis = Vector3(0, 1, 1)
 SpinSpeed = 1.0
 
 [node name="RedCubes" type="Node3D" parent="Flair" unique_id=95044868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0)
 
 [node name="RedCube1" type="MeshInstance3D" parent="Flair/RedCubes" unique_id=731609486]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
@@ -113,7 +183,7 @@ spin_axis = Vector3(0, 1, 1)
 spin_speed = 1.0
 
 [node name="WhiteCubes" type="Node3D" parent="Flair" unique_id=2137620085]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, -1.6, 0)
 
 [node name="WhiteCube1" type="MeshInstance3D" parent="Flair/WhiteCubes" unique_id=1653823542]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
@@ -144,23 +214,34 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TargetLabel" type="Label" parent="CenterContainer" unique_id=1589393793]
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 2
-text = "These cubes are controlled by Godot (GDScript)"
+offset_transform_enabled = true
+offset_transform_position = Vector2(-310, 0)
+theme_override_styles/normal = SubResource("StyleBox_legend_red")
+text = "GDScript in Godot"
 label_settings = SubResource("LabelSettings_1bvp3")
+horizontal_alignment = 2
 
 [node name="TargetLabel2" type="Label" parent="CenterContainer" unique_id=1325166068]
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 2
 offset_transform_enabled = true
-offset_transform_position = Vector2(0, -100)
-text = "These cubes are controlled by Godot (C#)"
+offset_transform_position = Vector2(-310, -97)
+theme_override_styles/normal = SubResource("StyleBox_legend_blue")
+text = "C# script in Godot"
 label_settings = SubResource("LabelSettings_1bvp3")
+horizontal_alignment = 2
 
 [node name="TargetLabel3" type="Label" parent="CenterContainer" unique_id=327575077]
+custom_minimum_size = Vector2(232, 0)
 layout_mode = 2
 offset_transform_enabled = true
-offset_transform_position = Vector2(0, 100)
-text = "These cubes are controlled by 2dog (C#)"
+offset_transform_position = Vector2(-310, 97)
+theme_override_styles/normal = SubResource("StyleBox_legend_white")
+text = "C# in the 2dog host"
 label_settings = SubResource("LabelSettings_1bvp3")
+horizontal_alignment = 2
 
 [node name="GDScriptLinkerProbe" type="Node" parent="CenterContainer" unique_id=1497267197]
 script = ExtResource("2_gdscript_probe")
@@ -168,9 +249,10 @@ script = ExtResource("2_gdscript_probe")
 [node name="GDExtensionProbe" type="Label" parent="CenterContainer" unique_id=1739420521]
 layout_mode = 2
 offset_transform_enabled = true
-offset_transform_position = Vector2(0, 200)
+offset_transform_position = Vector2(40, 205)
+theme_override_styles/normal = SubResource("StyleBox_caption")
 text = "GDExtension probe pending"
-label_settings = SubResource("LabelSettings_1bvp3")
+label_settings = SubResource("LabelSettings_caption")
 script = ExtResource("6_gdextension_probe")
 
 [node name="Signals" type="PanelContainer" parent="." unique_id=1766298625]

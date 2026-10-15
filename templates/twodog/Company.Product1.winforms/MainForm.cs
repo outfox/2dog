@@ -4,6 +4,8 @@ using Godot;
 using Button = System.Windows.Forms.Button;
 using Color = System.Drawing.Color;
 using Engine = twodog.Engine;
+using Font = System.Drawing.Font;
+using Label = System.Windows.Forms.Label;
 using Panel = System.Windows.Forms.Panel;
 
 // Embeds the game inside a WinForms window via Godot's `--wid` embedding (the same mechanism the
@@ -11,9 +13,15 @@ using Panel = System.Windows.Forms.Panel;
 // owned by this form, and the host drives its geometry and pumps frames from the UI thread.
 internal sealed class MainForm : Form
 {
+    private static readonly Color Backdrop = Color.FromArgb(0x1E, 0x26, 0x33);
+    private static readonly Color Surface = Color.FromArgb(0x12, 0x18, 0x21);
+    private static readonly Color Accent = Color.FromArgb(0x57, 0x9E, 0xFF);
+    private static readonly Color Muted = Color.FromArgb(0x9A, 0xA7, 0xB8);
+
     private readonly string[] _extraArgs;
     private readonly Panel _gamePanel;
     private readonly Button _pauseButton;
+    private readonly Label _status;
 
     private Engine? _engine;
     private GodotInstance? _instance;
@@ -24,22 +32,74 @@ internal sealed class MainForm : Form
     {
         _extraArgs = extraArgs;
 
+        // Sizes below are 96-DPI logical units; the form scales them to the system DPI.
+        SuspendLayout();
+        AutoScaleDimensions = new SizeF(96F, 96F);
+        AutoScaleMode = AutoScaleMode.Dpi;
         Text = "TPLRAWNAME — WinForms host";
-        ClientSize = new Size(1152, 688);
+        ClientSize = new Size(1152, 704);
         MinimumSize = new Size(480, 320);
+        BackColor = Backdrop;
+        ForeColor = Color.White;
 
-        _pauseButton = new Button { Text = "Pause", AutoSize = true, Enabled = false };
+        _pauseButton = new Button
+        {
+            Text = "Pause", Size = new Size(96, 32), Margin = new Padding(12, 0, 0, 0), Anchor = AnchorStyles.Left,
+            FlatStyle = FlatStyle.Flat, ForeColor = Color.FromArgb(0x0B, 0x12, 0x20), Cursor = Cursors.Hand,
+            Font = new Font(Font, FontStyle.Bold),
+        };
+        _pauseButton.FlatAppearance.BorderSize = 0;
+        _pauseButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(0x74, 0xB0, 0xFF);
+        _pauseButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(0x3F, 0x86, 0xE8);
         _pauseButton.Click += OnPauseClicked;
 
-        var buttonStrip = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(4) };
-        buttonStrip.Controls.Add(_pauseButton);
+        var title = ToolbarLabel("TPLRAWNAME", Color.White);
+        title.Font = new Font(Font.FontFamily, 11F, FontStyle.Bold);
+        _status = ToolbarLabel("", Muted);
 
-        // The panel only defines the embed rectangle; Godot's popup always draws above the form's
-        // client area, so form controls must not overlap it.
-        _gamePanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black };
+        // The toolbar sits above the game: Godot's popup always draws above the form's client area,
+        // so form controls must not overlap the embed rectangle.
+        var toolbar = new TableLayoutPanel
+        {
+            Dock = DockStyle.Top, Height = 56, BackColor = Surface, Padding = new Padding(12, 0, 16, 0),
+            ColumnCount = 5, RowCount = 1,
+        };
+        toolbar.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        for (var column = 0; column < 5; column++)
+            toolbar.ColumnStyles.Add(column == 3 ? new ColumnStyle(SizeType.Percent, 100) : new ColumnStyle());
+        toolbar.Controls.Add(title, 0, 0);
+        toolbar.Controls.Add(ToolbarLabel("WinForms host", Muted), 1, 0);
+        toolbar.Controls.Add(_status, 2, 0);
+        toolbar.Controls.Add(_pauseButton, 4, 0);
+
+        _gamePanel = new Panel { Dock = DockStyle.Fill, BackColor = Backdrop };
 
         Controls.Add(_gamePanel);
-        Controls.Add(buttonStrip);
+        Controls.Add(toolbar);
+        SetStatus("● Starting", Color.FromArgb(0xF2, 0xB8, 0x4B), running: false);
+        ResumeLayout(false);
+        PerformLayout();
+    }
+
+    private static Label ToolbarLabel(string text, Color color) => new()
+    {
+        Text = text, ForeColor = color, AutoSize = true, Anchor = AnchorStyles.Left, Margin = new Padding(4, 0, 8, 0),
+    };
+
+    private void SetStatus(string text, Color color, bool running)
+    {
+        _status.Text = text;
+        _status.ForeColor = color;
+        _pauseButton.Enabled = running;
+        _pauseButton.BackColor = running ? Accent : Color.FromArgb(0x2A, 0x36, 0x47);
+    }
+
+    // Windows draws a light title bar for Win32 windows unless asked otherwise.
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+        var dark = 1;
+        _ = DwmSetWindowAttribute(Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
     }
 
     protected override void OnShown(EventArgs e)
@@ -63,7 +123,7 @@ internal sealed class MainForm : Form
         _gamePanel.Resize += (_, _) => SyncGodotBounds();
         LocationChanged += (_, _) => SyncGodotBounds();
 
-        _pauseButton.Enabled = true;
+        SetStatus("● Running", Color.FromArgb(0x4A, 0xDE, 0x80), running: true);
         Application.Idle += OnApplicationIdle;
     }
 
@@ -109,6 +169,10 @@ internal sealed class MainForm : Form
         else
             _instance!.Resume();
         _pauseButton.Text = _paused ? "Resume" : "Pause";
+        if (_paused)
+            SetStatus("● Paused", Color.FromArgb(0xF2, 0xB8, 0x4B), running: true);
+        else
+            SetStatus("● Running", Color.FromArgb(0x4A, 0xDE, 0x80), running: true);
     }
 
     protected override void OnFormClosing(FormClosingEventArgs e)
@@ -122,7 +186,7 @@ internal sealed class MainForm : Form
     private void ShutdownEngine()
     {
         Application.Idle -= OnApplicationIdle;
-        _pauseButton.Enabled = false;
+        SetStatus("● Stopped", Muted, running: false);
         _instance = null;
         _engine?.Dispose();
         _engine = null;
@@ -131,6 +195,10 @@ internal sealed class MainForm : Form
 
     private const uint SWP_NOZORDER = 0x0004;
     private const uint SWP_NOACTIVATE = 0x0010;
+    private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(nint hwnd, int attribute, ref int value, int size);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct NativeMessage

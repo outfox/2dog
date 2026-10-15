@@ -10,7 +10,7 @@ using Windows.Graphics;
 using Button = Microsoft.UI.Xaml.Controls.Button;
 using Engine = twodog.Engine;
 using Grid = Microsoft.UI.Xaml.Controls.Grid;
-using Orientation = Microsoft.UI.Xaml.Controls.Orientation;
+using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
 using Window = Microsoft.UI.Xaml.Window;
 
 // Embeds the game inside a WinUI 3 window via Godot's `--wid` embedding (the same mechanism the
@@ -18,9 +18,13 @@ using Window = Microsoft.UI.Xaml.Window;
 // owned by this window, and the host drives its geometry and pumps frames from the UI thread.
 internal sealed class MainWindow : Window
 {
+    private static readonly Windows.UI.Color Accent = Rgb(0x57, 0x9E, 0xFF);
+    private static readonly Windows.UI.Color Muted = Rgb(0x9A, 0xA7, 0xB8);
+
     private readonly string[] _extraArgs;
     private readonly Grid _gamePanel;
     private readonly Button _pauseButton;
+    private readonly TextBlock _status;
     private readonly nint _hwnd;
 
     private Engine? _engine;
@@ -35,31 +39,60 @@ internal sealed class MainWindow : Window
 
         Title = "TPLRAWNAME — WinUI 3 host";
         _hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-        AppWindow.ResizeClient(new SizeInt32(1152, 688));
+        // ResizeClient takes physical pixels; scale the 96-DPI layout size to the window's monitor.
+        var dpiScale = GetDpiForWindow(_hwnd) / 96.0;
+        AppWindow.ResizeClient(new SizeInt32((int)(1152 * dpiScale), (int)(704 * dpiScale)));
+        var dark = 1;
+        _ = DwmSetWindowAttribute(_hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
 
-        _pauseButton = new Button { Content = "Pause", IsEnabled = false };
+        // Lightweight styling: these keys replace the OS accent color in the default templates.
+        _pauseButton = new Button
+        {
+            Content = "Pause", IsEnabled = false, Width = 96, Height = 32,
+            FontWeight = Microsoft.UI.Text.FontWeights.SemiBold, CornerRadius = new CornerRadius(6),
+        };
+        SetBrushes(_pauseButton.Resources, Accent, "ButtonBackground", "ButtonBackgroundDisabled");
+        SetBrushes(_pauseButton.Resources, Rgb(0x74, 0xB0, 0xFF), "ButtonBackgroundPointerOver");
+        SetBrushes(_pauseButton.Resources, Rgb(0x3F, 0x86, 0xE8), "ButtonBackgroundPressed");
+        SetBrushes(_pauseButton.Resources, Rgb(0x0B, 0x12, 0x20), "ButtonForeground", "ButtonForegroundPointerOver",
+            "ButtonForegroundPressed", "ButtonForegroundDisabled");
+        SetBrushes(_pauseButton.Resources, Microsoft.UI.Colors.Transparent, "ButtonBorderBrush",
+            "ButtonBorderBrushPointerOver", "ButtonBorderBrushPressed", "ButtonBorderBrushDisabled");
         _pauseButton.Click += OnPauseClicked;
 
-        var buttonStrip = new StackPanel
+        var title = ToolbarText("TPLRAWNAME", Microsoft.UI.Colors.White);
+        title.FontSize = 15;
+        title.FontWeight = Microsoft.UI.Text.FontWeights.Bold;
+        _status = ToolbarText("", Muted);
+        var toolbar = new Grid
         {
-            Orientation = Orientation.Horizontal,
-            Padding = new Thickness(4),
-            Spacing = 4,
+            Height = 56, Padding = new Thickness(16, 0, 16, 0), ColumnSpacing = 12,
+            Background = new SolidColorBrush(Rgb(0x12, 0x18, 0x21)),
         };
-        buttonStrip.Children.Add(_pauseButton);
+        UIElement[] items = [title, ToolbarText("WinUI 3 host", Muted), _status, new Border(), _pauseButton];
+        for (var column = 0; column < items.Length; column++)
+        {
+            toolbar.ColumnDefinitions.Add(new ColumnDefinition
+            {
+                Width = column == 3 ? new GridLength(1, GridUnitType.Star) : GridLength.Auto,
+            });
+            Grid.SetColumn((FrameworkElement)items[column], column);
+            toolbar.Children.Add(items[column]);
+        }
 
-        // The panel only defines the embed rectangle; Godot's popup always draws above the window's
-        // client area, so XAML controls must not overlap it.
-        _gamePanel = new Grid { Background = new SolidColorBrush(Microsoft.UI.Colors.Black) };
+        // The toolbar sits above the game: Godot's popup always draws above the window's client
+        // area, so XAML controls must not overlap the embed rectangle.
+        _gamePanel = new Grid { Background = new SolidColorBrush(Rgb(0x1E, 0x26, 0x33)) };
 
-        var root = new Grid();
+        var root = new Grid { RequestedTheme = ElementTheme.Dark };
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        Grid.SetRow(buttonStrip, 0);
+        Grid.SetRow(toolbar, 0);
         Grid.SetRow(_gamePanel, 1);
-        root.Children.Add(buttonStrip);
+        root.Children.Add(toolbar);
         root.Children.Add(_gamePanel);
         Content = root;
+        SetStatus("● Starting", Rgb(0xF2, 0xB8, 0x4B), running: false);
 
         // The engine starts once layout has given the panel its size.
         _gamePanel.Loaded += OnPanelLoaded;
@@ -97,8 +130,29 @@ internal sealed class MainWindow : Window
             if (change.DidPositionChange) SyncGodotBounds();
         };
 
-        _pauseButton.IsEnabled = true;
+        SetStatus("● Running", Rgb(0x4A, 0xDE, 0x80), running: true);
         PumpFrame();
+    }
+
+    private static Windows.UI.Color Rgb(byte r, byte g, byte b) => Windows.UI.Color.FromArgb(0xFF, r, g, b);
+
+    private static void SetBrushes(ResourceDictionary resources, Windows.UI.Color color, params string[] keys)
+    {
+        foreach (var key in keys)
+            resources[key] = new SolidColorBrush(color);
+    }
+
+    private static TextBlock ToolbarText(string text, Windows.UI.Color color) => new()
+    {
+        Text = text, Foreground = new SolidColorBrush(color), VerticalAlignment = VerticalAlignment.Center,
+    };
+
+    private void SetStatus(string text, Windows.UI.Color color, bool running)
+    {
+        _status.Text = text;
+        _status.Foreground = new SolidColorBrush(color);
+        _pauseButton.IsEnabled = running;
+        _pauseButton.Opacity = running ? 1 : 0.45;
     }
 
     // WinUI has no idle event; a self-reposting low-priority dispatcher callback plays that role:
@@ -155,6 +209,10 @@ internal sealed class MainWindow : Window
         else
             _instance!.Resume();
         _pauseButton.Content = _paused ? "Resume" : "Pause";
+        if (_paused)
+            SetStatus("● Paused", Rgb(0xF2, 0xB8, 0x4B), running: true);
+        else
+            SetStatus("● Running", Rgb(0x4A, 0xDE, 0x80), running: true);
     }
 
     // Iteration() dispatches this thread's messages, so a close usually arrives inside an engine frame. A window
@@ -170,7 +228,7 @@ internal sealed class MainWindow : Window
 
     private void ShutdownEngine()
     {
-        _pauseButton.IsEnabled = false;
+        SetStatus("● Stopped", Muted, running: false);
         _instance = null;
         _engine?.Dispose();
         _engine = null;
@@ -179,6 +237,13 @@ internal sealed class MainWindow : Window
 
     private const uint SWP_NOZORDER = 0x0004;
     private const uint SWP_NOACTIVATE = 0x0010;
+    private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(nint hwnd, int attribute, ref int value, int size);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetDpiForWindow(nint hwnd);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct NativePoint

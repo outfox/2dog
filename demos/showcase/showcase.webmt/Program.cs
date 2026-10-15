@@ -28,6 +28,8 @@ internal static class Program
         try
         {
             engine.Start();
+            // Godot titles the page after application/config/name once it starts.
+            DisplayServer.WindowSetTitle("2dog showcase — multithreaded web host");
             Require(OS.HasFeature("threads"), "the engine does not report the 'threads' feature");
             GD.Print("Hello from GodotSharp (multithreaded browser).");
 

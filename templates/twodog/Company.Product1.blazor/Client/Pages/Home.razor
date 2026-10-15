@@ -5,16 +5,25 @@
 
 <div class="layout">
     <aside class="panel">
-        <h1>TPLRAWNAME</h1>
-        <p class="status">@_status</p>
+        <header class="panel-header">
+            <div>
+                <h1>TPLRAWNAME</h1>
+                <p class="subtitle">Blazor UI beside Godot</p>
+            </div>
+            <p class="status" data-state="@_state">@_status</p>
+        </header>
 
         <dl>
+            <dt>Scene</dt>
+            <dd>@_scene</dd>
             <dt>FPS</dt>
             <dd>@_fps</dd>
         </dl>
 
-        <button @onclick="() => _view!.StartAsync()" disabled="@(_view is null || _view.IsRunning)">Start engine</button>
-        <button @onclick="() => _view?.Quit()" disabled="@(_view?.IsRunning != true)">Quit engine</button>
+        <div class="actions">
+            <button @onclick="() => _view!.StartAsync()" disabled="@(_view is null || _view.IsRunning)">Start engine</button>
+            <button @onclick="() => _view?.Quit()" disabled="@(_view?.IsRunning != true)">Quit engine</button>
+        </div>
     </aside>
 
     <main class="viewport">
@@ -29,12 +38,17 @@
 @code {
     private GodotView? _view;
     private string _status = "Starting Godot...";
+    private string _state = "starting";
+    private string _scene = "-";
     private string _fps = "-";
     private long _frames;
 
     // Blazor and Godot share one runtime: reach the scene tree directly.
-    private void OnStarted(twodog.Engine engine) =>
-        _status = $"Running: {engine.Tree.CurrentScene?.Name}";
+    private void OnStarted(twodog.Engine engine)
+    {
+        (_status, _state) = ("Running", "running");
+        _scene = engine.Tree.CurrentScene?.Name ?? "-";
+    }
 
     private void OnFrame()
     {
@@ -44,7 +58,7 @@
         _ = InvokeAsync(StateHasChanged);
     }
 
-    private void OnExited() => _status = "Godot quit.";
+    private void OnExited() => (_status, _state) = ("Godot quit.", "stopped");
 
-    private void OnFailed(Exception exception) => _status = $"Failed: {exception.Message}";
+    private void OnFailed(Exception exception) => (_status, _state) = ($"Failed: {exception.Message}", "failed");
 }

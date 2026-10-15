@@ -2,22 +2,83 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:twodog="using:twodog"
         x:Class="showcase.MainWindow"
-        Title="2dog showcase - Avalonia"
+        Title="2dog showcase — Avalonia host"
         Width="1152" Height="720"
-        MinWidth="480" MinHeight="320"
+        MinWidth="480" MinHeight="360"
+        Background="#1E2633"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- Fluent derives these from the OS accent color; the showcase uses 2dog's. -->
+        <SolidColorBrush x:Key="SliderTrackValueFill" Color="#579EFF"/>
+        <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="#74B0FF"/>
+        <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="#3F86E8"/>
+        <SolidColorBrush x:Key="SliderThumbBackground" Color="#579EFF"/>
+        <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="#74B0FF"/>
+        <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="#3F86E8"/>
+    </Window.Resources>
+    <Window.Styles>
+        <Style Selector="TextBlock.muted">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#9AA7B8"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#579EFF"/>
+            <Setter Property="Foreground" Value="#0B1220"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#74B0FF"/>
+            <Setter Property="Foreground" Value="#0B1220"/>
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3F86E8"/>
+            <Setter Property="Foreground" Value="#0B1220"/>
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#579EFF"/>
+            <Setter Property="Foreground" Value="#0B1220"/>
+            <Setter Property="Opacity" Value="0.45"/>
+        </Style>
+    </Window.Styles>
     <Panel>
         <twodog:GodotControl x:Name="GodotView"/>
         <!-- The point of this host: ordinary Avalonia controls floating OVER the game. -->
-        <Border x:Name="Overlay" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16"
-                Background="#B0202028" CornerRadius="8" Padding="12">
-            <StackPanel Spacing="8" MinWidth="180">
-                <TextBlock x:Name="FpsLabel" Text="- fps" Foreground="White"/>
-                <Button x:Name="PauseButton" Content="Pause" IsEnabled="False"
-                        HorizontalAlignment="Stretch"/>
-                <TextBlock Text="Game speed" Foreground="White"/>
-                <Slider x:Name="SpeedSlider" Minimum="0" Maximum="3" Value="1"
-                        AutomationProperties.Name="Game speed"/>
+        <Border x:Name="Overlay" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16" Width="280"
+                Padding="16" Background="#E6121821" BorderBrush="#2EFFFFFF" BorderThickness="1" CornerRadius="14"
+                BoxShadow="0 8 24 0 #59000000">
+            <StackPanel Spacing="12">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="2dog showcase" FontSize="17" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Classes="muted" Text="Avalonia controls over Godot"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" VerticalAlignment="Center" Padding="10,4" CornerRadius="12"
+                            Background="#1AFFFFFF">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Ellipse x:Name="StatusDot" Width="8" Height="8" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="StatusLabel" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <Border Height="1" Background="#24FFFFFF"/>
+                <StackPanel>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="Game speed" FontSize="13" Foreground="White"/>
+                        <TextBlock x:Name="SpeedLabel" Grid.Column="1" Text="1.00×" FontSize="13" Foreground="White"/>
+                    </Grid>
+                    <Slider x:Name="SpeedSlider" Minimum="0" Maximum="3" Value="1" IsEnabled="False"
+                            AutomationProperties.Name="Game speed"/>
+                </StackPanel>
+                <Button x:Name="PauseButton" Classes="primary" Content="Pause" IsEnabled="False"/>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock x:Name="ModeLabel" Classes="muted" Text="Waiting for Godot"/>
+                    <TextBlock x:Name="FpsLabel" Grid.Column="1" Classes="muted"/>
+                </Grid>
             </StackPanel>
         </Border>
     </Panel>
