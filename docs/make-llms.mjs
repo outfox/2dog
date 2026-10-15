@@ -44,7 +44,7 @@ const SECTIONS = [
     'hosts/index.md',
   ]],
   ['Console Hosts', [
-    'hosts/generic.md', 'hosts/repl.md', 'agents.md',
+    'hosts/generic.md', 'hosts/repl.md',
   ]],
   ['Desktop Hosts', [
     'hosts/avalonia.md', 'hosts/winforms.md', 'hosts/winui.md',
@@ -101,7 +101,7 @@ const SECTIONS = [
 ];
 
 // Redirect stubs and other pages that should not be indexed.
-const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md', 'testing.md']);
+const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md', 'testing.md', 'agents.md']);
 
 const inventory = loadPages(content, SECTIONS, EXCLUDE);
 const prepare = (page) => ({ ...page, url: `${HOST}/${page.rel}`, body: resolveMarkers(page.body) });
