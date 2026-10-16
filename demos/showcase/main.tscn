@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://dov5je877svgy" path="res://signals/SignalCounter.cs" id="10_counter_cs"]
 [ext_resource type="Script" uid="uid://d1hcx2etqrtl6" path="res://signals/signal_counter.gd" id="11_counter_gd"]
 [ext_resource type="Script" path="res://camera_fit.gd" id="12_camera_fit"]
+[ext_resource type="PackedScene" path="res://fps_counter.tscn" id="13_fps"]
 
 [sub_resource type="Environment" id="Environment_backdrop"]
 background_mode = 1
@@ -391,11 +392,14 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -76.0
-offset_right = -24.0
-offset_bottom = -24.0
+offset_left = -152.0
+offset_top = -112.0
+offset_right = -16.0
+offset_bottom = -60.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Enter VR"
 script = ExtResource("5_webxr")
+
+[node name="FpsCounter" parent="." unique_id=1427908153 instance=ExtResource("13_fps")]
+layout_mode = 1

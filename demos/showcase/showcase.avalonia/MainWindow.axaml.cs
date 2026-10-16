@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using Godot;
 using twodog;
 using GodotEngine = Godot.Engine;
@@ -15,7 +14,6 @@ public partial class MainWindow : Window
 {
     private readonly string[] _extraArgs;
     private GodotSession? _session;
-    private DispatcherTimer? _fpsTimer;
     private GodotPresentationMode? _reportedMode;
 
     // Parameterless overload for the XAML runtime loader and previewer.
@@ -112,10 +110,7 @@ public partial class MainWindow : Window
         PauseButton.IsEnabled = SpeedSlider.IsEnabled = true;
         SetStatus("Running", "#4ADE80");
         // The UI thread is the pump thread, so engine state is safe to touch from
-        // event handlers and timers, including the scene tree via _session.Engine.Tree.
-        _fpsTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background,
-            (_, _) => FpsLabel.Text = $"{GodotEngine.GetFramesPerSecond():0} fps");
-        _fpsTimer.Start();
+        // event handlers, including the scene tree via _session.Engine.Tree.
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
@@ -125,7 +120,6 @@ public partial class MainWindow : Window
 
         // Tear down before the window dies: the engine must be gone before the
         // ProcessExit libgodot unload runs (see twodog.Engine).
-        _fpsTimer?.Stop();
         _session?.Dispose();
         _session = null;
     }

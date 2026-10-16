@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[sub_resource type="GDScript" id="GDScript_fps"]
+script/source = "extends Label
+
+# Refreshes a few times per second; Engine.get_frames_per_second() is itself a one-second average.
+var _elapsed := 0.0
+
+
+func _process(delta: float) -> void:
+	_elapsed += delta
+	if _elapsed < 0.25:
+		return
+	_elapsed = 0.0
+	text = \"%d fps\" % Engine.get_frames_per_second()
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_pill"]
+content_margin_left = 12.0
+content_margin_top = 5.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+bg_color = Color(0.071, 0.094, 0.129, 0.8)
+corner_radius_top_left = 999
+corner_radius_top_right = 999
+corner_radius_bottom_right = 999
+corner_radius_bottom_left = 999
+
+[node name="FpsCounter" type="Label"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+custom_minimum_size = Vector2(72, 0)
+theme_override_colors/font_color = Color(0.604, 0.655, 0.722, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBox_pill")
+text = "- fps"
+horizontal_alignment = 1
+script = SubResource("GDScript_fps")

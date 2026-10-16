@@ -118,6 +118,8 @@ Showcase: `dotnet run --project demos/showcase/showcase.2dog`; web: publish `dem
   Game assembly names follow `[dotnet] project/assembly_name`. Keep host files out of game compile globs.
 - Fix warnings at their source; do not suppress warnings or disable failing tests. Find the root cause of
   a flaky test instead of adding retries.
+- `demos/showcase/fps_counter.tscn` is a symlink to the template's copy; edit the template file. Windows checkouts
+  need `core.symlinks=true`, and CI's Windows jobs set it before checkout.
 - Preserve CRLF working-tree endings; Git Bash `sed -i` writes LF, so check `git ls-files --eol` after
   scripted edits. Binary assets use Git LFS except `templates/**`, `logo.png` and `nuget/icon.png`.
 - The maintainer and other agents work in this tree concurrently: leave unrelated changes alone and check

@@ -195,19 +195,6 @@ html, body {
     background: var(--backdrop);
 }
 
-.hud {
-    position: absolute;
-    right: 1rem;
-    bottom: 1rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
-    background: rgba(18, 24, 33, 0.8);
-    color: var(--muted);
-    font-size: 0.85rem;
-    font-variant-numeric: tabular-nums;
-    pointer-events: none;
-}
-
 /* Narrow screens: the panel stacks above the game. */
 @media (max-width: 720px) {
     .layout {

@@ -30,8 +30,6 @@ internal sealed class MainForm : Form
     private readonly TrackBar _speed;
     private readonly Label _speedValue;
     private readonly Label _status;
-    private readonly Label _fps;
-    private readonly System.Windows.Forms.Timer _fpsTimer = new() { Interval = 500 };
 
     private Engine? _engine;
     private GodotInstance? _instance;
@@ -74,10 +72,6 @@ internal sealed class MainForm : Form
         _speedValue = HeaderLabel("1.00×", Color.White);
         _speedValue.MinimumSize = new Size(44, 0);
         _status = HeaderLabel("", Starting);
-        _fps = HeaderLabel("", Muted);
-        _fps.MinimumSize = new Size(56, 0);
-        _fps.TextAlign = ContentAlignment.MiddleRight;
-        _fpsTimer.Tick += (_, _) => _fps.Text = $"{Godot.Engine.GetFramesPerSecond():0} fps";
 
         // The toolbar sits above the game: Godot's popup always draws above the form's client area,
         // so form controls must not overlap the embed rectangle.
@@ -100,7 +94,7 @@ internal sealed class MainForm : Form
         var actions = new FlowLayoutPanel
         {
             AutoSize = true, WrapContents = false, Anchor = AnchorStyles.Left, Margin = Padding.Empty,
-            Controls = { _pauseButton, _fps },
+            Controls = { _pauseButton },
         };
         toolbar.Controls.Add(actions, 7, 0);
 
@@ -124,7 +118,6 @@ internal sealed class MainForm : Form
         _status.ForeColor = color;
         _pauseButton.Enabled = _speed.Enabled = running;
         _pauseButton.BackColor = running ? Accent : Color.FromArgb(0x2A, 0x36, 0x47);
-        if (!running) _fps.Text = "";
     }
 
     // Windows draws a light title bar for Win32 windows unless asked otherwise.
@@ -163,7 +156,6 @@ internal sealed class MainForm : Form
             .GetChildren().OfType<Node3D>().ToArray();
 
         SetStatus("● Running", Running, running: true);
-        _fpsTimer.Start();
         Application.Idle += OnApplicationIdle;
     }
 
@@ -236,7 +228,6 @@ internal sealed class MainForm : Form
     private void ShutdownEngine()
     {
         Application.Idle -= OnApplicationIdle;
-        _fpsTimer.Stop();
         SetStatus("● Stopped", Muted, running: false);
         _whiteCubes = [];
         _instance = null;

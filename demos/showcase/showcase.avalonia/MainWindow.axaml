@@ -75,10 +75,7 @@
                             AutomationProperties.Name="Game speed"/>
                 </StackPanel>
                 <Button x:Name="PauseButton" Classes="primary" Content="Pause" IsEnabled="False"/>
-                <Grid ColumnDefinitions="*,Auto">
-                    <TextBlock x:Name="ModeLabel" Classes="muted" Text="Waiting for Godot"/>
-                    <TextBlock x:Name="FpsLabel" Grid.Column="1" Classes="muted"/>
-                </Grid>
+                <TextBlock x:Name="ModeLabel" Classes="muted" Text="Waiting for Godot"/>
             </StackPanel>
         </Border>
     </Panel>

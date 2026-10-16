@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://fps_counter.tscn" id="1_fps"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 44
 
@@ -51,3 +53,6 @@ layout_mode = 2
 text = "Godot runs inside your .NET host. Edit main.tscn to make it yours."
 label_settings = SubResource("LabelSettings_hint")
 horizontal_alignment = 1
+
+[node name="FpsCounter" parent="." instance=ExtResource("1_fps")]
+layout_mode = 1

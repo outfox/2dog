@@ -403,6 +403,10 @@ jobs:
     steps:
       # The showcase's LFS assets (e.g. splash.png) must be real files: Godot reports an error for every
       # engine boot that finds an LFS pointer instead, and 2dog.xunit fails tests on Godot errors.
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
@@ -561,6 +565,10 @@ jobs:
       TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
@@ -659,6 +667,10 @@ jobs:
       DOTNET_DISABLE_GUI_ERRORS: '1'
 
     steps:
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
@@ -1366,6 +1378,10 @@ jobs:
     runs-on: windows-2025
     timeout-minutes: 25
     steps:
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
@@ -1429,6 +1445,10 @@ jobs:
     timeout-minutes: 20
 
     steps:
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
       - name: Checkout repository
         uses: actions/checkout@v7
 

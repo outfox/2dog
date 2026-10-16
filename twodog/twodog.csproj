@@ -95,6 +95,7 @@
         <!-- Godot project files, for `2dog new` -->
         <EmbeddedResource Include="../templates/twodog/project.godot" LogicalName="tpl/project.godot"/>
         <EmbeddedResource Include="../templates/twodog/main.tscn" LogicalName="tpl/main.tscn"/>
+        <EmbeddedResource Include="../templates/twodog/fps_counter.tscn" LogicalName="tpl/fps_counter.tscn"/>
         <EmbeddedResource Include="../templates/twodog/.editorconfig" LogicalName="tpl/.editorconfig"/>
         <EmbeddedResource Include="../templates/twodog/.gitignore" LogicalName="tpl/.gitignore"/>
         <EmbeddedResource Include="../templates/twodog/.vscode/*.json" LogicalName="tpl/.vscode/%(Filename)%(Extension)"/>
