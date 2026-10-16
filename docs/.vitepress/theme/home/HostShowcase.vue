@@ -1,5 +1,5 @@
-<!-- Every host 2dog scaffolds, grouped and ordered like the Hosts sidebar. Brand marks sit on
-     their brand color; hosts without a vendored mark get a Godot pictogram on a neutral chip. -->
+<!-- Every host 2dog scaffolds. Brand marks wear their brand color on a neutral chip; hosts without
+     a vendored mark get a Godot pictogram in plain text color. -->
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 import { brIconUrl, iconUrl } from './icons'
@@ -11,16 +11,14 @@ type Host = {
   link: string
   brand?: string
   glyph?: string
-  chip?: string
-  ink?: string
+  mark?: string
   tag?: string
 }
 
-const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
+const groups: { label: string; icon: string; hosts: Host[] }[] = [
   {
     label: 'Terminal',
     icon: 'window_terminal',
-    tint: 'accent',
     hosts: [
       {
         name: '2dog',
@@ -28,7 +26,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
         link: '/hosts/generic',
         brand: 'dotnet',
-        chip: 'var(--chip-dotnet)',
+        mark: 'var(--mark-dotnet)',
       },
       {
         name: 'REPL',
@@ -42,7 +40,6 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
   {
     label: 'Testing',
     icon: 'test_tube',
-    tint: 'gold',
     hosts: [
       {
         name: 'GdUnit',
@@ -70,7 +67,6 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
   {
     label: 'Desktop',
     icon: 'desktop',
-    tint: '2d',
     hosts: [
       {
         name: 'Avalonia',
@@ -78,7 +74,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Godot as a control in cross-platform Avalonia apps - in a zero-copy GPU surface.',
         link: '/hosts/avalonia',
         brand: 'avaloniaui',
-        chip: 'var(--chip-avalonia)',
+        mark: 'var(--mark-avalonia)',
       },
       {
         name: 'WinForms',
@@ -86,7 +82,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Drop the engine into a Windows Forms window.',
         link: '/hosts/winforms',
         glyph: 'window',
-        chip: 'var(--chip-windows)',
+        mark: 'var(--mark-windows)',
       },
       {
         name: 'WinUI 3',
@@ -94,14 +90,13 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Host Godot in a modern Windows App SDK window.',
         link: '/hosts/winui',
         glyph: 'windows',
-        chip: 'var(--chip-windows)',
+        mark: 'var(--mark-windows)',
       },
     ],
   },
   {
     label: 'Web',
     icon: 'globe',
-    tint: 'gui',
     hosts: [
       {
         name: 'WebAssembly',
@@ -109,7 +104,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Your C# game as a static site, WebGL or WebGPU.<br/>No more waiting for Godot!',
         link: '/hosts/web',
         brand: 'webassembly',
-        chip: 'var(--chip-wasm)',
+        mark: 'var(--mark-wasm)',
       },
       {
         name: 'WebXR',
@@ -123,7 +118,6 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
   {
     label: 'Fullstack',
     icon: 'server',
-    tint: 'gui',
     hosts: [
       {
         name: 'Blazor',
@@ -131,14 +125,13 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'A <code>GodotView</code> component in your Blazor WebAssembly, served by ASP.NET Core.',
         link: '/hosts/blazor',
         brand: 'blazor',
-        chip: 'var(--chip-dotnet)',
+        mark: 'var(--mark-dotnet)',
       },
     ],
   },
   {
     label: 'Mobile',
     icon: 'mobile_phone',
-    tint: '3d',
     hosts: [
       {
         name: 'Android',
@@ -146,8 +139,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Package your game as an Android APK.',
         link: '/hosts/android',
         brand: 'android',
-        chip: 'var(--chip-android)',
-        ink: 'var(--chip-android-ink)',
+        mark: 'var(--mark-android)',
         tag: 'Experimental',
       },
       {
@@ -156,7 +148,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
         text: 'Embed Godot in a .NET MAUI page on Windows and Android.',
         link: '/hosts/maui',
         glyph: 'mobile_phone',
-        chip: 'var(--chip-dotnet)',
+        mark: 'var(--mark-dotnet)',
       },
     ],
   },
@@ -171,7 +163,7 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
       <div class="hosts-head">
         <div>
           <p class="home-kicker">
-            <span class="gd-icon gd-icon--accent" :style="{ '--gd-icon': iconUrl('container') }" aria-hidden="true"></span>Hosts
+            <span class="gd-icon" :style="{ '--gd-icon': iconUrl('container') }" aria-hidden="true"></span>Hosts
           </p>
           <h2 id="hosts-title" class="home-h2">One code base, many tricks!</h2>
           <p class="home-intro">
@@ -186,7 +178,6 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
         <h3 class="host-group-label">
           <span
             class="gd-icon"
-            :class="`gd-icon--${g.tint}`"
             :style="{ '--gd-icon': iconUrl(g.icon) }"
             aria-hidden="true"
           ></span>{{ g.label }}
@@ -196,8 +187,7 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
             <a class="host-card" :href="withBase(h.link)">
               <span
                 class="brand-chip"
-                :class="{ neutral: !h.chip }"
-                :style="{ '--chip-bg': h.chip, '--chip-ink': h.ink ?? (h.chip ? '#fff' : undefined) }"
+                :style="{ '--mark': h.mark }"
                 aria-hidden="true"
               >
                 <span class="chip-glyph" :style="{ '--gd-icon': glyphUrl(h) }"></span>
@@ -257,8 +247,9 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
 }
 
 .host-group-label .gd-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--ed-text-2);
 }
 
 .host-list {

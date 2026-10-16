@@ -18,7 +18,7 @@ const tree = [
   <section class="home-section" aria-labelledby="why-title">
     <div class="home-wrap">
       <p class="home-kicker">
-        <span class="gd-icon gd-icon--gold" :style="{ '--gd-icon': iconUrl('paw_print') }" aria-hidden="true"></span>Why 2dog
+        <span class="gd-icon" :style="{ '--gd-icon': iconUrl('paw_print') }" aria-hidden="true"></span>Why 2dog
       </p>
       <h2 id="why-title" class="home-h2">Made with love, dogs + robots.</h2>
 
@@ -196,8 +196,8 @@ engine.<span class="f">Start</span>();
 
 .why-tree-glyph {
   flex: none;
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   background-color: var(--ed-text-2);
   -webkit-mask: var(--gd-icon) no-repeat center / contain;
   mask: var(--gd-icon) no-repeat center / contain;

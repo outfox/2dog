@@ -16,13 +16,13 @@ const props = [
     <div class="home-wrap gpu-grid">
       <div>
         <div class="gpu-marks" aria-hidden="true">
-          <span class="brand-chip logo-chip">
+          <span class="brand-chip">
             <img :src="webgpuLogoUrl()" alt="" width="35" height="22" />
           </span>
-          <span class="brand-chip" style="--chip-bg: var(--chip-wasm); --chip-ink: #fff">
+          <span class="brand-chip" style="--mark: var(--mark-wasm)">
             <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('webassembly') }"></span>
           </span>
-          <span class="brand-chip" style="--chip-bg: var(--chip-dotnet); --chip-ink: #fff">
+          <span class="brand-chip" style="--mark: var(--mark-dotnet)">
             <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('dotnet') }"></span>
           </span>
         </div>
@@ -68,11 +68,6 @@ const props = [
   display: flex;
   gap: 12px;
   margin-bottom: 28px;
-}
-
-/* The WebGPU logo keeps its own blues, so its chip is white rather than brand-filled. */
-.logo-chip {
-  background: #fff;
 }
 
 .gpu-actions {

@@ -20,7 +20,7 @@ const links = [
     <div class="home-wrap free-grid">
       <div>
         <p class="home-kicker">
-          <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>Open source
+          <span class="gd-icon" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>Open source
         </p>
         <h2 id="free-title" class="home-h2">Free &amp; libre, as Godot itself.</h2>
         <p class="home-intro">
@@ -137,11 +137,11 @@ const links = [
 }
 
 .repo-dot.lic {
-  background: var(--ed-node-gui);
+  background: var(--ed-text-3);
 }
 
 .repo-dot.cs {
-  background: #178600;
+  background: var(--id-dotnet);
 }
 
 .repo-links {
@@ -166,8 +166,8 @@ const links = [
 
 .repo-links .gd-icon,
 .repo-links .brand-glyph {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 @media (max-width: 959px) {

@@ -34,9 +34,9 @@ async function copyCommands() {
           <span aria-hidden="true">→</span>
         </a>
     -->
-        <h1 id="hero-title" class="hero-title">Godot, where .NET&nbsp;goes.  <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('arrow_local_axes') }" aria-hidden="true"></span></h1>
+        <h1 id="hero-title" class="hero-title">Godot, where .NET&nbsp;goes.  <span class="gd-icon hero-axes" :style="{ '--gd-icon': iconUrl('arrow_local_axes') }" aria-hidden="true"></span></h1>
         <p class="hero-lead">
-          <strong>2dog</strong> <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('bone') }" aria-hidden="true"></span> embeds the <strong>Godot</strong> <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('gobot') }" aria-hidden="true"></span> game engine in <strong>.NET</strong> <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('box') }" aria-hidden="true"></span>
+          <strong>2dog</strong> <span class="lead-dog" aria-hidden="true"><span class="gd-icon lead-icon" :style="{ '--gd-icon': iconUrl('bone') }"></span></span> embeds the <strong>Godot</strong> <span class="gd-icon lead-icon godot" :style="{ '--gd-icon': iconUrl('gobot') }" aria-hidden="true"></span> game engine in <strong>.NET</strong> <span class="gd-icon lead-icon dotnet" :style="{ '--gd-icon': iconUrl('box') }" aria-hidden="true"></span>
           <br/>Ship your C# game to the
           browser, surround it with desktop or mobile UI, and give it the <s>treats</s> tests it deserves.           
         </p>
@@ -61,7 +61,7 @@ async function copyCommands() {
         <ul class="hero-facts">
           <li>
             MIT licensed.
-            <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>
+            <span class="gd-icon hero-heart" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>
           </li>
           <li>2dog {{ twodogVersion }}</li>
           <li>Godot {{ godotVersion }}</li>
@@ -208,6 +208,34 @@ async function copyCommands() {
   color: var(--ed-text-2);
 }
 
+/* Identity icons: the dog is always white, so on light grounds it gets a hairline halo to stay visible. */
+.hero-title .hero-axes,
+.lead-icon.godot {
+  background-color: var(--id-godot);
+}
+
+.lead-icon,
+.hero-facts .hero-heart {
+  width: 16px;
+  height: 16px;
+}
+
+.lead-icon.dotnet {
+  background-color: var(--id-dotnet);
+}
+
+.lead-dog .lead-icon {
+  background-color: var(--id-dog);
+}
+
+:root:not(.dark) .lead-dog {
+  filter: drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.8));
+}
+
+.hero-facts .hero-heart {
+  background-color: var(--ed-accent);
+}
+
 .hero-lead strong {
   color: var(--ed-text-1);
 }
@@ -351,13 +379,13 @@ async function copyCommands() {
   width: 30px;
   height: 16px;
   border-radius: 999px;
-  background: var(--chip-avalonia);
+  background: var(--ed-accent);
 }
 
 .art-slider {
   height: 4px;
   border-radius: 2px;
-  background: linear-gradient(90deg, var(--chip-avalonia) 60%, var(--ed-seam) 60%);
+  background: linear-gradient(90deg, var(--ed-accent) 60%, var(--ed-seam) 60%);
 }
 
 .art-logo {
@@ -466,12 +494,8 @@ async function copyCommands() {
 }
 
 .hero-term .prompt {
-  color: var(--ed-node-gui);
+  color: var(--ed-accent);
   user-select: none;
-}
-
-:root:not(.dark) .hero-term .prompt {
-  color: var(--ed-success);
 }
 
 @media (max-width: 959px) {

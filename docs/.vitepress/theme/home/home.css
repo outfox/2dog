@@ -4,13 +4,17 @@
  */
 
 .home-page {
-  /* Brand chips: each pairing keeps its glyph at 4.5:1 or better against the chip. */
-  --chip-dotnet: #512bd4;
-  --chip-avalonia: #165bff;
-  --chip-windows: #0067c0;
-  --chip-wasm: #654ff0;
-  --chip-android: #3ddc84;
-  --chip-android-ink: #073042;
+  /* Palette: the editor accent marks everything clickable. Three identities appear only where they name
+     their owner: 2dog's white dog, Godot blue, .NET purple. Brand marks wear their own colors on neutral
+     chips; everything else stays neutral. Dark mode lifts the darker brand hues to stay legible. */
+  --id-dog: #ffffff;
+  --id-godot: #3b78a9;
+  --id-dotnet: #512bd4;
+  --mark-dotnet: var(--id-dotnet);
+  --mark-avalonia: #165bff;
+  --mark-windows: #0067c0;
+  --mark-wasm: #654ff0;
+  --mark-android: #1f9a5b;
   /* Game viewports render the dark editor grid in both appearances, like a running game. */
   --game-ground: #161616;
   --game-grid: rgba(255, 255, 255, 0.06);
@@ -18,6 +22,15 @@
   font-size: 17px;
   line-height: 1.6;
   color: var(--ed-text-1);
+}
+
+.dark .home-page {
+  --id-godot: #478cbf;
+  --id-dotnet: #9780e5;
+  --mark-avalonia: #6b98ff;
+  --mark-windows: #4cc2ff;
+  --mark-wasm: #9b8cf7;
+  --mark-android: #3ddc84;
 }
 
 .home-section {
@@ -44,11 +57,13 @@
   color: var(--ed-text-2);
 }
 
+/* Godot pictograms are 16px pixel icons, so they render at 16px or 32px; other scales blur their edges. */
 .home-kicker .gd-icon {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
   vertical-align: -2px;
+  background-color: var(--ed-accent);
 }
 
 .home-h2 {
@@ -147,18 +162,14 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: var(--chip-bg, var(--ed-raise));
-  color: var(--chip-ink, var(--ed-accent));
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  background: var(--ed-raise);
+  color: var(--mark, var(--ed-text-1));
+  box-shadow: inset 0 0 0 1px var(--ed-seam);
 }
 
 .brand-chip .chip-glyph {
-  width: 26px;
-  height: 26px;
-}
-
-.brand-chip.neutral {
-  box-shadow: inset 0 0 0 1px var(--ed-seam);
+  width: 32px;
+  height: 32px;
 }
 
 /* ---------- Game viewport ---------- */
