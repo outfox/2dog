@@ -722,17 +722,25 @@ jobs:
             SMOKE=tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke
             # Keep a native stack for failures after the first engine teardown.
             # Run the existing renderer separately to distinguish host lifecycle bugs.
-            set +e
-            lldb --batch --no-lldbinit -o run -k 'thread backtrace all' -k 'quit 1' -- "$SMOKE" opengl3 > /tmp/2dog-macos-opengl-smoke.log 2>&1
-            GL_STATUS=$?
-            cat /tmp/2dog-macos-opengl-smoke.log
-            lldb --batch --no-lldbinit -o run -k 'thread backtrace all' -k 'quit 1' -- "$SMOKE" > /tmp/2dog-macos-webgpu-smoke.log 2>&1
-            GPU_STATUS=$?
-            cat /tmp/2dog-macos-webgpu-smoke.log
-            set -e
-            if [ "$GL_STATUS" -ne 0 ] || [ "$GPU_STATUS" -ne 0 ]; then exit 1; fi
-            grep -q 'NATIVE_OPENGL3_SMOKE_PASSED: lifetime 2' /tmp/2dog-macos-opengl-smoke.log
-            grep -q 'NATIVE_WEBGPU_SMOKE_PASSED: lifetime 2' /tmp/2dog-macos-webgpu-smoke.log
+            SMOKE_STATUS=0
+            for DRIVER in opengl3 webgpu; do
+              LOG="/tmp/2dog-macos-$DRIVER-smoke.log"
+              set +e
+              lldb --batch --no-lldbinit -o 'settings set auto-confirm true' \
+                -o run -o 'thread backtrace all' -k 'thread backtrace all' -k 'quit 1' \
+                -- "$SMOKE" "$DRIVER" > "$LOG" 2>&1 &
+              DEBUGGER_PID=$!
+              # Interrupt a hung runtime so the following command captures its stack.
+              (sleep 120; kill -INT "$DEBUGGER_PID" 2>/dev/null) &
+              WATCHDOG_PID=$!
+              wait "$DEBUGGER_PID"
+              kill "$WATCHDOG_PID" 2>/dev/null
+              cat "$LOG"
+              set -e
+              if ! grep -q "NATIVE_${DRIVER^^}_SMOKE_PASSED: lifetime 2" "$LOG" || \
+                 ! grep -q 'exited with status = 0 ' "$LOG"; then SMOKE_STATUS=1; fi
+            done
+            exit "$SMOKE_STATUS"
           else
             dotnet run --project tests/webgpu-smoke -c Release
           fi
