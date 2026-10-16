@@ -24,7 +24,7 @@ const tree = [
 
       <div class="why-grid">
         <article class="why-card">
-          <h3>.NET holds the leash</h3>
+          <h3>Let .NET hold the leash</h3>
           <p>
             Start Godot from your own <code>Main()</code>, run each frame when you choose, and reach every
             node from C#.
