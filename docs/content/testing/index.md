@@ -48,15 +48,20 @@ style, rather than missing async support.
 
 ## Test runners
 
-All three hosts support Microsoft.Testing.Platform (MTP):
+All three scaffolded hosts run on Microsoft.Testing.Platform (MTP):
 
 | Host | MTP integration | Setup |
 | --- | --- | --- |
 | GdUnit | 2dog's framework drives the embedded GDScript runner | [Configuration](/configuration/gdunit) |
-| NUnit | Official NUnit adapter bridge | [Opt in](/configuration/nunit#microsofttestingplatform) |
-| xUnit | Upstream xUnit runner with 2dog's owner-thread entry point | [Opt in](/configuration/xunit#microsofttestingplatform) |
+| NUnit | Official NUnit adapter bridge | [Configuration](/configuration/nunit#microsofttestingplatform) |
+| xUnit | Upstream xUnit runner with 2dog's owner-thread entry point | [Configuration](/configuration/xunit#microsofttestingplatform) |
 
-Scaffolded C# hosts use VSTest by default. NUnit's adapter has a
+The .NET 10 SDK runs every project of a `dotnet test` run on the runner that
+`global.json` selects. When 2dog scaffolds a test host into a project without
+a root `global.json`, it creates one that selects MTP, so `dotnet test` from
+the project root runs all of them. Every scaffolded host references
+`Microsoft.Testing.Extensions.CodeCoverage`, so `dotnet test --coverage`
+collects coverage for all of them. NUnit's adapter has a
 [session cancellation limitation](/configuration/nunit#cancellation);
 use its cooperative test timeout before any outer runner timeout.
 

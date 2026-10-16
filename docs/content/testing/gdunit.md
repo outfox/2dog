@@ -15,13 +15,18 @@ by 2dog. To create the .NET project, follow the [GdUnit host guide](/hosts/gduni
 ## Run through .NET
 
 The 2dog host uses Microsoft.Testing.Platform (MTP) and `dotnet test`. Run
-commands inside the host directory containing its MTP `global.json`:
+commands from the project root, whose scaffolded `global.json` selects MTP:
 
 ```bash
-dotnet test --project MyGame.gdunit.csproj
-dotnet test --project MyGame.gdunit.csproj --list-tests
-dotnet test --project MyGame.gdunit.csproj --gdunit-filter "*test_answer"
+dotnet test --project MyGame.gdunit
+dotnet test --project MyGame.gdunit --list-tests
+dotnet test --project MyGame.gdunit --gdunit-filter "*test_answer"
 ```
+
+Plain `dotnet test` runs the GdUnit host together with the
+[xUnit](/hosts/xunit) and [NUnit](/hosts/nunit) hosts. If the root
+`global.json` does not select MTP, run from `MyGame.gdunit/`, which carries
+its own; see [Select the runner](/configuration/gdunit#select-the-runner).
 
 Use the host's MTP options for these commands. GdUnit's
 [standalone command-line options](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/cmd/)

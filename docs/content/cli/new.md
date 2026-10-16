@@ -29,7 +29,8 @@ The host is excluded from plain solution builds.
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
-`--xunit`, `--gdunit` or `--nunit`.
+`--xunit`, `--gdunit` or `--nunit`. With a test host, the root `global.json`
+selects Microsoft.Testing.Platform, so `dotnet test` runs every test host.
 
 ## Options
 

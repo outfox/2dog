@@ -233,7 +233,8 @@ internal static class ScaffoldCommand
         PlanRootBuildProps(plan, projectDir);
         PlanPropsValues(plan, projectDir);
         var wantsMaui = newHosts.Any(h => h.Kind == HostKind.Maui) || existingHosts.Any(h => h.Kind == HostKind.Maui);
-        PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting, wantsMaui);
+        PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting, wantsMaui,
+            newHosts.Where(h => Hosts.IsTestHost(h.Kind)).Select(h => h.Folder).ToList());
         PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
         PlanXrShaders(plan, project, newHosts);
@@ -522,15 +523,21 @@ internal static class ScaffoldCommand
             : csproj.Replace($"{baseName}.web/TwoDogWebBoot.cs", $"{webFolder}/TwoDogWebBoot.cs");
 
     private static void PlanRootGlobalJson(
-        List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting, bool wantsMaui)
+        List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting, bool wantsMaui,
+        IReadOnlyList<string> newTestHosts)
     {
-        if (!wantsWeb && !wantsMaui) return;
+        if (!wantsWeb && !wantsMaui && newTestHosts.Count == 0) return;
 
         // global.json applies at or below its directory, so a root pin is what lets the web host publish from
-        // there. An existing global.json is the user's SDK policy - never touch it, not even with --force.
+        // there, and its test runner is what lets MTP test hosts run under `dotnet test` from the root. An existing
+        // global.json is the user's SDK policy - never touch it, not even with --force.
         var path = Path.Combine(projectDir, "global.json");
         if (File.Exists(path))
         {
+            if (newTestHosts.Count > 0 && !DotnetInfo.SelectsTestingPlatform(File.ReadAllText(path)))
+                warnings.Add("global.json does not select Microsoft.Testing.Platform - left untouched. `dotnet test` " +
+                             $"from the project root fails for {string.Join(", ", newTestHosts)} until it contains " +
+                             "\"test\": { \"runner\": \"Microsoft.Testing.Platform\" }.");
             if (retrofitting && wantsWeb)
                 warnings.Add("global.json already exists - left untouched. Publishing the web host from the " +
                              "project root needs it to pin a .NET 10 SDK with the wasm-tools workload " +
@@ -541,9 +548,9 @@ internal static class ScaffoldCommand
             return;
         }
 
-        plan.Add(new PlannedAction(wantsWeb
-            ? "create global.json (pins a wasm-capable SDK for the whole project)"
-            : "create global.json (pins a .NET 10 SDK for MAUI workloads)", ActionKind.CreateFile,
+        plan.Add(new PlannedAction(wantsWeb ? "create global.json (pins a wasm-capable SDK for the whole project)"
+            : wantsMaui ? "create global.json (pins a .NET 10 SDK for MAUI workloads)"
+            : "create global.json (selects Microsoft.Testing.Platform for dotnet test)", ActionKind.CreateFile,
             () => File.WriteAllText(path, TemplateAssets.RootGlobalJson())));
     }
 
@@ -801,16 +808,14 @@ internal static class ScaffoldCommand
             HostKind.Tests => ($"dotnet test {host.Folder}", "xUnit tests (headless Godot)"),
             HostKind.Repl => ($"dotnet run --project {host.Folder}", "interactive C# REPL (live Godot)"),
             HostKind.NUnit => ($"dotnet test {host.Folder}", "NUnit tests (headless Godot)"),
-            HostKind.GdUnit => ($"dotnet run --project {host.Folder}", "GdUnit GDScript tests (MTP)"),
+            HostKind.GdUnit => ($"dotnet test {host.Folder}", "GdUnit GDScript tests"),
             HostKind.Web => ($"dotnet publish {host.Folder}", "browser bundle (needs wasm-tools workload)"),
             HostKind.WebXr => ($"dotnet publish {host.Folder}", "WebXR browser bundle (needs wasm-tools workload)"),
             HostKind.WinForms => ($"dotnet run --project {host.Folder}", "WinForms host (Windows only)"),
             HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
             HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
             HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
-            HostKind.Maui => (OperatingSystem.IsWindows()
-                ? $"dotnet run --project {host.Folder} -f net10.0-windows10.0.19041.0"
-                : $"dotnet build {host.Folder} -f net10.0-android", "MAUI host (Windows and Android; needs MAUI workloads)"),
+            HostKind.Maui => ($"dotnet run --project {host.Folder}", "MAUI host (Windows and Android; needs MAUI workloads)"),
             HostKind.Android => ($"dotnet publish {host.Folder}", "Android APK (needs the android workload)"),
             _ => (host.Folder, ""),
         }).ToList();

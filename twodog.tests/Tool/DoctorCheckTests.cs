@@ -426,6 +426,27 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
+    public void TestRunner_FlagsVsTestHostsAndGlobalJsonWithoutMtp()
+    {
+        var dir = Scaffold("--xunit", "--nunit", "--gdunit");
+        Assert.All(Findings(Doctor(dir, "--json").Stdout, "layout.test-runner"), f => Assert.Equal("pass", f.GetProperty("severity").GetString()));
+
+        Edit(dir, "Game.xunit/Game.xunit.csproj", "<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>", "");
+        var vstest = Issue(Doctor(dir, "--json").Stdout, "layout.test-runner", "warn", fixable: false);
+        Assert.Contains("Game.xunit", vstest.GetProperty("title").GetString());
+
+        Edit(dir, "Game.xunit/Game.xunit.csproj", "<OutputType>Exe</OutputType>",
+            "<OutputType>Exe</OutputType><UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>");
+        File.WriteAllText(Path.Combine(dir, "global.json"), "{ \"sdk\": { \"version\": \"10.0.100\", \"rollForward\": \"latestFeature\" } }");
+        Issue(Doctor(dir, "--json").Stdout, "layout.test-runner", "warn", fixable: false);
+
+        File.Delete(Path.Combine(dir, "global.json"));
+        Issue(Doctor(dir, "--json").Stdout, "layout.test-runner", "warn", fixable: true);
+        Doctor(dir, "--fix");
+        Assert.True(DotnetInfo.SelectsTestingPlatform(File.ReadAllText(Path.Combine(dir, "global.json"))));
+    }
+
+    [Fact]
     public void FixAll_AddsProjectsAndBacksUpBeforeMigratingSln()
     {
         var dir = Scaffold("--generic");

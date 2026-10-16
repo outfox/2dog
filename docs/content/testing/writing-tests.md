@@ -133,9 +133,13 @@ checks for the whole project or fixture leaves the log available for inspection.
 ```bash
 dotnet test MyGame.xunit
 dotnet test MyGame.nunit -c Release
-dotnet test MyGame.xunit --filter "FullyQualifiedName~SceneTests"
-dotnet test MyGame.nunit --logger "console;verbosity=detailed"
+dotnet test MyGame.xunit --filter-class "*SceneTests"
+dotnet test MyGame.nunit --output Detailed
 ```
+
+Scaffolded hosts run on Microsoft.Testing.Platform, so `dotnet test` with no
+project runs every test host. xUnit selects tests with options such as
+`--filter-class` and `--filter-method`; VSTest's `--logger` does not apply.
 
 Resource import runs automatically when the test project builds. For Editor
 APIs, choose `-c Editor` and check your

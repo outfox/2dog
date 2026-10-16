@@ -149,11 +149,13 @@ The scaffold sets this up for you. For an existing test project:
 ```bash
 dotnet add package 2dog.engine
 dotnet add package 2dog.xunit
-dotnet add package xunit.v3
-dotnet add package Microsoft.NET.Test.Sdk
-dotnet add package xunit.runner.visualstudio
+dotnet add package xunit.v3.mtp-v2
+dotnet add package Microsoft.Testing.Extensions.CodeCoverage
 ```
 
+Set `OutputType` to `Exe` and `UseMicrosoftTestingPlatformRunner` to `true`,
+and select Microsoft.Testing.Platform in `global.json`; see
+[xUnit configuration](/configuration/xunit#microsofttestingplatform).
 Select `2dog.engine.double` instead for double precision; `2dog.xunit` stays
 the same. See
 [xUnit configuration](/configuration/xunit) for game paths and Editor bindings.

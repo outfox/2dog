@@ -93,7 +93,10 @@ It registers the host's MTP extensions, including MSBuild integration.
 
 ## Select the runner
 
-Put this `global.json` inside `MyGame.gdunit/`:
+The .NET 10 SDK runs `dotnet test` on MTP only when a `global.json` at or
+above the working directory selects it. The scaffold creates a root
+`global.json` that does, unless the project already has one, and also puts
+this `global.json` inside `MyGame.gdunit/`:
 
 ```json
 {
@@ -102,13 +105,16 @@ Put this `global.json` inside `MyGame.gdunit/`:
 }
 ```
 
-Run commands from that directory so the .NET SDK selects MTP:
+With the root file in place, run commands from the project root:
 
 ```bash
-cd MyGame.gdunit
-dotnet test --project MyGame.gdunit.csproj
-dotnet test --project MyGame.gdunit.csproj --list-tests
+dotnet test MyGame.gdunit
+dotnet test --project MyGame.gdunit --list-tests
 ```
+
+If you keep your own root `global.json` without the `test` runner, run from
+`MyGame.gdunit/` so the host's file applies, or add the `test` entry to the
+root file. [`2dog doctor`](/cli/doctor) reports this as `layout.test-runner`.
 
 ## Execution options
 

@@ -13,7 +13,7 @@ existing root `global.json`. Run from `MyGame.maui/` to use the host's pin.
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `TargetFrameworks` | `net10.0-android`, plus `net10.0-windows10.0.19041.0` on Windows | Select with `-f` |
+| `TargetFrameworks` | `net10.0-android`, plus `net10.0-windows10.0.19041.0` on Windows | Select with `-f`; `dotnet run` asks without it |
 | `GodotProjectDir` | `..` | Game directory for import and pack export |
 | `RuntimeIdentifier` | `win-x64` on Windows, `android-arm64` on Android | Native architecture; Android also supports `android-x64` |
 | `TwoDogVariant` | `debug` in Debug, `release` otherwise | Use Debug or Release |

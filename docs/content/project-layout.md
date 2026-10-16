@@ -67,6 +67,9 @@ loads the real game assembly and resources.
 dotnet test MyGame.xunit
 ```
 
+The root `global.json` selects Microsoft.Testing.Platform, so plain
+`dotnet test` from the root runs every xUnit, NUnit and GdUnit host.
+
 ### Web Host
 
 `MyGame.web` is a .NET WebAssembly host. Publishing it builds the managed

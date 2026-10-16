@@ -15,8 +15,12 @@ From your Godot project directory on Windows:
 ```bash
 dotnet workload install maui-windows maui-android
 dnx 2dog add --maui
-dotnet run --project MyGame.maui -f net10.0-windows10.0.19041.0
+dotnet run --project MyGame.maui
 ```
+
+The host targets several frameworks, so the .NET 10 SDK asks which one to
+run, or lists them when it cannot prompt. Add
+`-f net10.0-windows10.0.19041.0` to skip the question.
 
 For Android on any supported host OS, install `maui-android` and follow the
 [SDK and JDK setup](/hosts/android#set-it-up). To build for an x64 emulator:
@@ -25,7 +29,7 @@ For Android on any supported host OS, install `maui-android` and follow the
 dotnet build MyGame.maui -f net10.0-android -r android-x64
 ```
 
-Build the host directly with `-f`; MAUI projects are excluded from ordinary
+Build the host project directly; MAUI projects are excluded from ordinary
 solution builds. iOS and Mac Catalyst are unsupported.
 
 ## Customize It

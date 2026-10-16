@@ -76,6 +76,23 @@ internal static class DotnetInfo
         }
     }
 
+    /// <summary>Whether global.json selects Microsoft.Testing.Platform for <c>dotnet test</c> (the .NET 10 SDK opt-in).</summary>
+    public static bool SelectsTestingPlatform(string json)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(json, new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true });
+            return doc.RootElement.ValueKind == JsonValueKind.Object && doc.RootElement.TryGetProperty("test", out var test)
+                   && test.ValueKind == JsonValueKind.Object && test.TryGetProperty("runner", out var runner)
+                   && runner.ValueKind == JsonValueKind.String
+                   && string.Equals(runner.GetString(), "Microsoft.Testing.Platform", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
     /// <summary>Whether an installed SDK satisfies the pin under its roll-forward policy (the common policies).</summary>
     public static bool Satisfies(Version pin, string rollForward, IEnumerable<Sdk> installed)
     {

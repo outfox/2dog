@@ -29,9 +29,9 @@ Tests use the game directory and its imported resource cache. See
 
 ## Microsoft.Testing.Platform
 
-The host uses xUnit's own runner. Scaffolded projects use VSTest by default;
-their `xunit.v3` package also supports MTP v1. For MTP v2, replace that
-package with `xunit.v3.mtp-v2` and add these properties:
+The host uses xUnit's own runner on MTP v2. Scaffolded projects reference
+`xunit.v3.mtp-v2` and `Microsoft.Testing.Extensions.CodeCoverage`, and set
+these properties:
 
 ```xml
 <PropertyGroup>
@@ -40,8 +40,11 @@ package with `xunit.v3.mtp-v2` and add these properties:
 </PropertyGroup>
 ```
 
-To select native MTP integration for `dotnet test` on .NET 10, add this
-alongside your SDK settings in `global.json`:
+On .NET 10, `dotnet test` runs every project of a run on the runner that
+`global.json` selects. The root `global.json` that 2dog creates with a test
+host selects MTP, so `dotnet test` from the project root runs the xUnit,
+NUnit and GdUnit hosts together. 2dog never edits an existing `global.json`;
+add this alongside your SDK settings:
 
 ```json
 "test": {
@@ -49,10 +52,20 @@ alongside your SDK settings in `global.json`:
 }
 ```
 
-Then run `dotnet test --project MyGame.xunit/MyGame.xunit.csproj`.
-The generated project retains the VSTest adapter for existing test tooling.
-VSTest coverage collector options apply to VSTest; configure MTP coverage
-through its extensions.
+```bash
+dotnet test MyGame.xunit
+dotnet test --project MyGame.xunit --coverage --coverage-output-format cobertura
+```
+
+Coverage uses MTP's `--coverage` option from
+`Microsoft.Testing.Extensions.CodeCoverage`; VSTest's
+`--collect "XPlat Code Coverage"` does not apply. Reports go to `TestResults/`.
+
+Hosts scaffolded before 2dog used MTP run on VSTest, and
+[`2dog doctor`](/cli/doctor) flags them with `layout.test-runner`. To migrate
+one, add the properties above, replace `xunit.v3` with `xunit.v3.mtp-v2` and
+`coverlet.collector` with `Microsoft.Testing.Extensions.CodeCoverage`, and
+remove `xunit.runner.visualstudio` and `Microsoft.NET.Test.Sdk`.
 
 2dog delegates discovery, filters, result reporting and cancellation to
 xUnit. Its entry point preserves the Godot owner thread, including the

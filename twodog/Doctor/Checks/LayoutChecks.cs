@@ -18,6 +18,7 @@ internal static class LayoutChecks
         new("layout.root-build-targets", Category.Layout, "Directory.Build.targets provides the deep-clean target"),
         new("layout.root-build-props", Category.Layout, "Directory.Build.props holds the shared package versions"),
         new("layout.root-global-json", Category.Layout, "global.json pins a wasm-capable SDK when a browser host exists"),
+        new("layout.test-runner", Category.Layout, "test hosts and global.json use Microsoft.Testing.Platform for dotnet test"),
     ];
 
     public static IEnumerable<Finding> Run(DoctorContext ctx)
@@ -142,7 +143,63 @@ internal static class LayoutChecks
                         () => File.WriteAllText(globalJson, TemplateAssets.RootGlobalJson())));
             }
         }
+
+        foreach (var finding in TestRunner(p)) yield return finding;
     }
+
+    /// <summary>
+    /// .NET 10's dotnet test runs every project of a run on the runner global.json selects, and MTP projects fail
+    /// under VSTest. GdUnit hosts are MTP-only, so all test hosts share MTP.
+    /// </summary>
+    private static IEnumerable<Finding> TestRunner(ProjectModel p)
+    {
+        const Category c = Category.Layout;
+        var testHosts = p.Hosts.Where(h => Hosts.IsTestHost(h.Kind)).ToList();
+        if (testHosts.Count == 0) yield break;
+
+        var healthy = true;
+        foreach (var host in testHosts.Where(h => !UsesTestingPlatform(h)))
+        {
+            healthy = false;
+            yield return new Finding("layout.test-runner", c, Severity.Warn, $"{host.Folder} runs on VSTest",
+                "dotnet test runs every test host on Microsoft.Testing.Platform when global.json selects it",
+                host.Kind == HostKind.Tests
+                    ? "set OutputType Exe and UseMicrosoftTestingPlatformRunner, and reference xunit.v3.mtp-v2 instead of xunit.v3"
+                    : "set OutputType Exe and EnableNUnitRunner",
+                $"{host.Folder}/{host.Folder}.csproj");
+        }
+
+        var above = p.RootGlobalJsonText == null ? FindAbove(p.Dir, "global.json") : null;
+        var json = p.RootGlobalJsonText ?? (above != null ? File.ReadAllText(above) : null);
+        if (json == null)
+        {
+            var globalJson = Path.Combine(p.Dir, "global.json");
+            yield return new Finding("layout.test-runner", c, Severity.Warn, "no global.json selects Microsoft.Testing.Platform",
+                "dotnet test uses VSTest, which cannot run the test hosts", null, "global.json",
+                new Fix("create:global.json", FixClass.Safe, "create global.json (selects Microsoft.Testing.Platform)",
+                    () => File.WriteAllText(globalJson, TemplateAssets.RootGlobalJson())));
+        }
+        else if (!DotnetInfo.SelectsTestingPlatform(json))
+        {
+            yield return new Finding("layout.test-runner", c, Severity.Warn,
+                above == null ? "global.json does not select Microsoft.Testing.Platform" : "the parent global.json does not select Microsoft.Testing.Platform",
+                "dotnet test uses VSTest, which cannot run the test hosts",
+                "add \"test\": { \"runner\": \"Microsoft.Testing.Platform\" } (2dog never edits global.json)", above ?? "global.json");
+        }
+        else if (healthy)
+        {
+            yield return Finding.Pass("layout.test-runner", c, "test hosts run on Microsoft.Testing.Platform");
+        }
+    }
+
+    private static bool UsesTestingPlatform(HostModel host) => host.Kind switch
+    {
+        HostKind.Tests => IsTrue(host.Property("UseMicrosoftTestingPlatformRunner")),
+        HostKind.NUnit => IsTrue(host.Property("EnableNUnitRunner")),
+        _ => true,
+    };
+
+    private static bool IsTrue(string? value) => string.Equals(value, "true", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>A monorepo may keep the file above the project; MSBuild and the SDK resolver find it there.</summary>
     private static string? FindAbove(string dir, string fileName)

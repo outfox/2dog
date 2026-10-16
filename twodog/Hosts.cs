@@ -182,6 +182,9 @@ internal static class Hosts
     };
 
     /// <summary>How the interactive picker groups the kinds.</summary>
+    /// <summary>Test hosts run on Microsoft.Testing.Platform, which <c>dotnet test</c> uses only when global.json selects it.</summary>
+    public static bool IsTestHost(HostKind kind) => Group(kind) == HostGroup.Testing;
+
     public static HostGroup Group(HostKind kind) => kind switch
     {
         HostKind.Desktop => HostGroup.Generic,
