@@ -58,6 +58,9 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Additional Godot command-line arguments (after the pack argument).</summary>
     [Parameter] public IReadOnlyList<string>? Args { get; set; }
 
+    /// <summary>Browser renderer: "webgpu" or "opengl3". Null follows --rendering-driver in Args, otherwise OpenGL.</summary>
+    [Parameter] public string? RenderingDriver { get; set; }
+
     /// <summary>How the canvas is sized; see <see cref="GodotCanvasResize"/>.</summary>
     [Parameter] public GodotCanvasResize Resize { get; set; } = GodotCanvasResize.Container;
 
@@ -157,6 +160,13 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
 
             // The pack is copied into the wasm file system under its own name; Godot opens it from there.
             var packName = Path.GetFileName(PackUrl);
+            var renderingDriver = RenderingDriver;
+            if (renderingDriver is null && Args is not null)
+                for (int i = 0; i + 1 < Args.Count; i++)
+                    if (Args[i] == "--rendering-driver") renderingDriver = Args[i + 1];
+            renderingDriver ??= "opengl3";
+            if (renderingDriver is not ("opengl3" or "webgpu"))
+                throw new ArgumentException("Blazor supports the opengl3 or webgpu rendering driver.", nameof(RenderingDriver));
             await _module.InvokeVoidAsync("prepare", _disposeCancellation.Token, _canvas, new
             {
                 packUrl = PackUrl,
@@ -164,6 +174,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
                 resize = (int)Resize,
                 focusCanvas = FocusCanvas,
                 locale = Locale,
+                renderingDriver,
             });
             if (_disposed) return;
 
@@ -172,7 +183,9 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             Engine.WebExitRuntimeOnQuit = false;
 
             var args = new List<string> { "--main-pack", packName };
+            if (renderingDriver == "webgpu") args.AddRange(["--rendering-driver", "webgpu", "--rendering-method", "mobile"]);
             if (Args is not null) args.AddRange(Args);
+            if (RenderingDriver is not null) args.AddRange(["--rendering-driver", RenderingDriver]);
 
             var engine = new Engine(Project, args: args.ToArray());
             Engine = engine;

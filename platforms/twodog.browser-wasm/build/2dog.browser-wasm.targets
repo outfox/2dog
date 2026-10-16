@@ -29,6 +29,8 @@
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'debug' And Exists('$(_TwoDogWebDebugPackageDir)libgodot/libgodot.a')">$(_TwoDogWebDebugPackageDir)</TwoDogWebNativeDir>
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(TwoDogWebVariant)' == 'release' And Exists('$(_TwoDogWebReleasePackageDir)libgodot/libgodot.a')">$(_TwoDogWebReleasePackageDir)</TwoDogWebNativeDir>
         <TwoDogWebNativeDir Condition="'$(TwoDogWebNativeDir)' == '' And '$(_TwoDogWebBuildVariant)' != '' And Exists('$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/$(_TwoDogWebPayloadName)/$(_TwoDogWebBuildVariant)/libgodot/libgodot.a')">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/$(_TwoDogWebPayloadName)/$(_TwoDogWebBuildVariant)/</TwoDogWebNativeDir>
+        <_TwoDogWebGpuPort Condition="Exists('$(TwoDogWebNativeDir)libgodot/emdawnwebgpu/emdawnwebgpu.port.py')">$([System.IO.Path]::GetFullPath('$(TwoDogWebNativeDir)libgodot/emdawnwebgpu/emdawnwebgpu.port.py').Replace('\', '/'))</_TwoDogWebGpuPort>
+        <_TwoDogWebGpuExterns Condition="'$(_TwoDogWebGpuPort)' != ''">$([System.IO.Path]::GetFullPath('$(TwoDogWebNativeDir)libgodot/emdawnwebgpu/webgpu/src/webgpu-externs.js').Replace('\', '/'))</_TwoDogWebGpuExterns>
     </PropertyGroup>
 
     <!-- Wasm build configuration -->
@@ -100,6 +102,10 @@
         <_TwoDogGodotJsLibraries Include="$(TwoDogWebNativeDir)libgodot/js_library/**/*.js"/>
         <_TwoDogGodotPreJs Include="$(TwoDogWebNativeDir)libgodot/pre_js/**/*.js"/>
         <_TwoDogGodotPostJs Include="$(TwoDogWebNativeDir)libgodot/post_js/**/*.js"/>
+        <!-- The port is carried with the selected native payload, including its Emscripten 3.x shim. -->
+        <TwoDogGodotEmccExtraLDFlag Include="-sDEFAULT_TO_CXX=1" Condition="Exists('$(TwoDogWebNativeDir)libgodot/emdawnwebgpu/emdawnwebgpu.port.py')"/>
+        <TwoDogGodotEmccExtraLDFlag Include="--use-port=&quot;$(_TwoDogWebGpuPort)&quot;" Condition="'$(_TwoDogWebGpuPort)' != ''"/>
+        <TwoDogGodotEmccExtraLDFlag Include="--closure-args=&quot;--externs='$(_TwoDogWebGpuExterns)'&quot;" Condition="'$(_TwoDogWebGpuPort)' != ''"/>
 
         <!-- Godot-required emcc link flags (mirrors the engine's web link; recorded in
              $(TwoDogWebNativeDir)libgodot/config.json) -->
@@ -141,6 +147,22 @@
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' == 'true'">
         <_TwoDogBlazorAssetRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(BaseIntermediateOutputPath)', 'twodog-web', 'wwwroot'))</_TwoDogBlazorAssetRoot>
     </PropertyGroup>
+
+    <!-- The SDK's prebuilt Emscripten cache is frozen and cannot build an external port. Override the
+         compiler environment after the SDK constructs it, without changing its global WasmCachePath. -->
+    <Target Name="TwoDogWebGpuEnvironment" AfterTargets="_PrepareForBrowserWasmBuildNative"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And Exists('$(TwoDogWebNativeDir)libgodot/emdawnwebgpu/emdawnwebgpu.port.py')">
+        <PropertyGroup>
+            <TwoDogWebGpuCachePath Condition="'$(TwoDogWebGpuCachePath)' == '' And '$(WasmCachePath)' != '' And '$(WasmCachePath)' != '$(EmscriptenCacheSdkCacheDir)'">$(WasmCachePath)</TwoDogWebGpuCachePath>
+            <TwoDogWebGpuCachePath Condition="'$(TwoDogWebGpuCachePath)' == ''">$([System.IO.Path]::GetTempPath())2dog-webgpu-dotnet-emscripten-3.1.56</TwoDogWebGpuCachePath>
+        </PropertyGroup>
+        <ItemGroup>
+            <EmscriptenEnvVars Remove="@(EmscriptenEnvVars)"
+                              Condition="$([System.String]::Copy('%(Identity)').StartsWith('EM_CACHE=')) Or $([System.String]::Copy('%(Identity)').StartsWith('EM_FROZEN_CACHE='))"/>
+            <EmscriptenEnvVars Include="EM_CACHE=$(TwoDogWebGpuCachePath);EM_FROZEN_CACHE=0"/>
+        </ItemGroup>
+        <MakeDir Directories="$(TwoDogWebGpuCachePath)"/>
+    </Target>
 
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
         <EmccExtraLDFlags>$(EmccExtraLDFlags) @(TwoDogGodotEmccExtraLDFlag->'%(Identity)', ' ')</EmccExtraLDFlags>

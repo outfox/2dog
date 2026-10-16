@@ -24,10 +24,13 @@
             </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>
                 <PkgPath>$(NuGetPackageRoot)/%(PackageId).$(_TwoDogNativeVariant)$(TwoDogPackageSuffix)/%(PackageVersion)/runtimes/%(Identity)/native/%(OutName)</PkgPath>
+                <PkgNativeDir>$(NuGetPackageRoot)/%(PackageId).$(_TwoDogNativeVariant)$(TwoDogPackageSuffix)/%(PackageVersion)/runtimes/%(Identity)/native/</PkgNativeDir>
                 <LocalPath>%(LocalBin)%(LocalFile)</LocalPath>
+                <SidecarDir>%(LocalBin)webgpu/%(Identity)/</SidecarDir>
             </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>
                 <Resolved Condition="Exists('%(PkgPath)')">%(PkgPath)</Resolved>
+                <SidecarDir Condition="Exists('%(PkgPath)')">%(PkgNativeDir)</SidecarDir>
             </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>
                 <Resolved Condition="'%(Resolved)' == '' And Exists('%(LocalPath)')">%(LocalPath)</Resolved>
@@ -49,6 +52,14 @@
               DestinationFiles="$(OutputPath)%(_TwoDogNativeForBuild.OutName)"
               SkipUnchangedFiles="true"
               Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
+        <ItemGroup>
+            <_TwoDogSidecarForBuild Include="%(_TwoDogNativeForBuild.SidecarDir)**/*"
+                                    Exclude="%(_TwoDogNativeForBuild.Resolved)"
+                                    Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
+        </ItemGroup>
+        <Copy SourceFiles="@(_TwoDogSidecarForBuild)"
+              DestinationFiles="@(_TwoDogSidecarForBuild->'$(OutputPath)%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true"/>
         <Message Importance="normal"
                  Text="2dog: copied %(_TwoDogNativeForBuild.OutName) to $(OutputPath)"
                  Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
@@ -68,6 +79,14 @@
               DestinationFiles="$(PublishDir)%(_TwoDogNativeForPublish.OutName)"
               SkipUnchangedFiles="true"
               Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
+        <ItemGroup>
+            <_TwoDogSidecarForPublish Include="%(_TwoDogNativeForPublish.SidecarDir)**/*"
+                                      Exclude="%(_TwoDogNativeForPublish.Resolved)"
+                                      Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
+        </ItemGroup>
+        <Copy SourceFiles="@(_TwoDogSidecarForPublish)"
+              DestinationFiles="@(_TwoDogSidecarForPublish->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true"/>
         <Message Importance="high"
                  Text="2dog: published %(_TwoDogNativeForPublish.OutName) to $(PublishDir)"
                  Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>

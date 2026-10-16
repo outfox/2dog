@@ -44,3 +44,16 @@ Keep `PrivateAssets="all"` on the client's engine and browser package references
 so their build targets stay out of the server; the generated engine reference
 also sets `Publish="true"` so its managed assemblies remain in the client publish.
 See the [Blazor host guide](/hosts/blazor) for `GodotView` and static asset serving.
+
+## WebGPU on the WebGPU Branch
+
+Set `RenderingDriver="webgpu"` on `GodotView` to request a WebGPU device before
+starting the engine and select the Mobile renderer. The browser must expose
+WebGPU in a secure context. The default remains OpenGL/WebGL Compatibility.
+You can also supply `--rendering-driver webgpu` through `Args`; the view uses
+that argument when `RenderingDriver` is unset. The device is reused across
+view lifetimes, and a cancelled initialization releases its unclaimed device.
+
+The single-threaded browser packages supply Dawn's link configuration and a
+writable Emscripten cache. This path requires the single-precision WebGPU
+branch packages; see [build configurations](/build-configurations#webgpu-branch).

@@ -27,12 +27,32 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogWebSideModuleTableSlots` | `16384` | With threads: function table slots reserved for GDExtension side modules |
 | `WasmEmitSymbolMap` | `false` in Release, `true` otherwise | Include native symbols for stack traces; explicit settings override the default |
 | `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
+| `TwoDogWebGpuCachePath` | System temporary directory | Writable Emscripten port cache when using WebGPU branch natives |
 
 `2dog.browser-wasm` restores both debug and release natives. A missing selected
 payload fails the build. Editor configuration selects the unsupported editor
 variant and fails; use Debug or Release, or explicitly select a supported variant.
 
 Changing `TwoDogWebPackName` also requires matching the pack URL in your boot page.
+
+## WebGPU on the WebGPU Branch
+
+The single-threaded packages include both WebGPU and WebGL. In the host's
+`wwwroot/index.html`, set the following fields of `GODOT_CONFIG` before
+creating `Engine`:
+
+```javascript
+'renderingDriver': 'webgpu',
+'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
+```
+
+The shell requests a WebGPU device before initializing Godot. The browser must
+expose WebGPU in a secure context. Keep `opengl3` and the Compatibility renderer
+to use WebGL. The package supplies Dawn's port, final-link flags, and a writable
+cache automatically; no custom emcc flags are needed in the host project.
+
+See [build configurations](/build-configurations#webgpu-branch) for the branch's
+precision and threading scope.
 
 ## Precompression
 

@@ -91,6 +91,45 @@ if referenced explicitly, append `.double` to the entire ID, such as
 GDExtensions must also match the precision!
 :::
 
+## WebGPU Branch
+
+The `webgpu` branch includes native Dawn/WebGPU in single-precision desktop
+packages and WebGPU in single-threaded browser packages. Existing renderer
+defaults stay unchanged. Double precision, threaded web, Android, and WebXR
+retain their existing renderer paths.
+
+Select WebGPU Mobile in a desktop host with Godot's arguments:
+
+```bash
+dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method mobile
+```
+
+The platform package copies Dawn and its dependencies beside libgodot for
+both build and publish. Keep those files and their `licenses/` directory when
+deploying. Browser packages carry the pinned Emscripten port and supply the
+final-link flags automatically. See [Web configuration](/configuration/web)
+for browser initialization and [Blazor configuration](/configuration/blazor)
+for the view parameter.
+
+Source builds enable WebGPU automatically on supported configurations:
+
+```bash
+uv run build-godot.py
+uv run build-godot.py --platform web
+uv run poe build
+```
+
+The builder verifies the pinned Dawn and DXC downloads and builds a small
+shared C API library around Dawn. It requires a C++20 compiler and prepares
+its pinned CMake through `uv`. An existing SDK can be selected with
+`--webgpu-native-path <sdk>`; it must contain runtime dependencies and a
+`licenses/` directory. `--webgpu no` builds the original renderer set.
+
+The existing Emscripten pin remains in force. Browser linking uses a writable
+cache for the external Dawn port; set `TwoDogWebGpuCachePath` to override its
+default under the system temporary directory. Keep it separate from a native
+SCons cache, and on the Emscripten SDK's drive on Windows.
+
 ## Editor Variants
 
 ::: tip Opening the editor

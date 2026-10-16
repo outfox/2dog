@@ -16,6 +16,28 @@ Oh btw., this means you can [export Godot C# to the web](https://2dog.dev/web.ht
 
 2dog ships with pre-built native libraries, so you do not have to compile Godot yourself.
 
+## WebGPU branch
+
+The `webgpu` branch pins `thygrrr/godot`'s `2dog-4.7.2-webgpu` renderer fork.
+Its single-precision Windows, Linux and macOS builds include native WebGPU
+alongside the existing drivers. Desktop packages carry Dawn, its compiler
+dependencies and notices; build and publish copy them with libgodot. The
+single-threaded browser packages include WebGPU and WebGL with the pinned
+Emscripten port and final-link configuration.
+
+Select `--rendering-driver webgpu --rendering-method mobile` on desktop.
+Web shells also set `renderingDriver: 'webgpu'` before engine initialization;
+Blazor views can set `RenderingDriver="webgpu"`. Existing renderer defaults
+remain unchanged. Double precision, threaded web, Android and WebXR keep their
+existing paths.
+
+Normal `uv run poe build-all` builds and packages the host with WebGPU on this
+branch. The native builder downloads checksum-verified Dawn/DXC releases and
+builds a shared C API boundary to isolate Dawn's Tint from Godot's compiler.
+Use `--webgpu no` to omit it, or `--webgpu-native-path <sdk>` to supply an SDK
+with its runtime dependencies and `licenses/` folder. See
+[build configurations](docs/content/build-configurations.md#webgpu-branch).
+
 ## One Godot project, plenty of ways to run
 
 Keep your scenes, scripts and assets as you had them, in your normal Godot project. No change needed.

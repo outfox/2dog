@@ -301,7 +301,9 @@ jobs:
       - name: Test precision build configuration
         env:
           TwoDogPrecision: ''
-        run: uv run python -m unittest discover -s tests/precision -v
+        run: |
+          uv run python -m unittest discover -s tests/precision -v
+          uv run python -m unittest discover -s tests/webgpu -v
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
@@ -704,6 +706,20 @@ jobs:
       # self-contained hosts must not reach gd_mono's hostfxr fallback.
       - name: Publish showcase desktop host (Release, RID)
         run: dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
+
+      - name: Install WebGPU display dependencies (Linux)
+        if: runner.os == 'Linux' && matrix.precision == 'single'
+        run: sudo apt-get update && sudo apt-get install -y xvfb mesa-vulkan-drivers libvulkan1
+
+      - name: Render and restart native WebGPU from packages
+        if: matrix.precision == 'single'
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a dotnet run --project tests/webgpu-smoke -c Release
+          else
+            dotnet run --project tests/webgpu-smoke -c Release
+          fi
 
       # RID-less publish is the most natural user command: the SDK infers the
       # host RID for the self-contained default and publishes through an inner

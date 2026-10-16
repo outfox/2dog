@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <TwoDogAutoImport>false</TwoDogAutoImport>
+    <TwoDogExportPack>false</TwoDogExportPack>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+    <None Update="project.godot;main.tscn" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

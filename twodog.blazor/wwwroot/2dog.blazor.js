@@ -23,6 +23,29 @@ function resolveUrl(url) {
     return new URL(url, document.baseURI).href;
 }
 
+async function requestWebGpuDevice() {
+    if (!navigator.gpu) throw new Error('2dog.blazor: WebGPU is unavailable in this browser or context.');
+    const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
+    if (!adapter) throw new Error('2dog.blazor: no WebGPU adapter is available.');
+    const features = [
+        'timestamp-query', 'texture-formats-tier1', 'texture-formats-tier2',
+        'float32-filterable', 'float32-blendable', 'rg11b10ufloat-renderable',
+        'clip-distances', 'dual-source-blending', 'texture-compression-bc',
+        'texture-compression-etc2', 'texture-compression-astc',
+        'readonly-and-readwrite-storage-textures',
+    ];
+    const limits = {};
+    for (const name of [
+        'maxStorageBuffersPerShaderStage', 'maxStorageBufferBindingSize', 'maxBufferSize',
+        'maxUniformBufferBindingSize', 'maxUniformBuffersPerShaderStage',
+        'maxSampledTexturesPerShaderStage', 'maxSamplersPerShaderStage',
+        'maxColorAttachments', 'maxBindGroups',
+    ]) {
+        if (adapter.limits[name] !== undefined) limits[name] = adapter.limits[name];
+    }
+    return adapter.requestDevice({ requiredFeatures: features.filter(name => adapter.features.has(name)), requiredLimits: limits });
+}
+
 // Like Godot's own preloader (engine.js retries every download), a transient failure must not fail the start:
 // CI restarts saw the pack fetch cancelled at the network layer (net::ERR_ABORTED) while the server served it fine.
 const PACK_ATTEMPTS = 4;
@@ -110,6 +133,18 @@ export async function prepare(canvas, options) {
     }
 
     try {
+        if (options.renderingDriver === 'webgpu' && !Module.preinitializedWebGPUDevice) {
+            const device = await requestWebGpuDevice();
+            if (controller.signal.aborted) {
+                device.destroy();
+                controller.signal.throwIfAborted();
+            }
+            Module.preinitializedWebGPUDevice = device;
+            device.lost.then(info => {
+                if (info.reason !== 'destroyed') console.error('2dog.blazor: WebGPU device lost: ' + info.message);
+                if (Module.preinitializedWebGPUDevice === device) delete Module.preinitializedWebGPUDevice;
+            });
+        }
         // An interop cancellation can release the lease while initFS is still running.
         // The next view must join that initialization instead of mounting IDBFS twice.
         await (fsInitialization ??= Module.initFS(['/userfs']).catch((error) => {

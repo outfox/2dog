@@ -175,7 +175,10 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: godot-editor-linux-x64-${{ inputs.precision }}
-          path: godot/bin/godot.linuxbsd.editor${{ env.NATIVE_SUFFIX }}.x86_64.executable.mono
+          path: |
+            godot/bin/godot.linuxbsd.editor${{ env.NATIVE_SUFFIX }}.x86_64.executable.mono
+            godot/bin/libgodot_webgpu_dawn.so
+            godot/bin/webgpu/linux-x64/licenses/
           if-no-files-found: error
           retention-days: 7
 
@@ -378,7 +381,9 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
-          path: godot/bin/${{ env.NATIVE_SUBDIR }}*godot.${{ matrix.platform }}.${{ matrix.target }}${{ env.NATIVE_SUFFIX }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
+          path: |
+            godot/bin/${{ env.NATIVE_SUBDIR }}*godot.${{ matrix.platform }}.${{ matrix.target }}${{ env.NATIVE_SUFFIX }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
+            godot/bin/${{ env.NATIVE_SUBDIR }}webgpu/${{ matrix.rid }}/
           if-no-files-found: error
           retention-days: 7
 
