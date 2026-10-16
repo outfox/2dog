@@ -9,7 +9,7 @@ const props = [
 ]
 </script>
 
-<template>
+<template><!--
   <section class="home-section gpu" aria-labelledby="gpu-title">
     <div class="home-wrap gpu-grid">
       <div>
@@ -44,6 +44,7 @@ const props = [
       </dl>
     </div>
   </section>
+  -->
 </template>
 
 <style>

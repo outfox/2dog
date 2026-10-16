@@ -102,7 +102,7 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
       {
         name: 'WebAssembly',
         flag: '--web',
-        text: 'Your C# game as a static site, WebGL or WebGPU.<br/>No more waiting for Godot!',
+        text: 'C# Games as an AppBundle. WebGL, and soon WebGPU.<br/>No more waiting for Godot!',
         link: '/hosts/web',
         brand: 'webassembly',
         mark: 'var(--mark-wasm)',

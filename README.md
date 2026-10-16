@@ -112,7 +112,7 @@ If you skip the offer or run unattended, use
 
 ```bash
 dotnet publish MyGame.web
-dnx dotnet-serve -d MyGame.web/AppBundle
+dnx dotnet-serve -- -d MyGame.web/AppBundle
 ```
 
 See the [Web host](https://2dog.dev/hosts/web) for building and deployment.

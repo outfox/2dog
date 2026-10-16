@@ -23,7 +23,7 @@ dotnet publish MyGame.webxr
 Serve the site:
 
 ```bash
-dnx dotnet-serve -d MyGame.webxr/AppBundle
+dnx dotnet-serve -- -d MyGame.webxr/AppBundle
 ```
 
 ## Set Up Your Scene

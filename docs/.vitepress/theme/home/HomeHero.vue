@@ -108,12 +108,14 @@ async function copyCommands() {
               <span class="art-dots"><i></i><i></i><i></i></span>
               <span class="art-url">mygame.example</span>
             </div>
+            <!---
             <div class="game-view art-view">
               <img class="art-icon" :src="withBase('/icon.svg')" alt="" width="568" height="573" />
               <span class="art-badge">
                 <img :src="webgpuLogoUrl()" alt="" width="19" height="12" />WebGPU
               </span>
             </div>
+            -->
           </div>
 
           <div class="art-phone">

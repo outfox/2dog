@@ -16,7 +16,7 @@ installation offer if `wasm-tools` is missing:
 ```bash
 dnx 2dog add --web
 dotnet publish MyGame.web
-dnx dotnet-serve -d MyGame.web/AppBundle
+dnx dotnet-serve -- -d MyGame.web/AppBundle
 ```
 
 Open the URL printed by the server. Game output appears in the browser console.
@@ -53,7 +53,7 @@ through `TwoDogWebExportPreset`. The threaded engine has no WebXR.
 The page must be cross-origin isolated, so serve it with these headers:
 
 ```bash
-dnx dotnet-serve -d MyGame.web/AppBundle -h "Cross-Origin-Opener-Policy: same-origin" -h "Cross-Origin-Embedder-Policy: require-corp"
+dnx dotnet-serve -- -d MyGame.web/AppBundle -h "Cross-Origin-Opener-Policy: same-origin" -h "Cross-Origin-Embedder-Policy: require-corp"
 ```
 
 GDExtensions need a `-pthread` side module under a `web.wasm32.threads` key.
