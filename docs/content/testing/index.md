@@ -59,7 +59,10 @@ All three scaffolded hosts run on Microsoft.Testing.Platform (MTP):
 The .NET 10 SDK runs every project of a `dotnet test` run on the runner that
 `global.json` selects. When 2dog scaffolds a test host into a project without
 a root `global.json`, it creates one that selects MTP, so `dotnet test` from
-the project root runs all of them. Every scaffolded host references
+the project root runs all of them. The SDK looks for `global.json` from the
+working directory, not from the project path: `dotnet test MyGame/MyGame.xunit`
+from the parent directory falls back to VSTest and fails with "Testing with
+VSTest target is no longer supported". Every scaffolded host references
 `Microsoft.Testing.Extensions.CodeCoverage`, so `dotnet test --coverage`
 collects coverage for all of them. NUnit's adapter has a
 [session cancellation limitation](/configuration/nunit#cancellation);
