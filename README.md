@@ -26,6 +26,9 @@ single-threaded browser packages include WebGPU and WebGL with the pinned
 Emscripten port and final-link configuration.
 
 Select `--rendering-driver webgpu --rendering-method mobile` on desktop.
+When only the WebGPU driver is specified, it selects Mobile automatically.
+Forward+ is currently unsupported with WebGPU and is rejected before shader
+initialization. Other drivers retain their existing rendering methods.
 Web shells also set `renderingDriver: 'webgpu'` before engine initialization;
 Blazor views can set `RenderingDriver="webgpu"`. Existing renderer defaults
 remain unchanged. Double precision, threaded web, Android and WebXR keep their

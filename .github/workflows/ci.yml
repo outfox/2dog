@@ -712,6 +712,17 @@ jobs:
         if: runner.os == 'Linux' && matrix.precision == 'single'
         run: sudo apt-get update && sudo apt-get install -y xvfb mesa-vulkan-drivers libvulkan1
 
+      - name: Boot showcase in editor mode
+        shell: bash
+        run: |
+          dotnet run --project demos/showcase/showcase.2dog -c Editor -- \
+            --headless --editor --quit-after 10 > editor-smoke.log 2>&1
+          cat editor-smoke.log
+          grep -q '2DOG_EDITOR_SMOKE_PASSED' editor-smoke.log
+          if grep -Eq '2DOG_(CSHARP_SCRIPT|API)_SMOKE_PASSED|^ERROR:|^WARNING:' editor-smoke.log; then
+            exit 1
+          fi
+
       - name: Render and restart native WebGPU from packages
         if: matrix.precision == 'single'
         shell: bash
@@ -751,6 +762,16 @@ jobs:
           else
             dotnet run --project tests/webgpu-smoke -c Release
           fi
+
+      - name: Reject unsupported WebGPU Forward+ before shader initialization
+        if: matrix.precision == 'single'
+        shell: bash
+        run: |
+          dotnet run --project tests/webgpu-smoke -c Release -- \
+            webgpu forward_plus --expect-rejection > webgpu-method-smoke.log 2>&1
+          cat webgpu-method-smoke.log
+          grep -q 'WebGPU currently supports only the Mobile rendering method' webgpu-method-smoke.log
+          grep -q 'NATIVE_WEBGPU_FORWARD_PLUS_REJECTED' webgpu-method-smoke.log
 
       # RID-less publish is the most natural user command: the SDK infers the
       # host RID for the self-contained default and publishes through an inner

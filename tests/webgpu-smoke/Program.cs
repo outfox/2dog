@@ -7,15 +7,31 @@ internal static class Program
     private static void Main(string[] args)
     {
         var driver = args.FirstOrDefault() ?? "webgpu";
-        var method = driver == "opengl3" ? "gl_compatibility" : "mobile";
+        var method = args.ElementAtOrDefault(1)
+            ?? (driver == "opengl3" ? "gl_compatibility" : driver == "webgpu" ? "default" : "mobile");
+        var expectRejection = args.Contains("--expect-rejection");
         for (int lifetime = 0; lifetime < 2; lifetime++)
         {
-            string[] options = ["--rendering-driver", driver, "--rendering-method", method, "--audio-driver", "Dummy"];
+            string[] options = ["--rendering-driver", driver, "--audio-driver", "Dummy"];
+            if (method != "default") options = [.. options, "--rendering-method", method];
             if (OperatingSystem.IsLinux()) options = [.. options, "--display-driver", "x11"];
             using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true };
-            engine.Start();
+            try
+            {
+                engine.Start();
+            }
+            catch (NullReferenceException error) when (expectRejection
+                && error.Message.Contains("Error creating Godot instance, returned IntPtr.Zero"))
+            {
+                Console.WriteLine("NATIVE_WEBGPU_FORWARD_PLUS_REJECTED");
+                return;
+            }
+            if (expectRejection) throw new Exception("Unsupported rendering method was accepted.");
             if (RenderingServer.GetCurrentRenderingDriverName() != driver)
                 throw new Exception($"{driver} selection fell back to another rendering driver.");
+            if (method == "default" && driver == "webgpu"
+                && RenderingServer.GetCurrentRenderingMethod() != "mobile")
+                throw new Exception("An implicit WebGPU rendering method must select Mobile.");
             var root = new Node3D();
             engine.Tree.Root.AddChild(root);
             root.AddChild(new MeshInstance3D { Mesh = new BoxMesh() });

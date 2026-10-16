@@ -95,8 +95,11 @@ GDExtensions must also match the precision!
 
 The `webgpu` branch includes native Dawn/WebGPU in single-precision desktop
 packages and WebGPU in single-threaded browser packages. Existing renderer
-defaults stay unchanged. Double precision, threaded web, Android, and WebXR
-retain their existing renderer paths.
+defaults are preserved. An explicit WebGPU driver argument defaults to Mobile
+when no rendering method is supplied. Forward+ is currently unsupported with
+WebGPU and is rejected before shader initialization; Vulkan, D3D12 and Metal
+retain their existing rendering methods. Double precision, threaded web,
+Android, and WebXR retain their existing renderer paths.
 
 Native Dawn loads only when WebGPU is selected; existing renderers keep their
 original runtime requirements. WebGPU requires macOS 13 or newer on macOS and
