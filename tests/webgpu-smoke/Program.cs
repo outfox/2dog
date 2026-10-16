@@ -49,6 +49,7 @@ internal static class Program
                 var corner = image.GetPixel(0, 0);
                 if (center.IsEqualApprox(corner)) throw new Exception("WebGPU did not render distinct object/background pixels.");
             }
+            CanvasViewportSmoke.Run(engine);
             foreach (var format in new[] { Image.Format.L8, Image.Format.La8 })
             {
                 byte[] pixels = format == Image.Format.L8 ? [64, 128, 192, 255] : [64, 128, 128, 192, 192, 64, 255, 255];
