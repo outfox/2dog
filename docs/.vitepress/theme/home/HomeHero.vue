@@ -8,7 +8,7 @@ const { theme } = useData()
 const twodogVersion = computed(() => (theme.value as any).twodogVersion ?? '')
 const godotVersion = computed(() => (theme.value as any).godotVersion ?? '')
 
-const commands = ['cd MyGame', 'dnx 2dog add --web', 'dotnet publish MyGame.web']
+const commands = ['dnx 2dog add --web', 'dotnet publish MyGame.web']
 const copied = ref(false)
 
 async function copyCommands() {
@@ -130,7 +130,7 @@ async function copyCommands() {
               {{ copied ? 'Copied' : 'Copy' }}
             </button>
           </div>
-          <pre tabindex="0" aria-label="Shell commands"><code><template v-for="c in commands" :key="c"><span class="prompt" aria-hidden="true">$ </span>{{ c }}
+          <pre tabindex="0" aria-label="Shell commands"><code><template v-for="c in commands" :key="c"><span class="prompt" aria-hidden="true">~/MyGame&gt; </span>{{ c }}
 </template></code></pre>
           <span class="visually-hidden" aria-live="polite">{{ copied ? 'Commands copied' : '' }}</span>
         </div>
