@@ -737,7 +737,8 @@ jobs:
               kill "$WATCHDOG_PID" 2>/dev/null
               cat "$LOG"
               set -e
-              if ! grep -q "NATIVE_${DRIVER^^}_SMOKE_PASSED: lifetime 2" "$LOG" || \
+              MARKER=$(printf '%s' "$DRIVER" | tr '[:lower:]' '[:upper:]')
+              if ! grep -q "NATIVE_${MARKER}_SMOKE_PASSED: lifetime 2" "$LOG" || \
                  ! grep -q 'exited with status = 0 ' "$LOG"; then SMOKE_STATUS=1; fi
             done
             exit "$SMOKE_STATUS"
