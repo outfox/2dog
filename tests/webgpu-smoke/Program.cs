@@ -4,16 +4,18 @@ using Engine = twodog.Engine;
 internal static class Program
 {
     [STAThread]
-    private static void Main()
+    private static void Main(string[] args)
     {
+        var driver = args.FirstOrDefault() ?? "webgpu";
+        var method = driver == "opengl3" ? "gl_compatibility" : "mobile";
         for (int lifetime = 0; lifetime < 2; lifetime++)
         {
-            string[] options = ["--rendering-driver", "webgpu", "--rendering-method", "mobile", "--audio-driver", "Dummy"];
+            string[] options = ["--rendering-driver", driver, "--rendering-method", method, "--audio-driver", "Dummy"];
             if (OperatingSystem.IsLinux()) options = [.. options, "--display-driver", "x11"];
             using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true };
             engine.Start();
-            if (RenderingServer.GetCurrentRenderingDriverName() != "webgpu")
-                throw new Exception("WebGPU selection fell back to another rendering driver.");
+            if (RenderingServer.GetCurrentRenderingDriverName() != driver)
+                throw new Exception($"{driver} selection fell back to another rendering driver.");
             var root = new Node3D();
             engine.Tree.Root.AddChild(root);
             root.AddChild(new MeshInstance3D { Mesh = new BoxMesh() });
@@ -47,7 +49,7 @@ internal static class Program
             engine.Completion.GetAwaiter().GetResult();
             var errors = engine.Errors.Drain();
             if (errors.Length != 0) throw new Exception(string.Join("\n", errors.Select(error => error.ToString())));
-            Console.WriteLine($"NATIVE_WEBGPU_SMOKE_PASSED: lifetime {lifetime + 1}");
+            Console.WriteLine($"NATIVE_{driver.ToUpperInvariant()}_SMOKE_PASSED: lifetime {lifetime + 1}");
         }
     }
 }

@@ -717,6 +717,22 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = Linux ]; then
             xvfb-run -a dotnet run --project tests/webgpu-smoke -c Release
+          elif [ "$RUNNER_OS" = macOS ]; then
+            dotnet build tests/webgpu-smoke -c Release
+            SMOKE=tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke
+            # Keep a native stack for failures after the first engine teardown.
+            # Run the existing renderer separately to distinguish host lifecycle bugs.
+            set +e
+            lldb --batch --no-lldbinit -o run -k 'thread backtrace all' -k 'quit 1' -- "$SMOKE" opengl3 > /tmp/2dog-macos-opengl-smoke.log 2>&1
+            GL_STATUS=$?
+            cat /tmp/2dog-macos-opengl-smoke.log
+            lldb --batch --no-lldbinit -o run -k 'thread backtrace all' -k 'quit 1' -- "$SMOKE" > /tmp/2dog-macos-webgpu-smoke.log 2>&1
+            GPU_STATUS=$?
+            cat /tmp/2dog-macos-webgpu-smoke.log
+            set -e
+            if [ "$GL_STATUS" -ne 0 ] || [ "$GPU_STATUS" -ne 0 ]; then exit 1; fi
+            grep -q 'NATIVE_OPENGL3_SMOKE_PASSED: lifetime 2' /tmp/2dog-macos-opengl-smoke.log
+            grep -q 'NATIVE_WEBGPU_SMOKE_PASSED: lifetime 2' /tmp/2dog-macos-webgpu-smoke.log
           else
             dotnet run --project tests/webgpu-smoke -c Release
           fi
