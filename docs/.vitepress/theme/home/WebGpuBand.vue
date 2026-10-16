@@ -27,7 +27,7 @@ const props = [
         <p class="home-kicker">New in 2dog</p>
         <h2 id="gpu-title" class="home-h2">WebGPU rendering driver</h2>
         <p class="home-intro">
-          Lets you design for the Forward+ renderer, instead of Compatibility.<br/>It's a modern GPU interface for modern browsers: less
+          Design for the Forward+ or Mobile renderers instead of Compatibility.<br/>It's a modern GPU interface for modern browsers: less
           overhead, access to compute shaders, with performance &amp; visuals close to desktop builds. <br/><i>(older browsers can still use WebGL&nbsp;2)</i>
         </p>
         <div class="home-actions gpu-actions">

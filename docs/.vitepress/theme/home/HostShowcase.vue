@@ -34,6 +34,7 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Explore, edit, play, or inspect the game from a C# prompt while it is running.',
         link: '/hosts/repl',
         glyph: 'window_terminal',
+        tag: 'Experimental',
       },
     ],
   },
