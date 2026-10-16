@@ -50,6 +50,13 @@ public class GodotApiCoverageTests(HeadlessFixture godot)
         GodotApiSmoke.ManagedCallables();
 
     [Fact]
+    public void DefaultShowcaseSmoke_DoesNotEmitExpectedDiagnostics()
+    {
+        WithMainScene(GodotApiSmoke.RunAll);
+        Assert.Empty(godot.Errors.Drain());
+    }
+
+    [Fact]
     public void ErrorReportingAndTypedCollections_ReachTheirNativeShapes()
     {
         GodotApiSmoke.ErrorReportingAndTypedCollections();

@@ -765,6 +765,16 @@ jobs:
             dotnet run --project tests/webgpu-smoke -c Release
           fi
 
+      - name: Check C# editor hot-reload lifecycle
+        shell: bash
+        run: |
+          dotnet run --project tests/editor-lifecycle-smoke -c Editor > editor-lifecycle-smoke.log 2>&1
+          cat editor-lifecycle-smoke.log
+          grep -q 'NATIVE_EDITOR_LIFECYCLE_SMOKE_PASSED' editor-lifecycle-smoke.log
+          if grep -Eq '^ERROR:|^WARNING:' editor-lifecycle-smoke.log; then
+            exit 1
+          fi
+
       - name: Reject unsupported WebGPU Forward+ before shader initialization
         if: matrix.precision == 'single'
         shell: bash
@@ -1264,6 +1274,17 @@ jobs:
 
           for FLAVOR in web webxr webmt; do
             BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
+
+            # Opt in to deliberate error/warning interop probes only in CI.
+            uv run python - "$BUNDLE/index.html" <<'PY'
+          from pathlib import Path
+          import sys
+          path = Path(sys.argv[1])
+          content = path.read_text()
+          needle = "'args': []"
+          assert content.count(needle) == 1, "Showcase shell args declaration changed"
+          path.write_text(content.replace(needle, "'args': ['--', '--2dog-smoke-markers']"))
+          PY
 
             # The webxr shell records whether Layers polyfill construction
             # completed; require it, so a polyfill that throws during init

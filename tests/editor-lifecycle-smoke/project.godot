@@ -1,0 +1,7 @@
+config_version=5
+
+[application]
+config/name="2dog editor lifecycle smoke"
+
+[rendering]
+renderer/rendering_method="mobile"

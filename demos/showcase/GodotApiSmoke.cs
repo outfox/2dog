@@ -15,7 +15,9 @@ public static class GodotApiSmoke
         MathPrecision();
         CoreTypesAndNativeHelpers(tree);
         ManagedCallables();
-        ErrorReportingAndTypedCollections();
+        // Deliberate warnings/errors belong to explicit smoke runs. Muting console
+        // output alone still sends them to an attached editor debugger.
+        ErrorReportingAndTypedCollections(OS.GetCmdlineUserArgs().Contains("--2dog-smoke-markers"));
         ImagesAndResources();
         EngineSingletons();
         LowLevelServers();
@@ -174,22 +176,25 @@ public static class GodotApiSmoke
         }
     }
 
-    public static void ErrorReportingAndTypedCollections()
+    public static void ErrorReportingAndTypedCollections(bool exerciseErrorReporting = true)
     {
         // Both calls go through the 7-pointer-arg native shape that had no wasm trampoline
         // until twodog.WebTrampolines declared it (err_print_error / dictionary_set_typed).
         // Printing is muted: the native call is what is under test, and the warning would
         // otherwise land in every test and smoke log as noise.
-        var printErrors = Godot.Engine.PrintErrorMessages;
-        Godot.Engine.PrintErrorMessages = false;
-        try
+        if (exerciseErrorReporting)
         {
-            GD.PushWarning("2dog smoke: expected warning, exercising err_print_error");
-            GD.PushError("2dog smoke: expected error, exercising err_print_error");
-        }
-        finally
-        {
-            Godot.Engine.PrintErrorMessages = printErrors;
+            var printErrors = Godot.Engine.PrintErrorMessages;
+            Godot.Engine.PrintErrorMessages = false;
+            try
+            {
+                GD.PushWarning("2dog smoke: expected warning, exercising err_print_error");
+                GD.PushError("2dog smoke: expected error, exercising err_print_error");
+            }
+            finally
+            {
+                Godot.Engine.PrintErrorMessages = printErrors;
+            }
         }
 
         var typed = new Godot.Collections.Dictionary<string, int> { ["answer"] = 42 };
