@@ -132,9 +132,3 @@ reference the engine instead:
 ```bash
 dotnet add package 2dog.engine
 ```
-
-MAUI: `dnx 2dog add --maui` creates a Windows/Android host using `2dog.maui`.
-Install `maui-windows` and `maui-android` with `dotnet workload install`.
-Windows prefers GPU sharing and falls back to CPU readback; Android renders
-directly to Godot's native surface. MAUI controls can overlap the game.
-`--no-maui` omits this opt-in host. See https://2dog.dev/hosts/maui.
