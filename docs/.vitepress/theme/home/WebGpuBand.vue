@@ -9,8 +9,10 @@ const props = [
 ]
 </script>
 
-<template><!--
-  <section class="home-section gpu" aria-labelledby="gpu-title">
+<template>
+  <!-- Hidden until WebGPU ships. v-if, not an HTML comment: production strips comments, so a comment-only
+       template server-renders nothing and the client hydrates the following sections out of place. -->
+  <section v-if="false" class="home-section gpu" aria-labelledby="gpu-title">
     <div class="home-wrap gpu-grid">
       <div>
         <div class="gpu-marks" aria-hidden="true">
@@ -44,7 +46,6 @@ const props = [
       </dl>
     </div>
   </section>
-  -->
 </template>
 
 <style>
