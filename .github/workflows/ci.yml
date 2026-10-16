@@ -304,6 +304,7 @@ jobs:
         run: |
           uv run python -m unittest discover -s tests/precision -v
           uv run python -m unittest discover -s tests/webgpu -v
+          uv run python -m unittest discover -s tests/ci_packages -v
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7

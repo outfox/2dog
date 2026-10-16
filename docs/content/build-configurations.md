@@ -137,6 +137,46 @@ cache for the external Dawn port; set `TwoDogWebGpuCachePath` to override its
 default under the system temporary directory. Keep it separate from a native
 SCons cache, and on the Emscripten SDK's drive on Windows.
 
+## Downloading CI Packages
+
+In a 2dog checkout, use the current branch's tested packages without compiling
+Godot. Install `uv`, the .NET SDK selected by `global.json`, and an
+authenticated GitHub CLI (`gh`), then run:
+
+```bash
+uv run poe pull-packages
+dotnet run --project demos/showcase/showcase.2dog
+```
+
+The command imports the latest successful CI run with available packages for
+the current branch into `packages/`. Each bundle includes Windows x64, Linux
+x64, macOS arm64, browser and Android packages. It also downloads the matching
+Godot SDK, managed APIs and source generator, refreshes only stale package
+versions in the checkout's `.packages/` cache, and restores `2dog.tests.slnf`.
+Use the same command in the checkout on each operating system.
+
+Pass `--run <run-id>` to select the same snapshot on several machines,
+`--precision double` or `--precision both` for double precision, `--plan` to
+show the run, sizes and expiry without downloading, or `--no-restore` to
+import the feed without restoring projects. WebGPU uses single precision.
+
+The downloader checks package versions against `Directory.Build.props` and
+the native source against the checkout's Godot submodule commit. It rejects
+incomplete feeds and empty native stubs. The selected run and package versions
+are recorded in `packages/ci-packages.json`.
+
+CI package artifacts expire after seven days. If no matching artifact remains,
+run CI again. Avoid `poe build` after downloading unless you intend to repack:
+without local native builds it can replace other platforms' packages with
+empty stubs. `dotnet build`, `dotnet run` and `dotnet test` use the downloaded
+feed directly.
+
+For a project outside the checkout, add the absolute path to `packages/` as a
+NuGet source in that project's `NuGet.Config`, and pin the versions from the
+downloaded feed. If the project previously restored different contents at
+those same versions, remove only the affected package/version directories
+from its NuGet cache before restoring.
+
 ## Editor Variants
 
 ::: tip Opening the editor

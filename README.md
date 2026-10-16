@@ -38,6 +38,25 @@ Use `--webgpu no` to omit it, or `--webgpu-native-path <sdk>` to supply an SDK
 with its runtime dependencies and `licenses/` folder. See
 [build configurations](docs/content/build-configurations.md#webgpu-branch).
 
+To use CI's packages on Windows, Linux or macOS without compiling Godot,
+install the GitHub CLI (`gh`) and authenticate it, then run from this checkout:
+
+```bash
+uv run poe pull-packages
+dotnet run --project demos/showcase/showcase.2dog -- --rendering-driver webgpu --rendering-method mobile
+```
+
+The command downloads the current branch's latest successful, unexpired CI
+package bundle for all platforms, plus the matching Godot SDK and managed
+bindings. It replaces local stubs, refreshes affected entries in `.packages/`,
+and restores the desktop/test solution. Run the same command after pulling
+the branch on each OS. Use `--run <run-id>` to share an exact snapshot,
+`--plan` to inspect it first, or `--precision both` to include double precision
+(which retains the original renderer set). CI package artifacts expire after
+seven days; the command reports their expiry. Avoid `poe build` afterwards
+unless you intend to repack locally, as it can replace other platforms with
+empty stubs. Download provenance is recorded in `packages/ci-packages.json`.
+
 ## One Godot project, plenty of ways to run
 
 Keep your scenes, scripts and assets as you had them, in your normal Godot project. No change needed.
