@@ -58,6 +58,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.csproj              <- created or minimally patched
   MyGame.slnx                <- created, or an existing .sln is migrated
   Directory.Build.props      <- the package versions every host references
+  global.json                <- SDK pin and MTP test runner (with web, MAUI or test hosts; existing ones are kept)
   MyGame.2dog/   (.gdignore) <- generic .NET host (your Main entry point)
   MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)

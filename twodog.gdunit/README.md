@@ -61,8 +61,11 @@ return await application.RunAsync();
 `AddSelfRegisteredExtensions` is generated in the project's `RootNamespace` and
 registers MTP extensions referenced by the host, including MSBuild integration.
 
-Place this `global.json` in `MyGame.gdunit/` to select the .NET 10 MTP runner for
-commands issued inside that directory:
+The .NET 10 SDK uses the MTP runner for `dotnet test` only when a `global.json`
+at or above the working directory selects it. `2dog add --gdunit` creates a root
+`global.json` that does, unless one exists. Also place this `global.json` in
+`MyGame.gdunit/`, so commands issued inside that directory work even when the
+root file does not select MTP:
 
 ```json
 {
@@ -83,12 +86,15 @@ func test_answer() -> void:
 
 ## Run and select tests
 
+From the project root, when its `global.json` selects MTP:
+
 ```text
-cd MyGame.gdunit
-dotnet test --project MyGame.gdunit.csproj
-dotnet test --project MyGame.gdunit.csproj --list-tests
-dotnet test --project MyGame.gdunit.csproj --gdunit-filter "*test_answer"
+dotnet test --project MyGame.gdunit
+dotnet test --project MyGame.gdunit --list-tests
+dotnet test --project MyGame.gdunit --gdunit-filter "*test_answer"
 ```
+
+Otherwise run inside `MyGame.gdunit/` with `--project MyGame.gdunit.csproj`.
 
 `--gdunit-filter` matches gdUnit's fully qualified name, including a parameter
 row's display name. Matching is case-sensitive; `*` and `?` are wildcards. MTP's
@@ -129,7 +135,7 @@ completion. MTP cancellation interrupts the import process or asks gdUnit to
 terminate the session and finish teardown, with a five-second cleanup grace
 period. A host timeout or cancellation cannot interrupt a blocked native call.
 
-CLI scaffolding, rendering support, snapshot caching, relocatable published
+Rendering support, snapshot caching, relocatable published
 hosts, and verified IDE integration remain future work. The adapter depends on
 GdUnit session internals at the pinned release; rerun its compatibility tests
 when updating that release. See [MTP's dotnet test documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-dotnet-test)

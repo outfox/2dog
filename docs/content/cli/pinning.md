@@ -62,7 +62,8 @@ A version without `*` does not follow each new release. A normal build or restor
 does not rewrite this value. Running `2dog update` can change it.
 
 This property does not select the tool that `dnx` runs. Use `@version` for that.
-`global.json` selects SDK versions, not the 2dog tool or engine package version.
+`global.json` selects SDK versions and the `dotnet test` runner, not the 2dog
+tool or engine package version.
 
 ## Build without restoring packages
 

@@ -76,6 +76,7 @@ internal static class TemplateAssets
     {
         yield return ("project.godot", Substitute(ReadRaw("tpl/project.godot"), baseName));
         yield return ("main.tscn", ReadRaw("tpl/main.tscn"));
+        yield return ("fps_counter.tscn", ReadRaw("tpl/fps_counter.tscn"));
         yield return (".editorconfig", ReadRaw("tpl/.editorconfig"));
         yield return (".gitignore", ReadRaw("tpl/.gitignore"));
         yield return (".vscode/launch.json", ReadRaw("tpl/.vscode/launch.json"));

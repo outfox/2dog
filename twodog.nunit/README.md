@@ -4,7 +4,8 @@ Reference `2dog.engine` or `2dog.engine.double` explicitly in the host project.
 This integration package works with either precision.
 
 Run [NUnit](https://nunit.org/) tests against a real Godot engine.
-Reference `2dog.nunit`, `NUnit3TestAdapter` and `Microsoft.NET.Test.Sdk`, or scaffold:
+Reference `2dog.nunit`, `NUnit` and `NUnit3TestAdapter` 6.x, set `OutputType` to `Exe` and
+`EnableNUnitRunner` to `true` for Microsoft.Testing.Platform, or scaffold:
 
 ```text
 dnx 2dog add --nunit
@@ -48,7 +49,7 @@ thread-switching attributes such as `Timeout` or `RequiresThread` on these tests
 The default fixture runs headless on Windows, Linux and macOS. Derive from
 `GodotRenderingTestFixture` for rendering on Windows/Linux with a display.
 It supplies Windows STA; the engine fixture activates common-controls v6 even
-inside NUnit's testhost. Windowed macOS tests still need a runner that owns the
+inside NUnit's test process. Windowed macOS tests still need a runner that owns the
 process main thread; use xUnit's rendering collection there.
 Override `CreateFixture()` to supply a custom `twodog.Testing.FixtureBase`.
 Keep headless and rendering fixtures in separate test projects. Switching

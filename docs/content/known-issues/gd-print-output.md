@@ -15,13 +15,17 @@ with engine and fixture logs rather than belonging to a specific test.
 
 ## Making GD.Print Visible
 
-Enable detailed console logging:
+Scaffolded test hosts run on Microsoft.Testing.Platform (MTP), so each one is
+an executable. Run it directly to see its stdout in the terminal:
 
 ```bash
-dotnet test --logger "console;verbosity=detailed"
+dotnet run --project MyGame.xunit
 ```
 
-Your messages show up, mixed into the test-host stream with engine and fixture logs.
+Your messages show up, mixed into the test-host stream with engine and fixture
+logs. VSTest's `--logger "console;verbosity=detailed"` does not apply under
+MTP; `dotnet test --output Detailed` lists every test result, not only
+failures.
 
 ## Use ITestOutputHelper instead
 
@@ -43,5 +47,11 @@ public class MyTests(HeadlessFixture godot, ITestOutputHelper output)
 ```
 
 The output then belongs to that test: it lands in the failure report and in
-the IDE test explorer, with no engine noise around it. `GD.Print` stays what it
-is, a runtime debugging aid.
+the IDE test explorer, with no engine noise around it. To watch it while
+tests run, pass xUnit's `--show-live-output on`:
+
+```bash
+dotnet test --project MyGame.xunit --show-live-output on
+```
+
+`GD.Print` stays what it is, a runtime debugging aid.

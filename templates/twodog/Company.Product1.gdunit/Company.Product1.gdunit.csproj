@@ -10,6 +10,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="2dog.gdunitTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />
+        <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.*" />
         <ProjectReference Include="../TPLRAWNAME.csproj" />
         <AssemblyMetadata Include="GodotProject" Value="$(MSBuildProjectDirectory)/.." />
     </ItemGroup>

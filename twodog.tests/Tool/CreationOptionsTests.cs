@@ -35,6 +35,12 @@ public class CreationOptionsTests
         Assert.Contains("<RootNamespace>Game.GdUnit</RootNamespace>", project);
         Assert.Contains("Game.scripts/tests", File.ReadAllText(Path.Combine(dir, "Game.scripts", "Program.cs")));
         Assert.Contains("Microsoft.Testing.Platform", File.ReadAllText(Path.Combine(dir, "Game.scripts", "global.json")));
+        // .NET 10 runs one test runner per global.json, so `dotnet test` from the root needs every host on MTP.
+        Assert.True(DotnetInfo.SelectsTestingPlatform(File.ReadAllText(Path.Combine(dir, "global.json"))));
+        Assert.Contains("<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>",
+            File.ReadAllText(Path.Combine(dir, "Game.xunit", "Game.xunit.csproj")));
+        Assert.Contains("<EnableNUnitRunner>true</EnableNUnitRunner>", File.ReadAllText(Path.Combine(dir, "Game.nunit", "Game.nunit.csproj")));
+        Assert.Contains("dotnet test Game.scripts", run.Stdout);
         Assert.True(File.Exists(Path.Combine(dir, "Game.scripts", ".gdignore")));
         Assert.True(File.Exists(Path.Combine(dir, "Game.scripts", "tests", "example_test.gd")));
         Assert.Contains("Game.scripts/**", File.ReadAllText(Path.Combine(dir, "Game.csproj")));

@@ -18,12 +18,14 @@ dnx 2dog add --gdunit
 Or select GdUnit in the interactive host picker. The generated host includes
 a sample GDScript test and its MTP runner configuration.
 See the [GdUnit configuration guide](/configuration/gdunit) for customization.
-CLI scaffolding is planned. Run from its directory:
+Run from the project root:
 
 ```bash
-cd MyGame.gdunit
-dotnet test --project MyGame.gdunit.csproj
+dotnet test MyGame.gdunit
 ```
+
+The root `global.json` that 2dog creates selects MTP for `dotnet test`. With a
+root `global.json` of your own that does not, run from `MyGame.gdunit/`.
 
 Use [GdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/)
 to write tests. [Testing with GdUnit](/testing/gdunit) explains the 2dog-specific

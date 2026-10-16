@@ -73,10 +73,14 @@ echo "::endgroup::"
 
 echo "::group::build and test the scaffolded project"
 cp "$work/nuget.config" SmokeGame/nuget.config
+# Runs from the project root, as the scaffold's next steps do: dotnet test takes its runner (Microsoft.Testing.Platform)
+# from the global.json above the working directory, not above the project.
+test_hosts() {
+  (cd SmokeGame && dotnet test SmokeGame.xunit "$@" --no-build && dotnet test SmokeGame.nunit "$@" --no-build)
+}
 for config in Debug Release Editor; do
   dotnet build SmokeGame/SmokeGame.slnx -c "$config"
-  dotnet test SmokeGame/SmokeGame.xunit -c "$config" --no-build
-  dotnet test SmokeGame/SmokeGame.nunit -c "$config" --no-build
+  test_hosts -c "$config"
 done
 echo "::endgroup::"
 
@@ -85,8 +89,7 @@ echo "::group::desktop and tests with unused optional hosts"
 # Disabling SDK workload resolution proves this graph does not evaluate either
 # optional host, even on runners where a workload happens to be installed.
 dotnet build SmokeGame/SmokeGame.slnx -c Debug -p:MSBuildEnableWorkloadResolver=false
-dotnet test SmokeGame/SmokeGame.xunit -c Debug --no-build
-dotnet test SmokeGame/SmokeGame.nunit -c Debug --no-build
+test_hosts -c Debug
 echo "::endgroup::"
 
 echo "::group::doctor"

@@ -7,9 +7,9 @@ description: "Configure NUnit hosts, engine variants, Editor bindings and headle
 
 Set properties in `MyGame.nunit/MyGame.nunit.csproj`. Reference `2dog.nunit`
 and explicitly select `2dog.engine` or `2dog.engine.double`.
-The scaffold also references
-`NUnit3TestAdapter`, `Microsoft.NET.Test.Sdk` and `coverlet.collector` for
-`dotnet test` and coverage collection.
+The scaffold also references `NUnit`, `NUnit3TestAdapter` and
+`Microsoft.Testing.Extensions.CodeCoverage` for `dotnet test` and coverage
+collection.
 
 The [global settings](/configuration#properties) control the game directory,
 resource import, analyzers and native variant.
@@ -30,8 +30,8 @@ and [Writing engine tests](/testing/writing-tests) for waits and assertions.
 
 ## Microsoft.Testing.Platform
 
-The host supports the official NUnit adapter's MTP bridge. Scaffolded
-projects use VSTest by default. Add these properties to opt in to MTP:
+The host runs on the official NUnit adapter's MTP bridge. Scaffolded projects
+reference `NUnit3TestAdapter` 6.x for MTP v2 and set these properties:
 
 ```xml
 <PropertyGroup>
@@ -40,9 +40,11 @@ projects use VSTest by default. Add these properties to opt in to MTP:
 </PropertyGroup>
 ```
 
-Use `NUnit3TestAdapter` 6.x for MTP v2. The same project retains VSTest
-support. To use native MTP integration with `dotnet test` on .NET 10, add
-this alongside your SDK settings in `global.json`:
+On .NET 10, `dotnet test` runs every project of a run on the runner that
+`global.json` selects. The root `global.json` that 2dog creates with a test
+host selects MTP, so `dotnet test` from the project root runs the xUnit,
+NUnit and GdUnit hosts together. 2dog never edits an existing `global.json`;
+add this alongside your SDK settings:
 
 ```json
 "test": {
@@ -50,7 +52,20 @@ this alongside your SDK settings in `global.json`:
 }
 ```
 
-Then run `dotnet test --project MyGame.nunit/MyGame.nunit.csproj`.
+```bash
+dotnet test MyGame.nunit
+dotnet test --project MyGame.nunit --coverage
+```
+
+Coverage uses MTP's `--coverage` option and writes a `.coverage` file under
+`TestResults/`; VSTest's `--collect "XPlat Code Coverage"` does not apply.
+
+Hosts scaffolded before 2dog used MTP run on VSTest, and
+[`2dog doctor`](/cli/doctor) flags them with `layout.test-runner`. To migrate
+one, add the properties above, update `NUnit3TestAdapter` to 6.x, replace
+`coverlet.collector` with `Microsoft.Testing.Extensions.CodeCoverage`, and
+remove `Microsoft.NET.Test.Sdk`.
+
 2dog leaves discovery, filters and results to NUnit's bridge and keeps
 Godot setup, tests and teardown on NUnit's fixture thread. See
 [NUnit's official MTP documentation](https://docs.nunit.org/articles/vs-test-adapter/NUnit-And-Microsoft-Test-Platform.html)

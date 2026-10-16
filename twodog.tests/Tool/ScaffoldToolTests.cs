@@ -1912,7 +1912,7 @@ public class ScaffoldEndToEndTests
 
         foreach (var expected in new[]
                  {
-                     "project.godot", "main.tscn", ".editorconfig", ".gitignore",
+                     "project.godot", "main.tscn", "fps_counter.tscn", ".editorconfig", ".gitignore",
                      "MyGame.csproj", "MyGame.slnx", "Directory.Build.targets",
                      "export_presets.cfg", "global.json",
                      "MyGame.2dog/MyGame.2dog.csproj", "MyGame.web/MyGame.web.csproj",

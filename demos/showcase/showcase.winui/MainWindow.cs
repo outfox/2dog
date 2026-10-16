@@ -36,8 +36,6 @@ internal sealed class MainWindow : Window
     private readonly Slider _speed;
     private readonly TextBlock _speedValue;
     private readonly TextBlock _status;
-    private readonly TextBlock _fps;
-    private readonly DispatcherQueueTimer _fpsTimer;
     private readonly nint _hwnd;
 
     private Engine? _engine;
@@ -91,12 +89,6 @@ internal sealed class MainWindow : Window
         _speedValue = ToolbarText("1.00×", Microsoft.UI.Colors.White);
         _speedValue.MinWidth = 44;
         _status = ToolbarText("", Starting);
-        _fps = ToolbarText("", Muted);
-        _fps.MinWidth = 56;
-        _fps.TextAlignment = TextAlignment.Right;
-        _fpsTimer = DispatcherQueue.CreateTimer();
-        _fpsTimer.Interval = TimeSpan.FromMilliseconds(500);
-        _fpsTimer.Tick += (_, _) => _fps.Text = $"{Godot.Engine.GetFramesPerSecond():0} fps";
 
         var title = ToolbarText("2dog showcase", Microsoft.UI.Colors.White);
         title.FontSize = 15;
@@ -109,7 +101,7 @@ internal sealed class MainWindow : Window
         UIElement[] items =
         [
             title, ToolbarText("WinUI 3 host", Muted), _status, new Border(),
-            ToolbarText("Game speed", Microsoft.UI.Colors.White), _speed, _speedValue, _pauseButton, _fps,
+            ToolbarText("Game speed", Microsoft.UI.Colors.White), _speed, _speedValue, _pauseButton,
         ];
         for (var column = 0; column < items.Length; column++)
         {
@@ -178,7 +170,6 @@ internal sealed class MainWindow : Window
             .GetChildren().OfType<Node3D>().ToArray();
 
         SetStatus("● Running", Running, running: true);
-        _fpsTimer.Start();
         PumpFrame();
     }
 
@@ -201,7 +192,6 @@ internal sealed class MainWindow : Window
         _status.Foreground = new SolidColorBrush(color);
         _pauseButton.IsEnabled = _speed.IsEnabled = running;
         _pauseButton.Opacity = running ? 1 : 0.45;
-        if (!running) _fps.Text = "";
     }
 
     private void OnSpeedChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -288,7 +278,6 @@ internal sealed class MainWindow : Window
 
     private void ShutdownEngine()
     {
-        _fpsTimer.Stop();
         SetStatus("● Stopped", Muted, running: false);
         _instance = null;
         _engine?.Dispose();

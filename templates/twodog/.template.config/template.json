@@ -309,7 +309,7 @@
           ]
         },
         {
-          "condition": "(!web && !webxr && !blazor && !maui)",
+          "condition": "(!web && !webxr && !blazor && !maui && !xunit && !nunit && !gdunit)",
           "exclude": [
             "global.json"
           ]

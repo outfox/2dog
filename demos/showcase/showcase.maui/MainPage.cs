@@ -20,7 +20,6 @@ public sealed class MainPage : ContentPage
     };
     private readonly Label _status = new() { FontSize = 12, VerticalOptions = LayoutOptions.Center };
     private readonly Label _mode = new() { Text = "Waiting for Godot", FontSize = 12, TextColor = Muted };
-    private readonly Label _fps = new() { FontSize = 12, TextColor = Muted, HorizontalOptions = LayoutOptions.End };
     private readonly Label _error = new() { FontSize = 12, TextColor = Error, IsVisible = false };
     private readonly Label _speedValue = new()
     {
@@ -60,7 +59,6 @@ public sealed class MainPage : ContentPage
                 };
                 global::Godot.GD.Print("2DOG_MAUI_SHOWCASE_SMOKE_PASSED");
             });
-            Dispatcher.StartTimer(TimeSpan.FromMilliseconds(500), PollFps);
         };
         _game.PresentationModeChanged += (_, _) => _mode.Text = _game.ActivePresentationMode switch
         {
@@ -138,12 +136,6 @@ public sealed class MainPage : ContentPage
         };
         speedHeader.Add(_speedValue, 1);
 
-        var footer = new Grid
-        {
-            ColumnDefinitions = { new(GridLength.Star), new(GridLength.Auto) }, Children = { _mode },
-        };
-        footer.Add(_fps, 1);
-
         return new Border
         {
             WidthRequest = 280, Margin = 16, Padding = 16,
@@ -161,7 +153,7 @@ public sealed class MainPage : ContentPage
                     new VerticalStackLayout { Spacing = 0, Children = { speedHeader, _speed } },
                     _pause,
                     _error,
-                    footer,
+                    _mode,
                 },
             },
         };
@@ -175,18 +167,5 @@ public sealed class MainPage : ContentPage
         _statusDot.Fill = color;
         _pause.IsEnabled = _speed.IsEnabled = running;
         _pause.Opacity = _speed.Opacity = running ? 1 : 0.45;
-        if (!running) _fps.Text = "";
-    }
-
-    private bool PollFps()
-    {
-        // The view clears its presentation mode as soon as the engine stops, before Stopped/Failed arrive.
-        if (!_running || _game.ActivePresentationMode is null) return false;
-        _game.Dispatch(_ =>
-        {
-            var fps = global::Godot.Engine.GetFramesPerSecond();
-            Dispatcher.Dispatch(() => { if (_running) _fps.Text = $"{fps:0} fps"; });
-        });
-        return true;
     }
 }

@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, and where to look when a restore or build fails."
+description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, where to look when a restore or build fails, and how to enable symlinks in a Windows checkout."
 ---
 
 # Troubleshooting
@@ -75,6 +75,47 @@ dotnet pack twodog.engine -c Release -p:TwoDogVersion=:2dog-version:-local.1
 python tests/bindings/test_packages.py --version :2dog-version:-local.1
 # consumer nuget.config: add the repo's packages/ folder as a source, reference -local.1
 ```
+
+## Symlinks in a Windows checkout of 2dog
+
+The 2dog repository shares some files through committed symlinks, such as the
+showcase's `fps_counter.tscn`, which links to the template's copy. Without
+symlink support, Git writes each link as a small text file holding the target
+path. The showcase then fails to load its main scene, and
+`FpsCounterDriftTests` reports that the file is not a symlink.
+
+On Windows, symlinks need two things:
+
+1. **Developer Mode**, so that a normal account can create symlinks: Settings >
+   System > For developers > Developer Mode. Without it, only an elevated
+   prompt can create them.
+2. **`core.symlinks=true`** in Git. Git for Windows writes
+   `core.symlinks=false` into `.git/config` at clone time when it cannot create
+   symlinks, and that repository setting overrides the global one.
+
+Set both before cloning:
+
+```bash
+git config --global core.symlinks true
+git clone --recursive https://github.com/outfox/2dog
+```
+
+To repair an existing clone, enable the setting in the repository and check the
+links out again:
+
+```bash
+git config core.symlinks true
+git ls-files -s | grep ^120000          # lists the symlinks
+git checkout -- demos/showcase/fps_counter.tscn
+```
+
+`git config --show-origin --get-all core.symlinks` shows which configuration
+file sets the value; the last entry wins.
+
+Edit a shared file through its real path, `templates/twodog/fps_counter.tscn`.
+On Windows, the Godot editor saves through a temporary file and a rename, which
+replaces a symlink with a regular copy; `git status` then shows the link as
+changed.
 
 ## Mixed Godot bindings (TDG001–TDG004)
 

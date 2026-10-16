@@ -28,6 +28,9 @@ AppBundle/
 .DS_Store
 Thumbs.db
 
+# Test results and coverage reports
+TestResults/
+
 # NuGet packages
 *.nupkg
 packages/

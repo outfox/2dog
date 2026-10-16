@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, GodotSharp compatibility, and separate tool and engine packages."
+description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, GodotSharp compatibility, separate tool and engine packages, and browser frame rate caps."
 ---
 
 # FAQ
@@ -56,6 +56,32 @@ NuGet packages marked as dotnet tools cannot also be consumed through a
 library, while `2dog` contains the self-contained tool and template. They are
 released together, and both scaffolding routes produce the same output. See
 [`2dog add`](/cli/add).
+
+## Why does the browser build never exceed my display's refresh rate?
+
+Browser hosts run Godot's frame loop on `requestAnimationFrame`, which the
+browser calls once per display refresh. Godot's vsync setting has no effect on
+the web, and `application/run/max_fps` can only lower the rate. The browser
+also composites the canvas once per refresh, so extra frames would never reach
+the screen.
+
+To measure uncapped performance, lift the browser's own limit:
+
+| Browser | Setting | Notes |
+| --- | --- | --- |
+| Chrome | Start with `--disable-frame-rate-limit --disable-gpu-vsync` | Close every Chrome window first, or pass a separate `--user-data-dir` |
+| Edge | The same flags on `msedge` | Chromium-based, same caveats as Chrome |
+| Firefox | Set `layout.frame_rate` to `0` in `about:config` | `-1` (default) follows vsync, `0` renders as fast as possible, any other value is a fixed rate |
+| Safari | Turn off Develop > Feature Flags > "Prefer Page Rendering Updates near 60fps", then restart | Raises the 60 fps cap to the display rate, such as 120 Hz on ProMotion screens; there is no uncapped mode |
+
+```bash
+chrome --disable-frame-rate-limit --disable-gpu-vsync --user-data-dir=/tmp/2dog-bench http://localhost:8080
+```
+
+Use these for benchmarks only, and restore the defaults afterwards: uncapped
+rendering keeps the CPU and GPU busy and drains batteries. The Safari setting
+appears after enabling "Show features for web developers" in Safari's Advanced
+settings.
 
 ---
 

@@ -103,6 +103,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `layout.root-build-targets` | Directory.Build.targets provides the deep-clean target |
 | `layout.root-build-props` | Directory.Build.props holds the shared package versions |
 | `layout.root-global-json` | global.json pins a wasm-capable SDK when a browser host exists |
+| `layout.test-runner` | test hosts and global.json use Microsoft.Testing.Platform for dotnet test |
 
 ### Game csproj
 

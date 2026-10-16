@@ -34,6 +34,11 @@ generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
 `--xunit`, `--gdunit` or `--nunit`. Existing hosts are
 recognized and skipped.
 
+Test hosts run on Microsoft.Testing.Platform. Without a root `global.json`,
+adding one creates a `global.json` that selects it, so `dotnet test` from the
+project root runs every test host. An existing `global.json` is never edited;
+2dog warns when it does not select Microsoft.Testing.Platform.
+
 The new hosts are built for the running tool's versions, so the game project's
 `Godot.NET.Sdk` and an existing 2dog version block in `Directory.Build.props`
 are raised to them in the same run (never lowered), as `2dog update` would. A
