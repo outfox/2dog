@@ -4,10 +4,8 @@ import { withBase } from 'vitepress'
 import { brIconUrl, webgpuLogoUrl } from './icons'
 
 const props = [
-  { key: 'Renderer', value: 'WebGPU, with WebGL&nbsp;2 fallback' },
-  { key: 'Runtime', value: '.NET 10 on WebAssembly' },
-  { key: 'Hosts', value: 'Web and Blazor' },
-  { key: 'Output', value: 'A static site, ready for any web host' },
+  { key: 'Renderer', value: 'WebGPU with WebGL&nbsp;2 fallback' },
+  { key: 'Runtime', value: '.NET 10 browser-wasm + desktop' },
 ]
 </script>
 
@@ -27,10 +25,10 @@ const props = [
           </span>
         </div>
         <p class="home-kicker">New in 2dog</p>
-        <h2 id="gpu-title" class="home-h2">WebGPU Forward+ renderer</h2>
+        <h2 id="gpu-title" class="home-h2">WebGPU rendering driver</h2>
         <p class="home-intro">
-          Design for Godot's Forward+ renderer, not the Compatibility renderer. Modern GPU interface for modern browsers: less
-          overhead, versatile compute shaders, and visuals close to your desktop build. <br/><i>(older browsers can still use WebGL&nbsp;2)</i>
+          Lets you design for the Forward+ renderer, instead of Compatibility.<br/>It's a modern GPU interface for modern browsers: less
+          overhead, access to compute shaders, with performance &amp; visuals close to desktop builds. <br/><i>(older browsers can still use WebGL&nbsp;2)</i>
         </p>
         <div class="home-actions gpu-actions">
           <a class="home-btn primary" :href="withBase('/hosts/web')">Ship to the web</a>
