@@ -1,0 +1,190 @@
+/**
+ * Shared grammar for the homepage sections: section rhythm, kickers, buttons, brand chips and the
+ * always-dark game viewport. Colors come from the editor tokens in custom.css.
+ */
+
+.home-page {
+  /* Brand chips: each pairing keeps its glyph at 4.5:1 or better against the chip. */
+  --chip-dotnet: #512bd4;
+  --chip-avalonia: #165bff;
+  --chip-windows: #0067c0;
+  --chip-wasm: #654ff0;
+  --chip-android: #3ddc84;
+  --chip-android-ink: #073042;
+  /* Game viewports render the dark editor grid in both appearances, like a running game. */
+  --game-ground: #161616;
+  --game-grid: rgba(255, 255, 255, 0.06);
+
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ed-text-1);
+}
+
+.home-section {
+  padding: 96px 24px;
+  border-top: 1px solid var(--ed-seam);
+}
+
+.home-section.alt {
+  background: var(--ed-dark-1);
+}
+
+.home-wrap {
+  max-width: 1152px;
+  margin: 0 auto;
+}
+
+.home-kicker {
+  margin: 0 0 12px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ed-text-2);
+}
+
+.home-kicker .gd-icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  vertical-align: -2px;
+}
+
+.home-h2 {
+  margin: 0;
+  max-width: 22ch;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ed-text-1);
+}
+
+.home-intro {
+  max-width: 60ch;
+  margin: 16px 0 0;
+  color: var(--ed-text-2);
+}
+
+.home-page code {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.88em;
+}
+
+.home-page :not(pre) > code {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--ed-raise);
+  color: var(--ed-text-1);
+}
+
+.home-page a:focus-visible,
+.home-page button:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Buttons ---------- */
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 6px;
+  background: var(--ed-raise);
+  color: var(--ed-text-1);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.12s ease-out, border-color 0.12s ease-out;
+}
+
+.home-btn:hover {
+  border-color: var(--ed-accent);
+}
+
+.home-btn.primary {
+  border-color: transparent;
+  background: var(--ed-accent);
+  color: var(--ed-on-accent);
+}
+
+.home-btn.primary:hover {
+  background: var(--ed-accent-strong);
+}
+
+.home-btn .brand-glyph {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Glyphs and brand chips ---------- */
+
+.brand-glyph,
+.chip-glyph {
+  flex: none;
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+.brand-chip {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--chip-bg, var(--ed-raise));
+  color: var(--chip-ink, var(--ed-accent));
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.brand-chip .chip-glyph {
+  width: 26px;
+  height: 26px;
+}
+
+.brand-chip.neutral {
+  box-shadow: inset 0 0 0 1px var(--ed-seam);
+}
+
+/* ---------- Game viewport ---------- */
+
+.game-view {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(var(--game-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--game-grid) 1px, transparent 1px),
+    var(--game-ground);
+  background-size: 24px 24px, 24px 24px, auto;
+}
+
+@media (max-width: 719px) {
+  .home-page {
+    font-size: 16px;
+  }
+
+  .home-section {
+    padding: 64px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page * {
+    transition: none !important;
+  }
+}

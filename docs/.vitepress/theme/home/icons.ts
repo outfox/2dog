@@ -1,5 +1,5 @@
 /**
- * Icon mask URLs for the editor-home components. Three sets, one contract:
+ * Icon mask URLs for the homepage components. Three sets, one contract:
  * every glyph is applied as a CSS mask and tinted from theme tokens, so both
  * appearances recolor correctly (the SVGs carry baked dark-theme colors).
  *  - icons/node: neutral pictograms (brand content, tree/inspector glyphs)
@@ -36,3 +36,6 @@ export const iconUrl = (name: string) => iconMaskUrl(['node', 'godot-editor', 'g
 export const edIconUrl = (name: string) => iconMaskUrl(['godot-editor'], name)
 export const thIconUrl = (name: string) => iconMaskUrl(['godot-theme'], name)
 export const brIconUrl = (name: string) => iconMaskUrl(['brand'], name)
+
+/** The full-color W3C WebGPU logo as an <img> src, its viewBox cropped from the square canvas to the triangles. */
+export const webgpuLogoUrl = () => withBase('/WebGPU_logo.svg') + '#svgView(viewBox(38,209,667,421))'

@@ -165,7 +165,7 @@
 /* ---------- Godot pictogram icons ---------- */
 
 /* Rendered by plugins/godot-icons.mts (:gd-name@tint:) and by inline HTML in
-   config.mts / EditorHome.vue. Neutral SVGs from public/icons/node act as a
+   config.mts / the home components. Neutral SVGs from public/icons/node act as a
    mask; the tint comes from theme tokens so both appearances color correctly. */
 .gd-icon {
   display: inline-block;
@@ -195,19 +195,6 @@
 }
 
 /* ---------- The host frame (site-wide nav) ---------- */
-
-/* Home only: the editor window IS the page, and the editor's own menu bar carries
-   navigation, so the site header stands down and gives the docks the height.
-   Hidden, never unmounted — the search component stays alive, so Ctrl+K still binds
-   and Help ▸ Search Help… can open it (its modal teleports to <body>, so it shows).
-   `.VPContent.is-home` is server-rendered, so this lands on first paint. */
-body:has(.VPContent.is-home) .VPNav {
-  display: none;
-}
-
-body:has(.VPContent.is-home) .VPContent {
-  padding-top: 0;
-}
 
 .VPNavBar {
   border-bottom: 1px solid var(--ed-seam);

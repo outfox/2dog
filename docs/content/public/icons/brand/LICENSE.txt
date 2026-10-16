@@ -1,0 +1,15 @@
+Brand marks in this folder come from Simple Icons (https://simpleicons.org, package simple-icons 16.35.0).
+The SVG data is released under CC0-1.0, except where a mark's own license is listed below. Each mark remains
+a trademark of its owner and is shown only to name the platform 2dog works with; no endorsement is implied.
+The full-color WebGPU logo lives at ../../WebGPU_logo.svg: (c) W3C, CC-BY-4.0,
+https://www.w3.org/2023/02/webgpu-logos.html
+
+android.svg   Android robot, (c) Google LLC, CC-BY-3.0
+              https://developer.android.com/distribute/marketing-tools/brand-guidelines#brand-android
+dotnet.svg    .NET logo, Microsoft, CC0-1.0 - https://github.com/dotnet/brand
+avaloniaui.svg  Avalonia UI, AvaloniaUI OU - https://avaloniaui.net/brand
+blazor.svg    Blazor, Microsoft
+webassembly.svg  WebAssembly logo, CC0-1.0 - https://github.com/carlosbaraza/web-assembly-logo
+nuget.svg     NuGet, .NET Foundation
+github.svg    GitHub, GitHub Inc. - https://github.com/logos
+discord.svg   Discord, Discord Inc.

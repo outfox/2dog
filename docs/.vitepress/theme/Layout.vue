@@ -4,7 +4,7 @@
 // CSS, 14 unused woff2 in the bundle) on top of our self-hosted copy.
 import DefaultTheme from 'vitepress/theme-without-fonts'
 import { useData } from 'vitepress'
-import EditorHome from './EditorHome.vue'
+import HomePage from './HomePage.vue'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
@@ -13,7 +13,7 @@ const { frontmatter } = useData()
 <template>
   <Layout>
     <template #home-hero-before v-if="frontmatter.layout === 'home'">
-      <EditorHome />
+      <HomePage />
     </template>
   </Layout>
 </template>

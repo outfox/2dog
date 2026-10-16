@@ -8,7 +8,7 @@
   `configuration/`, `cli/`, `api/` and `known-issues/` hold references.
 - `.vitepress/config.mts` holds the nav, sidebar and site metadata, `.vitepress/plugins/` the Markdown
   plugins and `.vitepress/theme/` styling and layout. The homepage is `content/index.md` frontmatter rendered
-  by `theme/EditorHome.vue` and `theme/home/`, so its text lives in those components.
+  by `theme/HomePage.vue` and `theme/home/`, so its text lives in those components.
 - `npm run dev` and `npm run build` regenerate the ignored `content/public/llms.txt` and `llms-full.txt`;
   postbuild mirrors the Markdown into `.vitepress/dist/`. Edit sources, never generated output.
 - statichost.eu builds and hosts 2dog.dev from pushes with `npm run build-ci`; there is no manual deploy.
