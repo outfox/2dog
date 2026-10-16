@@ -94,7 +94,8 @@ def prepare_native(platform, arch):
             f"-DDawn_DIR={dawn_cmake}",
             f"-DCMAKE_INSTALL_PREFIX={sdk}",
             "-DCMAKE_BUILD_TYPE=Release",
-            *(["-A", "x64"] if platform == "windows" else []),
+            # Dawn's official Windows SDK uses the VS 2026 STL ABI helpers.
+            *(["-G", "Visual Studio 18 2026", "-A", "x64"] if platform == "windows" else []),
         ],
         check=True,
     )

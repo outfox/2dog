@@ -121,7 +121,9 @@ uv run poe build
 
 The builder verifies the pinned Dawn and DXC downloads and builds a small
 shared C API library around Dawn. It requires a C++20 compiler and prepares
-its pinned CMake through `uv`. An existing SDK can be selected with
+its pinned CMake through `uv`. The official Windows Dawn SDK also requires
+Visual Studio 2026 with MSVC Build Tools 14.51 or newer; the native CI installs that
+toolset when the runner lacks it. An existing SDK can be selected with
 `--webgpu-native-path <sdk>`; it must contain runtime dependencies and a
 `licenses/` directory. `--webgpu no` builds the original renderer set.
 

@@ -1,5 +1,8 @@
 config_version=5
 
+[xr]
+shaders/enabled=true
+
 [application]
 config/name="2dog native WebGPU smoke"
 run/main_scene="res://main.tscn"

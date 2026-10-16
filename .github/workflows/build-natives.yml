@@ -292,6 +292,24 @@ jobs:
           python-version: '3.12'
           enable-cache: false
 
+      # The pinned Dawn SDK uses STL helpers newer than the runner's VS 2022 toolset.
+      - name: Install MSVC Build Tools for native Dawn
+        if: matrix.platform == 'windows' && inputs.precision == 'single'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $tools = & $vswhere -latest -products '*' -version '[18.0,19.0)' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $tools) {
+            $bootstrapper = Join-Path $env:RUNNER_TEMP 'vs_buildtools.exe'
+            Invoke-WebRequest 'https://aka.ms/vs/stable/vs_buildtools.exe' -OutFile $bootstrapper
+            $signature = Get-AuthenticodeSignature $bootstrapper
+            if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') {
+              throw 'Visual Studio bootstrapper signature is not valid for Microsoft Corporation.'
+            }
+            $installer = Start-Process $bootstrapper -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--add', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64' -WindowStyle Hidden -PassThru -Wait
+            if ($installer.ExitCode -notin 0, 3010) { throw "Build Tools install failed: $($installer.ExitCode)" }
+          }
+
       # Linux-specific dependencies
       - name: Install Linux dependencies
         if: matrix.platform == 'linuxbsd'
