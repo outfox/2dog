@@ -68,6 +68,8 @@ def prepare_native(platform, arch):
         b"".join((boundary / name).read_bytes() for name in ("CMakeLists.txt", "dawn_boundary.cpp", "dawn_boundary.h"))
     ).hexdigest()
     expected = {"dawn": DAWN_COMMIT, "boundary": fingerprint, "dxc": DXC_TAG if platform == "windows" else None}
+    if platform == "macos":
+        expected["deployment_target"] = "13.0"
     if stamp.is_file() and json.loads(stamp.read_text()) == expected and (sdk / RUNTIME[platform]).is_file():
         for source in (ROOT / "nuget/webgpu").iterdir():
             shutil.copy2(source, sdk / "licenses" / source.name)
@@ -94,6 +96,7 @@ def prepare_native(platform, arch):
             f"-DDawn_DIR={dawn_cmake}",
             f"-DCMAKE_INSTALL_PREFIX={sdk}",
             "-DCMAKE_BUILD_TYPE=Release",
+            *(["-DCMAKE_OSX_DEPLOYMENT_TARGET=13.0"] if platform == "macos" else []),
             # Dawn's official Windows SDK uses the VS 2026 STL ABI helpers.
             *(["-G", "Visual Studio 18 2026", "-A", "x64"] if platform == "windows" else []),
         ],

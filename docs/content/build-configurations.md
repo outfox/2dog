@@ -98,6 +98,9 @@ packages and WebGPU in single-threaded browser packages. Existing renderer
 defaults stay unchanged. Double precision, threaded web, Android, and WebXR
 retain their existing renderer paths.
 
+On macOS, WebGPU requires macOS 13 or newer. Dawn loads only when WebGPU is
+selected; existing renderers keep their original OS requirements.
+
 Select WebGPU Mobile in a desktop host with Godot's arguments:
 
 ```bash
