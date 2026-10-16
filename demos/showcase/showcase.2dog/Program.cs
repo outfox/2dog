@@ -40,11 +40,12 @@ internal static class Program
         // Content is resolved from the source project or published .pck.
         using var engine = new Engine("showcase", args: args);
         engine.Start();
+        var smokeRequested = OS.GetCmdlineUserArgs().Contains("--2dog-smoke-markers");
         Node3D[] whiteCubes = [];
         if (Godot.Engine.IsEditorHint())
         {
             // The editor owns the tree; there is no running game scene to probe or animate.
-            Console.WriteLine("2DOG_EDITOR_SMOKE_PASSED");
+            if (smokeRequested) Console.WriteLine("2DOG_EDITOR_SMOKE_PASSED");
         }
         else
         {
@@ -55,13 +56,14 @@ internal static class Program
             GD.Print("Hello from GodotSharp.");
             GD.Print("Scene Root: ", scene.Name);
 
-            // The platform smoke tests grep for this marker to prove script classes bound in this build.
-            if (scene.GetNodeOrNull<SpinningCube>("Flair/BlueCubes/BlueCube1") is not null)
-                Console.WriteLine("2DOG_CSHARP_SCRIPT_SMOKE_PASSED");
-
-            // The broad GodotSharp probe the web hosts run too; only published hosts exercise NativeAOT.
-            GodotApiSmoke.RunAll(engine.Tree);
-            Console.WriteLine("2DOG_API_SMOKE_PASSED");
+            if (smokeRequested)
+            {
+                // Published host checks opt in, including the NativeAOT API probe.
+                if (scene.GetNodeOrNull<SpinningCube>("Flair/BlueCubes/BlueCube1") is not null)
+                    Console.WriteLine("2DOG_CSHARP_SCRIPT_SMOKE_PASSED");
+                GodotApiSmoke.RunAll(engine.Tree);
+                Console.WriteLine("2DOG_API_SMOKE_PASSED");
+            }
 
             // Blue cubes spin in SpinningCube._Process; the host drives the white ones.
             whiteCubes = scene.GetNode<Node3D>("Flair/WhiteCubes")

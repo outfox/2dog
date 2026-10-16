@@ -718,7 +718,7 @@ jobs:
           # Wait for the editor's initial scan before quitting; a fixed frame
           # count can interrupt the scan and report a native warning on Linux.
           dotnet run --project demos/showcase/showcase.2dog -c Editor -- \
-            --headless --editor --import > editor-smoke.log 2>&1
+            --headless --editor --import -- --2dog-smoke-markers > editor-smoke.log 2>&1
           cat editor-smoke.log
           grep -q '2DOG_EDITOR_SMOKE_PASSED' editor-smoke.log
           if grep -Eq '2DOG_(CSHARP_SCRIPT|API)_SMOKE_PASSED|^ERROR:|^WARNING:' editor-smoke.log; then

@@ -18,6 +18,8 @@ public partial class Home : ComponentBase
     private string _twodogVersion = "-";
     private string _sceneName = "-";
     private string _fps = "-";
+    private string _renderer = "-";
+    private string _driver = "-";
     private long _frames;
     private float _spinSpeed = 1.8f; // radians per second
     private bool _paused;
@@ -34,12 +36,14 @@ public partial class Home : ComponentBase
         _state = "running";
         _godotVersion = Godot.Engine.GetVersionInfo()["string"].AsString();
         _twodogVersion = Engine.Version.ToString();
+        _renderer = RenderingServer.GetCurrentRenderingMethod();
+        _driver = RenderingServer.GetCurrentRenderingDriverName();
         // Godot titles the page after application/config/name once it starts.
         DisplayServer.WindowSetTitle("2dog showcase — Blazor host");
         _sceneName = tree.CurrentScene?.Name ?? "-";
         // CI's restart probe reads this to tell the second lifetime's smoke pass from the first.
         JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-lifetime', '{_view?.Lifetime ?? 0}')");
-        JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-renderer', '{RenderingServer.GetCurrentRenderingDriverName()}')");
+        JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-renderer', '{_driver}')");
 
         // The blue cubes spin themselves via SpinningCube._Process (Godot side), the red ones via GDScript;
         // the white ones are plain MeshInstance3Ds this host drives from its frame callback.
