@@ -175,6 +175,10 @@ uv run poe build-all
 Run the showcase with `dotnet run --project demos/showcase/showcase.2dog` and the tests with
 `dotnet test twodog.tests`.
 
+The repository contains symlinks. On Windows, enable Developer Mode and run
+`git config --global core.symlinks true` before cloning; see
+[Symlinks in a Windows checkout](https://2dog.dev/troubleshooting#symlinks-in-a-windows-checkout-of-2dog).
+
 
 ## Join us at the dog park
 
