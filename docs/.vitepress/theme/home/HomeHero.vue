@@ -33,7 +33,7 @@ async function copyCommands() {
           WebGPU rendering for web builds
           <span aria-hidden="true">→</span>
         </a>
-    -->
+        -->
         <h1 id="hero-title" class="hero-title">Godot, where .NET&nbsp;goes.  <span class="gd-icon hero-axes" :style="{ '--gd-icon': iconUrl('arrow_local_axes') }" aria-hidden="true"></span></h1>
         <p class="hero-lead">
           <strong>2dog</strong> <span class="lead-dog" aria-hidden="true"><span class="gd-icon lead-icon" :style="{ '--gd-icon': iconUrl('bone') }"></span></span> embeds the <strong>Godot</strong> <span class="gd-icon lead-icon godot" :style="{ '--gd-icon': iconUrl('gobot') }" aria-hidden="true"></span> engine in <strong>.NET</strong> <span class="gd-icon lead-icon dotnet" :style="{ '--gd-icon': iconUrl('box') }" aria-hidden="true"></span>
@@ -106,16 +106,16 @@ async function copyCommands() {
           <div class="art-win art-browser">
             <div class="art-bar">
               <span class="art-dots"><i></i><i></i><i></i></span>
-              <span class="art-url">mygame.example</span>
+              <span class="art-url">https://mygame.example</span>
             </div>
-            <!---
             <div class="game-view art-view">
               <img class="art-icon" :src="withBase('/icon.svg')" alt="" width="568" height="573" />
+            <!---
               <span class="art-badge">
                 <img :src="webgpuLogoUrl()" alt="" width="19" height="12" />WebGPU
               </span>
-            </div>
             -->
+            </div>
           </div>
 
           <div class="art-phone">
