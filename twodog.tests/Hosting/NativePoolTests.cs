@@ -10,7 +10,9 @@ public sealed class NativePoolTests : IDisposable
 
     public NativePoolTests()
     {
-        _source = Path.Combine(Path.GetTempPath(), $"2dog-pool-test-{Guid.NewGuid():N}.bin");
+        var sourceDir = Path.Combine(Path.GetTempPath(), $"2dog-pool-test-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(sourceDir);
+        _source = Path.Combine(sourceDir, "native.bin");
         var payload = new byte[4096];
         Random.Shared.NextBytes(payload);
         File.WriteAllBytes(_source, payload);
@@ -18,7 +20,7 @@ public sealed class NativePoolTests : IDisposable
 
     public void Dispose()
     {
-        File.Delete(_source);
+        Directory.Delete(Path.GetDirectoryName(_source)!, recursive: true);
         // Slot dirs and the per-source identity dir; quiet best-effort cleanup.
         foreach (var keyDir in _copies.Select(c => Path.GetDirectoryName(Path.GetDirectoryName(c))!).Distinct())
         {
@@ -49,6 +51,20 @@ public sealed class NativePoolTests : IDisposable
         Assert.NotEqual(_source, copy);
         Assert.Contains("slot-91000", copy);
         Assert.Equal(File.ReadAllBytes(_source), File.ReadAllBytes(copy));
+    }
+
+    [Fact]
+    public void DawnDependenciesTravelWithTheCopyAndInvalidateItsIdentity()
+    {
+        var name = OperatingSystem.IsWindows() ? "godot_webgpu_dawn.dll" : "libgodot_webgpu_dawn.so";
+        var dependency = Path.Combine(Path.GetDirectoryName(_source)!, name);
+        File.WriteAllBytes(dependency, [1, 2, 3]);
+        var first = Acquire(91_002);
+        Assert.Equal([1, 2, 3], File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(first)!, name)));
+        File.WriteAllBytes(dependency, [4, 5, 6, 7]);
+        var second = Acquire(91_002);
+        Assert.NotEqual(first, second);
+        Assert.Equal([4, 5, 6, 7], File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(second)!, name)));
     }
 
     [Fact]

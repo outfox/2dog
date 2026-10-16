@@ -44,6 +44,7 @@
 
     <main class="viewport">
         <GodotView @ref="_view" Project="showcase" PluginsInitializer="TwoDogWebBoot.PluginsInitializer()"
+                   RenderingDriver="@RenderingDriver"
                    OnFrame="OnFrame" Started="OnStarted" Exited="OnExited" Failed="OnFailed"
                    style="width: 100%; height: 100%;" />
     </main>

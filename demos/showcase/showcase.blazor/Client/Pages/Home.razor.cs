@@ -8,6 +8,9 @@ namespace showcase.blazor.Client.Pages;
 // Blazor UI and Godot share one runtime: the panel reads engine state and pokes scene nodes directly.
 public partial class Home : ComponentBase
 {
+    [SupplyParameterFromQuery(Name = "renderer")]
+    public string? RenderingDriver { get; set; }
+
     private GodotView? _view;
     private string _status = "Starting Godot...";
     private string _state = "starting";
@@ -36,6 +39,7 @@ public partial class Home : ComponentBase
         _sceneName = tree.CurrentScene?.Name ?? "-";
         // CI's restart probe reads this to tell the second lifetime's smoke pass from the first.
         JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-lifetime', '{_view?.Lifetime ?? 0}')");
+        JavaScriptBridge.Eval($"document.documentElement.setAttribute('data-twodog-renderer', '{RenderingServer.GetCurrentRenderingDriverName()}')");
 
         // The blue cubes spin themselves via SpinningCube._Process (Godot side), the red ones via GDScript;
         // the white ones are plain MeshInstance3Ds this host drives from its frame callback.

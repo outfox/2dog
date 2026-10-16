@@ -1372,6 +1372,44 @@ jobs:
           fi
           echo "Blazor engine restart smoke passed"
 
+      - name: Run Blazor WebGPU browser restart smoke
+        if: matrix.precision == 'single'
+        run: |
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+          PUB=demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish
+          ASPNETCORE_ENVIRONMENT=Production dotnet "$PUB/showcase.blazor.dll" --urls http://127.0.0.1:8000 \
+            --contentroot "$(pwd)/$PUB" > /tmp/2dog-blazor-webgpu-server.log 2>&1 &
+          SERVER_PID=$!
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          "$CHROME" --headless=new --no-sandbox --disable-dev-shm-usage \
+            --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan=swiftshader \
+            --disable-vulkan-surface --enable-unsafe-swiftshader \
+            --remote-debugging-address=127.0.0.1 --remote-debugging-port=9232 \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-blazor-webgpu" \
+            'http://127.0.0.1:8000/?renderer=webgpu' > /tmp/2dog-blazor-webgpu-browser.log 2>&1 &
+          CHROME_PID=$!
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:9232/json/list > /dev/null; then break; fi
+            sleep 1
+          done
+          set +e
+          timeout 130s node .github/scripts/browser-restart-smoke.mjs \
+            'http://127.0.0.1:8000/?renderer=webgpu' 120000 9232 webgpu \
+            | tee /tmp/2dog-blazor-webgpu-restart.log
+          SMOKE_STATUS=$?
+          set -e
+          cat /tmp/2dog-blazor-webgpu-server.log
+          cat /tmp/2dog-blazor-webgpu-browser.log
+          exit "$SMOKE_STATUS"
+
       - name: Preserve failed Blazor publish and browser diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
@@ -1382,6 +1420,7 @@ jobs:
             /tmp/2dog-blazor-server.log
             /tmp/2dog-blazor-browser.log
             /tmp/2dog-blazor-restart.log
+            /tmp/2dog-blazor-webgpu-*.log
           retention-days: 7
 
   # The packed `2dog` tool, installed from the artifacts the way a user gets
