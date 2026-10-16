@@ -720,26 +720,28 @@ jobs:
           elif [ "$RUNNER_OS" = macOS ]; then
             dotnet build tests/webgpu-smoke -c Release
             SMOKE=tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke
-            # Keep a native stack for failures after the first engine teardown.
-            # Run the existing renderer separately to distinguish host lifecycle bugs.
+            # Compare the host lifecycle with the existing renderer as well.
             SMOKE_STATUS=0
             for DRIVER in opengl3 webgpu; do
               LOG="/tmp/2dog-macos-$DRIVER-smoke.log"
               set +e
-              lldb --batch --no-lldbinit -o 'settings set auto-confirm true' \
-                -o run -o 'thread backtrace all' -k 'thread backtrace all' -k 'quit 1' \
-                -- "$SMOKE" "$DRIVER" > "$LOG" 2>&1 &
-              DEBUGGER_PID=$!
-              # Interrupt a hung runtime so the following command captures its stack.
-              (sleep 120; kill -INT "$DEBUGGER_PID" 2>/dev/null) &
+              "$SMOKE" "$DRIVER" > "$LOG" 2>&1 &
+              SMOKE_PID=$!
+              (sleep 120; kill -TERM "$SMOKE_PID" 2>/dev/null; sleep 5; kill -KILL "$SMOKE_PID" 2>/dev/null) &
               WATCHDOG_PID=$!
-              wait "$DEBUGGER_PID"
+              wait "$SMOKE_PID"
+              DRIVER_STATUS=$?
               kill "$WATCHDOG_PID" 2>/dev/null
               cat "$LOG"
               set -e
               MARKER=$(printf '%s' "$DRIVER" | tr '[:lower:]' '[:upper:]')
-              if ! grep -q "NATIVE_${MARKER}_SMOKE_PASSED: lifetime 2" "$LOG" || \
-                 ! grep -q 'exited with status = 0 ' "$LOG"; then SMOKE_STATUS=1; fi
+              if [ "$DRIVER_STATUS" -ne 0 ] || ! grep -q "NATIVE_${MARKER}_SMOKE_PASSED: lifetime 2" "$LOG"; then
+                SMOKE_STATUS=1
+                # Preserve the OS crash report without changing runtime signal handling.
+                sleep 5
+                find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -type f \
+                  -name 'NativeWebGpuSmoke*' -mmin -5 -exec cat {} \; 2>/dev/null || true
+              fi
             done
             exit "$SMOKE_STATUS"
           else
