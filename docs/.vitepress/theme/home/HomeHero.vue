@@ -26,18 +26,19 @@ async function copyCommands() {
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-grid">
       <div class="hero-copy">
+        <!--
         <a class="hero-news" :href="withBase('/hosts/web')">
           <span class="hero-news-tag">New</span>
           <img class="hero-news-logo" :src="webgpuLogoUrl()" alt="" width="29" height="18" />
           WebGPU rendering for web builds
           <span aria-hidden="true">→</span>
         </a>
-
-        <h1 id="hero-title" class="hero-title">Godot, where .NET&nbsp;goes.</h1>
+    -->
+        <h1 id="hero-title" class="hero-title">Godot, where .NET&nbsp;goes.  <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('arrow_local_axes') }" aria-hidden="true"></span></h1>
         <p class="hero-lead">
-          <strong>2dog</strong> embeds the Godot game engine in .NET <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('bone') }" aria-hidden="true"></span>
+          <strong>2dog</strong> <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('bone') }" aria-hidden="true"></span> embeds the <strong>Godot</strong> <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('gobot') }" aria-hidden="true"></span> game engine in <strong>.NET</strong> <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('box') }" aria-hidden="true"></span>
           <br/>Ship your C# game to the
-          browser, embed it in desktop or mobile apps, and give it the <s>treats</s> tests it deserves.           
+          browser, surround it with desktop or mobile UI, and give it the <s>treats</s> tests it deserves.           
         </p>
 
         <div class="home-actions">
@@ -50,7 +51,7 @@ async function copyCommands() {
           </a>
           <a class="home-btn" href="https://www.nuget.org/packages/2dog/">
             <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" aria-hidden="true"></span>
-            Fetch on NuGet
+            Fetch from NuGet
           </a>
           <a class="home-btn" href="https://github.com/outfox/2dog">
             <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('github') }" aria-hidden="true"></span>
@@ -59,8 +60,8 @@ async function copyCommands() {
         </div>
         <ul class="hero-facts">
           <li>
-            <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>
             MIT licensed.
+            <span class="gd-icon gd-icon--ok" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>
           </li>
           <li>2dog {{ twodogVersion }}</li>
           <li>Godot {{ godotVersion }}</li>

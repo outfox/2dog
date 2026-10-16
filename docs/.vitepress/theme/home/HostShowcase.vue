@@ -75,7 +75,7 @@ const groups: { label: string; icon: string; tint: string; hosts: Host[] }[] = [
       {
         name: 'Avalonia',
         flag: '--avalonia',
-        text: 'Godot as a control in cross-platform Avalonia apps. All in a zero-copy GPU surface.',
+        text: 'Godot as a control in cross-platform Avalonia apps - in a zero-copy GPU surface.',
         link: '/hosts/avalonia',
         brand: 'avaloniaui',
         chip: 'var(--chip-avalonia)',
