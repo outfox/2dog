@@ -183,7 +183,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             Engine.WebExitRuntimeOnQuit = false;
 
             var args = new List<string> { "--main-pack", packName };
-            if (renderingDriver == "webgpu") args.AddRange(["--rendering-driver", "webgpu", "--rendering-method", "mobile"]);
+            if (renderingDriver == "webgpu") args.AddRange(["--rendering-driver", "webgpu"]);
             if (Args is not null) args.AddRange(Args);
             if (RenderingDriver is not null) args.AddRange(["--rendering-driver", RenderingDriver]);
 

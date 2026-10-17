@@ -43,11 +43,12 @@ creating `Engine`:
 
 ```javascript
 'renderingDriver': 'webgpu',
-'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
+'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'forward_plus'],
 ```
 
 The shell requests a WebGPU device before initializing Godot. The browser must
-expose WebGPU in a secure context. Keep `opengl3` and the Compatibility renderer
+expose WebGPU in a secure context. Mobile remains available by using `mobile`
+as the rendering method. Keep `opengl3` and the Compatibility renderer
 to use WebGL. The package supplies Dawn's port, final-link flags, and a writable
 cache automatically; no custom emcc flags are needed in the host project.
 

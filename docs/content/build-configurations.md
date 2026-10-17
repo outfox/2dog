@@ -95,10 +95,12 @@ GDExtensions must also match the precision!
 
 The `webgpu` branch includes native Dawn/WebGPU in single-precision desktop
 packages and WebGPU in single-threaded browser packages. Existing renderer
-defaults are preserved. An explicit WebGPU driver argument defaults to Mobile
-when no rendering method is supplied. Forward+ is currently unsupported with
-WebGPU and is rejected before shader initialization; Vulkan, D3D12 and Metal
-retain their existing rendering methods. Double precision, threaded web,
+defaults are preserved. An explicit WebGPU driver argument defaults to Forward+
+when no rendering method is supplied. Both Forward+ and Mobile are available;
+Vulkan, D3D12 and Metal retain their existing rendering methods. Forward+ is
+experimental, with image checks for clustered lighting, shadows, volumetric
+fog and bounced SDFGI. Broader feature and hardware parity is still being tested.
+Double precision, threaded web,
 Android, and WebXR retain their existing renderer paths.
 
 Native Dawn loads only when WebGPU is selected; existing renderers keep their
@@ -106,10 +108,10 @@ original runtime requirements. WebGPU requires macOS 13 or newer on macOS and
 the [Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe)
 on Windows.
 
-Select WebGPU Mobile in a desktop host with Godot's arguments:
+Select WebGPU Forward+ in a desktop host with Godot's arguments:
 
 ```bash
-dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method mobile
+dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method forward_plus
 ```
 
 To select it through `project.godot` instead, configure both the driver and
@@ -118,7 +120,7 @@ driver setting:
 
 ```ini
 [rendering]
-renderer/rendering_method="mobile"
+renderer/rendering_method="forward_plus"
 rendering_device/driver="webgpu"
 rendering_device/driver.windows="webgpu"
 rendering_device/driver.linuxbsd="webgpu"
@@ -126,12 +128,10 @@ rendering_device/driver.macos="webgpu"
 ```
 
 The `.mobile` suffix in `renderer/rendering_method.mobile` is a platform feature
-override; it does not select the Mobile renderer on desktop. Existing `.web` or
-`.mobile` overrides must also use `"mobile"` when those platforms use WebGPU.
-`--editor` opens the editor using the selected renderer and driver; it does not
-enable Forward+. Forward+ needs additional shader and resource-limit work in
-this backend, even on desktop GPUs. Startup rejection is intentional until that
-work is complete.
+override; it does not select the Mobile renderer on desktop. Configure existing
+`.web` or `.mobile` overrides separately for those platforms. To keep using
+Mobile, select `"mobile"` in the project or pass `--rendering-method mobile`.
+`--editor` opens the editor using the selected renderer and driver.
 
 The platform package copies Dawn and its dependencies beside libgodot for
 both build and publish. Keep those files and their `licenses/` directory when

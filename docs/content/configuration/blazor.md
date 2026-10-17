@@ -48,7 +48,9 @@ See the [Blazor host guide](/hosts/blazor) for `GodotView` and static asset serv
 ## WebGPU on the WebGPU Branch
 
 Set `RenderingDriver="webgpu"` on `GodotView` to request a WebGPU device before
-starting the engine and select the Mobile renderer. The browser must expose
+starting the engine. It defaults to Forward+; supply
+`Args='@(new[] { "--rendering-method", "mobile" })'` to select Mobile.
+The browser must expose
 WebGPU in a secure context. The default remains OpenGL/WebGL Compatibility.
 You can also supply `--rendering-driver webgpu` through `Args`; the view uses
 that argument when `RenderingDriver` is unset. The device is reused across

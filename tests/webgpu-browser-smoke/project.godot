@@ -1,0 +1,14 @@
+config_version=5
+
+[application]
+config/name="WebGPU Forward+ regression"
+run/main_scene="res://main.tscn"
+
+[display]
+window/size/viewport_width=128
+window/size/viewport_height=128
+
+[rendering]
+renderer/rendering_method="forward_plus"
+renderer/rendering_method.web="forward_plus"
+rendering_device/driver.web="webgpu"

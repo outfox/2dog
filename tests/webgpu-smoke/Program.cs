@@ -9,29 +9,38 @@ internal static class Program
         var driver = args.FirstOrDefault() ?? "webgpu";
         var method = args.ElementAtOrDefault(1)
             ?? (driver == "opengl3" ? "gl_compatibility" : driver == "webgpu" ? "default" : "mobile");
-        var expectRejection = args.Contains("--expect-rejection");
         for (int lifetime = 0; lifetime < 2; lifetime++)
         {
             string[] options = ["--rendering-driver", driver, "--audio-driver", "Dummy"];
             if (method != "default") options = [.. options, "--rendering-method", method];
             if (OperatingSystem.IsLinux()) options = [.. options, "--display-driver", "x11"];
-            using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true };
-            try
-            {
-                engine.Start();
-            }
-            catch (InvalidOperationException error) when (expectRejection
-                && error.Message.Contains("Godot initialization failed"))
-            {
-                Console.WriteLine("NATIVE_WEBGPU_FORWARD_PLUS_REJECTED");
-                return;
-            }
-            if (expectRejection) throw new Exception("Unsupported rendering method was accepted.");
+            using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true, NativePath = System.Environment.GetEnvironmentVariable("TWODOG_WEBGPU_NATIVE_PATH") };
+            engine.Start();
             if (RenderingServer.GetCurrentRenderingDriverName() != driver)
                 throw new Exception($"{driver} selection fell back to another rendering driver.");
             if (method == "default" && driver == "webgpu"
-                && RenderingServer.GetCurrentRenderingMethod() != "mobile")
-                throw new Exception("An implicit WebGPU rendering method must select Mobile.");
+                && RenderingServer.GetCurrentRenderingMethod() != "forward_plus")
+                throw new Exception("An implicit WebGPU rendering method must select Forward+.");
+            if (driver == "webgpu") DescriptorArraySmoke.Run();
+            if (RenderingServer.GetCurrentRenderingMethod() == "forward_plus")
+            {
+                using var probe = new ForwardPlusScene(engine.Tree);
+                for (int stage = 0; stage < 4; stage++)
+                {
+                    probe.SelectStage(stage);
+                    for (int frame = 0; frame < 12; frame++)
+                    {
+                        if (engine.Iteration()) throw new Exception("Unexpected engine quit.");
+                        Thread.Sleep(20);
+                    }
+                    using var pixels = engine.Tree.Root.GetTexture().GetImage();
+                    var pixel = pixels.GetPixel(pixels.GetWidth() / 2, pixels.GetHeight() / 2);
+                    probe.Record(stage, (pixel.R + pixel.G + pixel.B) / 3.0);
+                }
+                probe.AssertLighting();
+                ForwardEffects.Run(engine, probe);
+            }
+            ShadowPixelSmoke.Run(engine);
             var root = new Node3D();
             engine.Tree.Root.AddChild(root);
             root.AddChild(new MeshInstance3D { Mesh = new BoxMesh() });

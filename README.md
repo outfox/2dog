@@ -25,10 +25,12 @@ dependencies and notices; build and publish copy them with libgodot. The
 single-threaded browser packages include WebGPU and WebGL with the pinned
 Emscripten port and final-link configuration.
 
-Select `--rendering-driver webgpu --rendering-method mobile` on desktop.
-When only the WebGPU driver is specified, it selects Mobile automatically.
-Forward+ is currently unsupported with WebGPU and is rejected before shader
-initialization. Other drivers retain their existing rendering methods.
+Select `--rendering-driver webgpu --rendering-method forward_plus` on desktop.
+When only the WebGPU driver is specified, it defaults to Forward+.
+Mobile remains available with `--rendering-method mobile`. Forward+ is
+experimental: clustered lighting, shadows, volumetric fog and bounced SDFGI
+have image regression coverage; broad feature and hardware parity is still
+being tested. Other drivers retain their existing rendering methods.
 Web shells also set `renderingDriver: 'webgpu'` before engine initialization;
 Blazor views can set `RenderingDriver="webgpu"`. Existing renderer defaults
 remain unchanged. Double precision, threaded web, Android and WebXR keep their
@@ -46,7 +48,7 @@ install the GitHub CLI (`gh`) and authenticate it, then run from this checkout:
 
 ```bash
 uv run poe pull-packages
-dotnet run --project demos/showcase/showcase.2dog -- --rendering-driver webgpu --rendering-method mobile
+dotnet run --project demos/showcase/showcase.2dog -- --rendering-driver webgpu --rendering-method forward_plus
 ```
 
 The command downloads the current branch's latest successful, unexpired CI

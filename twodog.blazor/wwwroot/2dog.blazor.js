@@ -29,17 +29,19 @@ async function requestWebGpuDevice() {
     if (!adapter) throw new Error('2dog.blazor: no WebGPU adapter is available.');
     const features = [
         'timestamp-query', 'texture-formats-tier1', 'texture-formats-tier2',
-        'float32-filterable', 'float32-blendable', 'rg11b10ufloat-renderable',
+        'float32-filterable', 'float32-blendable', 'rg11b10ufloat-renderable', 'depth32float-stencil8',
         'clip-distances', 'dual-source-blending', 'texture-compression-bc',
         'texture-compression-etc2', 'texture-compression-astc',
         'readonly-and-readwrite-storage-textures',
     ];
     const limits = {};
     for (const name of [
-        'maxStorageBuffersPerShaderStage', 'maxStorageBufferBindingSize', 'maxBufferSize',
+        'maxStorageBuffersPerShaderStage', 'maxStorageTexturesPerShaderStage', 'maxStorageBufferBindingSize', 'maxBufferSize',
         'maxUniformBufferBindingSize', 'maxUniformBuffersPerShaderStage',
         'maxSampledTexturesPerShaderStage', 'maxSamplersPerShaderStage',
         'maxColorAttachments', 'maxBindGroups',
+        'maxComputeInvocationsPerWorkgroup', 'maxComputeWorkgroupSizeX',
+        'maxComputeWorkgroupSizeY', 'maxComputeWorkgroupSizeZ', 'maxComputeWorkgroupStorageSize',
     ]) {
         if (adapter.limits[name] !== undefined) limits[name] = adapter.limits[name];
     }
