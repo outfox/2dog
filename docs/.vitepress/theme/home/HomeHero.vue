@@ -36,7 +36,7 @@ async function copyCommands() {
         -->
         <h1 id="hero-title" class="hero-title">Godot, where .NET&nbsp;goes.  <span class="gd-icon hero-axes" :style="{ '--gd-icon': iconUrl('arrow_local_axes') }" aria-hidden="true"></span></h1>
         <p class="hero-lead">
-          <strong>2dog</strong> <span class="lead-dog" aria-hidden="true"><span class="gd-icon lead-icon" :style="{ '--gd-icon': iconUrl('bone') }"></span></span> embeds the <strong>Godot</strong> <span class="gd-icon lead-icon godot" :style="{ '--gd-icon': iconUrl('gobot') }" aria-hidden="true"></span> engine in <strong>.NET</strong> <span class="gd-icon lead-icon dotnet" :style="{ '--gd-icon': iconUrl('box') }" aria-hidden="true"></span>
+          <strong>2dog</strong> <span class="lead-dog" aria-hidden="true"><span class="gd-icon lead-icon" :style="{ '--gd-icon': iconUrl('bone') }"></span></span> runs the <strong>Godot</strong> <span class="gd-icon lead-icon godot" :style="{ '--gd-icon': iconUrl('gobot') }" aria-hidden="true"></span> engine in <strong>.NET</strong> <span class="gd-icon lead-icon dotnet" :style="{ '--gd-icon': iconUrl('box') }" aria-hidden="true"></span>
           <br/>Ship your C# game to the
           browser, wrap it in desktop or mobile UI, and give it the <s>treats</s> tests it deserves.           
         </p>
