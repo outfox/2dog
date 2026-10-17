@@ -8,6 +8,9 @@ run/main_scene="res://main.tscn"
 window/size/viewport_width=128
 window/size/viewport_height=128
 
+[dotnet]
+project/assembly_name="WebGpuBrowserSmoke"
+
 [rendering]
 renderer/rendering_method="forward_plus"
 renderer/rendering_method.web="forward_plus"

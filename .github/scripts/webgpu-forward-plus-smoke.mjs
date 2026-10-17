@@ -55,9 +55,9 @@ try {
     await send('Page.navigate', { url });
     if (output) await mkdir(output, { recursive: true });
     const samples = [];
-    for (let phase = 0; phase < 6; phase++) {
+    for (let phase = 0; phase < 7; phase++) {
         if (phase) await evaluate(`document.documentElement.dataset.requestPhase='${phase}'`);
-        await waitFor(`document.documentElement.dataset.readyPhase==='${phase}'`);
+        await waitFor(`document.documentElement?.dataset.readyPhase==='${phase}'`);
         await delay(200);
         const clip = await evaluate(`(() => {
             const r = document.querySelector('canvas').getBoundingClientRect();
@@ -84,12 +84,15 @@ try {
             if (pixel[2] < 0.025 * 255 || pixel[2] <= pixel[0] + 0.01 * 255)
                 throw new Error(`SDFGI did not transfer blue emission to the unlit target: ${pixel}`);
             console.log('BROWSER_SDFGI_INDIRECT_LIGHT_PASSED');
+        } else if (phase === 6) {
+            if (pixel[0] < 0.5 * 255) throw new Error(`MSAA lost the lit target: ${pixel}`);
+            console.log('BROWSER_MSAA_PIXELS_PASSED');
         } else {
             samples.push((pixel[0] + pixel[1] + pixel[2]) / (3 * 255));
         }
     }
-    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='6'`);
-    await waitFor(`document.documentElement.dataset.twodogSmoke==='passed'`);
+    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='7'`);
+    await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
     if (errors.length) throw new Error(errors.join('\n'));
     console.log('BROWSER_FORWARD_PLUS_CLUSTERED_LIGHTING_PASSED', samples);
 } finally {

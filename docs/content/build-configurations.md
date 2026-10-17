@@ -98,10 +98,17 @@ packages and WebGPU in single-threaded browser packages. Existing renderer
 defaults are preserved. An explicit WebGPU driver argument defaults to Forward+
 when no rendering method is supplied. Both Forward+ and Mobile are available;
 Vulkan, D3D12 and Metal retain their existing rendering methods. Forward+ is
-experimental, with image checks for clustered lighting, shadows, volumetric
-fog and bounced SDFGI. Broader feature and hardware parity is still being tested.
+experimental, with image checks for clustered lighting, shadows, SSAO,
+volumetric fog, bounced SDFGI and MSAA. Broader feature and hardware parity is
+still being tested.
 Double precision, threaded web,
 Android, and WebXR retain their existing renderer paths.
+
+Godot falls back to Mobile if the adapter exposes fewer than 48 sampled
+textures per shader stage. On adapters without the optional storage-format
+tiers, unsupported read/write formats use read snapshots refreshed between
+compute dispatches. Custom storage-image shaders that need to read their own
+writes within one dispatch require native support for that format.
 
 Native Dawn loads only when WebGPU is selected; existing renderers keep their
 original runtime requirements. WebGPU requires macOS 13 or newer on macOS and

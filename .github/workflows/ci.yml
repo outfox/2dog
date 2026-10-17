@@ -1479,7 +1479,7 @@ jobs:
           timeout 300s node .github/scripts/webgpu-forward-plus-smoke.mjs \
             http://127.0.0.1:8000/ 9233 240000 /tmp/2dog-forward-webgpu-captures
           timeout 300s node .github/scripts/webgpu-forward-plus-smoke.mjs \
-            'http://127.0.0.1:8000/?limited-compute=1' 9233 240000 /tmp/2dog-forward-webgpu-captures-limited
+            'http://127.0.0.1:8000/?limited-compute=1&base-formats=1' 9233 240000 /tmp/2dog-forward-webgpu-captures-limited
 
       - name: Run Blazor WebGPU browser restart smoke
         if: matrix.precision == 'single'

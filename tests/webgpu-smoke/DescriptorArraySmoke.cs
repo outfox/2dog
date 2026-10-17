@@ -78,7 +78,77 @@ internal static class DescriptorArraySmoke
             if (!promotedReadback.SequenceEqual(promotedPixels))
                 throw new Exception($"{promotedFormat} storage texture transfer did not preserve every depth slice and mipmap.");
         }
+        StorageTextureFeedback(rd, view);
+        foreach (bool renderAttachment in new[] { false, true })
+        {
+            using var msaaFormat = new RDTextureFormat
+            {
+                Width = 8, Height = 8, Format = RenderingDevice.DataFormat.R8G8B8A8Unorm,
+                Samples = RenderingDevice.TextureSamples.Samples4,
+                UsageBits = RenderingDevice.TextureUsageBits.ColorAttachmentBit | RenderingDevice.TextureUsageBits.CanCopyFromBit | RenderingDevice.TextureUsageBits.CanCopyToBit,
+            };
+            var multisampled = rd.TextureCreate(msaaFormat, view);
+            msaaFormat.Samples = RenderingDevice.TextureSamples.Samples1;
+            if (!renderAttachment) msaaFormat.UsageBits &= ~RenderingDevice.TextureUsageBits.ColorAttachmentBit;
+            var resolved = rd.TextureCreate(msaaFormat, view);
+            rd.TextureClear(multisampled, new Color(0.2f, 0.4f, 0.8f, 1), 0, 1, 0, 1);
+            if (rd.TextureResolveMultisample(multisampled, resolved) != Error.Ok)
+                throw new Exception("Could not resolve a multisampled color texture.");
+            rd.Submit(); rd.Sync();
+            var resolvedPixels = rd.TextureGetData(resolved, 0);
+            rd.FreeRid(multisampled); rd.FreeRid(resolved);
+            byte[] expectedColor = [51, 102, 204, 255];
+            if (resolvedPixels.Length != 8 * 8 * 4 || resolvedPixels.Where((value, index) => value != expectedColor[index % 4]).Any())
+                throw new Exception($"MSAA resolve lost color data (render attachment: {renderAttachment}).");
+        }
+        Console.WriteLine("NATIVE_MSAA_RESOLVE_PASSED");
         rd.Free();
         Console.WriteLine("NATIVE_DESCRIPTOR_ARRAY_AND_FLOAT_CLASSIFICATION_PASSED");
+    }
+
+    private static void StorageTextureFeedback(RenderingDevice rd, RDTextureView view)
+    {
+        foreach (bool volume in new[] { false, true })
+        {
+            using var source = new RDShaderSource { SourceCompute = """
+                #version 450
+                layout(local_size_x=1,local_size_y=1,local_size_z=1) in;
+                layout(rgba16i,set=0,binding=0) uniform IMAGE_TYPE values;
+                void main() {
+                    ivec3 coordinate = ivec3(gl_GlobalInvocationID);
+                    imageStore(values, coordinate, imageLoad(values, coordinate) + ivec4(1, 2, 3, 4));
+                }
+                """.Replace("IMAGE_TYPE", volume ? "iimage3D" : "iimage2DArray") };
+            using var spirv = rd.ShaderCompileSpirVFromSource(source);
+            if (spirv.CompileErrorCompute.Length != 0) throw new Exception(spirv.CompileErrorCompute);
+            var shader = rd.ShaderCreateFromSpirV(spirv);
+            var pipeline = rd.ComputePipelineCreate(shader);
+            using var format = new RDTextureFormat
+            {
+                TextureType = volume ? RenderingDevice.TextureType.Type3D : RenderingDevice.TextureType.Type2DArray,
+                Width = 2, Height = 1, Depth = volume ? 2u : 1u, ArrayLayers = volume ? 1u : 2u,
+                Format = RenderingDevice.DataFormat.R16G16B16A16Sint,
+                UsageBits = RenderingDevice.TextureUsageBits.StorageBit | RenderingDevice.TextureUsageBits.CanUpdateBit | RenderingDevice.TextureUsageBits.CanCopyFromBit,
+            };
+            var texture = rd.TextureCreate(format, view, volume ? [new byte[32]] : [new byte[16], new byte[16]]);
+            using var uniform = new RDUniform { UniformType = RenderingDevice.UniformType.Image, Binding = 0 };
+            uniform.AddId(texture);
+            var set = rd.UniformSetCreate([uniform], shader, 0);
+            var list = rd.ComputeListBegin();
+            rd.ComputeListBindComputePipeline(list, pipeline);
+            rd.ComputeListBindUniformSet(list, set, 0);
+            for (int dispatch = 0; dispatch < 4; dispatch++) rd.ComputeListDispatch(list, 2, 1, 2);
+            rd.ComputeListEnd(); rd.Submit(); rd.Sync();
+            for (uint layer = 0; layer < (volume ? 1 : 2); layer++)
+            {
+                var data = rd.TextureGetData(texture, layer);
+                if (data.Length != (volume ? 32 : 16)) throw new Exception("Storage texture feedback returned an incomplete volume or array.");
+                for (int component = 0; component < data.Length / 2; component++)
+                    if (BitConverter.ToInt16(data, component * 2) != (component % 4 + 1) * 4)
+                        throw new Exception($"Storage texture feedback lost a dispatch (volume: {volume}, component: {component}).");
+            }
+            rd.FreeRid(set); rd.FreeRid(texture); rd.FreeRid(pipeline); rd.FreeRid(shader);
+        }
+        Console.WriteLine("NATIVE_STORAGE_TEXTURE_FEEDBACK_PASSED");
     }
 }

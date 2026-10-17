@@ -13,7 +13,7 @@ internal static class ForwardEffects
         environment.VolumetricFogTemporalReprojectionEnabled = false;
         environment.SdfgiCascades = 1;
         environment.SdfgiReadSkyLight = false;
-        string[] effects = ["fog", "ssao", "ssil", "ssr", "taa", "sdfgi", "fsr1"];
+        string[] effects = ["fog", "ssao", "ssil", "ssr", "taa", "sdfgi", "fsr1", "msaa"];
         foreach (string effect in effects)
         {
             scene.SelectStage(effect == "sdfgi" ? 3 : 0);
@@ -26,6 +26,7 @@ internal static class ForwardEffects
             engine.Tree.Root.UseTaa = effect == "taa";
             engine.Tree.Root.Scaling3DMode = effect == "fsr1" ? Viewport.Scaling3DModeEnum.Fsr : Viewport.Scaling3DModeEnum.Bilinear;
             engine.Tree.Root.Scaling3DScale = effect == "fsr1" ? 0.5f : 1;
+            engine.Tree.Root.Msaa3D = effect == "msaa" ? Viewport.Msaa.Msaa4X : Viewport.Msaa.Disabled;
             Console.WriteLine("FORWARD_EFFECT_BEGIN " + effect);
             for (int frame = 0; frame < (effect == "sdfgi" ? 120 : 24); frame++)
             {
@@ -36,6 +37,8 @@ internal static class ForwardEffects
             var pixel = pixels.GetPixel(2, 2);
             Console.WriteLine($"FORWARD_EFFECT_PIXEL {effect} {pixel}");
             if (effect == "fog" && pixel.R < 0.05f) throw new Exception("Volumetric fog did not illuminate background pixels.");
+            if (effect != "sdfgi" && pixels.GetPixel(pixels.GetWidth() / 2, pixels.GetHeight() / 2).R < 0.5f)
+                throw new Exception($"{effect} did not preserve the lit target.");
             if (effect == "sdfgi")
             {
                 var indirect = pixels.GetPixel(pixels.GetWidth() / 2, pixels.GetHeight() / 2);
@@ -48,6 +51,7 @@ internal static class ForwardEffects
             Console.WriteLine("FORWARD_EFFECT_RENDERED " + effect);
         }
         environment.SdfgiEnabled = false;
+        engine.Tree.Root.Msaa3D = Viewport.Msaa.Disabled;
         engine.Tree.Root.Scaling3DMode = Viewport.Scaling3DModeEnum.Bilinear;
         engine.Tree.Root.Scaling3DScale = 1;
     }

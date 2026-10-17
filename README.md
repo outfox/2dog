@@ -28,7 +28,7 @@ Emscripten port and final-link configuration.
 Select `--rendering-driver webgpu --rendering-method forward_plus` on desktop.
 When only the WebGPU driver is specified, it defaults to Forward+.
 Mobile remains available with `--rendering-method mobile`. Forward+ is
-experimental: clustered lighting, shadows, volumetric fog and bounced SDFGI
+experimental: clustered lighting, shadows, SSAO, volumetric fog, bounced SDFGI and MSAA
 have image regression coverage; broad feature and hardware parity is still
 being tested. Other drivers retain their existing rendering methods.
 Web shells also set `renderingDriver: 'webgpu'` before engine initialization;

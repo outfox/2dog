@@ -41,6 +41,7 @@ internal static class Program
                 ForwardEffects.Run(engine, probe);
             }
             ShadowPixelSmoke.Run(engine);
+            if (RenderingServer.GetCurrentRenderingMethod() == "forward_plus") SsaoPixelSmoke.Run(engine);
             var root = new Node3D();
             engine.Tree.Root.AddChild(root);
             root.AddChild(new MeshInstance3D { Mesh = new BoxMesh() });

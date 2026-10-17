@@ -8,12 +8,17 @@
 <canvas id="canvas" width="128" height="128"></canvas>
 <script src="godot.js"></script>
 <script>
-if (new URLSearchParams(location.search).has('limited-compute')) {
+const options = new URLSearchParams(location.search);
+if (options.has('limited-compute') || options.has('base-formats')) {
     const requestDevice = GPUAdapter.prototype.requestDevice;
     GPUAdapter.prototype.requestDevice = function (descriptor = {}) {
         return requestDevice.call(this, {
             ...descriptor,
-            requiredLimits: { ...descriptor.requiredLimits, maxComputeInvocationsPerWorkgroup: 256 },
+            requiredLimits: options.has('limited-compute')
+                ? { ...descriptor.requiredLimits, maxComputeInvocationsPerWorkgroup: 256 }
+                : descriptor.requiredLimits,
+            requiredFeatures: [...(descriptor.requiredFeatures || [])].filter(feature =>
+                !options.has('base-formats') || !['texture-formats-tier1', 'texture-formats-tier2'].includes(feature)),
         });
     };
 }
