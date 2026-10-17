@@ -17,24 +17,23 @@ type Host = {
 
 const groups: { label: string; icon: string; hosts: Host[] }[] = [
   {
-    label: 'Terminal',
-    icon: 'window_terminal',
+    label: 'Web',
+    icon: 'globe',
     hosts: [
       {
-        name: '2dog',
-        flag: '--generic',
-        text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
-        link: '/hosts/generic',
-        brand: 'dotnet',
-        mark: 'var(--mark-dotnet)',
+        name: 'WebAssembly',
+        flag: '--web',
+        text: 'C# Games as an AppBundle. WebGL, and soon WebGPU.<br/>No more waiting for Godot!',
+        link: '/hosts/web',
+        brand: 'webassembly',
+        mark: 'var(--mark-wasm)',
       },
       {
-        name: 'REPL',
-        flag: '--repl',
-        text: 'Explore, edit, play, or inspect the game from a C# prompt while it is running.',
-        link: '/hosts/repl',
-        glyph: 'window_terminal',
-        tag: 'Experimental',
+        name: 'WebXR',
+        flag: '--webxr',
+        text: 'Godot VR and AR sessions, right in the browser.',
+        link: '/hosts/webxr',
+        glyph: 'vr_headset',
       },
     ],
   },
@@ -66,6 +65,28 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
     ],
   },
   {
+    label: 'Tooling',
+    icon: 'code',
+    hosts: [
+      {
+        name: '2dog',
+        flag: '--generic',
+        text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
+        link: '/hosts/generic',
+        brand: 'dotnet',
+        mark: 'var(--mark-dotnet)',
+      },
+      {
+        name: 'REPL',
+        flag: '--repl',
+        text: 'Explore, edit, play, or inspect the game from a C# prompt while it is running.',
+        link: '/hosts/repl',
+        glyph: 'window_terminal',
+        tag: 'Experimental',
+      },
+    ],
+  },
+  {
     label: 'Desktop',
     icon: 'desktop',
     hosts: [
@@ -92,27 +113,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         link: '/hosts/winui',
         glyph: 'windows',
         mark: 'var(--mark-windows)',
-      },
-    ],
-  },
-  {
-    label: 'Web',
-    icon: 'globe',
-    hosts: [
-      {
-        name: 'WebAssembly',
-        flag: '--web',
-        text: 'C# Games as an AppBundle. WebGL, and soon WebGPU.<br/>No more waiting for Godot!',
-        link: '/hosts/web',
-        brand: 'webassembly',
-        mark: 'var(--mark-wasm)',
-      },
-      {
-        name: 'WebXR',
-        flag: '--webxr',
-        text: 'Godot VR and AR sessions, right in the browser.',
-        link: '/hosts/webxr',
-        glyph: 'vr_headset',
       },
     ],
   },
