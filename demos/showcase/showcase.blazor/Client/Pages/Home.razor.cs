@@ -11,6 +11,12 @@ public partial class Home : ComponentBase
     [SupplyParameterFromQuery(Name = "renderer")]
     public string? RenderingDriver { get; set; }
 
+    [SupplyParameterFromQuery(Name = "method")]
+    public string? RenderingMethod { get; set; }
+
+    private IReadOnlyList<string>? RendererArgs => string.IsNullOrEmpty(RenderingMethod)
+        ? null : ["--rendering-method", RenderingMethod];
+
     private GodotView? _view;
     private string _status = "Starting Godot...";
     private string _state = "starting";
