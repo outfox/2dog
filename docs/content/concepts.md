@@ -9,13 +9,14 @@ Teaching an old robot new tricks! *(and it won't forget any of the older ones)*
 
 2dog works by adding small "sidecar" projects called [Hosts](/hosts/) to your solution that do the embedding and offer you to run your own code before, on top of, or after Godot. It uses `libgodot`, which became an official part of Godot in version 4.6, to achieve this.
 
+![Illus. Diego Rado: a white anthro dog in a hacker hoodie sitting in harmony with their robot dog](img/2dog-harmony.png)
 
-#### A companion, not a replacement
-Your original Godot project stays and works the same. Simply continue developing it using the official Godot editor if you like. 
+#### A companion to Godot, not a replacement
 
+Your original Godot project stays and works the same.  Simply continue developing it using the official Godot editor as you like.
 
 ## 2dog is Godot, backwards!
-But the side car projects allow us to do things quite differently!
+However, the side car projects allow us to do things quite differently!
 
 Traditional Godot applications have Godot control the process lifecycle:
 

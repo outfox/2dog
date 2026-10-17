@@ -5,6 +5,11 @@ description: "The recommended 2dog layout: the directory containing project.godo
 
 # Project Layout
 
+*"Can we, for once, agree where everything goes?"*
+
+![a white anthro dog in a hacker hoodie playing tug of war with of their robot dog](img/2dog-tugofwar.png)
+
+
 2dog recommends using the directory containing `project.godot` as the .NET
 solution root, with a small nested project for each host. Godot keeps its
 familiar layout while desktop, tests, and the browser get independent entry points.

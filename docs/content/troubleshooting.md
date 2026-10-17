@@ -5,6 +5,10 @@ description: "What the 2dog tool's exit codes, notes and errors mean, how it beh
 
 # Troubleshooting
 
+What's up, ~~dog~~ doc?
+
+![Illus. Diego Rado: a white anthro dog in a hacker hoodie faceplanting in front of their robot dog](img/2dog-trouble.png)
+
 Most problems have a first step in common: run [`2dog doctor`](/cli/doctor) in
 the project. It checks the machine and the project, fixes what it safely can,
 and explains build failures it recognizes (`2dog doctor --build`, or
