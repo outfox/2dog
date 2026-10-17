@@ -20,8 +20,8 @@ internal static class Program
             {
                 engine.Start();
             }
-            catch (NullReferenceException error) when (expectRejection
-                && error.Message.Contains("Error creating Godot instance, returned IntPtr.Zero"))
+            catch (InvalidOperationException error) when (expectRejection
+                && error.Message.Contains("Godot initialization failed"))
             {
                 Console.WriteLine("NATIVE_WEBGPU_FORWARD_PLUS_REJECTED");
                 return;

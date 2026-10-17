@@ -234,6 +234,7 @@ public class Engine : IDisposable, IAsyncDisposable
     }
 
     /// <summary>Starts Godot and returns a borrowed wrapper owned by this Engine.</summary>
+    /// <exception cref="InvalidOperationException">Godot initialization failed; see the native output for the cause.</exception>
     public GodotInstance Start()
     {
         GodotInstance instance;
@@ -348,7 +349,9 @@ public class Engine : IDisposable, IAsyncDisposable
         var instancePtr = CreateGodotInstance(godotArgs.ToArray(), LoadMainScene);
 
         if (instancePtr == IntPtr.Zero)
-            throw new NullReferenceException($"{nameof(Engine)}: Error creating Godot instance, returned IntPtr.Zero");
+            throw new InvalidOperationException(
+                $"{nameof(Engine)}: Godot initialization failed. Check the preceding native output for the cause, " +
+                "including unsupported rendering settings or invalid arguments.");
 
         var instanceConflict = false;
         lock (ProcessSync)
@@ -369,7 +372,7 @@ public class Engine : IDisposable, IAsyncDisposable
         if (!LibGodot.CallGodotInstanceStart(instancePtr))
         {
             Console.Error.WriteLine("Error starting Godot instance");
-            throw new Exception($"{nameof(Engine)}: Error starting Godot instance");
+            throw new InvalidOperationException($"{nameof(Engine)}: Error starting Godot instance. Check the preceding native output for the cause.");
         }
 
         // Get the GodotInstance object from the native pointer
@@ -377,7 +380,7 @@ public class Engine : IDisposable, IAsyncDisposable
         if (godotInstance == null)
         {
             Console.Error.WriteLine($"{nameof(Engine)}: Failed to get GodotInstance from pointer");
-            throw new NullReferenceException($"{nameof(Engine)}: Failed to get GodotInstance from pointer.");
+            throw new InvalidOperationException($"{nameof(Engine)}: Failed to get GodotInstance from pointer.");
         }
 
         Console.WriteLine($"{nameof(Engine)}: Godot started successfully!");

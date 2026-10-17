@@ -112,6 +112,27 @@ Select WebGPU Mobile in a desktop host with Godot's arguments:
 dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method mobile
 ```
 
+To select it through `project.godot` instead, configure both the driver and
+the rendering method. Platform driver overrides take precedence over the base
+driver setting:
+
+```ini
+[rendering]
+renderer/rendering_method="mobile"
+rendering_device/driver="webgpu"
+rendering_device/driver.windows="webgpu"
+rendering_device/driver.linuxbsd="webgpu"
+rendering_device/driver.macos="webgpu"
+```
+
+The `.mobile` suffix in `renderer/rendering_method.mobile` is a platform feature
+override; it does not select the Mobile renderer on desktop. Existing `.web` or
+`.mobile` overrides must also use `"mobile"` when those platforms use WebGPU.
+`--editor` opens the editor using the selected renderer and driver; it does not
+enable Forward+. Forward+ needs additional shader and resource-limit work in
+this backend, even on desktop GPUs. Startup rejection is intentional until that
+work is complete.
+
 The platform package copies Dawn and its dependencies beside libgodot for
 both build and publish. Keep those files and their `licenses/` directory when
 deploying. Browser packages carry the pinned Emscripten port and supply the
