@@ -1,6 +1,7 @@
 ---
 title: WebXR Configuration
 description: "MSBuild configuration for WebXR hosts, using the Web host's browser engine, pack, compression, and AOT settings."
+tagline: "Learn how to configure your WebXR builds for VR and AR in the browser."
 ---
 
 # WebXR Configuration

@@ -1,6 +1,7 @@
 ---
 title: 2dog new
 description: "Reference for 2dog new: create a Godot project with 2dog hosts - arguments, host flags, options, examples."
+tagline: "Learn how to start a fresh Godot game with .NET hosts in one command."
 ---
 
 # `2dog new`

@@ -1,6 +1,7 @@
 ---
 title: xUnit
 description: "Add an xUnit test project alongside your Godot game."
+tagline: "Learn how to test your Godot game with xUnit."
 ---
 
 # xUnit

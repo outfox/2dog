@@ -1,6 +1,7 @@
 ---
 title: Web Configuration
 description: "MSBuild properties for browser-wasm hosts: native variants, game packs, symbols, compression, and Mono AOT."
+tagline: "Learn how to tune your browser build: packs, compression and AOT."
 ---
 
 # Web Configuration

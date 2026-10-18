@@ -1,6 +1,7 @@
 ---
 title: API Reference
 description: "Overview of the deliberately small 2dog API: twodog.Engine, Godot.GodotInstance, the twodog.Testing fixtures, xUnit collections, and object lifetimes at a glance."
+tagline: "Take a quick tour of the small API that puts Godot in your .NET app."
 ---
 
 # API Reference

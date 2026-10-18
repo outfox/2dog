@@ -1,6 +1,7 @@
 ---
 title: GD.Print in Tests
 description: "Why GD.Print output is hidden during dotnet test, how to make it visible, and why ITestOutputHelper is the recommended pattern."
+tagline: "Missing GD.Print output in your tests? Learn how to see it again."
 ---
 
 # GD.Print Output Not Visible in Tests

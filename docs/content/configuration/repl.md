@@ -1,6 +1,7 @@
 ---
 title: REPL Configuration
 description: "Configure REPL native variants, headless runs, local connections and publishing."
+tagline: "Learn how to configure the C# REPL for headless runs and publishing."
 ---
 
 # REPL Configuration

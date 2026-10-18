@@ -1,6 +1,7 @@
 ---
 title: C# REPL
-description: "Explore and change a running Godot game with C# and node shell commands."
+description: "Explore and change a running Godot game with C# and shell-like commands."
+tagline: "Learn how to explore and change a running game live, with C# and shell-like commands."
 ---
 
 # C# REPL
@@ -52,8 +53,8 @@ node.QueueFree();
 
 | Mode | Input |
 | --- | --- |
-| `:auto` (default) | C# and node shell commands |
-| `:sh` | Node shell commands, with C# expressions for properties and methods |
+| `:auto` (default) | C# and shell-like commands |
+| `:sh` | Shell-like commands, with C# expressions for properties and methods |
 | `:cs` | C# statements, declarations and expressions |
 
 Variables and the selected node carry over when switching modes. Type `:help`

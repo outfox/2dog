@@ -1,6 +1,7 @@
 ---
 title: Single Godot Instance
 description: "Only one Godot instance may run per assembly load context in 2dog; sequential restart is supported and isolated concurrent hosting is experimental."
+tagline: "Learn why one Godot runs per load context, and how to restart it."
 ---
 
 # Single Godot Instance Per Load Context

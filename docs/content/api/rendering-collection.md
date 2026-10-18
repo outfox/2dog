@@ -1,6 +1,7 @@
 ---
 title: twodog.Testing.Xunit.RenderingCollection
 description: "API reference for RenderingCollection, the non-parallel xUnit collection that shares one rendering Fixture across test classes."
+tagline: "Learn how to share one rendering Godot across your xUnit test classes."
 ---
 
 # `twodog.Testing.Xunit.RenderingCollection`

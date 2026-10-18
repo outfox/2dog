@@ -1,6 +1,7 @@
 ---
 title: Avalonia
 description: "Embed Godot in a cross-platform Avalonia window with controls over the game."
+tagline: "Learn how to embed Godot in an Avalonia app, with your UI right on top."
 ---
 
 # Avalonia

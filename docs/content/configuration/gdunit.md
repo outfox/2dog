@@ -1,6 +1,7 @@
 ---
 title: GdUnit Configuration
 description: "Configure GdUnit host packages, private resource roots, execution limits and artifacts."
+tagline: "Learn how to configure GdUnit runs, limits and test artifacts."
 ---
 
 # GdUnit Configuration

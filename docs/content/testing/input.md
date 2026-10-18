@@ -1,6 +1,7 @@
 ---
 title: Simulating Input
 description: "Click Godot controls and send keyboard events in xUnit and NUnit tests."
+tagline: "Learn how to click buttons and press keys in your Godot tests."
 ---
 
 # Simulating input

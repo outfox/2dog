@@ -1,6 +1,7 @@
 ---
 title: Known Issues
 description: "Current 2dog limitations and their workarounds: one Godot instance per load context, xUnit discovery crashes with Godot types, GD.Print visibility in tests, and spaced project names breaking publish."
+tagline: "Hit a snag? See what's known, and how to work around it."
 ---
 
 # Known Issues

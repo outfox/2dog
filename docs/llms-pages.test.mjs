@@ -8,7 +8,7 @@ import { loadPages } from './llms-pages.mjs';
 function fixture(t) {
   const dir = mkdtempSync(join(tmpdir(), '2dog-docs-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
-  const write = (rel, text = '---\ntitle: Page\ndescription: A page\n---\nBody\n') => {
+  const write = (rel, text = '---\ntitle: Page\ndescription: A page\ntagline: Read a page.\n---\nBody\n') => {
     const path = join(dir, rel);
     mkdirSync(join(path, '..'), { recursive: true });
     writeFileSync(path, text);
@@ -42,7 +42,9 @@ test('removed pages must be removed from the index', (t) => {
 test('missing metadata fails instead of silently omitting a page', (t) => {
   const { dir, write, sections } = fixture(t);
   write('guide.md', '---\ntitle: Guide\n---\nBody\n');
-  assert.throws(() => loadPages(dir, sections), /guide.md has no frontmatter title\/description/);
+  assert.throws(() => loadPages(dir, sections), /guide.md has no frontmatter title\/description\/tagline/);
+  write('guide.md', '---\ntitle: Guide\ndescription: A guide\n---\nBody\n');
+  assert.throws(() => loadPages(dir, sections), /guide.md has no frontmatter title\/description\/tagline/);
 });
 
 test('duplicate index entries fail', (t) => {

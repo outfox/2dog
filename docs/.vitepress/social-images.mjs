@@ -12,26 +12,46 @@ export const socialImageHeight = 630;
 const logo = fileURLToPath(new URL('../content/public/logo-static.svg', import.meta.url));
 const illustrations = fileURLToPath(new URL('../content/img/', import.meta.url));
 const fallback = join(illustrations, '2dog-walkies.png');
-const logoWidth = 240;
-const logoInset = 48;
-const copyLeft = 48;
+const accent = '#579eff';
+const inset = 64;
+const artInset = 48;
 const copyWidth = 576;
+const logoWidth = 152;
+const logoTop = 52;
+const titleTop = 168;
 const buttonTop = 452;
-const buttonWidth = 264;
 const buttonHeight = 64;
 const fonts = fileURLToPath(new URL('../content/public/fonts/', import.meta.url));
 const fontCache = fileURLToPath(new URL('./cache/social-fonts/', import.meta.url));
 const fontFiles = new Map();
+
+// The Godot editor's dark blue-grey with a dot grid, lit from behind the artwork.
 const background = Buffer.from(`
 <svg xmlns="http://www.w3.org/2000/svg" width="${socialImageWidth}" height="${socialImageHeight}">
   <defs>
-    <linearGradient id="background" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#000000"/>
-      <stop offset="55%" stop-color="#0c141d"/>
-      <stop offset="100%" stop-color="#192b3a"/>
+    <linearGradient id="base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05080d"/>
+      <stop offset="60%" stop-color="#0c1520"/>
+      <stop offset="100%" stop-color="#132538"/>
     </linearGradient>
+    <radialGradient id="glow" cx="912" cy="600" r="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="${accent}" stop-opacity="0.34"/>
+      <stop offset="45%" stop-color="${accent}" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="${accent}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fade" cx="912" cy="420" r="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <rect x="11" y="11" width="2" height="2" fill="#8fb4e0" fill-opacity="0.16"/>
+    </pattern>
+    <mask id="grid"><rect width="100%" height="100%" fill="url(#fade)"/></mask>
   </defs>
-  <rect width="100%" height="100%" fill="url(#background)"/>
+  <rect width="100%" height="100%" fill="url(#base)"/>
+  <rect width="100%" height="100%" fill="url(#dots)" mask="url(#grid)"/>
+  <rect width="100%" height="100%" fill="url(#glow)"/>
+  <rect width="100%" height="4" fill="${accent}"/>
 </svg>`);
 
 function escapeMarkup(text) {
@@ -65,50 +85,84 @@ function textFont(bold) {
   return fontFiles.get(name);
 }
 
-async function renderText(text, size, { bold = false, color = '#f5f8fc', width = copyWidth } = {}) {
+async function renderText(text, size, { bold = false, color = '#f5f8fc', width = copyWidth, spacing = 0, tracking = 0 } = {}) {
   return sharp({ text: {
-    text: `<span foreground="${color}">${escapeMarkup(text)}</span>`,
+    text: `<span foreground="${color}" letter_spacing="${tracking * 1024}">${escapeMarkup(text)}</span>`,
     font: `Inter ${bold ? 'Bold ' : ''}${size}`,
     fontfile: await textFont(bold),
     width,
     wrap: 'word-char',
-    spacing: 8,
+    spacing,
     rgba: true
   }}).png().toBuffer({ resolveWithObject: true });
 }
 
-async function renderCopy(title, summary) {
-  const layers = [];
-  let heading;
-  for (let size = 52; size >= 28; size -= 2) {
-    heading = await renderText(title.replace(/\./g, '.\u200b'), size, { bold: true });
-    if (heading.info.height <= 168) break;
-  }
-  if (heading.info.height > 168) throw new Error(`Social image title does not fit: ${title}`);
-  layers.push({ input: heading.data, top: 56, left: copyLeft });
-
-  const summaryTop = 56 + heading.info.height + 28;
-  const maxSummaryHeight = Math.min(208, buttonTop - summaryTop - 32);
-  let excerpt = summary.replace(/\s+/g, ' ').trim();
-  while (excerpt) {
-    const paragraph = await renderText(excerpt, 26, { color: '#becbd9' });
-    if (paragraph.info.height <= maxSummaryHeight) {
-      layers.push({ input: paragraph.data, top: summaryTop, left: copyLeft });
+// Shrink the title before the tagline: a long API name needs the room, and the tagline is the invitation.
+async function fitCopy(title, tagline) {
+  const space = buttonTop - 40 - titleTop;
+  const gap = 24;
+  // Let dotted API names wrap after a dot, but keep ".NET" whole.
+  const titleText = title.replace(/(?<=\w)\.(?=\w)/g, '.\u200b');
+  const taglineText = tagline.replace(/\s+/g, ' ').trim();
+  // Prefer a slightly smaller title on one line over a larger one broken across two.
+  const sizes = [60, 54, 48, 42, 36];
+  let first = 0;
+  for (const [index, size] of sizes.slice(0, 3).entries()) {
+    const line = await renderText(titleText, size, { bold: true, width: socialImageWidth * 4 });
+    if (line.info.width <= copyWidth) {
+      first = index;
       break;
     }
-    excerpt = excerpt.replace(/(?:\s+\S+|\S)\.*$/, '').trimEnd() + '...';
+  }
+  for (const titleSize of sizes.slice(first)) {
+    const heading = await renderText(titleText, titleSize, { bold: true, spacing: -4 });
+    if (heading.info.height > 160) continue;
+    for (const taglineSize of [30, 28, 26]) {
+      const paragraph = taglineText ? await renderText(taglineText, taglineSize, { color: '#c9d6e6', spacing: 8 }) : undefined;
+      if (heading.info.height + gap + (paragraph?.info.height ?? 0) <= space) return { heading, paragraph, gap };
+    }
+  }
+  throw new Error(`Social image copy does not fit; shorten the title or tagline: ${title} / ${tagline}`);
+}
+
+async function renderCopy(section, title, tagline) {
+  const layers = [];
+  const brand = await sharp(logo).resize({ width: logoWidth }).png().toBuffer({ resolveWithObject: true });
+  layers.push({ input: brand.data, top: logoTop, left: inset });
+
+  if (section) {
+    const label = await renderText(section.toUpperCase(), 17, { bold: true, color: '#9cc5ff', tracking: 2 });
+    const pillWidth = label.info.width + 32;
+    const pillHeight = 36;
+    const pillLeft = inset + logoWidth + 24;
+    const pillTop = logoTop + Math.round((brand.info.height - pillHeight) / 2) + 6;
+    layers.push(
+      { input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${pillWidth}" height="${pillHeight}">
+        <rect x="0.5" y="0.5" width="${pillWidth - 1}" height="${pillHeight - 1}" rx="${pillHeight / 2}"
+          fill="${accent}" fill-opacity="0.14" stroke="${accent}" stroke-opacity="0.55"/>
+      </svg>`), top: pillTop, left: pillLeft },
+      {
+        input: label.data,
+        top: pillTop + Math.floor((pillHeight - label.info.height) / 2),
+        left: pillLeft + 16
+      }
+    );
   }
 
-  const button = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${buttonWidth}" height="${buttonHeight}">
-    <rect x="0.5" y="0.5" width="${buttonWidth - 1}" height="${buttonHeight - 1}" rx="8" fill="#579eff" stroke="#83b8ff"/>
-  </svg>`);
-  const label = await renderText('Read the dogs!', 26, { bold: true, color: '#0b1522', width: buttonWidth - 32 });
+  const { heading, paragraph, gap } = await fitCopy(title, tagline);
+  layers.push({ input: heading.data, top: titleTop, left: inset });
+  if (paragraph) layers.push({ input: paragraph.data, top: titleTop + heading.info.height + gap, left: inset });
+
+  const label = await renderText('Read the dogs! \u2192', 26, { bold: true, color: '#0b1522' });
+  const buttonWidth = label.info.width + 64;
   layers.push(
-    { input: button, top: buttonTop, left: copyLeft },
+    { input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${buttonWidth}" height="${buttonHeight}">
+      <rect x="0.5" y="0.5" width="${buttonWidth - 1}" height="${buttonHeight - 1}" rx="12" fill="${accent}" stroke="#8fc0ff"/>
+    </svg>`), top: buttonTop, left: inset },
     {
       input: label.data,
       top: buttonTop + Math.floor((buttonHeight - label.info.height) / 2),
-      left: copyLeft + Math.floor((buttonWidth - label.info.width) / 2)
+      left: inset + 32
     }
   );
   return layers;
@@ -124,37 +178,34 @@ function preferredIllustration(illustration) {
 }
 
 // Double each illustration pixel with nearest-neighbor sampling before compositing.
-export async function renderSocialImage(illustration = fallback, { title = '2dog', summary = '' } = {}) {
+export async function renderSocialImage(illustration = fallback, { section = '', title = '2dog', tagline = '' } = {}) {
   illustration = preferredIllustration(illustration);
   const { width, height } = await sharp(illustration).metadata();
   const scaledWidth = width * 2;
   const scaledHeight = height * 2;
-  if (scaledWidth > socialImageWidth - logoInset || scaledHeight > socialImageHeight) {
-    throw new Error(`Social illustration ${width}x${height} at 2x (${scaledWidth}x${scaledHeight}) exceeds the 1200x630 canvas with its right inset.`);
+  if (scaledWidth > socialImageWidth - inset - copyWidth - artInset || scaledHeight > socialImageHeight) {
+    throw new Error(`Social illustration ${width}x${height} at 2x (${scaledWidth}x${scaledHeight}) exceeds the space beside the copy on the 1200x630 canvas.`);
   }
   const illustrationImage = await sharp(illustration)
     .resize({ width: scaledWidth, height: scaledHeight, kernel: 'nearest' })
     .png().toBuffer();
-  const logoImage = await sharp(logo).resize({ width: logoWidth }).png().toBuffer();
-  const copy = await renderCopy(title, summary);
   return sharp(background).composite([
-    { input: logoImage, top: logoInset, left: socialImageWidth - logoWidth - logoInset },
     {
       input: illustrationImage,
       top: socialImageHeight - scaledHeight,
-      left: socialImageWidth - logoInset - scaledWidth
+      left: socialImageWidth - artInset - scaledWidth
     },
-    ...copy
+    ...await renderCopy(section, title, tagline)
   ]).png().toBuffer();
 }
 
 // Cache by artwork and page copy. Hash the output so changes to the artwork,
-// caption, summary or design give social crawlers a new URL.
+// copy or design give social crawlers a new URL.
 export function createSocialImageGenerator() {
   const images = new Map();
   return (illustration = fallback, outDir, copy = {}) => {
     illustration = preferredIllustration(illustration);
-    const key = JSON.stringify([outDir, illustration, copy.title, copy.summary]);
+    const key = JSON.stringify([outDir, illustration, copy.section, copy.title, copy.tagline]);
     if (!images.has(key)) {
       images.set(key, (async () => {
         const image = await renderSocialImage(illustration, copy);

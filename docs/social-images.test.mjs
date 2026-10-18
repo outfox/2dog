@@ -7,7 +7,12 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import { createSocialImageGenerator, renderSocialImage } from './.vitepress/social-images.mjs';
 
-test('composes a 1200x630 gradient with the logo and a 2x nearest-neighbor bottom-right illustration', async () => {
+// stats() reads the input image, so crop to a buffer first.
+async function regionStats(image, region) {
+  return sharp(await sharp(image).extract(region).png().toBuffer()).stats();
+}
+
+test('composes a 1200x630 card with the logo and a 2x nearest-neighbor bottom-right illustration', async () => {
   const colors = [[240, 40, 120, 255], [40, 120, 240, 255]];
   const source = Buffer.alloc(31 * 17 * 4);
   for (let y = 0; y < 17; y++) {
@@ -35,13 +40,21 @@ test('composes a 1200x630 gradient with the logo and a 2x nearest-neighbor botto
       }
     }
   }
-  assert.deepEqual(pixel(0, 0), [0, 0, 0, 255]);
+  assert.deepEqual(pixel(0, 0), [87, 158, 255, 255], 'accent stripe along the top edge');
+  assert.ok(pixel(0, 8).slice(0, 3).every((channel) => channel < 16), 'near-black top-left corner');
   const [red, green, blue, alpha] = pixel(1199, 629);
-  assert.ok(red < green && green < blue && blue < 70, 'faint steel blue at the end of the gradient');
+  assert.ok(red < green && green < blue && blue < 110, 'blue glow fades out in the bottom-right corner');
   assert.equal(alpha, 255);
-  const logo = await sharp(image).extract({ left: 912, top: 48, width: 240, height: 124 }).stats();
-  assert.ok(logo.channels[0].max > 240, 'white logo appears in the top-right corner');
-  assert.deepEqual(pixel(64, 468), [87, 158, 255, 255], 'CTA button leaves clearance above social overlays');
+  const logo = await regionStats(image, { left: 64, top: 52, width: 152, height: 78 });
+  assert.ok(logo.channels[0].max > 240, 'white logo appears in the top-left corner');
+  assert.deepEqual(pixel(72, 468), [87, 158, 255, 255], 'CTA button leaves clearance above social overlays');
+});
+
+test('labels the section in the header and leaves it out when there is none', async () => {
+  const header = async (section) => regionStats(
+    await renderSocialImage(undefined, { section, title: 'Web' }), { left: 240, top: 60, width: 400, height: 60 });
+  assert.ok((await header('Hosts')).channels[2].max > 200, 'section pill appears beside the logo');
+  assert.ok((await header('')).channels[2].max < 80, 'no pill without a section');
 });
 
 test('uses the standard illustration instead of a -big asset, including hashed Vite filenames', async () => {
@@ -63,25 +76,35 @@ test('shares hashed images only for identical artwork and copy, and writes fetch
   const image = await readFile(join(dir, first));
   assert.equal((await sharp(image).metadata()).width, 1200);
   assert.equal((await sharp(image).metadata()).height, 630);
-  const differentTitle = await generate(undefined, dir, { title: 'Web', summary: 'Run Godot C# in a browser.' });
-  const differentSummary = await generate(undefined, dir, { title: 'Web', summary: 'Publish a browser game.' });
+  const differentTitle = await generate(undefined, dir, { title: 'Web', tagline: 'Learn how to run Godot in a browser.' });
+  const differentTagline = await generate(undefined, dir, { title: 'Web', tagline: 'Learn how to publish a browser game.' });
+  const differentSection = await generate(undefined, dir, { section: 'Hosts', title: 'Web', tagline: 'Learn how to publish a browser game.' });
   assert.notEqual(first, differentTitle);
-  assert.notEqual(differentTitle, differentSummary);
+  assert.notEqual(differentTitle, differentTagline);
+  assert.notEqual(differentTagline, differentSection);
 });
 
-test('fits long API captions and summaries while escaping markup in page text', async () => {
+test('fits long API captions with their taglines while escaping markup in page text', async () => {
   const image = await renderSocialImage(undefined, {
+    section: 'API <Reference>',
     title: 'twodog.Testing.Xunit.RenderingCollection <T> & Tests',
-    summary: 'Run <Godot> & .NET tests safely. '.repeat(20)
+    tagline: 'Learn how to share one rendering <Godot> & its tests across all of your xUnit test classes.'
   });
-  const heading = await sharp(image).extract({ left: 48, top: 56, width: 576, height: 168 }).stats();
+  const heading = await regionStats(image, { left: 64, top: 168, width: 576, height: 160 });
   assert.ok(heading.channels[0].max > 240, 'title is rendered in the reserved heading area');
+});
+
+test('rejects taglines that do not fit instead of cutting the invitation short', async () => {
+  await assert.rejects(
+    renderSocialImage(undefined, { title: 'Web', tagline: 'Learn how to publish your game. '.repeat(8) }),
+    /copy does not fit/
+  );
 });
 
 test('uses the proportional Inter font instead of silently falling back to a system font', async () => {
   const headingWidth = async (title) => {
     const image = await renderSocialImage(undefined, { title });
-    const { data, info } = await sharp(image).extract({ left: 48, top: 56, width: 576, height: 168 })
+    const { data, info } = await sharp(image).extract({ left: 64, top: 168, width: 576, height: 160 })
       .removeAlpha().raw().toBuffer({ resolveWithObject: true });
     let right = 0;
     for (let y = 0; y < info.height; y++) {
@@ -95,9 +118,9 @@ test('uses the proportional Inter font instead of silently falling back to a sys
   assert.ok(await headingWidth('WWWW') > (await headingWidth('iiii')) * 2);
 });
 
-test('rejects illustrations that would overflow the canvas at 2x instead of cropping them', async () => {
+test('rejects illustrations that would run into the copy at 2x instead of overlapping it', async () => {
   const illustration = await sharp({
-    create: { width: 601, height: 10, channels: 4, background: '#fff' }
+    create: { width: 257, height: 10, channels: 4, background: '#fff' }
   }).png().toBuffer();
-  await assert.rejects(renderSocialImage(illustration), /exceeds the 1200x630 canvas/);
+  await assert.rejects(renderSocialImage(illustration), /exceeds the space beside the copy/);
 });

@@ -1,6 +1,7 @@
 ---
 title: twodog.Testing.Fixture
 description: "API reference for Fixture, the test fixture that starts Godot with rendering enabled - used through RenderingCollection in xUnit tests."
+tagline: "Learn how to test with a real, rendering Godot instance in xUnit."
 ---
 
 # `twodog.Testing.Fixture`

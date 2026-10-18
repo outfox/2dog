@@ -1,6 +1,7 @@
 ---
 title: Avalonia Configuration
 description: "MSBuild settings for Avalonia hosts: shared engine settings, desktop pack export, and Native AOT."
+tagline: "Learn how to configure Godot in your Avalonia app, up to Native AOT."
 ---
 
 # Avalonia Configuration

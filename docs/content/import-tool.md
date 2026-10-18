@@ -1,6 +1,7 @@
 ---
 title: Resource Import
 description: "How 2dog imports Godot resources and exports game packs during MSBuild: incremental imports driven by GodotProjectDir, the twodog.import helper, pack contents, and troubleshooting."
+tagline: "Learn how 2dog imports your Godot resources while you build."
 ---
 
 # Resource Import

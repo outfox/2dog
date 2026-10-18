@@ -1,6 +1,7 @@
 ---
 title: 2dog skill
 description: "Reference for 2dog skill: write the REPL working guide where Claude Code, Codex and other coding agents read project instructions."
+tagline: "Learn how to teach your coding agent to work with a live Godot game."
 ---
 
 # `2dog skill`

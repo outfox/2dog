@@ -1,6 +1,7 @@
 ---
 title: MAUI
 description: "Embed Godot in a .NET MAUI page on Windows and Android."
+tagline: "Learn how to embed Godot in a .NET MAUI app on Windows and Android."
 ---
 
 # MAUI

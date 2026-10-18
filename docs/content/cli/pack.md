@@ -1,6 +1,7 @@
 ---
 title: 2dog pack
 description: "Reference for 2dog pack list: list an exported .pck's contents by size, without an engine or project."
+tagline: "Learn how to peek inside your exported .pck files."
 ---
 
 # `2dog pack`

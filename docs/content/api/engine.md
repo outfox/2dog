@@ -1,6 +1,7 @@
 ---
 title: twodog.Engine
 description: "API reference for twodog.Engine, which configures, starts, and owns one embedded Godot instance: constructor, properties, Start, Run, Dispose, and common Godot arguments."
+tagline: "Learn how to configure, start and run Godot from your own .NET code."
 ---
 
 # `twodog.Engine`

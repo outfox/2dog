@@ -1,6 +1,7 @@
 ---
 title: 2dog doctor
 description: "Reference for 2dog doctor: check a 2dog project and the machine, apply fixes, explain build failures - options, exit codes, every check id."
+tagline: "Learn how to check your project and let 2dog fix what it finds."
 ---
 
 # `2dog doctor`

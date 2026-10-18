@@ -1,6 +1,7 @@
 ---
 title: Blazor Configuration
 description: "MSBuild configuration for the Blazor WebAssembly client: game packs, native symbols, memory, and SDK-managed compression."
+tagline: "Learn how to configure Godot in Blazor, from game packs to compression."
 ---
 
 # Blazor Configuration

@@ -1,6 +1,7 @@
 ---
 title: Environment Variables
 description: "Environment variables for 2dog debugging, diagnostics, CLI output, assembly loading, and Android builds."
+tagline: "Learn which environment variables help you debug and diagnose 2dog."
 ---
 
 # Environment Variables

@@ -1,6 +1,7 @@
 ---
 title: MAUI Configuration
 description: "Configure MAUI targets, GodotView rendering and publishing."
+tagline: "Learn how to configure Godot in MAUI, from targets to publishing."
 ---
 
 # MAUI Configuration

@@ -9,7 +9,7 @@ function frontmatter(file) {
     const m = match[1].match(new RegExp(`^${field}: (?:'(.*)'|"(.*)"|(.+))$`, 'm'));
     return m ? (m[1] ?? m[2] ?? m[3]).replace(/''/g, "'").trim() : undefined;
   };
-  return { title: get('title'), description: get('description'), body: text.slice(match[0].length) };
+  return { title: get('title'), description: get('description'), tagline: get('tagline'), body: text.slice(match[0].length) };
 }
 
 // All authored pages must have metadata and exactly one index entry (or an explicit exclusion).
@@ -23,8 +23,8 @@ export function loadPages(content, sectionDefinitions, exclude = new Set()) {
     const rel = relative(content, file).split(sep).join('/');
     if (rel.startsWith('public/') || exclude.has(rel)) continue;
     const page = { rel, ...frontmatter(file) };
-    if (!page.title || !page.description)
-      errors.push(`${rel} has no frontmatter title/description`);
+    if (!page.title || !page.description || !page.tagline)
+      errors.push(`${rel} has no frontmatter title/description/tagline`);
     pages.set(rel, page);
   }
 

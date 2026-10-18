@@ -1,6 +1,7 @@
 ---
 title: Spaced Project Names
 description: "Whitespace in the game project's .NET name makes dotnet publish silently drop its NuGet dependencies from 2dog hosts - an upstream .NET SDK bug 2dog guards against."
+tagline: "Learn why spaces in project names break publishing, and how to avoid it."
 ---
 
 # Project Names With Spaces Break Publish

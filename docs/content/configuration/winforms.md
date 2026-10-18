@@ -1,6 +1,7 @@
 ---
 title: WinForms Configuration
 description: "MSBuild settings for WinForms hosts: Windows targeting, pack export, runtime bundling, and trimming limitations."
+tagline: "Learn how to configure Godot in your Windows Forms app."
 ---
 
 # WinForms Configuration

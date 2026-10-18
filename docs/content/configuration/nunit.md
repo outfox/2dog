@@ -1,6 +1,7 @@
 ---
 title: NUnit Configuration
 description: "Configure NUnit hosts, engine variants, Editor bindings and headless fixtures."
+tagline: "Learn how to configure NUnit hosts, engine variants and headless fixtures."
 ---
 
 # NUnit Configuration

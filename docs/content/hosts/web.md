@@ -1,6 +1,7 @@
 ---
 title: Web
 description: "Publish your Godot C# game as a static browser site with the browser-wasm host."
+tagline: "Learn how to publish your Godot C# game to the web."
 ---
 
 # Web

@@ -63,6 +63,16 @@ test('uses a composed article illustration with readable card text and image dim
   for (const key of ['og:image:alt', 'twitter:image:alt']) {
     assert.equal(value(head, key).content, 'Web (HTML5) | 2dog. Run Godot C# in the browser. Read the dogs! 2dog logo with Lucky and Dogbot.');
   }
+});
+
+test('the card invites with the page tagline while share text keeps the description', async () => {
+  const head = await metadata({
+    pageData: { relativePath: 'hosts/web.md', title: 'Web', frontmatter: { tagline: 'Learn how to publish to the web.' } }
+  });
+  assert.equal(value(head, 'og:description').content, 'Run Godot C# in the browser.');
+  for (const key of ['og:image:alt', 'twitter:image:alt']) {
+    assert.equal(value(head, key).content, 'Web. Learn how to publish to the web. Read the dogs! 2dog logo with Lucky and Dogbot.');
+  }
   assert.equal(value(head, 'og:image:type').content, 'image/png');
   assert.equal(value(head, 'og:image:width').content, '1200');
   assert.equal(value(head, 'og:image:height').content, '630');
@@ -95,6 +105,33 @@ test('resolves illustrations to emitted local assets under the deployment base',
   });
   assert.deepEqual(calls, [[
     join('/docs/dist', 'assets/2dog-squirrel.ABC123.png'), '/docs/dist',
-    { title: 'Hosts', summary: 'Host Godot.' }
+    { section: 'Hosts', title: 'Hosts', tagline: 'Host Godot.' }
   ]]);
+});
+
+test('labels cards with the part of the docs a page belongs to', async () => {
+  const sections = [];
+  const transform = createSocialMetadata(async (_, __, copy) => {
+    sections.push(copy.section);
+    return 'social/composed.ABC123.png';
+  });
+  const paths = [
+    'index.md', 'getting-started.md', 'api-reference.md', 'api/engine.md', 'dnx-2dog.md', 'cli/new.md',
+    'configuration.md', 'build-configurations.md', 'configuration/web.md', 'hosts/index.md',
+    'known-issues/index.md', 'testing/xunit.md', 'faq.md', 'troubleshooting.md'
+  ];
+  for (const relativePath of paths) {
+    await transform({
+      pageData: { relativePath },
+      siteData: { base: '/', lang: 'en-US' },
+      siteConfig: { outDir: '/docs/dist' },
+      title: 'Page | 2dog', description: 'A page.',
+      content: '<main class="main"></main>'
+    });
+  }
+  assert.deepEqual(sections, [
+    '', 'Guide', 'API Reference', 'API Reference', 'CLI', 'CLI',
+    'Configuration', 'Configuration', 'Configuration', 'Hosts',
+    'Known Issues', 'Testing', 'Help', 'Help'
+  ]);
 });

@@ -1,6 +1,7 @@
 ---
 title: dnx 2dog
 description: "Reference for the 2dog command-line tool: installation, commands, host flags, global and output options, exit codes, version pinning."
+tagline: "Learn how to install and use the 2dog command-line tool."
 ---
 
 # `dotnet tool execute 2dog`

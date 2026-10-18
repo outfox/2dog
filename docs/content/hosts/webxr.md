@@ -1,6 +1,7 @@
 ---
 title: WebXR
 description: "Run Godot VR and AR in the browser with WebXR and the WebXR Layers polyfill."
+tagline: "Learn how to bring Godot VR and AR to the browser."
 ---
 
 # WebXR

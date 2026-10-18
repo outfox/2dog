@@ -1,6 +1,7 @@
 ---
 title: WinForms
 description: "Embed Godot in a Windows Forms window."
+tagline: "Learn how to embed Godot in a Windows Forms app."
 ---
 
 # WinForms

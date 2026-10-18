@@ -1,6 +1,7 @@
 ---
 title: WinUI 3
 description: "Embed Godot in a Windows App SDK window."
+tagline: "Learn how to embed Godot in a WinUI 3 app."
 ---
 
 # WinUI 3

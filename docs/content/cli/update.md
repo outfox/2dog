@@ -1,6 +1,7 @@
 ---
 title: 2dog update
 description: "Reference for 2dog update: bring a project's 2dog packages to the running tool's versions - arguments, options, examples."
+tagline: "Learn how to bring your project's 2dog packages up to date."
 ---
 
 # `2dog update`

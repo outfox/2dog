@@ -1,6 +1,7 @@
 ---
 title: Pinning
 description: "Choose which version of the 2dog tool to run, keep project package versions fixed, and understand what global.json controls."
+tagline: "Learn how to pin the 2dog tool and keep your package versions steady."
 ---
 
 # Pinning a specific Version

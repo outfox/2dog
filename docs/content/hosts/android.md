@@ -1,6 +1,7 @@
 ---
 title: Android
 description: "Package your Godot C# game as an Android APK with the experimental Android host."
+tagline: "Learn how to ship your Godot C# game as an Android app."
 ---
 
 # Android

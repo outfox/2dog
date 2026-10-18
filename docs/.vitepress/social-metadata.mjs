@@ -5,6 +5,18 @@ import { createSocialImageGenerator, socialImageWidth, socialImageHeight } from 
 // Social crawlers read the generated HTML without running the site's JavaScript.
 export const siteUrl = 'https://2dog.dev';
 
+// Card eyebrows name the page's part of the docs; the homepage has none and other pages are guides.
+const sections = [
+  [/^index\.md$/, ''],
+  [/^api(?:\/|-reference\.md$)/, 'API Reference'],
+  [/^(?:cli\/|dnx-2dog\.md$)/, 'CLI'],
+  [/^(?:configuration|build-configurations)\b/, 'Configuration'],
+  [/^hosts\//, 'Hosts'],
+  [/^known-issues\//, 'Known Issues'],
+  [/^testing\//, 'Testing'],
+  [/^(?:faq|troubleshooting)\.md$/, 'Help']
+];
+
 function attribute(tag, name) {
   const value = tag?.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
   const entities = { amp: '&', quot: '"', apos: "'", '#39': "'", lt: '<', gt: '>' };
@@ -12,7 +24,7 @@ function attribute(tag, name) {
 }
 
 /**
- * @param {(illustration: string | undefined, outDir: string, copy: { title: string, summary: string }) => Promise<string>} generateImage
+ * @param {(illustration: string | undefined, outDir: string, copy: { section: string, title: string, tagline: string }) => Promise<string>} generateImage
  * @returns {(context: import('vitepress').TransformContext) => Promise<import('vitepress').HeadConfig[]>}
  */
 export function createSocialMetadata(generateImage) {
@@ -33,9 +45,11 @@ export function createSocialMetadata(generateImage) {
       ? join(siteConfig.outDir, decodeURIComponent(sourceUrl.pathname.slice(siteData.base.length)))
       : undefined;
     const caption = pageData.title || title;
-    const imagePath = await generateImage(illustrationPath, siteConfig.outDir, { title: caption, summary: description });
+    const tagline = pageData.frontmatter?.tagline || description;
+    const section = sections.find(([pattern]) => pattern.test(pageData.relativePath))?.[1] ?? 'Guide';
+    const imagePath = await generateImage(illustrationPath, siteConfig.outDir, { section, title: caption, tagline });
     const image = new URL(`${siteData.base}${imagePath}`, siteUrl).href;
-    const imageAlt = `${caption}. ${description} Read the dogs! 2dog logo with Lucky and Dogbot.`;
+    const imageAlt = `${caption}. ${tagline} Read the dogs! 2dog logo with Lucky and Dogbot.`;
 
     return [
       ['link', { rel: 'canonical', href: url }],

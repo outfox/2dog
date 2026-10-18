@@ -1,6 +1,7 @@
 ---
 title: FAQ
 description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, GodotSharp compatibility, separate tool and engine packages, and browser frame rate caps."
+tagline: "Curious about 2dog? Find quick answers to the most common questions."
 ---
 
 # FAQ

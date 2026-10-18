@@ -1,6 +1,7 @@
 ---
 title: 2dog add
 description: "Reference for 2dog add: add .NET hosts to an existing Godot project in place - arguments, host flags, options, examples."
+tagline: "Learn how to add .NET hosts to the Godot project you already have."
 ---
 
 # `2dog add`

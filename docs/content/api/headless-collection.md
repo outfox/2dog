@@ -1,6 +1,7 @@
 ---
 title: twodog.Testing.Xunit.HeadlessCollection
 description: "API reference for HeadlessCollection, the non-parallel xUnit collection backed by one shared HeadlessFixture."
+tagline: "Learn how to share one headless Godot across your xUnit test classes."
 ---
 
 # `twodog.Testing.Xunit.HeadlessCollection`

@@ -1,6 +1,7 @@
 ---
 title: 2dog version
 description: "Reference for 2dog version: print the tool version and every package a scaffold references, checked against nuget.org."
+tagline: "Learn how to check your 2dog versions against the latest on nuget.org."
 ---
 
 # `2dog version`

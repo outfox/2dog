@@ -1,6 +1,7 @@
 ---
 title: Generic .NET Configuration
 description: "MSBuild settings for the generic .NET host: console behavior, desktop pack export, and Native AOT."
+tagline: "Learn how to configure your console host, from pack export to Native AOT."
 ---
 
 # Generic .NET Configuration

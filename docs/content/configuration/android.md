@@ -1,6 +1,7 @@
 ---
 title: Android Configuration
 description: "MSBuild configuration for experimental Android hosts: native variants, game packs, signing, trimming, and Native AOT."
+tagline: "Learn how to configure, sign and slim down your Android builds."
 ---
 
 # Android Configuration

@@ -1,6 +1,7 @@
 ---
 title: xUnit Configuration
 description: "MSBuild configuration for xUnit hosts: engine variants, resource import, and Editor API references."
+tagline: "Learn how to configure xUnit hosts, resource import and Editor APIs."
 ---
 
 # xUnit Configuration

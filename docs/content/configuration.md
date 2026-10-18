@@ -1,6 +1,7 @@
 ---
 title: MSBuild Configuration
 description: "Shared 2dog settings, MSBuild runtimes, package versions, and configuration references for each host."
+tagline: "Learn how to tune 2dog's MSBuild settings for every host."
 ---
 
 # MSBuild Configuration

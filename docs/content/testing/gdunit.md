@@ -1,6 +1,7 @@
 ---
 title: Testing GDScript with GdUnit
 description: "Understand how the 2dog host changes GdUnit execution, resource isolation and test reporting."
+tagline: "Learn how 2dog runs your GdUnit tests and keeps their resources apart."
 ---
 
 # Testing GDScript with GdUnit

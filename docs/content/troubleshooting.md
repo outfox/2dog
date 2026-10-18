@@ -1,6 +1,7 @@
 ---
 title: Troubleshooting
 description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, where to look when a restore or build fails, and how to enable symlinks in a Windows checkout."
+tagline: "How to work around common pitfalls and limitations of 2dog, git, and Godot."
 ---
 
 # Troubleshooting

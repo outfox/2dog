@@ -1,6 +1,7 @@
 ---
 title: Godot.GodotSharp
 description: "API stub for GodotSharp, which 2dog exposes."
+tagline: "Find your way to the familiar GodotSharp API, right inside 2dog."
 ---
 
 # `using Godot;`

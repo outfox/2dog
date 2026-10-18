@@ -1,6 +1,7 @@
 ---
 title: 2dog repl
 description: "Attach to a running REPL host or execute C# and node commands from scripts and agents."
+tagline: "Learn how to drive a running game with C# from scripts and coding agents."
 ---
 
 # `2dog repl`

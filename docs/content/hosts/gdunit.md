@@ -1,6 +1,7 @@
 ---
 title: GdUnit
 description: "Run GDScript GdUnit suites through a .NET test host with embedded Godot."
+tagline: "Learn how to run your GdUnit suites with dotnet test."
 ---
 
 # GdUnit

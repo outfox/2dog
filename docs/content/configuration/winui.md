@@ -1,6 +1,7 @@
 ---
 title: WinUI 3 Configuration
 description: "MSBuild settings for WinUI 3 hosts: desktop packs, self-contained Windows App SDK deployment, and Native AOT."
+tagline: "Learn how to configure WinUI 3 hosts, from game packs to Native AOT."
 ---
 
 # WinUI 3 Configuration
