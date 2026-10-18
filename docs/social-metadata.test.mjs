@@ -10,7 +10,7 @@ function metadata(overrides = {}) {
     pageData: { relativePath: 'hosts/web.md' },
     siteData: { base: '/', lang: 'en-US', cleanUrls: false },
     siteConfig: { outDir: '/docs/dist' },
-    title: 'Web (HTML5) 🦴 2dog',
+    title: 'Web (HTML5) | 2dog',
     description: 'Run Godot C# in the browser.',
     content: '<main class="main"><h1>Web</h1></main>',
     ...overrides
@@ -24,7 +24,7 @@ function value(head, key) {
 test('share titles and descriptions match the resolved page, including its title template', async () => {
   const head = await metadata();
   for (const key of ['og:title', 'twitter:title']) {
-    assert.equal(value(head, key).content, 'Web (HTML5) 🦴 2dog');
+    assert.equal(value(head, key).content, 'Web (HTML5) | 2dog');
   }
   for (const key of ['og:description', 'twitter:description']) {
     assert.equal(value(head, key).content, 'Run Godot C# in the browser.');
@@ -61,7 +61,7 @@ test('uses a composed article illustration with readable card text and image dim
     assert.equal(value(head, key).content, 'https://2dog.dev/social/composed.ABC123.png');
   }
   for (const key of ['og:image:alt', 'twitter:image:alt']) {
-    assert.equal(value(head, key).content, 'Web (HTML5) 🦴 2dog. Run Godot C# in the browser. Read the dogs! 2dog logo with Lucky and Dogbot.');
+    assert.equal(value(head, key).content, 'Web (HTML5) | 2dog. Run Godot C# in the browser. Read the dogs! 2dog logo with Lucky and Dogbot.');
   }
   assert.equal(value(head, 'og:image:type').content, 'image/png');
   assert.equal(value(head, 'og:image:width').content, '1200');
@@ -90,7 +90,7 @@ test('resolves illustrations to emitted local assets under the deployment base',
     pageData: { relativePath: 'hosts/index.md', title: 'Hosts' },
     siteData: { base: '/docs/', lang: 'en-US' },
     siteConfig: { outDir: '/docs/dist' },
-    title: 'Hosts 🦴 2dog', description: 'Host Godot.',
+    title: 'Hosts | 2dog', description: 'Host Godot.',
     content: '<main class="main"><img src="/docs/assets/2dog-squirrel.ABC123.png"></main>'
   });
   assert.deepEqual(calls, [[

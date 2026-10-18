@@ -5,9 +5,8 @@ and **subset** for the web: 311 KB → 122 KB across the three files.
 
 The ranges cover every non-ASCII character used anywhere in `docs/` – Latin-1,
 Latin Extended-A, general punctuation, arrows, math operators, geometric
-shapes, box drawing (the `├── └──` project trees), and currency. The one
-character outside them is 🦴, which comes from the system emoji font in every
-case.
+shapes, box drawing (the `├── └──` project trees), and currency. Share-card copy
+uses these vendored fonts without requiring a system emoji font.
 
 Regenerate after replacing a font, or after introducing a character outside
 these ranges:

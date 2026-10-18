@@ -41,7 +41,7 @@ test('composes a 1200x630 gradient with the logo and a 2x nearest-neighbor botto
   assert.equal(alpha, 255);
   const logo = await sharp(image).extract({ left: 912, top: 48, width: 240, height: 124 }).stats();
   assert.ok(logo.channels[0].max > 240, 'white logo appears in the top-right corner');
-  assert.deepEqual(pixel(64, 532), [87, 158, 255, 255], 'CTA button appears in the bottom-left corner');
+  assert.deepEqual(pixel(64, 468), [87, 158, 255, 255], 'CTA button leaves clearance above social overlays');
 });
 
 test('uses the standard illustration instead of a -big asset, including hashed Vite filenames', async () => {
