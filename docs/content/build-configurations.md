@@ -108,5 +108,11 @@ the engine and avoid assuming that a game scene is running in editor mode.
 
 Resource import also runs separately and automatically at build time; see
 [Resource Import](./import-tool).
+
+The editor's export dialog edits the presets that `dotnet publish` uses. It
+cannot build a playable game, because the host does that: Export Project,
+Export All, one-click deploy and `--export-release`/`--export-debug` are
+unavailable inside a host. PCK/ZIP and patch exports remain and contain
+resources only; see [Pack export](./import-tool#pack-export).
 :::
 

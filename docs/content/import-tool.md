@@ -1,6 +1,6 @@
 ---
 title: Resource Import
-description: "How 2dog imports Godot resources automatically during MSBuild: incremental imports driven by GodotProjectDir, the twodog.import helper, and troubleshooting."
+description: "How 2dog imports Godot resources and exports game packs during MSBuild: incremental imports driven by GodotProjectDir, the twodog.import helper, pack contents, and troubleshooting."
 ---
 
 # Resource Import
@@ -31,7 +31,7 @@ incremental import after `Build`:
 | `TwoDogForceImport` | `false` | Set `true` to force the import to run even when up-to-date. Also covers staleness the file tracking cannot see (deleted assets). |
 | `TwoDogImportStampFile` | `<project>/.godot/2dog.import.stamp` | Override the stamp file location. |
 | `TwoDogImportExcludes` | - | Extra semicolon-separated glob excludes for the import inputs (directories with a `.gdignore` are always excluded). |
-| `GodotEditor` | - | Path to an external Godot editor binary. Only an explicit build setting selects this instead of the in-process helper; ambient `GODOT_EDITOR` and `GODOT4` variables do not affect imports or exports. |
+| `GodotEditor` | - | Path to an external Godot editor binary for imports and [pack exports](#pack-export). Only an explicit build setting selects this instead of the in-process helper; ambient `GODOT_EDITOR` and `GODOT4` variables do not affect imports or exports. |
 
 When neither the helper payload nor an external editor can be resolved, the
 build warns and skips the import. Set `TwoDogRequireImport` to fail instead.
@@ -47,6 +47,26 @@ the same project.
 Template builds (`template_debug`, `template_release`) cannot import; the
 pipeline requires the editor variant (`TOOLS_ENABLED`).
 :::
+
+## Pack export
+
+Publishing a host also exports the game content through the host's export
+preset, using the same helper. The pack holds resources only. The host's own
+publish ships the code: the game assembly, the bindings, libgodot and the .NET
+runtime. Godot's own .NET export step, which runs `dotnet publish` on the game
+project, is skipped.
+
+- Desktop packs sit beside the host executable, and the export copies the
+  preset's GDExtension libraries next to them, where the engine loads them.
+- Web packs embed their GDExtension side modules.
+- A stock Godot editor set as `GodotEditor` exports a pack the standard way: it
+  runs Godot's .NET publish and leaves GDExtension libraries out. Use the
+  bundled helper when the game uses GDExtensions.
+
+Packs exported later, such as patches, DLC or mods loaded with
+`ProjectSettings.LoadResourcePack`, are resource-only as well. C# changes ship
+with a host update, and a pack can only use script classes that the installed
+host already contains.
 
 ## Troubleshooting
 
