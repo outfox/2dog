@@ -6,14 +6,12 @@ description: "Reference for the 2dog command-line tool: installation, commands, 
 # `dotnet tool execute 2dog`
 
 `2dog` scaffolds .NET host projects around a Godot project, keeps them healthy,
-and updates them. The project directory becomes the solution root; hosts live
-in nested folders Godot ignores. It creates files and edits `*.csproj`,
-`project.godot`, the solution and `Directory.Build.props` in place. Nothing is
-moved, renamed or deleted, except two announced opt-ins: the `.sln` → `.slnx`
-migration and the [`--rename` fix](/known-issues/spaced-project-names).
+and updates them. 
 
-The tool and the matching `dotnet new` template ship together in the
-[`2dog` NuGet package](https://www.nuget.org/packages/2dog/).
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](../img/2dog-terminal.png)
+*"Everything at my pawtips!"*
+
+The 2dog tool helps set up and maintain your host projects without making other changes. Your project directory stays solution root; added hosts live in nested folders that Godot is instructed to ignore.
 
 ## Installation
 
@@ -21,6 +19,15 @@ The tool and the matching `dotnet new` template ship together in the
 dnx 2dog add                  # run latest from nuget
 dotnet tool install -g 2dog   # or install it globally
 ```
+
+`dnx 2dog` creates files and edits `*.csproj`, `project.godot`, and if needed, the solution and `Directory.Build.props` in place. 
+
+Nothing is moved, renamed or deleted. There are two opt-out/opt-in changes (y/n question in the tool): 
+
+- `.sln` → `.slnx` migration (creates a `.sln.old` backup)
+- [`--rename` fix](/known-issues/spaced-project-names) that sanitizes created directory names for safe use with .NET
+
+The tool and the matching `dotnet new` template ship together in the [`2dog` NuGet package](https://www.nuget.org/packages/2dog/).
 
 ## Commands
 

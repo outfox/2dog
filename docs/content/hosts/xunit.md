@@ -8,6 +8,12 @@ description: "Add an xUnit test project alongside your Godot game."
 The xUnit host is a .NET test project that runs your game in a real Godot
 engine. The scaffold uses a headless fixture; rendering is available too.
 
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and ther robot dog sniffing the ground](../img/2dog-investigation.png)
+
+::: tip It's what we use!
+**⤜outfox⤏** tests primarily on xUnit in production, it's great! :thumbsup:
+:::
+
 From your Godot project directory:
 
 ```bash

@@ -9,6 +9,9 @@ The Avalonia host displays Godot inside a cross-platform desktop window using
 `2dog.avalonia`. Avalonia controls can overlap the game, including translucent
 controls.
 
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
+*(get cozy and embed Godot in a real UI framework)*
+
 ## Use It
 
 From your Godot project directory:

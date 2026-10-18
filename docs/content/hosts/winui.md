@@ -8,6 +8,9 @@ description: "Embed Godot in a Windows App SDK window."
 The WinUI 3 host embeds Godot in a Windows App SDK window with a Pause/Resume
 button. It builds and runs on Windows.
 
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
+*(get cozy and embed Godot in a real UI framework)*
+
 Godot reports `Engine.is_embedded_in_editor()` as `true` for this host;
 account for this in scripts that check editor embedding.
 

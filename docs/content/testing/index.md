@@ -9,6 +9,11 @@ Load scenes, click buttons, and check signals from a normal .NET test runner.
 2dog starts a real Godot engine for your tests, so they use your game's scripts
 and resources.
 
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and ther robot dog sniffing the ground](../img/2dog-investigation.png)
+*"Find those bugs, where ever they hide."*
+
+2dog supports several popular testing frameworks, but also provides generic fixtures just in case you need something specific.
+
 ## Choose your framework
 
 Test hosts are opt-in. Choose `--xunit`, `--gdunit` or `--nunit` when adding one.
@@ -33,7 +38,7 @@ Test hosts are opt-in. Choose `--xunit`, `--gdunit` or `--nunit` when adding one
 Both integrations provide frame waits, signal expectations, input simulation,
 async lifecycle support, and automatic checks for Godot errors and warnings.
 
-::: details Where they still differ
+::: details Minor differences
 | Capability | xUnit | NUnit |
 | --- | --- | --- |
 | Engine shared across test classes | Collection fixture | One engine per fixture; no cross-class sharing |
@@ -67,7 +72,6 @@ VSTest target is no longer supported". Every scaffolded host references
 collects coverage for all of them. NUnit's adapter has a
 [session cancellation limitation](/configuration/nunit#cancellation);
 use its cooperative test timeout before any outer runner timeout.
-
 
 ## Find a guide
 

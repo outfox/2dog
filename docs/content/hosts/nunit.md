@@ -8,6 +8,8 @@ description: "Add an NUnit test project alongside your Godot game."
 The NUnit host is a .NET test project that runs your game in a real headless
 Godot engine on Windows, Linux, and macOS.
 
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and ther robot dog sniffing the ground](../img/2dog-investigation.png)
+
 From your Godot project directory:
 
 ```bash

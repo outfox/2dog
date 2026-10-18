@@ -5,14 +5,25 @@ description: "Explore and change a running Godot game with C# and node shell com
 
 # C# REPL
 
-Add an interactive C# prompt to your game from its Godot project directory:
+Add an interactive C# prompt to your game from its Godot project directory.
+
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie playing tug of war with of their robot dog](../img/2dog-tugofwar.png)
+*"Be a nice dogbot. Share that assembly load context!"*
+
+::: danger Don't play too rough! :stop_sign:
+... don't call `tree.free()`, for example, and only give trusted users access.
+
+This is an experimental, powerful new way to interact with your godot project or the editor *while it's running!* Furthermore, REPLs can be used by multiple users or processes via named pipes!
+:::
+
+Create a REPL host:
 
 ```bash
 dnx 2dog add --repl
 dotnet run --project MyGame.repl
 ```
 
-For a new project, use `dnx 2dog new MyGame --repl`.
+For a a new, purely REPL project, use `dnx 2dog new MyGame --repl`.
 
 ## Try It
 
