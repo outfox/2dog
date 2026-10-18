@@ -180,7 +180,16 @@ function preferredIllustration(illustration) {
 // Double each illustration pixel with nearest-neighbor sampling before compositing.
 export async function renderSocialImage(illustration = fallback, { section = '', title = '2dog', tagline = '' } = {}) {
   illustration = preferredIllustration(illustration);
-  const { width, height } = await sharp(illustration).metadata();
+  let width, height;
+  try {
+    ({ width, height } = await sharp(illustration).metadata());
+  } catch (error) {
+    const source = typeof illustration === 'string' ? await readFile(illustration) : illustration;
+    if (source.subarray(0, 23).toString() === 'version https://git-lfs') {
+      throw new Error(`Social illustration ${illustration} is a Git LFS pointer; fetch it with git lfs pull.`, { cause: error });
+    }
+    throw error;
+  }
   const scaledWidth = width * 2;
   const scaledHeight = height * 2;
   if (scaledWidth > socialImageWidth - inset - copyWidth - artInset || scaledHeight > socialImageHeight) {

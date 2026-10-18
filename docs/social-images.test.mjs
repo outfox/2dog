@@ -118,6 +118,11 @@ test('uses the proportional Inter font instead of silently falling back to a sys
   assert.ok(await headingWidth('WWWW') > (await headingWidth('iiii')) * 2);
 });
 
+test('names Git LFS pointers instead of reporting an unsupported image format', async () => {
+  const pointer = Buffer.from('version https://git-lfs.github.com/spec/v1\noid sha256:abc\nsize 4626\n');
+  await assert.rejects(renderSocialImage(pointer), /Git LFS pointer/);
+});
+
 test('rejects illustrations that would run into the copy at 2x instead of overlapping it', async () => {
   const illustration = await sharp({
     create: { width: 257, height: 10, channels: 4, background: '#fff' }

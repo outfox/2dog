@@ -1,7 +1,7 @@
 ---
 title: What's a Host?
 description: "Choose a .NET application that starts Godot for your game or tests."
-tagline: "Find the right .NET host for your game, your app or your tests."
+tagline: "A host is the .NET app that runs your Godot game, its tests, or your tools."
 ---
 
 # Hosts
