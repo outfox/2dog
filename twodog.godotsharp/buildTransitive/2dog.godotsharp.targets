@@ -4,6 +4,9 @@
         <_TwoDogFallbackEditorBinding>$(MSBuildThisFileDirectory)api/GodotSharpEditor.dll</_TwoDogFallbackEditorBinding>
         <_TwoDogGenerator>$(MSBuildThisFileDirectory)../analyzers/dotnet/cs/Godot.SourceGenerators.dll</_TwoDogGenerator>
         <_TwoDogExpectedEditorBinding Condition="'$(_TwoDogExpectedEditorBinding)' == ''">$(_TwoDogFallbackEditorBinding)</_TwoDogExpectedEditorBinding>
+        <!-- Godot editor exports (ExportDebug/ExportRelease) publish beside a stock export template, which needs the
+             stock bindings; 2dog hosts never build those configurations. -->
+        <TwoDogUseStockBindings Condition="'$(TwoDogUseStockBindings)' == '' And ('$(Configuration)' == 'ExportDebug' Or '$(Configuration)' == 'ExportRelease')">true</TwoDogUseStockBindings>
     </PropertyGroup>
     <!-- Keep the fork generator for Godot games and remove the SDK's duplicate, including on first restore. -->
     <Target Name="TwoDogSelectGodotGenerator" BeforeTargets="CoreCompile">
@@ -36,7 +39,7 @@
         <Error Code="TDG004"
                Condition="'@(_TwoDogEditorPackage)' != '' And '%(_TwoDogEditorPackage.NuGetPackageVersion)' != '$(_TwoDogCorePackageVersion)'"
                Text="TwoDog: core and editor binding packages must have the same 2dog version." />
-        <ItemGroup>
+        <ItemGroup Condition="'$(TwoDogUseStockBindings)' != 'true'">
             <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
             <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
             <_ReferenceDocumentationFiles Remove="@(_ReferenceDocumentationFiles)" Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
@@ -45,13 +48,24 @@
                 <Private>true</Private>
             </Reference>
         </ItemGroup>
+        <Error Code="TDG005" Condition="'$(TwoDogUseStockBindings)' == 'true' And '@(_TwoDogStockBinding)' == ''"
+               Text="TwoDog: $(Configuration) builds use the stock GodotSharp package for Godot editor exports, but none was resolved. Build the project with Godot.NET.Sdk." />
+        <ItemGroup Condition="'$(TwoDogUseStockBindings)' == 'true'">
+            <ResolvedCompileFileDefinitions Remove="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)' Or '%(NuGetPackageId)' == '2dog.godotsharp.editor$(TwoDogPackageSuffix)'" />
+            <RuntimeCopyLocalItems Remove="@(RuntimeCopyLocalItems)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)' Or '%(NuGetPackageId)' == '2dog.godotsharp.editor$(TwoDogPackageSuffix)'" />
+            <_ReferenceDocumentationFiles Remove="@(_ReferenceDocumentationFiles)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)' Or '%(NuGetPackageId)' == '2dog.godotsharp.editor$(TwoDogPackageSuffix)'" />
+        </ItemGroup>
     </Target>
 
     <!-- Publish resolves package runtime assets afresh. Stock assets must not re-enter the publish set. -->
     <Target Name="TwoDogSelectPublishBindings" AfterTargets="_ComputeResolvedCopyLocalPublishAssets">
-        <ItemGroup>
+        <ItemGroup Condition="'$(TwoDogUseStockBindings)' != 'true'">
             <ResolvedCopyLocalPublishAssets Remove="@(ResolvedCopyLocalPublishAssets)"
                 Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'" />
+        </ItemGroup>
+        <ItemGroup Condition="'$(TwoDogUseStockBindings)' == 'true'">
+            <ResolvedCopyLocalPublishAssets Remove="@(ResolvedCopyLocalPublishAssets)"
+                Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)' Or '%(NuGetPackageId)' == '2dog.godotsharp.editor$(TwoDogPackageSuffix)'" />
         </ItemGroup>
     </Target>
 
@@ -67,7 +81,8 @@
     <!-- Hashes also validate manually supplied references and project-output copies, without relying on
          assembly version or IsTrimmable metadata. Equal copies of the fork payload are allowed. -->
     <Target Name="TwoDogValidateCompileBindings" AfterTargets="ResolveReferences"
-            BeforeTargets="CoreCompile" DependsOnTargets="TwoDogReadBindingHashes">
+            BeforeTargets="CoreCompile" DependsOnTargets="TwoDogReadBindingHashes"
+            Condition="'$(TwoDogUseStockBindings)' != 'true'">
         <ItemGroup>
             <_TwoDogCompileBinding Include="@(ReferencePath);@(ReferenceCopyLocalPaths)"
                 Condition="'%(Filename)%(Extension)' == 'GodotSharp.dll' Or '%(Filename)%(Extension)' == 'GodotSharpEditor.dll'" />
@@ -88,7 +103,8 @@
 
     <!-- Validate original publish inputs before ILLink rewrites them; this also runs for publishes that skip the build. -->
     <Target Name="TwoDogValidatePublishBindings" AfterTargets="ComputeResolvedFilesToPublishList"
-            BeforeTargets="ILLink" DependsOnTargets="TwoDogReadBindingHashes">
+            BeforeTargets="ILLink" DependsOnTargets="TwoDogReadBindingHashes"
+            Condition="'$(TwoDogUseStockBindings)' != 'true'">
         <ItemGroup>
             <_TwoDogPublishBinding Include="@(ResolvedFileToPublish)"
                 Condition="'%(Filename)%(Extension)' == 'GodotSharp.dll' Or '%(Filename)%(Extension)' == 'GodotSharpEditor.dll'" />

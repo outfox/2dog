@@ -63,6 +63,11 @@ project, is skipped.
   runs Godot's .NET publish and leaves GDExtension libraries out. Use the
   bundled helper when the game uses GDExtensions.
 
+A stock Godot editor can still export the game the standard way. Its
+`ExportDebug` and `ExportRelease` builds compile against the stock GodotSharp
+bindings, because stock export templates need them, so code that uses 2dog-only
+engine APIs does not compile there.
+
 Packs exported later, such as patches, DLC or mods loaded with
 `ProjectSettings.LoadResourcePack`, are resource-only as well. C# changes ship
 with a host update, and a pack can only use script classes that the installed
