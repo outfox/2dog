@@ -7,7 +7,7 @@ description: "Run Godot inside .NET applications with desktop, web, and test hos
 
 **2dog** embeds **Godot** inside **.NET** applications to help build games, apps, and tools for **desktop**, **web**, and **mobile**. It simplifies build automation, has templates for integration with **UI** frameworks and **web servers**, and running automated **tests** in your IDE.
 
-![Illus. Diego Rado: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.png)
+![Illus. Diego Rado: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies-big.png)
 
 ## Who's a good robot?
 Things you can do with 2dog may be complex, so we try to make it developer friendly.
