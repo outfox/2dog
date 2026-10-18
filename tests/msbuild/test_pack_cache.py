@@ -66,6 +66,14 @@ class PackCacheTests(unittest.TestCase):
         self.pack("second")
         self.assertEqual(self.restore(), "second")
 
+    def test_build_time_packs_keep_the_extraction(self):
+        # Platform projects pack on every build (GeneratePackageOnBuild) while the same build consumes them.
+        self.pack("first")
+        self.assertEqual(self.restore(), "first")
+        self.dotnet("build", str(self.package / "probe.csproj"), "-p:GeneratePackageOnBuild=true",
+                    f"-p:PackageOutputPath={self.feed.as_posix()}/", f"-p:NuGetPackageRoot={self.cache.as_posix()}/")
+        self.assertTrue((self.cache / "twodog.cacheprobe/1.0.0/payload.txt").exists())
+
     def test_other_cached_packages_survive(self):
         other = self.cache / "unrelated/1.0.0/marker.txt"
         other.parent.mkdir(parents=True)

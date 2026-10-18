@@ -48,8 +48,10 @@
     </Target>
 
     <!-- Restore extracts each package version once and never refreshes it. Local packs reuse unpublished versions
-         with new content, so drop this version's extraction; the next restore unpacks the new package. -->
-    <Target Name="TwoDogInvalidatePackedVersion" AfterTargets="Pack" Condition="'$(NuGetPackageRoot)' != ''">
+         with new content, so drop this version's extraction; the next restore unpacks the new package. Only
+         `dotnet pack` (_IsPacking) does this: builds also pack platform packages that the same build consumes. -->
+    <Target Name="TwoDogInvalidatePackedVersion" AfterTargets="Pack"
+            Condition="'$(NuGetPackageRoot)' != '' And '$(_IsPacking)' == 'true'">
         <RemoveDir Directories="$(NuGetPackageRoot)$(PackageId.ToLowerInvariant())/$(PackageVersion.ToLowerInvariant())"
                    ContinueOnError="WarnAndContinue" />
     </Target>
