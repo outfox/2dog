@@ -8,7 +8,7 @@ description: "The recommended 2dog layout: the directory containing project.godo
 2dog recommends using the directory containing `project.godot` as the .NET
 solution root, with a small nested project for each host. 
 
-![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their blue robot dog checking a trail map](../img/2dog-trail-map.png)
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their blue robot dog checking a trail map](img/2dog-trail-map.png)
 *"So this is where everything is. Easy!"*
 
 This way you keep your familiar Godot-style project layout while 2dog's hosts sit obediently in ~~their baskets~~ your solution.

@@ -37,7 +37,7 @@ space-free.
 
 ## What 2dog does
 
-`2dog add`/`convert` refuses to scaffold hosts against a name containing
+`2dog add` refuses to scaffold hosts against a name containing
 whitespace and offers to fix it - interactively, or via
 `2dog add --rename NewName`. The rename
 touches the .NET identity only: the csproj file, `[dotnet]

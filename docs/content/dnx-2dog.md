@@ -8,7 +8,7 @@ description: "Reference for the 2dog command-line tool: installation, commands, 
 `2dog` scaffolds .NET host projects around a Godot project, keeps them healthy,
 and updates them. 
 
-![Illus. Moritz Voss: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](../img/2dog-terminal.png)
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](img/2dog-terminal.png)
 *"Everything at my pawtips!"*
 
 The 2dog tool helps set up and maintain your host projects without making other changes. Your project directory stays solution root; added hosts live in nested folders that Godot is instructed to ignore.
@@ -34,7 +34,7 @@ The tool and the matching `dotnet new` template ship together in the [`2dog` NuG
 | Command | Use it to |
 | --- | --- |
 | [`2dog new`](/cli/new) | Create a Godot project with 2dog hosts |
-| [`2dog add`](/cli/add) | Add hosts to an existing Godot project (`2dog convert` is an alias) |
+| [`2dog add`](/cli/add) | Add hosts to an existing Godot project |
 | [`2dog doctor`](/cli/doctor) | Check the project and this machine, fix what can be fixed, explain build failures |
 | [`2dog update`](/cli/update) | Bring the project's 2dog packages to this tool's versions |
 | [`2dog pack`](/cli/pack) | List a `.pck`'s contents |

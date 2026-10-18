@@ -127,5 +127,3 @@ These settings apply to development scripts in a 2dog source checkout.
 | `TWODOG_TEST_VULKAN_LOADER` | Path to `vulkan-1.dll` | Copies that Vulkan loader beside the Windows NUnit rendering test host; set by the software-rendering setup script |
 | `TWODOG_TEST_RESTORE_PACKAGES` | NuGet cache directory | Overrides the restore cache used by the Android package tests |
 | `TWODOG_WEB_TARGETS` | Path to browser MSBuild targets | Overrides the targets file exercised by the web side-module export tests |
-
-`TWODOG_WEB_BOOT` is a C# compilation symbol, not an environment variable.

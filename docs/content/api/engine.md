@@ -224,11 +224,12 @@ public static void RegisterWebPluginsInitializer(IntPtr initializer)
 Registers the game assembly's generated plugin initializer in a browser host.
 The web host's `Program.cs` calls this before `Start()` with the pointer from
 `TwoDogWebBoot.PluginsInitializer()`; normal application code does not need
-anything beyond that template line. The 2dog bindings generate `TwoDogWebBoot`
-into the game assembly when it allows unsafe code. A `TwoDogWebBoot` class
-declared in the game project replaces the generated one, such as the bootstrap
-file current templates still compile from the web host folder. Desktop calls
-throw `PlatformNotSupportedException`.
+anything beyond that template line. The 2dog bindings (`2dog.godotsharp`)
+generate `TwoDogWebBoot` into the game assembly when it allows unsafe code. A
+`TwoDogWebBoot` class declared in the game project replaces the generated one,
+so the `TwoDogWebBoot.cs` that older templates put in the web host folder keeps
+working; projects can delete it together with its `Compile Include` in the game
+csproj. Desktop calls throw `PlatformNotSupportedException`.
 
 ## Example
 

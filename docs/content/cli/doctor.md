@@ -99,7 +99,6 @@ Ids are stable; `--ignore <id>` drops one.
 | `layout.assembly-name` | project.godot names the assembly and the csproj matches it |
 | `layout.multiple-root-csproj` | a single csproj at the root, or assembly_name picks one |
 | `layout.spaced-name` | the .NET project name contains no whitespace |
-| `layout.legacy-root-webboot` | TwoDogWebBoot.cs lives in a web host folder, not at the root |
 | `layout.root-build-targets` | Directory.Build.targets provides the deep-clean target |
 | `layout.root-build-props` | Directory.Build.props holds the shared package versions |
 | `layout.root-global-json` | global.json pins a wasm-capable SDK when a browser host exists |
@@ -112,10 +111,9 @@ Ids are stable; `--ignore <id>` drops one.
 | `game.sdk` | the game csproj uses Godot.NET.Sdk |
 | `game.sdk-mismatch` | Godot.NET.Sdk matches the Godot line 2dog.engine was built for |
 | `game.target-framework` | the game csproj targets net10.0 |
-| `game.properties` | EnableDynamicLoading, AllowUnsafeBlocks and TWODOG_WEB_BOOT are set |
+| `game.properties` | EnableDynamicLoading and AllowUnsafeBlocks are set |
+| `game.bindings` | the game csproj references 2dog.godotsharp |
 | `game.default-item-excludes` | every host folder is excluded from the game's default globs |
-| `game.webboot-include` | the web bootstrap is compiled into the game assembly |
-| `game.webboot-duplicate` | exactly one TwoDogWebBoot.cs compiles into the game assembly |
 
 ### Hosts
 
@@ -132,7 +130,6 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.app-manifest` | the app.manifest a host declares exists |
 | `host.web-props-shim` | browser hosts chain to the root Directory.Build.props |
 | `host.web-global-json` | browser hosts carry their own global.json |
-| `host.webboot-drift` | the tool-owned TwoDogWebBoot.cs matches this tool's copy |
 | `host.trimmer-root` | browser hosts root the game assembly for the trimmer |
 | `host.blazor-client` | the Blazor client project exists and publishes 2dog.engine |
 | `host.blazor-launch-settings` | Blazor hosts carry a Development launchSettings.json |
@@ -210,7 +207,6 @@ line and the fixing command; other errors follow.
 | `build.sdk-too-old` | the installed .NET SDK is too old for net10.0 |
 | `build.global-json-unresolved` | no installed SDK satisfies global.json |
 | `build.godot-sdk-not-found` | the Godot.NET.Sdk version could not be downloaded |
-| `build.webboot-duplicate` | TwoDogWebBoot.cs compiles twice into the game assembly |
 | `build.il1035` | the trimmer cannot see a root assembly |
 | `build.export-failed` | the Godot pck export failed |
 | `build.godotplugins-missing` | GodotPlugins.dll not found at runtime |
