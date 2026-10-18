@@ -235,7 +235,7 @@
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg)"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg) ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 

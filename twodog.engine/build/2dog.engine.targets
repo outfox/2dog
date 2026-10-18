@@ -390,7 +390,7 @@
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; &quot;$(_TwoDogDesktopPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; &quot;$(_TwoDogDesktopPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
@@ -454,7 +454,7 @@
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; &quot;$(_TwoDogAndroidPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; &quot;$(_TwoDogAndroidPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
