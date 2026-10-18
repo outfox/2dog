@@ -6,13 +6,14 @@ description: "Choose a .NET application that starts Godot for your game or tests
 # Hosts
 
 A host is a .NET application that starts Godot for your game or its tests.
-Each host has its own entry point and references the same game project.
+Each host has its own entry point and references your base game project.
 
 You can have multiple hosts of the same type, each will have its unique project.
 
-![Illus. Diego Rado: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](../img/2dog-squirrel.png)
+The host is what runs your game.
 
-The host runs your game, but no worries, you can be *totally in charge.*
+![Illus. Diego Rado: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](../img/2dog-squirrel.png)
+*(but no worries, you can be totally in charge!)*
 
 ## Add a Host
 
