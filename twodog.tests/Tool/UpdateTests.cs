@@ -368,21 +368,6 @@ public class UpdateTests
     }
 
     [Fact]
-    public void Update_RefreshesADriftedWebBootstrap()
-    {
-        using var tmp = new TempProjectDir();
-        var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--no-restore").ExitCode);
-        var boot = Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs");
-        File.WriteAllText(boot, "// stale\n");
-
-        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
-        Assert.Equal(0, run.ExitCode);
-        Assert.Contains("refresh Game.web/TwoDogWebBoot.cs", run.Stdout);
-        Assert.Equal(TemplateAssets.WebBootSource(), File.ReadAllText(boot));
-    }
-
-    [Fact]
     public void UpdateTo_ExplainsHowToPickAVersion()
     {
         var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["update", "--to", "1.2.3"]));

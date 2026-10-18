@@ -21,12 +21,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- TwoDogWebBoot.cs is compiled by the GAME project (see the root
-             csproj's Compile Include), not by this host. -->
-        <Compile Remove="TwoDogWebBoot.cs"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.browser-wasmTWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"/>
     </ItemGroup>

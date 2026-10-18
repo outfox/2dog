@@ -196,24 +196,6 @@ internal static class ScaffoldCommand
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        // The web bootstrap lives in the first web host folder, compiled via a root csproj Compile Include. A
-        // root-level TwoDogWebBoot.cs (older layout) still works via default globs, so it is left alone.
-        var legacyRootBoot = File.Exists(Path.Combine(projectDir, "TwoDogWebBoot.cs"));
-        // Existing web-like hosts win over new ones: a project booting from its webxr folder keeps that single
-        // active copy (--force updates it) instead of gaining a second, dead one.
-        var webBootFolder = legacyRootBoot
-            ? null
-            : existingHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
-              ?? existingHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder
-              ?? existingHosts.FirstOrDefault(h => h.Kind == HostKind.Blazor)?.Folder
-              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Web)?.Folder
-              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.WebXr)?.Folder
-              ?? newHosts.FirstOrDefault(h => h.Kind == HostKind.Blazor)?.Folder;
-        if (legacyRootBoot && wantsWeb)
-            warnings.Add("TwoDogWebBoot.cs sits at the project root (older layout) - left untouched, it still " +
-                         "works there. Newer layouts keep it in the web host folder with a guarded Compile " +
-                         "Include in the root csproj, so the Godot editor stops importing it as a script.");
-
         // Existing root files are worth a word when 2dog is first added ("your file was left alone"), but not
         // when adding hosts to a project 2dog already set up.
         var retrofitting = !project.IsNew && existingHosts.Count == 0;
@@ -227,7 +209,7 @@ internal static class ScaffoldCommand
             if (rename.CsprojExists) renamedFrom = Path.Combine(projectDir, rename.OldName + ".csproj");
         }
 
-        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, webBootFolder, renamedFrom,
+        PlanGodotCsproj(plan, warnings, project, godotCsproj, allHostFolders, renamedFrom,
             options.DoublePrecision ?? BuildSettings.IsDouble(projectDir));
         PlanRootBuildTargets(plan, warnings, projectDir, retrofitting);
         PlanRootBuildProps(plan, projectDir);
@@ -235,7 +217,6 @@ internal static class ScaffoldCommand
         var wantsMaui = newHosts.Any(h => h.Kind == HostKind.Maui) || existingHosts.Any(h => h.Kind == HostKind.Maui);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting, wantsMaui,
             newHosts.Where(h => Hosts.IsTestHost(h.Kind)).Select(h => h.Folder).ToList());
-        PlanWebBoot(plan, skipped, options, projectDir, webBootFolder, retrofitting);
         PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
         PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
@@ -425,7 +406,7 @@ internal static class ScaffoldCommand
 
     private static void PlanGodotCsproj(
         List<PlannedAction> plan, List<string> warnings, ProjectContext project,
-        string godotCsproj, List<string> hostFolders, string? webBootFolder, string? renamedFrom = null,
+        string godotCsproj, List<string> hostFolders, string? renamedFrom = null,
         bool doublePrecision = false)
     {
         // With a rename planned the csproj still sits at the old path at plan time: read from there, write to the
@@ -435,9 +416,7 @@ internal static class ScaffoldCommand
         {
             // GDScript-only or brand-new project: scaffold the csproj and declare the assembly so the editor finds
             // it (res://<name>.csproj).
-            var content = SetWebBootInclude(
-                SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName, doublePrecision), hostFolders),
-                project.BaseName, webBootFolder);
+            var content = SetHostExcludes(TemplateAssets.GodotCsproj(project.BaseName, doublePrecision), hostFolders);
             plan.Add(new PlannedAction(
                 $"create {Path.GetFileName(godotCsproj)} (Godot.NET.Sdk/{ToolVersions.GodotSdkVersion})", ActionKind.CreateFile,
                 () => MsBuildXml.Write(godotCsproj, content)));
@@ -452,8 +431,7 @@ internal static class ScaffoldCommand
         }
 
         // The Godot.NET.Sdk follows the tool (never downgraded): the hosts being added are built for that Godot line.
-        var result = CsprojPatcher.Patch(readPath, hostFolders,
-            webBootFolder is null ? null : $"{webBootFolder}/TwoDogWebBoot.cs", upgradeGodotSdk: true);
+        var result = CsprojPatcher.Patch(readPath, hostFolders, upgradeGodotSdk: true);
         warnings.AddRange(result.Warnings);
         if (result.NewContent is { } newContent)
             plan.Add(new PlannedAction(
@@ -512,15 +490,6 @@ internal static class ScaffoldCommand
         return Regex.Replace(csproj, "<DefaultItemExcludes>.*?</DefaultItemExcludes>",
             $"<DefaultItemExcludes>{value}</DefaultItemExcludes>", RegexOptions.Singleline);
     }
-
-    /// <summary>
-    /// Rewrites the guarded TwoDogWebBoot.cs Compile Include (template: &lt;Base&gt;.web) to the actual web host
-    /// folder. With no web host the template path is kept: the Exists condition makes it inert.
-    /// </summary>
-    internal static string SetWebBootInclude(string csproj, string baseName, string? webFolder) =>
-        webFolder is null
-            ? csproj
-            : csproj.Replace($"{baseName}.web/TwoDogWebBoot.cs", $"{webFolder}/TwoDogWebBoot.cs");
 
     private static void PlanRootGlobalJson(
         List<PlannedAction> plan, List<string> warnings, string projectDir, bool wantsWeb, bool retrofitting, bool wantsMaui,
@@ -600,30 +569,6 @@ internal static class ScaffoldCommand
         var model = ProjectModel.Load(projectDir);
         if (model.PropsValues.Count == 0) return;
         UpdateCommand.PlanPropsValues(plan, model, ProjectVersions.Current(model));
-    }
-
-    private static void PlanWebBoot(
-        List<PlannedAction> plan, List<string> skipped, ScaffoldOptions options, string projectDir,
-        string? webBootFolder, bool retrofitting)
-    {
-        // null: no web host to boot, or a legacy root-level file the root
-        // csproj's default globs already compile (left alone).
-        if (webBootFolder is null) return;
-
-        var relative = $"{webBootFolder}/TwoDogWebBoot.cs";
-        var path = Path.Combine(projectDir, webBootFolder, "TwoDogWebBoot.cs");
-        if (File.Exists(path) && !options.Force)
-        {
-            if (retrofitting) skipped.Add(relative);
-            return;
-        }
-
-        // The web host folder may be created later in this same plan.
-        plan.Add(new PlannedAction($"create {relative} (web bootstrap)", ActionKind.CreateFile, () =>
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            File.WriteAllText(path, TemplateAssets.WebBootSource());
-        }));
     }
 
     /// <summary>The WebXR host renders nothing without [xr] shaders/enabled.web=true in project.godot.</summary>

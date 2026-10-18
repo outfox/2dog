@@ -8,7 +8,6 @@ public class CreationOptionsTests
     [Theory]
     [InlineData("new")]
     [InlineData("add")]
-    [InlineData("convert")]
     public void BuildFlagsDistinguishUnsetEnabledAndDisabled(string verb)
     {
         var defaults = CommandLine.Parse([verb]).Options;

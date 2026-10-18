@@ -212,19 +212,19 @@ public class DoctorTests : IDisposable
     public void AnnouncedFixes_WaitForFixAll()
     {
         var dir = Scaffold("--generic", "--web");
-        var boot = Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs");
-        File.WriteAllText(boot, "// stale\n");
+        var csproj = Path.Combine(dir, "Game.csproj");
+        File.WriteAllText(csproj, File.ReadAllText(csproj).Replace("<TargetFramework>net10.0<", "<TargetFramework>net9.0<"));
 
         var run = Doctor(dir, null, "--json");
-        Assert.Equal("announced", Finding(run.Stdout, "host.webboot-drift")!.Value.GetProperty("fix").GetProperty("class").GetString());
+        Assert.Equal("announced", Finding(run.Stdout, "game.target-framework")!.Value.GetProperty("fix").GetProperty("class").GetString());
 
         Assert.Equal(0, Doctor(dir, null, "--fix").ExitCode);
-        Assert.Equal("// stale\n", File.ReadAllText(boot));
+        Assert.Contains("<TargetFramework>net9.0<", File.ReadAllText(csproj));
 
         var all = Doctor(dir, null, "--fix-all");
         Assert.Equal(0, all.ExitCode);
-        Assert.Contains("+ announced: refresh Game.web/TwoDogWebBoot.cs", all.Stdout);
-        Assert.Equal(TemplateAssets.WebBootSource(), File.ReadAllText(boot));
+        Assert.Contains("+ announced: upgrade Game.csproj to net10.0", all.Stdout);
+        Assert.Contains("<TargetFramework>net10.0<", File.ReadAllText(csproj));
     }
 
     [Fact]
@@ -549,7 +549,8 @@ public class DoctorTests : IDisposable
     {
         var dir = Scaffold("--web");
         File.Delete(Path.Combine(dir, "Game.web", ".gdignore"));
-        File.WriteAllText(Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs"), "// stale\n");
+        var csproj = Path.Combine(dir, "Game.csproj");
+        File.WriteAllText(csproj, File.ReadAllText(csproj).Replace("<TargetFramework>net10.0<", "<TargetFramework>net9.0<"));
         var installed = false;
         var fallback = Runner();
         var runner = new FakeProcessRunner(request =>
@@ -571,7 +572,7 @@ public class DoctorTests : IDisposable
         Assert.Contains("the announced ones as well:", run.Stdout);
         Assert.Contains("2dog doctor --fix-all", run.Stdout);
         Assert.False(File.Exists(Path.Combine(dir, "Game.web", ".gdignore")));
-        Assert.Equal("// stale\n", File.ReadAllText(Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs")));
+        Assert.Contains("<TargetFramework>net9.0<", File.ReadAllText(csproj));
     }
 
     [Theory]
@@ -841,7 +842,6 @@ public class BuildLogAnalyzerTests
             ["build.nu1213"] = "error NU1213: The package 2dog 4.7.2.79 has a package type DotnetTool that is incompatible with this project.",
             ["build.wasm-tools-missing"] = "error NETSDK1147: To build this project, the following workloads must be installed: wasm-tools",
             ["build.android-workload-missing"] = "error NETSDK1147: To build this project, the following workloads must be installed: android",
-            ["build.webboot-duplicate"] = "TwoDogWebBoot.cs(5,18): error CS0101: The namespace 'Game.web' already contains a definition for 'TwoDogWebBoot'",
             ["build.godotplugins-missing"] = "Unhandled exception. System.IO.FileNotFoundException: TwoDog: GodotPlugins.dll not found (probed GODOTSHARP_DIR, ...)",
             ["build.variant-fallback"] = "TwoDog: TwoDogVariant is 'editor' but libgodot-editor.dll was not found; falling back to libgodot.dll, which may be a different variant.",
         };

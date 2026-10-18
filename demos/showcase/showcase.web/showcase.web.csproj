@@ -16,12 +16,6 @@
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
 
-    <ItemGroup>
-        <!-- TwoDogWebBoot.cs is compiled by the GAME project (see the root
-             csproj's Compile Include), not by this host. -->
-        <Compile Remove="TwoDogWebBoot.cs"/>
-    </ItemGroup>
-
     <!-- Engine from the source checkout by default; -p:Official=true consumes the published NuGet packages.
          The game project stays a ProjectReference either way -->
     <ItemGroup>

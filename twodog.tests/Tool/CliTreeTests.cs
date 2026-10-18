@@ -53,7 +53,7 @@ public class CliTreeTests
     public void RenameOnNew_SaysWhy()
     {
         var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["new", "X", "--rename", "Y"]));
-        Assert.Contains("add/convert only", ex.Message);
+        Assert.Contains("applies to add only", ex.Message);
         Assert.Contains("already picks a clean name", ex.Message);
     }
 
@@ -82,7 +82,7 @@ public class CliTreeTests
     [InlineData("ad", "add")]
     [InlineData("nwe", "new")]
     [InlineData("pakc", "pack")]
-    [InlineData("convrt", "convert")]
+    [InlineData("doctr", "doctor")]
     public void UnknownVerb_SuggestsTheClosestOne(string typo, string suggestion)
     {
         var ex = Assert.Throws<UsageException>(() => CommandLine.Parse([typo]));
@@ -123,7 +123,7 @@ public class CliTreeTests
     [Fact]
     public void Pin_BeforeTheVerb_IsStillTheUsageError()
     {
-        var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--pin", "convert"]));
+        var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["--pin", "add"]));
         Assert.Contains("cannot pin its own version", ex.Message);
     }
 
@@ -186,7 +186,7 @@ public class CliTreeTests
         Assert.Null(CommandLine.Parse(["help"]).HelpVerb);
         Assert.Null(CommandLine.Parse(["--help"]).HelpVerb);
         Assert.Equal(Verb.New, CommandLine.Parse(["help", "new"]).HelpVerb);
-        Assert.Equal(Verb.Add, CommandLine.Parse(["help", "convert"]).HelpVerb);
+        Assert.Equal(Verb.Add, CommandLine.Parse(["help", "add"]).HelpVerb);
         Assert.Equal(Verb.Add, CommandLine.Parse(["add", "--help"]).HelpVerb);
         Assert.Equal(Verb.Pack, CommandLine.Parse(["pack", "list", "-h"]).HelpVerb);
         Assert.Throws<UsageException>(() => CommandLine.Parse(["help", "bogus"]));
@@ -285,8 +285,8 @@ public class SuggestTests
     [Fact]
     public void Closest_PrefersExactPrefixesThenSmallEdits()
     {
-        string[] verbs = ["new", "add", "convert", "pack", "version", "help"];
-        Assert.Equal("convert", Suggest.Closest("conv", verbs));
+        string[] verbs = ["new", "add", "doctor", "pack", "version", "help"];
+        Assert.Equal("doctor", Suggest.Closest("doc", verbs));
         Assert.Equal("add", Suggest.Closest("ad", verbs));
         Assert.Null(Suggest.Closest("zzzz", verbs));
         Assert.Null(Suggest.Closest("xy", verbs));

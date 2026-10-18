@@ -79,7 +79,7 @@ internal static class CliTree
     {
         HelpName = "NewName",
         Description = "Fix a project whose .NET name contains spaces (breaks publish): renames the csproj, sets " +
-                      "assembly_name, repoints the solution. add/convert only, before any hosts exist",
+                      "assembly_name, repoints the solution. add only, before any hosts exist",
     };
 
     public static readonly Option<string> Output = new("--output", "-o")
@@ -224,12 +224,6 @@ internal static class CliTree
     /// <summary>A verb with operations that also does something by itself (2dog repl attaches a terminal).</summary>
     public static bool RunsWithoutOperation(Command command) => command == Repl;
 
-    /// <summary>Verb aliases get their own row in the verb table, with their own wording.</summary>
-    public static readonly IReadOnlyDictionary<string, string> AliasDescriptions = new Dictionary<string, string>
-    {
-        ["convert"] = "Alias of add, for projects that have no hosts yet",
-    };
-
     static CliTree()
     {
         // The built-in --help/--version actions print System.CommandLine's own help; ours render through Usage.
@@ -241,7 +235,6 @@ internal static class CliTree
         New.Options.Add(Name);
         New.Options.Add(Output);
 
-        Add.Aliases.Add("convert");
         Add.Arguments.Add(ProjectPathArg);
         Add.Options.Add(Name);
         Add.Options.Add(Rename);

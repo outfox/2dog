@@ -14,7 +14,6 @@ internal static class LayoutChecks
         new("layout.assembly-name", Category.Layout, "project.godot names the assembly and the csproj matches it"),
         new("layout.multiple-root-csproj", Category.Layout, "a single csproj at the root, or assembly_name picks one"),
         new("layout.spaced-name", Category.Layout, "the .NET project name contains no whitespace"),
-        new("layout.legacy-root-webboot", Category.Layout, "TwoDogWebBoot.cs lives in a web host folder, not at the root"),
         new("layout.root-build-targets", Category.Layout, "Directory.Build.targets provides the deep-clean target"),
         new("layout.root-build-props", Category.Layout, "Directory.Build.props holds the shared package versions"),
         new("layout.root-global-json", Category.Layout, "global.json pins a wasm-capable SDK when a browser host exists"),
@@ -78,11 +77,6 @@ internal static class LayoutChecks
         {
             yield return Finding.Pass("layout.spaced-name", c, "name");
         }
-
-        if (p.LegacyRootWebBoot)
-            yield return new Finding("layout.legacy-root-webboot", c, Severity.Warn, "TwoDogWebBoot.cs sits at the project root (older layout)",
-                "it still works, but the Godot editor imports it as a script",
-                "move it into the web host folder and let '2dog add --force' wire the guarded Compile Include (2dog never moves files)", "TwoDogWebBoot.cs");
 
         if (p.Hosts.Count > 0)
         {

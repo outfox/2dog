@@ -94,9 +94,10 @@ plain solution builds.
   `twodog.tests/Tool/DocsDriftTests.cs` checks both.
 - Unmanaged function-pointer signatures used on wasm: declare each in `twodog.engine/WebTrampolines.cs`;
   `WebTrampolineCoverageTests` checks coverage.
-- `templates/twodog/` and code the docs tell users to copy: build with stock .NET and Godot.NET.Sdk; avoid
-  fork-only generated APIs. In-repo builds resolve the fork's SDK through `nuget.config`, so verify with a
-  project scaffolded outside the repo.
+- `templates/twodog/` and code the docs tell users to copy: build with the stock Godot.NET.Sdk plus
+  `2dog.godotsharp`. Only hosts may use fork-generated APIs such as `TwoDogWebBoot`: Godot editor exports
+  compile game code with stock bindings. In-repo builds resolve the fork's SDK through `nuget.config`, so verify
+  with a project scaffolded outside the repo.
 
 ## Verification
 

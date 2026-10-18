@@ -10,10 +10,11 @@ namespace twodog.cli;
 internal static class CsprojPatcher
 {
     private const string TargetFramework = "net10.0";
+    public const string BindingsAdded = "PackageReference: 2dog.godotsharp";
 
     public sealed record Result(string? NewContent, List<string> Added, List<string> Warnings);
 
-    public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders, string? webBootPath = null,
+    public static Result Patch(string csprojPath, IReadOnlyList<string> hostFolders,
         bool upgradeTargetFramework = true, bool upgradeGodotSdk = false)
     {
         var warnings = new List<string>();
@@ -73,13 +74,6 @@ internal static class CsprojPatcher
             added.Add("AllowUnsafeBlocks");
         }
 
-        var defines = properties.Where(e => e.Name.LocalName == "DefineConstants").ToList();
-        if (!defines.Any(d => d.Value.Contains("TWODOG_WEB_BOOT")))
-        {
-            patch.Add(Element(ns, "DefineConstants", "$(DefineConstants);TWODOG_WEB_BOOT"));
-            added.Add("DefineConstants: TWODOG_WEB_BOOT");
-        }
-
         var excludes = properties.Where(e => e.Name.LocalName == "DefaultItemExcludes").ToList();
         var missingFolders = hostFolders
             .Where(f => !excludes.Any(e => e.Value.Contains($"{f}/**")))
@@ -91,43 +85,13 @@ internal static class CsprojPatcher
             added.Add($"DefaultItemExcludes: {string.Join(", ", missingFolders)}");
         }
 
-        // An existing Compile item counts as "already wired" only when it names the requested path or an existing
-        // file; a stale Exists-guarded include from a no-web scaffold must NOT count (the bootstrap would not compile).
-        XElement? bootGroup = null;
-        var csprojDir = Path.GetDirectoryName(Path.GetFullPath(csprojPath))!;
-        var hasBootInclude = root.Descendants(ns + "Compile")
-            .Select(e => (string?)e.Attribute("Include"))
-            .Where(include => include?.EndsWith("TwoDogWebBoot.cs", StringComparison.OrdinalIgnoreCase) == true)
-            .Any(include => string.Equals(include, webBootPath, StringComparison.OrdinalIgnoreCase)
-                            || File.Exists(Path.Combine(csprojDir, include!.Replace('/', Path.DirectorySeparatorChar))));
-        if (webBootPath != null && !hasBootInclude)
-        {
-            var compile = new XElement(ns + "Compile");
-            compile.SetAttributeValue("Include", webBootPath);
-            // %27 = escaped apostrophe, so a quoted host folder can't break
-            // the condition string.
-            compile.SetAttributeValue("Condition",
-                $"Exists('$(MSBuildThisFileDirectory){webBootPath.Replace("'", "%27")}')");
-            bootGroup = new XElement(ns + "ItemGroup",
-                new XText("\n        "), compile, new XText("\n    "));
-            added.Add($"Compile Include: {webBootPath}");
-        }
+        if (EnsureBindings(doc)) added.Add(BindingsAdded);
 
-        if (EnsureBindings(doc)) added.Add("PackageReference: 2dog.godotsharp");
-
-        if (!patch.HasElements && bootGroup == null && added.Count == 0) return new Result(null, added, warnings);
+        if (!patch.HasElements && added.Count == 0) return new Result(null, added, warnings);
 
         if (patch.HasElements)
             MsBuildXml.AppendPropertyGroup(doc, "added by the 2dog tool: properties 2dog hosts need that were not already set",
                 patch.Elements().ToList());
-
-        if (bootGroup != null)
-            root.Add(
-                new XText("    "),
-                new XComment(" added by the 2dog tool: compiles the web bootstrap (in the web host folder) into this game assembly "),
-                new XText("\n    "),
-                bootGroup,
-                new XText("\n"));
 
         return new Result(MsBuildXml.Serialize(doc), added, warnings);
     }
@@ -150,8 +114,10 @@ internal static class CsprojPatcher
         foreach (var id in new[] { "2dog.godotsharp", "2dog.godotsharp.editor" })
         {
             var packageId = id + (doublePrecision ? ".double" : "");
-            if (root.Descendants(ns + "PackageReference").Any(e =>
-                string.Equals((string?)e.Attribute("Include"), packageId, StringComparison.OrdinalIgnoreCase))) continue;
+            // A property-selected precision suffix (2dog.godotsharp$(Suffix)) counts as present.
+            if (root.Descendants(ns + "PackageReference").Select(e => (string?)e.Attribute("Include") ?? "").Any(include =>
+                    string.Equals(include, packageId, StringComparison.OrdinalIgnoreCase)
+                    || include.StartsWith(id + "$(", StringComparison.OrdinalIgnoreCase))) continue;
             var reference = new XElement(ns + "PackageReference",
                 new XAttribute("Include", packageId), new XAttribute("Version", "$(TwoDogVersion)"));
             if (id.EndsWith(".editor", StringComparison.Ordinal))

@@ -60,7 +60,7 @@ MyGame/                      <- your existing Godot project (unchanged)
   Directory.Build.props      <- the package versions every host references
   global.json                <- SDK pin and MTP test runner (with web, MAUI or test hosts; existing ones are kept)
   MyGame.2dog/   (.gdignore) <- generic .NET host (your Main entry point)
-  MyGame.web/    (.gdignore) <- browser (WebAssembly) host (holds TwoDogWebBoot.cs)
+  MyGame.web/    (.gdignore) <- browser (WebAssembly) host
   MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
   MyGame.xunit/  (.gdignore) <- xUnit test project (opt-in: --xunit)
   MyGame.repl/   (.gdignore) <- interactive C# prompt in the running game (opt-in: --repl)
@@ -85,7 +85,6 @@ Commands:
 | `2dog` | Print version info and usage |
 | `2dog new [Name] [dir]` | Create a new Godot project with 2dog hosts |
 | `2dog add [path]` | Add hosts to an existing Godot project |
-| `2dog convert [path]` | Alias of `add`, for projects that have no hosts yet |
 | `2dog doctor [path]` | Check the project and this machine; `--fix` applies the safe fixes; `--build` / `--log` explain build failures |
 | `2dog update [path]` | Update the project's 2dog packages to this tool's versions (never downgrades) |
 | `2dog pack list <file.pck>` | List a `.pck`'s contents by size (no engine involved) |
@@ -103,7 +102,7 @@ Options:
 | `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, android, and maui are opt-in and never in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
-| `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`/`convert`, before any hosts exist) |
+| `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`, before any hosts exist) |
 | `-o, --output <dir>` | Directory for a new project |
 | `-y, --yes`, `--non-interactive` | Do not prompt; take the flags and defaults |
 | `--dry-run` | Print planned actions without changing anything |

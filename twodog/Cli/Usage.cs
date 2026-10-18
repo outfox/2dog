@@ -210,8 +210,7 @@ internal static class Usage
 
             yield return new Row(CliTree.Signature(command), command.Description ?? "");
             foreach (var alias in command.Aliases)
-                yield return new Row(CliTree.Signature(command, alias),
-                    CliTree.AliasDescriptions.GetValueOrDefault(alias, $"Alias of {command.Name}"));
+                yield return new Row(CliTree.Signature(command, alias), $"Alias of {command.Name}");
         }
     }
 

@@ -47,8 +47,8 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     [Parameter, EditorRequired] public string Project { get; set; } = "";
 
     /// <summary>
-    /// The game assembly's plugins-initializer pointer, <c>TwoDogWebBoot.PluginsInitializer()</c> from the 2dog
-    /// template (there is no GodotPlugins.dll on web).
+    /// The game assembly's plugins-initializer pointer, <c>TwoDogWebBoot.PluginsInitializer()</c>, which
+    /// 2dog.godotsharp generates (there is no GodotPlugins.dll on web).
     /// </summary>
     [Parameter, EditorRequired] public IntPtr PluginsInitializer { get; set; }
 

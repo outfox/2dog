@@ -382,7 +382,7 @@
 
         <!-- Actionable message instead of the engine's exit-1 (whose stderr an IDE build may swallow). -->
         <Error Condition="'$(_TwoDogHasDesktopPreset)' != 'true'"
-               Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), re-run `2dog convert` (it scaffolds the desktop presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
+               Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), run `2dog doctor --fix` (it appends the template presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
 
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"

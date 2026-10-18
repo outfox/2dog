@@ -54,9 +54,6 @@ internal static class TemplateAssets
     public static string GodotCsproj(string baseName, bool doublePrecision = false) =>
         Substitute(ReadRaw("tpl/Company.Product1.csproj"), baseName, doublePrecision);
 
-    /// <summary>The web bootstrap source, copied verbatim (template copyOnly).</summary>
-    public static string WebBootSource() => ReadRaw("tpl/Company.Product1.web/TwoDogWebBoot.cs");
-
     /// <summary>The template's export_presets.cfg (Web preset), verbatim - no tokens.</summary>
     public static string ExportPresets() => ReadRaw("tpl/export_presets.cfg");
 
@@ -92,11 +89,8 @@ internal static class TemplateAssets
     {
         var sourceFolder = $"{SourceName}.{Hosts.Suffix(kind)}";
         var prefix = $"tpl/{sourceFolder}/";
-        // TwoDogWebBoot.cs is excluded: PlanWebBoot is its single writer (one copy per project - two would be
-        // CS0101 in the game assembly with several web hosts).
         foreach (var name in Names.Select(Normalize)
                      .Where(n => n.StartsWith(prefix, StringComparison.Ordinal))
-                     .Where(n => !n.EndsWith("/TwoDogWebBoot.cs", StringComparison.Ordinal))
                      .Order())
         {
             // Substitute in file names too (e.g. Company.Product1.2dog.csproj

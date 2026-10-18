@@ -70,8 +70,6 @@ internal static class BuildSignatures
             "no installed SDK satisfies global.json", "install the pinned SDK band (2dog never edits global.json)"),
         new("build.godot-sdk-not-found", Rx(@"MSB4236: The SDK 'Godot\.NET\.Sdk/(?<v>\S+)'"),
             "the Godot.NET.Sdk version could not be downloaded", "check the feed or the version; 2dog update sets the one this tool ships"),
-        new("build.webboot-duplicate", Rx(@"CS0101.*?TwoDogWebBoot|CS0111.*?TwoDogWebBoot"),
-            "TwoDogWebBoot.cs compiles twice into the game assembly", "keep one copy (2dog doctor reports which)"),
         new("build.il1035", Rx(@"\bIL1035\b"),
             "the trimmer cannot see a root assembly", "Blazor client: 2dog.engine needs PrivateAssets=\"all\" Publish=\"true\"; check TrimmerRootAssembly"),
         new("build.export-failed", Rx(@"MSB3073: The command "".*?--export-pack.*?"" exited"),

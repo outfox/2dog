@@ -54,7 +54,6 @@ internal sealed class ProjectModel
     public bool HasRootBuildTargets { get; init; }
     public bool HasRootBuildProps { get; init; }
     public Dictionary<string, string> PropsValues { get; init; } = new(StringComparer.OrdinalIgnoreCase);
-    public bool LegacyRootWebBoot { get; init; }
 
     /// <summary>Problems hit while loading (unparseable files); reported once, checks skip what they cannot read.</summary>
     public List<string> LoadProblems { get; init; } = [];
@@ -173,7 +172,6 @@ internal sealed class ProjectModel
             HasRootBuildTargets = File.Exists(Path.Combine(dir, "Directory.Build.targets")),
             HasRootBuildProps = File.Exists(propsPath),
             PropsValues = propsValues,
-            LegacyRootWebBoot = File.Exists(Path.Combine(dir, "TwoDogWebBoot.cs")),
             LoadProblems = problems,
         };
     }

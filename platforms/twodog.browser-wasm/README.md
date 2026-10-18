@@ -20,7 +20,7 @@ bundle.
 - A host project: `net10.0`, `OutputType=Exe`, `RuntimeIdentifier=browser-wasm`,
   `PackageReference` to `2dog` and `2dog.browser-wasm`, `<GodotProjectDir>` set
 - The Godot project needs a `Web` export preset, a solution file, and
-  `TWODOG_WEB_BOOT` + `AllowUnsafeBlocks` in its csproj
+  a `2dog.godotsharp` reference and `AllowUnsafeBlocks` in its csproj
 - A `wwwroot/index.html` boot page (create a project with
   `dnx 2dog new MyGame --web` for a working setup out of the box)
 - Or a Blazor WebAssembly project: the package detects the Blazor SDK and

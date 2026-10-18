@@ -18,7 +18,6 @@ internal static class HostChecks
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
         new("host.web-props-shim", Category.Hosts, "browser hosts chain to the root Directory.Build.props"),
         new("host.web-global-json", Category.Hosts, "browser hosts carry their own global.json"),
-        new("host.webboot-drift", Category.Hosts, "the tool-owned TwoDogWebBoot.cs matches this tool's copy"),
         new("host.trimmer-root", Category.Hosts, "browser hosts root the game assembly for the trimmer"),
         new("host.blazor-client", Category.Hosts, "the Blazor client project exists and publishes 2dog.engine"),
         new("host.blazor-launch-settings", Category.Hosts, "Blazor hosts carry a Development launchSettings.json"),
@@ -141,13 +140,6 @@ internal static class HostChecks
                         "publishing from inside the folder would not pin the SDK", null, $"{host.Folder}/global.json",
                         new Fix($"create:{host.Folder}/global.json", FixClass.Safe, $"create {host.Folder}/global.json",
                             () => WriteTemplateFile(p, host, "global.json"))));
-
-                var boot = Path.Combine(dir, "TwoDogWebBoot.cs");
-                if (File.Exists(boot) && File.ReadAllText(boot) != TemplateAssets.WebBootSource())
-                    yield return Issue(new Finding("host.webboot-drift", c, Severity.Warn, $"{host.Folder}/TwoDogWebBoot.cs differs from this tool's bootstrap",
-                        "the file is tool-owned; an older copy may miss what newer packages expect", "2dog update", $"{host.Folder}/TwoDogWebBoot.cs",
-                        new Fix($"refresh:{host.Folder}/TwoDogWebBoot.cs", FixClass.Announced, $"refresh {host.Folder}/TwoDogWebBoot.cs (overwrites the tool-owned file)",
-                            () => File.WriteAllText(boot, TemplateAssets.WebBootSource()))));
 
                 if (host.Kind != HostKind.Blazor && p.BaseName is { } game)
                 {
