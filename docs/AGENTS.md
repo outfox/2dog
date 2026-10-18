@@ -17,7 +17,10 @@
 
 - Give every page frontmatter `title` and a quoted one-sentence `description`. The description becomes the
   meta description and the page's `llms.txt` entry. The build also uses these fields for Open Graph and
-  Twitter previews, with the first article illustration or the shared `public/og-image.png` fallback.
+  Twitter previews. `.vitepress/social-images.mjs` composites 1200x630 PNGs into the build's `social/`
+  directory: dark gradient, top-right logo, and the first article illustration at its original pixel size,
+  centered at the bottom. Prefer a matching non-`-big` PNG when available. Pages without artwork use
+  `img/2dog-walkies.png`. Generated images are not sources.
 - List a new page in the sidebar in `.vitepress/config.mts` and in the matching section of `SECTIONS` in
   `make-llms.mjs`. Pages that must stay out of the index go in `EXCLUDE`.
 - When a page moves or merges, keep a redirect stub at the old path like `content/web.md`: `search: false`,
