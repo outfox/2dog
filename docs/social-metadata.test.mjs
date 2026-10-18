@@ -51,7 +51,7 @@ test('URLs respect clean URLs and a deployment subpath', async () => {
   assert.equal(value(head, 'og:image').content, 'https://2dog.dev/docs/social/composed.ABC123.png');
 });
 
-test('uses a composed article illustration with decoded alt text and image dimensions', async () => {
+test('uses a composed article illustration with readable card text and image dimensions', async () => {
   const head = await metadata({
     content: '<nav><img src="/logo.svg" alt="Logo"></nav>' +
       '<main class="main"><img alt="Lucky &amp; Dogbot &quot;walkies&quot;" ' +
@@ -61,7 +61,7 @@ test('uses a composed article illustration with decoded alt text and image dimen
     assert.equal(value(head, key).content, 'https://2dog.dev/social/composed.ABC123.png');
   }
   for (const key of ['og:image:alt', 'twitter:image:alt']) {
-    assert.equal(value(head, key).content, '2dog logo above Lucky & Dogbot "walkies"');
+    assert.equal(value(head, key).content, 'Web (HTML5) 🦴 2dog. Run Godot C# in the browser. Read the dogs! 2dog logo with Lucky and Dogbot.');
   }
   assert.equal(value(head, 'og:image:type').content, 'image/png');
   assert.equal(value(head, 'og:image:width').content, '1200');
@@ -87,11 +87,14 @@ test('resolves illustrations to emitted local assets under the deployment base',
     return 'social/composed.ABC123.png';
   });
   await transform({
-    pageData: { relativePath: 'hosts/index.md' },
+    pageData: { relativePath: 'hosts/index.md', title: 'Hosts' },
     siteData: { base: '/docs/', lang: 'en-US' },
     siteConfig: { outDir: '/docs/dist' },
-    title: 'Hosts', description: 'Host Godot.',
+    title: 'Hosts 🦴 2dog', description: 'Host Godot.',
     content: '<main class="main"><img src="/docs/assets/2dog-squirrel.ABC123.png"></main>'
   });
-  assert.deepEqual(calls, [[join('/docs/dist', 'assets/2dog-squirrel.ABC123.png'), '/docs/dist']]);
+  assert.deepEqual(calls, [[
+    join('/docs/dist', 'assets/2dog-squirrel.ABC123.png'), '/docs/dist',
+    { title: 'Hosts', summary: 'Host Godot.' }
+  ]]);
 });

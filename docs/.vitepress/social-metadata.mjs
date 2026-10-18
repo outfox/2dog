@@ -12,7 +12,7 @@ function attribute(tag, name) {
 }
 
 /**
- * @param {(illustration: string | undefined, outDir: string) => Promise<string>} generateImage
+ * @param {(illustration: string | undefined, outDir: string, copy: { title: string, summary: string }) => Promise<string>} generateImage
  * @returns {(context: import('vitepress').TransformContext) => Promise<import('vitepress').HeadConfig[]>}
  */
 export function createSocialMetadata(generateImage) {
@@ -32,12 +32,10 @@ export function createSocialMetadata(generateImage) {
     const illustrationPath = hasIllustration
       ? join(siteConfig.outDir, decodeURIComponent(sourceUrl.pathname.slice(siteData.base.length)))
       : undefined;
-    const imagePath = await generateImage(illustrationPath, siteConfig.outDir);
+    const caption = pageData.title || title;
+    const imagePath = await generateImage(illustrationPath, siteConfig.outDir, { title: caption, summary: description });
     const image = new URL(`${siteData.base}${imagePath}`, siteUrl).href;
-    const illustrationAlt = hasIllustration && attribute(illustration, 'alt');
-    const imageAlt = illustrationAlt
-      ? `2dog logo above ${illustrationAlt}`
-      : '2dog logo above Lucky and Dogbot on a dark steel blue background.';
+    const imageAlt = `${caption}. ${description} Read the dogs! 2dog logo with Lucky and Dogbot.`;
 
     return [
       ['link', { rel: 'canonical', href: url }],
