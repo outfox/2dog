@@ -70,8 +70,8 @@ plain solution builds.
 ## Packages and versions
 
 - Tests and showcase hosts consume engine/UI/binding packages through `PackageReference`, not source projects.
-  Same-version repacks may leave stale extracted files: remove only `.packages/<id>/<version>` for affected
-  packages, then `dotnet restore --force`.
+  Packing removes that version's extraction from `.packages`, so the next restore unpacks a same-version repack;
+  verify with `ls -la .packages/<id>/<version>` when results contradict fresh bits.
 - `TwoDogVariant` defaults to `debug` for Debug, `editor` for Editor, `release` otherwise. Desktop packages
   carry all three; web uses `TwoDogWebVariant`. Web/Android support debug/release only. Stage desktop
   natives through `platforms/common/2dog.native-resolver.targets`; leave GodotSharp's resolver slot alone.

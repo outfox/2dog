@@ -47,6 +47,13 @@
         <MakeDir Directories="$(MSBuildThisFileDirectory)godot/bin/GodotSharp/Tools/nupkgs" />
     </Target>
 
+    <!-- Restore extracts each package version once and never refreshes it. Local packs reuse unpublished versions
+         with new content, so drop this version's extraction; the next restore unpacks the new package. -->
+    <Target Name="TwoDogInvalidatePackedVersion" AfterTargets="Pack" Condition="'$(NuGetPackageRoot)' != ''">
+        <RemoveDir Directories="$(NuGetPackageRoot)$(PackageId.ToLowerInvariant())/$(PackageVersion.ToLowerInvariant())"
+                   ContinueOnError="WarnAndContinue" />
+    </Target>
+
     <!-- Keep the repository clean across configuration changes. -->
     <Target Name="TwoDogDeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
