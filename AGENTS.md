@@ -40,6 +40,9 @@ Code reads them instead of `AGENTS.md`.
   teardown is asynchronous.
 - Normal `Engine` use allows one active instance per load context.
 - Android uses Godot's Activity-owned loop; do not call `Engine.Start()` there.
+- Pack exports are resource-only. `libgodot_export_pack` and 2dog's external-editor export commands mark them
+  with `++ --2dog-host-pack`, which skips GodotTools' publish and copies desktop GDExtensions beside the pck.
+  Editors inside a host (`CoreGlobals::libgodot_host_instance`) offer no playable exports.
 
 ## Build
 

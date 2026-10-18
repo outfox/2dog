@@ -316,6 +316,24 @@ public class EngineRestartTests
     }
 
     [Fact]
+    public void ClassApiTypesAreStableAcrossLifetimes()
+    {
+        var projectDir = Engine.ResolveProjectDir();
+        AssemblyPreloader.PreloadGameAssemblies(projectDir);
+
+        // A finished lifetime leaves ClassDB's API selector at None; the next one must not register classes under it.
+        for (var lifetime = 0; lifetime < 2; lifetime++)
+        {
+            using var engine = new Engine($"api-{lifetime}", projectDir, "--headless");
+            engine.Start();
+            Assert.Equal(Godot.ClassDB.ApiType.Core, Godot.ClassDB.ClassGetApiType("Object"));
+            Assert.Equal(Godot.ClassDB.ApiType.Core, Godot.ClassDB.ClassGetApiType("Node"));
+            if (Godot.ClassDB.ClassExists("EditorInterface"))
+                Assert.Equal(Godot.ClassDB.ApiType.Editor, Godot.ClassDB.ClassGetApiType("EditorInterface"));
+        }
+    }
+
+    [Fact]
     public void ManyLifetimesNeverExhaustProcessWideRegistrations()
     {
         var projectDir = Engine.ResolveProjectDir();
