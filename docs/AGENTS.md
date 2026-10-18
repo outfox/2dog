@@ -16,7 +16,8 @@
 ## Pages
 
 - Give every page frontmatter `title` and a quoted one-sentence `description`. The description becomes the
-  meta description and the page's `llms.txt` entry.
+  meta description and the page's `llms.txt` entry. The build also uses these fields for Open Graph and
+  Twitter previews, with the first article illustration or the shared `public/og-image.png` fallback.
 - List a new page in the sidebar in `.vitepress/config.mts` and in the matching section of `SECTIONS` in
   `make-llms.mjs`. Pages that must stay out of the index go in `EXCLUDE`.
 - When a page moves or merges, keep a redirect stub at the old path like `content/web.md`: `search: false`,
@@ -46,7 +47,7 @@
 
 ```text
 npm ci
-npm test         # Page index validation tests
+npm test         # Page index and social metadata tests
 npm run check    # Every page has metadata and one index entry
 npm run build    # Also fails on dead internal links and unknown icons
 dotnet test ../twodog.tests --filter "FullyQualifiedName~DocsDriftTests"   # After CLI page changes

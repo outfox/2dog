@@ -206,6 +206,21 @@
   letter-spacing: 0;
 }
 
+/* Keep the shared footer visible and centered beneath the docs column. */
+.Layout .VPFooter.has-sidebar {
+  display: block;
+}
+
+@media (min-width: 60rem) {
+  .Layout .VPFooter.has-sidebar {
+    margin-right: max(0px, calc((100% - var(--vp-layout-max-width)) / 2));
+    margin-left: max(
+      var(--vp-sidebar-width),
+      calc((100% - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width))
+    );
+  }
+}
+
 /* ---------- Sidebar as scene tree ---------- */
 
 .VPSidebar {
@@ -278,8 +293,9 @@
   border-radius: 3px;
 }
 
-/* Keep the reading width consistent without a right-hand outline column. */
-.VPDoc .content-container {
+/* Keep the article and its footer at the same reading width. */
+.VPDoc .content-container,
+.Layout .VPFooter.has-sidebar .container {
   max-width: 688px;
 }
 

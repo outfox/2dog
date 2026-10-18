@@ -8,6 +8,7 @@ import {
 } from './plugins/version-markers.mts'
 import { columnsPlugin } from './plugins/columns.mts'
 import { godotIconsPlugin, godotIconHtml } from './plugins/godot-icons.mts'
+import { siteUrl, socialMetadata } from './social-metadata.mjs'
 
 // Sidebar node glyphs; the section's --tree-color tints them (theme/custom.css).
 const gd = (name: string) => `${godotIconHtml(name)} `
@@ -40,9 +41,11 @@ export default defineConfig({
   // Emits sitemap.xml into the build output for search engines (Google Search Console).
   // lastUpdated derives per-page <lastmod> from git history; needs a full clone at build time.
   sitemap: {
-    hostname: 'https://2dog.dev'
+    hostname: siteUrl
   },
   lastUpdated: true,
+
+  transformHead: socialMetadata,
 
   title: "2dog",
   titleTemplate: ":title 🦴 2dog",
@@ -65,16 +68,6 @@ export default defineConfig({
     ['link', { rel: "me", href: "https://tiggi.es/@thygrrr" }],
     ['meta', { name: "author", content: "outfox" }],
     ['meta', { name: "theme-color", content: "#478cbf" }],
-    ['meta', { name: "twitter:card", content: "summary_large_image" }],
-    ['meta', { name: "twitter:title", content: "2dog is Godot backwards 🦴 " }],
-    ['meta', { name: "twitter:image", content: "https://2dog.dev/og-image.png" }],
-    ['meta', { name: "twitter:image:alt", content: "2dog logo - a happy white dog" }],
-    ['meta', { name: "twitter:description", content: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow." }],
-    ['meta', { property: "og:type", content: "website" }],
-    ['meta', { property: "og:url", content: "https://2dog.dev" }],
-    ['meta', { property: "og:title", content: "2dog is Godot backwards 🦴" }],
-    ['meta', { property: "og:description", content: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow." }],
-    ['meta', { property: "og:image", content: "https://2dog.dev/og-image.png" }],
   ],
 
 
