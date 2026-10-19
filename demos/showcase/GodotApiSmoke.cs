@@ -10,11 +10,7 @@ namespace showcase;
 /// </summary>
 public static class GodotApiSmoke
 {
-    /// <param name="gdExtension">
-    /// Whether the platform loads the TwoDogProbe GDExtension; false skips its probe and the signal table that
-    /// includes its ticker.
-    /// </param>
-    public static void RunAll(SceneTree tree, bool gdExtension = true)
+    public static void RunAll(SceneTree tree)
     {
         MathPrecision();
         CoreTypesAndNativeHelpers(tree);
@@ -25,7 +21,6 @@ public static class GodotApiSmoke
         LowLevelServers();
         SceneAndGeneratedScript();
         GDScriptOnlyEngineFeatures(tree);
-        if (!gdExtension) return;
         GDExtensionProbe(tree);
         SignalTable(tree);
     }
@@ -314,6 +309,7 @@ public static class GodotApiSmoke
 
         var platform = OperatingSystem.IsBrowser() ? "web"
             : OperatingSystem.IsWindows() ? "windows"
+            : OperatingSystem.IsIOS() ? "ios"
             : OperatingSystem.IsMacOS() ? "macos"
             : OperatingSystem.IsAndroid() ? "android"
             : "linux";

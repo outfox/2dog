@@ -128,12 +128,12 @@ class IosPackages(unittest.TestCase):
 class IosHostTargets(unittest.TestCase):
     """twodog.ios/build/2dog.ios.targets from source: the pack bundle resource, roots and validation."""
 
-    def project(self, root, properties="", pack=None):
+    def project(self, root, properties="", pack=None, rid="iossimulator-arm64"):
         targets = REPO / "twodog.ios/build/2dog.ios.targets"
         pack_property = f"<TwoDogIosPack>{xml(pack)}</TwoDogIosPack>" if pack else ""
         project = root / "Host.proj"
         project.write_text(f'''<Project>
-<PropertyGroup><TargetPlatformIdentifier>ios</TargetPlatformIdentifier><RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+<PropertyGroup><TargetPlatformIdentifier>ios</TargetPlatformIdentifier><RuntimeIdentifier>{rid}</RuntimeIdentifier>
 <Configuration>Debug</Configuration><TwoDogIosGameAssembly>MyGame</TwoDogIosGameAssembly>{pack_property}{properties}</PropertyGroup>
 <Import Project="{xml(targets)}"/>
 <Target Name="ResolveReferences"/>
@@ -143,6 +143,7 @@ class IosHostTargets(unittest.TestCase):
 <WriteLinesToFile File="{xml(root / 'bundle.txt')}" Lines="@(BundleResource->'%(Link)|%(FullPath)')" Overwrite="true"/>
 <WriteLinesToFile File="{xml(root / 'roots.txt')}" Lines="@(TrimmerRootAssembly)" Overwrite="true"/>
 <WriteLinesToFile File="{xml(root / 'symbols.txt')}" Lines="@(ReferenceNativeSymbol->'%(Identity)|%(SymbolType)')" Overwrite="true"/>
+<WriteLinesToFile File="{xml(root / 'natives.txt')}" Lines="@(NativeReference->'%(Identity)|%(Kind)|%(ForceLoad)')" Overwrite="true"/>
 <WriteLinesToFile File="{xml(root / 'props.txt')}" Lines="$(TwoDogVariant)|$(TwoDogExportPack)|$(UseInterpreter)" Overwrite="true"/>
 </Target></Project>''')
         return project
@@ -161,6 +162,94 @@ class IosHostTargets(unittest.TestCase):
             # The app links with -dead_strip: 2dog.engine's libgodot import survives only as a named symbol.
             self.assertEqual(["set_load_from_executable_fn|Function"], (root / "symbols.txt").read_text().split())
             self.assertEqual("debug|false|true", (root / "props.txt").read_text().strip())
+
+    @staticmethod
+    def gdextension_project(root, xcframework=True, dependency=True):
+        """A Godot project with one .gdextension: an xcframework (device and Simulator slices) or a static library."""
+        game = root / "game"
+        (game / "bin").mkdir(parents=True)
+        (game / "project.godot").write_text("")
+        if xcframework:
+            framework = game / "bin/probe.xcframework"
+            for identifier, variant in (("ios-arm64", ""), ("ios-arm64_x86_64-simulator", "simulator")):
+                (framework / identifier).mkdir(parents=True)
+                (framework / identifier / "libprobe.a").write_bytes(b"!<arch>\n")
+            slices = "".join(f'''<dict>
+<key>LibraryIdentifier</key><string>{identifier}</string><key>LibraryPath</key><string>libprobe.a</string>
+<key>SupportedArchitectures</key><array><string>arm64</string>{extra}</array><key>SupportedPlatform</key><string>ios</string>{variant}
+</dict>''' for identifier, extra, variant in (
+                ("ios-arm64", "", ""),
+                ("ios-arm64_x86_64-simulator", "<string>x86_64</string>", "<key>SupportedPlatformVariant</key><string>simulator</string>")))
+            (framework / "Info.plist").write_text(f'''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict><key>AvailableLibraries</key><array>{slices}</array>
+<key>CFBundlePackageType</key><string>XFWK</string><key>XCFrameworkFormatVersion</key><string>1.0</string></dict></plist>''')
+            library = "res://bin/probe.xcframework"
+        else:
+            (game / "bin/libprobe.a").write_bytes(b"!<arch>\n")
+            library = "res://bin/libprobe.a"
+        (game / "bin/libdep.a").write_bytes(b"!<arch>\n")
+        dependencies = '\n[dependencies]\n\nios.arm64 = {"res://bin/libdep.a": ""}\n' if dependency else ""
+        (game / "probe.gdextension").write_text(f'''[configuration]
+
+entry_symbol = "probe_init"
+compatibility_minimum = "4.7"
+
+[libraries]
+
+macos = "res://bin/libprobe.dylib"
+ios.arm64 = "{library}"
+{dependencies}''')
+        return game
+
+    def test_gdextension_xcframework_slice_and_dependency_are_linked_with_the_entry_symbol(self):
+        for rid, identifier in (("iossimulator-arm64", "ios-arm64_x86_64-simulator"), ("ios-arm64", "ios-arm64")):
+            with self.subTest(rid=rid), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                game = self.gdextension_project(root)
+                pack = root / "exported.pck"
+                pack.write_bytes(b"pck")
+                properties = f"<TwoDogGodotProjectFullPath>{xml(game)}</TwoDogGodotProjectFullPath>"
+                result = msbuild(self.project(root, properties, pack=pack, rid=rid), "Collect", REPO)
+                self.assertEqual(0, result.returncode, result.stdout)
+                natives = (root / "natives.txt").read_text().splitlines()
+                self.assertEqual([f"{game / 'bin/probe.xcframework' / identifier / 'libprobe.a'}|Static|True",
+                                  f"{game / 'bin/libdep.a'}|Static|True"], natives)
+                symbols = (root / "symbols.txt").read_text().split()
+                self.assertEqual(["set_load_from_executable_fn|Function", "probe_init|Function"], symbols)
+
+    def test_gdextension_static_library_links_as_is_and_missing_files_fail_with_codes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            game = self.gdextension_project(root, xcframework=False, dependency=False)
+            pack = root / "exported.pck"
+            pack.write_bytes(b"pck")
+            properties = f"<TwoDogGodotProjectFullPath>{xml(game)}</TwoDogGodotProjectFullPath>"
+            result = msbuild(self.project(root, properties, pack=pack), "Collect", REPO)
+            self.assertEqual(0, result.returncode, result.stdout)
+            self.assertEqual([f"{game / 'bin/libprobe.a'}|Static|True"], (root / "natives.txt").read_text().splitlines())
+            # The listed library is gone: TDGI009; opting out skips the extension entirely.
+            (game / "bin/libprobe.a").unlink()
+            result = msbuild(self.project(root, properties, pack=pack), "Collect", REPO)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn("TDGI009", result.stdout)
+            result = msbuild(self.project(root, properties + "<TwoDogIosGdExtensions>false</TwoDogIosGdExtensions>", pack=pack), "Collect", REPO)
+            self.assertEqual(0, result.returncode, result.stdout)
+            self.assertEqual("", (root / "natives.txt").read_text().strip())
+        with tempfile.TemporaryDirectory() as directory:
+            # An xcframework without a Simulator slice: TDGI010 for the Simulator, fine for devices.
+            root = Path(directory)
+            game = self.gdextension_project(root, dependency=False)
+            plist = game / "bin/probe.xcframework/Info.plist"
+            plist.write_text(plist.read_text().replace("<string>simulator</string>", "<string>maccatalyst</string>"))
+            pack = root / "exported.pck"
+            pack.write_bytes(b"pck")
+            properties = f"<TwoDogGodotProjectFullPath>{xml(game)}</TwoDogGodotProjectFullPath>"
+            result = msbuild(self.project(root, properties, pack=pack), "Collect", REPO)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn("TDGI010", result.stdout)
+            result = msbuild(self.project(root, properties, pack=pack, rid="ios-arm64"), "Collect", REPO)
+            self.assertEqual(0, result.returncode, result.stdout)
 
     def test_missing_pack_unsupported_rid_and_native_aot_fail_with_codes(self):
         with tempfile.TemporaryDirectory() as directory:

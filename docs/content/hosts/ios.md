@@ -88,10 +88,17 @@ engine and returns the view controller to present or embed. `Started` and
 Devices use Godot's Metal driver; the Simulator has no Metal driver in Godot
 and runs the Compatibility renderer on GLES3.
 
+## GDExtensions
+
+iOS links extensions into the app. List a static library, or an `.xcframework`
+of static libraries with device and Simulator slices, under the `ios.arm64` key
+of the `.gdextension` file; `[dependencies]` entries link the same way. The
+build force-loads the slice for the `RuntimeIdentifier` and keeps the entry
+symbol, which Godot resolves from the app itself. Every listed file must exist,
+because the pack export copies it. Opt out with `TwoDogIosGdExtensions=false`.
+
 ## Limitations
 
-- GDExtensions are not packaged yet: iOS loads extensions as static libraries
-  linked into the app.
 - Native AOT (`PublishAot`) is not supported; builds use Mono.
 - Device validation, input and background handling are not validated yet.
 

@@ -47,8 +47,7 @@ public sealed class MainPage : ContentPage
             SetStatus("Running", Running, running: true);
             _game.Dispatch(tree =>
             {
-                // iOS GDExtensions (static libraries registered at link time) are later work, as in showcase.ios.
-                GodotApiSmoke.RunAll(tree, gdExtension: !OperatingSystem.IsIOS());
+                GodotApiSmoke.RunAll(tree);
                 // The blue and red cubes spin themselves in Godot; the host drives the white ones.
                 var cubes = tree.CurrentScene.GetNode<global::Godot.Node3D>("Flair/WhiteCubes")
                     .GetChildren().OfType<global::Godot.Node3D>().ToArray();

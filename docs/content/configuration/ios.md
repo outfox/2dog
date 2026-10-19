@@ -19,6 +19,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogIosGameAssembly` | Set by the generated host | Game assembly kept whole by the trimmer |
 | `TwoDogIosExportPreset` | `iOS` | Preset in `export_presets.cfg` |
 | `TwoDogIosPack` | Exported by the build | Use an existing game pack instead of exporting one |
+| `TwoDogIosGdExtensions` | `true` | Link the static libraries or xcframework slices the project's `.gdextension` files list for iOS |
 | `UseInterpreter` | `true` in Debug | Run the Mono interpreter so no code path needs a JIT; Release builds AOT-compile |
 | `RuntimeIdentifier` | `ios-arm64` in the generated host | `iossimulator-arm64` for the Simulator on Apple silicon |
 | `CodesignKey`, `CodesignProvision` | Unset | Signing identity and provisioning profile for device builds |

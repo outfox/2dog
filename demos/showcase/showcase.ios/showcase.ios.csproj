@@ -44,4 +44,6 @@
     <ItemGroup>
         <ProjectReference Include="../showcase.csproj"/>
     </ItemGroup>
+    <!-- The GDExtension probe's iOS xcframework, which 2dog.ios links into the app -->
+    <Import Project="../gdextension/TwoDogProbe.targets"/>
 </Project>

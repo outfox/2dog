@@ -66,5 +66,5 @@
         <PackageReference Include="2dog.iossimulator-arm64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]"
                           Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'"/>
     </ItemGroup>
-    <Import Project="../gdextension/TwoDogProbe.targets" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"/>
+    <Import Project="../gdextension/TwoDogProbe.targets" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' Or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'"/>
 </Project>

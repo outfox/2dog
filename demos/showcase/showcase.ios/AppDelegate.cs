@@ -32,17 +32,8 @@ public class AppDelegate : UIApplicationDelegate
             GD.Print("Hello from GodotSharp (iOS).");
             GD.Print("Scene Root: ", tree.CurrentScene.Name);
 
-            // Everything but the GDExtension probe and the signal table that includes its ticker: iOS GDExtensions
-            // (static libraries registered at link time) are later work.
-            GodotApiSmoke.MathPrecision();
-            GodotApiSmoke.CoreTypesAndNativeHelpers(tree);
-            GodotApiSmoke.ManagedCallables();
-            GodotApiSmoke.ErrorReportingAndTypedCollections();
-            GodotApiSmoke.ImagesAndResources();
-            GodotApiSmoke.EngineSingletons();
-            GodotApiSmoke.LowLevelServers();
-            GodotApiSmoke.SceneAndGeneratedScript();
-            GodotApiSmoke.GDScriptOnlyEngineFeatures(tree);
+            // Including the GDExtension probe: its xcframework slice is linked into the app (TwoDogProbe.targets).
+            GodotApiSmoke.RunAll(tree);
 
             // The blue cubes spin themselves via SpinningCube._Process (Godot side), the red ones via GDScript;
             // the white ones are plain MeshInstance3Ds this host drives once per frame.
