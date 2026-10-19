@@ -53,6 +53,10 @@ Building imports the game, exports its pack with the `iOS` preset, bundles it as
 `game.pck` and force-loads the engine archive into the app. Debug builds run the
 Mono interpreter, Release builds are AOT-compiled.
 
+A Simulator booted outside a GUI session (over SSH, on CI) has no audio service
+and CoreAudio aborts the app when the engine starts. Pass `--audio-driver Dummy`
+as an engine argument to `GodotHost.Start` there; devices need nothing.
+
 See [iOS Configuration](/configuration/ios) for build settings.
 
 ## Host Code
