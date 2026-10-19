@@ -19,6 +19,11 @@
              callbacks, so these assemblies stay whole. -->
         <TrimmerRootAssembly Include="GodotSharp;twodog;twodog.ios"/>
         <TrimmerRootAssembly Include="$(TwoDogIosGameAssembly)" Condition="'$(TwoDogIosGameAssembly)' != ''"/>
+        <!-- 2dog.engine imports this from the logical libgodot library, which the app resolves to itself at run
+             time. The app links with -dead_strip and exports only the symbols it knows about, so name it here. -->
+        <ReferenceNativeSymbol Include="_set_load_from_executable_fn">
+            <SymbolType>Function</SymbolType>
+        </ReferenceNativeSymbol>
     </ItemGroup>
     <Target Name="TwoDogValidateIosHost" BeforeTargets="PrepareForBuild"
             Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true'">
