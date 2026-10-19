@@ -14,7 +14,8 @@ type Host = {
   tag?: string
 }
 
-const groups: { label: string; icon: string; hue: string; hosts: Host[] }[] = [
+// `soon` closes the group with a placeholder card for hosts that are planned but not yet scaffolded.
+const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: boolean }[] = [
   {
     label: 'Web',
     hue: 'var(--hue-sky)',
@@ -127,6 +128,7 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[] }[] = [
         brand: 'blazor',
       },
     ],
+    soon: true,
   },
   {
     label: 'Mobile',
@@ -149,6 +151,14 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[] }[] = [
         glyph: 'mobile_phone',
       },
     ],
+    soon: true,
+  },
+  {
+    label: 'Consoles',
+    hue: 'var(--hue-amber)',
+    icon: 'joypad',
+    hosts: [],
+    soon: true,
   },
 ]
 
@@ -194,6 +204,16 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
                 <code class="host-flag">{{ h.flag }}</code>
               </span>
             </a>
+          </li>
+          <li v-if="g.soon">
+            <div class="host-card soon">
+              <span class="brand-chip" aria-hidden="true">
+                <span class="chip-glyph" :style="{ '--gd-icon': iconUrl('ellipsis_horizontal') }"></span>
+              </span>
+              <span class="host-body">
+                <span class="host-text">More coming soon.</span>
+              </span>
+            </div>
           </li>
         </ul>
       </div>
@@ -271,6 +291,19 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
 .host-card:hover {
   border-color: var(--ed-accent);
   transform: translateY(-2px);
+}
+
+/* Placeholder: an outline in the group's hue, not a link, so it neither lifts nor highlights on hover. */
+.host-card.soon,
+.host-card.soon:hover {
+  align-items: center;
+  border: 1px dashed color-mix(in srgb, var(--mark) 45%, var(--ed-seam));
+  background: transparent;
+  transform: none;
+}
+
+.host-card.soon .host-text {
+  color: var(--ed-text-3);
 }
 
 .host-body {
