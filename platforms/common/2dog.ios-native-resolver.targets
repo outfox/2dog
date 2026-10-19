@@ -36,7 +36,8 @@
                 <!-- The archive carries Godot's SwiftUI wrapper (drivers/apple_embedded/app.swift). -->
                 <LinkWithSwiftSystemLibraries>True</LinkWithSwiftSystemLibraries>
                 <Frameworks>UIKit Foundation CoreGraphics QuartzCore Metal AVFoundation AudioToolbox CoreAudio CoreMedia CoreMotion CoreVideo CoreHaptics GameController MediaPlayer Security SystemConfiguration OpenGLES</Frameworks>
-                <WeakFrameworks>MetalFX</WeakFrameworks>
+                <!-- Godot's upscalers use MetalFX on devices; the Simulator SDK has no MetalFX framework. -->
+                <WeakFrameworks Condition="'$(RuntimeIdentifier)' == 'ios-arm64'">MetalFX</WeakFrameworks>
                 <LinkerFlags>-lc++</LinkerFlags>
             </NativeReference>
         </ItemGroup>
