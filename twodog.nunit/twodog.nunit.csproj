@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <DefineConstants>$(DefineConstants);TWODOG_NUNIT</DefineConstants>
         <PackageId>2dog.nunit</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <!-- One package works with either engine precision; the host selects its engine explicitly. -->
@@ -12,6 +13,8 @@
         <IsPackable>true</IsPackable>
     </PropertyGroup>
     <ItemGroup>
+        <!-- Share the assertion source; xUnit still packages it as compile-in code. -->
+        <Compile Include="../twodog.xunit/build/GodotAssert.cs" Link="GodotAssert.cs" />
         <ProjectReference Include="../twodog.engine/twodog.engine.csproj" PrivateAssets="all"/>
         <PackageReference Include="NUnit" Version="4.*" />
     </ItemGroup>

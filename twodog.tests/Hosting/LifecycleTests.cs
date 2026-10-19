@@ -132,8 +132,10 @@ public sealed class LifecycleTests
         host.Dispose(); // clean now: no aggregate timeout
     }
 
-    [Fact]
-    public async Task DisposeFromOnMessageCallbackDoesNotDeadlock()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task DisposeFromOnMessageCallbackDoesNotDeadlock(bool disposeHost)
     {
         HostGuard.SkipUnlessSupported();
         using var host = new EngineHost();
@@ -145,12 +147,20 @@ public sealed class LifecycleTests
             Tag = "lc-post",
             ProjectDir = TempProject,
             State = release,
+            ShutdownTimeout = TimeSpan.FromSeconds(2),
             OnMessage = _ =>
             {
-                // Runs on the engine thread: Dispose must degrade to RequestQuit
-                // instead of waiting for its own thread.
-                instance!.Dispose();
-                posted.TrySetResult();
+                try
+                {
+                    if (disposeHost) host.Dispose();
+                    else instance!.Dispose();
+                    posted.TrySetResult();
+                }
+                catch (Exception error)
+                {
+                    posted.TrySetException(error);
+                    throw;
+                }
             },
         });
         // Only release the message once the instance handle the callback needs

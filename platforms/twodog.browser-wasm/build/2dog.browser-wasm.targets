@@ -211,7 +211,7 @@
             BeforeTargets="Publish"
             AfterTargets="Build"
             DependsOnTargets="TwoDogPrepareExport;TwoDogWebExportSideModuleImports"
-            Inputs="@(TwoDogWebExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogWebExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 

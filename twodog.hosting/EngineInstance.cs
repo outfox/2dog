@@ -58,6 +58,8 @@ public sealed class EngineInstance : IDisposable
 
     public void RequestQuit() => _ctx.RequestQuit();
 
+    internal bool IsOwnerThread => Thread.CurrentThread == _thread;
+
     /// <summary>
     /// Requests quit and waits up to InstanceOptions.ShutdownTimeout for the
     /// program to finish; throws TimeoutException if it does not exit in time
@@ -71,7 +73,7 @@ public sealed class EngineInstance : IDisposable
     public void Dispose()
     {
         RequestQuit();
-        if (Thread.CurrentThread == _thread) return;
+        if (IsOwnerThread) return;
         // WaitAny (not Task.Wait) so a faulted Completion does not throw here.
         if (Task.WaitAny([_completion.Task], _shutdownTimeout) == -1)
             throw new TimeoutException(

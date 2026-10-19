@@ -29,7 +29,7 @@ internal static class SolutionOps
 
         // Same disambiguation Godot applies: the sln containing the project.
         var containing = solutions
-            .Where(s => File.ReadAllText(s).Contains($"{baseName}.csproj", StringComparison.OrdinalIgnoreCase))
+            .Where(s => ContainsProject(s, $"{baseName}.csproj"))
             .ToList();
         if (containing.Count == 1) return (containing[0], true);
 
@@ -96,7 +96,7 @@ internal static class SolutionOps
     /// <summary>Whether the solution already references the given project file name.</summary>
     public static bool ContainsProject(string solutionPath, string projectFileName) =>
         File.Exists(solutionPath) &&
-        File.ReadAllText(solutionPath).Contains(projectFileName, StringComparison.OrdinalIgnoreCase);
+        ProjectModel.NamesProject(File.ReadAllText(solutionPath), projectFileName);
 
     /// <summary>
     /// Points a solution's root game project entries at a renamed csproj (--rename fix). Textual on purpose: the

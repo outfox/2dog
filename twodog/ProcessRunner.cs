@@ -103,18 +103,24 @@ internal sealed class ProcessRunner : IProcessRunner
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
 
-        using var registration = cancellationToken.Register(() => TryKill(process));
-        var timedOut = !process.WaitForExit((int)(request.Timeout ?? DefaultTimeout).TotalMilliseconds);
-        var exited = !timedOut;
-        if (timedOut)
+        using var timeout = new CancellationTokenSource(request.Timeout ?? DefaultTimeout);
+        using var stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
+        var timedOut = false;
+        bool exited;
+        try
         {
-            // Killed (timeout or Ctrl+C): wait a bounded time, never forever on a child that refuses to die.
+            // This wait includes output EOF: descendants can keep the pipes open after the parent exits.
+            process.WaitForExitAsync(stop.Token).GetAwaiter().GetResult();
+            exited = true;
+        }
+        catch (OperationCanceledException) when (stop.IsCancellationRequested)
+        {
+            timedOut = timeout.IsCancellationRequested;
             TryKill(process);
             exited = process.WaitForExit((int)KillGrace.TotalMilliseconds);
+            process.CancelOutputRead();
+            process.CancelErrorRead();
         }
-
-        // The parameterless wait drains the async readers, so the tail is complete (a timed wait does not).
-        if (exited) process.WaitForExit();
 
         watch.Stop();
         // Read after the grace period too: a Ctrl+C during it is a cancellation, not a timeout.

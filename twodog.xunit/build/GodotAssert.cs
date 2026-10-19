@@ -6,10 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 using twodog.Testing;
-using Xunit;
-using Xunit.Sdk;
-
+#if TWODOG_NUNIT
+using AssertionException = NUnit.Framework.AssertionException;
+namespace twodog.Testing.NUnit;
+#else
+using AssertionException = Xunit.Sdk.XunitException;
 namespace twodog.Testing.Xunit;
+#endif
 
 /// <summary>Bounded waits which advance Godot on the fixture's owner thread.</summary>
 public static class GodotTestExtensions
@@ -17,7 +20,7 @@ public static class GodotTestExtensions
     private sealed class PumpState { public int Active; }
     private static readonly ConditionalWeakTable<FixtureBase, PumpState> Pumps = new();
 
-    /// <summary>Pumps frames until a condition holds. Defaults to five seconds and observes xUnit cancellation.</summary>
+    /// <summary>Pumps frames until a condition holds. Defaults to five seconds and observes test-runner cancellation.</summary>
     public static async Task WaitUntilAsync(this FixtureBase godot, Func<bool> condition, TimeSpan? timeout = null,
         CancellationToken cancellationToken = default, [CallerArgumentExpression(nameof(condition))] string? description = null)
     {
@@ -25,7 +28,13 @@ public static class GodotTestExtensions
         ArgumentNullException.ThrowIfNull(condition);
         var limit = timeout ?? TimeSpan.FromSeconds(5);
         if (limit <= TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(timeout), "Timeout must be positive.");
-        using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken, cancellationToken);
+        using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(
+#if TWODOG_NUNIT
+            global::NUnit.Framework.TestContext.CurrentContext.CancellationToken,
+#else
+            global::Xunit.TestContext.Current.CancellationToken,
+#endif
+            cancellationToken);
         var token = cancellation.Token;
         token.ThrowIfCancellationRequested();
         var state = Pumps.GetValue(godot, _ => new PumpState());
@@ -38,9 +47,9 @@ public static class GodotTestExtensions
             {
                 token.ThrowIfCancellationRequested();
                 if (clock.Elapsed >= limit)
-                    throw new XunitException($"Timed out after {limit.TotalSeconds:g} s waiting for {description ?? "the condition"}.");
+                    throw new AssertionException($"Timed out after {limit.TotalSeconds:g} s waiting for {description ?? "the condition"}.");
                 if (godot.Engine.Iteration())
-                    throw new XunitException($"Godot requested quit while waiting for {description ?? "the condition"}.");
+                    throw new AssertionException($"Godot requested quit while waiting for {description ?? "the condition"}.");
                 // Let managed asynchronous work run, preserving the engine's synchronization context.
                 await Task.Delay(1, token);
             }
@@ -110,7 +119,7 @@ public class SignalExpectation : IDisposable
         if (error != Error.Ok)
         {
             _signal.Dispose();
-            throw new XunitException($"Could not connect signal '{_name}': {error}.");
+            throw new AssertionException($"Could not connect signal '{_name}': {error}.");
         }
     }
 
@@ -121,7 +130,7 @@ public class SignalExpectation : IDisposable
     public void AssertEmitted(int count = 1)
     {
         if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
-        if (Count != count) throw new XunitException($"Expected signal '{_name}' {count} time(s), but observed {Count}.");
+        if (Count != count) throw new AssertionException($"Expected signal '{_name}' {count} time(s), but observed {Count}.");
     }
 
     /// <summary>Pumps until at least count emissions arrive. A timeout or cancellation disconnects the listener.</summary>
@@ -135,7 +144,7 @@ public class SignalExpectation : IDisposable
             {
                 if (Count >= count) return true;
                 if (!GodotObject.IsInstanceValid(_source))
-                    throw new XunitException($"Signal '{_name}' source was freed before {count} emission(s) arrived.");
+                    throw new AssertionException($"Signal '{_name}' source was freed before {count} emission(s) arrived.");
                 return false;
             }, timeout, cancellationToken, $"signal '{_name}' ({count} emission(s))");
         }
