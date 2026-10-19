@@ -144,8 +144,8 @@
          iOS host links the slice for its RuntimeIdentifier (2dog.ios's TwoDogAddIosGdExtensions) and the pck export
          copies the xcframework, so both slices build before either. Xcode's clang and xcodebuild, as the host needs. -->
     <ItemGroup>
-        <_TwoDogProbeIosSlice Include="ios-arm64" Sdk="iphoneos" Target="arm64-apple-ios15.0"/>
-        <_TwoDogProbeIosSlice Include="ios-arm64-simulator" Sdk="iphonesimulator" Target="arm64-apple-ios15.0-simulator"/>
+        <_TwoDogProbeIosSlice Include="ios-arm64" Sdk="iphoneos" Triple="arm64-apple-ios15.0"/>
+        <_TwoDogProbeIosSlice Include="ios-arm64-simulator" Sdk="iphonesimulator" Triple="arm64-apple-ios15.0-simulator"/>
     </ItemGroup>
     <Target Name="TwoDogProbeBuildIos"
             BeforeTargets="TwoDogExportIosPack;TwoDogAddIosGdExtensions"
@@ -158,7 +158,7 @@
         </PropertyGroup>
         <MakeDir Directories="$(_TwoDogProbeBin);@(_TwoDogProbeIosSlice->'$(_TwoDogProbeIosObj)%(Identity)')"/>
         <!-- One archive name per slice: xcodebuild packs same-named libraries into one xcframework -->
-        <Exec Command="xcrun --sdk %(_TwoDogProbeIosSlice.Sdk) clang $(_TwoDogProbeCFlags) -target %(_TwoDogProbeIosSlice.Target) -c &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeIosObj)%(_TwoDogProbeIosSlice.Identity)/twodog_probe.o&quot; &amp;&amp; xcrun --sdk %(_TwoDogProbeIosSlice.Sdk) libtool -static -o &quot;$(_TwoDogProbeIosObj)%(_TwoDogProbeIosSlice.Identity)/libtwodog_probe.a&quot; &quot;$(_TwoDogProbeIosObj)%(_TwoDogProbeIosSlice.Identity)/twodog_probe.o&quot;"/>
+        <Exec Command="xcrun --sdk %(_TwoDogProbeIosSlice.Sdk) clang $(_TwoDogProbeCFlags) -target %(_TwoDogProbeIosSlice.Triple) -c &quot;$(_TwoDogProbeSource)&quot; -o &quot;$(_TwoDogProbeIosObj)%(_TwoDogProbeIosSlice.Identity)/twodog_probe.o&quot; &amp;&amp; xcrun --sdk %(_TwoDogProbeIosSlice.Sdk) libtool -static -o &quot;$(_TwoDogProbeIosObj)%(_TwoDogProbeIosSlice.Identity)/libtwodog_probe.a&quot; &quot;$(_TwoDogProbeIosObj)%(_TwoDogProbeIosSlice.Identity)/twodog_probe.o&quot;"/>
         <RemoveDir Directories="$(_TwoDogProbeIosFramework)"/>
         <Exec Command="xcodebuild -create-xcframework @(_TwoDogProbeIosSlice->'-library &quot;$(_TwoDogProbeIosObj)%(Identity)/libtwodog_probe.a&quot;', ' ') -output &quot;$(_TwoDogProbeIosFramework)&quot;"/>
     </Target>
