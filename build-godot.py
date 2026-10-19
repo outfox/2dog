@@ -574,8 +574,9 @@ def build_libgodot(args, platform_config: PlatformConfig):
             # iOS is always a static archive; the library_type adds the libgodot entry points (platform/ios/libgodot_ios.mm).
             "library_type=static_library" if is_ios else "library_type=shared_library",
             *([] if is_ios else ["extra_suffix=shared_library"]),
-            # Godot's Metal driver, no MoltenVK; the Simulator has neither and falls back to GLES3.
-            *(["vulkan=no", "generate_bundle=no", f"simulator={'yes' if getattr(args, 'simulator', False) else 'no'}"] if is_ios else []),
+            # Godot's Metal driver, no MoltenVK; the Simulator has neither and falls back to GLES3. iOS 15.0 is the
+            # hosts' SupportedOSPlatformVersion and the floor this SDK's libc++ still supports.
+            *(["vulkan=no", "generate_bundle=no", "ios_min_version=15.0", f"simulator={'yes' if getattr(args, 'simulator', False) else 'no'}"] if is_ios else []),
             f"dev_build={use_dev_build}",
             f"scu_build={args.scu_build}",
             f"debug_symbols={args.debug_symbols}",

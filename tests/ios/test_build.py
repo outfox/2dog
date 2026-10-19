@@ -92,6 +92,7 @@ class IosBuild(unittest.TestCase):
                         self.assertIn("platform=ios", command)
                         self.assertIn("library_type=static_library", command)
                         self.assertIn("vulkan=no", command)
+                        self.assertIn("ios_min_version=15.0", command)
                         self.assertIn(f"simulator={'yes' if simulator else 'no'}", command)
                         self.assertFalse(any(part.startswith("extra_suffix=") for part in command))
                     self.assertFalse(any("target=editor" in c for c in commands))
