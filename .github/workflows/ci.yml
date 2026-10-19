@@ -1026,7 +1026,7 @@ jobs:
           package-manager-cache: false
 
       - name: Install wasm-tools workload
-        run: dotnet workload install wasm-tools
+        run: dotnet workload install wasm-tools --skip-manifest-update --source https://api.nuget.org/v3/index.json
 
       - name: Verify MSBuild configuration defaults
         env:
@@ -1396,7 +1396,7 @@ jobs:
           python-version: '3.12'
           enable-cache: false
       - name: Install MAUI workloads
-        run: dotnet workload install maui-windows maui-android
+        run: dotnet workload install maui-windows maui-android --skip-manifest-update --source https://api.nuget.org/v3/index.json
       - name: Setup Java
         uses: actions/setup-java@v5
         with:

@@ -59,7 +59,10 @@ public class ProcessRunnerTests
     [Fact]
     public void Run_TimesOut_AndKillsTheChild()
     {
-        var request = ProcessRunner.Dotnet(Path.GetTempPath(), null, TimeSpan.FromMilliseconds(1), "--info");
+        // dotnet --info can finish before the timeout callback runs on a busy runner.
+        var request = OperatingSystem.IsWindows()
+            ? new ProcessRequest("ping", ["-n", "30", "127.0.0.1"], Path.GetTempPath(), TimeSpan.FromMilliseconds(200))
+            : new ProcessRequest("sleep", ["30"], Path.GetTempPath(), TimeSpan.FromMilliseconds(200));
         var result = ProcessRunner.Default.Run(request, TestContext.Current.CancellationToken);
         Assert.True(result.TimedOut);
         Assert.False(result.Ok);
