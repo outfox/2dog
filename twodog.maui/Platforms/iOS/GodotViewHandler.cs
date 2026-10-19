@@ -41,9 +41,18 @@ internal sealed class GodotViewHandler : ViewHandler<GodotView, UIView>
     private void Loaded(object? sender, EventArgs args) => Attach();
     private void Unloaded(object? sender, EventArgs args) => Detach();
 
+    public override void PlatformArrange(Microsoft.Maui.Graphics.Rect rect)
+    {
+        base.PlatformArrange(rect);
+        if (_attached) _godot!.View!.Frame = PlatformView.Bounds;
+        else if (VirtualView.IsLoaded) Attach();
+    }
+
     private void Attach()
     {
         if (_attached) return;
+        // Godot's GL view builds its framebuffer from the first bounds it sees; PlatformArrange attaches once sized.
+        if (PlatformView.Bounds.IsEmpty) return;
         try
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(VirtualView.Project);
