@@ -722,18 +722,8 @@ public class Engine : IDisposable, IAsyncDisposable
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            try
-            {
-                foreach (var attr in assembly.GetCustomAttributes<AssemblyMetadataAttribute>())
-                {
-                    if (attr.Key == "GodotProjectDir" && !string.IsNullOrEmpty(attr.Value))
-                        return attr.Value;
-                }
-            }
-            catch
-            {
-                // Some dynamic/reflection-emit assemblies may throw
-            }
+            foreach (var dir in AssemblyMetadata.Values(assembly, "GodotProjectDir"))
+                return dir;
         }
 
         throw new InvalidOperationException(

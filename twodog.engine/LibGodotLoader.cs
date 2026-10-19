@@ -162,18 +162,10 @@ internal static class LibGodotLoader
 
     private static string? MetadataVariant(Assembly assembly)
     {
-        try
+        foreach (var value in AssemblyMetadata.Values(assembly, "TwoDogVariant"))
         {
-            foreach (var attr in assembly.GetCustomAttributes<AssemblyMetadataAttribute>())
-            {
-                if (attr.Key != "TwoDogVariant" || string.IsNullOrEmpty(attr.Value)) continue;
-                var variant = attr.Value.ToLowerInvariant();
-                if (Array.IndexOf(KnownVariants, variant) >= 0) return variant;
-            }
-        }
-        catch
-        {
-            // Some dynamic/reflection-emit assemblies may throw
+            var variant = value.ToLowerInvariant();
+            if (Array.IndexOf(KnownVariants, variant) >= 0) return variant;
         }
 
         return null;
