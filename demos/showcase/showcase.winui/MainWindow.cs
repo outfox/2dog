@@ -25,7 +25,7 @@ namespace showcase;
 
 internal sealed class MainWindow : Window
 {
-    private static readonly Windows.UI.Color Accent = Rgb(0x57, 0x9E, 0xFF);
+    private static readonly Windows.UI.Color Accent = Rgb(0xA8, 0xE6, 0x6A);
     private static readonly Windows.UI.Color Muted = Rgb(0x9A, 0xA7, 0xB8);
     private static readonly Windows.UI.Color Starting = Rgb(0xF2, 0xB8, 0x4B);
     private static readonly Windows.UI.Color Running = Rgb(0x4A, 0xDE, 0x80);

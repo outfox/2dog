@@ -19,7 +19,7 @@ internal sealed class MainForm : Form
 {
     private static readonly Color Backdrop = Color.FromArgb(0x1E, 0x26, 0x33);
     private static readonly Color Surface = Color.FromArgb(0x12, 0x18, 0x21);
-    private static readonly Color Accent = Color.FromArgb(0x57, 0x9E, 0xFF);
+    private static readonly Color Accent = Color.FromArgb(0xA8, 0xE6, 0x6A);
     private static readonly Color Muted = Color.FromArgb(0x9A, 0xA7, 0xB8);
     private static readonly Color Starting = Color.FromArgb(0xF2, 0xB8, 0x4B);
     private static readonly Color Running = Color.FromArgb(0x4A, 0xDE, 0x80);

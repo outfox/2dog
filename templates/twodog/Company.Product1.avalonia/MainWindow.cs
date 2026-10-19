@@ -48,8 +48,8 @@ internal sealed class MainWindow : Window
         // Fluent's lightweight styling keys: an accent button whatever the OS accent color is.
         foreach (var (key, color) in new[]
                  {
-                     ("ButtonBackground", "#579EFF"), ("ButtonBackgroundPointerOver", "#74B0FF"),
-                     ("ButtonBackgroundPressed", "#3F86E8"), ("ButtonBackgroundDisabled", "#579EFF"),
+                     ("ButtonBackground", "#A8E66A"), ("ButtonBackgroundPointerOver", "#BDF088"),
+                     ("ButtonBackgroundPressed", "#9BD462"), ("ButtonBackgroundDisabled", "#A8E66A"),
                      ("ButtonForeground", "#0B1220"), ("ButtonForegroundPointerOver", "#0B1220"),
                      ("ButtonForegroundPressed", "#0B1220"), ("ButtonForegroundDisabled", "#0B1220"),
                  })

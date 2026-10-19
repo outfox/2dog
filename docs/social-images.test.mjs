@@ -40,21 +40,21 @@ test('composes a 1200x630 card with the logo and a 2x nearest-neighbor bottom-ri
       }
     }
   }
-  assert.deepEqual(pixel(0, 0), [87, 158, 255, 255], 'accent stripe along the top edge');
+  assert.deepEqual(pixel(0, 0), [168, 230, 106, 255], 'accent stripe along the top edge');
   assert.ok(pixel(0, 8).slice(0, 3).every((channel) => channel < 16), 'near-black top-left corner');
   const [red, green, blue, alpha] = pixel(1199, 629);
-  assert.ok(red < green && green < blue && blue < 110, 'blue glow fades out in the bottom-right corner');
+  assert.ok(Math.max(red, green, blue) < 110, 'accent glow fades out in the bottom-right corner');
   assert.equal(alpha, 255);
   const logo = await regionStats(image, { left: 64, top: 52, width: 152, height: 78 });
   assert.ok(logo.channels[0].max > 240, 'white logo appears in the top-left corner');
-  assert.deepEqual(pixel(72, 468), [87, 158, 255, 255], 'CTA button leaves clearance above social overlays');
+  assert.deepEqual(pixel(72, 468), [168, 230, 106, 255], 'CTA button leaves clearance above social overlays');
 });
 
 test('labels the section in the header and leaves it out when there is none', async () => {
   const header = async (section) => regionStats(
     await renderSocialImage(undefined, { section, title: 'Web' }), { left: 240, top: 60, width: 400, height: 60 });
-  assert.ok((await header('Hosts')).channels[2].max > 200, 'section pill appears beside the logo');
-  assert.ok((await header('')).channels[2].max < 80, 'no pill without a section');
+  assert.ok((await header('Hosts')).channels[1].max > 200, 'section pill appears beside the logo');
+  assert.ok((await header('')).channels[1].max < 80, 'no pill without a section');
 });
 
 test('uses the standard illustration instead of a -big asset, including hashed Vite filenames', async () => {

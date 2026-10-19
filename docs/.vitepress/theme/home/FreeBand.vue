@@ -20,7 +20,7 @@ const links = [
     <div class="home-wrap free-grid">
       <div>
         <p class="home-kicker">
-          <span class="gd-icon" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>Open source
+          <span class="gd-icon free-heart" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>Open source
         </p>
         <h2 id="free-title" class="home-h2">Free &amp; libre, as Godot itself.</h2>
         <p class="home-intro">
@@ -32,7 +32,7 @@ const links = [
             Star 2dog on GitHub
           </a>
           <a class="home-btn" href="https://discord.com/invite/GAXdbZCNGT">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord') }" aria-hidden="true"></span>
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord'), '--mark': 'var(--hue-violet)' }" aria-hidden="true"></span>
             Chat on Discord
           </a>
         </div>
@@ -58,7 +58,7 @@ const links = [
           </li>
           <li>
             <a href="https://www.nuget.org/packages/2dog">
-              <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" aria-hidden="true"></span>
+              <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" style="color: var(--hue-sky)" aria-hidden="true"></span>
               Install from NuGet
             </a>
           </li>
@@ -105,6 +105,7 @@ const links = [
 .repo-name .brand-glyph {
   width: 26px;
   height: 26px;
+  color: var(--hue-lime);
 }
 
 .repo-desc {
@@ -137,7 +138,11 @@ const links = [
 }
 
 .repo-dot.lic {
-  background: var(--ed-text-3);
+  background: var(--hue-amber);
+}
+
+.home-kicker .gd-icon.free-heart {
+  background-color: var(--ed-spark);
 }
 
 .repo-dot.cs {

@@ -91,21 +91,21 @@ engine.<span class="f">Start</span>();
 
 <style>
 .home-page {
-  --code-bg: #f7f7f7;
+  --code-bg: var(--ed-raise);
   --syn-k: #b0274a;
   --syn-t: #1d6e3a;
   --syn-f: #1c4fae;
   --syn-s: #84540a;
-  --syn-c: #5f676c;
+  --syn-c: var(--ed-text-3);
 }
 
 .dark .home-page {
-  --code-bg: #161616;
+  --code-bg: var(--ed-dark-2);
   --syn-k: #ff7085;
   --syn-t: #8eef97;
   --syn-f: #7cb2ff;
   --syn-s: #ffeda1;
-  --syn-c: #9da2a8;
+  --syn-c: var(--ed-text-3);
 }
 
 .why-grid {
