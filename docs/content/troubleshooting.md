@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, where to look when a restore or build fails, and how to enable symlinks in a Windows checkout."
+description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, where to look when a restore or build fails, and how to fix a pinned Godot .NET runtime."
 tagline: "How to work around common pitfalls and limitations of 2dog, git, and Godot."
 ---
 
@@ -64,6 +64,53 @@ a saved restore log the same way it explains builds.
 ## "dotnet not found"
 
 Put `dotnet` on `PATH`, or set `DOTNET_HOST_PATH` to the `dotnet` executable.
+
+## Godot cannot load `System.Runtime` (NixOS and pinned .NET runtimes)
+
+After `2dog add`, the stock Godot editor may report:
+
+```text
+System.IO.FileNotFoundException: Could not load file or assembly
+'System.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.
+.NET: Failed to load project assembly.
+```
+
+`2dog add` upgrades the game project to `net10.0`, which the 2dog binding
+packages require. If the editor loads an older .NET runtime, it cannot load
+that assembly even when compilation succeeds. Running `dnx 2dog` successfully
+or seeing .NET 10 in `dotnet --list-sdks` does not prove that the editor uses
+.NET 10: the editor loads its runtime separately from the build SDK.
+
+### NixOS
+
+Nixpkgs' `godot-mono` wrapper selects its own .NET SDK, which can be older than
+the one in your shell. Replace the existing `pkgs.godot-mono` entry in your
+NixOS `environment.systemPackages` or Home Manager `home.packages` with:
+
+```nix
+(pkgs.godot-mono.overrideAttrs {
+  dotnet-sdk = pkgs.dotnet-sdk_10;
+})
+```
+
+Apply your Nix configuration, fully close Godot, then reopen the project using
+the updated package and rebuild. An already running editor keeps its loaded
+runtime. Installing .NET 10 alongside the default Godot package alone does not
+change the SDK selected by its wrapper. See the
+[Nixpkgs Godot wrapper](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/godot/common.nix)
+for the SDK override.
+
+### Other systems and later .NET versions
+
+The same issue can occur with any launcher, package or environment that pins
+Godot to an older .NET runtime. Check the launcher's SDK/runtime selection,
+including `DOTNET_ROOT` and `PATH`, and configure it to use a runtime compatible
+with the game's target framework. Fully restart the editor after changing it.
+Keep the game on the target framework required by its 2dog packages.
+
+Godot 4.8's move to .NET 10 reduces this mismatch for `net10.0` projects, but
+does not remove the underlying constraint: it can recur when a game targets
+a later .NET version than the runtime selected by the editor.
 
 ## Mixed Godot bindings (TDG001-TDG005)
 
