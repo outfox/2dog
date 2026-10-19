@@ -8,6 +8,7 @@ internal static class PresetChecks
         new("preset.file", Category.Presets, "export_presets.cfg exists"),
         new("preset.web", Category.Presets, "the 'Web' preset exists when a browser host does"),
         new("preset.android", Category.Presets, "the Android hosts' export preset ('Android' by default) exists"),
+        new("preset.ios", Category.Presets, "the iOS hosts' export preset ('iOS' by default) exists"),
         new("preset.desktop", Category.Presets, "the per-OS desktop presets exist"),
     ];
 
@@ -22,7 +23,7 @@ internal static class PresetChecks
         {
             yield return new Finding("preset.file", c, Severity.Fail, $"{ExportPresetOps.FileName} missing",
                 "publishes export the game pck through it (the publish stops without it)", null, ExportPresetOps.FileName,
-                new Fix("presets:create", FixClass.Safe, $"create {ExportPresetOps.FileName} (web, desktop and Android export presets)",
+                new Fix("presets:create", FixClass.Safe, $"create {ExportPresetOps.FileName} (web, desktop, Android and iOS export presets)",
                     () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             yield break;
         }
@@ -35,6 +36,12 @@ internal static class PresetChecks
                      .Select(h => h.Property("TwoDogAndroidExportPreset") ?? ExportPresetOps.AndroidPresetName)
                      .Where(name => !name.Contains("$(")).Distinct())
             wanted.Add((name, "preset.android", "Android builds export the pck through it", Severity.Fail));
+        // MAUI hosts only build for iOS on a Mac; elsewhere the preset is a warning, not a blocker.
+        foreach (var (name, kind) in p.Hosts.Where(h => (h.Kind is HostKind.Ios or HostKind.Maui) && !h.HasProperty("TwoDogIosPack"))
+                     .Select(h => (h.Property("TwoDogIosExportPreset") ?? ExportPresetOps.IosPresetName, h.Kind))
+                     .Where(t => !t.Item1.Contains("$(")).Distinct())
+            wanted.Add((name, "preset.ios", "iOS builds export the pck through it",
+                kind == HostKind.Ios || ctx.Env.IsMacOS ? Severity.Fail : Severity.Warn));
         var hostOs = ctx.Env.IsWindows ? "Windows Desktop" : ctx.Env.IsMacOS ? "macOS" : "Linux";
         foreach (var name in ExportPresetOps.DesktopPresetNames)
             wanted.Add((name, "preset.desktop", $"desktop publish for {name} exports the pck through it",
@@ -50,8 +57,7 @@ internal static class PresetChecks
             }
 
             // Only the template's presets can be appended; a custom preset name has to be added in Godot.
-            var fromTemplate = name == ExportPresetOps.WebPresetName || name == ExportPresetOps.AndroidPresetName
-                               || ExportPresetOps.DesktopPresetNames.Contains(name);
+            var fromTemplate = ExportPresetOps.IsTemplatePreset(name);
             yield return new Finding(id, c, severity, $"'{name}' export preset missing", why,
                 fromTemplate ? null : "add it in Godot (Project > Export)", ExportPresetOps.FileName,
                 fromTemplate

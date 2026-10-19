@@ -16,6 +16,7 @@ internal enum HostKind
     Blazor,
     Android,
     Maui,
+    Ios,
 }
 
 /// <summary>Picker groups by the kind of application a host creates.</summary>
@@ -42,17 +43,17 @@ internal static class Hosts
 {
     public static readonly IReadOnlyList<HostKind> All =
         [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.NUnit, HostKind.GdUnit, HostKind.Repl, HostKind.WinForms,
-         HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor, HostKind.Android, HostKind.Maui];
+         HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor, HostKind.Android, HostKind.Maui, HostKind.Ios];
 
     /// <summary>
     /// Whether a bare run without host flags creates this kind. Opt-in: WinForms/WinUI (Windows-only), Avalonia
     /// (pulls in the whole UI framework), WebXr (needs project-side XR setup), Blazor (a server + client pair),
-    /// Android (needs the android workload), REPL (runtime C# compiler), xUnit and NUnit (choose a test framework explicitly).
-    /// All remain available via flags/prompts.
+    /// Android (needs the android workload), iOS (needs the ios workload and a Mac), REPL (runtime C# compiler),
+    /// xUnit and NUnit (choose a test framework explicitly). All remain available via flags/prompts.
     /// </summary>
     public static bool InDefaultSet(HostKind kind) =>
         kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Blazor
-            or HostKind.Android or HostKind.Maui or HostKind.Tests or HostKind.NUnit or HostKind.GdUnit or HostKind.Repl);
+            or HostKind.Android or HostKind.Maui or HostKind.Ios or HostKind.Tests or HostKind.NUnit or HostKind.GdUnit or HostKind.Repl);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -70,6 +71,7 @@ internal static class Hosts
         HostKind.Blazor => "blazor",
         HostKind.Android => "android",
         HostKind.Maui => "maui",
+        HostKind.Ios => "ios",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -89,6 +91,7 @@ internal static class Hosts
         HostKind.Blazor => "blazor",
         HostKind.Android => "android",
         HostKind.Maui => "maui",
+        HostKind.Ios => "ios",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -116,7 +119,8 @@ internal static class Hosts
         HostKind.Avalonia => "game embedded in an Avalonia app (cross-platform GUI)",
         HostKind.Blazor => "game embedded in a Blazor Web App page (WebAssembly)",
         HostKind.Android => "Android app, published as an APK (experimental)",
-        HostKind.Maui => "Godot view in a .NET MAUI app (Windows and Android)",
+        HostKind.Maui => "Godot view in a .NET MAUI app (Windows, Android and iOS)",
+        HostKind.Ios => "iOS app with Godot's view controller, built on a Mac (experimental)",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -136,6 +140,7 @@ internal static class Hosts
         HostKind.Blazor => "--blazor",
         HostKind.Android => "--android",
         HostKind.Maui => "--maui",
+        HostKind.Ios => "--ios",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -156,10 +161,10 @@ internal static class Hosts
 
     /// <summary>
     /// Kinds kept out of plain solution builds: the browser ones need wasm-tools, Android the android workload (a
-    /// build-excluded project is not restored either), WinUI builds only on Windows.
+    /// build-excluded project is not restored either), iOS the ios workload and a Mac, WinUI builds only on Windows.
     /// </summary>
     public static bool ExcludedFromSolutionBuild(HostKind kind) =>
-        IsWebLike(kind) || kind is HostKind.WinUi or HostKind.Android or HostKind.Maui;
+        IsWebLike(kind) || kind is HostKind.WinUi or HostKind.Android or HostKind.Maui or HostKind.Ios;
 
     /// <summary>The help row for the host flag: what the host is plus availability notes.</summary>
     public static string HelpText(HostKind kind) => kind switch
@@ -177,7 +182,8 @@ internal static class Hosts
         HostKind.Blazor => "Blazor Web App host: ASP.NET Core server plus a WebAssembly client page embedding the " +
                            "game (opt-in; needs wasm-tools)",
         HostKind.Android => "Android host publishing an APK (experimental, opt-in; needs the android workload)",
-        HostKind.Maui => "MAUI host with a GPU Godot view (Windows and Android; opt-in; needs MAUI workloads)",
+        HostKind.Maui => "MAUI host with a GPU Godot view (Windows, Android and iOS; opt-in; needs MAUI workloads)",
+        HostKind.Ios => "iOS host showing Godot's view controller (experimental, opt-in; needs the ios workload and a Mac with Xcode)",
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
 
@@ -190,7 +196,7 @@ internal static class Hosts
         HostKind.Desktop => HostGroup.Generic,
         HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Repl => HostGroup.Desktop,
         HostKind.Web or HostKind.WebXr or HostKind.Blazor => HostGroup.Browser,
-        HostKind.Android or HostKind.Maui => HostGroup.Mobile,
+        HostKind.Android or HostKind.Maui or HostKind.Ios => HostGroup.Mobile,
         HostKind.Tests or HostKind.NUnit or HostKind.GdUnit => HostGroup.Testing,
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
@@ -348,10 +354,15 @@ internal static class HostScan
         var sdk = (string?)root.Attribute("Sdk") ?? "";
 
         var isTwoDog = Package("2dog.engine") || Package("2dog.repl") || Package("2dog.xunit") || Package("2dog.nunit") || Package("2dog.gdunit") || Package("2dog.avalonia")
-                       || Package("2dog.maui") || Property("TwoDogBlazor") != null || Property("GodotProjectDir") != null;
+                       || Package("2dog.maui") || Package("2dog.ios") || Property("TwoDogBlazor") != null || Property("GodotProjectDir") != null;
         if (!isTwoDog) return null;
 
         if (PropertyTrue("UseMaui") || Package("2dog.maui")) return HostKind.Maui;
+        // Before the Desktop OutputType check: iOS hosts are Exe too.
+        if (Package("2dog.ios")
+            || (Property("TargetFramework") ?? "").Contains("-ios", StringComparison.OrdinalIgnoreCase)
+            || (Property("TargetFrameworks") ?? "").Contains("-ios", StringComparison.OrdinalIgnoreCase))
+            return HostKind.Ios;
         if (Package("2dog.repl")) return HostKind.Repl;
         if (Package("2dog.gdunit")) return HostKind.GdUnit;
         if (PropertyTrue("TwoDogBlazor")) return HostKind.Blazor;
@@ -387,11 +398,15 @@ internal static class HostScan
                        || csproj.Contains("2dog.gdunit", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.maui", StringComparison.OrdinalIgnoreCase)
+                       || csproj.Contains("2dog.ios", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<TwoDogBlazor", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<GodotProjectDir>", StringComparison.OrdinalIgnoreCase);
         if (!isTwoDog) return null;
 
         if (csproj.Contains("2dog.maui", StringComparison.OrdinalIgnoreCase) || csproj.Contains("<UseMaui>true</UseMaui>", StringComparison.OrdinalIgnoreCase)) return HostKind.Maui;
+        if (csproj.Contains("2dog.ios", StringComparison.OrdinalIgnoreCase)
+            || System.Text.RegularExpressions.Regex.IsMatch(csproj, @"<TargetFrameworks?>[^<]*-ios",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return HostKind.Ios;
         if (csproj.Contains("2dog.repl", StringComparison.OrdinalIgnoreCase)) return HostKind.Repl;
         if (csproj.Contains("2dog.gdunit", StringComparison.OrdinalIgnoreCase)) return HostKind.GdUnit;
 

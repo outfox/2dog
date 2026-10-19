@@ -26,9 +26,13 @@ on terminals, a missing workload (`wasm-tools`, `android`) can still be offered.
 `--repl [folder]` adds an opt-in [C# REPL host](/hosts/repl) with syntax
 highlighting, completion and live access to the running game.
 
-`--maui [folder]` adds a [MAUI host](/hosts/maui) for Windows and Android.
-Install `maui-windows` on Windows and `maui-android` for Android builds.
-The host is excluded from plain solution builds.
+`--maui [folder]` adds a [MAUI host](/hosts/maui) for Windows, Android and iOS.
+Install `maui-windows` on Windows, `maui-android` for Android builds and
+`maui-ios` on a Mac. The host is excluded from plain solution builds.
+
+`--ios [folder]` adds an experimental [iOS host](/hosts/ios). It builds on a
+Mac with Xcode and the `ios` workload only, and is excluded from plain solution
+builds.
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
@@ -99,6 +103,7 @@ Choose hosts interactively, or supply host flags:
 2dog add                           # interactive, here
 2dog add --generic MyGame.editor   # a second generic host, named
 2dog add --android                 # an Android host
+2dog add --ios                     # an iOS host (builds on a Mac)
 2dog add --xunit                   # an xUnit test host
 2dog add --gdunit                  # a GDScript test host (MTP)
 2dog add --nunit                   # an NUnit test host

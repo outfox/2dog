@@ -70,8 +70,9 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |
 | `--avalonia [folder]` | [Avalonia host](/hosts/avalonia); opt-in |
 | `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); opt-in, needs wasm-tools |
-| `--maui [folder]` | [MAUI host](/hosts/maui); Windows and Android, opt-in, needs MAUI workloads |
+| `--maui [folder]` | [MAUI host](/hosts/maui); Windows, Android and iOS, opt-in, needs MAUI workloads |
 | `--android [folder]` | [Android host](/hosts/android); experimental, opt-in, needs the android workload |
+| `--ios [folder]` | [iOS host](/hosts/ios); experimental, opt-in, needs the ios workload and a Mac with Xcode |
 | `--no-generic`, `--no-web` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
 
 ## Build options

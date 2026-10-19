@@ -186,8 +186,13 @@ internal static class ScaffoldCommand
             .ToList();
         var wantsWeb = newHosts.Any(h => Hosts.IsWebLike(h.Kind)) || existingHosts.Any(h => Hosts.IsWebLike(h.Kind));
         var wantsAndroid = newHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui) || existingHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui);
+        // MAUI hosts build for iOS on a Mac, so they get the preset too.
+        var wantsIos = newHosts.Any(h => h.Kind is HostKind.Ios or HostKind.Maui) || existingHosts.Any(h => h.Kind is HostKind.Ios or HostKind.Maui);
         if (newHosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui))
             warnings.AddRange(AndroidSdk.Inspect(environment ?? SystemEnvironment.Instance).Warnings);
+        if (newHosts.Any(h => h.Kind == HostKind.Ios) && !(environment ?? SystemEnvironment.Instance).IsMacOS)
+            warnings.Add("iOS hosts build on macOS with Xcode only (the iOS SDK, clang, codesign and Mono's AOT compiler " +
+                         "ship with it). Use Pair to Mac from Windows, or a macOS CI runner.");
         // Every host csproj the solution should list; the Blazor host contributes its nested client project too.
         var allHostProjects = allHostFolders.Select(f => Path.Combine(projectDir, f, f + ".csproj"))
             .Concat(existingHosts.Concat(newHosts.Select(h => new ExistingHost(h.Kind, h.Folder)))
@@ -217,7 +222,7 @@ internal static class ScaffoldCommand
         var wantsMaui = newHosts.Any(h => h.Kind == HostKind.Maui) || existingHosts.Any(h => h.Kind == HostKind.Maui);
         PlanRootGlobalJson(plan, warnings, projectDir, wantsWeb, retrofitting, wantsMaui,
             newHosts.Where(h => Hosts.IsTestHost(h.Kind)).Select(h => h.Folder).ToList());
-        PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid);
+        PlanExportPresets(plan, projectDir, wantsWeb, wantsAndroid, wantsIos);
         PlanXrShaders(plan, project, newHosts);
         PlanHosts(plan, skipped, options, projectDir, baseName, newHosts);
         PlanAgentSkill(plan, skipped, options, projectDir, newHosts);
@@ -582,16 +587,16 @@ internal static class ScaffoldCommand
             () => (project.Godot ?? new GodotProjectFile(path)).Set("xr", "shaders/enabled.web", "true", raw: true)));
     }
 
-    private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb, bool wantsAndroid)
+    private static void PlanExportPresets(List<PlannedAction> plan, string projectDir, bool wantsWeb, bool wantsAndroid, bool wantsIos)
     {
         // The engine refuses `--export-pack` without a root export_presets.cfg; web publish uses the 'Web' preset,
-        // desktop publishes the per-OS presets.
+        // desktop publishes the per-OS presets, the mobile builds their platform's preset.
         var path = Path.Combine(projectDir, ExportPresetOps.FileName);
         if (!File.Exists(path))
         {
             // Even without a web host, matching dotnet-new output: the template
             // always ships all presets, so adding a host later just works.
-            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web, desktop and Android export presets)", ActionKind.CreateFile,
+            plan.Add(new PlannedAction($"create {ExportPresetOps.FileName} (web, desktop, Android and iOS export presets)", ActionKind.CreateFile,
                 () => File.WriteAllText(path, TemplateAssets.ExportPresets())));
             return;
         }
@@ -605,6 +610,8 @@ internal static class ScaffoldCommand
             missing = missing.Prepend(ExportPresetOps.WebPresetName);
         if (wantsAndroid && !ExportPresetOps.HasPreset(text, ExportPresetOps.AndroidPresetName))
             missing = missing.Append(ExportPresetOps.AndroidPresetName);
+        if (wantsIos && !ExportPresetOps.HasPreset(text, ExportPresetOps.IosPresetName))
+            missing = missing.Append(ExportPresetOps.IosPresetName);
 
         foreach (var preset in missing)
         {
@@ -689,6 +696,7 @@ internal static class ScaffoldCommand
                 HostKind.Blazor => ("needs wasm-tools; built via dotnet run", "requires the wasm-tools workload"),
                 HostKind.Maui => ("needs MAUI workloads; built directly with a target framework", "requires MAUI workloads"),
                 HostKind.Android => ("needs the android workload; built via dotnet publish", "requires the android workload"),
+                HostKind.Ios => ("needs the ios workload and a Mac with Xcode; built via dotnet build", "requires the ios workload"),
                 _ => ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload"),
             };
             plan.Add(new PlannedAction(
@@ -760,8 +768,9 @@ internal static class ScaffoldCommand
             HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
             HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
             HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
-            HostKind.Maui => ($"dotnet run --project {host.Folder}", "MAUI host (Windows and Android; needs MAUI workloads)"),
+            HostKind.Maui => ($"dotnet run --project {host.Folder}", "MAUI host (Windows, Android and iOS; needs MAUI workloads)"),
             HostKind.Android => ($"dotnet publish {host.Folder}", "Android APK (needs the android workload)"),
+            HostKind.Ios => ($"dotnet build {host.Folder} -r iossimulator-arm64", "iOS app in the Simulator (macOS with Xcode; needs the ios workload)"),
             _ => (host.Folder, ""),
         }).ToList();
 

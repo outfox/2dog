@@ -64,12 +64,15 @@ internal static class LibGodotLoader
         LoadedLibraryHandle = handle;
     }
 
+    private static bool _registered;
+
     /// <summary>Called from LibGodot's static constructor, so registration is
     /// guaranteed to precede the first libgodot P/Invoke.</summary>
     internal static void Register()
     {
         // Browser-wasm links libgodot statically; there is nothing to resolve.
-        if (OperatingSystem.IsBrowser()) return;
+        if (OperatingSystem.IsBrowser() || _registered) return;
+        _registered = true;
         // twodog assembly only: GodotPlugins registers GodotSharp's own resolver during InitializeFromEngine, and
         // claiming that slot here breaks its init.
         NativeLibrary.SetDllImportResolver(typeof(LibGodotLoader).Assembly, Resolve);
@@ -81,6 +84,14 @@ internal static class LibGodotLoader
 
         // LoadExact already picked this context's module (hosted mode).
         if (LoadedLibraryHandle != 0) return LoadedLibraryHandle;
+
+        // iOS apps link libgodot.a into their executable (the 2dog.ios targets force-load it).
+        if (OperatingSystem.IsIOS())
+        {
+            var program = NativeLibrary.GetMainProgramHandle();
+            Record("__Internal", null, program);
+            return program;
+        }
 
         var variant = ResolveVariant();
         var probeDirs = ProbeDirs();

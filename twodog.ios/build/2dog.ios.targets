@@ -1,0 +1,44 @@
+<Project>
+    <!-- 2dog.ios consumer targets for net10.0-ios hosts: variant defaults, host validation, the bundled game pack
+         and trimmer roots. The archive itself is linked by the runtime meta package's resolver
+         (2dog.ios-native-resolver.targets). Inert outside iOS. -->
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <!-- 2dog.engine exports iOS packs during the build (TwoDogExportIosPack); its desktop export after Publish
+             never applies to an app bundle. -->
+        <TwoDogExportPack>false</TwoDogExportPack>
+        <!-- Debug builds run the Mono interpreter so no code path ever needs a JIT; Release builds AOT-compile. -->
+        <UseInterpreter Condition="'$(UseInterpreter)' == '' And '$(Configuration)' == 'Debug'">true</UseInterpreter>
+        <!-- No GodotPlugins.dll on iOS: the game's generated initializer is registered through IosHost. -->
+        <TwoDogSkipGodotApiCopy>true</TwoDogSkipGodotApiCopy>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+        <!-- GodotSharp finds the game's scripts through reflection and the host glue is reached from native
+             callbacks, so these assemblies stay whole. -->
+        <TrimmerRootAssembly Include="GodotSharp;twodog;twodog.ios"/>
+        <TrimmerRootAssembly Include="$(TwoDogIosGameAssembly)" Condition="'$(TwoDogIosGameAssembly)' != ''"/>
+    </ItemGroup>
+    <Target Name="TwoDogValidateIosHost" BeforeTargets="PrepareForBuild"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true'">
+        <Error Code="TDGI001" Condition="'$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'release'"
+               Text="2dog: iOS supports debug and release variants only."/>
+        <!-- Mono is the only runtime validated so far; NativeAOT needs the NativeAotPlugins entry point and a device pass. -->
+        <Error Code="TDGI004" Condition="'$(PublishAot)' == 'true' Or '$(UseMonoRuntime)' == 'false'"
+               Text="2dog: iOS hosts run on Mono (interpreter in Debug, AOT in Release); NativeAOT (PublishAot) is not supported yet."/>
+        <Error Code="TDGI005" Condition="'$(RuntimeIdentifier)' != 'ios-arm64' And '$(RuntimeIdentifier)' != 'iossimulator-arm64'"
+               Text="2dog: iOS hosts support ios-arm64 (devices) and iossimulator-arm64 (the Simulator on Apple silicon) only; unsupported RuntimeIdentifier: '$(RuntimeIdentifier)'."/>
+    </Target>
+
+    <!-- game.pck, the main pack GodotHost.Start hands to Godot: TwoDogIosPack when set, otherwise the pck that
+         2dog.engine's TwoDogExportIosPack (hooked in before this target) exports from GodotProjectDir. -->
+    <Target Name="TwoDogAddIosPack" BeforeTargets="_CollectBundleResources" DependsOnTargets="ResolveReferences"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true'">
+        <Error Code="TDGI006" Condition="'$(TwoDogIosPack)' == '' Or !Exists('$(TwoDogIosPack)')"
+               Text="2dog: there is no game pck for the app bundle. Set GodotProjectDir to the Godot project so 2dog.engine exports it with its iOS preset, or set TwoDogIosPack to a pck exported with an iOS preset."/>
+        <ItemGroup>
+            <BundleResource Include="$(TwoDogIosPack)" Link="game.pck"/>
+        </ItemGroup>
+    </Target>
+</Project>

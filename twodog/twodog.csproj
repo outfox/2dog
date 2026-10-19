@@ -87,6 +87,7 @@
         <EmbeddedResource Include="../templates/twodog/Company.Product1.blazor/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.blazor/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.maui/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.maui/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.android/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.android/%(RecursiveDir)%(Filename)%(Extension)"/>
+        <EmbeddedResource Include="../templates/twodog/Company.Product1.ios/**/*" Exclude="$(_TwoDogCliTplExcludes)" LogicalName="tpl/Company.Product1.ios/%(RecursiveDir)%(Filename)%(Extension)"/>
         <EmbeddedResource Include="../templates/twodog/Company.Product1.csproj" LogicalName="tpl/Company.Product1.csproj"/>
         <EmbeddedResource Include="../templates/twodog/Directory.Build.targets" LogicalName="tpl/Directory.Build.targets"/>
         <EmbeddedResource Include="../templates/twodog/Directory.Build.props" LogicalName="tpl/Directory.Build.props"/>

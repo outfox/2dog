@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>2dog.iossimulator-arm64$(TwoDogPackageSuffix)</PackageId>
+        <Description>Experimental iOS Simulator arm64 (Apple silicon) runtime variants of the statically linked Godot engine. Requires 2dog.ios for the host glue and build targets.</Description>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <IsPackable Condition="!Exists('$(GodotBinDir)ios/template_debug/iossimulator-arm64/libgodot.a') Or !Exists('$(GodotBinDir)ios/template_release/iossimulator-arm64/libgodot.a')">false</IsPackable>
+        <NuspecFile>twodog.iossimulator-arm64.nuspec</NuspecFile>
+        <NuspecProperties>version=$(Version);authors=$(Authors);description=$(Description);precision=$(TwoDogPackageSuffix)</NuspecProperties>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="twodog.iossimulator-arm64.release.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="twodog.iossimulator-arm64.debug.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+</Project>

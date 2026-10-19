@@ -14,18 +14,20 @@ existing root `global.json`. Run from `MyGame.maui/` to use the host's pin.
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `TargetFrameworks` | `net10.0-android`, plus `net10.0-windows10.0.19041.0` on Windows | Select with `-f`; `dotnet run` asks without it |
+| `TargetFrameworks` | `net10.0-android`, plus `net10.0-windows10.0.19041.0` on Windows and `net10.0-ios` on a Mac | Select with `-f`; `dotnet run` asks without it |
 | `GodotProjectDir` | `..` | Game directory for import and pack export |
-| `RuntimeIdentifier` | `win-x64` on Windows, `android-arm64` on Android | Native architecture; Android also supports `android-x64` |
+| `RuntimeIdentifier` | `win-x64` on Windows, `android-arm64` on Android, `ios-arm64` on iOS | Native architecture; Android also supports `android-x64`, iOS `iossimulator-arm64` |
 | `TwoDogVariant` | `debug` in Debug, `release` otherwise | Use Debug or Release |
 | `WindowsPackageType` | `None` | Unpackaged Windows app |
 | `WindowsAppSDKSelfContained` | `true` on Windows | Bundle the Windows App SDK runtime |
 | `PublishSelfContained` | `true` on Windows | Bundle the .NET runtime |
 | `TwoDogAndroidGameAssembly` | Game assembly name | Assembly extracted before engine startup |
+| `TwoDogIosGameAssembly` | Game assembly name | Assembly kept whole by the trimmer on iOS |
 | `AndroidPackageFormats` | `apk` | Use `aab` for store distribution |
 
 Android uses the [Android host's export, signing and trimming settings](/configuration/android)
-and Mono AOT in Release. Native AOT is unsupported by the MAUI host.
+and iOS the [iOS host's](/configuration/ios); both use Mono AOT in Release.
+Native AOT is unsupported by the MAUI host.
 
 ## View Properties
 
@@ -49,6 +51,7 @@ Godot's native GPU surface.
 ```bash
 dotnet publish MyGame.maui -f net10.0-windows10.0.19041.0 -c Release
 dotnet publish MyGame.maui -f net10.0-android -c Release -r android-arm64
+dotnet publish MyGame.maui -f net10.0-ios -c Release -r ios-arm64 -p:CodesignKey="Apple Development"
 ```
 
 See the [MAUI host guide](/hosts/maui) for setup, lifecycle and `Dispatch`.

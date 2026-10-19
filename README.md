@@ -34,7 +34,8 @@ The tool adds hosts you want as small 'sidecar' projects, each with its own .NET
 | [WinForms](https://2dog.dev/hosts/winforms) | Embed Godot in a Windows Forms application. | `--winforms` |
 | [WinUI 3](https://2dog.dev/hosts/winui) | Embed Godot in a Windows App SDK application. | `--winui` |
 | [Android](https://2dog.dev/hosts/android) · experimental | Build an APK with `dotnet publish`. | `--android` |
-| [MAUI](https://2dog.dev/hosts/maui) | Embed Godot in a Windows or Android MAUI page, with controls over the game. | `--maui` |
+| [iOS](https://2dog.dev/hosts/ios) · experimental | Build an iPhone or iPad app on a Mac with `dotnet build`. | `--ios` |
+| [MAUI](https://2dog.dev/hosts/maui) | Embed Godot in a Windows, Android or iOS MAUI page, with controls over the game. | `--maui` |
 | [xUnit](https://2dog.dev/hosts/xunit) | Test your game with Godot fixtures and xUnit collections. | `--xunit` |
 | [NUnit](https://2dog.dev/hosts/nunit) | Test your game with Godot fixtures and NUnit's familiar test runner. | `--nunit` |
 | [C# REPL](https://2dog.dev/hosts/repl) | Explore and change your running game from an interactive prompt. | `--repl` |
@@ -139,7 +140,7 @@ has its own entry point and dependencies.
 ## Requirements and status
 
 - .NET SDK 10.0 or later
-- Web/WebXR/Blazor builds: `wasm-tools`; Android builds: `android`, Android SDK and JDK 17. Desktop and tests need neither workload, even when those optional hosts exist in the solution.
+- Web/WebXR/Blazor builds: `wasm-tools`; Android builds: `android`, Android SDK and JDK 17; iOS builds: `ios` and a Mac with Xcode. Desktop and tests need none of these workloads, even when those optional hosts exist in the solution.
 - Godot 4.7.x official .NET editor (only when you want to edit scenes visually)
 - Supported build platforms: `win-x64`, `linux-x64`, and `osx-arm64`
 - Supported RIDs for published builds: `win-x64`, `linux-x64`, `osx-arm64`, `browser-wasm`
@@ -149,6 +150,10 @@ Experimental Android arm64/x64 support: `dnx 2dog add --android` scaffolds a hos
 whose `dotnet publish` makes an APK.
 See the [Android host](https://2dog.dev/hosts/android) and [2dog.android](platforms/twodog.android/README.md).
 Device validation is still required before Android joins the supported RID list.
+
+Experimental iOS support: `dnx 2dog add --ios` scaffolds a host that shows Godot's view
+controller; it builds on a Mac with Xcode (`dotnet build -r iossimulator-arm64` for the Simulator).
+See the [iOS host](https://2dog.dev/hosts/ios) and [2dog.ios](twodog.ios/README.md).
 
 
 ## Dogs and robots are nice

@@ -32,6 +32,7 @@ class Platform(Enum):
     MACOS = "macos"
     WEB = "web"
     ANDROID = "android"
+    IOS = "ios"
 
 
 class Arch(Enum):
@@ -116,6 +117,18 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
             godot_platform=plat.value, godot_arch=arch_str, godot_exe="",
             lib_path_var="PATH", path_separator=os.pathsep,
             lib_extension=".so", lib_prefix="libgodot",
+        )
+
+    if plat == Platform.IOS:
+        # Static archive linked into the .NET iOS app (device or, with --simulator, the Simulator slice); built
+        # on macOS with Xcode only, arm64 only. No editor or glue: both come from the desktop build.
+        arch_str = Arch.ARM64.value if not arch_override or arch_override == "auto" else arch.value
+        if arch_str != Arch.ARM64.value:
+            raise ValueError("iOS .NET hosts support arm64 only")
+        return PlatformConfig(
+            godot_platform=plat.value, godot_arch=arch_str, godot_exe="",
+            lib_path_var="DYLD_LIBRARY_PATH", path_separator=":",
+            lib_extension=".a", lib_prefix="libgodot",
         )
 
     if plat == Platform.WINDOWS:
@@ -210,6 +223,10 @@ def parse_arguments():
         "--threads", action="store_true",
         help="Web only: multithreaded payload for WasmEnableThreads hosts, staged under bin/web-threads/",
     )
+    parser.add_argument(
+        "--simulator", action="store_true",
+        help="iOS only: build the Simulator slice (iossimulator-arm64) instead of the device archive",
+    )
 
     # Build steps control
     parser.add_argument(
@@ -234,7 +251,7 @@ def parse_arguments():
     parser.add_argument(
         "--platform",
         type=str,
-        choices=["auto", "windows", "linuxbsd", "macos", "web", "android"],
+        choices=["auto", "windows", "linuxbsd", "macos", "web", "android", "ios"],
         default="auto",
         help="Override target platform (for CI/cross-compilation)",
     )
@@ -264,8 +281,12 @@ def parse_arguments():
         "auto", Arch.ARM64.value, Arch.X86_64.value,
     ):
         parser.error("Android .NET hosts support --arch arm64 or x86_64 only (or auto)")
+    if args.platform == Platform.IOS.value and args.arch not in ("auto", Arch.ARM64.value):
+        parser.error("iOS .NET hosts support --arch arm64 only (or auto)")
     if args.threads and args.platform != Platform.WEB.value:
         parser.error("--threads requires --platform web")
+    if args.simulator and args.platform != Platform.IOS.value:
+        parser.error("--simulator requires --platform ios")
     return args
 
 
@@ -357,6 +378,8 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Precision", getattr(args, "precision", "single"))
     if args.threads:
         table.add_row("Threads", "yes (proxy_to_pthread)")
+    if getattr(args, "simulator", False):
+        table.add_row("iOS slice", "Simulator (iossimulator-arm64)")
     table.add_row("Maximum build jobs", str(get_job_limit() or "SCons default"))
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
@@ -515,15 +538,18 @@ def build_libgodot(args, platform_config: PlatformConfig):
     console.print("\n[bold yellow]┌── Building libgodot ──┐[/bold yellow]")
 
     # Determine which targets to build
+    is_ios = platform_config.godot_platform == Platform.IOS.value
     if args.target == "all":
         targets = ["template_release", "template_debug"]
-        if platform_config.godot_platform != Platform.ANDROID.value:
+        if platform_config.godot_platform != Platform.ANDROID.value and not is_ios:
             targets.append("editor")
     else:
         targets = [args.target]
 
     if platform_config.godot_platform == Platform.ANDROID.value and "editor" in targets:
         raise ValueError("Android .NET library builds have no editor target; use a desktop editor for glue")
+    if is_ios and "editor" in targets:
+        raise ValueError("iOS .NET library builds have no editor target; use a desktop editor for glue")
 
     for target in targets:
         # template_release should never be a dev build (for optimized release binaries)
@@ -545,8 +571,11 @@ def build_libgodot(args, platform_config: PlatformConfig):
             "module_mono_enabled=yes",
             f"precision={getattr(args, 'precision', 'single')}",
             "d3d12=no",
-            "library_type=shared_library",
-            "extra_suffix=shared_library",
+            # iOS is always a static archive; the library_type adds the libgodot entry points (platform/ios/libgodot_ios.mm).
+            "library_type=static_library" if is_ios else "library_type=shared_library",
+            *([] if is_ios else ["extra_suffix=shared_library"]),
+            # Godot's Metal driver, no MoltenVK; the Simulator has neither and falls back to GLES3.
+            *(["vulkan=no", "generate_bundle=no", f"simulator={'yes' if getattr(args, 'simulator', False) else 'no'}"] if is_ios else []),
             f"dev_build={use_dev_build}",
             f"scu_build={args.scu_build}",
             f"debug_symbols={args.debug_symbols}",
@@ -572,6 +601,18 @@ def build_libgodot(args, platform_config: PlatformConfig):
             for name in ("libgodot_android.so", "libc++_shared.so"):
                 shutil.copy2(source / name, destination / name)
 
+        elif is_ios:
+            # Stage the archive per RID, where the 2dog.ios-* packages and resolver look for it.
+            import shutil
+            from pathlib import Path
+
+            simulator = getattr(args, "simulator", False)
+            rid = "iossimulator-arm64" if simulator else "ios-arm64"
+            name = ios_archive_name(target, use_dev_build == "yes", getattr(args, "precision", "single"), simulator)
+            destination = native_output_dir(getattr(args, "precision", "single")) / "ios" / target / rid
+            destination.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(Path("godot/bin") / name, destination / "libgodot.a")
+
         elif getattr(args, "precision", "single") == "double":
             # SCons names double binaries separately; stage all double payloads together.
             import shutil
@@ -582,6 +623,12 @@ def build_libgodot(args, platform_config: PlatformConfig):
                     f"{platform_config.godot_arch}.shared_library{platform_config.lib_extension}")
             native_output_dir("double").mkdir(parents=True, exist_ok=True)
             shutil.copy2(Path("godot/bin") / name, native_output_dir("double") / name)
+
+
+def ios_archive_name(target, dev_build, precision, simulator):
+    """SCons names the iOS archive libgodot.ios.<target>[.dev][.double].arm64[.simulator].a."""
+    return (f"libgodot.ios.{target}{'.dev' if dev_build else ''}{'.double' if precision == 'double' else ''}"
+            f".arm64{'.simulator' if simulator else ''}.a")
 
 
 def native_output_dir(precision):
@@ -638,8 +685,8 @@ def main():
         precision=args.precision,
     )
 
-    if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value):
-        # Editor/glue come from desktop builds for both cross-compilation targets.
+    if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value, Platform.IOS.value):
+        # Editor/glue come from desktop builds for the cross-compilation targets.
         args.no_editor = True
         args.no_glue = True
 

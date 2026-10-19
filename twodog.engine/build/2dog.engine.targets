@@ -1,7 +1,7 @@
 <Project>
     <!-- 2dog.engine consumer targets: GodotPlugins copy, variant metadata, automatic import and desktop pck export.
          Consumer knobs: TwoDogVariant (release|debug|editor), TwoDogExportPack, TwoDogDesktopExportPreset,
-         TwoDogAndroidExportPreset. -->
+         TwoDogAndroidExportPreset, TwoDogIosExportPreset. -->
 
     <!-- ============================================ -->
     <!-- GodotProjectDir Assembly Metadata             -->
@@ -468,6 +468,70 @@
                Text="TwoDog: the Android build needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, restore the 2dog.&lt;build-machine-rid&gt;.editor and 2dog.tools packages, or set &lt;TwoDogAndroidPack&gt; to a pre-exported pck."/>
 
         <Message Importance="high" Text="TwoDog: exported the game pck for the APK to $(_TwoDogAndroidPackFullPath)"/>
+    </Target>
+
+    <!-- ============================================ -->
+    <!-- Content pipeline: iOS .pck                    -->
+    <!-- ============================================ -->
+    <!-- The 2dog.ios host loads game.pck from the app bundle, so iOS exports during the build, before 2dog.ios's
+         TwoDogAddIosPack adds it as a bundle resource. Same capability as the desktop export, which the macOS build
+         machine provides. An explicit TwoDogIosPack (a pre-exported pck) skips it.
+         Knobs: TwoDogIosExportPreset (default iOS), TwoDogIosExportPath (default under obj/). -->
+    <PropertyGroup>
+        <TwoDogIosExportPreset Condition="'$(TwoDogIosExportPreset)' == ''">iOS</TwoDogIosExportPreset>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(TwoDogIosPack)' == '' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <_TwoDogIosGdIgnoredDirs Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
+        <TwoDogIosExportInputs Include="$(TwoDogGodotProjectFullPath)/**/*"
+                               Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogIosGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
+    </ItemGroup>
+
+    <!-- Runs even when the export is up to date, so TwoDogIosPack always names the pck. -->
+    <Target Name="_TwoDogResolveIosExportPath">
+        <PropertyGroup>
+            <TwoDogIosExportPath Condition="'$(TwoDogIosExportPath)' == ''">$(IntermediateOutputPath)twodog/game.pck</TwoDogIosExportPath>
+            <_TwoDogIosPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(TwoDogIosExportPath)'))))</_TwoDogIosPackFullPath>
+            <TwoDogIosPack>$(_TwoDogIosPackFullPath)</TwoDogIosPack>
+        </PropertyGroup>
+    </Target>
+
+    <Target Name="TwoDogExportIosPack"
+            BeforeTargets="TwoDogAddIosPack"
+            DependsOnTargets="TwoDogImportGodotProject;TwoDogPrepareExport;_TwoDogResolveIosExportPath"
+            Inputs="@(TwoDogIosExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Outputs="$(_TwoDogIosPackFullPath)"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogIosPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+
+        <PropertyGroup>
+            <_TwoDogIosExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogIosExportPresetsPath>
+            <_TwoDogHasIosPreset>false</_TwoDogHasIosPreset>
+            <_TwoDogHasIosPreset Condition="Exists('$(_TwoDogIosExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogIosExportPresetsPath)').Contains('name=&quot;$(TwoDogIosExportPreset)&quot;'))">true</_TwoDogHasIosPreset>
+        </PropertyGroup>
+        <Error Code="TDGI007" Condition="'$(_TwoDogHasIosPreset)' != 'true'"
+               Text="TwoDog: the iOS build exports the game pck via the '$(TwoDogIosExportPreset)' export preset, which '$(_TwoDogIosExportPresetsPath)' does not define (or the file is missing). Add an iOS preset in the Godot editor (Project &gt; Export &gt; Add), run `2dog doctor --fix` (it appends the template preset), point &lt;TwoDogIosExportPreset&gt; at an existing one, or set &lt;TwoDogIosPack&gt; to a pre-exported pck."/>
+        <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogIosPackFullPath)'))"/>
+
+        <!-- (1) explicitly configured external editor, through the helper when available -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogIosExportPreset)&quot; --output &quot;$(_TwoDogIosPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogIosExportPreset)&quot; &quot;$(_TwoDogIosPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; ++ --2dog-host-pack"
+              EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+
+        <!-- (2) in-process export helper against the packaged editor libgodot -->
+        <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogIosExportPreset)&quot; --output &quot;$(_TwoDogIosPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
+              IgnoreStandardErrorWarningFormat="true"/>
+
+        <Error Code="TDGI008" Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"
+               Text="TwoDog: the iOS build needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, restore the 2dog.&lt;build-machine-rid&gt;.editor and 2dog.tools packages, or set &lt;TwoDogIosPack&gt; to a pre-exported pck."/>
+
+        <Message Importance="high" Text="TwoDog: exported the game pck for the app bundle to $(_TwoDogIosPackFullPath)"/>
     </Target>
 
 </Project>

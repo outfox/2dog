@@ -1204,7 +1204,9 @@ public class AddEndToEndTests
     [InlineData("--winui", "winui", "<UseWinUI>true</UseWinUI>",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
     [InlineData("--maui", "maui", "<UseMaui>true</UseMaui>",
-        new[] { "MauiProgram.cs", "App.cs", "MainPage.cs", "Platforms/Windows/App.xaml", "Platforms/Android/MainActivity.cs", "Platforms/Android/MainApplication.cs" })]
+        new[] { "MauiProgram.cs", "App.cs", "MainPage.cs", "Platforms/Windows/App.xaml", "Platforms/Android/MainActivity.cs", "Platforms/Android/MainApplication.cs", "Platforms/iOS/AppDelegate.cs", "Platforms/iOS/Info.plist" })]
+    [InlineData("--ios", "ios", "<TwoDogIosGameAssembly>SpaceMiner</TwoDogIosGameAssembly>",
+        new[] { "Main.cs", "AppDelegate.cs", "SceneDelegate.cs", "Info.plist", "Entitlements.plist", "Resources/LaunchScreen.storyboard", "Assets.xcassets/AppIcon.appiconset/appicon.png", "global.json" })]
     [InlineData("--avalonia", "avalonia", "2dog.avalonia",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
     [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",

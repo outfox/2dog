@@ -35,8 +35,14 @@ a `.gdignore`):
 - `showcase.winforms/` - Windows-only GUI embedding demo (`--wid`): `dotnet run --project demos/showcase/showcase.winforms`
 - `showcase.winui/` - Windows-only WinUI 3 embedding demo (`--wid`; builds only on Windows): `dotnet run --project demos/showcase/showcase.winui`
 - `showcase.avalonia/` - cross-platform Avalonia embedding demo (controls composite over the game): `dotnet run --project demos/showcase/showcase.avalonia`
-- `showcase.maui/` - Windows and Android MAUI embedding demo with pause, time scale, and presentation mode in an
-  overlay. Install `maui-windows` and `maui-android`, then run
+- `showcase.ios/` - experimental iOS host (macOS with Xcode only): `dotnet build demos/showcase/showcase.ios -r
+  iossimulator-arm64` builds the game, exports its pck into the app bundle and links the static engine; Godot's view
+  controller owns the loop, so the host drives the white cubes and runs the API smoke (minus the GDExtension probe,
+  which iOS does not package yet) from `GodotHost.Started`. Needs the ios workload and, in `packages/`, the `2dog.ios`
+  and `2dog.ios*-arm64` packages (`uv run poe build-ios`, `uv run poe build-maui`); see
+  [2dog.ios](../../twodog.ios/README.md). `uv run poe build-ios-app --app showcase` wraps the build and inspection.
+- `showcase.maui/` - Windows, Android and (on a Mac) iOS MAUI embedding demo with pause, time scale, and presentation
+  mode in an overlay. Install `maui-windows` and `maui-android` (`maui-ios` on a Mac), then run
   `dotnet run --project demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0`, or publish
   `dotnet publish demos/showcase/showcase.maui -f net10.0-android -r android-arm64`.
   Pack `2dog.maui` first with `uv run poe build-maui`. Android also needs its native packages and the NDK as below.

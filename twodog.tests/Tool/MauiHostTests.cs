@@ -13,7 +13,8 @@ public class MauiHostTests
         var project = File.ReadAllText(Path.Combine(tmp.Dir, "Game.ui", "Game.ui.csproj"));
         Assert.Contains("<UseMaui>true</UseMaui>", project);
         Assert.Contains("2dog.maui", project);
-        Assert.DoesNotContain("-ios", project);
+        // iOS is a Mac-only target of the MAUI host; Mac Catalyst stays out.
+        Assert.Contains("IsOSPlatform('osx'))\">$(TargetFrameworks);net10.0-ios", project);
         Assert.DoesNotContain("-maccatalyst", project);
         Assert.Contains("Game.ui/**", File.ReadAllText(Path.Combine(tmp.Dir, "Game.csproj")));
         Assert.Contains("<TwoDogMauiVersion>", File.ReadAllText(Path.Combine(tmp.Dir, "Directory.Build.props")));

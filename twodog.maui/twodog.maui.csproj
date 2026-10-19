@@ -2,6 +2,10 @@
     <PropertyGroup>
         <TargetFrameworks>net10.0-android</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+        <!-- The iOS target needs the maui-ios and ios workloads: always on a Mac, opt-in elsewhere (the Windows
+             pack job passes TwoDogMauiIos=true; class libraries build there without a Mac). -->
+        <TwoDogMauiIos Condition="'$(TwoDogMauiIos)' == '' And $([MSBuild]::IsOSPlatform('osx'))">true</TwoDogMauiIos>
+        <TargetFrameworks Condition="'$(TwoDogMauiIos)' == 'true'">$(TargetFrameworks);net10.0-ios</TargetFrameworks>
         <UseMaui>true</UseMaui>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -10,17 +14,20 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'android'">24</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="'$(TargetPlatformIdentifier)' == 'ios'">15.0</SupportedOSPlatformVersion>
         <PackageId>2dog.maui</PackageId>
         <Version>$(TwoDogVersion)</Version>
         <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
-        <Description>Embed Godot in .NET MAUI on Windows and Android with GPU presentation and MAUI overlays.</Description>
+        <Description>Embed Godot in .NET MAUI on Windows, Android and iOS (experimental) with GPU presentation and MAUI overlays.</Description>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>icon.png</PackageIcon>
-        <PackageTags>godot;2dog;maui;android;winui;game-engine</PackageTags>
+        <PackageTags>godot;2dog;maui;android;ios;winui;game-engine</PackageTags>
     </PropertyGroup>
     <ItemGroup>
         <AndroidJavaSource Remove="Platforms/Android/**/*.java"/>
         <ProjectReference Include="../twodog.engine/twodog.engine.csproj" PrivateAssets="all"/>
+        <!-- The iOS handler hosts Godot's view controller through 2dog.ios, which consumers get transitively. -->
+        <ProjectReference Include="../twodog.ios/twodog.ios.csproj" Condition="'$(TargetPlatformIdentifier)' == 'ios'"/>
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png"/>
         <None Include="README.md" Pack="true" PackagePath="README.md"/>

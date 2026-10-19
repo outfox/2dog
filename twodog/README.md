@@ -33,7 +33,7 @@ folder names, the plan, and a confirmation. Naming any host option (or passing
 `--install-wasm-tools` or `--install-android-workload` for explicit installation. The `dotnet new` template produces the
 same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
 
-Browser, Android, and MAUI hosts are excluded from ordinary solution builds. Install their
+Browser, Android, iOS, and MAUI hosts are excluded from ordinary solution builds. Install their
 workloads when building or publishing those hosts. Package updates and desktop/test
 builds do not require them. Doctor only requires them for its selected `--build`
 target, or installs them when explicitly requested with an install flag.
@@ -70,8 +70,9 @@ MyGame/                      <- your existing Godot project (unchanged)
   MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
   MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)
   MyGame.blazor/ (.gdignore) <- Blazor Web App host (opt-in: --blazor; server + Client/ WebAssembly page)
-  MyGame.maui/ (.gdignore)    <- MAUI host (opt-in: --maui; Windows and Android)
+  MyGame.maui/ (.gdignore)    <- MAUI host (opt-in: --maui; Windows, Android and iOS)
   MyGame.android/ (.gdignore) <- Android host (opt-in: --android; dotnet publish makes an APK)
+  MyGame.ios/ (.gdignore)     <- iOS host (opt-in: --ios; builds on a Mac with Xcode)
 ```
 
 Run it again whenever you want another host – hosts that exist are recognized
@@ -99,7 +100,7 @@ Options:
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, android, and maui are opt-in and never in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]`, `--ios [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, android, maui, and ios are opt-in and never in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`, before any hosts exist) |

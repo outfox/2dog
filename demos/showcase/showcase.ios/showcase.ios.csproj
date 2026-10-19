@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Experimental iOS host: the app links the Godot engine statically and shows Godot's own view controller,
+         which owns the display link, input and lifecycle; this app registers the .NET runtime before it starts.
+         Builds on macOS with Xcode only (the ios workload), so it is in no solution (like tests/ios).
+         Simulator: dotnet build -r iossimulator-arm64    Device: dotnet publish -r ios-arm64 -c Release -->
+    <PropertyGroup>
+        <TargetFramework>net10.0-ios</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>showcase.ios</RootNamespace>
+        <ApplicationId>dev.twodog.showcase</ApplicationId>
+        <ApplicationTitle>2dog showcase</ApplicationTitle>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <!-- Devices by default; the Simulator needs -r iossimulator-arm64 -->
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">ios-arm64</RuntimeIdentifier>
+    </PropertyGroup>
+    <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
+         their .gdignore. The build imports it and exports its pck into the app bundle. -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+    </PropertyGroup>
+
+    <!-- In this repo the native variant follows the build configuration (iOS has no editor variant) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <TwoDogIosGameAssembly>showcase</TwoDogIosGameAssembly>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios-arm64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]"
+                          Condition="'$(RuntimeIdentifier)' == 'ios-arm64'"/>
+        <PackageReference Include="2dog.iossimulator-arm64$(TwoDogPackageSuffix)" Version="[$(NativesVersion)]"
+                          Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../showcase.csproj"/>
+    </ItemGroup>
+</Project>

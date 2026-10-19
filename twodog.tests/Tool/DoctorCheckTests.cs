@@ -156,6 +156,7 @@ public class DoctorCheckTests : IDisposable
     [Theory]
     [InlineData("web")]
     [InlineData("android")]
+    [InlineData("ios")]
     public void NativeVariants_SelectedEditorBuildRejectsUnsupportedDefaults(string kind)
     {
         var dir = Scaffold($"--{kind}");
@@ -276,6 +277,7 @@ public class DoctorCheckTests : IDisposable
     [Theory]
     [InlineData("--web", "Game.web/Game.web.csproj", "2dog.browser-wasm")]
     [InlineData("--android", "Game.android/Game.android.csproj", "2dog.android")]
+    [InlineData("--ios", "Game.ios/Game.ios.csproj", "2dog.ios-arm64")]
     public void UnpinnedNativesProperty_Warns(string host, string csproj, string package)
     {
         var dir = Scaffold(host);
@@ -306,6 +308,41 @@ public class DoctorCheckTests : IDisposable
         // A pre-exported pck needs no preset at all.
         Edit(dir, csproj, anchor, "<TwoDogAndroidPack>game.pck</TwoDogAndroidPack>" + anchor);
         Assert.False(HasIssue());
+    }
+
+    [Fact]
+    public void IosPreset_FollowsHowTheHostGetsItsPck()
+    {
+        var dir = Scaffold("--ios");
+        Assert.All(Findings(Doctor(dir, "--json").Stdout, "preset.ios"), f => Assert.Equal("pass", f.GetProperty("severity").GetString()));
+        Edit(dir, "export_presets.cfg", "name=\"iOS\"", "name=\"Phone\"");
+        const string csproj = "Game.ios/Game.ios.csproj", anchor = "<TwoDogIosGameAssembly>";
+        bool HasIssue() => Findings(Doctor(dir, "--json").Stdout, "preset.ios")
+            .Any(f => f.GetProperty("severity").GetString() is "warn" or "fail");
+
+        // The template preset can be appended back by the fix.
+        var missing = Issue(Doctor(dir, "--json").Stdout, "preset.ios", "fail", fixable: true);
+        Assert.Equal("'iOS' export preset missing", missing.GetProperty("title").GetString());
+        Assert.Equal(0, Doctor(dir, "--fix").ExitCode);
+        Assert.False(HasIssue());
+
+        // The host's own preset name is the one the build exports through; a custom name cannot be appended.
+        Edit(dir, csproj, anchor, "<TwoDogIosExportPreset>Tablet</TwoDogIosExportPreset>" + anchor);
+        Issue(Doctor(dir, "--json").Stdout, "preset.ios", "fail", fixable: false);
+
+        // A pre-exported pck needs no preset at all.
+        Edit(dir, csproj, anchor, "<TwoDogIosPack>game.pck</TwoDogIosPack>" + anchor);
+        Assert.False(HasIssue());
+    }
+
+    [Fact]
+    public void IosHost_ReportsTheMacRequirementOffAMac()
+    {
+        var dir = Scaffold("--ios");
+        var finding = Assert.Single(Findings(Doctor(dir, "--json").Stdout, "env.xcode"));
+        Assert.Equal("info", finding.GetProperty("severity").GetString());
+        Assert.Contains("need a Mac with Xcode", finding.GetProperty("title").GetString());
+        Assert.True(SolutionOps.IsExcludedFromSolutionBuild(Path.Combine(dir, "Game.slnx"), "Game.ios/Game.ios.csproj"));
     }
 
     [Fact]

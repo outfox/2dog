@@ -2,8 +2,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using Godot.Bridge;
-using Godot.NativeInterop;
 
 namespace twodog;
 
@@ -14,9 +12,6 @@ namespace twodog;
 [SupportedOSPlatform("browser")]
 internal static unsafe partial class WebHost
 {
-    private static nint _pluginsInitializer;
-    private static nint _initializePluginsCallback;
-    private static bool _pluginsInitialized;
     private static Func<bool>? _iterate;
     private static Action? _perFrame;
     private static Action? _onShutdown;
@@ -31,11 +26,6 @@ internal static unsafe partial class WebHost
     /// with other managed code (Blazor) keep it alive; the instance is still destroyed.
     /// </summary>
     internal static bool ExitRuntimeOnQuit { get; set; }
-
-    // Exported by the mono module (GD_MONO_LIBGODOT_ENABLED); GDMono init calls the registered callback for the
-    // godot_plugins_initialize pointer instead of loading GodotPlugins.dll.
-    [LibraryImport("libgodot")]
-    private static partial void set_load_from_executable_fn(nint callback);
 
     // Exported by platform/web/libgodot_web.cpp: runs one engine frame
     // (redraw/max_fps handling + main_loop_iterate), returns non-zero on quit.
@@ -60,48 +50,10 @@ internal static unsafe partial class WebHost
     [DllImport("*")]
     private static extern void godot_js_os_finish_async(nint callback);
 
-    [UnmanagedCallersOnly]
-    private static nint LoadFromExecutable() => _initializePluginsCallback;
+    /// <summary>Registers the game's plugins initializer with the statically linked engine; see <see cref="GamePluginsInitializer"/>.</summary>
+    internal static void RegisterPluginsInitializer(nint initializer) => GamePluginsInitializer.Register(initializer);
 
-    [UnmanagedCallersOnly]
-    private static godot_bool InitializePlugins(nint godotDllHandle, nint outManagedCallbacks,
-        nint unmanagedCallbacks, int unmanagedCallbacksSize)
-    {
-        try
-        {
-            var initialize = (delegate* unmanaged<nint, nint, nint, int, godot_bool>)_pluginsInitializer;
-            var ok = initialize(godotDllHandle, outManagedCallbacks, unmanagedCallbacks, unmanagedCallbacksSize);
-            if (!ok.ToBool()) return ok;
-            // The game may compile against stock GodotSharp and run against the fork.
-            // Keep the fork-only reset here, after the initializer refreshes native callbacks,
-            // matching GodotPlugins on desktop without duplicating the generated initializer.
-            if (_pluginsInitialized) ScriptManagerBridge.ResetForEngineReinitialization();
-            _pluginsInitialized = true;
-            return godot_bool.True;
-        }
-        catch (Exception e)
-        {
-            Console.Error.WriteLine(e);
-            return godot_bool.False;
-        }
-    }
-
-    /// <summary>
-    /// Stores the game's godot_plugins_initialize pointer (<c>GodotPlugins.Game.Main.InitializeFromGameProject</c>)
-    /// and registers it with libgodot. Must happen before the engine starts.
-    /// </summary>
-    internal static void RegisterPluginsInitializer(nint initializer)
-    {
-        if (initializer == 0)
-            throw new ArgumentException($"{nameof(WebHost)}: plugins initializer pointer must not be null.", nameof(initializer));
-        _pluginsInitializer = initializer;
-        // Mono wasm AOT can abort in ldftn when a native callback takes another
-        // UnmanagedCallersOnly method's address. Resolve it before native entry.
-        _initializePluginsCallback = (nint)(delegate* unmanaged<nint, nint, nint, int, godot_bool>)&InitializePlugins;
-        set_load_from_executable_fn((nint)(delegate* unmanaged<nint>)&LoadFromExecutable);
-    }
-
-    internal static bool HasPluginsInitializer => _pluginsInitializer != 0;
+    internal static bool HasPluginsInitializer => GamePluginsInitializer.HasPluginsInitializer;
 
     /// <summary>
     /// Hands the main loop to emscripten and returns immediately; on quit the async teardown runs and

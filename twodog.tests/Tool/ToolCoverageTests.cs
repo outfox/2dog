@@ -141,6 +141,7 @@ public class HostsCoverageTests
     [InlineData("winui", "winui", "game embedded in a WinUI 3 window (Windows-only)", "--winui")]
     [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]
     [InlineData("blazor", "blazor", "game embedded in a Blazor Web App page (WebAssembly)", "--blazor")]
+    [InlineData("ios", "ios", "iOS app with Godot's view controller, built on a Mac (experimental)", "--ios")]
     public void HostMetadata_IsComplete(string suffix, string label, string blurb, string flag)
     {
         var kind = HostKinds.Of(suffix);

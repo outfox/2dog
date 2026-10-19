@@ -7,19 +7,23 @@ internal sealed record Workload(string Id, string NeededBy)
     public static readonly Workload Android = new("android", "Android hosts");
     public static readonly Workload MauiAndroid = new("maui-android", "MAUI Android hosts");
     public static readonly Workload MauiWindows = new("maui-windows", "MAUI Windows hosts");
+    public static readonly Workload MauiIos = new("maui-ios", "MAUI iOS hosts");
+    public static readonly Workload Ios = new("ios", "iOS hosts");
 
     public string InstallCommand => $"dotnet workload install {Id}";
 
-    /// <summary>The workloads these hosts need, browser before Android.</summary>
+    /// <summary>The workloads these hosts need, browser before Android before iOS; MAUI iOS only on a Mac.</summary>
     public static IEnumerable<Workload> For(IEnumerable<HostKind> kinds)
     {
         var list = kinds.ToList();
         if (list.Any(Hosts.IsWebLike)) yield return WasmTools;
         if (list.Contains(HostKind.Android)) yield return Android;
+        if (list.Contains(HostKind.Ios)) yield return Ios;
         if (list.Contains(HostKind.Maui))
         {
             yield return MauiAndroid;
             if (OperatingSystem.IsWindows()) yield return MauiWindows;
+            if (OperatingSystem.IsMacOS()) yield return MauiIos;
         }
     }
 }

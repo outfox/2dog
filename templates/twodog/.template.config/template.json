@@ -195,6 +195,12 @@
       "valueTransform": "androidPackage",
       "replaces": "tplandroidname"
     },
+    "ios": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include an experimental iOS host that shows Godot's view controller in a .NET for iOS app. Requires the ios workload and a Mac with Xcode to build. Omitted by default; pass '--ios true' to include.",
+      "defaultValue": "false"
+    },
     "maui": {
       "type": "parameter",
       "datatype": "bool",
@@ -309,7 +315,7 @@
           ]
         },
         {
-          "condition": "(!web && !webxr && !blazor && !maui && !xunit && !nunit && !gdunit)",
+          "condition": "(!web && !webxr && !blazor && !maui && !ios && !xunit && !nunit && !gdunit)",
           "exclude": [
             "global.json"
           ]
@@ -345,12 +351,19 @@
           ]
         },
         {
+          "condition": "(!ios)",
+          "exclude": [
+            "Company.Product1.ios/**/*"
+          ]
+        },
+        {
           "copyOnly": [
             "Company.Product1.web/wwwroot/favicon*",
             "Company.Product1.webxr/wwwroot/favicon*",
             "Company.Product1.webxr/wwwroot/*.min.js",
             "Company.Product1.blazor/wwwroot/favicon*",
-            "Company.Product1.android/Resources/**/*.png"
+            "Company.Product1.android/Resources/**/*.png",
+            "Company.Product1.ios/Assets.xcassets/**/*.png"
           ]
         },
         {
