@@ -1,7 +1,7 @@
 /**
  * The Editor, Inverted — 2dog.dev wears the Godot editor's own interface grammar,
- * visibly hosted inside a .NET process frame. Every color is taken from the Godot 4
- * editor source in godot/ (editor_settings.cpp, editor_color_map.cpp). See DESIGN.md.
+ * visibly hosted inside a .NET process frame. Chrome is Godot's classic slate editor theme,
+ * node and syntax colors come from godot/ (editor_color_map.cpp); the lime accent is 2dog's own.
  */
 
 /* The editor's own faces, vendored from godot/thirdparty/fonts (OFL licenses sit
@@ -33,59 +33,81 @@
 
 /* ---------- World tokens ---------- */
 
+/* Palette: Godot's slate editor chrome, one 2dog green for everything you can click, Godot blue
+   for tips and the robot dog, and the logo's coral tongue as the only warm spark. */
 :root {
-  /* Light: the editor's light theme — supported, deliberately secondary. */
-  --ed-base: #e7e7e7;
-  --ed-dark-1: #dcdcdc;
-  --ed-dark-2: #d0d0d0;
-  --ed-raise: #f2f2f2;
-  --ed-seam: #a8a8a8;
-  --ed-accent: #1c4fae;
-  --ed-accent-strong: #163f8c;
-  --ed-on-accent: #ffffff;
-  --ed-text-1: #2f373b;
-  --ed-text-2: #4c545a;
-  --ed-text-3: #5f676c;
+  /* Light: secondary, the same slate cooled to paper. */
+  --ed-base: #f1f3f7;
+  --ed-dark-1: #e6eaf0;
+  --ed-dark-2: #dce1e9;
+  --ed-raise: #fafbfc;
+  --ed-seam: #c5ccd7;
+  --ed-accent: #286e1b;
+  --ed-accent-strong: #1f5715;
+  /* Filled controls keep the bright green in both appearances; dark ink stays legible on it. */
+  --ed-fill: #a8e66a;
+  --ed-fill-strong: #9bd462;
+  --ed-on-fill: #13210a;
+  --ed-text-1: #1d2430;
+  --ed-text-2: #434d5c;
+  --ed-text-3: #586273;
   --ed-node-2d: #3d64dd;
   --ed-node-3d: #cd3838;
-  --ed-node-gui: #2fa139;
+  --ed-node-gui: #286e1b;
   --ed-node-gold: #a06c1c;
   --ed-node-anim: #a85de9;
-  /* FileDialog/folder_icon_color, adapted: the dark formula brightens past white
-     on light grounds, so light uses the legible mid blue instead. */
-  --ed-folder: #2f62c4;
-  --ed-warning: #7f4f00;
+  --ed-folder: #48843d;
+  --ed-tip: #2f6fa3;
+  --ed-spark: #d23f3f;
+  --ed-warning: #8a5a00;
   --ed-error: #c22929;
-  --ed-success: #176334;
-  --ed-console-bg: #dedede;
-  --ed-grid: rgba(0, 0, 0, 0.07);
+  --ed-success: #286e1b;
+  --ed-console-bg: #e6eaf0;
+  --ed-grid: rgba(30, 50, 80, 0.07);
+  /* Icon palette: every icon wears one of six hues of equal weight, never its vendor's own color, so brand
+     marks sit beside pictograms without one outshouting another. */
+  --hue-lime: var(--ed-accent);
+  --hue-sky: #2f6fa3;
+  --hue-amber: #946410;
+  --hue-coral: #c4452f;
+  --hue-violet: #6a4bc9;
+  --hue-teal: #0e7c6b;
 }
 
 .dark {
-  /* Dark: the editor as shipped. base_color #242424, accent Color(0.34, 0.62, 1.0). */
-  --ed-base: #242424;
-  --ed-dark-1: #1c1c1c;
-  --ed-dark-2: #161616;
-  --ed-raise: #2e2e2e;
-  --ed-seam: #0f0f0f;
-  --ed-accent: #579eff;
-  --ed-accent-strong: #7cb2ff;
-  --ed-on-accent: #16191d;
-  --ed-text-1: #cdced2;
-  --ed-text-2: #9da2a8;
-  --ed-text-3: #8f949a;
+  /* Dark: the primary appearance, slate after Godot's classic editor theme. */
+  --ed-base: #1a1f28;
+  --ed-dark-1: #151a22;
+  --ed-dark-2: #10141b;
+  --ed-raise: #232a35;
+  --ed-seam: #2b3340;
+  --ed-accent: #a8e66a;
+  --ed-accent-strong: #bdf088;
+  --ed-fill: #a8e66a;
+  --ed-fill-strong: #bdf088;
+  --ed-on-fill: #13210a;
+  --ed-text-1: #dde3ec;
+  --ed-text-2: #a4aebd;
+  --ed-text-3: #8691a2;
   --ed-node-2d: #8da5f3;
   --ed-node-3d: #fc7f7f;
-  --ed-node-gui: #8eef97;
+  --ed-node-gui: #a8e66a;
   --ed-node-gold: #ffca5f;
   --ed-node-anim: #c38ef1;
   /* folder_icon_color: Color(1,1,1).lerp(accent, 0.7) — theme_classic.cpp */
-  --ed-folder: #89bbff;
-  --ed-warning: #ffdd65;
-  --ed-error: #ff5f5f;
-  --ed-success: #45ff8b;
-  --ed-console-bg: #161616;
-  --ed-grid: rgba(255, 255, 255, 0.045);
+  --ed-folder: #c2ee97;
+  --ed-tip: #6cb4ee;
+  --ed-spark: #ff5555;
+  --ed-warning: #ffcb6b;
+  --ed-error: #ff6b6b;
+  --ed-success: #a8e66a;
+  --ed-console-bg: #10141b;
+  --ed-grid: rgba(160, 190, 230, 0.05);
+  --hue-sky: #6cb4ee;
+  --hue-amber: #ffca5f;
+  --hue-coral: #ff8c78;
+  --hue-violet: #b39cf5;
+  --hue-teal: #5ed6c3;
 }
 
 /* ---------- VitePress token override ---------- */
@@ -110,18 +132,20 @@
   --vp-c-brand-1: var(--ed-accent);
   --vp-c-brand-2: var(--ed-accent-strong);
   --vp-c-brand-3: var(--ed-accent);
-  --vp-c-brand-soft: rgba(28, 79, 174, 0.12);
+  --vp-c-brand-soft: rgba(40, 110, 27, 0.12);
 
-  --vp-c-tip-1: var(--ed-success);
-  --vp-c-tip-2: var(--ed-success);
-  --vp-c-tip-soft: rgba(23, 99, 52, 0.1);
+  --vp-c-tip-1: var(--ed-tip);
+  --vp-c-tip-2: var(--ed-tip);
+  --vp-c-tip-soft: rgba(47, 111, 163, 0.1);
   --vp-c-warning-1: var(--ed-warning);
   --vp-c-warning-2: var(--ed-warning);
-  --vp-c-warning-soft: rgba(127, 79, 0, 0.1);
+  --vp-c-warning-soft: rgba(138, 90, 0, 0.1);
   --vp-c-danger-1: var(--ed-error);
   --vp-c-danger-2: var(--ed-error);
   --vp-c-danger-soft: rgba(194, 41, 41, 0.1);
 
+  /* Inline code stays ink; only linked code wears the accent. */
+  --vp-code-color: var(--ed-text-1);
   --vp-code-block-bg: var(--ed-dark-2);
   --vp-code-tab-divider: var(--ed-seam);
   --vp-code-tab-bg: var(--ed-dark-2);
@@ -132,12 +156,12 @@
   --vp-code-copy-code-hover-bg: var(--ed-raise);
 
   --vp-button-brand-border: transparent;
-  --vp-button-brand-text: var(--ed-on-accent);
-  --vp-button-brand-bg: var(--ed-accent);
+  --vp-button-brand-text: var(--ed-on-fill);
+  --vp-button-brand-bg: var(--ed-fill);
   --vp-button-brand-hover-border: transparent;
-  --vp-button-brand-hover-text: var(--ed-on-accent);
-  --vp-button-brand-hover-bg: var(--ed-accent-strong);
-  --vp-button-brand-active-bg: var(--ed-accent);
+  --vp-button-brand-hover-text: var(--ed-on-fill);
+  --vp-button-brand-hover-bg: var(--ed-fill-strong);
+  --vp-button-brand-active-bg: var(--ed-fill);
   --vp-button-alt-border: var(--ed-seam);
   --vp-button-alt-text: var(--ed-text-1);
   --vp-button-alt-bg: var(--ed-raise);
@@ -156,10 +180,10 @@
 }
 
 .dark {
-  --vp-c-brand-soft: rgba(87, 158, 255, 0.14);
-  --vp-c-tip-soft: rgba(69, 255, 139, 0.1);
-  --vp-c-warning-soft: rgba(255, 221, 101, 0.1);
-  --vp-c-danger-soft: rgba(255, 95, 95, 0.1);
+  --vp-c-brand-soft: rgba(168, 230, 106, 0.14);
+  --vp-c-tip-soft: rgba(108, 180, 238, 0.1);
+  --vp-c-warning-soft: rgba(255, 203, 107, 0.1);
+  --vp-c-danger-soft: rgba(255, 107, 107, 0.1);
 }
 
 /* ---------- Godot pictogram icons ---------- */
@@ -204,6 +228,15 @@
   font-family: var(--vp-font-family-mono);
   font-size: 14px;
   letter-spacing: 0;
+}
+
+/* Social marks wear the same hues as the homepage buttons: 2dog's repo lime, Discord violet, NuGet sky. */
+.VPSocialLink[aria-label='github'] { color: var(--hue-lime); }
+.VPSocialLink[aria-label='discord'] { color: var(--hue-violet); }
+.VPSocialLink[aria-label='nuget'] { color: var(--hue-sky); }
+
+.VPSocialLink:hover {
+  color: var(--ed-text-1);
 }
 
 /* Keep the shared footer visible and centered beneath the docs column. */

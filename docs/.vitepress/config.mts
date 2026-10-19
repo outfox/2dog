@@ -67,7 +67,7 @@ export default defineConfig({
     ['link', { rel: "me", href: "https://mastodon.gamedev.place/@jupiter" }],
     ['link', { rel: "me", href: "https://tiggi.es/@thygrrr" }],
     ['meta', { name: "author", content: "outfox" }],
-    ['meta', { name: "theme-color", content: "#478cbf" }],
+    ['meta', { name: "theme-color", content: "#10141b" }],
   ],
 
 

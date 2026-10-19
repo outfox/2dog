@@ -10,7 +10,7 @@ font_size = 18
 font_color = Color(0.6, 0.65, 0.72, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_accent"]
-bg_color = Color(0.341, 0.62, 1, 1)
+bg_color = Color(0.659, 0.902, 0.416, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2

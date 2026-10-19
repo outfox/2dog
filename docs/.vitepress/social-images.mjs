@@ -12,7 +12,7 @@ export const socialImageHeight = 630;
 const logo = fileURLToPath(new URL('../content/public/logo-static.svg', import.meta.url));
 const illustrations = fileURLToPath(new URL('../content/img/', import.meta.url));
 const fallback = join(illustrations, '2dog-walkies.png');
-const accent = '#579eff';
+const accent = '#a8e66a';
 const inset = 64;
 const artInset = 48;
 const copyWidth = 576;
@@ -131,7 +131,7 @@ async function renderCopy(section, title, tagline) {
   layers.push({ input: brand.data, top: logoTop, left: inset });
 
   if (section) {
-    const label = await renderText(section.toUpperCase(), 17, { bold: true, color: '#9cc5ff', tracking: 2 });
+    const label = await renderText(section.toUpperCase(), 17, { bold: true, color: '#d4f5b0', tracking: 2 });
     const pillWidth = label.info.width + 32;
     const pillHeight = 36;
     const pillLeft = inset + logoWidth + 24;
@@ -153,11 +153,11 @@ async function renderCopy(section, title, tagline) {
   layers.push({ input: heading.data, top: titleTop, left: inset });
   if (paragraph) layers.push({ input: paragraph.data, top: titleTop + heading.info.height + gap, left: inset });
 
-  const label = await renderText('Read the dogs! \u2192', 26, { bold: true, color: '#0b1522' });
+  const label = await renderText('Read the dogs! \u2192', 26, { bold: true, color: '#13210a' });
   const buttonWidth = label.info.width + 64;
   layers.push(
     { input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${buttonWidth}" height="${buttonHeight}">
-      <rect x="0.5" y="0.5" width="${buttonWidth - 1}" height="${buttonHeight - 1}" rx="12" fill="${accent}" stroke="#8fc0ff"/>
+      <rect x="0.5" y="0.5" width="${buttonWidth - 1}" height="${buttonHeight - 1}" rx="12" fill="${accent}" stroke="#c9f29e"/>
     </svg>`), top: buttonTop, left: inset },
     {
       input: label.data,

@@ -9,12 +9,12 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <!-- Fluent derives these from the OS accent color; the showcase uses 2dog's. -->
-        <SolidColorBrush x:Key="SliderTrackValueFill" Color="#579EFF"/>
-        <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="#74B0FF"/>
-        <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="#3F86E8"/>
-        <SolidColorBrush x:Key="SliderThumbBackground" Color="#579EFF"/>
-        <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="#74B0FF"/>
-        <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="#3F86E8"/>
+        <SolidColorBrush x:Key="SliderTrackValueFill" Color="#A8E66A"/>
+        <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="#BDF088"/>
+        <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="#9BD462"/>
+        <SolidColorBrush x:Key="SliderThumbBackground" Color="#A8E66A"/>
+        <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="#BDF088"/>
+        <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="#9BD462"/>
     </Window.Resources>
     <Window.Styles>
         <Style Selector="TextBlock.muted">
@@ -28,19 +28,19 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="#579EFF"/>
+            <Setter Property="Background" Value="#A8E66A"/>
             <Setter Property="Foreground" Value="#0B1220"/>
         </Style>
         <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#74B0FF"/>
+            <Setter Property="Background" Value="#BDF088"/>
             <Setter Property="Foreground" Value="#0B1220"/>
         </Style>
         <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#3F86E8"/>
+            <Setter Property="Background" Value="#9BD462"/>
             <Setter Property="Foreground" Value="#0B1220"/>
         </Style>
         <Style Selector="Button.primary:disabled /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#579EFF"/>
+            <Setter Property="Background" Value="#A8E66A"/>
             <Setter Property="Foreground" Value="#0B1220"/>
             <Setter Property="Opacity" Value="0.45"/>
         </Style>

@@ -74,15 +74,16 @@ internal static class VersionRewriter
         return pinned ? $"[$({property})]" : $"$({property})";
     }
 
-    /// <summary>Every PackageReference with a Version attribute in the csproj text.</summary>
+    /// <summary>Every PackageReference with a Version attribute or child element in the csproj text.</summary>
     public static List<PackageRef> References(string csprojText) => References(XDocument.Parse(csprojText));
 
     public static List<PackageRef> References(XDocument doc) =>
         doc.Descendants()
             .Where(e => e.Name.LocalName == "PackageReference")
-            .Select(e => ((string?)e.Attribute("Include"), (string?)e.Attribute("Version")))
+            .Select(e => ((string?)e.Attribute("Include"),
+                (string?)e.Attribute("Version") ?? (string?)e.Element(e.Name.Namespace + "Version")))
             .Where(p => p.Item1 != null && p.Item2 != null)
-            .Select(p => new PackageRef(p.Item1!, p.Item2!))
+            .Select(p => new PackageRef(p.Item1!, p.Item2!.Trim()))
             .ToList();
 
     /// <summary>The managed references that still carry a literal version.</summary>
@@ -90,13 +91,14 @@ internal static class VersionRewriter
         References(csprojText).Where(r => r.IsManagedLiteral).ToList();
 
     // Either XML quote style, any whitespace around '=': the file is edited as text, so both must be recognized.
-    private static readonly Regex PackageReferenceTag = new(@"<PackageReference\b[^>]*>", RegexOptions.Compiled);
+    private static readonly Regex PackageReferenceTag = new(@"<!--[\s\S]*?-->|<PackageReference\b[^>]*?(?:/>|>[\s\S]*?</PackageReference\s*>)", RegexOptions.Compiled);
     private static readonly Regex IncludeAttribute = new(@"\bInclude\s*=\s*(?<q>[""'])(?<id>[^""']*)\k<q>", RegexOptions.Compiled);
     private static readonly Regex VersionAttribute = new(@"\bVersion\s*=\s*(?<q>[""'])(?<version>[^""']*)\k<q>", RegexOptions.Compiled);
+    private static readonly Regex VersionElement = new(@"<!--[\s\S]*?-->|<Version(?:\s[^>]*)?>\s*(?<version>[^<]*?)\s*</Version\s*>", RegexOptions.Compiled);
 
     /// <summary>
     /// The csproj with every managed literal version replaced by its property reference, plus what changed; null
-    /// text when nothing had to change. A textual edit of the Version attributes only, so the rest of the file
+    /// text when nothing had to change. A textual edit of the version values only, so the rest of the file
     /// stays byte-identical (an XML writer would re-space attributes).
     /// </summary>
     public static (string? NewText, List<string> Changes) Migrate(string csprojPath)
@@ -104,11 +106,14 @@ internal static class VersionRewriter
         var changes = new List<string>();
         var text = PackageReferenceTag.Replace(File.ReadAllText(csprojPath), tag =>
         {
-            var include = IncludeAttribute.Match(tag.Value);
-            var version = VersionAttribute.Match(tag.Value);
-            if (!include.Success || !version.Success) return tag.Value;
+            if (tag.Value.StartsWith("<!--", StringComparison.Ordinal)) return tag.Value;
+            var opening = tag.Value[..(tag.Value.IndexOf('>') + 1)];
+            var include = IncludeAttribute.Match(opening);
+            Match? version = VersionAttribute.Match(opening);
+            if (!version.Success) version = VersionElement.Matches(tag.Value).FirstOrDefault(m => m.Groups["version"].Success);
+            if (!include.Success || version is null || !version.Success) return tag.Value;
             var id = include.Groups["id"].Value;
-            var current = version.Groups["version"].Value;
+            var current = version.Groups["version"].Value.Trim();
             if (!Managed.ContainsKey(BaseId(id)) || current.Contains("$(", StringComparison.Ordinal)) return tag.Value;
             var reference = Reference(id);
             changes.Add($"{id} {current} -> {reference}");

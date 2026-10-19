@@ -40,6 +40,9 @@ target, or installs them when explicitly requested with an install flag.
 Failed restores return exit code `2`, preserve the created files, and explain
 recognized failures; fix the cause and run `dotnet restore` again.
 
+`2dog update` handles package versions in both `Version` attributes and nested
+`<Version>` elements, moving either form to the shared version properties.
+
 ## What it does
 
 Creates the host projects **in place**: it creates files and edits `*.csproj`,

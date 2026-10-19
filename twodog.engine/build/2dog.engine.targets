@@ -249,7 +249,17 @@
          made without that assembly can stay broken even after the assembly is supplied. The stamp also forces
          a pack refresh when installing this fix into a project with an existing, otherwise up-to-date pack. -->
     <Target Name="TwoDogPrepareExport"
-            DependsOnTargets="TwoDogResolveExportAssemblyDir;TwoDogHashExportAssemblies" />
+            DependsOnTargets="TwoDogResolveExportAssemblyDir;TwoDogHashExportAssemblies"
+            Condition="'$(TwoDogGodotProjectFullPath)' != ''">
+        <!-- File timestamps alone cannot detect removed resources or added files with old timestamps. -->
+        <PropertyGroup>
+            <_TwoDogExportInputsStamp>$(BaseIntermediateOutputPath)twodog-export-inputs.list</_TwoDogExportInputsStamp>
+        </PropertyGroup>
+        <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+        <WriteLinesToFile File="$(_TwoDogExportInputsStamp)"
+                          Lines="@(TwoDogDesktopExportInputs);@(TwoDogAndroidExportInputs);@(TwoDogWebExportInputs)"
+                          Overwrite="true" WriteOnlyWhenDifferent="true" />
+    </Target>
 
     <Target Name="TwoDogHashExportAssemblies"
             Condition="'@(_TwoDogExportGameAssembly)' != ''">
@@ -361,7 +371,7 @@
     <Target Name="TwoDogExportDesktopPack"
             AfterTargets="Publish"
             DependsOnTargets="TwoDogPrepareExport"
-            Inputs="@(TwoDogDesktopExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogDesktopExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(PublishDir)$(TargetName).pck"
             Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
@@ -435,7 +445,7 @@
     <Target Name="TwoDogExportAndroidPack"
             BeforeTargets="TwoDogAddAndroidPack"
             DependsOnTargets="TwoDogImportGodotProject;TwoDogPrepareExport;_TwoDogResolveAndroidExportPath"
-            Inputs="@(TwoDogAndroidExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogAndroidExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(_TwoDogAndroidPackFullPath)"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogAndroidPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 

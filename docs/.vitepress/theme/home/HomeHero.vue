@@ -46,11 +46,11 @@ async function copyCommands() {
            Read the Dogs!
           </a>
           <a class="home-btn" href="https://discord.gg/GAXdbZCNGT">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord') }" aria-hidden="true"></span>
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord'), '--mark': 'var(--hue-violet)' }" aria-hidden="true"></span>
             Bark on Discord
           </a>
           <a class="home-btn" href="https://www.nuget.org/packages/2dog/">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" aria-hidden="true"></span>
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget'), '--mark': 'var(--hue-sky)' }" aria-hidden="true"></span>
             Fetch from NuGet
           </a>
           <a class="home-btn" href="https://github.com/outfox/2dog">
@@ -182,8 +182,8 @@ async function copyCommands() {
 .hero-news-tag {
   padding: 2px 10px;
   border-radius: 999px;
-  background: var(--ed-accent);
-  color: var(--ed-on-accent);
+  background: var(--ed-fill);
+  color: var(--ed-on-fill);
   font-size: 13px;
   font-weight: 700;
 }
@@ -210,10 +210,13 @@ async function copyCommands() {
   color: var(--ed-text-2);
 }
 
-/* Identity icons: the dog is always white, so on light grounds it gets a hairline halo to stay visible. */
-.hero-title .hero-axes,
+/* Identity icons: 2dog lime, Godot sky, .NET violet. */
 .lead-icon.godot {
   background-color: var(--id-godot);
+}
+
+.hero-title .hero-axes {
+  background-color: var(--ed-accent);
 }
 
 .lead-icon,
@@ -230,12 +233,8 @@ async function copyCommands() {
   background-color: var(--id-dog);
 }
 
-:root:not(.dark) .lead-dog {
-  filter: drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 0.5px rgba(0, 0, 0, 0.8));
-}
-
 .hero-facts .hero-heart {
-  background-color: var(--ed-accent);
+  background-color: var(--ed-spark);
 }
 
 .hero-lead strong {
@@ -381,13 +380,13 @@ async function copyCommands() {
   width: 30px;
   height: 16px;
   border-radius: 999px;
-  background: var(--ed-accent);
+  background: var(--ed-fill);
 }
 
 .art-slider {
   height: 4px;
   border-radius: 2px;
-  background: linear-gradient(90deg, var(--ed-accent) 60%, var(--ed-seam) 60%);
+  background: linear-gradient(90deg, var(--ed-fill) 60%, var(--ed-seam) 60%);
 }
 
 .art-logo {

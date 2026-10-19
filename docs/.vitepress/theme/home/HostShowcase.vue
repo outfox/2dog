@@ -1,5 +1,5 @@
-<!-- Every host 2dog scaffolds. Brand marks wear their brand color on a neutral chip; hosts without
-     a vendored mark get a Godot pictogram in plain text color. -->
+<!-- Every host 2dog scaffolds. Each group wears one palette hue on its label and chips, whether the
+     chip shows a brand mark or a Godot pictogram. -->
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 import { brIconUrl, iconUrl } from './icons'
@@ -11,13 +11,13 @@ type Host = {
   link: string
   brand?: string
   glyph?: string
-  mark?: string
   tag?: string
 }
 
-const groups: { label: string; icon: string; hosts: Host[] }[] = [
+const groups: { label: string; icon: string; hue: string; hosts: Host[] }[] = [
   {
     label: 'Web',
+    hue: 'var(--hue-sky)',
     icon: 'globe',
     hosts: [
       {
@@ -26,7 +26,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'C# Games as an AppBundle. WebGL, and soon WebGPU.<br/>No more waiting for Godot!',
         link: '/hosts/web',
         brand: 'webassembly',
-        mark: 'var(--mark-wasm)',
       },
       {
         name: 'WebXR',
@@ -39,6 +38,7 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
   },
   {
     label: 'Testing',
+    hue: 'var(--hue-amber)',
     icon: 'test_tube',
     hosts: [
       {
@@ -66,6 +66,7 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
   },
   {
     label: 'Tooling',
+    hue: 'var(--hue-lime)',
     icon: 'code',
     hosts: [
       {
@@ -74,7 +75,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
         link: '/hosts/generic',
         brand: 'dotnet',
-        mark: 'var(--mark-dotnet)',
       },
       {
         name: 'REPL',
@@ -88,6 +88,7 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
   },
   {
     label: 'Desktop',
+    hue: 'var(--hue-coral)',
     icon: 'desktop',
     hosts: [
       {
@@ -96,7 +97,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Godot as a control in cross-platform Avalonia apps - in a zero-copy GPU surface.',
         link: '/hosts/avalonia',
         brand: 'avaloniaui',
-        mark: 'var(--mark-avalonia)',
       },
       {
         name: 'WinForms',
@@ -104,7 +104,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Drop the engine into a Windows Forms window.',
         link: '/hosts/winforms',
         glyph: 'window',
-        mark: 'var(--mark-windows)',
       },
       {
         name: 'WinUI 3',
@@ -112,12 +111,12 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Host Godot in a modern Windows App SDK window.',
         link: '/hosts/winui',
         glyph: 'windows',
-        mark: 'var(--mark-windows)',
       },
     ],
   },
   {
     label: 'Fullstack',
+    hue: 'var(--hue-violet)',
     icon: 'server',
     hosts: [
       {
@@ -126,12 +125,12 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'A <code>GodotView</code> component in your Blazor WebAssembly, served by ASP.NET Core.',
         link: '/hosts/blazor',
         brand: 'blazor',
-        mark: 'var(--mark-dotnet)',
       },
     ],
   },
   {
     label: 'Mobile',
+    hue: 'var(--hue-teal)',
     icon: 'mobile_phone',
     hosts: [
       {
@@ -140,7 +139,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Package your game as an Android APK.',
         link: '/hosts/android',
         brand: 'android',
-        mark: 'var(--mark-android)',
         tag: 'Experimental',
       },
       {
@@ -149,7 +147,6 @@ const groups: { label: string; icon: string; hosts: Host[] }[] = [
         text: 'Embed Godot in a .NET MAUI page on Windows and Android.',
         link: '/hosts/maui',
         glyph: 'mobile_phone',
-        mark: 'var(--mark-dotnet)',
       },
     ],
   },
@@ -175,7 +172,7 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
         <a class="hosts-more" :href="withBase('/hosts/')">What's a host? <span aria-hidden="true">→</span></a>
       </div>
 
-      <div v-for="g in groups" :key="g.label" class="host-group">
+      <div v-for="g in groups" :key="g.label" class="host-group" :style="{ '--mark': g.hue }">
         <h3 class="host-group-label">
           <span
             class="gd-icon"
@@ -186,11 +183,7 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
         <ul class="host-list">
           <li v-for="h in g.hosts" :key="h.name">
             <a class="host-card" :href="withBase(h.link)">
-              <span
-                class="brand-chip"
-                :style="{ '--mark': h.mark }"
-                aria-hidden="true"
-              >
+              <span class="brand-chip" aria-hidden="true">
                 <span class="chip-glyph" :style="{ '--gd-icon': glyphUrl(h) }"></span>
               </span>
               <span class="host-body">
@@ -250,7 +243,7 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
 .host-group-label .gd-icon {
   width: 16px;
   height: 16px;
-  background-color: var(--ed-text-2);
+  background-color: var(--mark);
 }
 
 .host-list {

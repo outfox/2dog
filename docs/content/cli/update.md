@@ -10,6 +10,9 @@ Sets the project's 2dog package versions to the running tool's, and restores
 after project changes. Never downgrades. When Git can check the project, it
 refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 
+Package versions may use a `Version` attribute or a nested `<Version>` element.
+Both forms move to the shared version properties during an update.
+
 ```bash
 2dog update [path] [options]
 ```

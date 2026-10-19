@@ -19,10 +19,10 @@ const props = [
           <span class="brand-chip">
             <img :src="webgpuLogoUrl()" alt="" width="35" height="22" />
           </span>
-          <span class="brand-chip" style="--mark: var(--mark-wasm)">
+          <span class="brand-chip" style="--mark: var(--hue-sky)">
             <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('webassembly') }"></span>
           </span>
-          <span class="brand-chip" style="--mark: var(--mark-dotnet)">
+          <span class="brand-chip" style="--mark: var(--hue-violet)">
             <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('dotnet') }"></span>
           </span>
         </div>
