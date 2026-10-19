@@ -105,11 +105,23 @@ the layers do not consume each other's source files.
 
 ## What the Godot Editor Sees
 
-Open `MyGame/` in Godot as usual:
+Open `MyGame/` in the Godot .NET editor as usual, or from a terminal:
 
-```bash
-godot-mono --editor MyGame
+::: code-group
+
+```powershell [Windows]
+Godot_v:godot-version:-stable_mono_win64.exe --path MyGame --editor
 ```
+
+```bash [macOS]
+Godot_mono.app/Contents/MacOS/Godot --path MyGame --editor
+```
+
+```bash [Linux]
+godot-mono --path MyGame --editor
+```
+
+:::
 
 The hosts' `.gdignore` files hide them from the editor, importer, and exporter.
 

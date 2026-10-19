@@ -105,7 +105,8 @@ removal. Removing a node from its parent does not free it.
 
 Unconsumed Godot errors and warnings fail engine tests, including exceptions
 Godot catches in C# callbacks. If a test intentionally triggers an error,
-consume it and check its text:
+consume it and check its text. `Expect` consumes every pending report, and
+each one must contain the text:
 
 ```csharp
 player.Health = -1;
@@ -138,19 +139,19 @@ dotnet test MyGame.xunit --filter-class "*SceneTests"
 dotnet test MyGame.nunit --output Detailed
 ```
 
-Scaffolded hosts run on Microsoft.Testing.Platform, so `dotnet test` with no
-project runs every test host. xUnit selects tests with options such as
-`--filter-class` and `--filter-method`; VSTest's `--logger` does not apply.
+`dotnet test` with no project runs every test host; see
+[Test runners](/testing/#test-runners). For filters and output options, see
+[xUnit's](https://xunit.net/docs/getting-started/v3/microsoft-testing-platform)
+and [NUnit's](https://docs.nunit.org/articles/vs-test-adapter/NUnit-And-Microsoft-Test-Platform.html)
+MTP documentation.
 
 Resource import runs automatically when the test project builds. For Editor
 APIs, choose `-c Editor` and check your
 [xUnit](/configuration/xunit) or [NUnit](/configuration/nunit) settings.
 
-Use a headless fixture in CI, with a dummy audio driver:
+Use a headless fixture in CI; it needs no display or audio device:
 
 ```yaml
 - name: Run tests
   run: dotnet test MyGame.xunit --configuration Release
-  env:
-    GODOT_AUDIO_DRIVER: Dummy
 ```

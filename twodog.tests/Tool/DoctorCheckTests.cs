@@ -208,6 +208,23 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
+    public void WebXrThreads_FailWhenEnabledAndAreRemovedByFix()
+    {
+        var dir = Scaffold("--webxr");
+        const string csproj = "Game.webxr/Game.webxr.csproj";
+        Edit(dir, csproj, "<GodotProjectDir>..</GodotProjectDir>",
+            "<GodotProjectDir>..</GodotProjectDir><WasmEnableThreads>$(TwoDogWebThreads)</WasmEnableThreads>");
+        Issue(Doctor(dir, "--json").Stdout, "host.webxr-threads", "warn", fixable: true);
+
+        Edit(dir, csproj, "$(TwoDogWebThreads)</WasmEnableThreads>", "true</WasmEnableThreads>");
+        Issue(Doctor(dir, "--json").Stdout, "host.webxr-threads", "fail", fixable: true);
+
+        Doctor(dir, "--fix");
+        Assert.DoesNotContain("WasmEnableThreads", File.ReadAllText(Path.Combine(dir, csproj)));
+        Assert.Empty(Findings(Doctor(dir, "--json").Stdout, "host.webxr-threads"));
+    }
+
+    [Fact]
     public void PublishSingleFile_OffersNativeAotOnlyWhereItWorks()
     {
         var dir = Scaffold("--generic", "--winforms", "--avalonia");

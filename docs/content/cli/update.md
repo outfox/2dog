@@ -10,9 +10,6 @@ Sets the project's 2dog package versions to the running tool's, and restores
 after project changes. Never downgrades. When Git can check the project, it
 refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 
-Package versions may use a `Version` attribute or a nested `<Version>` element.
-Both forms move to the shared version properties during an update.
-
 ```bash
 2dog update [path] [options]
 ```
@@ -35,13 +32,11 @@ Both forms move to the shared version properties during an update.
 Plus the [global and output options](/dnx-2dog#global-options). There is no
 `--to`: pin the tool instead.
 
-Package updates do not require browser/Android workloads or an Android SDK.
-Missing workloads are installed only with the explicit install flags or
-`--update-workloads`. For projects with browser or Android hosts, terminals can
-offer to update installed workloads. `dotnet workload update` checks for and
-applies updates to **all installed workloads** for the selected SDK.
-`--no-restore` skips these offers; the explicit flags still apply.
-`--dry-run` never checks or changes workloads.
+Package updates need no workloads or Android SDK. For browser or Android
+hosts, terminals can offer to update workloads;
+[`dotnet workload update`](https://learn.microsoft.com/dotnet/core/tools/dotnet-workload-update)
+updates **all installed workloads** for the SDK. `--no-restore` skips the
+offer, and `--dry-run` never touches workloads.
 
 ## Examples
 

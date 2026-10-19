@@ -12,7 +12,8 @@ and updates them.
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](img/2dog-terminal.png)
 *"Everything at my pawtips!"*
 
-The 2dog tool helps set up and maintain your host projects without making other changes. Your project directory stays solution root; added hosts live in nested folders that Godot is instructed to ignore.
+Your project directory stays the solution root; added hosts live in nested
+folders that Godot ignores.
 
 ## Installation
 
@@ -23,10 +24,11 @@ dotnet tool install -g 2dog   # or install it globally
 
 `dnx 2dog` creates files and edits `*.csproj`, `project.godot`, and if needed, the solution and `Directory.Build.props` in place. 
 
-Nothing is moved, renamed or deleted. There are two opt-out/opt-in changes (y/n question in the tool): 
+Only two changes rename files, and the tool asks before either:
 
-- `.sln` → `.slnx` migration (creates a `.sln.old` backup)
-- [`--rename` fix](/known-issues/spaced-project-names) that sanitizes created directory names for safe use with .NET
+- `.sln` → `.slnx` migration (renames the `.sln` to `.sln.old`)
+- [`--rename`](/known-issues/spaced-project-names), which renames the .NET project, its csproj and
+  `assembly_name` to a name without spaces
 
 The tool and the matching `dotnet new` template ship together in the [`2dog` NuGet package](https://www.nuget.org/packages/2dog/).
 
@@ -61,18 +63,21 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | --- | --- |
 | `--generic [folder]` | [2dog (generic .NET)](/hosts/generic) with your own `Main()` |
 | `--web [folder]` | [Web host](/hosts/web) |
-| `--webxr [folder]` | [WebXR host](/hosts/webxr); opt-in |
-| `--xunit [folder]` | [xUnit test project](/hosts/xunit) (opt-in) |
-| `--repl [folder]` | [C# REPL host](/hosts/repl); opt-in |
-| `--gdunit [folder]` | [GdUnit GDScript test project](/hosts/gdunit) (opt-in) |
-| `--nunit [folder]` | [NUnit test project](/hosts/nunit) (opt-in) |
-| `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only, opt-in |
-| `--winui [folder]` | [WinUI 3 host](/hosts/winui); Windows-only, builds only on Windows, opt-in |
-| `--avalonia [folder]` | [Avalonia host](/hosts/avalonia); opt-in |
-| `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); opt-in, needs wasm-tools |
-| `--maui [folder]` | [MAUI host](/hosts/maui); Windows and Android, opt-in, needs MAUI workloads |
-| `--android [folder]` | [Android host](/hosts/android); experimental, opt-in, needs the android workload |
-| `--no-generic`, `--no-web` | Leave a host out of the default set (every kind has a `--no-<host>` form; opt-in kinds are never in the set) |
+| `--webxr [folder]` | [WebXR host](/hosts/webxr) |
+| `--xunit [folder]` | [xUnit test project](/hosts/xunit) |
+| `--repl [folder]` | [C# REPL host](/hosts/repl) |
+| `--gdunit [folder]` | [GdUnit GDScript test project](/hosts/gdunit) |
+| `--nunit [folder]` | [NUnit test project](/hosts/nunit) |
+| `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only |
+| `--winui [folder]` | [WinUI 3 host](/hosts/winui); builds only on Windows |
+| `--avalonia [folder]` | [Avalonia host](/hosts/avalonia) |
+| `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); needs wasm-tools |
+| `--maui [folder]` | [MAUI host](/hosts/maui); Windows and Android, needs MAUI workloads |
+| `--android [folder]` | [Android host](/hosts/android); experimental, needs the android workload |
+| `--no-generic`, `--no-web` | Leave a host out of the default set (every kind has a `--no-<host>` form) |
+
+All hosts except `--generic` and `--web` are opt-in: an unattended run never
+adds them.
 
 ## Build options
 
@@ -82,7 +87,7 @@ same settings without a prompt:
 | Flag | Effect |
 | --- | --- |
 | `--double-precision [true\|false]` | Use matching `.double` engine, bindings and native packages across the game and all hosts |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web and Blazor clients |
 
 New projects default to single precision and single-threaded web builds.
 Omitting these flags on `add` preserves the project's settings. Pass `false`
@@ -118,11 +123,11 @@ Mistyped options and verbs get a suggestion.
 
 The report goes to stdout, diagnostics (`error:`, `warning:`, `note:`, `hint:`,
 `verbose:`, spinners) to stderr: `2dog add --json | jq .` and
-`2dog doctor 2>errors.log` both work. In a pipe or a CI environment (`CI`,
-`GITHUB_ACTIONS`, `TF_BUILD`, `GITLAB_CI`, `TEAMCITY_VERSION`, `BUILD_NUMBER`)
-nothing prompts or animates and the markers are ASCII; a wanted prompt falls
-back to the default with a `note:`. `CLICOLOR_FORCE` or `FORCE_COLOR` keeps
-colour in a pipe.
+`2dog doctor 2>errors.log` both work. In a pipe or a CI environment nothing
+prompts or animates and the markers are ASCII; a wanted prompt falls
+back to the default with a `note:`. See
+[CLI environment variables](/configuration/environment-variables#cli-output-and-automation)
+for the CI indicators and colour overrides.
 
 ## Exit codes
 

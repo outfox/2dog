@@ -1,15 +1,14 @@
 ---
 title: MSBuild Configuration
-description: "Shared 2dog settings, MSBuild runtimes, package versions, and configuration references for each host."
+description: "Shared 2dog settings, package versions, and configuration references for each host."
 tagline: "Learn how to tune 2dog's MSBuild settings for every host."
 ---
 
 # MSBuild Configuration
 
-Set host properties inside a `<PropertyGroup>` in its `.csproj`. Put shared
-settings in `Directory.Build.props`. Project settings override shared values;
-command-line properties (`-p:Name=value`) override project settings. Omitted
-2dog properties use their documented defaults.
+Set host properties inside a `<PropertyGroup>` in its `.csproj`, and shared
+settings in the root
+[`Directory.Build.props`](https://learn.microsoft.com/visualstudio/msbuild/customize-by-directory).
 
 ## Global Properties {#properties}
 
@@ -39,17 +38,16 @@ See [Build Variants](./build-configurations) for native selection and
 
 ## Packages and Versions
 
-Package versions begin with the embedded Godot version. Pin manual references
-to your project's Godot line, for example `Version=":godot-version:.*"`, so
-NuGet does not silently select a newer engine line. Scaffolded projects keep
-versions in one block of the root `Directory.Build.props`:
+Package versions begin with the embedded Godot version. Reference exact
+versions; scaffolded projects keep them in one block of the root
+`Directory.Build.props`:
 
 ```xml
 <PropertyGroup Label="2dog">
   <TwoDogVersion>:2dog-version:</TwoDogVersion>
   <TwoDogNativesVersion>:natives-version:</TwoDogNativesVersion>
   <TwoDogGodotVersion>:godot-version:</TwoDogGodotVersion>
-  <!-- TwoDogAvaloniaVersion, TwoDogWindowsAppSdkVersion, TwoDogAspNetCoreVersion -->
+  <!-- TwoDogAvaloniaVersion, TwoDogWindowsAppSdkVersion, TwoDogAspNetCoreVersion, TwoDogMauiVersion -->
 </PropertyGroup>
 ```
 
@@ -75,6 +73,23 @@ build or publish platform. Each pins the release, debug, and editor packages;
 the selected library is copied as `libgodot-<variant>.dll`, `.so`, or `.dylib`.
 `2dog.browser-wasm` pins both release and debug browser natives.
 
+## Desktop Publishing
+
+These properties apply to the generic, Avalonia, WinForms and WinUI hosts:
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `TwoDogExportPack` | `true` | Export content to an executable-adjacent `.pck`; `false` skips export, so supply game content separately |
+| `TwoDogDesktopExportPreset` | RID-mapped | Preset in `export_presets.cfg`: `Windows Desktop`, `Linux`, or `macOS`, according to the publish target |
+| `PublishSelfContained` | `true` in generated hosts | Bundle the .NET runtime; `false` requires an installed runtime |
+| `PublishAot` | `false` | Compile the host and managed game code into a [native executable](#native-aot) |
+| `PublishReadyToRun` | `false` | Precompile the engine and host assemblies for [faster startup](#readytorun) |
+
+`PublishSingleFile` is unsupported; Native AOT produces one executable instead.
+Generated desktop hosts build as `WinExe`, the generic host only in Release,
+which hides the Windows console. Set `OutputType=Exe` to keep console output;
+Linux and macOS treat `WinExe` as `Exe`.
+
 ## Native AOT
 
 Generic, Avalonia, and WinUI hosts support `PublishAot=true` with debug or
@@ -86,7 +101,31 @@ C++ build tools on Windows, `clang` and `zlib1g-dev` on Linux, or Xcode
 command-line tools on macOS. Publish on the operating system you target; see
 the [.NET prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites).
 
-2dog preserves `GodotSharp` and the game assembly for reflection. Root other
+Native AOT trims the app; see [Trimming](#trimming) for reflection-only
+assemblies. Android has [experimental Native AOT](./configuration/android#native-aot)
+with NDK requirements and different trimmer roots. Browser hosts use Mono's
+AOT compiler through `RunAOTCompilation`, described in their host references.
+
+## ReadyToRun
+
+Generic, Avalonia, WinForms, and WinUI hosts support
+[ReadyToRun](https://learn.microsoft.com/dotnet/core/deploying/ready-to-run)
+with a runtime identifier:
+
+```bash
+dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishReadyToRun=true
+```
+
+It precompiles the engine side, `GodotSharp` and `twodog`. Game scripts are
+still JIT-compiled, because Godot loads the game assembly from a stream.
+
+Browser and Android hosts run on Mono, which has no ReadyToRun; use
+`RunAOTCompilation` there.
+
+## Trimming
+
+Native AOT, browser, Blazor and Android publishes are trimmed. 2dog keeps
+`GodotSharp`, `twodog`, the host and your game assembly whole. Root other
 assemblies that are only accessed through reflection:
 
 ```xml
@@ -95,50 +134,14 @@ assemblies that are only accessed through reflection:
 </ItemGroup>
 ```
 
-Android has [experimental Native AOT](./configuration/android#native-aot)
-with NDK requirements and different trimmer roots. Browser hosts use Mono's
-AOT compiler through `RunAOTCompilation`, described in their host references.
+## Trimming
 
-## ReadyToRun
+Native AOT, browser, Blazor and Android publishes are trimmed. 2dog keeps
+`GodotSharp`, `twodog`, the host and your game assembly whole. Root other
+assemblies that are only accessed through reflection:
 
-ReadyToRun precompiles the published assemblies to native code, so the
-runtime starts with less JIT work. Unlike Native AOT it keeps the JIT and the
-IL, so reflection and dynamic loading behave as in a regular publish, and no
-native toolchain is required. Generic, Avalonia, WinForms, and WinUI hosts
-support it; it needs a runtime identifier:
-
-```bash
-dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishReadyToRun=true
+```xml
+<ItemGroup>
+  <TrimmerRootAssembly Include="MyLibrary"/>
+</ItemGroup>
 ```
-
-The engine side, `GodotSharp` and `twodog`, runs precompiled code. Godot loads
-the game assembly into its own load context from a stream, where the runtime
-ignores precompiled code, so game scripts are still JIT-compiled.
-ReadyToRun assemblies are several times larger than IL-only ones.
-
-Browser and Android hosts run on Mono, which has no ReadyToRun; use
-`RunAOTCompilation` there.
-
-## MSBuild Runtimes
-
-`Core`, `Full`, and `Mono` describe the runtime executing MSBuild. They are
-independent of your project's `TargetFramework`, build `Configuration`, and
-the runtime used by your published app. Windows builds can use Core or Full.
-
-| `MSBuildRuntimeType` | Build tool |
-| --- | --- |
-| `Core` | MSBuild from the .NET SDK: `dotnet build`, `dotnet publish`, or `dotnet msbuild` |
-| `Full` | .NET Framework MSBuild, such as Visual Studio's `MSBuild.exe` |
-| `Mono` | Legacy MSBuild running on Mono |
-
-MSBuild sets this [reserved property](https://learn.microsoft.com/visualstudio/msbuild/msbuild-reserved-and-well-known-properties#reserved-and-well-known-properties)
-automatically. To inspect the runtime used by a command:
-
-```bash
-dotnet msbuild MyGame.2dog/MyGame.2dog.csproj -getProperty:MSBuildRuntimeType
-```
-
-Use the .NET 10+ SDK for 2dog's CLI workflows. Currently, Web and WebXR
-[precompression](./configuration/web#precompression) runs only under Core
-MSBuild; Full and Mono skip it even when explicitly enabled. The current
-inline task depends on Core's compression APIs.

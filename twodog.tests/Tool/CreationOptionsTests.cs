@@ -78,17 +78,18 @@ public class CreationOptionsTests
     }
 
     [Fact]
-    public void WebThreadsCoverEveryBrowserClientAndArePreservedWhenAddingHosts()
+    public void WebThreadsCoverWebAndBlazorClientsAndArePreservedWhenAddingHosts()
     {
         using var tmp = new TempProjectDir();
         var dir = Path.Combine(tmp.Dir, "Game");
         Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--web", "--webxr", "--blazor", "--web-threads", "--no-restore").ExitCode);
         Assert.True(BuildSettings.HasWebThreads(dir));
-        foreach (var relative in new[] { "Game.web/Game.web.csproj", "Game.webxr/Game.webxr.csproj", Hosts.BlazorClientProject("Game.blazor") })
+        foreach (var relative in new[] { "Game.web/Game.web.csproj", Hosts.BlazorClientProject("Game.blazor") })
         {
             var doc = XDocument.Load(Path.Combine(dir, relative));
             Assert.Equal("$(TwoDogWebThreads)", doc.Descendants("WasmEnableThreads").Single().Value);
         }
+        Assert.Empty(XDocument.Load(Path.Combine(dir, "Game.webxr/Game.webxr.csproj")).Descendants("WasmEnableThreads"));
         Assert.Equal(0, CliConsole.Run("add", dir, "--generic", "--no-restore").ExitCode);
         Assert.True(BuildSettings.HasWebThreads(dir));
         Assert.Equal(0, CliConsole.Run("add", dir, "--web", "--web-threads=false", "--no-restore").ExitCode);

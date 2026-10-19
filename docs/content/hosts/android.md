@@ -28,13 +28,10 @@ own package name.
 You also need the .NET `android` workload (the tool offers to install it), an
 Android SDK, and JDK 17.
 
-`2dog new`, `add`, `update`, and `doctor` check `AndroidSdkDirectory`,
+`2dog new`, `add`, `update`, and `doctor` look for the SDK in
+`AndroidSdkDirectory`,
 [`ANDROID_HOME` and `ANDROID_SDK_ROOT`](https://developer.android.com/tools/variables)
-and common SDK install locations. They warn politely about missing SDKs,
-incomplete SDK roots, or conflicting environment variables. These checks look
-for platform tools, platforms, and build tools; they do not verify every
-project-specific API or build-tools version. The tool leaves your SDK paths
-and environment variables untouched. See
+and common install locations, and warn when it is missing. See
 [Android SDK setup](https://learn.microsoft.com/en-us/dotnet/android/getting-started/installation/dependencies)
 to install the required components.
 
@@ -49,15 +46,8 @@ Publishing builds the game, exports its pack with the Android preset, and
 packages a signed APK named after the `ApplicationId`. Use `-r android-x64` for an x64 emulator, and start it
 with `-gpu swangle` or `-gpu host`.
 
-Publishing signs with the first keystore it finds:
-
-1. The .NET `AndroidKeyStore` and `AndroidSigning*` properties
-2. Godot's `GODOT_ANDROID_KEYSTORE_RELEASE_PATH`, `_USER`, and `_PASSWORD`
-   environment variables (`DEBUG` variables for Debug builds)
-3. Android's debug keystore, `~/.android/debug.keystore`
-4. The .NET debug keystore
-
-See [Android Configuration](/configuration/android) for build settings.
+See [Android Configuration](/configuration/android) for build settings and
+[signing](/configuration/android#signing).
 
 ## Host Code
 
@@ -73,12 +63,9 @@ the APK. Every listed library must exist, because the pack export copies them.
 
 ## Trimming and AOT
 
-Release builds are trimmed and AOT-compiled, like any .NET for Android app. 2dog
-keeps `GodotSharp`, `GodotPlugins`, `twodog`, and your game assembly whole. To
-keep other assemblies or compile every method ahead of time, see
-[Android Configuration](/configuration/android). This is Mono's AOT
-compiler (`RunAOTCompilation`). Experimental [Native AOT](/configuration/android#native-aot)
-builds compile the app into one native library instead.
+Release builds are trimmed and AOT-compiled, like any .NET for Android app; see
+[Trimming and Mono AOT](/configuration/android#trimming-and-mono-aot) and
+experimental [Native AOT](/configuration/android#native-aot).
 
 ## Limitations
 

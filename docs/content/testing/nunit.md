@@ -55,10 +55,8 @@ in tests; project autoloads still initialize. Restore shared state such as
 `SceneTree.Paused` if a scene changes it.
 
 ::: details Why the Timer alias?
-`using Timer = Godot.Timer;` distinguishes Godot's timer from .NET's timer.
-The older fixture property named `Godot` remains a compatibility alias for
-`EngineFixture`; inside a derived class it also shadows the `Godot` namespace.
-The type alias avoids needing `global::Godot.Timer` in the test body.
+The fixture's `Godot` compatibility property shadows the `Godot` namespace in
+derived classes, so alias Godot types such as `Timer`.
 :::
 
 ## Setup and teardown

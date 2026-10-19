@@ -43,22 +43,17 @@ a required workload is an announced fix: select it in the checklist or use
 `--fix-all`. The install flags explicitly request installation for existing hosts
 without a build. `--fix` alone does not install workloads.
 
-Variant checks read project and inherited `Directory.Build.props` literals and
-simple `Configuration` conditions. Browser clients use `TwoDogWebVariant`;
-Android and browser linking accept only `debug` and `release`. Complex MSBuild
-expressions are reported as informational; use `--build` to evaluate them.
-
-Solution migration first saves a `.sln.old` backup beside the original,
-numbered `.sln.old.1`, `.sln.old.2`, and so on if needed. Existing backups
-are kept; the `.sln` is removed only after conversion to `.slnx` succeeds.
+Variant checks read literal values and simple `Configuration` conditions;
+anything more complex is reported as info, so use `--build` to evaluate it.
+Solution migration keeps the `.sln` as a numbered `.sln.old` backup.
 
 ## Exit codes
 
 | Code | Meaning |
 | --- | --- |
-| `0` | Only informational items remain |
+| `0` | No errors remain (warnings allowed unless `--strict`) |
 | `2` | Doctor could not run: no `project.godot`, unreadable files |
-| `3` | Errors remain (warnings too under `--strict`), or the `--build` failed |
+| `3` | Errors remain (warnings too under `--strict`), the `--build` failed, or `--log` found a problem |
 
 ## Examples
 
@@ -125,8 +120,9 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.godot-project-dir` | GodotProjectDir points at the Godot project |
 | `host.variant` | TwoDogVariant / TwoDogWebVariant is supported by the host platform |
 | `host.buildtype-deprecated` | the deprecated TwoDogBuildType property is gone |
-| `host.publish-aot` | no WinForms, browser or Blazor host enables PublishAot |
+| `host.publish-aot` | no WinForms, REPL, browser or Blazor host enables PublishAot |
 | `host.publish-singlefile` | PublishSingleFile is only enabled by browser hosts or alongside PublishAot |
+| `host.webxr-threads` | WebXR hosts do not enable WasmEnableThreads |
 | `host.duplicate-analyzers` | hosts referencing the game strip the duplicate Godot analyzers |
 | `host.app-manifest` | the app.manifest a host declares exists |
 | `host.web-props-shim` | browser hosts chain to the root Directory.Build.props |
@@ -145,7 +141,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `sln.legacy-format` | the solution uses the .slnx format |
 | `sln.contains-game` | the solution lists the game project |
 | `sln.contains-hosts` | the solution lists every host project |
-| `sln.build-exclusions` | browser and WinUI hosts are excluded from plain solution builds |
+| `sln.build-exclusions` | browser, Android and WinUI hosts are excluded from plain solution builds |
 
 ### Versions
 
@@ -213,3 +209,4 @@ line and the fixing command; other errors follow.
 | `build.godotplugins-missing` | GodotPlugins.dll not found at runtime |
 | `build.native-variant-missing` | the native library for this TwoDogVariant is missing at runtime |
 | `build.variant-fallback` | the engine fell back to another native variant |
+| `build.host-leak` | host sources compile into the game assembly |

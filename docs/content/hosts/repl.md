@@ -14,7 +14,7 @@ Add an interactive C# prompt to your game from its Godot project directory.
 ::: danger Don't play too rough! :stop_sign:
 ... don't call `tree.free()`, for example, and only give trusted users access.
 
-This is an experimental, powerful new way to interact with your godot project or the editor *while it's running!* Furthermore, REPLs can be used by multiple users or processes via named pipes!
+This is an experimental, powerful new way to interact with your Godot project or the editor *while it's running!*
 :::
 
 Create a REPL host:
@@ -24,7 +24,7 @@ dnx 2dog add --repl
 dotnet run --project MyGame.repl
 ```
 
-For a a new, purely REPL project, use `dnx 2dog new MyGame --repl`.
+For a new, purely REPL project, use `dnx 2dog new MyGame --repl`.
 
 ## Try It
 

@@ -10,11 +10,8 @@ tagline: "Learn how to configure the C# REPL for headless runs and publishing."
 `2dog.engine.double` for double precision; submissions use the host's loaded
 bindings. The [shared engine properties](/configuration#properties) apply.
 
-| Configuration | Native variant |
-| --- | --- |
-| Debug (default) | `debug` |
-| Editor | `editor` |
-| Release | `release` |
+Debug (the default), Editor and Release select the matching
+[native variant](/build-configurations).
 
 ```bash
 dotnet run --project MyGame.repl -c Editor

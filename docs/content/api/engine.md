@@ -102,6 +102,12 @@ public event Action? Exited;
 Fires once after a successfully started instance is destroyed. `Completion`
 also completes for an `Engine` disposed before it starts, but `Exited` does not fire.
 
+## Threading
+
+Lifecycle calls and Godot object access belong on the thread that called
+`Start()`. Calls from another thread are rejected; dispatch them to the host's
+engine thread.
+
 ## Methods
 
 ### `Start`
@@ -162,11 +168,8 @@ public ValueTask DisposeAsync()
 ```
 
 Requests shutdown and waits for teardown. Prefer this in browser hosts.
-
-Lifecycle calls and Godot object access belong on the thread that called
-`Start()`. Calls from another thread are rejected; dispatch them to the host's
-engine thread. Disposal from a game callback is deferred until the native
-frame returns. Do not synchronously wait for `Completion` inside that callback.
+Disposal from a game callback is deferred until the native frame returns; do
+not synchronously wait for `Completion` inside that callback.
 
 ### `WebExitRuntimeOnQuit`
 
@@ -224,13 +227,8 @@ public static void RegisterWebPluginsInitializer(IntPtr initializer)
 
 Registers the game assembly's generated plugin initializer in a browser host.
 The web host's `Program.cs` calls this before `Start()` with the pointer from
-`TwoDogWebBoot.PluginsInitializer()`; normal application code does not need
-anything beyond that template line. The 2dog bindings (`2dog.godotsharp`)
-generate `TwoDogWebBoot` into the game assembly when it allows unsafe code. A
-`TwoDogWebBoot` class declared in the game project replaces the generated one,
-so the `TwoDogWebBoot.cs` that older templates put in the web host folder keeps
-working; projects can delete it together with its `Compile Include` in the game
-csproj. Desktop calls throw `PlatformNotSupportedException`.
+`TwoDogWebBoot.PluginsInitializer()`, which `2dog.godotsharp` generates into
+the game assembly. Desktop calls throw `PlatformNotSupportedException`.
 
 ## Example
 

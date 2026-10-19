@@ -58,9 +58,8 @@ dnx dotnet-serve -- -d MyGame.web/AppBundle -h "Cross-Origin-Opener-Policy: same
 ```
 
 GDExtensions need a `-pthread` side module under a `web.wasm32.threads` key.
-Every thread loads it. A thread that is busy while an extension loads picks it
-up at its next wait. Threaded side modules cannot export `thread_local`
-variables and are never unloaded.
+Threaded side modules cannot export `thread_local` variables and are never
+unloaded.
 
 ## Limitations
 

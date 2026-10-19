@@ -175,9 +175,16 @@ uv run poe build-all
 Run the showcase with `dotnet run --project demos/showcase/showcase.2dog` and the tests with
 `dotnet test twodog.tests`.
 
-The repository contains symlinks. On Windows, enable Developer Mode and run
-`git config --global core.symlinks true` before cloning; see
-[Symlinks in a Windows checkout](https://2dog.dev/troubleshooting#symlinks-in-a-windows-checkout-of-2dog).
+The repository contains symlinks. On Windows, enable
+[Developer Mode](https://learn.microsoft.com/windows/advanced-settings/developer-mode)
+and run `git config --global core.symlinks true` before cloning. To repair an
+existing clone, run `git config core.symlinks true`, then
+`git checkout -- demos/showcase/fps_counter.tscn`.
+
+
+## Acknowledgements
+
+Continuous Integration compute graciously supported by [RunsOn](https://runs-on.com).
 
 
 ## Join us at the dog park

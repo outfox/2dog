@@ -1,38 +1,13 @@
 ---
-title: twodog.Testing.Xunit.HeadlessCollection
-description: "API reference for HeadlessCollection, the non-parallel xUnit collection backed by one shared HeadlessFixture."
-tagline: "Learn how to share one headless Godot across your xUnit test classes."
+# Merged into the Fixtures page (api/fixture-base.md).
+# This stub keeps the old URL alive for external links; kept out of search.
+search: false
+head:
+  - - meta
+    - http-equiv: refresh
+      content: 0; url=/api/fixture-base#collections
 ---
 
-# `twodog.Testing.Xunit.HeadlessCollection`
+# HeadlessCollection
 
-Defines a non-parallel xUnit collection backed by
-[`HeadlessFixture`](./headless-fixture).
-
-```csharp
-public class HeadlessCollection : ICollectionFixture<HeadlessFixture>
-```
-
-**Package:** `2dog.xunit`  
-**Namespace:** `twodog.Testing.Xunit`
-
-The package compiles this collection definition into your test assembly so
-xUnit can discover it. This is the usual collection for CI.
-
-## Usage
-
-```csharp
-using twodog.Testing;
-using twodog.Testing.Xunit;
-using Xunit;
-
-[Collection<HeadlessCollection>]
-public class SceneTests(HeadlessFixture godot)
-{
-    [Fact]
-    public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);
-}
-```
-
-Tests in the collection share one fixture. Clean up nodes and other state that
-should not carry into the next test.
+This page has a new home: [Fixtures](/api/fixture-base#collections). You are being redirected.

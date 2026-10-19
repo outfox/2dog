@@ -11,10 +11,8 @@ button. It runs on Windows.
 
 ![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
 
-::: warning Uses stock plumbing to work
 Godot reports `Engine.is_embedded_in_editor()` as `true` for this host;
 account for this in scripts that check editor embedding.
-:::
 
 ## Use It
 

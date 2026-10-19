@@ -34,8 +34,9 @@ command again: existing files are skipped, `--force` overwrites.
 
 ## No terminal, CI, pipes
 
-With stdout not a terminal, or one of `CI`, `GITHUB_ACTIONS`, `TF_BUILD`,
-`GITLAB_CI`, `TEAMCITY_VERSION`, `BUILD_NUMBER` set, the tool never prompts.
+With stdout not a terminal, or in
+[CI](/configuration/environment-variables#cli-output-and-automation), the tool
+never prompts.
 `new` and `add` without host flags then apply the default host set and print
 `note: no terminal to ask on`; pass `--yes` or name the hosts to make that
 explicit. `doctor` prints the fix commands instead of asking. Markers fall back
@@ -62,84 +63,20 @@ a saved restore log the same way it explains builds.
 
 ## "dotnet not found"
 
-The tool runs `dotnet sln`, `dotnet restore` and (for doctor) `dotnet build`
-through the muxer that launched it (`DOTNET_HOST_PATH`), then `DOTNET_ROOT`,
-then `PATH`. Set `DOTNET_HOST_PATH` to the `dotnet` executable when none of
-those apply.
+Put `dotnet` on `PATH`, or set `DOTNET_HOST_PATH` to the `dotnet` executable.
 
-## Testing locally packed packages
+## Mixed Godot bindings (TDG001-TDG005)
 
-When you develop 2dog itself, same-version repacks are masked by the NuGet
-cache and by nuget.org. Pack with a prerelease suffix CI can never publish and
-point the consumer at the local feed:
+2dog swaps stock GodotSharp assemblies for its own at build time. `2dog update`
+sets this up in an existing game; `2dog add` and new projects do it already.
 
-```bash
-dotnet pack twodog.godotsharp -c Release -p:TwoDogVersion=:2dog-version:-local.1
-dotnet pack twodog.godotsharp.editor -c Release -p:TwoDogVersion=:2dog-version:-local.1
-dotnet pack twodog.engine -c Release -p:TwoDogVersion=:2dog-version:-local.1
-python tests/bindings/test_packages.py --version :2dog-version:-local.1
-# consumer nuget.config: add the repo's packages/ folder as a source, reference -local.1
-```
-
-## Symlinks in a Windows checkout of 2dog
-
-The 2dog repository shares some files through committed symlinks, such as the
-showcase's `fps_counter.tscn`, which links to the template's copy. Without
-symlink support, Git writes each link as a small text file holding the target
-path. The showcase then fails to load its main scene, and
-`FpsCounterDriftTests` reports that the file is not a symlink.
-
-On Windows, symlinks need two things:
-
-1. **Developer Mode**, so that a normal account can create symlinks: Settings >
-   System > For developers > Developer Mode. Without it, only an elevated
-   prompt can create them.
-2. **`core.symlinks=true`** in Git. Git for Windows writes
-   `core.symlinks=false` into `.git/config` at clone time when it cannot create
-   symlinks, and that repository setting overrides the global one.
-
-Set both before cloning:
-
-```bash
-git config --global core.symlinks true
-git clone --recursive https://github.com/outfox/2dog
-```
-
-To repair an existing clone, enable the setting in the repository and check the
-links out again:
-
-```bash
-git config core.symlinks true
-git ls-files -s | grep ^120000          # lists the symlinks
-git checkout -- demos/showcase/fps_counter.tscn
-```
-
-`git config --show-origin --get-all core.symlinks` shows which configuration
-file sets the value; the last entry wins.
-
-Edit a shared file through its real path, `templates/twodog/fps_counter.tscn`.
-On Windows, the Godot editor saves through a temporary file and a rename, which
-replaces a symlink with a regular copy; `git status` then shows the link as
-changed.
-
-## Mixed Godot bindings (TDG001–TDG004)
-
-Run the current `2dog update` to configure fork bindings in an existing game. `2dog add`
-and new templates do this automatically too. No DisableImplicitGodotSharpReferences or
-DisableImplicitGodotGeneratorReferences properties are required.
-
-Compatible stock GodotSharp/GodotSharpEditor package assets are replaced with the matching
-fork assemblies before compile/copy/publish. TDG001 now means a dependency targets a different
-Godot version: align its version (or Godot.NET.Sdk) with the engine's Godot version.
-TDG003 identifies a stale manual assembly reference; remove the conflicting HintPath.
-TDG004 requires core/editor/engine packages to use the same 2dog version.
-
-The published 4.7.2.89 binding package rejected all mixed package graphs. Updating only the CLI
-cannot repair that package's build targets; upgrade the engine and managed packages together
-to a release containing the compatibility fix.
-
-Builds still validate binding contents before compilation and publish trimming. IL2125 warnings
-for your own libraries require a separate trimming review.
+| Code | Cause | Fix |
+| --- | --- | --- |
+| `TDG001` | A dependency targets a different Godot version | Align it, or `Godot.NET.Sdk`, with the engine's Godot version |
+| `TDG002` | `GodotSharpEditor` without `2dog.godotsharp.editor` | Reference `2dog.godotsharp.editor` at the engine version; remove stock packages and HintPaths |
+| `TDG003` | A referenced GodotSharp assembly is not 2dog's | Remove the conflicting reference or HintPath and rebuild against `2dog.godotsharp` |
+| `TDG004` | Core and editor binding packages differ in version | Use one 2dog version for all of them |
+| `TDG005` | An editor export build found no stock GodotSharp | Build the game with `Godot.NET.Sdk` |
 
 ## The Godot editor holds a file
 

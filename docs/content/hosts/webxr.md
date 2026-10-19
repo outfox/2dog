@@ -7,7 +7,8 @@ tagline: "Learn how to bring Godot VR and AR to the browser."
 # WebXR
 
 The WebXR host is a `browser-wasm` host with Godot's WebXR capabilities enabled
-and the WebXR Layers polyfill included.
+and the WebXR Layers polyfill included. It is single-threaded: `--web-threads`
+applies only to Web and Blazor hosts.
 
 See [WebXR Configuration](/configuration/webxr) for build and publish settings.
 

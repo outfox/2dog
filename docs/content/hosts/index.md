@@ -9,7 +9,7 @@ tagline: "A host is the .NET app that runs your Godot game, its tests, or your t
 A host is a .NET application that starts Godot for your game or its tests.
 Each host has its own entry point and references your base game project.
 
-You can have multiple hosts of the same type, each will have its unique project.
+You can have several hosts of the same type, each with its own project.
 
 The host is what runs your game...
 
@@ -27,7 +27,7 @@ dnx 2dog add
 Choose hosts when prompted, or use the flags below. For a new project, use
 `dnx 2dog new MyGame` instead.
 
-Without host flags, unattended commands include generic .NET, Web, and xUnit.
+Without host flags, unattended commands include generic .NET and Web.
 See [Project Layout](/project-layout) for files and
 [MSBuild Configuration](/configuration) for shared settings.
 

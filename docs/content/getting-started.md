@@ -67,7 +67,7 @@ dnx 2dog doctor
 To create a project from scratch, `project.godot` and all, from the command line:
 
 ```bash
-dnx 2dog new NewGame
+dnx 2dog new NewGame --generic --xunit
 cd NewGame
 dotnet run --project NewGame.2dog
 dotnet test

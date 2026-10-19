@@ -86,10 +86,8 @@ per-submission `results` and top-level `errors`; listings include a `tree` of
 | `130` | Cancelled by Ctrl+C or session closure |
 
 All sessions share the engine thread; synchronous work pauses the game.
-Submitted loops check cancellation. Ctrl+C, client termination, `--timeout`
-or session closure cancels work, but waits such as `Task.Delay` without `ct`
-or `await tree.ToSignal(...)` can keep running. A timeout still returns 124;
-the session stays busy until the code finishes.
+Cancellation is cooperative: pass `ct` to waits such as `Task.Delay`, or they
+keep running, and the session stays busy after a timeout returns 124.
 
 ## Sessions
 

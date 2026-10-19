@@ -41,44 +41,11 @@ The publish folder includes the executable, .NET runtime, engine, and game
 pack. Copy the whole folder to the target machine. Add `-r win-x64`,
 `-r linux-x64`, or `-r osx-arm64` to select a platform.
 
-For a build that requires an installed .NET runtime, pass
-`-p:PublishSelfContained=false`. Single-file publishing is unsupported; Native
-AOT produces one executable instead.
-
-### Native AOT
-
-Native AOT compiles the host, your game, and GodotSharp into one native
-executable. It needs no .NET runtime and starts faster:
-
-```bash
-dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishAot=true
-```
-
-The publish folder holds the executable, the engine, and the game pack. To
-make it the default, set `<PublishAot>true</PublishAot>` in the host's
-`.csproj`. See [Native AOT](/configuration#native-aot) for requirements.
-
-### ReadyToRun
-
-ReadyToRun keeps the regular .NET runtime but precompiles the engine
-assemblies, which shortens startup without Native AOT's restrictions:
-
-```bash
-dotnet publish MyGame.2dog -c Release -r win-x64 -p:PublishReadyToRun=true
-```
-
-See [ReadyToRun](/configuration#readytorun) for what it covers.
+Release builds hide the Windows console. See
+[Desktop Publishing](/configuration#desktop-publishing) for framework-dependent,
+Native AOT and ReadyToRun builds.
 
 See [Engine](/api/engine) to customize the frame loop and
 [Build Variants](/build-configurations) to select an engine build. See
 [Generic .NET Configuration](/configuration/generic) for build and publish settings.
 
-## No Console
-
-End users of generic 2dog apps usually don't need or expect a console window. The
-generated host already builds Release as `WinExe`, which hides it on Windows:
-```xml
-<OutputType Condition="'$(Configuration)' == 'Release'">WinExe</OutputType>
-```
-Linux and macOS ignore `WinExe`. On Windows, console output then goes nowhere
-unless it is redirected.

@@ -41,31 +41,17 @@ reference `NUnit3TestAdapter` 6.x for MTP v2 and set these properties:
 </PropertyGroup>
 ```
 
-On .NET 10, `dotnet test` runs every project of a run on the runner that
-`global.json` selects. The root `global.json` that 2dog creates with a test
-host selects MTP, so `dotnet test` from the project root runs the xUnit,
-NUnit and GdUnit hosts together. 2dog never edits an existing `global.json`;
-add this alongside your SDK settings:
-
-```json
-"test": {
-  "runner": "Microsoft.Testing.Platform"
-}
-```
+Run it from the project root; see [Test runners](/testing/#test-runners) for
+the `global.json` that selects MTP.
 
 ```bash
 dotnet test MyGame.nunit
 dotnet test --project MyGame.nunit --coverage
 ```
 
-Coverage uses MTP's `--coverage` option and writes a `.coverage` file under
-`TestResults/`; VSTest's `--collect "XPlat Code Coverage"` does not apply.
-
-Hosts scaffolded before 2dog used MTP run on VSTest, and
-[`2dog doctor`](/cli/doctor) flags them with `layout.test-runner`. To migrate
-one, add the properties above, update `NUnit3TestAdapter` to 6.x, replace
-`coverlet.collector` with `Microsoft.Testing.Extensions.CodeCoverage`, and
-remove `Microsoft.NET.Test.Sdk`.
+Coverage reports go to `TestResults/`. To move an older VSTest host, add the
+properties above and update `NUnit3TestAdapter` to 6.x; Microsoft's
+[migration guide](https://learn.microsoft.com/dotnet/core/testing/migrating-vstest-microsoft-testing-platform) covers the rest.
 
 2dog leaves discovery, filters and results to NUnit's bridge and keeps
 Godot setup, tests and teardown on NUnit's fixture thread. See
@@ -74,14 +60,8 @@ for runner options.
 
 ### Cancellation
 
-The verified NUnit adapter 6.3.1 does not signal
-`TestContext.CurrentContext.CancellationToken` when MTP cancels the
-session. Its forced stop skips fixture teardown, even if the test later
-observes its own cancellation token. This can leave Godot active during
-process exit.
-
-Use NUnit's
-[cooperative cancellation](https://docs.nunit.org/articles/nunit/writing-tests/attributes/cancelafter.html)
-with `[CancelAfter(milliseconds)]`, and observe the NUnit token in async
-work and frame waits. Set that test timeout below any outer MTP or CI
-timeout. A forced process exit cannot guarantee engine cleanup.
+NUnit's adapter does not signal the test's cancellation token when the
+session is cancelled, and its forced stop skips fixture teardown. Use NUnit's
+[`[CancelAfter]`](https://docs.nunit.org/articles/nunit/writing-tests/attributes/cancelafter.html),
+observe its token in async work and frame waits, and keep that timeout below
+any outer CI timeout.

@@ -71,8 +71,8 @@ internal static class CliTree
     public static readonly Option<string> Name = new("--name", "-n")
     {
         HelpName = "name",
-        Description = "Project name (new) or base name override (names are reduced to letters, digits, '.', '_' " +
-                      "and '-'; adjustments are announced)",
+        Description = "Project name (new) or base name override (letters, digits, '.' and '_' survive, '-' becomes " +
+                      "'_'; adjustments are announced)",
     };
 
     public static readonly Option<string> Rename = new("--rename")
@@ -98,7 +98,7 @@ internal static class CliTree
         { Description = "Use double precision bindings and natives for the game and all hosts (false selects single precision)" };
 
     public static readonly Option<bool> WebThreads = new("--web-threads")
-        { Description = "Enable experimental multithreading for Web, WebXR and Blazor clients (requires COOP/COEP headers)" };
+        { Description = "Enable experimental multithreading for Web and Blazor clients (requires COOP/COEP headers)" };
 
     public static readonly Option<bool> InstallWasmTools = new("--install-wasm-tools")
         { Description = "Install missing wasm-tools for Web, WebXR or Blazor hosts without prompting" };

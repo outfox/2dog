@@ -12,11 +12,6 @@ Set properties in `MyGame.webxr.csproj`. WebXR uses the same
 [trimming and Mono AOT settings](./web#trimming-and-aot) as the Web host.
 The generated host defaults to Release.
 
-`TwoDogWebVariant` selects debug for Debug and release for Release. Editor is
-unsupported. `TwoDogWebExportPreset` defaults to `Web`, and
-`TwoDogExportPack=false` uses an existing `wwwroot/godot.pck`.
-`WasmEmitSymbolMap` defaults to `false` in Release and `true` otherwise.
-
 ```bash
 dotnet publish MyGame.webxr -c Release -p:RunAOTCompilation=true
 ```

@@ -15,13 +15,13 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `TwoDogWebVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Native Web engine; explicit settings override the default. The `editor` variant is unsupported |
+| `TwoDogWebVariant` | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release` |
 | `TwoDogExportPack` | `true` | Export game content; `false` uses an existing `wwwroot/godot.pck` |
 | `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
 | `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for loading progress |
 | `TwoDogWebStripMaps` | `true` with the release engine | Remove JavaScript source maps |
-| `TwoDogWebPrecompress` | `true` with `dotnet publish` | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files |
+| `TwoDogWebPrecompress` | `true` with the dotnet CLI | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files |
 | `TwoDogWebPrecompressLevel` | `Optimal` | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive |
 | `TwoDogWebSideModuleExports` | `true` | Export native symbols used by GDExtensions |
 | `WasmEnableThreads` | `false` | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental) |
@@ -30,33 +30,31 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
 
 `2dog.browser-wasm` restores both debug and release natives. A missing selected
-payload fails the build. Editor configuration selects the unsupported editor
-variant and fails; use Debug or Release, or explicitly select a supported variant.
+payload fails the build.
 
 Changing `TwoDogWebPackName` also requires matching the pack URL in your boot page.
 
 ## Precompression
 
-`dotnet publish` enables precompression; set `TwoDogWebPrecompress=false` to
-skip it. Originals are kept. Currently, Full and Mono MSBuild skip this step even when
-explicitly enabled; use `dotnet publish` to generate compressed copies.
-See [MSBuild runtimes](/configuration#msbuild-runtimes).
-
-`NoCompression` still creates `.br` and `.gz` files. Use
-`TwoDogWebPrecompress=false` to skip generating them.
+The dotnet CLI writes compressed copies next to the originals; set
+`TwoDogWebPrecompress=false` to skip them. Visual Studio's MSBuild skips this
+step.
 
 ## Trimming and AOT
 
-The generated host preserves the game, host, `GodotSharp`, and `twodog`
-assemblies. Root other assemblies accessed only through reflection:
+See [Trimming](/configuration#trimming) for assemblies accessed only through
+reflection.
+
+Browser hosts run on Mono. Enable Mono's
+[AOT compiler](https://learn.microsoft.com/aspnet/core/blazor/webassembly-build-tools-and-aot)
+in the host's csproj instead of `PublishAot`; it applies to `dotnet publish`:
 
 ```xml
-<ItemGroup>
-  <TrimmerRootAssembly Include="MyLibrary"/>
-</ItemGroup>
+<PropertyGroup>
+  <RunAOTCompilation>true</RunAOTCompilation>
+</PropertyGroup>
 ```
 
-Browser hosts run on Mono. Enable Mono's AOT compiler with
-`-p:RunAOTCompilation=true`; use this instead of `PublishAot`.
+`-p:RunAOTCompilation=true` sets it for a single publish.
 
 See the [Web host guide](/hosts/web) for serving and deploying `AppBundle/`.

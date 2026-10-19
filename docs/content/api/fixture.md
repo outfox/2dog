@@ -1,45 +1,13 @@
 ---
-title: twodog.Testing.Fixture
-description: "API reference for Fixture, the test fixture that starts Godot with rendering enabled - used through RenderingCollection in xUnit tests."
-tagline: "Learn how to test with a real, rendering Godot instance in xUnit."
+# Merged into the Fixtures page (api/fixture-base.md).
+# This stub keeps the old URL alive for external links; kept out of search.
+search: false
+head:
+  - - meta
+    - http-equiv: refresh
+      content: 0; url=/api/fixture-base#fixture
 ---
 
-# `twodog.Testing.Fixture`
+# Fixture
 
-Starts a Godot test fixture with rendering enabled.
-
-```csharp
-public class Fixture : FixtureBase
-```
-
-**Package:** `2dog.engine`  
-**Namespace:** `twodog.Testing`
-
-Use this fixture for tests that need a display, rendered frames, or window
-behavior. For most CI tests, prefer [`HeadlessFixture`](./headless-fixture).
-
-## Inherited Properties
-
-| Property | Type | Description |
-| --- | --- | --- |
-| `Engine` | `twodog.Engine` | Engine owned by the fixture |
-| `GodotInstance` | `Godot.GodotInstance` | Running native instance |
-| `Tree` | `Godot.SceneTree` | Active scene tree |
-
-## xUnit Collection
-
-[`RenderingCollection`](./rendering-collection) supplies this fixture to a
-non-parallel xUnit collection.
-
-```csharp
-using twodog.Testing;
-using twodog.Testing.Xunit;
-using Xunit;
-
-[Collection<RenderingCollection>]
-public class RenderingTests(Fixture godot)
-{
-    [Fact]
-    public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);
-}
-```
+This page has a new home: [Fixtures](/api/fixture-base#fixture). You are being redirected.

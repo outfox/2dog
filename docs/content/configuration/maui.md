@@ -18,12 +18,11 @@ existing root `global.json`. Run from `MyGame.maui/` to use the host's pin.
 | `GodotProjectDir` | `..` | Game directory for import and pack export |
 | `RuntimeIdentifier` | `win-x64` on Windows, `android-arm64` on Android | Native architecture; Android also supports `android-x64` |
 | `TwoDogVariant` | `debug` in Debug, `release` otherwise | Use Debug or Release |
-| `WindowsPackageType` | `None` | Unpackaged Windows app |
-| `WindowsAppSDKSelfContained` | `true` on Windows | Bundle the Windows App SDK runtime |
-| `PublishSelfContained` | `true` on Windows | Bundle the .NET runtime |
 | `TwoDogAndroidGameAssembly` | Game assembly name | Assembly extracted before engine startup |
 | `AndroidPackageFormats` | `apk` | Use `aab` for store distribution |
 
+Windows builds are
+[unpackaged and self-contained](https://learn.microsoft.com/dotnet/maui/windows/deployment/publish-unpackaged-cli).
 Android uses the [Android host's export, signing and trimming settings](/configuration/android)
 and Mono AOT in Release. Native AOT is unsupported by the MAUI host.
 

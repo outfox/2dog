@@ -40,14 +40,9 @@ Deleting `.godot/` forces a full import on the next build.
 
 ## The import helper (`twodog.import`)
 
-`2dog.engine` includes `tools/net10.0/2dog.import.dll`, which MSBuild runs in a
-separate process. A `.godot/2dog.import.lock` serializes concurrent imports of
-the same project.
-
-::: info
-Template builds (`template_debug`, `template_release`) cannot import; the
-pipeline requires the editor variant (`TOOLS_ENABLED`).
-:::
+`2dog.engine` runs the import in a separate helper process, one import per
+project at a time. It needs the `editor` variant; `debug` and `release`
+natives cannot import.
 
 ## Pack export
 
@@ -60,14 +55,9 @@ project, is skipped.
 - Desktop packs sit beside the host executable, and the export copies the
   preset's GDExtension libraries next to them, where the engine loads them.
 - Web packs embed their GDExtension side modules.
-- A stock Godot editor set as `GodotEditor` exports a pack the standard way: it
-  runs Godot's .NET publish and leaves GDExtension libraries out. Use the
-  bundled helper when the game uses GDExtensions.
-
-A stock Godot editor can still export the game the standard way. Its
-`ExportDebug` and `ExportRelease` builds compile against the stock GodotSharp
-bindings, because stock export templates need them, so code that uses 2dog-only
-engine APIs does not compile there.
+- A stock Godot editor, also as `GodotEditor`, exports the standard way: it
+  runs Godot's .NET publish against the stock bindings, so 2dog-only engine
+  APIs do not compile there, and leaves GDExtension libraries out.
 
 Packs exported later, such as patches, DLC or mods loaded with
 `ProjectSettings.LoadResourcePack`, are resource-only as well. C# changes ship
@@ -76,18 +66,13 @@ host already contains.
 
 ## Troubleshooting
 
-### Warning: no import capability was found
+### No import capability, or GodotTools.dll not found
 
 The editor libgodot (`2dog.<rid>.editor`), helper, or GodotTools assemblies
 (`2dog.tools`) could not be resolved. Restore `2dog.engine`, which depends on
 all three, or set `<GodotEditor>` to an external editor binary.
 
-### GodotTools.dll not found
-
-The bundled import needs the GodotTools assemblies from `2dog.tools`. Restore
-`2dog.engine` normally, or configure an external editor explicitly with `<GodotEditor>`.
-
 ### No .uid files generated
 
 Check for the `TwoDog: Imported Godot project` build message and confirm an
-*editor* libgodot or editor binary was used. Template builds cannot import.
+*editor* libgodot or editor binary was used.

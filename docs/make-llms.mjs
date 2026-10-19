@@ -60,8 +60,7 @@ const SECTIONS = [
   ]],
   ['API Reference', [
     'api-reference.md', 'api/engine.md', 'api/godot-instance.md', 'api/godotsharp.md',
-    'api/fixture-base.md', 'api/fixture.md', 'api/headless-fixture.md',
-    'api/rendering-collection.md', 'api/headless-collection.md', 'api/assembly-preloader.md',
+    'api/fixture-base.md', 'api/assembly-preloader.md',
   ]],
   ['Develop and Configure', [
     'dnx-2dog.md', 'cli/add.md', 'cli/new.md', 'cli/doctor.md', 'cli/update.md', 'cli/pack.md', 'cli/repl.md', 'cli/skill.md',
@@ -101,7 +100,10 @@ const SECTIONS = [
 ];
 
 // Redirect stubs and other pages that should not be indexed.
-const EXCLUDE = new Set(['add.md', 'templates.md', 'convert.md', 'web.md', 'testing.md', 'agents.md']);
+const EXCLUDE = new Set([
+  'add.md', 'templates.md', 'convert.md', 'web.md', 'testing.md', 'agents.md',
+  'api/fixture.md', 'api/headless-fixture.md', 'api/headless-collection.md', 'api/rendering-collection.md',
+]);
 
 const inventory = loadPages(content, SECTIONS, EXCLUDE);
 const prepare = (page) => ({ ...page, url: `${HOST}/${page.rel}`, body: resolveMarkers(page.body) });

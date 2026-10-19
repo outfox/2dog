@@ -10,8 +10,8 @@ Load scenes, click buttons, and check signals from a normal .NET test runner.
 2dog starts a real Godot engine for your tests, so they use your game's scripts
 and resources.
 
-![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and ther robot dog sniffing the ground](../img/2dog-investigation.png)
-*"Find those bugs, where ever they hide."*
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their robot dog sniffing the ground](../img/2dog-investigation.png)
+*"Find those bugs, wherever they hide."*
 
 2dog supports several popular testing frameworks, but also provides generic fixtures just in case you need something specific.
 
@@ -46,10 +46,6 @@ async lifecycle support, and automatic checks for Godot errors and warnings.
 | Rendering on macOS | Main-thread runner included | Needs a dedicated runner; use headless tests for now |
 | Class-wide configuration matrix | Separate fixture types and collections | `[TestFixture(...)]` |
 | Method input combinations | `TestMatrix` with `[MemberData]` | `[Combinatorial]` and `[Pairwise]` |
-
-xUnit already supports async setup and cleanup through `IAsyncLifetime`.
-NUnit's attributes make those hooks more explicit; this is a difference in
-style, rather than missing async support.
 :::
 
 ## Test runners
@@ -62,17 +58,18 @@ All three scaffolded hosts run on Microsoft.Testing.Platform (MTP):
 | NUnit | Official NUnit adapter bridge | [Configuration](/configuration/nunit#microsofttestingplatform) |
 | xUnit | Upstream xUnit runner with 2dog's owner-thread entry point | [Configuration](/configuration/xunit#microsofttestingplatform) |
 
-The .NET 10 SDK runs every project of a `dotnet test` run on the runner that
-`global.json` selects. When 2dog scaffolds a test host into a project without
-a root `global.json`, it creates one that selects MTP, so `dotnet test` from
-the project root runs all of them. The SDK looks for `global.json` from the
-working directory, not from the project path: `dotnet test MyGame/MyGame.xunit`
-from the parent directory falls back to VSTest and fails with "Testing with
-VSTest target is no longer supported". Every scaffolded host references
-`Microsoft.Testing.Extensions.CodeCoverage`, so `dotnet test --coverage`
-collects coverage for all of them. NUnit's adapter has a
-[session cancellation limitation](/configuration/nunit#cancellation);
-use its cooperative test timeout before any outer runner timeout.
+Scaffolding a test host creates a root `global.json` that selects MTP, unless
+the project already has one; 2dog never edits an existing file. Run
+`dotnet test` from the project root to run every test host. To select MTP in
+your own `global.json`, add:
+
+```json
+"test": { "runner": "Microsoft.Testing.Platform" }
+```
+
+[`2dog doctor`](/cli/doctor) reports hosts or a `global.json` still on VSTest
+as `layout.test-runner`. See Microsoft's [`dotnet test` guide](https://learn.microsoft.com/dotnet/core/testing/unit-testing-with-dotnet-test)
+for runner selection and options such as `--coverage`.
 
 ## Find a guide
 

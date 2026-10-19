@@ -23,22 +23,14 @@ on terminals, a missing workload (`wasm-tools`, `android`) can still be offered.
 
 ## Hosts
 
-`--repl [folder]` adds an opt-in [C# REPL host](/hosts/repl) with syntax
-highlighting, completion and live access to the running game.
-
-`--maui [folder]` adds a [MAUI host](/hosts/maui) for Windows and Android.
-Install `maui-windows` on Windows and `maui-android` for Android builds.
-The host is excluded from plain solution builds.
-
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
 `--xunit`, `--gdunit` or `--nunit`. Existing hosts are
 recognized and skipped.
 
-Test hosts run on Microsoft.Testing.Platform. Without a root `global.json`,
-adding one creates a `global.json` that selects it, so `dotnet test` from the
-project root runs every test host. An existing `global.json` is never edited;
-2dog warns when it does not select Microsoft.Testing.Platform.
+Adding a test host creates a root `global.json` that selects
+[Microsoft.Testing.Platform](/testing/#test-runners) when none exists. An
+existing `global.json` is never edited; 2dog warns when it does not select it.
 
 The new hosts are built for the running tool's versions, so the game project's
 `Godot.NET.Sdk` and an existing 2dog version block in `Directory.Build.props`
@@ -46,35 +38,30 @@ are raised to them in the same run (never lowered), as `2dog update` would. A
 move across Godot lines is called out: install the matching editor and open
 the project once.
 
-Migrating an existing `.sln` to `.slnx` first saves a `.sln.old` backup beside
-it, using `.sln.old.1`, `.sln.old.2`, and so on if needed. Existing backups
-are kept; the `.sln` is removed only after conversion succeeds.
+Migrating an existing `.sln` to `.slnx` keeps it as a numbered `.sln.old`
+backup.
 
 ## Options
 
 | Option | Effect |
 | --- | --- |
-| `-n, --name <name>` | Base name override for the scaffolded files; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords get a `_` prefix |
+| `-n, --name <name>` | Base name override for the scaffolded files; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix |
 | `--rename <NewName>` | Rename a .NET project name that [contains spaces](/known-issues/spaced-project-names), then scaffold; only before any hosts exist |
 | `--dry-run` | Print the plan; change nothing |
 | `--force` | Overwrite scaffolded files that exist; never deletes |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients; serving requires COOP/COEP headers |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
 | `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
 
-Build settings are also available as wizard toggles. Omitting these flags on
-`add` preserves existing settings. See [build options](/dnx-2dog#build-options)
-for precision and browser serving requirements.
+Omitting the build settings preserves the project's; see
+[build options](/dnx-2dog#build-options) for their requirements.
 
 Plus the [global and output options](/dnx-2dog#global-options).
 
-Before restore, newly selected browser hosts get a `wasm-tools` installation offer
-on terminals, and newly selected Android hosts an `android` one. Existing optional
-hosts do not trigger offers when adding a desktop or test host.
-`--no-restore` skips the offers; the install
-flags request installation explicitly, including in CI. `--dry-run` never checks or installs workloads.
+Workload offers apply only to newly selected hosts. `--no-restore` skips them;
+the install flags work in CI too. `--dry-run` never checks or installs workloads.
 
 A failed restore returns exit code `2` and keeps the created files. The tool
 explains recognized errors; fix the cause and run `dotnet restore` again.

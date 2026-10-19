@@ -111,7 +111,7 @@ Options:
 | `--dry-run` | Print planned actions without changing anything |
 | `--force` | Overwrite files that already exist (never deletes/moves) |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients; serving requires COOP/COEP headers |
+| `--web-threads [true\|false]` | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers |
 | `--no-restore` | Skip the final `dotnet restore` |
 | `--install-wasm-tools` | `new`, `add`, `doctor`, `update`: install missing `wasm-tools` for browser hosts |
 | `--install-android-workload` | `new`, `add`, `doctor`, `update`: install the missing `android` workload for Android hosts |

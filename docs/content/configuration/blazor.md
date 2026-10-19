@@ -15,7 +15,7 @@ It normally sets `GodotProjectDir=../..`; see the
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `TwoDogWebVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Native Web engine; explicit settings override the default. The `editor` variant is unsupported |
+| `TwoDogWebVariant` | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release` |
 | `TwoDogExportPack` | `true` | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
 | `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
 | `TwoDogWebPackName` | `godot.pck` | Exported pack name; match it in `GodotView.PackUrl` if changed |
@@ -36,12 +36,9 @@ Publish the server project to include its client:
 dotnet publish MyGame.blazor -c Release -p:RunAOTCompilation=true
 ```
 
-`RunAOTCompilation` enables Mono's browser AOT compiler. The generated client
-preserves the game, host, `GodotSharp`, and `twodog` assemblies. Add
-`<TrimmerRootAssembly Include="MyLibrary"/>` in an `<ItemGroup>` for other
-assemblies accessed only through reflection.
+`RunAOTCompilation` enables Mono's browser AOT compiler. See
+[Trimming](/configuration#trimming) for assemblies accessed only through
+reflection.
 
-Keep `PrivateAssets="all"` on the client's engine and browser package references
-so their build targets stay out of the server; the generated engine reference
-also sets `Publish="true"` so its managed assemblies remain in the client publish.
-See the [Blazor host guide](/hosts/blazor) for `GodotView` and static asset serving.
+Keep the attributes on the client's generated `2dog.engine` and browser
+package references. See the [Blazor host guide](/hosts/blazor) for `GodotView`.

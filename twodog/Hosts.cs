@@ -154,6 +154,9 @@ internal static class Hosts
     /// <summary>Browser-side hosts: they need wasm-tools and publish a pck.</summary>
     public static bool IsWebLike(HostKind kind) => kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor;
 
+    /// <summary>Browser kinds that follow TwoDogWebThreads; WebXR stays single-threaded.</summary>
+    public static bool SupportsWebThreads(HostKind kind) => kind is HostKind.Web or HostKind.Blazor;
+
     /// <summary>
     /// Kinds kept out of plain solution builds: the browser ones need wasm-tools, Android the android workload (a
     /// build-excluded project is not restored either), WinUI builds only on Windows.

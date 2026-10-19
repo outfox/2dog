@@ -24,9 +24,7 @@ dotnet run --project MyGame.xunit
 ```
 
 Your messages show up, mixed into the test-host stream with engine and fixture
-logs. VSTest's `--logger "console;verbosity=detailed"` does not apply under
-MTP; `dotnet test --output Detailed` lists every test result, not only
-failures.
+logs.
 
 ## Use ITestOutputHelper instead
 

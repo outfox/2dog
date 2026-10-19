@@ -33,12 +33,14 @@ for a pause button, time-scale slider, and FPS display.
 
 ## Publish It
 
-Publish like the [generic host](./generic#publishing), with or without
-[Native AOT](./generic#native-aot).
-See [Avalonia Configuration](/configuration/avalonia) for build and publish settings.
+```bash
+dotnet publish MyGame.avalonia -c Release
+```
+
+See [Avalonia Configuration](/configuration/avalonia) for Native AOT and other
+publish settings.
 
 ## Requirements
 
 - Avalonia 12.1 or later on Windows, Linux, or macOS.
-- Keep the generated Windows app manifest for correct DPI scaling.
 - IME composition and captured mouse input are not supported yet.

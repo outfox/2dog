@@ -1,37 +1,13 @@
 ---
-title: twodog.Testing.Xunit.RenderingCollection
-description: "API reference for RenderingCollection, the non-parallel xUnit collection that shares one rendering Fixture across test classes."
-tagline: "Learn how to share one rendering Godot across your xUnit test classes."
+# Merged into the Fixtures page (api/fixture-base.md).
+# This stub keeps the old URL alive for external links; kept out of search.
+search: false
+head:
+  - - meta
+    - http-equiv: refresh
+      content: 0; url=/api/fixture-base#collections
 ---
 
-# `twodog.Testing.Xunit.RenderingCollection`
+# RenderingCollection
 
-Defines a non-parallel xUnit collection backed by [`Fixture`](./fixture).
-
-```csharp
-public class RenderingCollection : ICollectionFixture<Fixture>
-```
-
-**Package:** `2dog.xunit`  
-**Namespace:** `twodog.Testing.Xunit`
-
-The package compiles this collection definition into your test assembly so
-xUnit can discover it.
-
-## Usage
-
-```csharp
-using twodog.Testing;
-using twodog.Testing.Xunit;
-using Xunit;
-
-[Collection<RenderingCollection>]
-public class RenderingTests(Fixture godot)
-{
-    [Fact]
-    public void SceneTree_IsRunning() => Assert.NotNull(godot.Tree.Root);
-}
-```
-
-Tests in the collection share one fixture. Clean up nodes and other state that
-should not carry into the next test.
+This page has a new home: [Fixtures](/api/fixture-base#collections). You are being redirected.

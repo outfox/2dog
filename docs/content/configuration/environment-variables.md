@@ -6,9 +6,7 @@ tagline: "Learn which environment variables help you debug and diagnose 2dog."
 
 # Environment Variables
 
-Set these in the shell that launches `dotnet`, or in your IDE's launch
-environment. Restart an already-running IDE after changing its inherited
-environment. Diagnostic switches are off when unset.
+Diagnostic switches are off when unset.
 
 ## Debugging and Diagnostics
 
@@ -25,43 +23,14 @@ the explicit [`GodotEditor` MSBuild property](/import-tool#properties).
 Ambient `GODOT4` and `GODOT_EDITOR` variables do not select the import/export
 editor.
 
-For lifecycle tracing, choose a file in an existing writable directory and
-use a different path for each simultaneously running process. The log appends
-and flushes once per second, including while the engine thread is stalled.
-It records message handling and iteration progress; check the game visually
-to confirm rendering resumes. Tracing does not activate or restore the window.
-
-For Avalonia console diagnostics on Windows, use `OutputType=Exe`; see
-[Avalonia Configuration](./avalonia).
-
-### Capture a Windows Lifecycle Trace
-
-Run from the directory containing `MyGame.2dog`:
-
-::: code-group
-
-```powershell [PowerShell]
-$env:TWODOG_LIFECYCLE_LOG = Join-Path $PWD 'window-lifecycle.log'
-dotnet run --project MyGame.2dog
-Remove-Item Env:TWODOG_LIFECYCLE_LOG
-```
-
-```nushell [Nushell]
-$env.TWODOG_LIFECYCLE_LOG = ($env.PWD | path join 'window-lifecycle.log')
-dotnet run --project MyGame.2dog
-hide-env TWODOG_LIFECYCLE_LOG
-```
-
-:::
-
-Use `TWODOG_GODOT_LOG_DIR` to capture native test output separately:
+The lifecycle log appends and flushes once per second, even while the engine
+thread is stalled; give each running process its own file. Avalonia
+diagnostics need `OutputType=Exe` on Windows.
 
 ```bash
+TWODOG_LIFECYCLE_LOG=./window-lifecycle.log dotnet run --project MyGame.2dog
 TWODOG_GODOT_LOG_DIR=./godot-logs dotnet test MyGame.xunit
 ```
-
-In PowerShell, set `$env:TWODOG_GODOT_LOG_DIR = './godot-logs'` before running
-`dotnet test`, then remove it with `Remove-Item Env:TWODOG_GODOT_LOG_DIR`.
 
 ## CLI Output and Automation
 
@@ -83,27 +52,21 @@ except `0` or `false` enables the switch (`false` is case-insensitive).
 
 ## Godot Assembly Paths
 
-Packaged hosts normally configure these paths automatically. Use matching
-Godot assemblies when supplying a custom layout.
-
-| Variable | Value | Effect |
-| --- | --- | --- |
-| `GODOTSHARP_DIR` | Directory containing `GodotPlugins.dll` | Overrides the API source directory during the build when the file exists. The hosted loader also probes it; during engine startup, 2dog selects the packaged flat or nested API layout when available |
-| `GODOT_TOOLS_DIR` | Directory containing `GodotTools.dll` | Overrides the fork's editor tools directory when the file exists. Import/export helpers receive the packaged tools path automatically |
-| `GODOT_PROJECT_ASSEMBLY_DIR` | Directory containing the game's C# assembly | Used by the fork to find the hosted game assembly. Engine startup sets it from `Engine.ProjectAssemblyDir`, defaulting to the host output directory; configure that property for a custom location |
+`GODOTSHARP_DIR` (the directory holding `GodotPlugins.dll`), `GODOT_TOOLS_DIR`
+and `GODOT_PROJECT_ASSEMBLY_DIR` locate Godot's managed assemblies. 2dog sets
+them for its hosts, so leave them unset; use
+[`Engine.ProjectAssemblyDir`](/api/engine#projectassemblydir) for a custom game
+assembly location. [`2dog doctor`](/cli/doctor) reports stray values as
+`env.overrides`.
 
 ## .NET and Android Tooling
 
 | Variable | Value | Effect |
 | --- | --- | --- |
-| `DOTNET_HOST_PATH` | Full path to `dotnet` | First choice for CLI child `dotnet` commands when the file exists; usually supplied by the .NET launcher |
-| `DOTNET_ROOT` | .NET installation directory | Next location checked for `dotnet` |
-| `PATH` | Executable search directories | Final fallback when the CLI locates `dotnet` |
+| `DOTNET_HOST_PATH`, `DOTNET_ROOT`, `PATH` | See [.NET environment variables](https://learn.microsoft.com/dotnet/core/tools/dotnet-environment-variables) | Where the CLI finds `dotnet` for child commands, in that order |
 | `AndroidSdkDirectory` | Android SDK directory | First explicit SDK location checked by `2dog new`, `add` and `doctor` |
-| `ANDROID_HOME`, `ANDROID_SDK_ROOT` | Android SDK directory | Additional SDK locations checked in that order. `ANDROID_SDK_ROOT` is deprecated; keep both paths consistent if both are set |
-| `JAVA_HOME` | JDK directory | Used by Android tooling; the repository's APK build script forwards it as `JavaSdkDirectory` |
+| `ANDROID_HOME`, `ANDROID_SDK_ROOT` | Android SDK directory | Additional SDK locations checked in that order; see [Android environment variables](https://developer.android.com/tools/variables) |
 | `ANDROID_USER_HOME` | Android user configuration directory | Location of `debug.keystore` for the signing fallback; defaults to `~/.android` |
-| `ANDROID_NDK_ROOT`, `ANDROID_NDK_HOME` | Android NDK directory | Used in that order by the repository's APK build script; otherwise it searches SDK `ndk` directories |
 
 For Android signing, use the following sets together:
 
@@ -112,19 +75,5 @@ For Android signing, use the following sets together:
 | Debug | `GODOT_ANDROID_KEYSTORE_DEBUG_PATH` | `GODOT_ANDROID_KEYSTORE_DEBUG_USER` | `GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD` |
 | Release | `GODOT_ANDROID_KEYSTORE_RELEASE_PATH` | `GODOT_ANDROID_KEYSTORE_RELEASE_USER` | `GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD` |
 
-Explicit .NET signing settings with `AndroidKeyStore=true` take precedence.
-When a Godot keystore path is set, its alias and password must also be set.
-2dog passes the password to the signer through an `env:` reference. Otherwise,
-signing falls back to the Android user debug keystore, then .NET's debug key.
-See [Android Configuration](./android) and the [Android host guide](/hosts/android).
-
-## Repository Test Helpers
-
-These settings apply to development scripts in a 2dog source checkout.
-
-| Variable | Value | Effect |
-| --- | --- | --- |
-| `TWODOG_CDP_DEBUG` | Exactly `1` | Enables protocol diagnostics in the browser smoke-test waiter |
-| `TWODOG_TEST_VULKAN_LOADER` | Path to `vulkan-1.dll` | Copies that Vulkan loader beside the Windows NUnit rendering test host; set by the software-rendering setup script |
-| `TWODOG_TEST_RESTORE_PACKAGES` | NuGet cache directory | Overrides the restore cache used by the Android package tests |
-| `TWODOG_WEB_TARGETS` | Path to browser MSBuild targets | Overrides the targets file exercised by the web side-module export tests |
+2dog passes the password to the signer through an `env:` reference. See
+[Android signing](./android#signing) for the keystore order.

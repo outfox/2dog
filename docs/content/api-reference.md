@@ -31,9 +31,9 @@ nodes, resources, scenes, and other engine types.
 
 | Type | Use it to |
 | --- | --- |
-| [`FixtureBase`](./api/fixture-base) | Build a fixture with custom Godot arguments |
-| [`Fixture`](./api/fixture) | Run tests with rendering enabled |
-| [`HeadlessFixture`](./api/headless-fixture) | Run headless tests, including CI |
+| [`FixtureBase`](./api/fixture-base#fixturebase) | Build a fixture with custom Godot arguments |
+| [`Fixture`](./api/fixture-base#fixture) | Run tests with rendering enabled |
+| [`HeadlessFixture`](./api/fixture-base#headlessfixture) | Run headless tests, including CI |
 
 These fixtures ship in `2dog.engine` and do not depend on a specific test
 framework.
@@ -42,8 +42,8 @@ framework.
 
 | Type | Use it to |
 | --- | --- |
-| [`RenderingCollection`](./api/rendering-collection) | Share a rendered fixture across an xUnit collection |
-| [`HeadlessCollection`](./api/headless-collection) | Share a headless fixture across an xUnit collection |
+| [`RenderingCollection`](./api/fixture-base#collections) | Share a rendered fixture across an xUnit collection |
+| [`HeadlessCollection`](./api/fixture-base#collections) | Share a headless fixture across an xUnit collection |
 
 The collection definitions ship in `2dog.xunit` and compile into the consuming
 test assembly so xUnit can discover them.
