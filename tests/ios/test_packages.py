@@ -174,16 +174,37 @@ class IosHostTargets(unittest.TestCase):
             for identifier, variant in (("ios-arm64", ""), ("ios-arm64_x86_64-simulator", "simulator")):
                 (framework / identifier).mkdir(parents=True)
                 (framework / identifier / "libprobe.a").write_bytes(b"!<arch>\n")
-            slices = "".join(f'''<dict>
-<key>LibraryIdentifier</key><string>{identifier}</string><key>LibraryPath</key><string>libprobe.a</string>
-<key>SupportedArchitectures</key><array><string>arm64</string>{extra}</array><key>SupportedPlatform</key><string>ios</string>{variant}
-</dict>''' for identifier, extra, variant in (
+            # Pretty-printed like xcodebuild's output: whitespace between each key and its value.
+            slices = "".join(f'''
+		<dict>
+			<key>LibraryIdentifier</key>
+			<string>{identifier}</string>
+			<key>LibraryPath</key>
+			<string>libprobe.a</string>
+			<key>SupportedArchitectures</key>
+			<array>
+				<string>arm64</string>{extra}
+			</array>
+			<key>SupportedPlatform</key>
+			<string>ios</string>{variant}
+		</dict>''' for identifier, extra, variant in (
                 ("ios-arm64", "", ""),
-                ("ios-arm64_x86_64-simulator", "<string>x86_64</string>", "<key>SupportedPlatformVariant</key><string>simulator</string>")))
+                ("ios-arm64_x86_64-simulator", "\n\t\t\t\t<string>x86_64</string>",
+                 "\n\t\t\t<key>SupportedPlatformVariant</key>\n\t\t\t<string>simulator</string>")))
             (framework / "Info.plist").write_text(f'''<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict><key>AvailableLibraries</key><array>{slices}</array>
-<key>CFBundlePackageType</key><string>XFWK</string><key>XCFrameworkFormatVersion</key><string>1.0</string></dict></plist>''')
+<plist version="1.0">
+<dict>
+	<key>AvailableLibraries</key>
+	<array>{slices}
+	</array>
+	<key>CFBundlePackageType</key>
+	<string>XFWK</string>
+	<key>XCFrameworkFormatVersion</key>
+	<string>1.0</string>
+</dict>
+</plist>
+''')
             library = "res://bin/probe.xcframework"
         else:
             (game / "bin/libprobe.a").write_bytes(b"!<arch>\n")

@@ -131,7 +131,8 @@
                     plist = XDocument.Load(reader);
                 foreach (var library in plist.Descendants("dict").Where(dict => dict.Elements("key").Any(key => key.Value == "LibraryIdentifier")))
                 {
-                    var values = library.Elements("key").ToDictionary(key => key.Value, key => (XElement)key.NextNode);
+                    // Pretty-printed plists put whitespace between a key and its value element.
+                    var values = library.Elements("key").ToDictionary(key => key.Value, key => key.ElementsAfterSelf().FirstOrDefault());
                     XElement platform, variant, architectures, identifier, path;
                     if (!values.TryGetValue("SupportedPlatform", out platform) || platform.Value != "ios") continue;
                     values.TryGetValue("SupportedPlatformVariant", out variant);
