@@ -24,7 +24,11 @@ def main():
     if not args.marker:
         parser.error("--marker must not be empty: any output would contain it")
     subprocess.run(simctl(args, "install", args.device, str(args.app.resolve())), check=True)
-    subprocess.run(simctl(args, "terminate", args.device, args.bundle), check=False)
+    # A stale instance would keep the console attached; simctl itself can hang when the Simulator is overloaded.
+    try:
+        subprocess.run(simctl(args, "terminate", args.device, args.bundle), check=False, timeout=30)
+    except subprocess.TimeoutExpired:
+        pass
     # --console attaches the app's stdout and stderr to this process until it exits or is terminated.
     launch = subprocess.Popen(simctl(args, "launch", "--console", args.device, args.bundle),
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
