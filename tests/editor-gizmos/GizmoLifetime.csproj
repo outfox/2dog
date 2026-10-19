@@ -1,0 +1,10 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.godotsharp$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
+    </ItemGroup>
+</Project>
