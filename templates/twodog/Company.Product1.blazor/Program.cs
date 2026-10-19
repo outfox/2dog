@@ -7,6 +7,14 @@ builder.Services.AddRazorComponents()
 
 var app = builder.Build();
 
+// SharedArrayBuffer requires cross-origin isolation on the page and worker scripts.
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+    context.Response.Headers["Cross-Origin-Embedder-Policy"] = "require-corp";
+    await next();
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
