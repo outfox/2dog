@@ -159,7 +159,7 @@ class IosHostTargets(unittest.TestCase):
             for expected in ("GodotSharp", "twodog", "twodog.ios", "MyGame"):
                 self.assertIn(expected, roots)
             # The app links with -dead_strip: 2dog.engine's libgodot import survives only as a named symbol.
-            self.assertEqual(["_set_load_from_executable_fn|Function"], (root / "symbols.txt").read_text().split())
+            self.assertEqual(["set_load_from_executable_fn|Function"], (root / "symbols.txt").read_text().split())
             self.assertEqual("debug|false|true", (root / "props.txt").read_text().strip())
 
     def test_missing_pack_unsupported_rid_and_native_aot_fail_with_codes(self):

@@ -21,7 +21,7 @@
         <TrimmerRootAssembly Include="$(TwoDogIosGameAssembly)" Condition="'$(TwoDogIosGameAssembly)' != ''"/>
         <!-- 2dog.engine imports this from the logical libgodot library, which the app resolves to itself at run
              time. The app links with -dead_strip and exports only the symbols it knows about, so name it here. -->
-        <ReferenceNativeSymbol Include="_set_load_from_executable_fn">
+        <ReferenceNativeSymbol Include="set_load_from_executable_fn">
             <SymbolType>Function</SymbolType>
         </ReferenceNativeSymbol>
     </ItemGroup>
