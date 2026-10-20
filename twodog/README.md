@@ -1,6 +1,6 @@
 # 2dog
 
-Command-line tool and project templates for [2dog](https://2dog.dev), which runs Godot as a library from your own
+The .NET Tool and project templates for [2dog](https://2dog.dev), which runs Godot as a library from your own
 .NET entry point. Point it at a Godot project and it adds .NET hosts: desktop, web, WebXR, Avalonia, Blazor,
 WinForms, WinUI 3, MAUI, Android, a C# REPL, and xUnit, NUnit or gdUnit tests. Then it keeps them healthy with
 `2dog doctor` and current with `2dog update`.
