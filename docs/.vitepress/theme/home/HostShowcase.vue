@@ -66,28 +66,6 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
     ],
   },
   {
-    label: 'Tooling',
-    hue: 'var(--hue-lime)',
-    icon: 'code',
-    hosts: [
-      {
-        name: '2dog',
-        flag: '--generic',
-        text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
-        link: '/hosts/generic',
-        brand: 'dotnet',
-      },
-      {
-        name: 'REPL',
-        flag: '--repl',
-        text: 'Explore, edit, play, or inspect the game from a C# prompt while it is running.',
-        link: '/hosts/repl',
-        glyph: 'window_terminal',
-        tag: 'Experimental',
-      },
-    ],
-  },
-  {
     label: 'Desktop',
     hue: 'var(--hue-coral)',
     icon: 'desktop',
@@ -159,6 +137,28 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
     icon: 'joypad',
     hosts: [],
     soon: true,
+  },
+  {
+    label: 'Tooling',
+    hue: 'var(--hue-lime)',
+    icon: 'code',
+    hosts: [
+      {
+        name: '2dog',
+        flag: '--generic',
+        text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
+        link: '/hosts/generic',
+        brand: 'dotnet',
+      },
+      {
+        name: 'REPL',
+        flag: '--repl',
+        text: 'Explore, edit, play, or inspect the game from a C# prompt while it is running.',
+        link: '/hosts/repl',
+        glyph: 'window_terminal',
+        tag: 'Experimental',
+      },
+    ],
   },
 ]
 
