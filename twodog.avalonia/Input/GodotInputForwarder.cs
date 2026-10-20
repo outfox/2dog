@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Godot;
 using AvaloniaKey = Avalonia.Input.Key;
@@ -26,7 +27,8 @@ internal sealed class GodotInputForwarder : IDisposable
     }
 
     private readonly GodotControl _control;
-    private readonly GodotSession _session;
+    private readonly Func<bool> _isReady;
+    private readonly Action<InputEvent> _dispatch;
     private readonly Dictionary<HeldKeyId, AvaloniaKey> _heldKeys = [];
     // Kept in DIPs and converted per use: RenderScaling can change between events (monitor
     // move), and a baseline stored in old pixel space would skew the next relative delta.
@@ -34,11 +36,25 @@ internal sealed class GodotInputForwarder : IDisposable
     private bool _hasLastPos;
     private MouseButtonMask _buttonMask;
     private DisplayServer.CursorShape? _lastShape;
+    private Input.MouseModeEnum? _lastMouseMode;
+    private IPointer? _pointer;
+    private KeyModifiers _modifiers;
+    private readonly WindowsMouseCapture? _mouseCapture;
+    private readonly WindowBase? _window;
+    private bool _captureLost;
+    private Cursor? _hiddenCursor;
 
     public GodotInputForwarder(GodotControl control, GodotSession session)
+        : this(control, () => session.IsStarted, Dispatch) { }
+
+    internal GodotInputForwarder(GodotControl control, Func<bool> isReady, Action<InputEvent> dispatch)
     {
         _control = control;
-        _session = session;
+        _isReady = isReady;
+        _dispatch = dispatch;
+        if (OperatingSystem.IsWindows()) _mouseCapture = new WindowsMouseCapture(control);
+        _window = TopLevel.GetTopLevel(control) as WindowBase;
+        if (_window is not null) _window.Deactivated += OnLostFocus;
 
         _control.PointerEntered += OnPointerEntered;
         _control.PointerMoved += OnPointerMoved;
@@ -56,6 +72,10 @@ internal sealed class GodotInputForwarder : IDisposable
         // Detaching mid-gesture must not leave keys or buttons wedged in the still-running session.
         ReleaseHeldKeys();
         ReleaseHeldButtons();
+        ReleasePointer();
+        if (OperatingSystem.IsWindows()) _mouseCapture?.Release();
+        _control.Cursor = null;
+        _hiddenCursor?.Dispose();
 
         _control.PointerEntered -= OnPointerEntered;
         _control.PointerMoved -= OnPointerMoved;
@@ -66,15 +86,42 @@ internal sealed class GodotInputForwarder : IDisposable
         _control.KeyDown -= OnKeyDown;
         _control.KeyUp -= OnKeyUp;
         _control.LostFocus -= OnLostFocus;
+        if (_window is not null) _window.Deactivated -= OnLostFocus;
     }
 
     /// <summary>Reflects the engine's requested cursor shape onto the control, once per change.</summary>
     public void SyncCursor()
     {
+        var mode = Godot.Input.MouseMode;
+        if (OperatingSystem.IsWindows() && _mouseCapture is { } capture)
+        {
+            if (!_captureLost) capture.Update(mode);
+            if (capture.IsCaptured) _pointer?.Capture(_control);
+            else if (_buttonMask == 0) ReleasePointer();
+            if (!capture.HasFocus) ReleaseHeldButtons();
+        }
         var shape = DisplayServer.CursorGetShape();
-        if (shape == _lastShape) return;
+        if (shape == _lastShape && mode == _lastMouseMode) return;
         _lastShape = shape;
-        _control.Cursor = CursorMap.ToCursor(shape);
+        _lastMouseMode = mode;
+        _hasLastPos = false;
+        _control.Cursor = mode is Input.MouseModeEnum.Hidden or Input.MouseModeEnum.Captured or
+            Input.MouseModeEnum.ConfinedHidden ? _hiddenCursor ??= new Cursor(StandardCursorType.None) : CursorMap.ToCursor(shape);
+    }
+
+    internal void PollCapturedMotion()
+    {
+        if (!Ready || !OperatingSystem.IsWindows() || _mouseCapture is null) return;
+        var relative = _mouseCapture.PollMotion();
+        if (relative == Vector2.Zero) return;
+        SendMotion(ToViewport(new Avalonia.Point(_control.Bounds.Width / 2, _control.Bounds.Height / 2)), relative, _modifiers);
+    }
+
+    private void ReleasePointer()
+    {
+        var pointer = _pointer;
+        _pointer = null;
+        if (pointer?.Captured == _control) pointer.Capture(null);
     }
 
     private double Scaling => _control.RenderScaling;
@@ -93,7 +140,7 @@ internal sealed class GodotInputForwarder : IDisposable
         e.MetaPressed = modifiers.HasFlag(KeyModifiers.Meta);
     }
 
-    private bool Ready => _session.IsStarted;
+    private bool Ready => _isReady();
 
     // Dispose synthesized events right after injection: Godot's buffered Ref keeps the native
     // object alive, while waiting for the finalizer would free the managed GCHandle on the
@@ -121,19 +168,28 @@ internal sealed class GodotInputForwarder : IDisposable
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (!Ready) return;
+        _pointer = e.Pointer;
+        _modifiers = e.KeyModifiers;
+        if (OperatingSystem.IsWindows() && _mouseCapture?.IsCaptured == true) return;
         var dip = e.GetPosition(_control);
         var pos = ToViewport(dip);
+        SendMotion(pos, _hasLastPos ? pos - ToViewport(_lastPos) : Vector2.Zero, e.KeyModifiers);
+        _lastPos = dip;
+        _hasLastPos = true;
+    }
+
+    private void SendMotion(Vector2 pos, Vector2 relative, KeyModifiers modifiers)
+    {
         var motion = new InputEventMouseMotion
         {
             Position = pos,
             GlobalPosition = pos,
-            Relative = _hasLastPos ? pos - ToViewport(_lastPos) : Vector2.Zero,
+            Relative = relative,
+            ScreenRelative = relative,
             ButtonMask = _buttonMask,
         };
-        ApplyModifiers(motion, e.KeyModifiers);
-        _lastPos = dip;
-        _hasLastPos = true;
-        Dispatch(motion);
+        ApplyModifiers(motion, modifiers);
+        _dispatch(motion);
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -151,12 +207,20 @@ internal sealed class GodotInputForwarder : IDisposable
         if (!Ready) return;
         var button = KeyMap.ToMouseButton(e.GetCurrentPoint(_control).Properties.PointerUpdateKind);
         if (button == MouseButton.None) return;
+        _pointer = e.Pointer;
+        _modifiers = e.KeyModifiers;
+        if (pressed)
+        {
+            _captureLost = false;
+            e.Pointer.Capture(_control);
+        }
 
         if (pressed) _buttonMask |= KeyMap.ToMask(button);
         else _buttonMask &= ~KeyMap.ToMask(button);
 
         SendMouseButton(button, pressed, ToViewport(e.GetPosition(_control)), e.KeyModifiers,
             doubleClick: doubleClick, factor: 1);
+        if (_buttonMask == 0 && !(OperatingSystem.IsWindows() && _mouseCapture?.IsCaptured == true)) ReleasePointer();
         e.Handled = true;
     }
 
@@ -195,10 +259,17 @@ internal sealed class GodotInputForwarder : IDisposable
             ButtonMask = _buttonMask,
         };
         ApplyModifiers(ev, modifiers);
-        Dispatch(ev);
+        _dispatch(ev);
     }
 
-    private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e) => ReleaseHeldButtons();
+    private void OnPointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
+    {
+        if (!ReferenceEquals(e.Pointer, _pointer)) return;
+        _captureLost = true;
+        if (OperatingSystem.IsWindows()) _mouseCapture?.Release();
+        _hasLastPos = false;
+        ReleaseHeldButtons();
+    }
 
     // A drag left the control's world (popup opened, capture stolen, control detached): release
     // every pressed button so the engine's state cannot wedge.
@@ -221,6 +292,7 @@ internal sealed class GodotInputForwarder : IDisposable
     private void SendKey(KeyEventArgs e, bool pressed)
     {
         if (!Ready) return;
+        _modifiers = e.KeyModifiers;
         // Avalonia repeats arrive as repeated KeyDown events; Godot wants them flagged as echo.
         var id = HeldKeyId.From(e);
         AvaloniaKey key;
@@ -247,7 +319,7 @@ internal sealed class GodotInputForwarder : IDisposable
             Echo = pressed && echo,
         };
         ApplyModifiers(ev, e.KeyModifiers);
-        Dispatch(ev);
+        _dispatch(ev);
         e.Handled = true;
     }
 
@@ -259,7 +331,7 @@ internal sealed class GodotInputForwarder : IDisposable
             foreach (var (id, key) in _heldKeys)
             {
                 var keycode = KeyMap.ToKeycode(key, id.Physical);
-                Dispatch(new InputEventKey
+                _dispatch(new InputEventKey
                 {
                     Keycode = keycode,
                     PhysicalKeycode = KeyMap.ToPhysicalKeycode(id.Physical),
@@ -274,5 +346,12 @@ internal sealed class GodotInputForwarder : IDisposable
     // Deliberately no GodotInstance.FocusIn/FocusOut here: those are for cross-process
     // embedding and corrupt display-server state in-process; the engine's own window
     // keeps app focus.
-    private void OnLostFocus(object? sender, EventArgs e) => ReleaseHeldKeys();
+    private void OnLostFocus(object? sender, EventArgs e)
+    {
+        ReleaseHeldKeys();
+        ReleaseHeldButtons();
+        ReleasePointer();
+        if (OperatingSystem.IsWindows()) _mouseCapture?.Release();
+        _hasLastPos = false;
+    }
 }

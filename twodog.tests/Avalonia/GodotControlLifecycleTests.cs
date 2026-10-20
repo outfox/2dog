@@ -20,11 +20,21 @@ public class GodotControlLifecycleTests
 {
     // One headless Avalonia app per test assembly, never disposed: Avalonia's platform state is process-wide,
     // and starting/tearing down a session per test raced other collections (NRE in HeadlessUnitTestSession.Dispose).
-    private static void Dispatch(Action action)
+    internal static void Dispatch(Action action)
     {
         var session = HeadlessUnitTestSession.GetOrStartForAssembly(typeof(HeadlessTestApp).Assembly);
         session.Dispatch(action, CancellationToken.None).GetAwaiter().GetResult();
     }
+
+    [Fact]
+    public void WindowsAutoPacing_LeavesTheLimiterToTheCompositor() => Dispatch(() =>
+    {
+        if (!OperatingSystem.IsWindows()) return;
+        using var automatic = new GodotSession(new GodotSessionOptions { Project = "test" });
+        using var limited = new GodotSession(new GodotSessionOptions { Project = "test", MaxFramesPerSecond = 60 });
+        Assert.Equal(0, automatic.ResolveMaxFps());
+        Assert.Equal(60, limited.ResolveMaxFps());
+    });
 
     [Fact]
     public void ViewportCoordinates_UseTheSelectedEnginePrecision() => Dispatch(() =>
