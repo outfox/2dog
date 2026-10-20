@@ -8,9 +8,11 @@
 
 # 🦴 2dog is Godot... just backward!
 
-Godot normally loads .NET, now .NET loads Godot.
+### Godot normally loads .NET, now .NET loads Godot.
 
-2dog packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863))
+**2dog** is available fully precompiled from [NuGet.org](https://www.nuget.org/packages/2dog/) and as [GitHub Releases](https://github.com/outfox/2dog/releases). *(no need to compile this repo)*
+
+**2dog** packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863))
 that your .NET application hosts. Keep your Godot project exactly as it is, and run it on the desktop, in the
 browser, inside a .NET UI, or under **xUnit and NUnit with a real Godot engine**, all with `dotnet` and your IDE.
 
@@ -128,9 +130,9 @@ The main ones are [`2dog`](twodog/README.md) (the tool and templates) and [`2dog
 - Releases on NuGet use Trusted Publishing and may only be invoked via direct human interaction
 
 
-## Teach 2dog new tricks
+## Compile your own: Teach 2dog new tricks (Contributors)
 
-Want to work on 2dog itself? Clone with submodules, then build the native and .NET packages:
+Want to contribute, modify, or add to 2dog itself? Clone with submodules, then build the native and .NET packages:
 
 ```bash
 git clone --recursive https://github.com/outfox/2dog
@@ -139,7 +141,7 @@ uv run poe build-all
 ```
 
 Run the showcase with `dotnet run --project demos/showcase/showcase.2dog` and the tests with
-`dotnet test twodog.tests`. [AGENTS.md](AGENTS.md) maps the repository and its build tasks.
+`dotnet test twodog.tests`. 
 
 The repository contains symlinks. On Windows, enable
 [Developer Mode](https://learn.microsoft.com/windows/advanced-settings/developer-mode)
