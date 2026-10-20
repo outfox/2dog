@@ -3,9 +3,10 @@
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 import { brIconUrl, iconUrl } from './icons'
+import type { ThemeConfig } from '../config'
 
-const { theme } = useData()
-const godotVersion = computed(() => (theme.value as any).godotVersion ?? '')
+const { theme } = useData<ThemeConfig>()
+const godotVersion = computed(() => theme.value.godotVersion ?? '')
 
 const repo = 'https://github.com/outfox/2dog'
 const links = [

@@ -17,15 +17,18 @@
 
 import container from 'markdown-it-container'
 import type MarkdownIt from 'markdown-it'
+import type Token from 'markdown-it/lib/token.mjs'
+
+// shortcut: pin @types/markdown-it to 14.1.2 until its ESM/CJS types agree.
 
 export function columnsPlugin(md: MarkdownIt) {
   md.use(container, 'columns', {
-    render: (tokens, idx) =>
+    render: (tokens: Token[], idx: number) =>
       tokens[idx].nesting === 1 ? '<div class="md-columns">\n' : '</div>\n'
   })
 
   md.use(container, 'column', {
-    render: (tokens, idx) => {
+    render: (tokens: Token[], idx: number) => {
       const token = tokens[idx]
       if (token.nesting === -1) return '</div>\n'
       const title = token.info.trim().replace(/^column\s*/, '')

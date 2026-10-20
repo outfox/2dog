@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "strict": true,
+    // shortcut: skip .d.ts checks until DocSearch fixes its missing type dependencies.
+    "skipLibCheck": true,
+    "allowJs": true,
+    "types": ["*", "vitepress/client"]
+  },
+  "include": ["**/*.ts", "**/*.mts", "**/*.vue"]
+}

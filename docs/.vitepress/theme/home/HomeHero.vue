@@ -3,10 +3,11 @@
 import { ref, computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { brIconUrl, iconUrl } from './icons'
+import type { ThemeConfig } from '../config'
 
-const { theme } = useData()
-const twodogVersion = computed(() => (theme.value as any).twodogVersion ?? '')
-const godotVersion = computed(() => (theme.value as any).godotVersion ?? '')
+const { theme } = useData<ThemeConfig>()
+const twodogVersion = computed(() => theme.value.twodogVersion ?? '')
+const godotVersion = computed(() => theme.value.godotVersion ?? '')
 
 const commands = ['dnx 2dog add --web', 'dotnet publish MyGame.web']
 const copied = ref(false)

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import type { ThemeConfig } from './theme/config.ts'
 import {
   twodogVersionPlugin,
   godotVersionPlugin,
@@ -13,7 +14,7 @@ import { siteUrl, socialMetadata } from './social-metadata.mjs'
 // Sidebar node glyphs; the section's --tree-color tints them (theme/custom.css).
 const gd = (name: string) => `${godotIconHtml(name)} `
 
-export default defineConfig({
+export default defineConfig<ThemeConfig>({
   srcDir: "content",
 
   // The vendored icon sets ship their own README.md; without this VitePress

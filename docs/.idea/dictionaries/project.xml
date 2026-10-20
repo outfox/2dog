@@ -2,7 +2,10 @@
   <dictionary name="project">
     <words>
       <w>gdignore</w>
+      <w>gobot</w>
       <w>tscn</w>
+      <w>twodog</w>
+      <w>webgpu</w>
     </words>
   </dictionary>
 </component>
