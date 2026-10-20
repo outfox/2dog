@@ -18,7 +18,7 @@ const tree = [
   <section class="home-section" aria-labelledby="why-title">
     <div class="home-wrap">
       <p class="home-kicker">
-        <span class="gd-icon" :style="{ '--gd-icon': iconUrl('paw_print') }" aria-hidden="true"></span>Why 2dog
+        <span class="gd-icon" :style="{ '--gd-icon': iconUrl('paw_print') }" aria-hidden="true"></span>2dog is Godot backwards
       </p>
       <h2 id="why-title" class="home-h2">Made with love, dogs + robots.</h2>
       <p class="home-intro">
