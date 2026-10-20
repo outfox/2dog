@@ -115,8 +115,8 @@ Later, `dnx 2dog update` moves the project to new 2dog releases and `dnx 2dog do
   and JDK 17. `2dog` offers to install the workloads, and desktop and test builds need neither.
 
 Packages are on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases).
-The main ones are [`2dog`](twodog/README.md) (the tool and templates) and [`2dog.engine`](twodog.engine/README.md)
-(the library); the tool adds the rest to your hosts.
+The main ones are [`2dog`](twodog/README.md) (the tool), [`2dog.templates`](templates/README.md)
+(the `dotnet new` templates) and [`2dog.engine`](twodog.engine/README.md) (the library); the tool adds the rest to your hosts.
 
 
 ## Dogs and robots are nice

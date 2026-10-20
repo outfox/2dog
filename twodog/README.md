@@ -1,12 +1,12 @@
 # 2dog
 
-The .NET Tool and project templates for [2dog](https://2dog.dev), which runs Godot as a library from your own
+The .NET Tool for [2dog](https://2dog.dev), which runs Godot as a library from your own
 .NET entry point. Point it at a Godot project and it adds .NET hosts: desktop, web, WebXR, Avalonia, Blazor,
 WinForms, WinUI 3, MAUI, Android, a C# REPL, and xUnit, NUnit or gdUnit tests. Then it keeps them healthy with
 `2dog doctor` and current with `2dog update`.
 
-This one package is both a dotnet tool and a `dotnet new` template package. To reference the engine from your
-own code, use [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) instead.
+The `dotnet new` templates ship separately as [`2dog.templates`](https://www.nuget.org/packages/2dog.templates).
+To reference the engine from your own code, use [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) instead.
 
 ## Getting started
 
@@ -25,7 +25,7 @@ dnx 2dog add --web --xunit --yes
 ```
 
 Other ways in: `dotnet tool install -g 2dog` installs the `2dog` command, and
-`dotnet new install 2dog && dotnet new 2dog -n MyGame` uses the template.
+`dotnet new install 2dog.templates && dotnet new 2dog -n MyGame` uses the template.
 
 Your Godot project stays where it is. Each host is a nested folder with a `.gdignore`, added to the
 solution beside your game:

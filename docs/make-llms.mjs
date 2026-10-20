@@ -147,7 +147,8 @@ and GodotSharp C# API stay exactly as they are - you gain \`dotnet run\`,
 \`dotnet publish\` to desktop and browser (WebAssembly), real-engine xUnit and NUnit
 tests, and embedding in any .NET app.
 Current version: ${twodogVersion} (Godot ${godotVersion}).
-NuGet packages: \`2dog\` (CLI tool + templates) - https://www.nuget.org/packages/2dog/,
+NuGet packages: \`2dog\` (CLI tool) - https://www.nuget.org/packages/2dog/,
+\`2dog.templates\` (dotnet new templates),
 \`2dog.engine\` (the library), \`2dog.xunit\` (test collections),
 \`2dog.nunit\` (NUnit fixtures).
 Source: https://github.com/outfox/2dog

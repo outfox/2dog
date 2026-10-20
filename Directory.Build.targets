@@ -1,8 +1,8 @@
 <Project>
-    <!-- Writes version defaults into the dotnet-new template's template.json; used by twodog/twodog.csproj. -->
+    <!-- Writes version defaults into the dotnet-new template's template.json; used by twodog.templates/twodog.templates.csproj. -->
     <UsingTask TaskName="SetTemplateDefaults" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll"
-               Condition="'$(MSBuildProjectName)' == 'twodog'">
+               Condition="'$(MSBuildProjectName)' == 'twodog.templates'">
         <ParameterGroup>
             <FilePath ParameterType="System.String" Required="true" />
             <TwoDogVer ParameterType="System.String" Required="true" />
@@ -41,6 +41,19 @@
             ]]></Code>
         </Task>
     </UsingTask>
+
+    <!-- Gitignored template files never reach a CI checkout and silently vanish from the pack (4.7.0.36 shipped
+         without export_presets.cfg that way). -->
+    <Target Name="VerifyEmbeddedTemplateTracked" BeforeTargets="GenerateNuspec"
+            Condition="'$(MSBuildProjectName)' == 'twodog' Or '$(MSBuildProjectName)' == 'twodog.templates'">
+        <Exec Command="git -C &quot;$(MSBuildProjectDirectory)/../&quot; ls-files --others templates/twodog/"
+              ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogCliTemplateUntracked"/>
+            <Output TaskParameter="ExitCode" PropertyName="_TwoDogCliTemplateGitExit"/>
+        </Exec>
+        <Error Condition="'$(_TwoDogCliTemplateGitExit)' == '0' And '$(_TwoDogCliTemplateUntracked.Trim())' != ''"
+               Text="2dog template content contains files git does not track (gitignored or never added) - they would be missing from a CI-packed $(PackageId) package: $(_TwoDogCliTemplateUntracked)"/>
+    </Target>
 
     <!-- nuget.config lists godot/bin/GodotSharp/Tools/nupkgs as a source, but it only exists after a glue build. -->
     <Target Name="TwoDogEnsureLocalNugetSource" BeforeTargets="Restore;CollectPackageReferences">

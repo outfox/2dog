@@ -78,12 +78,17 @@ For an existing project, use [`2dog add`](/cli/add).
 
 ## Use the .NET Template
 
-The same template is available through `dotnet new`:
+The same template is available through `dotnet new` in the separate
+[`2dog.templates`](https://www.nuget.org/packages/2dog.templates/) package:
 
 ```bash
-dotnet new install 2dog
+dotnet new install 2dog.templates
 dotnet new 2dog -n MyGame --web false
 ```
+
+If you previously installed the template from `2dog`, run
+`dotnet new uninstall 2dog` before installing `2dog.templates`. This leaves the
+`2dog` tool installed.
 
 This creates a generic .NET host. Omit `--web false` to include Web;
 install `wasm-tools` when you want to build or publish that host.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs the freshly packed `2dog` tool from the CI artifacts, scaffolds a project with it in a directory whose
+# Installs the freshly packed `2dog` tool and `2dog.templates` from the CI artifacts, scaffolds projects in a directory whose
 # name contains a space, checks it with `2dog doctor`, and builds and tests the result against the same artifacts.
 # Expects: packages/ (nuget-packages artifact) and godot/ (godot-bin artifact) in the checkout, the .NET 10 SDK.
 set -euo pipefail
@@ -47,6 +47,32 @@ tool="$work/toolbin/2dog"
 echo "::endgroup::"
 
 cd "$work/dir with space"
+
+echo "::group::template package"
+tool_package="$root/packages/2dog.$version.nupkg"
+template_package="$root/packages/2dog.templates.$version.nupkg"
+unzip -p "$tool_package" '*.nuspec' > "$work/tool.nuspec"
+unzip -p "$template_package" '*.nuspec' > "$work/template.nuspec"
+grep -q 'packageType name="DotnetTool"' "$work/tool.nuspec"
+grep -q 'packageType name="Template"' "$work/template.nuspec"
+if grep -q 'packageType name="Template"' "$work/tool.nuspec" \
+  || grep -q 'packageType name="DotnetTool"' "$work/template.nuspec" \
+  || unzip -Z1 "$tool_package" | grep '^content/' \
+  || unzip -Z1 "$template_package" | grep -E '^(lib|tools|build|buildTransitive)/'; then
+  echo "::error::The tool and template package contents are not separated."
+  exit 1
+fi
+# A private hive keeps the smoke independent of templates installed on the runner.
+hive="$work/template-hive"
+dotnet new install "$template_package" --debug:custom-hive "$hive"
+dotnet new 2dog -n TemplateGame --web false --xunit true --nunit true --skipRestore true --debug:custom-hive "$hive"
+test -f TemplateGame/TemplateGame.2dog/.gdignore
+test -f TemplateGame/.vscode/launch.json
+test -f TemplateGame/.editorconfig
+grep -q "$version" TemplateGame/Directory.Build.props
+dotnet build TemplateGame/TemplateGame.slnx -c Debug
+dotnet new uninstall 2dog.templates --debug:custom-hive "$hive"
+echo "::endgroup::"
 
 echo "::group::scaffold"
 "$tool" new "Smoke Game" --generic --tests --nunit -y --no-restore 2> stderr.txt

@@ -62,14 +62,13 @@ DEFAULT_PACKAGES = ["2dog", "2dog.*"]
 
 # Dead package ids -> the package that replaced them: ALL versions retire,
 # and deprecation points consumers at the replacement.
-# 2dog.cli and 2dog.Templates merged into the 2dog tool+template package;
+# 2dog.cli merged into the 2dog tool package;
 # note that pre-merge versions of the `2dog` id itself were the library
 # (now 2dog.engine) — retiring those needs a one-off manual deprecation
 # with 2dog.engine as the alternate, not this script's generic message.
 DEAD_PACKAGES = {
     "2dog.osx-x64": "2dog.osx-arm64",
     "2dog.cli": "2dog",
-    "2dog.Templates": "2dog",
 }
 
 # The gallery website (not api.nuget.org) sits behind a CDN that may reject

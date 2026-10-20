@@ -30,7 +30,9 @@ Only two changes rename files, and the tool asks before either:
 - [`--rename`](/known-issues/spaced-project-names), which renames the .NET project, its csproj and
   `assembly_name` to a name without spaces
 
-The tool and the matching `dotnet new` template ship together in the [`2dog` NuGet package](https://www.nuget.org/packages/2dog/).
+The tool ships as [`2dog`](https://www.nuget.org/packages/2dog/). The matching
+`dotnet new` template ships separately as
+[`2dog.templates`](https://www.nuget.org/packages/2dog.templates/).
 
 ## Commands
 
