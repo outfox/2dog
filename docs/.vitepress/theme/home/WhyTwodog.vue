@@ -21,7 +21,9 @@ const tree = [
         <span class="gd-icon" :style="{ '--gd-icon': iconUrl('paw_print') }" aria-hidden="true"></span>Why 2dog
       </p>
       <h2 id="why-title" class="home-h2">Made with love, dogs + robots.</h2>
-
+      <p class="home-intro">
+        In addition to the pre-made hosts, you get fine customization options because: You can have a <strong>Main Loop</strong> now!
+      </p>
       <div class="why-grid">
         <article class="why-card">
           <h3>Let .NET hold the leash</h3>
@@ -89,6 +91,7 @@ engine.<span class="f">Start</span>();
   </section>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style>
 .home-page {
   --code-bg: var(--ed-raise);
@@ -163,8 +166,8 @@ engine.<span class="f">Start</span>();
   border: 1px solid var(--ed-seam);
   border-radius: 8px;
   background: var(--code-bg);
-  font-family: var(--vp-font-family-mono);
-  font-size: 13.5px;
+  font-family: var(--vp-font-family-mono),monospace;
+  font-size: 14px;
   line-height: 1.65;
   color: var(--ed-text-1);
 }
