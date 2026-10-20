@@ -116,9 +116,10 @@ internal static class DescriptorArraySmoke
                 #version 450
                 layout(local_size_x=1,local_size_y=1,local_size_z=1) in;
                 layout(IMAGE_FORMAT,set=0,binding=0) uniform IMAGE_TYPE values;
+                layout(push_constant,std430) uniform Params { int factor; } params;
                 void main() {
                     ivec3 coordinate = ivec3(gl_GlobalInvocationID);
-                    imageStore(values, coordinate, imageLoad(values, coordinate) + ivec4(1, 2, 3, 4));
+                    imageStore(values, coordinate, imageLoad(values, coordinate) + ivec4(1, 2, 3, 4) * params.factor);
                 }
                 """.Replace("IMAGE_TYPE", volume ? "iimage3D" : "iimage2DArray")
                     .Replace("IMAGE_FORMAT", wide ? "rg32i" : "rgba16i") };
@@ -146,6 +147,7 @@ internal static class DescriptorArraySmoke
             rd.ComputeListBindUniformSet(list, set, 0);
             for (int dispatch = 0; dispatch < 4; dispatch++)
             {
+                if (dispatch < 2) rd.ComputeListSetPushConstant(list, BitConverter.GetBytes(dispatch + 1), 4);
                 if (dispatch % 2 == 0) rd.ComputeListDispatch(list, 2, 1, 2);
                 else rd.ComputeListDispatchIndirect(list, indirect, 0);
             }
@@ -158,7 +160,7 @@ internal static class DescriptorArraySmoke
                 for (int component = 0; component < data.Length / componentBytes; component++)
                 {
                     int actual = wide ? BitConverter.ToInt32(data, component * 4) : BitConverter.ToInt16(data, component * 2);
-                    if (actual != 7 + (component % (wide ? 2 : 4) + 1) * 4)
+                    if (actual != 7 + (component % (wide ? 2 : 4) + 1) * 7)
                         throw new Exception($"Storage texture feedback lost a dispatch (format: {format.Format}, volume: {volume}, component: {component}, actual: {actual}).");
                 }
             }
