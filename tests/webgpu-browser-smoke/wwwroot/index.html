@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8">
-<title>WebGPU Forward+ regression</title>
+<title>WebGPU Mobile regression</title>
 <link rel="icon" href="data:,">
 <style>body{background:#111;color:white;font:16px sans-serif}canvas{width:512px;height:512px;image-rendering:pixelated}</style>
-<p id="status">Starting WebGPU Forward+…</p>
+<p id="status">Starting WebGPU Mobile…</p>
 <canvas id="canvas" width="128" height="128"></canvas>
 <script src="godot.js"></script>
 <script>
@@ -26,7 +26,7 @@ const engine = new Engine({
     executable: 'godot',
     canvas: document.getElementById('canvas'),
     renderingDriver: 'webgpu',
-    args: ['--rendering-driver', 'webgpu', '--rendering-method', 'forward_plus'],
+    args: ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
     onPrint: text => { console.log(text); document.getElementById('status').textContent = text; },
     onPrintError: text => { console.error(text); document.getElementById('status').textContent = text; },
 });

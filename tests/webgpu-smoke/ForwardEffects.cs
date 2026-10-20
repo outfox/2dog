@@ -3,7 +3,7 @@ using Engine = twodog.Engine;
 
 internal static class ForwardEffects
 {
-    public static void Run(Engine engine, ForwardPlusScene scene)
+    public static void Run(Engine engine, LightingScene scene)
     {
         var environment = scene.Environment;
         environment.VolumetricFogDensity = 0.1f;

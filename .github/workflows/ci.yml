@@ -738,10 +738,12 @@ jobs:
             SMOKE_STATUS=0
             for DRIVER in metal webgpu; do
               LOG="/tmp/2dog-macos-$DRIVER-smoke.log"
+              METHOD=default
+              if [ "$DRIVER" = metal ]; then METHOD=forward_plus; fi
               set +e
               lldb --batch --no-lldbinit -o 'settings set auto-confirm true' \
                 -o run -k 'thread backtrace all' -k 'quit 1' \
-                -- "$SMOKE" "$DRIVER" > "$LOG" 2>&1 &
+                -- "$SMOKE" "$DRIVER" "$METHOD" > "$LOG" 2>&1 &
               SMOKE_PID=$!
               (sleep 300; kill -TERM "$SMOKE_PID" 2>/dev/null; sleep 5; kill -KILL "$SMOKE_PID" 2>/dev/null) &
               WATCHDOG_PID=$!
@@ -1145,15 +1147,15 @@ jobs:
       - name: Publish showcase.web
         run: dotnet publish demos/showcase/showcase.web -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
-      - name: Publish WebGPU Forward+ image regression
+      - name: Publish WebGPU Mobile image regression
         if: matrix.precision == 'single' && matrix.aot == false
         run: dotnet publish tests/webgpu-browser-smoke -c Release
 
-      - name: Upload WebGPU Forward+ browser image test
+      - name: Upload WebGPU Mobile browser image test
         if: matrix.precision == 'single' && matrix.aot == false
         uses: actions/upload-artifact@v7
         with:
-          name: webgpu-forward-plus-bundle
+          name: webgpu-mobile-bundle
           path: tests/webgpu-browser-smoke/AppBundle/
           if-no-files-found: error
           retention-days: 7
@@ -1514,10 +1516,9 @@ jobs:
             /tmp/2dog-blazor-webgpu-*.log
           retention-days: 7
 
-  # SwiftShader exposes only 16 sampled textures per stage. Keep its explicit
-  # Mobile coverage above; run actual Forward+ pixels on the macOS Metal GPU.
+  # Check Mobile pixels on the macOS Metal GPU as well as SwiftShader above.
   webgpu-browser:
-    name: WebGPU Browser Forward+
+    name: WebGPU Browser Mobile
     needs: [web-smoke]
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.web-smoke.result == 'success')
     runs-on: macos-15
@@ -1532,13 +1533,13 @@ jobs:
           node-version: '24'
           package-manager-cache: false
 
-      - name: Download WebGPU Forward+ browser image test
+      - name: Download WebGPU Mobile browser image test
         uses: actions/download-artifact@v8
         with:
-          name: webgpu-forward-plus-bundle
+          name: webgpu-mobile-bundle
           path: tests/webgpu-browser-smoke/AppBundle
 
-      - name: Verify browser WebGPU clustered lighting, fog and indirect light
+      - name: Verify browser WebGPU light lists, depth fog, ambient light and MSAA
         run: |
           CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
           cleanup() {
@@ -1546,31 +1547,31 @@ jobs:
             if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
           }
           trap cleanup EXIT
-          node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000 > /tmp/2dog-forward-webgpu-server.log 2>&1 &
+          node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000 > /tmp/2dog-mobile-webgpu-server.log 2>&1 &
           SERVER_PID=$!
           "$CHROME" --headless=new --enable-unsafe-webgpu --no-first-run --no-default-browser-check \
             --remote-debugging-address=127.0.0.1 --remote-debugging-port=9233 \
-            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-forward-webgpu" about:blank > /tmp/2dog-forward-webgpu-browser.log 2>&1 &
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-mobile-webgpu" about:blank > /tmp/2dog-mobile-webgpu-browser.log 2>&1 &
           CHROME_PID=$!
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:9233/json/list > /dev/null && \
                curl --fail --silent http://127.0.0.1:8000/ > /dev/null; then break; fi
             sleep 1
           done
-          node .github/scripts/webgpu-forward-plus-smoke.mjs \
-            http://127.0.0.1:8000/ 9233 240000 /tmp/2dog-forward-webgpu-captures
-          node .github/scripts/webgpu-forward-plus-smoke.mjs \
-            'http://127.0.0.1:8000/?limited-compute=1&base-formats=1' 9233 240000 /tmp/2dog-forward-webgpu-captures-limited
+          node .github/scripts/webgpu-mobile-smoke.mjs \
+            http://127.0.0.1:8000/ 9233 240000 /tmp/2dog-mobile-webgpu-captures
+          node .github/scripts/webgpu-mobile-smoke.mjs \
+            'http://127.0.0.1:8000/?limited-compute=1&base-formats=1' 9233 240000 /tmp/2dog-mobile-webgpu-captures-limited
 
       - name: Preserve WebGPU browser images and diagnostics
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: webgpu-forward-plus-images
+          name: webgpu-mobile-images
           path: |
-            /tmp/2dog-forward-webgpu-*.log
-            /tmp/2dog-forward-webgpu-captures/
-            /tmp/2dog-forward-webgpu-captures-limited/
+            /tmp/2dog-mobile-webgpu-*.log
+            /tmp/2dog-mobile-webgpu-captures/
+            /tmp/2dog-mobile-webgpu-captures-limited/
           retention-days: 7
 
   # The packed `2dog` tool, installed from the artifacts the way a user gets

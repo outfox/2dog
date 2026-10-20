@@ -140,7 +140,7 @@ jobs:
             godotsharp-linux-${{ inputs.precision }}-
 
       - name: Test native WebGPU configuration
-        run: uv run python -m unittest discover -s godot/webgpu_tests -p 'test_native*.py' -v
+        run: uv run python -m unittest discover -s godot/drivers/webgpu/tests -p 'test_native*.py' -v
 
       - name: Build editor + GodotSharp assemblies
         run: |

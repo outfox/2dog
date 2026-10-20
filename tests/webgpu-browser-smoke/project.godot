@@ -1,7 +1,7 @@
 config_version=5
 
 [application]
-config/name="WebGPU Forward+ regression"
+config/name="WebGPU Mobile regression"
 run/main_scene="res://main.tscn"
 
 [display]
@@ -12,6 +12,6 @@ window/size/viewport_height=128
 project/assembly_name="WebGpuBrowserSmoke"
 
 [rendering]
-renderer/rendering_method="forward_plus"
-renderer/rendering_method.web="forward_plus"
+renderer/rendering_method="mobile"
+renderer/rendering_method.web="mobile"
 rendering_device/driver.web="webgpu"

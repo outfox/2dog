@@ -19,13 +19,14 @@ internal static class Program
             if (RenderingServer.GetCurrentRenderingDriverName() != driver)
                 throw new Exception($"{driver} selection fell back to another rendering driver.");
             if (method == "default" && driver == "webgpu"
-                && RenderingServer.GetCurrentRenderingMethod() != "forward_plus")
-                throw new Exception("An implicit WebGPU rendering method must select Forward+.");
+                && RenderingServer.GetCurrentRenderingMethod() != "mobile")
+                throw new Exception("An implicit WebGPU rendering method must select Mobile.");
             if (driver == "webgpu") DescriptorArraySmoke.Run();
-            if (RenderingServer.GetCurrentRenderingMethod() == "forward_plus")
+            if (RenderingServer.GetCurrentRenderingMethod() is "forward_plus" or "mobile")
             {
-                using var probe = new ForwardPlusScene(engine.Tree);
-                for (int stage = 0; stage < 4; stage++)
+                using var probe = new LightingScene(engine.Tree);
+                bool forwardPlus = RenderingServer.GetCurrentRenderingMethod() == "forward_plus";
+                for (int stage = 0; stage < (forwardPlus ? 4 : 7); stage++)
                 {
                     probe.SelectStage(stage);
                     for (int frame = 0; frame < 12; frame++)
@@ -35,10 +36,20 @@ internal static class Program
                     }
                     using var pixels = engine.Tree.Root.GetTexture().GetImage();
                     var pixel = pixels.GetPixel(pixels.GetWidth() / 2, pixels.GetHeight() / 2);
-                    probe.Record(stage, (pixel.R + pixel.G + pixel.B) / 3.0);
+                    if (stage < 4) probe.Record(stage, (pixel.R + pixel.G + pixel.B) / 3.0);
+                    else
+                    {
+                        if (stage == 4 && (pixel.R < 0.5f || pixel.R <= pixel.B + 0.2f))
+                            throw new Exception($"Depth fog did not produce a red target: {pixel}.");
+                        if (stage == 5 && (pixel.B < 0.025f || pixel.B <= pixel.R + 0.01f))
+                            throw new Exception($"Ambient light did not produce a blue target: {pixel}.");
+                        if (stage == 6 && pixel.R < 0.5f)
+                            throw new Exception($"MSAA lost the lit target: {pixel}.");
+                        Console.WriteLine($"MOBILE_EFFECT_PIXEL stage={stage} {pixel}");
+                    }
                 }
                 probe.AssertLighting();
-                ForwardEffects.Run(engine, probe);
+                if (forwardPlus) ForwardEffects.Run(engine, probe);
             }
             ShadowPixelSmoke.Run(engine);
             if (RenderingServer.GetCurrentRenderingMethod() == "forward_plus") SsaoPixelSmoke.Run(engine);

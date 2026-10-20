@@ -76,7 +76,7 @@ internal static class DescriptorArraySmoke
             var promotedReadback = rd.TextureGetData(promotedVolume, 0);
             rd.FreeRid(promotedVolume);
             if (!promotedReadback.SequenceEqual(promotedPixels))
-                throw new Exception($"{promotedFormat} storage texture transfer did not preserve every depth slice and mipmap.");
+                throw new Exception($"{promotedFormat} storage texture transfer changed: expected {Convert.ToHexString(promotedPixels)}, actual {Convert.ToHexString(promotedReadback)}.");
         }
         StorageTextureFeedback(rd, view);
         foreach (bool renderAttachment in new[] { false, true })
