@@ -108,17 +108,20 @@ internal static class DescriptorArraySmoke
 
     private static void StorageTextureFeedback(RenderingDevice rd, RDTextureView view)
     {
+        // RG32 always needs the shadow fallback; RGBA16 also tests native access on tier2 devices.
+        foreach (bool wide in new[] { false, true })
         foreach (bool volume in new[] { false, true })
         {
             using var source = new RDShaderSource { SourceCompute = """
                 #version 450
                 layout(local_size_x=1,local_size_y=1,local_size_z=1) in;
-                layout(rgba16i,set=0,binding=0) uniform IMAGE_TYPE values;
+                layout(IMAGE_FORMAT,set=0,binding=0) uniform IMAGE_TYPE values;
                 void main() {
                     ivec3 coordinate = ivec3(gl_GlobalInvocationID);
                     imageStore(values, coordinate, imageLoad(values, coordinate) + ivec4(1, 2, 3, 4));
                 }
-                """.Replace("IMAGE_TYPE", volume ? "iimage3D" : "iimage2DArray") };
+                """.Replace("IMAGE_TYPE", volume ? "iimage3D" : "iimage2DArray")
+                    .Replace("IMAGE_FORMAT", wide ? "rg32i" : "rgba16i") };
             using var spirv = rd.ShaderCompileSpirVFromSource(source);
             if (spirv.CompileErrorCompute.Length != 0) throw new Exception(spirv.CompileErrorCompute);
             var shader = rd.ShaderCreateFromSpirV(spirv);
@@ -127,27 +130,39 @@ internal static class DescriptorArraySmoke
             {
                 TextureType = volume ? RenderingDevice.TextureType.Type3D : RenderingDevice.TextureType.Type2DArray,
                 Width = 2, Height = 1, Depth = volume ? 2u : 1u, ArrayLayers = volume ? 1u : 2u,
-                Format = RenderingDevice.DataFormat.R16G16B16A16Sint,
+                Format = wide ? RenderingDevice.DataFormat.R32G32Sint : RenderingDevice.DataFormat.R16G16B16A16Sint,
                 UsageBits = RenderingDevice.TextureUsageBits.StorageBit | RenderingDevice.TextureUsageBits.CanUpdateBit | RenderingDevice.TextureUsageBits.CanCopyFromBit,
             };
-            var texture = rd.TextureCreate(format, view, volume ? [new byte[32]] : [new byte[16], new byte[16]]);
+            byte[] initialLayer = wide
+                ? Enumerable.Repeat(7, volume ? 8 : 4).SelectMany(BitConverter.GetBytes).ToArray()
+                : Enumerable.Repeat((short)7, volume ? 16 : 8).SelectMany(BitConverter.GetBytes).ToArray();
+            var texture = rd.TextureCreate(format, view, volume ? [initialLayer] : [initialLayer, initialLayer]);
             using var uniform = new RDUniform { UniformType = RenderingDevice.UniformType.Image, Binding = 0 };
             uniform.AddId(texture);
             var set = rd.UniformSetCreate([uniform], shader, 0);
+            var indirect = rd.StorageBufferCreate(12, [.. BitConverter.GetBytes(2u), .. BitConverter.GetBytes(1u), .. BitConverter.GetBytes(2u)], RenderingDevice.StorageBufferUsage.Indirect);
             var list = rd.ComputeListBegin();
             rd.ComputeListBindComputePipeline(list, pipeline);
             rd.ComputeListBindUniformSet(list, set, 0);
-            for (int dispatch = 0; dispatch < 4; dispatch++) rd.ComputeListDispatch(list, 2, 1, 2);
+            for (int dispatch = 0; dispatch < 4; dispatch++)
+            {
+                if (dispatch % 2 == 0) rd.ComputeListDispatch(list, 2, 1, 2);
+                else rd.ComputeListDispatchIndirect(list, indirect, 0);
+            }
             rd.ComputeListEnd(); rd.Submit(); rd.Sync();
             for (uint layer = 0; layer < (volume ? 1 : 2); layer++)
             {
                 var data = rd.TextureGetData(texture, layer);
                 if (data.Length != (volume ? 32 : 16)) throw new Exception("Storage texture feedback returned an incomplete volume or array.");
-                for (int component = 0; component < data.Length / 2; component++)
-                    if (BitConverter.ToInt16(data, component * 2) != (component % 4 + 1) * 4)
-                        throw new Exception($"Storage texture feedback lost a dispatch (volume: {volume}, component: {component}).");
+                int componentBytes = wide ? 4 : 2;
+                for (int component = 0; component < data.Length / componentBytes; component++)
+                {
+                    int actual = wide ? BitConverter.ToInt32(data, component * 4) : BitConverter.ToInt16(data, component * 2);
+                    if (actual != 7 + (component % (wide ? 2 : 4) + 1) * 4)
+                        throw new Exception($"Storage texture feedback lost a dispatch (format: {format.Format}, volume: {volume}, component: {component}, actual: {actual}).");
+                }
             }
-            rd.FreeRid(set); rd.FreeRid(texture); rd.FreeRid(pipeline); rd.FreeRid(shader);
+            rd.FreeRid(indirect); rd.FreeRid(set); rd.FreeRid(texture); rd.FreeRid(pipeline); rd.FreeRid(shader);
         }
         Console.WriteLine("NATIVE_STORAGE_TEXTURE_FEEDBACK_PASSED");
     }

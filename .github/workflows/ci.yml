@@ -739,7 +739,8 @@ jobs:
             for DRIVER in metal webgpu; do
               LOG="/tmp/2dog-macos-$DRIVER-smoke.log"
               METHOD=default
-              if [ "$DRIVER" = metal ]; then METHOD=forward_plus; fi
+              # The runner's Apple5 virtual GPU lacks the image atomics used by Forward+ fog.
+              if [ "$DRIVER" = metal ]; then METHOD=mobile; fi
               set +e
               lldb --batch --no-lldbinit -o 'settings set auto-confirm true' \
                 -o run -k 'thread backtrace all' -k 'quit 1' \
