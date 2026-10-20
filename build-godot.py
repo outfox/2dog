@@ -3,6 +3,7 @@
 import argparse
 import os
 import platform
+from pathlib import Path
 import subprocess
 import sys
 import time
@@ -10,6 +11,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from scripts.dotnet_build import get_job_limit
+from scripts import webgpu
 
 if sys.platform == "win32":
     os.system("chcp 65001 > NUL")
@@ -210,6 +212,10 @@ def parse_arguments():
         "--threads", action="store_true",
         help="Web only: multithreaded payload for WasmEnableThreads hosts, staged under bin/web-threads/",
     )
+    parser.add_argument("--webgpu", choices=["auto", "yes", "no"], default="auto",
+                        help="Include WebGPU (auto: single-precision desktop and single-threaded web)")
+    parser.add_argument("--webgpu-native-path", default="",
+                        help="Use an existing Dawn boundary SDK instead of preparing the pinned SDK")
 
     # Build steps control
     parser.add_argument(
@@ -346,6 +352,16 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
         )
 
 
+def get_scons_job_limit():
+    value = os.environ.get("DOTNET_PROCESSOR_COUNT")
+    if value is None:
+        return get_job_limit()
+    limit = int(value)
+    if limit < 1:
+        raise ValueError("DOTNET_PROCESSOR_COUNT must be a positive integer")
+    return min(limit, get_job_limit() or os.cpu_count() or 1)
+
+
 def show_build_config(args, platform_config: PlatformConfig):
     """Display build configuration in a nice table."""
     table = Table(title="Build Configuration", show_header=True, header_style="bold magenta")
@@ -357,7 +373,7 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Precision", getattr(args, "precision", "single"))
     if args.threads:
         table.add_row("Threads", "yes (proxy_to_pthread)")
-    table.add_row("Maximum build jobs", str(get_job_limit() or "SCons default"))
+    table.add_row("Maximum build jobs", str(get_scons_job_limit() or "SCons default"))
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Dev Build", args.dev_build)
@@ -378,7 +394,7 @@ def build_editor(args, platform_config: PlatformConfig):
     task_desc = "Building Godot Editor"
     cmd = [
         "scons",
-        *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
+        *([f"--jobs={get_scons_job_limit()}"] if get_scons_job_limit() is not None else []),
         f"platform={platform_config.godot_platform}",
         f"arch={platform_config.godot_arch}",
         "target=editor",
@@ -393,7 +409,23 @@ def build_editor(args, platform_config: PlatformConfig):
     ]
     if args.cache_path:
         cmd.append(f"cache_path={args.cache_path}")
+    cmd.extend(webgpu_flags(args, platform_config))
     run_with_live_output(cmd, cwd="godot", description=task_desc)
+
+
+def webgpu_flags(args, config):
+    if not webgpu.enabled(args, config.godot_platform):
+        return ["webgpu=no"]
+    flags = ["webgpu=yes", "webgpu_precompile=no"]
+    if config.godot_platform != "web":
+        if (config.godot_platform, config.godot_arch) not in webgpu.DAWN_ARCHIVES and not getattr(args, "webgpu_native_path", ""):
+            if getattr(args, "webgpu", "auto") == "yes":
+                raise ValueError("This architecture requires --webgpu-native-path with a matching Dawn boundary SDK")
+            return ["webgpu=no"]
+        sdk = Path(args.webgpu_native_path).resolve() if getattr(args, "webgpu_native_path", "") else webgpu.prepare_native(config.godot_platform, config.godot_arch)
+        flags.append(f"webgpu_native_path={sdk.as_posix()}")
+        webgpu.stage_native(sdk, native_output_dir(getattr(args, "precision", "single")), config.godot_platform, config.godot_arch)
+    return flags
 
 
 def read_pinned_emscripten_version() -> str:
@@ -458,7 +490,7 @@ def build_libgodot_web(args):
         task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32)"
         cmd = [
             "scons",
-            *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
+            *([f"--jobs={get_scons_job_limit()}"] if get_scons_job_limit() is not None else []),
             "platform=web",
             "arch=wasm32",
             f"target={target}",
@@ -482,6 +514,7 @@ def build_libgodot_web(args):
         ]
         if args.cache_path:
             cmd.append(f"cache_path={args.cache_path}")
+        cmd.extend(webgpu_flags(args, get_platform_config("web", "wasm32")))
         run_with_live_output(cmd, cwd="godot", description=task_desc)
 
         # Assemble the per-target packaging payload:
@@ -499,6 +532,8 @@ def build_libgodot_web(args):
         if os.path.isdir(dst):
             shutil.rmtree(dst)
         shutil.copytree(src, os.path.join(dst, "libgodot"))
+        if webgpu.enabled(args, "web"):
+            webgpu.stage_web_port(Path(dst) / "libgodot")
         shell_dst = os.path.join(dst, "shell")
         os.makedirs(shell_dst)
         for shell_file in ["godot.js", "godot.audio.worklet.js", "godot.audio.position.worklet.js"]:
@@ -538,7 +573,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
         cmd = [
             "scons",
-            *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
+            *([f"--jobs={get_scons_job_limit()}"] if get_scons_job_limit() is not None else []),
             f"platform={platform_config.godot_platform}",
             f"arch={platform_config.godot_arch}",
             f"target={target}",
@@ -556,6 +591,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
         ]
         if args.cache_path:
             cmd.append(f"cache_path={args.cache_path}")
+        cmd.extend(webgpu_flags(args, platform_config))
         run_with_live_output(cmd, cwd="godot", description=task_desc)
 
         if platform_config.godot_platform == Platform.ANDROID.value:
