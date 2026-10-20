@@ -351,7 +351,8 @@ public sealed class GodotSession : IDisposable
         if (fps > 0) return (int)Math.Ceiling(fps);
         for (var screen = 0; screen < DisplayServer.GetScreenCount(); screen++)
             fps = Math.Max(fps, DisplayServer.ScreenGetRefreshRate(screen));
-        return fps > 0 ? (int)Math.Ceiling(fps) : 60;
+        // Leave one FPS of headroom so the limiter does not compete with compositor vsync.
+        return fps > 0 ? (int)Math.Ceiling(fps) + 1 : 60;
     }
 
     private void OnAnimationFrame(TimeSpan _)
