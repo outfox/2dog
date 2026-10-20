@@ -1,21 +1,26 @@
 # 2dog.engine
 
-Embed the Godot engine in your .NET applications.
+Run the Godot engine inside your .NET application. 2dog loads Godot as a library, so your own `Main` starts it,
+drives its frames, and uses the full GodotSharp API.
 
-2dog lets a standard .NET application host Godot and use the GodotSharp API.
+Most projects never reference this package by hand: the [`2dog`](https://www.nuget.org/packages/2dog) tool
+scaffolds hosts that already use it. See [2dog.dev](https://2dog.dev) for the full documentation.
 
-## Quick Start
+## Getting started
 
-Scaffold a host beside an existing `project.godot`:
+From the folder with your `project.godot`, with the .NET 10 SDK:
 
 ```bash
-dnx 2dog add
+dnx 2dog add                       # or: dnx 2dog new MyGame
+dotnet run --project MyGame.2dog
 ```
+
+The generated desktop host boils down to this:
 
 ```csharp
 using twodog;
 
-using var engine = new Engine("MyGodotApp", args: args);
+using var engine = new Engine("MyGame", args: args);
 engine.Start();
 
 while (!engine.Iteration())
@@ -24,79 +29,24 @@ while (!engine.Iteration())
 }
 ```
 
-`Engine` owns the instance; `Start()` returns a borrowed `GodotInstance`
-compatibility handle. Use `RequestQuit()`, `Completion`, and `Exited` for
-lifecycle control. Desktop disposal is synchronous; browser code awaits
-`DisposeAsync()`. After completion, create a new `Engine` to restart.
-Pump and access Godot from the thread that called `Start()`; do not iterate and
-dispose the same engine concurrently from different threads.
+During development the engine loads your Godot project folder; after `dotnet publish` it loads the exported `.pck`
+beside the executable. Call Godot only from the thread that called `Start()`. Lifecycle, restarts and browser
+hosting are covered in the [`Engine` reference](https://2dog.dev/api/engine).
 
-The generated host embeds its `GodotProjectDir`. The constructor uses that
-source directory during development and the adjacent `.pck` after publish.
+## What's included
 
-To create a new project instead:
+- **twodog.dll**: the `Engine` hosting API, and the `twodog.Testing` fixtures used by
+  [2dog.xunit](https://www.nuget.org/packages/2dog.xunit) and [2dog.nunit](https://www.nuget.org/packages/2dog.nunit)
+- **[2dog.godotsharp](https://www.nuget.org/packages/2dog.godotsharp)**: the matching C# bindings and source
+  generator
+- **Native Godot libraries** for `win-x64`, `linux-x64` and `osx-arm64`, pulled in as platform packages
+- **Build integration**: automatic resource import during the build, and `.pck` export on publish
 
-```bash
-dnx 2dog new MyGodotApp
-```
+## Learn more
 
-## What's Included
-
-- **twodog.dll** - engine hosting API
-- **2dog.godotsharp** - exact-pinned fork C# bindings and source generator
-- **GodotPlugins** - script loading
-- **Automatic asset import** - incremental import during build
-
-Platform-specific native libraries are provided by transitive dependencies (`2dog.win-x64`, `2dog.linux-x64`, `2dog.osx-arm64`); the GodotTools assemblies used by the automatic import come from `2dog.tools`.
-
-## Game and library bindings
-
-`2dog new`, `2dog add`, and `2dog update` configure fork bindings in the game automatically.
-Existing Godot.NET.Sdk defaults and compatible stock dependencies are supported; no implicit-reference
-opt-out properties are required. Plain .NET libraries can reference `2dog.godotsharp` directly,
-and `2dog.godotsharp.editor` when they use editor APIs, at the engine's version.
-
-Incompatible Godot versions and stale manual binding references still fail the build.
-See the [binding package guide](../twodog.godotsharp/README.md).
-Trimming compatibility of your own code remains a separate concern.
-
-## Intentionally unawaited tasks
-
-Observe fire-and-forget operations so failures are reported immediately:
-
-```csharp
-using twodog;
-
-SaveAsync().Forget(); // Console.Error on desktop, browser console errors on web
-```
-
-`Forget()` supports `Task`, `Task<T>`, `ValueTask`, and `ValueTask<T>`; successful
-completion and cancellation stay quiet. It consumes value tasks, which must
-not be awaited or consumed again. Plain discarded tasks rely on the runtime's
-GC-delayed unobserved-exception event. See [browser exception diagnostics](../docs/content/hosts/web.md#diagnosing-async-exceptions)
-for logging every thrown exception during debugging.
-
-## Simulating Test Input
-
-`twodog.Testing.FixtureBase.Input` is shared by xUnit collections and NUnit
-fixtures. `Input.Click(control)` aims at a control through its viewport's input
-router, so foreground controls, clipping and input suppression still apply.
-`PushToViewport(event, viewport)` routes custom events locally; `Send(event)`
-uses Godot's input server, flushes buffered input and updates global polling
-state. Use these methods on the engine's owner thread. See
-[Simulating Input](https://2dog.dev/testing/input) for examples and routing limits.
-
-## Windows window lifecycle diagnostics
-
-Set `TWODOG_LIFECYCLE_LOG` to a log file path before starting a windowed engine
-to record Windows activation/minimize/restore messages, Godot window signals
-and an independent frame-loop heartbeat. The trace appends to the file and
-flushes once per second, including while the owner thread is stalled. Unset
-the variable to disable tracing. See the
-[windowed test instructions](../tests/windowed-fixture/README.md) for a showcase
-reproduction command and the separate native window-state capture script.
-
-## Documentation
-
-- [Getting Started](https://github.com/outfox/2dog)
-- [API Reference](https://github.com/outfox/2dog)
+- [Getting started](https://2dog.dev/getting-started)
+- [Hosts](https://2dog.dev/hosts/): desktop, web, UI frameworks, Android and tests
+- [Testing](https://2dog.dev/testing), including [simulated input](https://2dog.dev/testing/input)
+- [API reference](https://2dog.dev/api-reference)
+- [Environment variables](https://2dog.dev/configuration/environment-variables), including lifecycle tracing
+- [Troubleshooting](https://2dog.dev/troubleshooting)

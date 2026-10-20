@@ -1,87 +1,50 @@
 # 2dog
 
-Command-line tool and project templates for [2dog](https://2dog.dev) – run
-Godot as a library from your own .NET entry point. It scaffolds host projects,
-checks and repairs them (`2dog doctor`), and updates them (`2dog update`). The
-engine library itself is the [`2dog.engine`](https://www.nuget.org/packages/2dog.engine)
-package.
+Command-line tool and project templates for [2dog](https://2dog.dev), which runs Godot as a library from your own
+.NET entry point. Point it at a Godot project and it adds .NET hosts: desktop, web, WebXR, Avalonia, Blazor,
+WinForms, WinUI 3, MAUI, Android, a C# REPL, and xUnit, NUnit or gdUnit tests. Then it keeps them healthy with
+`2dog doctor` and current with `2dog update`.
 
-This one package is both a dotnet tool and a `dotnet new` template package.
+This one package is both a dotnet tool and a `dotnet new` template package. To reference the engine from your
+own code, use [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) instead.
 
-## Run it
+## Getting started
 
-One-shot (no install, .NET 10+):
-
-```bash
-dnx 2dog add         # add hosts to the Godot project here
-dnx 2dog new MyGame  # a new Godot project with 2dog hosts
-dnx 2dog doctor      # check the project and this machine, fix what it can
-dnx 2dog update      # bring the 2dog packages to this tool's versions
-```
-
-Or install the `2dog` command globally:
+With the .NET 10 SDK, run it without installing:
 
 ```bash
-dotnet tool install -g 2dog
-2dog add
+cd path/to/MyGame        # the folder with project.godot
+dnx 2dog add             # pick hosts interactively
+dotnet run --project MyGame.2dog
 ```
 
-With no host options the tool prompts: a checkbox list of hosts, editable
-folder names, the plan, and a confirmation. Naming any host option (or passing
-`--yes`) skips that wizard. On terminals, a missing workload (`wasm-tools`,
-`android`) can still be offered for newly selected hosts before restore; `--yes` skips the offer. Use
-`--install-wasm-tools` or `--install-android-workload` for explicit installation. The `dotnet new` template produces the
-same output: `dotnet new install 2dog && dotnet new 2dog -n MyGame`.
+Or start from scratch with `dnx 2dog new MyGame`. Every prompt has a flag, so this runs unattended:
 
-Browser, Android, and MAUI hosts are excluded from ordinary solution builds. Install their
-workloads when building or publishing those hosts. Package updates and desktop/test
-builds do not require them. Doctor only requires them for its selected `--build`
-target, or installs them when explicitly requested with an install flag.
-Failed restores return exit code `2`, preserve the created files, and explain
-recognized failures; fix the cause and run `dotnet restore` again.
+```bash
+dnx 2dog add --web --xunit --yes
+```
 
-`2dog update` handles package versions in both `Version` attributes and nested
-`<Version>` elements, moving either form to the shared version properties.
+Other ways in: `dotnet tool install -g 2dog` installs the `2dog` command, and
+`dotnet new install 2dog && dotnet new 2dog -n MyGame` uses the template.
 
-## What it does
-
-Creates the host projects **in place**: it creates files and edits `*.csproj`,
-`project.godot`, the solution and `Directory.Build.props`; no file is ever
-moved, renamed or deleted (two announced opt-ins aside: the `.sln` to `.slnx`
-migration and `--rename`). Solution migration first saves a `.sln.old` backup,
-using `.sln.old.1`, `.sln.old.2`, and so on if needed, and removes the `.sln`
-only after conversion succeeds. Existing backups are kept.
-The Godot project directory becomes the solution
-root, and host projects are scaffolded as nested subfolders that the Godot
-editor ignores (each carries a `.gdignore`):
+Your Godot project stays where it is. Each host is a nested folder with a `.gdignore`, added to the
+solution beside your game:
 
 ```
-MyGame/                      <- your existing Godot project (unchanged)
+MyGame/
   project.godot
-  MyGame.csproj              <- created or minimally patched
-  MyGame.slnx                <- created, or an existing .sln is migrated
-  Directory.Build.props      <- the package versions every host references
-  global.json                <- SDK pin and MTP test runner (with web, MAUI or test hosts; existing ones are kept)
-  MyGame.2dog/   (.gdignore) <- generic .NET host (your Main entry point)
-  MyGame.web/    (.gdignore) <- browser (WebAssembly) host
-  MyGame.webxr/  (.gdignore) <- WebXR browser host (opt-in: --webxr; page ships the WebXR Layers polyfill)
-  MyGame.xunit/  (.gdignore) <- xUnit test project (opt-in: --xunit)
-  MyGame.repl/   (.gdignore) <- interactive C# prompt in the running game (opt-in: --repl)
-  MyGame.gdunit/ (.gdignore) <- GDScript test host using MTP (opt-in: --gdunit)
-  MyGame.nunit/  (.gdignore) <- NUnit test project (opt-in: --nunit)
-  MyGame.winforms/ (.gdignore) <- WinForms host (opt-in: --winforms; Windows-only at runtime)
-  MyGame.winui/  (.gdignore) <- WinUI 3 host (opt-in: --winui; Windows-only, builds only on Windows)
-  MyGame.avalonia/ (.gdignore) <- Avalonia host (opt-in: --avalonia; cross-platform GUI)
-  MyGame.blazor/ (.gdignore) <- Blazor Web App host (opt-in: --blazor; server + Client/ WebAssembly page)
-  MyGame.maui/ (.gdignore)    <- MAUI host (opt-in: --maui; Windows and Android)
-  MyGame.android/ (.gdignore) <- Android host (opt-in: --android; dotnet publish makes an APK)
+  MyGame.csproj      <- created or minimally patched
+  MyGame.slnx        <- created, or an existing .sln is migrated (backup kept)
+  MyGame.2dog/       <- desktop host
+  MyGame.web/        <- browser host
+  MyGame.xunit/      <- tests
 ```
 
-Run it again whenever you want another host – hosts that exist are recognized
-and left alone, and a kind you already have is added a second time under a
-free folder name (`2dog add --generic MyGame.editor`).
+The tool never moves, renames or deletes your files, except for the announced `.sln` migration and `--rename`.
+Run it again to add more hosts; existing ones are left alone. The
+[guide](https://2dog.dev/getting-started) and [CLI reference](https://2dog.dev/dnx-2dog) cover the details.
 
-Commands:
+## Commands
 
 | Command | Effect |
 | --- | --- |
@@ -98,11 +61,11 @@ Commands:
 | `2dog version` | Print the tool and package versions |
 | `2dog help [verb]` | Usage, or the help for one verb |
 
-Options:
+## Options
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; xunit, nunit, gdunit, repl, webxr, winforms, winui, avalonia, blazor, android, and maui are opt-in and never in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; only `--generic` and `--web` are in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`, before any hosts exist) |
@@ -122,15 +85,7 @@ Options:
 | `--json`, `-q, --quiet`, `--plain`, `--no-color`, `--accessible`, `-v, --verbose` | Output modes: machine-readable, terse, no styling, screen-reader friendly, extra detail |
 | `-h, --help`, `--version` | Help (per verb after a verb), versions |
 
-Exit codes: `0` ok, `1` usage error, `2` tool error, `3` doctor findings remain
-or a `repl exec` submission failed, `124` `repl exec` timed out, `130` cancelled. The report goes to stdout, diagnostics to stderr; nothing
-prompts in a pipe or in CI. Full reference: https://2dog.dev/dnx-2dog
-
-## Using the library directly
-
-This package cannot be referenced from a project (it is a tool package);
-reference the engine instead:
-
-```bash
-dotnet add package 2dog.engine
-```
+Exit codes: `0` ok, `1` usage error, `2` tool error (including a failed restore, which keeps the created files),
+`3` doctor findings remain or a `repl exec` submission failed, `124` `repl exec` timed out, `130` cancelled.
+Nothing prompts in a pipe or in CI. Workloads, troubleshooting and every verb in depth:
+[2dog.dev/dnx-2dog](https://2dog.dev/dnx-2dog).
