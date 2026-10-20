@@ -13,15 +13,15 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 ## Properties
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogVariant` | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release` |
-| `TwoDogAndroidGameAssembly` | Set by the generated host | Game assembly that Godot loads; kept whole by the trimmer |
-| `TwoDogAndroidExportPreset` | `Android` | Preset in `export_presets.cfg` |
-| `TwoDogAndroidPack` | Exported by the build | Use an existing game pack instead of exporting one |
-| `TwoDogAndroidGdExtensions` | `true` | Package the Android libraries of the project's GDExtensions |
-| `TwoDogAndroidSigning` | `true` | Sign using .NET signing properties, Godot's keystore variables, or the debug keystore |
-| `AndroidPackageFormats` | `apk` in the generated host | `apk` for sideloading, `aab` for app stores |
+| Property                    | Default                                            | Purpose                                                                               |
+|-----------------------------|----------------------------------------------------|---------------------------------------------------------------------------------------|
+| `TwoDogVariant`             | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                           |
+| `TwoDogAndroidGameAssembly` | Set by the generated host                          | Game assembly that Godot loads; kept whole by the trimmer                             |
+| `TwoDogAndroidExportPreset` | `Android`                                          | Preset in `export_presets.cfg`                                                        |
+| `TwoDogAndroidPack`         | Exported by the build                              | Use an existing game pack instead of exporting one                                    |
+| `TwoDogAndroidGdExtensions` | `true`                                             | Package the Android libraries of the project's GDExtensions                           |
+| `TwoDogAndroidSigning`      | `true`                                             | Sign using .NET signing properties, Godot's keystore variables, or the debug keystore |
+| `AndroidPackageFormats`     | `apk` in the generated host                        | `apk` for sideloading, `aab` for app stores                                           |
 
 Android exports its pack during the build and puts it inside the APK/AAB;
 `TwoDogExportPack` does not apply.

@@ -22,8 +22,8 @@ native binaries  :natives-version: ✅  2dog.win-x64, 2dog.linux-x64, 2dog.osx-a
 GodotSharp       :2dog-version: ✅  2dog.godotsharp, 2dog.godotsharp.editor
 ```
 
-| Mark | Meaning |
-| --- | --- |
-| ✅ (`ok` when redirected) | The latest stable release |
-| 🔄 (`new`) | A newer stable release exists |
-| none | nuget.org could not be reached |
+| Mark                      | Meaning                        |
+|---------------------------|--------------------------------|
+| ✅ (`ok` when redirected) | The latest stable release      |
+| 🔄 (`new`)                | A newer stable release exists  |
+| none                      | nuget.org could not be reached |

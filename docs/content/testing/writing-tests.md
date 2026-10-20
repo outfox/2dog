@@ -12,22 +12,22 @@ The testing helpers handle these steps on the engine's thread.
 
 The examples use `godot` for the shared fixture:
 
-| Framework | Fixture | Helpers namespace |
-| --- | --- | --- |
-| xUnit | Constructor argument `godot` | `twodog.Testing.Xunit` |
-| NUnit | Use `var godot = EngineFixture;` inside a test | `twodog.Testing.NUnit` |
+| Framework | Fixture                                        | Helpers namespace      |
+|-----------|------------------------------------------------|------------------------|
+| xUnit     | Constructor argument `godot`                   | `twodog.Testing.Xunit` |
+| NUnit     | Use `var godot = EngineFixture;` inside a test | `twodog.Testing.NUnit` |
 
 ## Wait for frames
 
 An ordinary `await Task.Delay(...)` does not advance Godot. Choose a helper
 when the work needs the main loop:
 
-| Helper | Waits for |
-| --- | --- |
-| `godot.WaitUntilAsync(() => condition)` | A condition to become true |
-| `godot.AwaitAsync(task)` | A task to finish; returns its result or propagates its failure |
-| `signal.WaitAsync(godot)` | A recorded signal emission |
-| `GodotAssert.FreedAsync(godot, node)` | A native object to be deleted |
+| Helper                                  | Waits for                                                      |
+|-----------------------------------------|----------------------------------------------------------------|
+| `godot.WaitUntilAsync(() => condition)` | A condition to become true                                     |
+| `godot.AwaitAsync(task)`                | A task to finish; returns its result or propagates its failure |
+| `signal.WaitAsync(godot)`               | A recorded signal emission                                     |
+| `GodotAssert.FreedAsync(godot, node)`   | A native object to be deleted                                  |
 
 For example, wrap an operation that awaits a Godot signal:
 
@@ -64,11 +64,11 @@ await timeout.WaitAsync(godot);
 timeout.AssertEmitted();
 ```
 
-| Call | Meaning |
-| --- | --- |
-| `AssertEmitted()` | Exactly one emission |
-| `AssertEmitted(0)` | No emissions |
-| `WaitAsync(godot, count: 2)` | Pump until at least two emissions arrive |
+| Call                              | Meaning                                           |
+|-----------------------------------|---------------------------------------------------|
+| `AssertEmitted()`                 | Exactly one emission                              |
+| `AssertEmitted(0)`                | No emissions                                      |
+| `WaitAsync(godot, count: 2)`      | Pump until at least two emissions arrive          |
 | `ExpectSignal<T>(source, signal)` | Record a single argument per emission in `Values` |
 
 ```csharp
@@ -121,10 +121,10 @@ xUnit can report late cleanup errors as collection failures. Tests without a
 ::: details Opting out of automatic error checks
 Prefer expecting a known error so unrelated failures still surface.
 
-| Framework | Opt out |
-| --- | --- |
-| xUnit | Mark a test or class `[AllowGodotErrors]`, or set `<TwoDogFailOnGodotErrors>false</TwoDogFailOnGodotErrors>` in the test project |
-| NUnit | Mark a test or class `[AllowGodotErrors]`, or override `FailOnGodotErrors` to return `false` for the whole fixture |
+| Framework | Opt out                                                                                                                          |
+|-----------|----------------------------------------------------------------------------------------------------------------------------------|
+| xUnit     | Mark a test or class `[AllowGodotErrors]`, or set `<TwoDogFailOnGodotErrors>false</TwoDogFailOnGodotErrors>` in the test project |
+| NUnit     | Mark a test or class `[AllowGodotErrors]`, or override `FailOnGodotErrors` to return `false` for the whole fixture               |
 
 `AllowGodotErrors` clears reports after the allowed test. Disabling automatic
 checks for the whole project or fixture leaves the log available for inspection.

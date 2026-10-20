@@ -13,15 +13,15 @@ It normally sets `GodotProjectDir=../..`; see the
 
 ## Client Properties
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogWebVariant` | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release` |
-| `TwoDogExportPack` | `true` | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
-| `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
-| `TwoDogWebPackName` | `godot.pck` | Exported pack name; match it in `GodotView.PackUrl` if changed |
-| `TwoDogWebSideModuleExports` | `true` | Export native symbols used by GDExtensions |
-| `WasmEmitSymbolMap` | `false` in Release, `true` otherwise | Include native symbols for stack traces; explicit settings override the default |
-| `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
+| Property                     | Default                                            | Purpose                                                                                                |
+|------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `TwoDogWebVariant`           | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release`                                                                |
+| `TwoDogExportPack`           | `true`                                             | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
+| `TwoDogWebExportPreset`      | `Web`                                              | Preset in `export_presets.cfg`                                                                         |
+| `TwoDogWebPackName`          | `godot.pck`                                        | Exported pack name; match it in `GodotView.PackUrl` if changed                                         |
+| `TwoDogWebSideModuleExports` | `true`                                             | Export native symbols used by GDExtensions                                                             |
+| `WasmEmitSymbolMap`          | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                        |
+| `WasmInitialHeapSize`        | `256MB`                                            | Initial memory allocation; memory can grow                                                             |
 
 `2dog.browser-wasm` restores both supported native variants; a missing selected
 payload fails the build. The client SDK manages its own bundle, progress,

@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@types/markdown-it-container": "^4.0.0",
+    "@types/node": "^22.20.5",
     "markdown-it-container": "^4.0.0",
     "sharp": "^0.35.5",
     "vitepress": "^2.0.0-alpha.16",

@@ -51,11 +51,11 @@ node.Name
 node.QueueFree();
 ```
 
-| Mode | Input |
-| --- | --- |
-| `:auto` (default) | C# and shell-like commands |
-| `:sh` | Shell-like commands, with C# expressions for properties and methods |
-| `:cs` | C# statements, declarations and expressions |
+| Mode              | Input                                                               |
+|-------------------|---------------------------------------------------------------------|
+| `:auto` (default) | C# and shell-like commands                                          |
+| `:sh`             | Shell-like commands, with C# expressions for properties and methods |
+| `:cs`             | C# statements, declarations and expressions                         |
 
 Variables and the selected node carry over when switching modes. Type `:help`
 for commands and keybindings, or `:exit` to stop the prompt and game.

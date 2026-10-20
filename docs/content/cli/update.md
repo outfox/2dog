@@ -14,20 +14,20 @@ refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 2dog update [path] [options]
 ```
 
-| Argument | Meaning |
-| --- | --- |
-| `path` | Directory containing `project.godot`; defaults to the current directory |
+| Argument | Meaning                                                                 |
+|----------|-------------------------------------------------------------------------|
+| `path`   | Directory containing `project.godot`; defaults to the current directory |
 
 ## Options
 
-| Option | Effect |
-| --- | --- |
-| `--dry-run` | Print the plan; change nothing |
-| `--no-restore` | Skip the final `dotnet restore` |
-| `--allow-dirty` | Proceed despite uncommitted tracked-file changes |
-| `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts |
-| `--install-android-workload` | Install the missing `android` workload for Android hosts |
-| `--update-workloads` | Install missing workloads the hosts need, then run `dotnet workload update` for the project's SDK |
+| Option                       | Effect                                                                                            |
+|------------------------------|---------------------------------------------------------------------------------------------------|
+| `--dry-run`                  | Print the plan; change nothing                                                                    |
+| `--no-restore`               | Skip the final `dotnet restore`                                                                   |
+| `--allow-dirty`              | Proceed despite uncommitted tracked-file changes                                                  |
+| `--install-wasm-tools`       | Install missing `wasm-tools` for browser hosts                                                    |
+| `--install-android-workload` | Install the missing `android` workload for Android hosts                                          |
+| `--update-workloads`         | Install missing workloads the hosts need, then run `dotnet workload update` for the project's SDK |
 
 Plus the [global and output options](/dnx-2dog#global-options). There is no
 `--to`: pin the tool instead.

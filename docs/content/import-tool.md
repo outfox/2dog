@@ -25,14 +25,14 @@ incremental import after `Build`:
 
 ### Properties
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `TwoDogAutoImport` | `true` | Set `false` to disable the automatic import. |
-| `TwoDogRequireImport` | `false` | Set `true` to fail the build when no import capability is available (instead of a warning). |
-| `TwoDogForceImport` | `false` | Set `true` to force the import to run even when up-to-date. Also covers staleness the file tracking cannot see (deleted assets). |
-| `TwoDogImportStampFile` | `<project>/.godot/2dog.import.stamp` | Override the stamp file location. |
-| `TwoDogImportExcludes` | - | Extra semicolon-separated glob excludes for the import inputs (directories with a `.gdignore` are always excluded). |
-| `GodotEditor` | - | Path to an external Godot editor binary for imports and [pack exports](#pack-export). Only an explicit build setting selects this instead of the in-process helper; ambient `GODOT_EDITOR` and `GODOT4` variables do not affect imports or exports. |
+| Property                | Default                              | Description                                                                                                                                                                                                                                         |
+|-------------------------|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TwoDogAutoImport`      | `true`                               | Set `false` to disable the automatic import.                                                                                                                                                                                                        |
+| `TwoDogRequireImport`   | `false`                              | Set `true` to fail the build when no import capability is available (instead of a warning).                                                                                                                                                         |
+| `TwoDogForceImport`     | `false`                              | Set `true` to force the import to run even when up-to-date. Also covers staleness the file tracking cannot see (deleted assets).                                                                                                                    |
+| `TwoDogImportStampFile` | `<project>/.godot/2dog.import.stamp` | Override the stamp file location.                                                                                                                                                                                                                   |
+| `TwoDogImportExcludes`  | -                                    | Extra semicolon-separated glob excludes for the import inputs (directories with a `.gdignore` are always excluded).                                                                                                                                 |
+| `GodotEditor`           | -                                    | Path to an external Godot editor binary for imports and [pack exports](#pack-export). Only an explicit build setting selects this instead of the in-process helper; ambient `GODOT_EDITOR` and `GODOT4` variables do not affect imports or exports. |
 
 When neither the helper payload nor an external editor can be resolved, the
 build warns and skips the import. Set `TwoDogRequireImport` to fail instead.

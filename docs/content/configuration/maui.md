@@ -12,14 +12,14 @@ existing root `global.json`. Run from `MyGame.maui/` to use the host's pin.
 
 ## Platform Properties
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TargetFrameworks` | `net10.0-android`, plus `net10.0-windows10.0.19041.0` on Windows | Select with `-f`; `dotnet run` asks without it |
-| `GodotProjectDir` | `..` | Game directory for import and pack export |
-| `RuntimeIdentifier` | `win-x64` on Windows, `android-arm64` on Android | Native architecture; Android also supports `android-x64` |
-| `TwoDogVariant` | `debug` in Debug, `release` otherwise | Use Debug or Release |
-| `TwoDogAndroidGameAssembly` | Game assembly name | Assembly extracted before engine startup |
-| `AndroidPackageFormats` | `apk` | Use `aab` for store distribution |
+| Property                    | Default                                                          | Purpose                                                  |
+|-----------------------------|------------------------------------------------------------------|----------------------------------------------------------|
+| `TargetFrameworks`          | `net10.0-android`, plus `net10.0-windows10.0.19041.0` on Windows | Select with `-f`; `dotnet run` asks without it           |
+| `GodotProjectDir`           | `..`                                                             | Game directory for import and pack export                |
+| `RuntimeIdentifier`         | `win-x64` on Windows, `android-arm64` on Android                 | Native architecture; Android also supports `android-x64` |
+| `TwoDogVariant`             | `debug` in Debug, `release` otherwise                            | Use Debug or Release                                     |
+| `TwoDogAndroidGameAssembly` | Game assembly name                                               | Assembly extracted before engine startup                 |
+| `AndroidPackageFormats`     | `apk`                                                            | Use `aab` for store distribution                         |
 
 Windows builds are
 [unpackaged and self-contained](https://learn.microsoft.com/dotnet/maui/windows/deployment/publish-unpackaged-cli).
@@ -30,13 +30,13 @@ and Mono AOT in Release. Native AOT is unsupported by the MAUI host.
 
 Set startup properties before adding `GodotView` to a page:
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `Project` | Required | Game assembly name |
-| `ProjectPath` | `null` | Windows project directory; published games use their pack |
-| `Arguments` | Empty | Godot startup arguments |
-| `PresentationMode` | `Auto` | Windows: prefer GPU sharing, with CPU fallback; `Gpu` requires sharing, `Cpu` forces readback |
-| `ActivePresentationMode` | `null` before startup | Read-only active GPU or CPU mode |
+| Property                 | Default               | Purpose                                                                                       |
+|--------------------------|-----------------------|-----------------------------------------------------------------------------------------------|
+| `Project`                | Required              | Game assembly name                                                                            |
+| `ProjectPath`            | `null`                | Windows project directory; published games use their pack                                     |
+| `Arguments`              | Empty                 | Godot startup arguments                                                                       |
+| `PresentationMode`       | `Auto`                | Windows: prefer GPU sharing, with CPU fallback; `Gpu` requires sharing, `Cpu` forces readback |
+| `ActivePresentationMode` | `null` before startup | Read-only active GPU or CPU mode                                                              |
 
 Windows GPU mode defaults to the Vulkan mobile renderer. `Arguments` can
 override it; the Compatibility renderer uses CPU presentation in Auto mode.

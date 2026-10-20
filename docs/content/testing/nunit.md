@@ -88,11 +88,11 @@ public class RenderingTests : GodotRenderingTestFixture
 Each NUnit fixture owns its engine; this integration does not share an engine
 across test classes like an xUnit collection.
 
-| Platform | Requirement |
-| --- | --- |
-| Linux | A display and a compatible renderer |
-| Windows | A display; the fixture supplies STA and common-controls activation |
-| macOS | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
+| Platform | Requirement                                                                                  |
+|----------|----------------------------------------------------------------------------------------------|
+| Linux    | A display and a compatible renderer                                                          |
+| Windows  | A display; the fixture supplies STA and common-controls activation                           |
+| macOS    | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
 
 ::: warning Use a separate rendering test project
 The scaffold uses headless fixtures. Keep rendering fixtures in another test

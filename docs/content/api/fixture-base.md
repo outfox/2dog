@@ -8,12 +8,12 @@ tagline: "Learn how test fixtures own a Godot instance for your tests."
 
 Each fixture starts and owns one Godot engine for the tests that use it.
 
-| Type | Use |
-| --- | --- |
-| [`HeadlessFixture`](#headlessfixture) | Starts Godot with `--headless`; the usual fixture for game logic, scenes, resources and CI |
-| [`Fixture`](#fixture) | Starts Godot with rendering, for tests that need a display, rendered frames or windows |
-| [`FixtureBase`](#fixturebase) | Base class; derive from it to pass other Godot arguments |
-| [`HeadlessCollection`, `RenderingCollection`](#collections) | Non-parallel xUnit collections that share one fixture |
+| Type                                                        | Use                                                                                        |
+|-------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| [`HeadlessFixture`](#headlessfixture)                       | Starts Godot with `--headless`; the usual fixture for game logic, scenes, resources and CI |
+| [`Fixture`](#fixture)                                       | Starts Godot with rendering, for tests that need a display, rendered frames or windows     |
+| [`FixtureBase`](#fixturebase)                               | Base class; derive from it to pass other Godot arguments                                   |
+| [`HeadlessCollection`, `RenderingCollection`](#collections) | Non-parallel xUnit collections that share one fixture                                      |
 
 ## `FixtureBase` {#fixturebase}
 
@@ -38,13 +38,13 @@ or rendering fixtures; the constructor rejects a switch between the two.
 
 ### Properties
 
-| Property | Type | Description |
-| --- | --- | --- |
-| `Engine` | `twodog.Engine` | Engine owned by the fixture |
-| `GodotInstance` | `Godot.GodotInstance` | Borrowed compatibility handle |
-| `Tree` | `Godot.SceneTree` | Active scene tree |
-| `Errors` | `twodog.GodotErrorLog` | Errors and warnings Godot reported and no test consumed yet |
-| `Input` | `twodog.Testing.TestInput` | Input server events, viewport routing and control-position clicks |
+| Property        | Type                       | Description                                                       |
+|-----------------|----------------------------|-------------------------------------------------------------------|
+| `Engine`        | `twodog.Engine`            | Engine owned by the fixture                                       |
+| `GodotInstance` | `Godot.GodotInstance`      | Borrowed compatibility handle                                     |
+| `Tree`          | `Godot.SceneTree`          | Active scene tree                                                 |
+| `Errors`        | `twodog.GodotErrorLog`     | Errors and warnings Godot reported and no test consumed yet       |
+| `Input`         | `twodog.Testing.TestInput` | Input server events, viewport routing and control-position clicks |
 
 ### `Input`
 

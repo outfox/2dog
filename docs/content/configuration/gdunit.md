@@ -121,14 +121,14 @@ instead.
 
 Set these properties on `GdUnitOptions` in `Program.cs`:
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `ProjectPath` | Required | Directory containing `project.godot` |
-| `TestRoots` | `tests` | Directories relative to the game |
-| `ArtifactsDirectory` | Host output `TestResults/gdunit` | Parent of fresh stages and logs |
-| `ProjectAssemblyDirectory` | Host output | Built game assemblies and dependencies |
-| `ImportTimeout` | Two minutes | Limit for the separate import process |
-| `SessionTimeout` | Five minutes | Limit for pumping one embedded session |
+| Property                   | Default                          | Purpose                                |
+|----------------------------|----------------------------------|----------------------------------------|
+| `ProjectPath`              | Required                         | Directory containing `project.godot`   |
+| `TestRoots`                | `tests`                          | Directories relative to the game       |
+| `ArtifactsDirectory`       | Host output `TestResults/gdunit` | Parent of fresh stages and logs        |
+| `ProjectAssemblyDirectory` | Host output                      | Built game assemblies and dependencies |
+| `ImportTimeout`            | Two minutes                      | Limit for the separate import process  |
+| `SessionTimeout`           | Five minutes                     | Limit for pumping one embedded session |
 
 For tests under a nested host, include that host in each root, for example
 `MyGame.gdunit/tests`. Roots must remain inside the source game. Selected roots
@@ -143,12 +143,12 @@ assemblies and dependencies are staged elsewhere.
 
 Each request creates a fresh subdirectory beneath `ArtifactsDirectory`:
 
-| Artifact | Contents |
-| --- | --- |
-| `project/` | Writable game copy, selected tests, pinned framework and bridge |
-| `import.log` | Resource import helper output |
-| `godot.log` | Embedded engine's native log |
-| `events.json` | Serialized discovery, lifecycle and result events |
+| Artifact      | Contents                                                        |
+|---------------|-----------------------------------------------------------------|
+| `project/`    | Writable game copy, selected tests, pinned framework and bridge |
+| `import.log`  | Resource import helper output                                   |
+| `godot.log`   | Embedded engine's native log                                    |
+| `events.json` | Serialized discovery, lifecycle and result events               |
 
 Reports from GdUnit's session hooks live under
 `project/twodog_test_host/reports/`. The host retains artifacts for inspection.

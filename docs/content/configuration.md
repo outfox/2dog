@@ -12,11 +12,11 @@ settings in the root
 
 ## Global Properties {#properties}
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `GodotProjectDir` | None | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()` |
-| `TwoDogVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android native variant; explicit settings override the default. Android does not support `editor`; browser hosts use `TwoDogWebVariant` |
-| `TwoDogRemoveDuplicateGodotAnalyzers` | `false` | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project |
+| Property                              | Default                                                   | Purpose                                                                                                                                         |
+|---------------------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `GodotProjectDir`                     | None                                                      | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()`                                  |
+| `TwoDogVariant`                       | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android native variant; explicit settings override the default. Android does not support `editor`; browser hosts use `TwoDogWebVariant` |
+| `TwoDogRemoveDuplicateGodotAnalyzers` | `false`                                                   | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project                                                     |
 
 For a host nested directly inside the Godot project:
 
@@ -77,13 +77,13 @@ the selected library is copied as `libgodot-<variant>.dll`, `.so`, or `.dylib`.
 
 These properties apply to the generic, Avalonia, WinForms and WinUI hosts:
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogExportPack` | `true` | Export content to an executable-adjacent `.pck`; `false` skips export, so supply game content separately |
-| `TwoDogDesktopExportPreset` | RID-mapped | Preset in `export_presets.cfg`: `Windows Desktop`, `Linux`, or `macOS`, according to the publish target |
-| `PublishSelfContained` | `true` in generated hosts | Bundle the .NET runtime; `false` requires an installed runtime |
-| `PublishAot` | `false` | Compile the host and managed game code into a [native executable](#native-aot) |
-| `PublishReadyToRun` | `false` | Precompile the engine and host assemblies for [faster startup](#readytorun) |
+| Property                    | Default                   | Purpose                                                                                                  |
+|-----------------------------|---------------------------|----------------------------------------------------------------------------------------------------------|
+| `TwoDogExportPack`          | `true`                    | Export content to an executable-adjacent `.pck`; `false` skips export, so supply game content separately |
+| `TwoDogDesktopExportPreset` | RID-mapped                | Preset in `export_presets.cfg`: `Windows Desktop`, `Linux`, or `macOS`, according to the publish target  |
+| `PublishSelfContained`      | `true` in generated hosts | Bundle the .NET runtime; `false` requires an installed runtime                                           |
+| `PublishAot`                | `false`                   | Compile the host and managed game code into a [native executable](#native-aot)                           |
+| `PublishReadyToRun`         | `false`                   | Precompile the engine and host assemblies for [faster startup](#readytorun)                              |
 
 `PublishSingleFile` is unsupported; Native AOT produces one executable instead.
 Generated desktop hosts build as `WinExe`, the generic host only in Release,

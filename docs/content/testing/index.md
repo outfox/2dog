@@ -52,11 +52,11 @@ async lifecycle support, and automatic checks for Godot errors and warnings.
 
 All three scaffolded hosts run on Microsoft.Testing.Platform (MTP):
 
-| Host | MTP integration | Setup |
-| --- | --- | --- |
-| GdUnit | 2dog's framework drives the embedded GDScript runner | [Configuration](/configuration/gdunit) |
-| NUnit | Official NUnit adapter bridge | [Configuration](/configuration/nunit#microsofttestingplatform) |
-| xUnit | Upstream xUnit runner with 2dog's owner-thread entry point | [Configuration](/configuration/xunit#microsofttestingplatform) |
+| Host   | MTP integration                                            | Setup                                                          |
+|--------|------------------------------------------------------------|----------------------------------------------------------------|
+| GdUnit | 2dog's framework drives the embedded GDScript runner       | [Configuration](/configuration/gdunit)                         |
+| NUnit  | Official NUnit adapter bridge                              | [Configuration](/configuration/nunit#microsofttestingplatform) |
+| xUnit  | Upstream xUnit runner with 2dog's owner-thread entry point | [Configuration](/configuration/xunit#microsofttestingplatform) |
 
 Scaffolding a test host creates a root `global.json` that selects MTP, unless
 the project already has one; 2dog never edits an existing file. Run
@@ -64,7 +64,7 @@ the project already has one; 2dog never edits an existing file. Run
 your own `global.json`, add:
 
 ```json
-"test": { "runner": "Microsoft.Testing.Platform" }
+{ "test": { "runner": "Microsoft.Testing.Platform" } }
 ```
 
 [`2dog doctor`](/cli/doctor) reports hosts or a `global.json` still on VSTest
@@ -73,12 +73,12 @@ for runner selection and options such as `--coverage`.
 
 ## Find a guide
 
-| Task | Guide |
-| --- | --- |
-| Set up a test project | [xUnit](./xunit) or [NUnit](./nunit) |
-| Run GDScript suites through `dotnet test` | [GdUnit](./gdunit) |
-| Wait for frames, check signals, or verify deletion | [Writing engine tests](./writing-tests) |
-| Click controls or send keyboard events | [Simulating input](./input) |
+| Task                                                | Guide                                                                                      |
+|-----------------------------------------------------|--------------------------------------------------------------------------------------------|
+| Set up a test project                               | [xUnit](./xunit) or [NUnit](./nunit)                                                       |
+| Run GDScript suites through `dotnet test`           | [GdUnit](./gdunit)                                                                         |
+| Wait for frames, check signals, or verify deletion  | [Writing engine tests](./writing-tests)                                                    |
+| Click controls or send keyboard events              | [Simulating input](./input)                                                                |
 | Change packages, build variants, or import settings | [xUnit configuration](/configuration/xunit) or [NUnit configuration](/configuration/nunit) |
 
 ::: tip Keep simple tests simple

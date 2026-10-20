@@ -26,11 +26,11 @@ handles hit testing and event consumption, so an overlay or input handler can
 block the click. The helper sends motion, press, and release events; it does
 not advance frames.
 
-| Aim at | Call |
-| --- | --- |
-| A point within a control | `godot.Input.Click(playButton, localPosition: new Vector2(10, 10))` |
-| A point in the root viewport | `godot.Input.Click(new Vector2(80, 40))` |
-| A point in another viewport | `godot.Input.Click(new Vector2(80, 40), viewport: gameViewport)` |
+| Aim at                       | Call                                                                |
+|------------------------------|---------------------------------------------------------------------|
+| A point within a control     | `godot.Input.Click(playButton, localPosition: new Vector2(10, 10))` |
+| A point in the root viewport | `godot.Input.Click(new Vector2(80, 40))`                            |
+| A point in another viewport  | `godot.Input.Click(new Vector2(80, 40), viewport: gameViewport)`    |
 
 ::: tip Give headless UI tests enough room
 Headless, the root window can start at its minimum size, which skews layout
@@ -105,10 +105,10 @@ the helper does not send them with every click.
 
 Choose the delivery method based on what your game reads:
 
-| Method | Delivery | Updates global `Godot.Input` state? |
-| --- | --- | --- |
-| `Click` / `PushToViewport` | Local viewport routing | No |
-| `Send` | Godot's input server and window routing | Yes |
+| Method                     | Delivery                                | Updates global `Godot.Input` state? |
+|----------------------------|-----------------------------------------|-------------------------------------|
+| `Click` / `PushToViewport` | Local viewport routing                  | No                                  |
+| `Send`                     | Godot's input server and window routing | Yes                                 |
 
 For `IsKeyPressed`, `IsMouseButtonPressed`, or action polling, use `Send`:
 

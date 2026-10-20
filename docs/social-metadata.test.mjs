@@ -80,8 +80,8 @@ test('the card invites with the page tagline while share text keeps the descript
 
 test('uses a composed fallback for the homepage, pages without illustrations, and inline images', async () => {
   for (const content of [
-    '<main class="home-page"><img src="/logo.svg"></main>',
-    '<nav><img src="/logo.svg"></nav><main class="main"><h1>API</h1></main>',
+    '<main class="home-page"><img src="/logo.svg" alt=""></main>',
+    '<nav><img src="/logo.svg" alt=""></nav><main class="main"><h1>API</h1></main>',
     '<main class="main"><img src="data:image/png;base64,ABC" alt="Inline"></main>'
   ]) {
     const head = await metadata({ content });
@@ -101,7 +101,7 @@ test('resolves illustrations to emitted local assets under the deployment base',
     siteData: { base: '/docs/', lang: 'en-US' },
     siteConfig: { outDir: '/docs/dist' },
     title: 'Hosts | 2dog', description: 'Host Godot.',
-    content: '<main class="main"><img src="/docs/assets/2dog-squirrel.ABC123.png"></main>'
+    content: '<main class="main"><img src="/docs/assets/2dog-squirrel.ABC123.png" alt=""></main>'
   });
   assert.deepEqual(calls, [[
     join('/docs/dist', 'assets/2dog-squirrel.ABC123.png'), '/docs/dist',

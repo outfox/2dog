@@ -14,10 +14,10 @@ hosts to create. Host flags skip that wizard; a missing workload (`wasm-tools`,
 2dog new [Name] [dir] [hosts] [options]
 ```
 
-| Argument | Meaning |
-| --- | --- |
-| `Name` | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix, an adjustment is announced |
-| `dir` | Directory to create; defaults to the sanitized name |
+| Argument | Meaning                                                                                                                                                                                       |
+|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name`   | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix, an adjustment is announced |
+| `dir`    | Directory to create; defaults to the sanitized name                                                                                                                                           |
 
 ## Hosts
 
@@ -28,17 +28,17 @@ selects Microsoft.Testing.Platform, so `dotnet test` runs every test host.
 
 ## Options
 
-| Option | Effect |
-| --- | --- |
-| `-n, --name <name>` | Project name; same as `Name` |
-| `-o, --output <dir>` | Directory; same as `dir` |
-| `--dry-run` | Print the plan; change nothing |
-| `--force` | Overwrite scaffolded files that exist; never deletes |
+| Option                             | Effect                                                                                                             |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `-n, --name <name>`                | Project name; same as `Name`                                                                                       |
+| `-o, --output <dir>`               | Directory; same as `dir`                                                                                           |
+| `--dry-run`                        | Print the plan; change nothing                                                                                     |
+| `--force`                          | Overwrite scaffolded files that exist; never deletes                                                               |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers |
-| `--no-restore` | Skip the final `dotnet restore` |
-| `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
-| `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
+| `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers                  |
+| `--no-restore`                     | Skip the final `dotnet restore`                                                                                    |
+| `--install-wasm-tools`             | Install missing `wasm-tools` for browser hosts without an installation prompt                                      |
+| `--install-android-workload`       | Install the missing `android` workload for Android hosts without an installation prompt                            |
 
 See [build options](/dnx-2dog#build-options) for the build settings'
 requirements.

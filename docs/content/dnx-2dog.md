@@ -36,17 +36,17 @@ The tool ships as [`2dog`](https://www.nuget.org/packages/2dog/). The matching
 
 ## Commands
 
-| Command | Use it to |
-| --- | --- |
-| [`2dog new`](/cli/new) | Create a Godot project with 2dog hosts |
-| [`2dog add`](/cli/add) | Add hosts to an existing Godot project |
-| [`2dog doctor`](/cli/doctor) | Check the project and this machine, fix what can be fixed, explain build failures |
-| [`2dog update`](/cli/update) | Bring the project's 2dog packages to this tool's versions |
-| [`2dog pack`](/cli/pack) | List a `.pck`'s contents |
-| [`2dog repl`](/cli/repl) | Attach to a running REPL host, or run code in it from scripts and agents (`--session`, `--timeout`, `--pipe`) |
-| [`2dog skill`](/cli/skill) | Write the REPL working guide for coding agents (`--claude`, `--codex`) |
-| [`2dog version`](/cli/version) | Print the tool and package versions |
-| [`2dog help`](/cli/help) | Show the usage, or the help for one verb |
+| Command                        | Use it to                                                                                                     |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------|
+| [`2dog new`](/cli/new)         | Create a Godot project with 2dog hosts                                                                        |
+| [`2dog add`](/cli/add)         | Add hosts to an existing Godot project                                                                        |
+| [`2dog doctor`](/cli/doctor)   | Check the project and this machine, fix what can be fixed, explain build failures                             |
+| [`2dog update`](/cli/update)   | Bring the project's 2dog packages to this tool's versions                                                     |
+| [`2dog pack`](/cli/pack)       | List a `.pck`'s contents                                                                                      |
+| [`2dog repl`](/cli/repl)       | Attach to a running REPL host, or run code in it from scripts and agents (`--session`, `--timeout`, `--pipe`) |
+| [`2dog skill`](/cli/skill)     | Write the REPL working guide for coding agents (`--claude`, `--codex`)                                        |
+| [`2dog version`](/cli/version) | Print the tool and package versions                                                                           |
+| [`2dog help`](/cli/help)       | Show the usage, or the help for one verb                                                                      |
 
 `2dog` alone prints the version info and the usage. `new`, `add` and `doctor`
 prompt on a terminal when no deciding flag is given. Host flags skip the project
@@ -61,21 +61,21 @@ newly selected hosts before restore. `--yes`, pipes, and CI skip workload offers
 flag adds a second host of the same kind. Test hosts are opt-in: choose
 `--xunit`, `--gdunit` or `--nunit`, or select a framework in the interactive picker.
 
-| Flag | Host |
-| --- | --- |
-| `--generic [folder]` | [2dog (generic .NET)](/hosts/generic) with your own `Main()` |
-| `--web [folder]` | [Web host](/hosts/web) |
-| `--webxr [folder]` | [WebXR host](/hosts/webxr) |
-| `--xunit [folder]` | [xUnit test project](/hosts/xunit) |
-| `--repl [folder]` | [C# REPL host](/hosts/repl) |
-| `--gdunit [folder]` | [GdUnit GDScript test project](/hosts/gdunit) |
-| `--nunit [folder]` | [NUnit test project](/hosts/nunit) |
-| `--winforms [folder]` | [WinForms host](/hosts/winforms); Windows-only |
-| `--winui [folder]` | [WinUI 3 host](/hosts/winui); builds only on Windows |
-| `--avalonia [folder]` | [Avalonia host](/hosts/avalonia) |
-| `--blazor [folder]` | [Blazor Web App host](/hosts/blazor); needs wasm-tools |
-| `--maui [folder]` | [MAUI host](/hosts/maui); Windows and Android, needs MAUI workloads |
-| `--android [folder]` | [Android host](/hosts/android); experimental, needs the android workload |
+| Flag                       | Host                                                                      |
+|----------------------------|---------------------------------------------------------------------------|
+| `--generic [folder]`       | [2dog (generic .NET)](/hosts/generic) with your own `Main()`              |
+| `--web [folder]`           | [Web host](/hosts/web)                                                    |
+| `--webxr [folder]`         | [WebXR host](/hosts/webxr)                                                |
+| `--xunit [folder]`         | [xUnit test project](/hosts/xunit)                                        |
+| `--repl [folder]`          | [C# REPL host](/hosts/repl)                                               |
+| `--gdunit [folder]`        | [GdUnit GDScript test project](/hosts/gdunit)                             |
+| `--nunit [folder]`         | [NUnit test project](/hosts/nunit)                                        |
+| `--winforms [folder]`      | [WinForms host](/hosts/winforms); Windows-only                            |
+| `--winui [folder]`         | [WinUI 3 host](/hosts/winui); builds only on Windows                      |
+| `--avalonia [folder]`      | [Avalonia host](/hosts/avalonia)                                          |
+| `--blazor [folder]`        | [Blazor Web App host](/hosts/blazor); needs wasm-tools                    |
+| `--maui [folder]`          | [MAUI host](/hosts/maui); Windows and Android, needs MAUI workloads       |
+| `--android [folder]`       | [Android host](/hosts/android); experimental, needs the android workload  |
 | `--no-generic`, `--no-web` | Leave a host out of the default set (every kind has a `--no-<host>` form) |
 
 All hosts except `--generic` and `--web` are opt-in: an unattended run never
@@ -86,10 +86,10 @@ adds them.
 `new` and `add` offer build option toggles after the host picker. Flags use the
 same settings without a prompt:
 
-| Flag | Effect |
-| --- | --- |
+| Flag                               | Effect                                                                                    |
+|------------------------------------|-------------------------------------------------------------------------------------------|
 | `--double-precision [true\|false]` | Use matching `.double` engine, bindings and native packages across the game and all hosts |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web and Blazor clients |
+| `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients                             |
 
 New projects default to single precision and single-threaded web builds.
 Omitting these flags on `add` preserves the project's settings. Pass `false`
@@ -103,25 +103,25 @@ See [web multithreading](/hosts/web#multithreading) for serving requirements.
 
 Valid under every verb, also before it (`2dog --json add`).
 
-| Option | Effect |
-| --- | --- |
-| `-y, --yes` | Do not prompt; take the flags and defaults (also `--non-interactive`, `--no-input`) |
-| `-h, --help` | Show help; after a verb, the help for that verb |
-| `--version` | Same as [`2dog version`](/cli/version); see [choosing a tool version](/cli/pinning#run-a-specific-tool-version) |
+| Option       | Effect                                                                                                          |
+|--------------|-----------------------------------------------------------------------------------------------------------------|
+| `-y, --yes`  | Do not prompt; take the flags and defaults (also `--non-interactive`, `--no-input`)                             |
+| `-h, --help` | Show help; after a verb, the help for that verb                                                                 |
+| `--version`  | Same as [`2dog version`](/cli/version); see [choosing a tool version](/cli/pinning#run-a-specific-tool-version) |
 
 Values attach or follow: `--name Foo`, `--name=Foo`. `--` ends option parsing.
 Mistyped options and verbs get a suggestion.
 
 ## Output
 
-| Option | Effect |
-| --- | --- |
-| `--json` | One JSON document on stdout, nothing on stderr, also on failure (`"ok": false`); implies `--yes` |
-| `-q, --quiet` | Results and problems only: no header, plan, progress or next steps |
-| `--plain` | No colour, no cursor movement, ASCII markers (also `TERM=dumb`) |
-| `--no-color` | No colour; cursor movement stays (also `NO_COLOR`) |
-| `--accessible` | Numbered yes/no questions instead of lists, no spinners (also `TWODOG_ACCESSIBLE=1`) |
-| `-v, --verbose` | Extra detail on stderr: subprocess command lines and output, stack traces |
+| Option          | Effect                                                                                           |
+|-----------------|--------------------------------------------------------------------------------------------------|
+| `--json`        | One JSON document on stdout, nothing on stderr, also on failure (`"ok": false`); implies `--yes` |
+| `-q, --quiet`   | Results and problems only: no header, plan, progress or next steps                               |
+| `--plain`       | No colour, no cursor movement, ASCII markers (also `TERM=dumb`)                                  |
+| `--no-color`    | No colour; cursor movement stays (also `NO_COLOR`)                                               |
+| `--accessible`  | Numbered yes/no questions instead of lists, no spinners (also `TWODOG_ACCESSIBLE=1`)             |
+| `-v, --verbose` | Extra detail on stderr: subprocess command lines and output, stack traces                        |
 
 The report goes to stdout, diagnostics (`error:`, `warning:`, `note:`, `hint:`,
 `verbose:`, spinners) to stderr: `2dog add --json | jq .` and
@@ -133,14 +133,14 @@ for the CI indicators and colour overrides.
 
 ## Exit codes
 
-| Code | Meaning |
-| --- | --- |
-| `0` | Success, including `--dry-run`, "Nothing to do", and a declined plan |
-| `1` | Usage error: unknown option or verb, missing value, wrong positional count; the error names the verb's `--help` |
-| `2` | Tool error: project state, I/O, invalid XML, a failed subprocess, a plan that stopped half-way (the report says which steps stand), an unexpected exception (`--verbose` adds the stack trace) |
-| `3` | `doctor`: findings remain after the fixes (errors; warnings too under `--strict`), or the `--build` failed; `repl exec`: a submission failed |
-| `124` | `repl exec`: `--timeout` cancelled a submission |
-| `130` | Cancelled with Ctrl+C |
+| Code  | Meaning                                                                                                                                                                                        |
+|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `0`   | Success, including `--dry-run`, "Nothing to do", and a declined plan                                                                                                                           |
+| `1`   | Usage error: unknown option or verb, missing value, wrong positional count; the error names the verb's `--help`                                                                                |
+| `2`   | Tool error: project state, I/O, invalid XML, a failed subprocess, a plan that stopped half-way (the report says which steps stand), an unexpected exception (`--verbose` adds the stack trace) |
+| `3`   | `doctor`: findings remain after the fixes (errors; warnings too under `--strict`), or the `--build` failed; `repl exec`: a submission failed                                                   |
+| `124` | `repl exec`: `--timeout` cancelled a submission                                                                                                                                                |
+| `130` | Cancelled with Ctrl+C                                                                                                                                                                          |
 
 ## Versions
 

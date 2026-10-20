@@ -8,11 +8,11 @@ tagline: "Learn how to pick debug, release or editor builds, in single or double
 
 2dog selects the native Godot variant from your .NET build configuration:
 
-| .NET configuration | `TwoDogVariant` | Use |
-| --- | --- | --- |
-| **Debug** | `debug` | Development, debugging, tests |
-| **Release** | `release` | Production |
-| **Editor** | `editor` | Editor types and `[Tool]` scripts |
+| .NET configuration | `TwoDogVariant` | Use                               |
+|--------------------|-----------------|-----------------------------------|
+| **Debug**          | `debug`         | Development, debugging, tests     |
+| **Release**        | `release`       | Production                        |
+| **Editor**         | `editor`        | Editor types and `[Tool]` scripts |
 
 Every variant also comes in [double precision](#double-precision);
 `TwoDogVariant` stays the same.

@@ -87,6 +87,7 @@ function textFont(bold) {
 
 async function renderText(text, size, { bold = false, color = '#f5f8fc', width = copyWidth, spacing = 0, tracking = 0 } = {}) {
   return sharp({ text: {
+    // language=XML
     text: `<span foreground="${color}" letter_spacing="${tracking * 1024}">${escapeMarkup(text)}</span>`,
     font: `Inter ${bold ? 'Bold ' : ''}${size}`,
     fontfile: await textFont(bold),
@@ -177,7 +178,10 @@ function preferredIllustration(illustration) {
   return standardName !== name && existsSync(standard) ? standard : illustration;
 }
 
-// Double each illustration pixel with nearest-neighbor sampling before compositing.
+/** Double each illustration pixel with nearest-neighbor sampling before compositing.
+ * @param {string | Buffer} [illustration]
+ * @param {{section?: string, title?: string, tagline?: string}} [copy]
+ */
 export async function renderSocialImage(illustration = fallback, { section = '', title = '2dog', tagline = '' } = {}) {
   illustration = preferredIllustration(illustration);
   let width, height;

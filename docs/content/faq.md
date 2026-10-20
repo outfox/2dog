@@ -68,11 +68,11 @@ the screen.
 
 To measure uncapped performance, lift the browser's own limit:
 
-| Browser | Setting | Notes |
-| --- | --- | --- |
-| Chrome, Edge | Start with `--disable-frame-rate-limit --disable-gpu-vsync` | Close every browser window first, or pass a separate `--user-data-dir` |
-| Firefox | Set `layout.frame_rate` to `0` in `about:config` | `-1` (default) follows vsync, `0` renders as fast as possible, any other value is a fixed rate |
-| Safari | Turn off Develop > Feature Flags > "Prefer Page Rendering Updates near 60fps", then restart | Raises the 60 fps cap to the display rate, such as 120 Hz on ProMotion screens; there is no uncapped mode |
+| Browser      | Setting                                                                                     | Notes                                                                                                     |
+|--------------|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| Chrome, Edge | Start with `--disable-frame-rate-limit --disable-gpu-vsync`                                 | Close every browser window first, or pass a separate `--user-data-dir`                                    |
+| Firefox      | Set `layout.frame_rate` to `0` in `about:config`                                            | `-1` (default) follows vsync, `0` renders as fast as possible, any other value is a fixed rate            |
+| Safari       | Turn off Develop > Feature Flags > "Prefer Page Rendering Updates near 60fps", then restart | Raises the 60 fps cap to the display rate, such as 120 Hz on ProMotion screens; there is no uncapped mode |
 
 ```bash
 chrome --disable-frame-rate-limit --disable-gpu-vsync --user-data-dir=/tmp/2dog-bench http://localhost:8080

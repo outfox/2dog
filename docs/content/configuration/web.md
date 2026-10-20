@@ -13,21 +13,21 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 ## Properties
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogWebVariant` | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release` |
-| `TwoDogExportPack` | `true` | Export game content; `false` uses an existing `wwwroot/godot.pck` |
-| `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
-| `TwoDogWebPackName` | `godot.pck` | Deployed pack name |
-| `TwoDogWebSizeManifest` | `true` | Write `twodog.sizes.json` for loading progress |
-| `TwoDogWebStripMaps` | `true` with the release engine | Remove JavaScript source maps |
-| `TwoDogWebPrecompress` | `true` with the dotnet CLI | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files |
-| `TwoDogWebPrecompressLevel` | `Optimal` | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive |
-| `TwoDogWebSideModuleExports` | `true` | Export native symbols used by GDExtensions |
-| `WasmEnableThreads` | `false` | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental) |
-| `TwoDogWebSideModuleTableSlots` | `16384` | With threads: function table slots reserved for GDExtension side modules |
-| `WasmEmitSymbolMap` | `false` in Release, `true` otherwise | Include native symbols for stack traces; explicit settings override the default |
-| `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
+| Property                        | Default                                            | Purpose                                                                                                      |
+|---------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| `TwoDogWebVariant`              | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release`                                                                      |
+| `TwoDogExportPack`              | `true`                                             | Export game content; `false` uses an existing `wwwroot/godot.pck`                                            |
+| `TwoDogWebExportPreset`         | `Web`                                              | Preset in `export_presets.cfg`                                                                               |
+| `TwoDogWebPackName`             | `godot.pck`                                        | Deployed pack name                                                                                           |
+| `TwoDogWebSizeManifest`         | `true`                                             | Write `twodog.sizes.json` for loading progress                                                               |
+| `TwoDogWebStripMaps`            | `true` with the release engine                     | Remove JavaScript source maps                                                                                |
+| `TwoDogWebPrecompress`          | `true` with the dotnet CLI                         | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files                                           |
+| `TwoDogWebPrecompressLevel`     | `Optimal`                                          | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive |
+| `TwoDogWebSideModuleExports`    | `true`                                             | Export native symbols used by GDExtensions                                                                   |
+| `WasmEnableThreads`             | `false`                                            | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental)                        |
+| `TwoDogWebSideModuleTableSlots` | `16384`                                            | With threads: function table slots reserved for GDExtension side modules                                     |
+| `WasmEmitSymbolMap`             | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                              |
+| `WasmInitialHeapSize`           | `256MB`                                            | Initial memory allocation; memory can grow                                                                   |
 
 `2dog.browser-wasm` restores both debug and release natives. A missing selected
 payload fails the build.

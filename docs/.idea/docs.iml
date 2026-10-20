@@ -2,9 +2,9 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/content" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.vitepress/cache" />
       <excludeFolder url="file://$MODULE_DIR$/.vitepress/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludePattern pattern="llms.txt" />
       <excludePattern pattern="llms-full.txt" />
     </content>

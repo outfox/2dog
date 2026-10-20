@@ -17,9 +17,9 @@ on terminals, a missing workload (`wasm-tools`, `android`) can still be offered.
 2dog add [path] [hosts] [options]
 ```
 
-| Argument | Meaning |
-| --- | --- |
-| `path` | Directory containing `project.godot`; defaults to the current directory |
+| Argument | Meaning                                                                 |
+|----------|-------------------------------------------------------------------------|
+| `path`   | Directory containing `project.godot`; defaults to the current directory |
 
 ## Hosts
 
@@ -43,17 +43,17 @@ backup.
 
 ## Options
 
-| Option | Effect |
-| --- | --- |
-| `-n, --name <name>` | Base name override for the scaffolded files; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix |
-| `--rename <NewName>` | Rename a .NET project name that [contains spaces](/known-issues/spaced-project-names), then scaffold; only before any hosts exist |
-| `--dry-run` | Print the plan; change nothing |
-| `--force` | Overwrite scaffolded files that exist; never deletes |
-| `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers |
-| `--no-restore` | Skip the final `dotnet restore` |
-| `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
-| `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
+| Option                             | Effect                                                                                                                                              |
+|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `-n, --name <name>`                | Base name override for the scaffolded files; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix |
+| `--rename <NewName>`               | Rename a .NET project name that [contains spaces](/known-issues/spaced-project-names), then scaffold; only before any hosts exist                   |
+| `--dry-run`                        | Print the plan; change nothing                                                                                                                      |
+| `--force`                          | Overwrite scaffolded files that exist; never deletes                                                                                                |
+| `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision                                  |
+| `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers                                                   |
+| `--no-restore`                     | Skip the final `dotnet restore`                                                                                                                     |
+| `--install-wasm-tools`             | Install missing `wasm-tools` for browser hosts without an installation prompt                                                                       |
+| `--install-android-workload`       | Install the missing `android` workload for Android hosts without an installation prompt                                                             |
 
 Omitting the build settings preserves the project's; see
 [build options](/dnx-2dog#build-options) for their requirements.

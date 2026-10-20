@@ -53,10 +53,10 @@ in tests; project autoloads still initialize. Restore shared state such as
 
 ## Choose a fixture
 
-| Collection | Constructor argument | Use |
-| --- | --- | --- |
-| `HeadlessCollection` | `HeadlessFixture godot` | Scene logic and CI, without a window |
-| `RenderingCollection` | `Fixture godot` | Tests that need rendering |
+| Collection            | Constructor argument    | Use                                  |
+|-----------------------|-------------------------|--------------------------------------|
+| `HeadlessCollection`  | `HeadlessFixture godot` | Scene logic and CI, without a window |
+| `RenderingCollection` | `Fixture godot`         | Tests that need rendering            |
 
 Keep Godot collections non-parallel. You can use several; xUnit disposes one
 collection's engine before starting the next. Keep headless and rendering
@@ -90,10 +90,10 @@ Both guides work with xUnit and NUnit.
 
 ## Setup and test data
 
-| Scope | Setup | Cleanup |
-| --- | --- | --- |
-| Each test | Constructor or `IAsyncLifetime.InitializeAsync()` | `IDisposable.Dispose()` or `IAsyncLifetime.DisposeAsync()` |
-| Shared engine | A custom collection fixture | Fixture disposal |
+| Scope         | Setup                                             | Cleanup                                                    |
+|---------------|---------------------------------------------------|------------------------------------------------------------|
+| Each test     | Constructor or `IAsyncLifetime.InitializeAsync()` | `IDisposable.Dispose()` or `IAsyncLifetime.DisposeAsync()` |
+| Shared engine | A custom collection fixture                       | Fixture disposal                                           |
 
 Async lifecycle methods run on the engine's owner thread too. See
 [xUnit's shared context guide](https://xunit.net/docs/shared-context).

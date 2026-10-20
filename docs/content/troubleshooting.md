@@ -17,12 +17,12 @@ and explains build failures it recognizes (`2dog doctor --build`, or
 
 ## Exit codes
 
-| Code | Meaning | What to do |
-| --- | --- | --- |
-| `1` | Usage error | The `error:` line names the problem and suggests the closest option or verb; `2dog <verb> --help` lists what the verb accepts |
-| `2` | Tool error | Project state (no `project.godot`, a name with spaces, invalid XML), a failed `dotnet` call, or a plan that stopped half-way. The `error:`/`hint:` lines say which; `--verbose` adds the stack trace and every subprocess line |
-| `3` | Doctor findings remain, or the `--build` failed | Read the report; `--fix` applies the safe fixes, `--ignore <id>` drops one you accept. After `--build`, the build section names the matched failure and the full log |
-| `130` | Cancelled | Ctrl+C during a prompt or a subprocess; nothing after the cancelled step ran |
+| Code  | Meaning                                         | What to do                                                                                                                                                                                                                     |
+|-------|-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `1`   | Usage error                                     | The `error:` line names the problem and suggests the closest option or verb; `2dog <verb> --help` lists what the verb accepts                                                                                                  |
+| `2`   | Tool error                                      | Project state (no `project.godot`, a name with spaces, invalid XML), a failed `dotnet` call, or a plan that stopped half-way. The `error:`/`hint:` lines say which; `--verbose` adds the stack trace and every subprocess line |
+| `3`   | Doctor findings remain, or the `--build` failed | Read the report; `--fix` applies the safe fixes, `--ignore <id>` drops one you accept. After `--build`, the build section names the matched failure and the full log                                                           |
+| `130` | Cancelled                                       | Ctrl+C during a prompt or a subprocess; nothing after the cancelled step ran                                                                                                                                                   |
 
 ## A plan stopped half-way
 
@@ -117,13 +117,13 @@ a later .NET version than the runtime selected by the editor.
 2dog swaps stock GodotSharp assemblies for its own at build time. `2dog update`
 sets this up in an existing game; `2dog add` and new projects do it already.
 
-| Code | Cause | Fix |
-| --- | --- | --- |
-| `TDG001` | A dependency targets a different Godot version | Align it, or `Godot.NET.Sdk`, with the engine's Godot version |
+| Code     | Cause                                               | Fix                                                                                           |
+|----------|-----------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `TDG001` | A dependency targets a different Godot version      | Align it, or `Godot.NET.Sdk`, with the engine's Godot version                                 |
 | `TDG002` | `GodotSharpEditor` without `2dog.godotsharp.editor` | Reference `2dog.godotsharp.editor` at the engine version; remove stock packages and HintPaths |
-| `TDG003` | A referenced GodotSharp assembly is not 2dog's | Remove the conflicting reference or HintPath and rebuild against `2dog.godotsharp` |
-| `TDG004` | Core and editor binding packages differ in version | Use one 2dog version for all of them |
-| `TDG005` | An editor export build found no stock GodotSharp | Build the game with `Godot.NET.Sdk` |
+| `TDG003` | A referenced GodotSharp assembly is not 2dog's      | Remove the conflicting reference or HintPath and rebuild against `2dog.godotsharp`            |
+| `TDG004` | Core and editor binding packages differ in version  | Use one 2dog version for all of them                                                          |
+| `TDG005` | An editor export build found no stock GodotSharp    | Build the game with `Godot.NET.Sdk`                                                           |
 
 ## The Godot editor holds a file
 

@@ -21,11 +21,11 @@ public class Engine : IDisposable, IAsyncDisposable
 public Engine(string project, string? path = null, params string[] args)
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `project` | Label passed as Godot's first argument; this is not a content path |
-| `path` | Directory containing `project.godot`; omit it for automatic content resolution |
-| `args` | Additional Godot command-line arguments, passed unchanged |
+| Parameter | Description                                                                    |
+|-----------|--------------------------------------------------------------------------------|
+| `project` | Label passed as Godot's first argument; this is not a content path             |
+| `path`    | Directory containing `project.godot`; omit it for automatic content resolution |
+| `args`    | Additional Godot command-line arguments, passed unchanged                      |
 
 When `path` is omitted or `null`, desktop hosts call
 [`ResolveContent()`](#resolvecontent). Browser hosts leave the path unset so

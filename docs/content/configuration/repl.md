@@ -33,10 +33,10 @@ dotnet run --project MyGame.repl -- --repl-listen mygame
 2dog repl --pipe mygame
 ```
 
-| Host option | Behavior |
-| --- | --- |
-| `--repl-listen NAME` | Accept sessions over a local named pipe; keep running after stdin ends. |
-| `--repl-connect NAME` | Connect to that host without starting another engine. |
+| Host option           | Behavior                                                                |
+|-----------------------|-------------------------------------------------------------------------|
+| `--repl-listen NAME`  | Accept sessions over a local named pipe; keep running after stdin ends. |
+| `--repl-connect NAME` | Connect to that host without starting another engine.                   |
 
 The options are mutually exclusive. `--repl-connect` accepts no Godot
 arguments and times out after five seconds. Custom hosts use the

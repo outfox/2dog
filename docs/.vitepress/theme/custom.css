@@ -36,6 +36,7 @@
 /* Palette: Godot's slate editor chrome, one 2dog green for everything you can click, Godot blue
    for tips and the robot dog, and the logo's coral tongue as the only warm spark. */
 :root {
+  --gd-icon: none;
   /* Light: secondary, the same slate cooled to paper. */
   --ed-base: #f1f3f7;
   --ed-dark-1: #e6eaf0;
@@ -225,7 +226,7 @@
 }
 
 .VPNavBar .title span {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--vp-font-family-mono), monospace;
   font-size: 14px;
   letter-spacing: 0;
 }
@@ -261,7 +262,7 @@
 }
 
 .VPSidebarItem.level-0 > .item > .text {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--vp-font-family-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -341,13 +342,13 @@
 
 /* Info blocks ("Trail marker") are output-console lines. */
 .custom-block.info {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--vp-font-family-mono), monospace;
   font-size: 13px;
   line-height: 1.7;
 }
 
 .custom-block.info .custom-block-title {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--vp-font-family-mono), monospace;
   font-weight: 400;
   color: var(--ed-success);
 }
@@ -371,7 +372,7 @@
 }
 
 .vp-code-group .tabs label {
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--vp-font-family-mono), monospace;
   font-size: 12px;
   border-radius: 3px 3px 0 0;
 }

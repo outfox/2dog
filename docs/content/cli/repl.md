@@ -60,13 +60,13 @@ stop at the first failure; `#load "file.csx"` runs a file as one submission.
 Quote code to protect `$` paths from your shell. Code starting with `-` goes
 after `--`: `2dog repl exec -- -1 + 2`.
 
-| Option | Effect |
-| --- | --- |
+| Option                 | Effect                                                                                                                     |
+|------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | `-s, --session <name>` | Keep variables, imports, mode, selected node and worlds until closed or the host stops. Omit for a fresh session per call. |
-| `--timeout <seconds>` | Cancel after this duration, including queued time; preserve the session. |
-| `--strict` | Fail if a submission logs a Godot error or warning. |
-| `--pipe <name>` | Choose a host by its `--repl-listen` name. |
-| `--json` | Return a structured report with status, values, errors, logs and node listings. |
+| `--timeout <seconds>`  | Cancel after this duration, including queued time; preserve the session.                                                   |
+| `--strict`             | Fail if a submission logs a Godot error or warning.                                                                        |
+| `--pipe <name>`        | Choose a host by its `--repl-listen` name.                                                                                 |
+| `--json`               | Return a structured report with status, values, errors, logs and node listings.                                            |
 
 ## Output and cancellation
 
@@ -76,14 +76,14 @@ returns with it; later output stays on the host console. JSON reports contain
 per-submission `results` and top-level `errors`; listings include a `tree` of
 `name`, `type` and `children`, with `hidden` counting omitted descendants.
 
-| Exit code | Meaning |
-| --- | --- |
-| `0` | All submissions succeeded |
-| `1` | Invalid command line |
-| `2` | Host unavailable, connection broken or request refused |
-| `3` | Submission failed; later submissions did not run |
-| `124` | Timeout expired or the host did not answer |
-| `130` | Cancelled by Ctrl+C or session closure |
+| Exit code | Meaning                                                |
+|-----------|--------------------------------------------------------|
+| `0`       | All submissions succeeded                              |
+| `1`       | Invalid command line                                   |
+| `2`       | Host unavailable, connection broken or request refused |
+| `3`       | Submission failed; later submissions did not run       |
+| `124`     | Timeout expired or the host did not answer             |
+| `130`     | Cancelled by Ctrl+C or session closure                 |
 
 All sessions share the engine thread; synchronous work pauses the game.
 Cancellation is cooperative: pass `ct` to waits such as `Task.Delay`, or they

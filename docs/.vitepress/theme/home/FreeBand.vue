@@ -91,7 +91,7 @@ const links = [
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-family: var(--vp-font-family-mono);
+  font-family: var(--vp-font-family-mono), monospace;
   font-size: 20px;
   font-weight: 400;
   color: var(--ed-text-1);
