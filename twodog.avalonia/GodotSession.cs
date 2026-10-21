@@ -27,6 +27,7 @@ public sealed class GodotSession : IDisposable
     private bool _gpuFailed;
     private bool _pumpScheduled;
     private bool _pumpStopped;
+    private bool _pumping;
     private bool _disposed;
     private bool _pausedByUser;
     private bool _pausedByDetach;
@@ -370,8 +371,10 @@ public sealed class GodotSession : IDisposable
 
     private void PumpFrame()
     {
-        if (_instance is null || _pumpStopped) return;
+        // Godot's native event loop can dispatch another Avalonia frame on this thread.
+        if (_instance is null || _pumpStopped || _pumping) return;
 
+        _pumping = true;
         try
         {
             ApplyPendingResize();
@@ -396,6 +399,10 @@ public sealed class GodotSession : IDisposable
             // session quiescent so the host sees the failure once and can Dispose cleanly.
             StopPump();
             throw;
+        }
+        finally
+        {
+            _pumping = false;
         }
     }
 
