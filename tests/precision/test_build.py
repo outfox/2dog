@@ -223,6 +223,22 @@ class NativeResolverPrecisionTests(unittest.TestCase):
 
 
 class BuildWorkerLimitTests(unittest.TestCase):
+    def test_scons_respects_dotnet_processor_count(self):
+        for value, cap, expected in ((None, None, None), (None, 4, 4),
+                                     ("3", None, 3), ("3", 8, 3), ("8", 3, 3)):
+            with self.subTest(value=value, cap=cap), patch.dict(os.environ, {}, clear=True), \
+                    patch.object(build, "get_job_limit", return_value=cap), \
+                    patch.object(os, "cpu_count", return_value=16):
+                if value is not None:
+                    os.environ["DOTNET_PROCESSOR_COUNT"] = value
+                self.assertEqual(expected, build.get_scons_job_limit())
+
+    def test_scons_rejects_invalid_dotnet_processor_count(self):
+        for value in ("0", "-1", "invalid", ""):
+            with self.subTest(value=value), patch.dict(os.environ, DOTNET_PROCESSOR_COUNT=value):
+                with self.assertRaises(ValueError):
+                    build.get_scons_job_limit()
+
     def test_machine_worker_cap_is_enforced_by_msbuild(self):
         with tempfile.TemporaryDirectory(prefix="2dog-build-cap-") as scratch:
             project = Path(scratch) / "cap.proj"
@@ -240,7 +256,7 @@ class BuildWorkerLimitTests(unittest.TestCase):
 
     def test_native_command_uses_the_same_worker_cap(self):
         args = argparse.Namespace(precision="double", dev_build="no", scu_build="yes", cache_path="")
-        with patch.object(build, "get_job_limit", return_value=20), patch.object(build, "run_with_live_output") as run:
+        with patch.object(build, "get_scons_job_limit", return_value=20), patch.object(build, "run_with_live_output") as run:
             build.build_editor(args, build.get_platform_config("windows", "x86_64", "double"))
         self.assertIn("--jobs=20", run.call_args.args[0])
 
