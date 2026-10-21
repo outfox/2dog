@@ -172,7 +172,7 @@ existing clone, run `git config core.symlinks true`, then
 
 ## Acknowledgements
 
-Continuous Integration compute graciously supported by [RunsOn](https://runs-on.com).
+Continuous Integration compute graciously supported by [Blacksmith](https://blacksmith.sh).
 
 
 ## Join us at the dog park
