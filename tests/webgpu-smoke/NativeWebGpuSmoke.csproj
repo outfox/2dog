@@ -9,7 +9,7 @@
     <TwoDogExportPack>false</TwoDogExportPack>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+    <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)" />
     <None Update="project.godot;main.tscn" CopyToOutputDirectory="PreserveNewest" />
     <None Update="global_script_class_cache.cfg" TargetPath=".godot/global_script_class_cache.cfg" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

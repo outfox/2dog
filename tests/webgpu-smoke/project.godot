@@ -14,3 +14,6 @@ window/size/viewport_height=96
 [rendering]
 renderer/rendering_method="mobile"
 rendering_device/driver="webgpu"
+rendering_device/driver.windows="webgpu"
+rendering_device/driver.linuxbsd="webgpu"
+rendering_device/driver.macos="webgpu"
