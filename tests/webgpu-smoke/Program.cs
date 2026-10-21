@@ -18,6 +18,7 @@ internal static class Program
             if (args.Contains("--headless")) options = [.. options, "--headless"];
             using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true, NativePath = System.Environment.GetEnvironmentVariable("TWODOG_WEBGPU_NATIVE_PATH") };
             engine.Start();
+            if (OperatingSystem.IsLinux() && DisplayServer.GetName() == "X11") X11EventQueueSmoke.Run();
             if (args.Contains("--startup-only"))
             {
                 engine.Dispose();

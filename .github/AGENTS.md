@@ -19,6 +19,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   Preserve the harness's cancellation, cleanup and source-isolation assertions and subprocess deadlines.
 - Desktop publish and editor lifecycle checks use the normal renderer settings. `webgpu-desktop` alone
   runs the native WebGPU pixels, restart and shader-contract checks, once per supported OS in single precision.
+  Its Linux host also verifies the engine's ignored-X11-event fallback, which prevents libX11 cookie cleanup crashes.
   Keep it in both tested-content/revision-bump family lists and the deployment gate.
 - The native build runs the real C++ shader compiler regressions once, against the single-precision,
   non-threaded Web debug archive. Source-level WebGPU checks run where the submodule source is checked out.

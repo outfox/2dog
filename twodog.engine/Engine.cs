@@ -395,6 +395,7 @@ public class Engine : IDisposable, IAsyncDisposable
             _startedLifetime = true;
         }
         _lifecycleTrace = WindowsLifecycleTrace.TryStart();
+        X11EventQueue.Initialize();
         return godotInstance;
     }
 
