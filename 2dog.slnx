@@ -37,6 +37,28 @@
       <BuildType Solution="Editor|*" Project="Debug" />
     </Project>
   </Folder>
+  <Folder Name="/platforms/ios-arm64/">
+    <Project Path="platforms/twodog.ios-arm64/twodog.ios-arm64.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.ios-arm64/twodog.ios-arm64.debug.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.ios-arm64/twodog.ios-arm64.release.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/platforms/iossimulator-arm64/">
+    <Project Path="platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.debug.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+    <Project Path="platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.release.csproj">
+      <BuildType Solution="Editor|*" Project="Debug" />
+    </Project>
+  </Folder>
   <Folder Name="/platforms/browser-wasm/">
     <Project Path="platforms/twodog.browser-wasm/twodog.browser-wasm.csproj">
       <BuildType Solution="Editor|*" Project="Debug" />
@@ -95,6 +117,10 @@
     <Build Project="false" />
   </Project>
   <Project Path="twodog.maui/twodog.maui.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="twodog.ios/twodog.ios.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />
     <Build Project="false" />
   </Project>

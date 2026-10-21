@@ -34,6 +34,12 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   additions, so a miss must remain a correct cold build.
 - NuGet publishing uses four concurrent pushes; any failure blocks the release. Packing remains ordered
   within each precision because the managed packages consume the freshly packed platform/binding packages.
+- iOS device/Simulator arm64 archives build in both precisions through `build-natives.yml`; release completeness
+  and staging must require all four archives. Pack uploads scoped iOS inputs, excluding raw archives from godot-bin.
+  The Windows MAUI job packs the precision-neutral iOS host and all MAUI TFMs. Its .NET SDK/workload pins must
+  match the Xcode selected by `ios-smoke`. Three Simulator cells cover single Debug pixels, double Release showcase
+  and single Debug MAUI; keep `iOS Smoke` in both reuse family lists and the deployment gate. Device signing
+  stays with the app developer; CI publishes native packages and downloadable Simulator apps.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
   tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and

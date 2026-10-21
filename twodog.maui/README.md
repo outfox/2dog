@@ -1,6 +1,6 @@
 # 2dog.maui
 
-An embeddable `GodotView` for .NET MAUI on Windows and Android. Register
+An embeddable `GodotView` for .NET MAUI on Windows, Android and iOS (experimental). Register
 `builder.UseTwoDog()`, then add `new GodotView { Project = "MyGame" }` to your
 page. Use `view.Dispatch(tree => ...)` to access Godot on its owning thread.
 
@@ -21,5 +21,11 @@ One active view per process is supported. Android engine restart in the same
 process is not supported. Listen to Started, QuitRequested, and Failed. Windows
 forwards mouse, touch, and basic keyboard input; IME and mouse capture are not
 implemented. Android uses Godot's native input handling.
+
+iOS hosts Godot's own view controller (2dog.ios) as a child of the page's
+view controller; Godot's display link runs on the main thread MAUI shares, so
+Dispatch runs between frames. Register IosHost with the game's
+TwoDogWebBoot.PluginsInitializer() in the app delegate before creating the
+view. Building needs a Mac with Xcode. Never call Engine.Start() on iOS.
 
 Scaffold with `dnx 2dog add --maui`. See https://2dog.dev/hosts/maui.

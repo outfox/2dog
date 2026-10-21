@@ -15,7 +15,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE_ID = re.compile(r"2dog\.(?:win-|linux-|osx-|browser-|android(?:[.-]|$)|tools(?:\.|$))")
+NATIVE_ID = re.compile(r"2dog\.(?:win-|linux-|osx-|browser-|android(?:[.-]|$)|ios(?:simulator)?-|tools(?:\.|$))")
 COMPONENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.+-]*\Z")
 
 
@@ -92,6 +92,7 @@ def inspect_package(path):
         commit = repository.get("commit", "") if repository is not None else ""
         payload = any(p.file_size > 1_000_000 and (
             Path(p.filename).name.startswith("libgodot-")
+            or Path(p.filename).name == "libgodot.a"
             or p.filename.endswith("libgodot/libgodot.a")
             or (package_id.startswith("2dog.tools") and p.filename.endswith(".dll")))
             for p in archive.infolist())
@@ -124,10 +125,12 @@ def collect_packages(staging, precisions, expected, source_commit, native_commit
         suffix = ".double" if precision == "double" else ""
         required = {f"2dog.{name}{suffix}" for name in
                     ("engine", "godotsharp", "godotsharp.editor", "tools", "browser-wasm",
-                     "win-x64", "linux-x64", "osx-arm64")}
+                     "win-x64", "linux-x64", "osx-arm64", "ios-arm64", "iossimulator-arm64")}
         payloads = {f"2dog.{rid}.{variant}{suffix}" for rid in ("win-x64", "linux-x64", "osx-arm64")
                     for variant in ("debug", "release", "editor")}
         payloads |= {f"2dog.browser-wasm.{variant}{suffix}" for variant in ("debug", "release")}
+        payloads |= {f"2dog.{rid}.{variant}{suffix}" for rid in ("ios-arm64", "iossimulator-arm64")
+                     for variant in ("debug", "release")}
         required |= payloads
         missing = required - packages.keys()
         if missing:

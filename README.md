@@ -126,13 +126,17 @@ Later, `dnx 2dog update` moves the project to new 2dog releases and `dnx 2dog do
 
 - .NET SDK 10.0 or later on `win-x64`, `linux-x64` or `osx-arm64`
 - Godot 4.7, with the official .NET editor for visual editing
-- Published builds: `win-x64`, `linux-x64`, `osx-arm64` and `browser-wasm`; Android arm64/x64 is experimental
+- Published builds: `win-x64`, `linux-x64`, `osx-arm64` and `browser-wasm`; Android arm64/x64 and iOS device/Simulator arm64 are experimental
 - Web, WebXR and Blazor hosts need the `wasm-tools` workload; Android needs the `android` workload, the Android SDK
-  and JDK 17. `2dog` offers to install the workloads, and desktop and test builds need neither.
+  and JDK 17. iOS needs the `ios` workload and a Mac with Xcode. `2dog` offers to install the workloads, and desktop and test builds need neither.
 
 Packages are on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases).
 The main ones are [`2dog`](twodog/README.md) (the tool), [`2dog.templates`](templates/README.md)
 (the `dotnet new` templates) and [`2dog.engine`](twodog.engine/README.md) (the library); the tool adds the rest to your hosts.
+
+Experimental iOS support: `dnx 2dog add --ios` scaffolds a host that shows Godot's view
+controller; it builds on a Mac with Xcode (`dotnet build -r iossimulator-arm64` for the Simulator).
+See the [iOS host](https://2dog.dev/hosts/ios) and [2dog.ios](twodog.ios/README.md).
 
 
 ## Dogs and robots are nice

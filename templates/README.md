@@ -16,11 +16,12 @@ importer, and exporter skip them:
 - **NUnit test project** (`<Name>.nunit/`) - NUnit tests with 2dog.nunit (opt-in: `--nunit true`)
 - **Web host project** (`<Name>.web/`) - Browser (WebAssembly) host that publishes the game as a static site (included by default; `--web false` to omit)
 - **WebXR host** (`<Name>.webxr/`) - Browser host whose page ships the WebXR Layers polyfill for VR (opt-in via `--webxr true`)
-- **MAUI host** (`<Name>.maui/`) - Embedded Godot view for Windows and Android with MAUI overlays (opt-in via `--maui true`; requires MAUI workloads)
+- **MAUI host** (`<Name>.maui/`) - Embedded Godot view for Windows, Android and iOS with MAUI overlays (opt-in via `--maui true`; requires MAUI workloads; iOS builds on a Mac)
 - **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
 - **Avalonia host** (`<Name>.avalonia/`) - Cross-platform GUI embedding the game (opt-in via `--avalonia true`)
 - **Qt Quick host** (`<Name>.qt/`) - QML window on Qt Bridge for C# showing the game through `2dog.qt`'s `GodotView` (opt-in via `--qt true`; building needs CMake, Ninja and a C++ toolchain, and outside win-x64 a Qt 6 install in `QtDir`)
 - **Android host** (`<Name>.android/`) - Experimental APK host (opt-in via `--android true`; building requires the Android workload, SDK and JDK 17)
+- **iOS host** (`<Name>.ios/`) - Experimental iOS app showing Godot's view controller (opt-in via `--ios true`; building requires the ios workload and a Mac with Xcode)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
 - **.editorconfig** - Standard .NET coding conventions

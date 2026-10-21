@@ -314,6 +314,7 @@ public static class GodotApiSmoke
 
         var platform = OperatingSystem.IsBrowser() ? "web"
             : OperatingSystem.IsWindows() ? "windows"
+            : OperatingSystem.IsIOS() ? "ios"
             : OperatingSystem.IsMacOS() ? "macos"
             : OperatingSystem.IsAndroid() ? "android"
             : "linux";

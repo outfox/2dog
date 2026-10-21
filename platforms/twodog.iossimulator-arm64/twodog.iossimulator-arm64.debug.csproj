@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PlatformRID>iossimulator-arm64</PlatformRID>
+        <PlatformOS>ios</PlatformOS>
+        <PlatformArch>arm64</PlatformArch>
+        <BuildVariant>template_debug</BuildVariant>
+        <NativeLibExt>a</NativeLibExt>
+        <PackageSuffix>.debug</PackageSuffix>
+        <Description>Experimental iOS Simulator arm64 (Apple silicon) debug static Godot engine archive for .NET iOS hosts.</Description>
+    </PropertyGroup>
+</Project>

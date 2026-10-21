@@ -243,6 +243,11 @@ public class Engine : IDisposable, IAsyncDisposable
         {
             if (_state != LifecycleState.Created)
                 throw new InvalidOperationException($"{nameof(Engine)}: Start() may only be called once.");
+            // Godot's own view controller creates and drives the iOS engine (2dog.ios), like the Android Activity.
+            if (OperatingSystem.IsIOS() || OperatingSystem.IsAndroid())
+                throw new PlatformNotSupportedException(
+                    $"{nameof(Engine)}: on {(OperatingSystem.IsIOS() ? "iOS" : "Android")} the platform host owns the engine; " +
+                    "register the runtime with " + (OperatingSystem.IsIOS() ? "IosHost" : "AndroidHost") + " instead of calling Start().");
             _ownerThreadId = System.Environment.CurrentManagedThreadId;
             _hostSynchronizationContext = SynchronizationContext.Current;
             _state = LifecycleState.Starting;
@@ -720,18 +725,8 @@ public class Engine : IDisposable, IAsyncDisposable
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            try
-            {
-                foreach (var attr in assembly.GetCustomAttributes<AssemblyMetadataAttribute>())
-                {
-                    if (attr.Key == "GodotProjectDir" && !string.IsNullOrEmpty(attr.Value))
-                        return attr.Value;
-                }
-            }
-            catch
-            {
-                // Some dynamic/reflection-emit assemblies may throw
-            }
+            foreach (var dir in AssemblyMetadata.Values(assembly, "GodotProjectDir"))
+                return dir;
         }
 
         throw new InvalidOperationException(

@@ -17,6 +17,8 @@ internal static class EnvironmentChecks
         new("env.maui-workload", Category.Environment, "MAUI workloads are available for selected MAUI builds"),
         new("env.android-sdk", Category.Environment, "Android SDK paths and components are available for selected Android builds"),
         new("env.qt-toolchain", Category.Environment, "CMake, Ninja and a C++ compiler are available for Qt hosts"),
+        new("env.ios-workload", Category.Environment, "the ios workload is available for selected iOS builds"),
+        new("env.xcode", Category.Environment, "Xcode is installed on this Mac for iOS builds; other OSes are told iOS builds need a Mac"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot4", Category.Environment, "GODOT4 points at an existing Godot executable for IDE debugging"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
@@ -66,6 +68,25 @@ internal static class EnvironmentChecks
         foreach (var finding in WorkloadFindings(ctx, workload, "env.maui-workload",
                      project.Hosts.Where(h => h.Kind == HostKind.Maui), "MAUI hosts need platform MAUI workloads", false))
             yield return finding;
+
+        foreach (var finding in WorkloadFindings(ctx, Workload.Ios, "env.ios-workload",
+                     project.Hosts.Where(h => h.Kind == HostKind.Ios), "iOS hosts build with .NET for iOS", false))
+            yield return finding;
+
+        if (project.Hosts.Any(h => h.Kind == HostKind.Ios) || (ctx.Env.IsMacOS && project.Hosts.Any(h => h.Kind == HostKind.Maui)))
+        {
+            var iosHosts = string.Join(", ", project.Hosts.Where(h => h.Kind is HostKind.Ios or HostKind.Maui).Select(h => h.Folder));
+            if (!ctx.Env.IsMacOS)
+                yield return new Finding("env.xcode", c, Severity.Info, $"iOS builds of {iosHosts} need a Mac with Xcode",
+                    "the iOS SDK, clang, codesign and Mono's AOT compiler ship with Xcode; Linux cannot build iOS apps",
+                    "build on a Mac, use Pair to Mac from Windows, or a macOS CI runner");
+            else if (Xcode(ctx.Env) is { } developerDir)
+                yield return Finding.Pass("env.xcode", c, $"Xcode ({developerDir})");
+            else
+                yield return new Finding("env.xcode", c, ctx.BuildHosts.Any(h => h.Kind is HostKind.Ios or HostKind.Maui) ? Severity.Fail : Severity.Warn,
+                    "Xcode not found", $"iOS builds of {iosHosts} link with its iOS SDK and sign with its codesign",
+                    "install Xcode with the iOS platform from the App Store, or point DEVELOPER_DIR at an Xcode.app/Contents/Developer");
+        }
 
         if (project.Hosts.Any(h => h.Kind is HostKind.Android or HostKind.Maui))
         {
@@ -225,6 +246,15 @@ internal static class EnvironmentChecks
         {
             return null;
         }
+    }
+
+    /// <summary>The Xcode developer directory on a Mac: DEVELOPER_DIR, or the App Store install location.</summary>
+    internal static string? Xcode(IEnvironment env)
+    {
+        if (env.Var("DEVELOPER_DIR") is { Length: > 0 } developerDir)
+            return env.DirectoryExists(Path.Combine(developerDir, "Platforms", "iPhoneOS.platform")) ? developerDir : null;
+        const string appStore = "/Applications/Xcode.app/Contents/Developer";
+        return env.DirectoryExists(Path.Combine(appStore, "Platforms", "iPhoneOS.platform")) ? appStore : null;
     }
 
     internal static string Rid(IEnvironment env)

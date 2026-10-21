@@ -41,7 +41,7 @@
     <Target Name="TwoDogCopyNativeLibs"
             AfterTargets="Build"
             DependsOnTargets="TwoDogResolveNativeLibs"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android'">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios'">
         <ItemGroup>
             <_TwoDogNativeForBuild Include="@(_TwoDogNativeResolved)"
                                    Condition="$([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))"/>
@@ -70,7 +70,7 @@
     <Target Name="TwoDogPublishNativeLibs"
             AfterTargets="Publish"
             DependsOnTargets="TwoDogResolveNativeLibs"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android'">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios'">
         <ItemGroup>
             <_TwoDogNativeForPublish Include="@(_TwoDogNativeResolved)"
                                      Condition="('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('%(_TwoDogNativeResolved.RidPrefix)'))"/>

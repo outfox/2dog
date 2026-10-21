@@ -39,6 +39,9 @@ public sealed class MainPage : ContentPage
 
     public MainPage()
     {
+        // A Simulator launched by CI has no audio service.
+        if (OperatingSystem.IsIOS() && Environment.GetEnvironmentVariable("CI") == "true")
+            _game.Arguments = ["--audio-driver", "Dummy"];
         BackgroundColor = Color.FromArgb("#202B36");
         SetStatus("Starting", Starting, running: false);
 
@@ -57,7 +60,9 @@ public sealed class MainPage : ContentPage
                     if (tree.Paused) return;
                     foreach (var cube in cubes) cube.Rotate(axis, 1.8f * (float)tree.Root.GetProcessDeltaTime());
                 };
+                // Both sinks: Godot's logger and the process stdout that device and Simulator consoles show.
                 global::Godot.GD.Print("2DOG_MAUI_SHOWCASE_SMOKE_PASSED");
+                Console.WriteLine("2DOG_MAUI_SHOWCASE_SMOKE_PASSED");
             });
         };
         _game.PresentationModeChanged += (_, _) => _mode.Text = _game.ActivePresentationMode switch

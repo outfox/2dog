@@ -1,0 +1,181 @@
+<Project>
+    <!-- 2dog.ios consumer targets for net10.0-ios hosts: variant defaults, host validation, the bundled game pack
+         and trimmer roots. The archive itself is linked by the runtime meta package's resolver
+         (2dog.ios-native-resolver.targets). Inert outside iOS. -->
+    <PropertyGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <!-- 2dog.engine exports iOS packs during the build (TwoDogExportIosPack); its desktop export after Publish
+             never applies to an app bundle. -->
+        <TwoDogExportPack>false</TwoDogExportPack>
+        <!-- Debug builds run the Mono interpreter so no code path ever needs a JIT; Release builds AOT-compile. -->
+        <UseInterpreter Condition="'$(UseInterpreter)' == '' And '$(Configuration)' == 'Debug'">true</UseInterpreter>
+        <!-- No GodotPlugins.dll on iOS: the game's generated initializer is registered through IosHost. -->
+        <TwoDogSkipGodotApiCopy>true</TwoDogSkipGodotApiCopy>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(TargetPlatformIdentifier)' == 'ios'">
+        <!-- GodotSharp finds the game's scripts through reflection and the host glue is reached from native
+             callbacks, so these assemblies stay whole. -->
+        <TrimmerRootAssembly Include="GodotSharp;twodog;twodog.ios"/>
+        <TrimmerRootAssembly Include="$(TwoDogIosGameAssembly)" Condition="'$(TwoDogIosGameAssembly)' != ''"/>
+        <!-- 2dog.engine imports this from the logical libgodot library, which the app resolves to itself at run
+             time. The app links with -dead_strip and exports only the symbols it knows about, so name it here. -->
+        <ReferenceNativeSymbol Include="set_load_from_executable_fn">
+            <SymbolType>Function</SymbolType>
+        </ReferenceNativeSymbol>
+    </ItemGroup>
+    <Target Name="TwoDogValidateIosHost" BeforeTargets="PrepareForBuild"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true'">
+        <Error Code="TDGI001" Condition="'$(TwoDogVariant)' != 'debug' And '$(TwoDogVariant)' != 'release'"
+               Text="2dog: iOS supports debug and release variants only."/>
+        <!-- Mono is the only runtime validated so far; NativeAOT needs the NativeAotPlugins entry point and a device pass. -->
+        <Error Code="TDGI004" Condition="'$(PublishAot)' == 'true' Or '$(UseMonoRuntime)' == 'false'"
+               Text="2dog: iOS hosts run on Mono (interpreter in Debug, AOT in Release); NativeAOT (PublishAot) is not supported yet."/>
+        <Error Code="TDGI005" Condition="'$(RuntimeIdentifier)' != 'ios-arm64' And '$(RuntimeIdentifier)' != 'iossimulator-arm64'"
+               Text="2dog: iOS hosts support ios-arm64 (devices) and iossimulator-arm64 (the Simulator on Apple silicon) only; unsupported RuntimeIdentifier: '$(RuntimeIdentifier)'."/>
+    </Target>
+
+    <!-- GDExtensions: iOS links extensions into the app. Each .gdextension library or dependency listed for ios (a
+         static library, or an xcframework whose slice matches the RuntimeIdentifier) becomes a force-loaded
+         NativeReference, and the entry symbol is kept for Godot, which resolves it from the app itself. Opt out with
+         TwoDogIosGdExtensions=false. -->
+    <UsingTask TaskName="TwoDogFindIosGdExtensionLibraries" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <ProjectDirectory ParameterType="System.String" Required="true"/>
+            <Extensions ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true"/>
+            <RuntimeIdentifier ParameterType="System.String" Required="true"/>
+            <Variant ParameterType="System.String" Required="true"/>
+            <Libraries ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Text.RegularExpressions"/>
+            <Using Namespace="System.Xml"/>
+            <Using Namespace="System.Xml.Linq"/>
+            <Code Type="Method" Language="cs"><![CDATA[
+            public override bool Execute()
+            {
+                var archTags = new HashSet<string> { "x86_32", "x86_64", "arm32", "arm64", "rv64", "ppc64", "wasm32", "loongarch64" };
+                var otherVariant = Variant == "release"
+                    ? new[] { "debug", "template_debug", "editor" }
+                    : new[] { "release", "template_release", "editor" };
+                var simulator = RuntimeIdentifier == "iossimulator-arm64";
+                var libraries = new List<ITaskItem>();
+                var linked = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var extension in Extensions)
+                {
+                    var text = File.ReadAllText(extension.ItemSpec);
+                    var entrySymbol = Regex.Match(text, @"(?m)^[ \t]*entry_symbol[ \t]*=[ \t]*""([^""\r\n]+)""").Groups[1].Value;
+                    foreach (Match section in Regex.Matches(text, @"(?ms)^\[(libraries|dependencies)\][^\n]*\n(.*?)(?=^\[|\z)"))
+                    {
+                        var dependencies = section.Groups[1].Value == "dependencies";
+                        var entries = Regex.Matches(section.Groups[2].Value, @"(?m)^[ \t]*([\w.]+)[ \t]*=[ \t]*(\{[^}]*\}|""[^""\r\n]*"")")
+                            .Cast<Match>()
+                            .Select(entry => new { Tags = entry.Groups[1].Value.Split('.'), Value = entry.Groups[2].Value })
+                            .Where(entry => entry.Tags.Contains("ios") && !entry.Tags.Any(otherVariant.Contains)
+                                && entry.Tags.Where(archTags.Contains).All(tag => tag == "arm64")
+                                && (simulator || !entry.Tags.Contains("simulator")))
+                            .ToList();
+                        // A Simulator slice listed under its own simulator tag wins over the device entry.
+                        if (simulator && entries.Any(entry => entry.Tags.Contains("simulator")))
+                            entries = entries.Where(entry => entry.Tags.Contains("simulator")).ToList();
+                        foreach (var entry in entries)
+                        {
+                            // [libraries] maps tags to one path, [dependencies] to a dictionary keyed by paths.
+                            foreach (Match path in Regex.Matches(entry.Value, dependencies ? @"""([^""]+)""\s*:" : @"""([^""]+)"""))
+                            {
+                                var value = path.Groups[1].Value;
+                                var file = Path.GetFullPath(value.StartsWith("res://")
+                                    ? Path.Combine(ProjectDirectory, value.Substring("res://".Length))
+                                    : Path.Combine(Path.GetDirectoryName(extension.ItemSpec), value));
+                                if (!File.Exists(file) && !Directory.Exists(file))
+                                {
+                                    Log.LogError(null, "TDGI009", null, extension.ItemSpec, 0, 0, 0, 0,
+                                        "2dog: {0} lists '{1}' for iOS, but it does not exist. Build or install it before the iOS build, or set TwoDogIosGdExtensions=false.",
+                                        Path.GetFileName(extension.ItemSpec), value);
+                                    continue;
+                                }
+                                if (file.EndsWith(".xcframework", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    file = Slice(file, simulator);
+                                    if (file == null)
+                                    {
+                                        Log.LogError(null, "TDGI010", null, extension.ItemSpec, 0, 0, 0, 0,
+                                            "2dog: {0} lists '{1}' for iOS, but the xcframework has no arm64 {2} slice.",
+                                            Path.GetFileName(extension.ItemSpec), value, simulator ? "Simulator" : "device");
+                                        continue;
+                                    }
+                                }
+                                if (!linked.Add(file)) continue;
+                                var item = new TaskItem(file);
+                                var framework = file.EndsWith(".framework", StringComparison.OrdinalIgnoreCase);
+                                item.SetMetadata("Kind", framework ? "Framework" : "Static");
+                                item.SetMetadata("ForceLoad", framework ? "False" : "True");
+                                item.SetMetadata("EntrySymbol", dependencies ? "" : entrySymbol);
+                                libraries.Add(item);
+                            }
+                        }
+                    }
+                }
+                Libraries = libraries.ToArray();
+                return !Log.HasLoggedErrors;
+            }
+
+            // The slice of an xcframework for ios/arm64 and the device or Simulator variant, from its Info.plist.
+            private static string Slice(string xcframework, bool simulator)
+            {
+                var settings = new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, XmlResolver = null };
+                XDocument plist;
+                using (var reader = XmlReader.Create(Path.Combine(xcframework, "Info.plist"), settings))
+                    plist = XDocument.Load(reader);
+                foreach (var library in plist.Descendants("dict").Where(dict => dict.Elements("key").Any(key => key.Value == "LibraryIdentifier")))
+                {
+                    // Pretty-printed plists put whitespace between a key and its value element.
+                    var values = library.Elements("key").ToDictionary(key => key.Value, key => key.ElementsAfterSelf().FirstOrDefault());
+                    XElement platform, variant, architectures, identifier, path;
+                    if (!values.TryGetValue("SupportedPlatform", out platform) || platform.Value != "ios") continue;
+                    values.TryGetValue("SupportedPlatformVariant", out variant);
+                    if ((variant != null && variant.Value == "simulator") != simulator) continue;
+                    if (!values.TryGetValue("SupportedArchitectures", out architectures) || !architectures.Elements("string").Any(a => a.Value == "arm64")) continue;
+                    if (!values.TryGetValue("LibraryIdentifier", out identifier) || !values.TryGetValue("LibraryPath", out path)) continue;
+                    return Path.Combine(xcframework, identifier.Value, path.Value);
+                }
+                return null;
+            }
+            ]]></Code>
+        </Task>
+    </UsingTask>
+    <Target Name="TwoDogAddIosGdExtensions" BeforeTargets="PrepareForBuild;_ComputeNativeReferences"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogIosGdExtensions)' != 'false' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <ItemGroup>
+            <!-- Godot's filesystem scan, which finds the extensions it loads, skips .godot/ and .gdignore trees. -->
+            <_TwoDogIosGdIgnoredDir Include="$(TwoDogGodotProjectFullPath)/**/.gdignore"/>
+            <_TwoDogIosGdExtension Include="$(TwoDogGodotProjectFullPath)/**/*.gdextension"
+                                   Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;@(_TwoDogIosGdIgnoredDir->'%(RootDir)%(Directory)**')"/>
+        </ItemGroup>
+        <TwoDogFindIosGdExtensionLibraries Condition="'@(_TwoDogIosGdExtension)' != ''"
+                                           ProjectDirectory="$(TwoDogGodotProjectFullPath)"
+                                           Extensions="@(_TwoDogIosGdExtension)"
+                                           RuntimeIdentifier="$(RuntimeIdentifier)"
+                                           Variant="$(TwoDogVariant)">
+            <Output TaskParameter="Libraries" ItemName="_TwoDogIosGdExtensionLibrary"/>
+        </TwoDogFindIosGdExtensionLibraries>
+        <ItemGroup>
+            <NativeReference Include="@(_TwoDogIosGdExtensionLibrary)"/>
+            <ReferenceNativeSymbol Include="@(_TwoDogIosGdExtensionLibrary->'%(EntrySymbol)')" SymbolType="Function"
+                                   Condition="'%(_TwoDogIosGdExtensionLibrary.EntrySymbol)' != ''"/>
+        </ItemGroup>
+    </Target>
+
+    <!-- game.pck, the main pack GodotHost.Start hands to Godot: TwoDogIosPack when set, otherwise the pck that
+         2dog.engine's TwoDogExportIosPack (hooked in before this target) exports from GodotProjectDir. -->
+    <Target Name="TwoDogAddIosPack" BeforeTargets="_CollectBundleResources" DependsOnTargets="ResolveReferences"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true'">
+        <Error Code="TDGI006" Condition="'$(TwoDogIosPack)' == '' Or !Exists('$(TwoDogIosPack)')"
+               Text="2dog: there is no game pck for the app bundle. Set GodotProjectDir to the Godot project so 2dog.engine exports it with its iOS preset, or set TwoDogIosPack to a pck exported with an iOS preset."/>
+        <ItemGroup>
+            <BundleResource Include="$(TwoDogIosPack)" Link="game.pck"/>
+        </ItemGroup>
+    </Target>
+</Project>

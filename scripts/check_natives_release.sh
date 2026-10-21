@@ -17,7 +17,7 @@ for rid in linux-x64 win-x64 osx-arm64; do
     expected+=("libgodot-$rid-$target.zip")
   done
 done
-for rid in android-arm64 android-x64; do
+for rid in android-arm64 android-x64 ios-arm64 iossimulator-arm64; do
   for target in template_debug template_release; do
     expected+=("libgodot-$rid-$target.zip")
   done

@@ -75,8 +75,9 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | `--avalonia [folder]`      | [Avalonia host](/hosts/avalonia)                                          |
 | `--qt [folder]`            | [Qt Quick host](/hosts/qt); needs CMake, Ninja and a C++ toolchain        |
 | `--blazor [folder]`        | [Blazor Web App host](/hosts/blazor); needs wasm-tools                    |
-| `--maui [folder]`          | [MAUI host](/hosts/maui); Windows and Android, needs MAUI workloads       |
+| `--maui [folder]`          | [MAUI host](/hosts/maui); Windows, Android and iOS, needs MAUI workloads       |
 | `--android [folder]`       | [Android host](/hosts/android); experimental, needs the android workload  |
+| `--ios [folder]` | [iOS host](/hosts/ios); experimental, needs the ios workload and a Mac with Xcode |
 | `--no-generic`, `--no-web` | Leave a host out of the default set (every kind has a `--no-<host>` form) |
 
 All hosts except `--generic` and `--web` are opt-in: an unattended run never

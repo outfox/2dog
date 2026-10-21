@@ -16,6 +16,11 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }} # never cancel tag/deploy runs
 
+# Keep the iOS bindings/workload matched to the Simulator runner's Xcode.
+env:
+  IOS_DOTNET_VERSION: 10.0.401
+  IOS_WORKLOAD_VERSION: 10.0.401
+
 permissions:
   contents: read # jobs that need more (build-natives, deploy) declare their own
 
@@ -89,7 +94,7 @@ jobs:
              ! echo "$lines" | grep -qv '<TwoDogRevision>'; then
             parent=$(git rev-parse HEAD^)
             # Any run that tested the parent's content counts, also one on the branch the parent merged.
-            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke"); then
+            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
               read -r run sha <<<"$found"
               echo "::notice::Parent ${parent:0:7}'s content passed CI in run $run (${sha:0:7}); skipping test, desktop and Android jobs."
               tested=true
@@ -108,7 +113,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
-               "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke"); then
+               "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
             read -r run sha <<<"$found"
             url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
             echo "::notice::This content passed CI in run $run (${sha:0:7}); skipping natives, pack, test and smoke jobs."
@@ -311,6 +316,7 @@ jobs:
           uv run python -m unittest discover -s tests/precision -v
           uv run python -m unittest discover -s tests/webgpu -v
           uv run python -m unittest discover -s tests/ci_packages -v
+          uv run python -m unittest discover -s tests/ios -v
 
       - name: Mount scoped Android input disk
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
@@ -335,6 +341,25 @@ jobs:
           compression-level: 0
           retention-days: 3
 
+      # iOS consumers need the engine dependency closure and fork SDK, not browser/UI packages or raw archives.
+      - name: Upload iOS inputs
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-inputs-${{ matrix.precision }}
+          path: |
+            packages/2dog.engine*.nupkg
+            packages/2dog.godotsharp*.nupkg
+            packages/2dog.tools*.nupkg
+            packages/2dog.win-x64*.nupkg
+            packages/2dog.linux-x64*.nupkg
+            packages/2dog.osx-arm64*.nupkg
+            packages/2dog.ios-arm64*.nupkg
+            packages/2dog.iossimulator-arm64*.nupkg
+            godot/bin/GodotSharp/Tools/nupkgs/*.nupkg
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 3
+
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
         with:
@@ -343,6 +368,8 @@ jobs:
             godot/bin/
             !godot/bin/**/android/**
             !godot/bin/android/**
+            !godot/bin/**/ios/**
+            !godot/bin/ios/**
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
 
@@ -1723,14 +1750,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: ${{ env.IOS_DOTNET_VERSION }}
+
+      - name: Pin SDK to the iOS workload
+        run: dotnet new globaljson --sdk-version ${{ env.IOS_DOTNET_VERSION }} --roll-forward disable --force
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
           enable-cache: false
       - name: Install MAUI workloads
-        run: dotnet workload install maui-windows maui-android --skip-manifest-update --source https://api.nuget.org/v3/index.json
+        run: dotnet workload install maui-windows maui-android maui-ios ios --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -1746,8 +1776,10 @@ jobs:
         with:
           name: nuget-packages-single
           path: packages
-      - name: Pack MAUI integration
-        run: dotnet pack twodog.maui -c Release
+      - name: Pack iOS host and MAUI integration
+        run: |
+          dotnet pack twodog.ios -c Release
+          dotnet pack twodog.maui -c Release -p:TwoDogMauiIos=true
       - name: Build Windows showcase
         run: dotnet build demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0 -c Release
       - name: Build Android showcase
@@ -1756,7 +1788,9 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: nuget-packages-maui
-          path: packages/2dog.maui.*nupkg
+          path: |
+            packages/2dog.maui.*nupkg
+            packages/2dog.ios.*nupkg
           if-no-files-found: error
           retention-days: 7
 
@@ -2055,6 +2089,105 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding.
+  ios-smoke:
+    name: iOS Smoke (${{ matrix.app }}, ${{ matrix.configuration }}) [${{ matrix.precision }}]
+    needs: [check-natives, pack, maui]
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.maui.result == 'success' &&
+      needs.check-natives.outputs.tested-bump != 'true')
+    runs-on: macos-26
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {app: smoke, configuration: Debug, precision: single, bundle: dev.twodog.smoke, marker: 2DOG_IOS_CSHARP_SMOKE_PASSED}
+          - {app: showcase, configuration: Release, precision: double, bundle: dev.twodog.showcase, marker: 2DOG_IOS_SHOWCASE_SMOKE_PASSED}
+          - {app: maui, configuration: Debug, precision: single, bundle: com.companyname.showcase.maui, marker: 2DOG_MAUI_SHOWCASE_SMOKE_PASSED}
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.IOS_DOTNET_VERSION }}
+
+      - name: Pin SDK to the iOS workload
+        run: dotnet new globaljson --sdk-version ${{ env.IOS_DOTNET_VERSION }} --roll-forward disable --force
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Install iOS workloads
+        run: dotnet workload install ios maui-ios --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
+
+      - name: Download iOS inputs
+        uses: actions/download-artifact@v8
+        with:
+          name: ios-inputs-${{ matrix.precision }}
+
+      - name: Download iOS host and MAUI packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-maui
+          path: packages
+
+      - name: Build and inspect Simulator app
+        run: >-
+          uv run scripts/build_ios_app.py --app '${{ matrix.app }}' --feed packages
+          --configuration '${{ matrix.configuration }}' --output artifacts/ios-app
+
+      # Preserve permissions, symlinks and bundle layout; artifact upload alone does not.
+      - name: Archive Simulator app and inspection report
+        run: ditto -c -k --sequesterRsrc --keepParent artifacts/ios-app/app/*.app artifacts/ios-app/simulator-app.zip
+
+      - name: Upload Simulator app
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-simulator-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
+          path: |
+            artifacts/ios-app/simulator-app.zip
+            artifacts/ios-app/app-report.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+      - name: Boot Simulator and run C# smoke
+        env:
+          SIMCTL_CHILD_CI: 'true'
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          runtime=$(xcrun simctl list runtimes --json | jq -r '[.runtimes[] | select(.isAvailable and (.identifier | contains(".iOS-")))] | last | .identifier // empty')
+          test -n "$runtime"
+          device=$(xcrun simctl create 2dog-ci com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$runtime")
+          trap 'xcrun simctl shutdown "$device" || true' EXIT
+          xcrun simctl boot "$device"
+          xcrun simctl bootstatus "$device" -b
+          uv run scripts/test_ios_simulator.py artifacts/ios-app/app/*.app --device "$device" \
+            --bundle '${{ matrix.bundle }}' --marker '${{ matrix.marker }}' --timeout 120 \
+            2>&1 | tee artifacts/ios-app/simulator.log
+
+      - name: Upload Simulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-simulator-log-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
+          path: artifacts/ios-app/simulator.log
+          if-no-files-found: ignore
+          retention-days: 7
+
   # Deploy to NuGet and create GitHub release when running on a version tag —
   # either pushed directly or dispatched on the tag by release.yml (tags pushed
   # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).
@@ -2067,7 +2200,7 @@ jobs:
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it. A tested revision bump (see check-natives) takes
     # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, tool-smoke, maui]
+    needs: [check-natives, test, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -2078,7 +2211,7 @@ jobs:
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
       (needs.check-natives.outputs.tested-bump == 'true' ||
       (needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
-      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success')) &&
+      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
       needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
       needs.tool-smoke.result == 'success' && needs.maui.result == 'success')
     permissions:
@@ -2116,7 +2249,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.templates" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.qt" "2dog.repl" "2dog.gdunit" "2dog.maui"; do
+          for pkg in "2dog" "2dog.templates" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.qt" "2dog.repl" "2dog.gdunit" "2dog.maui" "2dog.ios"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

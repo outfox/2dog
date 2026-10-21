@@ -242,6 +242,29 @@ jobs:
             runner: blacksmith-4vcpu-ubuntu-2404
             arch: x86_64
             rid: android-x64
+          # iOS static libraries: device and Simulator arm64, no editor target.
+          - platform: ios
+            target: template_release
+            runner: macos-26
+            arch: arm64
+            rid: ios-arm64
+          - platform: ios
+            target: template_debug
+            runner: macos-26
+            arch: arm64
+            rid: ios-arm64
+          - platform: ios
+            target: template_release
+            runner: macos-26
+            arch: arm64
+            rid: iossimulator-arm64
+            build_args: --simulator
+          - platform: ios
+            target: template_debug
+            runner: macos-26
+            arch: arm64
+            rid: iossimulator-arm64
+            build_args: --simulator
           # Web (browser-wasm) static libraries: no editor target, built with
           # the emscripten version pinned in Directory.Build.props (must match
           # the .NET browser-wasm runtime pack the consumers publish with).
@@ -408,7 +431,7 @@ jobs:
 
       # Upload the library under its original Godot file name; the release job zips it as-is.
       - name: Upload artifact
-        if: matrix.platform != 'web' && matrix.platform != 'android'
+        if: matrix.platform != 'web' && matrix.platform != 'android' && matrix.platform != 'ios'
         uses: actions/upload-artifact@v7
         with:
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
@@ -438,6 +461,15 @@ jobs:
         with:
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}android/${{ matrix.target }}/${{ matrix.arch }}/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload artifact (iOS archive)
+        if: matrix.platform == 'ios'
+        uses: actions/upload-artifact@v7
+        with:
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
+          path: godot/bin/${{ env.NATIVE_SUBDIR }}ios/${{ matrix.target }}/${{ matrix.rid }}/
           if-no-files-found: error
           retention-days: 7
 
@@ -550,6 +582,7 @@ jobs:
           - macOS arm64 (template_release, template_debug, editor)
           - Browser wasm32 (template_release, template_debug — static library payloads, single-threaded and WasmEnableThreads)
           - Android arm64 and x64 (template_release, template_debug — libgodot_android.so + libc++_shared.so; experimental)
+          - iOS device and Simulator arm64 (template_release, template_debug — static libgodot.a; experimental)
 
           ### Additional assets
           - `godotsharp.zip` — GodotSharp assemblies (platform-independent)

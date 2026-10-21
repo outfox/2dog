@@ -184,8 +184,8 @@ internal static class Program
     {
         var rows = new (string Label, string Version, string Probe, string Packages)[]
         {
-            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.qt, 2dog.xunit, 2dog.nunit, 2dog.gdunit, 2dog.repl"),
-            ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.tools"),
+            ("tool + packages", ToolVersions.TwoDogVersion, "2dog", "2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.qt, 2dog.maui, 2dog.ios, 2dog.xunit, 2dog.nunit, 2dog.gdunit, 2dog.repl"),
+            ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.ios-arm64, 2dog.iossimulator-arm64, 2dog.tools"),
             ("GodotSharp", ToolVersions.TwoDogVersion, "2dog.godotsharp", "2dog.godotsharp, 2dog.godotsharp.editor"),
         };
         var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => r.Probe)) : null;

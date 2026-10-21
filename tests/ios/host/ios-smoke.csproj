@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0-ios</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>TwoDog.Ios.Smoke</RootNamespace>
+        <ApplicationId>dev.twodog.smoke</ApplicationId>
+        <ApplicationTitle>2dog iOS smoke</ApplicationTitle>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">iossimulator-arm64</RuntimeIdentifier>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <!-- The build imports the game and exports its pck into the app bundle. -->
+        <GodotProjectDir>../game</GodotProjectDir>
+        <TwoDogIosGameAssembly>ios-smoke-game</TwoDogIosGameAssembly>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios-arm64$(TwoDogPackageSuffix)" Version="$(NativesVersion)"
+                          Condition="'$(RuntimeIdentifier)' == 'ios-arm64'"/>
+        <PackageReference Include="2dog.iossimulator-arm64$(TwoDogPackageSuffix)" Version="$(NativesVersion)"
+                          Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'"/>
+        <ProjectReference Include="../game/ios-smoke-game.csproj"/>
+    </ItemGroup>
+    <Target Name="TwoDogValidateIosSmokeRid" BeforeTargets="_GenerateRestoreGraphProjectEntry;PrepareForBuild">
+        <Error Code="TDGSMOKE002"
+               Condition="'$(RuntimeIdentifier)' != 'ios-arm64' And '$(RuntimeIdentifier)' != 'iossimulator-arm64'"
+               Text="2dog iOS smoke supports ios-arm64 and iossimulator-arm64 only; unsupported RID: $(RuntimeIdentifier)."/>
+    </Target>
+</Project>

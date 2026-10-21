@@ -73,19 +73,21 @@ Ids are stable; `--ignore <id>` drops one.
 
 ### Environment
 
-| Id                      | Passes when                                                                                       |
-|-------------------------|---------------------------------------------------------------------------------------------------|
-| `env.dotnet-sdk`        | a .NET 10 SDK is installed                                                                        |
-| `env.global-json`       | the root global.json pin is satisfied by an installed SDK                                         |
-| `env.wasm-tools`        | wasm-tools is available for the selected browser build; otherwise optional                        |
-| `env.maui-workload`     | MAUI workloads are available for selected MAUI builds                                             |
-| `env.android-workload`  | android is available for the selected Android build; otherwise optional                           |
-| `env.android-sdk`       | Android SDK paths and components are available for the selected Android build; otherwise optional |
-| `env.qt-toolchain`      | CMake, Ninja and a C++ compiler are available for the selected Qt build; otherwise optional       |
-| `env.host-platform`     | this OS and architecture have 2dog native packages                                                |
-| `env.godot4`            | GODOT4 points at an existing Godot executable for IDE debugging                                   |
-| `env.overrides`         | GODOTSHARP_DIR and the other layout overrides point at what they claim                            |
-| `env.packages-restored` | the engine, tools and native packages are in the NuGet cache                                      |
+| Id | Passes when |
+| --- | --- |
+| `env.dotnet-sdk` | a .NET 10 SDK is installed |
+| `env.global-json` | the root global.json pin is satisfied by an installed SDK |
+| `env.wasm-tools` | wasm-tools is available for the selected browser build; otherwise optional |
+| `env.maui-workload` | MAUI workloads are available for selected MAUI builds |
+| `env.android-workload` | android is available for the selected Android build; otherwise optional |
+| `env.android-sdk` | Android SDK paths and components are available for the selected Android build; otherwise optional |
+| `env.ios-workload` | ios is available for the selected iOS build; otherwise optional |
+| `env.xcode` | Xcode with the iOS platform is installed on this Mac; elsewhere a note that iOS builds need a Mac |
+| `env.qt-toolchain` | CMake, Ninja and a C++ compiler are available for the selected Qt build; otherwise optional |
+| `env.host-platform` | this OS and architecture have 2dog native packages |
+| `env.godot4` | GODOT4 points at an existing Godot executable for IDE debugging |
+| `env.overrides` | GODOTSHARP_DIR and the other layout overrides point at what they claim |
+| `env.packages-restored` | the engine, tools and native packages are in the NuGet cache |
 
 ### Layout
 
@@ -168,7 +170,8 @@ Ids are stable; `--ignore <id>` drops one.
 | `preset.file`    | export_presets.cfg exists                                                                           |
 | `preset.web`     | the 'Web' preset exists when a browser host does                                                    |
 | `preset.android` | the Android hosts' export preset ('Android' by default) exists, unless they ship a pre-exported pck |
-| `preset.desktop` | the per-OS desktop presets exist                                                                    |
+| `preset.ios` | the iOS hosts' export preset ('iOS' by default) exists, unless they ship a pre-exported pck; a warning for MAUI hosts off a Mac |
+| `preset.desktop` | the per-OS desktop presets exist |
 
 ### Godot settings
 

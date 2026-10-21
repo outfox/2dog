@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PlatformRID>ios-arm64</PlatformRID>
+        <PlatformOS>ios</PlatformOS>
+        <PlatformArch>arm64</PlatformArch>
+        <BuildVariant>template_release</BuildVariant>
+        <NativeLibExt>a</NativeLibExt>
+        <PackageSuffix>.release</PackageSuffix>
+        <Description>Experimental iOS arm64 device release static Godot engine archive for .NET iOS hosts.</Description>
+    </PropertyGroup>
+</Project>

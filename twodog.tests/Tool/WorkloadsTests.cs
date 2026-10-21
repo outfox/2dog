@@ -189,6 +189,9 @@ public class WorkloadsTests
         Assert.Equal([Workload.WasmTools], Workload.For([HostKind.Web, HostKind.Blazor]));
         Assert.Equal([Workload.Android], Workload.For([HostKind.Android]));
         Assert.Equal([Workload.WasmTools, Workload.Android], Workload.For([HostKind.Android, HostKind.WebXr]));
+        Assert.Equal([Workload.Ios], Workload.For([HostKind.Ios]));
+        Assert.Equal([Workload.Android, Workload.Ios], Workload.For([HostKind.Ios, HostKind.Android]));
+        Assert.Equal(OperatingSystem.IsMacOS(), Workload.For([HostKind.Maui]).Contains(Workload.MauiIos));
     }
 
     [Theory]

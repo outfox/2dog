@@ -34,6 +34,8 @@ def stage(assets, root, precision):
         for rid, arch in (("android-arm64", "arm64"), ("android-x64", "x86_64")):
             manifest.append((f"libgodot-{rid}-{target}", selected / f"android/{target}/{arch}",
                              ["libgodot_android.so", "libc++_shared.so"]))
+        for rid in ("ios-arm64", "iossimulator-arm64"):
+            manifest.append((f"libgodot-{rid}-{target}", selected / f"ios/{target}/{rid}", ["libgodot.a"]))
     # Validate every archive before extracting anything. Never turn missing platforms into publishable stubs.
     for name, destination, expected in manifest:
         with zipfile.ZipFile(assets / f"{name}.zip") as archive:

@@ -1,0 +1,45 @@
+<Project>
+    <PropertyGroup>
+        <_TwoDogIosNativeResolverImported>true</_TwoDogIosNativeResolverImported>
+    </PropertyGroup>
+    <!-- Links the selected variant's libgodot.a into the app: NuGet payload first, then a source checkout's
+         godot/bin/ios/<target>/<rid>/. Force-loaded, because Godot registers classes and Objective-C categories
+         from static initializers the linker would otherwise drop. -->
+    <Target Name="TwoDogResolveIosNatives" BeforeTargets="PrepareForBuild;_ComputeNativeReferences"
+            Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true'">
+        <PropertyGroup>
+            <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+            <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+            <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+            <_TwoDogIosTarget Condition="'$(TwoDogVariant)' == 'release'">template_release</_TwoDogIosTarget>
+            <_TwoDogIosTarget Condition="'$(TwoDogVariant)' == 'debug'">template_debug</_TwoDogIosTarget>
+        </PropertyGroup>
+        <Error Code="TDGI001" Condition="'$(TwoDogVariant)' != 'release' And '$(TwoDogVariant)' != 'debug'"
+               Text="2dog: iOS supports TwoDogVariant release or debug only; use a desktop editor for imports."/>
+        <ItemGroup>
+            <_TwoDogSelectedIosNative Include="@(TwoDogIosNative)" Condition="'%(Identity)' == '$(RuntimeIdentifier)'">
+                <Root>$(NuGetPackageRoot)/2dog.%(Identity).$(TwoDogVariant)$(TwoDogPackageSuffix)/%(PackageVersion)/runtimes/%(Identity)/native/</Root>
+            </_TwoDogSelectedIosNative>
+            <_TwoDogSelectedIosNative>
+                <Root Condition="!Exists('%(Root)libgodot.a')">$(TwoDogLocalGodotBin)ios/$(_TwoDogIosTarget)/%(Identity)/</Root>
+            </_TwoDogSelectedIosNative>
+        </ItemGroup>
+        <Error Code="TDGI002" Condition="'@(_TwoDogSelectedIosNative)' == ''"
+               Text="2dog: select ios-arm64 or iossimulator-arm64 with RuntimeIdentifier and reference its runtime meta package (2dog.ios-arm64 or 2dog.iossimulator-arm64)."/>
+        <Error Code="TDGI003" Condition="!Exists('%(_TwoDogSelectedIosNative.Root)libgodot.a')"
+               Text="2dog: missing $(TwoDogVariant) iOS native payload for %(_TwoDogSelectedIosNative.Identity) in %(_TwoDogSelectedIosNative.Root). Build the iOS natives (build-godot.py --platform ios) or restore the matching packages."/>
+        <ItemGroup>
+            <NativeReference Include="%(_TwoDogSelectedIosNative.Root)libgodot.a">
+                <Kind>Static</Kind>
+                <ForceLoad>True</ForceLoad>
+                <IsCxx>True</IsCxx>
+                <!-- The archive carries Godot's SwiftUI wrapper (drivers/apple_embedded/app.swift). -->
+                <LinkWithSwiftSystemLibraries>True</LinkWithSwiftSystemLibraries>
+                <Frameworks>UIKit Foundation CoreGraphics QuartzCore Metal AVFoundation AudioToolbox CoreAudio CoreMedia CoreMotion CoreVideo CoreHaptics GameController MediaPlayer Security SystemConfiguration OpenGLES</Frameworks>
+                <!-- Godot's upscalers use MetalFX on devices; the Simulator SDK has no MetalFX framework. -->
+                <WeakFrameworks Condition="'$(RuntimeIdentifier)' == 'ios-arm64'">MetalFX</WeakFrameworks>
+                <LinkerFlags>-lc++</LinkerFlags>
+            </NativeReference>
+        </ItemGroup>
+    </Target>
+</Project>

@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Experimental iOS host: the app links the Godot engine statically and shows Godot's own view controller,
+         which owns the display link, input and lifecycle; this app registers .NET with it first.
+         Builds on macOS with Xcode only (the ios workload, the iOS SDK and codesign); from Windows use Pair to Mac.
+         Simulator: dotnet build -r iossimulator-arm64   Device: dotnet publish -r ios-arm64 -c Release with
+         CodesignKey/CodesignProvision set. -->
+    <PropertyGroup>
+        <TargetFramework>net10.0-ios</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'TPLRAWNAME.ios' would differ from the other hosts for types
+             shared with them. -->
+        <RootNamespace>Company.Product1</RootNamespace>
+        <ApplicationId>com.companyname.tplandroidname</ApplicationId>
+        <ApplicationTitle>TPLRAWNAME</ApplicationTitle>
+        <ApplicationVersion>1</ApplicationVersion>
+        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <!-- Devices by default; pass -r iossimulator-arm64 for the Simulator on an Apple silicon Mac -->
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">ios-arm64</RuntimeIdentifier>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios-arm64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
+                          Condition="'$(RuntimeIdentifier)' == 'ios-arm64'"/>
+        <PackageReference Include="2dog.iossimulator-arm64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
+                          Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../TPLRAWNAME.csproj"/>
+    </ItemGroup>
+
+    <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
+         their .gdignore. The build imports it and exports its pck with the 'iOS' preset into the app bundle. -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+        <TwoDogIosGameAssembly>TPLRAWNAME</TwoDogIosGameAssembly>
+    </PropertyGroup>
+</Project>

@@ -2,6 +2,8 @@
     <PropertyGroup>
         <TargetFrameworks>net10.0-android</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+        <!-- iOS builds need Xcode, so the target only exists on a Mac (experimental) -->
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net10.0-ios</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <RootNamespace>Company.Product1.Maui</RootNamespace>
         <UseMaui>true</UseMaui>
@@ -34,6 +36,12 @@
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
         <TwoDogAndroidGameAssembly>TPLRAWNAME</TwoDogAndroidGameAssembly>
     </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <!-- Devices by default; pass -r iossimulator-arm64 for the Simulator on an Apple silicon Mac -->
+        <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">ios-arm64</RuntimeIdentifier>
+        <TwoDogIosGameAssembly>TPLRAWNAME</TwoDogIosGameAssembly>
+    </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)"/>
         <PackageReference Include="2dog.maui" Version="$(TwoDogVersion)"/>
@@ -49,5 +57,12 @@
         <PackageReference Include="2dog.android-x64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
                           Condition="$([System.String]::Copy('$(_TwoDogAndroidRids)').Contains(';android-x64;'))"/>
         <PackageReference Include="Xamarin.AndroidX.DocumentFile" Version="1.1.0"/>
+    </ItemGroup>
+    <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+        <PackageReference Include="2dog.ios" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.ios-arm64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
+                          Condition="'$(RuntimeIdentifier)' == 'ios-arm64'"/>
+        <PackageReference Include="2dog.iossimulator-arm64TWODOG_PRECISION_SUFFIX" Version="[$(TwoDogNativesVersion)]"
+                          Condition="'$(RuntimeIdentifier)' == 'iossimulator-arm64'"/>
     </ItemGroup>
 </Project>

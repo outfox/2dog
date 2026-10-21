@@ -12,11 +12,11 @@ settings in the root
 
 ## Global Properties {#properties}
 
-| Property                              | Default                                                   | Purpose                                                                                                                                         |
-|---------------------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GodotProjectDir`                     | None                                                      | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()`                                  |
-| `TwoDogVariant`                       | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android native variant; explicit settings override the default. Android does not support `editor`; browser hosts use `TwoDogWebVariant` |
-| `TwoDogRemoveDuplicateGodotAnalyzers` | `false`                                                   | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project                                                     |
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `GodotProjectDir` | None | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()` |
+| `TwoDogVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android/iOS native variant; explicit settings override the default. Android and iOS do not support `editor`; browser hosts use `TwoDogWebVariant` |
+| `TwoDogRemoveDuplicateGodotAnalyzers` | `false` | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project |
 
 For a host nested directly inside the Godot project:
 

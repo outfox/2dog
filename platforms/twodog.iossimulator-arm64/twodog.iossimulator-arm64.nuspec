@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>2dog.iossimulator-arm64$precision$</id>
+        <version>$version$</version>
+        <authors>$authors$</authors>
+        <license type="expression">MIT</license>
+        <icon>icon.png</icon>
+        <readme>README.md</readme>
+        <description>$description$</description>
+        <dependencies>
+            <group targetFramework=".NETStandard2.0">
+                <dependency id="2dog.iossimulator-arm64.release$precision$" version="[$version$]" exclude="native"/>
+                <dependency id="2dog.iossimulator-arm64.debug$precision$" version="[$version$]" exclude="native"/>
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="../../nuget/icon.png" target="icon.png"/>
+        <file src="README.md" target="README.md"/>
+        <file src="../../nuget/GODOT_LICENSE.txt" target="LICENSE.txt"/>
+        <file src="../../nuget/GODOT_AUTHORS.md" target="AUTHORS.md"/>
+        <file src="$assetDir$/build/2dog.iossimulator-arm64$precision$.targets" target="build/"/>
+        <file src="$assetDir$/build/2dog.ios-native-resolver.targets" target="build/"/>
+        <file src="$assetDir$/buildTransitive/2dog.iossimulator-arm64$precision$.targets" target="buildTransitive/"/>
+        <file src="$assetDir$/build/2dog.precision.props" target="build/"/>
+        <file src="$assetDir$/buildTransitive/2dog.precision.props" target="buildTransitive/"/>
+        <file src="$assetDir$/build/2dog.iossimulator-arm64$precision$.props" target="build/"/>
+        <file src="$assetDir$/buildTransitive/2dog.iossimulator-arm64$precision$.props" target="buildTransitive/"/>
+    </files>
+</package>

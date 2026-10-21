@@ -1,0 +1,3 @@
+<Project>
+    <Import Project="$(MSBuildThisFileDirectory)../build/2dog.iossimulator-arm64.targets"/>
+</Project>

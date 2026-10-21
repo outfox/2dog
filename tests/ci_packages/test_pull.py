@@ -87,10 +87,12 @@ class PullPackagesTests(unittest.TestCase):
                 feed.mkdir()
                 ids = {f"2dog.{name}{suffix}" for name in
                        ("engine", "godotsharp", "godotsharp.editor", "tools", "browser-wasm",
-                        "win-x64", "linux-x64", "osx-arm64")}
+                        "win-x64", "linux-x64", "osx-arm64", "ios-arm64", "iossimulator-arm64")}
                 ids |= {f"2dog.{rid}.{variant}{suffix}" for rid in ("win-x64", "linux-x64", "osx-arm64")
                         for variant in ("debug", "release", "editor")}
                 ids |= {f"2dog.browser-wasm.{variant}{suffix}" for variant in ("debug", "release")}
+                ids |= {f"2dog.{rid}.{variant}{suffix}" for rid in ("ios-arm64", "iossimulator-arm64")
+                        for variant in ("debug", "release")}
                 ids.add("2dog.avalonia")
                 for package_id in ids:
                     path = feed / f"{package_id}.nupkg"
@@ -103,6 +105,8 @@ class PullPackagesTests(unittest.TestCase):
                                                  ("4.7.2", "4.7.2.123", "4.7.2.28"), "managed", "native")
                 neutral = next(p for p in packages if p.id == "2dog.avalonia")
                 self.assertEqual(neutral.path.parent.name, "nuget-packages-single")
+                ios = next(p for p in packages if p.id == "2dog.iossimulator-arm64.release.double")
+                self.assertEqual("4.7.2.28", ios.version)
                 native = next(p for p in packages if p.id == "2dog.linux-x64.release")
                 entries[native.path] = pull.Package(native.path, native.id, native.version, native.commit, False)
                 with self.assertRaisesRegex(ValueError, "native payload is missing"):
@@ -112,6 +116,19 @@ class PullPackagesTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "version/source does not match"):
                     pull.collect_packages(root, ("single",),
                                           ("4.7.2", "4.7.2.123", "4.7.2.28"), "managed", "native")
+
+    def test_ios_host_is_managed_and_ios_archives_are_native_payloads(self):
+        self.assertFalse(pull.NATIVE_ID.match('2dog.ios'))
+        for rid in ('ios-arm64', 'iossimulator-arm64'):
+            with self.subTest(rid=rid), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / 'runtime.nupkg'
+                with zipfile.ZipFile(path, 'w') as archive:
+                    archive.writestr('runtime.nuspec', f'<package><metadata><id>2dog.{rid}.release.double</id>'
+                                     '<version>4.7.2.45</version></metadata></package>')
+                    archive.writestr(f'runtimes/{rid}/native/libgodot.a', b'a' * 1_000_001)
+                package = pull.inspect_package(path)
+                self.assertTrue(pull.NATIVE_ID.match(package.id))
+                self.assertTrue(package.has_payload)
 
 
 if __name__ == "__main__":

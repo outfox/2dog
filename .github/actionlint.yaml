@@ -1,5 +1,7 @@
 self-hosted-runner:
   labels:
+    # GitHub-hosted label not yet recognized by the pinned actionlint.
+    - macos-26
     - blacksmith-2vcpu-ubuntu-2404
     - blacksmith-4vcpu-ubuntu-2404
     - blacksmith-8vcpu-ubuntu-2404

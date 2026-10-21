@@ -21,11 +21,15 @@
         <!-- Android's JNI loader and SONAME require the original name; variants are exclusive in an APK. -->
         <NativeLibPath Condition="'$(PlatformOS)' == 'android'">$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libgodot_android.so</NativeLibPath>
         <OutputLibName Condition="'$(PlatformOS)' == 'android'">libgodot_android.so</OutputLibName>
+        <!-- iOS links one static archive per RID (device or Simulator slice) into the app. -->
+        <NativeLibPath Condition="'$(PlatformOS)' == 'ios'">$(GodotBinDir)ios/$(BuildVariant)/$(PlatformRID)/libgodot.a</NativeLibPath>
+        <OutputLibName Condition="'$(PlatformOS)' == 'ios'">libgodot.a</OutputLibName>
 
         <!-- Skip packaging if native library doesn't exist (unless forcing all platforms) -->
         <IsPackable Condition="'$(ForcePackAllPlatforms)' != 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
-        <!-- Android is opt-in and is not an engine dependency. Never let CI's force-pack publish empty stubs. -->
+        <!-- Android and iOS are opt-in and not engine dependencies. Never let CI's force-pack publish empty stubs. -->
         <IsPackable Condition="'$(PlatformOS)' == 'android' And '$(ForcePackAllPlatforms)' == 'true' And (!Exists('$(NativeLibPath)') Or !Exists('$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so'))">false</IsPackable>
+        <IsPackable Condition="'$(PlatformOS)' == 'ios' And '$(ForcePackAllPlatforms)' == 'true' And !Exists('$(NativeLibPath)')">false</IsPackable>
     </PropertyGroup>
 
     <!-- Web variants pack a payload directory (static archive + JS glue + boot shell) under godot-web/, and the

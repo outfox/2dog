@@ -33,6 +33,8 @@ class NativeReleaseStagingTests(unittest.TestCase):
             files[f"libgodot-browser-wasm-threads-{target}"] = ["libgodot/libgodot.a"]
             for rid in ("android-arm64", "android-x64"):
                 files[f"libgodot-{rid}-{target}"] = ["libgodot_android.so", "libc++_shared.so"]
+            for rid in ("ios-arm64", "iossimulator-arm64"):
+                files[f"libgodot-{rid}-{target}"] = ["libgodot.a"]
         assets.mkdir()
         for name, members in files.items():
             with zipfile.ZipFile(assets / f"{name}.zip", "w") as archive:
@@ -52,6 +54,9 @@ class NativeReleaseStagingTests(unittest.TestCase):
                 self.assertEqual(precision.encode(), (selected / "web/template_release/libgodot/libgodot.a").read_bytes())
                 self.assertEqual(precision.encode(), (selected / "web-threads/template_debug/libgodot/libgodot.a").read_bytes())
                 self.assertEqual(precision.encode(), (selected / "android/template_debug/arm64/libgodot_android.so").read_bytes())
+                for rid in ("ios-arm64", "iossimulator-arm64"):
+                    for target in ("template_debug", "template_release"):
+                        self.assertEqual(precision.encode(), (selected / f"ios/{target}/{rid}/libgodot.a").read_bytes())
             self.assertTrue((root / "godot/bin/android/java/debug/godot.aar").is_file())
             self.assertTrue((root / "godot/bin/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.4.7.2.nupkg").is_file())
 
@@ -67,7 +72,7 @@ class NativeReleaseStagingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as scratch:
             root = Path(scratch)
             self.release(root / "assets", "double")
-            (root / "assets/libgodot-android-arm64-template_debug.zip").unlink()
+            (root / "assets/libgodot-iossimulator-arm64-template_debug.zip").unlink()
             with self.assertRaises(FileNotFoundError):
                 staging.stage(root / "assets", root, "double")
             self.assertFalse((root / "godot/bin").exists())

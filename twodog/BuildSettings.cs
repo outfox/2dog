@@ -9,7 +9,7 @@ internal static class BuildSettings
     {
         "2dog.engine", "2dog.godotsharp", "2dog.godotsharp.editor", "2dog.gdunit", "2dog.tools",
         "2dog.browser-wasm", "2dog.win-x64", "2dog.linux-x64", "2dog.osx-arm64",
-        "2dog.android-arm64", "2dog.android-x64",
+        "2dog.android-arm64", "2dog.android-x64", "2dog.ios-arm64", "2dog.iossimulator-arm64",
     };
 
     public static bool IsDouble(string projectDir)

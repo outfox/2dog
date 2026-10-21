@@ -40,8 +40,13 @@ a `.gdignore`):
   (`uv run poe build-managed`). Builds need CMake, Ninja and a C++ toolchain (MSVC on Windows); Qt is bundled on
   win-x64, elsewhere pass `-p:QtDir=<Qt 6 prefix>`. It is in no solution because Qt Bridge has no package for some
   RIDs (osx-x64, linux-arm64)
-- `showcase.maui/` - Windows and Android MAUI embedding demo with pause, time scale, and presentation mode in an
-  overlay. Install `maui-windows` and `maui-android`, then run
+- `showcase.ios/` - experimental iOS host (macOS with Xcode only): `dotnet build demos/showcase/showcase.ios -r
+  iossimulator-arm64` builds the game, exports its pck into the app bundle and links the static engine; Godot's view
+  controller owns the loop, so the host drives the white cubes and runs the API smoke from `GodotHost.Started`. Needs the ios workload and, in `packages/`, the `2dog.ios`
+  and `2dog.ios*-arm64` packages (`uv run poe build-ios`, `uv run poe build-maui`); see
+  [2dog.ios](../../twodog.ios/README.md). `uv run poe build-ios-app --app showcase` wraps the build and inspection.
+- `showcase.maui/` - Windows, Android and (on a Mac) iOS MAUI embedding demo with pause, time scale, and presentation
+  mode in an overlay. Install `maui-windows` and `maui-android` (`maui-ios` on a Mac), then run
   `dotnet run --project demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0`, or publish
   `dotnet publish demos/showcase/showcase.maui -f net10.0-android -r android-arm64`.
   Pack `2dog.maui` first with `uv run poe build-maui`. Android also needs its native packages and the NDK as below.

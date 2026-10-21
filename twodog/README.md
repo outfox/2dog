@@ -65,7 +65,7 @@ Run it again to add more hosts; existing ones are left alone. The
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--qt [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; only `--generic` and `--web` are in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--qt [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]`, `--ios [folder]` | Add a host, optionally in a named folder (repeatable; only `--generic` and `--web` are in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`, before any hosts exist) |

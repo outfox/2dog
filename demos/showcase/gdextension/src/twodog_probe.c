@@ -23,7 +23,12 @@
 #elif defined(_WIN32)
 #define PROBE_PLATFORM "windows"
 #elif defined(__APPLE__)
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#define PROBE_PLATFORM "ios"
+#else
 #define PROBE_PLATFORM "macos"
+#endif
 #elif defined(__ANDROID__)
 #define PROBE_PLATFORM "android"
 #else

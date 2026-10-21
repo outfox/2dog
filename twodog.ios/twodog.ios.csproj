@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Experimental iOS host glue: wraps the view controller of a statically linked libgodot (platform/ios/
+         libgodot_ios.mm) for .NET for iOS apps and ships the build targets that link the archive, bundle the game
+         pack and root the trimmer. Needs the ios workload to build; packed with the MAUI integration. -->
+    <PropertyGroup>
+        <TargetFramework>net10.0-ios</TargetFramework>
+        <SupportedOSPlatformVersion>15.0</SupportedOSPlatformVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <IsTrimmable>true</IsTrimmable>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <AssemblyName>twodog.ios</AssemblyName>
+        <RootNamespace>twodog.Ios</RootNamespace>
+    </PropertyGroup>
+
+    <!-- NuGet Package Metadata -->
+    <PropertyGroup>
+        <PackageId>2dog.ios</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <!-- One package works with either engine precision; the host selects its engine and natives explicitly. -->
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
+        <Description>Experimental iOS host for 2dog: Godot's view controller inside a .NET for iOS app, with the build targets that link the statically linked engine and bundle the game pack. Requires 2dog.engine and an iOS runtime meta package.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>true</IsPackable>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageTags>godot;2dog;ios;game-engine</PackageTags>
+    </PropertyGroup>
+
+    <!-- PrivateAssets=all: hosts reference 2dog.engine themselves (like 2dog.maui), so the engine's build targets
+         and native packages are not pulled in twice. -->
+    <ItemGroup>
+        <ProjectReference Include="../twodog.engine/twodog.engine.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="build/2dog.ios.targets" Pack="true" PackagePath="build/"/>
+        <None Include="buildTransitive/2dog.ios.targets" Pack="true" PackagePath="buildTransitive/"/>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
+</Project>

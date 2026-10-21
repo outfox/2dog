@@ -30,7 +30,13 @@ dotnet build MyGame.maui -f net10.0-android -r android-x64
 ```
 
 Build the host project directly; MAUI projects are excluded from ordinary
-solution builds. iOS and Mac Catalyst are unsupported.
+solution builds.
+
+On a Mac, the host also targets `net10.0-ios` (experimental): install
+`maui-ios`, then build for the Simulator or a device as the
+[iOS host](/hosts/ios) does. The app delegate registers the game's plugins
+initializer with `IosHost.Register` before the page creates the view. Mac
+Catalyst is unsupported.
 
 ## Customize It
 
@@ -65,13 +71,14 @@ for pause and time-scale controls.
 ## Rendering and Lifecycle
 
 Windows uses GPU texture sharing with CPU readback as a fallback. Android
-renders to Godot's native GPU surface. See [view properties](/configuration/maui#view-properties)
+renders to Godot's native GPU surface, and iOS hosts Godot's own view
+controller as a child of the page. See [view properties](/configuration/maui#view-properties)
 to choose the Windows presentation mode.
 
 One Godot view can be active per process. Unloading it stops the engine on
-Windows. On Android, detaching keeps the engine alive for reattachment;
-destroying the Activity stops it. Restarting Godot in that Android process
-is unsupported.
+Windows. On Android and iOS, detaching keeps the engine alive for
+reattachment; destroying the Activity stops it on Android. Restarting Godot
+in that process is unsupported on both.
 
 Windows supports mouse, touch and basic keyboard input; IME composition and
 captured mouse input are unimplemented. Android uses Godot's native input;

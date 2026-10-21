@@ -1,0 +1,12 @@
+<Project>
+    <PropertyGroup>
+        <_TwoDogIosTargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogIosTargetsDir>
+        <_TwoDogIosPackageVersion>$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogIosTargetsDir)'))))</_TwoDogIosPackageVersion>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
+    </PropertyGroup>
+    <ItemGroup>
+        <TwoDogIosNative Include="ios-arm64" PackageVersion="$(_TwoDogIosPackageVersion)"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildThisFileDirectory)2dog.ios-native-resolver.targets"
+            Condition="'$(_TwoDogIosNativeResolverImported)' != 'true'"/>
+</Project>

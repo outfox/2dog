@@ -56,8 +56,11 @@ sequence = [
 ]
 
 [tool.poe.tasks.build-maui]
-help = "Pack the Windows/Android MAUI integration (requires maui-windows and maui-android workloads on Windows)"
-cmd = "uv run scripts/dotnet_build.py pack twodog.maui"
+help = "Pack the Windows/Android/iOS MAUI integration and the iOS host glue (requires maui-windows, maui-android, maui-ios and ios workloads on Windows)"
+sequence = [
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.ios" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.maui" },
+]
 
 [tool.poe.tasks.build-godot-local]
 help = "Fast incremental libgodot build for the host platform only (skips editor executable and mono glue; needs one prior full build-godot)"
@@ -101,6 +104,29 @@ sequence = [
     { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android-x64/twodog.android-x64.csproj" },
     { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android/twodog.android.csproj" },
 ]
+
+[tool.poe.tasks.build-ios]
+help = "Experimental iOS device and Simulator archives (requires macOS with Xcode and desktop Mono glue)"
+sequence = [
+    { cmd = "uv run build-godot.py --platform ios" },
+    { cmd = "uv run build-godot.py --platform ios --simulator" },
+    { ref = "pack-ios" },
+]
+
+[tool.poe.tasks.pack-ios]
+help = "Pack experimental iOS runtime packages (the 2dog.ios host glue packs with build-maui, which needs the ios workload)"
+sequence = [
+    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.ios-arm64/twodog.ios-arm64.csproj" },
+    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.csproj" },
+]
+
+[tool.poe.tasks.test-ios-build]
+help = "iOS build, package and script tests (no Mac, device or workload required)"
+cmd = "uv run python -m unittest discover -s tests/ios -p 'test_*.py'"
+
+[tool.poe.tasks.build-ios-app]
+help = "Build and inspect the iOS smoke (or --app showcase) app bundle from local packages; macOS with Xcode only"
+cmd = "uv run scripts/build_ios_app.py"
 
 [tool.poe.tasks.test-android-build]
 help = "Android build and package tests (no device/workload required)"

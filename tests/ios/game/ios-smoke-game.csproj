@@ -1,0 +1,13 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <IsTrimmable>false</IsTrimmable>
+        <IsPackable>false</IsPackable>
+        <!-- 2dog.godotsharp generates TwoDogWebBoot (the iOS host's plugins initializer) only with unsafe code -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="2dog.godotsharp$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
+    </ItemGroup>
+</Project>
