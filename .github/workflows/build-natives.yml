@@ -139,8 +139,11 @@ jobs:
           restore-keys: |
             godotsharp-linux-${{ inputs.precision }}-
 
-      - name: Test native WebGPU configuration
-        run: uv run python -m unittest discover -s godot/drivers/webgpu/tests -p 'test_native*.py' -v
+      - name: Test WebGPU build configuration and browser startup
+        if: inputs.precision == 'single'
+        run: |
+          uv run python -m unittest discover -s godot/drivers/webgpu/tests -p 'test_*.py' -v
+          node --test godot/drivers/webgpu/tests/engine_boot.test.mjs
 
       - name: Build editor + GodotSharp assemblies
         run: |
@@ -395,8 +398,15 @@ jobs:
             --scu-build yes \
             --cache-path godot/.scons_cache ${{ matrix.build_args }}
 
-      # Upload the library under its original Godot file name; the release job
-      # zips each artifact directory as-is.
+      - name: Test the real WebGPU shader compiler
+        if: matrix.platform == 'web' && matrix.target == 'template_debug' && inputs.precision == 'single' && matrix.flavor != '-threads'
+        run: |
+          uv run --no-project python godot/drivers/webgpu/tests/run_port_regressions.py \
+            --emscripten "$EMSDK/upstream/emscripten" \
+            --archive godot/bin/web/template_debug/libgodot/libgodot.a \
+            --output "$RUNNER_TEMP/webgpu-compiler-tests"
+
+      # Upload the library under its original Godot file name; the release job zips it as-is.
       - name: Upload artifact
         if: matrix.platform != 'web' && matrix.platform != 'android'
         uses: actions/upload-artifact@v7

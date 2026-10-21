@@ -13,6 +13,12 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   configuration/precision pair; Windows and macOS cover each configuration and each precision at least once.
   Configuration-independent suites (CLI tool tests, MTP contracts) run in the Debug jobs, REPL coverage in
   Windows Debug single. Add new suites the same way rather than to every cell.
+- Desktop publish and editor lifecycle checks use the normal renderer settings. `webgpu-desktop` alone
+  runs the native WebGPU pixels, restart and shader-contract checks, once per supported OS in single precision.
+  Keep it in both tested-content/revision-bump family lists and the deployment gate.
+- The native build runs the real C++ shader compiler regressions once, against the single-precision,
+  non-threaded Web debug archive. Source-level WebGPU checks run where the submodule source is checked out.
+  Precision-independent package and browser-script checks run once rather than in every precision/AOT cell.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
   tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and
@@ -45,3 +51,4 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 ## Checking runs
 
 - A green run can hide skipped jobs: confirm that the test jobs ran, e.g. with `gh run view <run-id>`.
+- Read every page of jobs when reusing a run; native build matrices can fill the first 100 results.

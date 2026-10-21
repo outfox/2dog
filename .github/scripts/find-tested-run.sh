@@ -30,7 +30,7 @@ mapfile -t runs < <(gh api "$api/actions/workflows/ci.yml/runs?status=success&pe
 # A green run can hide skipped jobs: every family must have run, and every job in them passed.
 verified() {
   local verdict
-  verdict=$(gh api "$api/actions/runs/$1/jobs?per_page=100" --jq "$families as \$families | [.jobs[] | . as \$job
+  verdict=$(gh api --paginate --slurp "$api/actions/runs/$1/jobs?per_page=100" --jq "$families as \$families | [.[].jobs[] | . as \$job
       | (\$families | map(. as \$f | select(\$job.name == \$f or (\$job.name | startswith(\$f + \" \")))) | first) as \$family
       | select(\$family != null) | {family: \$family, conclusion}] as \$gated
     | (\$gated | all(.conclusion == \"success\")) and ((\$gated | map(.family) | unique | length) == (\$families | length))" \
