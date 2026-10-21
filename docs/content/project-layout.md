@@ -1,13 +1,19 @@
 ---
 title: Project Layout
 description: "The recommended 2dog layout: the directory containing project.godot is the .NET solution root, with small nested host projects for desktop, browser, and tests that Godot ignores."
+tagline: "Learn how to keep your game, hosts and tests in one tidy solution."
 ---
 
 # Project Layout
 
 2dog recommends using the directory containing `project.godot` as the .NET
-solution root, with a small nested project for each host. Godot keeps its
-familiar layout while desktop, tests, and the browser get independent entry points.
+solution root, with a small nested project for each host. 
+
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their blue robot dog checking a trail map](img/2dog-trail-map.png)
+*"So this is where everything is. Easy!"*
+
+This way you keep your familiar Godot-style project layout while 2dog's hosts sit obediently in ~~their baskets~~ your solution.
+
 
 ## The Layout at a Glance
 
@@ -99,11 +105,23 @@ the layers do not consume each other's source files.
 
 ## What the Godot Editor Sees
 
-Open `MyGame/` in Godot as usual:
+Open `MyGame/` in the Godot .NET editor as usual, or from a terminal:
 
-```bash
-godot-mono --editor MyGame
+::: code-group
+
+```powershell [Windows]
+Godot_v:godot-version:-stable_mono_win64.exe --path MyGame --editor
 ```
+
+```bash [macOS]
+Godot_mono.app/Contents/MacOS/Godot --path MyGame --editor
+```
+
+```bash [Linux]
+godot-mono --path MyGame --editor
+```
+
+:::
 
 The hosts' `.gdignore` files hide them from the editor, importer, and exporter.
 

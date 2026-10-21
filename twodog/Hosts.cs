@@ -151,8 +151,11 @@ internal static class Hosts
     /// <summary>The flag that leaves this kind out of the default set: the host flag, negated.</summary>
     public static string NoFlag(HostKind kind) => "--no-" + Flag(kind)[2..];
 
-    /// <summary>Browser-side hosts: they carry TwoDogWebBoot.cs, need wasm-tools, and publish a pck.</summary>
+    /// <summary>Browser-side hosts: they need wasm-tools and publish a pck.</summary>
     public static bool IsWebLike(HostKind kind) => kind is HostKind.Web or HostKind.WebXr or HostKind.Blazor;
+
+    /// <summary>Browser kinds that follow TwoDogWebThreads; WebXR stays single-threaded.</summary>
+    public static bool SupportsWebThreads(HostKind kind) => kind is HostKind.Web or HostKind.Blazor;
 
     /// <summary>
     /// Kinds kept out of plain solution builds: the browser ones need wasm-tools, Android the android workload (a

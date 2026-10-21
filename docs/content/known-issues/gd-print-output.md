@@ -1,6 +1,7 @@
 ---
 title: GD.Print in Tests
 description: "Why GD.Print output is hidden during dotnet test, how to make it visible, and why ITestOutputHelper is the recommended pattern."
+tagline: "Missing GD.Print output in your tests? Learn how to see it again."
 ---
 
 # GD.Print Output Not Visible in Tests
@@ -23,9 +24,7 @@ dotnet run --project MyGame.xunit
 ```
 
 Your messages show up, mixed into the test-host stream with engine and fixture
-logs. VSTest's `--logger "console;verbosity=detailed"` does not apply under
-MTP; `dotnet test --output Detailed` lists every test result, not only
-failures.
+logs.
 
 ## Use ITestOutputHelper instead
 

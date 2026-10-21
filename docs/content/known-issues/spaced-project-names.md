@@ -1,15 +1,15 @@
 ---
 title: Spaced Project Names
 description: "Whitespace in the game project's .NET name makes dotnet publish silently drop its NuGet dependencies from 2dog hosts - an upstream .NET SDK bug 2dog guards against."
+tagline: "Learn why spaces in project names break publishing, and how to avoid it."
 ---
 
 # Project Names With Spaces Break Publish
 
 A .NET SDK bug makes `dotnet publish` silently drop a *referenced* project's
-transitive NuGet packages whenever that project's restore name contains
-whitespace and any reference in the publishing project carries
-`Publish=false`. Every 2dog web publish qualifies: `PublishTrimmed` brings in
-the implicit `Microsoft.NET.ILLink.Tasks` reference with `PrivateAssets="all"`.
+NuGet packages when that project's name contains a space. Every 2dog web
+publish triggers it. The name comes from `PackageId`, `AssemblyName` or the
+project file name, so all of them must be space-free.
 
 The symptom: the game's own DLL ships, but every NuGet package it references
 (a JSON library, a logging framework, ...) is missing from
@@ -25,19 +25,9 @@ generated `Fast Dragon.csproj` with a matching assembly name. Stock Godot
 never notices (its export publishes the game as the *root* project, which is
 unaffected); 2dog hosts reference the game, which is exactly the broken case.
 
-## The mechanism
-
-NuGet records each project's direct dependencies in `project.assets.json` as
-flat strings (`"Fast Dragon >= 1.0.0"`), and the SDK's publish-exclusion
-computation parses the name by cutting at the first whitespace - yielding
-`Fast`, which matches nothing. The game's whole package subtree is then
-treated as unreachable and excluded from publish. The restore name resolves as
-`PackageId` → `AssemblyName` → project file name, so all of them must be
-space-free.
-
 ## What 2dog does
 
-`2dog add`/`convert` refuses to scaffold hosts against a name containing
+`2dog add` refuses to scaffold hosts against a name containing
 whitespace and offers to fix it - interactively, or via
 `2dog add --rename NewName`. The rename
 touches the .NET identity only: the csproj file, `[dotnet]

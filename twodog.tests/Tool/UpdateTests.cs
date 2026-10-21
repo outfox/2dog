@@ -368,21 +368,6 @@ public class UpdateTests
     }
 
     [Fact]
-    public void Update_RefreshesADriftedWebBootstrap()
-    {
-        using var tmp = new TempProjectDir();
-        var dir = Path.Combine(tmp.Dir, "Game");
-        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--generic", "--web", "--no-restore").ExitCode);
-        var boot = Path.Combine(dir, "Game.web", "TwoDogWebBoot.cs");
-        File.WriteAllText(boot, "// stale\n");
-
-        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
-        Assert.Equal(0, run.ExitCode);
-        Assert.Contains("refresh Game.web/TwoDogWebBoot.cs", run.Stdout);
-        Assert.Equal(TemplateAssets.WebBootSource(), File.ReadAllText(boot));
-    }
-
-    [Fact]
     public void UpdateTo_ExplainsHowToPickAVersion()
     {
         var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["update", "--to", "1.2.3"]));
@@ -457,5 +442,35 @@ public class UpdateTests
         Assert.Equal(File.ReadAllText(csproj).Replace("Version=\"4.7.1.10\"", "Version=\"$(TwoDogVersion)\""), text);
         Assert.DoesNotContain("\r", text);
         Assert.Matches(new Regex("Serilog\"   Version"), text!);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"")]
+    public void VersionRewriter_ReadsAndMigratesVersionElements(string xmlNamespace)
+    {
+        using var tmp = new TempProjectDir();
+        var original = $"<Project{xmlNamespace}>\n  <ItemGroup>\n" +
+            "    <!-- <PackageReference Include='2dog.engine' Version='0.0.0' /> -->\n" +
+            "    <PackageReference Include='2dog.engine'>\n      <!-- <Version>0.0.0</Version> -->\n      <Version> 4.7.1.10 </Version>\n    </PackageReference>\n" +
+            "    <PackageReference Include='2dog.browser-wasm'><Version>[4.7.1.1]</Version></PackageReference>\n" +
+            "    <PackageReference Include='2dog.xunit'><Version>$(MyVersion)</Version></PackageReference>\n" +
+            "    <PackageReference Include='Serilog'><Version>4.0.0</Version></PackageReference>\n" +
+            "  </ItemGroup>\n</Project>\n";
+        var csproj = tmp.Write("x.csproj", original);
+        var references = VersionRewriter.References(original);
+        Assert.Equal(4, references.Count);
+        Assert.Equal("4.7.1.10", references[0].RawVersion);
+        Assert.True(references[1].IsPinned);
+        Assert.Equal(2, VersionRewriter.Literals(original).Count);
+
+        var (text, changes) = VersionRewriter.Migrate(csproj);
+
+        Assert.Equal(2, changes.Count);
+        Assert.Equal(original.Replace("4.7.1.10", "$(TwoDogVersion)")
+            .Replace("[4.7.1.1]", "[$(TwoDogNativesVersion)]"), text);
+        Assert.NotNull(text);
+        File.WriteAllText(csproj, text);
+        Assert.Null(VersionRewriter.Migrate(csproj).NewText);
     }
 }

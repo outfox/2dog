@@ -1,12 +1,14 @@
 ---
 title: WebXR
 description: "Run Godot VR and AR in the browser with WebXR and the WebXR Layers polyfill."
+tagline: "Learn how to bring Godot VR and AR to the browser."
 ---
 
 # WebXR
 
 The WebXR host is a `browser-wasm` host with Godot's WebXR capabilities enabled
-and the WebXR Layers polyfill included.
+and the WebXR Layers polyfill included. It is single-threaded: `--web-threads`
+applies only to Web and Blazor hosts.
 
 See [WebXR Configuration](/configuration/webxr) for build and publish settings.
 
@@ -23,7 +25,7 @@ dotnet publish MyGame.webxr
 Serve the site:
 
 ```bash
-dnx dotnet-serve -d MyGame.webxr/AppBundle
+dnx dotnet-serve -- -d MyGame.webxr/AppBundle
 ```
 
 ## Set Up Your Scene

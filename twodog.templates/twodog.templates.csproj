@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <PackageId>2dog.templates</PackageId>
+        <PackageType>Template</PackageType>
+        <Version>$(TwoDogVersion)</Version>
+        <Description>Project templates for 2dog, which runs Godot as a library from .NET. Install with dotnet new install 2dog.templates, then create a project with dotnet new 2dog -n MyGame. For interactive scaffolding and adding hosts to existing projects, use the separate 2dog tool.</Description>
+        <PackageTags>dotnet-new;templates;godot;2dog;game-engine</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IsPackable>true</IsPackable>
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <!-- Template content does not need contentFiles metadata. -->
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+        <!-- Include .template.config, .gdignore and the editor configuration files. -->
+        <NoDefaultExcludes>true</NoDefaultExcludes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="../templates/README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
+
+    <!-- The dotnet-new template content. template.json is replaced by a versioned copy staged into obj/
+         (StageVersionedTemplateJson), so the committed file keeps its placeholders. -->
+    <ItemGroup>
+        <Content Include="../templates/twodog/**/*" Exclude="../templates/twodog/**/bin/**;../templates/twodog/**/obj/**;../templates/twodog/**/TestResults/**;../templates/twodog/.template.config/template.json"
+                 Pack="true" PackagePath="content/twodog/" CopyToOutputDirectory="Never"/>
+    </ItemGroup>
+
+    <!-- Pack a copy of template.json with real versions substituted; the committed file keeps its 0.0.0-*tpl
+         placeholders. SetTemplateDefaults lives in the repo-root Directory.Build.targets. -->
+    <Target Name="StageVersionedTemplateJson" BeforeTargets="_GetPackageFiles;GenerateNuspec">
+        <Copy SourceFiles="../templates/twodog/.template.config/template.json"
+              DestinationFiles="$(IntermediateOutputPath)template.json"/>
+        <SetTemplateDefaults FilePath="$(IntermediateOutputPath)template.json"
+                             TwoDogVer="$(TwoDogVersion)"
+                             NativesVer="$(NativesVersion)"
+                             GodotVer="$(GodotVersion)"
+                             AvaloniaVer="$(AvaloniaVersion)" MauiVer="$(MauiVersion)"
+                             WinAppSdkVer="$(WindowsAppSdkVersion)"
+                             AspNetCoreVer="$(AspNetCoreVersion)" />
+        <ItemGroup>
+            <None Include="$(IntermediateOutputPath)template.json" Pack="true"
+                  PackagePath="content/twodog/.template.config/template.json"/>
+        </ItemGroup>
+    </Target>
+
+</Project>

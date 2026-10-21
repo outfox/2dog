@@ -1,6 +1,5 @@
 using Godot;
 using showcase;
-using showcase.web;
 using Engine = twodog.Engine;
 using Environment = System.Environment;
 using Thread = System.Threading.Thread;

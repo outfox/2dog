@@ -1,6 +1,7 @@
 ---
 title: xUnit Configuration
 description: "MSBuild configuration for xUnit hosts: engine variants, resource import, and Editor API references."
+tagline: "Learn how to configure xUnit hosts, resource import and Editor APIs."
 ---
 
 # xUnit Configuration
@@ -40,32 +41,17 @@ these properties:
 </PropertyGroup>
 ```
 
-On .NET 10, `dotnet test` runs every project of a run on the runner that
-`global.json` selects. The root `global.json` that 2dog creates with a test
-host selects MTP, so `dotnet test` from the project root runs the xUnit,
-NUnit and GdUnit hosts together. 2dog never edits an existing `global.json`;
-add this alongside your SDK settings:
-
-```json
-"test": {
-  "runner": "Microsoft.Testing.Platform"
-}
-```
+Run it from the project root; see [Test runners](/testing/#test-runners) for
+the `global.json` that selects MTP.
 
 ```bash
 dotnet test MyGame.xunit
 dotnet test --project MyGame.xunit --coverage --coverage-output-format cobertura
 ```
 
-Coverage uses MTP's `--coverage` option from
-`Microsoft.Testing.Extensions.CodeCoverage`; VSTest's
-`--collect "XPlat Code Coverage"` does not apply. Reports go to `TestResults/`.
-
-Hosts scaffolded before 2dog used MTP run on VSTest, and
-[`2dog doctor`](/cli/doctor) flags them with `layout.test-runner`. To migrate
-one, add the properties above, replace `xunit.v3` with `xunit.v3.mtp-v2` and
-`coverlet.collector` with `Microsoft.Testing.Extensions.CodeCoverage`, and
-remove `xunit.runner.visualstudio` and `Microsoft.NET.Test.Sdk`.
+Coverage reports go to `TestResults/`. To move an older VSTest host, add the
+properties above and replace `xunit.v3` with `xunit.v3.mtp-v2`; Microsoft's
+[migration guide](https://learn.microsoft.com/dotnet/core/testing/migrating-vstest-microsoft-testing-platform) covers the rest.
 
 2dog delegates discovery, filters, result reporting and cancellation to
 xUnit. Its entry point preserves the Godot owner thread, including the

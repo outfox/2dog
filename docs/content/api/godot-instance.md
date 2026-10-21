@@ -1,6 +1,7 @@
 ---
 title: Godot.GodotInstance
 description: "API reference for Godot.GodotInstance, the borrowed compatibility handle returned by Engine.Start()."
+tagline: "Learn what Engine.Start() hands you, and how to use it safely."
 ---
 
 # `Godot.GodotInstance`

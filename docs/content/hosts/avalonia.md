@@ -1,6 +1,7 @@
 ---
 title: Avalonia
 description: "Embed Godot in a cross-platform Avalonia window with controls over the game."
+tagline: "Learn how to embed Godot in an Avalonia app, with your UI right on top."
 ---
 
 # Avalonia
@@ -8,6 +9,9 @@ description: "Embed Godot in a cross-platform Avalonia window with controls over
 The Avalonia host displays Godot inside a cross-platform desktop window using
 `2dog.avalonia`. Avalonia controls can overlap the game, including translucent
 controls.
+
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
+*(get cozy and embed Godot in a real UI framework)*
 
 ## Use It
 
@@ -29,12 +33,14 @@ for a pause button, time-scale slider, and FPS display.
 
 ## Publish It
 
-Publish like the [generic host](./generic#publishing), with or without
-[Native AOT](./generic#native-aot).
-See [Avalonia Configuration](/configuration/avalonia) for build and publish settings.
+```bash
+dotnet publish MyGame.avalonia -c Release
+```
+
+See [Avalonia Configuration](/configuration/avalonia) for Native AOT and other
+publish settings.
 
 ## Requirements
 
 - Avalonia 12.1 or later on Windows, Linux, or macOS.
-- Keep the generated Windows app manifest for correct DPI scaling.
 - IME composition and captured mouse input are not supported yet.

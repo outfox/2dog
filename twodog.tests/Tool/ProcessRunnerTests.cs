@@ -59,7 +59,10 @@ public class ProcessRunnerTests
     [Fact]
     public void Run_TimesOut_AndKillsTheChild()
     {
-        var request = ProcessRunner.Dotnet(Path.GetTempPath(), null, TimeSpan.FromMilliseconds(1), "--info");
+        // dotnet --info can finish before the timeout callback runs on a busy runner.
+        var request = OperatingSystem.IsWindows()
+            ? new ProcessRequest("ping", ["-n", "30", "127.0.0.1"], Path.GetTempPath(), TimeSpan.FromMilliseconds(200))
+            : new ProcessRequest("sleep", ["30"], Path.GetTempPath(), TimeSpan.FromMilliseconds(200));
         var result = ProcessRunner.Default.Run(request, TestContext.Current.CancellationToken);
         Assert.True(result.TimedOut);
         Assert.False(result.Ok);
@@ -72,6 +75,38 @@ public class ProcessRunnerTests
         using var cts = new CancellationTokenSource();
         cts.Cancel();
         Assert.Throws<OperationCanceledException>(() => ProcessRunner.Default.Run(Dotnet("--info"), cts.Token));
+    }
+
+    [Fact]
+    public void Run_TimesOutWhenADescendantKeepsTheExitedParentsOutputOpen()
+    {
+        var request = OperatingSystem.IsWindows()
+            ? new ProcessRequest("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command",
+                "$start = New-Object System.Diagnostics.ProcessStartInfo; $start.FileName = 'ping.exe'; " +
+                "$start.Arguments = '-n 30 127.0.0.1'; $start.UseShellExecute = $false; $start.CreateNoWindow = $true; " +
+                "$child = [System.Diagnostics.Process]::Start($start); Write-Output ('child:' + $child.Id)"],
+                Path.GetTempPath(), TimeSpan.FromSeconds(3))
+            : new ProcessRequest("sh", ["-c", "sleep 30 & echo child:$!"], Path.GetTempPath(), TimeSpan.FromSeconds(3));
+        var result = ProcessRunner.Default.Run(request, TestContext.Current.CancellationToken);
+        try
+        {
+            Assert.True(result.TimedOut);
+            Assert.False(result.Ok);
+            Assert.True(result.Elapsed < TimeSpan.FromSeconds(10), $"output drain exceeded the deadline: {result.Elapsed}");
+        }
+        finally
+        {
+            foreach (var line in result.Output.Where(line => line.StartsWith("child:", StringComparison.Ordinal)))
+            {
+                try
+                {
+                    using var child = System.Diagnostics.Process.GetProcessById(int.Parse(line[6..]));
+                    child.Kill(entireProcessTree: true);
+                }
+                catch (ArgumentException) { /* already exited */ }
+            }
+        }
+        Assert.Contains(result.Output, line => line.StartsWith("child:", StringComparison.Ordinal));
     }
 
     // Ctrl+C mid-run kills the child and surfaces as cancellation, never as a timed-out or failed result.

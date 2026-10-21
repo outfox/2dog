@@ -292,6 +292,7 @@ jobs:
           dotnet pack twodog.gdunit
           dotnet pack twodog.repl
           dotnet pack twodog
+          dotnet pack twodog.templates
 
       - name: Test managed binding packages
         run: uv run tests/bindings/test_packages.py --precision ${{ matrix.precision }}
@@ -768,6 +769,46 @@ jobs:
             dotnet run --project tests/webgpu-smoke -c Release
           fi
 
+      - name: Verify WebGPU capability rejections
+        shell: bash
+        run: |
+          # Rejection happens before creating a display or GPU device.
+          METHOD=forward_plus
+          REASON='WebGPU currently supports only the Mobile rendering method'
+          if [ '${{ matrix.precision }}' = double ]; then
+            METHOD=mobile
+            REASON='WebGPU is unavailable in double-precision runtimes'
+          fi
+          if dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only > webgpu-rejection.log 2>&1; then
+            cat webgpu-rejection.log
+            echo 'Unsupported WebGPU startup unexpectedly succeeded'
+            exit 1
+          fi
+          cat webgpu-rejection.log
+          grep -q "$REASON" webgpu-rejection.log
+          if [ '${{ matrix.precision }}' = double ]; then
+            if dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --startup-only --project-settings > webgpu-project-rejection.log 2>&1; then
+              cat webgpu-project-rejection.log
+              exit 1
+            fi
+            cat webgpu-project-rejection.log
+            grep -q "$REASON" webgpu-project-rejection.log
+          fi
+          dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only --headless --project-settings > webgpu-headless.log 2>&1
+          cat webgpu-headless.log
+          grep -q NATIVE_RENDERER_STARTUP_PASSED webgpu-headless.log
+          if grep -Eq '^ERROR:|^WARNING:' webgpu-headless.log; then exit 1; fi
+
+      - name: Reject unsupported WebGPU shader contracts
+        if: matrix.precision == 'single'
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --contract-rejections
+          else
+            dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --contract-rejections
+          fi
+
       - name: Check C# editor hot-reload lifecycle
         shell: bash
         run: |
@@ -1112,7 +1153,7 @@ jobs:
           package-manager-cache: false
 
       - name: Install wasm-tools workload
-        run: dotnet workload install wasm-tools
+        run: dotnet workload install wasm-tools --skip-manifest-update --source https://api.nuget.org/v3/index.json
 
       - name: Verify MSBuild configuration defaults
         env:
@@ -1373,7 +1414,7 @@ jobs:
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
         env:
           GODOT_WEB_JS_LIB_DIR: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/template_release/libgodot/js_library
-        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
+        run: node --test godot/drivers/webgpu/tests/engine_boot.test.mjs .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
 
       - name: Test managed exception reporting in browser-wasm
         run: |
@@ -1603,7 +1644,7 @@ jobs:
           python-version: '3.12'
           enable-cache: false
       - name: Install MAUI workloads
-        run: dotnet workload install maui-windows maui-android
+        run: dotnet workload install maui-windows maui-android --skip-manifest-update --source https://api.nuget.org/v3/index.json
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -1875,7 +1916,7 @@ jobs:
       - name: Verify packages match tag
         run: |
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.repl" "2dog.gdunit" "2dog.maui"; do
+          for pkg in "2dog" "2dog.templates" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.repl" "2dog.gdunit" "2dog.maui"; do
             if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
               echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
               echo "Artifact contents:"

@@ -1,6 +1,7 @@
 ---
 title: REPL Configuration
 description: "Configure REPL native variants, headless runs, local connections and publishing."
+tagline: "Learn how to configure the C# REPL for headless runs and publishing."
 ---
 
 # REPL Configuration
@@ -9,11 +10,8 @@ description: "Configure REPL native variants, headless runs, local connections a
 `2dog.engine.double` for double precision; submissions use the host's loaded
 bindings. The [shared engine properties](/configuration#properties) apply.
 
-| Configuration | Native variant |
-| --- | --- |
-| Debug (default) | `debug` |
-| Editor | `editor` |
-| Release | `release` |
+Debug (the default), Editor and Release select the matching
+[native variant](/build-configurations).
 
 ```bash
 dotnet run --project MyGame.repl -c Editor
@@ -35,10 +33,10 @@ dotnet run --project MyGame.repl -- --repl-listen mygame
 2dog repl --pipe mygame
 ```
 
-| Host option | Behavior |
-| --- | --- |
-| `--repl-listen NAME` | Accept sessions over a local named pipe; keep running after stdin ends. |
-| `--repl-connect NAME` | Connect to that host without starting another engine. |
+| Host option           | Behavior                                                                |
+|-----------------------|-------------------------------------------------------------------------|
+| `--repl-listen NAME`  | Accept sessions over a local named pipe; keep running after stdin ends. |
+| `--repl-connect NAME` | Connect to that host without starting another engine.                   |
 
 The options are mutually exclusive. `--repl-connect` accepts no Godot
 arguments and times out after five seconds. Custom hosts use the

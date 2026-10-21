@@ -1,6 +1,7 @@
 ---
 title: FAQ
 description: "Frequently asked questions about 2dog: how it differs from godot-dotnet, GodotSharp compatibility, separate tool and engine packages, and browser frame rate caps."
+tagline: "Curious about 2dog? Find quick answers to the most common questions."
 ---
 
 # FAQ
@@ -51,10 +52,10 @@ No. 2dog embeds GodotSharp and Godot's C# source generators. `GD`, `Node`,
 
 ## Why is the library a separate package (`2dog.engine`) instead of part of `2dog`?
 
-NuGet packages marked as dotnet tools cannot also be consumed through a
-`PackageReference`; doing so fails with `NU1213`. Therefore `2dog.engine` is the
-library, while `2dog` contains the self-contained tool and template. They are
-released together, and both scaffolding routes produce the same output. See
+A dotnet tool package cannot also be a `PackageReference`
+([`NU1213`](https://learn.microsoft.com/nuget/reference/errors-and-warnings/nu1213)). Therefore `2dog.engine` is the
+library, `2dog` is the tool, and `2dog.templates` provides the `dotnet new`
+template. They are released together, and both scaffolding routes produce the same output. See
 [`2dog add`](/cli/add).
 
 ## Why does the browser build never exceed my display's refresh rate?
@@ -67,12 +68,11 @@ the screen.
 
 To measure uncapped performance, lift the browser's own limit:
 
-| Browser | Setting | Notes |
-| --- | --- | --- |
-| Chrome | Start with `--disable-frame-rate-limit --disable-gpu-vsync` | Close every Chrome window first, or pass a separate `--user-data-dir` |
-| Edge | The same flags on `msedge` | Chromium-based, same caveats as Chrome |
-| Firefox | Set `layout.frame_rate` to `0` in `about:config` | `-1` (default) follows vsync, `0` renders as fast as possible, any other value is a fixed rate |
-| Safari | Turn off Develop > Feature Flags > "Prefer Page Rendering Updates near 60fps", then restart | Raises the 60 fps cap to the display rate, such as 120 Hz on ProMotion screens; there is no uncapped mode |
+| Browser      | Setting                                                                                     | Notes                                                                                                     |
+|--------------|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| Chrome, Edge | Start with `--disable-frame-rate-limit --disable-gpu-vsync`                                 | Close every browser window first, or pass a separate `--user-data-dir`                                    |
+| Firefox      | Set `layout.frame_rate` to `0` in `about:config`                                            | `-1` (default) follows vsync, `0` renders as fast as possible, any other value is a fixed rate            |
+| Safari       | Turn off Develop > Feature Flags > "Prefer Page Rendering Updates near 60fps", then restart | Raises the 60 fps cap to the display rate, such as 120 Hz on ProMotion screens; there is no uncapped mode |
 
 ```bash
 chrome --disable-frame-rate-limit --disable-gpu-vsync --user-data-dir=/tmp/2dog-bench http://localhost:8080

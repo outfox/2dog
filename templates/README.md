@@ -22,7 +22,6 @@ importer, and exporter skip them:
 - **Android host** (`<Name>.android/`) - Experimental APK host (opt-in via `--android true`; building requires the Android workload, SDK and JDK 17)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
-- **`<Name>.web/TwoDogWebBoot.cs`** - Web bootstrap compiled into the game assembly (`TWODOG_WEB_BOOT`-guarded `Compile Include` in the game csproj)
 - **.editorconfig** - Standard .NET coding conventions
 - **.gitignore** - Ignores for .NET and Godot artifacts
 
@@ -32,9 +31,9 @@ importer, and exporter skip them:
 
 ```bash
 # From the repository root
-dotnet pack twodog
+dotnet pack twodog.templates
 # Replace <TwoDogVersion> with the version printed by pack:
-dotnet new install packages/2dog.<TwoDogVersion>.nupkg
+dotnet new install packages/2dog.templates.<TwoDogVersion>.nupkg
 ```
 
 Packing substitutes the source template's version placeholders. Installing the
@@ -68,7 +67,7 @@ dotnet new 2dog -n MyGame --winforms true
 ### Uninstalling the Template
 
 ```bash
-dotnet new uninstall 2dog
+dotnet new uninstall 2dog.templates
 ```
 
 ## Template Structure
@@ -98,14 +97,12 @@ templates/
     │   ├── .gdignore
     │   ├── Company.Product1.web.csproj
     │   ├── Program.cs
-    │   ├── TwoDogWebBoot.cs       # Web bootstrap (compiled into the game assembly)
     │   ├── global.json            # Same SDK pin as the root, for runs started in here
     │   └── wwwroot/index.html
     ├── Company.Product1.webxr/    # WebXR browser host (opt-in; --webxr true to include)
     │   ├── .gdignore
     │   ├── Company.Product1.webxr.csproj
     │   ├── Program.cs
-    │   ├── TwoDogWebBoot.cs
     │   ├── global.json
     │   └── wwwroot/               # index.html + vendored webxr-layers-polyfill.min.js
     ├── Company.Product1.blazor/   # Blazor Web App host (opt-in; --blazor true to include)
@@ -114,7 +111,6 @@ templates/
     │   ├── Program.cs
     │   ├── Components/            # App.razor, Routes.razor, Error page
     │   ├── wwwroot/               # app.css, favicon
-    │   ├── TwoDogWebBoot.cs
     │   ├── global.json
     │   └── Client/                # Blazor WebAssembly client (links Godot, hosts GodotView)
     │       ├── Company.Product1.blazor.Client.csproj
@@ -167,18 +163,21 @@ The template uses `Company.Product1` as the source name, which gets replaced wit
 
 ## Packaging
 
-The template content in `twodog/` is the single source of truth and ships two ways, both inside the `2dog` tool+template package (`<PackageType>DotnetTool;Template</PackageType>`, packed from `twodog/twodog.csproj`):
+The template content in `twodog/` is the single source of truth and ships two ways:
 
-- Bundled as `dotnet new` template content under `content/twodog/`, so `dotnet new install 2dog` registers the template.
-- Embedded as resources into the `2dog` tool assembly, which scaffolds the same content via `2dog new` and `2dog add` (alias `2dog convert`). The tool substitutes the rename tokens itself, including the host folder token (`Company.Product1.2dog` and friends), so hosts can live in freely named folders.
+- Bundled in `2dog.templates` (packed from `twodog.templates/twodog.templates.csproj`) as `dotnet new` template content under `content/twodog/`, so `dotnet new install 2dog.templates` registers the template.
+- Embedded as resources into the `2dog` tool assembly, which scaffolds the same content via `2dog new` and `2dog add`. The tool substitutes the rename tokens itself, including the host folder token (`Company.Product1.2dog` and friends), so hosts can live in freely named folders.
 
 When packing, the version placeholders in `template.json` are substituted automatically.
 
 ### Installing from NuGet
 
 ```bash
-dotnet new install 2dog
+dotnet new install 2dog.templates
 ```
+
+If you previously installed the template from `2dog`, run `dotnet new uninstall 2dog`
+before installing `2dog.templates`. This leaves the `2dog` tool installed.
 
 ## Known Limitations
 
@@ -246,8 +245,8 @@ The template is defined in `.template.config/template.json`:
 
 After modifying the template:
 
-1. **Pack and reinstall:** run `dotnet pack twodog`, then install the resulting
-   `packages/2dog.<TwoDogVersion>.nupkg` with `dotnet new install --force`.
+1. **Pack and reinstall:** run `dotnet pack twodog.templates`, then install the resulting
+   `packages/2dog.templates.<TwoDogVersion>.nupkg` with `dotnet new install --force`.
 
 2. **Test project creation:**
    ```bash

@@ -152,6 +152,13 @@ if (editorPath != null)
             process.StartInfo.ArgumentList.Add(a);
     }
     if (verbose) process.StartInfo.ArgumentList.Add("--verbose");
+    // 2dog's editor skips dotnet publish and copies GDExtensions beside the pck only for marked host exports;
+    // libgodot_export_pack adds the same marker in-process.
+    if (exportPreset != null)
+    {
+        process.StartInfo.ArgumentList.Add("++");
+        process.StartInfo.ArgumentList.Add("--2dog-host-pack");
+    }
 
     process.Start();
     process.WaitForExit();

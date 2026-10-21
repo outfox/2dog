@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Logo"
+   width="768"
+   height="768"
+   viewBox="0 0 768 768"
+   version="1.1"
+   sodipodi:docname="WebGPU_logo.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.58050889"
+     inkscape:cx="-4.3065663"
+     inkscape:cy="28.423337"
+     inkscape:window-width="3840"
+     inkscape:window-height="1511"
+     inkscape:window-x="-9"
+     inkscape:window-y="792"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Logo" />
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+     .cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+        fill-rule: evenodd;
+        stroke-linejoin: round;
+      }
+
+      .cls-6 {
+        fill-rule: evenodd;
+      }
+
+      .cls-1 {
+        fill: #005a9c;
+        stroke: #005a9c;
+      }
+
+      .cls-2 {
+        fill: #0066b0;
+        stroke: #0066b0;
+      }
+
+      .cls-3 {
+        fill: #0076cc;
+        stroke: #0076cc;
+      }
+
+      .cls-4 {
+        fill: #0086e8;
+        stroke: #0086e8;
+      }
+
+      .cls-5 {
+        fill: #0093ff;
+        stroke: #0093ff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .cls-6 {
+          fill: #eeeeee;
+        }
+      }
+    </style>
+  </defs>
+  <path
+     id="Triangle_4"
+     data-name="Triangle 4"
+     class="cls-4"
+     d="m 642.13364,419.52911 -60.189,-104.25 h 120.55 z" />
+  <path
+     id="Triangle_5"
+     data-name="Triangle 5"
+     class="cls-5"
+     d="m 642.13364,211.03011 -60.189,104.25 h 120.55 z" />
+  <path
+     id="Triangle_3"
+     data-name="Triangle 3"
+     class="cls-3"
+     d="m 521.76364,628.02911 -120.38,-208.5 240.76,-0.002 z" />
+  <path
+     id="Triangle_2"
+     data-name="Triangle 2"
+     class="cls-2"
+     d="m 521.76364,211.02911 -120.38,208.5 240.76,-0.002 z" />
+  <path
+     id="Triangle_1"
+     data-name="Triangle 1"
+     class="cls-1"
+     d="m 281.00364,628.02911 -240.760002,-417 H 521.75364 Z" />
+</svg>

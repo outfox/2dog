@@ -233,7 +233,7 @@
             BeforeTargets="Publish"
             AfterTargets="Build"
             DependsOnTargets="TwoDogPrepareExport;TwoDogWebExportSideModuleImports"
-            Inputs="@(TwoDogWebExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogWebExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(_TwoDogWebPackPath)"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
@@ -247,7 +247,7 @@
 
         <!-- Actionable message instead of the engine's exit-1 (whose stderr an IDE build may swallow) -->
         <Error Condition="'$(_TwoDogHasWebPreset)' != 'true'"
-               Text="TwoDog: web publish exports the game pck via the '$(TwoDogWebExportPreset)' export preset, which '$(_TwoDogExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add &gt; Web), re-run `2dog convert` (it scaffolds one), or point &lt;TwoDogWebExportPreset&gt; at an existing preset."/>
+               Text="TwoDog: web publish exports the game pck via the '$(TwoDogWebExportPreset)' export preset, which '$(_TwoDogExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add &gt; Web), run `2dog doctor --fix` (it appends the template preset), or point &lt;TwoDogWebExportPreset&gt; at an existing preset."/>
 
         <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogWebPackFullPath)'))"/>
 
@@ -257,7 +257,7 @@
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg)"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg) ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 

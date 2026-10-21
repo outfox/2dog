@@ -108,8 +108,7 @@ internal static class DescriptorArraySmoke
 
     private static void StorageTextureFeedback(RenderingDevice rd, RDTextureView view)
     {
-        // RG32 always needs the shadow fallback; RGBA16 also tests native access on tier2 devices.
-        foreach (bool wide in new[] { false, true })
+        // R32 supports native read/write access without the optional tier2 format feature.
         foreach (bool volume in new[] { false, true })
         {
             using var source = new RDShaderSource { SourceCompute = """
@@ -119,10 +118,13 @@ internal static class DescriptorArraySmoke
                 layout(push_constant,std430) uniform Params { int factor; } params;
                 void main() {
                     ivec3 coordinate = ivec3(gl_GlobalInvocationID);
-                    imageStore(values, coordinate, imageLoad(values, coordinate) + ivec4(1, 2, 3, 4) * params.factor);
+                    ivec4 before = imageLoad(values, coordinate);
+                    imageStore(values, coordinate, before + ivec4(params.factor));
+                    memoryBarrierImage();
+                    imageStore(values, coordinate, imageLoad(values, coordinate) + ivec4(params.factor));
                 }
                 """.Replace("IMAGE_TYPE", volume ? "iimage3D" : "iimage2DArray")
-                    .Replace("IMAGE_FORMAT", wide ? "rg32i" : "rgba16i") };
+                    .Replace("IMAGE_FORMAT", "r32i") };
             using var spirv = rd.ShaderCompileSpirVFromSource(source);
             if (spirv.CompileErrorCompute.Length != 0) throw new Exception(spirv.CompileErrorCompute);
             var shader = rd.ShaderCreateFromSpirV(spirv);
@@ -131,12 +133,10 @@ internal static class DescriptorArraySmoke
             {
                 TextureType = volume ? RenderingDevice.TextureType.Type3D : RenderingDevice.TextureType.Type2DArray,
                 Width = 2, Height = 1, Depth = volume ? 2u : 1u, ArrayLayers = volume ? 1u : 2u,
-                Format = wide ? RenderingDevice.DataFormat.R32G32Sint : RenderingDevice.DataFormat.R16G16B16A16Sint,
+                Format = RenderingDevice.DataFormat.R32Sint,
                 UsageBits = RenderingDevice.TextureUsageBits.StorageBit | RenderingDevice.TextureUsageBits.CanUpdateBit | RenderingDevice.TextureUsageBits.CanCopyFromBit,
             };
-            byte[] initialLayer = wide
-                ? Enumerable.Repeat(7, volume ? 8 : 4).SelectMany(BitConverter.GetBytes).ToArray()
-                : Enumerable.Repeat((short)7, volume ? 16 : 8).SelectMany(BitConverter.GetBytes).ToArray();
+            byte[] initialLayer = Enumerable.Repeat(7, volume ? 4 : 2).SelectMany(BitConverter.GetBytes).ToArray();
             var texture = rd.TextureCreate(format, view, volume ? [initialLayer] : [initialLayer, initialLayer]);
             using var uniform = new RDUniform { UniformType = RenderingDevice.UniformType.Image, Binding = 0 };
             uniform.AddId(texture);
@@ -155,12 +155,12 @@ internal static class DescriptorArraySmoke
             for (uint layer = 0; layer < (volume ? 1 : 2); layer++)
             {
                 var data = rd.TextureGetData(texture, layer);
-                if (data.Length != (volume ? 32 : 16)) throw new Exception("Storage texture feedback returned an incomplete volume or array.");
-                int componentBytes = wide ? 4 : 2;
+                if (data.Length != (volume ? 16 : 8)) throw new Exception("Storage texture feedback returned an incomplete volume or array.");
+                int componentBytes = 4;
                 for (int component = 0; component < data.Length / componentBytes; component++)
                 {
-                    int actual = wide ? BitConverter.ToInt32(data, component * 4) : BitConverter.ToInt16(data, component * 2);
-                    if (actual != 7 + (component % (wide ? 2 : 4) + 1) * 7)
+                    int actual = BitConverter.ToInt32(data, component * 4);
+                    if (actual != 7 + 7 * 2)
                         throw new Exception($"Storage texture feedback lost a dispatch (format: {format.Format}, volume: {volume}, component: {component}, actual: {actual}).");
                 }
             }

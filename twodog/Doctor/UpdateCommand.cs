@@ -34,7 +34,6 @@ internal static class UpdateCommand
         PlanPropsValues(plan, model, current);
         PlanGodotSdk(plan, model, warnings);
         PlanGameBindings(plan, model);
-        PlanWebBootRefresh(plan, model);
 
         var hasProjectChanges = plan.Count > 0;
         var workloads = Workload.For(model.Hosts.Select(h => h.Kind)).ToList();
@@ -172,19 +171,6 @@ internal static class UpdateCommand
             // Earlier actions may update package versions and the SDK in the same file.
             if (CsprojPatcher.PatchBindings(game) is { } text) MsBuildXml.Write(game, text);
         }));
-    }
-
-    /// <summary>TwoDogWebBoot.cs is tool-owned: a newer tool may need a newer bootstrap.</summary>
-    private static void PlanWebBootRefresh(List<PlannedAction> plan, ProjectModel model)
-    {
-        var template = TemplateAssets.WebBootSource();
-        foreach (var host in model.Hosts.Where(h => h.IsWebLike))
-        {
-            var path = Path.Combine(model.Dir, host.Folder, "TwoDogWebBoot.cs");
-            if (!File.Exists(path) || File.ReadAllText(path) == template) continue;
-            plan.Add(new PlannedAction($"refresh {host.Folder}/TwoDogWebBoot.cs (tool-owned web bootstrap)",
-                ActionKind.CreateFile, () => File.WriteAllText(path, template)));
-        }
     }
 
     private static void Restore(ProjectContext project)

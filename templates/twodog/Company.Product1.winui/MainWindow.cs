@@ -18,7 +18,7 @@ using Window = Microsoft.UI.Xaml.Window;
 // owned by this window, and the host drives its geometry and pumps frames from the UI thread.
 internal sealed class MainWindow : Window
 {
-    private static readonly Windows.UI.Color Accent = Rgb(0x57, 0x9E, 0xFF);
+    private static readonly Windows.UI.Color Accent = Rgb(0xA8, 0xE6, 0x6A);
     private static readonly Windows.UI.Color Muted = Rgb(0x9A, 0xA7, 0xB8);
 
     private readonly string[] _extraArgs;

@@ -1,0 +1,13 @@
+config_version=5
+
+[application]
+
+config/name="Gizmo lifetime regression"
+
+[dotnet]
+
+project/assembly_name="GizmoLifetime"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/lifetime/plugin.cfg")

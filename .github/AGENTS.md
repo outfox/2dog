@@ -37,6 +37,10 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   that dumps the test processes. It sets `TWODOG_GODOT_LOG_DIR` to `twodog.tests/TestResults/godot-<Config>`,
   so failed runs upload Godot's native logs with the test results. `TWODOG_TEST_FILTER` adds a `--filter`.
 - After changing the web or Blazor smoke scripts, run `node --test .github/scripts/*.test.mjs`.
+- Test helper variables: `TWODOG_CDP_DEBUG=1` logs CDP traffic in the browser smoke waiter;
+  `TWODOG_TEST_VULKAN_LOADER` (set by `setup-windows-software-rendering.ps1`) copies a Vulkan loader beside
+  the Windows NUnit rendering host; `TWODOG_TEST_RESTORE_PACKAGES` overrides the Android package tests'
+  restore cache; `TWODOG_WEB_TARGETS` overrides the targets file the side-module export tests read.
 
 ## Checking runs
 

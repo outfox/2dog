@@ -17,7 +17,7 @@ import { readdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type MarkdownIt from 'markdown-it'
-import type { StateCore } from 'markdown-it/index.js'
+import type StateCore from 'markdown-it/lib/rules_core/state_core.mjs'
 import type Token from 'markdown-it/lib/token.mjs'
 
 const iconsRoot = resolve(

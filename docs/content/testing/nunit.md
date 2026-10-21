@@ -1,6 +1,7 @@
 ---
 title: Testing with NUnit
 description: "Write Godot tests with NUnit's headless or rendering fixture."
+tagline: "Learn how to write your first Godot tests with NUnit."
 ---
 
 # Testing with NUnit
@@ -54,10 +55,8 @@ in tests; project autoloads still initialize. Restore shared state such as
 `SceneTree.Paused` if a scene changes it.
 
 ::: details Why the Timer alias?
-`using Timer = Godot.Timer;` distinguishes Godot's timer from .NET's timer.
-The older fixture property named `Godot` remains a compatibility alias for
-`EngineFixture`; inside a derived class it also shadows the `Godot` namespace.
-The type alias avoids needing `global::Godot.Timer` in the test body.
+The fixture's `Godot` compatibility property shadows the `Godot` namespace in
+derived classes, so alias Godot types such as `Timer`.
 :::
 
 ## Setup and teardown
@@ -89,11 +88,11 @@ public class RenderingTests : GodotRenderingTestFixture
 Each NUnit fixture owns its engine; this integration does not share an engine
 across test classes like an xUnit collection.
 
-| Platform | Requirement |
-| --- | --- |
-| Linux | A display and a compatible renderer |
-| Windows | A display; the fixture supplies STA and common-controls activation |
-| macOS | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
+| Platform | Requirement                                                                                  |
+|----------|----------------------------------------------------------------------------------------------|
+| Linux    | A display and a compatible renderer                                                          |
+| Windows  | A display; the fixture supplies STA and common-controls activation                           |
+| macOS    | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
 
 ::: warning Use a separate rendering test project
 The scaffold uses headless fixtures. Keep rendering fixtures in another test

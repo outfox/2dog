@@ -1,11 +1,12 @@
 ---
 title: Pinning
 description: "Choose which version of the 2dog tool to run, keep project package versions fixed, and understand what global.json controls."
+tagline: "Learn how to pin the 2dog tool and keep your package versions steady."
 ---
 
 # Pinning a specific Version
 
-2dog already pins your project to a specific version in `Directory.build.props`, which you can manually edit.
+2dog already pins your project to a specific version in `Directory.Build.props`, which you can manually edit.
 
 You can also choose the version of the **2dog tool** you run and the version of the **2dog packages** the tool will use. These are separate settings.
 
@@ -58,21 +59,5 @@ For example:
 This is a shortened example; keep the other version properties in your file.
 Projects use `$(TwoDogVersion)` in their package references.
 
-A version without `*` does not follow each new release. A normal build or restore
-does not rewrite this value. Running `2dog update` can change it.
-
-This property does not select the tool that `dnx` runs. Use `@version` for that.
-`global.json` selects SDK versions and the `dotnet test` runner, not the 2dog
-tool or engine package version.
-
-## Build without restoring packages
-
-If the project has already been restored and its packages are available locally,
-you can skip restore:
-
-```bash
-dotnet run --project MyGame.2dog --no-restore
-```
-
-Replace `MyGame.2dog` with your host project. Choosing a version and skipping
-restore are different: a fixed version may still need downloading if it is missing.
+Only `2dog update` changes this value. It does not select the tool that `dnx`
+runs; use `@version` for that.

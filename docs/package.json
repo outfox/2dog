@@ -1,12 +1,19 @@
 {
   "devDependencies": {
+    "@types/markdown-it": "14.1.2",
     "@types/markdown-it-container": "^4.0.0",
+    "@types/node": "^22.20.5",
     "markdown-it-container": "^4.0.0",
-    "vitepress": "^2.0.0-alpha.16"
+    "sharp": "^0.35.5",
+    "typescript": "6.0.3",
+    "vitepress": "^2.0.0-alpha.16",
+    "vue-tsc": "3.3.13",
+    "wawoff2": "^2.0.1"
   },
   "scripts": {
-    "test": "node --test llms-pages.test.mjs",
+    "test": "node --test llms-pages.test.mjs social-metadata.test.mjs social-images.test.mjs",
     "check": "node make-llms.mjs --check",
+    "typecheck": "vue-tsc --project .vitepress/tsconfig.json",
     "predev": "node make-llms.mjs",
     "dev": "vitepress dev",
     "prebuild": "node make-llms.mjs",

@@ -9,9 +9,7 @@
              A host's 2dog.engine dependency does not flow back into this game project. -->
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-        <!-- TwoDogWebBoot.cs (web hosts) takes a function pointer to the source-generated plugins initializer;
-             harmless on desktop -->
-        <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
+        <!-- 2dog.godotsharp generates TwoDogWebBoot (the web hosts' plugins initializer) only with unsafe code -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
              from the Godot editor) -->
@@ -22,20 +20,6 @@
         <PackageReference Include="2dog.godotsharp.editor$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"
                           Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'" />
     </ItemGroup>
-    <ItemGroup>
-        <!-- Web bootstrap lives in the web host folder but must compile into THIS assembly: scripts resolve
-             from the assembly holding the source-generated plugins initializer -->
-        <Compile Include="showcase.web/TwoDogWebBoot.cs"
-                 Condition="Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs')"/>
-        <!-- The webxr host carries its own copy; compile it only when the web host's is absent (one definition
-             per assembly) -->
-        <Compile Include="showcase.webxr/TwoDogWebBoot.cs"
-                 Condition="!Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)showcase.webxr/TwoDogWebBoot.cs')"/>
-        <!-- Same for the blazor host, last in line -->
-        <Compile Include="showcase.blazor/TwoDogWebBoot.cs"
-                 Condition="!Exists('$(MSBuildThisFileDirectory)showcase.web/TwoDogWebBoot.cs') And !Exists('$(MSBuildThisFileDirectory)showcase.webxr/TwoDogWebBoot.cs') And Exists('$(MSBuildThisFileDirectory)showcase.blazor/TwoDogWebBoot.cs')"/>
-    </ItemGroup>
-
     <!-- The GDExtension probe's native library for this machine's desktop platform (hosts build this project first) -->
     <Import Project="gdextension/TwoDogProbe.targets"/>
 </Project>

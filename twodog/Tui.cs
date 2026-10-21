@@ -141,8 +141,8 @@ internal static class Tui
         const string precision = "Double precision (--double-precision)";
         const string threads = "Web multithreading, experimental (--web-threads; requires COOP/COEP headers)";
         if (options.DoublePrecision is null) defaults.Add(precision, BuildSettings.IsDouble(project.Dir));
-        if (options.WebThreads is null && (options.Hosts.Any(h => Hosts.IsWebLike(h.Kind))
-            || project.ExistingHosts.Any(h => Hosts.IsWebLike(h.Kind))))
+        if (options.WebThreads is null && (options.Hosts.Any(h => Hosts.SupportsWebThreads(h.Kind))
+            || project.ExistingHosts.Any(h => Hosts.SupportsWebThreads(h.Kind))))
             defaults.Add(threads, BuildSettings.HasWebThreads(project.Dir));
         if (defaults.Count == 0) return;
 

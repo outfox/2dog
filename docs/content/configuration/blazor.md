@@ -1,6 +1,7 @@
 ---
 title: Blazor Configuration
 description: "MSBuild configuration for the Blazor WebAssembly client: game packs, native symbols, memory, and SDK-managed compression."
+tagline: "Learn how to configure Godot in Blazor, from game packs to compression."
 ---
 
 # Blazor Configuration
@@ -12,15 +13,15 @@ It normally sets `GodotProjectDir=../..`; see the
 
 ## Client Properties
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `TwoDogWebVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Native Web engine; explicit settings override the default. The `editor` variant is unsupported |
-| `TwoDogExportPack` | `true` | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
-| `TwoDogWebExportPreset` | `Web` | Preset in `export_presets.cfg` |
-| `TwoDogWebPackName` | `godot.pck` | Exported pack name; match it in `GodotView.PackUrl` if changed |
-| `TwoDogWebSideModuleExports` | `true` | Export native symbols used by GDExtensions |
-| `WasmEmitSymbolMap` | `false` in Release, `true` otherwise | Include native symbols for stack traces; explicit settings override the default |
-| `WasmInitialHeapSize` | `256MB` | Initial memory allocation; memory can grow |
+| Property                     | Default                                            | Purpose                                                                                                |
+|------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `TwoDogWebVariant`           | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release`                                                                |
+| `TwoDogExportPack`           | `true`                                             | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
+| `TwoDogWebExportPreset`      | `Web`                                              | Preset in `export_presets.cfg`                                                                         |
+| `TwoDogWebPackName`          | `godot.pck`                                        | Exported pack name; match it in `GodotView.PackUrl` if changed                                         |
+| `TwoDogWebSideModuleExports` | `true`                                             | Export native symbols used by GDExtensions                                                             |
+| `WasmEmitSymbolMap`          | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                        |
+| `WasmInitialHeapSize`        | `256MB`                                            | Initial memory allocation; memory can grow                                                             |
 
 `2dog.browser-wasm` restores both supported native variants; a missing selected
 payload fails the build. The client SDK manages its own bundle, progress,
@@ -35,27 +36,22 @@ Publish the server project to include its client:
 dotnet publish MyGame.blazor -c Release -p:RunAOTCompilation=true
 ```
 
-`RunAOTCompilation` enables Mono's browser AOT compiler. The generated client
-preserves the game, host, `GodotSharp`, and `twodog` assemblies. Add
-`<TrimmerRootAssembly Include="MyLibrary"/>` in an `<ItemGroup>` for other
-assemblies accessed only through reflection.
+`RunAOTCompilation` enables Mono's browser AOT compiler. See
+[Trimming](/configuration#trimming) for assemblies accessed only through
+reflection.
 
-Keep `PrivateAssets="all"` on the client's engine and browser package references
-so their build targets stay out of the server; the generated engine reference
-also sets `Publish="true"` so its managed assemblies remain in the client publish.
-See the [Blazor host guide](/hosts/blazor) for `GodotView` and static asset serving.
+Keep the attributes on the client's generated `2dog.engine` and browser
+package references. See the [Blazor host guide](/hosts/blazor) for `GodotView`.
 
-## WebGPU on the WebGPU Branch
+## Experimental WebGPU
 
-Set `RenderingDriver="webgpu"` on `GodotView` to request a WebGPU device before
-starting the engine. It defaults to Forward+; supply
-`Args='@(new[] { "--rendering-method", "mobile" })'` to select Mobile.
-The browser must expose
-WebGPU in a secure context. The default remains OpenGL/WebGL Compatibility.
-You can also supply `--rendering-driver webgpu` through `Args`; the view uses
-that argument when `RenderingDriver` is unset. The device is reused across
-view lifetimes, and a cancelled initialization releases its unclaimed device.
+Set `RenderingDriver="webgpu"` on `GodotView` to select WebGPU Mobile. The default
+remains OpenGL/WebGL Compatibility. `--rendering-driver webgpu` in `Args` also
+selects WebGPU when `RenderingDriver` is unset.
 
-The single-threaded browser packages supply Dawn's link configuration and a
-writable Emscripten cache. This path requires the single-precision WebGPU
-branch packages; see [build configurations](/build-configurations#webgpu-branch).
+This requires the single-precision, single-threaded browser payload and WebGPU
+browser support in a secure context. Unsupported payloads fail before device
+creation. The device is reused across view lifetimes; cancelled initialization
+releases an unclaimed device.
+
+See [build configurations](/build-configurations#experimental-webgpu).

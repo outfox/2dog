@@ -1,6 +1,7 @@
 ---
 title: twodog.Engine
 description: "API reference for twodog.Engine, which configures, starts, and owns one embedded Godot instance: constructor, properties, Start, Run, Dispose, and common Godot arguments."
+tagline: "Learn how to configure, start and run Godot from your own .NET code."
 ---
 
 # `twodog.Engine`
@@ -20,11 +21,11 @@ public class Engine : IDisposable, IAsyncDisposable
 public Engine(string project, string? path = null, params string[] args)
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `project` | Label passed as Godot's first argument; this is not a content path |
-| `path` | Directory containing `project.godot`; omit it for automatic content resolution |
-| `args` | Additional Godot command-line arguments, passed unchanged |
+| Parameter | Description                                                                    |
+|-----------|--------------------------------------------------------------------------------|
+| `project` | Label passed as Godot's first argument; this is not a content path             |
+| `path`    | Directory containing `project.godot`; omit it for automatic content resolution |
+| `args`    | Additional Godot command-line arguments, passed unchanged                      |
 
 When `path` is omitted or `null`, desktop hosts call
 [`ResolveContent()`](#resolvecontent). Browser hosts leave the path unset so
@@ -101,6 +102,12 @@ public event Action? Exited;
 Fires once after a successfully started instance is destroyed. `Completion`
 also completes for an `Engine` disposed before it starts, but `Exited` does not fire.
 
+## Threading
+
+Lifecycle calls and Godot object access belong on the thread that called
+`Start()`. Calls from another thread are rejected; dispatch them to the host's
+engine thread.
+
 ## Methods
 
 ### `Start`
@@ -161,11 +168,8 @@ public ValueTask DisposeAsync()
 ```
 
 Requests shutdown and waits for teardown. Prefer this in browser hosts.
-
-Lifecycle calls and Godot object access belong on the thread that called
-`Start()`. Calls from another thread are rejected; dispatch them to the host's
-engine thread. Disposal from a game callback is deferred until the native
-frame returns. Do not synchronously wait for `Completion` inside that callback.
+Disposal from a game callback is deferred until the native frame returns; do
+not synchronously wait for `Completion` inside that callback.
 
 ### `WebExitRuntimeOnQuit`
 
@@ -223,10 +227,8 @@ public static void RegisterWebPluginsInitializer(IntPtr initializer)
 
 Registers the game assembly's generated plugin initializer in a browser host.
 The web host's `Program.cs` calls this before `Start()` with the pointer from
-`TwoDogWebBoot.PluginsInitializer()` (the bootstrap file in the web host
-folder, compiled into the game assembly); normal application code does not
-need anything beyond that template line. Desktop calls throw
-`PlatformNotSupportedException`.
+`TwoDogWebBoot.PluginsInitializer()`, which `2dog.godotsharp` generates into
+the game assembly. Desktop calls throw `PlatformNotSupportedException`.
 
 ## Example
 

@@ -1,6 +1,7 @@
 ---
 title: 2dog new
 description: "Reference for 2dog new: create a Godot project with 2dog hosts - arguments, host flags, options, examples."
+tagline: "Learn how to start a fresh Godot game with .NET hosts in one command."
 ---
 
 # `2dog new`
@@ -13,19 +14,12 @@ hosts to create. Host flags skip that wizard; a missing workload (`wasm-tools`,
 2dog new [Name] [dir] [hosts] [options]
 ```
 
-| Argument | Meaning |
-| --- | --- |
-| `Name` | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords get a `_` prefix, an adjustment is announced |
-| `dir` | Directory to create; defaults to the sanitized name |
+| Argument | Meaning                                                                                                                                                                                       |
+|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name`   | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix, an adjustment is announced |
+| `dir`    | Directory to create; defaults to the sanitized name                                                                                                                                           |
 
 ## Hosts
-
-`--repl [folder]` adds an opt-in [C# REPL host](/hosts/repl) with syntax
-highlighting, completion and live access to the running game.
-
-`--maui [folder]` adds a [MAUI host](/hosts/maui) for Windows and Android.
-Install `maui-windows` on Windows and `maui-android` for Android builds.
-The host is excluded from plain solution builds.
 
 Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
 generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
@@ -34,30 +28,25 @@ selects Microsoft.Testing.Platform, so `dotnet test` runs every test host.
 
 ## Options
 
-| Option | Effect |
-| --- | --- |
-| `-n, --name <name>` | Project name; same as `Name` |
-| `-o, --output <dir>` | Directory; same as `dir` |
-| `--dry-run` | Print the plan; change nothing |
-| `--force` | Overwrite scaffolded files that exist; never deletes |
+| Option                             | Effect                                                                                                             |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `-n, --name <name>`                | Project name; same as `Name`                                                                                       |
+| `-o, --output <dir>`               | Directory; same as `dir`                                                                                           |
+| `--dry-run`                        | Print the plan; change nothing                                                                                     |
+| `--force`                          | Overwrite scaffolded files that exist; never deletes                                                               |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
-| `--web-threads [true\|false]` | Enable experimental multithreading for Web, WebXR and Blazor clients; serving requires COOP/COEP headers |
-| `--no-restore` | Skip the final `dotnet restore` |
-| `--install-wasm-tools` | Install missing `wasm-tools` for browser hosts without an installation prompt |
-| `--install-android-workload` | Install the missing `android` workload for Android hosts without an installation prompt |
+| `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers                  |
+| `--no-restore`                     | Skip the final `dotnet restore`                                                                                    |
+| `--install-wasm-tools`             | Install missing `wasm-tools` for browser hosts without an installation prompt                                      |
+| `--install-android-workload`       | Install the missing `android` workload for Android hosts without an installation prompt                            |
 
-Build settings are also available as wizard toggles. Omitting these flags on
-`add` preserves existing settings. See [build options](/dnx-2dog#build-options)
-for precision and browser serving requirements.
+See [build options](/dnx-2dog#build-options) for the build settings'
+requirements.
 
 Plus the [global and output options](/dnx-2dog#global-options).
 
-`--no-restore` skips the workload offers; the install flags request
-installation explicitly. `--dry-run` never checks or installs workloads.
-
-Workload offers apply to newly selected hosts. Browser and Android hosts are
-excluded from plain solution builds; desktop/test work needs neither workload.
-A failed restore returns exit code `2` and keeps the created files. Fix the
+`--no-restore` skips the workload offers; the install flags work in CI too.
+`--dry-run` never checks or installs workloads. A failed restore returns exit code `2` and keeps the created files. Fix the
 reported cause and run `dotnet restore` again.
 
 ## Examples
@@ -89,12 +78,17 @@ For an existing project, use [`2dog add`](/cli/add).
 
 ## Use the .NET Template
 
-The same template is available through `dotnet new`:
+The same template is available through `dotnet new` in the separate
+[`2dog.templates`](https://www.nuget.org/packages/2dog.templates/) package:
 
 ```bash
-dotnet new install 2dog
+dotnet new install 2dog.templates
 dotnet new 2dog -n MyGame --web false
 ```
+
+If you previously installed the template from `2dog`, run
+`dotnet new uninstall 2dog` before installing `2dog.templates`. This leaves the
+`2dog` tool installed.
 
 This creates a generic .NET host. Omit `--web false` to include Web;
 install `wasm-tools` when you want to build or publish that host.

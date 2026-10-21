@@ -8,10 +8,9 @@ internal static class GameCsprojChecks
         new("game.sdk", Category.GameProject, "the game csproj uses Godot.NET.Sdk"),
         new("game.sdk-mismatch", Category.GameProject, "Godot.NET.Sdk matches the Godot line 2dog.engine was built for"),
         new("game.target-framework", Category.GameProject, "the game csproj targets net10.0"),
-        new("game.properties", Category.GameProject, "EnableDynamicLoading, AllowUnsafeBlocks and TWODOG_WEB_BOOT are set"),
+        new("game.properties", Category.GameProject, "EnableDynamicLoading and AllowUnsafeBlocks are set"),
+        new("game.bindings", Category.GameProject, "the game csproj references 2dog.godotsharp"),
         new("game.default-item-excludes", Category.GameProject, "every host folder is excluded from the game's default globs"),
-        new("game.webboot-include", Category.GameProject, "the web bootstrap is compiled into the game assembly"),
-        new("game.webboot-duplicate", Category.GameProject, "exactly one TwoDogWebBoot.cs compiles into the game assembly"),
     ];
 
     public static IEnumerable<Finding> Run(DoctorContext ctx)
@@ -43,17 +42,12 @@ internal static class GameCsprojChecks
         }
 
         var hostFolders = p.Hosts.Select(h => h.Folder).ToList();
-        var bootFolder = p.LegacyRootWebBoot
-            ? null
-            : p.Hosts.Where(h => h.IsWebLike).Select(h => h.Folder)
-                .FirstOrDefault(f => File.Exists(Path.Combine(p.Dir, f, "TwoDogWebBoot.cs")));
-        var bootPath = bootFolder is null ? null : $"{bootFolder}/TwoDogWebBoot.cs";
 
         CsprojPatcher.Result safe, full;
         try
         {
-            safe = CsprojPatcher.Patch(csproj, hostFolders, bootPath, upgradeTargetFramework: false);
-            full = CsprojPatcher.Patch(csproj, hostFolders, bootPath);
+            safe = CsprojPatcher.Patch(csproj, hostFolders, upgradeTargetFramework: false);
+            full = CsprojPatcher.Patch(csproj, hostFolders);
         }
         catch (System.Xml.XmlException)
         {
@@ -63,7 +57,7 @@ internal static class GameCsprojChecks
         // Patches are recomputed when applied, so the safe and the announced one compose in either order.
         void ApplyPatch(bool upgradeTargetFramework)
         {
-            if (CsprojPatcher.Patch(csproj, hostFolders, bootPath, upgradeTargetFramework).NewContent is { } content)
+            if (CsprojPatcher.Patch(csproj, hostFolders, upgradeTargetFramework: upgradeTargetFramework).NewContent is { } content)
                 MsBuildXml.Write(csproj, content);
         }
 
@@ -80,10 +74,10 @@ internal static class GameCsprojChecks
         else
             yield return Finding.Pass("game.target-framework", c, "net10.0");
 
-        var properties = safe.Added.Where(a => a is "EnableDynamicLoading" or "AllowUnsafeBlocks" || a.StartsWith("DefineConstants", StringComparison.Ordinal)).ToList();
+        var properties = safe.Added.Where(a => a is "EnableDynamicLoading" or "AllowUnsafeBlocks").ToList();
         if (properties.Count > 0)
             yield return new Finding("game.properties", c, Severity.Warn, $"{name} lacks {string.Join(", ", properties)}",
-                "hosts load the game assembly dynamically and the web bootstrap needs unsafe code", null, name, safeFix);
+                "hosts load the game assembly dynamically; web hosts need the generated TwoDogWebBoot, which requires unsafe code", null, name, safeFix);
 
         // The patcher only adds what is absent; a property set to anything but true is the author's edit to undo.
         var disabled = new[] { "EnableDynamicLoading", "AllowUnsafeBlocks" }
@@ -92,7 +86,7 @@ internal static class GameCsprojChecks
             .ToList();
         if (disabled.Count > 0)
             yield return new Finding("game.properties", c, Severity.Warn, $"{name} sets {string.Join(", ", disabled)} to something other than true",
-                "hosts load the game assembly dynamically and the web bootstrap needs unsafe code", $"set {string.Join(" and ", disabled)} to true", name);
+                "hosts load the game assembly dynamically; web hosts need the generated TwoDogWebBoot, which requires unsafe code", $"set {string.Join(" and ", disabled)} to true", name);
 
         if (properties.Count == 0 && disabled.Count == 0)
             yield return Finding.Pass("game.properties", c, "properties");
@@ -103,20 +97,12 @@ internal static class GameCsprojChecks
         else if (hostFolders.Count > 0)
             yield return Finding.Pass("game.default-item-excludes", c, "host excludes");
 
-        if (bootPath != null && safe.Added.Any(a => a.StartsWith("Compile Include", StringComparison.Ordinal)))
-            yield return new Finding("game.webboot-include", c, Severity.Warn, $"{name} does not compile {bootPath}",
-                "the web bootstrap must live in the game assembly", null, name, safeFix);
-        else if (bootPath != null)
-            yield return Finding.Pass("game.webboot-include", c, "web boot include");
-
-        var copies = p.Hosts.Where(h => h.IsWebLike && File.Exists(Path.Combine(p.Dir, h.Folder, "TwoDogWebBoot.cs"))).Select(h => h.Folder).ToList();
-        var unguarded = p.GameCsproj.Descendants()
-            .Where(e => e.Name.LocalName == "Compile")
-            .Count(e => ((string?)e.Attribute("Include") ?? "").EndsWith("TwoDogWebBoot.cs", StringComparison.OrdinalIgnoreCase)
-                        && e.Attribute("Condition") == null);
-        if ((p.LegacyRootWebBoot && copies.Count > 0) || unguarded > 1)
-            yield return new Finding("game.webboot-duplicate", c, Severity.Fail, "more than one TwoDogWebBoot.cs would compile into the game (CS0101)",
-                p.LegacyRootWebBoot ? $"root copy plus {string.Join(", ", copies)}" : $"{unguarded} unconditional Compile includes",
-                "keep one copy: delete the extras yourself, or guard the includes with Exists() conditions", name);
+        // Web hosts call TwoDogWebBoot, which only the fork's source generator emits.
+        if (safe.Added.Contains(CsprojPatcher.BindingsAdded))
+            yield return new Finding("game.bindings", c, p.Hosts.Any(h => h.IsWebLike) ? Severity.Fail : Severity.Warn,
+                $"{name} does not reference 2dog.godotsharp",
+                "hosts expect the fork's bindings, and web hosts the TwoDogWebBoot its source generator emits", "2dog update", name, safeFix);
+        else
+            yield return Finding.Pass("game.bindings", c, "2dog.godotsharp");
     }
 }

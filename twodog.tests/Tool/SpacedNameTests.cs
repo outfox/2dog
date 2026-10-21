@@ -364,7 +364,7 @@ public class RenameCommandLineTests
     public void Rename_OnNew_IsAUsageError()
     {
         var ex = Assert.Throws<UsageException>(() => CommandLine.Parse(["new", "X", "--rename", "Y"]));
-        Assert.Contains("add/convert only", ex.Message);
+        Assert.Contains("applies to add only", ex.Message);
     }
 }
 

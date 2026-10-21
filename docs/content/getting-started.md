@@ -1,13 +1,15 @@
 ---
 title: Getting Started
 description: "Run Godot inside .NET applications with desktop, web, and test hosts."
+tagline: "Take Godot for a walk! Learn how to run your game in .NET in minutes."
 ---
 
 # Let's take Godot for a walk!
 
 **2dog** embeds **Godot** inside **.NET** applications to help build games, apps, and tools for **desktop**, **web**, and **mobile**. It simplifies build automation, has templates for integration with **UI** frameworks and **web servers**, and running automated **tests** in your IDE.
 
-![a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies.webp)
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](img/2dog-walkies-big.png)
+*(illustration by [Diego Rago](https://diegorago.com) - Dogbot and Lucky!)*
 
 ## Who's a good robot?
 Things you can do with 2dog may be complex, so we try to make it developer friendly.
@@ -24,7 +26,7 @@ Your app/game and `index.html` are then in `MyGame.web/AppBundle/` - easy!
 
 Upload that to itch.io, your web
 space, or serve locally, for example:  
-`dnx dotnet-serve -d MyGame.web/AppBundle` or `npx serve MyGame.web/AppBundle`
+`dnx dotnet-serve -- -d MyGame.web/AppBundle` or `npx serve MyGame.web/AppBundle`
 
 *(use your project's name, i.e. the one in `project.godot`, in place of `MyGame`)*
 :::
@@ -56,15 +58,16 @@ dnx 2dog update
 dnx 2dog doctor
 ```
 
-
 ## Squirrel ?!
 
+
 2dog can do a lot more, such as provide unit testing, embedding in other applications and UIs, etc. It's maybe safest to try this in a completely fresh project, and *you know you wanted to start a new game project anyway!*
+
 
 To create a project from scratch, `project.godot` and all, from the command line:
 
 ```bash
-dnx 2dog new NewGame
+dnx 2dog new NewGame --generic --xunit
 cd NewGame
 dotnet run --project NewGame.2dog
 dotnet test

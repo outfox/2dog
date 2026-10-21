@@ -137,6 +137,7 @@ public sealed class EngineHost : IDisposable
 
     /// <summary>Requests quit on all instances, then waits for each (bounded by
     /// their ShutdownTimeout). Instance failures/timeouts are aggregated.
+    /// An instance calling Dispose on its own host only receives the quit request; it cannot wait for itself.
     /// Native modules, ALCs, and pool slots stay resident until process exit -
     /// see <see cref="EngineInstance.Dispose"/>.</summary>
     public void Dispose()
@@ -153,7 +154,8 @@ public sealed class EngineHost : IDisposable
         // Quit is already broadcast: run the bounded per-instance waits
         // concurrently, so worst-case teardown is the largest ShutdownTimeout
         // rather than their sum.
-        var waits = instances.Select(instance => Task.Run(instance.Dispose)).ToArray();
+        var waits = instances.Where(instance => !instance.IsOwnerThread)
+            .Select(instance => Task.Run(instance.Dispose)).ToArray();
         try
         {
             Task.WaitAll(waits);

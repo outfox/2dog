@@ -20,7 +20,7 @@
         <TwoDogWebExportPreset>Web (threads)</TwoDogWebExportPreset>
     </PropertyGroup>
 
-    <!-- Uses showcase.web's TwoDogWebBoot, which the game project compiles -->
+    <!-- Uses the TwoDogWebBoot that 2dog.godotsharp generates into the game assembly -->
     <ItemGroup>
         <ProjectReference Include="../../../twodog.engine/twodog.engine.csproj"/>
         <ProjectReference Include="../showcase.csproj"/>

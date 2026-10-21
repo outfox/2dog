@@ -1,6 +1,7 @@
 ---
 title: Blazor
 description: "Embed Godot in a Blazor WebAssembly page with GodotView."
+tagline: "Learn how to put your Godot game on a Blazor web page."
 ---
 
 # Blazor
@@ -24,6 +25,27 @@ Open the URL printed by the server. To publish the server and client:
 ```bash
 dotnet publish MyGame.blazor -c Release
 ```
+
+## Multithreading Headers
+
+The generated server sends cross-origin isolation headers so `--web-threads`
+clients can use `SharedArrayBuffer` in development and after publishing. For an
+existing host, add this immediately after `builder.Build()` in
+`MyGame.blazor/Program.cs`, before debugging, static assets, and endpoints:
+
+```csharp
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+    context.Response.Headers["Cross-Origin-Embedder-Policy"] = "require-corp";
+    await next();
+});
+```
+
+This sends `Cross-Origin-Opener-Policy: same-origin` and
+`Cross-Origin-Embedder-Policy: require-corp`. Cross-origin resources must allow
+loading through CORS or Cross-Origin-Resource-Policy. Use HTTPS or localhost
+for the browser's secure context requirement.
 
 ## Customize the Page
 

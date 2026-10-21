@@ -123,6 +123,9 @@ public sealed class GodotSession : IDisposable
         // the hidden engine window would only add a second, competing pacer (observed as the
         // pump capping at the engine window's refresh rate instead of the control's).
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+        // Low-processor mode skips unchanged redraws and delays an off-screen engine even
+        // though Avalonia is already pacing it. Keep every compositor tick productive.
+        OS.LowProcessorUsageMode = false;
         // With vsync off, the engine's own limiter (a smoothed sleep inside Iteration())
         // paces the pump instead: backends whose animation frames aren't tied to the
         // display (Avalonia's Wayland backend) would otherwise run the engine unbounded.
@@ -341,14 +344,15 @@ public sealed class GodotSession : IDisposable
         }
     }
 
-    // Auto means the highest current refresh rate among the connected screens - a pump
-    // faster than every display is pure waste, while per-window rates are not knowable
-    // here. Infinity means uncapped (Godot's 0).
-    private int ResolveMaxFps()
+    // Windows animation frames already follow the display. A second limiter at the same
+    // rate can miss compositor slots, especially from a cold start. Other backends can
+    // free-run, so auto still caps them at the highest connected refresh rate.
+    internal int ResolveMaxFps()
     {
         var fps = _options.MaxFramesPerSecond;
         if (double.IsPositiveInfinity(fps)) return 0;
         if (fps > 0) return (int)Math.Ceiling(fps);
+        if (OperatingSystem.IsWindows()) return 0;
         for (var screen = 0; screen < DisplayServer.GetScreenCount(); screen++)
             fps = Math.Max(fps, DisplayServer.ScreenGetRefreshRate(screen));
         // Leave one FPS of headroom so the limiter does not compete with compositor vsync.
@@ -371,6 +375,7 @@ public sealed class GodotSession : IDisposable
         try
         {
             ApplyPendingResize();
+            _forwarder?.PollCapturedMotion();
             if (Engine.Iteration())
             {
                 StopPump();

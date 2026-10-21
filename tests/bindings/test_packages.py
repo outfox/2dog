@@ -5,6 +5,7 @@ or poe pack-double):
     uv run tests/bindings/test_packages.py [--precision double] [--feed packages] [--version VERSION]
 """
 import argparse
+import json
 import os
 import platform
 from pathlib import Path
@@ -31,6 +32,8 @@ SUFFIX = ".double" if args.precision == "double" else ""
 CORE = "2dog.godotsharp" + SUFFIX
 EDITOR = "2dog.godotsharp.editor" + SUFFIX
 ENGINE = "2dog.engine" + SUFFIX
+# Avalonia's build telemetry collector outlives the build and locks its DLL in the temporary package folder.
+ENV = {**os.environ, "AVALONIA_TELEMETRY_OPTOUT": "1"}
 
 
 def xml(value):
@@ -92,7 +95,7 @@ class BindingPackages(unittest.TestCase):
         # DLLs in this temporary package cache after the test completes.
         result = subprocess.run(["dotnet", *map(str, command), "--nologo", "-nr:false"], cwd=self.dir,
                                 text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=180,
-                                env={**os.environ, "AVALONIA_TELEMETRY_OPTOUT": "1"})
+                                env={**ENV, "AVALONIA_TELEMETRY_OPTOUT": "1"})
         # Preserve diagnostics outside the temporary fixtures on failure.
         if (error is None and result.returncode) or (error and (not result.returncode or error not in result.stdout)):
             self.fail(f"dotnet {' '.join(map(str, command))}\n{result.stdout}")
@@ -197,7 +200,9 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
         (game_dir / "Example.cs").write_text("public partial class Example : Godot.Node { public Api Value = new(); }")
         host = self.project("Host", packages=[], extra='<PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>'
                             '<ItemGroup><ProjectReference Include="../Game/Game.csproj"/></ItemGroup>',
-                            source="System.Console.WriteLine(typeof(Example).Name);")
+                            # The game assembly generates TwoDogWebBoot; the template ships no TwoDogWebBoot.cs here.
+                            source="System.Console.WriteLine(typeof(Example).Name);"
+                                   "System.Console.WriteLine(TwoDogWebBoot.PluginsInitializer() != System.IntPtr.Zero);")
         for config in ("Debug", "Release", "Editor"):
             with self.subTest(config=config):
                 output = self.dotnet("build", host, "-c", config)
@@ -254,6 +259,21 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
         self.assertEqual(self.editor_bytes, (publish / "GodotSharpEditor.dll").read_bytes())
 
         self.dotnet(publish / "Host.dll")
+
+    def test_godot_editor_exports_use_stock_bindings(self):
+        # Godot editor exports publish beside stock templates; 2dog hosts never build ExportDebug/ExportRelease.
+        project = self.project(sdk=f"Godot.NET.Sdk/{GODOT}", source="public partial class Api : Godot.Node { }")
+        expected = {"Release": CORE, "ExportDebug": "GodotSharp", "ExportRelease": "GodotSharp"}
+        for config, package in expected.items():
+            with self.subTest(config=config):
+                output = self.dotnet("msbuild", project, "-restore", f"-p:Configuration={config}",
+                                     "-t:Build;ComputeResolvedFilesToPublishList",
+                                     "-getItem:ReferencePath,ResolvedFileToPublish")
+                items = json.loads(output[output.index("{"):])["Items"]
+                for kind in ("ReferencePath", "ResolvedFileToPublish"):
+                    sources = {item.get("NuGetPackageId") for item in items[kind]
+                               if item["Filename"] + item["Extension"] == "GodotSharp.dll"}
+                    self.assertEqual({package}, sources, kind)
 
     def test_incompatible_stock_core_package_rejected(self):
         project = self.project(packages=[(CORE, VERSION), ("GodotSharp", "0.0.1-test")])

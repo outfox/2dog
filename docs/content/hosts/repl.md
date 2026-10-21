@@ -1,18 +1,30 @@
 ---
 title: C# REPL
-description: "Explore and change a running Godot game with C# and node shell commands."
+description: "Explore and change a running Godot game with C# and shell-like commands."
+tagline: "Learn how to explore and change a running game live, with C# and shell-like commands."
 ---
 
 # C# REPL
 
-Add an interactive C# prompt to your game from its Godot project directory:
+Add an interactive C# prompt to your game from its Godot project directory.
+
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie playing tug of war with of their robot dog](../img/2dog-tugofwar.png)
+*"Be a nice dogbot. Share that assembly load context!"*
+
+::: danger Don't play too rough! :stop_sign:
+... don't call `tree.free()`, for example, and only give trusted users access.
+
+This is an experimental, powerful new way to interact with your Godot project or the editor *while it's running!*
+:::
+
+Create a REPL host:
 
 ```bash
 dnx 2dog add --repl
 dotnet run --project MyGame.repl
 ```
 
-For a new project, use `dnx 2dog new MyGame --repl`.
+For a new, purely REPL project, use `dnx 2dog new MyGame --repl`.
 
 ## Try It
 
@@ -39,11 +51,11 @@ node.Name
 node.QueueFree();
 ```
 
-| Mode | Input |
-| --- | --- |
-| `:auto` (default) | C# and node shell commands |
-| `:sh` | Node shell commands, with C# expressions for properties and methods |
-| `:cs` | C# statements, declarations and expressions |
+| Mode              | Input                                                               |
+|-------------------|---------------------------------------------------------------------|
+| `:auto` (default) | C# and shell-like commands                                          |
+| `:sh`             | Shell-like commands, with C# expressions for properties and methods |
+| `:cs`             | C# statements, declarations and expressions                         |
 
 Variables and the selected node carry over when switching modes. Type `:help`
 for commands and keybindings, or `:exit` to stop the prompt and game.

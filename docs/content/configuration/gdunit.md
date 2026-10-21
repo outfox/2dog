@@ -1,6 +1,7 @@
 ---
 title: GdUnit Configuration
 description: "Configure GdUnit host packages, private resource roots, execution limits and artifacts."
+tagline: "Learn how to configure GdUnit runs, limits and test artifacts."
 ---
 
 # GdUnit Configuration
@@ -53,9 +54,12 @@ For manual setup, create `MyGame.gdunit/MyGame.gdunit.csproj`:
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>MyGame.GdUnit</RootNamespace>
+    <GodotProjectDir>..</GodotProjectDir>
+    <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="2dog.gdunit" Version=":2dog-version:" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.*" />
     <AssemblyMetadata Include="GodotProject" Value="$(MSBuildProjectDirectory)/.." />
   </ItemGroup>
 </Project>
@@ -87,16 +91,14 @@ using var application = await builder.BuildAsync();
 return await application.RunAsync();
 ```
 
-`AddSelfRegisteredExtensions` is generated in the project's `RootNamespace`.
-It registers the host's MTP extensions, including MSBuild integration.
+`AddSelfRegisteredExtensions` is generated in the project's `RootNamespace`;
 `AddGdUnit` registers the GDScript test framework.
 
 ## Select the runner
 
-The .NET 10 SDK runs `dotnet test` on MTP only when a `global.json` at or
-above the working directory selects it. The scaffold creates a root
-`global.json` that does, unless the project already has one, and also puts
-this `global.json` inside `MyGame.gdunit/`:
+Besides the root `global.json` described in
+[Test runners](/testing/#test-runners), the scaffold puts this one inside
+`MyGame.gdunit/`:
 
 ```json
 {
@@ -112,22 +114,21 @@ dotnet test MyGame.gdunit
 dotnet test --project MyGame.gdunit --list-tests
 ```
 
-If you keep your own root `global.json` without the `test` runner, run from
-`MyGame.gdunit/` so the host's file applies, or add the `test` entry to the
-root file. [`2dog doctor`](/cli/doctor) reports this as `layout.test-runner`.
+If your root `global.json` does not select MTP, run from `MyGame.gdunit/`
+instead.
 
 ## Execution options
 
 Set these properties on `GdUnitOptions` in `Program.cs`:
 
-| Property | Default | Purpose |
-| --- | --- | --- |
-| `ProjectPath` | Required | Directory containing `project.godot` |
-| `TestRoots` | `tests` | Directories relative to the game |
-| `ArtifactsDirectory` | Host output `TestResults/gdunit` | Parent of fresh stages and logs |
-| `ProjectAssemblyDirectory` | Host output | Built game assemblies and dependencies |
-| `ImportTimeout` | Two minutes | Limit for the separate import process |
-| `SessionTimeout` | Five minutes | Limit for pumping one embedded session |
+| Property                   | Default                          | Purpose                                |
+|----------------------------|----------------------------------|----------------------------------------|
+| `ProjectPath`              | Required                         | Directory containing `project.godot`   |
+| `TestRoots`                | `tests`                          | Directories relative to the game       |
+| `ArtifactsDirectory`       | Host output `TestResults/gdunit` | Parent of fresh stages and logs        |
+| `ProjectAssemblyDirectory` | Host output                      | Built game assemblies and dependencies |
+| `ImportTimeout`            | Two minutes                      | Limit for the separate import process  |
+| `SessionTimeout`           | Five minutes                     | Limit for pumping one embedded session |
 
 For tests under a nested host, include that host in each root, for example
 `MyGame.gdunit/tests`. Roots must remain inside the source game. Selected roots
@@ -142,12 +143,12 @@ assemblies and dependencies are staged elsewhere.
 
 Each request creates a fresh subdirectory beneath `ArtifactsDirectory`:
 
-| Artifact | Contents |
-| --- | --- |
-| `project/` | Writable game copy, selected tests, pinned framework and bridge |
-| `import.log` | Resource import helper output |
-| `godot.log` | Embedded engine's native log |
-| `events.json` | Serialized discovery, lifecycle and result events |
+| Artifact      | Contents                                                        |
+|---------------|-----------------------------------------------------------------|
+| `project/`    | Writable game copy, selected tests, pinned framework and bridge |
+| `import.log`  | Resource import helper output                                   |
+| `godot.log`   | Embedded engine's native log                                    |
+| `events.json` | Serialized discovery, lifecycle and result events               |
 
 Reports from GdUnit's session hooks live under
 `project/twodog_test_host/reports/`. The host retains artifacts for inspection.
@@ -156,4 +157,4 @@ native directory operations can reach Windows path length limits.
 
 For assertions, suites and other framework settings, use
 [GdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/).
-See [Testing with gdUnit](/testing/gdunit) for the host's execution differences.
+See [Testing with GdUnit](/testing/gdunit) for the host's execution differences.

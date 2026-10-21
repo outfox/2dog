@@ -1,6 +1,7 @@
 ---
 title: 2dog help
 description: "Reference for 2dog help: show the tool's usage, or the help for one verb."
+tagline: "Learn how to get help for 2dog and each of its commands."
 ---
 
 # `2dog help`

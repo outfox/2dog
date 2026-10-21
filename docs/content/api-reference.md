@@ -1,6 +1,7 @@
 ---
 title: API Reference
 description: "Overview of the deliberately small 2dog API: twodog.Engine, Godot.GodotInstance, the twodog.Testing fixtures, xUnit collections, and object lifetimes at a glance."
+tagline: "Take a quick tour of the small API that puts Godot in your .NET app."
 ---
 
 # API Reference
@@ -10,16 +11,16 @@ instance, or use the fixture classes when xUnit owns the process.
 
 ## `twodog`
 
-| Type | Use it to |
-| --- | --- |
+| Type                     | Use it to                                      |
+|--------------------------|------------------------------------------------|
 | [`Engine`](./api/engine) | Configure, start, run, and stop embedded Godot |
 
 `Engine` is the normal entry point from the `2dog.engine` package.
 
 ## `Godot`
 
-| Type | Use it to |
-| --- | --- |
+| Type                                    | Use it to                                                             |
+|-----------------------------------------|-----------------------------------------------------------------------|
 | [`GodotInstance`](./api/godot-instance) | Access the borrowed compatibility handle returned by `Engine.Start()` |
 
 2dog adds `GodotInstance` to the GodotSharp API. Use the
@@ -28,21 +29,21 @@ nodes, resources, scenes, and other engine types.
 
 ## `twodog.Testing`
 
-| Type | Use it to |
-| --- | --- |
-| [`FixtureBase`](./api/fixture-base) | Build a fixture with custom Godot arguments |
-| [`Fixture`](./api/fixture) | Run tests with rendering enabled |
-| [`HeadlessFixture`](./api/headless-fixture) | Run headless tests, including CI |
+| Type                                                    | Use it to                                   |
+|---------------------------------------------------------|---------------------------------------------|
+| [`FixtureBase`](./api/fixture-base#fixturebase)         | Build a fixture with custom Godot arguments |
+| [`Fixture`](./api/fixture-base#fixture)                 | Run tests with rendering enabled            |
+| [`HeadlessFixture`](./api/fixture-base#headlessfixture) | Run headless tests, including CI            |
 
 These fixtures ship in `2dog.engine` and do not depend on a specific test
 framework.
 
 ## `twodog.Testing.Xunit`
 
-| Type | Use it to |
-| --- | --- |
-| [`RenderingCollection`](./api/rendering-collection) | Share a rendered fixture across an xUnit collection |
-| [`HeadlessCollection`](./api/headless-collection) | Share a headless fixture across an xUnit collection |
+| Type                                                    | Use it to                                           |
+|---------------------------------------------------------|-----------------------------------------------------|
+| [`RenderingCollection`](./api/fixture-base#collections) | Share a rendered fixture across an xUnit collection |
+| [`HeadlessCollection`](./api/fixture-base#collections)  | Share a headless fixture across an xUnit collection |
 
 The collection definitions ship in `2dog.xunit` and compile into the consuming
 test assembly so xUnit can discover them.

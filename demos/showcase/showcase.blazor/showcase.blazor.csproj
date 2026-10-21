@@ -10,8 +10,8 @@
         <IsPackable>false</IsPackable>
         <!-- Marks this host as the Blazor flavor for the 2dog tool's host scan. -->
         <TwoDogBlazor>true</TwoDogBlazor>
-        <!-- The nested client project and the game-owned web boot file must stay out of this project's globs. -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);Client/**;TwoDogWebBoot.cs</DefaultItemExcludes>
+        <!-- The nested client project must stay out of this project's globs. -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);Client/**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,9 +1,14 @@
 ---
 title: Troubleshooting
-description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, where to look when a restore or build fails, and how to enable symlinks in a Windows checkout."
+description: "What the 2dog tool's exit codes, notes and errors mean, how it behaves in CI and pipes, where to look when a restore or build fails, and how to fix a pinned Godot .NET runtime."
+tagline: "How to work around common pitfalls and limitations of 2dog, git, and Godot."
 ---
 
 # Troubleshooting
+
+What's up, ~~dog~~ doc?
+
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie faceplanting in front of their robot dog](img/2dog-trouble.png)
 
 Most problems have a first step in common: run [`2dog doctor`](/cli/doctor) in
 the project. It checks the machine and the project, fixes what it safely can,
@@ -12,12 +17,12 @@ and explains build failures it recognizes (`2dog doctor --build`, or
 
 ## Exit codes
 
-| Code | Meaning | What to do |
-| --- | --- | --- |
-| `1` | Usage error | The `error:` line names the problem and suggests the closest option or verb; `2dog <verb> --help` lists what the verb accepts |
-| `2` | Tool error | Project state (no `project.godot`, a name with spaces, invalid XML), a failed `dotnet` call, or a plan that stopped half-way. The `error:`/`hint:` lines say which; `--verbose` adds the stack trace and every subprocess line |
-| `3` | Doctor findings remain, or the `--build` failed | Read the report; `--fix` applies the safe fixes, `--ignore <id>` drops one you accept. After `--build`, the build section names the matched failure and the full log |
-| `130` | Cancelled | Ctrl+C during a prompt or a subprocess; nothing after the cancelled step ran |
+| Code  | Meaning                                         | What to do                                                                                                                                                                                                                     |
+|-------|-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `1`   | Usage error                                     | The `error:` line names the problem and suggests the closest option or verb; `2dog <verb> --help` lists what the verb accepts                                                                                                  |
+| `2`   | Tool error                                      | Project state (no `project.godot`, a name with spaces, invalid XML), a failed `dotnet` call, or a plan that stopped half-way. The `error:`/`hint:` lines say which; `--verbose` adds the stack trace and every subprocess line |
+| `3`   | Doctor findings remain, or the `--build` failed | Read the report; `--fix` applies the safe fixes, `--ignore <id>` drops one you accept. After `--build`, the build section names the matched failure and the full log                                                           |
+| `130` | Cancelled                                       | Ctrl+C during a prompt or a subprocess; nothing after the cancelled step ran                                                                                                                                                   |
 
 ## A plan stopped half-way
 
@@ -29,8 +34,9 @@ command again: existing files are skipped, `--force` overwrites.
 
 ## No terminal, CI, pipes
 
-With stdout not a terminal, or one of `CI`, `GITHUB_ACTIONS`, `TF_BUILD`,
-`GITLAB_CI`, `TEAMCITY_VERSION`, `BUILD_NUMBER` set, the tool never prompts.
+With stdout not a terminal, or in
+[CI](/configuration/environment-variables#cli-output-and-automation), the tool
+never prompts.
 `new` and `add` without host flags then apply the default host set and print
 `note: no terminal to ask on`; pass `--yes` or name the hosts to make that
 explicit. `doctor` prints the fix commands instead of asking. Markers fall back
@@ -57,84 +63,67 @@ a saved restore log the same way it explains builds.
 
 ## "dotnet not found"
 
-The tool runs `dotnet sln`, `dotnet restore` and (for doctor) `dotnet build`
-through the muxer that launched it (`DOTNET_HOST_PATH`), then `DOTNET_ROOT`,
-then `PATH`. Set `DOTNET_HOST_PATH` to the `dotnet` executable when none of
-those apply.
+Put `dotnet` on `PATH`, or set `DOTNET_HOST_PATH` to the `dotnet` executable.
 
-## Testing locally packed packages
+## Godot cannot load `System.Runtime` (NixOS and pinned .NET runtimes)
 
-When you develop 2dog itself, same-version repacks are masked by the NuGet
-cache and by nuget.org. Pack with a prerelease suffix CI can never publish and
-point the consumer at the local feed:
+After `2dog add`, the stock Godot editor may report:
 
-```bash
-dotnet pack twodog.godotsharp -c Release -p:TwoDogVersion=:2dog-version:-local.1
-dotnet pack twodog.godotsharp.editor -c Release -p:TwoDogVersion=:2dog-version:-local.1
-dotnet pack twodog.engine -c Release -p:TwoDogVersion=:2dog-version:-local.1
-python tests/bindings/test_packages.py --version :2dog-version:-local.1
-# consumer nuget.config: add the repo's packages/ folder as a source, reference -local.1
+```text
+System.IO.FileNotFoundException: Could not load file or assembly
+'System.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.
+.NET: Failed to load project assembly.
 ```
 
-## Symlinks in a Windows checkout of 2dog
+`2dog add` upgrades the game project to `net10.0`, which the 2dog binding
+packages require. If the editor loads an older .NET runtime, it cannot load
+that assembly even when compilation succeeds. Running `dnx 2dog` successfully
+or seeing .NET 10 in `dotnet --list-sdks` does not prove that the editor uses
+.NET 10: the editor loads its runtime separately from the build SDK.
 
-The 2dog repository shares some files through committed symlinks, such as the
-showcase's `fps_counter.tscn`, which links to the template's copy. Without
-symlink support, Git writes each link as a small text file holding the target
-path. The showcase then fails to load its main scene, and
-`FpsCounterDriftTests` reports that the file is not a symlink.
+### NixOS
 
-On Windows, symlinks need two things:
+Nixpkgs' `godot-mono` wrapper selects its own .NET SDK, which can be older than
+the one in your shell. Replace the existing `pkgs.godot-mono` entry in your
+NixOS `environment.systemPackages` or Home Manager `home.packages` with:
 
-1. **Developer Mode**, so that a normal account can create symlinks: Settings >
-   System > For developers > Developer Mode. Without it, only an elevated
-   prompt can create them.
-2. **`core.symlinks=true`** in Git. Git for Windows writes
-   `core.symlinks=false` into `.git/config` at clone time when it cannot create
-   symlinks, and that repository setting overrides the global one.
-
-Set both before cloning:
-
-```bash
-git config --global core.symlinks true
-git clone --recursive https://github.com/outfox/2dog
+```nix
+(pkgs.godot-mono.overrideAttrs {
+  dotnet-sdk = pkgs.dotnet-sdk_10;
+})
 ```
 
-To repair an existing clone, enable the setting in the repository and check the
-links out again:
+Apply your Nix configuration, fully close Godot, then reopen the project using
+the updated package and rebuild. An already running editor keeps its loaded
+runtime. Installing .NET 10 alongside the default Godot package alone does not
+change the SDK selected by its wrapper. See the
+[Nixpkgs Godot wrapper](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/godot/common.nix)
+for the SDK override.
 
-```bash
-git config core.symlinks true
-git ls-files -s | grep ^120000          # lists the symlinks
-git checkout -- demos/showcase/fps_counter.tscn
-```
+### Other systems and later .NET versions
 
-`git config --show-origin --get-all core.symlinks` shows which configuration
-file sets the value; the last entry wins.
+The same issue can occur with any launcher, package or environment that pins
+Godot to an older .NET runtime. Check the launcher's SDK/runtime selection,
+including `DOTNET_ROOT` and `PATH`, and configure it to use a runtime compatible
+with the game's target framework. Fully restart the editor after changing it.
+Keep the game on the target framework required by its 2dog packages.
 
-Edit a shared file through its real path, `templates/twodog/fps_counter.tscn`.
-On Windows, the Godot editor saves through a temporary file and a rename, which
-replaces a symlink with a regular copy; `git status` then shows the link as
-changed.
+Godot 4.8's move to .NET 10 reduces this mismatch for `net10.0` projects, but
+does not remove the underlying constraint: it can recur when a game targets
+a later .NET version than the runtime selected by the editor.
 
-## Mixed Godot bindings (TDG001–TDG004)
+## Mixed Godot bindings (TDG001-TDG005)
 
-Run the current `2dog update` to configure fork bindings in an existing game. `2dog add`
-and new templates do this automatically too. No DisableImplicitGodotSharpReferences or
-DisableImplicitGodotGeneratorReferences properties are required.
+2dog swaps stock GodotSharp assemblies for its own at build time. `2dog update`
+sets this up in an existing game; `2dog add` and new projects do it already.
 
-Compatible stock GodotSharp/GodotSharpEditor package assets are replaced with the matching
-fork assemblies before compile/copy/publish. TDG001 now means a dependency targets a different
-Godot version: align its version (or Godot.NET.Sdk) with the engine's Godot version.
-TDG003 identifies a stale manual assembly reference; remove the conflicting HintPath.
-TDG004 requires core/editor/engine packages to use the same 2dog version.
-
-The published 4.7.2.89 binding package rejected all mixed package graphs. Updating only the CLI
-cannot repair that package's build targets; upgrade the engine and managed packages together
-to a release containing the compatibility fix.
-
-Builds still validate binding contents before compilation and publish trimming. IL2125 warnings
-for your own libraries require a separate trimming review.
+| Code     | Cause                                               | Fix                                                                                           |
+|----------|-----------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `TDG001` | A dependency targets a different Godot version      | Align it, or `Godot.NET.Sdk`, with the engine's Godot version                                 |
+| `TDG002` | `GodotSharpEditor` without `2dog.godotsharp.editor` | Reference `2dog.godotsharp.editor` at the engine version; remove stock packages and HintPaths |
+| `TDG003` | A referenced GodotSharp assembly is not 2dog's      | Remove the conflicting reference or HintPath and rebuild against `2dog.godotsharp`            |
+| `TDG004` | Core and editor binding packages differ in version  | Use one 2dog version for all of them                                                          |
+| `TDG005` | An editor export build found no stock GodotSharp    | Build the game with `Godot.NET.Sdk`                                                           |
 
 ## The Godot editor holds a file
 

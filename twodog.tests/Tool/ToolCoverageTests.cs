@@ -85,7 +85,7 @@ public class CommandLineCoverageTests
     public void Parse_RecognizesAliasesAndAllScalarOptions()
     {
         var cmd = CommandLine.Parse(
-            ["convert", "-n", "Game", "--2dog", "Desk", "--browser", "Web", "--webxr", "Xr", "--test", "Tests",
+            ["add", "-n", "Game", "--2dog", "Desk", "--browser", "Web", "--webxr", "Xr", "--test", "Tests",
              "--winforms", "Forms", "--winui", "Wui", "--avalonia", "Ava", "--dry-run", "--force", "--verbose", "--no-input"]);
 
         Assert.Equal(Verb.Add, cmd.Verb);

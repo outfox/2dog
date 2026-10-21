@@ -14,11 +14,11 @@ internal static class HostChecks
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
         new("host.publish-aot", Category.Hosts, "no WinForms, REPL, browser or Blazor host enables PublishAot"),
         new("host.publish-singlefile", Category.Hosts, "PublishSingleFile is only enabled by browser hosts or alongside PublishAot"),
+        new("host.webxr-threads", Category.Hosts, "WebXR hosts do not enable WasmEnableThreads"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
         new("host.web-props-shim", Category.Hosts, "browser hosts chain to the root Directory.Build.props"),
         new("host.web-global-json", Category.Hosts, "browser hosts carry their own global.json"),
-        new("host.webboot-drift", Category.Hosts, "the tool-owned TwoDogWebBoot.cs matches this tool's copy"),
         new("host.trimmer-root", Category.Hosts, "browser hosts root the game assembly for the trimmer"),
         new("host.blazor-client", Category.Hosts, "the Blazor client project exists and publishes 2dog.engine"),
         new("host.blazor-launch-settings", Category.Hosts, "Blazor hosts carry a Development launchSettings.json"),
@@ -107,6 +107,17 @@ internal static class HostChecks
                     host.Kind is HostKind.Web or HostKind.WebXr ? "replace PublishAot with RunAOTCompilation" : "remove PublishAot",
                     csproj));
 
+            // Godot's WebXR module refuses proxy_to_pthread, so the threaded engine has none; old scaffolds wired
+            // $(TwoDogWebThreads) in, which only breaks once the root enables it.
+            if (host.Kind == HostKind.WebXr && host.Properties("WasmEnableThreads").Select(e => e.Value.Trim())
+                    .FirstOrDefault(v => !v.Equals("false", StringComparison.OrdinalIgnoreCase)) is { } threads)
+                yield return Issue(new Finding("host.webxr-threads", c,
+                    threads == "$(TwoDogWebThreads)" && !BuildSettings.HasWebThreads(p.Dir) ? Severity.Warn : Severity.Fail,
+                    $"{csproj} sets WasmEnableThreads to '{threads}'",
+                    "the threaded engine has no WebXR, so XRServer finds no WebXR interface", null, csproj,
+                    new Fix($"csproj:{host.Folder}:threads", FixClass.Safe, $"remove WasmEnableThreads from {csproj}",
+                        () => RemoveProperties(host.CsprojPath, "WasmEnableThreads"))));
+
             // NativeAOT ignores PublishSingleFile; its executable already holds every assembly.
             if (!host.IsWebLike && Enables("PublishSingleFile") && !(nativeAot && Enables("PublishAot")))
                 yield return Issue(new Finding("host.publish-singlefile", c, Severity.Fail, $"{csproj} enables PublishSingleFile",
@@ -141,13 +152,6 @@ internal static class HostChecks
                         "publishing from inside the folder would not pin the SDK", null, $"{host.Folder}/global.json",
                         new Fix($"create:{host.Folder}/global.json", FixClass.Safe, $"create {host.Folder}/global.json",
                             () => WriteTemplateFile(p, host, "global.json"))));
-
-                var boot = Path.Combine(dir, "TwoDogWebBoot.cs");
-                if (File.Exists(boot) && File.ReadAllText(boot) != TemplateAssets.WebBootSource())
-                    yield return Issue(new Finding("host.webboot-drift", c, Severity.Warn, $"{host.Folder}/TwoDogWebBoot.cs differs from this tool's bootstrap",
-                        "the file is tool-owned; an older copy may miss what newer packages expect", "2dog update", $"{host.Folder}/TwoDogWebBoot.cs",
-                        new Fix($"refresh:{host.Folder}/TwoDogWebBoot.cs", FixClass.Announced, $"refresh {host.Folder}/TwoDogWebBoot.cs (overwrites the tool-owned file)",
-                            () => File.WriteAllText(boot, TemplateAssets.WebBootSource()))));
 
                 if (host.Kind != HostKind.Blazor && p.BaseName is { } game)
                 {

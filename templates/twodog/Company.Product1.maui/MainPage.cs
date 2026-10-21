@@ -6,7 +6,7 @@ namespace Company.Product1.Maui;
 // The game fills the page and a floating MAUI card controls it. Input outside the card reaches Godot.
 public sealed class MainPage : ContentPage
 {
-    private static readonly Color Accent = Color.FromArgb("#579EFF");
+    private static readonly Color Accent = Color.FromArgb("#A8E66A");
     private static readonly Color Muted = Color.FromArgb("#9AA7B8");
 
     private readonly GodotView _game = new() { Project = "TPLRAWNAME" };

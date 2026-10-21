@@ -1,5 +1,4 @@
 using Godot;
-using showcase.web;
 using Engine = twodog.Engine;
 
 namespace showcase.webxr;

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import type { ThemeConfig } from './theme/config.ts'
 import {
   twodogVersionPlugin,
   godotVersionPlugin,
@@ -8,11 +9,12 @@ import {
 } from './plugins/version-markers.mts'
 import { columnsPlugin } from './plugins/columns.mts'
 import { godotIconsPlugin, godotIconHtml } from './plugins/godot-icons.mts'
+import { siteUrl, socialMetadata } from './social-metadata.mjs'
 
 // Sidebar node glyphs; the section's --tree-color tints them (theme/custom.css).
 const gd = (name: string) => `${godotIconHtml(name)} `
 
-export default defineConfig({
+export default defineConfig<ThemeConfig>({
   srcDir: "content",
 
   // The vendored icon sets ship their own README.md; without this VitePress
@@ -40,12 +42,14 @@ export default defineConfig({
   // Emits sitemap.xml into the build output for search engines (Google Search Console).
   // lastUpdated derives per-page <lastmod> from git history; needs a full clone at build time.
   sitemap: {
-    hostname: 'https://2dog.dev'
+    hostname: siteUrl
   },
   lastUpdated: true,
 
+  transformHead: socialMetadata,
+
   title: "2dog",
-  titleTemplate: ":title 🦴 2dog",
+  titleTemplate: ":title | 2dog",
   description: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow.",
 
   head: [
@@ -64,17 +68,7 @@ export default defineConfig({
     ['link', { rel: "me", href: "https://mastodon.gamedev.place/@jupiter" }],
     ['link', { rel: "me", href: "https://tiggi.es/@thygrrr" }],
     ['meta', { name: "author", content: "outfox" }],
-    ['meta', { name: "theme-color", content: "#478cbf" }],
-    ['meta', { name: "twitter:card", content: "summary_large_image" }],
-    ['meta', { name: "twitter:title", content: "2dog is Godot backwards 🦴 " }],
-    ['meta', { name: "twitter:image", content: "https://2dog.dev/og-image.png" }],
-    ['meta', { name: "twitter:image:alt", content: "2dog logo - a happy white dog" }],
-    ['meta', { name: "twitter:description", content: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow." }],
-    ['meta', { property: "og:type", content: "website" }],
-    ['meta', { property: "og:url", content: "https://2dog.dev" }],
-    ['meta', { property: "og:title", content: "2dog is Godot backwards 🦴" }],
-    ['meta', { property: "og:description", content: "2dog is Godot C# running in .NET! Export for HTML5, run unit tests, embed and automate. Keep your scenes, scripts, and Godot workflow." }],
-    ['meta', { property: "og:image", content: "https://2dog.dev/og-image.png" }],
+    ['meta', { name: "theme-color", content: "#10141b" }],
   ],
 
 
@@ -226,17 +220,7 @@ export default defineConfig({
                 text: 'twodog.Testing',
                 collapsed: true,
                 items: [
-                  { text: gd('test_tube') + 'FixtureBase', link: '/api/fixture-base' },
-                  { text: gd('test_tube') + 'Fixture', link: '/api/fixture' },
-                  { text: gd('test_tube') + 'HeadlessFixture', link: '/api/headless-fixture' }
-                ]
-              },
-              {
-                text: 'twodog.Testing.Xunit',
-                collapsed: true,
-                items: [
-                  { text: gd('layers') + 'HeadlessCollection', link: '/api/headless-collection' },
-                  { text: gd('layers') + 'RenderingCollection', link: '/api/rendering-collection' }
+                  { text: gd('test_tube') + 'Fixtures', link: '/api/fixture-base' }
                 ]
               }
             ]
@@ -341,8 +325,8 @@ export default defineConfig({
     ],
 
     footer: {
-      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>. <br/>Godot is licensed under the <a href="https://godotengine.org/license/">MIT License</a>.<br/><b>2dog</b> is not affiliated with or endorsed by the Godot Foundation.<br/><b>@icons</b> made by <a href="https://www.voxy.space">Voxy</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.',
-      copyright: '<b>2dog</b> is Copyright © 2025-2026 <a href="https://github.com/outfox/2dog/graphs/contributors">its contributors</a>'
+      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>.<br/><b>2dog</b> is not affiliated with or endorsed by the Godot Foundation.<br/>Godot is licensed under the <a href="https://godotengine.org/license/">MIT License</a>. <b>@icons</b> made by <a href="https://www.voxy.space">Voxy</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.<br/>Continuous Integration compute graciously supported by <a href="https://runs-on.com">RunsOn</a>.',
+      copyright: '<b>2dog</b> is Copyright © 2025-2026 <a href="https://github.com/outfox/2dog/graphs/contributors">its contributors</a>. <b>Lucky &amp; Dogbot</b> illustrations by <a href="https://www.diegorago.com/">Diego Rago</a>.'
     },
   }
 })

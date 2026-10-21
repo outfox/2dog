@@ -1,6 +1,7 @@
 ---
 title: MAUI
 description: "Embed Godot in a .NET MAUI page on Windows and Android."
+tagline: "Learn how to embed Godot in a .NET MAUI app on Windows and Android."
 ---
 
 # MAUI
@@ -18,9 +19,8 @@ dnx 2dog add --maui
 dotnet run --project MyGame.maui
 ```
 
-The host targets several frameworks, so the .NET 10 SDK asks which one to
-run, or lists them when it cannot prompt. Add
-`-f net10.0-windows10.0.19041.0` to skip the question.
+Add `-f net10.0-windows10.0.19041.0` to pick the Windows target; otherwise
+`dotnet run` asks.
 
 For Android on any supported host OS, install `maui-android` and follow the
 [SDK and JDK setup](/hosts/android#set-it-up). To build for an x64 emulator:

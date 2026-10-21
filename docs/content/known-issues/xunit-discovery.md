@@ -1,6 +1,7 @@
 ---
 title: xUnit Test Discovery Crash
 description: "Godot values in xUnit MemberData can crash the test host during discovery - the affected Godot types and the workarounds."
+tagline: "Test host crashing during discovery? Learn how to fix it."
 ---
 
 # xUnit Test Discovery Crash with Godot Types

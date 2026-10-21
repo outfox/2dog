@@ -13,14 +13,33 @@ internal static class Program
         {
             string[] options = ["--rendering-driver", driver, "--audio-driver", "Dummy"];
             if (method != "default") options = [.. options, "--rendering-method", method];
+            if (args.Contains("--project-settings")) options = ["--audio-driver", "Dummy"];
             if (OperatingSystem.IsLinux()) options = [.. options, "--display-driver", "x11"];
+            if (args.Contains("--headless")) options = [.. options, "--headless"];
             using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true, NativePath = System.Environment.GetEnvironmentVariable("TWODOG_WEBGPU_NATIVE_PATH") };
             engine.Start();
+            if (args.Contains("--startup-only"))
+            {
+                engine.Dispose();
+                engine.Completion.GetAwaiter().GetResult();
+                if (engine.Errors.Drain().Length != 0) throw new Exception("Unexpected startup errors.");
+                Console.WriteLine("NATIVE_RENDERER_STARTUP_PASSED");
+                return;
+            }
             if (RenderingServer.GetCurrentRenderingDriverName() != driver)
                 throw new Exception($"{driver} selection fell back to another rendering driver.");
             if (method == "default" && driver == "webgpu"
                 && RenderingServer.GetCurrentRenderingMethod() != "mobile")
                 throw new Exception("An implicit WebGPU rendering method must select Mobile.");
+            if (args.Contains("--contract-rejections"))
+            {
+                ContractRejections.Run(engine);
+                engine.Dispose();
+                engine.Completion.GetAwaiter().GetResult();
+                if (engine.Errors.Drain().Length != 0) throw new Exception("Unexpected errors after capability probes.");
+                Console.WriteLine("NATIVE_WEBGPU_CONTRACT_REJECTIONS_PASSED");
+                return;
+            }
             if (driver == "webgpu") DescriptorArraySmoke.Run();
             if (RenderingServer.GetCurrentRenderingMethod() is "forward_plus" or "mobile")
             {

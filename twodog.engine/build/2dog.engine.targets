@@ -249,7 +249,17 @@
          made without that assembly can stay broken even after the assembly is supplied. The stamp also forces
          a pack refresh when installing this fix into a project with an existing, otherwise up-to-date pack. -->
     <Target Name="TwoDogPrepareExport"
-            DependsOnTargets="TwoDogResolveExportAssemblyDir;TwoDogHashExportAssemblies" />
+            DependsOnTargets="TwoDogResolveExportAssemblyDir;TwoDogHashExportAssemblies"
+            Condition="'$(TwoDogGodotProjectFullPath)' != ''">
+        <!-- File timestamps alone cannot detect removed resources or added files with old timestamps. -->
+        <PropertyGroup>
+            <_TwoDogExportInputsStamp>$(BaseIntermediateOutputPath)twodog-export-inputs.list</_TwoDogExportInputsStamp>
+        </PropertyGroup>
+        <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+        <WriteLinesToFile File="$(_TwoDogExportInputsStamp)"
+                          Lines="@(TwoDogDesktopExportInputs);@(TwoDogAndroidExportInputs);@(TwoDogWebExportInputs)"
+                          Overwrite="true" WriteOnlyWhenDifferent="true" />
+    </Target>
 
     <Target Name="TwoDogHashExportAssemblies"
             Condition="'@(_TwoDogExportGameAssembly)' != ''">
@@ -361,7 +371,7 @@
     <Target Name="TwoDogExportDesktopPack"
             AfterTargets="Publish"
             DependsOnTargets="TwoDogPrepareExport"
-            Inputs="@(TwoDogDesktopExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogDesktopExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(PublishDir)$(TargetName).pck"
             Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
@@ -382,7 +392,7 @@
 
         <!-- Actionable message instead of the engine's exit-1 (whose stderr an IDE build may swallow). -->
         <Error Condition="'$(_TwoDogHasDesktopPreset)' != 'true'"
-               Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), re-run `2dog convert` (it scaffolds the desktop presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
+               Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), run `2dog doctor --fix` (it appends the template presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
 
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
@@ -390,7 +400,7 @@
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; &quot;$(_TwoDogDesktopPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; &quot;$(_TwoDogDesktopPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
@@ -435,7 +445,7 @@
     <Target Name="TwoDogExportAndroidPack"
             BeforeTargets="TwoDogAddAndroidPack"
             DependsOnTargets="TwoDogImportGodotProject;TwoDogPrepareExport;_TwoDogResolveAndroidExportPath"
-            Inputs="@(TwoDogAndroidExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogAndroidExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(_TwoDogAndroidPackFullPath)"
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogAndroidPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
@@ -454,7 +464,7 @@
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; &quot;$(_TwoDogAndroidPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; &quot;$(_TwoDogAndroidPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 

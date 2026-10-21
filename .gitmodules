@@ -1,4 +1,3 @@
 [submodule "godot"]
 	path = godot
 	url = git@github.com:thygrrr/godot.git
-	branch = 2dog-4.7.2-webgpu

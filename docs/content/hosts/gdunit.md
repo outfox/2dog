@@ -1,6 +1,7 @@
 ---
 title: GdUnit
 description: "Run GDScript GdUnit suites through a .NET test host with embedded Godot."
+tagline: "Learn how to run your GdUnit suites with dotnet test."
 ---
 
 # GdUnit
@@ -8,6 +9,8 @@ description: "Run GDScript GdUnit suites through a .NET test host with embedded 
 The GdUnit host is a .NET test executable that runs GDScript suites in a
 private copy of your game with embedded libgodot. It supports pure GDScript
 games and scenes containing C# components.
+
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their robot dog sniffing the ground](../img/2dog-investigation.png)
 
 Create a host from the game directory:
 

@@ -1,6 +1,7 @@
 ---
 title: twodog.fixture.AssemblyPreloader
 description: "API reference for AssemblyPreloader, which preloads game assemblies into the default AssemblyLoadContext before Godot starts."
+tagline: "Learn how to load your game assemblies before Godot starts."
 ---
 
 # `twodog.fixture.AssemblyPreloader`
@@ -36,8 +37,8 @@ always matches the host's build configuration; other configurations' outputs and
 leftovers of renamed projects are ignored. Otherwise the first of the `Debug`,
 `Release` and `Editor` folders that contains assemblies is loaded.
 
-| Parameter | Description |
-| --- | --- |
+| Parameter     | Description                          |
+|---------------|--------------------------------------|
 | `projectPath` | Directory containing `project.godot` |
 
 Call it before `Engine.Start()`. In the browser it returns without doing work.

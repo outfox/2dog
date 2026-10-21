@@ -1,6 +1,7 @@
 ---
 title: Simulating Input
 description: "Click Godot controls and send keyboard events in xUnit and NUnit tests."
+tagline: "Learn how to click buttons and press keys in your Godot tests."
 ---
 
 # Simulating input
@@ -25,20 +26,16 @@ handles hit testing and event consumption, so an overlay or input handler can
 block the click. The helper sends motion, press, and release events; it does
 not advance frames.
 
-| Aim at | Call |
-| --- | --- |
-| A point within a control | `godot.Input.Click(playButton, localPosition: new Vector2(10, 10))` |
-| A point in the root viewport | `godot.Input.Click(new Vector2(80, 40))` |
-| A point in another viewport | `godot.Input.Click(new Vector2(80, 40), viewport: gameViewport)` |
+| Aim at                       | Call                                                                |
+|------------------------------|---------------------------------------------------------------------|
+| A point within a control     | `godot.Input.Click(playButton, localPosition: new Vector2(10, 10))` |
+| A point in the root viewport | `godot.Input.Click(new Vector2(80, 40))`                            |
+| A point in another viewport  | `godot.Input.Click(new Vector2(80, 40), viewport: gameViewport)`    |
 
 ::: tip Give headless UI tests enough room
-The headless display server reports no native window size, so the root window
-can start at its minimum size. Stretch settings can make `GetVisibleRect()`
-larger while still giving the UI an unexpected aspect ratio. This affects
-layout and hit testing; it does not mean input simulation is unavailable.
-
-For root-viewport UI tests, set the root window to the project's configured
-viewport dimensions before loading your scene, then settle the layout:
+Headless, the root window can start at its minimum size, which skews layout
+and hit testing. Set it to the project's viewport size before loading your
+scene, then settle the layout:
 
 ```csharp
 var root = godot.Tree.Root;
@@ -55,11 +52,8 @@ try
 finally { root.Size = originalSize; }
 ```
 
-Use an explicit test size instead when testing another resolution or a window
-size override. The fixture is shared, so remove your scene and restore the
-size after the test. Input helpers leave viewport sizes unchanged.
-
-For isolated controls, create a `SubViewport` with an explicit size:
+The fixture is shared, so remove your scene and restore the size afterwards.
+For isolated controls, use a `SubViewport` with an explicit size:
 
 ```csharp
 var viewport = new SubViewport { Size = new Vector2I(400, 300) };
@@ -111,10 +105,10 @@ the helper does not send them with every click.
 
 Choose the delivery method based on what your game reads:
 
-| Method | Delivery | Updates global `Godot.Input` state? |
-| --- | --- | --- |
-| `Click` / `PushToViewport` | Local viewport routing | No |
-| `Send` | Godot's input server and window routing | Yes |
+| Method                     | Delivery                                | Updates global `Godot.Input` state? |
+|----------------------------|-----------------------------------------|-------------------------------------|
+| `Click` / `PushToViewport` | Local viewport routing                  | No                                  |
+| `Send`                     | Godot's input server and window routing | Yes                                 |
 
 For `IsKeyPressed`, `IsMouseButtonPressed`, or action polling, use `Send`:
 
@@ -168,11 +162,6 @@ one event through both delivery methods delivers it twice.
 including other pending events. Project input emulation and window routing
 apply; coordinates use Godot's device/window conventions. GUI event consumption
 does not clear global polling state.
-
-Current Godot natives support headless input-server delivery. The older
-limitation discussed in [Godot issue #73557](https://github.com/godotengine/godot/issues/73557)
-was addressed by [PR #92806](https://github.com/godotengine/godot/pull/92806).
-Viewport sizing remains a separate concern.
 
 See Godot's [viewport delivery](https://docs.godotengine.org/en/stable/classes/class_viewport.html#class-viewport-method-push-input)
 and [input server](https://docs.godotengine.org/en/stable/classes/class_input.html#class-input-method-parse-input-event)

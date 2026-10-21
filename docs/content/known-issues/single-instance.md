@@ -1,15 +1,10 @@
 ---
 title: Single Godot Instance
 description: "Only one Godot instance may run per assembly load context in 2dog; sequential restart is supported and isolated concurrent hosting is experimental."
+tagline: "Learn why one Godot runs per load context, and how to restart it."
 ---
 
 # Single Godot Instance Per Load Context
-
-The repository also contains experimental `twodog.hosting*` projects and
-[hosting demos](https://github.com/outfox/2dog/tree/main/demos) for concurrent
-desktop engines. They are not published NuGet packages: each engine needs its
-own assembly load context and physical native library copy. CWD, environment
-variables and signal handlers remain process-global; macOS hosting is unsupported.
 
 Only one Godot instance may run in an assembly load context at a time. Starting
 a second instance throws `InvalidOperationException`:
@@ -22,8 +17,7 @@ using var engine2 = new Engine("MyGame");
 engine2.Start(); // Throws InvalidOperationException.
 ```
 
-Sequential restart is supported in packages based on Godot 4.7 and later,
-including the browser: the [Blazor host](/hosts/blazor) restarts on a fresh
+Sequential restart is supported, including in the browser: the [Blazor host](/hosts/blazor) restarts on a fresh
 canvas, and web hosts keep the runtime alive by default
 (`Engine.WebExitRuntimeOnQuit = false`). Any host can start a new engine after
 `Completion` completes and `Exited` fires. `Engine` owns its instance; the
@@ -70,3 +64,11 @@ private static FastNoiseLite? _noise;
 private static FastNoiseLite Noise =>
     GodotObject.IsInstanceValid(_noise) ? _noise : _noise = new FastNoiseLite();
 ```
+
+## Concurrent engines
+
+The repository contains experimental `twodog.hosting*` projects and
+[hosting demos](https://github.com/outfox/2dog/tree/main/demos) for concurrent
+desktop engines. They are not published NuGet packages: each engine needs its
+own assembly load context and physical native library copy. CWD, environment
+variables and signal handlers remain process-global; macOS hosting is unsupported.

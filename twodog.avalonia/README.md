@@ -25,4 +25,10 @@ Requires an explicit reference to `2dog.engine` or `2dog.engine.double`, and Ava
 On Windows, declare DPI awareness in your app manifest (the scaffolded host does) so the
 engine's own DPI call cannot desync Avalonia's scaling mid-run.
 
+The compositor paces rendering; sessions disable Godot's low-processor mode and hidden-window
+vsync to avoid competing delays. On Windows the default uses the compositor's frame rate;
+an explicit `MaxFramesPerSecond` still caps engine frames.
+On Windows, captured/confined mouse modes operate on the visible control, including continuous
+mouse look. Use matching updated native packages: the hidden engine window must not take OS capture.
+
 Docs: https://2dog.dev/hosts/avalonia

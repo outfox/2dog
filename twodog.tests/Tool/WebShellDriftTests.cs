@@ -3,9 +3,9 @@ namespace twodog.tests.ToolTests;
 // The web host ships several times (web/webxr/blazor dotnet-new templates and
 // their showcase demo hosts). Each template must stay identical to its showcase
 // mirror apart from the page title, and the webxr flavor must not drift from
-// the web flavor: the shell differs only by the WebXR Layers polyfill block,
-// TwoDogWebBoot.cs is byte-identical, and the template Program.cs differs
-// only by the host label - or fixes silently land in only some copies.
+// the web flavor: the shell differs only by the WebXR Layers polyfill block
+// and the template Program.cs only by the host label - or fixes silently
+// land in only some copies.
 public class WebShellDriftTests
 {
     private static string HostFile(string file, params string[] parts) =>
@@ -56,24 +56,6 @@ public class WebShellDriftTests
         Assert.Equal(-1, webxr.IndexOf(polyfillBlock, index + 1, StringComparison.Ordinal));
 
         Assert.Equal(web, webxr.Remove(index, polyfillBlock.Length));
-    }
-
-    // The game csproj compiles whichever host folder's TwoDogWebBoot.cs is
-    // present (web wins over webxr over blazor), so the copies must not
-    // diverge - a webxr- or blazor-only project would silently boot differently.
-    [Theory]
-    [InlineData("webxr", "templates", "twodog", "Company.Product1")]
-    [InlineData("webxr", "demos", "showcase", "showcase")]
-    [InlineData("blazor", "templates", "twodog", "Company.Product1")]
-    [InlineData("blazor", "demos", "showcase", "showcase")]
-    public void WebFlavorBootFiles_AreIdentical(string suffix, params string[] parts)
-    {
-        var root = parts[..^1];
-        var baseName = parts[^1];
-        var web = HostFile("TwoDogWebBoot.cs", [.. root, $"{baseName}.web"]);
-        var flavor = HostFile("TwoDogWebBoot.cs", [.. root, $"{baseName}.{suffix}"]);
-
-        Assert.Equal(web.ReplaceLineEndings("\n"), flavor.ReplaceLineEndings("\n"));
     }
 
     // The Blazor host ships twice (template + showcase); everything but the

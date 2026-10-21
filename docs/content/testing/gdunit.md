@@ -1,6 +1,7 @@
 ---
 title: Testing GDScript with GdUnit
 description: "Understand how the 2dog host changes GdUnit execution, resource isolation and test reporting."
+tagline: "Learn how 2dog runs your GdUnit tests and keeps their resources apart."
 ---
 
 # Testing GDScript with GdUnit
@@ -33,15 +34,10 @@ Use the host's MTP options for these commands. GdUnit's
 belong to its own runner.
 
 `--gdunit-filter` matches the fully qualified test name with case-sensitive
-`*` and `?` wildcards. Each parameter row has its own MTP result and stable ID,
-derived from the resource path, method and row index. MTP's `--filter-uid`
-selects an exact ID, including a single parameter row. An empty selection
-follows MTP's no-test policy.
-
-`--list-tests json` includes IDs and original source locations. When running
-the executable directly, native Godot output can appear before or after the
-JSON document as its stdout buffers flush. Read the JSON document separately
-from those native messages.
+`*` and `?` wildcards. Each parameter row has its own result and stable ID,
+derived from the resource path, method and row index, so MTP's
+[`--filter-uid`](https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-cli-options)
+can select a single row.
 
 ## Test a private project copy
 
@@ -75,8 +71,7 @@ stack tracking so Release builds retain assertion source lines.
 
 The host disables GdUnit's flaky-test retries and fail-fast execution. It
 preserves GdUnit session hooks; reports they generate remain in the private
-project. Add MTP reporting extensions to the .NET host when you need their
-formats or options.
+project.
 
 MTP cancellation terminates an active import process or asks GdUnit to stop
 execution and finish teardown. The embedded session gets a five-second cleanup
@@ -91,6 +86,3 @@ Ordinary C# game components can be loaded in scenes; GdUnit4Net's C# test
 adapter is not loaded. Use the [xUnit](/hosts/xunit) or [NUnit](/hosts/nunit)
 hosts for C# test suites.
 
-Rendering, verified IDE integration, snapshot caching and relocatable
-published hosts remain follow-up work. CI exercises headless execution on
-Windows, Linux and macOS in both precisions and all three build configurations.

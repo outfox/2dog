@@ -8,15 +8,23 @@
   `configuration/`, `cli/`, `api/` and `known-issues/` hold references.
 - `.vitepress/config.mts` holds the nav, sidebar and site metadata, `.vitepress/plugins/` the Markdown
   plugins and `.vitepress/theme/` styling and layout. The homepage is `content/index.md` frontmatter rendered
-  by `theme/EditorHome.vue` and `theme/home/`, so its text lives in those components.
+  by `theme/HomePage.vue` and `theme/home/`, so its text lives in those components.
 - `npm run dev` and `npm run build` regenerate the ignored `content/public/llms.txt` and `llms-full.txt`;
   postbuild mirrors the Markdown into `.vitepress/dist/`. Edit sources, never generated output.
 - statichost.eu builds and hosts 2dog.dev from pushes with `npm run build-ci`; there is no manual deploy.
 
 ## Pages
 
-- Give every page frontmatter `title` and a quoted one-sentence `description`. The description becomes the
-  meta description and the page's `llms.txt` entry.
+- Give every page frontmatter `title`, a quoted one-sentence `description` and a quoted `tagline`. The
+  description becomes the meta description, the share text and the page's `llms.txt` entry. The tagline is
+  the share card's invitation, written to the reader ("Learn how to publish your Godot C# game to the web."),
+  not a summary; keep it under about 90 characters, or the build fails because the card copy does not fit.
+- `.vitepress/social-images.mjs` composites 1200x630 PNGs into the build's `social/` directory: dark
+  dot-grid background with an accent glow, logo and section pill at top left (sections map from the page path
+  in `social-metadata.mjs`), page title and tagline below, a "Read the dogs!" button at bottom left, and the
+  first article illustration at bottom right, at 2x with nearest-neighbor scaling. Use the vendored Inter
+  fonts for the copy. Prefer a matching non-`-big` PNG when available. Pages without artwork use
+  `img/2dog-walkies.png`. Generated images are not sources.
 - List a new page in the sidebar in `.vitepress/config.mts` and in the matching section of `SECTIONS` in
   `make-llms.mjs`. Pages that must stay out of the index go in `EXCLUDE`.
 - When a page moves or merges, keep a redirect stub at the old path like `content/web.md`: `search: false`,
@@ -46,7 +54,7 @@
 
 ```text
 npm ci
-npm test         # Page index validation tests
+npm test         # Page index and social metadata tests
 npm run check    # Every page has metadata and one index entry
 npm run build    # Also fails on dead internal links and unknown icons
 dotnet test ../twodog.tests --filter "FullyQualifiedName~DocsDriftTests"   # After CLI page changes

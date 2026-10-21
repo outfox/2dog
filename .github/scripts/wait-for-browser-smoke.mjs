@@ -67,6 +67,8 @@ async function run() {
     const pending = new Map();
     let commandId = 0;
     let lastState;
+    let mainFrameId;
+    let mainContext;
 
     await new Promise((resolve, reject) => {
         const timer = setTimeout(
@@ -108,7 +110,17 @@ async function run() {
             return;
         }
 
-        if (message.method === "Runtime.consoleAPICalled") {
+        if (message.method === "Runtime.executionContextCreated") {
+            const context = message.params.context;
+            if (context.auxData?.isDefault && context.auxData.frameId === mainFrameId &&
+                context.origin === new URL(targetUrl).origin) {
+                mainContext = context;
+            }
+        } else if (message.method === "Runtime.executionContextsCleared" ||
+            (message.method === "Runtime.executionContextDestroyed" &&
+                message.params.executionContextId === mainContext?.id)) {
+            mainContext = undefined;
+        } else if (message.method === "Runtime.consoleAPICalled") {
             const values = message.params.args.map(formatRemoteObject).join(" ");
             console.log(`[browser:${message.params.type}] ${values}`);
         } else if (message.method === "Runtime.exceptionThrown") {
@@ -147,10 +159,20 @@ async function run() {
     }
 
     async function evaluate(expression, timeoutOverride) {
-        const response = await command("Runtime.evaluate", {
-            expression,
-            returnByValue: true,
-        }, timeoutOverride);
+        // A target is visible before navigation creates its default JavaScript context.
+        const context = mainContext;
+        if (!context) return undefined;
+        let response;
+        try {
+            response = await command("Runtime.evaluate", {
+                expression,
+                uniqueContextId: context.uniqueId,
+                returnByValue: true,
+            }, timeoutOverride);
+        } catch (error) {
+            if (mainContext !== context) return undefined;
+            throw error;
+        }
 
         if (response.exceptionDetails) {
             throw new Error(response.exceptionDetails.exception?.description ?? response.exceptionDetails.text);
@@ -161,7 +183,7 @@ async function run() {
 
     async function printDom() {
         try {
-            const dom = await evaluate("document.documentElement.outerHTML", 5_000);
+            const dom = await evaluate("document.documentElement?.outerHTML", 5_000);
             console.error(`Browser DOM at failure:\n${dom}`);
         } catch (error) {
             console.error(`Could not capture the browser DOM: ${error}`);
@@ -169,6 +191,8 @@ async function run() {
     }
 
     try {
+        const { frameTree } = await command("Page.getFrameTree");
+        mainFrameId = frameTree.frame.id;
         await command("Runtime.enable");
         await command("Log.enable");
 
@@ -183,6 +207,11 @@ async function run() {
                     failureNotice: notice?.style.display === "block" ? notice.textContent : "",
                 };
             })()`);
+
+            if (!lastState) {
+                await sleep(250);
+                continue;
+            }
 
             if (lastState.smoke === "passed") {
                 if (requiredAttributeName && lastState.required !== requiredAttributeValue) {

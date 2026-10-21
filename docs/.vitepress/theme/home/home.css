@@ -1,0 +1,190 @@
+/**
+ * Shared grammar for the homepage sections: section rhythm, kickers, buttons, brand chips and the
+ * always-dark game viewport. Colors come from the editor tokens in custom.css.
+ */
+
+.home-page {
+  /* The three names keep a fixed hue from the icon palette in custom.css. */
+  --id-dog: var(--hue-lime);
+  --id-godot: var(--hue-sky);
+  --id-dotnet: var(--hue-violet);
+  /* Game viewports render the dark editor grid in both appearances, like a running game. */
+  --game-ground: #10141b;
+  --game-grid: rgba(160, 190, 230, 0.07);
+
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ed-text-1);
+}
+
+.home-section {
+  padding: 96px 24px;
+  border-top: 1px solid var(--ed-seam);
+}
+
+.home-section.alt {
+  background: var(--ed-dark-1);
+}
+
+.home-wrap {
+  max-width: 1152px;
+  margin: 0 auto;
+}
+
+.home-kicker {
+  margin: 0 0 12px;
+  font-family: var(--vp-font-family-mono), monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ed-text-2);
+}
+
+/* Godot pictograms are 16px pixel icons, so they render at 16px or 32px; other scales blur their edges. */
+.home-kicker .gd-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  background-color: var(--ed-accent);
+}
+
+.home-h2 {
+  margin: 0;
+  max-width: 22ch;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ed-text-1);
+}
+
+.home-intro {
+  max-width: 60ch;
+  margin: 16px 0 0;
+  color: var(--ed-text-2);
+}
+
+.home-page code {
+  font-family: var(--vp-font-family-mono), monospace;
+  font-size: 0.88em;
+}
+
+.home-page :not(pre) > code {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--ed-raise);
+  color: var(--ed-text-1);
+}
+
+.home-page a:focus-visible,
+.home-page button:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Buttons ---------- */
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--ed-seam);
+  border-radius: 6px;
+  background: var(--ed-raise);
+  color: var(--ed-text-1);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.12s ease-out, border-color 0.12s ease-out;
+}
+
+.home-btn:hover {
+  border-color: var(--ed-accent);
+}
+
+.home-btn.primary {
+  border-color: transparent;
+  background: var(--ed-fill);
+  color: var(--ed-on-fill);
+}
+
+.home-btn.primary:hover {
+  background: var(--ed-fill-strong);
+}
+
+.home-btn .brand-glyph {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- Glyphs and brand chips ---------- */
+
+.brand-glyph,
+.chip-glyph {
+  flex: none;
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: var(--gd-icon) no-repeat center / contain;
+  mask: var(--gd-icon) no-repeat center / contain;
+}
+
+/* Secondary buttons tint their mark; the filled primary keeps dark ink. */
+.home-btn:not(.primary) .brand-glyph {
+  color: var(--mark, var(--hue-lime));
+}
+
+.brand-chip {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--mark, var(--hue-lime)) 14%, var(--ed-raise));
+  color: var(--mark, var(--hue-lime));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mark, var(--hue-lime)) 35%, var(--ed-seam));
+}
+
+.brand-chip .chip-glyph {
+  width: 32px;
+  height: 32px;
+}
+
+/* ---------- Game viewport ---------- */
+
+.game-view {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(var(--game-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--game-grid) 1px, transparent 1px),
+    var(--game-ground);
+  background-size: 24px 24px, 24px 24px, auto;
+}
+
+@media (max-width: 719px) {
+  .home-page {
+    font-size: 16px;
+  }
+
+  .home-section {
+    padding: 64px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page * {
+    transition: none !important;
+  }
+}

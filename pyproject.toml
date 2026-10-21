@@ -31,7 +31,7 @@ sequence = [
 ]
 
 [tool.poe.tasks.build-managed]
-help = "dotnet pack: bindings, engine, Avalonia, Blazor, xUnit, NUnit, gdUnit, REPL, tool and restore"
+help = "dotnet pack: bindings, engine, Avalonia, Blazor, xUnit, NUnit, gdUnit, REPL, tool, templates and restore"
 sequence = [
     { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp.editor" },
@@ -43,6 +43,7 @@ sequence = [
     { cmd = "uv run scripts/dotnet_build.py pack twodog.gdunit" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.repl" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.templates" },
     { cmd = "uv run scripts/dotnet_build.py restore" },
 ]
 

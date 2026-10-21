@@ -1,6 +1,7 @@
 ---
 title: Web
 description: "Publish your Godot C# game as a static browser site with the browser-wasm host."
+tagline: "Learn how to publish your Godot C# game to the web."
 ---
 
 # Web
@@ -16,7 +17,7 @@ installation offer if `wasm-tools` is missing:
 ```bash
 dnx 2dog add --web
 dotnet publish MyGame.web
-dnx dotnet-serve -d MyGame.web/AppBundle
+dnx dotnet-serve -- -d MyGame.web/AppBundle
 ```
 
 Open the URL printed by the server. Game output appears in the browser console.
@@ -53,13 +54,12 @@ through `TwoDogWebExportPreset`. The threaded engine has no WebXR.
 The page must be cross-origin isolated, so serve it with these headers:
 
 ```bash
-dnx dotnet-serve -d MyGame.web/AppBundle -h "Cross-Origin-Opener-Policy: same-origin" -h "Cross-Origin-Embedder-Policy: require-corp"
+dnx dotnet-serve -- -d MyGame.web/AppBundle -h "Cross-Origin-Opener-Policy: same-origin" -h "Cross-Origin-Embedder-Policy: require-corp"
 ```
 
 GDExtensions need a `-pthread` side module under a `web.wasm32.threads` key.
-Every thread loads it. A thread that is busy while an extension loads picks it
-up at its next wait. Threaded side modules cannot export `thread_local`
-variables and are never unloaded.
+Threaded side modules cannot export `thread_local` variables and are never
+unloaded.
 
 ## Limitations
 

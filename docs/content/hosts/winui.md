@@ -1,12 +1,16 @@
 ---
 title: WinUI 3
 description: "Embed Godot in a Windows App SDK window."
+tagline: "Learn how to embed Godot in a WinUI 3 app."
 ---
 
 # WinUI 3
 
 The WinUI 3 host embeds Godot in a Windows App SDK window with a Pause/Resume
 button. It builds and runs on Windows.
+
+![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
+*(get cozy and embed Godot in a real UI framework)*
 
 Godot reports `Engine.is_embedded_in_editor()` as `true` for this host;
 account for this in scripts that check editor embedding.
@@ -31,6 +35,9 @@ use [Avalonia](./avalonia) for overlays or a cross-platform UI.
 
 ## Publish It
 
-Publish like the [generic host](./generic#publishing), with or without
-[Native AOT](./generic#native-aot).
-See [WinUI 3 Configuration](/configuration/winui) for build and publish settings.
+```bash
+dotnet publish MyGame.winui -c Release
+```
+
+See [WinUI 3 Configuration](/configuration/winui) for Native AOT and other
+publish settings.

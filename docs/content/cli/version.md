@@ -1,6 +1,7 @@
 ---
 title: 2dog version
 description: "Reference for 2dog version: print the tool version and every package a scaffold references, checked against nuget.org."
+tagline: "Learn how to check your 2dog versions against the latest on nuget.org."
 ---
 
 # `2dog version`
@@ -16,13 +17,13 @@ against nuget.org (best effort, 2.5 s). `--version` is the same, except
 ```text
 2dog :2dog-version:  https://2dog.dev
 
-tool + packages  :2dog-version: ✅  2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit, 2dog.nunit, 2dog.repl
+tool + packages  :2dog-version: ✅  2dog, 2dog.engine, 2dog.avalonia, 2dog.blazor, 2dog.xunit, 2dog.nunit, 2dog.gdunit, 2dog.repl
 native binaries  :natives-version: ✅  2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.tools
 GodotSharp       :2dog-version: ✅  2dog.godotsharp, 2dog.godotsharp.editor
 ```
 
-| Mark | Meaning |
-| --- | --- |
-| ✅ (`ok` when redirected) | The latest stable release |
-| 🔄 (`new`) | A newer stable release exists |
-| none | nuget.org could not be reached |
+| Mark                      | Meaning                        |
+|---------------------------|--------------------------------|
+| ✅ (`ok` when redirected) | The latest stable release      |
+| 🔄 (`new`)                | A newer stable release exists  |
+| none                      | nuget.org could not be reached |

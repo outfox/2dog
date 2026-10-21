@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Browser (wasm) host with WebXR: the web host plus the WebXR Layers polyfill; serve over localhost or HTTPS.
-         Requires wasm-tools; enable xr/shaders/enabled in the game - see https://2dog.dev/hosts/webxr -->
+         Requires wasm-tools; enable xr/shaders/enabled in the game - see https://2dog.dev/hosts/webxr
+         Single-threaded: Godot's WebXR module is not built into the threaded engine. -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
-        <WasmEnableThreads Condition="'$(WasmEnableThreads)' == ''">$(TwoDogWebThreads)</WasmEnableThreads>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
@@ -21,12 +21,6 @@
         <GodotProjectDir>..</GodotProjectDir>
         <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
     </PropertyGroup>
-
-    <ItemGroup>
-        <!-- TwoDogWebBoot.cs is compiled by the GAME project (see the root
-             csproj's Compile Include), not by this host. -->
-        <Compile Remove="TwoDogWebBoot.cs"/>
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="2dog.engineTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)"/>

@@ -1,24 +1,21 @@
 ---
 title: Build Variants
 description: "Choosing debug, release and editor variants with single or double precision."
+tagline: "Learn how to pick debug, release or editor builds, in single or double precision."
 ---
 
 # Build Variants
 
-2dog selects the native Godot variant from your .NET build configuration.
-Each desktop variant is available with single or double precision:
+2dog selects the native Godot variant from your .NET build configuration:
 
-| .NET configuration | `TwoDogVariant` | Precision | Use |
-| --- | --- | --- | --- |
-| **Debug** | `debug` | Single | Development, debugging, tests |
-| **Release** | `release` | Single | Production |
-| **Editor** | `editor` | Single | Editor types and `[Tool]` scripts |
-| **Debug** | `debug` | Double (`.double` packages) | Development, debugging, tests |
-| **Release** | `release` | Double (`.double` packages) | Production |
-| **Editor** | `editor` | Double (`.double` packages) | Editor types and `[Tool]` scripts |
+| .NET configuration | `TwoDogVariant` | Use                               |
+|--------------------|-----------------|-----------------------------------|
+| **Debug**          | `debug`         | Development, debugging, tests     |
+| **Release**        | `release`       | Production                        |
+| **Editor**         | `editor`        | Editor types and `[Tool]` scripts |
 
-Single precision is the default. Select double precision through the
-[package references below](#double-precision); `TwoDogVariant` stays the same.
+Every variant also comes in [double precision](#double-precision);
+`TwoDogVariant` stays the same.
 
 `debug` includes assertions and debugging support; `release` is the optimized
 production runtime; `editor`
@@ -45,8 +42,7 @@ for Release and other configurations. Set it explicitly to override that mapping
 ```
 
 All three desktop variants come through the platform meta package, so selecting
-a variant needs no extra package references. `TwoDogVariant` also controls the copied
-native library, GodotPlugins layout, and embedded runtime metadata.
+a variant needs no extra package references.
 
 Web hosts use `TwoDogWebVariant` with the same configuration mapping. The
 `2dog.browser-wasm` package restores both debug and release natives; a missing
@@ -59,14 +55,6 @@ Without an explicit variant override, use the configuration in the usual way:
 dotnet run -c Debug
 dotnet publish -c Release
 dotnet test -c Editor
-```
-
-If Godot reports that it cannot find its .NET assemblies, confirm that
-`TwoDogVariant` is `release`, `debug`, or `editor`, then clean and rebuild:
-
-```bash
-dotnet clean
-dotnet build -c Debug
 ```
 
 See [Configuration](./configuration) for the property and package reference.
@@ -83,7 +71,7 @@ bindings; single- and double-precision Godot types cannot be mixed.
 ```
 
 Keep `2dog.avalonia`, `2dog.blazor`, `2dog.xunit`, `2dog.nunit` and `2dog.repl`
-under their ordinary names. Native dependencies are selected automatically;
+under their ordinary names; `2dog.gdunit` becomes `2dog.gdunit.double`. Native dependencies are selected automatically;
 if referenced explicitly, append `.double` to the entire ID, such as
 `2dog.win-x64.release.double`. 
 
@@ -91,82 +79,62 @@ if referenced explicitly, append `.double` to the entire ID, such as
 GDExtensions must also match the precision!
 :::
 
-## WebGPU Branch
+## Experimental WebGPU
 
-The `webgpu` branch includes native Dawn/WebGPU in single-precision desktop
-packages and WebGPU in single-threaded browser packages. Existing renderer
-defaults are preserved. An explicit WebGPU driver argument defaults to Forward+
-when no rendering method is supplied. Both Forward+ and Mobile are available;
-Vulkan, D3D12 and Metal retain their existing rendering methods. Forward+ is
-experimental, with image checks for clustered lighting, shadows, SSAO,
-volumetric fog, bounced SDFGI and MSAA. Broader feature and hardware parity is
-still being tested.
-Double precision, threaded web,
-Android, and WebXR retain their existing renderer paths.
-
-Godot falls back to Mobile if the adapter exposes fewer than 48 sampled
-textures per shader stage. On adapters without the optional storage-format
-tiers, unsupported read/write formats use read snapshots refreshed between
-compute dispatches. Custom storage-image shaders that need to read their own
-writes within one dispatch require native support for that format.
-
-Native Dawn loads only when WebGPU is selected; existing renderers keep their
-original runtime requirements. WebGPU requires macOS 13 or newer on macOS and
-the [Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe)
-on Windows.
-
-Select WebGPU Forward+ in a desktop host with Godot's arguments:
+WebGPU is opt-in and currently supports the Mobile renderer on single-precision
+Windows, Linux and macOS, and single-threaded browser runtimes. Existing renderer
+defaults are preserved. Android, double precision, threaded browser payloads and
+Forward+ reject WebGPU with a clear error. Native threading remains supported.
+Headless imports and exports do not require a WebGPU device.
 
 ```bash
-dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method forward_plus
+dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method mobile
 ```
 
-To select it through `project.godot` instead, configure both the driver and
-the rendering method. Platform driver overrides take precedence over the base
-driver setting:
+For project settings, select both the renderer and the platform driver:
 
 ```ini
 [rendering]
-renderer/rendering_method="forward_plus"
+renderer/rendering_method="mobile"
 rendering_device/driver="webgpu"
 rendering_device/driver.windows="webgpu"
 rendering_device/driver.linuxbsd="webgpu"
 rendering_device/driver.macos="webgpu"
 ```
 
-The `.mobile` suffix in `renderer/rendering_method.mobile` is a platform feature
-override; it does not select the Mobile renderer on desktop. Configure existing
-`.web` or `.mobile` overrides separately for those platforms. To keep using
-Mobile, select `"mobile"` in the project or pass `--rendering-method mobile`.
-`--editor` opens the editor using the selected renderer and driver.
+Configure `.web` and `.mobile` feature overrides explicitly when present.
+See [web configuration](/configuration/web#experimental-webgpu) and
+[Blazor configuration](/configuration/blazor#experimental-webgpu) for browser boot.
+WebXR's immersive rendering is outside this experimental scope.
 
-The platform package copies Dawn and its dependencies beside libgodot for
-both build and publish. Keep those files and their `licenses/` directory when
-deploying. Browser packages carry the pinned Emscripten port and supply the
-final-link flags automatically. See [Web configuration](/configuration/web)
-for browser initialization and [Blazor configuration](/configuration/blazor)
-for the view parameter.
+### Adapter and shader limits
 
-Source builds enable WebGPU automatically on supported configurations:
+The backend has no image atomics, multiview or ray tracing. Read/write storage
+textures require native support for their format; unsupported formats fail
+shader creation. Use supported R32 formats or separate read and write resources.
+Overlapping writable storage-buffer bindings are rejected instead of redirected
+to dummy buffers. GPU timestamp and memory statistics are not implemented.
+Translated WGSL is cached; GPU pipeline compilation still happens at runtime.
 
-```bash
-uv run build-godot.py
-uv run build-godot.py --platform web
-uv run poe build
+Native Dawn loads only when selected. WebGPU requires macOS 13 or newer; other
+renderers retain their existing runtime requirements. Desktop packages include
+Dawn and the compiler sidecars and notices needed by the selected backend.
+
+### Source builds
+
+Normal `uv run poe build-all` enables WebGPU on supported configurations. Keep
+the Emscripten SDK pinned to `EmscriptenVersion` from `Directory.Build.props`.
+
+```text
+uv run build-godot.py --webgpu auto
+uv run build-godot.py --platform web --webgpu yes
 ```
 
-The builder verifies the pinned Dawn and DXC downloads and builds a small
-shared C API library around Dawn. It requires a C++20 compiler and prepares
-its pinned CMake through `uv`. The official Windows Dawn SDK also requires
-Visual Studio 2026 with MSVC Build Tools 14.51 or newer; the native CI installs that
-toolset when the runner lacks it. An existing SDK can be selected with
-`--webgpu-native-path <sdk>`; it must contain runtime dependencies and a
-`licenses/` directory. `--webgpu no` builds the original renderer set.
-
-The existing Emscripten pin remains in force. Browser linking uses a writable
-cache for the external Dawn port; set `TwoDogWebGpuCachePath` to override its
-default under the system temporary directory. Keep it separate from a native
-SCons cache, and on the Emscripten SDK's drive on Windows.
+Use `--webgpu no` to omit the driver. `--webgpu-native-path <sdk>` supplies an
+existing native Dawn boundary SDK, including its runtime libraries and licenses.
+Unsupported configurations reject `--webgpu yes`; `auto` preserves their renderer.
+Browser packages supply a prepared port and a writable cache. Override that cache
+with `TwoDogWebGpuCachePath` when needed.
 
 ## Downloading CI Packages
 
@@ -219,11 +187,16 @@ dotnet run --project MyGame.2dog -c Editor -- --editor
 ```
 
 The generic host forwards these arguments and pumps the editor's main loop.
-Editor builds and publishes copy GodotTools and its dependencies into
-`GodotSharp/Tools` beside the host executable. Custom hosts must keep pumping
-the engine and avoid assuming that a game scene is running in editor mode.
+Custom hosts must keep pumping the engine and avoid assuming that a game scene
+is running in editor mode.
 
 Resource import also runs separately and automatically at build time; see
 [Resource Import](./import-tool).
+
+The editor's export dialog edits the presets that `dotnet publish` uses. It
+cannot build a playable game, because the host does that: Export Project,
+Export All, one-click deploy and `--export-release`/`--export-debug` are
+unavailable inside a host. PCK/ZIP and patch exports remain and contain
+resources only; see [Pack export](./import-tool#pack-export).
 :::
 
