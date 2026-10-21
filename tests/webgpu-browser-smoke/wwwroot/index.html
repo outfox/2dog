@@ -9,14 +9,16 @@
 <script src="godot.js"></script>
 <script>
 const options = new URLSearchParams(location.search);
-if (options.has('limited-compute') || options.has('base-formats')) {
+if (options.has('limited-compute') || options.has('base-formats') || options.has('limited-bindings')) {
     const requestDevice = GPUAdapter.prototype.requestDevice;
     GPUAdapter.prototype.requestDevice = function (descriptor = {}) {
         return requestDevice.call(this, {
             ...descriptor,
-            requiredLimits: options.has('limited-compute')
-                ? { ...descriptor.requiredLimits, maxComputeInvocationsPerWorkgroup: 256 }
-                : descriptor.requiredLimits,
+            requiredLimits: {
+                ...descriptor.requiredLimits,
+                ...(options.has('limited-compute') ? { maxComputeInvocationsPerWorkgroup: 256 } : {}),
+                ...(options.has('limited-bindings') ? { maxSampledTexturesPerShaderStage: 16, maxInterStageShaderVariables: 16 } : {}),
+            },
             requiredFeatures: [...(descriptor.requiredFeatures || [])].filter(feature =>
                 !options.has('base-formats') || !['texture-formats-tier1', 'texture-formats-tier2'].includes(feature)),
         });

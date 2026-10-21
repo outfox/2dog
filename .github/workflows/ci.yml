@@ -1605,7 +1605,7 @@ jobs:
           node .github/scripts/webgpu-mobile-smoke.mjs \
             http://127.0.0.1:8000/ 9233 240000 /tmp/2dog-mobile-webgpu-captures
           node .github/scripts/webgpu-mobile-smoke.mjs \
-            'http://127.0.0.1:8000/?limited-compute=1&base-formats=1' 9233 240000 /tmp/2dog-mobile-webgpu-captures-limited
+            'http://127.0.0.1:8000/?limited-compute=1&base-formats=1&limited-bindings=1' 9233 240000 /tmp/2dog-mobile-webgpu-captures-limited
 
       - name: Preserve WebGPU browser images and diagnostics
         if: always()

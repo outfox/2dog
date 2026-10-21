@@ -55,7 +55,7 @@ try {
     await send('Page.navigate', { url });
     if (output) await mkdir(output, { recursive: true });
     const samples = [];
-    for (let phase = 0; phase < 7; phase++) {
+    for (let phase = 0; phase < 9; phase++) {
         if (phase) await evaluate(`document.documentElement.dataset.requestPhase='${phase}'`);
         await waitFor(`document.documentElement?.dataset.readyPhase==='${phase}'`);
         await delay(200);
@@ -87,11 +87,19 @@ try {
         } else if (phase === 6) {
             if (pixel[0] < 0.5 * 255) throw new Error(`MSAA lost the lit target: ${pixel}`);
             console.log('BROWSER_MSAA_PIXELS_PASSED');
+        } else if (phase === 7) {
+            if (pixel[0] < 0.5 * 255 || pixel[2] < 0.5 * 255 || pixel[1] > 0.1 * 255)
+                throw new Error(`User varyings did not produce a magenta target: ${pixel}`);
+            console.log('BROWSER_USER_VARYINGS_PASSED');
+        } else if (phase === 8) {
+            if (pixel[1] < 0.2 * 255 || pixel[1] <= pixel[0] + 0.15 * 255)
+                throw new Error(`The textured lightmapped material did not produce a green target: ${pixel}`);
+            console.log('BROWSER_LIGHTMAP_BINDING_BUDGET_PASSED');
         } else {
             samples.push((pixel[0] + pixel[1] + pixel[2]) / (3 * 255));
         }
     }
-    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='7'`);
+    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='9'`);
     await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
     if (errors.length) throw new Error(errors.join('\n'));
     console.log('BROWSER_MOBILE_LIGHT_LIST_PASSED', samples);

@@ -40,12 +40,16 @@ internal static class Program
                 Console.WriteLine("NATIVE_WEBGPU_CONTRACT_REJECTIONS_PASSED");
                 return;
             }
-            if (driver == "webgpu") DescriptorArraySmoke.Run();
+            if (driver == "webgpu")
+            {
+                DescriptorArraySmoke.Run();
+                ShaderBakingSmoke.Run();
+            }
             if (RenderingServer.GetCurrentRenderingMethod() is "forward_plus" or "mobile")
             {
                 using var probe = new LightingScene(engine.Tree);
                 bool forwardPlus = RenderingServer.GetCurrentRenderingMethod() == "forward_plus";
-                for (int stage = 0; stage < (forwardPlus ? 4 : 7); stage++)
+                for (int stage = 0; stage < (forwardPlus ? 4 : 9); stage++)
                 {
                     probe.SelectStage(stage);
                     for (int frame = 0; frame < 12; frame++)
@@ -64,6 +68,10 @@ internal static class Program
                             throw new Exception($"Ambient light did not produce a blue target: {pixel}.");
                         if (stage == 6 && pixel.R < 0.5f)
                             throw new Exception($"MSAA lost the lit target: {pixel}.");
+                        if (stage == 7 && (pixel.R < 0.5f || pixel.B < 0.5f || pixel.G > 0.1f))
+                            throw new Exception($"User varyings did not produce a magenta target: {pixel}.");
+                        if (stage == 8 && (pixel.G < 0.2f || pixel.G <= pixel.R + 0.15f))
+                            throw new Exception($"The textured lightmapped material did not produce a green target: {pixel}.");
                         Console.WriteLine($"MOBILE_EFFECT_PIXEL stage={stage} {pixel}");
                     }
                 }

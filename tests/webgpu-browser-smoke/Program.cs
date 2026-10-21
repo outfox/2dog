@@ -26,7 +26,7 @@ internal static class Program
         engine.Run(() =>
         {
             int requested = (int)(double)JavaScriptBridge.Eval("Number(document.documentElement.dataset.requestPhase || 0)");
-            if (requested != phase && requested < 7)
+            if (requested != phase && requested < 9)
             {
                 phase = requested;
                 frames = 0;
@@ -34,7 +34,7 @@ internal static class Program
             }
             if (++frames == 24)
                 JavaScriptBridge.Eval($"document.documentElement.dataset.readyPhase='{phase}'");
-            if (requested == 7 && !validated)
+            if (requested == 9 && !validated)
             {
                 var samples = JavaScriptBridge.Eval("document.documentElement.dataset.samples").AsString().Split(',');
                 for (int i = 0; i < 4; i++)

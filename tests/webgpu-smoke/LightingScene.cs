@@ -6,6 +6,9 @@ internal sealed class LightingScene : IDisposable
     private readonly Node3D _root = new();
     private readonly OmniLight3D[] _lights;
     private readonly Window _viewport;
+    private readonly MeshInstance3D _subject = new() { Name = "Subject" };
+    private ShaderMaterial? _varyingMaterial;
+    private LightmapGI? _lightmap;
     private StandardMaterial3D? _emitterMaterial;
     private MeshInstance3D? _emitter;
     private readonly double[] _luminance = new double[4];
@@ -38,7 +41,9 @@ internal sealed class LightingScene : IDisposable
         _viewport = tree.Root;
         tree.Root.AddChild(_root);
         _root.AddChild(new WorldEnvironment { Environment = _environment });
-        _root.AddChild(new MeshInstance3D { Mesh = new BoxMesh(), MaterialOverride = _material });
+        _subject.Mesh = new BoxMesh { AddUV2 = true };
+        _subject.MaterialOverride = _material;
+        _root.AddChild(_subject);
         _root.AddChild(new Camera3D { Position = new Vector3(0, 0, 4), Current = true });
         for (int i = 0; i < _lights.Length; i++)
         {
@@ -65,12 +70,44 @@ internal sealed class LightingScene : IDisposable
 
     public void SelectStage(int stage)
     {
+        if (stage == 7 && _varyingMaterial is null)
+        {
+            _varyingMaterial = new ShaderMaterial
+            {
+                Shader = new Shader { Code = """
+                    shader_type spatial;
+                    render_mode unshaded;
+                    varying vec3 red;
+                    varying vec3 blue;
+                    void vertex() { red = vec3(0.8, 0.0, 0.0); blue = vec3(0.0, 0.0, 0.8); }
+                    void fragment() { ALBEDO = red + blue; }
+                    """ },
+            };
+        }
+        _subject.MaterialOverride = stage == 7 ? _varyingMaterial : _material;
+        if (stage == 8 && _lightmap is null)
+        {
+            using var light = Image.CreateEmpty(4, 4, false, Image.Format.Rgba8);
+            light.Fill(Colors.Green);
+            var atlas = new Texture2DArray();
+            if (atlas.CreateFromImages([light]) != Error.Ok) throw new Exception("Could not create the lightmap atlas.");
+            using var white = Image.CreateEmpty(4, 4, false, Image.Format.Rgba8);
+            white.Fill(Colors.White);
+            var mask = new Texture2DArray();
+            if (mask.CreateFromImages([white]) != Error.Ok) throw new Exception("Could not create the shadow mask.");
+            _material.AlbedoTexture = ImageTexture.CreateFromImage(white);
+            var data = new LightmapGIData { LightmapTextures = [atlas], ShadowmaskTextures = [mask] };
+            data.AddUser("../Subject", new Rect2(Vector2.Zero, Vector2.One), 0, -1);
+            _lightmap = new LightmapGI { Name = "Lightmap", ShadowmaskMode = LightmapGIData.ShadowmaskMode.Overlay };
+            _root.AddChild(_lightmap);
+            _lightmap.LightData = data;
+        }
         _environment.FogEnabled = stage == 4;
         _environment.AmbientLightEnergy = stage == 5 ? 1 : 0;
         _viewport.Msaa3D = stage == 6 ? Viewport.Msaa.Msaa4X : Viewport.Msaa.Disabled;
         for (int i = 0; i < _lights.Length; i++)
         {
-            _lights[i].Visible = stage switch { 1 => i < _lights.Length / 2, 2 => i >= _lights.Length / 2, _ => true };
+            _lights[i].Visible = stage switch { 1 => i < _lights.Length / 2, 2 => i >= _lights.Length / 2, 8 => false, _ => true };
             _lights[i].Position = stage is 3 or 5 ? new Vector3(100, 0, 2) : new Vector3(0, 0, 2);
         }
     }
@@ -119,10 +156,23 @@ internal sealed class LightingScene : IDisposable
 
     public void Dispose()
     {
+        var data = _lightmap?.LightData;
+        var atlases = data?.LightmapTextures;
+        var masks = data?.ShadowmaskTextures;
+        var albedo = _material.AlbedoTexture;
+        var varyingShader = _varyingMaterial?.Shader;
         _viewport.Msaa3D = Viewport.Msaa.Disabled;
         _root.Free();
         _emitterMaterial?.Dispose();
+        _varyingMaterial?.Dispose();
+        varyingShader?.Dispose();
         _material.Dispose();
+        albedo?.Dispose();
+        if (atlases is not null) foreach (var texture in atlases) texture.Dispose();
+        if (masks is not null) foreach (var texture in masks) texture.Dispose();
+        atlases?.Clear();
+        masks?.Clear();
+        data?.Dispose();
         _environment.Dispose();
     }
 }
