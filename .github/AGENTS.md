@@ -19,6 +19,9 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - The native build runs the real C++ shader compiler regressions once, against the single-precision,
   non-threaded Web debug archive. Source-level WebGPU checks run where the submodule source is checked out.
   Precision-independent package and browser-script checks run once rather than in every precision/AOT cell.
+- `webgpu-browser-build` publishes the single-precision image-test bundle after pack; `webgpu-browser`
+  consumes it without waiting for Web Smoke. Both belong to the `WebGPU Browser` tested-content family;
+  the browser job gates deployment and requires the bundle job to succeed.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
   tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and
