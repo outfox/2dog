@@ -22,6 +22,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogIosGdExtensions` | `true` | Link the static libraries or xcframework slices the project's `.gdextension` files list for iOS |
 | `UseInterpreter` | `true` in Debug | Run the Mono interpreter so no code path needs a JIT; Release builds AOT-compile |
 | `RuntimeIdentifier` | `ios-arm64` in the generated host | `iossimulator-arm64` for the Simulator on Apple silicon |
+| `SupportedOSPlatformVersion` | `15.0` in the generated host | Minimum iOS version; the Simulator runtime must also meet the installed workload's requirements |
 | `CodesignKey`, `CodesignProvision` | Unset | Signing identity and provisioning profile for device builds |
 
 iOS exports its pack during the build and bundles it as `game.pck`.

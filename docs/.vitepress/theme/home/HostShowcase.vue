@@ -130,14 +130,21 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
         tag: 'Experimental',
       },
       {
+        name: 'iOS',
+        flag: '--ios',
+        text: 'Build an iPhone or iPad app, or try it in the Simulator on an Apple silicon Mac.',
+        link: '/hosts/ios',
+        glyph: 'mobile_phone',
+        tag: 'Experimental',
+      },
+      {
         name: 'MAUI',
         flag: '--maui',
-        text: 'Embed Godot in a .NET MAUI page on Windows and Android.',
+        text: 'Embed Godot in a .NET MAUI page on Windows, Android and iOS.',
         link: '/hosts/maui',
         glyph: 'mobile_phone',
       },
     ],
-    soon: true,
   },
   {
     label: 'Consoles',

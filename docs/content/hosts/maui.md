@@ -1,13 +1,14 @@
 ---
 title: MAUI
-description: "Embed Godot in a .NET MAUI page on Windows and Android."
-tagline: "Learn how to embed Godot in a .NET MAUI app on Windows and Android."
+description: "Embed Godot in a .NET MAUI page on Windows, Android and, experimentally, iOS."
+tagline: "Learn how to embed Godot in a .NET MAUI app on Windows, Android and iOS."
 ---
 
 # MAUI
 
 Embed your game in a MAUI page, with controls beside or over the Godot view.
-Windows and Android share the same game project.
+Windows, Android and iOS share the same game project. iOS support is
+experimental and requires a Mac with Xcode.
 
 ## Use It
 
@@ -37,6 +38,17 @@ On a Mac, the host also targets `net10.0-ios` (experimental): install
 [iOS host](/hosts/ios) does. The app delegate registers the game's plugins
 initializer with `IosHost.Register` before the page creates the view. Mac
 Catalyst is unsupported.
+
+From `MyGame.maui/`, with an iPhone or iPad Simulator booted:
+
+```bash
+dotnet workload install maui-ios
+dotnet build -f net10.0-ios -r iossimulator-arm64
+```
+
+Install and launch the resulting `.app` as described in the
+[iOS host guide](/hosts/ios#build-and-run). You can also
+[try a CI-built MAUI Simulator app](/hosts/ios#try-a-ci-build).
 
 ## Customize It
 

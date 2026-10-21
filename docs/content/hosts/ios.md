@@ -12,7 +12,9 @@ and lifecycle; the host registers the .NET runtime before Godot starts.
 
 ::: warning Experimental
 Only `ios-arm64` (devices) and `iossimulator-arm64` (the Simulator on Apple
-silicon Macs) are supported. Building needs a Mac with Xcode.
+silicon Macs) are supported. Building needs a Mac with Xcode. Intel Mac
+Simulators and Mac Catalyst are unsupported; physical-device validation is
+still needed.
 :::
 
 ## Set It Up
@@ -33,20 +35,36 @@ clang and iOS SDK, signs with `codesign`, and its Mono AOT compiler runs on
 macOS only. From Windows, use Pair to Mac; Linux cannot build iOS apps.
 `2dog doctor` reports the workload and Xcode.
 
-## Build and Run
-
-In the Simulator, no signing needed:
+Run workload and build commands inside the generated host directory so its
+`global.json` selects the .NET 10 SDK. Install an iOS workload compatible with
+your installed Xcode; the workload and Xcode SDK must match.
 
 ```bash
-dotnet build MyGame.ios -r iossimulator-arm64
-xcrun simctl install booted MyGame.ios/bin/Debug/net10.0-ios/iossimulator-arm64/MyGame.ios.app
+cd MyGame.ios
+dotnet workload install ios
+dnx 2dog doctor
+```
+
+The host is excluded from ordinary solution builds. Build it directly using
+the commands below.
+
+## Build and Run
+
+Start an iPhone or iPad in Xcode's Simulator first. From `MyGame.ios/`, build
+and install the app; Simulator builds need no signing identity:
+
+```bash
+dotnet build -c Debug -r iossimulator-arm64
+xcrun simctl install booted bin/Debug/net10.0-ios/iossimulator-arm64/MyGame.ios.app
 xcrun simctl launch --console booted com.companyname.mygame
 ```
+
+Use the `ApplicationId` from your project file in the launch command.
 
 On a device, with your signing identity and provisioning profile:
 
 ```bash
-dotnet publish MyGame.ios -r ios-arm64 -c Release -p:CodesignKey="Apple Development" -p:CodesignProvision="MyGame Dev"
+dotnet publish -r ios-arm64 -c Release -p:CodesignKey="Apple Development" -p:CodesignProvision="MyGame Dev"
 ```
 
 Building imports the game, exports its pack with the `iOS` preset, bundles it as
@@ -58,6 +76,41 @@ and CoreAudio aborts the app when the engine starts. Pass `--audio-driver Dummy`
 as an engine argument to `GodotHost.Start` there; devices need nothing.
 
 See [iOS Configuration](/configuration/ios) for build settings.
+
+## Try a CI Build
+
+To try the showcase without installing .NET or building the engine, use an
+Apple silicon Mac with Xcode and an installed iOS Simulator runtime:
+
+1. Open a successful [CI run](https://github.com/outfox/2dog/actions/workflows/ci.yml)
+   whose **iOS Smoke** jobs ran.
+2. Download the `ios-simulator-showcase-double-Release` artifact from the run's
+   **Artifacts** section. GitHub requires you to sign in to download artifacts;
+   they are retained for seven days.
+3. Extract the downloaded artifact, then run these commands in the extracted
+   directory with a Simulator already booted:
+
+```bash
+ditto -x -k simulator-app.zip ios-showcase
+xcrun simctl install booted ios-showcase/showcase.ios.app
+xcrun simctl launch --console booted dev.twodog.showcase
+```
+
+The inner ZIP preserves the app bundle's permissions and layout. These are
+Simulator apps; they cannot be installed on an iPhone or iPad. Build and sign
+your own device app using the command above.
+
+CI builds, inspects and launches three complementary Simulator apps:
+
+| Artifact | Coverage |
+| --- | --- |
+| `ios-simulator-smoke-single-Debug` | Basic C# game startup with the interpreter |
+| `ios-simulator-showcase-double-Release` | Trimmed, AOT-compiled showcase with double precision and a static GDExtension |
+| `ios-simulator-maui-single-Debug` | Godot embedded in a MAUI page |
+
+Each job requires its C# success marker in the app's console. Its matching
+`ios-simulator-log-...` artifact contains the Simulator log. This coverage does
+not validate physical-device input, audio or background handling.
 
 ## Host Code
 
