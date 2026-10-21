@@ -8,10 +8,18 @@ for precision in single double; do
   mkdir -p "$root/.ci/downloads/godot-bin-$precision/bin" "$root/.ci/downloads/godot-bin-$precision/modules" \
     "$root/.ci/downloads/nuget-packages-$precision" "$root/godot"
   printf '%s' "$precision natives" > "$root/.ci/downloads/godot-bin-$precision/bin/native"
+  mkdir -p "$root/godot/bin/GodotSharp/Tools/nupkgs" "$root/packages"
+  mkdir -p "$root/.ci/downloads/godot-bin-$precision/bin/GodotSharp/Tools/nupkgs"
+  printf 'downloaded SDK' > "$root/.ci/downloads/godot-bin-$precision/bin/GodotSharp/Tools/nupkgs/fresh.nupkg"
+  printf 'existing SDK' > "$root/godot/bin/GodotSharp/Tools/nupkgs/fixture.nupkg"
+  printf 'stale native' > "$root/godot/bin/native"
+  printf 'stale package' > "$root/packages/test.nupkg"
   printf '%s' "$precision package" > "$root/.ci/downloads/nuget-packages-$precision/test.nupkg"
   (cd "$root" && bash "$script" "$precision")
   test "$(cat "$root/godot/bin/native")" = "$precision natives"
   test -d "$root/godot/modules"
+  test "$(cat "$root/godot/bin/GodotSharp/Tools/nupkgs/fixture.nupkg")" = 'existing SDK'
+  test "$(cat "$root/godot/bin/GodotSharp/Tools/nupkgs/fresh.nupkg")" = 'downloaded SDK'
   test "$(cat "$root/packages/test.nupkg")" = "$precision package"
 done
 for missing in godot-bin nuget-packages; do

@@ -2264,28 +2264,43 @@ jobs:
           compression-level: 0
           retention-days: 7
 
-      - name: Boot Simulator and run C# smoke
-        env:
-          SIMCTL_CHILD_CI: 'true'
-        timeout-minutes: 6
+      # First-boot data migration can take five minutes before app installation even starts.
+      - name: Boot iOS Simulator
+        id: simulator
+        timeout-minutes: 8
         shell: bash
         run: |
           runtime=$(xcrun simctl list runtimes --json | jq -r '[.runtimes[] | select(.isAvailable and (.identifier | contains(".iOS-")))] | last | .identifier // empty')
           test -n "$runtime"
           device=$(xcrun simctl create 2dog-ci com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$runtime")
-          trap 'xcrun simctl shutdown "$device" || true' EXIT
+          echo "device=$device" >> "$GITHUB_OUTPUT"
           xcrun simctl boot "$device"
-          xcrun simctl bootstatus "$device" -b
-          uv run scripts/test_ios_simulator.py artifacts/ios-app/app/*.app --device "$device" \
+          xcrun simctl bootstatus "$device" -b 2>&1 | tee artifacts/ios-app/simulator-boot.log
+
+      - name: Install app and run C# smoke
+        env:
+          SIMCTL_CHILD_CI: 'true'
+          SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          uv run scripts/test_ios_simulator.py artifacts/ios-app/app/*.app --device "$SIMULATOR_DEVICE" \
             --bundle '${{ matrix.bundle }}' --marker '${{ matrix.marker }}' --timeout 120 \
             2>&1 | tee artifacts/ios-app/simulator.log
+
+      - name: Shut down iOS Simulator
+        if: always() && steps.simulator.outputs.device != ''
+        timeout-minutes: 1
+        env:
+          SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
+        run: xcrun simctl shutdown "$SIMULATOR_DEVICE" || true
 
       - name: Upload Simulator diagnostics
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: ios-simulator-log-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
-          path: artifacts/ios-app/simulator.log
+          path: artifacts/ios-app/simulator*.log
           if-no-files-found: ignore
           retention-days: 7
 

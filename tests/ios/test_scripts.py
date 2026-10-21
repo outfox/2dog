@@ -199,6 +199,7 @@ class SimulatorScript(unittest.TestCase):
         self.assertIsNone(exit_message)
         self.assertEqual("2DOG_IOS_CSHARP_SMOKE_PASSED\n", output)
         self.assertEqual(["xcrun", "simctl", "install", "booted"], calls[0][0][:4])
+        self.assertEqual(5, calls[0][1]["timeout"])
         self.assertEqual("terminate", calls[-1][0][2])
         self.assertTrue(launch.killed)
 
@@ -206,6 +207,15 @@ class SimulatorScript(unittest.TestCase):
         _, output, exit_message, _ = self.run_script(["booting\n", "2DOG_IOS_CSHARP_SMOKE_FAILED: boom\n"])
         self.assertEqual("iOS smoke marker not observed before timeout", exit_message)
         self.assertIn("2DOG_IOS_CSHARP_SMOKE_FAILED", output)
+
+    def test_hung_install_is_bounded_and_does_not_launch_the_app(self):
+        with patch.object(sys, "argv", ["test_ios_simulator.py", "smoke.app", "--timeout", "1"]), \
+                patch.object(simulator.subprocess, "run", side_effect=subprocess.TimeoutExpired("simctl install", 1)) as run, \
+                patch.object(simulator.subprocess, "Popen") as launch:
+            with self.assertRaisesRegex(SystemExit, "app installation timed out"):
+                simulator.main()
+        self.assertEqual(1, run.call_args.kwargs["timeout"])
+        launch.assert_not_called()
 
     def test_silent_process_cannot_block_the_smoke_timeout(self):
         launch = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(30)"],

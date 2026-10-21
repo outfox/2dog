@@ -47,7 +47,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   in both reuse family lists. Binding checks download the matching fork SDK only, rather than all of godot-bin.
   Upload NuGet artifacts with compression disabled because their payloads are already compressed.
 - Consumers that need both native outputs and NuGet packages use `actions/download-ci-inputs` to download them
-  concurrently and move them into `godot/` and `packages/`. Require both artifacts before staging either.
+  concurrently and move them into `godot/` and `packages/`, merging directories created by source checks.
+  Require both artifacts before staging either.
   The MAUI job caches workload installer downloads by runner image, SDK and workload set; expose the cached
   nupkgs as a flat NuGet source alongside nuget.org, never `--from-cache`: the download command can omit manifests
   required by the pinned workload set. Still run installation to preserve Windows MSI registration.
@@ -58,6 +59,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   match the Xcode selected by `ios-smoke`. Three Simulator cells cover single Debug pixels, double Release showcase
   and single Debug MAUI; keep `iOS Smoke` in both reuse family lists and the deployment gate. Device signing
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
+  Simulator first boot and app testing have separate time budgets; keep installation bounded and always
+  shut down the created device, including after boot/test failure. Preserve both boot and app logs.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
   tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and

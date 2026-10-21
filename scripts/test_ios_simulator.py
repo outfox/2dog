@@ -25,7 +25,10 @@ def main():
         parser.error("--timeout must be greater than zero")
     if not args.marker:
         parser.error("--marker must not be empty: any output would contain it")
-    subprocess.run(simctl(args, "install", args.device, str(args.app.resolve())), check=True)
+    try:
+        subprocess.run(simctl(args, "install", args.device, str(args.app.resolve())), check=True, timeout=args.timeout)
+    except subprocess.TimeoutExpired:
+        raise SystemExit("iOS Simulator app installation timed out")
     # A stale instance would keep the console attached; simctl itself can hang when the Simulator is overloaded.
     try:
         subprocess.run(simctl(args, "terminate", args.device, args.bundle), check=False, timeout=30)
