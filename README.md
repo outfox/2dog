@@ -10,7 +10,7 @@
 
 ### Godot normally loads .NET, now .NET loads Godot.
 
-**2dog** is available fully precompiled from [NuGet.org](https://www.nuget.org/packages/2dog/) and as [GitHub Releases](https://github.com/outfox/2dog/releases). *(no need to compile this repo)*
+**2dog** is available fully precompiled from [NuGet.org](https://www.nuget.org/packages/2dog/) and as [GitHub Releases](https://github.com/outfox/2dog/releases). *(no need to clone this repo)*
 
 **2dog** packages Godot as a library (a slightly modified [`libgodot`](https://github.com/godotengine/godot/pull/110863))
 that your .NET application hosts. Keep your Godot project exactly as it is, and run it on the desktop, in the
