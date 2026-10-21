@@ -48,8 +48,10 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   Upload NuGet artifacts with compression disabled because their payloads are already compressed.
 - Consumers that need both native outputs and NuGet packages use `actions/download-ci-inputs` to download them
   concurrently and move them into `godot/` and `packages/`. Require both artifacts before staging either.
-  The MAUI job caches workload installer downloads by runner image, SDK and workload set; still run installation
-  from that cache to preserve Windows MSI registration. Changing its workload list requires a cache-key bump.
+  The MAUI job caches workload installer downloads by runner image, SDK and workload set; expose the cached
+  nupkgs as a flat NuGet source alongside nuget.org, never `--from-cache`: the download command can omit manifests
+  required by the pinned workload set. Still run installation to preserve Windows MSI registration.
+  Changing its workload list requires a cache-key bump.
 - iOS device/Simulator arm64 archives build in both precisions through `build-natives.yml`; release completeness
   and staging must require all four archives. Pack uploads scoped iOS inputs, excluding raw archives from godot-bin.
   The Windows MAUI job packs the precision-neutral iOS host and all MAUI TFMs. Its .NET SDK/workload pins must

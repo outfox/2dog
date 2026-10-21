@@ -1864,11 +1864,17 @@ jobs:
           path: .ci/maui-workloads
           key: ${{ steps.workload-cache.outputs.cache-primary-key }}
 
-      - name: Install MAUI workloads from cached downloads
-        run: >-
-          dotnet workload install maui-windows maui-android maui-ios ios
-          --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
-          --from-cache .ci/maui-workloads
+      # The download command can omit manifests required when applying the pinned workload set.
+      # Use its packages as a normal feed so installation can fetch any missing dependencies.
+      - name: Install MAUI workloads using cached downloads
+        shell: pwsh
+        run: |
+          $feed = New-Item -ItemType Directory -Path .ci/maui-workload-feed -Force
+          # The download cache's nested layout lacks NuGet feed metadata; expose a flat feed without copying it.
+          Get-ChildItem .ci/maui-workloads -Recurse -File -Filter *.nupkg | ForEach-Object {
+            New-Item -ItemType HardLink -Path (Join-Path $feed.FullName $_.Name) -Target $_.FullName | Out-Null
+          }
+          dotnet workload install maui-windows maui-android maui-ios ios --version ${{ env.IOS_WORKLOAD_VERSION }} --source $feed.FullName --source https://api.nuget.org/v3/index.json
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
