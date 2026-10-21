@@ -4,6 +4,7 @@ using twodog.cli;
 namespace twodog.tests.ToolTests;
 
 // --json: exactly one document on stdout, nothing on stderr, also when the run fails.
+[Trait("Precision", "Independent")]
 public class JsonModeTests
 {
     private static JsonElement Parse((int ExitCode, string Stdout, string Stderr) run)

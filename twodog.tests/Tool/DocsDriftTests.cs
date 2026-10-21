@@ -4,6 +4,7 @@ namespace twodog.tests.ToolTests;
 
 // The command tree is the single source of truth; the package README and the docs reference (the index page plus
 // one page per verb) must mention every advertised verb and option, and the doctor verb page every check id.
+[Trait("Precision", "Independent")]
 public class DocsDriftTests
 {
     private const string VerbPages = "docs/content/cli";

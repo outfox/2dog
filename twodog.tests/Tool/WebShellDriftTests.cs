@@ -6,6 +6,7 @@ namespace twodog.tests.ToolTests;
 // the web flavor: the shell differs only by the WebXR Layers polyfill block
 // and the template Program.cs only by the host label - or fixes silently
 // land in only some copies.
+[Trait("Precision", "Independent")]
 public class WebShellDriftTests
 {
     private static string HostFile(string file, params string[] parts) =>

@@ -2,6 +2,7 @@ using twodog.cli;
 
 namespace twodog.tests.ToolTests;
 
+[Trait("Precision", "Independent")]
 public class AndroidSdkTests
 {
     private static string Sdk(TempProjectDir tmp, string folder = "sdk", bool windows = true)

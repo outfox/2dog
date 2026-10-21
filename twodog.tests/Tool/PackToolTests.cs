@@ -8,6 +8,7 @@ namespace twodog.tests.ToolTests;
 /// The `2dog pack list` verb and the GDPC reader behind it (shared with the
 /// twodog.import helper's --list-pack): synthetic packs only, no engine.
 /// </summary>
+[Trait("Precision", "Independent")]
 public class PackToolTests
 {
     /// <summary>A minimal GDPC pack: v2 uses the reserved block, v3/v4 a directory offset.</summary>

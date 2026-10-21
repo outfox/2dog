@@ -5,6 +5,7 @@ namespace twodog.tests.ToolTests;
 
 // The System.CommandLine-backed parser: the command tree is the single source of truth for options and help, so
 // these lock the tree, the pre-passes around it and the wording of usage errors.
+[Trait("Precision", "Independent")]
 public class CliTreeTests
 {
     [Fact]
@@ -218,6 +219,7 @@ public class CliTreeTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class UsageTests
 {
     [Fact]
@@ -272,6 +274,7 @@ public class UsageTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class SuggestTests
 {
     [Theory]
@@ -293,6 +296,7 @@ public class SuggestTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class OptionalValueTokensTests
 {
     [Theory]

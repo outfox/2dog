@@ -7,6 +7,7 @@ namespace twodog.tests.ToolTests;
 
 // Output modes: how the environment, the console and the output flags decide colour, prompts, spinners, glyphs
 // and which lines are printed where.
+[Trait("Precision", "Independent")]
 public class OutputModeTests
 {
     private static readonly ConsoleFacts Tty = new(false, false, false, true);
@@ -225,6 +226,7 @@ public class OutputModeTests
 }
 
 // Every Out helper must be safe against markup in user text and must keep the greppable prefixes.
+[Trait("Precision", "Independent")]
 public class OutGuardTests
 {
     private const string Hostile = "[bold]x[/] ]] [[ [red";

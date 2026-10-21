@@ -4,6 +4,7 @@ namespace twodog.tests.ToolTests;
 
 // The root Directory.Build.props carries the package versions every host references: the template ships it,
 // `add` creates or appends it, and no host csproj carries a literal version any more.
+[Trait("Precision", "Independent")]
 public class PropsPatcherTests
 {
     [Fact]

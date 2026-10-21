@@ -5,6 +5,7 @@ namespace twodog.tests.ToolTests;
 // The pure halves of the `2dog version` nuget.org check: picking the latest
 // stable out of a flat-container version list, and turning current-vs-latest
 // into the up-to-date mark. The HTTP path is best-effort by design and not tested.
+[Trait("Precision", "Independent")]
 public class NuGetLatestTests
 {
     [Fact]

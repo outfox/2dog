@@ -11,14 +11,22 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   another one built. Do not merge configurations back into one job: together they exceed the job timeout.
 - The test matrix is priced by runner: macOS minutes cost 5x Windows and 10x Linux. Linux runs every
   configuration/precision pair; Windows and macOS cover each configuration and each precision at least once.
-  Configuration-independent suites (CLI tool tests, MTP contracts) run in the Debug jobs, REPL coverage in
-  Windows Debug single. Add new suites the same way rather than to every cell.
+  CLI tests marked `Precision=Independent` run once per OS in Debug single; unmarked precision/native tests
+  stay in both precisions. Windows Debug single excludes `FullyQualifiedName~Repl` from its ordinary pass
+  and runs that exact selection under the 95% coverage gate. Keep native-state collections serialized.
+- `test-contracts` runs independently after pack, preserving Debug adapter coverage in both precisions on
+  Linux/Windows and single on macOS. Keep `Test Contracts` in both reuse family lists and the deployment gate.
+  Preserve the harness's cancellation, cleanup and source-isolation assertions and subprocess deadlines.
 - Desktop publish and editor lifecycle checks use the normal renderer settings. `webgpu-desktop` alone
   runs the native WebGPU pixels, restart and shader-contract checks, once per supported OS in single precision.
   Keep it in both tested-content/revision-bump family lists and the deployment gate.
 - The native build runs the real C++ shader compiler regressions once, against the single-precision,
   non-threaded Web debug archive. Source-level WebGPU checks run where the submodule source is checked out.
   Precision-independent package and browser-script checks run once rather than in every precision/AOT cell.
+- `web-smoke` runs Web, WebXR, threaded Web and Blazor in separate flavor/precision/AOT matrix cells;
+  its single `checks` cell runs MSBuild contracts and browser diagnostics. Portable showcase cells select
+  Compatibility before publishing because double precision and threads do not support WebGPU. Keep
+  WebGPU image coverage and single-precision Blazor WebGPU restart coverage enabled independently.
 - `webgpu-browser-build` publishes the single-precision image-test bundle after pack; `webgpu-browser`
   consumes it without waiting for Web Smoke. Both belong to the `WebGPU Browser` tested-content family;
   the browser job gates deployment and requires the bundle job to succeed.

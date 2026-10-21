@@ -5,6 +5,7 @@ namespace twodog.tests.ToolTests;
 
 // Host recognition and project.godot handling on the awkward inputs real projects have: namespaces, comments,
 // broken XML, CRLF files with byte-order marks, escaped values.
+[Trait("Precision", "Independent")]
 public class DetectionTests
 {
     [Theory]

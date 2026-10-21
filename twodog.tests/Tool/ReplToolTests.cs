@@ -9,6 +9,7 @@ using twodog.tests.ReplTests;
 
 namespace twodog.tests.ToolTests;
 
+[Trait("Precision", "Independent")]
 public class ReplCommandLineTests
 {
     [Theory]
@@ -74,6 +75,7 @@ public class ReplCommandLineTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class ReplHostLookupTests : IDisposable
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), "2dog-repl-lookup-" + Guid.NewGuid().ToString("N"));

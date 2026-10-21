@@ -4,6 +4,7 @@ using twodog.cli;
 namespace twodog.tests.ToolTests;
 
 // `2dog update`: literal versions move into the props block, the block follows the tool, nothing ever downgrades.
+[Trait("Precision", "Independent")]
 public class UpdateTests
 {
     /// <summary>A project as an older tool left it: literal versions in every csproj and no props block.</summary>

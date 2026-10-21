@@ -4,6 +4,7 @@ namespace twodog.tests.ToolTests;
 
 // The subprocess runner behind `dotnet sln`, `dotnet restore` and doctor's probes: captured output, bounded
 // waits, cancellation, and the muxer lookup.
+[Trait("Precision", "Independent")]
 public class ProcessRunnerTests
 {
     private static ProcessRequest Dotnet(params string[] args) =>

@@ -1,5 +1,6 @@
 """Pack the iOS runtime NuGets from stub archives and exercise their targets, plus the 2dog.ios host targets from
 source, without the ios workload, a Mac or a device."""
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -286,6 +287,28 @@ ios.arm64 = "{library}"
             self.assertIn("TDGI005", result.stdout)
             result = msbuild(self.project(root, "<TwoDogVariant>editor</TwoDogVariant>", pack), "Collect", REPO)
             self.assertIn("TDGI001", result.stdout)
+
+
+class MauiFrameworks(unittest.TestCase):
+    def test_sdk_dispatches_each_framework_separately(self):
+        # Evaluation only: no mobile workloads, restore or native archives required.
+        for android, ios in ((True, True), (False, True), (True, False)):
+            with self.subTest(android=android, ios=ios):
+                result = subprocess.run([
+                    "dotnet", "msbuild", str(REPO / "twodog.maui/twodog.maui.csproj"),
+                    "-nologo", "-t:_ComputeTargetFrameworkItems", "-getItem:_TargetFrameworkNormalized",
+                    "-p:MSBuildEnableWorkloadResolver=false",
+                    f"-p:TwoDogMauiAndroid={str(android).lower()}",
+                    f"-p:TwoDogMauiIos={str(ios).lower()}",
+                ], cwd=REPO, capture_output=True, text=True, timeout=60)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                frameworks = json.loads(result.stdout)["Items"]["_TargetFrameworkNormalized"]
+                expected = ["net10.0-android"] if android else []
+                if os.name == "nt":
+                    expected.append("net10.0-windows10.0.19041.0")
+                if ios:
+                    expected.append("net10.0-ios")
+                self.assertEqual([item["Identity"] for item in frameworks], expected)
 
 
 if __name__ == "__main__":

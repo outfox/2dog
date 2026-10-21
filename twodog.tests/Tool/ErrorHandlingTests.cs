@@ -6,6 +6,7 @@ namespace twodog.tests.ToolTests;
 // Failures end in an `error:` line and a stable exit code, never a stack trace (unless --verbose asks for one),
 // and a plan that breaks half-way says what stands and what never ran.
 [Collection("doctor statics")] // DoctorCommand.Runner/Environment are process-wide seams: never swap them in parallel.
+[Trait("Precision", "Independent")]
 public class ErrorHandlingTests
 {
     [Fact]

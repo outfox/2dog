@@ -8,6 +8,7 @@ namespace twodog.tests.ToolTests;
 // the assets file's dependency strings up to the first whitespace), so the
 // tool refuses such names and offers to fix them.
 
+[Trait("Precision", "Independent")]
 public class SetAssemblyNameTests
 {
     [Fact]
@@ -55,6 +56,7 @@ public class SetAssemblyNameTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class SolutionRenameProjectTests
 {
     [Fact]
@@ -95,6 +97,7 @@ public class SolutionRenameProjectTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class SpacedIdentityTests
 {
     private static string? Identity(TempProjectDir tmp, string projectGodot)
@@ -135,6 +138,7 @@ public class SpacedIdentityTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class SpacedNameGuardTests
 {
     private const string SpacedProject =
@@ -238,6 +242,7 @@ public class SpacedNameGuardTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class RenameEndToEndTests
 {
     private static readonly string SpacedCsproj =
@@ -345,6 +350,7 @@ public class RenameEndToEndTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class RenameCommandLineTests
 {
     [Fact]
@@ -368,6 +374,7 @@ public class RenameCommandLineTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class NewNameAnnouncementTests
 {
     [Fact]

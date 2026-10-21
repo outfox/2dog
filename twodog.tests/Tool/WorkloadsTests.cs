@@ -2,6 +2,7 @@ using twodog.cli;
 
 namespace twodog.tests.ToolTests;
 
+[Trait("Precision", "Independent")]
 public class WorkloadsTests
 {
     private static FakeProcessRunner Runner(bool installed, int installExit = 0) => new(request =>

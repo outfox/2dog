@@ -47,6 +47,7 @@ internal sealed class TempProjectDir : IDisposable
     }
 }
 
+[Trait("Precision", "Independent")]
 public class GodotProjectFileTests
 {
     private const string Sample =
@@ -115,6 +116,7 @@ public class GodotProjectFileTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class DeriveBaseNameTests
 {
     private static string Derive(TempProjectDir tmp, string projectGodot, string? nameOverride = null)
@@ -217,6 +219,7 @@ public class DeriveBaseNameTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class CsprojPatcherTests
 {
     private static readonly string[] HostFolders = ["MyGame.2dog", "MyGame.web", "MyGame.xunit"];
@@ -429,6 +432,7 @@ public class CsprojPatcherTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class SolutionOpsTests
 {
     // Classic sln skeleton with one project entry; the separator in the
@@ -630,6 +634,7 @@ public class SolutionOpsTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class TemplateAssetsTests
 {
     private static void AssertNoTokens(string text)
@@ -745,6 +750,7 @@ public class TemplateAssetsTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class ExportPresetOpsTests
 {
     private const string DesktopPreset =
@@ -807,6 +813,7 @@ public class ExportPresetOpsTests
 // `dotnet sln` subprocess steps (restore is skipped). These prove the two
 // contractual behaviors: a fresh add scaffolds the complete nested
 // layout, and a re-run changes nothing.
+[Trait("Precision", "Independent")]
 public class AddEndToEndTests
 {
     private const string GdScriptProject =
@@ -1329,6 +1336,7 @@ public class AddEndToEndTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class HostsTests
 {
     [Fact]
@@ -1491,6 +1499,7 @@ public class HostsTests
         Assert.Null(Hosts.SanitizeName(input));
 }
 
+[Trait("Precision", "Independent")]
 public class HostScanTests
 {
     [Theory]
@@ -1552,6 +1561,7 @@ public class HostScanTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class CommandLineTests
 {
     [Fact]
@@ -1679,6 +1689,7 @@ public class CommandLineTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class HostSelectionTests
 {
     private static ProjectContext Project(params (HostKind Kind, string Folder)[] existing) =>
@@ -1801,6 +1812,7 @@ public class HostSelectionTests
 // End-to-end runs of the two shapes the conversion tests above do not cover:
 // creating a project from scratch, and adding a second host of a kind that is
 // already present.
+[Trait("Precision", "Independent")]
 public class ScaffoldEndToEndTests
 {
     private static int Run(ScaffoldOptions options) => CliConsole.Capture(() =>

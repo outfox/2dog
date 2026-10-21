@@ -3,6 +3,7 @@ using twodog.cli;
 
 namespace twodog.tests.ToolTests;
 
+[Trait("Precision", "Independent")]
 public class QtHostTests
 {
     private static readonly string BridgeVersion = ToolVersions.QtBridgeVersion;

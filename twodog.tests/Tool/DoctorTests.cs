@@ -6,6 +6,7 @@ namespace twodog.tests.ToolTests;
 // `2dog doctor`: a fresh scaffold is clean, every breaker is found by id, safe fixes repair and are idempotent,
 // announced fixes wait for --fix-all, and the exit code says whether findings remain.
 [Collection("doctor statics")] // DoctorCommand.Runner/Environment are process-wide seams: never swap them in parallel.
+[Trait("Precision", "Independent")]
 public class DoctorTests : IDisposable
 {
     private readonly TempProjectDir _tmp = new();
@@ -766,6 +767,7 @@ public class DoctorTests : IDisposable
     }
 }
 
+[Trait("Precision", "Independent")]
 public class DotnetInfoTests
 {
     [Fact]
@@ -825,6 +827,7 @@ public class DotnetInfoTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class BuildLogAnalyzerTests
 {
     [Fact]

@@ -2,6 +2,7 @@ using twodog.cli;
 
 namespace twodog.tests.ToolTests;
 
+[Trait("Precision", "Independent")]
 public class ProgramTests
 {
     [Fact]
@@ -79,6 +80,7 @@ public class ProgramTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class CommandLineCoverageTests
 {
     [Fact]
@@ -128,6 +130,7 @@ public class CommandLineCoverageTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class HostsCoverageTests
 {
     [Theory]
@@ -184,6 +187,7 @@ public class HostsCoverageTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class SolutionOpsCoverageTests
 {
     [Fact]
@@ -250,6 +254,7 @@ public class SolutionOpsCoverageTests
     }
 }
 
+[Trait("Precision", "Independent")]
 public class ScaffoldCoverageTests
 {
     [Fact]

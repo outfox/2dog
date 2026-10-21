@@ -94,7 +94,7 @@ jobs:
              ! echo "$lines" | grep -qv '<TwoDogRevision>'; then
             parent=$(git rev-parse HEAD^)
             # Any run that tested the parent's content counts, also one on the branch the parent merged.
-            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
+            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
               read -r run sha <<<"$found"
               echo "::notice::Parent ${parent:0:7}'s content passed CI in run $run (${sha:0:7}); skipping test, desktop and Android jobs."
               tested=true
@@ -112,7 +112,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
+          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
                "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
             read -r run sha <<<"$found"
             url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
@@ -423,7 +423,7 @@ jobs:
             runner: blacksmith-4vcpu-windows-2025
           - name: osx-arm64
             runner: blacksmith-6vcpu-macos-latest
-          # The Debug jobs also run the CLI tool tests and MTP contracts and set the workflow's duration. Shorter
+          # The Debug jobs also run the CLI tool tests and set the workflow's duration. Shorter
           # jobs still finish before them on free GitHub-hosted runners, which take about twice as long.
           - name: linux-x64
             config: Release
@@ -488,39 +488,22 @@ jobs:
 
       # The watchdog dumps the xunit v3 child (and 2dog.import grandchildren) on a hang;
       # vstest's own --blame-hang only ever dumped its testhost. Crash dumps cover a segv.
-      # The CLI tool tests do not depend on the configuration; they run in the Debug jobs only.
+      # CLI-only tests run once per OS in Debug single; unmarked native/precision tests stay in both precisions.
+      # Windows Debug single's REPL tests run only in the instrumented pass below, with the same filter.
       - name: Test (${{ matrix.config }})
         env:
-          TWODOG_TEST_FILTER: ${{ matrix.config != 'Debug' && 'FullyQualifiedName!~twodog.tests.ToolTests.' || '' }}
+          TWODOG_TEST_FILTER: >-
+            ${{ matrix.config != 'Debug' && 'FullyQualifiedName!~twodog.tests.ToolTests.' ||
+            matrix.precision == 'double' && 'Precision!=Independent' ||
+            runner.os == 'Windows' && 'FullyQualifiedName!~Repl' || '' }}
         run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
 
-      - name: Setup uv for MTP contracts and REPL coverage
-        if: matrix.config == 'Debug'
+      - name: Setup uv for REPL coverage
+        if: runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
           enable-cache: false
-
-      # The contracts check the test adapters, not the configuration: the Debug jobs run them.
-      - name: Test xUnit, NUnit and GdUnit MTP contracts
-        if: matrix.config == 'Debug'
-        timeout-minutes: 5
-        run: uv run --no-project python tests/mtp/test_hosts.py --configuration ${{ matrix.config }} --precision ${{ matrix.precision }}
-
-      - name: Upload MTP contract diagnostics
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: mtp-contracts-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}
-          path: |
-            tests/mtp/bin/**/console.log
-            tests/mtp/bin/**/fixture.events
-            tests/mtp/bin/**/godot/*.log
-            tests/gdunit-mtp/bin/contracts/**/*.log
-            tests/gdunit-mtp/bin/contracts/**/events.json
-            tests/gdunit-mtp/bin/contracts/**/test-name.txt
-          if-no-files-found: ignore
-          retention-days: 7
 
       # Instrument the actual packed assembly, not a special source-project build. 2dog.repl is packed once for
       # every configuration and precision, so one Windows job measures it; behavior runs in every job.
@@ -590,6 +573,75 @@ jobs:
         with:
           name: test-dumps-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}
           path: '**/TestResults/**'
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # Adapter contracts have their own process/import/build work; run alongside the main suite.
+  # Preserve the previous Debug coverage: both precisions on Linux/Windows, single on macOS.
+  test-contracts:
+    name: Test Contracts (${{ matrix.name }}, Debug) [${{ matrix.precision }}]
+    needs: [check-natives, pack]
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        precision: [single, double]
+        name: [linux-x64, win-x64, osx-arm64]
+        exclude:
+          - {name: osx-arm64, precision: double}
+        include:
+          - {name: linux-x64, runner: blacksmith-4vcpu-ubuntu-2404}
+          - {name: win-x64, runner: blacksmith-4vcpu-windows-2025}
+          - {name: osx-arm64, runner: blacksmith-6vcpu-macos-latest}
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+    steps:
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+      - name: Download godot-bin artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: godot-bin-${{ matrix.precision }}
+          path: godot
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-${{ matrix.precision }}
+          path: packages
+      - name: Test xUnit, NUnit and GdUnit MTP contracts
+        # Includes cold builds/restores now; individual subprocess deadlines remain in the harness.
+        timeout-minutes: 10
+        run: uv run --no-project python tests/mtp/test_hosts.py --configuration Debug --precision ${{ matrix.precision }}
+      - name: Upload MTP contract diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: mtp-contracts-${{ matrix.name }}-Debug-${{ matrix.precision }}
+          path: |
+            tests/mtp/bin/**/console.log
+            tests/mtp/bin/**/fixture.events
+            tests/mtp/bin/**/godot/*.log
+            tests/gdunit-mtp/bin/contracts/**/*.log
+            tests/gdunit-mtp/bin/contracts/**/events.json
+            tests/gdunit-mtp/bin/contracts/**/test-name.txt
           if-no-files-found: ignore
           retention-days: 7
 
@@ -1181,7 +1233,7 @@ jobs:
   # is complete. Consumers never install emsdk — the workload ships the
   # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
   web-smoke:
-    name: Web Smoke (AOT=${{ matrix.aot }}) [${{ matrix.precision }}]
+    name: Web Smoke (${{ matrix.flavor }}, AOT=${{ matrix.aot }}) [${{ matrix.precision }}]
     needs: [pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
@@ -1190,10 +1242,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        flavor: [web, webxr, webmt, blazor]
         precision: [single, double]
         # AOT is the slowest smoke build; keep it as a release gate for both
         # pushed v* tags and release.yml's workflow_dispatch on the new tag.
         aot: ${{ fromJSON((startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/double-precision') && '[false, true]' || '[false]') }}
+        # Contracts and exception diagnostics run once, independently of the app publishes.
+        include:
+          - {flavor: checks, precision: single, aot: false}
 
     env:
       TwoDogPrecision: ${{ matrix.precision }}
@@ -1228,7 +1284,7 @@ jobs:
         run: dotnet workload install wasm-tools --skip-manifest-update --source https://api.nuget.org/v3/index.json
 
       - name: Verify MSBuild configuration defaults
-        if: matrix.precision == 'single' && matrix.aot == false
+        if: matrix.flavor == 'checks'
         env:
           TwoDogPrecision: ''
         run: uv run python -m unittest discover -s tests/msbuild -v
@@ -1246,6 +1302,7 @@ jobs:
           path: packages
 
       - name: Make Linux editor executable
+        if: matrix.flavor != 'checks'
         run: chmod +x godot/bin/godot.linuxbsd.editor${{ env.TWODOG_NATIVE_SUFFIX }}.x86_64.executable.mono
 
       # The publish exports the showcase Godot project as godot.pck via the
@@ -1254,33 +1311,32 @@ jobs:
       # godot-bin download: the helper references GodotSharp assemblies from
       # godot/bin.
       - name: Build import helper
+        if: matrix.flavor != 'checks'
         run: dotnet build twodog.import -c Release
 
-      # Runs from the repo root on purpose: the root global.json pins the
-      # wasm-capable SDK band, so the from-root publish flow the docs promise
-      # stays covered.
-      - name: Publish showcase.web
-        run: dotnet publish demos/showcase/showcase.web -c Release -p:RunAOTCompilation=${{ matrix.aot }}
+      # Double precision and threaded runtimes do not support WebGPU. These portable
+      # smoke cells use Compatibility; dedicated image and Blazor restart tests cover WebGPU.
+      - name: Select Compatibility for portable browser smoke
+        if: matrix.flavor != 'checks'
+        run: |
+          uv run python - <<'PY'
+          from pathlib import Path
+          project = Path('demos/showcase/project.godot')
+          content = project.read_text()
+          setting = 'renderer/rendering_method.web="mobile"'
+          assert content.count(setting) == 1, 'Showcase web renderer setting changed'
+          project.write_text(content.replace(setting, 'renderer/rendering_method.web="gl_compatibility"'))
+          PY
 
-      # The WebXR flavor differs only in its page shell (Layers polyfill); the
-      # engine link and pck export are shared, so this publish is incremental.
-      - name: Publish showcase.webxr
-        run: dotnet publish demos/showcase/showcase.webxr -c Release -p:RunAOTCompilation=${{ matrix.aot }}
-
-      # .NET's threaded runtime (WasmEnableThreads) linking the web-threads payload and the -pthread GDExtension
-      # probe; a separate link and pck export ('Web (threads)' preset).
-      - name: Publish showcase.webmt
-        run: dotnet publish demos/showcase/showcase.webmt -c Release -p:RunAOTCompilation=${{ matrix.aot }}
-
-      # The Blazor flavor is a Blazor Web App (server + wasm client); the client
-      # links the engine into Blazor's own dotnet.native.wasm and 2dog.blazor's
-      # GodotView starts Godot in-process. Shares the pck export.
-      - name: Publish showcase.blazor
-        run: dotnet publish demos/showcase/showcase.blazor -c Release -p:RunAOTCompilation=${{ matrix.aot }}
+      # Keep the documented from-root publish flow under the root SDK pin.
+      - name: Publish showcase.${{ matrix.flavor }}
+        if: matrix.flavor != 'checks'
+        run: dotnet publish demos/showcase/showcase.${{ matrix.flavor }} -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
       - name: Verify app bundle
+        if: matrix.flavor == 'web' || matrix.flavor == 'webmt'
         run: |
-          BUNDLE=demos/showcase/showcase.web/AppBundle
+          BUNDLE=demos/showcase/showcase.${{ matrix.flavor }}/AppBundle
           # The last four dotnet.* files back the shell's modulepreload hints;
           # a rename there would 404 on every page load while CI stays green.
           for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" \
@@ -1312,6 +1368,7 @@ jobs:
           echo "Web app bundle OK"
 
       - name: Verify webxr app bundle
+        if: matrix.flavor == 'webxr'
         run: |
           BUNDLE=demos/showcase/showcase.webxr/AppBundle
           # Same shape as the web bundle (same asset list, including the
@@ -1340,6 +1397,7 @@ jobs:
           echo "WebXR app bundle OK"
 
       - name: Verify blazor publish
+        if: matrix.flavor == 'blazor'
         run: |
           PUB=demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish
           WWW=$PUB/wwwroot
@@ -1375,6 +1433,7 @@ jobs:
       # WebXR interface is registered on XRServer (its Program.cs does); webmt
       # calls the GDExtension probe from worker threads.
       - name: Run browser API smoke
+        if: matrix.flavor == 'web' || matrix.flavor == 'webxr' || matrix.flavor == 'webmt'
         run: |
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           if [ -z "$CHROME" ]; then
@@ -1392,11 +1451,11 @@ jobs:
           }
           trap cleanup EXIT
 
-          for FLAVOR in web webxr webmt; do
-            BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
+          FLAVOR=${{ matrix.flavor }}
+          BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
 
-            # Opt in to deliberate error/warning interop probes only in CI.
-            uv run python - "$BUNDLE/index.html" <<'PY'
+          # Opt in to deliberate error/warning interop probes only in CI.
+          uv run python - "$BUNDLE/index.html" <<'PY'
           from pathlib import Path
           import sys
           path = Path(sys.argv[1])
@@ -1406,79 +1465,68 @@ jobs:
           path.write_text(content.replace(needle, "'args': ['--', '--2dog-smoke-markers']"))
           PY
 
-            # The webxr shell records whether Layers polyfill construction
-            # completed; require it, so a polyfill that throws during init
-            # cannot ride the generic smoke marker to a pass.
-            EXTRA_ATTR=""
-            if [ "$FLAVOR" = "webxr" ]; then
-              EXTRA_ATTR="data-twodog-xr-layers=polyfilled"
+          # The webxr shell records whether Layers polyfill construction
+          # completed; require it, so a polyfill that throws during init
+          # cannot ride the generic smoke marker to a pass.
+          EXTRA_ATTR=""
+          if [ "$FLAVOR" = "webxr" ]; then
+            EXTRA_ATTR="data-twodog-xr-layers=polyfilled"
+          fi
+
+          if [ "$FLAVOR" = "webmt" ]; then
+            # SharedArrayBuffer, and so the threaded runtime, needs cross-origin isolation.
+            node .github/scripts/serve-isolated.mjs "$BUNDLE" 8000 > /tmp/2dog-web-server.log 2>&1 &
+          else
+            uv run python -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
+          fi
+          SERVER_PID=$!
+
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
+              break
             fi
-
-            if [ "$FLAVOR" = "webmt" ]; then
-              # SharedArrayBuffer, and so the threaded runtime, needs cross-origin isolation.
-              node .github/scripts/serve-isolated.mjs "$BUNDLE" 8000 > /tmp/2dog-web-server.log 2>&1 &
-            else
-              uv run python -m http.server 8000 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-web-server.log 2>&1 &
-            fi
-            SERVER_PID=$!
-
-            for attempt in $(seq 1 30); do
-              if curl --fail --silent http://127.0.0.1:8000/index.html > /dev/null; then
-                break
-              fi
-              sleep 1
-            done
-
-            "$CHROME" \
-              --headless=new \
-              --no-sandbox \
-              --use-gl=angle \
-              --use-angle=swiftshader-webgl \
-              --enable-unsafe-swiftshader \
-              --disable-dev-shm-usage \
-              --enable-logging=stderr \
-              --remote-debugging-address=127.0.0.1 \
-              --remote-debugging-port=9222 \
-              '--remote-allow-origins=*' \
-              "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-$FLAVOR" \
-              http://127.0.0.1:8000/index.html \
-              > /tmp/2dog-browser.log 2>&1 &
-            CHROME_PID=$!
-
-            set +e
-            timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
-              http://127.0.0.1:8000/index.html 120000 9222 $EXTRA_ATTR
-            SMOKE_STATUS=$?
-            set -e
-
-            cat /tmp/2dog-web-server.log
-            cat /tmp/2dog-browser.log
-
-            kill "$CHROME_PID" "$SERVER_PID" 2>/dev/null || true
-            CHROME_PID=""; SERVER_PID=""
-            # Let the debug and http ports free up before the next flavor binds them.
-            sleep 3
-
-            if [ "$SMOKE_STATUS" -ne 0 ]; then
-              echo "::error::The $FLAVOR browser app did not complete the Godot API smoke probe"
-              exit "$SMOKE_STATUS"
-            fi
-            echo "$FLAVOR browser smoke passed"
+            sleep 1
           done
 
-          echo "Web runtime API smoke OK"
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --use-gl=angle \
+            --use-angle=swiftshader-webgl \
+            --enable-unsafe-swiftshader \
+            --disable-dev-shm-usage \
+            --enable-logging=stderr \
+            --remote-debugging-address=127.0.0.1 \
+            --remote-debugging-port=9222 \
+            '--remote-allow-origins=*' \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-$FLAVOR" \
+            http://127.0.0.1:8000/index.html \
+            > /tmp/2dog-browser.log 2>&1 &
+          CHROME_PID=$!
 
-      # Same probe through the Blazor host: the published ASP.NET Core server
-      # serves the client, whose home page runs GodotApiSmoke after GodotView
-      # started the engine and marks the DOM.
+          set +e
+          timeout 130s node .github/scripts/wait-for-browser-smoke.mjs \
+            http://127.0.0.1:8000/index.html 120000 9222 $EXTRA_ATTR
+          SMOKE_STATUS=$?
+          set -e
+
+          cat /tmp/2dog-web-server.log
+          cat /tmp/2dog-browser.log
+
+          if [ "$SMOKE_STATUS" -ne 0 ]; then
+            echo "::error::The $FLAVOR browser app did not complete the Godot API smoke probe"
+            exit "$SMOKE_STATUS"
+          fi
+          echo "$FLAVOR browser smoke passed"
+
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
-        if: matrix.precision == 'single' && matrix.aot == false
+        if: matrix.flavor == 'checks'
         env:
           GODOT_WEB_JS_LIB_DIR: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/template_release/libgodot/js_library
         run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-renderer-default.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
 
       - name: Test managed exception reporting in browser-wasm
-        if: matrix.precision == 'single' && matrix.aot == false
+        if: matrix.flavor == 'checks'
         run: |
           dotnet publish tests/browser-exceptions -c Release -r browser-wasm --configfile nuget.config \
             -p:WasmAppDir="$PWD/browser-exceptions-probe" -v:quiet
@@ -1496,7 +1544,9 @@ jobs:
           done
           node .github/scripts/web-exception-diagnostics-smoke.mjs http://127.0.0.1:8091/index.html 9231
 
+      # Same API probe through the published ASP.NET Core server and Blazor client.
       - name: Run Blazor browser smoke
+        if: matrix.flavor == 'blazor'
         run: |
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           cleanup() {
@@ -1570,7 +1620,7 @@ jobs:
           echo "Blazor engine restart smoke passed"
 
       - name: Run Blazor WebGPU browser restart smoke
-        if: matrix.precision == 'single' && matrix.aot == false
+        if: matrix.flavor == 'blazor' && matrix.precision == 'single' && matrix.aot == false
         run: |
           CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           cleanup() {
@@ -1607,17 +1657,15 @@ jobs:
           cat /tmp/2dog-blazor-webgpu-browser.log
           exit "$SMOKE_STATUS"
 
-      - name: Preserve failed Blazor publish and browser diagnostics
+      - name: Preserve failed web publish and browser diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: blazor-browser-failure-aot-${{ matrix.aot }}-${{ github.run_attempt }}-${{ matrix.precision }}
+          name: web-smoke-failure-${{ matrix.flavor }}-aot-${{ matrix.aot }}-${{ github.run_attempt }}-${{ matrix.precision }}
           path: |
+            demos/showcase/showcase.${{ matrix.flavor }}/AppBundle/
             demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish/
-            /tmp/2dog-blazor-server.log
-            /tmp/2dog-blazor-browser.log
-            /tmp/2dog-blazor-restart.log
-            /tmp/2dog-blazor-webgpu-*.log
+            /tmp/2dog-*.log
           retention-days: 7
 
   # Produce the image test independently so macOS does not wait for the Web Smoke matrix.
@@ -2200,7 +2248,7 @@ jobs:
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it. A tested revision bump (see check-natives) takes
     # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui]
+    needs: [check-natives, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -2210,7 +2258,7 @@ jobs:
       github.repository == 'outfox/2dog' &&
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
       (needs.check-natives.outputs.tested-bump == 'true' ||
-      (needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
+      (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
       needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
       needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
       needs.tool-smoke.result == 'success' && needs.maui.result == 'success')

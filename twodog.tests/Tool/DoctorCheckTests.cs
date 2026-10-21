@@ -6,6 +6,7 @@ namespace twodog.tests.ToolTests;
 // Individual doctor checks against deliberately damaged scaffolds: what a fresh project passes must be reported
 // once an author disables, removes or mistypes it, and the fixes must follow a solution migration.
 [Collection("doctor statics")] // DoctorCommand.Runner/Environment are process-wide seams: never swap them in parallel.
+[Trait("Precision", "Independent")]
 public class DoctorCheckTests : IDisposable
 {
     private readonly TempProjectDir _tmp = new();
