@@ -55,7 +55,7 @@ try {
     await send('Page.navigate', { url });
     if (output) await mkdir(output, { recursive: true });
     const samples = [];
-    for (let phase = 0; phase < 9; phase++) {
+    for (let phase = 0; phase < 13; phase++) {
         if (phase) await evaluate(`document.documentElement.dataset.requestPhase='${phase}'`);
         await waitFor(`document.documentElement?.dataset.readyPhase==='${phase}'`);
         await delay(200);
@@ -95,11 +95,26 @@ try {
             if (pixel[1] < 0.2 * 255 || pixel[1] <= pixel[0] + 0.15 * 255)
                 throw new Error(`The textured lightmapped material did not produce a green target: ${pixel}`);
             console.log('BROWSER_LIGHTMAP_BINDING_BUDGET_PASSED');
+        } else if (phase === 9) {
+            if (pixel[0] < 0.5 * 255 || pixel[1] < 0.5 * 255 || pixel[2] > 0.1 * 255)
+                throw new Error(`Point coordinates did not produce a yellow target: ${pixel}`);
+            console.log('BROWSER_POINT_COORDINATES_PASSED');
+        } else if (phase === 10) {
+            if (pixel[0] < 0.1 * 255) throw new Error(`Depth texture returned the zero fallback: ${pixel}`);
+            console.log('BROWSER_DEPTH_TEXTURE_PASSED');
+        } else if (phase === 11) {
+            if (pixel[0] < 0.8 * 255 || pixel[1] < 0.3 * 255 || pixel[1] > 0.8 * 255 || pixel[2] > 0.1 * 255)
+                throw new Error(`DXT5 RA_AS_RG lost its channels: ${pixel}`);
+            console.log('BROWSER_DXT5_RA_AS_RG_PASSED');
+        } else if (phase === 12) {
+            if (pixel[1] < 0.3 * 255 || pixel[0] > 0.2 * 255 || pixel[2] > 0.1 * 255)
+                throw new Error(`ETC2 RA_AS_RG lost its channels: ${pixel}`);
+            console.log('BROWSER_ETC2_RA_AS_RG_PASSED');
         } else {
             samples.push((pixel[0] + pixel[1] + pixel[2]) / (3 * 255));
         }
     }
-    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='9'`);
+    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='13'`);
     await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
     if (errors.length) throw new Error(errors.join('\n'));
     console.log('BROWSER_MOBILE_LIGHT_LIST_PASSED', samples);

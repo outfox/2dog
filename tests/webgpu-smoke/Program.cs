@@ -44,12 +44,14 @@ internal static class Program
             {
                 DescriptorArraySmoke.Run();
                 ShaderBakingSmoke.Run();
+                ShaderControlFlowSmoke.Run();
+                TextureSwizzleSmoke.Run();
             }
             if (RenderingServer.GetCurrentRenderingMethod() is "forward_plus" or "mobile")
             {
                 using var probe = new LightingScene(engine.Tree);
                 bool forwardPlus = RenderingServer.GetCurrentRenderingMethod() == "forward_plus";
-                for (int stage = 0; stage < (forwardPlus ? 4 : 9); stage++)
+                for (int stage = 0; stage < (forwardPlus ? 4 : LightingScene.StageCount); stage++)
                 {
                     probe.SelectStage(stage);
                     for (int frame = 0; frame < 12; frame++)
@@ -72,6 +74,14 @@ internal static class Program
                             throw new Exception($"User varyings did not produce a magenta target: {pixel}.");
                         if (stage == 8 && (pixel.G < 0.2f || pixel.G <= pixel.R + 0.15f))
                             throw new Exception($"The textured lightmapped material did not produce a green target: {pixel}.");
+                        if (stage == 9 && (pixel.R < 0.5f || pixel.G < 0.5f || pixel.B > 0.1f))
+                            throw new Exception($"Point coordinates did not produce a yellow target: {pixel}.");
+                        if (stage == 10 && pixel.R < 0.1f)
+                            throw new Exception($"The depth-texture material sampled the zero fallback: {pixel}.");
+                        if (stage == 11 && (pixel.R < 0.8f || pixel.G < 0.3f || pixel.G > 0.8f || pixel.B > 0.1f))
+                            throw new Exception($"DXT5 RA_AS_RG material lost its channels: {pixel}.");
+                        if (stage == 12 && (pixel.G < 0.3f || pixel.R > 0.2f || pixel.B > 0.1f))
+                            throw new Exception($"ETC2 RA_AS_RG material lost its channels: {pixel}.");
                         Console.WriteLine($"MOBILE_EFFECT_PIXEL stage={stage} {pixel}");
                     }
                 }

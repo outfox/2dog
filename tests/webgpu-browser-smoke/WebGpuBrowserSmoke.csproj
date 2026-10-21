@@ -13,6 +13,7 @@
     <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
     <PackageReference Include="2dog.browser-wasm" Version="$(NativesVersion)" />
     <Compile Include="../webgpu-smoke/LightingScene.cs" Link="LightingScene.cs" />
+    <Compile Include="../webgpu-smoke/TextureSwizzleSmoke.cs" Link="TextureSwizzleSmoke.cs" />
     <TrimmerRootAssembly Include="$(AssemblyName)" />
   </ItemGroup>
 </Project>

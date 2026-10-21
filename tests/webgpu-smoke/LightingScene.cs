@@ -3,11 +3,19 @@ using Godot;
 // Both halves of the light list must contribute on the selected renderer.
 internal sealed class LightingScene : IDisposable
 {
+    public const int StageCount = 13;
     private readonly Node3D _root = new();
     private readonly OmniLight3D[] _lights;
     private readonly Window _viewport;
     private readonly MeshInstance3D _subject = new() { Name = "Subject" };
+    private readonly BoxMesh _boxMesh = new() { AddUV2 = true };
+    private ArrayMesh? _pointMesh;
     private ShaderMaterial? _varyingMaterial;
+    private ShaderMaterial? _pointMaterial;
+    private ShaderMaterial? _depthMaterial;
+    private MeshInstance3D? _depthProbe;
+    private readonly ShaderMaterial?[] _normalMaterials = new ShaderMaterial?[2];
+    private readonly ImageTexture?[] _normalTextures = new ImageTexture?[2];
     private LightmapGI? _lightmap;
     private StandardMaterial3D? _emitterMaterial;
     private MeshInstance3D? _emitter;
@@ -41,7 +49,7 @@ internal sealed class LightingScene : IDisposable
         _viewport = tree.Root;
         tree.Root.AddChild(_root);
         _root.AddChild(new WorldEnvironment { Environment = _environment });
-        _subject.Mesh = new BoxMesh { AddUV2 = true };
+        _subject.Mesh = _boxMesh;
         _subject.MaterialOverride = _material;
         _root.AddChild(_subject);
         _root.AddChild(new Camera3D { Position = new Vector3(0, 0, 4), Current = true });
@@ -85,6 +93,46 @@ internal sealed class LightingScene : IDisposable
             };
         }
         _subject.MaterialOverride = stage == 7 ? _varyingMaterial : _material;
+        _subject.Mesh = _boxMesh;
+        if (stage == 9)
+        {
+            _pointMaterial ??= new ShaderMaterial { Shader = new Shader { Code = "shader_type spatial; render_mode unshaded; void vertex() { POINT_SIZE = 32.0; } void fragment() { ALBEDO = vec3(POINT_COORD, 0.0); }" } };
+            if (_pointMesh is null)
+            {
+                var arrays = new Godot.Collections.Array();
+                arrays.Resize((int)Mesh.ArrayType.Max);
+                arrays[(int)Mesh.ArrayType.Vertex] = new Vector3[] { Vector3.Zero };
+                _pointMesh = new ArrayMesh();
+                _pointMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Points, arrays);
+                arrays.Clear();
+            }
+            _subject.Mesh = _pointMesh;
+            _subject.MaterialOverride = _pointMaterial;
+        }
+        if (stage == 10 && _depthProbe is null)
+        {
+            _depthMaterial = new ShaderMaterial { Shader = new Shader { Code = """
+                shader_type spatial;
+                render_mode unshaded, depth_draw_never, depth_test_disabled;
+                uniform sampler2D depth_tex : hint_depth_texture, filter_linear;
+                void fragment() { ALBEDO = vec3(textureLod(depth_tex, SCREEN_UV, 0.0).r * 50.0); ALPHA = 1.0; }
+                """ } };
+            _depthProbe = new MeshInstance3D { Mesh = new QuadMesh { Size = new Vector2(2, 2) }, MaterialOverride = _depthMaterial, Position = new Vector3(0, 0, 2) };
+            _root.AddChild(_depthProbe);
+        }
+        if (_depthProbe is not null) _depthProbe.Visible = stage == 10;
+        if (stage is 11 or 12)
+        {
+            int index = stage - 11;
+            if (_normalMaterials[index] is null)
+            {
+                using var source = TextureSwizzleSmoke.CreateSource(index == 0 ? Image.Format.Dxt5RaAsRg : Image.Format.Etc2RaAsRg);
+                _normalTextures[index] = ImageTexture.CreateFromImage(source);
+                _normalMaterials[index] = new ShaderMaterial { Shader = new Shader { Code = "shader_type spatial; render_mode unshaded; uniform sampler2D normal_data; void fragment() { ALBEDO = texture(normal_data, UV).rgb; }" } };
+                _normalMaterials[index]!.SetShaderParameter("normal_data", _normalTextures[index]!);
+            }
+            _subject.MaterialOverride = _normalMaterials[index];
+        }
         if (stage == 8 && _lightmap is null)
         {
             using var light = Image.CreateEmpty(4, 4, false, Image.Format.Rgba8);
@@ -161,11 +209,22 @@ internal sealed class LightingScene : IDisposable
         var masks = data?.ShadowmaskTextures;
         var albedo = _material.AlbedoTexture;
         var varyingShader = _varyingMaterial?.Shader;
+        var pointShader = _pointMaterial?.Shader;
+        var depthShader = _depthMaterial?.Shader;
+        var depthMesh = _depthProbe?.Mesh;
         _viewport.Msaa3D = Viewport.Msaa.Disabled;
         _root.Free();
         _emitterMaterial?.Dispose();
         _varyingMaterial?.Dispose();
         varyingShader?.Dispose();
+        _pointMaterial?.Dispose(); pointShader?.Dispose();
+        _pointMesh?.Dispose(); _boxMesh.Dispose();
+        _depthMaterial?.Dispose(); depthShader?.Dispose(); depthMesh?.Dispose();
+        for (int i = 0; i < _normalMaterials.Length; i++)
+        {
+            var shader = _normalMaterials[i]?.Shader;
+            _normalMaterials[i]?.Dispose(); shader?.Dispose(); _normalTextures[i]?.Dispose();
+        }
         _material.Dispose();
         albedo?.Dispose();
         if (atlases is not null) foreach (var texture in atlases) texture.Dispose();

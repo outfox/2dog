@@ -20,7 +20,7 @@ if (options.has('limited-compute') || options.has('base-formats') || options.has
                 ...(options.has('limited-bindings') ? { maxSampledTexturesPerShaderStage: 16, maxInterStageShaderVariables: 16 } : {}),
             },
             requiredFeatures: [...(descriptor.requiredFeatures || [])].filter(feature =>
-                !options.has('base-formats') || !['texture-formats-tier1', 'texture-formats-tier2'].includes(feature)),
+                !options.has('base-formats') || !['texture-formats-tier1', 'texture-formats-tier2', 'depth32float-stencil8'].includes(feature)),
         });
     };
 }
