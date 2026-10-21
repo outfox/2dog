@@ -47,7 +47,7 @@ const SECTIONS = [
     'hosts/generic.md', 'hosts/repl.md',
   ]],
   ['Desktop Hosts', [
-    'hosts/avalonia.md', 'hosts/winforms.md', 'hosts/winui.md',
+    'hosts/avalonia.md', 'hosts/qt.md', 'hosts/winforms.md', 'hosts/winui.md',
   ]],
   ['Web Hosts', [
     'hosts/blazor.md', 'hosts/web.md', 'hosts/webxr.md',
@@ -78,7 +78,7 @@ const SECTIONS = [
     'configuration/generic.md', 'configuration/repl.md',
   ]],
   ['Desktop Configuration', [
-    'configuration/avalonia.md', 'configuration/winforms.md', 'configuration/winui.md',
+    'configuration/avalonia.md', 'configuration/qt.md', 'configuration/winforms.md', 'configuration/winui.md',
   ]],
   ['Web Configuration', [
     'configuration/blazor.md', 'configuration/web.md', 'configuration/webxr.md',

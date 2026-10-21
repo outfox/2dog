@@ -73,6 +73,7 @@ flag adds a second host of the same kind. Test hosts are opt-in: choose
 | `--winforms [folder]`      | [WinForms host](/hosts/winforms); Windows-only                            |
 | `--winui [folder]`         | [WinUI 3 host](/hosts/winui); builds only on Windows                      |
 | `--avalonia [folder]`      | [Avalonia host](/hosts/avalonia)                                          |
+| `--qt [folder]`            | [Qt Quick host](/hosts/qt); needs CMake, Ninja and a C++ toolchain        |
 | `--blazor [folder]`        | [Blazor Web App host](/hosts/blazor); needs wasm-tools                    |
 | `--maui [folder]`          | [MAUI host](/hosts/maui); Windows and Android, needs MAUI workloads       |
 | `--android [folder]`       | [Android host](/hosts/android); experimental, needs the android workload  |

@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <!-- A 'twodog.Qt' namespace would shadow Qt Bridge's root 'Qt' namespace inside twodog code. -->
+        <RootNamespace>twodog</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <!-- NuGet Package Metadata -->
+    <PropertyGroup>
+        <PackageId>2dog.qt</PackageId>
+        <Version>$(TwoDogVersion)</Version>
+        <!-- One package works with either engine precision; the host selects its engine explicitly. -->
+        <TwoDogPrecisionNeutral>true</TwoDogPrecisionNeutral>
+        <Description>Embed Godot in a Qt Quick (QML) application built with Qt Bridge for C#. The TwoDog QML module's GodotView item shows the engine inside the scene, so QML items can render on top of the running game.</Description>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IsPackable>true</IsPackable>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageTags>godot;2dog;qt;qml;game-engine</PackageTags>
+    </PropertyGroup>
+
+    <!-- The engine is a private build dependency: the host selects 2dog.engine or 2dog.engine.double. Qt Bridge
+         is the host's choice too, since its package is per RID. -->
+    <ItemGroup>
+        <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <!-- The QML module ships as source and builds against the host's Qt, so it always matches Qt's ABI. -->
+    <ItemGroup>
+        <None Include="native/CMakeLists.txt;native/*.h;native/*.cpp" Pack="true" PackagePath="native/"/>
+        <None Include="buildTransitive/2dog.qt.targets" Pack="true" PackagePath="buildTransitive/"/>
+        <None Include="../nuget/icon.png" Pack="true" PackagePath="icon.png" Visible="false"/>
+        <None Include="README.md" Pack="true" PackagePath="README.md"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="twodog.tests"/>
+    </ItemGroup>
+</Project>

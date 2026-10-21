@@ -15,6 +15,7 @@
         <TwoDogMauiVersion>MAUI_PKG_VERSION</TwoDogMauiVersion>
         <TwoDogWindowsAppSdkVersion>WINAPPSDK_PKG_VERSION</TwoDogWindowsAppSdkVersion>
         <TwoDogAspNetCoreVersion>ASPNETCORE_PKG_VERSION</TwoDogAspNetCoreVersion>
+        <TwoDogQtBridgeVersion>QTBRIDGE_PKG_VERSION</TwoDogQtBridgeVersion>
         <TwoDogPrecision Condition="'$(TwoDogPrecision)' == ''">TWODOG_PRECISION</TwoDogPrecision>
         <GodotFloat64 Condition="'$(TwoDogPrecision)' == 'double'">true</GodotFloat64>
         <TwoDogWebThreads Condition="'$(TwoDogWebThreads)' == ''">TWODOG_WEB_THREADS</TwoDogWebThreads>

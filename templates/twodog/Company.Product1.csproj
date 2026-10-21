@@ -8,7 +8,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <!-- Keep nested host projects out of the default compile/content globs (their .gdignore hides them
              from the Godot editor) -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);TPLRAWNAME.2dog/**;TPLRAWNAME.web/**;TPLRAWNAME.webxr/**;TPLRAWNAME.xunit/**;TPLRAWNAME.nunit/**;TPLRAWNAME.gdunit/**;TPLRAWNAME.repl/**;TPLRAWNAME.winforms/**;TPLRAWNAME.winui/**;TPLRAWNAME.avalonia/**;TPLRAWNAME.blazor/**;TPLRAWNAME.android/**;TPLRAWNAME.maui/**</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);TPLRAWNAME.2dog/**;TPLRAWNAME.web/**;TPLRAWNAME.webxr/**;TPLRAWNAME.xunit/**;TPLRAWNAME.nunit/**;TPLRAWNAME.gdunit/**;TPLRAWNAME.repl/**;TPLRAWNAME.winforms/**;TPLRAWNAME.winui/**;TPLRAWNAME.avalonia/**;TPLRAWNAME.qt/**;TPLRAWNAME.blazor/**;TPLRAWNAME.android/**;TPLRAWNAME.maui/**</DefaultItemExcludes>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="2dog.godotsharpTWODOG_PRECISION_SUFFIX" Version="$(TwoDogVersion)" />

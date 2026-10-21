@@ -31,7 +31,8 @@ event handlers can access the scene tree through `_engine.Tree`.
 See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winui).
 
 The app runs unpackaged. WinUI controls cannot overlap the game window;
-use [Avalonia](./avalonia) for overlays or a cross-platform UI.
+use [Avalonia](./avalonia) or [Qt Quick](./qt) for overlays or a
+cross-platform UI.
 
 ## Publish It
 

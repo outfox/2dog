@@ -47,7 +47,8 @@ versions; scaffolded projects keep them in one block of the root
   <TwoDogVersion>:2dog-version:</TwoDogVersion>
   <TwoDogNativesVersion>:natives-version:</TwoDogNativesVersion>
   <TwoDogGodotVersion>:godot-version:</TwoDogGodotVersion>
-  <!-- TwoDogAvaloniaVersion, TwoDogWindowsAppSdkVersion, TwoDogAspNetCoreVersion, TwoDogMauiVersion -->
+  <!-- TwoDogAvaloniaVersion, TwoDogWindowsAppSdkVersion, TwoDogAspNetCoreVersion, TwoDogMauiVersion,
+       TwoDogQtBridgeVersion -->
 </PropertyGroup>
 ```
 

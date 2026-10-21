@@ -12,6 +12,7 @@
             <MauiVer ParameterType="System.String" Required="true" />
             <WinAppSdkVer ParameterType="System.String" Required="true" />
             <AspNetCoreVer ParameterType="System.String" Required="true" />
+            <QtBridgeVer ParameterType="System.String" Required="true" />
         </ParameterGroup>
         <Task>
             <Using Namespace="System.Text.RegularExpressions" />
@@ -26,6 +27,7 @@
                     ("mauiVersion", MauiVer),
                     ("winAppSdkVersion", WinAppSdkVer),
                     ("aspNetCoreVersion", AspNetCoreVer),
+                    ("qtBridgeVersion", QtBridgeVer),
                 };
                 foreach (var (symbol, value) in substitutions)
                 {

@@ -27,13 +27,14 @@ sequence = [
 ]
 
 [tool.poe.tasks.build-managed]
-help = "dotnet pack: bindings, engine, Avalonia, Blazor, xUnit, NUnit, gdUnit, REPL, tool, templates and restore"
+help = "dotnet pack: bindings, engine, Avalonia, Blazor, Qt, xUnit, NUnit, gdUnit, REPL, tool, templates and restore"
 sequence = [
     { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp.editor" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.engine" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.avalonia" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.blazor" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.qt" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.xunit" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.nunit" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.gdunit" },
@@ -124,6 +125,7 @@ sequence = [
     { cmd = "uv run scripts/dotnet_build.py pack twodog.engine -p:TwoDogPrecision=double" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.avalonia -p:TwoDogPrecision=double" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.blazor -p:TwoDogPrecision=double" },
+    { cmd = "uv run scripts/dotnet_build.py pack twodog.qt -p:TwoDogPrecision=double" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.xunit -p:TwoDogPrecision=double" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.nunit -p:TwoDogPrecision=double" },
     { cmd = "uv run scripts/dotnet_build.py pack twodog.gdunit -p:TwoDogPrecision=double" },

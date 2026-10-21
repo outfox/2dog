@@ -29,7 +29,7 @@ Edit the generated form to add controls. Its UI thread runs Godot frames, so
 event handlers can access the scene tree through `_engine.Tree`.
 See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms).
 
-Controls cannot overlap the game window. Use [Avalonia](./avalonia) for overlays
-or a cross-platform UI.
+Controls cannot overlap the game window. Use [Avalonia](./avalonia) or
+[Qt Quick](./qt) for overlays or a cross-platform UI.
 
 See [WinForms Configuration](/configuration/winforms) for build and publish settings.

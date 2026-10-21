@@ -653,6 +653,7 @@ public class TemplateAssetsTests
     [InlineData("winui")]
     [InlineData("maui")]
     [InlineData("avalonia")]
+    [InlineData("qt")]
     [InlineData("blazor")]
     public void HostFiles_SubstituteTokensInPathsAndContent(string suffix)
     {
@@ -680,6 +681,7 @@ public class TemplateAssetsTests
     [InlineData("winui")]
     [InlineData("maui")]
     [InlineData("avalonia")]
+    [InlineData("qt")]
     [InlineData("blazor")]
     public void HostFiles_CustomFolder_RenamesFolderAndProject(string suffix)
     {
@@ -1207,6 +1209,8 @@ public class AddEndToEndTests
         new[] { "MauiProgram.cs", "App.cs", "MainPage.cs", "Platforms/Windows/App.xaml", "Platforms/Android/MainActivity.cs", "Platforms/Android/MainApplication.cs" })]
     [InlineData("--avalonia", "avalonia", "2dog.avalonia",
         new[] { "Program.cs", "App.cs", "MainWindow.cs", "app.manifest" })]
+    [InlineData("--qt", "qt", "2dog.qt",
+        new[] { "Program.cs", "GameControls.cs", "Main.qml", "app.manifest" })]
     [InlineData("--webxr", "webxr", "<TwoDogWebXR>true</TwoDogWebXR>",
         new[] { "Program.cs", "wwwroot/index.html", "wwwroot/webxr-layers-polyfill.min.js" })]
     [InlineData("--blazor", "blazor", "<TwoDogBlazor>true</TwoDogBlazor>",
@@ -1498,6 +1502,7 @@ public class HostScanTests
     [InlineData("winui")]
     [InlineData("maui")]
     [InlineData("avalonia")]
+    [InlineData("qt")]
     [InlineData("blazor")]
     public void Classify_RecognizesScaffoldedHosts_ByContentNotName(string suffix)
     {
@@ -1523,7 +1528,7 @@ public class HostScanTests
                      (HostKind.Desktop, "MyGame.2dog"), (HostKind.Desktop, "MyGame.editor"),
                      (HostKind.Web, "MyGame.web"), (HostKind.WebXr, "MyGame.webxr"), (HostKind.Tests, "MyGame.xunit"),
                      (HostKind.WinForms, "MyGame.winforms"), (HostKind.WinUi, "MyGame.winui"),
-                     (HostKind.Avalonia, "MyGame.avalonia"), (HostKind.Blazor, "MyGame.blazor"),
+                     (HostKind.Avalonia, "MyGame.avalonia"), (HostKind.Qt, "MyGame.qt"), (HostKind.Blazor, "MyGame.blazor"),
                  })
             foreach (var (path, content) in TemplateAssets.HostFiles(kind, "MyGame", folder))
                 tmp.Write(path, content);
@@ -1538,7 +1543,7 @@ public class HostScanTests
         Assert.Equal(
             [("MyGame.2dog", HostKind.Desktop), ("MyGame.avalonia", HostKind.Avalonia),
              ("MyGame.blazor", HostKind.Blazor),
-             ("MyGame.editor", HostKind.Desktop),
+             ("MyGame.editor", HostKind.Desktop), ("MyGame.qt", HostKind.Qt),
              ("MyGame.web", HostKind.Web), ("MyGame.webxr", HostKind.WebXr),
              ("MyGame.winforms", HostKind.WinForms), ("MyGame.winui", HostKind.WinUi), ("MyGame.xunit", HostKind.Tests)],
             hosts.Select(h => (h.Folder, h.Kind)).Order().ToArray());
@@ -1703,7 +1708,7 @@ public class HostSelectionTests
         Assert.Equal([HostKind.Desktop], hosts.Select(h => h.Kind).ToArray());
     }
 
-    // WinForms and WinUI (Windows-only) and Avalonia (heavy dependency set) are never
+    // WinForms and WinUI (Windows-only), Avalonia (heavy dependency set) and Qt (C++ toolchain) are never
     // part of the default set - they only come from their flags or the interactive checkbox.
     [Fact]
     public void Defaults_NeverIncludeOptInHosts()
@@ -1714,6 +1719,7 @@ public class HostSelectionTests
         Assert.DoesNotContain(HostKind.WinForms, kinds);
         Assert.DoesNotContain(HostKind.WinUi, kinds);
         Assert.DoesNotContain(HostKind.Avalonia, kinds);
+        Assert.DoesNotContain(HostKind.Qt, kinds);
     }
 
     [Fact]

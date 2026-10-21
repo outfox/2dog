@@ -12,7 +12,7 @@ internal static class HostChecks
         new("host.godot-project-dir", Category.Hosts, "GodotProjectDir points at the Godot project"),
         new("host.variant", Category.Hosts, "the selected native variant is supported by its host platform"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
-        new("host.publish-aot", Category.Hosts, "no WinForms, REPL, browser or Blazor host enables PublishAot"),
+        new("host.publish-aot", Category.Hosts, "no WinForms, REPL, Qt, browser or Blazor host enables PublishAot"),
         new("host.publish-singlefile", Category.Hosts, "PublishSingleFile is only enabled by browser hosts or alongside PublishAot"),
         new("host.webxr-threads", Category.Hosts, "WebXR hosts do not enable WasmEnableThreads"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
@@ -23,6 +23,7 @@ internal static class HostChecks
         new("host.blazor-client", Category.Hosts, "the Blazor client project exists and publishes 2dog.engine"),
         new("host.blazor-launch-settings", Category.Hosts, "Blazor hosts carry a Development launchSettings.json"),
         new("host.windows-only", Category.Hosts, "Windows-only hosts are noted on other platforms"),
+        new("host.qt-dir", Category.Hosts, "Qt hosts outside win-x64 point QtDir at a Qt 6 install"),
     ];
 
     public static IEnumerable<Finding> Run(DoctorContext ctx)
@@ -94,7 +95,8 @@ internal static class HostChecks
 
             // Test hosts are never published, so PublishAot there only adds analyzers.
             var nativeAot = host.Kind is HostKind.Desktop or HostKind.Avalonia or HostKind.WinUi or HostKind.Android;
-            if (Enables("PublishAot") && host.Kind is HostKind.Repl or HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor or HostKind.Maui)
+            if (Enables("PublishAot") && host.Kind is HostKind.Repl or HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor or HostKind.Maui
+                    or HostKind.Qt)
                 yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables PublishAot",
                     host.Kind switch
                     {
@@ -102,6 +104,7 @@ internal static class HostChecks
                         HostKind.WinForms => "Windows Forms does not support trimming, so the SDK rejects NativeAOT (NETSDK1175)",
                         HostKind.Blazor => "Blazor does not support NativeAOT; its WebAssembly client can AOT-compile with Mono (RunAOTCompilation)",
                         HostKind.Maui => "the MAUI host supports managed Windows builds and Mono AOT on Android",
+                        HostKind.Qt => "Qt Bridge's native host starts the app through hostfxr, which needs managed assemblies",
                         _ => "NativeAOT cannot target the browser (NETSDK1203); Mono's AOT compiler (RunAOTCompilation) can",
                     },
                     host.Kind is HostKind.Web or HostKind.WebXr ? "replace PublishAot with RunAOTCompilation" : "remove PublishAot",
@@ -187,6 +190,9 @@ internal static class HostChecks
 
             if (host.Kind is HostKind.WinForms or HostKind.WinUi && !ctx.Env.IsWindows)
                 yield return Issue(new Finding("host.windows-only", c, Severity.Info, $"{host.Folder} ({Hosts.Label(host.Kind)}) only builds on Windows"));
+
+            if (host.Kind == HostKind.Qt && QtDirFinding(ctx, host, csproj) is { } qtDir)
+                yield return qtDir.Severity == Severity.Pass ? qtDir : Issue(qtDir);
         }
 
         foreach (var (id, title) in new[]
@@ -196,6 +202,41 @@ internal static class HostChecks
                  })
             if (!issues.Contains(id))
                 yield return Finding.Pass(id, c, title);
+    }
+
+    /// <summary>
+    /// Only Qt Bridge's win-x64 package bundles Qt; elsewhere QtDir must name a Qt 6 install. MSBuild reads it from the
+    /// environment (QtDir or QTDIR) or a property, and an explicit value replaces the bundled Qt everywhere.
+    /// </summary>
+    private static Finding QtDirFinding(DoctorContext ctx, HostModel host, string csproj)
+    {
+        const Category c = Category.Hosts;
+        var qtDir = new[] { ctx.Env.Var("QtDir"), ctx.Env.Var("QTDIR"), host.Property("QtDir"), RootProperty(ctx.Project, "QtDir") }
+            .FirstOrDefault(v => !string.IsNullOrWhiteSpace(v));
+        var severity = ctx.BuildHosts.Contains(host) ? Severity.Fail : Severity.Warn;
+        if (qtDir is null)
+        {
+            var rid = EnvironmentChecks.Rid(ctx.Env);
+            return rid == "win-x64"
+                ? Finding.Pass("host.qt-dir", c, $"{host.Folder}: Qt bundled by Qt Bridge (win-x64)")
+                : new Finding("host.qt-dir", c, severity, $"{host.Folder} has no QtDir on {rid}",
+                    "Qt Bridge bundles Qt only for win-x64; elsewhere it and the TwoDog QML module build against an installed Qt 6",
+                    "install Qt 6 (qtbase, qtdeclarative, qtshadertools, qtsvg, qtquick3d, qtquick3dphysics, qtquicktimeline) " +
+                    "and set QtDir to its prefix, e.g. export QtDir=/usr/lib/qt6", csproj);
+        }
+        if (qtDir.Contains("$(") || ctx.Env.FileExists(Path.Combine(qtDir, "lib", "cmake", "Qt6", "Qt6Config.cmake")))
+            return Finding.Pass("host.qt-dir", c, $"{host.Folder}: QtDir {qtDir}");
+        return new Finding("host.qt-dir", c, severity, $"QtDir '{qtDir}' is not a Qt 6 prefix",
+            "it has no lib/cmake/Qt6/Qt6Config.cmake, and an explicit QtDir replaces the Qt that Qt Bridge bundles",
+            "point QtDir at a Qt 6 prefix, or unset it on win-x64 to use the bundled Qt", csproj);
+    }
+
+    private static string? RootProperty(ProjectModel p, string name)
+    {
+        var path = Path.Combine(p.Dir, PropsPatcher.FileName);
+        if (!File.Exists(path)) return null;
+        try { return MsBuildXml.Property(MsBuildXml.Load(path), name); }
+        catch (System.Xml.XmlException) { return null; }
     }
 
     internal static bool SamePath(string a, string b) =>

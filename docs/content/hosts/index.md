@@ -40,11 +40,12 @@ See [Project Layout](/project-layout) for files and
 
 ### Desktop
 
-| Host                   | Flag         | Purpose                   |
-|------------------------|--------------|---------------------------|
-| [Avalonia](./avalonia) | `--avalonia` | Cross-platform desktop UI |
-| [WinForms](./winforms) | `--winforms` | Windows Forms UI          |
-| [WinUI 3](./winui)     | `--winui`    | Windows App SDK UI        |
+| Host                   | Flag         | Purpose                                     |
+|------------------------|--------------|---------------------------------------------|
+| [Avalonia](./avalonia) | `--avalonia` | Cross-platform desktop UI                   |
+| [Qt Quick](./qt)       | `--qt`       | QML UI with Qt Bridge for C# (experimental) |
+| [WinForms](./winforms) | `--winforms` | Windows Forms UI                            |
+| [WinUI 3](./winui)     | `--winui`    | Windows App SDK UI                          |
 
 ### Web
 

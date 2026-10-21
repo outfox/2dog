@@ -16,6 +16,7 @@ internal enum HostKind
     Blazor,
     Android,
     Maui,
+    Qt,
 }
 
 /// <summary>Picker groups by the kind of application a host creates.</summary>
@@ -42,17 +43,18 @@ internal static class Hosts
 {
     public static readonly IReadOnlyList<HostKind> All =
         [HostKind.Desktop, HostKind.Web, HostKind.WebXr, HostKind.Tests, HostKind.NUnit, HostKind.GdUnit, HostKind.Repl, HostKind.WinForms,
-         HostKind.WinUi, HostKind.Avalonia, HostKind.Blazor, HostKind.Android, HostKind.Maui];
+         HostKind.WinUi, HostKind.Avalonia, HostKind.Qt, HostKind.Blazor, HostKind.Android, HostKind.Maui];
 
     /// <summary>
     /// Whether a bare run without host flags creates this kind. Opt-in: WinForms/WinUI (Windows-only), Avalonia
-    /// (pulls in the whole UI framework), WebXr (needs project-side XR setup), Blazor (a server + client pair),
+    /// (pulls in the whole UI framework), Qt (needs a C++ toolchain), WebXr (needs project-side XR setup), Blazor (a
+    /// server + client pair),
     /// Android (needs the android workload), REPL (runtime C# compiler), xUnit and NUnit (choose a test framework explicitly).
     /// All remain available via flags/prompts.
     /// </summary>
     public static bool InDefaultSet(HostKind kind) =>
-        kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Blazor
-            or HostKind.Android or HostKind.Maui or HostKind.Tests or HostKind.NUnit or HostKind.GdUnit or HostKind.Repl);
+        kind is not (HostKind.WebXr or HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Qt
+            or HostKind.Blazor or HostKind.Android or HostKind.Maui or HostKind.Tests or HostKind.NUnit or HostKind.GdUnit or HostKind.Repl);
 
     /// <summary>The template subtree suffix - also the default folder suffix.</summary>
     public static string Suffix(HostKind kind) => kind switch
@@ -67,6 +69,7 @@ internal static class Hosts
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
+        HostKind.Qt => "qt",
         HostKind.Blazor => "blazor",
         HostKind.Android => "android",
         HostKind.Maui => "maui",
@@ -86,6 +89,7 @@ internal static class Hosts
         HostKind.WinForms => "winforms",
         HostKind.WinUi => "winui",
         HostKind.Avalonia => "avalonia",
+        HostKind.Qt => "qt",
         HostKind.Blazor => "blazor",
         HostKind.Android => "android",
         HostKind.Maui => "maui",
@@ -114,6 +118,7 @@ internal static class Hosts
         HostKind.WinForms => "game embedded in a WinForms window (Windows-only)",
         HostKind.WinUi => "game embedded in a WinUI 3 window (Windows-only)",
         HostKind.Avalonia => "game embedded in an Avalonia app (cross-platform GUI)",
+        HostKind.Qt => "game embedded in a Qt Quick (QML) app via Qt Bridge for C#",
         HostKind.Blazor => "game embedded in a Blazor Web App page (WebAssembly)",
         HostKind.Android => "Android app, published as an APK (experimental)",
         HostKind.Maui => "Godot view in a .NET MAUI app (Windows and Android)",
@@ -133,6 +138,7 @@ internal static class Hosts
         HostKind.WinForms => "--winforms",
         HostKind.WinUi => "--winui",
         HostKind.Avalonia => "--avalonia",
+        HostKind.Qt => "--qt",
         HostKind.Blazor => "--blazor",
         HostKind.Android => "--android",
         HostKind.Maui => "--maui",
@@ -159,10 +165,17 @@ internal static class Hosts
 
     /// <summary>
     /// Kinds kept out of plain solution builds: the browser ones need wasm-tools, Android the android workload (a
-    /// build-excluded project is not restored either), WinUI builds only on Windows.
+    /// build-excluded project is not restored either), WinUI builds only on Windows, Qt needs CMake, Ninja and a C++
+    /// toolchain (and a Qt install outside win-x64).
     /// </summary>
     public static bool ExcludedFromSolutionBuild(HostKind kind) =>
-        IsWebLike(kind) || kind is HostKind.WinUi or HostKind.Android or HostKind.Maui;
+        IsWebLike(kind) || kind is HostKind.WinUi or HostKind.Android or HostKind.Maui or HostKind.Qt;
+
+    /// <summary>Build-excluded kinds with an Editor configuration of their own; the others map Editor to Debug.</summary>
+    public static bool HasEditorConfiguration(HostKind kind) => kind is HostKind.WinUi or HostKind.Qt;
+
+    /// <summary>Qt Bridge for C# ships one package per RID: this prefix plus the RID.</summary>
+    public const string QtBridgePackagePrefix = "QtGroup.Qt.Bridge.CSharp.";
 
     /// <summary>The help row for the host flag: what the host is plus availability notes.</summary>
     public static string HelpText(HostKind kind) => kind switch
@@ -177,6 +190,7 @@ internal static class Hosts
         HostKind.WinForms => "WinForms host embedding the game window (Windows-only; never part of the default set)",
         HostKind.WinUi => "WinUI 3 host embedding the game window (Windows-only, like --winforms; builds only on Windows)",
         HostKind.Avalonia => "Avalonia host embedding the game in a cross-platform GUI (opt-in, like --winforms)",
+        HostKind.Qt => "Qt Quick (QML) host on Qt Bridge for C# (opt-in; needs CMake, Ninja and a C++ toolchain)",
         HostKind.Blazor => "Blazor Web App host: ASP.NET Core server plus a WebAssembly client page embedding the " +
                            "game (opt-in; needs wasm-tools)",
         HostKind.Android => "Android host publishing an APK (experimental, opt-in; needs the android workload)",
@@ -191,7 +205,7 @@ internal static class Hosts
     public static HostGroup Group(HostKind kind) => kind switch
     {
         HostKind.Desktop => HostGroup.Generic,
-        HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Repl => HostGroup.Desktop,
+        HostKind.WinForms or HostKind.WinUi or HostKind.Avalonia or HostKind.Qt or HostKind.Repl => HostGroup.Desktop,
         HostKind.Web or HostKind.WebXr or HostKind.Blazor => HostGroup.Browser,
         HostKind.Android or HostKind.Maui => HostGroup.Mobile,
         HostKind.Tests or HostKind.NUnit or HostKind.GdUnit => HostGroup.Testing,
@@ -351,7 +365,7 @@ internal static class HostScan
         var sdk = (string?)root.Attribute("Sdk") ?? "";
 
         var isTwoDog = Package("2dog.engine") || Package("2dog.repl") || Package("2dog.xunit") || Package("2dog.nunit") || Package("2dog.gdunit") || Package("2dog.avalonia")
-                       || Package("2dog.maui") || Property("TwoDogBlazor") != null || Property("GodotProjectDir") != null;
+                       || Package("2dog.maui") || Package("2dog.qt") || Property("TwoDogBlazor") != null || Property("GodotProjectDir") != null;
         if (!isTwoDog) return null;
 
         if (PropertyTrue("UseMaui") || Package("2dog.maui")) return HostKind.Maui;
@@ -373,6 +387,9 @@ internal static class HostScan
             || (Property("TargetFrameworks") ?? "").Contains("-android", StringComparison.OrdinalIgnoreCase))
             return HostKind.Android;
         if (Package("2dog.avalonia") || Package("Avalonia.Desktop")) return HostKind.Avalonia;
+        // 2dog.qt catches scaffolded hosts, a Qt Bridge package hand-rolled ones.
+        if (Package("2dog.qt") || packages.Any(p => p.StartsWith(Hosts.QtBridgePackagePrefix, StringComparison.OrdinalIgnoreCase)))
+            return HostKind.Qt;
         if (Property("OutputType") is { } outputType
             && (outputType.Equals("Exe", StringComparison.OrdinalIgnoreCase)
                 || outputType.Equals("WinExe", StringComparison.OrdinalIgnoreCase))) return HostKind.Desktop;
@@ -390,6 +407,7 @@ internal static class HostScan
                        || csproj.Contains("2dog.gdunit", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("2dog.maui", StringComparison.OrdinalIgnoreCase)
+                       || csproj.Contains("2dog.qt", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<TwoDogBlazor", StringComparison.OrdinalIgnoreCase)
                        || csproj.Contains("<GodotProjectDir>", StringComparison.OrdinalIgnoreCase);
         if (!isTwoDog) return null;
@@ -422,6 +440,8 @@ internal static class HostScan
         // 2dog.avalonia catches scaffolded hosts, Avalonia.Desktop hand-rolled ones.
         if (csproj.Contains("2dog.avalonia", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("Avalonia.Desktop", StringComparison.OrdinalIgnoreCase)) return HostKind.Avalonia;
+        if (csproj.Contains("2dog.qt", StringComparison.OrdinalIgnoreCase)
+            || csproj.Contains(Hosts.QtBridgePackagePrefix, StringComparison.OrdinalIgnoreCase)) return HostKind.Qt;
         if (csproj.Contains("<OutputType>Exe</OutputType>", StringComparison.OrdinalIgnoreCase)
             || csproj.Contains("<OutputType>WinExe</OutputType>", StringComparison.OrdinalIgnoreCase)) return HostKind.Desktop;
 

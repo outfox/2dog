@@ -1,8 +1,8 @@
 # 2dog
 
 The .NET Tool for [2dog](https://2dog.dev), which runs Godot as a library from your own
-.NET entry point. Point it at a Godot project and it adds .NET hosts: desktop, web, WebXR, Avalonia, Blazor,
-WinForms, WinUI 3, MAUI, Android, a C# REPL, and xUnit, NUnit or gdUnit tests. Then it keeps them healthy with
+.NET entry point. Point it at a Godot project and it adds .NET hosts: desktop, web, WebXR, Avalonia, Qt Quick,
+Blazor, WinForms, WinUI 3, MAUI, Android, a C# REPL, and xUnit, NUnit or gdUnit tests. Then it keeps them healthy with
 `2dog doctor` and current with `2dog update`.
 
 The `dotnet new` templates ship separately as [`2dog.templates`](https://www.nuget.org/packages/2dog.templates).
@@ -65,7 +65,7 @@ Run it again to add more hosts; existing ones are left alone. The
 
 | Option | Effect |
 | --- | --- |
-| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; only `--generic` and `--web` are in the default set) |
+| `--generic [folder]`, `--web [folder]`, `--webxr [folder]`, `--xunit [folder]`, `--nunit [folder]`, `--gdunit [folder]`, `--repl [folder]`, `--winforms [folder]`, `--winui [folder]`, `--avalonia [folder]`, `--qt [folder]`, `--blazor [folder]`, `--android [folder]`, `--maui [folder]` | Add a host, optionally in a named folder (repeatable; only `--generic` and `--web` are in the default set) |
 | `--no-generic`, `--no-web` | Leave a host out of the default set |
 | `-n, --name <BaseName>` | Project name (`new`) or base name override |
 | `--rename <NewName>` | Fix a .NET project name that contains spaces (`add`, before any hosts exist) |

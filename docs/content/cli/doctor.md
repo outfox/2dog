@@ -81,6 +81,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `env.maui-workload`     | MAUI workloads are available for selected MAUI builds                                             |
 | `env.android-workload`  | android is available for the selected Android build; otherwise optional                           |
 | `env.android-sdk`       | Android SDK paths and components are available for the selected Android build; otherwise optional |
+| `env.qt-toolchain`      | CMake, Ninja and a C++ compiler are available for the selected Qt build; otherwise optional       |
 | `env.host-platform`     | this OS and architecture have 2dog native packages                                                |
 | `env.godot4`            | GODOT4 points at an existing Godot executable for IDE debugging                                   |
 | `env.overrides`         | GODOTSHARP_DIR and the other layout overrides point at what they claim                            |
@@ -120,7 +121,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.godot-project-dir`      | GodotProjectDir points at the Godot project                                |
 | `host.variant`                | TwoDogVariant / TwoDogWebVariant is supported by the host platform         |
 | `host.buildtype-deprecated`   | the deprecated TwoDogBuildType property is gone                            |
-| `host.publish-aot`            | no WinForms, REPL, browser or Blazor host enables PublishAot               |
+| `host.publish-aot`            | no WinForms, REPL, Qt, browser or Blazor host enables PublishAot           |
 | `host.publish-singlefile`     | PublishSingleFile is only enabled by browser hosts or alongside PublishAot |
 | `host.webxr-threads`          | WebXR hosts do not enable WasmEnableThreads                                |
 | `host.duplicate-analyzers`    | hosts referencing the game strip the duplicate Godot analyzers             |
@@ -131,6 +132,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.blazor-client`          | the Blazor client project exists and publishes 2dog.engine                 |
 | `host.blazor-launch-settings` | Blazor hosts carry a Development launchSettings.json                       |
 | `host.windows-only`           | Windows-only hosts are noted on other platforms                            |
+| `host.qt-dir`                 | Qt hosts outside win-x64 point QtDir at a Qt 6 install                     |
 
 ### Solution
 

@@ -93,12 +93,12 @@ internal static class SolutionChecks
         if (included.Count > 0)
             yield return new Finding("sln.build-exclusions", c, Severity.Warn,
                 $"{name} builds {string.Join(", ", included.Select(i => Path.GetFileName(i.Relative)))} in plain solution builds",
-                "browser hosts need wasm-tools, Android hosts need the android workload and WinUI needs Windows; 'dotnet build' of the solution would fail without them", null, name,
+                "browser hosts need wasm-tools, Android hosts need the android workload, WinUI needs Windows and Qt a C++ toolchain; 'dotnet build' of the solution would fail without them", null, name,
                 new Fix("sln:exclude", FixClass.Safe, $"exclude {included.Count} host(s) from plain solution builds", () =>
                 {
-                    // The wasm and Android hosts have no Editor configuration; the WinUI host does.
+                    // The wasm and Android hosts have no Editor configuration; the WinUI and Qt hosts do.
                     foreach (var (relative, kind) in included)
-                        SolutionOps.ExcludeFromSolutionBuild(Current(), relative, mapEditorToDebug: kind is not HostKind.WinUi);
+                        SolutionOps.ExcludeFromSolutionBuild(Current(), relative, mapEditorToDebug: !Hosts.HasEditorConfiguration(kind));
                 }));
         else if (excludable.Count > 0)
             yield return Finding.Pass("sln.build-exclusions", c, "build exclusions");

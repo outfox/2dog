@@ -118,6 +118,7 @@ export default defineConfig<ThemeConfig>({
             text: 'Desktop',
             items: [
               { text: gd('window') + 'Avalonia', link: '/hosts/avalonia' },
+              { text: gd('window') + 'Qt Quick', link: '/hosts/qt' },
               { text: gd('window') + 'WinForms', link: '/hosts/winforms' },
               { text: gd('window') + 'WinUI 3', link: '/hosts/winui' }
             ]
@@ -269,6 +270,7 @@ export default defineConfig<ThemeConfig>({
                 text: 'Desktop',
                 items: [
                   { text: gd('window') + 'Avalonia', link: '/configuration/avalonia' },
+                  { text: gd('window') + 'Qt Quick', link: '/configuration/qt' },
                   { text: gd('window') + 'WinForms', link: '/configuration/winforms' },
                   { text: gd('window') + 'WinUI 3', link: '/configuration/winui' }
                 ]

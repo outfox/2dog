@@ -78,6 +78,14 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
         brand: 'avaloniaui',
       },
       {
+        name: 'Qt Quick',
+        flag: '--qt',
+        text: 'A <code>GodotView</code> in your QML scene, with Qt Quick items over the game.',
+        link: '/hosts/qt',
+        brand: 'qt',
+        tag: 'Experimental',
+      },
+      {
         name: 'WinForms',
         flag: '--winforms',
         text: 'Drop the engine into a Windows Forms window.',

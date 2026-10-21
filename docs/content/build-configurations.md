@@ -70,8 +70,8 @@ bindings; single- and double-precision Godot types cannot be mixed.
 <PackageReference Include="2dog.engine.double" Version=":2dog-version:" />
 ```
 
-Keep `2dog.avalonia`, `2dog.blazor`, `2dog.xunit`, `2dog.nunit` and `2dog.repl`
-under their ordinary names; `2dog.gdunit` becomes `2dog.gdunit.double`. Native dependencies are selected automatically;
+Keep `2dog.avalonia`, `2dog.blazor`, `2dog.qt`, `2dog.xunit`, `2dog.nunit` and
+`2dog.repl` under their ordinary names; `2dog.gdunit` becomes `2dog.gdunit.double`. Native dependencies are selected automatically;
 if referenced explicitly, append `.double` to the entire ID, such as
 `2dog.win-x64.release.double`. 
 

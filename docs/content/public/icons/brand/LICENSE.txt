@@ -9,6 +9,7 @@ android.svg   Android robot, (c) Google LLC, CC-BY-3.0
 dotnet.svg    .NET logo, Microsoft, CC0-1.0 - https://github.com/dotnet/brand
 avaloniaui.svg  Avalonia UI, AvaloniaUI OU - https://avaloniaui.net/brand
 blazor.svg    Blazor, Microsoft
+qt.svg        Qt, The Qt Company Ltd. - https://www.qt.io/brand
 webassembly.svg  WebAssembly logo, CC0-1.0 - https://github.com/carlosbaraza/web-assembly-logo
 nuget.svg     NuGet, .NET Foundation
 github.svg    GitHub, GitHub Inc. - https://github.com/logos

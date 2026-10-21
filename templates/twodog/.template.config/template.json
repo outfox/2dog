@@ -76,6 +76,13 @@
       "replaces": "ASPNETCORE_PKG_VERSION",
       "description": "Version of the ASP.NET Core (Blazor) packages to reference."
     },
+    "qtBridgeVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "0.0.0-qtbtpl",
+      "replaces": "QTBRIDGE_PKG_VERSION",
+      "description": "Version of the Qt Bridge for C# packages (QtGroup.Qt.Bridge.CSharp.<rid>) to reference."
+    },
     "xunit": {
       "type": "parameter",
       "datatype": "bool",
@@ -175,6 +182,12 @@
       "type": "parameter",
       "datatype": "bool",
       "description": "Include an Avalonia host project that composites the game inside a cross-platform GUI window (Avalonia controls render on top of the game). Omitted by default; pass '--avalonia true' to include.",
+      "defaultValue": "false"
+    },
+    "qt": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Include a Qt Quick (QML) host built on Qt Bridge for C#: 2dog.qt's GodotView shows the game inside the QML scene, so QML items render on top of it. Building needs CMake, Ninja and a C++ toolchain; Qt is bundled on win-x64, elsewhere set QtDir to a Qt 6 install. Omitted by default; pass '--qt true' to include.",
       "defaultValue": "false"
     },
     "blazor": {
@@ -333,6 +346,12 @@
           ]
         },
         {
+          "condition": "(!qt)",
+          "exclude": [
+            "Company.Product1.qt/**/*"
+          ]
+        },
+        {
           "condition": "(!blazor)",
           "exclude": [
             "Company.Product1.blazor/**/*"
@@ -407,6 +426,10 @@
     {
       "condition": "(avalonia)",
       "path": "Company.Product1.avalonia/Company.Product1.avalonia.csproj"
+    },
+    {
+      "condition": "(qt)",
+      "path": "Company.Product1.qt/Company.Product1.qt.csproj"
     },
     {
       "condition": "(blazor)",

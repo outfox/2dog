@@ -19,6 +19,7 @@ importer, and exporter skip them:
 - **MAUI host** (`<Name>.maui/`) - Embedded Godot view for Windows and Android with MAUI overlays (opt-in via `--maui true`; requires MAUI workloads)
 - **Blazor host** (`<Name>.blazor/`) - Blazor Web App: ASP.NET Core server plus a WebAssembly client (`Client/`) whose page embeds the game through `2dog.blazor`'s `GodotView` (opt-in via `--blazor true`)
 - **Avalonia host** (`<Name>.avalonia/`) - Cross-platform GUI embedding the game (opt-in via `--avalonia true`)
+- **Qt Quick host** (`<Name>.qt/`) - QML window on Qt Bridge for C# showing the game through `2dog.qt`'s `GodotView` (opt-in via `--qt true`; building needs CMake, Ninja and a C++ toolchain, and outside win-x64 a Qt 6 install in `QtDir`)
 - **Android host** (`<Name>.android/`) - Experimental APK host (opt-in via `--android true`; building requires the Android workload, SDK and JDK 17)
 - **WinForms host** (`<Name>.winforms/`) - Embeds the game window inside a WinForms form with a Pause button (opt-in via `--winforms true`; Windows-only at runtime)
 - **WinUI 3 host** (`<Name>.winui/`) - Embeds the game window inside a WinUI 3 (Windows App SDK) window (opt-in via `--winui true`; Windows-only, builds only on Windows)
@@ -62,6 +63,9 @@ dotnet new 2dog -n MyGame --blazor true
 
 # With the Windows-only WinForms host (omitted by default)
 dotnet new 2dog -n MyGame --winforms true
+
+# With the Qt Quick host (omitted by default; needs CMake, Ninja and a C++ toolchain)
+dotnet new 2dog -n MyGame --qt true
 ```
 
 ### Uninstalling the Template
@@ -116,6 +120,13 @@ templates/
     │       ├── Company.Product1.blazor.Client.csproj
     │       ├── Program.cs
     │       └── Pages/Home.razor
+    ├── Company.Product1.qt/       # Qt Quick host (opt-in; --qt true to include)
+    │   ├── .gdignore
+    │   ├── Company.Product1.qt.csproj
+    │   ├── Program.cs
+    │   ├── GameControls.cs        # overlay state the QML binds to
+    │   ├── Main.qml               # ApplicationWindow with the GodotView and the overlay
+    │   └── app.manifest
     ├── Company.Product1.winforms/ # WinForms host (opt-in; --winforms true to include)
     │   ├── .gdignore
     │   ├── Company.Product1.winforms.csproj

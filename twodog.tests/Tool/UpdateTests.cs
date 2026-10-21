@@ -297,6 +297,32 @@ public class UpdateTests
         Assert.Contains("Version=\"$(TwoDogAspNetCoreVersion)\"", File.ReadAllText(csproj));
     }
 
+    [Theory]
+    [InlineData("99.0.0-beta")]
+    [InlineData("99.0.0")]
+    public void Update_KeepsANewerQtBridgePrerelease(string newer)
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(0, CliConsole.Run("new", "Game", dir, "--qt", "--no-restore").ExitCode);
+        // A hand-picked RID package with a literal version, as a project written before the props block might have.
+        var csproj = Path.Combine(dir, "Game.qt", "Game.qt.csproj");
+        File.WriteAllText(csproj, File.ReadAllText(csproj).Replace(
+            "Include=\"QtGroup.Qt.Bridge.CSharp.$(QtBridgeRid)\" Version=\"$(TwoDogQtBridgeVersion)\"",
+            $"Include=\"QtGroup.Qt.Bridge.CSharp.win-x64\" Version=\"{newer}\""));
+
+        var run = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, run.ExitCode);
+        Assert.Contains($"TwoDogQtBridgeVersion {ToolVersions.QtBridgeVersion} -> {newer}", run.Stdout);
+        Assert.Equal(newer, PropsPatcher.Read(Path.Combine(dir, "Directory.Build.props"))["TwoDogQtBridgeVersion"]);
+        Assert.Contains("Version=\"$(TwoDogQtBridgeVersion)\"", File.ReadAllText(csproj));
+
+        // The block's own newer prerelease survives later updates too.
+        var again = CliConsole.Run("update", dir, "--no-restore", "--allow-dirty");
+        Assert.Equal(0, again.ExitCode);
+        Assert.Contains("Nothing to do", again.Stdout);
+    }
+
     [Fact]
     public void Update_KeepsANewerCompanionVersion()
     {

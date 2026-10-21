@@ -19,10 +19,48 @@ internal static class ToolVersions
     /// <summary>Floats on the patch level ("10.0.*"): restores take the newest servicing release.</summary>
     public static string AspNetCoreVersion => Metadata("AspNetCoreVersion");
     public static string MauiVersion => Metadata("MauiVersion");
+    /// <summary>Qt Bridge for C# is pre-release ("0.4.0-beta"): System.Version cannot read it, see <see cref="CompareNuGet"/>.</summary>
+    public static string QtBridgeVersion => Metadata("QtBridgeVersion");
 
     /// <summary>The lowest version a literal or floating NuGet version ("10.0.*") admits; null when unreadable.</summary>
     public static Version? Floor(string text) =>
         Version.TryParse(text.EndsWith(".*", StringComparison.Ordinal) ? text[..^1] + "0" : text, out var v) ? v : null;
+
+    /// <summary>
+    /// NuGet's order for versions System.Version cannot read because of a prerelease label ("0.4.0-beta",
+    /// "0.4.0.22-beta"): the numbers first, then a release above any prerelease of it, then the labels' dot-separated
+    /// parts (numeric ones by value and below text ones). Null when a version part does not parse.
+    /// </summary>
+    public static int? CompareNuGet(string a, string b)
+    {
+        var (aNumbers, aLabel) = Split(a);
+        var (bNumbers, bLabel) = Split(b);
+        if (aNumbers is null || bNumbers is null) return null;
+        var byNumbers = aNumbers.CompareTo(bNumbers);
+        if (byNumbers != 0) return byNumbers;
+        if (aLabel is null || bLabel is null) return aLabel is null ? bLabel is null ? 0 : 1 : -1;
+        var aParts = aLabel.Split('.');
+        var bParts = bLabel.Split('.');
+        for (var i = 0; i < Math.Min(aParts.Length, bParts.Length); i++)
+        {
+            var aNumeric = int.TryParse(aParts[i], out var aValue);
+            var bNumeric = int.TryParse(bParts[i], out var bValue);
+            var part = aNumeric && bNumeric ? aValue.CompareTo(bValue)
+                : aNumeric != bNumeric ? aNumeric ? -1 : 1
+                : string.Compare(aParts[i], bParts[i], StringComparison.OrdinalIgnoreCase);
+            if (part != 0) return part;
+        }
+        return aParts.Length.CompareTo(bParts.Length);
+
+        // Missing parts count as zero, as NuGet reads "1.0" and "1.0.0.0" as one version.
+        static (Version? Numbers, string? Label) Split(string text)
+        {
+            var dash = text.IndexOf('-');
+            var numbers = dash < 0 ? text : text[..dash];
+            if (!Version.TryParse(numbers, out var v)) return (null, null);
+            return (new Version(v.Major, v.Minor, Math.Max(v.Build, 0), Math.Max(v.Revision, 0)), dash < 0 ? null : text[(dash + 1)..]);
+        }
+    }
 
     /// <summary>Whether a floating NuGet version ("10.0.*") already admits <paramref name="version"/>.</summary>
     public static bool Admits(string text, Version version) =>

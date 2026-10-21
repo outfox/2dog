@@ -134,6 +134,7 @@ internal static class TemplateAssets
         ("MAUI_PKG_VERSION", ToolVersions.MauiVersion),
         ("WINAPPSDK_PKG_VERSION", ToolVersions.WindowsAppSdkVersion),
         ("ASPNETCORE_PKG_VERSION", ToolVersions.AspNetCoreVersion),
+        ("QTBRIDGE_PKG_VERSION", ToolVersions.QtBridgeVersion),
         ("TWODOG_PRECISION_SUFFIX", doublePrecision ? ".double" : ""),
         ("TWODOG_PRECISION", doublePrecision ? "double" : "single"),
         ("TWODOG_WEB_THREADS", "false"),

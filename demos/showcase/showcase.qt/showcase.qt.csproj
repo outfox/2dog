@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <!-- WinExe hides the console on Windows; switch to Exe to see the engine's stdout diagnostics. -->
+        <OutputType>WinExe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <!-- The assembly keeps the folder name, but 'showcase.qt' is not a valid C# namespace for types shared
+             with the other hosts. -->
+        <RootNamespace>showcase</RootNamespace>
+        <!-- comctl32 v6 + long paths for Godot's Windows display server; the SDK copies it into the Qt native host. -->
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+    </PropertyGroup>
+    <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
+         their .gdignore -->
+    <PropertyGroup>
+        <GodotProjectDir>..</GodotProjectDir>
+    </PropertyGroup>
+
+    <!-- In this repo the native variant follows the build configuration
+         (consumers set TwoDogVariant explicitly; default is release) -->
+    <PropertyGroup>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Debug'">debug</TwoDogVariant>
+        <TwoDogVariant Condition="'$(Configuration)' == 'Editor'">editor</TwoDogVariant>
+        <TwoDogRemoveDuplicateGodotAnalyzers>true</TwoDogRemoveDuplicateGodotAnalyzers>
+    </PropertyGroup>
+
+    <!-- Qt Bridge ships one package per RID; win-x64 bundles Qt, the others build against QtDir. -->
+    <PropertyGroup>
+        <QtBridgeRid Condition="'$(QtBridgeRid)' == '' and $([MSBuild]::IsOSPlatform('Windows'))">win</QtBridgeRid>
+        <QtBridgeRid Condition="'$(QtBridgeRid)' == '' and $([MSBuild]::IsOSPlatform('Linux'))">linux</QtBridgeRid>
+        <QtBridgeRid Condition="'$(QtBridgeRid)' == '' and $([MSBuild]::IsOSPlatform('OSX'))">osx</QtBridgeRid>
+        <QtBridgeRid Condition="!$(QtBridgeRid.Contains('-'))">$(QtBridgeRid)-$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant())</QtBridgeRid>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="2dog.engine$(TwoDogPackageSuffix)" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="2dog.qt" Version="$(TwoDogVersion)"/>
+        <PackageReference Include="QtGroup.Qt.Bridge.CSharp.$(QtBridgeRid)" Version="$(QtBridgeVersion)"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="../showcase.csproj"/>
+    </ItemGroup>
+</Project>

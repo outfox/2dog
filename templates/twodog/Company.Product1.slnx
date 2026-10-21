@@ -35,6 +35,11 @@
 #if (avalonia)
   <Project Path="TPLRAWNAME.avalonia/TPLRAWNAME.avalonia.csproj" />
 #endif
+#if (qt)
+  <Project Path="TPLRAWNAME.qt/TPLRAWNAME.qt.csproj">
+    <Build Project="false" />
+  </Project>
+#endif
 #if (web)
   <Project Path="TPLRAWNAME.web/TPLRAWNAME.web.csproj">
     <BuildType Solution="Editor|*" Project="Debug" />

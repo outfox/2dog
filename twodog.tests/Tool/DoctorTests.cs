@@ -120,7 +120,7 @@ public class DoctorTests : IDisposable
     [Fact]
     public void AllOptInHosts_AreCleanToo()
     {
-        var dir = Scaffold("--generic", "--webxr", "--avalonia", "--blazor", "--winforms", "--winui", "--xunit");
+        var dir = Scaffold("--generic", "--webxr", "--avalonia", "--qt", "--blazor", "--winforms", "--winui", "--xunit");
         var run = Doctor(dir, null, "--json");
         var issues = Findings(run.Stdout).EnumerateArray()
             .Where(f => f.GetProperty("severity").GetString() is "warn" or "fail")

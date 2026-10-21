@@ -28,8 +28,8 @@ browser, inside a .NET UI, or under **xUnit and NUnit with a real Godot engine**
 - **Real-engine tests.** xUnit and NUnit fixtures run headless in CI, with Godot-aware assertions for signals,
   frames and deferred deletion; Godot errors fail tests. GDScript tests run through gdUnit.
   [More](https://2dog.dev/testing)
-- **Godot inside .NET UIs.** Embed the engine in Avalonia, Blazor, WinForms, WinUI 3 or MAUI, with native
-  controls over the game.
+- **Godot inside .NET UIs.** Embed the engine in Avalonia, Blazor, Qt Quick, WinForms, WinUI 3 or MAUI, with
+  native controls over the game.
 - **A C# REPL in your running game.** Inspect and change live nodes from a terminal or a coding agent.
 - **One tool for setup and upkeep.** `2dog new`, `add`, `doctor` and `update` scaffold hosts, diagnose build
   problems and keep package versions in step. [More](https://2dog.dev/dnx-2dog)
@@ -49,6 +49,7 @@ The tool adds each host as a small nested project with its own .NET entry point:
 | [WebXR](https://2dog.dev/hosts/webxr) | Take your game into browser VR and AR. | `--webxr` |
 | [Avalonia](https://2dog.dev/hosts/avalonia) | Embed Godot in a cross-platform desktop UI. | `--avalonia` |
 | [Blazor](https://2dog.dev/hosts/blazor) | Put Godot in a Blazor page and drive it from Razor components. | `--blazor` |
+| [Qt Quick](https://2dog.dev/hosts/qt) · experimental | Embed Godot in a QML app built with Qt Bridge for C#. | `--qt` |
 | [WinForms](https://2dog.dev/hosts/winforms) | Embed Godot in a Windows Forms application. | `--winforms` |
 | [WinUI 3](https://2dog.dev/hosts/winui) | Embed Godot in a Windows App SDK application. | `--winui` |
 | [MAUI](https://2dog.dev/hosts/maui) | Embed Godot in a MAUI page on Windows or Android. | `--maui` |

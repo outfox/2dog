@@ -140,6 +140,7 @@ public class HostsCoverageTests
     [InlineData("winforms", "winforms", "game embedded in a WinForms window (Windows-only)", "--winforms")]
     [InlineData("winui", "winui", "game embedded in a WinUI 3 window (Windows-only)", "--winui")]
     [InlineData("avalonia", "avalonia", "game embedded in an Avalonia app (cross-platform GUI)", "--avalonia")]
+    [InlineData("qt", "qt", "game embedded in a Qt Quick (QML) app via Qt Bridge for C#", "--qt")]
     [InlineData("blazor", "blazor", "game embedded in a Blazor Web App page (WebAssembly)", "--blazor")]
     public void HostMetadata_IsComplete(string suffix, string label, string blurb, string flag)
     {

@@ -16,6 +16,7 @@ internal static class EnvironmentChecks
         new("env.android-workload", Category.Environment, "the android workload is available for selected Android builds"),
         new("env.maui-workload", Category.Environment, "MAUI workloads are available for selected MAUI builds"),
         new("env.android-sdk", Category.Environment, "Android SDK paths and components are available for selected Android builds"),
+        new("env.qt-toolchain", Category.Environment, "CMake, Ninja and a C++ compiler are available for Qt hosts"),
         new("env.host-platform", Category.Environment, "this OS and architecture have 2dog native packages"),
         new("env.godot4", Category.Environment, "GODOT4 points at an existing Godot executable for IDE debugging"),
         new("env.overrides", Category.Environment, "GODOTSHARP_DIR and the other layout overrides point at what they claim"),
@@ -75,6 +76,21 @@ internal static class EnvironmentChecks
                     Remedy: $"Android SDK setup: {AndroidSdk.SetupUrl}");
             if (sdk.Warnings.Count == 0)
                 yield return Finding.Pass("env.android-sdk", c, $"Android SDK ({sdk.Directory})");
+        }
+
+        if (project.Hosts.Where(h => h.Kind == HostKind.Qt).ToList() is { Count: > 0 } qtHosts)
+        {
+            var missing = MissingQtToolchain(ctx.Env, ctx.Runner, project.Dir);
+            var folders = string.Join(", ", qtHosts.Select(h => h.Folder));
+            var required = qtHosts.Any(ctx.BuildHosts.Contains);
+            yield return missing.Count == 0
+                ? Finding.Pass("env.qt-toolchain", c, "CMake, Ninja and a C++ compiler")
+                : new Finding("env.qt-toolchain", c, required ? Severity.Fail : Severity.Info,
+                    $"{string.Join(", ", missing)} missing (needed by {folders})",
+                    required ? "Qt Bridge for C# and the TwoDog QML module compile native code with CMake" : $"optional until building {folders}",
+                    ctx.Env.IsWindows
+                        ? "install Visual Studio or its Build Tools with the 'Desktop development with C++' workload (it includes CMake and Ninja)"
+                        : "install cmake, ninja and a C++ compiler (e.g. apt install cmake ninja-build g++, or brew install cmake ninja with the Xcode command line tools)");
         }
 
         var rid = Rid(ctx.Env);
@@ -162,6 +178,54 @@ internal static class EnvironmentChecks
             Workloads.Install(workload, ctx.Project.Dir, ctx.Runner);
             ctx.InvalidateWorkloads();
         });
+
+    /// <summary>
+    /// What a Qt host's native build cannot find. Qt Bridge runs CMake with Ninja: on Windows inside Visual Studio's
+    /// vcvars (MSVC, whose C++ CMake tools also bring CMake and Ninja), elsewhere from PATH.
+    /// </summary>
+    internal static List<string> MissingQtToolchain(IEnvironment env, IProcessRunner runner, string workingDir)
+    {
+        var missing = new List<string>();
+        string? cmakeTools = null;
+        if (env.IsWindows)
+        {
+            if (VisualStudioWithCpp(env, runner, workingDir) is { } vs)
+                cmakeTools = Path.Combine(vs, "Common7", "IDE", "CommonExtensions", "Microsoft", "CMake");
+            else
+                missing.Add("Visual Studio C++ tools");
+        }
+        else if (!OnPath(env, "c++") && !OnPath(env, "g++") && !OnPath(env, "clang++"))
+            missing.Add("a C++ compiler");
+
+        if (!OnPath(env, "cmake") && !(cmakeTools != null && env.FileExists(Path.Combine(cmakeTools, "CMake", "bin", "cmake.exe"))))
+            missing.Add("CMake");
+        if (!OnPath(env, "ninja") && !(cmakeTools != null && env.FileExists(Path.Combine(cmakeTools, "Ninja", "ninja.exe"))))
+            missing.Add("Ninja");
+        return missing;
+    }
+
+    private static bool OnPath(IEnvironment env, string tool) =>
+        (env.Var("PATH") ?? "").Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+        .Any(dir => env.FileExists(Path.Combine(dir, env.IsWindows ? tool + ".exe" : tool)));
+
+    /// <summary>The newest Visual Studio installation with the C++ desktop workload, via vswhere; null when none.</summary>
+    private static string? VisualStudioWithCpp(IEnvironment env, IProcessRunner runner, string workingDir)
+    {
+        if (env.Var("ProgramFiles(x86)") is not { Length: > 0 } programFiles) return null;
+        var vswhere = Path.Combine(programFiles, "Microsoft Visual Studio", "Installer", "vswhere.exe");
+        if (!env.FileExists(vswhere)) return null;
+        try
+        {
+            var result = runner.Run(new ProcessRequest(vswhere,
+                ["-latest", "-products", "*", "-requires", "Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core",
+                 "-property", "installationPath"], workingDir, TimeSpan.FromSeconds(30)), Cancellation.Token);
+            return result.Ok ? result.Output.Select(l => l.Trim()).FirstOrDefault(l => l.Length > 0 && env.DirectoryExists(l)) : null;
+        }
+        catch (ToolException)
+        {
+            return null;
+        }
+    }
 
     internal static string Rid(IEnvironment env)
     {

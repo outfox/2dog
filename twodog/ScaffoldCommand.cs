@@ -688,6 +688,7 @@ internal static class ScaffoldCommand
                 HostKind.WinUi => ("only builds on Windows; built via dotnet run", "fails to build on non-Windows systems"),
                 HostKind.Blazor => ("needs wasm-tools; built via dotnet run", "requires the wasm-tools workload"),
                 HostKind.Maui => ("needs MAUI workloads; built directly with a target framework", "requires MAUI workloads"),
+                HostKind.Qt => ("needs CMake, Ninja and a C++ toolchain; built via dotnet run", "requires CMake, Ninja and a C++ toolchain"),
                 HostKind.Android => ("needs the android workload; built via dotnet publish", "requires the android workload"),
                 _ => ("needs wasm-tools; built via dotnet publish", "requires the wasm-tools workload"),
             };
@@ -695,10 +696,10 @@ internal static class ScaffoldCommand
                 $"exclude {host.Folder} from plain solution builds ({why})", ActionKind.Solution,
                 () =>
                 {
-                    // The wasm and Android hosts have no Editor configuration; the WinUI host does.
+                    // The wasm and Android hosts have no Editor configuration; the WinUI and Qt hosts do.
                     foreach (var relative in relatives)
                         if (!SolutionOps.ExcludeFromSolutionBuild(solutionPath, relative,
-                                mapEditorToDebug: host.Kind is not HostKind.WinUi))
+                                mapEditorToDebug: !Hosts.HasEditorConfiguration(host.Kind)))
                             Out.Note($"could not adjust {solutionName} build configs for {relative}; " +
                                      $"solution-wide builds will include it ({note}).");
                 }));
@@ -759,6 +760,7 @@ internal static class ScaffoldCommand
             HostKind.WinForms => ($"dotnet run --project {host.Folder}", "WinForms host (Windows only)"),
             HostKind.WinUi => ($"dotnet run --project {host.Folder}", "WinUI 3 host (Windows only)"),
             HostKind.Avalonia => ($"dotnet run --project {host.Folder}", "Avalonia host (cross-platform GUI)"),
+            HostKind.Qt => ($"dotnet run --project {host.Folder}", "Qt Quick host (needs CMake, Ninja and a C++ toolchain)"),
             HostKind.Blazor => ($"dotnet run --project {host.Folder}", "Blazor Web App host (needs wasm-tools workload)"),
             HostKind.Maui => ($"dotnet run --project {host.Folder}", "MAUI host (Windows and Android; needs MAUI workloads)"),
             HostKind.Android => ($"dotnet publish {host.Folder}", "Android APK (needs the android workload)"),

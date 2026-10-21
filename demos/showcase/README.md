@@ -35,6 +35,11 @@ a `.gdignore`):
 - `showcase.winforms/` - Windows-only GUI embedding demo (`--wid`): `dotnet run --project demos/showcase/showcase.winforms`
 - `showcase.winui/` - Windows-only WinUI 3 embedding demo (`--wid`; builds only on Windows): `dotnet run --project demos/showcase/showcase.winui`
 - `showcase.avalonia/` - cross-platform Avalonia embedding demo (controls composite over the game): `dotnet run --project demos/showcase/showcase.avalonia`
+- `showcase.qt/` - Qt Quick (QML) embedding demo on [Qt Bridge for C#](https://github.com/qt/qtbridge-csharp)
+  (QML items composite over the game): `dotnet run --project demos/showcase/showcase.qt`. Pack `2dog.qt` first
+  (`uv run poe build-managed`). Builds need CMake, Ninja and a C++ toolchain (MSVC on Windows); Qt is bundled on
+  win-x64, elsewhere pass `-p:QtDir=<Qt 6 prefix>`. It is in no solution because Qt Bridge has no package for some
+  RIDs (osx-x64, linux-arm64)
 - `showcase.maui/` - Windows and Android MAUI embedding demo with pause, time scale, and presentation mode in an
   overlay. Install `maui-windows` and `maui-android`, then run
   `dotnet run --project demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0`, or publish

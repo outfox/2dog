@@ -42,7 +42,8 @@
                              GodotVer="$(GodotVersion)"
                              AvaloniaVer="$(AvaloniaVersion)" MauiVer="$(MauiVersion)"
                              WinAppSdkVer="$(WindowsAppSdkVersion)"
-                             AspNetCoreVer="$(AspNetCoreVersion)" />
+                             AspNetCoreVer="$(AspNetCoreVersion)"
+                             QtBridgeVer="$(QtBridgeVersion)" />
         <ItemGroup>
             <None Include="$(IntermediateOutputPath)template.json" Pack="true"
                   PackagePath="content/twodog/.template.config/template.json"/>

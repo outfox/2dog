@@ -21,6 +21,7 @@ internal static class PropsPatcher
         ("TwoDogMauiVersion", ToolVersions.MauiVersion),
         ("TwoDogWindowsAppSdkVersion", ToolVersions.WindowsAppSdkVersion),
         ("TwoDogAspNetCoreVersion", ToolVersions.AspNetCoreVersion),
+        ("TwoDogQtBridgeVersion", ToolVersions.QtBridgeVersion),
     ];
 
     /// <summary>The 2dog property group of a props document, or null.</summary>

@@ -39,6 +39,7 @@ internal static class VersionRewriter
             ["2dog.maui"] = ("TwoDogVersion", false),
             ["Microsoft.Maui.Controls"] = ("TwoDogMauiVersion", false),
             ["2dog.blazor"] = ("TwoDogVersion", false),
+            ["2dog.qt"] = ("TwoDogVersion", false),
             ["2dog.browser-wasm"] = ("TwoDogNativesVersion", true),
             ["2dog.android"] = ("TwoDogNativesVersion", true),
             ["2dog.android-arm64"] = ("TwoDogNativesVersion", true),
@@ -50,6 +51,12 @@ internal static class VersionRewriter
             ["Microsoft.WindowsAppSDK"] = ("TwoDogWindowsAppSdkVersion", false),
             ["Microsoft.AspNetCore.Components.WebAssembly"] = ("TwoDogAspNetCoreVersion", false),
             ["Microsoft.AspNetCore.Components.WebAssembly.Server"] = ("TwoDogAspNetCoreVersion", false),
+            // Qt Bridge for C# publishes one package per RID; the template picks it through $(QtBridgeRid).
+            [Hosts.QtBridgePackagePrefix + "win-x64"] = ("TwoDogQtBridgeVersion", false),
+            [Hosts.QtBridgePackagePrefix + "win-arm64"] = ("TwoDogQtBridgeVersion", false),
+            [Hosts.QtBridgePackagePrefix + "linux-x64"] = ("TwoDogQtBridgeVersion", false),
+            [Hosts.QtBridgePackagePrefix + "linux-arm64"] = ("TwoDogQtBridgeVersion", false),
+            [Hosts.QtBridgePackagePrefix + "osx-arm64"] = ("TwoDogQtBridgeVersion", false),
         };
 
     private static string BaseId(string id) => id.EndsWith(".double", StringComparison.OrdinalIgnoreCase)

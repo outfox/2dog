@@ -81,6 +81,8 @@ public class ErrorHandlingTests
                  })
             Assert.True(ToolVersions.Floor(value) != null, $"'{value}' is not a version");
         Assert.EndsWith(".*", ToolVersions.AspNetCoreVersion);
+        // Qt Bridge is pre-release: only NuGet's order reads it.
+        Assert.Equal(0, ToolVersions.CompareNuGet(ToolVersions.QtBridgeVersion, ToolVersions.QtBridgeVersion));
     }
 
     [Theory]

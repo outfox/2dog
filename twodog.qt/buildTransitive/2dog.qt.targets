@@ -1,0 +1,58 @@
+<Project>
+    <!-- Builds the TwoDog QML module (native/) against the Qt that Qt Bridge for C# uses, then copies it to
+         <app>/TwoDog, which is on QML's default import path. Uses the toolchain Qt Bridge already requires:
+         CMake, Ninja and a C++ compiler (MSVC on Windows). Without a QtDir (no Qt Bridge package, e.g. a test
+         project) there is no Qt app to build it for. -->
+    <PropertyGroup>
+        <TwoDogQtSourceDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)../native'))</TwoDogQtSourceDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <TwoDogQtModuleInput Include="$(TwoDogQtSourceDir)*" />
+        <TwoDogQtModuleInput Include="$(MSBuildThisFileFullPath)" />
+    </ItemGroup>
+
+    <Target Name="TwoDogQtResolveToolchain">
+        <Error Condition="!Exists('$(QtDir)/lib/cmake/Qt6/Qt6Config.cmake')"
+               Text="2dog.qt: QtDir '$(QtDir)' is not a Qt 6 prefix containing lib/cmake/Qt6/Qt6Config.cmake." />
+        <PropertyGroup>
+            <TwoDogQtBuildDir>$([MSBuild]::NormalizeDirectory('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)', 'twodog.qt'))</TwoDogQtBuildDir>
+            <TwoDogQtStamp>$(TwoDogQtBuildDir)module.stamp</TwoDogQtStamp>
+            <_TwoDogQtVsWhere>$([MSBuild]::GetProgramFiles32())\Microsoft Visual Studio\Installer\vswhere.exe</_TwoDogQtVsWhere>
+        </PropertyGroup>
+        <!-- A different Qt (e.g. a Qt Bridge update) must rebuild the module. -->
+        <WriteLinesToFile File="$(TwoDogQtBuildDir)qtdir.txt" Lines="$(QtDir)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+        <Exec Condition="$([MSBuild]::IsOSPlatform('Windows')) and '$(VsInstallRoot)' == '' and Exists('$(_TwoDogQtVsWhere)')"
+              Command="&quot;$(_TwoDogQtVsWhere)&quot; -latest -products * -requires Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core -property installationPath"
+              ConsoleToMsBuild="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_TwoDogQtVsRoot" />
+        </Exec>
+        <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+            <_TwoDogQtVsRoot Condition="'$(VsInstallRoot)' != ''">$(VsInstallRoot)</_TwoDogQtVsRoot>
+            <_TwoDogQtVcVars Condition="'$(QtArch)' == 'arm64'">$(_TwoDogQtVsRoot)\VC\Auxiliary\Build\vcvarsarm64.bat</_TwoDogQtVcVars>
+            <_TwoDogQtVcVars Condition="'$(QtArch)' != 'arm64'">$(_TwoDogQtVsRoot)\VC\Auxiliary\Build\vcvars64.bat</_TwoDogQtVcVars>
+            <!-- A Visual Studio generator platform in the environment breaks the Ninja generator. -->
+            <_TwoDogQtEnv>CALL &quot;$(_TwoDogQtVcVars)&quot; &gt; NUL &amp;&amp; set &quot;CMAKE_GENERATOR_PLATFORM=&quot; &amp;&amp; set &quot;CMAKE_GENERATOR_TOOLSET=&quot; &amp;&amp; </_TwoDogQtEnv>
+        </PropertyGroup>
+        <Error Condition="$([MSBuild]::IsOSPlatform('Windows')) and !Exists('$(_TwoDogQtVcVars)')"
+               Text="2dog.qt: no Visual Studio C++ toolchain found (needed for the TwoDog QML module, as for Qt Bridge for C#). Install the 'Desktop development with C++' workload." />
+    </Target>
+
+    <Target Name="TwoDogQtBuildModule" DependsOnTargets="TwoDogQtResolveToolchain"
+            Inputs="@(TwoDogQtModuleInput);$(TwoDogQtBuildDir)qtdir.txt" Outputs="$(TwoDogQtStamp)">
+        <Message Importance="high" Text="2dog.qt: building the TwoDog QML module against $(QtDir)" />
+        <!-- fresh: a cached Qt6_DIR would otherwise keep the previous Qt. -->
+        <Exec Command="$(_TwoDogQtEnv)cmake --fresh -S &quot;$(TwoDogQtSourceDir.TrimEnd('\/'))&quot; -B &quot;$(TwoDogQtBuildDir.TrimEnd('\/'))&quot; -G Ninja -DCMAKE_BUILD_TYPE=Release &quot;-DCMAKE_PREFIX_PATH=$(QtDir)&quot; &amp;&amp; cmake --build &quot;$(TwoDogQtBuildDir.TrimEnd('\/'))&quot;" />
+        <Touch Files="$(TwoDogQtStamp)" AlwaysCreate="true" />
+    </Target>
+
+    <Target Name="TwoDogQtCopyModule" DependsOnTargets="TwoDogQtBuildModule" BeforeTargets="AssignTargetPaths"
+            Condition="'$(DesignTimeBuild)' != 'true' and '$(QtDir)' != ''">
+        <ItemGroup>
+            <_TwoDogQtModuleFile Include="$(TwoDogQtBuildDir)qml/TwoDog/qmldir;$(TwoDogQtBuildDir)qml/TwoDog/*.qmltypes" />
+            <_TwoDogQtModuleFile Include="$(TwoDogQtBuildDir)qml/TwoDog/*twodogqt.dll;$(TwoDogQtBuildDir)qml/TwoDog/*twodogqt.so;$(TwoDogQtBuildDir)qml/TwoDog/*twodogqt.dylib" />
+            <None Include="@(_TwoDogQtModuleFile)" Link="TwoDog/%(Filename)%(Extension)"
+                  CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+        </ItemGroup>
+    </Target>
+</Project>
