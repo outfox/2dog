@@ -21,8 +21,9 @@ gh() {
     esac
     shift
   done
-  if $paginate && $slurp; then jq -s "$query" "$page1" "$page2";
-  else jq "$query" "$page1"; fi
+  if $slurp && [ -n "${query:-}" ]; then echo '--slurp does not support --jq' >&2; return 1; fi
+  if $paginate && $slurp; then jq -s '.' "$page1" "$page2";
+  else jq '.' "$page1"; fi
 }
 
 jq -n '{jobs: [range(100) | {name: "Build Natives", conclusion: "success"}]}' > "$page1"

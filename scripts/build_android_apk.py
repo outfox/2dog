@@ -67,6 +67,10 @@ def build(args):
     # Keep those existing local source folders valid; restores use the private config.
     (REPO / "packages").mkdir(exist_ok=True)
     (REPO / "godot/bin/GodotSharp/Tools/nupkgs").mkdir(parents=True, exist_ok=True)
+    # CI invalidates mutable local packages once before publishing; retain other dependencies on its sticky disk.
+    if getattr(args, "restore_cache", None) is not None:
+        args.restore_cache.mkdir(parents=True, exist_ok=True)
+        return build_with_packages(args, output, feed, config, args.restore_cache.resolve())
     # Rebuilt local packages must not reuse an older payload at the same version.
     # Keep the fresh cache alive through inspection, then clean it on every exit.
     with tempfile.TemporaryDirectory(prefix="restore-", dir=output) as restore:
@@ -174,10 +178,13 @@ def main():
     parser.add_argument("--feed", type=Path, help="Build against these packed 2dog packages (CI's pack job "
                         "output) instead of building natives and Java payloads and packing them here")
     parser.add_argument("--cache-path", type=Path)
+    parser.add_argument("--restore-cache", type=Path, help="CI's prepared NuGet cache (requires --feed)")
     parser.add_argument("--skip-native", action="store_true", help="Reuse both staged native variants")
     parser.add_argument("--skip-java", action="store_true", help="Reuse both staged Java AAR variants")
     parser.add_argument("--aot", action="store_true", help="Publish with NativeAOT (experimental) instead of Mono")
     args = parser.parse_args()
+    if args.restore_cache is not None and args.feed is None:
+        parser.error('--restore-cache requires --feed')
     if args.output is None:
         args.output = REPO / ("artifacts/android-apk" if args.app == "smoke" else f"artifacts/android-{args.app}-apk")
     if args.editor and not args.editor.is_file():

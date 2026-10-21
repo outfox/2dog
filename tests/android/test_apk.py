@@ -229,6 +229,21 @@ class AndroidApkTests(unittest.TestCase):
                 self.assertEqual(1, len(cache_paths))
                 self.assertFalse(cache_paths[0].exists())
 
+    def test_ci_restore_cache_is_reused_and_not_removed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            feed = root / 'feed'
+            feed.mkdir()
+            args = argparse.Namespace(output=root / 'output', skip_java=False, feed=feed, restore_cache=root / 'cache')
+            with patch.object(build, 'REPO', root), patch.object(build, 'build_with_packages', return_value='apk') as publish:
+                self.assertEqual('apk', build.build(args))
+                self.assertEqual(args.restore_cache.resolve(), publish.call_args.args[-1])
+                self.assertTrue(args.restore_cache.is_dir())
+                publish.side_effect = OSError('build failed')
+                with self.assertRaisesRegex(OSError, 'build failed'):
+                    build.build(args)
+                self.assertTrue(args.restore_cache.is_dir())
+
     def test_skip_java_rejects_either_missing_variant_before_building(self):
         for missing in ("debug", "release"):
             with self.subTest(missing=missing), tempfile.TemporaryDirectory() as directory:

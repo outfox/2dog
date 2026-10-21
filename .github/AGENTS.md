@@ -22,6 +22,18 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - `webgpu-browser-build` publishes the single-precision image-test bundle after pack; `webgpu-browser`
   consumes it without waiting for Web Smoke. Both belong to the `WebGPU Browser` tested-content family;
   the browser job gates deployment and requires the bundle job to succeed.
+- Android Smoke uses one APK per precision/variant matrix cell. `android-prepare` warms the SDK and a clean
+  emulator snapshot in parallel with packing; consumers mount SDK/snapshot disks with `commit: false` and
+  use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates deployment.
+  Pack fills a scoped Android input disk and uploads the same content as a fallback. Consumers must verify
+  its run/commit/precision before use; reset mismatched inputs before downloading the matching artifact.
+  Its native hashes come from the original build outputs; check packaged libraries against those hashes
+  before using them as the APK inspection reference, so a packaging mistake cannot validate itself.
+  Never persist bin/obj or test-modified emulator state. Clear mutable 2dog/fork SDK packages from the
+  NuGet disk before restore, preserving third-party dependencies. Concurrent cache commits may lose cache
+  additions, so a miss must remain a correct cold build.
+- NuGet publishing uses four concurrent pushes; any failure blocks the release. Packing remains ordered
+  within each precision because the managed packages consume the freshly packed platform/binding packages.
 - `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
   tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and

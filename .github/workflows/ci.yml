@@ -44,8 +44,10 @@ jobs:
         with:
           fetch-depth: 2 # a release tag is compared with its parent commit
 
-      - name: Test CI reuse gate
-        run: bash .github/scripts/find-tested-run.test.sh
+      - name: Test CI helpers
+        run: |
+          bash .github/scripts/find-tested-run.test.sh
+          bash .github/scripts/push-nuget.test.sh
 
       - name: Check native library availability
         id: check
@@ -301,8 +303,6 @@ jobs:
       - name: Test managed binding packages
         run: uv run tests/bindings/test_packages.py --precision ${{ matrix.precision }}
 
-      # The Android natives travel separately (android-natives): only android-smoke needs them, to compare the
-      # APKs against. Their packages are in nuget-packages like every other published package.
       - name: Test precision build configuration
         if: matrix.precision == 'single'
         env:
@@ -311,6 +311,29 @@ jobs:
           uv run python -m unittest discover -s tests/precision -v
           uv run python -m unittest discover -s tests/webgpu -v
           uv run python -m unittest discover -s tests/ci_packages -v
+
+      - name: Mount scoped Android input disk
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+        with:
+          key: ${{ github.repository }}-android-inputs-${{ matrix.precision }}-v1
+          path: .ci/android-inputs
+          commit: on-change
+
+      - name: Stage scoped Android inputs
+        run: uv run --no-project python scripts/stage_android_ci.py stage --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_SHA"
+
+      - name: Upload scoped Android inputs
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-inputs-${{ matrix.precision }}
+          path: |
+            .ci/android-inputs/packages/
+            .ci/android-inputs/sdk/
+            .ci/android-inputs/manifest.json
+          if-no-files-found: error
+          include-hidden-files: true
+          compression-level: 0
+          retention-days: 3
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
@@ -328,14 +351,6 @@ jobs:
         with:
           name: nuget-packages-${{ matrix.precision }}
           path: packages/
-          retention-days: 7
-
-      - name: Upload Android natives
-        uses: actions/upload-artifact@v7
-        with:
-          name: android-natives-${{ matrix.precision }}
-          path: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}android/
-          if-no-files-found: error
           retention-days: 7
 
   # Run tests on each platform, one job per configuration: a single job running all three back to back
@@ -1792,32 +1807,117 @@ jobs:
         shell: bash
         run: bash .github/scripts/tool-smoke.sh
 
-  # Experimental Android: publishes the smoke and showcase hosts against the packed packages the way an app does,
-  # then runs the x64 APKs on an emulator. The Release showcase builds are trimmed and AOT-compiled (.NET for
-  # Android's Release defaults); the arm64 one is built and inspected for devices only.
-  android-smoke:
-    name: Android Smoke [${{ matrix.precision }}]
-    needs: [check-natives, pack]
-    # See the test job for why this cannot rely on the implicit success().
+  # Warm shared tools and a pristine boot snapshot while natives/packing run.
+  android-prepare:
+    name: Android Smoke Cache
+    needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.check-natives.result == 'success' &&
+      needs.check-natives.outputs.tested-content != 'true' && needs.check-natives.outputs.tested-bump != 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    timeout-minutes: 45
+    timeout-minutes: 15
+    outputs:
+      avd-key: ${{ steps.snapshot-key.outputs.key }}
+    env:
+      ANDROID_HOME: /tmp/2dog-android-sdk
+      ANDROID_SDK_ROOT: /tmp/2dog-android-sdk
+    steps:
+      - name: Mount Android SDK
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+        with:
+          key: ${{ github.repository }}-android-sdk-36-ndk29-v1
+          path: ${{ env.ANDROID_HOME }}
+          commit: on-change
 
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: microsoft
+          java-version: '17'
+
+      - name: Prepare Android SDK and system image
+        uses: android-actions/setup-android@v4
+        with:
+          cmdline-tools-version: '15859902'
+          packages: platform-tools platforms;android-36 build-tools;36.1.0 build-tools;37.0.0 ndk;29.0.14206865 emulator system-images;android-36;google_apis;x86_64
+          log-accepted-android-sdk-licenses: false
+
+      - name: Keep command-line tools at the path expected by emulator-runner
+        run: ln -sfnT 22.0 "$ANDROID_HOME/cmdline-tools/latest"
+
+      - name: Key snapshot to installed emulator and image
+        id: snapshot-key
+        run: |
+          version=$(cat "$ANDROID_HOME/emulator/source.properties" "$ANDROID_HOME/system-images/android-36/google_apis/x86_64/source.properties" | sha256sum | cut -c1-16)
+          echo "key=${GITHUB_REPOSITORY}-android-avd-ubuntu2404-api36-x64-swangle-${version}-v1" >> "$GITHUB_OUTPUT"
+
+      - name: Mount pristine emulator snapshot
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+        with:
+          key: ${{ steps.snapshot-key.outputs.key }}
+          path: ~/.android
+          commit: on-change
+
+      - name: Check snapshot
+        id: snapshot
+        run: |
+          if test -s ~/.android/avd/2dog-ci.avd/snapshots/default_boot/snapshot.pb; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Enable emulator acceleration
+        if: steps.snapshot.outputs.ready != 'true'
+        run: sudo chmod 666 /dev/kvm
+
+      - name: Generate clean emulator snapshot
+        if: steps.snapshot.outputs.ready != 'true'
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          avd-name: 2dog-ci
+          force-avd-creation: true
+          emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none
+          script: adb -s emulator-5554 emu avd snapshot save default_boot
+
+      - name: Verify snapshot is ready
+        run: |
+          for attempt in $(seq 1 30); do
+            if ! pgrep -f '[q]emu-system.*-avd 2dog-ci' > /dev/null; then break; fi
+            sleep 1
+          done
+          ! pgrep -f '[q]emu-system.*-avd 2dog-ci' > /dev/null
+          test -s ~/.android/avd/2dog-ci.avd/snapshots/default_boot/snapshot.pb
+
+  # One APK per job: no shared bin/obj files, and arm64 needs no emulator.
+  android-smoke:
+    name: Android Smoke (${{ matrix.apk.name }}) [${{ matrix.precision }}]
+    needs: [check-natives, pack, android-prepare]
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.android-prepare.result == 'success' &&
+      needs.check-natives.outputs.tested-bump != 'true')
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         precision: [single, double]
-
+        apk:
+          - {name: smoke-debug, app: smoke, configuration: Debug, rid: android-x64, aot: false, package: dev.twodog.smoke, marker: 2DOG_ANDROID_CSHARP_SMOKE_PASSED}
+          - {name: showcase-debug, app: showcase, configuration: Debug, rid: android-x64, aot: false, package: dev.twodog.showcase, marker: 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED}
+          - {name: showcase-release, app: showcase, configuration: Release, rid: android-x64, aot: false, package: dev.twodog.showcase, marker: 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED}
+          - {name: showcase-arm64, app: showcase, configuration: Release, rid: android-arm64, aot: false, package: dev.twodog.showcase, marker: 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED}
+          - {name: showcase-nativeaot, app: showcase, configuration: Release, rid: android-x64, aot: true, package: dev.twodog.showcase, marker: 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED}
     env:
       TwoDogPrecision: ${{ matrix.precision }}
-      TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
-      TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
-      TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
-
+      ANDROID_HOME: /tmp/2dog-android-sdk
+      ANDROID_SDK_ROOT: /tmp/2dog-android-sdk
+      ANDROID_NDK_ROOT: /tmp/2dog-android-sdk/ndk/29.0.14206865
+      ANDROID_NDK_HOME: /tmp/2dog-android-sdk/ndk/29.0.14206865
     steps:
-      # The showcase's LFS assets (e.g. splash.png) must be real files for its pck export.
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
@@ -1840,91 +1940,117 @@ jobs:
           distribution: microsoft
           java-version: '17'
 
-      # The NDK builds the showcase's GDExtension probe.
-      - name: Setup Android SDK
+      - name: Mount Android SDK
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+        with:
+          key: ${{ github.repository }}-android-sdk-36-ndk29-v1
+          path: ${{ env.ANDROID_HOME }}
+          commit: 'false'
+
+      # Installed packages are reused; a missing sticky mount must still support a cold build.
+      - name: Ensure Android build tools
         uses: android-actions/setup-android@v4
         with:
+          cmdline-tools-version: '15859902'
           packages: platform-tools platforms;android-36 build-tools;36.1.0 ndk;29.0.14206865
           log-accepted-android-sdk-licenses: false
+
+      - name: Keep command-line tools at the path expected by emulator-runner
+        run: ln -sfnT 22.0 "$ANDROID_HOME/cmdline-tools/latest"
 
       - name: Install Android workload
         run: dotnet workload install android --skip-manifest-update --source https://api.nuget.org/v3/index.json
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Mount Android inputs
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          name: godot-bin-${{ matrix.precision }}
-          path: godot
+          key: ${{ github.repository }}-android-inputs-${{ matrix.precision }}-v1
+          path: .ci/android-inputs
+          commit: 'false'
 
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-${{ matrix.precision }}
-          path: packages
-
-      # The natives the APK inspection compares against.
-      - name: Download Android natives
-        uses: actions/download-artifact@v8
-        with:
-          name: android-natives-${{ matrix.precision }}
-          path: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}android
-
-      # Each is one `dotnet publish` of the host: it builds the game, imports and exports its pck with the packaged
-      # editor libgodot (2dog.linux-x64.editor), and packages the APK; the script then inspects the APK.
-      - name: Build and inspect APKs
+      - name: Check inputs belong to this run
+        id: inputs
         run: |
-          uv run scripts/build_android_apk.py --app smoke --feed packages --rid android-x64
-          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-x64
-          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
-            --configuration Release --output artifacts/android-showcase-release-apk
-          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-arm64 \
-            --configuration Release --output artifacts/android-showcase-arm64-apk
-          # Experimental NativeAOT; links with the NDK installed above.
-          uv run scripts/build_android_apk.py --app showcase --feed packages --rid android-x64 \
-            --configuration Release --aot --output artifacts/android-showcase-aot-apk
-          for apk in artifacts/android-*apk/apk/*-Signed.apk; do
-            "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify "$apk"
-          done
+          if uv run --no-project python scripts/stage_android_ci.py check --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_SHA"; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            uv run --no-project python scripts/stage_android_ci.py reset
+          fi
 
-      - name: Upload APKs
+      # A different branch may have committed the same disk key after pack.
+      - name: Download matching Android inputs on cache miss
+        if: steps.inputs.outputs.ready != 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: android-inputs-${{ matrix.precision }}
+          path: .ci/android-inputs
+
+      - name: Mount NuGet cache
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+        with:
+          key: ${{ github.repository }}-android-nuget-linux-${{ matrix.precision }}-v1
+          path: .packages
+          commit: on-change
+
+      - name: Prepare fork SDK and selected native reference bytes
+        run: |
+          uv run --no-project python scripts/stage_android_ci.py check --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_SHA"
+          uv run --no-project python scripts/stage_android_ci.py prepare --precision "$TwoDogPrecision" --rid '${{ matrix.apk.rid }}' --configuration '${{ matrix.apk.configuration }}'
+
+      - name: Build and inspect APK
+        env:
+          APK_AOT: ${{ matrix.apk.aot }}
+        run: |
+          extra=()
+          if [ "$APK_AOT" = true ]; then extra+=(--aot); fi
+          uv run scripts/build_android_apk.py --app '${{ matrix.apk.app }}' --feed .ci/android-inputs/packages \
+            --rid '${{ matrix.apk.rid }}' --configuration '${{ matrix.apk.configuration }}' \
+            --restore-cache .packages --output artifacts/android-apk "${extra[@]}"
+          "$ANDROID_HOME/build-tools/36.1.0/apksigner" verify artifacts/android-apk/apk/*-Signed.apk
+
+      - name: Upload APK and inspection report
         uses: actions/upload-artifact@v7
         with:
-          name: android-apks-${{ matrix.precision }}
+          name: android-apks-${{ matrix.precision }}-${{ matrix.apk.name }}
           path: |
-            artifacts/android-*apk/apk/*-Signed.apk
-            artifacts/android-*apk/apk-report.json
+            artifacts/android-apk/apk/*-Signed.apk
+            artifacts/android-apk/apk-report.json
           if-no-files-found: error
           retention-days: 7
 
+      - name: Mount pristine emulator snapshot
+        if: matrix.apk.rid == 'android-x64'
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+        with:
+          key: ${{ needs.android-prepare.outputs.avd-key }}
+          path: ~/.android
+          commit: 'false'
+
       - name: Enable emulator acceleration
+        if: matrix.apk.rid == 'android-x64'
         run: sudo chmod 666 /dev/kvm
 
-      - name: Run smoke and showcases on the emulator
-        uses: reactivecircus/android-emulator-runner@v2
+      - name: Run APK on the emulator
+        if: matrix.apk.rid == 'android-x64'
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 36
           arch: x86_64
           target: google_apis
+          avd-name: 2dog-ci
+          force-avd-creation: false
           disable-animations: true
-          # swangle: the legacy SwiftShader GLES translator cannot link Godot's GLES3 shaders.
-          emulator-options: -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none
-          # The action runs each script line separately; folding keeps this one shell command.
+          emulator-options: -no-snapshot-save -snapshot default_boot -no-window -gpu swangle -noaudio -no-boot-anim -camera-back none
           script: >-
-            uv run scripts/test_android_device.py artifacts/android-apk/apk/dev.twodog.smoke-Signed.apk
-            --serial emulator-5554 --timeout 120
-            && uv run scripts/test_android_device.py artifacts/android-showcase-apk/apk/dev.twodog.showcase-Signed.apk
-            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
-            && uv run scripts/test_android_device.py artifacts/android-showcase-release-apk/apk/dev.twodog.showcase-Signed.apk
-            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120
-            && uv run scripts/test_android_device.py artifacts/android-showcase-aot-apk/apk/dev.twodog.showcase-Signed.apk
-            --serial emulator-5554 --package dev.twodog.showcase --marker 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED --timeout 120;
+            uv run scripts/test_android_device.py artifacts/android-apk/apk/*-Signed.apk
+            --serial emulator-5554 --package '${{ matrix.apk.package }}' --marker '${{ matrix.apk.marker }}' --timeout 120;
             status=$?; adb -s emulator-5554 logcat -d -b all > artifacts/android-apk/logcat.txt; exit "$status"
 
       - name: Upload emulator diagnostics
-        if: always()
+        if: always() && matrix.apk.rid == 'android-x64'
         uses: actions/upload-artifact@v7
         with:
-          name: android-emulator-logcat-${{ matrix.precision }}
+          name: android-emulator-logcat-${{ matrix.precision }}-${{ matrix.apk.name }}
           path: artifacts/android-apk/logcat.txt
           if-no-files-found: ignore
           retention-days: 7
@@ -1960,6 +2086,9 @@ jobs:
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing
 
     steps:
+      - name: Checkout CI helpers
+        uses: actions/checkout@v7
+
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
@@ -2014,14 +2143,7 @@ jobs:
         env:
           NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
-          for pkg in packages/*.nupkg; do
-            [[ "$pkg" == *.snupkg ]] && continue
-            echo "Pushing $pkg..."
-            dotnet nuget push "$pkg" \
-              --source https://api.nuget.org/v3/index.json \
-              --api-key "$NUGET_API_KEY" \
-              --skip-duplicate
-          done
+          bash .github/scripts/push-nuget.sh packages
 
       - name: Create GitHub Release
         env:
