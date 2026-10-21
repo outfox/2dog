@@ -49,7 +49,8 @@ run_tests() {
 
 case "${RUNNER_OS:-}" in
   Windows)
-    run_tests \
+    mkdir -p "$dumps"
+    run_tests --diag "$dumps/vstest.log" \
       --blame-crash --blame-crash-dump-type full \
       --blame-hang-timeout "${limit}s" --blame-hang-dump-type full > >(tee "$output") 2>&1 & ;;
   macOS)

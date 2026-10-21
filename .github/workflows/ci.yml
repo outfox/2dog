@@ -731,7 +731,8 @@ jobs:
         shell: bash
         run: |
           if [ "$RUNNER_OS" = Linux ]; then
-            xvfb-run -a dotnet run --project tests/webgpu-smoke -c Release
+            cc -shared -fPIC .github/scripts/native-abort-trace.c -o /tmp/2dog-native-abort-trace.so
+            xvfb-run -a env LD_PRELOAD=/tmp/2dog-native-abort-trace.so dotnet run --project tests/webgpu-smoke -c Release
           elif [ "$RUNNER_OS" = macOS ]; then
             dotnet build tests/webgpu-smoke -c Release
             SMOKE=tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke
