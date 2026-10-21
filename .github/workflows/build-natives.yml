@@ -559,9 +559,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,createdAt \
-            -q '[.[] | select(.tagName | test("^godot-[0-9a-f]{7}${{ env.RELEASE_SUFFIX }}$"))] | sort_by(.createdAt) | reverse | .[5:] | .[].tagName' |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,publishedAt \
+            -q '[.[] | select(.tagName | test("^godot-[0-9a-f]{7}${{ env.RELEASE_SUFFIX }}$"))] | sort_by(.publishedAt) | reverse | .[5:] | .[].tagName' |
           while read -r tag; do
+            # createdAt is the target commit's date; always preserve this run's release.
+            if [ "$tag" = "godot-${{ needs.preflight.outputs.submodule-hash }}${RELEASE_SUFFIX}" ]; then continue; fi
             echo "Pruning $tag"
             gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
           done
