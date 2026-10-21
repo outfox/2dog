@@ -290,6 +290,24 @@ ios.arm64 = "{library}"
 
 
 class MauiFrameworks(unittest.TestCase):
+    def test_maui_hosts_dispatch_each_framework_separately(self):
+        expected = ["net10.0-android"]
+        if os.name == "nt":
+            expected.append("net10.0-windows10.0.19041.0")
+        elif os.uname().sysname == "Darwin":
+            expected.append("net10.0-ios")
+        for project in ("demos/showcase/showcase.maui/showcase.maui.csproj",
+                        "templates/twodog/Company.Product1.maui/Company.Product1.maui.csproj"):
+            with self.subTest(project=project):
+                result = subprocess.run([
+                    "dotnet", "msbuild", str(REPO / project), "-nologo",
+                    "-t:_ComputeTargetFrameworkItems", "-getItem:_TargetFrameworkNormalized",
+                    "-p:MSBuildEnableWorkloadResolver=false",
+                ], cwd=REPO, capture_output=True, text=True, timeout=60)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                frameworks = json.loads(result.stdout)["Items"]["_TargetFrameworkNormalized"]
+                self.assertEqual([item["Identity"] for item in frameworks], expected)
+
     def test_sdk_dispatches_each_framework_separately(self):
         # Evaluation only: no mobile workloads, restore or native archives required.
         for android, ios in ((True, True), (False, True), (True, False)):

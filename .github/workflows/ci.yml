@@ -53,6 +53,7 @@ jobs:
         run: |
           bash .github/scripts/find-tested-run.test.sh
           bash .github/scripts/push-nuget.test.sh
+          bash .github/scripts/stage-ci-inputs.test.sh
 
       - name: Check native library availability
         id: check
@@ -94,7 +95,7 @@ jobs:
              ! echo "$lines" | grep -qv '<TwoDogRevision>'; then
             parent=$(git rev-parse HEAD^)
             # Any run that tested the parent's content counts, also one on the branch the parent merged.
-            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
+            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
               read -r run sha <<<"$found"
               echo "::notice::Parent ${parent:0:7}'s content passed CI in run $run (${sha:0:7}); skipping test, desktop and Android jobs."
               tested=true
@@ -112,7 +113,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
+          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
                "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
             read -r run sha <<<"$found"
             url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
@@ -160,6 +161,37 @@ jobs:
     with:
       precision: double
       create_release: true
+
+  # These checks use fixtures and source only, so they can run while natives are built or packages are packed.
+  test-build-configuration:
+    name: Test Build Configuration
+    needs: [check-natives]
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.check-natives.result == 'success' && needs.check-natives.outputs.tested-content != 'true')
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Test build configuration and package fixtures
+        run: |
+          uv run python -m unittest discover -s tests/precision -v
+          uv run python -m unittest discover -s tests/webgpu -v
+          uv run python -m unittest discover -s tests/ci_packages -v
+          uv run python -m unittest discover -s tests/ios -v
 
   # Download pre-built native libraries, stage godot/bin, and pack all
   # NuGet packages for the test jobs. The game project is imported by the
@@ -305,19 +337,6 @@ jobs:
           dotnet pack twodog
           dotnet pack twodog.templates
 
-      - name: Test managed binding packages
-        run: uv run tests/bindings/test_packages.py --precision ${{ matrix.precision }}
-
-      - name: Test precision build configuration
-        if: matrix.precision == 'single'
-        env:
-          TwoDogPrecision: ''
-        run: |
-          uv run python -m unittest discover -s tests/precision -v
-          uv run python -m unittest discover -s tests/webgpu -v
-          uv run python -m unittest discover -s tests/ci_packages -v
-          uv run python -m unittest discover -s tests/ios -v
-
       - name: Mount scoped Android input disk
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
@@ -378,7 +397,58 @@ jobs:
         with:
           name: nuget-packages-${{ matrix.precision }}
           path: packages/
+          compression-level: 0 # nupkg files are already compressed ZIPs
           retention-days: 7
+
+  # Validate the produced packages alongside their consumers, including on revision-only release tags.
+  test-binding-packages:
+    name: Test Binding Packages (${{ matrix.precision }})
+    needs: [check-natives, pack]
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success')
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        precision: [single, double]
+    env:
+      TwoDogPrecision: ${{ matrix.precision }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-${{ matrix.precision }}
+          path: packages
+
+      - name: Download matching fork SDK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
+        run: |
+          # Only the SDK is needed from the native release; avoid downloading the large godot-bin artifact.
+          gh release download "godot-${{ needs.check-natives.outputs.hash }}${RELEASE_SUFFIX}" \
+            --repo "$GITHUB_REPOSITORY" --pattern godotsharp-nupkgs.zip --dir release-assets
+          mkdir -p godot/bin/GodotSharp/Tools/nupkgs
+          unzip -q release-assets/godotsharp-nupkgs.zip -d godot/bin/GodotSharp/Tools/nupkgs
+
+      - name: Test managed binding packages
+        run: uv run tests/bindings/test_packages.py --precision ${{ matrix.precision }}
 
   # Run tests on each platform, one job per configuration: a single job running all three back to back
   # took 8-10 minutes and hit the job timeout.
@@ -468,17 +538,10 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-${{ matrix.precision }}
-          path: godot
-
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-${{ matrix.precision }}
-          path: packages
+          precision: ${{ matrix.precision }}
 
       # 2dog.tests.slnf excludes showcase.web: its browser-wasm RuntimeIdentifier
       # makes restore demand the (hefty) wasm-tools workload, which only the
@@ -616,16 +679,10 @@ jobs:
         with:
           python-version: '3.12'
           enable-cache: false
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-${{ matrix.precision }}
-          path: godot
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-${{ matrix.precision }}
-          path: packages
+          precision: ${{ matrix.precision }}
       - name: Test xUnit, NUnit and GdUnit MTP contracts
         # Includes cold builds/restores now; individual subprocess deadlines remain in the harness.
         timeout-minutes: 10
@@ -683,17 +740,10 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-${{ matrix.precision }}
-          path: godot
-
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-${{ matrix.precision }}
-          path: packages
+          precision: ${{ matrix.precision }}
 
       # The test build triggers the automatic Godot import, which runs the in-process import helper.
       - name: Build import helper
@@ -785,17 +835,10 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-${{ matrix.precision }}
-          path: godot
-
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-${{ matrix.precision }}
-          path: packages
+          precision: ${{ matrix.precision }}
 
       # The publish triggers the automatic Godot import, which runs the
       # in-process import helper (discovered at twodog.import/bin/Release in
@@ -1289,17 +1332,10 @@ jobs:
           TwoDogPrecision: ''
         run: uv run python -m unittest discover -s tests/msbuild -v
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-${{ matrix.precision }}
-          path: godot
-
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-${{ matrix.precision }}
-          path: packages
+          precision: ${{ matrix.precision }}
 
       - name: Make Linux editor executable
         if: matrix.flavor != 'checks'
@@ -1691,17 +1727,10 @@ jobs:
       - name: Install wasm-tools workload
         run: dotnet workload install wasm-tools --skip-manifest-update --source https://api.nuget.org/v3/index.json
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-single
-          path: godot
-
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-single
-          path: packages
+          precision: single
 
       - name: Prepare import helper
         run: |
@@ -1807,23 +1836,48 @@ jobs:
         with:
           python-version: '3.12'
           enable-cache: false
-      - name: Install MAUI workloads
-        run: dotnet workload install maui-windows maui-android maui-ios ios --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
+      # Offline downloads depend on which packs the runner image already provides.
+      - name: Identify workload cache
+        id: workload-cache-key
+        shell: pwsh
+        run: '"image=$env:ImageOS-$env:ImageVersion" >> $env:GITHUB_OUTPUT'
+
+      - name: Cache MAUI workload downloads
+        id: workload-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: .ci/maui-workloads
+          key: maui-workloads-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.workload-cache-key.outputs.image }}-${{ env.IOS_DOTNET_VERSION }}-${{ env.IOS_WORKLOAD_VERSION }}
+
+      - name: Download MAUI workloads on cache miss
+        if: steps.workload-cache.outputs.cache-hit != 'true'
+        run: >-
+          dotnet workload install maui-windows maui-android maui-ios ios
+          --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
+          --download-to-cache .ci/maui-workloads
+
+      # Keep successful downloads even if a later showcase build fails.
+      - name: Save MAUI workload downloads
+        if: steps.workload-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: .ci/maui-workloads
+          key: ${{ steps.workload-cache.outputs.cache-primary-key }}
+
+      - name: Install MAUI workloads from cached downloads
+        run: >-
+          dotnet workload install maui-windows maui-android maui-ios ios
+          --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
+          --from-cache .ci/maui-workloads
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Download generated Godot APIs and editor
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-single
-          path: godot
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-single
-          path: packages
+          precision: single
       - name: Pack iOS host and MAUI integration
         run: |
           dotnet pack twodog.ios -c Release
@@ -1873,17 +1927,10 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Download godot-bin artifact
-        uses: actions/download-artifact@v8
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
         with:
-          name: godot-bin-single
-          path: godot
-
-      - name: Download NuGet packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-single
-          path: packages
+          precision: single
 
       - name: Run tool smoke
         shell: bash
@@ -2248,7 +2295,7 @@ jobs:
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it. A tested revision bump (see check-natives) takes
     # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui]
+    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -2257,6 +2304,7 @@ jobs:
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
+      needs.test-build-configuration.result == 'success' && needs.test-binding-packages.result == 'success' &&
       (needs.check-natives.outputs.tested-bump == 'true' ||
       (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
       needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&

@@ -42,6 +42,14 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   additions, so a miss must remain a correct cold build.
 - NuGet publishing uses four concurrent pushes; any failure blocks the release. Packing remains ordered
   within each precision because the managed packages consume the freshly packed platform/binding packages.
+  `test-build-configuration` runs source/fixture checks independently of pack; `test-binding-packages` validates
+  both precisions after pack, alongside consumers. Both gate deployment even on revision-only tags and belong
+  in both reuse family lists. Binding checks download the matching fork SDK only, rather than all of godot-bin.
+  Upload NuGet artifacts with compression disabled because their payloads are already compressed.
+- Consumers that need both native outputs and NuGet packages use `actions/download-ci-inputs` to download them
+  concurrently and move them into `godot/` and `packages/`. Require both artifacts before staging either.
+  The MAUI job caches workload installer downloads by runner image, SDK and workload set; still run installation
+  from that cache to preserve Windows MSI registration. Changing its workload list requires a cache-key bump.
 - iOS device/Simulator arm64 archives build in both precisions through `build-natives.yml`; release completeness
   and staging must require all four archives. Pack uploads scoped iOS inputs, excluding raw archives from godot-bin.
   The Windows MAUI job packs the precision-neutral iOS host and all MAUI TFMs. Its .NET SDK/workload pins must

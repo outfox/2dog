@@ -7,7 +7,7 @@ page1="$scratch/page1.json"
 page2="$scratch/page2.json"
 trap 'rm -f "$page1" "$page2"; rmdir "$scratch"' EXIT
 api=repos/test/repository
-families='["Test Contracts","Test Rendering","WebGPU Desktop","Desktop Smoke","iOS Smoke","Test"]'
+families='["Test Build Configuration","Test Binding Packages","Test Contracts","Test Rendering","WebGPU Desktop","Desktop Smoke","iOS Smoke","Test"]'
 eval "$(sed -n '/^verified() {/,/^}/p' find-tested-run.sh)"
 
 # Keep the actual jq predicate and emulate GitHub's paging boundary without network access.
@@ -28,6 +28,7 @@ gh() {
 
 jq -n '{jobs: [range(100) | {name: "Build Natives", conclusion: "success"}]}' > "$page1"
 jq -n '{jobs: ["Test (linux)", "Test Rendering (win)", "Desktop Smoke (linux)", "WebGPU Desktop (linux)",
+  "Test Build Configuration", "Test Binding Packages (single)", "Test Binding Packages (double)",
   "Test Contracts (win) [single]", "Test Contracts (win) [double]", "iOS Smoke (single)"]
   | map({name: ., conclusion: "success"})}' > "$page2"
 verified 1 || { echo 'Complete paginated run was not reusable'; exit 1; }
@@ -42,6 +43,7 @@ printf '{"jobs":[]}' > "$page2"
 if verified 1; then echo 'Reused a run missing iOS checks'; exit 1; fi
 # The new family must not be satisfied by the broader Test prefix or by only one passing precision.
 jq -n '{jobs: ["Test (linux)", "Test Rendering (win)", "Desktop Smoke (linux)", "WebGPU Desktop (linux)",
+  "Test Build Configuration", "Test Binding Packages (single)", "Test Binding Packages (double)",
   "iOS Smoke (single)", "Test Contracts (win) [single]", "Test Contracts (win) [double]"]
   | map({name: ., conclusion: "success"})}' > "$page2"
 printf '{"jobs":[]}' > "$page1"
@@ -55,5 +57,26 @@ done
 jq '.jobs |= map(select(.name | startswith("Test Contracts ") | not))' "$page2" > "$page1"
 printf '{"jobs":[]}' > "$page2"
 if verified 1; then echo 'Reused a run missing contract checks'; exit 1; fi
+
+# Source checks and both package precisions must pass independently of the broader Test family.
+for family in 'Test Build Configuration' 'Test Binding Packages'; do
+  jq -n '{jobs: ["Test (linux)", "Test Rendering (win)", "Desktop Smoke (linux)", "WebGPU Desktop (linux)",
+    "iOS Smoke (single)", "Test Contracts (win) [single]", "Test Contracts (win) [double]",
+    "Test Build Configuration", "Test Binding Packages (single)", "Test Binding Packages (double)"]
+    | map({name: ., conclusion: "success"})}' > "$page2"
+  printf '{"jobs":[]}' > "$page1"
+  verified 1 || { echo "Complete $family run was not reusable"; exit 1; }
+  for conclusion in failure skipped cancelled; do
+    jq --arg family "$family" --arg value "$conclusion" '
+      ([.jobs | to_entries[] | select(.value.name | startswith($family))] | last.key) as $i
+      | .jobs[$i].conclusion = $value' "$page2" > "$page1"
+    mv "$page1" "$page2"
+    printf '{"jobs":[]}' > "$page1"
+    if verified 1; then echo "Reused a $conclusion $family check"; exit 1; fi
+  done
+  jq --arg family "$family" '.jobs |= map(select(.name | startswith($family) | not))' "$page2" > "$page1"
+  printf '{"jobs":[]}' > "$page2"
+  if verified 1; then echo "Reused a run missing $family checks"; exit 1; fi
+done
 
 echo 'PASS: CI reuse requires all job pages, families and successful conclusions'

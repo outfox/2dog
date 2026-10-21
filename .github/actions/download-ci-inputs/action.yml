@@ -1,0 +1,18 @@
+name: Download CI inputs
+description: Download native and NuGet artifacts concurrently, then restore the expected workspace layout.
+inputs:
+  precision:
+    description: Package precision
+    default: single
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@v8
+      with:
+        pattern: '{godot-bin,nuget-packages}-${{ inputs.precision }}'
+        path: .ci/downloads
+        merge-multiple: false
+    - shell: bash
+      env:
+        PRECISION: ${{ inputs.precision }}
+      run: bash .github/scripts/stage-ci-inputs.sh "$PRECISION"
