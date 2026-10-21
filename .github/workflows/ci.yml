@@ -483,6 +483,7 @@ jobs:
       # Instrument the actual packed assembly, not a special source-project build. 2dog.repl is packed once for
       # every configuration and precision, so one Windows job measures it; behavior runs in every job.
       - name: Require 95% REPL line and branch coverage
+        id: repl-coverage
         if: runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         timeout-minutes: 10
         shell: bash
@@ -496,7 +497,7 @@ jobs:
           uv run --no-project python scripts/check_repl_coverage.py twodog.tests/TestResults/repl-coverage
 
       - name: Upload REPL coverage
-        if: always() && runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
+        if: always() && steps.repl-coverage.outcome != 'skipped' && runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         uses: actions/upload-artifact@v7
         with:
           name: repl-coverage-${{ matrix.config }}-${{ matrix.precision }}

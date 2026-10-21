@@ -73,7 +73,14 @@ internal sealed class ReplPipeServer : IDisposable
         {
             while (!stopped.IsCancellationRequested)
             {
-                await pipe.WaitForConnectionAsync(stopped.Token).ConfigureAwait(false);
+                try { await pipe.WaitForConnectionAsync(stopped.Token).ConfigureAwait(false); }
+                catch (IOException error) when (error.HResult == unchecked((int)0x800700E8))
+                {
+                    // Windows ERROR_NO_DATA: the client disconnected before we accepted it.
+                    pipe.Dispose();
+                    pipe = CreatePipe();
+                    continue;
+                }
                 var id = Interlocked.Increment(ref nextId);
                 var connected = pipe;
                 sessions[id] = Task.Run(() => ServeAsync(id, connected));

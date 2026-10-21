@@ -345,7 +345,8 @@ public class ParallelSessionTests
         using var output = new StringWriter();
         var connect = Task.Run(async () =>
         {
-            using (var empty = await Client.ConnectAsync(name, lifetime.Token)) { }
+            for (var i = 0; i < 16; i++)
+                using (var empty = await Client.ConnectAsync(name, lifetime.Token)) { }
             return await ReplPipeClient.RunAsync(name, input, output, lifetime.Token, () => terminal);
         });
         Assert.Equal(0, Pump(engine, dispatcher, connect, lifetime.Token));
