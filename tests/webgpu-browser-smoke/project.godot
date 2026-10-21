@@ -1,0 +1,17 @@
+config_version=5
+
+[application]
+config/name="WebGPU Mobile regression"
+run/main_scene="res://main.tscn"
+
+[display]
+window/size/viewport_width=128
+window/size/viewport_height=128
+
+[dotnet]
+project/assembly_name="WebGpuBrowserSmoke"
+
+[rendering]
+renderer/rendering_method="mobile"
+renderer/rendering_method.web="mobile"
+rendering_device/driver.web="webgpu"

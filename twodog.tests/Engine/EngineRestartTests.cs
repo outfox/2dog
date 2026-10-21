@@ -406,7 +406,11 @@ public class EngineRestartTests
         // Keep AppKit out of worker-thread tests, including failed startup.
         // The malformed option must remain last so its argument is still missing.
         using (var failed = new Engine("failed-setup", projectDir, "--headless", "--rendering-driver"))
-            Assert.ThrowsAny<Exception>(() => failed.Start());
+        {
+            var error = Assert.Throws<InvalidOperationException>(() => failed.Start());
+            Assert.Contains("Godot initialization failed", error.Message);
+            Assert.Contains("native output", error.Message);
+        }
 
         using var recovered = new Engine("after-failed-setup", projectDir, "--headless");
         recovered.Start();
@@ -422,7 +426,7 @@ public class EngineRestartTests
         // Select the headless macOS OS before setup validates the invalid driver.
         using (var failed = new Engine(
                    "failed-second-phase", projectDir, "--headless", "--display-driver", "definitely-missing"))
-            Assert.ThrowsAny<Exception>(() => failed.Start());
+            Assert.Throws<InvalidOperationException>(() => failed.Start());
 
         using var recovered = new Engine("after-failed-second-phase", projectDir, "--headless");
         recovered.Start();
@@ -438,7 +442,7 @@ public class EngineRestartTests
         // Node exists, but is not a MainLoop. This reaches Main::start() after
         // both setup phases, without invoking a platform error dialog.
         using (var failed = new Engine("failed-main-loop", projectDir, "--headless", "--main-loop", "Node"))
-            Assert.ThrowsAny<Exception>(() => failed.Start());
+            Assert.Throws<InvalidOperationException>(() => failed.Start());
 
         using var recovered = new Engine("after-failed-main-loop", projectDir, "--headless");
         recovered.Start();

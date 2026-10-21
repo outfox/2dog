@@ -41,5 +41,6 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="twodog.tests"/>
+        <InternalsVisibleTo Include="WindowedFixture.Tests"/>
     </ItemGroup>
 </Project>

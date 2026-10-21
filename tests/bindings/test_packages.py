@@ -91,8 +91,11 @@ class BindingPackages(unittest.TestCase):
         self.dir.mkdir()
 
     def dotnet(self, *command, error=None):
-        result = subprocess.run(["dotnet", *map(str, command), "--nologo"], cwd=self.dir, env=ENV,
-                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=180)
+        # Keep build workers and Avalonia's telemetry collector from retaining
+        # DLLs in this temporary package cache after the test completes.
+        result = subprocess.run(["dotnet", *map(str, command), "--nologo", "-nr:false"], cwd=self.dir,
+                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=180,
+                                env={**ENV, "AVALONIA_TELEMETRY_OPTOUT": "1"})
         # Preserve diagnostics outside the temporary fixtures on failure.
         if (error is None and result.returncode) or (error and (not result.returncode or error not in result.stdout)):
             self.fail(f"dotnet {' '.join(map(str, command))}\n{result.stdout}")

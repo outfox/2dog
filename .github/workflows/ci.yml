@@ -103,7 +103,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Rendering" "Desktop Smoke" \
-               "Web Smoke" "MAUI Builds" "Tool Smoke" "Android Smoke"); then
+               "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke"); then
             read -r run sha <<<"$found"
             url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
             echo "::notice::This content passed CI in run $run (${sha:0:7}); skipping natives, pack, test and smoke jobs."
@@ -303,7 +303,10 @@ jobs:
       - name: Test precision build configuration
         env:
           TwoDogPrecision: ''
-        run: uv run python -m unittest discover -s tests/precision -v
+        run: |
+          uv run python -m unittest discover -s tests/precision -v
+          uv run python -m unittest discover -s tests/webgpu -v
+          uv run python -m unittest discover -s tests/ci_packages -v
 
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
@@ -707,6 +710,130 @@ jobs:
       - name: Publish showcase desktop host (Release, RID)
         run: dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
 
+      - name: Install WebGPU display dependencies (Linux)
+        if: runner.os == 'Linux' && matrix.precision == 'single'
+        run: sudo apt-get update && sudo apt-get install -y xvfb mesa-vulkan-drivers libvulkan1
+
+      - name: Boot showcase in editor mode
+        shell: bash
+        run: |
+          # Wait for the editor's initial scan before quitting; a fixed frame
+          # count can interrupt the scan and report a native warning on Linux.
+          dotnet run --project demos/showcase/showcase.2dog -c Editor -- \
+            --headless --editor --import -- --2dog-smoke-markers > editor-smoke.log 2>&1
+          cat editor-smoke.log
+          grep -q '2DOG_EDITOR_SMOKE_PASSED' editor-smoke.log
+          if grep -Eq '2DOG_(CSHARP_SCRIPT|API)_SMOKE_PASSED|^ERROR:|^WARNING:' editor-smoke.log; then
+            exit 1
+          fi
+
+      - name: Render and restart native WebGPU from packages
+        if: matrix.precision == 'single'
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            cc -shared -fPIC .github/scripts/native-abort-trace.c -o /tmp/2dog-native-abort-trace.so
+            xvfb-run -a env LD_PRELOAD=/tmp/2dog-native-abort-trace.so dotnet run --project tests/webgpu-smoke -c Release
+          elif [ "$RUNNER_OS" = macOS ]; then
+            dotnet build tests/webgpu-smoke -c Release
+            SMOKE=tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke
+            # Compare the host lifecycle with the existing renderer as well.
+            SMOKE_STATUS=0
+            for DRIVER in metal webgpu; do
+              LOG="/tmp/2dog-macos-$DRIVER-smoke.log"
+              METHOD=default
+              # The runner's Apple5 virtual GPU lacks the image atomics used by Forward+ fog.
+              if [ "$DRIVER" = metal ]; then METHOD=mobile; fi
+              set +e
+              lldb --batch --no-lldbinit -o 'settings set auto-confirm true' \
+                -o run -k 'thread backtrace all' -k 'quit 1' \
+                -- "$SMOKE" "$DRIVER" "$METHOD" > "$LOG" 2>&1 &
+              SMOKE_PID=$!
+              (sleep 300; kill -TERM "$SMOKE_PID" 2>/dev/null; sleep 5; kill -KILL "$SMOKE_PID" 2>/dev/null) &
+              WATCHDOG_PID=$!
+              wait "$SMOKE_PID"
+              DRIVER_STATUS=$?
+              kill "$WATCHDOG_PID" 2>/dev/null
+              cat "$LOG"
+              set -e
+              MARKER=$(printf '%s' "$DRIVER" | tr '[:lower:]' '[:upper:]')
+              if [ "$DRIVER_STATUS" -ne 0 ] || ! grep -q "NATIVE_${MARKER}_SMOKE_PASSED: lifetime 2" "$LOG" || \
+                 ! grep -q 'exited with status = 0 ' "$LOG"; then
+                SMOKE_STATUS=1
+                # Preserve the OS crash report without changing runtime signal handling.
+                sleep 5
+                find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -type f \
+                  -name '*NativeWebGpu*' -mmin -5 -exec cat {} \; 2>/dev/null || true
+              fi
+            done
+            exit "$SMOKE_STATUS"
+          else
+            dotnet run --project tests/webgpu-smoke -c Release
+          fi
+
+      - name: Verify WebGPU capability rejections
+        shell: bash
+        run: |
+          # Rejection happens before creating a display or GPU device.
+          METHOD=forward_plus
+          REASON='WebGPU currently supports only the Mobile rendering method'
+          if [ '${{ matrix.precision }}' = double ]; then
+            METHOD=mobile
+            REASON='WebGPU is unavailable in double-precision runtimes'
+          fi
+          if dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only > webgpu-rejection.log 2>&1; then
+            cat webgpu-rejection.log
+            echo 'Unsupported WebGPU startup unexpectedly succeeded'
+            exit 1
+          fi
+          cat webgpu-rejection.log
+          grep -q "$REASON" webgpu-rejection.log
+          if [ '${{ matrix.precision }}' = double ]; then
+            if dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --startup-only --project-settings > webgpu-project-rejection.log 2>&1; then
+              cat webgpu-project-rejection.log
+              exit 1
+            fi
+            cat webgpu-project-rejection.log
+            grep -q "$REASON" webgpu-project-rejection.log
+          fi
+          dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only --headless --project-settings > webgpu-headless.log 2>&1
+          cat webgpu-headless.log
+          grep -q NATIVE_RENDERER_STARTUP_PASSED webgpu-headless.log
+          if grep -Eq '^ERROR:|^WARNING:' webgpu-headless.log; then exit 1; fi
+
+      - name: Reject unsupported WebGPU shader contracts
+        if: matrix.precision == 'single'
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --contract-rejections
+          else
+            dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --contract-rejections
+          fi
+
+      - name: Check C# editor hot-reload lifecycle
+        shell: bash
+        run: |
+          dotnet run --project tests/editor-lifecycle-smoke -c Editor > editor-lifecycle-smoke.log 2>&1
+          cat editor-lifecycle-smoke.log
+          grep -q 'NATIVE_EDITOR_LIFECYCLE_SMOKE_PASSED' editor-lifecycle-smoke.log
+          if grep -Eq '^ERROR:|^WARNING:' editor-lifecycle-smoke.log; then
+            exit 1
+          fi
+
+      - name: Preserve explicit WebGPU Mobile rendering
+        if: matrix.precision == 'single'
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile > webgpu-mobile-smoke.log 2>&1
+          else
+            dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile > webgpu-mobile-smoke.log 2>&1
+          fi
+          cat webgpu-mobile-smoke.log
+          grep -q 'NATIVE_WEBGPU_SMOKE_PASSED: lifetime 2' webgpu-mobile-smoke.log
+          grep -q 'NATIVE_DESCRIPTOR_ARRAY_AND_FLOAT_CLASSIFICATION_PASSED' webgpu-mobile-smoke.log
+          if grep -Eq '^ERROR:|^WARNING:' webgpu-mobile-smoke.log; then exit 1; fi
       # RID-less publish is the most natural user command: the SDK infers the
       # host RID for the self-contained default and publishes through an inner
       # RID build. Own output dir - the default output is the same RID
@@ -1064,6 +1191,19 @@ jobs:
       - name: Publish showcase.web
         run: dotnet publish demos/showcase/showcase.web -c Release -p:RunAOTCompilation=${{ matrix.aot }}
 
+      - name: Publish WebGPU Mobile image regression
+        if: matrix.precision == 'single' && matrix.aot == false
+        run: dotnet publish tests/webgpu-browser-smoke -c Release
+
+      - name: Upload WebGPU Mobile browser image test
+        if: matrix.precision == 'single' && matrix.aot == false
+        uses: actions/upload-artifact@v7
+        with:
+          name: webgpu-mobile-bundle
+          path: tests/webgpu-browser-smoke/AppBundle/
+          if-no-files-found: error
+          retention-days: 7
+
       # The WebXR flavor differs only in its page shell (Layers polyfill); the
       # engine link and pck export are shared, so this publish is incremental.
       - name: Publish showcase.webxr
@@ -1197,6 +1337,17 @@ jobs:
           for FLAVOR in web webxr webmt; do
             BUNDLE=demos/showcase/showcase.$FLAVOR/AppBundle
 
+            # Opt in to deliberate error/warning interop probes only in CI.
+            uv run python - "$BUNDLE/index.html" <<'PY'
+          from pathlib import Path
+          import sys
+          path = Path(sys.argv[1])
+          content = path.read_text()
+          needle = "'args': []"
+          assert content.count(needle) == 1, "Showcase shell args declaration changed"
+          path.write_text(content.replace(needle, "'args': ['--', '--2dog-smoke-markers']"))
+          PY
+
             # The webxr shell records whether Layers polyfill construction
             # completed; require it, so a polyfill that throws during init
             # cannot ride the generic smoke marker to a pass.
@@ -1265,7 +1416,7 @@ jobs:
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
         env:
           GODOT_WEB_JS_LIB_DIR: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/template_release/libgodot/js_library
-        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
+        run: node --test godot/drivers/webgpu/tests/engine_boot.test.mjs .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
 
       - name: Test managed exception reporting in browser-wasm
         run: |
@@ -1358,6 +1509,44 @@ jobs:
           fi
           echo "Blazor engine restart smoke passed"
 
+      - name: Run Blazor WebGPU browser restart smoke
+        if: matrix.precision == 'single'
+        run: |
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+          PUB=demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish
+          ASPNETCORE_ENVIRONMENT=Production dotnet "$PUB/showcase.blazor.dll" --urls http://127.0.0.1:8000 \
+            --contentroot "$(pwd)/$PUB" > /tmp/2dog-blazor-webgpu-server.log 2>&1 &
+          SERVER_PID=$!
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:8000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          "$CHROME" --headless=new --no-sandbox --disable-dev-shm-usage \
+            --enable-unsafe-webgpu --enable-features=Vulkan --use-vulkan=swiftshader \
+            --disable-vulkan-surface --enable-unsafe-swiftshader \
+            --remote-debugging-address=127.0.0.1 --remote-debugging-port=9232 \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-blazor-webgpu" \
+            'http://127.0.0.1:8000/?renderer=webgpu&method=mobile' > /tmp/2dog-blazor-webgpu-browser.log 2>&1 &
+          CHROME_PID=$!
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:9232/json/list > /dev/null; then break; fi
+            sleep 1
+          done
+          set +e
+          timeout 130s node .github/scripts/browser-restart-smoke.mjs \
+            'http://127.0.0.1:8000/?renderer=webgpu&method=mobile' 120000 9232 webgpu \
+            | tee /tmp/2dog-blazor-webgpu-restart.log
+          SMOKE_STATUS=$?
+          set -e
+          cat /tmp/2dog-blazor-webgpu-server.log
+          cat /tmp/2dog-blazor-webgpu-browser.log
+          exit "$SMOKE_STATUS"
+
       - name: Preserve failed Blazor publish and browser diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
@@ -1368,6 +1557,65 @@ jobs:
             /tmp/2dog-blazor-server.log
             /tmp/2dog-blazor-browser.log
             /tmp/2dog-blazor-restart.log
+            /tmp/2dog-blazor-webgpu-*.log
+          retention-days: 7
+
+  # Check Mobile pixels on the macOS Metal GPU as well as SwiftShader above.
+  webgpu-browser:
+    name: WebGPU Browser Mobile
+    needs: [web-smoke]
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.web-smoke.result == 'success')
+    runs-on: macos-15
+    timeout-minutes: 12
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Download WebGPU Mobile browser image test
+        uses: actions/download-artifact@v8
+        with:
+          name: webgpu-mobile-bundle
+          path: tests/webgpu-browser-smoke/AppBundle
+
+      - name: Verify browser WebGPU light lists, depth fog, ambient light and MSAA
+        run: |
+          CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+          node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000 > /tmp/2dog-mobile-webgpu-server.log 2>&1 &
+          SERVER_PID=$!
+          "$CHROME" --headless=new --enable-unsafe-webgpu --no-first-run --no-default-browser-check \
+            --remote-debugging-address=127.0.0.1 --remote-debugging-port=9233 \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-mobile-webgpu" about:blank > /tmp/2dog-mobile-webgpu-browser.log 2>&1 &
+          CHROME_PID=$!
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:9233/json/list > /dev/null && \
+               curl --fail --silent http://127.0.0.1:8000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          node .github/scripts/webgpu-mobile-smoke.mjs \
+            http://127.0.0.1:8000/ 9233 240000 /tmp/2dog-mobile-webgpu-captures
+          node .github/scripts/webgpu-mobile-smoke.mjs \
+            'http://127.0.0.1:8000/?limited-compute=1&base-formats=1' 9233 240000 /tmp/2dog-mobile-webgpu-captures-limited
+
+      - name: Preserve WebGPU browser images and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: webgpu-mobile-images
+          path: |
+            /tmp/2dog-mobile-webgpu-*.log
+            /tmp/2dog-mobile-webgpu-captures/
+            /tmp/2dog-mobile-webgpu-captures-limited/
           retention-days: 7
 
   # The packed `2dog` tool, installed from the artifacts the way a user gets
@@ -1624,7 +1872,7 @@ jobs:
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it. A tested revision bump (see check-natives) takes
     # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test, windows-rendering, desktop-smoke, web-smoke, android-smoke, tool-smoke, maui]
+    needs: [check-natives, test, windows-rendering, desktop-smoke, web-smoke, webgpu-browser, android-smoke, tool-smoke, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -1636,7 +1884,8 @@ jobs:
       (needs.check-natives.outputs.tested-bump == 'true' ||
       (needs.test.result == 'success' && needs.windows-rendering.result == 'success' &&
       needs.desktop-smoke.result == 'success' && needs.android-smoke.result == 'success')) &&
-      needs.web-smoke.result == 'success' && needs.tool-smoke.result == 'success' && needs.maui.result == 'success')
+      needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
+      needs.tool-smoke.result == 'success' && needs.maui.result == 'success')
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing

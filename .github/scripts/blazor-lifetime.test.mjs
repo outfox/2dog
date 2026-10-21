@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test, { beforeEach, afterEach } from 'node:test';
 
-const globalNames = ['document', 'window', 'ResizeObserver', 'Blazor', 'fetch'];
+const globalNames = ['document', 'window', 'navigator', 'ResizeObserver', 'Blazor', 'fetch'];
 let savedGlobals;
 beforeEach(() => {
     savedGlobals = new Map(globalNames.map((name) => [name, Object.getOwnPropertyDescriptor(globalThis, name)]));
@@ -40,6 +40,46 @@ async function view(initFS = async () => {}) {
     const options = { packUrl: 'godot.pck', packName: 'godot.pck', resize: 0, locale: 'en' };
     return { ...module, canvas, options, calls };
 }
+
+test('WebGPU preparation requests adapter limits and reuses the device across lifetimes', async () => {
+    const v = await view();
+    let descriptor;
+    let requests = 0;
+    const device = { lost: new Promise(() => {}), destroy() { throw new Error('Device is still in use'); } };
+    Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { gpu: {
+        requestAdapter: async () => ({
+            features: new Set(['float32-filterable']),
+            limits: { maxStorageBuffersPerShaderStage: 16, maxBufferSize: 1000 },
+            requestDevice: async value => { descriptor = value; requests++; return device; },
+        }),
+    } } });
+    globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+    v.options.renderingDriver = 'webgpu';
+    await v.prepare(v.canvas, v.options);
+    v.release(v.canvas);
+    await v.prepare(v.canvas, v.options);
+    assert.equal(requests, 1);
+    assert.equal(globalThis.Blazor.runtime.Module.preinitializedWebGPUDevice, device);
+    assert.deepEqual(descriptor.requiredFeatures, ['float32-filterable']);
+    assert.deepEqual(descriptor.requiredLimits, { maxStorageBuffersPerShaderStage: 16, maxBufferSize: 1000 });
+});
+
+test('cancelling WebGPU preparation destroys the unclaimed device', async () => {
+    const v = await view();
+    const pending = deferred();
+    let destroyed = false;
+    Object.defineProperty(globalThis, 'navigator', { configurable: true, value: { gpu: {
+        requestAdapter: async () => ({ features: new Set(), limits: {}, requestDevice: () => pending.promise }),
+    } } });
+    v.options.renderingDriver = 'webgpu';
+    const starting = v.prepare(v.canvas, v.options);
+    v.release(v.canvas);
+    pending.resolve({ destroy() { destroyed = true; } });
+    await assert.rejects(starting, { name: 'AbortError' });
+    assert.equal(destroyed, true);
+    assert.equal(globalThis.Blazor.runtime.Module.preinitializedWebGPUDevice, undefined);
+    assert.deepEqual(v.calls, []);
+});
 
 test('release during filesystem initialization prevents late fetch and canvas setup', async () => {
     const fs = deferred();

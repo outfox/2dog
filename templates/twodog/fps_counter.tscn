@@ -5,6 +5,14 @@ script/source = "extends Label
 
 # Refreshes a few times per second; Engine.get_frames_per_second() is itself a one-second average.
 var _elapsed := 0.0
+var _renderer := \"\"
+var _driver := \"\"
+
+
+func _ready() -> void:
+	_renderer = RenderingServer.get_current_rendering_method()
+	_driver = RenderingServer.get_current_rendering_driver_name()
+	_update_text()
 
 
 func _process(delta: float) -> void:
@@ -12,7 +20,11 @@ func _process(delta: float) -> void:
 	if _elapsed < 0.25:
 		return
 	_elapsed = 0.0
-	text = \"%d fps\" % Engine.get_frames_per_second()
+	_update_text()
+
+
+func _update_text() -> void:
+	text = \"%d fps | %s / %s\" % [Engine.get_frames_per_second(), _renderer, _driver]
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_pill"]
@@ -42,6 +54,6 @@ custom_minimum_size = Vector2(72, 0)
 theme_override_colors/font_color = Color(0.604, 0.655, 0.722, 1)
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBox_pill")
-text = "- fps"
+text = "- fps | renderer / driver"
 horizontal_alignment = 1
 script = SubResource("GDScript_fps")

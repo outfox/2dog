@@ -1,0 +1,18 @@
+<Project Sdk="Godot.NET.Sdk/4.7.2">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<GodotProjectDir>$(MSBuildProjectDirectory)</GodotProjectDir>
+    <TwoDogWebPrecompress>false</TwoDogWebPrecompress>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="2dog.engine" Version="$(TwoDogVersion)" />
+    <PackageReference Include="2dog.browser-wasm" Version="$(NativesVersion)" />
+    <Compile Include="../webgpu-smoke/LightingScene.cs" Link="LightingScene.cs" />
+    <TrimmerRootAssembly Include="$(AssemblyName)" />
+  </ItemGroup>
+</Project>

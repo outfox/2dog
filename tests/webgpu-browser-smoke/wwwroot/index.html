@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>WebGPU Mobile regression</title>
+<link rel="icon" href="data:,">
+<style>body{background:#111;color:white;font:16px sans-serif}canvas{width:512px;height:512px;image-rendering:pixelated}</style>
+<p id="status">Starting WebGPU Mobile…</p>
+<canvas id="canvas" width="128" height="128"></canvas>
+<script src="godot.js"></script>
+<script>
+const options = new URLSearchParams(location.search);
+if (options.has('limited-compute') || options.has('base-formats')) {
+    const requestDevice = GPUAdapter.prototype.requestDevice;
+    GPUAdapter.prototype.requestDevice = function (descriptor = {}) {
+        return requestDevice.call(this, {
+            ...descriptor,
+            requiredLimits: options.has('limited-compute')
+                ? { ...descriptor.requiredLimits, maxComputeInvocationsPerWorkgroup: 256 }
+                : descriptor.requiredLimits,
+            requiredFeatures: [...(descriptor.requiredFeatures || [])].filter(feature =>
+                !options.has('base-formats') || !['texture-formats-tier1', 'texture-formats-tier2'].includes(feature)),
+        });
+    };
+}
+const engine = new Engine({
+    executable: 'godot',
+    canvas: document.getElementById('canvas'),
+    renderingDriver: 'webgpu',
+    args: ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
+    onPrint: text => { console.log(text); document.getElementById('status').textContent = text; },
+    onPrintError: text => { console.error(text); document.getElementById('status').textContent = text; },
+});
+engine.startGame().catch(error => { console.error(error); document.documentElement.dataset.twodogSmoke = 'failed'; });
+</script>
+</html>

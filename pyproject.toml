@@ -20,6 +20,10 @@ package-mode = false
 [tool.poe.tasks]
 version = "version:echo"
 
+[tool.poe.tasks.pull-packages]
+help = "Download tested CI NuGet packages and matching SDK/bindings, refresh stale local cache entries, and restore"
+cmd = "uv run scripts/pull_ci_packages.py"
+
 [tool.poe.tasks.build-godot]
 help = "Godot build: build libgodot and glue code"
 sequence = [

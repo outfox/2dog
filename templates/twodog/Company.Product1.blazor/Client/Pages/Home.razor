@@ -18,6 +18,10 @@
             <dd>@_scene</dd>
             <dt>FPS</dt>
             <dd>@_fps</dd>
+            <dt>Renderer</dt>
+            <dd>@_renderer</dd>
+            <dt>Driver</dt>
+            <dd>@_driver</dd>
         </dl>
 
         <div class="actions">
@@ -39,11 +43,15 @@
     private string _state = "starting";
     private string _scene = "-";
     private string _fps = "-";
+    private string _renderer = "-";
+    private string _driver = "-";
     private long _frames;
 
     // Blazor and Godot share one runtime: reach the scene tree directly.
     private void OnStarted(twodog.Engine engine)
     {
+        _renderer = Godot.RenderingServer.GetCurrentRenderingMethod();
+        _driver = Godot.RenderingServer.GetCurrentRenderingDriverName();
         (_status, _state) = ("Running", "running");
         _scene = engine.Tree.CurrentScene?.Name ?? "-";
     }

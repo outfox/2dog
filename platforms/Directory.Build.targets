@@ -17,6 +17,7 @@
         <VariantShortName Condition="'$(BuildVariant)' == 'template_debug'">debug</VariantShortName>
         <VariantShortName Condition="'$(BuildVariant)' == 'editor'">editor</VariantShortName>
         <OutputLibName>libgodot-$(VariantShortName).$(NativeLibExt)</OutputLibName>
+        <WebGpuNativeDir>$(GodotBinDir)webgpu/$(PlatformRID)/</WebGpuNativeDir>
         <!-- Android's JNI loader and SONAME require the original name; variants are exclusive in an APK. -->
         <NativeLibPath Condition="'$(PlatformOS)' == 'android'">$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libgodot_android.so</NativeLibPath>
         <OutputLibName Condition="'$(PlatformOS)' == 'android'">libgodot_android.so</OutputLibName>
@@ -68,6 +69,12 @@
         <None Include="$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so"
               Condition="Exists('$(GodotBinDir)android/$(BuildVariant)/$(PlatformArch)/libc++_shared.so')"
               Pack="true" PackagePath="runtimes/$(PlatformRID)/native/libc++_shared.so" Visible="false"/>
+    </ItemGroup>
+
+    <!-- Dawn and its compiler are runtime dependencies of the WebGPU-enabled desktop binary. -->
+    <ItemGroup Condition="'$(PlatformRID)' != '' And ('$(PlatformOS)' == 'windows' Or '$(PlatformOS)' == 'linuxbsd' Or '$(PlatformOS)' == 'macos') And Exists('$(NativeLibPath)')">
+        <None Include="$(WebGpuNativeDir)**/*" Pack="true"
+              PackagePath="runtimes/$(PlatformRID)/native/" Visible="false"/>
     </ItemGroup>
 
     <Target Name="TwoDogValidateAndroidPayload" BeforeTargets="GenerateNuspec"

@@ -22,6 +22,10 @@
             <dd>@_sceneName</dd>
             <dt>FPS</dt>
             <dd>@_fps</dd>
+            <dt>Renderer</dt>
+            <dd>@_renderer</dd>
+            <dt>Driver</dt>
+            <dd>@_driver</dd>
             <dt>Frames</dt>
             <dd>@_frames</dd>
         </dl>
@@ -44,6 +48,8 @@
 
     <main class="viewport">
         <GodotView @ref="_view" Project="showcase" PluginsInitializer="TwoDogWebBoot.PluginsInitializer()"
+                   RenderingDriver="@RenderingDriver"
+                   Args="@RendererArgs"
                    OnFrame="OnFrame" Started="OnStarted" Exited="OnExited" Failed="OnFailed"
                    style="width: 100%; height: 100%;" />
     </main>

@@ -29,10 +29,29 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `WasmEmitSymbolMap`             | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                              |
 | `WasmInitialHeapSize`           | `256MB`                                            | Initial memory allocation; memory can grow                                                                   |
 
+| `TwoDogWebGpuCachePath` | System temporary directory | Writable Emscripten port cache for WebGPU |
+
 `2dog.browser-wasm` restores both debug and release natives. A missing selected
 payload fails the build.
 
 Changing `TwoDogWebPackName` also requires matching the pack URL in your boot page.
+
+## Experimental WebGPU
+
+Single-precision, single-threaded browser packages include WebGPU and WebGL.
+In `wwwroot/index.html`, configure `GODOT_CONFIG` before creating `Engine`:
+
+```javascript
+'renderingDriver': 'webgpu',
+'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
+```
+
+The shell requests a device before initializing Godot. WebGPU requires a secure
+context and browser support. Threaded and double-precision payloads reject the
+request before device creation. Use `opengl3` with `gl_compatibility` for WebGL.
+The package supplies the Emscripten port, link flags and writable cache.
+
+See [build configurations](/build-configurations#experimental-webgpu) for limits.
 
 ## Precompression
 

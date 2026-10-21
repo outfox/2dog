@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // Drives the Blazor showcase through quit/start and restart-from-exit-callback lifetimes.
 // Fails on browser/runtime errors as well as a failed or missing smoke marker.
-// Usage: browser-restart-smoke.mjs <url> [timeout-ms] [debug-port]
+// Usage: browser-restart-smoke.mjs <url> [timeout-ms] [debug-port] [expected-driver]
 
-const [targetUrl, timeoutValue = "120000", portValue = "9222"] = process.argv.slice(2);
+const [targetUrl, timeoutValue = "120000", portValue = "9222", expectedDriver] = process.argv.slice(2);
 if (!targetUrl) {
-    console.error("Usage: browser-restart-smoke.mjs <url> [timeout-ms] [debug-port]");
+    console.error("Usage: browser-restart-smoke.mjs <url> [timeout-ms] [debug-port] [expected-driver]");
     process.exit(2);
 }
 const timeoutMs = Number.parseInt(timeoutValue, 10);
@@ -79,6 +79,7 @@ const state = () => evaluate(`JSON.stringify({
     baseURI: document.baseURI,
     smoke: document.documentElement.getAttribute("data-twodog-smoke"),
     lifetime: document.documentElement.getAttribute("data-twodog-lifetime"),
+    renderer: document.documentElement.getAttribute("data-twodog-renderer"),
     status: document.querySelector(".status")?.textContent ?? null,
     canvases: document.querySelectorAll("canvas").length,
     audio: window.__twodogAudioProbe?.map(({context, ...record}) => ({...record, state: context.state})) ?? [],
@@ -128,6 +129,9 @@ try {
     await send("Log.enable");
     await send("Runtime.enable");
     const running = (s) => {
+        if (expectedDriver && s.smoke === "passed" && s.renderer !== expectedDriver) {
+            throw new Error(`Expected renderer ${expectedDriver}, got ${s.renderer}`);
+        }
         if (s.smoke !== "passed" || s.canvases !== 1 || !s.canvasLive) return false;
         if (s.lifetime === "1") return true; // Audio observation starts below, before the first restart.
         const current = s.audio.at(-1);

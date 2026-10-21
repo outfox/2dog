@@ -263,6 +263,25 @@ class ConfigurationTests(unittest.TestCase):
     def link_flags(output):
         return [item["Identity"] for item in output["Items"]["TwoDogGodotEmccExtraLDFlag"]]
 
+    def test_webgpu_payload_supplies_port_flags_and_a_writable_compiler_cache(self):
+        port = self.archive("debug").parent / "emdawnwebgpu/emdawnwebgpu.port.py"
+        port.parent.mkdir(parents=True)
+        port.touch()
+        cache = self.scratch / "writable emscripten cache"
+        project = self.project()
+        output = json.loads(self.run_msbuild(
+            project, "-p:Configuration=Debug", "-t:TwoDogWebGpuEnvironment",
+            f"-p:TwoDogWebGpuCachePath={cache}",
+            "-getItem:TwoDogGodotEmccExtraLDFlag,EmscriptenEnvVars",
+        ))
+        flags = self.link_flags(output)
+        self.assertIn(f'--use-port="{port.as_posix()}"', flags)
+        self.assertTrue(any(flag.startswith('--closure-args="--externs=\'') for flag in flags))
+        environment = [item["Identity"] for item in output["Items"]["EmscriptenEnvVars"]]
+        self.assertIn(f"EM_CACHE={cache}", environment)
+        self.assertIn("EM_FROZEN_CACHE=0", environment)
+        self.assertTrue(cache.is_dir())
+
     def test_web_editor_and_invalid_variant_fail_clearly(self):
         project = self.project()
         output = self.run_msbuild(project, "-p:Configuration=Editor", "-t:TwoDogWebCheckNativeDir", success=False)

@@ -139,6 +139,9 @@ jobs:
           restore-keys: |
             godotsharp-linux-${{ inputs.precision }}-
 
+      - name: Test native WebGPU configuration
+        run: uv run python -m unittest discover -s godot/drivers/webgpu/tests -p 'test_native*.py' -v
+
       - name: Build editor + GodotSharp assemblies
         run: |
           uv run build-godot.py --precision ${{ inputs.precision }} \
@@ -175,7 +178,10 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: godot-editor-linux-x64-${{ inputs.precision }}
-          path: godot/bin/godot.linuxbsd.editor${{ env.NATIVE_SUFFIX }}.x86_64.executable.mono
+          path: |
+            godot/bin/godot.linuxbsd.editor${{ env.NATIVE_SUFFIX }}.x86_64.executable.mono
+            godot/bin/libgodot_webgpu_dawn.so
+            godot/bin/webgpu/linux-x64/licenses/
           if-no-files-found: error
           retention-days: 7
 
@@ -289,6 +295,24 @@ jobs:
           python-version: '3.12'
           enable-cache: false
 
+      # The pinned Dawn SDK uses STL helpers newer than the runner's VS 2022 toolset.
+      - name: Install MSVC Build Tools for native Dawn
+        if: matrix.platform == 'windows' && inputs.precision == 'single'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $tools = & $vswhere -latest -products '*' -version '[18.0,19.0)' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $tools) {
+            $bootstrapper = Join-Path $env:RUNNER_TEMP 'vs_buildtools.exe'
+            Invoke-WebRequest 'https://aka.ms/vs/stable/vs_buildtools.exe' -OutFile $bootstrapper
+            $signature = Get-AuthenticodeSignature $bootstrapper
+            if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') {
+              throw 'Visual Studio bootstrapper signature is not valid for Microsoft Corporation.'
+            }
+            $installer = Start-Process $bootstrapper -ArgumentList '--quiet', '--wait', '--norestart', '--nocache', '--add', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64' -WindowStyle Hidden -PassThru -Wait
+            if ($installer.ExitCode -notin 0, 3010) { throw "Build Tools install failed: $($installer.ExitCode)" }
+          }
+
       # Linux-specific dependencies
       - name: Install Linux dependencies
         if: matrix.platform == 'linuxbsd'
@@ -378,7 +402,9 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
-          path: godot/bin/${{ env.NATIVE_SUBDIR }}*godot.${{ matrix.platform }}.${{ matrix.target }}${{ env.NATIVE_SUFFIX }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
+          path: |
+            godot/bin/${{ env.NATIVE_SUBDIR }}*godot.${{ matrix.platform }}.${{ matrix.target }}${{ env.NATIVE_SUFFIX }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
+            godot/bin/${{ env.NATIVE_SUBDIR }}webgpu/${{ matrix.rid }}/
           if-no-files-found: error
           retention-days: 7
 
@@ -533,9 +559,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,createdAt \
-            -q '[.[] | select(.tagName | test("^godot-[0-9a-f]{7}${{ env.RELEASE_SUFFIX }}$"))] | sort_by(.createdAt) | reverse | .[5:] | .[].tagName' |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,publishedAt \
+            -q '[.[] | select(.tagName | test("^godot-[0-9a-f]{7}${{ env.RELEASE_SUFFIX }}$"))] | sort_by(.publishedAt) | reverse | .[5:] | .[].tagName' |
           while read -r tag; do
+            # createdAt is the target commit's date; always preserve this run's release.
+            if [ "$tag" = "godot-${{ needs.preflight.outputs.submodule-hash }}${RELEASE_SUFFIX}" ]; then continue; fi
             echo "Pruning $tag"
             gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
           done

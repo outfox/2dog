@@ -45,7 +45,7 @@ public sealed class GodotSessionOptions
     /// start. The compositor's animation frames drive the pump, but not every backend paces
     /// them to the display (Avalonia's Wayland backend free-runs), so the engine's limiter
     /// enforces this cap. 0 (the default) means auto: use the compositor's pacing on Windows,
-    /// or the highest connected screen refresh rate on other backends.
+    /// or one FPS above the highest connected screen refresh rate on other backends.
     /// <see cref="double.PositiveInfinity"/> means uncapped.
     /// NaN and negative values are rejected.
     /// </summary>

@@ -263,7 +263,7 @@ public sealed class EngineHost : IDisposable
 
     /// <summary>
     /// Pool: %LOCALAPPDATA%/2dog/native-pool/&lt;key&gt;/slot-&lt;n&gt;/&lt;stem&gt;.slot-&lt;n&gt;&lt;ext&gt;.
-    /// Copies persist across runs, keyed by source identity (path, size, mtime -
+    /// Copies persist across runs, keyed by source and dependency identity (path, size, mtime -
     /// NOT content; an in-place rebuild changes size/mtime and therefore the
     /// key), so steady-state cost is zero for a stable instance count. Within a
     /// process the pool only grows - one copy per registered Start, no eviction
@@ -280,8 +280,14 @@ public sealed class EngineHost : IDisposable
         // have the original mapped, and loading the same path again would
         // silently share its module instead of creating a new instance.
         var source = new FileInfo(sourcePath);
-        var identityKey = Convert.ToHexString(SHA256.HashData(
-            Encoding.UTF8.GetBytes($"{source.FullName}|{source.Length}|{source.LastWriteTimeUtc.Ticks}")))[..16];
+        string[] dependencyNames = OperatingSystem.IsWindows()
+            ? ["godot_webgpu_dawn.dll", "dxcompiler.dll", "dxil.dll"]
+            : ["libgodot_webgpu_dawn.so"];
+        var dependencies = dependencyNames.Select(name => new FileInfo(Path.Combine(source.DirectoryName!, name)))
+            .Where(file => file.Exists).ToArray();
+        var identity = string.Join(";", new[] { source }.Concat(dependencies)
+            .Select(file => $"{file.FullName}|{file.Length}|{file.LastWriteTimeUtc.Ticks}"));
+        var identityKey = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(identity)))[..16];
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "2dog", "native-pool", identityKey, $"slot-{slot}");
         Directory.CreateDirectory(dir);
@@ -290,11 +296,19 @@ public sealed class EngineHost : IDisposable
         // a sibling copy or the original.
         var dest = Path.Combine(dir,
             $"{Path.GetFileNameWithoutExtension(source.Name)}.slot-{slot}{source.Extension}");
+        foreach (var dependency in dependencies)
+            EnsurePoolCopy(dependency, Path.Combine(dir, dependency.Name));
+        EnsurePoolCopy(source, dest);
+        return dest;
+    }
+
+    private static void EnsurePoolCopy(FileInfo source, string dest)
+    {
         // Length check evicts partial copies left by a crashed process.
         if (!File.Exists(dest) || new FileInfo(dest).Length != source.Length)
         {
             var tmp = $"{dest}.{Environment.ProcessId}.tmp";
-            File.Copy(sourcePath, tmp, overwrite: true);
+            File.Copy(source.FullName, tmp, overwrite: true);
             try
             {
                 // A stale partial must be evicted first: Move(overwrite: false)
@@ -309,8 +323,7 @@ public sealed class EngineHost : IDisposable
             }
         }
         if (new FileInfo(dest).Length != source.Length)
-            throw new IOException($"Native pool copy at '{dest}' does not match its source '{sourcePath}'.");
-        return dest;
+            throw new IOException($"Native pool copy at '{dest}' does not match its source '{source.FullName}'.");
     }
 
     /// <summary>Mirrors twodog's LibGodotLoader probing (internal to an assembly
