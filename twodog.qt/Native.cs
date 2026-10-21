@@ -54,6 +54,11 @@ internal static unsafe partial class Native
 
     static Native() => NativeLibrary.SetDllImportResolver(typeof(Native).Assembly, Resolve);
 
+    // The session loads the module before QML has loaded Qt Quick, and Windows' default absolute-path search
+    // (LOAD_WITH_ALTERED_SEARCH_PATH) skips the app directory, so Qt6Quick.dll would only resolve from the CWD.
+    private const DllImportSearchPath DependencySearch = DllImportSearchPath.UseDllDirectoryForDependencies |
+        DllImportSearchPath.ApplicationDirectory | DllImportSearchPath.System32;
+
     // QML loads the module from <app>/TwoDog; loading the same file here shares that instance.
     private static nint Resolve(string name, Assembly assembly, DllImportSearchPath? searchPath)
     {
@@ -61,7 +66,9 @@ internal static unsafe partial class Native
         var directory = Path.Combine(AppContext.BaseDirectory, "TwoDog");
         foreach (var file in (ReadOnlySpan<string>)["twodogqt.dll", "libtwodogqt.so", "libtwodogqt.dylib"])
         {
-            if (NativeLibrary.TryLoad(Path.Combine(directory, file), out var handle)) return handle;
+            // Load throws the loader's error, e.g. for a missing dependency.
+            var path = Path.Combine(directory, file);
+            if (File.Exists(path)) return NativeLibrary.Load(path, assembly, DependencySearch);
         }
         throw new DllNotFoundException(
             $"2dog.qt: the TwoDog QML module was not found in '{directory}'. Build the app with the 2dog.qt package " +
