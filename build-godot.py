@@ -352,6 +352,16 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
         )
 
 
+def get_scons_job_limit():
+    value = os.environ.get("DOTNET_PROCESSOR_COUNT")
+    if value is None:
+        return get_job_limit()
+    limit = int(value)
+    if limit < 1:
+        raise ValueError("DOTNET_PROCESSOR_COUNT must be a positive integer")
+    return min(limit, get_job_limit() or os.cpu_count() or 1)
+
+
 def show_build_config(args, platform_config: PlatformConfig):
     """Display build configuration in a nice table."""
     table = Table(title="Build Configuration", show_header=True, header_style="bold magenta")
@@ -363,7 +373,7 @@ def show_build_config(args, platform_config: PlatformConfig):
     table.add_row("Precision", getattr(args, "precision", "single"))
     if args.threads:
         table.add_row("Threads", "yes (proxy_to_pthread)")
-    table.add_row("Maximum build jobs", str(get_job_limit() or "SCons default"))
+    table.add_row("Maximum build jobs", str(get_scons_job_limit() or "SCons default"))
     table.add_row("Debug Symbols (separate)", args.debug_symbols)
     table.add_row("SCU Build", args.scu_build)
     table.add_row("Dev Build", args.dev_build)
@@ -384,7 +394,7 @@ def build_editor(args, platform_config: PlatformConfig):
     task_desc = "Building Godot Editor"
     cmd = [
         "scons",
-        *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
+        *([f"--jobs={get_scons_job_limit()}"] if get_scons_job_limit() is not None else []),
         f"platform={platform_config.godot_platform}",
         f"arch={platform_config.godot_arch}",
         "target=editor",
@@ -480,7 +490,7 @@ def build_libgodot_web(args):
         task_desc = f"Building libgodot (target={target}, platform=web, arch=wasm32)"
         cmd = [
             "scons",
-            *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
+            *([f"--jobs={get_scons_job_limit()}"] if get_scons_job_limit() is not None else []),
             "platform=web",
             "arch=wasm32",
             f"target={target}",
@@ -563,7 +573,7 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
         cmd = [
             "scons",
-            *([f"--jobs={get_job_limit()}"] if get_job_limit() is not None else []),
+            *([f"--jobs={get_scons_job_limit()}"] if get_scons_job_limit() is not None else []),
             f"platform={platform_config.godot_platform}",
             f"arch={platform_config.godot_arch}",
             f"target={target}",
