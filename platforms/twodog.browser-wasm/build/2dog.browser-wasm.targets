@@ -190,6 +190,39 @@
                Text="TwoDog: $(TwoDogWebVariant) web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.$(TwoDogWebVariant) package v$(TwoDogWebPackageVersion) and the source checkout (godot/bin/$(_TwoDogWebPayloadName)/$(_TwoDogWebBuildVariant)/). Restore the 2dog.browser-wasm package or build the matching web natives; another variant will not be substituted."/>
     </Target>
 
+    <UsingTask TaskName="TwoDogSetWebRendererDefault" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <ProjectFile ParameterType="System.String"/>
+            <ShellFile ParameterType="System.String" Required="true"/>
+            <WebGpuEnabled ParameterType="System.Boolean"/>
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Text.RegularExpressions"/>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                // Pack-only exports bypass Godot's HTML exporter, which normally supplies renderingDriver.
+                var section = "";
+                var mobile = false;
+                if (File.Exists(ProjectFile))
+                    foreach (var line in File.ReadLines(ProjectFile))
+                    {
+                        var text = line.Trim();
+                        var header = Regex.Match(text, @"^\[([^\]]+)\]\s*(?:;.*)?$");
+                        if (header.Success) section = header.Groups[1].Value;
+                        if (section != "rendering") continue;
+                        var setting = Regex.Match(text, "^renderer/rendering_method\\.web\\s*=\\s*\"([^\"]*)\"");
+                        if (setting.Success) mobile = setting.Groups[1].Value == "mobile";
+                    }
+                var driver = mobile && WebGpuEnabled ? "webgpu" : "opengl3";
+                var shell = File.ReadAllText(ShellFile);
+                var slot = new Regex(@"renderingDriver: '[^']*',");
+                if (slot.Matches(shell).Count != 1)
+                    throw new Exception("TwoDog: cannot find the web shell's renderingDriver default.");
+                File.WriteAllText(ShellFile, slot.Replace(shell, "renderingDriver: '" + driver + "',"));
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
     <!-- The engine preloader fetches <executable>.wasm (outside _framework) and hands it to dotnet.js; also prunes the
          stray archive copy. Hooks after bundle generation: AfterTargets="Publish" precedes the nested wasm publish. -->
     <Target Name="TwoDogWebFinalizeBundle"
@@ -199,6 +232,9 @@
               DestinationFiles="$(WasmAppDir)/godot.wasm"
               Condition="Exists('$(WasmAppDir)/_framework/dotnet.native.wasm')"/>
         <Delete Files="$(WasmAppDir)/_framework/libgodot.wasm"/>
+        <TwoDogSetWebRendererDefault ProjectFile="$(TwoDogGodotProjectFullPath)/project.godot"
+                                    ShellFile="$(WasmAppDir)/godot.js"
+                                    WebGpuEnabled="$([System.IO.File]::Exists('$(_TwoDogWebGpuPort)'))"/>
 
         <!-- Sourcemaps are only fetched with devtools open. Never delete *.symbols here: dotnet.boot.js is a manifest
              and any 404 fails the boot; WasmEmitSymbolMap keeps file and manifest entry out on a fresh relink. -->
