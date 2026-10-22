@@ -30,7 +30,7 @@ Tests use the game directory and its imported resource cache. See
 
 ## Microsoft.Testing.Platform
 
-The host uses xUnit's own runner on MTP v2. Scaffolded projects reference
+The host uses xUnit's own runner on MTP v2. Projects that 2dog sets up reference
 `xunit.v3.mtp-v2` and `Microsoft.Testing.Extensions.CodeCoverage`, and set
 these properties:
 

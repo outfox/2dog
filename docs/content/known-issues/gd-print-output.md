@@ -16,8 +16,8 @@ with engine and fixture logs rather than belonging to a specific test.
 
 ## Making GD.Print Visible
 
-Scaffolded test hosts run on Microsoft.Testing.Platform (MTP), so each one is
-an executable. Run it directly to see its stdout in the terminal:
+Test hosts that 2dog sets up run on Microsoft.Testing.Platform (MTP), so each
+one is an executable. Run it directly to see its stdout in the terminal:
 
 ```bash
 dotnet run --project MyGame.xunit

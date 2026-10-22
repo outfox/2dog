@@ -1,12 +1,12 @@
 ---
 title: 2dog version
-description: "Reference for 2dog version: print the tool version and every package a scaffold references, checked against nuget.org."
+description: "Reference for 2dog version: print the tool version and every package a setup references, checked against nuget.org."
 tagline: "Learn how to check your 2dog versions against the latest on nuget.org."
 ---
 
 # `2dog version`
 
-Prints the tool version and every package a scaffold references, each checked
+Prints the tool version and every package a setup references, each checked
 against nuget.org (best effort, 2.5 s). `--version` is the same, except
 [under dnx](/cli/pinning#print-the-version).
 

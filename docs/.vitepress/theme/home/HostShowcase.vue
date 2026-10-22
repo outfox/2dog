@@ -1,39 +1,43 @@
-<!-- Every host 2dog scaffolds. Each group wears one palette hue on its label and chips, whether the
-     chip shows a brand mark or a Godot pictogram. -->
+<!-- Every host 2dog sets up. Each group wears one palette hue on its label, chips and hover ring; a chip
+     shows the product's own mark, or a monogram where none exists. -->
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 import { brIconUrl, iconUrl } from './icons'
 
+// `size` is the mark's optical box in px (default 28), so heavy squares and thin wordmarks read alike.
 type Host = {
   name: string
   flag: string
   text: string
   link: string
   brand?: string
-  glyph?: string
+  mono?: string
+  size?: number
   tag?: string
 }
 
-// `soon` closes the group with a placeholder card for hosts that are planned but not yet scaffolded.
+// `soon` closes the group with a placeholder card for hosts that are planned but not yet set up.
 const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: boolean }[] = [
   {
     label: 'Web',
-    hue: 'var(--hue-sky)',
+    hue: 'var(--hue-teal)',
     icon: 'globe',
     hosts: [
       {
         name: 'WebAssembly',
         flag: '--web',
-        text: 'C# Games as an AppBundle, using WebGL or WebGPU.<br/>No more waiting for Godot!',
+        text: 'C# on the web, with WebGL or WebGPU.',
         link: '/hosts/web',
         brand: 'webassembly',
+        size: 24,
       },
       {
         name: 'WebXR',
         flag: '--webxr',
-        text: 'Godot VR and AR sessions, right in the browser or portable XR devices.',
+        text: 'VR and AR sessions, right in the browser or on device.',
         link: '/hosts/webxr',
-        glyph: 'vr_headset',
+        brand: 'webxr',
+        size: 30,
       },
     ],
   },
@@ -45,42 +49,43 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: 'GdUnit',
         flag: '--gdunit',
-        text: 'Run your GDScript GdUnit suites with <code>dotnet test</code>.',
+        text: 'Run your GdUnit suites with <code>dotnet test</code>.',
         link: '/hosts/gdunit',
-        glyph: 'test_tube',
+        mono: 'Gd',
       },
       {
         name: 'NUnit',
         flag: '--nunit',
-        text: 'Fixtures and signal assertions on a real engine.',
+        text: 'Fixtures, assertions, expectations &amp; more.',
         link: '/hosts/nunit',
-        glyph: 'test_tube',
+        brand: 'nunit',
       },
       {
         name: 'xUnit',
         flag: '--xunit',
-        text: 'Collections, frame waits and assertions for xUnit v3.',
+        text: 'Frame waits, assertions, parallel collections &amp; more.',
         link: '/hosts/xunit',
-        glyph: 'test_tube',
+        brand: 'xunit',
+        size: 26,
       },
     ],
   },
   {
     label: 'Desktop',
-    hue: 'var(--hue-coral)',
+    hue: 'var(--hue-lime)',
     icon: 'desktop',
     hosts: [
       {
         name: 'Avalonia',
         flag: '--avalonia',
-        text: 'Godot as a control in cross-platform Avalonia apps - in a zero-copy GPU surface.',
+        text: 'An Avalonia control, zero-copy on the GPU.',
         link: '/hosts/avalonia',
         brand: 'avaloniaui',
       },
       {
         name: 'Qt Quick',
         flag: '--qt',
-        text: 'A <code>GodotView</code> in your QML scene, with Qt Quick items over the game.',
+        text: 'A <code>GodotView</code> in QML with Qt Quick on top.',
         link: '/hosts/qt',
         brand: 'qt',
         tag: 'Experimental',
@@ -88,16 +93,18 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: 'WinForms',
         flag: '--winforms',
-        text: 'Drop the engine into a Windows Forms window.',
+        text: 'The engine in a Windows Forms window.',
         link: '/hosts/winforms',
-        glyph: 'window',
+        brand: 'dotnet',
+        size: 32,
       },
       {
         name: 'WinUI 3',
         flag: '--winui',
-        text: 'Host Godot in a modern Windows App SDK window.',
+        text: 'Godot in a Windows App SDK window.',
         link: '/hosts/winui',
-        glyph: 'windows',
+        brand: 'winui',
+        size: 30,
       },
     ],
   },
@@ -109,7 +116,7 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: 'Blazor',
         flag: '--blazor',
-        text: 'A <code>GodotView</code> component in your Blazor WebAssembly, served by ASP.NET Core.',
+        text: 'A <code>GodotView</code> component for Blazor.',
         link: '/hosts/blazor',
         brand: 'blazor',
       },
@@ -118,7 +125,7 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
   },
   {
     label: 'Mobile',
-    hue: 'var(--hue-teal)',
+    hue: 'var(--hue-rose)',
     icon: 'mobile_phone',
     hosts: [
       {
@@ -127,57 +134,60 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
         text: 'Package your game as an Android APK.',
         link: '/hosts/android',
         brand: 'android',
+        size: 30,
         tag: 'Experimental',
       },
       {
         name: 'iOS',
         flag: '--ios',
-        text: 'Build an iPhone or iPad app, or try it in the Simulator on an Apple silicon Mac.',
+        text: 'Publish to iPhone, iPad, and Simulators (Apple silicon).',
         link: '/hosts/ios',
-        glyph: 'mobile_phone',
+        mono: 'iOS',
         tag: 'Experimental',
       },
       {
         name: 'MAUI',
         flag: '--maui',
-        text: 'Embed Godot in a .NET MAUI page on Windows, Android and iOS.',
+        text: 'A .NET MAUI page on Windows, Android, iOS.',
         link: '/hosts/maui',
-        glyph: 'mobile_phone',
+        brand: 'maui',
+        size: 32,
       },
     ],
   },
   {
     label: 'Consoles',
-    hue: 'var(--hue-amber)',
+    hue: 'var(--hue-slate)',
     icon: 'joypad',
     hosts: [],
     soon: true,
   },
   {
     label: 'Tooling',
-    hue: 'var(--hue-lime)',
+    hue: 'var(--hue-coral)',
     icon: 'code',
     hosts: [
       {
         name: '2dog',
         flag: '--generic',
-        text: 'Your own <code>Main()</code>: start Godot, run code before, during, or after each frame.',
+        text: 'Your custom <code>Main()</code>, driving every frame.',
         link: '/hosts/generic',
-        brand: 'dotnet',
+        brand: '2dog',
+        size: 34,
       },
       {
         name: 'REPL',
         flag: '--repl',
-        text: 'Explore, edit, play, or inspect the game from a C# prompt while it is running.',
+        text: 'Explore, and edit a running game interactively.',
         link: '/hosts/repl',
-        glyph: 'window_terminal',
+        mono: '>_',
         tag: 'Experimental',
       },
     ],
   },
 ]
 
-const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
+const glyphStyle = (h: Host) => ({ '--gd-icon': brIconUrl(h.brand!), '--glyph': h.size ? `${h.size}px` : undefined })
 </script>
 
 <template>
@@ -209,7 +219,8 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
           <li v-for="h in g.hosts" :key="h.name">
             <a class="host-card" :href="withBase(h.link)">
               <span class="brand-chip" aria-hidden="true">
-                <span class="chip-glyph" :style="{ '--gd-icon': glyphUrl(h) }"></span>
+                <span v-if="h.mono" class="chip-mono" :class="{ long: h.mono.length > 2 }">{{ h.mono }}</span>
+                <span v-else class="chip-glyph" :style="glyphStyle(h)"></span>
               </span>
               <span class="host-body">
                 <span class="host-name">
@@ -222,8 +233,8 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
           </li>
           <li v-if="g.soon">
             <div class="host-card soon">
-              <span class="brand-chip" aria-hidden="true">
-                <span class="chip-glyph" :style="{ '--gd-icon': iconUrl('ellipsis_horizontal') }"></span>
+              <span class="brand-chip soon" aria-hidden="true">
+                <span class="chip-glyph" :style="{ '--gd-icon': iconUrl('ellipsis_horizontal'), '--glyph': '16px' }"></span>
               </span>
               <span class="host-body">
                 <span class="host-name">
@@ -307,15 +318,24 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
 }
 
 .host-card:hover {
-  border-color: var(--ed-accent);
+  border-color: color-mix(in srgb, var(--mark) 70%, var(--ed-seam));
   transform: translateY(-2px);
 }
 
-/* Placeholder: an outline in the group's hue, not a link, so it neither lifts nor highlights on hover. */
+.host-card:not(.soon):hover .brand-chip,
+.host-card:focus-visible .brand-chip {
+  background: var(--mark);
+  color: var(--chip-ink);
+  box-shadow: inset 0 0 0 1px var(--mark);
+}
+
+/* Placeholder: a neutral slate outline, not a link, so it neither lifts nor highlights on hover. Its minimum
+   height matches a host card with two lines of text, so a lone placeholder (Consoles) lines up too. */
 .host-card.soon,
 .host-card.soon:hover {
   align-items: center;
-  border: 1px dashed color-mix(in srgb, var(--mark) 45%, var(--ed-seam));
+  min-height: 139px;
+  border: 1px dashed color-mix(in srgb, var(--hue-slate) 55%, var(--ed-seam));
   background: transparent;
   transform: none;
 }

@@ -55,7 +55,7 @@ No. 2dog embeds GodotSharp and Godot's C# source generators. `GD`, `Node`,
 A dotnet tool package cannot also be a `PackageReference`
 ([`NU1213`](https://learn.microsoft.com/nuget/reference/errors-and-warnings/nu1213)). Therefore `2dog.engine` is the
 library, `2dog` is the tool, and `2dog.templates` provides the `dotnet new`
-template. They are released together, and both scaffolding routes produce the same output. See
+template. They are released together, and both setup routes produce the same output. See
 [`2dog add`](/cli/add).
 
 ## Why does the browser build never exceed my display's refresh rate?

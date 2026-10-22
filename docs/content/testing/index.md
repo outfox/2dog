@@ -50,7 +50,7 @@ async lifecycle support, and automatic checks for Godot errors and warnings.
 
 ## Test runners
 
-All three scaffolded hosts run on Microsoft.Testing.Platform (MTP):
+All three hosts that 2dog sets up run on Microsoft.Testing.Platform (MTP):
 
 | Host   | MTP integration                                            | Setup                                                          |
 |--------|------------------------------------------------------------|----------------------------------------------------------------|
@@ -58,7 +58,7 @@ All three scaffolded hosts run on Microsoft.Testing.Platform (MTP):
 | NUnit  | Official NUnit adapter bridge                              | [Configuration](/configuration/nunit#microsofttestingplatform) |
 | xUnit  | Upstream xUnit runner with 2dog's owner-thread entry point | [Configuration](/configuration/xunit#microsofttestingplatform) |
 
-Scaffolding a test host creates a root `global.json` that selects MTP, unless
+Setting up a test host creates a root `global.json` that selects MTP, unless
 the project already has one; 2dog never edits an existing file. Run
 `dotnet test` from the project root to run every test host. To select MTP in
 your own `global.json`, add:

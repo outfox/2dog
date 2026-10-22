@@ -7,7 +7,7 @@ tagline: "Learn how to configure Godot in MAUI, from targets to publishing."
 # MAUI Configuration
 
 Set build properties in `MyGame.maui.csproj`; package versions come from the
-root `Directory.Build.props`. Scaffolding adds .NET 10 SDK pins, preserving an
+root `Directory.Build.props`. The setup adds .NET 10 SDK pins, preserving an
 existing root `global.json`. Run from `MyGame.maui/` to use the host's pin.
 
 ## Platform Properties

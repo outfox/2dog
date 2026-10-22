@@ -46,7 +46,7 @@ for browser setup, adapter limitations and source builds.
 - **Godot inside .NET UIs.** Embed the engine in Avalonia, Blazor, Qt Quick, WinForms, WinUI 3 or MAUI, with
   native controls over the game.
 - **A C# REPL in your running game.** Inspect and change live nodes from a terminal or a coding agent.
-- **One tool for setup and upkeep.** `2dog new`, `add`, `doctor` and `update` scaffold hosts, diagnose build
+- **One tool for setup and upkeep.** `2dog new`, `add`, `doctor` and `update` set up hosts, diagnose build
   problems and keep package versions in step. [More](https://2dog.dev/dnx-2dog)
 - **No engine compile.** Prebuilt natives for Windows, Linux, macOS, WebAssembly and Android come from NuGet.
 - **Automatic import.** Changed resources are imported during the build; no `godot --import` step.
@@ -134,7 +134,7 @@ Packages are on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https:
 The main ones are [`2dog`](twodog/README.md) (the tool), [`2dog.templates`](templates/README.md)
 (the `dotnet new` templates) and [`2dog.engine`](twodog.engine/README.md) (the library); the tool adds the rest to your hosts.
 
-Experimental iOS support: `dnx 2dog add --ios` scaffolds a host that shows Godot's view
+Experimental iOS support: `dnx 2dog add --ios` sets up a host that shows Godot's view
 controller; it builds on a Mac with Xcode (`dotnet build -r iossimulator-arm64` for the Simulator).
 See the [iOS host](https://2dog.dev/hosts/ios) and [2dog.ios](twodog.ios/README.md).
 

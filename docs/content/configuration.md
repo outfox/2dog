@@ -39,7 +39,7 @@ See [Build Variants](./build-configurations) for native selection and
 ## Packages and Versions
 
 Package versions begin with the embedded Godot version. Reference exact
-versions; scaffolded projects keep them in one block of the root
+versions; projects that 2dog sets up keep them in one block of the root
 `Directory.Build.props`:
 
 ```xml

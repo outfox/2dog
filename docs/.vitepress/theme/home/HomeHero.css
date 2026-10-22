@@ -66,7 +66,7 @@
   color: var(--ed-text-2);
 }
 
-/* Identity icons: 2dog lime, Godot sky, .NET violet. */
+/* Identity icons: the 2dog bone always white, Godot sky, .NET violet. */
 .lead-icon.godot {
   background-color: var(--id-godot);
 }
@@ -87,6 +87,11 @@
 
 .lead-dog .lead-icon {
   background-color: var(--id-dog);
+}
+
+/* A hairline shadow keeps the white bone visible on the light appearance. */
+html:not(.dark) .lead-dog .lead-icon {
+  filter: drop-shadow(0 0 1px rgba(16, 20, 27, 0.6));
 }
 
 .hero-facts .hero-heart {

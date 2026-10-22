@@ -6,7 +6,7 @@ tagline: "Learn how to install and use the 2dog command-line tool."
 
 # `dotnet tool execute 2dog`
 
-`2dog` scaffolds .NET host projects around a Godot project, keeps them healthy,
+`2dog` sets up .NET host projects around a Godot project, keeps them healthy,
 and updates them. 
 
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie getting pulled on the leash by their blue robot dog](img/2dog-terminal.png)

@@ -156,7 +156,7 @@ export default defineConfig<ThemeConfig>({
             collapsed: true,
             items: [
               {
-                text: 'Scaffold',
+                text: 'Set up',
                 collapsed: true,
                 items: [
                   { text: gd('bone') + 'add', link: '/cli/add' },
@@ -329,7 +329,7 @@ export default defineConfig<ThemeConfig>({
     ],
 
     footer: {
-      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>.<br/><b>2dog</b> is not affiliated with or endorsed by the Godot Foundation.<br/>Godot is licensed under the <a href="https://godotengine.org/license/">MIT License</a>. <b>@icons</b> made by <a href="https://www.voxy.space">Voxy</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.<br/>Continuous Integration compute graciously supported by <a href="https://blacksmith.sh">Blacksmith</a>.',
+      message: '<b>2dog</b> is Free and Libre Open Source under the <a href="https://github.com/outfox/2dog?tab=MIT-1-ov-file#readme">MIT License</a>.<br/><b>2dog</b> is not affiliated with or endorsed by the Godot Foundation.<br/>Godot is licensed under the <a href="https://godotengine.org/license/">MIT License</a>; the Godot logo is by Andrea Calabró under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. <b>@icons</b> made by <a href="https://www.voxy.space">Voxy</a> under the <a href="/icons/LICENSE.txt">MIT License</a>.<br/>Continuous Integration compute graciously supported by <a href="https://blacksmith.sh">Blacksmith</a>.',
       copyright: '<b>2dog</b> is Copyright © 2025-2026 <a href="https://github.com/outfox/2dog/graphs/contributors">its contributors</a>. <b>Lucky &amp; Dogbot</b> illustrations by <a href="https://www.diegorago.com/">Diego Rago</a>.'
     },
   }

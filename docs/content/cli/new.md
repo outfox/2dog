@@ -33,7 +33,7 @@ selects Microsoft.Testing.Platform, so `dotnet test` runs every test host.
 | `-n, --name <name>`                | Project name; same as `Name`                                                                                       |
 | `-o, --output <dir>`               | Directory; same as `dir`                                                                                           |
 | `--dry-run`                        | Print the plan; change nothing                                                                                     |
-| `--force`                          | Overwrite scaffolded files that exist; never deletes                                                               |
+| `--force`                          | Overwrite existing files from the setup; never deletes                                                             |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
 | `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers                  |
 | `--no-restore`                     | Skip the final `dotnet restore`                                                                                    |

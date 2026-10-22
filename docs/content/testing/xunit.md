@@ -145,7 +145,7 @@ entry-point wrapper. For windowed macOS fixtures, your entry point must call
 :::
 
 ::: details Adding packages by hand
-The scaffold sets this up for you. For an existing test project:
+The setup does this for you. For an existing test project:
 
 ```bash
 dotnet add package 2dog.engine

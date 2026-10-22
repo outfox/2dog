@@ -65,14 +65,17 @@
   --ed-success: #286e1b;
   --ed-console-bg: #e6eaf0;
   --ed-grid: rgba(30, 50, 80, 0.07);
-  /* Icon palette: every icon wears one of six hues of equal weight, never its vendor's own color, so brand
-     marks sit beside pictograms without one outshouting another. */
+  /* Icon palette: each hue means one thing (a host group or one of the three names), never a vendor's own
+     color, so brand marks sit beside pictograms without one outshouting another; slate marks planned work.
+     Light values keep 4.5:1 inside a brand chip. */
   --hue-lime: var(--ed-accent);
-  --hue-sky: #2f6fa3;
-  --hue-amber: #946410;
-  --hue-coral: #c4452f;
+  --hue-sky: #29669a;
+  --hue-amber: #865a0c;
+  --hue-coral: #b33a25;
   --hue-violet: #6a4bc9;
-  --hue-teal: #0e7c6b;
+  --hue-teal: #0b6e5f;
+  --hue-rose: #b02e6a;
+  --hue-slate: var(--ed-text-3);
 }
 
 .dark {
@@ -109,6 +112,7 @@
   --hue-coral: #ff8c78;
   --hue-violet: #b39cf5;
   --hue-teal: #5ed6c3;
+  --hue-rose: #f58fbe;
 }
 
 /* ---------- VitePress token override ---------- */
@@ -231,11 +235,7 @@
   letter-spacing: 0;
 }
 
-/* Social marks wear the same hues as the homepage buttons: 2dog's repo lime, Discord violet, NuGet sky. */
-.VPSocialLink[aria-label='github'] { color: var(--hue-lime); }
-.VPSocialLink[aria-label='discord'] { color: var(--hue-violet); }
-.VPSocialLink[aria-label='nuget'] { color: var(--hue-sky); }
-
+/* Social marks stay neutral like the homepage link buttons, so no vendor color competes with the nav. */
 .VPSocialLink:hover {
   color: var(--ed-text-1);
 }

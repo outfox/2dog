@@ -8,7 +8,7 @@ tagline: "Learn how to configure NUnit hosts, engine variants and headless fixtu
 
 Set properties in `MyGame.nunit/MyGame.nunit.csproj`. Reference `2dog.nunit`
 and explicitly select `2dog.engine` or `2dog.engine.double`.
-The scaffold also references `NUnit`, `NUnit3TestAdapter` and
+The setup also references `NUnit`, `NUnit3TestAdapter` and
 `Microsoft.Testing.Extensions.CodeCoverage` for `dotnet test` and coverage
 collection.
 
@@ -31,8 +31,8 @@ and [Writing engine tests](/testing/writing-tests) for waits and assertions.
 
 ## Microsoft.Testing.Platform
 
-The host runs on the official NUnit adapter's MTP bridge. Scaffolded projects
-reference `NUnit3TestAdapter` 6.x for MTP v2 and set these properties:
+The host runs on the official NUnit adapter's MTP bridge. Projects that 2dog
+sets up reference `NUnit3TestAdapter` 6.x for MTP v2 and set these properties:
 
 ```xml
 <PropertyGroup>

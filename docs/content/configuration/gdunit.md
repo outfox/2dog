@@ -97,7 +97,7 @@ return await application.RunAsync();
 ## Select the runner
 
 Besides the root `global.json` described in
-[Test runners](/testing/#test-runners), the scaffold puts this one inside
+[Test runners](/testing/#test-runners), the setup puts this one inside
 `MyGame.gdunit/`:
 
 ```json

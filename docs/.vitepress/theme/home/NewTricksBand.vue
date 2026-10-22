@@ -1,7 +1,6 @@
 <!-- New capabilities, with linked highlights styled like the Inspector's property rows. -->
 <script setup lang="ts">
 import { withBase } from 'vitepress'
-import { brIconUrl, webgpuLogoUrl } from './icons'
 
 const tricks = [
   {
@@ -20,9 +19,19 @@ const tricks = [
     href: '/build-configurations#double-precision',
   },
   {
-    title: 'Multi-threaded WebAssembly',
+    title: 'Multi-threaded WASM',
     description: '.NET and Godot workers in parallel in the browser, and much better sound.',
     href: '/hosts/web#multithreading',
+  },
+  {
+    title: 'Zero-copy surfaces',
+    description: 'Render directly into supporting UI frameworks, with no CPU copy.',
+    href: '/hosts/qt#rendering-and-lifecycle',
+  },
+  {
+    title: 'CPU-readback surfaces',
+    description: "Frames copied into your UI: a portable fallback to Godot's --wid overlays.",
+    href: '/configuration/qt#session-properties',
   },
 ]
 </script>
@@ -32,17 +41,6 @@ const tricks = [
     <div class="home-wrap gpu-grid">
       <div>
         <p class="home-kicker">Experimental & power-user features</p>
-        <div class="gpu-marks" aria-hidden="true">
-          <span class="brand-chip">
-            <img :src="webgpuLogoUrl()" alt="" width="35" height="22" />
-          </span>
-          <span class="brand-chip" style="--mark: var(--hue-sky)">
-            <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('webassembly') }"></span>
-          </span>
-          <span class="brand-chip" style="--mark: var(--hue-violet)">
-            <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('dotnet') }"></span>
-          </span>
-        </div>
         <h2 id="new-tricks-title" class="home-h2">New Tricks</h2>
         <p class="home-intro">
           <strong>2dog</strong> offers a variety of optional features on top of Godot. They maintain general compatibility with the core Godot engine, adding new & popular capabilities and optimizations.
@@ -73,12 +71,6 @@ const tricks = [
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 64px;
   align-items: center;
-}
-
-.gpu-marks {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
 }
 
 .gpu-actions {

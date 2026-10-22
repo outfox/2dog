@@ -33,7 +33,7 @@ const links = [
             Star 2dog on GitHub
           </a>
           <a class="home-btn" href="https://discord.com/invite/GAXdbZCNGT">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord'), '--mark': 'var(--hue-violet)' }" aria-hidden="true"></span>
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord') }" aria-hidden="true"></span>
             Chat on Discord
           </a>
         </div>
@@ -59,7 +59,7 @@ const links = [
           </li>
           <li>
             <a href="https://www.nuget.org/packages/2dog">
-              <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" style="color: var(--hue-sky)" aria-hidden="true"></span>
+              <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" aria-hidden="true"></span>
               Install from NuGet
             </a>
           </li>
@@ -106,7 +106,7 @@ const links = [
 .repo-name .brand-glyph {
   width: 26px;
   height: 26px;
-  color: var(--hue-lime);
+  color: var(--ed-text-1);
 }
 
 .repo-desc {

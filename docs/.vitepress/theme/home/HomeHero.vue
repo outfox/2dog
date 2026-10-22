@@ -47,11 +47,11 @@ async function copyCommands() {
            Read the Dogs!
           </a>
           <a class="home-btn" href="https://discord.gg/GAXdbZCNGT">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord'), '--mark': 'var(--hue-violet)' }" aria-hidden="true"></span>
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord') }" aria-hidden="true"></span>
             Bark on Discord
           </a>
           <a class="home-btn" href="https://www.nuget.org/packages/2dog/">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget'), '--mark': 'var(--hue-sky)' }" aria-hidden="true"></span>
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" aria-hidden="true"></span>
             Fetch from NuGet
           </a>
           <a class="home-btn" href="https://github.com/outfox/2dog">

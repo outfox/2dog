@@ -4,10 +4,12 @@
  */
 
 .home-page {
-  /* The three names keep a fixed hue from the icon palette in custom.css. */
-  --id-dog: var(--hue-lime);
+  /* The three names keep fixed colors: the 2dog bone always white, Godot and .NET from the icon palette. */
+  --id-dog: #fff;
   --id-godot: var(--hue-sky);
   --id-dotnet: var(--hue-violet);
+  /* Glyph ink on a chip filled with its hue: white on the deep light hues, slate on the bright dark ones. */
+  --chip-ink: #fff;
   /* Game viewports render the dark editor grid in both appearances, like a running game. */
   --game-ground: #10141b;
   --game-grid: rgba(160, 190, 230, 0.07);
@@ -15,6 +17,10 @@
   font-size: 17px;
   line-height: 1.6;
   color: var(--ed-text-1);
+}
+
+.dark .home-page {
+  --chip-ink: var(--ed-dark-2);
 }
 
 .home-section {
@@ -139,26 +145,78 @@
   mask: var(--gd-icon) no-repeat center / contain;
 }
 
-/* Secondary buttons tint their mark; the filled primary keeps dark ink. */
+/* Secondary buttons keep their marks neutral, grey at rest and white on hover; the filled primary keeps dark ink. */
 .home-btn:not(.primary) .brand-glyph {
-  color: var(--mark, var(--hue-lime));
+  color: var(--ed-text-2);
+  transition: color 0.12s ease-out;
 }
 
+.home-btn:not(.primary):hover .brand-glyph {
+  color: var(--ed-text-1);
+}
+
+/* A tile tinted with its group's hue (--mark). Host cards fill it solid on hover. */
 .brand-chip {
+  position: relative;
   flex: none;
   display: grid;
   place-items: center;
+  box-sizing: border-box;
   width: 48px;
   height: 48px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--mark, var(--hue-lime)) 14%, var(--ed-raise));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--mark, var(--hue-lime)) 10%, var(--ed-raise));
   color: var(--mark, var(--hue-lime));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mark, var(--hue-lime)) 35%, var(--ed-seam));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mark, var(--hue-lime)) 30%, var(--ed-seam));
+  transition: background-color 0.12s ease-out, color 0.12s ease-out, box-shadow 0.12s ease-out;
 }
 
+/* A faint 8px editor grid toward the edges, clear behind the glyph. */
+.brand-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, currentColor 16%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, currentColor 16%, transparent) 1px, transparent 1px);
+  background-size: 8px 8px;
+  -webkit-mask-image: radial-gradient(closest-side, transparent 62%, #000);
+  mask-image: radial-gradient(closest-side, transparent 62%, #000);
+}
+
+/* Marks are sized optically (--glyph) so heavy squares and thin wordmarks read alike; half-opacity parts of a
+   mark's SVG become its second tone. */
 .brand-chip .chip-glyph {
-  width: 32px;
-  height: 32px;
+  position: relative;
+  width: var(--glyph, 28px);
+  height: var(--glyph, 28px);
+}
+
+/* Products without a vector mark of their own show a monogram. */
+.brand-chip .chip-mono {
+  position: relative;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.brand-chip .chip-mono.long {
+  font-size: 16px;
+}
+
+/* Planned work stays neutral: a dashed slate outline without fill or grid. */
+.brand-chip.soon {
+  --mark: var(--hue-slate);
+  border: 1px dashed color-mix(in srgb, var(--hue-slate) 55%, var(--ed-seam));
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-chip.soon::before {
+  display: none;
 }
 
 /* ---------- Game viewport ---------- */

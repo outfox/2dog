@@ -53,10 +53,10 @@ backup.
 
 | Option                             | Effect                                                                                                                                              |
 |------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `-n, --name <name>`                | Base name override for the scaffolded files; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix |
-| `--rename <NewName>`               | Rename a .NET project name that [contains spaces](/known-issues/spaced-project-names), then scaffold; only before any hosts exist                   |
+| `-n, --name <name>`                | Base name override for the setup's files; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix    |
+| `--rename <NewName>`               | Rename a .NET project name that [contains spaces](/known-issues/spaced-project-names), then set up; only before any hosts exist                     |
 | `--dry-run`                        | Print the plan; change nothing                                                                                                                      |
-| `--force`                          | Overwrite scaffolded files that exist; never deletes                                                                                                |
+| `--force`                          | Overwrite existing files from the setup; never deletes                                                                                              |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision                                  |
 | `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers                                                   |
 | `--no-restore`                     | Skip the final `dotnet restore`                                                                                                                     |

@@ -7,7 +7,7 @@ tagline: "Learn how to test your Godot game with xUnit."
 # xUnit
 
 The xUnit host is a .NET test project that runs your game in a real Godot
-engine. The scaffold uses a headless fixture; rendering is available too.
+engine. The setup uses a headless fixture; rendering is available too.
 
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their robot dog sniffing the ground](../img/2dog-investigation.png)
 

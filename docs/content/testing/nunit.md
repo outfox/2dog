@@ -95,7 +95,7 @@ across test classes like an xUnit collection.
 | macOS    | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
 
 ::: warning Use a separate rendering test project
-The scaffold uses headless fixtures. Keep rendering fixtures in another test
+The setup uses headless fixtures. Keep rendering fixtures in another test
 project so each mode runs in its own process. Switching display modes during
 native Godot restarts can crash; 2dog's fixtures reject the switch.
 For windowed macOS tests, use xUnit's rendering collection for now.

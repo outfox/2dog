@@ -16,7 +16,7 @@ by 2dog. To create the .NET project, follow the [GdUnit host guide](/hosts/gduni
 ## Run through .NET
 
 The 2dog host uses Microsoft.Testing.Platform (MTP) and `dotnet test`. Run
-commands from the project root, whose scaffolded `global.json` selects MTP:
+commands from the project root, where the setup's `global.json` selects MTP:
 
 ```bash
 dotnet test --project MyGame.gdunit

@@ -1,6 +1,8 @@
-Brand marks in this folder come from Simple Icons (https://simpleicons.org, package simple-icons 16.35.0).
-The SVG data is released under CC0-1.0, except where a mark's own license is listed below. Each mark remains
-a trademark of its owner and is shown only to name the platform 2dog works with; no endorsement is implied.
+Most brand marks in this folder come from Simple Icons (https://simpleicons.org, package simple-icons 16.35.0).
+That SVG data is released under CC0-1.0, except where a mark's own license is listed below. The rest are
+one-tone versions of each project's official mark, listed with their source; half-opacity parts stand in for a
+second color. Each mark remains a trademark of its owner and is shown only to name the platform 2dog works
+with; no endorsement is implied.
 The full-color WebGPU logo lives at ../../WebGPU_logo.svg: (c) W3C, CC-BY-4.0,
 https://www.w3.org/2023/02/webgpu-logos.html
 
@@ -14,3 +16,13 @@ webassembly.svg  WebAssembly logo, CC0-1.0 - https://github.com/carlosbaraza/web
 nuget.svg     NuGet, .NET Foundation
 github.svg    GitHub, GitHub Inc. - https://github.com/logos
 discord.svg   Discord, Discord Inc.
+
+2dog.svg      2dog logo silhouette, this project; outline of ../../favicon.svg
+webxr.svg     WebXR mark, W3C Immersive Web Working Group, MIT -
+              https://github.com/immersive-web/webxr-samples/blob/main/media/logo/webxr-logo-mark.svg
+winui.svg     WinUI logo, Microsoft, MIT -
+              https://github.com/microsoft/microsoft-ui-xaml/blob/main/docs/images/logo/winui-logo.svg
+maui.svg      .NET MAUI icon, Microsoft, MIT - traced on its 16-unit grid from
+              https://github.com/dotnet/maui/blob/main/Assets/icon.png
+nunit.svg     NUnit icon, NUnit Project - https://nunit.org/img/nunit.svg (dots dropped, as the file does below 32px)
+xunit.svg     xUnit.net logo, .NET Foundation - https://xunit.net/logo.svg
