@@ -34,6 +34,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - Android Smoke uses one APK per precision/variant matrix cell. `android-prepare` warms the SDK and a clean
   emulator snapshot in parallel with packing; consumers mount SDK/snapshot disks with `commit: false` and
   use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates deployment.
+  Stop the ADB server in an always-run step before sticky disk teardown; its executable keeps the SDK disk busy.
   Pack fills a scoped Android input disk and uploads the same content as a fallback. Consumers must verify
   its run/commit/precision before use; reset mismatched inputs before downloading the matching artifact.
   Its native hashes come from the original build outputs; check packaged libraries against those hashes

@@ -2026,6 +2026,14 @@ jobs:
           ! pgrep -f '[q]emu-system.*-avd 2dog-ci' > /dev/null
           test -s ~/.android/avd/2dog-ci.avd/snapshots/default_boot/snapshot.pb
 
+      - name: Stop ADB before unmounting Android SDK
+        if: always()
+        timeout-minutes: 1
+        run: |
+          if [ -x "$ANDROID_HOME/platform-tools/adb" ]; then
+            timeout 15s "$ANDROID_HOME/platform-tools/adb" kill-server
+          fi
+
   # One APK per job: no shared bin/obj files, and arm64 needs no emulator.
   android-smoke:
     name: Android Smoke (${{ matrix.apk.name }}) [${{ matrix.precision }}]
@@ -2189,6 +2197,14 @@ jobs:
           path: artifacts/android-apk/logcat.txt
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Stop ADB before unmounting Android SDK
+        if: always()
+        timeout-minutes: 1
+        run: |
+          if [ -x "$ANDROID_HOME/platform-tools/adb" ]; then
+            timeout 15s "$ANDROID_HOME/platform-tools/adb" kill-server
+          fi
 
   # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding.
   ios-smoke:
