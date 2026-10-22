@@ -16,7 +16,7 @@ const accent = '#a8e66a';
 const inset = 64;
 const artInset = 48;
 const copyWidth = 576;
-const logoWidth = 152;
+const logoWidth = 304;
 const logoTop = 52;
 const titleTop = 168;
 const buttonTop = 452;
@@ -129,14 +129,14 @@ async function fitCopy(title, tagline) {
 async function renderCopy(section, title, tagline) {
   const layers = [];
   const brand = await sharp(logo).resize({ width: logoWidth }).png().toBuffer({ resolveWithObject: true });
-  layers.push({ input: brand.data, top: logoTop, left: inset });
+  layers.push({ input: brand.data, top: logoTop, left: socialImageWidth - inset - logoWidth });
 
   if (section) {
     const label = await renderText(section.toUpperCase(), 17, { bold: true, color: '#d4f5b0', tracking: 2 });
     const pillWidth = label.info.width + 32;
     const pillHeight = 36;
-    const pillLeft = inset + logoWidth + 24;
-    const pillTop = logoTop + Math.round((brand.info.height - pillHeight) / 2) + 6;
+    const pillLeft = inset;
+    const pillTop = 80;
     layers.push(
       { input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${pillWidth}" height="${pillHeight}">
         <rect x="0.5" y="0.5" width="${pillWidth - 1}" height="${pillHeight - 1}" rx="${pillHeight / 2}"

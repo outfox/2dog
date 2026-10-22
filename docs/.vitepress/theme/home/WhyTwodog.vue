@@ -22,7 +22,7 @@ const tree = [
       </p>
       <h2 id="why-title" class="home-h2">Made with love, dogs + robots.</h2>
       <p class="home-intro">
-        In addition to the pre-made hosts, you get fine customization options for everything: You can have a <strong>Main Loop</strong> now!
+        In addition to the pre-made hosts, you get unlimited customization options: <br/>Yes, you can have a <strong>Main Loop</strong> now!
       </p>
       <div class="why-grid">
         <article class="why-card">

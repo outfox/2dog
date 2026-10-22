@@ -20,8 +20,9 @@
   the share card's invitation, written to the reader ("Learn how to publish your Godot C# game to the web."),
   not a summary; keep it under about 90 characters, or the build fails because the card copy does not fit.
 - `.vitepress/social-images.mjs` composites 1200x630 PNGs into the build's `social/` directory: dark
-  dot-grid background with an accent glow, logo and section pill at top left (sections map from the page path
-  in `social-metadata.mjs`), page title and tagline below, a "Read the dogs!" button at bottom left, and the
+  dot-grid background with an accent glow, a 304px-wide logo at top right and section pill at top left
+  (sections map from the page path in `social-metadata.mjs`), page title and tagline below,
+  a "Read the dogs!" button at bottom left, and the
   first article illustration at bottom right, at 2x with nearest-neighbor scaling. Use the vendored Inter
   fonts for the copy. Prefer a matching non-`-big` PNG when available. Pages without artwork use
   `img/2dog-walkies.png`. Generated images are not sources.

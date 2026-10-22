@@ -45,15 +45,19 @@ test('composes a 1200x630 card with the logo and a 2x nearest-neighbor bottom-ri
   const [red, green, blue, alpha] = pixel(1199, 629);
   assert.ok(Math.max(red, green, blue) < 110, 'accent glow fades out in the bottom-right corner');
   assert.equal(alpha, 255);
-  const logo = await regionStats(image, { left: 64, top: 52, width: 152, height: 78 });
-  assert.ok(logo.channels[0].max > 240, 'white logo appears in the top-left corner');
+  const logo = await regionStats(image, { left: 832, top: 52, width: 304, height: 156 });
+  assert.ok(logo.channels[0].max > 240, 'white logo appears in the top-right corner');
+  const lowerLogo = await regionStats(image, { left: 832, top: 130, width: 304, height: 78 });
+  assert.ok(lowerLogo.channels[0].max > 240, 'logo extends to twice its previous height');
+  const oldLogo = await regionStats(image, { left: 64, top: 52, width: 152, height: 78 });
+  assert.ok(oldLogo.channels[0].max < 80, 'logo no longer appears in the top-left corner');
   assert.deepEqual(pixel(72, 468), [168, 230, 106, 255], 'CTA button leaves clearance above social overlays');
 });
 
 test('labels the section in the header and leaves it out when there is none', async () => {
   const header = async (section) => regionStats(
-    await renderSocialImage(undefined, { section, title: 'Web' }), { left: 240, top: 60, width: 400, height: 60 });
-  assert.ok((await header('Hosts')).channels[1].max > 200, 'section pill appears beside the logo');
+    await renderSocialImage(undefined, { section, title: 'Web' }), { left: 64, top: 80, width: 400, height: 36 });
+  assert.ok((await header('Hosts')).channels[1].max > 200, 'section pill appears in the top-left corner');
   assert.ok((await header('')).channels[1].max < 80, 'no pill without a section');
 });
 

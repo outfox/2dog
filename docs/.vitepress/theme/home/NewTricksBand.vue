@@ -1,20 +1,37 @@
-<!-- WebGPU spotlight. The spec list on the right borrows the Inspector's property rows. -->
+<!-- New capabilities, with linked highlights styled like the Inspector's property rows. -->
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 import { brIconUrl, webgpuLogoUrl } from './icons'
 
-const props = [
-  { key: 'Renderer', value: 'WebGPU with WebGL&nbsp;2 fallback' },
-  { key: 'Runtime', value: '.NET 10 browser-wasm + desktop' },
+const tricks = [
+  {
+    title: 'WebGPU rendering',
+    description: 'Mobile Forward Renderer on desktop and single-threaded web builds.',
+    href: '/build-configurations#experimental-webgpu',
+  },
+  {
+    title: 'Multiple instances',
+    description: 'Run engines in one process side by side with isolated concurrent hosting.',
+    href: '/known-issues/single-instance#concurrent-engines',
+  },
+  {
+    title: 'Double precision',
+    description: 'Build bigger worlds with pre-built double-precision Godot binaries.',
+    href: '/build-configurations#double-precision',
+  },
+  {
+    title: 'Multi-threaded WebAssembly',
+    description: '.NET and Godot workers in parallel in the browser, and much better sound.',
+    href: '/hosts/web#multithreading',
+  },
 ]
 </script>
 
 <template>
-  <!-- Hidden until WebGPU ships. v-if, not an HTML comment: production strips comments, so a comment-only
-       template server-renders nothing and the client hydrates the following sections out of place. -->
-  <section v-if="false" class="home-section gpu" aria-labelledby="gpu-title">
+  <section class="home-section gpu" aria-labelledby="new-tricks-title">
     <div class="home-wrap gpu-grid">
       <div>
+        <p class="home-kicker">Experimental & power-user features</p>
         <div class="gpu-marks" aria-hidden="true">
           <span class="brand-chip">
             <img :src="webgpuLogoUrl()" alt="" width="35" height="22" />
@@ -26,22 +43,16 @@ const props = [
             <span class="chip-glyph" :style="{ '--gd-icon': brIconUrl('dotnet') }"></span>
           </span>
         </div>
-        <p class="home-kicker">New in 2dog</p>
-        <h2 id="gpu-title" class="home-h2">WebGPU rendering driver</h2>
+        <h2 id="new-tricks-title" class="home-h2">New Tricks</h2>
         <p class="home-intro">
-          Design for the Forward+ or Mobile renderers instead of Compatibility.<br/>It's a modern GPU interface for modern browsers: less
-          overhead, access to compute shaders, with performance &amp; visuals close to desktop builds. <br/><i>(older browsers can still use WebGL&nbsp;2)</i>
+          <strong>2dog</strong> offers a variety of optional features on top of Godot. They maintain general compatibility with the core Godot engine, adding new & popular capabilities and optimizations.
         </p>
-        <div class="home-actions gpu-actions">
-          <a class="home-btn primary" :href="withBase('/hosts/web')">Ship to the web</a>
-          <a class="home-btn" :href="withBase('/hosts/blazor')">Embed with Blazor</a>
-        </div>
       </div>
 
       <dl class="gpu-props">
-        <div v-for="p in props" :key="p.key" class="gpu-prop">
-          <dt>{{ p.key }}</dt>
-          <dd v-html="p.value"></dd>
+        <div v-for="trick in tricks" :key="trick.title" class="gpu-prop">
+          <dt><a :href="withBase(trick.href)">{{ trick.title }}</a></dt>
+          <dd>{{ trick.description }}</dd>
         </div>
       </dl>
     </div>
@@ -84,7 +95,7 @@ const props = [
 
 .gpu-prop {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-columns: 160px minmax(0, 1fr);
   gap: 16px;
   padding: 16px 20px;
 }
@@ -95,13 +106,18 @@ const props = [
 
 .gpu-prop dt {
   font-size: 15px;
-  color: var(--ed-text-2);
+}
+
+.gpu-prop dt a {
+  color: var(--ed-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .gpu-prop dd {
   margin: 0;
-  font-weight: 600;
-  color: var(--ed-text-1);
+  font-size: 15px;
+  color: var(--ed-text-2);
 }
 
 @media (max-width: 959px) {
