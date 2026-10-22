@@ -52,7 +52,7 @@ internal static class ScaffoldCommand
         var rename = ResolveSpacedName(options, projectDir, godot, existingHosts);
         var baseName = rename?.NewName ?? DeriveBaseName(options, projectDir, godot);
         if (Hosts.NamespaceName(baseName) is var ns && ns != baseName)
-            Out.Note($"'{baseName}' is not a valid C# namespace; the scaffolded code uses namespace '{ns}' " +
+            Out.Note($"'{baseName}' is not a valid C# namespace; the code 2dog sets up uses namespace '{ns}' " +
                      "(folders and assemblies keep the project's name)");
         return new ProjectContext
         {
@@ -146,7 +146,7 @@ internal static class ScaffoldCommand
 
         var message =
             $"project name '{spaced}' contains whitespace - .NET publish silently drops such a project's NuGet " +
-            "packages from hosts that reference it (dotnet/sdk bug), so 2dog refuses to scaffold against it.\n" +
+            "packages from hosts that reference it (dotnet/sdk bug), so 2dog refuses to set up hosts for it.\n" +
             "Fix the .NET identity by hand (Godot's display name may keep its spaces):\n" +
             string.Join("\n", steps.Select((s, i) => $"  {i + 1}. {s}"));
         if (existingHosts.Count == 0)

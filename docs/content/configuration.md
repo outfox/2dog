@@ -140,15 +140,3 @@ uses another assembly only through reflection, add it as a trimmer root:
   <TrimmerRootAssembly Include="MyLibrary"/>
 </ItemGroup>
 ```
-
-## Trimming
-
-Native AOT, browser, Blazor and Android publishes are trimmed. 2dog keeps
-`GodotSharp`, `twodog`, the host and your game assembly whole. Root other
-assemblies that are only accessed through reflection:
-
-```xml
-<ItemGroup>
-  <TrimmerRootAssembly Include="MyLibrary"/>
-</ItemGroup>
-```

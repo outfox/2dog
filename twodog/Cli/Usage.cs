@@ -13,7 +13,7 @@ internal static class Usage
 
     private const string Preamble =
         """
-        Scaffolds .NET host projects for a Godot project: the Godot project
+        Sets up .NET host projects for a Godot project: the Godot project
         directory is the solution root, hosts are nested subfolders the Godot
         editor ignores (.gdignore). It creates files and edits *.csproj,
         project.godot, the solution and Directory.Build.props in place; nothing
