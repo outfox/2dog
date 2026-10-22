@@ -207,7 +207,8 @@
          (or an explicitly configured $(GodotEditor)). Knobs: TwoDogAutoImport/RequireImport/ForceImport/ImportStampFile/ImportExcludes. -->
     <PropertyGroup>
         <TwoDogAutoImport Condition="'$(TwoDogAutoImport)' == ''">true</TwoDogAutoImport>
-        <TwoDogGodotProjectFullPath Condition="'$(GodotProjectDir)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))))</TwoDogGodotProjectFullPath>
+        <!-- Forward slashes keep trailing separators from escaping closing quotes in Windows commands. -->
+        <TwoDogGodotProjectFullPath Condition="'$(GodotProjectDir)' != ''">$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(GodotProjectDir)'))).Replace('\', '/'))</TwoDogGodotProjectFullPath>
         <!-- Stamp lives in the game project's .godot/: one import per game project (not per consumer), and deleting
              .godot/ - the standard "force reimport" gesture - invalidates it. -->
         <TwoDogImportStampFile Condition="'$(TwoDogImportStampFile)' == '' And '$(TwoDogGodotProjectFullPath)' != ''">$(TwoDogGodotProjectFullPath)/.godot/2dog.import.stamp</TwoDogImportStampFile>
