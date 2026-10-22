@@ -58,14 +58,11 @@ test('pack-only exports carry renderer defaults into device initialization witho
                 vm.runInContext('Godot = async config => capture(config);', context);
                 const engine = new context.window.Engine({ canvas: {} });
                 assert.equal(engine.config.renderingDriver, driver);
-                if (gpuAvailable) {
-                    await engine.init('godot');
-                    assert.equal(calls[0].preinitializedWebGPUDevice, enabled && driver === 'webgpu' ? device : undefined);
-                } else {
-                    context.navigator.gpu = undefined;
-                    await assert.rejects(engine.init('godot'), /WebGPU is not supported/);
-                    assert.equal(calls.length, 0, 'unsupported startup must stop before native initialization');
-                }
+                if (!gpuAvailable) context.navigator.gpu = undefined;
+                await engine.init('godot');
+                assert.equal(calls.length, 1);
+                assert.equal(engine.config.renderingDriver, gpuAvailable ? driver : 'opengl3');
+                assert.equal(calls[0].preinitializedWebGPUDevice, enabled && driver === 'webgpu' && gpuAvailable ? device : undefined);
                 assert.equal(new context.window.Engine({ renderingDriver: 'opengl3' }).config.renderingDriver, 'opengl3');
             });
         }
