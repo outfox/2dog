@@ -24,14 +24,14 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: 'WebAssembly',
         flag: '--web',
-        text: 'C# Games as an AppBundle. WebGL, and soon WebGPU.<br/>No more waiting for Godot!',
+        text: 'C# Games as an AppBundle, using WebGL or WebGPU.<br/>No more waiting for Godot!',
         link: '/hosts/web',
         brand: 'webassembly',
       },
       {
         name: 'WebXR',
         flag: '--webxr',
-        text: 'Godot VR and AR sessions, right in the browser.',
+        text: 'Godot VR and AR sessions, right in the browser or portable XR devices.',
         link: '/hosts/webxr',
         glyph: 'vr_headset',
       },
@@ -226,7 +226,10 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
                 <span class="chip-glyph" :style="{ '--gd-icon': iconUrl('ellipsis_horizontal') }"></span>
               </span>
               <span class="host-body">
-                <span class="host-text">More coming soon.</span>
+                <span class="host-name">
+                  Coming Soon
+                </span>
+                <span class="host-text"><i>... doggedly developing ...</i></span>
               </span>
             </div>
           </li>
