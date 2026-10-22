@@ -15,7 +15,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 | Property                        | Default                                            | Purpose                                                                                                      |
 |---------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| `TwoDogWebVariant`              | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release`                                                                      |
+| `TwoDogWebVariant`              | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                                                  |
 | `TwoDogExportPack`              | `true`                                             | Export game content; `false` uses an existing `wwwroot/godot.pck`                                            |
 | `TwoDogWebExportPreset`         | `Web`                                              | Preset in `export_presets.cfg`                                                                               |
 | `TwoDogWebPackName`             | `godot.pck`                                        | Deployed pack name                                                                                           |
@@ -28,35 +28,59 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogWebSideModuleTableSlots` | `16384`                                            | With threads: function table slots reserved for GDExtension side modules                                     |
 | `WasmEmitSymbolMap`             | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                              |
 | `WasmInitialHeapSize`           | `256MB`                                            | Initial memory allocation; memory can grow                                                                   |
+| `TwoDogWebGpuCachePath`         | System temporary directory                         | Writable Emscripten port cache for WebGPU                                                                    |
 
-| `TwoDogWebGpuCachePath` | System temporary directory | Writable Emscripten port cache for WebGPU |
+`2dog.browser-wasm` restores both debug and release natives. If the payload
+for the selected variant is missing, the build fails.
 
-`2dog.browser-wasm` restores both debug and release natives. A missing selected
-payload fails the build.
-
-Changing `TwoDogWebPackName` also requires matching the pack URL in your boot page.
+If you change `TwoDogWebPackName`, change the pack URL in your boot page to
+match.
 
 ## Experimental WebGPU
 
 Single-precision, single-threaded browser packages include WebGPU and WebGL.
-In `wwwroot/index.html`, configure `GODOT_CONFIG` before creating `Engine`:
+During bundling, `renderer/rendering_method.web="mobile"` in `project.godot`
+selects WebGPU when the native payload includes it. Other settings select WebGL.
+The showcase uses Mobile. A new template project uses Compatibility by default.
+To request WebGPU explicitly, configure `GODOT_CONFIG` in `wwwroot/index.html`
+before you create `Engine`:
 
 ```javascript
 'renderingDriver': 'webgpu',
 'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
 ```
 
-The shell requests a device before initializing Godot. WebGPU requires a secure
-context and browser support. Threaded and double-precision payloads reject the
-request before device creation. Use `opengl3` with `gl_compatibility` for WebGL.
-The package supplies the Emscripten port, link flags and writable cache.
+The shell requests a device before it initializes Godot. If one of these
+conditions occurs, the shell logs a warning and starts with `opengl3` and
+`gl_compatibility`, with the same runtime and game pack:
+
+- WebGPU is unavailable.
+- No adapter is available.
+- The adapter or device request fails.
+
+This fallback happens before startup; it does not recover from later device loss
+or native renderer failures. Game content must also work with Compatibility.
+
+To always use Compatibility, set `renderer/rendering_method.web` to
+`"gl_compatibility"`, or override both command-line options:
+
+```javascript
+'renderingDriver': 'opengl3',
+'args': ['--rendering-driver', 'opengl3', '--rendering-method', 'gl_compatibility'],
+```
+
+The `opengl3` driver uses WebGL 2 in browsers (OpenGL ES 3.0), not WebGL 3.
+WebGPU requires a secure context and browser support. Threaded and
+double-precision payloads reject explicit WebGPU requests before device
+creation. The package supplies the Emscripten port, link flags and writable
+cache.
 
 See [build configurations](/build-configurations#experimental-webgpu) for limits.
 
 ## Precompression
 
-The dotnet CLI writes compressed copies next to the originals; set
-`TwoDogWebPrecompress=false` to skip them. Visual Studio's MSBuild skips this
+The dotnet CLI writes compressed copies next to the originals. To skip them,
+set `TwoDogWebPrecompress=false`. Visual Studio's MSBuild skips this
 step.
 
 ## Trimming and AOT
@@ -66,7 +90,8 @@ reflection.
 
 Browser hosts run on Mono. Enable Mono's
 [AOT compiler](https://learn.microsoft.com/aspnet/core/blazor/webassembly-build-tools-and-aot)
-in the host's csproj instead of `PublishAot`; it applies to `dotnet publish`:
+in the host's csproj instead of `PublishAot`. This setting applies to
+`dotnet publish`:
 
 ```xml
 <PropertyGroup>
