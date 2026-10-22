@@ -42,7 +42,7 @@ public sealed class GodotSessionOptions
 
     /// <summary>
     /// Upper bound for the engine frame rate, applied as Godot's <c>Engine.MaxFps</c> at
-    /// start. The compositor's animation frames drive the pump, but not every backend paces
+    /// start. The compositor's commits drive the pump, but not every backend paces
     /// them to the display (Avalonia's Wayland backend free-runs), so the engine's limiter
     /// enforces this cap. 0 (the default) means auto: use the compositor's pacing on Windows,
     /// or one FPS above the highest connected screen refresh rate on other backends.
@@ -58,7 +58,7 @@ public sealed class GodotSessionOptions
     }
 
     /// <summary>
-    /// Pump rate while no control is attached (the compositor's animation frames drive the
+    /// Pump rate while no control is attached (the compositor's commits drive the
     /// pump only while a control is on screen). Clamped to 1-240; NaN is rejected.
     /// </summary>
     public double DetachedFramesPerSecond

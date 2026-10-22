@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Avalonia.Controls;
+using Avalonia.Rendering.Composition;
 using Avalonia.Threading;
 using Godot;
 using twodog.Presentation;
@@ -16,7 +17,7 @@ namespace twodog;
 public sealed class GodotSession : IDisposable
 {
     private readonly GodotSessionOptions _options;
-    private readonly Action<TimeSpan> _onAnimationFrame;
+    private readonly Action _onCompositionUpdate;
     private Engine? _engine;
     private GodotInstance? _instance;
     private GodotControl? _control;
@@ -45,7 +46,7 @@ public sealed class GodotSession : IDisposable
     public GodotSession(GodotSessionOptions options)
     {
         _options = options;
-        _onAnimationFrame = OnAnimationFrame;
+        _onCompositionUpdate = OnCompositionUpdate;
     }
 
     /// <summary>The engine; valid after <see cref="Start"/>.</summary>
@@ -128,7 +129,7 @@ public sealed class GodotSession : IDisposable
         // though Avalonia is already pacing it. Keep every compositor tick productive.
         OS.LowProcessorUsageMode = false;
         // With vsync off, the engine's own limiter (a smoothed sleep inside Iteration())
-        // paces the pump instead: backends whose animation frames aren't tied to the
+        // paces the pump instead: backends whose composition commits aren't tied to the
         // display (Avalonia's Wayland backend) would otherwise run the engine unbounded.
         // The sleep does block the UI thread, but a host-side nonblocking gate was tried
         // and performed far worse: skipped ticks forfeit their compositor timeslot, so the
@@ -318,7 +319,7 @@ public sealed class GodotSession : IDisposable
         ActiveModeChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    // The pump has two sources, both on the UI thread: the compositor's animation frames
+    // The pump has two sources, both on the UI thread: the compositor's commits
     // while a control is on screen (paces the engine to vsync - the engine's own window is
     // hidden and never blocks in present), and a timer while detached.
     private void UpdatePumpSource()
@@ -326,14 +327,17 @@ public sealed class GodotSession : IDisposable
         // No _disposed term: Dispose() stops the pump and nulls the instance before returning.
         if (_instance is null || _pumpStopped) return;
 
-        if (_control is { } control && TopLevel.GetTopLevel(control) is { } topLevel)
+        if (_control is { } control && TopLevel.GetTopLevel(control) is not null
+            && ElementComposition.GetElementVisual(control) is { } visual)
         {
             _detachedTimer?.Stop();
             _detachedTimer = null;
             if (!_pumpScheduled)
             {
                 _pumpScheduled = true;
-                topLevel.RequestAnimationFrame(_onAnimationFrame);
+                // Animation callbacks can outrun the preceding image update and skip
+                // presentation, leaving Avalonia's 16 ms idle-animation timer to pace us.
+                visual.Compositor.RequestCompositionUpdate(_onCompositionUpdate);
             }
         }
         else if (_detachedTimer is null)
@@ -345,7 +349,7 @@ public sealed class GodotSession : IDisposable
         }
     }
 
-    // Windows animation frames already follow the display. A second limiter at the same
+    // Windows composition commits already follow the display. A second limiter at the same
     // rate can miss compositor slots, especially from a cold start. Other backends can
     // free-run, so auto still caps them at the highest connected refresh rate.
     internal int ResolveMaxFps()
@@ -360,10 +364,15 @@ public sealed class GodotSession : IDisposable
         return fps > 0 ? (int)Math.Ceiling(fps) + 1 : 60;
     }
 
-    private void OnAnimationFrame(TimeSpan _)
+    private async void OnCompositionUpdate()
     {
-        _pumpScheduled = false;
         PumpFrame();
+        // Processed completes before the compositor's image-update jobs run. Wait for
+        // Rendered so the next pump can reuse the shared texture without dropping a frame.
+        if (_instance is not null && _control is { } control
+            && ElementComposition.GetElementVisual(control) is { } visual)
+            await visual.Compositor.RequestCompositionBatchCommitAsync().Rendered;
+        _pumpScheduled = false;
         // Re-registration (or the switch to the detached timer) is UpdatePumpSource's call;
         // its guards cover the stopped/disposed/detached cases.
         UpdatePumpSource();
@@ -395,7 +404,7 @@ public sealed class GodotSession : IDisposable
         {
             // A throw from here (engine callback, host FrameAdvanced handler, presenter)
             // surfaces through the dispatcher's unhandled-exception path; without stopping
-            // first, the next animation frame would pump and rethrow forever. Leave the
+            // first, the next composition update would pump and rethrow forever. Leave the
             // session quiescent so the host sees the failure once and can Dispose cleanly.
             StopPump();
             throw;
