@@ -188,7 +188,7 @@ const glyphUrl = (h: Host) => (h.brand ? brIconUrl(h.brand) : iconUrl(h.glyph!))
           <p class="home-kicker">
             <span class="gd-icon" :style="{ '--gd-icon': iconUrl('container') }" aria-hidden="true"></span>Hosts
           </p>
-          <h2 id="hosts-title" class="home-h2">One code base, many tricks!</h2>
+          <h2 id="hosts-title" class="home-h2">Dog of all Trades</h2>
           <p class="home-intro">
             A host is a small .NET project that starts Godot and runs your game. Add as many as you like
             with <code>dnx 2dog add</code>. They're just tiny sidecar projects!
