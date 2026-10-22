@@ -11,8 +11,8 @@ tagline: "Missing GD.Print output in your tests? Learn how to see it again."
 ## Why This Happens
 
 `GD.Print` writes to stdout through Godot's native `OS::print()`. `dotnet test`
-hides test-host stdout by default. The stream is global, so output also mixes
-with engine and fixture logs rather than belonging to a specific test.
+hides test-host stdout by default. The stream is global, so the output also mixes
+with engine and fixture logs and does not belong to a specific test.
 
 ## Making GD.Print Visible
 
@@ -23,12 +23,12 @@ one is an executable. Run it directly to see its stdout in the terminal:
 dotnet run --project MyGame.xunit
 ```
 
-Your messages show up, mixed into the test-host stream with engine and fixture
+Your messages appear in the test-host stream, mixed with engine and fixture
 logs.
 
 ## Use ITestOutputHelper instead
 
-For anything a test wants to say, use xUnit's `ITestOutputHelper`:
+To write output from a test, use xUnit's `ITestOutputHelper`:
 
 ```csharp
 [Collection<HeadlessCollection>]
@@ -45,8 +45,8 @@ public class MyTests(HeadlessFixture godot, ITestOutputHelper output)
 }
 ```
 
-The output then belongs to that test: it lands in the failure report and in
-the IDE test explorer, with no engine noise around it. To watch it while
+The output then belongs to that test. It appears in the failure report and in
+the IDE test explorer, without engine logs around it. To watch it while
 tests run, pass xUnit's `--show-live-output on`:
 
 ```bash

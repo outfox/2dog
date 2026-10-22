@@ -11,7 +11,7 @@ Godot engine on Windows, Linux, and macOS.
 
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their robot dog sniffing the ground](../img/2dog-investigation.png)
 
-From your Godot project directory:
+Run these commands from your Godot project directory:
 
 ```bash
 dnx 2dog add --nunit

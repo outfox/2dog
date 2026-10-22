@@ -6,9 +6,11 @@ tagline: "Learn how to bring your project's 2dog packages up to date."
 
 # `2dog update`
 
-Sets the project's 2dog package versions to the running tool's, and restores
-after project changes. Never downgrades. When Git can check the project, it
-refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
+Sets the project's 2dog package versions to the versions of the running tool.
+If this changes the project files, it then restores the packages. It never
+downgrades a package. If the project is in a Git
+repository and tracked files have uncommitted changes, the command stops. To
+continue anyway, pass `--allow-dirty`.
 
 ```bash
 2dog update [path] [options]
@@ -24,7 +26,7 @@ refuses uncommitted tracked-file changes unless you pass `--allow-dirty`.
 |------------------------------|---------------------------------------------------------------------------------------------------|
 | `--dry-run`                  | Print the plan; change nothing                                                                    |
 | `--no-restore`               | Skip the final `dotnet restore`                                                                   |
-| `--allow-dirty`              | Proceed despite uncommitted tracked-file changes                                                  |
+| `--allow-dirty`              | Continue even if tracked files have uncommitted changes                                           |
 | `--install-wasm-tools`       | Install missing `wasm-tools` for browser hosts                                                    |
 | `--install-android-workload` | Install the missing `android` workload for Android hosts                                          |
 | `--update-workloads`         | Install missing workloads the hosts need, then run `dotnet workload update` for the project's SDK |
@@ -33,10 +35,10 @@ Plus the [global and output options](/dnx-2dog#global-options). There is no
 `--to`: pin the tool instead.
 
 Package updates need no workloads or Android SDK. For browser or Android
-hosts, terminals can offer to update workloads;
-[`dotnet workload update`](https://learn.microsoft.com/dotnet/core/tools/dotnet-workload-update)
-updates **all installed workloads** for the SDK. `--no-restore` skips the
-offer, and `--dry-run` never touches workloads.
+hosts, the tool can offer to update workloads on a terminal. It uses
+[`dotnet workload update`](https://learn.microsoft.com/dotnet/core/tools/dotnet-workload-update),
+which updates **all installed workloads** for the SDK. `--no-restore` skips the
+offer, and `--dry-run` never checks or changes workloads.
 
 ## Examples
 

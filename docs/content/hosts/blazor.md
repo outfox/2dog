@@ -7,20 +7,21 @@ tagline: "Learn how to put your Godot game on a Blazor web page."
 # Blazor
 
 The Blazor host embeds Godot in a Blazor WebAssembly page through `GodotView`.
-An ASP.NET Core server serves the client; Razor components can access Godot
+An ASP.NET Core server serves the client. Razor components can access Godot
 objects directly.
 
 ## Use It
 
-From your Godot project directory, run these commands. Accept `add`'s
-installation offer if `wasm-tools` is missing:
+Run these commands from your Godot project directory. If `wasm-tools` is
+missing, accept the offer from `add` to install it:
 
 ```bash
 dnx 2dog add --blazor
 dotnet run --project MyGame.blazor
 ```
 
-Open the URL printed by the server. To publish the server and client:
+Open the URL that the server prints. To publish the server and the client,
+run this command:
 
 ```bash
 dotnet publish MyGame.blazor -c Release
@@ -30,8 +31,9 @@ dotnet publish MyGame.blazor -c Release
 
 The generated server sends cross-origin isolation headers so `--web-threads`
 clients can use `SharedArrayBuffer` in development and after publishing. For an
-existing host, add this immediately after `builder.Build()` in
-`MyGame.blazor/Program.cs`, before debugging, static assets, and endpoints:
+existing host, add this code to `MyGame.blazor/Program.cs`. Put it immediately
+after `builder.Build()` and before the calls that add debugging, static assets,
+and endpoints:
 
 ```csharp
 app.Use(async (context, next) =>
@@ -43,9 +45,9 @@ app.Use(async (context, next) =>
 ```
 
 This sends `Cross-Origin-Opener-Policy: same-origin` and
-`Cross-Origin-Embedder-Policy: require-corp`. Cross-origin resources must allow
-loading through CORS or Cross-Origin-Resource-Policy. Use HTTPS or localhost
-for the browser's secure context requirement.
+`Cross-Origin-Embedder-Policy: require-corp`. Resources from other origins must allow
+the load through CORS or a Cross-Origin-Resource-Policy header. Use HTTPS or
+localhost, because the browser requires a secure context.
 
 ## Customize the Page
 
@@ -60,8 +62,11 @@ disable prerendering:
            style="width: 100%; height: 100vh;" />
 ```
 
-Use `Started` to access the engine, `OnFrame` for per-frame work, and child
-content to overlay HTML on the game. One engine can run at a time.
+- Use `Started` to access the engine.
+- Use `OnFrame` for work in each frame.
+- Use child content to show HTML over the game.
+
+Only one engine can run at a time.
 
 Godot and Blazor share one thread. The [Web host's limitations](./web#limitations)
 apply to the client project. See [Blazor Configuration](/configuration/blazor)

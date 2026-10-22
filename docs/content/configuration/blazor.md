@@ -15,18 +15,18 @@ It normally sets `GodotProjectDir=../..`; see the
 
 | Property                     | Default                                            | Purpose                                                                                                |
 |------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `TwoDogWebVariant`           | Follows the [configuration](/build-configurations) | Native Web engine: `debug` or `release`                                                                |
+| `TwoDogWebVariant`           | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                                            |
 | `TwoDogExportPack`           | `true`                                             | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
 | `TwoDogWebExportPreset`      | `Web`                                              | Preset in `export_presets.cfg`                                                                         |
-| `TwoDogWebPackName`          | `godot.pck`                                        | Exported pack name; match it in `GodotView.PackUrl` if changed                                         |
+| `TwoDogWebPackName`          | `godot.pck`                                        | Exported pack name; if you change it, set the same name in `GodotView.PackUrl`                         |
 | `TwoDogWebSideModuleExports` | `true`                                             | Export native symbols used by GDExtensions                                                             |
 | `WasmEmitSymbolMap`          | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                        |
 | `WasmInitialHeapSize`        | `256MB`                                            | Initial memory allocation; memory can grow                                                             |
 
-`2dog.browser-wasm` restores both supported native variants; a missing selected
-payload fails the build. The client SDK manages its own bundle, progress,
+`2dog.browser-wasm` restores both supported native variants. If the payload
+for the selected variant is missing, the build fails. The client SDK manages its own bundle, progress,
 source maps, and compression. `TwoDogWebSizeManifest`, `TwoDogWebStripMaps`,
-and `TwoDogWebPrecompress` are settings for Web/WebXR hosts.
+and `TwoDogWebPrecompress` apply only to Web and WebXR hosts.
 
 ## Publishing, Trimming, and AOT
 
@@ -49,9 +49,9 @@ Set `RenderingDriver="webgpu"` on `GodotView` to select WebGPU Mobile. The defau
 remains OpenGL/WebGL Compatibility. `--rendering-driver webgpu` in `Args` also
 selects WebGPU when `RenderingDriver` is unset.
 
-This requires the single-precision, single-threaded browser payload and WebGPU
-browser support in a secure context. Unsupported payloads fail before device
-creation. The device is reused across view lifetimes; cancelled initialization
-releases an unclaimed device.
+WebGPU requires the single-precision, single-threaded browser payload, a secure
+context and a browser that supports WebGPU. Other payloads fail before 2dog
+creates a device. Later views reuse the same device. If initialization is cancelled, 2dog
+releases a device that no view has claimed.
 
 See [build configurations](/build-configurations#experimental-webgpu).

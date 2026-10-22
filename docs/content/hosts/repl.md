@@ -12,7 +12,8 @@ Add an interactive C# prompt to your game from its Godot project directory.
 *"Be a nice dogbot. Share that assembly load context!"*
 
 ::: danger Don't play too rough! :stop_sign:
-... don't call `tree.free()`, for example, and only give trusted users access.
+Give access only to trusted users. Do not call methods that can break the game,
+such as `tree.free()`.
 
 This is an experimental, powerful new way to interact with your Godot project or the editor *while it's running!*
 :::
@@ -24,7 +25,7 @@ dnx 2dog add --repl
 dotnet run --project MyGame.repl
 ```
 
-For a new, purely REPL project, use `dnx 2dog new MyGame --repl`.
+For a new project with only a REPL host, use `dnx 2dog new MyGame --repl`.
 
 ## Try It
 
@@ -39,7 +40,8 @@ cd /
 ```
 
 `ls` lists nodes, `cd` selects one, and `pwd` shows its path. `$Child` refers
-to a child of the selected node, using its live C# type.
+to a child of the selected node. The expression has the live C# type of that
+child.
 
 Use `engine`, `tree`, `root`, `scene` and `here` to access the running game.
 Godot and common .NET namespaces are already imported:
@@ -57,14 +59,19 @@ node.QueueFree();
 | `:sh`             | Shell-like commands, with C# expressions for properties and methods |
 | `:cs`             | C# statements, declarations and expressions                         |
 
-Variables and the selected node carry over when switching modes. Type `:help`
-for commands and keybindings, or `:exit` to stop the prompt and game.
+When you switch modes, you keep your variables and the selected node. Type
+`:help` to see the commands and keybindings. Type `:exit` to stop the prompt
+and the game.
 
-Tab completes commands, node paths and C# members. Shift+Enter adds a line;
-Up/Down browse history. Output scrolls above your input, and new submissions
-queue while earlier ones run. Ctrl+C or `:cancel` cancels running and queued
-work. Pass `ct` to asynchronous waits; blocking calls need cancellation
-support of their own. Keep Godot calls on the engine's owner thread.
+- Tab completes commands, node paths and C# members.
+- Shift+Enter adds a line.
+- Up and Down browse the history.
+- Ctrl+C or `:cancel` cancels the running work and the queued work.
+
+Output scrolls above your input. New submissions wait in a queue while earlier
+ones run. Pass `ct` to asynchronous waits so that Ctrl+C can cancel them.
+Ctrl+C cannot stop a blocking call unless that call supports cancellation.
+Call Godot APIs only on the thread that owns the engine.
 
 ## Scratch Worlds
 
@@ -76,16 +83,18 @@ worlds["lab"].Scene.GetChildren()
 worlds.Remove("lab");
 ```
 
-Each world has its own viewport and 2D/3D physics, sharing the SceneTree and
-singletons. Omit the scene path to create an empty world.
+Each world has its own viewport and 2D/3D physics. All worlds share the
+SceneTree and the singletons. To create an empty world, omit the scene path.
 
 ## Coding Agents
 
-Start a listening host, then run commands from another terminal or agent:
+Start the host so that it listens for commands:
 
 ```bash
 dotnet run --project MyGame.repl -- --repl-listen mygame
 ```
+
+Then run commands from another terminal or agent:
 
 ```bash
 2dog repl exec -s agent --timeout 30 'cd scene'
@@ -97,9 +106,9 @@ Sessions share the live game; use scratch worlds for separate experiments.
 Each call returns output and an exit code. See [`2dog repl`](/cli/repl) under
 Develop for options, sessions and terminal attachment.
 
-[`2dog skill`](/cli/skill) installs the working guide for Claude Code; add
-`--codex` to write it into `AGENTS.md`. The prompt also shows it with
-`:help agents`.
+[`2dog skill`](/cli/skill) installs the REPL guide for Claude Code. To write
+the guide into `AGENTS.md` instead, add `--codex`. To show the guide at the
+prompt, type `:help agents`.
 
 See [REPL configuration](/configuration/repl) for native variants, headless
 use, local connections and publishing.

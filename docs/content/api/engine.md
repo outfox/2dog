@@ -30,7 +30,7 @@ public Engine(string project, string? path = null, params string[] args)
 When `path` is omitted or `null`, desktop hosts call
 [`ResolveContent()`](#resolvecontent). Browser hosts leave the path unset so
 Godot loads the web pack. Pass a path only for a nonstandard content location.
-Relative paths are resolved from the process working directory.
+2dog resolves relative paths from the working directory of the process.
 
 ## Properties
 
@@ -43,8 +43,8 @@ public GodotErrorLog Errors { get; }
 
 Set `CaptureErrors = true` before `Start()` to collect Godot's native errors and
 warnings in `Errors` (`twodog.GodotErrorLog`). It defaults to `false`.
-Browser capture is unsupported: `Start()` throws `PlatformNotSupportedException`
-when capture is enabled there. The [testing fixtures](./fixture-base#errors)
+Capture does not work in a browser. If you enable it there, `Start()` throws
+`PlatformNotSupportedException`. The [testing fixtures](./fixture-base#errors)
 enable capture automatically and expose the same log.
 
 ### `Tree`
@@ -89,9 +89,9 @@ public Task Completion { get; }
 
 Completes when this `Engine` reaches a terminal state. If `Start()` succeeded,
 that means the owned native instance has been destroyed and synchronous `Exited`
-handlers have returned. Asynchronous work started by those handlers is not awaited.
-Shutdown restores the host synchronization context before notifying `Exited`, so
-subsequent host awaits do not depend on Godot's stopped frame loop.
+handlers have returned. `Engine` does not await asynchronous work that those handlers start.
+Shutdown restores the host synchronization context before `Exited` fires. As a
+result, later awaits in the host do not depend on Godot's stopped frame loop.
 
 ### `Exited`
 
@@ -104,9 +104,9 @@ also completes for an `Engine` disposed before it starts, but `Exited` does not 
 
 ## Threading
 
-Lifecycle calls and Godot object access belong on the thread that called
-`Start()`. Calls from another thread are rejected; dispatch them to the host's
-engine thread.
+Make lifecycle calls and access Godot objects only on the thread that called
+`Start()`. Calls from another thread fail, so dispatch them to the host's engine
+thread.
 
 ## Methods
 
@@ -118,8 +118,8 @@ public GodotInstance Start()
 
 Starts Godot and the project's `run/main_scene`, then returns a borrowed
 `GodotInstance` compatibility handle. `Engine` owns the instance; do not dispose
-the handle. Starting another instance in the same assembly load context before completion throws
-`InvalidOperationException`.
+the handle. If you start another instance in the same assembly load context before
+completion, `Start()` throws `InvalidOperationException`.
 
 ### `Iteration`
 
@@ -128,8 +128,9 @@ public bool Iteration()
 ```
 
 Processes one main-loop frame. Returns `true` when Godot requests exit.
-Dispose the engine after the pump stops. Calling `Iteration()` recursively,
-or while `Run()` owns the pump, throws `InvalidOperationException`.
+Dispose the engine after the main loop stops. `Iteration()` throws
+`InvalidOperationException` if you call it recursively or while `Run()` owns
+the main loop.
 
 ### `RequestQuit`
 
@@ -168,8 +169,8 @@ public ValueTask DisposeAsync()
 ```
 
 Requests shutdown and waits for teardown. Prefer this in browser hosts.
-Disposal from a game callback is deferred until the native frame returns; do
-not synchronously wait for `Completion` inside that callback.
+If you dispose from a game callback, 2dog defers the disposal until the native
+frame returns. Do not wait synchronously for `Completion` inside that callback.
 
 ### `WebExitRuntimeOnQuit`
 
@@ -189,15 +190,15 @@ Browser restarts require a fresh canvas and host configuration before `Start()`;
 public static bool WebLogFirstChanceExceptions { get; set; }
 ```
 
-Defaults to `false`. Set to `true` before browser startup to print every thrown
-managed exception to the browser console as an error, including caught exceptions
-and exceptions stored in unawaited tasks. Set back to `false` after investigating;
-this diagnostic mode adds logging overhead. Setting it on desktop throws
-`PlatformNotSupportedException`.
+Defaults to `false`. Set it to `true` before browser startup to print every thrown
+managed exception to the browser console as an error. This includes caught
+exceptions and exceptions stored in unawaited tasks. Set it back to `false` when
+you are done, because this diagnostic mode adds logging overhead. On desktop,
+the setter throws `PlatformNotSupportedException`.
 
-Unhandled managed exceptions and unobserved task exceptions are logged
-automatically on browser from the first use of `Engine`, across restarts.
-Unobserved task reporting waits for garbage collection.
+In a browser, 2dog logs unhandled managed exceptions and unobserved task
+exceptions automatically, from the first use of `Engine` and across restarts.
+2dog reports unobserved task exceptions only after a garbage collection.
 
 ### `ResolveContent`
 
@@ -205,8 +206,8 @@ Unobserved task reporting waits for garbage collection.
 public static string? ResolveContent()
 ```
 
-Returns `null` when a `.pck` named after the executable sits beside it, letting
-Godot load that pack. Otherwise, returns [`ResolveProjectDir()`](#resolveprojectdir).
+Returns `null` when a `.pck` named after the executable is next to it, so that
+Godot loads that pack. Otherwise, returns [`ResolveProjectDir()`](#resolveprojectdir).
 The desktop constructor calls this automatically when `path` is omitted.
 
 ### `ResolveProjectDir`
@@ -253,8 +254,8 @@ internal static class Program
 ```
 
 `args` accepts ordinary
-[Godot command-line arguments](https://docs.godotengine.org/en/stable/tutorials/editor/command_line_tutorial.html) – 
-`--headless`, `--verbose`, `--rendering-driver opengl3`, `--audio-driver Dummy`,
-and the rest – and passes them to the engine unchanged.
+[Godot command-line arguments](https://docs.godotengine.org/en/stable/tutorials/editor/command_line_tutorial.html),
+such as `--headless`, `--verbose`, `--rendering-driver opengl3` and
+`--audio-driver Dummy`. It passes them to the engine unchanged.
 
 See [2dog (generic .NET)](../hosts/generic) to run and publish a desktop host.

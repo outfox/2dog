@@ -18,15 +18,17 @@ agent:
 
 ## Finding the host
 
-A host running in a terminal listens automatically. For scripts and agents,
-use `--repl-listen` to keep it running after stdin ends:
+A host that runs in a terminal listens for connections automatically. For
+scripts and agents, use `--repl-listen`. Then the host does not stop when stdin
+ends:
 
 ```bash
 dotnet run --project MyGame.repl -- --headless --repl-listen mygame
 ```
 
-`2dog repl` selects the host for the current project, or the only running
-host. If several qualify, choose one with `--pipe NAME`.
+`2dog repl` selects the host for the current project. If there is no such host,
+it selects the only running host. If several hosts qualify, choose one with
+`--pipe NAME`.
 
 ## Running code
 
@@ -37,11 +39,12 @@ Use a named session to keep variables and node selection between calls:
 2dog repl exec -s agent --timeout 30 '$Player.Position'
 ```
 
-`$Player` refers to a child of the selected node using its live C# type.
+`$Player` refers to a child of the selected node. Its type is the live C# type
+of that child.
 Use `ls` to find nodes and `cd /root/Main` to select an absolute path.
 `ls -d 1` limits the listing depth.
 
-Without code, or with `-`, read from stdin:
+If you give no code, or give `-`, the command reads the code from stdin:
 
 ```bash
 2dog repl exec -s agent --timeout 30 - <<'EOF'
@@ -53,28 +56,29 @@ EOF
 
 Consecutive C# statements compile and run as one submission, with no frames
 between them. A line without a trailing semicolon ends the submission and
-prints its value. Shell commands and `:` commands run separately. Submissions
-stop at the first failure; `#load "file.csx"` runs a file as one submission.
-`:exit` ends the request without closing the session.
+prints its value. Shell commands and `:` commands run separately. If a submission
+fails, the later submissions do not run. `#load "file.csx"` runs a file as one
+submission. `:exit` ends the request but does not close the session.
 
-Quote code to protect `$` paths from your shell. Code starting with `-` goes
-after `--`: `2dog repl exec -- -1 + 2`.
+Quote code to protect `$` paths from your shell. If the code starts with `-`,
+put it after `--`: `2dog repl exec -- -1 + 2`.
 
-| Option                 | Effect                                                                                                                     |
-|------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `-s, --session <name>` | Keep variables, imports, mode, selected node and worlds until closed or the host stops. Omit for a fresh session per call. |
-| `--timeout <seconds>`  | Cancel after this duration, including queued time; preserve the session.                                                   |
-| `--strict`             | Fail if a submission logs a Godot error or warning.                                                                        |
-| `--pipe <name>`        | Choose a host by its `--repl-listen` name.                                                                                 |
-| `--json`               | Return a structured report with status, values, errors, logs and node listings.                                            |
+| Option                 | Effect                                                                                                                                                    |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `-s, --session <name>` | Keep variables, imports, mode, selected node and worlds until you close the session or the host stops. Without this option, each call gets a new session. |
+| `--timeout <seconds>`  | Cancel after this duration, including queued time; preserve the session.                                                                                  |
+| `--strict`             | Fail if a submission logs a Godot error or warning.                                                                                                       |
+| `--pipe <name>`        | Choose a host by its `--repl-listen` name.                                                                                                                |
+| `--json`               | Return a structured report with status, values, errors, logs and node listings.                                                                           |
 
 ## Output and cancellation
 
 Values go to stdout; compile errors, exceptions and Godot errors and warnings
-go to stderr. `Console.WriteLine` and `GD.Print` output from the submission
-returns with it; later output stays on the host console. JSON reports contain
+go to stderr. The command returns the output that
+the submission writes with `Console.WriteLine` and `GD.Print`. Output that
+comes later stays on the host console. JSON reports contain
 per-submission `results` and top-level `errors`; listings include a `tree` of
-`name`, `type` and `children`, with `hidden` counting omitted descendants.
+`name`, `type` and `children`. `hidden` gives the number of omitted descendants.
 
 | Exit code | Meaning                                                |
 |-----------|--------------------------------------------------------|
@@ -86,8 +90,9 @@ per-submission `results` and top-level `errors`; listings include a `tree` of
 | `130`     | Cancelled by Ctrl+C or session closure                 |
 
 All sessions share the engine thread; synchronous work pauses the game.
-Cancellation is cooperative: pass `ct` to waits such as `Task.Delay`, or they
-keep running, and the session stays busy after a timeout returns 124.
+Cancellation is cooperative. Pass `ct` to waits such as `Task.Delay`. If you
+do not, they continue to run, and the session stays busy after a timeout
+returns 124.
 
 ## Sessions
 

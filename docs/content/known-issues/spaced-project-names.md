@@ -11,30 +11,31 @@ NuGet packages when that project's name contains a space. Every 2dog web
 publish triggers it. The name comes from `PackageId`, `AssemblyName` or the
 project file name, so all of them must be space-free.
 
-The symptom: the game's own DLL ships, but every NuGet package it references
-(a JSON library, a logging framework, ...) is missing from
-`AppBundle/_framework`, and the app dies at startup with:
+The symptom is that the publish output contains the game's own DLL, but not its
+NuGet packages. Every package that the game references, such as a JSON library
+or a logging framework, is missing from `AppBundle/_framework`. The app then
+crashes at startup with this error:
 
 ```text
 System.IO.FileNotFoundException: Could not load file or assembly
 'Newtonsoft.Json, Version=13.0.0.0, ...'
 ```
 
-Godot sets this trap readily - a Godot project named "Fast Dragon" gets a
-generated `Fast Dragon.csproj` with a matching assembly name. Stock Godot
-never notices (its export publishes the game as the *root* project, which is
-unaffected); 2dog hosts reference the game, which is exactly the broken case.
+Godot often creates such names. For a project named "Fast Dragon", Godot
+generates `Fast Dragon.csproj` with a matching assembly name. Stock Godot
+is not affected, because its export publishes the game as the *root* project.
+2dog hosts reference the game, which is exactly the broken case.
 
 ## What 2dog does
 
-`2dog add` refuses to set up hosts against a name containing
-whitespace and offers to fix it - interactively, or via
+`2dog add` does not set up hosts for a name that contains
+whitespace. It offers to fix the name, either interactively or with
 `2dog add --rename NewName`. The rename
-touches the .NET identity only: the csproj file, `[dotnet]
+changes only the .NET identity: the csproj file, `[dotnet]
 project/assembly_name` in `project.godot`, and the solution reference. Godot's
 display name (`config/name`) keeps its spaces.
 
-`2dog new` never creates such names (spaces are stripped, with a notice).
+`2dog new` never creates such names. It removes spaces and shows a notice.
 
 ## Fixing an affected project by hand
 
@@ -46,6 +47,6 @@ display name (`config/name`) keeps its spaces.
 5. In each existing host csproj, update the `ProjectReference`, any
    `TrimmerRootAssembly`, and the `RootNamespace` that carry the old name.
 
-Adding the game's packages directly to the host csproj also works around the
-bug (direct references are never excluded) - but it must be kept in sync with
-the game's packages by hand, so prefer the rename.
+Another workaround is to add the game's packages directly to the host csproj,
+because the SDK never excludes direct references. But then you must keep these
+references in sync with the game's packages by hand, so prefer the rename.

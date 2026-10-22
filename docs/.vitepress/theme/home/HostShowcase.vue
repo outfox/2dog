@@ -148,7 +148,7 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: 'MAUI',
         flag: '--maui',
-        text: 'A .NET MAUI page on Windows, Android, iOS.',
+        text: 'A .NET MAUI page on Windows, Android and iOS.',
         link: '/hosts/maui',
         brand: 'maui',
         size: 32,
@@ -170,7 +170,7 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: '2dog',
         flag: '--generic',
-        text: 'Your custom <code>Main()</code>, driving every frame.',
+        text: 'Your custom <code>Main()</code> drives every frame.',
         link: '/hosts/generic',
         brand: '2dog',
         size: 34,
@@ -178,7 +178,7 @@ const groups: { label: string; icon: string; hue: string; hosts: Host[]; soon?: 
       {
         name: 'REPL',
         flag: '--repl',
-        text: 'Explore, and edit a running game interactively.',
+        text: 'Explore and edit a game while it runs.',
         link: '/hosts/repl',
         mono: '>_',
         tag: 'Experimental',

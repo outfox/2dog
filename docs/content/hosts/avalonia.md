@@ -6,8 +6,8 @@ tagline: "Learn how to embed Godot in an Avalonia app, with your UI right on top
 
 # Avalonia
 
-The Avalonia host displays Godot inside a cross-platform desktop window using
-`2dog.avalonia`. Avalonia controls can overlap the game, including translucent
+The Avalonia host uses `2dog.avalonia` to show Godot inside a cross-platform
+desktop window. Avalonia controls can overlap the game, including translucent
 controls.
 
 ![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
@@ -15,7 +15,7 @@ controls.
 
 ## Use It
 
-From your Godot project directory:
+Run these commands from your Godot project directory:
 
 ```bash
 dnx 2dog add --avalonia

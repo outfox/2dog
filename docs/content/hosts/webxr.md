@@ -14,8 +14,8 @@ See [WebXR Configuration](/configuration/webxr) for build and publish settings.
 
 ## Use It
 
-From your Godot project directory, run these commands. Accept `add`'s
-installation offer if `wasm-tools` is missing:
+Run these commands from your Godot project directory. If `wasm-tools` is
+missing, accept the offer from `add` to install it:
 
 ```bash
 dnx 2dog add --webxr
@@ -37,12 +37,12 @@ Enable web XR shaders in `project.godot`:
 shaders/enabled.web=true
 ```
 
-Add an `XROrigin3D` with an `XRCamera3D`. Start Godot's `WebXRInterface` from a
-button press and enable `Viewport.UseXR` when the session starts.
+Add an `XROrigin3D` with an `XRCamera3D`. Start Godot's `WebXRInterface` when the
+user presses a button. When the session starts, enable `Viewport.UseXR`.
 See the [showcase scene](https://github.com/outfox/2dog/tree/main/demos/showcase)
 for an example.
 
 Use an XR-capable browser and device, or the
 [Immersive Web Emulator](https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik).
-Serve over HTTPS outside `localhost`. The [Web host's limitations](./web#limitations)
-also apply.
+If you do not serve the site from `localhost`, use HTTPS. The
+[Web host's limitations](./web#limitations) also apply.

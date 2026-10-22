@@ -6,8 +6,8 @@ tagline: "Learn how to configure Godot in your Qt Quick app, from Qt to GPU shar
 
 # Qt Quick Configuration
 
-Set properties in `MyGame.qt.csproj`. Reference `2dog.qt`, explicitly select
-`2dog.engine` or `2dog.engine.double`, and reference the
+Set properties in `MyGame.qt.csproj`. Reference `2dog.qt` and explicitly
+select `2dog.engine` or `2dog.engine.double`. Also reference the
 [Qt Bridge for C#](https://github.com/qt/qtbridge-csharp) package for the build
 platform, `QtGroup.Qt.Bridge.CSharp.<rid>`.
 [Global settings](/configuration#properties) control the game directory,
@@ -17,28 +17,30 @@ resource import, analyzers, and native variant.
 
 `QtDir` is the Qt 6 prefix, the directory containing
 `lib/cmake/Qt6/Qt6Config.cmake`. The `win-x64` Qt Bridge package sets it to
-its bundled Qt; on Linux and macOS, pass it to every build:
+its bundled Qt. On Linux and macOS, pass it to every build:
 
 ```bash
 dotnet build MyGame.qt -p:QtDir=/path/to/qt6
 ```
 
-Qt Bridge's own settings, such as its export mode and resource packaging, are
-described in its [documentation](https://github.com/qt/qtbridge-csharp).
+The [Qt Bridge documentation](https://github.com/qt/qtbridge-csharp) describes
+the settings of Qt Bridge, such as its export mode and resource packaging.
 
 ## The TwoDog QML Module
 
 `GodotView` lives in the `TwoDog` QML module, which `2dog.qt` ships as C++
-source. The build compiles it against the Qt in `QtDir` with CMake and Ninja,
-under the host's `obj` directory, and copies it to `TwoDog/` next to the app,
-where QML finds it. It rebuilds when its sources or `QtDir` change. On Windows,
-the build uses the newest Visual Studio installation with C++ tools, and a
-very long NuGet package folder can push Qt's CMake files past Windows' 260
-character path limit; the default `%USERPROFILE%\.nuget\packages` is fine.
+source. The build compiles it with CMake and Ninja against the Qt in
+`QtDir`, in the host's `obj` directory. Then the build copies it to `TwoDog/`
+next to the app, where QML finds it. It rebuilds when its sources or `QtDir`
+change. On Windows,
+the build uses the newest Visual Studio installation with C++ tools. Do not use
+a very long path for the NuGet package folder, because the paths of Qt's CMake
+files can then exceed the 260-character path limit of Windows. The default
+`%USERPROFILE%\.nuget\packages` is short enough.
 
 ## Session Properties
 
-Set startup properties when creating the `QtGodotSession`:
+Set startup properties when you create the `QtGodotSession`:
 
 | Property           | Default | Purpose                                                                                     |
 |--------------------|---------|---------------------------------------------------------------------------------------------|
@@ -53,8 +55,9 @@ using var session = new QtGodotSession("MyGame", args: args)
 };
 ```
 
-GPU sharing needs Qt Quick's Direct3D 11 backend on Windows, Qt's default
-there. The session steers the engine to the GPU Qt renders on. CPU readback can
+On Windows, GPU sharing needs the Direct3D 11 backend of Qt Quick, which is
+the default backend there. The session makes the engine render on the same GPU
+as Qt. CPU readback can
 reduce the frame rate at larger window sizes.
 
 ## Publishing

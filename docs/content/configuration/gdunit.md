@@ -7,16 +7,16 @@ tagline: "Learn how to configure GdUnit runs, limits and test artifacts."
 # GdUnit Configuration
 
 The [GdUnit host](/hosts/gdunit) uses the .NET 10 SDK and MTP runner. Reference
-`2dog.gdunit` at the same 2dog version as the game. Choose
-`2dog.gdunit.double` for a double precision game. The package brings the engine
-and editor-tool dependencies needed for private resource imports, together with
-a pinned official GdUnit runtime. Consumers do not need a GdUnit checkout or a
-separate addon installation.
+`2dog.gdunit` at the same 2dog version as the game. For a
+double-precision game, choose `2dog.gdunit.double`. The package includes a
+pinned official GdUnit runtime. It also brings the engine and editor-tool
+dependencies that private resource imports need. You do not need a GdUnit
+checkout or a separate addon installation.
 
-Debug, Release and Editor select the corresponding
-[engine variant](/build-configurations). The host always runs headlessly.
-Normal game importing and pack export are disabled for the host project;
-discovery and execution import their own private stages.
+Debug, Release and Editor select the matching
+[native variant](/build-configurations). The host always runs headlessly.
+The host project disables the normal game import and pack export. Discovery
+and execution import their own private stages.
 
 ## Create the host
 
@@ -26,8 +26,9 @@ From the directory containing `project.godot`, run:
 dnx 2dog add --gdunit
 ```
 
-Use `--gdunit MyGame.scripts` to choose a custom host folder. New projects
-can use `dnx 2dog new MyGame --gdunit`; the template accepts `--gdunit true`.
+Use `--gdunit MyGame.scripts` to choose a custom host folder. For a new
+project, run `dnx 2dog new MyGame --gdunit`. The template accepts
+`--gdunit true`.
 The tool creates this layout, including a sample `tests/example_test.gd`:
 
 ```text
@@ -40,7 +41,7 @@ MyGame.gdunit/
 ```
 
 Leave `.gdignore` empty. It keeps the host and its test resources out of the
-game's normal import and export. The host imports a private copy when running.
+game's normal import and export. When the host runs, it imports a private copy.
 
 ## Project and entry point
 
@@ -128,16 +129,18 @@ Set these properties on `GdUnitOptions` in `Program.cs`:
 | `ArtifactsDirectory`       | Host output `TestResults/gdunit` | Parent of fresh stages and logs        |
 | `ProjectAssemblyDirectory` | Host output                      | Built game assemblies and dependencies |
 | `ImportTimeout`            | Two minutes                      | Limit for the separate import process  |
-| `SessionTimeout`           | Five minutes                     | Limit for pumping one embedded session |
+| `SessionTimeout`           | Five minutes                     | Time limit for one embedded session    |
 
 For tests under a nested host, include that host in each root, for example
-`MyGame.gdunit/tests`. Roots must remain inside the source game. Selected roots
-can be ignored in the game; nested `.gdignore` trees remain excluded. Linked
+`MyGame.gdunit/tests`. Roots must remain inside the source game. A root can
+be in a directory that the game ignores, such as `MyGame.gdunit/`. Nested
+`.gdignore` trees inside a root stay excluded. Linked
 files and directories are unsupported. Timeouts must be positive.
 
 For a mixed C#/GDScript game, build the game through a `ProjectReference` from
-the host. Keep `ProjectAssemblyDirectory` at the host output unless its game
-assemblies and dependencies are staged elsewhere.
+the host. If you stage the game
+assemblies and dependencies in a different directory, set
+`ProjectAssemblyDirectory` to it. Otherwise, keep the host output.
 
 ## Artifacts
 
@@ -152,8 +155,8 @@ Each request creates a fresh subdirectory beneath `ArtifactsDirectory`:
 
 Reports from GdUnit's session hooks live under
 `project/twodog_test_host/reports/`. The host retains artifacts for inspection.
-On Windows, choose a short artifact path for deeply nested projects because
-native directory operations can reach Windows path length limits.
+For a deeply nested project on Windows, choose a short artifact path. If you do
+not, native directory operations can exceed the maximum path length of Windows.
 
 For assertions, suites and other framework settings, use
 [GdUnit's official documentation](https://godot-gdunit-labs.github.io/gdUnit4/latest/).

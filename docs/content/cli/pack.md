@@ -6,16 +6,16 @@ tagline: "Learn how to peek inside your exported .pck files."
 
 # `2dog pack`
 
-File-format operations on Godot `.pck` bundles. Reads the pack directly: no
-engine, no project.
+Runs file-format operations on Godot `.pck` bundles. It reads the pack
+directly, so it needs no engine and no project.
 
 ```bash
 2dog pack list <pck>
 ```
 
 `list` prints the pack format, the Godot version and every entry, largest
-first; `--json` puts the listing in the report. It answers "why is my pck
-99 MiB?" and confirms an asset made it into a [web publish](/hosts/web).
+first; `--json` puts the listing in the report. Use it to see why a pck
+is 99 MiB, or to confirm that a [web publish](/hosts/web) contains an asset.
 
 ```bash
 2dog pack list MyGame.web/AppBundle/godot.pck

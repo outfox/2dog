@@ -17,10 +17,10 @@ tagline: "Learn how to pick debug, release or editor builds, in single or double
 Every variant also comes in [double precision](#double-precision);
 `TwoDogVariant` stays the same.
 
-`debug` includes assertions and debugging support; `release` is the optimized
-production runtime; `editor`
-enables `TOOLS_ENABLED`, including editor types, import plugins, and `[Tool]`
-scripts.
+- `debug` includes assertions and debugging support.
+- `release` is the optimized production runtime.
+- `editor` enables `TOOLS_ENABLED`, including editor types, import plugins,
+  and `[Tool]` scripts.
 
 ## Selecting a Variant
 
@@ -41,12 +41,12 @@ for Release and other configurations. Set it explicitly to override that mapping
 </Project>
 ```
 
-All three desktop variants come through the platform meta package, so selecting
-a variant needs no extra package references.
+The platform meta package includes all three desktop variants, so you do not
+need extra package references to select a variant.
 
 Web hosts use `TwoDogWebVariant` with the same configuration mapping. The
-`2dog.browser-wasm` package restores both debug and release natives; a missing
-selected payload fails the build. Web and Android do not support the editor
+`2dog.browser-wasm` package restores both debug and release natives. If the
+selected payload is missing, the build fails. Web and Android do not support the editor
 variant: use Debug or Release, or explicitly select a supported variant.
 
 Without an explicit variant override, use the configuration in the usual way:
@@ -71,20 +71,26 @@ bindings; single- and double-precision Godot types cannot be mixed.
 ```
 
 Keep `2dog.avalonia`, `2dog.blazor`, `2dog.qt`, `2dog.xunit`, `2dog.nunit` and
-`2dog.repl` under their ordinary names; `2dog.gdunit` becomes `2dog.gdunit.double`. Native dependencies are selected automatically;
-if referenced explicitly, append `.double` to the entire ID, such as
+`2dog.repl` under their ordinary names. `2dog.gdunit` becomes `2dog.gdunit.double`. 2dog selects the native dependencies automatically.
+If you reference them explicitly, append `.double` to the entire ID, such as
 `2dog.win-x64.release.double`. 
 
 ::: danger GDExtensions + Double Precision
-GDExtensions must also match the precision!
+Use only GDExtensions that are built for the same precision as the engine.
+In double precision, vectors and other math types use 64-bit floats, so an
+extension built for the other precision reads them wrongly.
 :::
 
 ## Experimental WebGPU
 
-WebGPU is opt-in and currently supports the Mobile renderer on single-precision
-Windows, Linux and macOS, and single-threaded browser runtimes. Existing renderer
-defaults are preserved. Android, double precision, threaded browser payloads and
-Forward+ reject WebGPU with a clear error. Native threading remains supported.
+WebGPU is opt-in. It currently supports the Mobile renderer on these targets:
+
+- Windows, Linux and macOS, in single precision
+- single-threaded browser runtimes
+
+2dog does not change your existing renderer defaults. If you use WebGPU with
+Android, double precision, threaded browser payloads or Forward+, you get a
+clear error. Native threading remains supported.
 Headless imports and exports do not require a WebGPU device.
 
 ```bash
@@ -138,9 +144,9 @@ with `TwoDogWebGpuCachePath` when needed.
 
 ## Downloading CI Packages
 
-In a 2dog checkout, use the current branch's tested packages without compiling
-Godot. Install `uv`, the .NET SDK selected by `global.json`, and an
-authenticated GitHub CLI (`gh`), then run:
+In a 2dog checkout, you can use the tested packages of the current branch, so
+you do not have to compile Godot. Install `uv`, the .NET SDK that
+`global.json` selects, and an authenticated GitHub CLI (`gh`). Then run:
 
 ```bash
 uv run poe pull-packages
@@ -149,15 +155,23 @@ dotnet run --project demos/showcase/showcase.2dog
 
 The command imports the latest successful CI run with available packages for
 the current branch into `packages/`. Each bundle includes Windows x64, Linux
-x64, macOS arm64, browser and Android packages. It also downloads the matching
-Godot SDK, managed APIs and source generator, refreshes only stale package
-versions in the checkout's `.packages/` cache, and restores `2dog.tests.slnf`.
+x64, macOS arm64, browser and Android packages. It also does these steps:
+
+- It downloads the matching Godot SDK, managed APIs and source generator.
+- It refreshes only stale package versions in the `.packages/` cache of the
+  checkout.
+- It restores `2dog.tests.slnf`.
+
 Use the same command in the checkout on each operating system.
 
-Pass `--run <run-id>` to select the same snapshot on several machines,
-`--precision double` or `--precision both` for double precision, `--plan` to
-show the run, sizes and expiry without downloading, or `--no-restore` to
-import the feed without restoring projects. WebGPU uses single precision.
+These options change what the command does:
+
+- `--run <run-id>` selects the same snapshot on several machines.
+- `--precision double` or `--precision both` adds the double-precision packages.
+- `--plan` shows the run, sizes and expiry, and does not download anything.
+- `--no-restore` imports the feed and does not restore projects.
+
+WebGPU uses single precision.
 
 The downloader checks package versions against `Directory.Build.props` and
 the native source against the checkout's Godot submodule commit. It rejects
@@ -165,8 +179,8 @@ incomplete feeds and empty native stubs. The selected run and package versions
 are recorded in `packages/ci-packages.json`.
 
 CI package artifacts expire after seven days. If no matching artifact remains,
-run CI again. Avoid `poe build` after downloading unless you intend to repack:
-without local native builds it can replace other platforms' packages with
+run CI again. Do not run `poe build` after you download packages, unless you want to repack.
+Without local native builds, it can replace the packages of other platforms with
 empty stubs. `dotnet build`, `dotnet run` and `dotnet test` use the downloaded
 feed directly.
 
@@ -179,24 +193,25 @@ from its NuGet cache before restoring.
 ## Editor Variants
 
 ::: tip Opening the editor
-The editor variant enables editor APIs; pass `--editor` to start the interactive
-editor and initialize editor runtime singletons such as `EditorInterface`:
+The editor variant enables editor APIs. To start the interactive editor and
+initialize the runtime singletons of the editor, such as `EditorInterface`, pass
+`--editor`:
 
 ```bash
 dotnet run --project MyGame.2dog -c Editor -- --editor
 ```
 
 The generic host forwards these arguments and pumps the editor's main loop.
-Custom hosts must keep pumping the engine and avoid assuming that a game scene
-is running in editor mode.
+A custom host must continue to run the engine loop. It must not assume that a
+game scene is active in editor mode.
 
 Resource import also runs separately and automatically at build time; see
 [Resource Import](./import-tool).
 
 The editor's export dialog edits the presets that `dotnet publish` uses. It
-cannot build a playable game, because the host does that: Export Project,
-Export All, one-click deploy and `--export-release`/`--export-debug` are
-unavailable inside a host. PCK/ZIP and patch exports remain and contain
+cannot build a playable game, because the host does that. For this reason,
+Export Project, Export All, one-click deploy and
+`--export-release`/`--export-debug` are not available inside a host. PCK/ZIP and patch exports remain and contain
 resources only; see [Pack export](./import-tool#pack-export).
 :::
 

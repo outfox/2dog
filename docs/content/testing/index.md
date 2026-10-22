@@ -13,11 +13,12 @@ and resources.
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their robot dog sniffing the ground](../img/2dog-investigation.png)
 *"Find those bugs, wherever they hide."*
 
-2dog supports several popular testing frameworks, but also provides generic fixtures just in case you need something specific.
+2dog supports several popular test frameworks. It also provides generic
+fixtures if you need a different setup.
 
 ## Choose your framework
 
-Test hosts are opt-in. Choose `--xunit`, `--gdunit` or `--nunit` when adding one.
+Test hosts are opt-in. To add one, choose `--xunit`, `--gdunit` or `--nunit`.
 
 :::: columns
 ::: column xUnit
@@ -58,8 +59,8 @@ All three hosts that 2dog sets up run on Microsoft.Testing.Platform (MTP):
 | NUnit  | Official NUnit adapter bridge                              | [Configuration](/configuration/nunit#microsofttestingplatform) |
 | xUnit  | Upstream xUnit runner with 2dog's owner-thread entry point | [Configuration](/configuration/xunit#microsofttestingplatform) |
 
-Setting up a test host creates a root `global.json` that selects MTP, unless
-the project already has one; 2dog never edits an existing file. Run
+When you set up a test host, 2dog creates a root `global.json` that selects
+MTP. If the project already has a `global.json`, 2dog does not change it. Run
 `dotnet test` from the project root to run every test host. To select MTP in
 your own `global.json`, add:
 
@@ -67,8 +68,8 @@ your own `global.json`, add:
 { "test": { "runner": "Microsoft.Testing.Platform" } }
 ```
 
-[`2dog doctor`](/cli/doctor) reports hosts or a `global.json` still on VSTest
-as `layout.test-runner`. See Microsoft's [`dotnet test` guide](https://learn.microsoft.com/dotnet/core/testing/unit-testing-with-dotnet-test)
+If a host or a `global.json` still uses VSTest, [`2dog doctor`](/cli/doctor)
+reports it with the check `layout.test-runner`. See Microsoft's [`dotnet test` guide](https://learn.microsoft.com/dotnet/core/testing/unit-testing-with-dotnet-test)
 for runner selection and options such as `--coverage`.
 
 ## Find a guide

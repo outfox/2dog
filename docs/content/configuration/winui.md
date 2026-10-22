@@ -9,8 +9,8 @@ tagline: "Learn how to configure WinUI 3 hosts, from game packs to Native AOT."
 Set properties in `MyGame.winui.csproj`, which references `2dog.engine` and
 `Microsoft.WindowsAppSDK`. Build and publish on Windows.
 [Global settings](/configuration#properties) control the game directory,
-resource import, analyzers, and native variant;
-[desktop publishing](/configuration#desktop-publishing) covers the pack,
+resource import, analyzers, and native variant.
+[Desktop publishing](/configuration#desktop-publishing) covers the pack,
 self-contained, Native AOT and ReadyToRun properties.
 
 The generated host is a `win-x64`, unpackaged and

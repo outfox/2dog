@@ -12,20 +12,20 @@ Diagnostic switches are off when unset.
 
 | Variable               | Value                                          | Effect                                                                                                                                                                                                                     |
 |------------------------|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `GODOT4`               | Full path to the .NET-enabled Godot executable | Used by the generated VS Code C# launch configuration. On Windows, select the main `mono` executable, not the `_console.exe` wrapper. Checked by `2dog doctor`                                                             |
+| `GODOT4`               | Full path to the .NET-enabled Godot executable | The generated VS Code C# launch configuration uses it. On Windows, select the main `mono` executable, not the `_console.exe` wrapper. `2dog doctor` checks it                                                              |
 | `TWODOG_LIFECYCLE_LOG` | Log file path                                  | Traces window activation, minimize/restore messages, Godot window signals and an independent engine-loop heartbeat. Applies to windowed engines using the Windows display driver                                           |
 | `TWODOG_GODOT_LOG_DIR` | Directory path                                 | Makes 2dog's xUnit/NUnit fixtures enable Godot's verbose native log and write a separate `godot-<process-id>-<fixture-number>.log` per fixture. Creates the directory if needed; works with headless and windowed fixtures |
 | `TWODOG_AVALONIA_DIAG` | Exactly `1`                                    | Prints Avalonia GPU presentation and Linux EGL interop diagnostics to the console, prefixed with `2DOG_GPU:` or `2DOG_EGL:`                                                                                                |
 
 `GODOT4` selects the executable launched by the debugger. Resource import and
-pack export use the packaged editor by default; choose an external editor with
-the explicit [`GodotEditor` MSBuild property](/import-tool#properties).
-Ambient `GODOT4` and `GODOT_EDITOR` variables do not select the import/export
-editor.
+pack export use the packaged editor by default. To use an external editor, set
+the [`GodotEditor` MSBuild property](/import-tool#properties) explicitly.
+`GODOT4` and `GODOT_EDITOR` in the environment do not select the editor for
+import and export.
 
 The lifecycle log appends and flushes once per second, even while the engine
-thread is stalled; give each running process its own file. Avalonia
-diagnostics need `OutputType=Exe` on Windows.
+thread is stalled. Give each process its own log file. On Windows, Avalonia
+diagnostics need `OutputType=Exe`.
 
 ```bash
 TWODOG_LIFECYCLE_LOG=./window-lifecycle.log dotnet run --project MyGame.2dog
@@ -46,17 +46,17 @@ These variables affect the [`2dog` CLI](/dnx-2dog).
 
 The CLI also detects `GITHUB_ACTIONS`, `TF_BUILD`, `GITLAB_CI`,
 `TEAMCITY_VERSION`, `BUILD_NUMBER`, `JENKINS_URL`, `BUILDKITE`, `CIRCLECI`,
-`TRAVIS` and `APPVEYOR` as CI indicators. For these indicators,
-`TWODOG_ACCESSIBLE`, `CLICOLOR_FORCE` and `FORCE_COLOR`, any nonempty value
-except `0` or `false` enables the switch (`false` is case-insensitive).
+`TRAVIS` and `APPVEYOR` as CI indicators. For these indicators and for
+`TWODOG_ACCESSIBLE`, `CLICOLOR_FORCE` and `FORCE_COLOR`, any value enables the
+switch, except an empty value, `0` or `false`. Case does not matter for
+`false`.
 
 ## Godot Assembly Paths
 
 `GODOTSHARP_DIR` (the directory holding `GodotPlugins.dll`), `GODOT_TOOLS_DIR`
 and `GODOT_PROJECT_ASSEMBLY_DIR` locate Godot's managed assemblies. 2dog sets
-them for its hosts, so leave them unset; use
-[`Engine.ProjectAssemblyDir`](/api/engine#projectassemblydir) for a custom game
-assembly location. [`2dog doctor`](/cli/doctor) reports stray values as
+them for its hosts, so leave them unset. For a game assembly in a custom
+location, use [`Engine.ProjectAssemblyDir`](/api/engine#projectassemblydir). [`2dog doctor`](/cli/doctor) reports stray values as
 `env.overrides`.
 
 ## .NET and Android Tooling
@@ -68,7 +68,7 @@ assembly location. [`2dog doctor`](/cli/doctor) reports stray values as
 | `ANDROID_HOME`, `ANDROID_SDK_ROOT`        | Android SDK directory                                                                                        | Additional SDK locations checked in that order; see [Android environment variables](https://developer.android.com/tools/variables) |
 | `ANDROID_USER_HOME`                       | Android user configuration directory                                                                         | Location of `debug.keystore` for the signing fallback; defaults to `~/.android`                                                    |
 
-For Android signing, use the following sets together:
+For Android signing, set all three variables of a row together:
 
 | Build variant | Keystore path                         | Key alias                             | Keystore/key password                     |
 |---------------|---------------------------------------|---------------------------------------|-------------------------------------------|

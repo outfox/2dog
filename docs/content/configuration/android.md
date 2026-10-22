@@ -30,12 +30,13 @@ and installation.
 
 ## Signing
 
-Publishing signs with the first keystore it finds:
+When you publish, the build signs the app with the first keystore that it
+finds:
 
 1. The .NET `AndroidKeyStore` and `AndroidSigning*` properties
 2. Godot's `GODOT_ANDROID_KEYSTORE_RELEASE_PATH`, `_USER`, and `_PASSWORD`
    [environment variables](/configuration/environment-variables#net-and-android-tooling)
-   (`DEBUG` variables for Debug builds); set all three together
+   (the `DEBUG` variables for Debug builds). Set all three variables together.
 3. Android's debug keystore, `~/.android/debug.keystore`
 4. The .NET debug keystore
 
@@ -44,7 +45,8 @@ Publishing signs with the first keystore it finds:
 Release builds use .NET for Android's default trimming and AOT; see its
 [build properties](https://learn.microsoft.com/dotnet/android/building-apps/build-properties).
 2dog preserves `GodotSharp`, `GodotPlugins`, `twodog`, and the game assembly.
-Root other assemblies accessed only through reflection:
+If your code uses another assembly only through reflection, add it as a
+trimmer root:
 
 ```xml
 <ItemGroup>

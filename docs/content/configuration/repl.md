@@ -6,9 +6,9 @@ tagline: "Learn how to configure the C# REPL for headless runs and publishing."
 
 # REPL Configuration
 
-`MyGame.repl/` references your game, `2dog.repl` and `2dog.engine`. Use
-`2dog.engine.double` for double precision; submissions use the host's loaded
-bindings. The [shared engine properties](/configuration#properties) apply.
+`MyGame.repl/` references your game, `2dog.repl` and `2dog.engine`. For
+double precision, use `2dog.engine.double`. Submissions use the bindings that
+the host has loaded. The [global settings](/configuration#properties) also apply.
 
 Debug (the default), Editor and Release select the matching
 [native variant](/build-configurations).
@@ -18,7 +18,8 @@ dotnet run --project MyGame.repl -c Editor
 dotnet run --project MyGame.repl -- --headless
 ```
 
-Editor uses editor natives without opening the Godot editor. Arguments after
+The Editor configuration uses the editor natives, but it does not open the
+Godot editor. Arguments after
 `--` go to Godot, except the connection options below.
 
 ## Local connections
@@ -38,19 +39,19 @@ dotnet run --project MyGame.repl -- --repl-listen mygame
 | `--repl-listen NAME`  | Accept sessions over a local named pipe; keep running after stdin ends. |
 | `--repl-connect NAME` | Connect to that host without starting another engine.                   |
 
-The options are mutually exclusive. `--repl-connect` accepts no Godot
+Use only one of these options at a time. `--repl-connect` accepts no Godot
 arguments and times out after five seconds. Custom hosts use the
 `ReplHost.Run(args, createEngine, references)` overload.
 
-Connections have separate variables, node selection, queues and scratch
-worlds, sharing the engine thread and scene tree. Interactive clients have
+Each connection has its own variables, node selection, queue and scratch
+world. All connections share the engine thread and the scene tree. Interactive clients have
 completion and multiline editing; redirected I/O uses plain UTF-8 text.
 `NO_COLOR` disables terminal colors.
 
 `:cancel` cancels a connection's work. EOF or `:exit` waits for submitted work
 and disconnects; an abrupt disconnect cancels work and closes its worlds.
 Local `:exit` or `tree.Quit()` stops the listening host. Pipes accept only the
-current OS user; connected clients can execute arbitrary code in the host.
+current OS user. A connected client can run any code in the host.
 
 ## Publishing
 

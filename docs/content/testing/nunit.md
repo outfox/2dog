@@ -50,9 +50,9 @@ public class TimerTests : GodotTestFixture
 `EngineFixture` exposes `Engine`, `GodotInstance`, `Tree`, `Input`, and `Errors`.
 Each derived test class gets one engine; clean up the objects each test creates.
 
-Fixtures skip the configured main scene. Load and instantiate scenes explicitly
-in tests; project autoloads still initialize. Restore shared state such as
-`SceneTree.Paused` if a scene changes it.
+Fixtures skip the configured main scene, but project autoloads still
+initialize. Load and instantiate scenes explicitly in your tests. If a scene
+changes shared state such as `SceneTree.Paused`, restore that state.
 
 ::: details Why the Timer alias?
 The fixture's `Godot` compatibility property shadows the `Godot` namespace in
@@ -63,13 +63,14 @@ derived classes, so alias Godot types such as `Timer`.
 
 Use your own `[SetUp]` and `[TearDown]` methods for per-test work, or
 `[OneTimeSetUp]` and `[OneTimeTearDown]` for work shared by the class.
-These methods may return `Task`.
+These methods can return `Task`.
 
 ::: warning Keep the engine on its thread
-Preserve the inherited `SingleThreaded`, `NonParallelizable`, and
-`FixtureLifeCycle(LifeCycle.SingleInstance)` settings. Avoid `Task.Run`,
-`ConfigureAwait(false)`, and thread-switching NUnit attributes such as
-`Timeout` and `RequiresThread` around Godot access.
+Do not change the inherited `SingleThreaded`, `NonParallelizable`, and
+`FixtureLifeCycle(LifeCycle.SingleInstance)` settings. Around Godot access, do
+not use `Task.Run`, `ConfigureAwait(false)`, or NUnit attributes that switch
+threads, such as `Timeout` and `RequiresThread`. Godot access must stay on the
+engine's owner thread.
 :::
 
 ## Rendering tests
@@ -85,8 +86,8 @@ public class RenderingTests : GodotRenderingTestFixture
 }
 ```
 
-Each NUnit fixture owns its engine; this integration does not share an engine
-across test classes like an xUnit collection.
+Each NUnit fixture owns its engine. Unlike an xUnit collection, this
+integration does not share an engine across test classes.
 
 | Platform | Requirement                                                                                  |
 |----------|----------------------------------------------------------------------------------------------|
@@ -95,10 +96,11 @@ across test classes like an xUnit collection.
 | macOS    | Use the headless fixture; the standard NUnit runner does not reserve the process main thread |
 
 ::: warning Use a separate rendering test project
-The setup uses headless fixtures. Keep rendering fixtures in another test
-project so each mode runs in its own process. Switching display modes during
-native Godot restarts can crash; 2dog's fixtures reject the switch.
-For windowed macOS tests, use xUnit's rendering collection for now.
+Keep rendering fixtures in a separate test project, so that each mode runs in
+its own process. The setup uses headless fixtures. Native Godot can crash if
+one process switches display modes between engine restarts, so 2dog's fixtures
+reject the switch. For windowed macOS tests, use xUnit's rendering collection
+for now.
 :::
 
 ::: details Custom engine arguments
@@ -116,16 +118,16 @@ public class UiTests : GodotRenderingTestFixture
 }
 ```
 
-Use `GodotRenderingTestFixture` only on Windows/Linux. An override does not
-remove macOS's requirement for the process main thread.
+Use `GodotRenderingTestFixture` only on Windows or Linux. On macOS, windowed
+Godot needs the process main thread, and an override does not change that.
 :::
 
 ## Parameterized fixtures and test cases
 
 Use NUnit's [parameterized fixtures](https://docs.nunit.org/articles/nunit/writing-tests/attributes/testfixture.html#parameterized-test-fixtures)
 to run a test class with several configurations. Each fixture instance gets
-its own engine. Keep constructor data managed; create Godot objects after
-the engine starts.
+its own engine. Pass only plain .NET values, not Godot
+types, as constructor arguments. Create Godot objects after the engine starts.
 
 For method-level inputs, `[TestCase]` supplies rows, `[Combinatorial]` combines
 parameter values, and `[Pairwise]` covers every pair with fewer cases. See
@@ -133,8 +135,8 @@ parameter values, and `[Pairwise]` covers every pair with fewer cases. See
 
 ## Waits, signals, and input
 
-Continue with [Writing engine tests](./writing-tests) for frame waits, signal
-arguments, cleanup, and expected errors. Use [Simulating input](./input) for
+Use [Writing engine tests](./writing-tests) for frame waits, signal
+expectations, cleanup, and expected errors. Use [Simulating input](./input) for
 UI tests. Both guides work with NUnit and xUnit.
 
 See [NUnit configuration](/configuration/nunit) for packages and Editor tests.

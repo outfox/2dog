@@ -6,10 +6,10 @@ tagline: "Learn how to teach your coding agent to work with a live Godot game."
 
 # `2dog skill`
 
-Writes the guide for working in a live game through
-[`2dog repl exec`](/cli/repl) where coding agents look for it: the globals,
-`$` paths, timing on the shared engine thread, handlers that run every frame,
-and how several agents share one game.
+Writes a guide for coding agents to the place where they look for it. The guide
+explains how to work in a live game through [`2dog repl exec`](/cli/repl). It
+covers the globals, `$` paths, timing on the shared engine thread, handlers that
+run every frame, and how several agents share one game.
 
 ```bash
 2dog skill                    # .claude/skills/2dog-repl/SKILL.md for Claude Code
@@ -24,6 +24,6 @@ and how several agents share one game.
 | `--codex`   | Write the guide between `<!-- 2dog:repl-guide -->` markers in `AGENTS.md`, which Codex and other agents read. Later runs replace only that section. |
 | `--dry-run` | Show what would change without writing.                                                                                                             |
 
-Run it again after updating the tool to refresh the guide; unchanged files are
-left alone. `2dog new --repl` and `2dog add --repl` write the Claude skill along
-with the host. The same text prints in a running REPL with `:help agents`.
+To refresh the guide after you update the tool, run it again. If the content of
+a file does not change, the command does not write that file. `2dog new --repl` and `2dog add --repl` write the Claude skill along
+with the host. In a running REPL, `:help agents` prints the same text.

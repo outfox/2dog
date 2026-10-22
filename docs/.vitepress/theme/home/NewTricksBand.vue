@@ -10,7 +10,7 @@ const tricks = [
   },
   {
     title: 'Multiple instances',
-    description: 'Run engines in one process side by side with isolated concurrent hosting.',
+    description: 'Run several isolated engines side by side in one process.',
     href: '/known-issues/single-instance#concurrent-engines',
   },
   {
@@ -25,7 +25,7 @@ const tricks = [
   },
   {
     title: 'Zero-copy surfaces',
-    description: 'Render directly into supporting UI frameworks, with no CPU copy.',
+    description: 'Render directly into UI frameworks that support it, with no CPU copy.',
     href: '/hosts/qt#rendering-and-lifecycle',
   },
   {
@@ -43,7 +43,7 @@ const tricks = [
         <p class="home-kicker">Experimental & power-user features</p>
         <h2 id="new-tricks-title" class="home-h2">New Tricks</h2>
         <p class="home-intro">
-          <strong>2dog</strong> offers a variety of optional features on top of Godot. They maintain general compatibility with the core Godot engine, adding new & popular capabilities and optimizations.
+          <strong>2dog</strong> offers a variety of optional features on top of Godot. They add new & popular capabilities and optimizations, and stay compatible with the core Godot engine.
         </p>
       </div>
 

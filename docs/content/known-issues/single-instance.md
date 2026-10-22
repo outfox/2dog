@@ -17,9 +17,9 @@ using var engine2 = new Engine("MyGame");
 engine2.Start(); // Throws InvalidOperationException.
 ```
 
-Sequential restart is supported, including in the browser: the [Blazor host](/hosts/blazor) restarts on a fresh
-canvas, and web hosts keep the runtime alive by default
-(`Engine.WebExitRuntimeOnQuit = false`). Any host can start a new engine after
+Sequential restart is supported, also in the browser. The
+[Blazor host](/hosts/blazor) restarts on a fresh canvas, and web hosts keep the
+runtime alive by default (`Engine.WebExitRuntimeOnQuit = false`). Any host can start a new engine after
 `Completion` completes and `Exited` fires. `Engine` owns its instance; the
 `GodotInstance` returned by `Start()` is a borrowed compatibility handle.
 
@@ -36,26 +36,26 @@ using var nextEngine = new Engine("MyGame");
 nextEngine.Start();
 ```
 
-In a browser, call `RequestQuit()` while `Run()` pumps frames and await
-`Completion`, or call `DisposeAsync()`
-before creating the new `Engine`; browser teardown is asynchronous.
+In a browser, teardown is asynchronous. Before you create the new `Engine`, call
+`RequestQuit()` while `Run()` pumps frames, then await `Completion`. You can
+also call `DisposeAsync()` instead.
 
 This allows xUnit collections to use fresh engines sequentially in one test
 process with the same display mode. Keep headless and rendering fixtures in
-separate test projects; switching modes across native restarts can crash Godot,
-so the fixtures reject it. Collections must disable parallelization; see
+separate test projects. A mode change across native restarts can crash Godot,
+so the fixtures reject it. Collections must disable parallelization. See
 [Testing](/testing/).
 
-Shutdown releases every Godot object the engine created before it returns,
-including wrappers the garbage collector dropped but had not finalized yet, so
-nothing from one engine is released into the next. You do not need to force a
+Before shutdown returns, it releases every Godot object that the engine
+created. This includes wrappers that the garbage collector dropped but did not
+finalize yet. As a result, nothing from one engine is released into the next. You do not need to force a
 garbage collection between engines.
 
-A restart does not reload the game assembly: static fields keep their values
-across engines, while every Godot object the previous engine created was
-disposed when it shut down. A static that holds a Godot object - a `Resource`
-such as `FastNoiseLite`, a `Node`, a `PackedScene` - therefore throws
-`ObjectDisposedException` in the next engine. Create such objects per instance
+A restart does not reload the game assembly. Static fields keep their values
+across engines, but the previous engine disposed every Godot object that it
+created when it shut down. As a result, a static that holds a Godot object
+throws `ObjectDisposedException` in the next engine. Examples are a `Resource`
+such as `FastNoiseLite`, a `Node` or a `PackedScene`. Create such objects per instance
 (in `_Ready`, or lazily behind `GodotObject.IsInstanceValid`), or reset them
 from `Exited`:
 

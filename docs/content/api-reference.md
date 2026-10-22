@@ -35,8 +35,8 @@ nodes, resources, scenes, and other engine types.
 | [`Fixture`](./api/fixture-base#fixture)                 | Run tests with rendering enabled            |
 | [`HeadlessFixture`](./api/fixture-base#headlessfixture) | Run headless tests, including CI            |
 
-These fixtures ship in `2dog.engine` and do not depend on a specific test
-framework.
+These fixtures are in the `2dog.engine` package. They do not depend on a
+specific test framework.
 
 ## `twodog.Testing.Xunit`
 
@@ -45,8 +45,8 @@ framework.
 | [`RenderingCollection`](./api/fixture-base#collections) | Share a rendered fixture across an xUnit collection |
 | [`HeadlessCollection`](./api/fixture-base#collections)  | Share a headless fixture across an xUnit collection |
 
-The collection definitions ship in `2dog.xunit` and compile into the consuming
-test assembly so xUnit can discover them.
+The collection definitions are in the `2dog.xunit` package. They compile into
+your test assembly, so xUnit can discover them.
 
 ## Lifetime at a Glance
 
@@ -60,8 +60,9 @@ while (!engine.Iteration())
 }
 ```
 
-`Engine` owns the instance. Use `RequestQuit()` for graceful shutdown;
-`Completion` completes and `Exited` fires after teardown on every platform.
-Desktop `Dispose()` is synchronous; browser callers await `DisposeAsync()` or
+`Engine` owns the instance. Use `RequestQuit()` for a graceful shutdown.
+After teardown, `Completion` completes and `Exited` fires on every platform.
+
+On desktop, `Dispose()` is synchronous. In a browser, await `DisposeAsync()` or
 `Completion`. Start a new `Engine` only after completion. See
 [Single Godot Instance](./known-issues/single-instance).

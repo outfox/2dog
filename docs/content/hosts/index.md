@@ -18,16 +18,18 @@ The host is what runs your game...
 
 ## Add a Host
 
-Run this from the directory containing `project.godot`:
+Run this command from your Godot project directory, which contains
+`project.godot`:
 
 ```bash
 dnx 2dog add
 ```
 
-Choose hosts when prompted, or use the flags below. For a new project, use
-`dnx 2dog new MyGame` instead.
+When the command asks, choose the hosts. You can also use the flags below. For
+a new project, use `dnx 2dog new MyGame` instead.
 
-Without host flags, unattended commands include generic .NET and Web.
+If you add `-y` and no host flags, the command adds the generic .NET and Web
+hosts.
 See [Project Layout](/project-layout) for files and
 [MSBuild Configuration](/configuration) for shared settings.
 
@@ -68,5 +70,5 @@ See [Project Layout](/project-layout) for files and
 | Host               | Flag       | Purpose                                        |
 |--------------------|------------|------------------------------------------------|
 | [GdUnit](./gdunit) | `--gdunit` | GDScript suites through embedded Godot and MTP |
-| [NUnit](./nunit)   | `--nunit`  | NUnit tests using the Godot engine (opt-in)    |
-| [xUnit](./xunit)   | `--xunit`  | xUnit tests using the Godot engine (opt-in)    |
+| [NUnit](./nunit)   | `--nunit`  | NUnit tests that use the Godot engine (opt-in) |
+| [xUnit](./xunit)   | `--xunit`  | xUnit tests that use the Godot engine (opt-in) |

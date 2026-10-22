@@ -11,8 +11,8 @@ browser. It publishes a static site that needs no server-side code.
 
 ## Build and Serve Locally
 
-From your Godot project directory, run these commands. Accept `add`'s
-installation offer if `wasm-tools` is missing:
+Run these commands from your Godot project directory. If `wasm-tools` is
+missing, accept the offer from `add` to install it:
 
 ```bash
 dnx 2dog add --web
@@ -20,14 +20,14 @@ dotnet publish MyGame.web
 dnx dotnet-serve -- -d MyGame.web/AppBundle
 ```
 
-Open the URL printed by the server. Game output appears in the browser console.
-Edit `MyGame.web/wwwroot/` to customize the page, then publish again.
+Open the URL that the server prints. Game output appears in the browser
+console. To customize the page, edit `MyGame.web/wwwroot/`. Then publish again.
 
 ## Publishing
 
-Upload the contents of `MyGame.web/AppBundle/` to a static web host.
-Enable gzip or Brotli compression for faster downloads. Cross-origin isolation
-headers are required only for [multithreading](#multithreading).
+Upload the contents of `MyGame.web/AppBundle/` to a static web server.
+Enable gzip or Brotli compression for faster downloads. Only
+[multithreading](#multithreading) needs cross-origin isolation headers.
 
 See [Web Configuration](/configuration/web) for build settings.
 
@@ -35,8 +35,8 @@ See [Web Configuration](/configuration/web) for build settings.
 
 Extensions need a single-threaded WebAssembly side module listed under a `web`
 key in their `.gdextension` file. With the default `TwoDogExportPack=true`,
-publishing includes it in `godot.pck`. If you disable export, include the
-extension in your supplied pack.
+`dotnet publish` adds it to `godot.pck`. If you disable the export, add the
+extension to the pack that you supply.
 Side modules cannot use `EM_ASM` or `EM_JS`.
 
 ## Multithreading
@@ -46,10 +46,10 @@ Side modules cannot use `EM_ASM` or `EM_JS`.
 :::
 
 Set `<WasmEnableThreads>true</WasmEnableThreads>` in `MyGame.web.csproj` to
-link the threaded engine. `Main`, and with it Godot's main loop, then runs on
-a Web Worker, and `System.Threading` and Godot's `WorkerThreadPool` run in
-parallel. Export with a preset that has `variant/thread_support=true`, set
-through `TwoDogWebExportPreset`. The threaded engine has no WebXR.
+link the threaded engine. `Main` and Godot's main loop then run on
+a Web Worker. `System.Threading` and Godot's `WorkerThreadPool` run in
+parallel. Use `TwoDogWebExportPreset` to select an export preset that has
+`variant/thread_support=true`. The threaded engine has no WebXR.
 
 The page must be cross-origin isolated, so serve it with these headers:
 

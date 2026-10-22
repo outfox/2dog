@@ -9,8 +9,8 @@ tagline: "Learn how to configure Godot in your Windows Forms app."
 Set properties in `MyGame.winforms.csproj`, which references `2dog.engine`.
 The generated host targets `net10.0-windows` with `UseWindowsForms=true`.
 [Global settings](/configuration#properties) control the game directory,
-resource import, analyzers, and native variant;
-[desktop publishing](/configuration#desktop-publishing) covers the pack,
+resource import, analyzers, and native variant.
+[Desktop publishing](/configuration#desktop-publishing) covers the pack,
 self-contained and ReadyToRun properties.
 
 ```bash

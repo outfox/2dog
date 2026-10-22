@@ -11,12 +11,12 @@ button. It runs on Windows.
 
 ![Illus. Diego Rago: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-harmony.png)
 
-Godot reports `Engine.is_embedded_in_editor()` as `true` for this host;
-account for this in scripts that check editor embedding.
+Godot reports `Engine.is_embedded_in_editor()` as `true` for this host. If a
+script checks this value, make sure that it also works in this host.
 
 ## Use It
 
-From your Godot project directory:
+Run these commands from your Godot project directory:
 
 ```bash
 dnx 2dog add --winforms
@@ -27,7 +27,8 @@ dotnet run --project MyGame.winforms
 
 Edit the generated form to add controls. Its UI thread runs Godot frames, so
 event handlers can access the scene tree through `_engine.Tree`.
-See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms).
+See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms)
+for an example.
 
 Controls cannot overlap the game window. Use [Avalonia](./avalonia) or
 [Qt Quick](./qt) for overlays or a cross-platform UI.

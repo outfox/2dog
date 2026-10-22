@@ -15,7 +15,7 @@ public class GodotInstance : IDisposable
 **Package:** `2dog.engine`  
 **Namespace:** `Godot`
 
-This class is one of the few differences from stock Godot, where it's not exposed.
+This class is one of the few differences from stock Godot, which does not expose it.
 Its `Engine` owns the native instance and its lifecycle.
 
 Create this object through `twodog.Engine.Start()` rather than its low-level static
@@ -29,8 +29,8 @@ factory methods.
 public bool Iteration()
 ```
 
-Processes one main-loop frame. Returns `true` when Godot wants to quit. New host
-code should call `Engine.Iteration()`.
+Processes one main-loop frame. Returns `true` when Godot requests exit. In new host
+code, call `Engine.Iteration()` instead.
 
 ```csharp
 while (!engine.Iteration())
@@ -69,6 +69,6 @@ hooks are useful when another application framework owns the outer window.
 
 ::: warning Choose one loop owner
 Call `Engine.Iteration()` yourself or call `Engine.Run()`. Do not use both for
-the same instance. Use `Engine.RequestQuit()`, `Completion`, `Exited`, and engine
-disposal for lifecycle control; do not dispose this borrowed handle.
+the same instance. Do not dispose this borrowed handle. For lifecycle control, use
+`Engine.RequestQuit()`, `Completion`, `Exited`, and engine disposal.
 :::

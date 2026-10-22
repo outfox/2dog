@@ -9,8 +9,8 @@ tagline: "Learn how to configure Godot in your Avalonia app, up to Native AOT."
 Set properties in `MyGame.avalonia.csproj`. Reference `2dog.avalonia` and
 explicitly select `2dog.engine` or `2dog.engine.double`.
 [Global settings](/configuration#properties) control the game directory,
-resource import, analyzers, and native variant;
-[desktop publishing](/configuration#desktop-publishing) covers the pack,
+resource import, analyzers, and native variant.
+[Desktop publishing](/configuration#desktop-publishing) covers the pack,
 self-contained, Native AOT and ReadyToRun properties.
 
 ```bash

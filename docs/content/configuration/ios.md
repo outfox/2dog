@@ -26,21 +26,22 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `CodesignKey`, `CodesignProvision` | Unset | Signing identity and provisioning profile for device builds |
 
 iOS exports its pack during the build and bundles it as `game.pck`.
-`TwoDogExportPack` is disabled by the iOS targets because the desktop publish
-export is not used; supply an existing pack through `TwoDogIosPack`. The
-targets also set `TwoDogSkipGodotApiCopy`: iOS has no `GodotPlugins.dll`, the
-game's generated initializer registers its scripts through `IosHost`.
+The iOS targets disable `TwoDogExportPack`, because iOS does not use the
+desktop publish export. To use an existing pack, set `TwoDogIosPack`. The
+targets also set `TwoDogSkipGodotApiCopy`, because iOS has no
+`GodotPlugins.dll`. Instead, the game's generated initializer registers its
+scripts through `IosHost`.
 
-The engine archive is linked with `ForceLoad` and the Swift runtime, since
-Godot registers classes from static initializers and carries a SwiftUI
-wrapper. Both native variants restore; a missing selected payload fails the
-build (`TDGI003`). Other RIDs fail with `TDGI005`.
+The build links the engine archive with `ForceLoad` and the Swift runtime,
+because Godot registers classes from static initializers and carries a SwiftUI
+wrapper. Both native variants restore. If the payload for the selected variant is
+missing, the build fails with `TDGI003`. Other RIDs fail with `TDGI005`.
 
 ## Trimming and AOT
 
 Release builds are trimmed and AOT-compiled, like any .NET for iOS app. 2dog
-preserves `GodotSharp`, `twodog`, `twodog.ios`, and the game assembly. Root
-other assemblies accessed only through reflection:
+preserves `GodotSharp`, `twodog`, `twodog.ios`, and the game assembly. If your
+code uses another assembly only through reflection, add it as a trimmer root:
 
 ```xml
 <ItemGroup>
@@ -48,6 +49,7 @@ other assemblies accessed only through reflection:
 </ItemGroup>
 ```
 
-Native AOT (`PublishAot`) is rejected with `TDGI004`; iOS hosts run on Mono.
+The build rejects Native AOT (`PublishAot`) with `TDGI004`, because iOS hosts
+run on Mono.
 
 See the [iOS host guide](/hosts/ios) for building, the Simulator and signing.

@@ -20,14 +20,15 @@ public void CanLogNodePath(NodePath path)
 }
 ```
 
-xUnit enumerates member data before fixtures run. Constructing types that call
-Godot native code at that point fails because the engine has not started.
+xUnit enumerates member data before fixtures run. At that point, the engine has
+not started yet, so constructors that call Godot native code fail.
 
 ## Workarounds
 
 ### Workaround 1: Disable Discovery Enumeration
 
-Defer member-data enumeration until test execution:
+Set `DisableDiscoveryEnumeration = true` so that xUnit enumerates the member
+data only when the tests run:
 
 ```csharp
 [Theory]
@@ -38,13 +39,13 @@ public void CanLogNodePath(NodePath path)
 }
 ```
 
-The test explorer will show one theory entry rather than one entry per data
+The test explorer then shows one theory entry, not one entry for each data
 row.
 
 ### Workaround 2: Use Primitive Values
 
-For separately discoverable rows, pass primitive values and create the Godot
-value inside the test after its fixture has started:
+If you need one test explorer entry for each row, pass primitive values. Then
+create the Godot value inside the test, after its fixture has started:
 
 ```csharp
 public static IEnumerable<object[]> Paths = [["/root"], ["/root/Main"]];
@@ -58,7 +59,7 @@ public void CanLogNodePath(string value)
 }
 ```
 
-Prefer this one.
+Prefer this workaround.
 
 ## Affected Types
 

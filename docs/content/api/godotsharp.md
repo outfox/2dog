@@ -8,8 +8,8 @@ tagline: "Find your way to the familiar GodotSharp API, right inside 2dog."
 
 2dog exposes the full GodotSharp API that we've grown to love and expect.
 
-You can just code like you're used to, both in your game-side code, and the host-side code. 
-Of course you can also work with GDscript (game-side only).
+Write C# as you always do, in your game code and in your host code.
+Of course, you can also use GDScript, but only in game code.
 
 :::info Official Docs
 I'm happy to wag my tail and send you on an adventure to godotengine.org!

@@ -16,5 +16,5 @@ The generated host defaults to Release.
 dotnet publish MyGame.webxr -c Release -p:RunAOTCompilation=true
 ```
 
-There are no additional WebXR-specific MSBuild properties. XR shaders and scene
+WebXR has no MSBuild properties of its own. XR shaders and scene
 setup belong to the Godot project; see the [WebXR host guide](/hosts/webxr).

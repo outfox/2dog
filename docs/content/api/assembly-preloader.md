@@ -29,21 +29,22 @@ public static void PreloadGameAssemblies(string projectPath)
 
 Finds compiled game assemblies under the project's
 `.godot/mono/temp/bin/{Configuration}` directory and loads them into the default
-context. This prevents the same game type from being loaded with a second type
-identity in Godot's plugin context.
+context. This stops Godot's plugin context from loading the same game type again with a
+second type identity.
 
-When the host references the game project, the host's own copy is loaded, so it
-always matches the host's build configuration; other configurations' outputs and
-leftovers of renamed projects are ignored. Otherwise the first of the `Debug`,
-`Release` and `Editor` folders that contains assemblies is loaded.
+When the host references the game project, the preloader loads the host's own
+copy, so it always matches the host's build configuration. It ignores the
+outputs of other configurations and the leftovers of renamed projects. If the
+host does not reference the game project, the preloader loads the first of the
+`Debug`, `Release` and `Editor` folders that contains assemblies.
 
 | Parameter     | Description                          |
 |---------------|--------------------------------------|
 | `projectPath` | Directory containing `project.godot` |
 
-Call it before `Engine.Start()`. In the browser it returns without doing work.
-Discovery and load failures are written to the console instead of thrown; one
-assembly that fails to load does not stop the others.
+Call it before `Engine.Start()`. In the browser, it returns and does nothing.
+It writes discovery and load failures to the console and does not throw them.
+If one assembly fails to load, it still loads the others.
 
 ```csharp
 var projectDir = twodog.Engine.ResolveProjectDir();

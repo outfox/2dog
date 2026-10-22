@@ -7,22 +7,24 @@ tagline: "Learn how to start a fresh Godot game with .NET hosts in one command."
 # `2dog new`
 
 Creates a new Godot project with 2dog hosts. Without host flags it asks which
-hosts to create. Host flags skip that wizard; a missing workload (`wasm-tools`,
-`android`) can still be offered on terminals. `-y` runs unattended.
+hosts to create. Host flags skip that wizard. On a terminal,
+the tool can still offer to install a missing workload (`wasm-tools`,
+`android`). `-y` runs unattended.
 
 ```bash
 2dog new [Name] [dir] [hosts] [options]
 ```
 
-| Argument | Meaning                                                                                                                                                                                       |
-|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Name`   | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` survive, `-` becomes `_`, C# keywords and leading digits get a `_` prefix, an adjustment is announced |
-| `dir`    | Directory to create; defaults to the sanitized name                                                                                                                                           |
+| Argument | Meaning                                                                                                                                                                                                         |
+|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Name`   | Project name, used for folders, assemblies and namespaces; letters, digits, `.` and `_` stay, `-` becomes `_`, and C# keywords and leading digits get a `_` prefix; the tool tells you when it changes the name |
+| `dir`    | Directory to create; defaults to the sanitized name                                                                                                                                                             |
 
 ## Hosts
 
-Any [host flag](/dnx-2dog#host-flags), repeatable. Unattended without one:
-generic and browser, minus the `--no-<host>` ones. Add tests explicitly with
+Use any [host flag](/dnx-2dog#host-flags). Repeat a flag to add another host of
+the same kind. Without host flags, an unattended run creates the generic and
+Web hosts, except the ones that you exclude with `--no-<host>`. Add tests explicitly with
 `--xunit`, `--gdunit` or `--nunit`. With a test host, the root `global.json`
 selects Microsoft.Testing.Platform, so `dotnet test` runs every test host.
 
@@ -35,7 +37,7 @@ selects Microsoft.Testing.Platform, so `dotnet test` runs every test host.
 | `--dry-run`                        | Print the plan; change nothing                                                                                     |
 | `--force`                          | Overwrite existing files from the setup; never deletes                                                             |
 | `--double-precision [true\|false]` | Select matching double precision bindings and natives for the game and all hosts; `false` selects single precision |
-| `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; serving requires COOP/COEP headers                  |
+| `--web-threads [true\|false]`      | Enable experimental multithreading for Web and Blazor clients; the web server must send COOP/COEP headers          |
 | `--no-restore`                     | Skip the final `dotnet restore`                                                                                    |
 | `--install-wasm-tools`             | Install missing `wasm-tools` for browser hosts without an installation prompt                                      |
 | `--install-android-workload`       | Install the missing `android` workload for Android hosts without an installation prompt                            |
@@ -46,8 +48,9 @@ requirements.
 Plus the [global and output options](/dnx-2dog#global-options).
 
 `--no-restore` skips the workload offers; the install flags work in CI too.
-`--dry-run` never checks or installs workloads. A failed restore returns exit code `2` and keeps the created files. Fix the
-reported cause and run `dotnet restore` again.
+`--dry-run` never checks or installs workloads. If the restore fails, the tool
+returns exit code `2` and keeps the created files. Fix the reported cause. Then
+run `dotnet restore` again.
 
 ## Examples
 
@@ -87,8 +90,8 @@ dotnet new 2dog -n MyGame --web false
 ```
 
 If you previously installed the template from `2dog`, run
-`dotnet new uninstall 2dog` before installing `2dog.templates`. This leaves the
-`2dog` tool installed.
+`dotnet new uninstall 2dog` before you install `2dog.templates`. This command
+does not remove the `2dog` tool.
 
 This creates a generic .NET host. Omit `--web false` to include Web;
 install `wasm-tools` when you want to build or publish that host.
@@ -99,8 +102,27 @@ Test hosts are opt-in. Pass `--xunit true`, `--gdunit true` or `--nunit true` to
 
 ## Debugging the Godot project in VS Code
 
-New projects include `.vscode/launch.json`, `tasks.json`, and a recommendation for Microsoft's C# extension. Open the project root folder, install that extension, select **Godot: Play (C#)** in Run and Debug, and press F5. The build task builds only the root Godot project in Debug configuration.
+New projects include `.vscode/launch.json`, `tasks.json`, and a recommendation
+for Microsoft's C# extension. To debug the Godot project:
 
-Set the `GODOT4` environment variable to the main **.NET-enabled** Godot executable and restart VS Code, or replace `program` in `launch.json` with its absolute path. On Windows, use the `mono` executable, not the `_console.exe` wrapper. Godot Tools' editor path setting alone does not configure the C# debugger.
+1. Open the project root folder in VS Code.
+2. Install the recommended C# extension.
+3. In Run and Debug, select **Godot: Play (C#)**.
+4. Press F5.
 
-The Godot SDK root is a library loaded by Godot, so it needs this external executable launch. The `.2dog` host is a regular .NET executable and supports the usual .NET launch workflow. **Godot: Attach (C#)** can attach to an already running .NET Godot game or editor; select the process that loads your scripts.
+The build task builds only the root Godot project, in the Debug configuration.
+
+The debugger must know where Godot is. Do one of these steps:
+
+- Set the `GODOT4` environment variable to the main **.NET-enabled** Godot
+  executable. Then restart VS Code.
+- Replace `program` in `launch.json` with the absolute path of that executable.
+
+On Windows, use the `mono` executable, not the `_console.exe` wrapper. The
+editor path setting in Godot Tools is not enough for the C# debugger.
+
+The root project uses the Godot SDK and builds a library that Godot loads.
+To debug it, VS Code must start the Godot executable. The `.2dog` host is a
+regular .NET executable and supports the usual .NET launch workflow.
+**Godot: Attach (C#)** can attach to an already running .NET Godot game or
+editor. Select the process that loads your scripts.

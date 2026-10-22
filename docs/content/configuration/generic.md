@@ -8,8 +8,8 @@ tagline: "Learn how to configure your console host, from pack export to Native A
 
 Set properties in `MyGame.2dog.csproj`, which references `2dog.engine`.
 The [global settings](/configuration#properties) control the game directory,
-resource import, analyzers, and native variant;
-[desktop publishing](/configuration#desktop-publishing) covers the pack,
+resource import, analyzers, and native variant.
+[Desktop publishing](/configuration#desktop-publishing) covers the pack,
 self-contained, Native AOT and ReadyToRun properties.
 
 ```bash

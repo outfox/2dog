@@ -12,7 +12,8 @@ inside your test.
 
 ## Click a control
 
-Settle the layout, click, then check what happened:
+Run one engine iteration to update the layout. Click the control. Then check
+the result:
 
 ```csharp
 godot.Engine.Iteration();
@@ -33,9 +34,10 @@ not advance frames.
 | A point in another viewport  | `godot.Input.Click(new Vector2(80, 40), viewport: gameViewport)`    |
 
 ::: tip Give headless UI tests enough room
-Headless, the root window can start at its minimum size, which skews layout
-and hit testing. Set it to the project's viewport size before loading your
-scene, then settle the layout:
+In headless mode, the root window can start at its minimum size. This can make
+layout and hit testing incorrect. Before you load your scene, set the root
+window to the project's viewport size. Then run one engine iteration to update
+the layout:
 
 ```csharp
 var root = godot.Tree.Root;
@@ -67,22 +69,29 @@ finally { viewport.Free(); }
 :::
 
 ::: details What can block a click?
-Foreground controls, mouse filters, clipping, hidden or disabled controls,
-paused processing, and viewport input suppression keep their normal behavior.
-An `_Input` handler can consume the event before GUI handling. Check a signal
-or state change to confirm receipt.
+Godot handles the click normally, so each of these can block it:
 
-The control overload targets its owning viewport directly. To test an outer
-overlay or `SubViewportContainer` forwarding, inject at the outer viewport's
-coordinates. Desktop window focus and OS event delivery need a windowed
-integration test.
+- Foreground controls
+- Mouse filters
+- Clipping
+- Hidden or disabled controls
+- Paused processing
+- Viewport input suppression
+
+An `_Input` handler can consume the event before the GUI receives it. To
+confirm that the click arrived, check a signal or a state change.
+
+The control overload sends the click directly to the viewport that owns the
+control. To test an outer overlay or `SubViewportContainer` forwarding, click a
+point in the outer viewport's coordinates. To test desktop window focus or OS
+event delivery, write a windowed integration test.
 :::
 
 ## Send keyboard or custom events
 
 `PushToViewport` sends an `InputEvent` in viewport coordinates. Keyboard events
-go to the current focus owner; click or tab through the UI first when testing
-focus acquisition.
+go to the control that has focus. To test how a control gets focus, first click
+it or press Tab until it has focus.
 
 ```csharp
 using var down = new InputEventKey { Keycode = Key.Space, Pressed = true };
@@ -110,7 +119,8 @@ Choose the delivery method based on what your game reads:
 | `Click` / `PushToViewport` | Local viewport routing                  | No                                  |
 | `Send`                     | Godot's input server and window routing | Yes                                 |
 
-For `IsKeyPressed`, `IsMouseButtonPressed`, or action polling, use `Send`:
+If your game polls `IsKeyPressed`, `IsMouseButtonPressed`, or input actions,
+use `Send`:
 
 ```csharp
 using var down = new InputEventKey { Keycode = Key.F13, Pressed = true };
@@ -140,9 +150,10 @@ using var motion = new InputEventMouseMotion
 godot.Input.Send(motion);
 ```
 
-`Send` uses window coordinates. With stretch scaling, convert a logical
-viewport point using `godot.Tree.Root.GetFinalTransform() * viewportPosition`.
-Set `Relative` when testing code that uses movement deltas, such as a camera.
+`Send` uses window coordinates. If the project uses stretch scaling,
+convert a logical viewport point with
+`godot.Tree.Root.GetFinalTransform() * viewportPosition`. If the code under test
+uses movement deltas, for example a camera, set `Relative`.
 
 `PushToViewport(motion, viewport)` uses viewport coordinates and delivers
 motion and hover too. It leaves global `Input` state unchanged, including the
@@ -152,16 +163,17 @@ Neither method moves the OS cursor; mouse warping is unnecessary for these
 tests.
 
 ::: warning Release held input
-The fixture is shared between tests. Always release keys, actions, and mouse
-buttons in `finally`, and use a fresh event for each press and release. Sending
-one event through both delivery methods delivers it twice.
+Always release keys, actions, and mouse buttons in a `finally` block. The
+fixture is shared between tests, so held input affects the next test. Use a
+new event for each press and for each release. Do not send one event through
+both delivery methods, because Godot then receives it twice.
 :::
 
 ::: details Input-server behavior
 `Send` calls `Input.ParseInputEvent` and immediately flushes buffered input,
-including other pending events. Project input emulation and window routing
-apply; coordinates use Godot's device/window conventions. GUI event consumption
-does not clear global polling state.
+including other pending events. The project's input emulation settings and
+window routing apply. Coordinates use Godot's device and window conventions. If
+a GUI control consumes the event, Godot does not clear the global polling state.
 
 See Godot's [viewport delivery](https://docs.godotengine.org/en/stable/classes/class_viewport.html#class-viewport-method-push-input)
 and [input server](https://docs.godotengine.org/en/stable/classes/class_input.html#class-input-method-parse-input-event)

@@ -15,7 +15,7 @@ engine. The setup uses a headless fixture; rendering is available too.
 **⤜outfox⤏** tests primarily on xUnit in production, it's great! :thumbsup:
 :::
 
-From your Godot project directory:
+Run these commands from your Godot project directory:
 
 ```bash
 dnx 2dog add --xunit
@@ -27,6 +27,7 @@ Start with `MyGame.xunit/BasicTests.cs`, then follow
 See [xUnit configuration](/configuration/xunit) for build settings.
 
 ::: info Existing test projects
-Older `.tests` hosts and custom names still work. Use their existing paths
-with `dotnet test`; adding or updating a host does not rename them.
+Older `.tests` hosts and hosts with custom names still work. Use their
+existing paths with `dotnet test`. `2dog add` and `2dog update` do not rename
+them.
 :::

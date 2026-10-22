@@ -7,18 +7,21 @@ tagline: "Learn how to run and ship your Godot game as a plain .NET app."
 # 2dog (generic .NET)
 
 The generic .NET host is a console application that runs Godot on Windows,
-Linux, or macOS. A Godot window will open (unless headless).
+Linux, or macOS. Godot opens a window unless you run it headless.
 
-It's truly the swiss-army-knife of hosts, giving you a blank .NET canvas to build on top of.
+It is truly the Swiss Army knife of hosts: it gives you a blank .NET canvas
+to build on.
 
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and glasses walking their blue godot robot dog](../img/2dog-victory.png)
 *It's pawesome! Robotastic!*
 
-Edit `MyGame.2dog/Program.cs` to add C# code around or on top of an existing Godot game and comfortably run, test, and debug it inside your IDE or using the `dotnet` CLI.
+Edit `MyGame.2dog/Program.cs` to add your own C# code to an existing Godot
+game. You can run, test, and debug the game in your IDE or with the `dotnet`
+CLI.
 
 ## Use It
 
-From your Godot project directory:
+Run these commands from your Godot project directory:
 
 ```bash
 dnx 2dog add --generic

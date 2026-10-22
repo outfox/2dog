@@ -18,7 +18,7 @@ with tests for your game.
 
 ## Your first test
 
-Put engine tests in a `HeadlessCollection` and take its fixture as a constructor
+Put engine tests in a `HeadlessCollection`. Take its fixture as a constructor
 argument. This test adds a node to the scene tree and checks that it entered:
 
 ```csharp
@@ -47,9 +47,9 @@ public class SceneTests(HeadlessFixture godot)
 The fixture exposes `Engine`, `GodotInstance`, `Tree`, `Input`, and `Errors`.
 Tests in the collection share these objects, so clean up what each test creates.
 
-Fixtures skip the configured main scene. Load and instantiate scenes explicitly
-in tests; project autoloads still initialize. Restore shared state such as
-`SceneTree.Paused` if a scene changes it.
+Fixtures skip the configured main scene, but project autoloads still
+initialize. Load and instantiate scenes explicitly in your tests. If a scene
+changes shared state such as `SceneTree.Paused`, restore that state.
 
 ## Choose a fixture
 
@@ -58,10 +58,11 @@ in tests; project autoloads still initialize. Restore shared state such as
 | `HeadlessCollection`  | `HeadlessFixture godot` | Scene logic and CI, without a window |
 | `RenderingCollection` | `Fixture godot`         | Tests that need rendering            |
 
-Keep Godot collections non-parallel. You can use several; xUnit disposes one
-collection's engine before starting the next. Keep headless and rendering
-collections in separate test projects. Switching display modes within one
-process can crash native Godot, so 2dog's fixtures reject the switch.
+Keep Godot collections non-parallel. You can use several collections. xUnit
+disposes the engine of one collection before it starts the next collection.
+Keep headless and rendering collections in separate test projects. Native
+Godot can crash if one process switches display modes between engine restarts,
+so 2dog's fixtures reject the switch.
 
 ::: details Custom engine arguments
 Derive from `FixtureBase` and define a non-parallel collection in your test
@@ -108,18 +109,19 @@ public static IEnumerable<object?[]> Cases => TestMatrix.Pairwise(
     [true, false]);
 ```
 
-Add `[MemberData(nameof(Cases))]` to a `[Theory]` taking a `string`, `int`,
-and `bool`. `Pairwise` covers every pair of input values with a reduced set
-of rows. Use `Combinatorial` for every combination. Both are deterministic;
-pairwise output is not guaranteed to be the smallest possible set.
+Add `[MemberData(nameof(Cases))]` to a `[Theory]` that takes a `string`, an
+`int`, and a `bool`. `Pairwise` covers every pair of input values with fewer
+rows. Use `Combinatorial` for every combination. Both are deterministic, but
+`Pairwise` does not always produce the smallest possible set.
 
 These are method inputs. For different engine configurations across an entire
 class, use separate fixture types and non-parallel collections.
 :::
 
 ::: warning Test data runs before the engine
-Godot types such as `NodePath` and `StringName` in `MemberData` can crash
-discovery. Pass primitive values or set `DisableDiscoveryEnumeration = true`.
+Do not put Godot types such as `NodePath` and `StringName` in `MemberData`,
+because they can crash discovery. Pass primitive values, or set
+`DisableDiscoveryEnumeration = true`.
 See [xUnit test discovery](/known-issues/xunit-discovery).
 :::
 
@@ -134,13 +136,13 @@ On Windows, the collection thread is STA. 2dog also supplies the comctl32 v6
 manifest unless you set your own `ApplicationManifest`.
 
 On macOS, windowed Godot needs the process main thread. 2dog wraps xUnit's
-generated entry point to run Godot collections there. A project with its own
-entry point should run xUnit through `GodotTestThread.RunMain`.
+generated entry point to run Godot collections there. If your project has its
+own entry point, run xUnit through `GodotTestThread.RunMain`.
 
 To use another xUnit test framework, set
 `<TwoDogGodotTestThread>false</TwoDogGodotTestThread>`. This also removes the
 entry-point wrapper. For windowed macOS fixtures, your entry point must call
-`GodotTestThread.RunMain` and your framework must run collections through
+`GodotTestThread.RunMain`. Your framework must also run collections through
 `GodotTestThread.Run`.
 :::
 
@@ -154,10 +156,10 @@ dotnet add package xunit.v3.mtp-v2
 dotnet add package Microsoft.Testing.Extensions.CodeCoverage
 ```
 
-Set `OutputType` to `Exe` and `UseMicrosoftTestingPlatformRunner` to `true`,
-and select Microsoft.Testing.Platform in `global.json`; see
+Set `OutputType` to `Exe` and `UseMicrosoftTestingPlatformRunner` to `true`.
+Then select Microsoft.Testing.Platform in `global.json`; see
 [xUnit configuration](/configuration/xunit#microsofttestingplatform).
-Select `2dog.engine.double` instead for double precision; `2dog.xunit` stays
-the same. See
+For double precision, add `2dog.engine.double` instead of `2dog.engine`. Keep
+`2dog.xunit` as it is. See
 [xUnit configuration](/configuration/xunit) for game paths and Editor bindings.
 :::

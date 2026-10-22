@@ -34,7 +34,8 @@ protected FixtureBase(params string[] cmdLineArgs)
 ```
 
 Passes each argument to Godot unchanged. One process supports either headless
-or rendering fixtures; the constructor rejects a switch between the two.
+or rendering fixtures, not both. The constructor rejects a change from one mode
+to the other.
 
 ### Properties
 
@@ -49,16 +50,18 @@ or rendering fixtures; the constructor rejects a switch between the two.
 ### `Input`
 
 Use `Input.Click(control)` to aim at a control through its viewport's input
-router. Foreground controls and input suppression still apply. `PushToViewport`
-routes custom events locally; `Send` uses the input server and updates global
-polling state. Call these on the engine's owner thread. See
+router. Foreground controls and viewport input
+suppression keep their normal behavior. `PushToViewport` routes custom events
+locally. `Send` uses the input server and also updates the global polling
+state. Call these on the engine's owner thread. See
 [Simulating Input](/testing/input) for examples and the distinction between modes.
 
 ### `Errors`
 
-The fixture starts its engine with `CaptureErrors` enabled, so every error and warning Godot reports lands in
-`Errors`: `push_error`, failed engine checks, and exceptions Godot catches in C# callbacks. With `2dog.xunit`
-or `2dog.nunit`, a test fails when it leaves any behind. A test that expects one consumes it, asserting its text:
+The fixture starts its engine with `CaptureErrors` enabled. Every error and warning that Godot reports goes to
+`Errors`: `push_error`, failed engine checks, and exceptions that Godot catches in C# callbacks. With
+`2dog.xunit` or `2dog.nunit`, a test fails if any errors or warnings remain in `Errors` after it. A test that
+expects an error consumes it and asserts its text:
 
 ```csharp
 godot.Errors.Expect("Health must not be negative");
@@ -72,8 +75,8 @@ godot.Errors.Expect("Health must not be negative");
 public void Dispose()
 ```
 
-Disposes the owning `Engine`. Let the test framework call this through its
-fixture lifetime.
+Disposes the `Engine` that the fixture owns. Let the test framework call this
+at the end of the fixture lifetime.
 
 ## `HeadlessFixture` {#headlessfixture}
 
@@ -104,8 +107,8 @@ public class RenderingCollection : ICollectionFixture<Fixture>
 
 Each collection is non-parallel and shares one fixture across its test classes.
 The package compiles the definitions into your test assembly so xUnit can
-discover them. Clean up nodes and other state that should not carry into the
-next test.
+discover them. Remove the nodes and other state that each test adds, so that
+they do not affect the next test.
 
 ```csharp
 using twodog.Testing;
@@ -122,8 +125,8 @@ public class SceneTests(HeadlessFixture godot)
 
 ### Custom collection
 
-Derive from `FixtureBase` for other Godot arguments, and define a non-parallel
-collection for it; Godot is not thread-safe.
+To pass other Godot arguments, derive from `FixtureBase`. Define a non-parallel
+collection for the new fixture, because Godot is not thread-safe.
 
 ```csharp
 using twodog.Testing;

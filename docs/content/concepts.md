@@ -8,18 +8,18 @@ tagline: "An overview of the concepts behind 2dog, Godot in .NET."
 
 Teaching an old robot new tricks! *(and it won't forget any of the older ones)*
 
-2dog works by adding small "sidecar" projects called [Hosts](/hosts/) to your solution that do the embedding and offer you to run your own code before, on top of, or after Godot. It uses `libgodot`, which became an official part of Godot in version 4.6, to achieve this.
+2dog adds small "sidecar" projects called [Hosts](/hosts/) to your solution. These hosts embed Godot, and they let you run your own code before, on top of, or after Godot. To do this, 2dog uses `libgodot`, which became an official part of Godot in version 4.6.
 
 
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and glasses scouting ahead with their blue godot robot dog](img/2dog-scouting.png)
 *"It's a companion, not a replacement."*
 
-Your original Godot project stays and works the same. Simply continue developing it using the official Godot editor as you like.
+Your original Godot project stays and works the same. Continue to develop it in the official Godot editor as you like.
 
 ## 2dog is Godot, backwards!
-However, the side car projects allow us to do things quite differently!
+However, the sidecar projects let us do things quite differently!
 
-Traditional Godot applications have Godot control the process lifecycle:
+In a traditional Godot application, Godot controls the process lifecycle:
 
 ```
 Godot Process
@@ -27,7 +27,7 @@ Godot Process
 → SceneTree → Scripts
 ```
 
-2dog rolls over:
+2dog rolls over and reverses the order:
 
 ```
 .NET Process 
@@ -41,16 +41,16 @@ rendering, physics, and audio library that your application drives.
 
 ## `libgodot` ... ?!
 
-2dog uses `libgodot`, a shared-library build of Godot Engine. The library is loaded by a .NET process, 
-supports direct P/Invoke calls to native APIs, and retains full access to GodotSharp managed bindings. It compiles and runs on most platforms.
+2dog uses `libgodot`, a shared-library build of Godot Engine. A .NET process loads the library. The library supports direct
+P/Invoke calls to native APIs and keeps full access to the managed GodotSharp bindings. It compiles and runs on most platforms.
 
 #### Wait, so Godot could just *do that all this time?*
 Almost, but... yay for free and libre open source!
 
-2dog is technically a 'fork' or a 'distro' of Godot, making some limited changes to the engine to allow it to tear down and start up more cleanly, to be not the first or primary loader of .NET assemblies, and more. It provides these as binaries for developers in easy to install `.nuget` packages. The [2dog tool](./dnx-2dog) grabs all these for us, check its output or do a `--dry-run`.
+2dog is technically a 'fork' or a 'distro' of Godot. It makes some limited changes to the engine. For example, the engine can stop and start again more cleanly, and it does not have to be the first or primary loader of .NET assemblies. 2dog provides these engine builds as binaries in `.nuget` packages that are easy to install. The [2dog tool](./dnx-2dog) gets all these packages for you. To see what it gets, check its output or use `--dry-run`.
 
-`2dog.engine` pulls in the native `libgodot` for your platform in three variants:
-`debug`, `release` and `editor`, following the Debug, Release and Editor .NET
+`2dog.engine` adds the native `libgodot` for your platform in three variants:
+`debug`, `release` and `editor`. They match the Debug, Release and Editor .NET
 configurations. [Build Variants](./build-configurations) is the complete guide.
 
 ## Lookin' sharp... GodotSharp ... !
@@ -64,7 +64,7 @@ It still gets us all the hosts, application embedding, custom imports &amp; expo
 </details>
 :::
 
-Your C# game needs GodotSharp, and 2dog has us covered. After application startup, the full GodotSharp API is accessible:
+Your C# game needs GodotSharp, and 2dog gives it to you. After the engine starts, you can use the full GodotSharp API:
 
 ```csharp
 using var engine = new Engine("MyGame", args: args);
@@ -85,7 +85,7 @@ var physics = PhysicsServer3D.Singleton;
 
 ## Wow, I have a Main Loop now?
 
-Unlike traditional Godot, the host explicitly pumps Godot in its own main loop. It comes with a basic implementation that mimics stock Godot, and you can extend it in each sidecar host project individually.
+Unlike traditional Godot, the host explicitly runs Godot frame by frame in its own main loop. The host has a basic loop that works like stock Godot. You can change this loop separately in each host project.
 
 ```csharp
 while (!engine.Iteration())
@@ -97,7 +97,7 @@ while (!engine.Iteration())
 ```
 
 `Engine` owns the running instance. `Iteration()` returns `true` when Godot
-wants to quit, such as when the window closes; `RequestQuit()` asks it to stop.
+wants to quit, for example when the window closes. `RequestQuit()` asks Godot to stop.
 After teardown, `Completion` completes and `Exited` fires on every platform.
 Desktop disposal is synchronous; browser disposal is asynchronous.
 

@@ -6,9 +6,9 @@ tagline: "Learn how to check your project and let 2dog fix what it finds."
 
 # `2dog doctor`
 
-Checks the project and this machine without building, and applies the fixes
-it can. Safe repairs use `--fix`; announced changes use `--fix-all` or the
-interactive checklist.
+Checks the project and this machine without a build, and applies the fixes
+that it can. Use `--fix` for safe repairs. Use `--fix-all` or the interactive
+checklist for announced fixes.
 
 ```bash
 2dog doctor [path] [options]
@@ -28,23 +28,23 @@ interactive checklist.
 | `--install-android-workload` | Install the missing `android` workload for Android hosts, then re-check                     |
 | `--build [target]`           | Run `dotnet build` of the solution, or a host folder or project, and explain known failures |
 | `-c, --configuration <Cfg>`  | Configuration for variant checks and `--build` (default `Debug`)                            |
-| `--log <file>`               | Only explain an existing build, restore or runtime log; `-` reads stdin                     |
+| `--log <file>`               | Explain an existing build, restore or runtime log and run no checks; `-` reads stdin        |
 | `--ignore <id>`              | Drop a finding by [check id](#checks); repeatable                                           |
-| `--strict`                   | Warnings count as findings for the exit code                                                |
+| `--strict`                   | Count warnings as findings for the exit code                                                |
 | `--offline`                  | Skip the nuget.org check for a newer tool                                                   |
 | `--list-checks`              | Print every check and build-log signature                                                   |
 
-Plus the [global and output options](/dnx-2dog#global-options); `-v` lists
-the passed checks too.
+The [global and output options](/dnx-2dog#global-options) also apply. With
+`-v`, doctor also lists the passed checks.
 
 Missing browser/Android tooling is informational until `--build` selects a host
-that needs it. Excluded solution hosts do not require their workloads. Installing
-a required workload is an announced fix: select it in the checklist or use
-`--fix-all`. The install flags explicitly request installation for existing hosts
+that needs it. Hosts excluded from plain solution builds do not need their workloads.
+To install a required workload, select it in the checklist or use `--fix-all`.
+This is an announced fix. The install flags explicitly request installation for existing hosts
 without a build. `--fix` alone does not install workloads.
 
 Variant checks read literal values and simple `Configuration` conditions;
-anything more complex is reported as info, so use `--build` to evaluate it.
+doctor reports anything more complex as info. To evaluate it, use `--build`.
 Solution migration keeps the `.sln` as a numbered `.sln.old` backup.
 
 ## Exit codes
@@ -149,19 +149,19 @@ Ids are stable; `--ignore <id>` drops one.
 
 ### Versions
 
-| Id                          | Passes when                                                          |
-|-----------------------------|----------------------------------------------------------------------|
-| `ver.managed-elsewhere`     | versions expressed through your own properties are noted, not judged |
-| `ver.props-invalid`         | the TwoDog* versions in Directory.Build.props are readable versions  |
-| `ver.literal-versions`      | host csprojs use the shared version properties, not literals         |
-| `ver.twodog-consistent`     | every 2dog package uses the same version                             |
-| `ver.twodog-outdated`       | the 2dog packages are at this tool's version                         |
-| `ver.twodog-newer`          | the project is not ahead of this tool                                |
-| `ver.natives`               | the native packages are exact-pinned on the engine's Godot line      |
-| `ver.godot-line-consistent` | TwoDogGodotVersion matches the game project's Godot.NET.Sdk          |
-| `ver.godotsharp-editor`     | GodotSharpEditor in the test host matches the Godot.NET.Sdk          |
-| `ver.companions`            | Avalonia and the other companion packages are not mixed              |
-| `ver.tool-latest`           | a newer 2dog tool on nuget.org is mentioned                          |
+| Id                          | Passes when                                                                       |
+|-----------------------------|-----------------------------------------------------------------------------------|
+| `ver.managed-elsewhere`     | doctor notes versions that come from your own properties, but does not check them |
+| `ver.props-invalid`         | the TwoDog* versions in Directory.Build.props are readable versions               |
+| `ver.literal-versions`      | host csprojs use the shared version properties, not literals                      |
+| `ver.twodog-consistent`     | every 2dog package uses the same version                                          |
+| `ver.twodog-outdated`       | the 2dog packages are at this tool's version                                      |
+| `ver.twodog-newer`          | the project is not ahead of this tool                                             |
+| `ver.natives`               | the native packages are exact-pinned on the engine's Godot line                   |
+| `ver.godot-line-consistent` | TwoDogGodotVersion matches the game project's Godot.NET.Sdk                       |
+| `ver.godotsharp-editor`     | GodotSharpEditor in the test host matches the Godot.NET.Sdk                       |
+| `ver.companions`            | Avalonia and the other companion packages are not mixed                           |
+| `ver.tool-latest`           | a newer 2dog tool on nuget.org is mentioned                                       |
 
 ### Presets
 
@@ -183,8 +183,9 @@ Ids are stable; `--ignore <id>` drops one.
 
 ## Build-log signatures
 
-Failures `--build` and `--log` recognize. A match gets a title, the offending
-line and the fixing command; other errors follow.
+`--build` and `--log` recognize these failures. For each match, doctor shows a
+title, the log line with the error and the command that fixes it. Doctor lists
+other errors after the matches.
 
 | Id                               | Failure                                                                              |
 |----------------------------------|--------------------------------------------------------------------------------------|

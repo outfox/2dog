@@ -6,8 +6,9 @@ tagline: "Learn how to check your 2dog versions against the latest on nuget.org.
 
 # `2dog version`
 
-Prints the tool version and every package a setup references, each checked
-against nuget.org (best effort, 2.5 s). `--version` is the same, except
+Prints the tool version and every package that a setup references. It checks
+each one against nuget.org. If it cannot reach nuget.org within 2.5 s, the
+output shows no mark. `--version` is the same, except
 [under dnx](/cli/pinning#print-the-version).
 
 ```bash
@@ -22,8 +23,8 @@ native binaries  :natives-version: ✅  2dog.win-x64, 2dog.linux-x64, 2dog.osx-a
 GodotSharp       :2dog-version: ✅  2dog.godotsharp, 2dog.godotsharp.editor
 ```
 
-| Mark                      | Meaning                        |
-|---------------------------|--------------------------------|
-| ✅ (`ok` when redirected) | The latest stable release      |
-| 🔄 (`new`)                | A newer stable release exists  |
-| none                      | nuget.org could not be reached |
+| Mark                      | Meaning                            |
+|---------------------------|------------------------------------|
+| ✅ (`ok` when redirected) | The latest stable release          |
+| 🔄 (`new`)                | A newer stable release exists      |
+| none                      | The tool could not reach nuget.org |

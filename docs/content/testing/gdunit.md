@@ -26,63 +26,69 @@ dotnet test --project MyGame.gdunit --gdunit-filter "*test_answer"
 
 Plain `dotnet test` runs the GdUnit host together with the
 [xUnit](/hosts/xunit) and [NUnit](/hosts/nunit) hosts. If the root
-`global.json` does not select MTP, run from `MyGame.gdunit/`, which carries
-its own; see [Select the runner](/configuration/gdunit#select-the-runner).
+`global.json` does not select MTP, run the commands from `MyGame.gdunit/`. That
+folder has its own `global.json`; see
+[Select the runner](/configuration/gdunit#select-the-runner).
 
-Use the host's MTP options for these commands. GdUnit's
-[standalone command-line options](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/cmd/)
-belong to its own runner.
+Use the host's MTP options for these commands. Do not use GdUnit's
+[standalone command-line options](https://godot-gdunit-labs.github.io/gdUnit4/latest/advanced_testing/cmd/);
+only GdUnit's own runner accepts them.
 
 `--gdunit-filter` matches the fully qualified test name with case-sensitive
-`*` and `?` wildcards. Each parameter row has its own result and stable ID,
-derived from the resource path, method and row index, so MTP's
-[`--filter-uid`](https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-cli-options)
-can select a single row.
+`*` and `?` wildcards. Each parameter row has its own result and a stable ID.
+The host derives the ID from the resource path, the method and the row index.
+To select a single row, use MTP's
+[`--filter-uid`](https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-cli-options).
 
 ## Test a private project copy
 
 Each discovery or execution request imports a fresh, writable copy of the
-game. Original `res://` paths, game resource UIDs and autoload settings are
-preserved. Test scenes and assets can live beneath the host's `.gdignore`;
-only configured test roots become visible in the private copy. Nested ignored
-trees remain excluded.
+game. The copy keeps the original `res://` paths, game resource UIDs and
+autoload settings. You can put test scenes and assets in the host folder, even
+though its `.gdignore` hides them from the game. Only the configured test roots
+become visible in the private copy. Folders under a nested `.gdignore` stay
+hidden.
 
 The source game, settings, sidecars and import cache stay unchanged. Changes
-to tests or assets appear in the next request. Point tools that inspect runtime
-files at the [artifact directory](/configuration/gdunit#artifacts), rather
-than expecting test-generated files in the source game.
+to tests or assets appear in the next request. Tests do not write
+files to the source game. If a tool inspects files that the tests create,
+configure the tool to read the
+[artifact directory](/configuration/gdunit#artifacts).
 
-The bridge replaces the game's main scene. Load game scenes explicitly in
+The host's bridge replaces the game's main scene. Load game scenes explicitly in
 tests. Discovery starts the engine and game autoloads, but runs no test bodies
 or suite hooks. Execution uses that same engine session and runs only selected
 cases.
 
 The package supplies an unmodified, pinned official GdUnit release, with its
-license and release provenance. No separate addon download is needed. A source
-project containing its own `addons/gdUnit4` copy is rejected to avoid combining
-framework versions.
+license and release provenance. You do not need to download the addon
+separately. If the source project has its own `addons/gdUnit4` copy, the host
+rejects it, so that two framework versions do not mix.
 
 ## Results and lifecycle
 
 Assertions, skips and test errors become MTP outcomes. Suite lifecycle failures
 also fail the run, even when every test body passes. Unexpected native Godot
-warnings and errors fail the host. The private project enables GDScript call
-stack tracking so Release builds retain assertion source lines.
+warnings and errors fail the host. In the private project, Godot tracks the
+GDScript call stack, so Release builds also report the source line of each
+assertion.
 
 The host disables GdUnit's flaky-test retries and fail-fast execution. It
 preserves GdUnit session hooks; reports they generate remain in the private
 project.
 
-MTP cancellation terminates an active import process or asks GdUnit to stop
-execution and finish teardown. The embedded session gets a five-second cleanup
-grace period. [Host timeouts](/configuration/gdunit#execution-options) bound
-importing and engine pumping; neither can interrupt a blocked native call.
+When MTP cancels a run, the host stops an active import process, or it asks
+GdUnit to stop execution and finish teardown. The embedded session then gets
+five seconds to clean up.
+[Host timeouts](/configuration/gdunit#execution-options) limit the import
+process and the embedded session. Neither timeout can interrupt a blocked
+native call.
 
 ## Current host scope
 
 The host executes GDScript suites headlessly and serializes requests within
-its load context. Godot starts, pumps and shuts down on its owner thread.
-Ordinary C# game components can be loaded in scenes; GdUnit4Net's C# test
-adapter is not loaded. Use the [xUnit](/hosts/xunit) or [NUnit](/hosts/nunit)
-hosts for C# test suites.
+its load context. Godot starts, runs and stops on its owner thread.
+Scenes can load ordinary C# game components, but the host does not load
+GdUnit4Net's C# test adapter. For C# test suites, use the [xUnit](/hosts/xunit)
+or [NUnit](/hosts/nunit) hosts.
 
