@@ -24,13 +24,13 @@ const tricks = [
     href: '/hosts/web#multithreading',
   },
   {
-    title: 'Zero-copy surfaces',
+    title: 'Zero-copy rendering',
     description: 'Render directly into UI frameworks that support it, with no CPU copy.',
     href: '/hosts/qt#rendering-and-lifecycle',
   },
   {
-    title: 'CPU-readback surfaces',
-    description: "Frames copied into your UI: a portable fallback to Godot's --wid overlays.",
+    title: 'CPU frame readback',
+    description: "Pixels copied into UI as fallback, but better than Godot's --wid option.",
     href: '/configuration/qt#session-properties',
   },
 ]
