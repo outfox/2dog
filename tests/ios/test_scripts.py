@@ -241,7 +241,7 @@ class SimulatorScript(unittest.TestCase):
         started = time.monotonic()
         try:
             with patch.object(sys, "argv", ["test_ios_simulator.py", "smoke.app", "--timeout", "1"]), \
-                    patch.object(simulator.subprocess, "run"), \
+                    patch.object(simulator.subprocess, "run", return_value=SimpleNamespace(returncode=0, stdout="", stderr="")), \
                     patch.object(simulator.subprocess, "Popen", return_value=launch), \
                     contextlib.redirect_stdout(io.StringIO()):
                 with self.assertRaisesRegex(SystemExit, "marker not observed"):
