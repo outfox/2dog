@@ -73,12 +73,12 @@ public partial class MainWindow : Window
         var hud = new Godot.Label
         {
             LabelSettings = caption.LabelSettings,
-            GrowHorizontal = Godot.Control.GrowDirection.Begin,
-            GrowVertical = Godot.Control.GrowDirection.Begin,
+            GrowHorizontal = Godot.Control.GrowDirection.End,
+            GrowVertical = Godot.Control.GrowDirection.End,
         };
         hud.AddThemeStyleboxOverride("normal", caption.GetThemeStylebox("normal"));
         scene.AddChild(hud);
-        hud.SetAnchorsAndOffsetsPreset(Godot.Control.LayoutPreset.BottomRight,
+        hud.SetAnchorsAndOffsetsPreset(Godot.Control.LayoutPreset.BottomLeft,
             Godot.Control.LayoutPresetMode.KeepSize, margin: 16);
         Vector2I hudSize = default;
         _session.FrameAdvanced += (_, _) =>
