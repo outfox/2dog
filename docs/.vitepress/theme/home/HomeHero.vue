@@ -50,13 +50,13 @@ async function copyCommands() {
             <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('nuget') }" aria-hidden="true"></span>
             Fetch from NuGet
           </a>
-          <a class="home-btn" href="https://discord.gg/GAXdbZCNGT">
-            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord') }" aria-hidden="true"></span>
-            Bark on Discord
-          </a>
           <a class="home-btn" href="https://github.com/outfox/2dog">
             <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('github') }" aria-hidden="true"></span>
             Sniff the Source
+          </a>
+          <a class="home-btn" href="https://discord.gg/GAXdbZCNGT">
+            <span class="brand-glyph" :style="{ '--gd-icon': brIconUrl('discord') }" aria-hidden="true"></span>
+            Bark on Discord
           </a>
         </div>
         <ul class="hero-facts">
