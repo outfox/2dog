@@ -169,6 +169,22 @@ and run `git config --global core.symlinks true` before cloning. To repair an
 existing clone, run `git config core.symlinks true`, then
 `git checkout -- demos/showcase/fps_counter.tscn`.
 
+To release, commit your changes on `main`, then run with [Nushell](https://www.nushell.sh/):
+
+```nu
+nu scripts/release.nu --native --dry-run  # preview both revision bumps
+nu scripts/release.nu --native            # bump TwoDogRevision and NativesRevision
+nu scripts/release.nu                     # bump TwoDogRevision only
+```
+
+Use `--revision 140` to choose the managed revision explicitly. The script requires a clean checkout
+containing the latest `origin/main`, signs the bump commit using your Git configuration, and pushes
+`main` and `v<TwoDogVersion>` atomically. Only the tag run builds, tests and publishes; branch CI
+leaves that work to the matching tag. Unpushed local commits can be included in that same push.
+`--native` versions the native NuGet packages; existing engine binaries keyed by the Godot commit
+remain reusable. The GitHub **2dog Release** action is an emergency/manual fallback, with the same
+optional native revision bump.
+
 
 ## Acknowledgements
 

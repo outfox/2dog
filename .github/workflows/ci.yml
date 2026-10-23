@@ -43,6 +43,7 @@ jobs:
       hash: ${{ steps.check.outputs.hash }}
       tested-bump: ${{ steps.release.outputs.tested-bump }}
       tested-content: ${{ steps.content.outputs.tested-content }}
+      release-push: ${{ steps.content.outputs.release-push }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -52,6 +53,8 @@ jobs:
       - name: Test CI helpers
         run: |
           bash .github/scripts/find-tested-run.test.sh
+          bash .github/scripts/release-push.test.sh
+          bash .github/scripts/release-workflow.test.sh
           bash .github/scripts/push-nuget.test.sh
           bash .github/scripts/stage-ci-inputs.test.sh
           bash .github/scripts/test-with-watchdog.test.sh
@@ -105,8 +108,8 @@ jobs:
           [ "$tested" = true ] || echo "::notice::Not a revision bump on a tested commit; running every job."
           echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
-      # A branch push whose content already passed every job family elsewhere (typically the merge of a tested,
-      # up-to-date branch) skips natives, pack, test and smoke jobs.
+      # An atomic main + release-tag push leaves testing to the tag run. Otherwise a branch push whose
+      # content already passed every job family elsewhere skips natives, pack, test and smoke jobs.
       # Tags keep their own rule above; manual dispatches always run in full.
       - name: Check for already-tested content
         id: content
@@ -114,6 +117,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if [ "$GITHUB_REF" = refs/heads/main ] && tag=$(bash .github/scripts/release-push.sh); then
+            echo "release-push=true" >> "$GITHUB_OUTPUT"
+            echo "Release [$tag]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions?query=branch%3A$tag) owns testing and deployment; skipping duplicate branch jobs." \
+              >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
                "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
             read -r run sha <<<"$found"
@@ -137,7 +146,8 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (needs.check-natives.outputs.ready != 'true' && needs.check-natives.outputs.tested-content != 'true')
+      (needs.check-natives.outputs.ready != 'true' && needs.check-natives.outputs.tested-content != 'true' &&
+      needs.check-natives.outputs.release-push != 'true')
     permissions:
       contents: write # callee's release job creates the godot-<hash> release
     concurrency:
@@ -152,7 +162,8 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (needs.check-natives.outputs.double-ready != 'true' && needs.check-natives.outputs.tested-content != 'true')
+      (needs.check-natives.outputs.double-ready != 'true' && needs.check-natives.outputs.tested-content != 'true' &&
+      needs.check-natives.outputs.release-push != 'true')
     permissions:
       contents: write
     concurrency:
@@ -169,7 +180,8 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.check-natives.result == 'success' && needs.check-natives.outputs.tested-content != 'true')
+      (!cancelled() && needs.check-natives.result == 'success' && needs.check-natives.outputs.tested-content != 'true' &&
+      needs.check-natives.outputs.release-push != 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
     steps:
@@ -207,6 +219,7 @@ jobs:
       github.repository == 'outfox/2dog' &&
       (!cancelled() && needs.check-natives.result == 'success' &&
       needs.check-natives.outputs.tested-content != 'true' &&
+      needs.check-natives.outputs.release-push != 'true' &&
       (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped') &&
       (needs.build-double-natives.result == 'success' || needs.build-double-natives.result == 'skipped'))
     runs-on: blacksmith-4vcpu-ubuntu-2404
@@ -1957,7 +1970,8 @@ jobs:
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && needs.check-natives.result == 'success' &&
-      needs.check-natives.outputs.tested-content != 'true' && needs.check-natives.outputs.tested-bump != 'true')
+      needs.check-natives.outputs.tested-content != 'true' && needs.check-natives.outputs.tested-bump != 'true' &&
+      needs.check-natives.outputs.release-push != 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     outputs:
@@ -2314,7 +2328,7 @@ jobs:
 
       - name: Shut down iOS Simulator
         if: always() && steps.simulator.outputs.device != ''
-        timeout-minutes: 1
+        timeout-minutes: 2
         env:
           SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
         run: xcrun simctl shutdown "$SIMULATOR_DEVICE" || true

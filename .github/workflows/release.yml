@@ -1,4 +1,4 @@
-# One-button release: bumps <TwoDogRevision> in Directory.Build.props, commits,
+# Emergency/manual fallback to scripts/release.nu: bumps revisions in Directory.Build.props, commits,
 # tags the bump commit, and pushes both — so the tag can never point at a commit
 # with a stale version (the failure mode behind the mislabeled v4.7.0.26 release).
 #
@@ -16,6 +16,11 @@ on:
         description: 'New TwoDogRevision (default: current + 1)'
         required: false
         type: string
+      native:
+        description: 'Also increment NativesRevision for native NuGet packages'
+        required: false
+        type: boolean
+        default: false
       dry_run:
         description: 'Compute, commit, and tag locally without pushing'
         required: false
@@ -51,11 +56,13 @@ jobs:
         id: version
         env:
           INPUT_REVISION: ${{ inputs.revision }}
+          INPUT_NATIVE: ${{ inputs.native }}
         run: |
           GODOT_VERSION=$(sed -n 's:.*<GodotVersion>\(.*\)</GodotVersion>.*:\1:p' Directory.Build.props)
           CURRENT_REV=$(sed -n 's:.*<TwoDogRevision>\(.*\)</TwoDogRevision>.*:\1:p' Directory.Build.props)
-          if [[ ! "$GODOT_VERSION" =~ ^[0-9.]+$ || ! "$CURRENT_REV" =~ ^[0-9]+$ ]]; then
-            echo "::error::Failed to parse GodotVersion/TwoDogRevision from Directory.Build.props."
+          CURRENT_NATIVE_REV=$(sed -n 's:.*<NativesRevision>\(.*\)</NativesRevision>.*:\1:p' Directory.Build.props)
+          if [[ ! "$GODOT_VERSION" =~ ^[0-9.]+$ || ! "$CURRENT_REV" =~ ^[0-9]+$ || ! "$CURRENT_NATIVE_REV" =~ ^[0-9]+$ ]]; then
+            echo "::error::Failed to parse GodotVersion/TwoDogRevision/NativesRevision from Directory.Build.props."
             exit 1
           fi
 
@@ -76,17 +83,29 @@ jobs:
           fi
 
           echo "Releasing $TAG (revision $CURRENT_REV -> $NEW_REV)"
+          NEW_NATIVE_REV="$CURRENT_NATIVE_REV"
+          if [ "$INPUT_NATIVE" = true ]; then
+            NEW_NATIVE_REV=$((CURRENT_NATIVE_REV + 1))
+          fi
+          echo "NativesRevision $CURRENT_NATIVE_REV -> $NEW_NATIVE_REV"
           {
             echo "current_rev=$CURRENT_REV"
             echo "new_rev=$NEW_REV"
             echo "tag=$TAG"
+            echo "current_native_rev=$CURRENT_NATIVE_REV"
+            echo "new_native_rev=$NEW_NATIVE_REV"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Bump TwoDogRevision
+      - name: Bump revisions
         run: |
           sed -i 's:<TwoDogRevision>${{ steps.version.outputs.current_rev }}</TwoDogRevision>:<TwoDogRevision>${{ steps.version.outputs.new_rev }}</TwoDogRevision>:' Directory.Build.props
           if ! grep -q '<TwoDogRevision>${{ steps.version.outputs.new_rev }}</TwoDogRevision>' Directory.Build.props; then
             echo "::error::Failed to update <TwoDogRevision> in Directory.Build.props."
+            exit 1
+          fi
+          sed -i 's:<NativesRevision>${{ steps.version.outputs.current_native_rev }}</NativesRevision>:<NativesRevision>${{ steps.version.outputs.new_native_rev }}</NativesRevision>:' Directory.Build.props
+          if ! grep -q '<NativesRevision>${{ steps.version.outputs.new_native_rev }}</NativesRevision>' Directory.Build.props; then
+            echo "::error::Failed to update <NativesRevision> in Directory.Build.props."
             exit 1
           fi
           git diff Directory.Build.props
@@ -95,12 +114,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "chore: bump <TwoDogRevision> to ${{ steps.version.outputs.new_rev }}"
+          git commit -am "chore: release ${{ steps.version.outputs.tag }}"
           git tag "${{ steps.version.outputs.tag }}"
 
       - name: Push commit and tag
         if: ${{ !inputs.dry_run }}
-        run: git push origin main "${{ steps.version.outputs.tag }}"
+        run: git push --atomic origin main "${{ steps.version.outputs.tag }}"
 
       # Tags pushed with GITHUB_TOKEN don't fire `on: push`, so trigger the CI
       # (and thereby the deploy) explicitly on the new tag.

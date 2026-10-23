@@ -63,8 +63,12 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
-- `release.yml` bumps `TwoDogRevision`, tags `v<TwoDogVersion>` and dispatches `ci.yml` on the tag, because
-  tags pushed with `GITHUB_TOKEN` start no workflows. When the tag's parent passed CI and the tag only bumps
+- `scripts/release.nu` is the normal local release path: bump `TwoDogRevision`, optionally `NativesRevision`
+  with `--native`, sign the commit and atomically push main + tag. A main push with its matching version tag
+  delegates testing/deployment to the tag run; keep the release-push gates on independent branch jobs.
+  `release.yml` is the emergency/manual fallback with a `native` boolean. It tags `v<TwoDogVersion>` and
+  dispatches `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
+  When the tag's parent passed CI and the tag only bumps
   the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and
   package tests; `docs.yml` builds the documentation site.
 - A branch push whose content already passed every job family in a recent successful run skips natives, pack,
@@ -83,6 +87,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 
 ## Scripts
 
+- After changing `scripts/release.nu`, run `uv run python -m unittest discover -s tests/releasing -v`
+  with Nushell installed. CI runs `release-push.test.sh` and `release-workflow.test.sh` with the other helpers.
 - `test-with-watchdog.sh <Config> [idle-seconds] [budget-seconds]` runs `dotnet test` under a hang watchdog
   that dumps the test processes. It sets `TWODOG_GODOT_LOG_DIR` to `twodog.tests/TestResults/godot-<Config>`,
   so failed runs upload Godot's native logs with the test results. `TWODOG_TEST_FILTER` adds a `--filter`.
