@@ -159,7 +159,12 @@ on macOS. On Windows, the signature also covers the embedded pack. 2dog does
 not embed a pack into an executable that is already signed, because that
 would break the signature.
 
-### Pack the Engine Too
+### Pack the whole Kitten Kaboodle
+
+```bash
+dotnet publish MyGame.2dog -c Release -r win-x64 \
+  -p:PublishSingleFile=true -p:TwoDogEmbedPack=true -p: IncludeNativeLibrariesForSelfExtract=true
+```
 
 `IncludeNativeLibrariesForSelfExtract=true` also packs the Godot libraries
 and your GDExtension libraries into the executable. Your game is then one
