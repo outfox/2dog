@@ -45,14 +45,16 @@ try {
         const probeUrl = new URL(url);
         probeUrl.searchParams.set('mode', mode);
         await send('Page.navigate', { url: probeUrl.href });
-        const terminal = mode.startsWith('unhandled') ? /Unhandled Exception|runtime terminating/ : /PROBE_COMPLETE/;
+        // The initial page can finish while navigation to this mode is starting.
+        const terminal = mode.startsWith('unhandled') ? /Unhandled Exception|runtime terminating/
+            : new RegExp(`^PROBE_COMPLETE:${mode}$`);
         const deadline = Date.now() + 10000;
         while (!logs.some((l) => terminal.test(l.text)) && Date.now() < deadline) await delay(100);
         assert(logs.some((l) => terminal.test(l.text)), `${mode} did not finish: ${JSON.stringify(logs)}`);
         await delay(100);
         const errors = logs.filter((l) => l.type === 'error').map((l) => l.text).join('\n');
         if (mode === 'forgotten' || mode === 'forgotten-source') {
-            assert.equal(errors.match(/2dog: Fire-and-forget task exception/g)?.length, 1);
+            assert.equal(errors.match(/2dog: Fire-and-forget task exception/g)?.length, 1, `${mode}: ${JSON.stringify(logs)}`);
             assert.match(errors, mode === 'forgotten' ? /forgotten-task/ : /source-task/);
             assert.match(errors, /inner-failure/);
             if (mode === 'forgotten') assert.match(errors, /FailAsync/);

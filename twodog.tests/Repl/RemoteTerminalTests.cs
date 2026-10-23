@@ -1,3 +1,5 @@
+using System.IO.Pipes;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
 using twodog.Repl;
@@ -6,6 +8,25 @@ namespace twodog.tests.ReplTests;
 
 public class RemoteTerminalTests
 {
+    [Fact]
+    public async Task PipeClientAcceptsHostEofAndRestoresTheTerminal()
+    {
+        using var lifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        var name = ReplDiscoveryInit.PipeName();
+        using var server = new NamedPipeServerStream(name, PipeDirection.InOut, 1,
+            PipeTransmissionMode.Byte, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
+        var connected = server.WaitForConnectionAsync(lifetime.Token);
+        using var terminal = new ScriptedTerminal(null, [], lifetime.Token);
+        var running = ReplPipeClient.RunAsync(name, TextReader.Null, TextWriter.Null, lifetime.Token, () => terminal);
+        await connected;
+        using var reader = new StreamReader(server, Encoding.UTF8, leaveOpen: true);
+        Assert.StartsWith(ReplRemoteTerminal.Hello, await reader.ReadLineAsync(lifetime.Token));
+        Assert.Contains("size", await reader.ReadLineAsync(lifetime.Token));
+        server.Dispose();
+        Assert.Equal(0, await running.WaitAsync(lifetime.Token));
+        Assert.True(terminal.Restored);
+    }
+
     [Theory]
     [InlineData(true)]
     [InlineData(false)]

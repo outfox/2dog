@@ -216,64 +216,73 @@ internal static class ReplPipeClient
         using var pipe = new NamedPipeClientStream(".", name, PipeDirection.InOut, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
         await pipe.ConnectAsync(5000, lifetimeToken).ConfigureAwait(false);
         using var reader = new StreamReader(pipe, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
-        using var writer = new StreamWriter(pipe, new UTF8Encoding(false), leaveOpen: true) { AutoFlush = true };
-        terminal?.Device.Write(Paint(terminal, $"Connected to REPL '{name}'.", "2") + " Enter submits; Shift+Enter adds a line; Ctrl+C cancels work; :exit disconnects.\r\n");
-        if (terminal is not null) return await ReplRemoteTerminalClient.RunAsync(reader, writer, terminal, lifetime).ConfigureAwait(false);
-        var output = Task.Run(async () =>
-        {
-            try
-            {
-                while (await reader.ReadLineAsync(lifetimeToken).ConfigureAwait(false) is { } line)
-                {
-                    destination.WriteLine(line);
-                }
-            }
-            finally { lifetime.Cancel(); }
-        });
-        using var sendGate = new SemaphoreSlim(1, 1);
-        async Task SendAsync(string line)
-        {
-            await sendGate.WaitAsync().ConfigureAwait(false);
-            try { await writer.WriteLineAsync(line).ConfigureAwait(false); }
-            finally { sendGate.Release(); }
-        }
-        void Cancel(object? sender, ConsoleCancelEventArgs args)
-        {
-            args.Cancel = true;
-            _ = CancelAsync();
-        }
-        async Task CancelAsync()
-        {
-            try { await SendAsync(":cancel").ConfigureAwait(false); }
-            catch (IOException) { }
-            catch (ObjectDisposedException) { }
-        }
-        Console.CancelKeyPress += Cancel;
+        var writer = new StreamWriter(pipe, new UTF8Encoding(false), leaveOpen: true) { AutoFlush = true };
         try
         {
-            var exitSent = false;
-            while (!lifetime.IsCancellationRequested)
+            terminal?.Device.Write(Paint(terminal, $"Connected to REPL '{name}'.", "2") + " Enter submits; Shift+Enter adds a line; Ctrl+C cancels work; :exit disconnects.\r\n");
+            if (terminal is not null) return await ReplRemoteTerminalClient.RunAsync(reader, writer, terminal, lifetime).ConfigureAwait(false);
+            var output = Task.Run(async () =>
             {
-                var line = await Task.Run(async () => await input.ReadLineAsync(lifetimeToken).ConfigureAwait(false)).WaitAsync(lifetimeToken).ConfigureAwait(false);
-                if (line is null) break;
-                await SendAsync(line).ConfigureAwait(false);
-                if (line.Trim() == ":exit") { exitSent = true; break; }
+                try
+                {
+                    while (await reader.ReadLineAsync(lifetimeToken).ConfigureAwait(false) is { } line)
+                    {
+                        destination.WriteLine(line);
+                    }
+                }
+                finally { lifetime.Cancel(); }
+            });
+            using var sendGate = new SemaphoreSlim(1, 1);
+            async Task SendAsync(string line)
+            {
+                await sendGate.WaitAsync().ConfigureAwait(false);
+                try { await writer.WriteLineAsync(line).ConfigureAwait(false); }
+                finally { sendGate.Release(); }
             }
-            if (!exitSent && !lifetime.IsCancellationRequested) await SendAsync(":exit").ConfigureAwait(false);
-            await output.ConfigureAwait(false);
-            return 0;
-        }
-        catch (OperationCanceledException) when (lifetime.IsCancellationRequested)
-        {
-            // The reader cancels input in its finally block, just before its Task
-            // becomes faulted. Await it so that race cannot hide an output failure.
-            try { await output.ConfigureAwait(false); }
-            catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { }
-            return 0;
+            void Cancel(object? sender, ConsoleCancelEventArgs args)
+            {
+                args.Cancel = true;
+                _ = CancelAsync();
+            }
+            async Task CancelAsync()
+            {
+                try { await SendAsync(":cancel").ConfigureAwait(false); }
+                catch (IOException) { }
+                catch (ObjectDisposedException) { }
+            }
+            Console.CancelKeyPress += Cancel;
+            try
+            {
+                var exitSent = false;
+                while (!lifetime.IsCancellationRequested)
+                {
+                    var line = await Task.Run(async () => await input.ReadLineAsync(lifetimeToken).ConfigureAwait(false)).WaitAsync(lifetimeToken).ConfigureAwait(false);
+                    if (line is null) break;
+                    await SendAsync(line).ConfigureAwait(false);
+                    if (line.Trim() == ":exit") { exitSent = true; break; }
+                }
+                if (!exitSent && !lifetime.IsCancellationRequested) await SendAsync(":exit").ConfigureAwait(false);
+                await output.ConfigureAwait(false);
+                return 0;
+            }
+            catch (OperationCanceledException) when (lifetime.IsCancellationRequested)
+            {
+                // The reader cancels input in its finally block, just before its Task
+                // becomes faulted. Await it so that race cannot hide an output failure.
+                try { await output.ConfigureAwait(false); }
+                catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { }
+                return 0;
+            }
+            finally
+            {
+                Console.CancelKeyPress -= Cancel;
+            }
         }
         finally
         {
-            Console.CancelKeyPress -= Cancel;
+            // Writes already auto-flushed; the peer can close before this final flush.
+            try { writer.Dispose(); }
+            catch (IOException) { }
         }
     }
 

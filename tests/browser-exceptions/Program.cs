@@ -83,7 +83,7 @@ switch (args.Single())
     default:
         throw new ArgumentException("Unknown probe mode");
 }
-Console.WriteLine("PROBE_COMPLETE");
+Console.WriteLine($"PROBE_COMPLETE:{args.Single()}");
 
 [MethodImpl(MethodImplOptions.NoInlining)]
 static void AbandonFaultedTask() => _ = FailAsync("abandoned-task");
