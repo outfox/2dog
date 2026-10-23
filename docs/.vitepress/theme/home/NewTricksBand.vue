@@ -29,6 +29,11 @@ const tricks = [
     href: '/hosts/qt#rendering-and-lifecycle',
   },
   {
+    title: 'Single-file publish',
+    description: 'One executable with the engine, your game and its GDExtensions inside.',
+    href: '/configuration#single-file',
+  },
+  {
     title: 'CPU frame readback',
     description: "Pixels copied into UI as fallback, but better than Godot's --wid option.",
     href: '/configuration/qt#session-properties',
