@@ -181,7 +181,7 @@ class SimulatorScript(unittest.TestCase):
 
         def run(command, **kwargs):
             calls.append((command, kwargs))
-            return SimpleNamespace(returncode=0)
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
 
         with patch.object(sys, "argv", ["test_ios_simulator.py", "smoke.app", "--timeout", str(timeout), "--marker", marker]), \
                 patch.object(simulator.subprocess, "run", side_effect=run), \
@@ -202,6 +202,24 @@ class SimulatorScript(unittest.TestCase):
         self.assertEqual(5, calls[0][1]["timeout"])
         self.assertEqual("terminate", calls[-1][0][2])
         self.assertTrue(launch.killed)
+
+    def test_termination_suppresses_only_the_expected_absent_process_error(self):
+        args = SimpleNamespace(xcrun="xcrun", device="booted", bundle="dev.twodog.smoke")
+        cases = (
+            (3, "found nothing to terminate\n", ""),
+            (1, "Simulator device is unavailable\n", "Simulator device is unavailable\n"),
+            (0, "", ""),
+        )
+        for code, message, expected in cases:
+            with self.subTest(code=code), contextlib.redirect_stdout(io.StringIO()) as stdout, \
+                    contextlib.redirect_stderr(io.StringIO()) as stderr, \
+                    patch.object(simulator.subprocess, "run", return_value=SimpleNamespace(
+                        returncode=code, stdout="", stderr=message)) as run:
+                simulator.terminate(args, timeout=10)
+                self.assertEqual("", stdout.getvalue())
+                self.assertEqual(expected, stderr.getvalue())
+                self.assertEqual(["xcrun", "simctl", "terminate", "booted", "dev.twodog.smoke"], run.call_args.args[0])
+                self.assertEqual(10, run.call_args.kwargs["timeout"])
 
     def test_missing_marker_fails_with_the_console_output(self):
         _, output, exit_message, _ = self.run_script(["booting\n", "2DOG_IOS_CSHARP_SMOKE_FAILED: boom\n"])

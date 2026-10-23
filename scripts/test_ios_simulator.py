@@ -4,12 +4,25 @@ import argparse
 from pathlib import Path
 from queue import Empty, Queue
 import subprocess
+import sys
 from threading import Thread
 import time
 
 
 def simctl(args, *command):
     return [args.xcrun, "simctl", *command]
+
+
+def terminate(args, timeout):
+    try:
+        result = subprocess.run(simctl(args, "terminate", args.device, args.bundle),
+                                check=False, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return
+    if result.returncode and "found nothing to terminate" in result.stderr:
+        return
+    print(result.stdout, end="")
+    print(result.stderr, end="", file=sys.stderr)
 
 
 def main():
@@ -30,10 +43,7 @@ def main():
     except subprocess.TimeoutExpired:
         raise SystemExit("iOS Simulator app installation timed out")
     # A stale instance would keep the console attached; simctl itself can hang when the Simulator is overloaded.
-    try:
-        subprocess.run(simctl(args, "terminate", args.device, args.bundle), check=False, timeout=30)
-    except subprocess.TimeoutExpired:
-        pass
+    terminate(args, timeout=30)
     # --console attaches the app's stdout and stderr to this process until it exits or is terminated.
     launch = subprocess.Popen(simctl(args, "launch", "--console", args.device, args.bundle),
                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -63,10 +73,7 @@ def main():
         raise SystemExit("iOS smoke marker not observed before timeout")
     finally:
         # Cleanup has a separate short bound and must not hide a smoke timeout.
-        try:
-            subprocess.run(simctl(args, "terminate", args.device, args.bundle), check=False, timeout=10)
-        except subprocess.TimeoutExpired:
-            pass
+        terminate(args, timeout=10)
         launch.kill()
 
 
