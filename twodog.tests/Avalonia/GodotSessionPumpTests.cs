@@ -11,8 +11,10 @@ namespace twodog.tests.AvaloniaTests;
 [Collection(nameof(EngineRunCollection))]
 public class GodotSessionPumpTests
 {
-    [Fact]
-    public void CompositionTicks_AdvanceFramesEvenWithoutAnImageUpdate() =>
+    [Theory]
+    [InlineData(0)]
+    [InlineData(60)]
+    public void CompositionTicks_AdvanceFramesEvenWithoutAnImageUpdate(int maxFps) =>
         GodotControlLifecycleTests.Dispatch(() =>
         {
             twodog.fixture.AssemblyPreloader.PreloadGameAssemblies(Engine.ResolveProjectDir());
@@ -20,6 +22,7 @@ public class GodotSessionPumpTests
             {
                 Project = "avalonia-composition-pump",
                 ExtraArgs = ["--headless"],
+                MaxFramesPerSecond = maxFps,
                 // No GPU import on the headless platform: presentation produces no commits.
                 PresentationMode = GodotPresentationMode.Gpu,
             });
@@ -30,12 +33,13 @@ public class GodotSessionPumpTests
                 var frames = 0;
                 session.FrameAdvanced += (_, _) => frames++;
                 session.Start();
-                Dispatcher.UIThread.RunJobs();
+                // Drain commits, not the automatic render timer: a capped frame can make that timer due forever.
+                Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
                 for (var i = 0; i < 5; i++)
                 {
                     var before = frames;
                     AvaloniaHeadlessPlatform.ForceRenderTimerTick();
-                    Dispatcher.UIThread.RunJobs();
+                    Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
                     Assert.True(frames > before, "The pump waited for the idle animation timer instead of the next commit.");
                 }
             }

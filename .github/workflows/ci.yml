@@ -54,6 +54,7 @@ jobs:
           bash .github/scripts/find-tested-run.test.sh
           bash .github/scripts/push-nuget.test.sh
           bash .github/scripts/stage-ci-inputs.test.sh
+          bash .github/scripts/test-with-watchdog.test.sh
 
       - name: Check native library availability
         id: check
@@ -450,10 +451,9 @@ jobs:
       - name: Test managed binding packages
         run: uv run tests/bindings/test_packages.py --precision ${{ matrix.precision }}
 
-  # Run tests on each platform, one job per configuration: a single job running all three back to back
-  # took 8-10 minutes and hit the job timeout.
+  # Keep Linux Avalonia tests in their own process/job: a stuck UI dispatcher must not repeat the core suite.
   test:
-    name: Test (${{ matrix.name }}, ${{ matrix.config }}) [${{ matrix.precision }}]
+    name: Test${{ matrix.suite == 'avalonia' && ' Avalonia' || '' }} (${{ matrix.name }}, ${{ matrix.config }}) [${{ matrix.precision }}]
     needs: [check-natives, pack]
     # Explicit result check: the implicit success() evaluates the transitive
     # needs chain, and the (usually) skipped build-natives job would skip this
@@ -468,9 +468,14 @@ jobs:
         precision: [single, double]
         name: [linux-x64, win-x64, osx-arm64]
         config: [Debug, Release, Editor]
+        suite: [core, avalonia]
         # Linux runs every combination. Windows and macOS run each configuration and each precision at least once;
         # desktop-smoke also boots Release double on all three.
         exclude:
+          - name: win-x64
+            suite: avalonia
+          - name: osx-arm64
+            suite: avalonia
           - name: win-x64
             precision: double
             config: Release
@@ -520,6 +525,7 @@ jobs:
       TWODOG_BUILD_SUBDIR: ${{ matrix.precision == 'double' && 'double/' || '' }}
       TWODOG_NATIVE_SUFFIX: ${{ matrix.precision == 'double' && '.double' || '' }}
       TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
+      TWODOG_TEST_PROJECT: ${{ matrix.suite == 'avalonia' && 'twodog.tests/twodog.tests.csproj' || '2dog.tests.slnf' }}
 
     steps:
       # The showcase's LFS assets (e.g. splash.png) must be real files: Godot reports an error for every
@@ -547,7 +553,7 @@ jobs:
       # makes restore demand the (hefty) wasm-tools workload, which only the
       # web-smoke job needs — and installs.
       - name: Restore
-        run: dotnet restore 2dog.tests.slnf
+        run: dotnet restore ${{ env.TWODOG_TEST_PROJECT }}
 
       # The watchdog dumps the xunit v3 child (and 2dog.import grandchildren) on a hang;
       # vstest's own --blame-hang only ever dumped its testhost. Crash dumps cover a segv.
@@ -556,10 +562,12 @@ jobs:
       - name: Test (${{ matrix.config }})
         env:
           TWODOG_TEST_FILTER: >-
-            ${{ matrix.config != 'Debug' && 'FullyQualifiedName!~twodog.tests.ToolTests.' ||
+            ${{ matrix.suite == 'avalonia' && 'FullyQualifiedName~twodog.tests.AvaloniaTests.' ||
+            format('{0}{1}', matrix.config != 'Debug' && 'FullyQualifiedName!~twodog.tests.ToolTests.' ||
             matrix.precision == 'double' && 'Precision!=Independent' ||
-            runner.os == 'Windows' && 'FullyQualifiedName!~Repl' || '' }}
-        run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }}
+            runner.os == 'Windows' && 'FullyQualifiedName!~Repl' || 'FullyQualifiedName~.',
+            runner.os == 'Linux' && '&FullyQualifiedName!~twodog.tests.AvaloniaTests.' || '') }}
+        run: bash .github/scripts/test-with-watchdog.sh ${{ matrix.config }} ${{ matrix.suite == 'avalonia' && 60 || runner.os == 'Linux' && 180 || 600 }}
 
       - name: Setup uv for REPL coverage
         if: runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
@@ -595,7 +603,7 @@ jobs:
 
       # Windows rendering runs in the windows-rendering job: this runner is a session-0 service without a desktop.
       - name: Test NUnit rendering (Linux)
-        if: runner.os == 'Linux' && matrix.config == 'Release'
+        if: runner.os == 'Linux' && matrix.config == 'Release' && matrix.suite == 'core'
         timeout-minutes: 10
         run: |
           sudo apt-get update
@@ -634,7 +642,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-dumps-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}
+          name: test-dumps-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}-${{ matrix.suite }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7

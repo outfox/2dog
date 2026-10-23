@@ -8,9 +8,11 @@
 # signal; Windows uses vstest's per-test hang timeout); every run must also finish within the budget.
 # Usage: test-with-watchdog.sh <Configuration> [idle-seconds] [budget-seconds]
 # TWODOG_TEST_FILTER, when set, is passed to `dotnet test --filter`.
+# TWODOG_TEST_PROJECT selects a smaller project for isolated CI cells.
 set -euo pipefail
 
 config="$1"
+project="${TWODOG_TEST_PROJECT:-2dog.tests.slnf}"
 # Allow ten minutes for both an idle test and the complete build/test run.
 limit="${2:-600}"
 budget="${3:-600}"
@@ -42,8 +44,8 @@ mkdir -p "$(dirname "$output")"
 run_tests() {
   # Finish every project's import before any test host reads the shared Godot cache.
   # A solution-level dotnet test otherwise overlaps one project's tests with another's build.
-  dotnet build 2dog.tests.slnf -c "$config" --no-restore || return $?
-  dotnet test 2dog.tests.slnf -c "$config" --no-build --no-restore \
+  dotnet build "$project" -c "$config" --no-restore || return $?
+  dotnet test "$project" -c "$config" --no-build --no-restore \
     --logger 'console;verbosity=normal' ${TWODOG_TEST_FILTER:+--filter "$TWODOG_TEST_FILTER"} "$@"
 }
 
