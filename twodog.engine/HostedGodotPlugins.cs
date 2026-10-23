@@ -11,7 +11,7 @@ namespace twodog;
 /// <summary>
 /// Registers this load context's GodotPlugins with libgodot via set_load_from_executable_fn, so GDMono uses the
 /// host's runtime and never falls back to hostfxr (which boots a second runtime under self-contained hosts).
-/// NativeAOT hosts register twodog's built-in <see cref="NativeAotPlugins"/> entry point instead.
+/// NativeAOT and single-file hosts register twodog's built-in <see cref="NativeAotPlugins"/> entry point instead.
 /// </summary>
 internal static unsafe class HostedGodotPlugins
 {
@@ -21,9 +21,10 @@ internal static unsafe class HostedGodotPlugins
     /// given libgodot module. Must run before the engine instance is created.</summary>
     internal static void Register(nint moduleHandle)
     {
-        // Constant under NativeAOT, so ILC drops the GodotPlugins.dll loader.
+        // Constant under NativeAOT, so ILC drops the GodotPlugins.dll loader. Single-file bundles have no assembly
+        // files on disk (empty Location) for GodotPlugins or GDMono's project assembly lookup.
         if (_initializeFromEngine == 0)
-            _initializeFromEngine = RuntimeFeature.IsDynamicCodeSupported
+            _initializeFromEngine = RuntimeFeature.IsDynamicCodeSupported && !IsSingleFileBundle()
                 ? LoadGodotPluginsInitializer()
                 : NativeAotPlugins.InitializeFromEngineFunction;
 
@@ -34,6 +35,10 @@ internal static unsafe class HostedGodotPlugins
 
     [UnmanagedCallersOnly]
     private static nint LoadFromExecutable() => _initializeFromEngine;
+
+    // Android loads GodotPlugins by name from its assembly store, whatever Location reports.
+    private static bool IsSingleFileBundle() =>
+        !OperatingSystem.IsAndroid() && typeof(HostedGodotPlugins).Assembly.Location.Length == 0;
 
     [UnconditionalSuppressMessage("Trimming", "IL2026",
         Justification = "Desktop hosts load GodotPlugins from the untrimmed output layout (AssemblyDependencyResolver " +

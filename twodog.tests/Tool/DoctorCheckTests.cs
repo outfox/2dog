@@ -227,20 +227,16 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
-    public void PublishSingleFile_OffersNativeAotOnlyWhereItWorks()
+    public void PublishSingleFile_FailsOnlyForTheRepl()
     {
-        var dir = Scaffold("--generic", "--winforms", "--avalonia");
-        foreach (var host in new[] { "Game.2dog", "Game.winforms", "Game.avalonia" })
+        var dir = Scaffold("--generic", "--winforms", "--repl");
+        foreach (var host in new[] { "Game.2dog", "Game.winforms" })
             Edit(dir, $"{host}/{host}.csproj", "<GodotProjectDir>..</GodotProjectDir>",
                 "<GodotProjectDir>..</GodotProjectDir><PublishSingleFile>true</PublishSingleFile>");
-        // NativeAOT ignores PublishSingleFile.
-        Edit(dir, "Game.avalonia/Game.avalonia.csproj", "<PublishSingleFile>true</PublishSingleFile>",
-            "<PublishSingleFile>true</PublishSingleFile><PublishAot>true</PublishAot>");
+        Edit(dir, "Game.repl/Game.repl.csproj", "<PublishSingleFile>false</PublishSingleFile>", "<PublishSingleFile>true</PublishSingleFile>");
 
         var failures = Failures(Doctor(dir, "--json").Stdout, "host.publish-singlefile");
-        Assert.Equal(["Game.2dog", "Game.winforms"], failures.Keys.Order().ToArray());
-        Assert.Contains("PublishAot", failures["Game.2dog"].GetProperty("remedy").GetString());
-        Assert.DoesNotContain("PublishAot", failures["Game.winforms"].GetProperty("remedy").GetString());
+        Assert.Equal(["Game.repl"], failures.Keys.ToArray());
     }
 
     /// <summary>The failing findings with that id, keyed by the host folder that starts their titles.</summary>

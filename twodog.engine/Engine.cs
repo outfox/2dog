@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot;
+using twodog.pck;
 
 namespace twodog;
 
@@ -329,6 +330,10 @@ public class Engine : IDisposable, IAsyncDisposable
             // self-contained hosts and needs a machine-wide .NET install.
             HostedGodotPlugins.Register(LibGodotLoader.EnsureLoaded());
         }
+
+        // Single-file bundles unpack GDExtension libraries next to libgodot, where the fork's loader also looks.
+        if (Path.GetDirectoryName(LibGodotLoader.LoadedLibraryPath) is { Length: > 0 } nativeDir)
+            NativeEnvironment.SetVariable("GODOT_GDEXTENSION_DIR", nativeDir);
 
         if (CaptureErrors)
         {
@@ -736,16 +741,31 @@ public class Engine : IDisposable, IAsyncDisposable
     }
 
     /// <summary>
-    /// Resolves the <see cref="Engine"/> path argument: null when an exe-adjacent &lt;host&gt;.pck exists (published
-    /// build, auto-loaded by the engine), otherwise <see cref="ResolveProjectDir"/> (source build).
+    /// Resolves the <see cref="Engine"/> path argument: null when the engine auto-loads a published pck (exe-adjacent
+    /// &lt;host&gt;.pck, a pack embedded in the executable, or Contents/Resources/&lt;host&gt;.pck of a macOS .app),
+    /// otherwise <see cref="ResolveProjectDir"/> (source build).
     /// </summary>
-    /// <exception cref="InvalidOperationException">No exe-adjacent .pck and no GodotProjectDir metadata.</exception>
+    /// <exception cref="InvalidOperationException">No published pck and no GodotProjectDir metadata.</exception>
     public static string? ResolveContent()
     {
-        if (System.Environment.ProcessPath is { Length: > 0 } exePath &&
-            File.Exists(Path.ChangeExtension(exePath, ".pck")))
+        if (System.Environment.ProcessPath is { Length: > 0 } exePath && HasPublishedPack(exePath))
             return null;
         return ResolveProjectDir();
+    }
+
+    // Both names Godot probes: extensionless Linux/macOS executables such as MyGame.2dog export MyGame.2dog.pck.
+    private static bool HasPublishedPack(string exePath)
+    {
+        var dir = Path.GetDirectoryName(exePath)!;
+        foreach (var pck in (ReadOnlySpan<string>)
+                 [Path.GetFileNameWithoutExtension(exePath) + ".pck", Path.GetFileName(exePath) + ".pck"])
+        {
+            if (File.Exists(Path.Combine(dir, pck)) ||
+                (OperatingSystem.IsMacOS() && File.Exists(Path.Combine(dir, "..", "Resources", pck))))
+                return true;
+        }
+
+        return EmbeddedPack.Contains(exePath);
     }
 
     private static unsafe IntPtr CreateGodotInstance(string[] args, bool loadMainScene)

@@ -11,7 +11,7 @@ The generated host targets `net10.0-windows` with `UseWindowsForms=true`.
 [Global settings](/configuration#properties) control the game directory,
 resource import, analyzers, and native variant.
 [Desktop publishing](/configuration#desktop-publishing) covers the pack,
-self-contained and ReadyToRun properties.
+self-contained, single-file and ReadyToRun properties.
 
 ```bash
 dotnet publish MyGame.winforms -c Release -r win-x64

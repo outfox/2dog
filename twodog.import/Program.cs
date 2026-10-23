@@ -12,6 +12,8 @@ string? exportPreset = null;
 string? exportOutput = null;
 string? listPackPath = null;
 string? assemblyHash = null;
+string? embedPackPath = null;
+string? embedIntoPath = null;
 var verbose = false;
 var exportDebug = false;
 
@@ -43,6 +45,12 @@ for (var i = 0; i < args.Length; i++)
         case "--assembly-hash" when i + 1 < args.Length:
             assemblyHash = args[++i];
             break;
+        case "--embed-pack" when i + 1 < args.Length:
+            embedPackPath = args[++i];
+            break;
+        case "--into" when i + 1 < args.Length:
+            embedIntoPath = args[++i];
+            break;
         case "--debug":
             exportDebug = true;
             break;
@@ -62,6 +70,20 @@ exportOutput = exportOutput != null ? Path.GetFullPath(exportOutput) : null;
 // The GDPC reader itself lives in GdpcPack.cs, shared with the 2dog tool.
 if (listPackPath != null)
     return GdpcPack.ListToConsole(listPackPath);
+
+if (embedPackPath != null && embedIntoPath != null)
+{
+    try
+    {
+        EmbeddedPack.Embed(embedIntoPath, embedPackPath);
+        return 0;
+    }
+    catch (Exception ex) when (ex is InvalidOperationException or IOException)
+    {
+        Console.Error.WriteLine($"twodog.import: {ex.Message}");
+        return 1;
+    }
+}
 
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
     (editorPath == null && libgodotPath == null) ||
@@ -83,6 +105,7 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
     Console.Error.WriteLine("  --debug            Export debug resources and GDExtensions (with --export-pack).");
     Console.Error.WriteLine("  --list-pack <pck>  List a .pck's contents by size (no engine involved).");
+    Console.Error.WriteLine("  --embed-pack <pck> --into <exe>  Embed a .pck where Godot finds it in a PE or ELF executable.");
     Console.Error.WriteLine("  --assembly-hash <hash>  Refresh cached export scenes when managed assemblies change.");
     Console.Error.WriteLine("  --verbose          Pass --verbose to the engine.");
     Console.Error.WriteLine();

@@ -190,8 +190,8 @@ public class DoctorTests : IDisposable
     [Fact]
     public void ManualFindings_HaveRemedies_AndNoFix()
     {
-        var dir = Scaffold("--generic", "--xunit");
-        Edit(dir, "Game.2dog/Game.2dog.csproj", "<GodotProjectDir>..</GodotProjectDir>", "<GodotProjectDir>..</GodotProjectDir><PublishSingleFile>true</PublishSingleFile>");
+        var dir = Scaffold("--generic", "--repl", "--xunit");
+        Edit(dir, "Game.repl/Game.repl.csproj", "<PublishSingleFile>false</PublishSingleFile>", "<PublishSingleFile>true</PublishSingleFile>");
         Edit(dir, "Game.csproj", $"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", "Godot.NET.Sdk/4.7.1");
 
         var run = Doctor(dir, null, "--json");
@@ -837,7 +837,7 @@ public class BuildLogAnalyzerTests
         {
             ["build.variant-invalid"] = "error : TwoDog: invalid TwoDogVariant 'fast'. Allowed values: release, debug, editor.",
             ["build.publish-aot"] = "error : TwoDog: PublishAot (NativeAOT) does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies at runtime.",
-            ["build.publish-singlefile"] = "error : TwoDog: PublishSingleFile is not supported for 2dog desktop hosts.",
+            ["build.publish-singlefile"] = "error : TwoDog: PublishSingleFile does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies from disk.",
             ["build.no-import-capability"] = "warning : TwoDog: Godot project 'x' needs a resource import, but no import capability was found (editor libgodot='', helper='', tools='').",
             ["build.import-required"] = "error : TwoDog: import required (TwoDogRequireImport=true) but no import capability is available (editor libgodot='', helper='', tools='').",
             ["build.web-payload-missing"] = "error : TwoDog: web payload (libgodot.a) not found. Searched the 2dog.browser-wasm.release package v4.7.2.3 and the source checkout.",

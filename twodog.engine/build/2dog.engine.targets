@@ -34,10 +34,6 @@
                Text="TwoDog: invalid TwoDogVariant '$(TwoDogVariant)'. Allowed values: release, debug, editor."/>
         <Warning Condition="'$(TwoDogBuildType)' != ''"
                  Text="TwoDog: TwoDogBuildType is deprecated and ignored - the API layout follows TwoDogVariant."/>
-
-        <!-- NativeAOT ignores PublishSingleFile: its output already is one native executable. -->
-        <Error Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(PublishSingleFile)' == 'true' And '$(PublishAot)' != 'true'"
-               Text="TwoDog: PublishSingleFile is not supported for 2dog desktop hosts. Assemblies embedded in a single-file bundle have no on-disk location, which the GodotPlugins / libgodot probing relies on. Publish as a normal folder instead (e.g. `dotnet publish -c Release -r win-x64`)."/>
     </Target>
 
     <!-- twodog's DllImportResolver reads this to load libgodot-<variant>; a mismatched native then fails at
@@ -127,10 +123,10 @@
     <!-- ============================================ -->
     <!-- Target: Publish GodotPlugins                 -->
     <!-- ============================================ -->
-    <!-- NativeAOT publishes initialize through twodog's built-in plugins entry point instead. -->
+    <!-- NativeAOT and single-file publishes initialize through twodog's built-in plugins entry point instead. -->
     <Target Name="TwoDogPublishGodotApi"
             AfterTargets="Publish"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(PublishAot)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And '$(PublishAot)' != 'true' And '$(PublishSingleFile)' != 'true' And '$(TwoDogGodotApiSourcePath)' != '' And Exists('$(TwoDogGodotApiSourcePath)')">
 
         <PropertyGroup>
             <TwoDogGodotApiPublishDestPath>$(PublishDir)$(TwoDogGodotApiDestSubdir)</TwoDogGodotApiPublishDestPath>
@@ -148,6 +144,18 @@
               SkipUnchangedFiles="true"/>
 
         <Message Importance="high" Text="TwoDog: Published GodotPlugins to $(TwoDogGodotApiPublishDestPath)"/>
+    </Target>
+
+    <!-- IncludeAllContentForSelfExtract (which the Windows App SDK requires for single-file) extracts every assembly to
+         disk, so the engine takes the folder-publish path and loads GodotPlugins from the extraction directory. -->
+    <Target Name="TwoDogBundleGodotApi"
+            AfterTargets="ComputeResolvedFilesToPublishList"
+            Condition="'$(PublishSingleFile)' == 'true' And '$(IncludeAllContentForSelfExtract)' == 'true' And '$(PublishAot)' != 'true' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogSkipGodotApiCopy)' != 'true' And Exists('$(TwoDogGodotApiSourcePath)GodotPlugins.dll')">
+        <ItemGroup>
+            <ResolvedFileToPublish Include="$(TwoDogGodotApiSourcePath)GodotPlugins.dll"
+                                   RelativePath="$(TwoDogGodotApiDestSubdir)GodotPlugins.dll"
+                                   CopyToPublishDirectory="PreserveNewest"/>
+        </ItemGroup>
     </Target>
 
     <!-- Editor-mode C# initialization loads GodotTools and its dependencies from GodotSharp/Tools beside the
@@ -197,6 +205,28 @@
                Text="TwoDog: PublishAot (NativeAOT) does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies at runtime. Publish the release or debug variant."/>
         <ItemGroup>
             <TrimmerRootAssembly Include="@(_TwoDogExportGameAssembly->'%(Filename)')"/>
+        </ItemGroup>
+    </Target>
+
+    <!-- Single-file bundles initialize like NativeAOT: no GodotPlugins.dll or game assembly file on disk. -->
+    <Target Name="TwoDogPrepareSingleFilePublish"
+            BeforeTargets="PrepareForPublish"
+            Condition="'$(PublishSingleFile)' == 'true' And '$(PublishAot)' != 'true' And '$(RuntimeIdentifier)' != 'browser-wasm'">
+        <Error Condition="'$(TwoDogVariant)' == 'editor'"
+               Text="TwoDog: PublishSingleFile does not support TwoDogVariant 'editor': the editor loads GodotTools and game assemblies from disk. Publish the release or debug variant."/>
+    </Target>
+
+    <!-- Names the game assembly for NativeAotPlugins, which loads it before registering scripts: GDMono's project
+         assembly lookup needs a file on disk, and the JIT loads assemblies only on first use. -->
+    <Target Name="TwoDogGameAssemblyMetadata"
+            BeforeTargets="GetAssemblyAttributes"
+            DependsOnTargets="TwoDogResolveExportAssemblyDir"
+            Condition="'$(TwoDogGodotProjectFullPath)' != ''">
+        <ItemGroup Condition="'@(_TwoDogExportGameAssembly)' != ''">
+            <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+                <_Parameter1>TwoDogGameAssembly</_Parameter1>
+                <_Parameter2>@(_TwoDogExportGameAssembly->'%(Filename)')</_Parameter2>
+            </AssemblyAttribute>
         </ItemGroup>
     </Target>
 
@@ -356,9 +386,12 @@
     <!-- Content pipeline: desktop publish .pck        -->
     <!-- ============================================ -->
     <!-- Desktop publish exports $(TargetName).pck next to the exe - the name Engine.ResolveContent() auto-loads.
-         Publish only; ordinary builds keep running from the raw project directory. -->
+         Publish only; ordinary builds keep running from the raw project directory. TwoDogEmbedPack=true ships it
+         inside the app instead: in the executable on Windows (a "pck" PE section; sign afterwards) and Linux (GDPC
+         trailer), in Contents/Resources of an $(AssemblyName).app bundle on macOS. -->
     <PropertyGroup>
         <TwoDogExportPack Condition="'$(TwoDogExportPack)' == ''">true</TwoDogExportPack>
+        <_TwoDogDesktopMac Condition="$(RuntimeIdentifier.StartsWith('osx')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('OSX')))">true</_TwoDogDesktopMac>
     </PropertyGroup>
 
     <!-- Own inputs item: @(TwoDogImportInputs) is empty when auto-import is off, and an incremental target with
@@ -369,11 +402,24 @@
                                    Exclude="$(TwoDogGodotProjectFullPath)/.godot/**;$(TwoDogGodotProjectFullPath)/bin/**;$(TwoDogGodotProjectFullPath)/obj/**;$(TwoDogGodotProjectFullPath)/**/*.tmp;$(TwoDogGodotProjectFullPath)/**/.DS_Store;@(_TwoDogDesktopGdIgnoredDirs->'%(RootDir)%(Directory)**');$(TwoDogImportExcludes)"/>
     </ItemGroup>
 
+    <!-- Embedded packs are exported to obj/, keeping the export incremental; the GDExtension libraries Godot copies
+         beside the pck move to the app from there. -->
+    <Target Name="_TwoDogResolveDesktopPackPath">
+        <PropertyGroup>
+            <!-- May run before PrepareForPublish appends the separator. -->
+            <_TwoDogPublishDir>$([MSBuild]::EnsureTrailingSlash('$(PublishDir)'))</_TwoDogPublishDir>
+            <_TwoDogDesktopPackDir>$(_TwoDogPublishDir)</_TwoDogDesktopPackDir>
+            <_TwoDogDesktopPackDir Condition="'$(TwoDogEmbedPack)' == 'true'">$(IntermediateOutputPath)twodog-pack/</_TwoDogDesktopPackDir>
+            <_TwoDogDesktopPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogDesktopPackDir)$(TargetName).pck'))))</_TwoDogDesktopPackFullPath>
+            <_TwoDogPublishedExecutable>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogPublishDir)$(AssemblyName)$(_NativeExecutableExtension)'))))</_TwoDogPublishedExecutable>
+        </PropertyGroup>
+    </Target>
+
     <Target Name="TwoDogExportDesktopPack"
             AfterTargets="Publish"
-            DependsOnTargets="TwoDogPrepareExport"
+            DependsOnTargets="TwoDogPrepareExport;_TwoDogResolveDesktopPackPath"
             Inputs="@(TwoDogDesktopExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
-            Outputs="$(PublishDir)$(TargetName).pck"
+            Outputs="$(_TwoDogDesktopPackFullPath)"
             Condition="'$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
         <PropertyGroup>
@@ -385,7 +431,6 @@
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">Linux</TwoDogDesktopExportPreset>
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">macOS</TwoDogDesktopExportPreset>
 
-            <_TwoDogDesktopPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(PublishDir)$(TargetName).pck'))))</_TwoDogDesktopPackFullPath>
             <_TwoDogDesktopExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogDesktopExportPresetsPath>
             <_TwoDogHasDesktopPreset>false</_TwoDogHasDesktopPreset>
             <_TwoDogHasDesktopPreset Condition="Exists('$(_TwoDogDesktopExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogDesktopExportPresetsPath)').Contains('name=&quot;$(TwoDogDesktopExportPreset)&quot;'))">true</_TwoDogHasDesktopPreset>
@@ -394,6 +439,10 @@
         <!-- Actionable message instead of the engine's exit-1 (whose stderr an IDE build may swallow). -->
         <Error Condition="'$(_TwoDogHasDesktopPreset)' != 'true'"
                Text="TwoDog: desktop publish exports the game pck via the '$(TwoDogDesktopExportPreset)' export preset, which '$(_TwoDogDesktopExportPresetsPath)' does not define (or the file is missing). Add it in the Godot editor (Project &gt; Export &gt; Add), run `2dog doctor --fix` (it appends the template presets), or point &lt;TwoDogDesktopExportPreset&gt; at an existing preset. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck (the output then runs only where the raw project directory exists)."/>
+
+        <!-- Libraries of GDExtensions removed since the last export must not linger. -->
+        <RemoveDir Directories="$(_TwoDogDesktopPackDir)" Condition="'$(TwoDogEmbedPack)' == 'true'"/>
+        <MakeDir Directories="$(_TwoDogDesktopPackDir)"/>
 
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
@@ -414,7 +463,79 @@
         <Error Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"
                Text="TwoDog: desktop publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck."/>
 
-        <Message Importance="high" Text="TwoDog: exported $(TargetName).pck to the publish directory"/>
+        <Message Importance="high" Text="TwoDog: exported $(TargetName).pck to $(_TwoDogDesktopPackDir)"/>
+    </Target>
+
+    <!-- The SDK regenerates or recopies only a missing executable, and an embedded one is never up to date. -->
+    <Target Name="TwoDogResetEmbeddedExecutable"
+            BeforeTargets="PrepareForPublish"
+            DependsOnTargets="_TwoDogResolveDesktopPackPath"
+            Condition="'$(TwoDogEmbedPack)' == 'true' And '$(_TwoDogDesktopMac)' != 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true'">
+        <Delete Files="$(_TwoDogPublishedExecutable)"/>
+    </Target>
+
+    <!-- Embedding exports before the publish list is final, so the GDExtension libraries Godot copies beside the pck
+         publish like any other file: IncludeNativeLibrariesForSelfExtract bundles them with libgodot (Engine points
+         Godot's library lookup at that directory), otherwise they land next to the executable. -->
+    <Target Name="TwoDogPublishPackSidecars"
+            AfterTargets="ComputeResolvedFilesToPublishList"
+            DependsOnTargets="TwoDogExportDesktopPack"
+            Condition="'$(TwoDogEmbedPack)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+        <ItemGroup>
+            <_TwoDogPackSidecar Include="$(_TwoDogDesktopPackDir)**/*" Exclude="$(_TwoDogDesktopPackFullPath)"/>
+            <ResolvedFileToPublish Include="@(_TwoDogPackSidecar)"
+                                   RelativePath="%(RecursiveDir)%(Filename)%(Extension)"
+                                   CopyToPublishDirectory="PreserveNewest"/>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="TwoDogEmbedDesktopPack"
+            AfterTargets="Publish"
+            DependsOnTargets="TwoDogExportDesktopPack"
+            Condition="'$(TwoDogEmbedPack)' == 'true' And '$(_TwoDogDesktopMac)' != 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+        <Error Condition="!Exists('$(_TwoDogPublishedExecutable)')"
+               Text="TwoDog: TwoDogEmbedPack embeds the pck in '$(_TwoDogPublishedExecutable)', which this publish did not produce (UseAppHost=false?)."/>
+        <Exec Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --embed-pack &quot;$(_TwoDogDesktopPackFullPath)&quot; --into &quot;$(_TwoDogPublishedExecutable)&quot;"/>
+        <Message Importance="high" Text="TwoDog: embedded $(TargetName).pck in $(AssemblyName)$(_NativeExecutableExtension)"/>
+    </Target>
+
+    <!-- macOS: the publish output becomes $(AssemblyName).app, the executable and its libraries in Contents/MacOS (Godot
+         also finds GDExtensions there) and the pck in Contents/Resources, which Godot searches for <executable>.pck.
+         CFBundleIdentifier comes from ApplicationId. Sign the bundle afterwards. -->
+    <Target Name="TwoDogCreateMacApp"
+            AfterTargets="Publish"
+            DependsOnTargets="TwoDogExportDesktopPack;TwoDogPublishGodotApi;TwoDogPublishNativeLibs"
+            Condition="'$(TwoDogEmbedPack)' == 'true' And '$(_TwoDogDesktopMac)' == 'true' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
+        <PropertyGroup>
+            <_TwoDogAppContents>$(PublishDir)$(AssemblyName).app/Contents/</_TwoDogAppContents>
+            <_TwoDogAppBundleId>$(ApplicationId)</_TwoDogAppBundleId>
+            <_TwoDogAppBundleId Condition="'$(_TwoDogAppBundleId)' == ''">com.example.$(AssemblyName)</_TwoDogAppBundleId>
+            <_TwoDogInfoPlist>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;CFBundleExecutable&lt;/key&gt;&lt;string&gt;$(AssemblyName)&lt;/string&gt;
+    &lt;key&gt;CFBundleIdentifier&lt;/key&gt;&lt;string&gt;$(_TwoDogAppBundleId)&lt;/string&gt;
+    &lt;key&gt;CFBundleName&lt;/key&gt;&lt;string&gt;$(AssemblyName)&lt;/string&gt;
+    &lt;key&gt;CFBundlePackageType&lt;/key&gt;&lt;string&gt;APPL&lt;/string&gt;
+    &lt;key&gt;CFBundleShortVersionString&lt;/key&gt;&lt;string&gt;$(Version)&lt;/string&gt;
+    &lt;key&gt;CFBundleVersion&lt;/key&gt;&lt;string&gt;$(Version)&lt;/string&gt;
+    &lt;key&gt;LSMinimumSystemVersion&lt;/key&gt;&lt;string&gt;11.0&lt;/string&gt;
+    &lt;key&gt;NSHighResolutionCapable&lt;/key&gt;&lt;true/&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;</_TwoDogInfoPlist>
+        </PropertyGroup>
+        <ItemGroup>
+            <_TwoDogAppFile Include="$(PublishDir)**/*" Exclude="$(PublishDir)$(AssemblyName).app/**"/>
+        </ItemGroup>
+        <RemoveDir Directories="$(PublishDir)$(AssemblyName).app"/>
+        <Copy SourceFiles="@(_TwoDogAppFile)" DestinationFiles="@(_TwoDogAppFile->'$(_TwoDogAppContents)MacOS/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <Copy SourceFiles="$(_TwoDogDesktopPackFullPath)" DestinationFolder="$(_TwoDogAppContents)Resources"/>
+        <WriteLinesToFile File="$(_TwoDogAppContents)Info.plist" Lines="$(_TwoDogInfoPlist)" Overwrite="true"/>
+        <!-- Moved, not copied: the bundle is the deliverable. -->
+        <Delete Files="@(_TwoDogAppFile)"/>
+        <RemoveDir Directories="$(PublishDir)%(_TwoDogAppFile.RecursiveDir)" Condition="'%(_TwoDogAppFile.RecursiveDir)' != ''"/>
+        <Message Importance="high" Text="TwoDog: created $(AssemblyName).app with $(TargetName).pck in Contents/Resources"/>
     </Target>
 
     <!-- ============================================ -->

@@ -206,8 +206,11 @@ exceptions automatically, from the first use of `Engine` and across restarts.
 public static string? ResolveContent()
 ```
 
-Returns `null` when a `.pck` named after the executable is next to it, so that
-Godot loads that pack. Otherwise, returns [`ResolveProjectDir()`](#resolveprojectdir).
+Returns `null` when Godot loads a published pack by itself: a `.pck` named
+after the executable next to it, a pack
+[embedded in the executable](/configuration#pack-inside-the-app), or the pack
+in `Contents/Resources` of a macOS `.app`. Otherwise, returns
+[`ResolveProjectDir()`](#resolveprojectdir).
 The desktop constructor calls this automatically when `path` is omitted.
 
 ### `ResolveProjectDir`

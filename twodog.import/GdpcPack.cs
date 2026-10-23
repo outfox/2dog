@@ -25,8 +25,11 @@ internal static class GdpcPack
             throw new PckFormatException($"Pack not found: {path}");
 
         using var f = new BinaryReader(File.OpenRead(path));
-        if (f.ReadUInt32() != 0x43504447) // 'GDPC'
-            throw new PckFormatException($"{path}: not a Godot .pck (bad magic; embedded packs are not supported)");
+        // V3+ offsets are relative to the pack start, which is not 0 inside an executable.
+        var start = EmbeddedPack.Find(f.BaseStream);
+        if (start < 0)
+            throw new PckFormatException($"{path}: not a Godot .pck and no embedded pack (bad magic)");
+        f.BaseStream.Position = start + 4;
 
         var formatVersion = f.ReadUInt32();
         var major = f.ReadUInt32();
@@ -44,9 +47,9 @@ internal static class GdpcPack
         if (formatVersion >= 3)
         {
             var directoryOffset = f.ReadUInt64();
-            if (directoryOffset >= (ulong)f.BaseStream.Length)
+            if (directoryOffset >= (ulong)(f.BaseStream.Length - start))
                 throw new PckFormatException($"{path}: corrupt pack (directory offset beyond end of file)");
-            f.BaseStream.Seek((long)directoryOffset, SeekOrigin.Begin);
+            f.BaseStream.Seek(start + (long)directoryOffset, SeekOrigin.Begin);
         }
         else
         {

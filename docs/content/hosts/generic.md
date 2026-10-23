@@ -46,7 +46,7 @@ pack. Copy the whole folder to the target machine. Add `-r win-x64`,
 
 Release builds hide the Windows console. See
 [Desktop Publishing](/configuration#desktop-publishing) for framework-dependent,
-Native AOT and ReadyToRun builds.
+single-file, Native AOT and ReadyToRun builds.
 
 See [Engine](/api/engine) to customize the frame loop and
 [Build Variants](/build-configurations) to select an engine build. See

@@ -33,4 +33,23 @@ public class ResolveContentTests
             File.Delete(pckPath);
         }
     }
+
+    // Extensionless Linux/macOS executables keep their dotted name: twodog.tests exports twodog.tests.pck.
+    [Fact]
+    public void ResolveContent_WithFileNamePack_ReturnsNull()
+    {
+        var exePath = Environment.ProcessPath;
+        Assert.False(string.IsNullOrEmpty(exePath));
+
+        var pckPath = exePath + ".pck";
+        File.WriteAllBytes(pckPath, []);
+        try
+        {
+            Assert.Null(Engine.ResolveContent());
+        }
+        finally
+        {
+            File.Delete(pckPath);
+        }
+    }
 }

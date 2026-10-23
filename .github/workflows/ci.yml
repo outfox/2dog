@@ -983,6 +983,15 @@ jobs:
           -p:PublishAot=true -p:TrimmerSingleWarn=false -warnaserror
           -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot
 
+      # Single-file: the executable carries the .NET runtime, every managed assembly, libgodot and the GDExtension
+      # library, which .NET extracts on start; TwoDogEmbedPack adds the pck (a .app's Contents/Resources on macOS). No
+      # assembly file exists on disk, so twodog registers scripts through its built-in plugins entry point.
+      - name: Publish showcase desktop host (Release, single-file)
+        run: >-
+          dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }}
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:TwoDogEmbedPack=true
+          -o demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-sf
+
       - name: Test delegate serialization (JIT and NativeAOT)
         shell: bash
         run: |
@@ -1043,6 +1052,21 @@ jobs:
               exit 1
             fi
           done
+          # Only the license texts stay beside the single-file executable; libgodot and the GDExtension library unpack
+          # from the bundle.
+          sf=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-sf
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            if [ ! -f "$sf/showcase.2dog.app/Contents/Resources/showcase.2dog.pck" ]; then
+              echo "::error::The macOS single-file publish has no showcase.2dog.app/Contents/Resources/showcase.2dog.pck"
+              exit 1
+            fi
+            sf="$sf/showcase.2dog.app/Contents/MacOS"
+          fi
+          leftovers=$(ls "$sf" | grep -vxE "${{ matrix.exe }}|licenses|.*\.pdb" || true)
+          if [ -n "$leftovers" ]; then
+            echo "::error::The single-file publish should leave only licenses beside the executable: $(ls "$sf" | tr '\n' ' ')"
+            exit 1
+          fi
 
       # The engine must load the game assembly from the publish output itself.
       # Delete the game project's own build outputs so a regression back to
@@ -1106,6 +1130,20 @@ jobs:
           set +e
           demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-aot/${{ matrix.exe }} \
             --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-aot.log
+          status=${PIPESTATUS[0]}
+          echo "Host exit code: $status"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+      - name: Run published host (headless, single-file)
+        id: run_sf
+        shell: bash
+        run: |
+          set +e
+          exe=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-sf/${{ matrix.exe }}
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            exe=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish-sf/showcase.2dog.app/Contents/MacOS/showcase.2dog
+          fi
+          "$exe" --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-sf.log
           status=${PIPESTATUS[0]}
           echo "Host exit code: $status"
           echo "status=$status" >> "$GITHUB_OUTPUT"
@@ -1182,6 +1220,7 @@ jobs:
           check smoke-fdd.log "${{ steps.run_fdd.outputs.status }}" "framework-dependent"
           check smoke-r2r.log "${{ steps.run_r2r.outputs.status }}" "readytorun"
           check smoke-aot.log "${{ steps.run_aot.outputs.status }}" "nativeaot"
+          check smoke-sf.log "${{ steps.run_sf.outputs.status }}" "single-file"
 
           # The R2R host must run GodotSharp and twodog from precompiled code; the plain RID host, as the control,
           # proves the probe reports R2R use rather than any call.

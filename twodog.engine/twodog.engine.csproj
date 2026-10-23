@@ -11,6 +11,8 @@
     <!-- Programming & Linkage Characteristics -->
     <ItemGroup>
         <EmbeddedResource Include="TestingControls.manifest" LogicalName="twodog.Testing.Controls.manifest" />
+        <!-- Engine.ResolveContent() finds packs that twodog.import embeds in executables. -->
+        <Compile Include="../twodog.import/EmbeddedPack.cs" Link="EmbeddedPack.cs" />
     </ItemGroup>
 
     <PropertyGroup>

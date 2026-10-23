@@ -16,6 +16,8 @@ directly, so it needs no engine and no project.
 `list` prints the pack format, the Godot version and every entry, largest
 first; `--json` puts the listing in the report. Use it to see why a pck
 is 99 MiB, or to confirm that a [web publish](/hosts/web) contains an asset.
+It also reads a pack [embedded in an executable](/configuration#pack-inside-the-app):
+pass the executable instead of the pck.
 
 ```bash
 2dog pack list MyGame.web/AppBundle/godot.pck

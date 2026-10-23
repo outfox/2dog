@@ -35,6 +35,7 @@
     <!-- GDPC pack reader behind `2dog pack list`, shared with twodog.import's list-pack mode. -->
     <ItemGroup>
         <Compile Include="../twodog.import/GdpcPack.cs" Link="GdpcPack.cs"/>
+        <Compile Include="../twodog.import/EmbeddedPack.cs" Link="EmbeddedPack.cs"/>
     </ItemGroup>
 
     <!-- The REPL pipe protocol behind `2dog repl`, shared with 2dog.repl; TWODOG_CLI gives it this tool's namespace. -->

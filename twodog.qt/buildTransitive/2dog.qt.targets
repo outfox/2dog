@@ -51,8 +51,10 @@
         <ItemGroup>
             <_TwoDogQtModuleFile Include="$(TwoDogQtBuildDir)qml/TwoDog/qmldir;$(TwoDogQtBuildDir)qml/TwoDog/*.qmltypes" />
             <_TwoDogQtModuleFile Include="$(TwoDogQtBuildDir)qml/TwoDog/*twodogqt.dll;$(TwoDogQtBuildDir)qml/TwoDog/*twodogqt.so;$(TwoDogQtBuildDir)qml/TwoDog/*twodogqt.dylib" />
+            <!-- QML imports the module from <app>/TwoDog, so a single-file bundle must not swallow it. -->
             <None Include="@(_TwoDogQtModuleFile)" Link="TwoDog/%(Filename)%(Extension)"
-                  CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+                  CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true"
+                  Visible="false" />
         </ItemGroup>
     </Target>
 </Project>
