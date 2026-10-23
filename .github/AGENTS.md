@@ -6,7 +6,9 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 
 - `ci.yml` reuses `godot-<submodule-hash>` and `godot-<submodule-hash>-double` native releases or builds missing natives through
   `build-natives.yml`, then packs and tests both precisions on three OSes in Debug/Release/Editor and runs smoke jobs. `v*` tags
-  also deploy to NuGet. Pushes that only touch `docs/**`, root Markdown or `AGENTS.md` files skip it.
+  also deploy to NuGet. CI runs on pull requests, `v*` tag pushes and manual dispatch, never branch pushes.
+  PRs must originate in `outfox/2dog`; the base repository check alone also matches fork PRs.
+  PRs that only touch `docs/**`, root Markdown or `AGENTS.md` files skip it.
 - Each OS/configuration pair is its own test job in a fresh workspace, so no configuration relies on files
   another one built. Do not merge configurations back into one job: together they exceed the job timeout.
 - The test matrix is priced by runner: macOS minutes cost 5x Windows and 10x Linux. Linux runs every
@@ -64,8 +66,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
 - `scripts/release.nu` is the normal local release path: bump `TwoDogRevision`, optionally `NativesRevision`
-  with `--native`, sign the commit and atomically push main + tag. A main push with its matching version tag
-  delegates testing/deployment to the tag run; keep the release-push gates on independent branch jobs.
+  with `--native`, sign the commit and atomically push main + tag. Only the tag push triggers release CI.
   `release.yml` is the emergency/manual fallback with a `native` boolean. It tags `v<TwoDogVersion>` and
   dispatches `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
   When the tag's parent passed CI and the tag only bumps

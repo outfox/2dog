@@ -48,6 +48,8 @@ INPUT_REVISION=''
 bash -euo pipefail <<<"$compute"
 grep -qx 'new_rev=141' "$GITHUB_OUTPUT"
 for INPUT_REVISION in 140 invalid; do
-  if bash -euo pipefail <<<"$compute"; then echo 'Accepted an invalid revision'; exit 1; fi
+  # Capture expected errors so their workflow commands do not create real CI annotations.
+  if output=$(bash -euo pipefail <<<"$compute" 2>&1); then echo 'Accepted an invalid revision'; exit 1; fi
+  printf '%s\n' "$output" | sed 's/::error::/Expected rejection: /g'
 done
 echo 'PASS: manual fallback bumps natives only when requested and validates revisions'

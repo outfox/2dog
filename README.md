@@ -179,8 +179,8 @@ nu scripts/release.nu                     # bump TwoDogRevision only
 
 Use `--revision 140` to choose the managed revision explicitly. The script requires a clean checkout
 containing the latest `origin/main`, signs the bump commit using your Git configuration, and pushes
-`main` and `v<TwoDogVersion>` atomically. Only the tag run builds, tests and publishes; branch CI
-leaves that work to the matching tag. Unpushed local commits can be included in that same push.
+`main` and `v<TwoDogVersion>` atomically. Only the tag push triggers release CI; ordinary branch pushes
+do not run CI. Unpushed local commits can be included in that same push.
 `--native` versions the native NuGet packages; existing engine binaries keyed by the Godot commit
 remain reusable. The GitHub **2dog Release** action is an emergency/manual fallback, with the same
 optional native revision bump.

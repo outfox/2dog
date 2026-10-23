@@ -2,14 +2,12 @@ name: 2dog CI
 
 on:
   push:
-    branches: ['**']
     tags: ['v*']
+  pull_request:
     paths-ignore:
       - 'docs/**'
       - '*.md'
       - '**/AGENTS.md'
-  # No pull_request trigger: push already runs on every branch, so a PR
-  # would run CI twice. Caveat: PRs from forks get no CI without it.
   workflow_dispatch:
 
 concurrency:
@@ -30,7 +28,9 @@ jobs:
   # the Android payloads), the build-natives job below builds it inline, so every
   # run self-heals in a single run graph.
   check-natives:
-    if: github.repository == 'outfox/2dog'
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
     name: Check Native Libraries
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 5
