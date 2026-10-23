@@ -124,7 +124,7 @@ Ids are stable; `--ignore <id>` drops one.
 | `host.variant`                | TwoDogVariant / TwoDogWebVariant is supported by the host platform         |
 | `host.buildtype-deprecated`   | the deprecated TwoDogBuildType property is gone                            |
 | `host.publish-aot`            | no WinForms, REPL, Qt, browser or Blazor host enables PublishAot           |
-| `host.publish-singlefile`     | PublishSingleFile is only enabled by browser hosts or alongside PublishAot |
+| `host.publish-singlefile`     | no REPL host enables PublishSingleFile                                     |
 | `host.webxr-threads`          | WebXR hosts do not enable WasmEnableThreads                                |
 | `host.duplicate-analyzers`    | hosts referencing the game strip the duplicate Godot analyzers             |
 | `host.app-manifest`           | the app.manifest a host declares exists                                    |
@@ -192,7 +192,7 @@ other errors after the matches.
 | `build.variant-invalid`          | TwoDogVariant is not release, debug or editor                                        |
 | `build.buildtype-deprecated`     | the deprecated TwoDogBuildType property is set                                       |
 | `build.publish-aot`              | PublishAot does not support the editor variant                                       |
-| `build.publish-singlefile`       | PublishSingleFile is not supported for desktop hosts                                 |
+| `build.publish-singlefile`       | PublishSingleFile does not support the editor variant                                |
 | `build.godot-sdk-mismatch`       | Godot.NET.Sdk and 2dog.engine are on different Godot lines                           |
 | `build.no-import-capability`     | no import capability (`2dog.<rid>.editor` and 2dog.tools packages missing)           |
 | `build.import-required`          | the build requires an import (TwoDogRequireImport=true) and has no import capability |

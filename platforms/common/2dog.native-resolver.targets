@@ -67,23 +67,61 @@
 
     <!-- A RID-less publish targets the build host, so an empty RuntimeIdentifier counts when the host OS matches;
          otherwise the publish folder ships without the native (DllNotFoundException). -->
-    <Target Name="TwoDogPublishNativeLibs"
-            AfterTargets="Publish"
-            DependsOnTargets="TwoDogResolveNativeLibs"
-            Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios'">
+    <Target Name="TwoDogSelectPublishNativeLibs" DependsOnTargets="TwoDogResolveNativeLibs">
         <ItemGroup>
             <_TwoDogNativeForPublish Include="@(_TwoDogNativeResolved)"
                                      Condition="('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('%(_TwoDogNativeResolved.RidPrefix)'))"/>
-        </ItemGroup>
-        <Copy SourceFiles="%(_TwoDogNativeForPublish.Resolved)"
-              DestinationFiles="$(PublishDir)%(_TwoDogNativeForPublish.OutName)"
-              SkipUnchangedFiles="true"
-              Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
-        <ItemGroup>
             <_TwoDogSidecarForPublish Include="%(_TwoDogNativeForPublish.SidecarDir)**/*"
                                       Exclude="%(_TwoDogNativeForPublish.Resolved)"
                                       Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
         </ItemGroup>
+    </Target>
+
+    <!-- Single-file publishes hand the natives to the SDK as runtime pack natives: it copies them beside the executable,
+         or embeds them with IncludeNativeLibrariesForSelfExtract. Their deps.json entries make the host add its
+         extraction directory to NATIVE_DLL_SEARCH_DIRECTORIES, where twodog's loader finds libgodot. -->
+    <Target Name="TwoDogBundleNativeLibs"
+            AfterTargets="ResolveRuntimePackAssets"
+            DependsOnTargets="TwoDogSelectPublishNativeLibs"
+            Condition="'$(PublishSingleFile)' == 'true' And '$(PublishAot)' != 'true' And '$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios'">
+        <ItemGroup>
+            <_TwoDogBundledNative Include="%(_TwoDogNativeForPublish.Resolved)"
+                                  DestinationSubPath="%(_TwoDogNativeForPublish.OutName)"
+                                  Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
+            <_TwoDogBundledNative Include="@(_TwoDogSidecarForPublish)"
+                                  DestinationSubPath="%(RecursiveDir)%(Filename)%(Extension)"
+                                  Condition="'%(Extension)' == '.dll' Or '%(Extension)' == '.so' Or '%(Extension)' == '.dylib'"/>
+            <RuntimePackAsset Include="@(_TwoDogBundledNative)"
+                              AssetType="native"
+                              RuntimePackName="2dog.natives"
+                              NuGetPackageId="2dog.natives"
+                              NuGetPackageVersion="@(_TwoDogNativeForPublish->'%(PackageVersion)')"
+                              RuntimeIdentifier="$(RuntimeIdentifier)"
+                              RuntimePackAlwaysCopyLocal="true"/>
+        </ItemGroup>
+    </Target>
+
+    <!-- License texts and other sidecar data stay beside the executable. -->
+    <Target Name="TwoDogPublishSidecarData"
+            AfterTargets="ComputeResolvedFilesToPublishList"
+            DependsOnTargets="TwoDogBundleNativeLibs"
+            Condition="'$(PublishSingleFile)' == 'true' And '$(PublishAot)' != 'true' And '$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios'">
+        <ItemGroup>
+            <ResolvedFileToPublish Include="@(_TwoDogSidecarForPublish)"
+                                   Exclude="@(_TwoDogBundledNative)"
+                                   RelativePath="%(RecursiveDir)%(Filename)%(Extension)"
+                                   CopyToPublishDirectory="PreserveNewest"/>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="TwoDogPublishNativeLibs"
+            AfterTargets="Publish"
+            DependsOnTargets="TwoDogSelectPublishNativeLibs"
+            Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios' And ('$(PublishSingleFile)' != 'true' Or '$(PublishAot)' == 'true')">
+        <Copy SourceFiles="%(_TwoDogNativeForPublish.Resolved)"
+              DestinationFiles="$(PublishDir)%(_TwoDogNativeForPublish.OutName)"
+              SkipUnchangedFiles="true"
+              Condition="'%(_TwoDogNativeForPublish.Resolved)' != ''"/>
         <Copy SourceFiles="@(_TwoDogSidecarForPublish)"
               DestinationFiles="@(_TwoDogSidecarForPublish->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')"
               SkipUnchangedFiles="true"/>

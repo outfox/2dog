@@ -181,6 +181,12 @@ internal static class LibGodotLoader
         if (!string.IsNullOrEmpty(assemblyDir)) dirs.Add(assemblyDir);
         if (!string.IsNullOrEmpty(AppContext.BaseDirectory) && !dirs.Contains(AppContext.BaseDirectory))
             dirs.Add(AppContext.BaseDirectory);
+        // Single-file bundles extract IncludeNativeLibrariesForSelfExtract natives into a directory listed here.
+        if (AppContext.GetData("NATIVE_DLL_SEARCH_DIRECTORIES") is string searchDirs)
+        {
+            foreach (var dir in searchDirs.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
+                if (!dirs.Contains(dir)) dirs.Add(dir);
+        }
         return dirs;
     }
 

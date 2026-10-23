@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Godot;
 using Godot.Bridge;
@@ -7,8 +8,9 @@ using Godot.NativeInterop;
 namespace twodog;
 
 /// <summary>
-/// NativeAOT stand-in for GodotPlugins.Main: one native image holds every assembly, so there is no GodotPlugins.dll to
-/// load and no project assembly file for GDMono to hand back. Script assemblies are registered during initialization.
+/// NativeAOT and single-file stand-in for GodotPlugins.Main: one image or bundle holds every assembly, so there is no
+/// GodotPlugins.dll to load and no project assembly file for GDMono to hand back. Script assemblies are registered
+/// during initialization.
 /// </summary>
 internal static unsafe class NativeAotPlugins
 {
@@ -69,9 +71,16 @@ internal static unsafe class NativeAotPlugins
         }
     }
 
-    // Every compiled assembly is loaded up front; the source generators mark the ones holding scripts.
+    // The source generators mark the assemblies holding scripts. NativeAOT loads every compiled assembly up front; the
+    // JIT loads the game assembly (named by 2dog.engine.targets) only once a host touches one of its types.
     private static void LookupScriptAssemblies()
     {
+        if (Assembly.GetEntryAssembly() is { } entry)
+        {
+            foreach (var name in AssemblyMetadata.Values(entry, "TwoDogGameAssembly"))
+                Assembly.Load(name);
+        }
+
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             if (assembly.IsDefined(typeof(AssemblyHasScriptsAttribute), inherit: false))

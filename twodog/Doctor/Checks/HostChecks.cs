@@ -13,7 +13,7 @@ internal static class HostChecks
         new("host.variant", Category.Hosts, "the selected native variant is supported by its host platform"),
         new("host.buildtype-deprecated", Category.Hosts, "the deprecated TwoDogBuildType property is gone"),
         new("host.publish-aot", Category.Hosts, "no WinForms, REPL, Qt, browser, Blazor, MAUI or iOS host enables PublishAot"),
-        new("host.publish-singlefile", Category.Hosts, "PublishSingleFile is only enabled by browser hosts or alongside PublishAot"),
+        new("host.publish-singlefile", Category.Hosts, "no REPL host enables PublishSingleFile"),
         new("host.webxr-threads", Category.Hosts, "WebXR hosts do not enable WasmEnableThreads"),
         new("host.duplicate-analyzers", Category.Hosts, "hosts referencing the game strip the duplicate Godot analyzers"),
         new("host.app-manifest", Category.Hosts, "the app.manifest a host declares exists"),
@@ -94,7 +94,6 @@ internal static class HostChecks
                 host.Properties(property).Any(e => e.Value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase));
 
             // Test hosts are never published, so PublishAot there only adds analyzers.
-            var nativeAot = host.Kind is HostKind.Desktop or HostKind.Avalonia or HostKind.WinUi or HostKind.Android;
             if (Enables("PublishAot") && host.Kind is HostKind.Repl or HostKind.WinForms or HostKind.Web or HostKind.WebXr or HostKind.Blazor or HostKind.Maui or HostKind.Ios or HostKind.Qt)
                 yield return Issue(new Finding("host.publish-aot", c, Severity.Fail, $"{csproj} enables PublishAot",
                     host.Kind switch
@@ -121,13 +120,10 @@ internal static class HostChecks
                     new Fix($"csproj:{host.Folder}:threads", FixClass.Safe, $"remove WasmEnableThreads from {csproj}",
                         () => RemoveProperties(host.CsprojPath, "WasmEnableThreads"))));
 
-            // NativeAOT ignores PublishSingleFile; its executable already holds every assembly.
-            if (!host.IsWebLike && Enables("PublishSingleFile") && !(nativeAot && Enables("PublishAot")))
+            if (host.Kind == HostKind.Repl && Enables("PublishSingleFile"))
                 yield return Issue(new Finding("host.publish-singlefile", c, Severity.Fail, $"{csproj} enables PublishSingleFile",
-                    "without NativeAOT the engine loads GodotPlugins and the game assembly from disk, which a single-file bundle cannot provide",
-                    nativeAot
-                        ? "remove PublishSingleFile and publish as a folder, or use PublishAot for a native executable"
-                        : "remove PublishSingleFile and publish as a folder", csproj));
+                    "the C# REPL compiles against assembly files on disk, which a single-file bundle does not have",
+                    "remove PublishSingleFile and publish as a folder", csproj));
 
             if (referencesGame && analyzers.Count == 0)
                 yield return Issue(new Finding("host.duplicate-analyzers", c, Severity.Warn, $"{csproj} lacks TwoDogRemoveDuplicateGodotAnalyzers",
