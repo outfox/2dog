@@ -1,0 +1,32 @@
+name: Set up the MAUI .NET SDK
+description: Install the pinned .NET SDK and the MAUI workloads into a private root and pin it with global.json.
+inputs:
+  sdk-version:
+    description: .NET SDK version
+    required: true
+  workload-version:
+    description: Workload set version
+    required: true
+  workloads:
+    description: Space-separated workload IDs
+    default: maui-windows maui-android maui-ios ios
+runs:
+  using: composite
+  steps:
+    # Outside the image's MSI-based root, workloads install as plain files: about a minute instead of five for
+    # one MSI per pack, and only the requested workloads instead of updating everything the image registered.
+    - uses: actions/setup-dotnet@v6
+      env:
+        DOTNET_INSTALL_DIR: ${{ runner.temp }}/maui-dotnet
+      with:
+        dotnet-version: ${{ inputs.sdk-version }}
+
+    - shell: bash
+      env:
+        SDK_VERSION: ${{ inputs.sdk-version }}
+        WORKLOAD_VERSION: ${{ inputs.workload-version }}
+        WORKLOADS: ${{ inputs.workloads }}
+      run: |
+        dotnet new globaljson --sdk-version "$SDK_VERSION" --roll-forward disable --force
+        # shellcheck disable=SC2086 # the list is word-split on purpose
+        dotnet workload install $WORKLOADS --version "$WORKLOAD_VERSION" --source https://api.nuget.org/v3/index.json

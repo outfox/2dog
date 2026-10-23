@@ -124,7 +124,7 @@ jobs:
             exit 0
           fi
           if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
-               "Web Smoke" "WebGPU Browser" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
+               "Web Smoke" "WebGPU Browser" "MAUI Pack" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
             read -r run sha <<<"$found"
             url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
             echo "::notice::This content passed CI in run $run (${sha:0:7}); skipping natives, pack, test and smoke jobs."
@@ -1827,15 +1827,14 @@ jobs:
             /tmp/2dog-mobile-webgpu-captures-limited/
           retention-days: 7
 
-  # The packed `2dog` tool, installed from the artifacts the way a user gets
-  # it: scaffolds into a path with a space, builds and tests the result
-  # against the same artifacts, and runs `2dog doctor` on it.
-  maui:
-    name: MAUI Builds
+  # Packs the precision-neutral iOS host and every MAUI TFM. The iOS Simulator cells only need these packages, so
+  # they start here instead of waiting for the showcase builds.
+  maui-pack:
+    name: MAUI Pack
     needs: [pack]
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: windows-2025
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
       - name: Enable symlinks
@@ -1845,57 +1844,16 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+      - name: Setup .NET with MAUI workloads
+        uses: ./.github/actions/setup-maui-dotnet
         with:
-          dotnet-version: ${{ env.IOS_DOTNET_VERSION }}
-
-      - name: Pin SDK to the iOS workload
-        run: dotnet new globaljson --sdk-version ${{ env.IOS_DOTNET_VERSION }} --roll-forward disable --force
+          sdk-version: ${{ env.IOS_DOTNET_VERSION }}
+          workload-version: ${{ env.IOS_WORKLOAD_VERSION }}
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
           enable-cache: false
-      # Offline downloads depend on which packs the runner image already provides.
-      - name: Identify workload cache
-        id: workload-cache-key
-        shell: pwsh
-        run: '"image=$env:ImageOS-$env:ImageVersion" >> $env:GITHUB_OUTPUT'
-
-      - name: Cache MAUI workload downloads
-        id: workload-cache
-        uses: actions/cache/restore@v6
-        with:
-          path: .ci/maui-workloads
-          key: maui-workloads-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.workload-cache-key.outputs.image }}-${{ env.IOS_DOTNET_VERSION }}-${{ env.IOS_WORKLOAD_VERSION }}
-
-      - name: Download MAUI workloads on cache miss
-        if: steps.workload-cache.outputs.cache-hit != 'true'
-        run: >-
-          dotnet workload install maui-windows maui-android maui-ios ios
-          --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
-          --download-to-cache .ci/maui-workloads
-
-      # Keep successful downloads even if a later showcase build fails.
-      - name: Save MAUI workload downloads
-        if: steps.workload-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: .ci/maui-workloads
-          key: ${{ steps.workload-cache.outputs.cache-primary-key }}
-
-      # The download command can omit manifests required when applying the pinned workload set.
-      # Use its packages as a normal feed so installation can fetch any missing dependencies.
-      - name: Install MAUI workloads using cached downloads
-        shell: pwsh
-        run: |
-          $feed = New-Item -ItemType Directory -Path .ci/maui-workload-feed -Force
-          # The download cache's nested layout lacks NuGet feed metadata; expose a flat feed without copying it.
-          Get-ChildItem .ci/maui-workloads -Recurse -File -Filter *.nupkg | ForEach-Object {
-            New-Item -ItemType HardLink -Path (Join-Path $feed.FullName $_.Name) -Target $_.FullName | Out-Null
-          }
-          dotnet workload install maui-windows maui-android maui-ios ios --version ${{ env.IOS_WORKLOAD_VERSION }} --source $feed.FullName --source https://api.nuget.org/v3/index.json
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -1909,10 +1867,6 @@ jobs:
         run: |
           dotnet pack twodog.ios -c Release
           dotnet pack twodog.maui -c Release -p:TwoDogMauiIos=true
-      - name: Build Windows showcase
-        run: dotnet build demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0 -c Release
-      - name: Build Android showcase
-        run: dotnet build demos/showcase/showcase.maui -f net10.0-android -r android-x64 -c Debug
       - name: Upload MAUI package
         uses: actions/upload-artifact@v7
         with:
@@ -1923,6 +1877,54 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  # Builds the MAUI showcase for Windows and Android against the published MAUI package.
+  maui:
+    name: MAUI Builds
+    needs: [maui-pack]
+    if: github.repository == 'outfox/2dog' && (!cancelled() && needs.maui-pack.result == 'success')
+    runs-on: windows-2025
+    timeout-minutes: 25
+    steps:
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+      - name: Setup .NET with MAUI workloads
+        uses: ./.github/actions/setup-maui-dotnet
+        with:
+          sdk-version: ${{ env.IOS_DOTNET_VERSION }}
+          workload-version: ${{ env.IOS_WORKLOAD_VERSION }}
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
+        with:
+          precision: single
+      - name: Download MAUI package
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-maui
+          path: packages
+      - name: Build Windows showcase
+        run: dotnet build demos/showcase/showcase.maui -f net10.0-windows10.0.19041.0 -c Release
+      - name: Build Android showcase
+        run: dotnet build demos/showcase/showcase.maui -f net10.0-android -r android-x64 -c Debug
+
+  # The packed `2dog` tool, installed from the artifacts the way a user gets
+  # it: scaffolds into a path with a space, builds and tests the result
+  # against the same artifacts, and runs `2dog doctor` on it.
   tool-smoke:
     name: Tool Smoke (${{ matrix.name }})
     needs: [pack]
@@ -2231,10 +2233,10 @@ jobs:
   # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding.
   ios-smoke:
     name: iOS Smoke (${{ matrix.app }}, ${{ matrix.configuration }}) [${{ matrix.precision }}]
-    needs: [check-natives, pack, maui]
+    needs: [check-natives, pack, maui-pack]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.maui.result == 'success' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success' &&
       needs.check-natives.outputs.tested-bump != 'true')
     runs-on: macos-26
     timeout-minutes: 30
@@ -2354,7 +2356,7 @@ jobs:
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
     # tool the way users get it. A tested revision bump (see check-natives) takes
     # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui]
+    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui-pack, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -2368,7 +2370,7 @@ jobs:
       (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
       needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
       needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
-      needs.tool-smoke.result == 'success' && needs.maui.result == 'success')
+      needs.tool-smoke.result == 'success' && needs.maui-pack.result == 'success' && needs.maui.result == 'success')
     permissions:
       contents: write # required to create the GitHub Release for the tag
       id-token: write # required to request the GitHub OIDC token for Trusted Publishing

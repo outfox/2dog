@@ -53,14 +53,15 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - Consumers that need both native outputs and NuGet packages use `actions/download-ci-inputs` to download them
   concurrently and move them into `godot/` and `packages/`, merging directories created by source checks.
   Require both artifacts before staging either.
-  The MAUI job caches workload installer downloads by runner image, SDK and workload set; expose the cached
-  nupkgs as a flat NuGet source alongside nuget.org, never `--from-cache`: the download command can omit manifests
-  required by the pinned workload set. Still run installation to preserve Windows MSI registration.
-  Changing its workload list requires a cache-key bump.
+  The MAUI jobs install their pinned SDK into a private root through `actions/setup-maui-dotnet`, so workloads
+  install as plain files in about a minute rather than as one MSI per pack into the image's root. Do not cache
+  that root: it is 5.5 GB, and caches saved by pull request or tag runs are not shared with other refs.
 - iOS device/Simulator arm64 archives build in both precisions through `build-natives.yml`; release completeness
   and staging must require all four archives. Pack uploads scoped iOS inputs, excluding raw archives from godot-bin.
-  The Windows MAUI job packs the precision-neutral iOS host and all MAUI TFMs. Its .NET SDK/workload pins must
-  match the Xcode selected by `ios-smoke`. Three Simulator cells cover single Debug pixels, double Release showcase
+  The Windows `maui-pack` job packs the precision-neutral iOS host and all MAUI TFMs; `ios-smoke` and the `maui`
+  showcase builds consume its artifact, so the Simulator cells never wait for the showcase builds. Keep `MAUI Pack`
+  in the tested-content family list and the deployment gate. Its .NET SDK/workload pins must match the Xcode
+  selected by `ios-smoke`. Three Simulator cells cover single Debug pixels, double Release showcase
   and single Debug MAUI; keep `iOS Smoke` in both reuse family lists and the deployment gate. Device signing
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
