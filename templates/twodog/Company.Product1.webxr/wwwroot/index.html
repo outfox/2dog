@@ -11,12 +11,25 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico">
     <!-- Start the big downloads before godot.js even runs; the dotnet.* files
-         are otherwise only discovered mid-boot. (When enabling TWODOG_PCK_GZ
-         below, swap both hints to their .gz siblings: godot.pck.gz, and
-         godot.wasm.gz because precompressedSuffix makes the engine fetch
-         that one too.) -->
-    <link rel="preload" href="godot.wasm" as="fetch" crossorigin="anonymous">
-    <link rel="preload" href="godot.pck" as="fetch" crossorigin="anonymous">
+         are otherwise only discovered mid-boot. -->
+    <script>
+        // Opt-in: fetch the .gz siblings the 2dog publish writes (engine, pack
+        // and _framework binaries) and inflate them in the page. For hosts that
+        // serve everything uncompressed, and required with
+        // TwoDogWebPrecompressKeepOriginals=false. A host that already
+        // content-encodes would compress them a second time.
+        const TWODOG_PCK_GZ = false;
+        // The hints must name the files the engine fetches, or both download.
+        const twodogGz = TWODOG_PCK_GZ && typeof DecompressionStream !== 'undefined';
+        for (const file of ['godot.wasm', 'godot.pck']) {
+            const hint = document.createElement('link');
+            hint.rel = 'preload';
+            hint.as = 'fetch';
+            hint.crossOrigin = 'anonymous';
+            hint.href = twodogGz ? file + '.gz' : file;
+            document.head.appendChild(hint);
+        }
+    </script>
     <link rel="modulepreload" href="_framework/dotnet.js">
     <link rel="modulepreload" href="_framework/dotnet.boot.js">
     <link rel="modulepreload" href="_framework/dotnet.runtime.js">
@@ -159,10 +172,6 @@
             'gdextensionLibs': []
         };
         const GODOT_THREADS_ENABLED = false;
-        // Opt-in: fetch godot.pck.gz (a sibling the 2dog publish writes) and
-        // inflate it in the page. For hosts that serve everything uncompressed;
-        // a host that already content-encodes would compress it a second time.
-        const TWODOG_PCK_GZ = false;
 
         (function () {
             performance.mark('2dog:boot');
@@ -311,7 +320,7 @@
                         return new Engine(GODOT_CONFIG);
                     };
                     setStatusMode('progress');
-                    const started = TWODOG_PCK_GZ && typeof DecompressionStream !== 'undefined'
+                    const started = twodogGz
                         ? startWithGzPack(fileSizes, makeEngine)
                         : makeEngine('').startGame({});
                     return started.then(() => {

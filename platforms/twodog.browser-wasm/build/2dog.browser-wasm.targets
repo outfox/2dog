@@ -61,6 +61,10 @@
         <!-- Optimal keeps iterative publishes fast; SmallestSize compresses harder at a much higher cost (final
              deploys) -->
         <TwoDogWebPrecompressLevel Condition="'$(TwoDogWebPrecompressLevel)' == ''">Optimal</TwoDogWebPrecompressLevel>
+        <TwoDogWebPrecompressFormats Condition="'$(TwoDogWebPrecompressFormats)' == ''">br;gz</TwoDogWebPrecompressFormats>
+        <!-- false: ship only .gz for the engine, pack and _framework binaries (size-capped hosts); the shell must
+             inflate them itself (TWODOG_PCK_GZ) -->
+        <TwoDogWebPrecompressKeepOriginals Condition="'$(TwoDogWebPrecompressKeepOriginals)' == ''">true</TwoDogWebPrecompressKeepOriginals>
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
         <!-- partial: only IsTrimmable assemblies are member-trimmed. GodotSharp's trim annotations assume script
@@ -541,29 +545,57 @@
         <ParameterGroup>
             <AppDir ParameterType="System.String" Required="true"/>
             <Level ParameterType="System.String" Required="true"/>
+            <Formats ParameterType="System.String"/>
+            <DropOriginals ParameterType="System.String"/>
         </ParameterGroup>
         <Task>
             <Using Namespace="System.IO.Compression"/>
             <Using Namespace="System.Linq"/>
             <Code Type="Fragment" Language="cs"><![CDATA[
+                var formats = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var entry in (Formats ?? "").Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var format = entry.Trim().TrimStart('.').ToLowerInvariant();
+                    if (format.Length == 0) continue;
+                    if (format != "br" && format != "gz")
+                    {
+                        Log.LogError("TwoDog: unknown TwoDogWebPrecompressFormats entry '" + entry.Trim() + "'; use br, gz or br;gz.");
+                        return false;
+                    }
+                    formats.Add(format);
+                }
+                var drop = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var path in (DropOriginals ?? "").Split(';'))
+                    if (path.Trim().Length > 0 && File.Exists(path.Trim())) drop.Add(Path.GetFullPath(path.Trim()));
+                if (drop.Count > 0 && !formats.Contains("gz"))
+                {
+                    Log.LogError("TwoDog: TwoDogWebPrecompressKeepOriginals=false needs gzip copies (TwoDogWebPrecompress=true with gz in TwoDogWebPrecompressFormats); the shell can only inflate gzip.");
+                    return false;
+                }
                 // BrotliStream is absent from the inline-task compiler's netstandard reference set but present in the
                 // core-MSBuild runtime - reach it via reflection.
                 var brotli = Type.GetType("System.IO.Compression.BrotliStream, System.IO.Compression.Brotli");
-                if (brotli == null)
-                    Log.LogWarning("TwoDog: BrotliStream unavailable in this MSBuild runtime; writing only .gz siblings.");
+                if (brotli == null && formats.Remove("br"))
+                    Log.LogWarning("TwoDog: BrotliStream unavailable in this MSBuild runtime; skipping .br siblings.");
                 var level = (CompressionLevel)Enum.Parse(typeof(CompressionLevel), Level, true);
                 var exts = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase)
                     { ".wasm", ".js", ".pck", ".dat", ".json", ".html" };
-                var written = 0;
-                // Materialized: the loop writes siblings into the tree being walked.
+                int written = 0, removed = 0;
+                // Materialized: the loop writes siblings into the tree being walked. Dropped originals are compressed
+                // whatever their size, since nothing else will serve them.
                 var files = new DirectoryInfo(AppDir).EnumerateFiles("*", SearchOption.AllDirectories)
-                    .Where(f => exts.Contains(f.Extension) && f.Length >= 4096).ToList();
+                    .Where(f => exts.Contains(f.Extension) && (f.Length >= 4096 || drop.Contains(f.FullName))).ToList();
                 foreach (var file in files)
                 {
                     foreach (var suffix in new[] { ".br", ".gz" })
                     {
-                        if (suffix == ".br" && brotli == null) continue;
                         var sibling = file.FullName + suffix;
+                        // A deselected format's sibling is stale; static servers would keep serving it.
+                        if (!formats.Contains(suffix.Substring(1)))
+                        {
+                            if (File.Exists(sibling)) { File.Delete(sibling); removed++; }
+                            continue;
+                        }
                         if (File.Exists(sibling) && File.GetLastWriteTimeUtc(sibling) >= file.LastWriteTimeUtc)
                             continue;
                         // Write-then-move: a cancelled build must not leave a truncated sibling with a fresh timestamp
@@ -580,8 +612,11 @@
                         File.SetLastWriteTimeUtc(sibling, DateTime.UtcNow);
                         written++;
                     }
+                    if (drop.Contains(file.FullName)) { file.Delete(); removed++; }
                 }
-                Log.LogMessage(MessageImportance.High, "TwoDog: wrote " + written + " precompressed sibling file(s)");
+                if (written + removed > 0)
+                    Log.LogMessage(MessageImportance.High, "TwoDog: wrote " + written + " precompressed sibling file(s)"
+                        + (removed > 0 ? ", removed " + removed + " stale sibling or uncompressed original file(s)" : ""));
             ]]></Code>
         </Task>
     </UsingTask>
@@ -598,11 +633,21 @@
     </Target>
 
     <!-- .br/.gz siblings: served transparently by precompressed-static servers (nginx, Caddy, static-web-server)
-         and fetched by the shell's opt-in pck fallback on hosts that compress nothing. Originals always remain. -->
+         and fetched by the shell's opt-in gz fallback on hosts that compress nothing. Also runs with precompression
+         off, to delete siblings an earlier publish left behind. -->
     <Target Name="TwoDogWebPrecompressBundle"
             AfterTargets="TwoDogWebWriteSizeManifest"
             DependsOnTargets="TwoDogDeployPack"
-            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebPrecompress)' == 'true' And '$(MSBuildRuntimeType)' == 'Core'">
-        <TwoDogPrecompressBundle AppDir="$(WasmAppDir)" Level="$(TwoDogWebPrecompressLevel)"/>
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' != 'true' And '$(MSBuildRuntimeType)' == 'Core'">
+        <!-- Exactly what the shell inflates: the engine, the pack and dotnet.js's binary resources -->
+        <ItemGroup Condition="'$(TwoDogWebPrecompressKeepOriginals)' == 'false'">
+            <_TwoDogWebDropOriginal Include="$(WasmAppDir)/godot.wasm;$(WasmAppDir)/$(TwoDogWebPackName)"/>
+            <_TwoDogWebDropOriginal Include="$(WasmAppDir)/_framework/*.wasm;$(WasmAppDir)/_framework/*.dat"/>
+        </ItemGroup>
+        <PropertyGroup>
+            <_TwoDogWebPrecompressFormats Condition="'$(TwoDogWebPrecompress)' == 'true'">$(TwoDogWebPrecompressFormats)</_TwoDogWebPrecompressFormats>
+        </PropertyGroup>
+        <TwoDogPrecompressBundle AppDir="$(WasmAppDir)" Level="$(TwoDogWebPrecompressLevel)"
+                                 Formats="$(_TwoDogWebPrecompressFormats)" DropOriginals="@(_TwoDogWebDropOriginal)"/>
     </Target>
 </Project>

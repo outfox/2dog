@@ -1615,6 +1615,89 @@ jobs:
           fi
           echo "$FLAVOR browser smoke passed"
 
+      # Size-capped hosts: rebuild the smoked bundle as gzip only, without the uncompressed engine, pack and
+      # _framework binaries, and boot it from a server that compresses nothing with the page inflating it.
+      - name: Run gzip-only browser smoke
+        if: matrix.flavor == 'web'
+        run: |
+          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
+          cleanup() {
+            if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+
+          BUNDLE=demos/showcase/showcase.web/AppBundle
+          dotnet msbuild demos/showcase/showcase.web/showcase.web.csproj -nologo -v:m -p:Configuration=Release \
+            -t:TwoDogWebPrecompressBundle \
+            -p:TwoDogWebPrecompressFormats=gz -p:TwoDogWebPrecompressKeepOriginals=false
+          LEFTOVERS=$(find "$BUNDLE" -name '*.br' -o -name 'godot.wasm' -o -name 'godot.pck' \
+            -o -path "$BUNDLE/_framework/*.wasm" -o -path "$BUNDLE/_framework/*.dat")
+          if [ -n "$LEFTOVERS" ]; then
+            echo "::error::The gzip-only bundle still holds: $LEFTOVERS"
+            exit 1
+          fi
+          echo "gzip-only bundle: $(du -sh "$BUNDLE" | cut -f1)"
+
+          uv run python - "$BUNDLE/index.html" <<'PY'
+          from pathlib import Path
+          import sys
+          path = Path(sys.argv[1])
+          content = path.read_text()
+          needle = "const TWODOG_PCK_GZ = false;"
+          assert content.count(needle) == 1, "Showcase shell gzip switch changed"
+          path.write_text(content.replace(needle, "const TWODOG_PCK_GZ = true;"))
+          PY
+
+          # http.server sends .gz files as application/gzip without Content-Encoding.
+          uv run python -m http.server 8001 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-gz-server.log 2>&1 &
+          SERVER_PID=$!
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8001/index.html > /dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --use-gl=angle \
+            --use-angle=swiftshader-webgl \
+            --enable-unsafe-swiftshader \
+            --disable-dev-shm-usage \
+            --enable-logging=stderr \
+            --remote-debugging-address=127.0.0.1 \
+            --remote-debugging-port=9223 \
+            '--remote-allow-origins=*' \
+            "--user-data-dir=${RUNNER_TEMP}/2dog-chrome-gz" \
+            http://127.0.0.1:8001/index.html \
+            > /tmp/2dog-gz-browser.log 2>&1 &
+          CHROME_PID=$!
+
+          set +e
+          timeout 130s node .github/scripts/wait-for-browser-smoke.mjs http://127.0.0.1:8001/index.html 120000 9223
+          SMOKE_STATUS=$?
+          set -e
+
+          cat /tmp/2dog-gz-server.log
+          cat /tmp/2dog-gz-browser.log
+
+          if [ "$SMOKE_STATUS" -ne 0 ]; then
+            echo "::error::The gzip-only web bundle did not complete the Godot API smoke probe"
+            exit "$SMOKE_STATUS"
+          fi
+          # A request for an uncompressed binary means a preload hint or loader bypassed the .gz copies.
+          if grep -E '"GET /[^ ]*\.(wasm|pck|dat) HTTP' /tmp/2dog-gz-server.log; then
+            echo "::error::The gzip-only page requested uncompressed binaries"
+            exit 1
+          fi
+          if ! grep -q '"GET /godot.wasm.gz HTTP/1.1" 200' /tmp/2dog-gz-server.log; then
+            echo "::error::The gzip-only page never loaded godot.wasm.gz"
+            exit 1
+          fi
+          echo "gzip-only browser smoke passed"
+
       - name: Test browser lifetime cleanup and Blazor preparation cancellation
         if: matrix.flavor == 'checks'
         env:

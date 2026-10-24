@@ -27,7 +27,9 @@ console. To customize the page, edit `MyGame.web/wwwroot/`. Then publish again.
 ## Publishing
 
 Upload the contents of `MyGame.web/AppBundle/` to a static web server.
-Enable gzip or Brotli compression for faster downloads. Only
+Serve it compressed for faster downloads; see
+[Precompression](/configuration/web#precompression) for the settings that
+match your server. Only
 [multithreading](#multithreading) needs cross-origin isolation headers.
 
 See [Web Configuration](/configuration/web) for build settings.
