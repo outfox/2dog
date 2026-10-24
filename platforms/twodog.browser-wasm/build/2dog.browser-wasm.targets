@@ -62,8 +62,8 @@
              deploys) -->
         <TwoDogWebPrecompressLevel Condition="'$(TwoDogWebPrecompressLevel)' == ''">Optimal</TwoDogWebPrecompressLevel>
         <TwoDogWebPrecompressFormats Condition="'$(TwoDogWebPrecompressFormats)' == ''">br;gz</TwoDogWebPrecompressFormats>
-        <!-- false: ship only .gz for the engine, pack and _framework binaries (size-capped hosts); the shell must
-             inflate them itself (TWODOG_PCK_GZ) -->
+        <!-- false: ship only .gz for the engine, pack and _framework binaries (size-capped hosts); the publish turns on
+             the shell's in-page inflation (TWODOG_PCK_GZ) in the deployed index.html -->
         <TwoDogWebPrecompressKeepOriginals Condition="'$(TwoDogWebPrecompressKeepOriginals)' == ''">true</TwoDogWebPrecompressKeepOriginals>
 
         <PublishTrimmed Condition="'$(PublishTrimmed)' == ''">true</PublishTrimmed>
@@ -564,13 +564,26 @@
                     }
                     formats.Add(format);
                 }
+                var dropping = !string.IsNullOrWhiteSpace(DropOriginals);
                 var drop = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var path in (DropOriginals ?? "").Split(';'))
                     if (path.Trim().Length > 0 && File.Exists(path.Trim())) drop.Add(Path.GetFullPath(path.Trim()));
-                if (drop.Count > 0 && !formats.Contains("gz"))
+                if (dropping && !formats.Contains("gz"))
                 {
                     Log.LogError("TwoDog: TwoDogWebPrecompressKeepOriginals=false needs gzip copies (TwoDogWebPrecompress=true with gz in TwoDogWebPrecompressFormats); the shell can only inflate gzip.");
                     return false;
+                }
+                // Without originals the shell must fetch the .gz copies itself: switch it on in the deployed copy.
+                var shell = Path.Combine(AppDir, "index.html");
+                if (dropping && File.Exists(shell))
+                {
+                    var html = File.ReadAllText(shell);
+                    var patched = System.Text.RegularExpressions.Regex.Replace(
+                        html, @"const\s+TWODOG_PCK_GZ\s*=\s*false\s*;", "const TWODOG_PCK_GZ = true;");
+                    if (patched != html)
+                        File.WriteAllText(shell, patched);
+                    else if (!System.Text.RegularExpressions.Regex.IsMatch(html, @"const\s+TWODOG_PCK_GZ\s*=\s*true\s*;"))
+                        Log.LogWarning("TwoDog: index.html has no 'const TWODOG_PCK_GZ = false;' to switch on; without uncompressed originals the page must fetch the .gz copies itself.");
                 }
                 // BrotliStream is absent from the inline-task compiler's netstandard reference set but present in the
                 // core-MSBuild runtime - reach it via reflection.

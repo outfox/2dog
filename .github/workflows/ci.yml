@@ -1638,16 +1638,10 @@ jobs:
             exit 1
           fi
           echo "gzip-only bundle: $(du -sh "$BUNDLE" | cut -f1)"
-
-          uv run python - "$BUNDLE/index.html" <<'PY'
-          from pathlib import Path
-          import sys
-          path = Path(sys.argv[1])
-          content = path.read_text()
-          needle = "const TWODOG_PCK_GZ = false;"
-          assert content.count(needle) == 1, "Showcase shell gzip switch changed"
-          path.write_text(content.replace(needle, "const TWODOG_PCK_GZ = true;"))
-          PY
+          if ! grep -q 'const TWODOG_PCK_GZ = true;' "$BUNDLE/index.html"; then
+            echo "::error::The gzip-only publish did not switch on the shell's in-page gzip path"
+            exit 1
+          fi
 
           # http.server sends .gz files as application/gzip without Content-Encoding.
           uv run python -m http.server 8001 --bind 127.0.0.1 --directory "$BUNDLE" > /tmp/2dog-gz-server.log 2>&1 &

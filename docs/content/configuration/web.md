@@ -14,24 +14,24 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 ## Properties
 
-| Property                            | Default                                            | Purpose                                                                                                      |
-|-------------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| `TwoDogWebVariant`                  | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                                                  |
-| `TwoDogExportPack`                  | `true`                                             | Export game content; `false` uses an existing `wwwroot/godot.pck`                                            |
-| `TwoDogWebExportPreset`             | `Web`                                              | Preset in `export_presets.cfg`                                                                               |
-| `TwoDogWebPackName`                 | `godot.pck`                                        | Deployed pack name                                                                                           |
-| `TwoDogWebSizeManifest`             | `true`                                             | Write `twodog.sizes.json` for loading progress                                                               |
-| `TwoDogWebStripMaps`                | `true` with the release engine                     | Remove JavaScript source maps                                                                                |
-| `TwoDogWebPrecompress`              | `true` with the dotnet CLI                         | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files                                           |
-| `TwoDogWebPrecompressLevel`         | `Optimal`                                          | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive |
-| `TwoDogWebPrecompressFormats`       | `br;gz`                                            | Compressed copies to write: `br`, `gz`, or `br;gz`                                                           |
-| `TwoDogWebPrecompressKeepOriginals` | `true`                                             | `false` ships only gzip copies of the engine, pack and .NET binaries ([size limits](#size-limited-hosts))    |
-| `TwoDogWebSideModuleExports`        | `true`                                             | Export native symbols used by GDExtensions                                                                   |
-| `WasmEnableThreads`                 | `false`                                            | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental)                        |
-| `TwoDogWebSideModuleTableSlots`     | `16384`                                            | With threads: function table slots reserved for GDExtension side modules                                     |
-| `WasmEmitSymbolMap`                 | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                              |
-| `WasmInitialHeapSize`               | `256MB`                                            | Initial memory allocation; memory can grow                                                                   |
-| `TwoDogWebGpuCachePath`             | System temporary directory                         | Writable Emscripten port cache for WebGPU                                                                    |
+| Property                            | Default                                            | Purpose                                                                                                          |
+|-------------------------------------|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| `TwoDogWebVariant`                  | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                                                      |
+| `TwoDogExportPack`                  | `true`                                             | Export game content; `false` uses an existing `wwwroot/godot.pck`                                                |
+| `TwoDogWebExportPreset`             | `Web`                                              | Preset in `export_presets.cfg`                                                                                   |
+| `TwoDogWebPackName`                 | `godot.pck`                                        | Deployed pack name                                                                                               |
+| `TwoDogWebSizeManifest`             | `true`                                             | Write `twodog.sizes.json` for loading progress                                                                   |
+| `TwoDogWebStripMaps`                | `true` with the release engine                     | Remove JavaScript source maps                                                                                    |
+| `TwoDogWebPrecompress`              | `true` with the dotnet CLI                         | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files                                               |
+| `TwoDogWebPrecompressLevel`         | `Optimal`                                          | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive     |
+| `TwoDogWebPrecompressFormats`       | `br;gz`                                            | Compressed copies to write: `br`, `gz`, or `br;gz`                                                               |
+| `TwoDogWebPrecompressKeepOriginals` | `true`                                             | `false` removes the uncompressed engine, pack and .NET binaries; needs `gz` ([size limits](#size-limited-hosts)) |
+| `TwoDogWebSideModuleExports`        | `true`                                             | Export native symbols used by GDExtensions                                                                       |
+| `WasmEnableThreads`                 | `false`                                            | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental)                            |
+| `TwoDogWebSideModuleTableSlots`     | `16384`                                            | With threads: function table slots reserved for GDExtension side modules                                         |
+| `WasmEmitSymbolMap`                 | `false` in Release, `true` otherwise               | Include native symbols for stack traces; explicit settings override the default                                  |
+| `WasmInitialHeapSize`               | `256MB`                                            | Initial memory allocation; memory can grow                                                                       |
+| `TwoDogWebGpuCachePath`             | System temporary directory                         | Writable Emscripten port cache for WebGPU                                                                        |
 
 `2dog.browser-wasm` restores both debug and release natives. If the payload
 for the selected variant is missing, the build fails.
@@ -86,12 +86,12 @@ The dotnet CLI writes Brotli (`.br`) and gzip (`.gz`) copies next to the large
 bundle files. Visual Studio's MSBuild skips this step. Choose the settings
 that match your web server:
 
-| Your server                                   | Settings                                                                                   |
-|-----------------------------------------------|--------------------------------------------------------------------------------------------|
-| Serves precompressed files                    | Defaults, or `TwoDogWebPrecompressFormats` set to the one format it serves (`br` or `gz`)  |
-| Compresses responses itself                   | `TwoDogWebPrecompress=false`                                                               |
-| Compresses nothing                            | Defaults, plus [compression in the page](#compression-in-the-page)                         |
-| Compresses nothing and limits the upload size | [gzip only](#size-limited-hosts), plus [compression in the page](#compression-in-the-page) |
+| Your server                                   | Settings                                                                                  |
+|-----------------------------------------------|-------------------------------------------------------------------------------------------|
+| Serves precompressed files                    | Defaults, or `TwoDogWebPrecompressFormats` set to the one format it serves (`br` or `gz`) |
+| Compresses responses itself                   | `TwoDogWebPrecompress=false`                                                              |
+| Compresses nothing                            | Defaults, plus [compression in the page](#compression-in-the-page)                        |
+| Compresses nothing and limits the upload size | [gzip only](#size-limited-hosts)                                                          |
 
 Servers that serve precompressed files include
 [Caddy](https://caddyserver.com/docs/caddyfile/directives/file_server) with
@@ -110,7 +110,10 @@ an outdated copy.
 ### Compression in the page
 
 On a server that compresses nothing, the page can download the `.gz` copies
-and inflate them itself. Set this in `wwwroot/index.html`:
+and inflate them with the browser's built-in gzip decoder,
+[`DecompressionStream`](https://developer.mozilla.org/docs/Web/API/DecompressionStream).
+Chrome does not support Brotli there, so the page uses gzip. Set this in
+`wwwroot/index.html`:
 
 ```javascript
 const TWODOG_PCK_GZ = true;
@@ -135,8 +138,9 @@ the .NET binaries, about 18 MiB:
 </PropertyGroup>
 ```
 
-The page has nothing to fall back to, so it needs
-[compression in the page](#compression-in-the-page). The build fails if
+The page has nothing to fall back to, so the publish turns on
+[compression in the page](#compression-in-the-page) in the bundle's copy of
+`index.html`. Your `wwwroot/index.html` stays unchanged. The build fails if
 `gz` is not among the formats.
 
 ## Trimming and AOT

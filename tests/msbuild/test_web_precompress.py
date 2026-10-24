@@ -33,6 +33,8 @@ class WebPrecompressTests(unittest.TestCase):
             path = self.bundle / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes((name.encode() * size)[:size])
+        self.shell = self.bundle / "index.html"
+        self.shell.write_bytes(b"<script>\r\n    const TWODOG_PCK_GZ = false;\r\n</script>\r\n".ljust(8192, b" "))
         self.project = self.root / "consumer.proj"
         self.project.write_text(f'''<Project>
   <PropertyGroup>
@@ -63,6 +65,7 @@ class WebPrecompressTests(unittest.TestCase):
         self.assertEqual(self.existing(""), set(FILES))
         self.assertEqual(gzip.decompress((self.bundle / "godot.wasm.gz").read_bytes()),
                          (self.bundle / "godot.wasm").read_bytes())
+        self.assertIn(b"const TWODOG_PCK_GZ = false;", self.shell.read_bytes())
 
     def test_deselected_formats_are_removed(self):
         self.build()
@@ -81,6 +84,16 @@ class WebPrecompressTests(unittest.TestCase):
         for name in DROPPED:
             self.assertEqual(gzip.decompress((self.bundle / (name + ".gz")).read_bytes()),
                              (name.encode() * FILES[name])[:FILES[name]], name)
+        # The shell has no originals to fall back to, so the publish switches on its in-page gzip path.
+        shell = self.shell.read_bytes()
+        self.assertIn(b"\r\n    const TWODOG_PCK_GZ = true;\r\n", shell)
+        self.assertEqual(gzip.decompress((self.bundle / "index.html.gz").read_bytes()), shell)
+
+    def test_gz_only_bundle_warns_about_a_shell_without_the_switch(self):
+        self.shell.write_bytes(b"<html>custom shell</html>".ljust(8192, b" "))
+        result = self.run_target("TwoDogWebPrecompressFormats=gz", "TwoDogWebPrecompressKeepOriginals=false")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("index.html has no 'const TWODOG_PCK_GZ = false;'", result.stdout)
 
     def test_invalid_configurations_fail_without_touching_the_bundle(self):
         for properties, message in (

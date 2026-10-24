@@ -15,9 +15,10 @@
     <script>
         // Opt-in: fetch the .gz siblings the 2dog publish writes (engine, pack
         // and _framework binaries) and inflate them in the page. For hosts that
-        // serve everything uncompressed, and required with
-        // TwoDogWebPrecompressKeepOriginals=false. A host that already
-        // content-encodes would compress them a second time.
+        // serve everything uncompressed. Publishing with
+        // TwoDogWebPrecompressKeepOriginals=false switches it on in the app
+        // bundle. A host that already content-encodes would compress them a
+        // second time.
         const TWODOG_PCK_GZ = false;
         // The hints must name the files the engine fetches, or both download.
         const twodogGz = TWODOG_PCK_GZ && typeof DecompressionStream !== 'undefined';
