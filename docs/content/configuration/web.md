@@ -25,7 +25,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogWebPrecompress`              | `true` with the dotnet CLI                         | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files                                               |
 | `TwoDogWebPrecompressLevel`         | `Optimal`                                          | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive     |
 | `TwoDogWebPrecompressFormats`       | `br;gz`                                            | Compressed copies to write: `br`, `gz`, or `br;gz`                                                               |
-| `TwoDogWebPrecompressKeepOriginals` | `true`                                             | `false` removes the uncompressed engine, pack and .NET binaries; needs `gz` ([size limits](#size-limited-hosts)) |
+| `TwoDogWebPrecompressKeepOriginals` | `true`                                             | `false` removes the uncompressed engine, pack and .NET binaries; needs `gz` ([upload limits](#web-hosting-with-upload-limits)) |
 | `TwoDogWebSideModuleExports`        | `true`                                             | Export native symbols used by GDExtensions                                                                       |
 | `WasmEnableThreads`                 | `false`                                            | Link the [multithreaded](/hosts/web#multithreading) runtime and engine (experimental)                            |
 | `TwoDogWebSideModuleTableSlots`     | `16384`                                            | With threads: function table slots reserved for GDExtension side modules                                         |
@@ -91,7 +91,7 @@ that match your web server:
 | Serves precompressed files                    | Defaults, or `TwoDogWebPrecompressFormats` set to the one format it serves (`br` or `gz`) |
 | Compresses responses itself                   | `TwoDogWebPrecompress=false`                                                              |
 | Compresses nothing                            | Defaults, plus [compression in the page](#compression-in-the-page)                        |
-| Compresses nothing and limits the upload size | [gzip only](#size-limited-hosts)                                                          |
+| Compresses nothing and limits the upload size | [gzip only](#web-hosting-with-upload-limits)                                              |
 
 Servers that serve precompressed files include
 [Caddy](https://caddyserver.com/docs/caddyfile/directives/file_server) with
@@ -125,11 +125,11 @@ uncompressed. If a `.gz` copy is missing, the page falls back to the
 original. Do not use this on a server that compresses responses, because
 the files would be compressed twice.
 
-### Size-limited hosts
+### Web hosting with upload limits
 
-The uncompressed bundle of an empty project is about 66 MiB. For hosts that
-limit the upload size, ship only the gzip copies of the engine, the pack and
-the .NET binaries, about 18 MiB:
+The uncompressed bundle of an empty project is about 66 MiB. If your web
+hosting service limits how much you can upload, ship only the gzip copies of
+the engine, the pack and the .NET binaries, about 18 MiB:
 
 ```xml
 <PropertyGroup>
