@@ -127,9 +127,21 @@ the files would be compressed twice.
 
 ## Web hosting with upload limits
 
-::: warning A minimum-size deploy, not a smaller game
-This deploy fits web hosting services that limit how much you can upload. It
-does not make your game smaller for players; it trades their download
+The uncompressed bundle of an empty project is about 66 MiB. 
+
+If your web hosting service limits how much you can upload, ship only the gzip copies of
+the engine, the pack and the .NET binaries, about 18 MiB:
+
+```xml
+<PropertyGroup>
+  <TwoDogWebPrecompressFormats>gz</TwoDogWebPrecompressFormats>
+  <TwoDogWebPrecompressKeepOriginals>false</TwoDogWebPrecompressKeepOriginals>
+</PropertyGroup>
+```
+
+::: warning A minimum-size deploy is not a smaller game download
+This deploy fits web hosting services that *limit how much you can upload.* It
+does not make your game smaller for players. Instead, it trades their download
 experience for upload size. Compared with a full deploy, players:
 
 - download gzip, which is larger than Brotli
@@ -141,17 +153,6 @@ Players get the best experience from a full deploy with all variants (Brotli,
 gzip and the uncompressed originals), where the server sends each browser the
 best format it accepts.
 :::
-
-The uncompressed bundle of an empty project is about 66 MiB. If your web
-hosting service limits how much you can upload, ship only the gzip copies of
-the engine, the pack and the .NET binaries, about 18 MiB:
-
-```xml
-<PropertyGroup>
-  <TwoDogWebPrecompressFormats>gz</TwoDogWebPrecompressFormats>
-  <TwoDogWebPrecompressKeepOriginals>false</TwoDogWebPrecompressKeepOriginals>
-</PropertyGroup>
-```
 
 The page has nothing to fall back to, so the publish turns on
 [compression in the page](#compression-in-the-page) in the bundle's copy of
