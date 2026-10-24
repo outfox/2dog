@@ -130,7 +130,9 @@ the files would be compressed twice.
 The uncompressed bundle, engine and all, of an empty project is about 70 MiB, plus 10-15 MiB per compressed variant of the Godot engine.
 
 If your web hosting service limits how much you can upload, ship only the gzip copies of
-the engine, the pack and the .NET binaries, about 18 MiB:
+the engine, the pack and the .NET binaries.
+
+That's about 18-20 MiB for an empty game.
 
 ```xml
 <PropertyGroup>
