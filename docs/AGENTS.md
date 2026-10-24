@@ -19,6 +19,9 @@
   description becomes the meta description, the share text and the page's `llms.txt` entry. The tagline is
   the share card's invitation, written to the reader ("Learn how to publish your Godot C# game to the web."),
   not a summary; keep it under about 90 characters, or the build fails because the card copy does not fit.
+- Topical pages may add a quoted, comma-separated `keywords` list of a few search phrases ("Godot xUnit, Godot
+  C# unit testing"); they lead the site-wide list in `social-metadata.mjs`. Search engines rank on the title,
+  description and copy, so put the phrase people search for there first; never stuff keywords.
 - `.vitepress/social-images.mjs` composites 1200x630 PNGs into the build's `social/` directory: dark
   dot-grid background with an accent glow, a 304px-wide logo at top right and section pill at top left
   (sections map from the page path in `social-metadata.mjs`), page title and tagline below,

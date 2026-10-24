@@ -2,6 +2,7 @@
 title: Qt Quick
 description: "Embed Godot in a Qt Quick (QML) app built with Qt Bridge for C#, with QML items over the game."
 tagline: "Learn how to embed Godot in a Qt Quick app, with QML right on top."
+keywords: "embed Godot in Qt, Qt Quick, QML"
 ---
 
 # Qt Quick

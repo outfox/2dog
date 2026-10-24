@@ -1,7 +1,8 @@
 ---
-title: Web
-description: "Publish your Godot C# game as a static browser site with the browser-wasm host."
+title: Godot C# Web Export
+description: "Web export for Godot C#: publish your game as a static browser site, with WebGL or WebGPU, from the browser-wasm host."
 tagline: "Learn how to publish your Godot C# game to the web."
+keywords: "Godot web export C#, Godot HTML5 export C#, WebGPU, browser-wasm"
 ---
 
 # Web

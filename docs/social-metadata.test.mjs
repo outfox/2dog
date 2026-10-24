@@ -135,3 +135,26 @@ test('labels cards with the part of the docs a page belongs to', async () => {
     'Known Issues', 'Testing', 'Help', 'Help'
   ]);
 });
+
+test('page keywords lead the site keywords without duplicates', async () => {
+  const head = await metadata({
+    pageData: { relativePath: 'hosts/web.md', frontmatter: { keywords: 'Godot web export C#, webgpu, ' } }
+  });
+  const list = value(head, 'keywords').content.split(', ');
+  assert.deepEqual(list.slice(0, 2), ['Godot web export C#', 'webgpu']);
+  for (const keyword of ['web export godot c#', 'csharp', '.NET', 'dotnet', 'embed Godot', 'xUnit', 'GDScript'])
+    assert.ok(list.includes(keyword), keyword);
+  assert.ok(!list.includes('WebGPU'));
+  assert.equal(new Set(list.map((keyword) => keyword.toLowerCase())).size, list.length);
+});
+
+test('only the homepage carries structured data', async () => {
+  const jsonLd = (head) => head.find(([tag, attrs]) => tag === 'script' && attrs.type === 'application/ld+json');
+  assert.equal(jsonLd(await metadata()), undefined);
+  const [, , json] = jsonLd(await metadata({ pageData: { relativePath: 'index.md' } }));
+  const [site, app] = JSON.parse(json)['@graph'];
+  assert.equal(site['@type'], 'WebSite');
+  assert.equal(site.url, 'https://2dog.dev/');
+  assert.equal(app['@type'], 'SoftwareApplication');
+  assert.match(app.keywords, /^web export godot c#, /);
+});

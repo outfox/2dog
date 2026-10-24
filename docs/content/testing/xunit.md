@@ -1,7 +1,8 @@
 ---
-title: Testing with xUnit
+title: Godot Unit Testing with xUnit
 description: "Write your first Godot test with xUnit and choose a shared engine fixture."
 tagline: "Learn how to write your first Godot test with xUnit."
+keywords: "Godot xUnit, Godot C# unit testing"
 ---
 
 # Testing with xUnit

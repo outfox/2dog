@@ -2,6 +2,7 @@
 title: GdUnit
 description: "Run GDScript GdUnit suites through a .NET test host with embedded Godot."
 tagline: "Learn how to run your GdUnit suites with dotnet test."
+keywords: "GdUnit4, GDScript unit testing, Godot unit testing"
 ---
 
 # GdUnit

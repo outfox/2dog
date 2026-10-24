@@ -1,7 +1,8 @@
 ---
-title: Testing with NUnit
+title: Godot Unit Testing with NUnit
 description: "Write Godot tests with NUnit's headless or rendering fixture."
 tagline: "Learn how to write your first Godot tests with NUnit."
+keywords: "Godot NUnit, Godot C# unit testing"
 ---
 
 # Testing with NUnit

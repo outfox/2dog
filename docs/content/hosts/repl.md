@@ -2,6 +2,7 @@
 title: C# REPL
 description: "Explore and change a running Godot game with C# and shell-like commands."
 tagline: "Learn how to explore and change a running game live, with C# and shell-like commands."
+keywords: "Godot REPL, C# REPL, live Godot scripting"
 ---
 
 # C# REPL

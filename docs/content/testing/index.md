@@ -1,7 +1,8 @@
 ---
-title: Testing
+title: Godot Unit Testing
 description: "Test your Godot game with GdUnit, xUnit or NUnit, from a first test to signals and simulated input."
 tagline: "Learn how to test your Godot game, from a first test to simulated input."
+keywords: "Godot unit testing, Godot C# unit testing"
 ---
 
 # Testing

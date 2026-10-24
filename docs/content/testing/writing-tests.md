@@ -2,6 +2,7 @@
 title: Writing Engine Tests
 description: "Wait for Godot frames, assert signals, and clean up test state in xUnit and NUnit."
 tagline: "Learn how to wait for frames, catch signals and keep tests tidy."
+keywords: "Godot C# unit testing, Godot signals"
 ---
 
 # Writing engine tests

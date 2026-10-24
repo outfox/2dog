@@ -2,6 +2,7 @@
 title: 2dog (generic .NET)
 description: "Run and publish your Godot game as a .NET console application."
 tagline: "Learn how to run and ship your Godot game as a plain .NET app."
+keywords: "Godot C# console app, Native AOT, single-file publish"
 ---
 
 # 2dog (generic .NET)

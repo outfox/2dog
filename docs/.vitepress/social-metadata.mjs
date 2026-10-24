@@ -5,6 +5,46 @@ import { createSocialImageGenerator, socialImageWidth, socialImageHeight } from 
 // Social crawlers read the generated HTML without running the site's JavaScript.
 export const siteUrl = 'https://2dog.dev';
 
+// Every page's keywords: a page's frontmatter `keywords` come first, then these. Google ignores the tag and
+// Bing reads stuffing as spam, so keep both lists short; titles, descriptions and copy carry the ranking.
+export const siteKeywords = [
+  'web export godot c#', 'Godot C# web export', 'Godot', 'C#', 'csharp', '.NET', 'dotnet', 'embed Godot',
+  'unit testing', 'xUnit', 'NUnit', 'GdUnit', 'GDScript', 'WebAssembly', 'WebGPU', 'WebXR', 'Avalonia',
+  'Blazor', '.NET MAUI', 'double precision', 'Native AOT', 'NuGet'
+];
+
+export function keywords(pageKeywords) {
+  const page = Array.isArray(pageKeywords) ? pageKeywords : String(pageKeywords ?? '').split(',');
+  const seen = new Set();
+  return [...page, ...siteKeywords]
+    .map((keyword) => String(keyword).trim())
+    .filter((keyword) => keyword && !seen.has(keyword.toLowerCase()) && seen.add(keyword.toLowerCase()))
+    .join(', ');
+}
+
+// Structured data for the homepage: the site name Google shows, and 2dog as free developer software.
+function homeStructuredData(url, description) {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'WebSite', name: '2dog', alternateName: '2dog.dev', url },
+      {
+        '@type': 'SoftwareApplication',
+        name: '2dog',
+        url,
+        description,
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Windows, macOS, Linux, Android, iOS, Web',
+        programmingLanguage: ['C#', 'GDScript'],
+        license: 'https://opensource.org/licenses/MIT',
+        keywords: keywords(),
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        sameAs: ['https://github.com/outfox/2dog', 'https://www.nuget.org/packages/2dog/']
+      }
+    ]
+  });
+}
+
 // Card eyebrows name the page's part of the docs; the homepage has none and other pages are guides.
 const sections = [
   [/^index\.md$/, ''],
@@ -51,7 +91,8 @@ export function createSocialMetadata(generateImage) {
     const image = new URL(`${siteData.base}${imagePath}`, siteUrl).href;
     const imageAlt = `${caption}. ${tagline} Read the dogs! 2dog logo with Lucky and Dogbot.`;
 
-    return [
+    const head = [
+      ['meta', { name: 'keywords', content: keywords(pageData.frontmatter?.keywords) }],
       ['link', { rel: 'canonical', href: url }],
       ['meta', { property: 'og:site_name', content: '2dog' }],
       ['meta', { property: 'og:type', content: 'website' }],
@@ -70,6 +111,9 @@ export function createSocialMetadata(generateImage) {
       ['meta', { name: 'twitter:image', content: image }],
       ['meta', { name: 'twitter:image:alt', content: imageAlt }]
     ];
+    if (pageData.relativePath === 'index.md')
+      head.push(['script', { type: 'application/ld+json' }, homeStructuredData(url, description)]);
+    return head;
   };
 }
 

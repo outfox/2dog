@@ -2,6 +2,7 @@
 title: Getting Started
 description: "Run Godot inside .NET applications with desktop, web, and test hosts."
 tagline: "Take Godot for a walk! Learn how to run your game in .NET in minutes."
+keywords: "embed Godot in .NET, Godot C# web export"
 ---
 
 # Let's take Godot for a walk!

@@ -2,6 +2,7 @@
 title: iOS
 description: "Run your Godot C# game as an iOS app with the experimental iOS host, built on a Mac with Xcode."
 tagline: "Learn how to put your Godot C# game on an iPhone or iPad."
+keywords: "Godot C# iOS, .NET for iOS"
 ---
 
 # iOS

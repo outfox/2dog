@@ -2,6 +2,7 @@
 title: Blazor
 description: "Embed Godot in a Blazor WebAssembly page with GodotView."
 tagline: "Learn how to put your Godot game on a Blazor web page."
+keywords: "embed Godot in Blazor, Blazor WebAssembly"
 ---
 
 # Blazor

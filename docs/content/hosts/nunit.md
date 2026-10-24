@@ -2,6 +2,7 @@
 title: NUnit
 description: "Add an NUnit test project alongside your Godot game."
 tagline: "Learn how to test your Godot game with NUnit."
+keywords: "Godot NUnit, Godot C# unit testing"
 ---
 
 # NUnit

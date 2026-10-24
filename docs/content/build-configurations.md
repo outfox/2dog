@@ -2,6 +2,7 @@
 title: Build Variants
 description: "Choosing debug, release and editor variants with single or double precision."
 tagline: "Learn how to pick debug, release or editor builds, in single or double precision."
+keywords: "Godot double precision C#, Native AOT, single-file publish, ReadyToRun"
 ---
 
 # Build Variants
