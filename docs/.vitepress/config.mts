@@ -46,6 +46,12 @@ export default defineConfig<ThemeConfig>({
   },
   lastUpdated: true,
 
+  // statichost.eu gives long-lived caching only to files named like `.<6-8 hex>.js`; Vite's default hashes are
+  // mixed-case base64 and would fall back to the short default.
+  vite: {
+    build: { rolldownOptions: { output: { hashCharacters: 'hex' } } }
+  },
+
   transformHead: socialMetadata,
 
   title: "2dog",
