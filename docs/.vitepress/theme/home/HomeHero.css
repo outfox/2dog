@@ -328,6 +328,15 @@ html:not(.dark) .lead-dog .lead-icon {
   color: var(--ed-text-2);
 }
 
+.hero-term-link {
+  color: var(--ed-accent);
+  text-decoration: none;
+}
+
+.hero-term-link:hover {
+  text-decoration: underline;
+}
+
 .hero-copy-btn {
   min-width: 72px;
   min-height: 36px;
