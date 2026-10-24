@@ -63,7 +63,7 @@ export default defineConfig<ThemeConfig>({
     ['link', { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" }],
     ['link', { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" }],
     ['link', { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
-    ['link', { rel: "icon", type: "image/svg+xml", href: "/favicon.ico" }],
+    ['link', { rel: "shortcut icon", href: "/favicon.ico" }],
     ['link', { rel: "manifest", href: "/site.webmanifest" }],
     ['link', { rel: "me", href: "https://mastodon.gamedev.place/@jupiter" }],
     ['link', { rel: "me", href: "https://tiggi.es/@thygrrr" }],
