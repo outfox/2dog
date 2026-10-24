@@ -127,7 +127,7 @@ the files would be compressed twice.
 
 ## Web hosting with upload limits
 
-The uncompressed bundle of an empty project is about 70 MiB, plus 10-15 MiB per compressed variant of the Godot engine.
+The uncompressed bundle, engine and all, of an empty project is about 70 MiB, plus 10-15 MiB per compressed variant of the Godot engine.
 
 If your web hosting service limits how much you can upload, ship only the gzip copies of
 the engine, the pack and the .NET binaries, about 18 MiB:
