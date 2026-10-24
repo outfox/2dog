@@ -148,7 +148,7 @@ a.trick-card:hover {
   height: auto;
 }
 
-/* Hovering a card sets its 2dog paths moving. */
+/* Hovering a card sets its 2dog paths and scene outlines moving. */
 a.trick-card:hover .flow,
 a.trick-card:focus-visible .flow {
   stroke-dasharray: 4 4;

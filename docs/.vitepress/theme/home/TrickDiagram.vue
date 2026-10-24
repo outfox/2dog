@@ -60,7 +60,8 @@ defineProps<{ name: Diagram }>()
         <rect class="f" :x="x" y="36" width="64" height="66" rx="6" />
         <text :x="x + 32" y="53" text-anchor="middle">Godot</text>
         <g class="c-scene">
-          <rect class="f" :x="x + 8" y="60" width="48" height="34" rx="3" />
+          <!-- A whole number of 8-unit dashes, so the flowing outline has no seam. -->
+          <rect class="f flow" :x="x + 8" y="60" width="48" height="34" rx="3" pathLength="160" />
           <circle v-if="i === 0" class="d flip" :cx="x + 32" cy="77" r="9" />
           <path v-else-if="i === 1" class="d spin tri" :d="`M${x + 32} 64.14 l12 20.78 h-24 Z`" />
           <rect v-else class="d spin" :x="x + 23" y="68" width="18" height="18" rx="2" />
@@ -72,7 +73,7 @@ defineProps<{ name: Diagram }>()
     <template v-else-if="name === 'double'">
       <g class="c-hot grow">
         <path class="z" d="M24 104 V8 H194.9 A196 196 0 0 1 220 104 Z" />
-        <path class="s" d="M194.9 8 A196 196 0 0 1 220 104" />
+        <path class="s flow" d="M194.9 8 A196 196 0 0 1 220 104" />
       </g>
       <g class="c-hot">
         <text x="194" y="24" text-anchor="end">double</text>
