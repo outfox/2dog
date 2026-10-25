@@ -29,7 +29,7 @@ public sealed class ContractTests(ProbeFixture fixture) : IClassFixture<ProbeFix
     {
         await Task.Yield();
         Assert.Equal(fixture.OwnerThreadId, Environment.CurrentManagedThreadId);
-        Assert.False(fixture.Engine.Iteration());
+        Assert.True(fixture.Engine.Update());
         ProbeFixture.Record("Passing");
     }
 
@@ -50,7 +50,7 @@ public sealed class ContractTests(ProbeFixture fixture) : IClassFixture<ProbeFix
     {
         await Task.Yield();
         Assert.Equal(fixture.OwnerThreadId, Environment.CurrentManagedThreadId);
-        Assert.False(fixture.Engine.Iteration());
+        Assert.True(fixture.Engine.Update());
         ProbeFixture.Record($"Parameterized:{value}");
         Assert.Equal(expected, value * 2);
     }

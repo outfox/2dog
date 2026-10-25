@@ -224,7 +224,7 @@ public class ModeIntegrationTests
             var game = typeof(showcase.CSharpTicker).Assembly;
             engine = new Engine("repl-modes", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
             engine.Start();
-            Assert.False(engine.Iteration());
+            Assert.True(engine.Update());
             Globals = new ReplGlobals(engine);
             Session = new ReplSession(Globals, [game], dispatcher);
         }
@@ -235,7 +235,7 @@ public class ModeIntegrationTests
             {
                 Token.ThrowIfCancellationRequested();
                 Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "Mode test stopped making progress.");
-                Assert.False(engine.Iteration());
+                Assert.True(engine.Update());
                 dispatcher.Pump();
                 Thread.Sleep(1);
             }

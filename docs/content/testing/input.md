@@ -13,11 +13,11 @@ inside your test.
 
 ## Click a control
 
-Run one engine iteration to update the layout. Click the control. Then check
+Run one engine frame to update the layout. Click the control. Then check
 the result:
 
 ```csharp
-godot.Engine.Iteration();
+godot.Engine.Update();
 using var pressed = GodotAssert.ExpectSignal(playButton, BaseButton.SignalName.Pressed);
 godot.Input.Click(playButton);
 pressed.AssertEmitted();
@@ -49,7 +49,7 @@ try
         ProjectSettings.GetSettingWithOverride("display/window/size/viewport_width").AsInt32(),
         ProjectSettings.GetSettingWithOverride("display/window/size/viewport_height").AsInt32());
     // Add your scene here.
-    godot.Engine.Iteration();
+    godot.Engine.Update();
     // Click controls and assert the results.
 }
 finally { root.Size = originalSize; }
@@ -130,7 +130,7 @@ try
 {
     godot.Input.Send(down);
     // Godot.Input.IsKeyPressed(Key.F13) is now true.
-    godot.Engine.Iteration(); // Let game code react.
+    godot.Engine.Update(); // Let game code react.
 }
 finally { godot.Input.Send(up); }
 ```

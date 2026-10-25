@@ -48,7 +48,7 @@ public static class GodotTestExtensions
                 token.ThrowIfCancellationRequested();
                 if (clock.Elapsed >= limit)
                     throw new AssertionException($"Timed out after {limit.TotalSeconds:g} s waiting for {description ?? "the condition"}.");
-                if (godot.Engine.Iteration())
+                if (!godot.Engine.Update())
                     throw new AssertionException($"Godot requested quit while waiting for {description ?? "the condition"}.");
                 // Let managed asynchronous work run, preserving the engine's synchronization context.
                 await Task.Delay(1, token);

@@ -198,7 +198,7 @@ public class Engine : IDisposable, IAsyncDisposable
             if (_state == LifecycleState.Disposed || _disposeRequested) return;
             EnsureOwnerThread();
             _disposeRequested = true;
-            // Game callbacks can dispose their host during Start() or Iteration().
+            // Game callbacks can dispose their host during Start() or Update().
             // Never free the native engine while its stack is still executing.
             if (_state == LifecycleState.Starting || _iterationActive || _teardownStarted) return;
             destroy = _state is LifecycleState.Running or LifecycleState.Stopping;
@@ -516,13 +516,17 @@ public class Engine : IDisposable, IAsyncDisposable
         }
     }
 
-    /// <summary>Runs one engine frame. A true result means Godot requested exit; dispose this Engine afterward.</summary>
-    public bool Iteration()
+    /// <summary>Runs one engine frame. A false result means Godot quit or requested exit; dispose this Engine afterward.</summary>
+    public bool Update()
     {
         if (_runActive)
             throw new InvalidOperationException($"{nameof(Engine)}: Run() already owns the frame loop.");
-        return IterateCore();
+        return !IterateCore();
     }
+
+    /// <summary>Runs one engine frame. A true result means Godot requested exit; dispose this Engine afterward.</summary>
+    [Obsolete("Use Update() instead; it returns false when Godot quits, the inverse of Iteration().")]
+    public bool Iteration() => !Update();
 
     private bool IterateCore()
     {
@@ -531,7 +535,7 @@ public class Engine : IDisposable, IAsyncDisposable
         {
             EnsureActiveStateLocked();
             if (_iterationActive)
-                throw new InvalidOperationException($"{nameof(Engine)}: Iteration() cannot be called from an engine frame.");
+                throw new InvalidOperationException($"{nameof(Engine)}: Update() cannot be called from an engine frame.");
             instance = _godotInstance!;
         }
         EnsureOwnedInstance();

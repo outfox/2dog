@@ -87,7 +87,7 @@ internal static class CanvasViewportSmoke
 
     private static void Pump(Engine engine)
     {
-        if (engine.Iteration()) throw new Exception("Unexpected engine quit.");
+        if (!engine.Update()) throw new Exception("Unexpected engine quit.");
         Thread.Sleep(20);
     }
 }

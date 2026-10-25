@@ -88,7 +88,7 @@ var physics = PhysicsServer3D.Singleton;
 Unlike traditional Godot, the host explicitly runs Godot frame by frame in its own main loop. The host has a basic loop that works like stock Godot. You can change this loop separately in each host project.
 
 ```csharp
-while (!engine.Iteration())
+while (engine.Update())
 {
     // Godot processes physics, rendering, input, and your frame logic here.
     if (someCondition)
@@ -96,7 +96,7 @@ while (!engine.Iteration())
 }
 ```
 
-`Engine` owns the running instance. `Iteration()` returns `true` when Godot
+`Engine` owns the running instance. `Update()` returns `false` when Godot
 wants to quit, for example when the window closes. `RequestQuit()` asks Godot to stop.
 After teardown, `Completion` completes and `Exited` fires on every platform.
 Desktop disposal is synchronous; browser disposal is asynchronous.

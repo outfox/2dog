@@ -20,8 +20,8 @@ internal static class Program
             GD.Print("2dog is running (no run/main_scene set in project.godot).");
         Console.WriteLine("Close the window to quit.");
 
-        // Iteration() returns true when Godot wants to quit.
-        while (!engine.Iteration())
+        // Update() returns false when Godot wants to quit.
+        while (engine.Update())
         {
             // Your per-frame logic here
         }

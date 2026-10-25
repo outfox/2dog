@@ -34,7 +34,7 @@ public sealed class ResidentProgram : IEngineProgram
             while (true)
             {
                 if (ctx.QuitRequested) engine.RequestQuit();
-                if (engine.Iteration()) break;
+                if (!engine.Update()) break;
                 // Bounded batch: an always-nonempty queue must not starve
                 // frame pumping or the QuitRequested check.
                 var batch = 8;

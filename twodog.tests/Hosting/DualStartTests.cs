@@ -17,7 +17,7 @@ public sealed class CountingProgram : IEngineProgram
         var frames = 0;
         for (var i = 0; i < 60; i++)
         {
-            if (engine.Iteration()) break;
+            if (!engine.Update()) break;
             frames++;
         }
         return frames;
@@ -42,7 +42,7 @@ public sealed class PacedProgram : IEngineProgram
             var frames = 0;
             for (var i = 0; i < Frames; i++)
             {
-                if (engine.Iteration()) break;
+                if (!engine.Update()) break;
                 frames++;
                 if (!barrier.SignalAndWait(TimeSpan.FromSeconds(30))) return -1;
             }

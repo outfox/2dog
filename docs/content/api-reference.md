@@ -54,7 +54,7 @@ your test assembly, so xUnit can discover them.
 using var engine = new twodog.Engine("MyGame", args: args);
 engine.Start();
 
-while (!engine.Iteration())
+while (engine.Update())
 {
     // One frame has completed.
 }

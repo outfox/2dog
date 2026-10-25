@@ -15,7 +15,7 @@ public class AsyncLifecycleFixture : FixtureBase, IAsyncLifetime
     {
         await Task.Yield();
         Assert.Equal(_owner, Environment.CurrentManagedThreadId);
-        Engine.Iteration();
+        Engine.Update();
     }
 
     public async ValueTask DisposeAsync()
@@ -35,7 +35,7 @@ public class AsyncLifecycleTests(AsyncLifecycleFixture godot) : IAsyncLifetime
     {
         await Task.Yield();
         Assert.Equal(_owner, Environment.CurrentManagedThreadId);
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Theory]
@@ -52,6 +52,6 @@ public class AsyncLifecycleTests(AsyncLifecycleFixture godot) : IAsyncLifetime
     {
         await Task.Yield();
         Assert.Equal(_owner, Environment.CurrentManagedThreadId);
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 }

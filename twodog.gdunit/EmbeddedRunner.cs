@@ -81,7 +81,7 @@ internal static class EmbeddedRunner
             var cancellationTime = TimeSpan.Zero;
             while (true)
             {
-                if (engine.Iteration()) throw new InvalidOperationException("Godot quit before the host received completion.");
+                if (!engine.Update()) throw new InvalidOperationException("Godot quit before the host received completion.");
                 bridge ??= engine.Tree.Root.GetNodeOrNull<Node>("TestHost");
                 if (bridge is not null)
                 {

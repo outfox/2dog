@@ -397,7 +397,7 @@ public class EditorContractIntegrationTests
             var game = typeof(showcase.CSharpTicker).Assembly;
             engine = new Engine("repl-editor-contract", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
             engine.Start();
-            Assert.False(engine.Iteration());
+            Assert.True(engine.Update());
             globals = new ReplGlobals(engine);
             var dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("Transient" + Guid.NewGuid()), AssemblyBuilderAccess.Run);
             Session = new ReplSession(globals, [game, dynamicAssembly], dispatcher);
@@ -410,7 +410,7 @@ public class EditorContractIntegrationTests
             {
                 Token.ThrowIfCancellationRequested();
                 Assert.True(clock.Elapsed < TimeSpan.FromSeconds(30));
-                Assert.False(engine.Iteration());
+                Assert.True(engine.Update());
                 dispatcher.Pump();
                 Thread.Sleep(1);
             }

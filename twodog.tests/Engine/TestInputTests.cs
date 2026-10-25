@@ -18,7 +18,7 @@ public class TestInputTests(HeadlessFixture godot)
             viewport.AddChild(button);
             var overlay = new Control { Position = button.Position, Size = button.Size };
             viewport.AddChild(overlay);
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             using var pressed = GodotAssert.ExpectSignal(button, BaseButton.SignalName.Pressed);
             godot.Input.Click(button);
             pressed.AssertEmitted(0);

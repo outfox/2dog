@@ -27,7 +27,7 @@ public sealed class EngineSession(Engine engine, GodotInstance godot)
     {
         for (var i = 0; i < count; i++)
         {
-            if (Engine.Iteration()) break;
+            if (!Engine.Update()) break;
         }
     }
 }

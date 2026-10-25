@@ -149,24 +149,24 @@ public class GodotEditorTests(HeadlessFixture godot)
         Assert.True(readyCalled);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
-    public void ToolNode_ProcessCount_IncrementsOnIteration()
+    public void ToolNode_ProcessCount_IncrementsOnUpdate()
     {
         using var scene = GD.Load<PackedScene>("res://tool_test.tscn");
         var node = scene.Instantiate();
         godot.Tree.Root.AddChild(node);
 
         for (var i = 0; i < 5; i++)
-            godot.Engine.Iteration();
+            godot.Engine.Update();
 
         var count = (int)node.Get("ProcessCount");
         Assert.True(count >= 5);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 }
 #endif

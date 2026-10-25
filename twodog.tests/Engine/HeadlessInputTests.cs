@@ -48,7 +48,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
             panel.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
             var button = new Button { Position = new Vector2(200, 100), Size = new Vector2(100, 50) };
             panel.AddChild(button);
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             output.WriteLine($"mode={mode}; root={root.Size}; visible={root.GetVisibleRect()}; panel={panel.Size}");
             Assert.Equal((Vector2)ProjectViewportSize(), root.GetVisibleRect().Size);
             Assert.Equal(root.GetVisibleRect().Size, panel.Size);
@@ -78,14 +78,14 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
             panel.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
             var button = new Button { Position = new Vector2(200, 100), Size = new Vector2(100, 50) };
             panel.AddChild(button);
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             Assert.False(root.GetVisibleRect().HasPoint(button.GetGlobalRect().GetCenter()));
             using var pressed = GodotAssert.ExpectSignal(button, BaseButton.SignalName.Pressed);
             godot.Input.Click(button);
             pressed.AssertEmitted(0);
 
             root.Size = ProjectViewportSize();
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             Assert.True(root.GetVisibleRect().HasPoint(button.GetGlobalRect().GetCenter()));
             godot.Input.Click(button);
             pressed.AssertEmitted();
@@ -102,7 +102,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
         try
         {
             godot.Tree.Root.AddChild(button);
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             button.GrabFocus();
             using var pressed = GodotAssert.ExpectSignal(button, BaseButton.SignalName.Pressed);
             using var down = new InputEventKey { Keycode = Key.Space, Pressed = true };
@@ -183,7 +183,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
         try
         {
             root.AddChild(button);
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             using var pressed = GodotAssert.ExpectSignal(button, BaseButton.SignalName.Pressed);
             using var entered = GodotAssert.ExpectSignal(button, Control.SignalName.MouseEntered);
             // Send takes window/device coordinates; Click takes logical viewport coordinates.
@@ -258,7 +258,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
         {
             root.AddChild(probe);
             root.AddChild(button);
-            godot.Engine.Iteration();
+            godot.Engine.Update();
             using var entered = GodotAssert.ExpectSignal(button, Control.SignalName.MouseEntered);
             using var exited = GodotAssert.ExpectSignal(button, Control.SignalName.MouseExited);
             var position = button.GetGlobalRect().GetCenter();

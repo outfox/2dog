@@ -25,8 +25,8 @@ import { iconUrl } from './icons'
           <pre class="why-code" tabindex="0" aria-label="C# host loop"><code><span class="k">using var</span> engine = <span class="k">new</span> <span class="t">Engine</span>(<span class="s">"MyGame"</span>, args: args);
 engine.<span class="f">Start</span>();
 
-<span class="c">// Iteration() returns true when Godot quits.</span>
-<span class="k">while</span> (!engine.<span class="f">Iteration</span>())
+<span class="c">// Update() returns false when Godot quits.</span>
+<span class="k">while</span> (engine.<span class="f">Update</span>())
 {
     <span class="c">// Your per-frame logic here</span>
 }</code></pre>

@@ -57,7 +57,7 @@ internal static class Program
                     probe.SelectStage(stage);
                     for (int frame = 0; frame < 12; frame++)
                     {
-                        if (engine.Iteration()) throw new Exception("Unexpected engine quit.");
+                        if (!engine.Update()) throw new Exception("Unexpected engine quit.");
                         Thread.Sleep(20);
                     }
                     using var pixels = engine.Tree.Root.GetTexture().GetImage();
@@ -98,7 +98,7 @@ internal static class Program
             root.AddChild(new DirectionalLight3D { RotationDegrees = new Vector3(-30, -30, 0) });
             for (int frame = 0; frame < 8; frame++)
             {
-                if (engine.Iteration()) throw new Exception("Unexpected engine quit.");
+                if (!engine.Update()) throw new Exception("Unexpected engine quit.");
                 Thread.Sleep(20);
             }
             using (var image = engine.Tree.Root.GetTexture().GetImage())

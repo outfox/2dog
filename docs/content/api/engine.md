@@ -121,16 +121,26 @@ Starts Godot and the project's `run/main_scene`, then returns a borrowed
 the handle. If you start another instance in the same assembly load context before
 completion, `Start()` throws `InvalidOperationException`.
 
+### `Update`
+
+```csharp
+public bool Update()
+```
+
+Processes one main-loop frame. Returns `true` while Godot keeps running and
+`false` once it quits or requests exit. Dispose the engine after the main loop
+stops. `Update()` throws `InvalidOperationException` if you call it recursively
+or while `Run()` owns the main loop.
+
 ### `Iteration`
 
 ```csharp
+[Obsolete]
 public bool Iteration()
 ```
 
-Processes one main-loop frame. Returns `true` when Godot requests exit.
-Dispose the engine after the main loop stops. `Iteration()` throws
-`InvalidOperationException` if you call it recursively or while `Run()` owns
-the main loop.
+Deprecated; use `Update()`. `Iteration()` returns the inverse: `true` when Godot
+requests exit. Replace `while (!engine.Iteration())` with `while (engine.Update())`.
 
 ### `RequestQuit`
 
@@ -248,7 +258,7 @@ internal static class Program
         using var engine = new Engine("MyGame", args: args);
         engine.Start();
 
-        while (!engine.Iteration())
+        while (engine.Update())
         {
             // One frame has completed.
         }

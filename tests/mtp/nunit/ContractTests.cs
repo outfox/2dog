@@ -32,7 +32,7 @@ public sealed class ContractTests : GodotTestFixture
     {
         await Task.Yield();
         Assert.That(Environment.CurrentManagedThreadId, Is.EqualTo(_ownerThreadId));
-        Assert.That(EngineFixture.Engine.Iteration(), Is.False);
+        Assert.That(EngineFixture.Engine.Update(), Is.True);
         Record("Passing");
     }
 
@@ -52,7 +52,7 @@ public sealed class ContractTests : GodotTestFixture
     {
         await Task.Yield();
         Assert.That(Environment.CurrentManagedThreadId, Is.EqualTo(_ownerThreadId));
-        Assert.That(EngineFixture.Engine.Iteration(), Is.False);
+        Assert.That(EngineFixture.Engine.Update(), Is.True);
         Record($"Parameterized:{value}");
         Assert.That(value * 2, Is.EqualTo(expected));
     }

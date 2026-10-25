@@ -30,7 +30,7 @@ public class CpuPresenterReadbackTests(Fixture godot)
         godot.Tree.Root.AddChild(viewport);
         try
         {
-            for (var frame = 0; frame < 4; frame++) godot.Engine.Iteration();
+            for (var frame = 0; frame < 4; frame++) godot.Engine.Update();
             var texture = viewport.GetTexture().GetRid();
             using var image = RenderingServer.Texture2DGet(texture);
             image.Convert(Image.Format.Rgba8);
@@ -68,7 +68,7 @@ public class CpuPresenterReadbackTests(Fixture godot)
             {
                 viewport.Size = size;
                 color.Size = new Vector2(size.X, size.Y);
-                for (var frame = 0; frame < 4; frame++) godot.Engine.Iteration();
+                for (var frame = 0; frame < 4; frame++) godot.Engine.Update();
 
                 var texture = viewport.GetTexture().GetRid();
                 using var image = RenderingServer.Texture2DGet(texture);

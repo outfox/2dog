@@ -14,7 +14,7 @@ public class RemoveNodeIntegrationTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new twodog.Engine("repl-remove", twodog.Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         var globals = new ReplGlobals(engine);
         using var scratch = globals.world;
@@ -26,7 +26,7 @@ public class RemoveNodeIntegrationTests
             while (!task.IsCompleted)
             {
                 Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "Removal stopped making progress");
-                Assert.False(engine.Iteration());
+                Assert.True(engine.Update());
                 dispatcher.Pump();
                 Thread.Sleep(1);
             }
@@ -67,11 +67,11 @@ public class RemoveNodeIntegrationTests
         var removed = Success("rm $Child");
         Assert.False(removed.Committed);
         Assert.Contains("/root/ReplRemove/Child", removed.Value!);
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Null(globals.here.GetNodeOrNull<Node>("Child"));
         Success("rm $[\"My Node\"]");
         Success(":rm $Sibling");
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Null(globals.here.GetNodeOrNull<Node>("My Node"));
         Assert.Null(globals.here.GetNodeOrNull<Node>("Sibling"));
 
@@ -79,13 +79,13 @@ public class RemoveNodeIntegrationTests
             "Node PickRemoval() { removalCalls++; if (System.Environment.CurrentManagedThreadId != removalThread) throw new Exception(\"Wrong thread\"); return savedRemoval; }");
         Success("rm PickRemoval()");
         Assert.Equal("1", Success("removalCalls").Value);
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Null(globals.here.GetNodeOrNull<Node>("Saved"));
         Assert.Equal("42", Success("retained").Value);
         Success("var remainingChild = new Node(); here.AddChild(remainingChild);");
         Success("rm here");
         Assert.Same(globals.root, globals.here);
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Null(globals.root.GetNodeOrNull<Node>("ReplRemove"));
         Assert.Equal("false", Success("GodotObject.IsInstanceValid(remainingChild)").Value);
         Assert.Equal("42", Success("retained").Value);

@@ -79,8 +79,8 @@ public abstract class GodotRestartSmokeTests(HeadlessFixture godot)
     [Fact]
     public void MainLoop_Iterates()
     {
-        // Iteration() returns true when the engine wants to quit.
-        Assert.False(godot.Engine.Iteration());
+        // Update() returns false when the engine wants to quit.
+        Assert.True(godot.Engine.Update());
     }
 }
 

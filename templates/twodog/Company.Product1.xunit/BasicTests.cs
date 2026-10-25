@@ -38,7 +38,7 @@ public class BasicTests(HeadlessFixture godot)
         await Task.Delay(1, TestContext.Current.CancellationToken);
 
         Assert.Equal(ownerThread, System.Environment.CurrentManagedThreadId);
-        godot.Engine.Iteration(); // Lifecycle calls also enforce the owner thread.
+        godot.Engine.Update(); // Lifecycle calls also enforce the owner thread.
     }
 
     [Fact]

@@ -28,7 +28,7 @@ public class GodotNodeTests(HeadlessFixture godot)
         Assert.Equal(1, parent.GetChildCount());
 
         parent.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class GodotNodeTests(HeadlessFixture godot)
         Assert.Equal(parent, child.GetParent());
 
         parent.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class GodotNodeTests(HeadlessFixture godot)
 
         child.Free();
         parent.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class GodotNodeTests(HeadlessFixture godot)
         Assert.Equal(childB, parent.GetChild(1));
 
         parent.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class GodotNodeTests(HeadlessFixture godot)
         Assert.Contains("PathTest", (string)path);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -102,7 +102,7 @@ public class GodotNodeTests(HeadlessFixture godot)
         Assert.True(node.IsInsideTree());
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -118,17 +118,17 @@ public class GodotNodeTests(HeadlessFixture godot)
         Assert.Contains(node, nodesInGroup);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
-    public void QueueFree_RemovesNodeAfterIteration()
+    public void QueueFree_RemovesNodeAfterUpdate()
     {
         var node = new Node { Name = "ToBeFreed" };
         godot.Tree.Root.AddChild(node);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
 
         var found = godot.Tree.Root.FindChild("ToBeFreed");
         Assert.Null(found);
@@ -147,7 +147,7 @@ public class GodotNodeTests(HeadlessFixture godot)
 
         original.QueueFree();
         copy.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]

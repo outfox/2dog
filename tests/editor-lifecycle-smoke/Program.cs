@@ -14,7 +14,7 @@ internal static class Program
         Node? watcher = null;
         for (int frame = 0; frame < 120 && watcher is null; frame++)
         {
-            if (engine.Iteration()) throw new Exception("Editor quit before its hot-reload watcher was ready.");
+            if (!engine.Update()) throw new Exception("Editor quit before its hot-reload watcher was ready.");
             watcher = engine.Tree.Root.FindChild("HotReloadAssemblyWatcher", recursive: true, owned: false);
             Thread.Sleep(10);
         }
@@ -51,7 +51,7 @@ internal static class Program
         for (int frame = 0; filesystem.IsScanning(); frame++)
         {
             if (frame == 1000) throw new Exception("Editor filesystem scan did not finish.");
-            if (engine.Iteration()) throw new Exception("Editor quit during its filesystem scan.");
+            if (!engine.Update()) throw new Exception("Editor quit during its filesystem scan.");
             Thread.Sleep(10);
         }
         engine.Dispose();

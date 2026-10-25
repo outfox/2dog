@@ -97,7 +97,7 @@ public class TransferNodeIntegrationTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new twodog.Engine("repl-transfer", twodog.Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         var globals = new ReplGlobals(engine);
         using var scratch = globals.world;
@@ -109,7 +109,7 @@ public class TransferNodeIntegrationTests
             while (!task.IsCompleted)
             {
                 Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "Transfer stopped making progress");
-                Assert.False(engine.Iteration());
+                Assert.True(engine.Update());
                 dispatcher.Pump();
                 Thread.Sleep(1);
             }
@@ -219,7 +219,7 @@ public class TransferNodeIntegrationTests
         Assert.Equal("42", Success("kept").Value);
         Success("cd /");
         Success("rm transfer");
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Empty(engine.Errors.Drain());
     }
 }

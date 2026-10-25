@@ -51,7 +51,7 @@ public static class ReplHost
         {
             engine.Start();
             // Let the main scene enter the tree before the first submission.
-            if (engine.Iteration()) return 0;
+            if (!engine.Update()) return 0;
             using var dispatcher = new EngineDispatcher();
             var globals = new ReplGlobals(engine);
             using var scratch = globals.worlds;
@@ -68,7 +68,7 @@ public static class ReplHost
             try
             {
                 // A listening host survives stdin EOF so it can also be launched by a process.
-                while ((!terminal.IsCompleted || server is not null && terminal.IsCompletedSuccessfully) && !engine.Iteration())
+                while ((!terminal.IsCompleted || server is not null && terminal.IsCompletedSuccessfully) && engine.Update())
                 {
                     dispatcher.Pump();
                     Thread.Sleep(1);

@@ -403,7 +403,7 @@ internal sealed class LiveHost : IDisposable
     {
         Engine = new Engine(name, Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         Engine.Start();
-        Assert.False(Engine.Iteration());
+        Assert.True(Engine.Update());
         Lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         Lifetime.CancelAfter(TimeSpan.FromSeconds(90));
         Server = new ReplPipeServer(Pipe, Engine, [typeof(showcase.CSharpTicker).Assembly, typeof(ReplLifetimeProbe).Assembly], Dispatcher, Lifetime.Token);
@@ -419,7 +419,7 @@ internal sealed class LiveHost : IDisposable
         {
             Lifetime.Token.ThrowIfCancellationRequested();
             Assert.True(watch.Elapsed < TimeSpan.FromSeconds(80), "REPL work stopped making progress.");
-            Assert.False(Engine.Iteration());
+            Assert.True(Engine.Update());
             Dispatcher.Pump();
             Thread.Sleep(1);
         }
@@ -430,7 +430,7 @@ internal sealed class LiveHost : IDisposable
     {
         for (var i = 0; i < count; i++)
         {
-            Assert.False(Engine.Iteration());
+            Assert.True(Engine.Update());
             Dispatcher.Pump();
         }
     }

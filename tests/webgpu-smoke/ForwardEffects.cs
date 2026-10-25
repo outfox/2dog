@@ -30,7 +30,7 @@ internal static class ForwardEffects
             Console.WriteLine("FORWARD_EFFECT_BEGIN " + effect);
             for (int frame = 0; frame < (effect == "sdfgi" ? 120 : 24); frame++)
             {
-                engine.Iteration();
+                engine.Update();
                 Thread.Sleep(20);
             }
             using var pixels = engine.Tree.Root.GetTexture().GetImage();

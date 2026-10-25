@@ -17,7 +17,7 @@ public class ParameterizedFixtureTests(int maxFps) : GodotTestFixture
     {
         var owner = Environment.CurrentManagedThreadId;
         await Task.Yield();
-        EngineFixture.Engine.Iteration();
+        EngineFixture.Engine.Update();
         Assert.That(Environment.CurrentManagedThreadId, Is.EqualTo(owner));
         Assert.That(GodotEngine.MaxFps, Is.EqualTo(maxFps));
     }
