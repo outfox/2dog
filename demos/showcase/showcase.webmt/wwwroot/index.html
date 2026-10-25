@@ -107,9 +107,60 @@
             }
         }
 
-        #status-progress {
+        #status-bar {
+            position: relative;
             width: min(60%, 320px);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            background-color: #4a4a4a;
             display: none;
+        }
+
+        #status-progress {
+            appearance: none;
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background-color: transparent;
+        }
+
+        #status-progress::-webkit-progress-bar {
+            background-color: transparent;
+        }
+
+        #status-progress::-webkit-progress-value {
+            background-color: #e0e0e0;
+        }
+
+        #status-progress::-moz-progress-bar {
+            background-color: #e0e0e0;
+        }
+
+        #status-progress:indeterminate::-moz-progress-bar {
+            background-color: transparent;
+        }
+
+        /* Engine startup blocks the page for seconds, freezing the native indeterminate bar;
+           a transform animation runs on the compositor and keeps moving. */
+        #status-bar:has(> :indeterminate)::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            width: 30%;
+            background-color: #e0e0e0;
+            animation: status-busy 1.2s ease-in-out infinite;
+        }
+
+        @keyframes status-busy {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(340%);
+            }
         }
 
         #status-notice {
@@ -143,7 +194,7 @@
     <div id="status">
         <!-- Set src to splash.svg, splash.png, or splash.webp to choose the image format. -->
         <img id="status-splash" src="splash.svg" alt="Loading">
-        <progress id="status-progress" aria-label="Loading progress"></progress>
+        <div id="status-bar"><progress id="status-progress" aria-label="Loading progress"></progress></div>
         <div id="status-notice" role="alert"></div>
     </div>
 
@@ -165,6 +216,7 @@
             performance.mark('2dog:boot');
 
             const statusOverlay = document.getElementById('status');
+            const statusBar = document.getElementById('status-bar');
             const statusProgress = document.getElementById('status-progress');
             const statusNotice = document.getElementById('status-notice');
 
@@ -180,7 +232,7 @@
                     initializing = false;
                     return;
                 }
-                statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+                statusBar.style.display = mode === 'progress' ? 'block' : 'none';
                 statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
                 statusMode = mode;
             }
