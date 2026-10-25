@@ -66,6 +66,25 @@
   color: var(--ed-text-1);
 }
 
+/* Band permalinks, like VitePress header anchors; the margin keeps the fixed nav off the heading. */
+.home-section[id] {
+  scroll-margin-top: var(--vp-nav-height);
+}
+
+.home-anchor {
+  margin-left: 0.3em;
+  font-weight: 500;
+  color: var(--ed-accent);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.home-h2:hover .home-anchor,
+.home-anchor:focus-visible {
+  opacity: 1;
+}
+
 .home-intro {
   max-width: 60ch;
   margin: 16px 0 0;

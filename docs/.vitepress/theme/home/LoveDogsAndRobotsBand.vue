@@ -1,32 +1,23 @@
-<!-- Three claims, each shown rather than told: the host loop and the xUnit test are trimmed from the
-     template's own Program.cs and BasicTests.cs; the tree is the layout `2dog add` produces. -->
+<!-- Two claims, each shown rather than told: the host loop and the xUnit test are trimmed from the
+     template's own Program.cs and BasicTests.cs. -->
 <script setup lang="ts">
 import { withBase } from 'vitepress'
-import { iconUrl, edIconUrl } from './icons'
-
-const tree = [
-  { name: 'MyGame/', icon: 'Folder', folder: true, depth: 0 },
-  { name: 'project.godot', icon: 'GodotMonochrome', depth: 1 },
-  { name: 'main.tscn', icon: 'PackedScene', depth: 1 },
-  { name: 'scripts/', icon: 'Folder', folder: true, depth: 1 },
-  { name: 'MyGame.web/', icon: 'Folder', folder: true, depth: 1, host: true },
-  { name: 'MyGame.xunit/', icon: 'Folder', folder: true, depth: 1, host: true },
-]
+import { iconUrl } from './icons'
 </script>
 
 <template>
-  <section class="home-section" aria-labelledby="why-title">
+  <section class="home-section" id="love-dogs-and-robots" aria-labelledby="love-dogs-and-robots-title">
     <div class="home-wrap">
       <p class="home-kicker">
         <span class="gd-icon" :style="{ '--gd-icon': iconUrl('paw_print') }" aria-hidden="true"></span>2dog is Godot backwards
       </p>
-      <h2 id="why-title" class="home-h2">Made with love, dogs + robots.</h2>
+      <h2 id="love-dogs-and-robots-title" class="home-h2">Love, Dogs + Robots<a class="home-anchor" href="#love-dogs-and-robots" aria-label="Permalink to this section">#</a></h2>
       <p class="home-intro">
-        In addition to the pre-made hosts, you get unlimited customization options: <br/>Yes, you can have a <strong>Main Loop</strong> now!
+        In addition to the pre-made hosts, you get unlimited customization options.
       </p>
       <div class="why-grid">
         <article class="why-card">
-          <h3>Let .NET hold the leash</h3>
+          <h3>You can have a custom Main Loop</h3>
           <p>
             Start Godot from your own <code>Main()</code>, run each frame when you choose, and reach every
             node from C#.
@@ -43,7 +34,7 @@ engine.<span class="f">Start</span>();
         </article>
 
         <article class="why-card">
-          <h3>Test it like any .NET code</h3>
+          <h3>Test it in your IDE or Test Platform</h3>
           <p>
             Load scenes, await signals and assert on real engine state with xUnit, NUnit or GdUnit, in your
             IDE and in CI.
@@ -62,29 +53,6 @@ engine.<span class="f">Start</span>();
     }
 }</code></pre>
           <a class="why-link" :href="withBase('/testing/')">Testing guide <span aria-hidden="true">→</span></a>
-        </article>
-
-        <article class="why-card wide">
-          <div class="why-wide-text">
-            <h3>2dog is still Godot, just backwards</h3>
-            <p>
-              Your scenes, scripts and editor stay exactly as they are. Hosts live beside them in folders
-              that Godot ignores, so the editor and your teammates recognize the same project as before.
-            </p>
-            <a class="why-link" :href="withBase('/project-layout')">Project layout <span aria-hidden="true">→</span></a>
-          </div>
-          <ul class="why-tree" aria-label="Project layout after adding two hosts">
-            <li v-for="e in tree" :key="e.name" :class="{ host: e.host }" :style="{ '--depth': e.depth }">
-              <span
-                class="why-tree-glyph"
-                :class="{ folder: e.folder }"
-                :style="{ '--gd-icon': edIconUrl(e.icon) }"
-                aria-hidden="true"
-              ></span>
-              <span>{{ e.name }}</span>
-              <span v-if="e.host" class="why-tree-note">.gdignore</span>
-            </li>
-          </ul>
         </article>
       </div>
     </div>
@@ -128,24 +96,6 @@ engine.<span class="f">Start</span>();
   background: var(--ed-dark-1);
 }
 
-.why-card.wide {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 20px 40px;
-  align-items: center;
-}
-
-.why-wide-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.why-card.wide .why-tree {
-  margin: 0;
-}
-
 .why-card h3 {
   margin: 0;
   font-size: 21px;
@@ -159,8 +109,7 @@ engine.<span class="f">Start</span>();
   color: var(--ed-text-2);
 }
 
-.why-code,
-.why-tree {
+.why-code {
   margin: 0 0 20px;
   padding: 16px;
   border: 1px solid var(--ed-seam);
@@ -182,41 +131,6 @@ engine.<span class="f">Start</span>();
 .why-code .s { color: var(--syn-s); }
 .why-code .c { color: var(--syn-c); font-style: italic; }
 
-.why-tree {
-  list-style: none;
-}
-
-.why-tree li {
-  --depth: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-left: calc(var(--depth) * 22px);
-}
-
-.why-tree li.host {
-  color: var(--ed-text-2);
-}
-
-.why-tree-glyph {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  background-color: var(--ed-text-2);
-  -webkit-mask: var(--gd-icon) no-repeat center / contain;
-  mask: var(--gd-icon) no-repeat center / contain;
-}
-
-.why-tree-glyph.folder {
-  background-color: var(--ed-folder);
-}
-
-.why-tree-note {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--ed-text-2);
-}
-
 .why-link {
   margin-top: auto;
   font-weight: 600;
@@ -229,8 +143,7 @@ engine.<span class="f">Start</span>();
 }
 
 @media (max-width: 1023px) {
-  .why-grid,
-  .why-card.wide {
+  .why-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }

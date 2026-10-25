@@ -17,13 +17,13 @@ const links = [
 </script>
 
 <template>
-  <section class="home-section alt" aria-labelledby="free-title">
+  <section class="home-section alt" id="open-source" aria-labelledby="free-title">
     <div class="home-wrap free-grid">
       <div>
         <p class="home-kicker">
           <span class="gd-icon free-heart" :style="{ '--gd-icon': iconUrl('heart') }" aria-hidden="true"></span>Open source
         </p>
-        <h2 id="free-title" class="home-h2">Free &amp; libre, as Godot itself.</h2>
+        <h2 id="free-title" class="home-h2">Free &amp; libre, as Godot itself.<a class="home-anchor" href="#open-source" aria-label="Permalink to this section">#</a></h2>
         <p class="home-intro">
           2dog is MIT licensed. Use it in commercial games, fork it, read every line, throw us a <s>ball</s> patch. It's just a good dog.
         </p>
