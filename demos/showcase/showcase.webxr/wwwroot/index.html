@@ -117,34 +117,16 @@
             display: none;
         }
 
+        /* Kept for screen readers, which announce an indeterminate progress as busy. */
         #status-progress {
-            appearance: none;
-            display: block;
-            width: 100%;
-            height: 100%;
-            border: 0;
-            background-color: transparent;
+            position: absolute;
+            inset: 0;
+            opacity: 0;
         }
 
-        #status-progress::-webkit-progress-bar {
-            background-color: transparent;
-        }
-
-        #status-progress::-webkit-progress-value {
-            background-color: #e0e0e0;
-        }
-
-        #status-progress::-moz-progress-bar {
-            background-color: #e0e0e0;
-        }
-
-        #status-progress:indeterminate::-moz-progress-bar {
-            background-color: transparent;
-        }
-
-        /* Engine startup blocks the page for seconds, freezing the native indeterminate bar;
+        /* Engine startup blocks the page for seconds, freezing a native progress bar;
            a transform animation runs on the compositor and keeps moving. */
-        #status-bar:has(> :indeterminate)::after {
+        #status-bar::after {
             content: '';
             position: absolute;
             inset: 0;
@@ -230,7 +212,6 @@
 
             const statusOverlay = document.getElementById('status');
             const statusBar = document.getElementById('status-bar');
-            const statusProgress = document.getElementById('status-progress');
             const statusNotice = document.getElementById('status-notice');
 
             let initializing = true;
@@ -264,16 +245,6 @@
                     downloadsDone = true;
                     performance.mark('2dog:downloads-done');
                 }
-                // Determinate while the size-tracked downloads run, then back
-                // to indeterminate for the tail (.NET runtime files and engine
-                // startup have no known total).
-                if (current > 0 && total > 0 && current < total) {
-                    statusProgress.value = current;
-                    statusProgress.max = total;
-                } else {
-                    statusProgress.removeAttribute('value');
-                    statusProgress.removeAttribute('max');
-                }
             }
 
             // The gz pack path re-points this at a merged reporter.
@@ -289,8 +260,8 @@
                     }
                     const engine = makeEngine('.gz');
                     // The engine only downloads the wasm here; this page fetches
-                    // and inflates the pack, merging both into one progress bar
-                    // (compressed pack bytes against its Content-Length).
+                    // and inflates the pack, merging both into one download
+                    // timing (compressed pack bytes against its Content-Length).
                     let pckLoaded = 0;
                     let wasmLoaded = 0;
                     let wasmTotal = fileSizes['godot.wasm'] || 0;
@@ -353,9 +324,9 @@
                 return;
             }
 
-            // Exact sizes written by the publish make the bar determinate;
-            // without the manifest it stays indeterminate (Content-Length is
-            // the compressed size on hosts that gzip, so headers lie).
+            // Exact sizes written by the publish split the first-frame timing
+            // into downloading and starting (Content-Length is the compressed
+            // size on hosts that gzip, so headers lie).
             fetch('twodog.sizes.json')
                 .then((response) => (response.ok ? response.json() : {}))
                 .catch(() => ({}))
