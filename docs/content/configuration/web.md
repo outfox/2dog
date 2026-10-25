@@ -55,6 +55,12 @@ in `wwwroot/index.html` before you create `Engine`:
 
 Adapters that can't run Forward+ start Mobile instead, with one console warning.
 
+Without baking, the browser translates every Forward+ shader variant on its main thread at the first start, which can
+take a minute and trigger the browser's unresponsive-page prompt. Enable `shader_baker/enabled` in the `Web` export
+preset to ship the translated shaders in the pack. Publishing then runs the export with a Vulkan (Metal on macOS)
+editor instead of headless, so it needs a GPU and a display. Baked shaders make the pack larger, by about 18 MB
+compressed for a small Forward+ project.
+
 The shell requests a device before it initializes Godot. If one of these
 conditions occurs, the shell logs a warning and starts with `opengl3` and
 `gl_compatibility`, with the same runtime and game pack:
