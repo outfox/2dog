@@ -29,9 +29,9 @@ internal static class Program
             }
             if (RenderingServer.GetCurrentRenderingDriverName() != driver)
                 throw new Exception($"{driver} selection fell back to another rendering driver.");
-            if (method == "default" && driver == "webgpu"
-                && RenderingServer.GetCurrentRenderingMethod() != "mobile")
-                throw new Exception("An implicit WebGPU rendering method must select Mobile.");
+            if (driver == "webgpu" && method is "default" or "forward_plus"
+                && RenderingServer.GetCurrentRenderingMethod() != "forward_plus")
+                throw new Exception($"WebGPU {method} downgraded to {RenderingServer.GetCurrentRenderingMethod()}.");
             if (args.Contains("--contract-rejections"))
             {
                 ContractRejections.Run(engine);

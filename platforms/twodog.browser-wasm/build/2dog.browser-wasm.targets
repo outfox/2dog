@@ -206,7 +206,7 @@
             <Code Type="Fragment" Language="cs"><![CDATA[
                 // Pack-only exports bypass Godot's HTML exporter, which normally supplies renderingDriver.
                 var section = "";
-                var mobile = false;
+                var rd = false;
                 if (File.Exists(ProjectFile))
                     foreach (var line in File.ReadLines(ProjectFile))
                     {
@@ -215,9 +215,9 @@
                         if (header.Success) section = header.Groups[1].Value;
                         if (section != "rendering") continue;
                         var setting = Regex.Match(text, "^renderer/rendering_method\\.web\\s*=\\s*\"([^\"]*)\"");
-                        if (setting.Success) mobile = setting.Groups[1].Value == "mobile";
+                        if (setting.Success) rd = setting.Groups[1].Value == "mobile" || setting.Groups[1].Value == "forward_plus";
                     }
-                var driver = mobile && WebGpuEnabled ? "webgpu" : "opengl3";
+                var driver = rd && WebGpuEnabled ? "webgpu" : "opengl3";
                 var shell = File.ReadAllText(ShellFile);
                 var slot = new Regex(@"renderingDriver: '[^']*',");
                 if (slot.Matches(shell).Count != 1)

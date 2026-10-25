@@ -1419,7 +1419,7 @@ jobs:
           from pathlib import Path
           project = Path('demos/showcase/project.godot')
           content = project.read_text()
-          setting = 'renderer/rendering_method.web="mobile"'
+          setting = 'renderer/rendering_method.web="forward_plus"'
           assert content.count(setting) == 1, 'Showcase web renderer setting changed'
           project.write_text(content.replace(setting, 'renderer/rendering_method.web="gl_compatibility"'))
           PY

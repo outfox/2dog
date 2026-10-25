@@ -42,16 +42,18 @@ match.
 ## Experimental WebGPU
 
 Single-precision, single-threaded browser packages include WebGPU and WebGL.
-During bundling, `renderer/rendering_method.web="mobile"` in `project.godot`
-selects WebGPU when the native payload includes it. Other settings select WebGL.
-The showcase uses Mobile. A new template project uses Compatibility by default.
-To request WebGPU explicitly, configure `GODOT_CONFIG` in `wwwroot/index.html`
-before you create `Engine`:
+During bundling, `renderer/rendering_method.web="forward_plus"` or `"mobile"` in
+`project.godot` selects WebGPU when the native payload includes it. Other
+settings select WebGL. The showcase uses Forward+. A new template project uses
+Compatibility by default. To request WebGPU explicitly, configure `GODOT_CONFIG`
+in `wwwroot/index.html` before you create `Engine`:
 
 ```javascript
 'renderingDriver': 'webgpu',
-'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
+'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'forward_plus'],
 ```
+
+Adapters that can't run Forward+ start Mobile instead, with one console warning.
 
 The shell requests a device before it initializes Godot. If one of these
 conditions occurs, the shell logs a warning and starts with `opengl3` and

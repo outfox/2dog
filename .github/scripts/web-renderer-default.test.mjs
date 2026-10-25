@@ -30,6 +30,8 @@ test('pack-only exports carry renderer defaults into device initialization witho
 </Project>`);
         for (const [name, settings, enabled, driver, gpuAvailable = true] of [
             ['Mobile', '[rendering]\nrenderer/rendering_method.web="mobile"', true, 'webgpu'],
+            ['Forward+', '[rendering]\nrenderer/rendering_method.web="forward_plus"', true, 'webgpu'],
+            ['Forward+ on an unsupported runtime', '[rendering]\nrenderer/rendering_method.web="forward_plus"', false, 'opengl3'],
             ['Compatibility', '[rendering]\nrenderer/rendering_method.web="gl_compatibility"', true, 'opengl3'],
             ['default project', '', true, 'opengl3'],
             ['unsupported runtime', '[rendering]\nrenderer/rendering_method.web="mobile"', false, 'opengl3'],

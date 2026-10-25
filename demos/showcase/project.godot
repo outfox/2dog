@@ -29,7 +29,7 @@ project/assembly_name="showcase"
 
 [rendering]
 
-renderer/rendering_method.web="mobile"
+renderer/rendering_method.web="forward_plus"
 renderer/rendering_method.mobile="mobile"
 
 [xr]
