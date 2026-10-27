@@ -2345,7 +2345,10 @@ jobs:
             timeout 15s "$ANDROID_HOME/platform-tools/adb" kill-server
           fi
 
-  # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding.
+  # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding. The
+  # Release cell's Mono AOT compile and link take 18-25 minutes on macos-26 runners, so it runs on version tags only
+  # (where deploy gates on it) until iteration speed matters less again, after GodotFest 2026; the Debug cells run
+  # on the interpreter in about 10 minutes.
   ios-smoke:
     name: iOS Smoke (${{ matrix.app }}, ${{ matrix.configuration }}) [${{ matrix.precision }}]
     needs: [check-natives, pack, maui-pack]
@@ -2354,16 +2357,16 @@ jobs:
       (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success' &&
       needs.check-natives.outputs.tested-bump != 'true')
     runs-on: macos-26
-    # The double showcase's Mono AOT compile and link alone take 18-25 minutes on macos-26 runners; the smoke step
-    # keeps its own 6-minute limit.
+    # Room for the Release cell's AOT build on tag runs; the smoke step keeps its own 6-minute limit.
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - {app: smoke, configuration: Debug, precision: single, bundle: dev.twodog.smoke, marker: 2DOG_IOS_CSHARP_SMOKE_PASSED}
-          - {app: showcase, configuration: Release, precision: double, bundle: dev.twodog.showcase, marker: 2DOG_IOS_SHOWCASE_SMOKE_PASSED}
-          - {app: maui, configuration: Debug, precision: single, bundle: com.companyname.showcase.maui, marker: 2DOG_MAUI_SHOWCASE_SMOKE_PASSED}
+        # The strategy context has no env, so the cells are JSON literals; the Release cell is appended on tags.
+        include: >-
+          ${{ fromJSON(format('[{0}{1}]',
+          '{"app":"smoke","configuration":"Debug","precision":"single","bundle":"dev.twodog.smoke","marker":"2DOG_IOS_CSHARP_SMOKE_PASSED"},{"app":"maui","configuration":"Debug","precision":"single","bundle":"com.companyname.showcase.maui","marker":"2DOG_MAUI_SHOWCASE_SMOKE_PASSED"}',
+          startsWith(github.ref, 'refs/tags/v') && ',{"app":"showcase","configuration":"Release","precision":"double","bundle":"dev.twodog.showcase","marker":"2DOG_IOS_SHOWCASE_SMOKE_PASSED"}' || '')) }}
     env:
       TwoDogPrecision: ${{ matrix.precision }}
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
