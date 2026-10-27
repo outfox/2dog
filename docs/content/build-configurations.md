@@ -119,11 +119,16 @@ WebXR's immersive rendering is outside this experimental scope.
 
 ### Adapter and shader limits
 
-Forward+ needs at least 48 sampled textures and 13 storage buffers per shader
-stage, and read/write storage from the
+Forward+ on WebGPU binds a compact scene: 4 lightmaps and 2 VoxelGIs per frame
+instead of 8, with the lightmap data in a uniform buffer. That keeps the scene
+shader within Safari's 44 sampled textures and Chrome on Metal's 10 storage
+buffers per shader stage. Forward+ needs at least 40 sampled textures and 10
+storage buffers per shader stage, and read/write storage from the
 [`texture-formats-tier2`](https://gpuweb.github.io/gpuweb/#texture-formats-tier2)
 feature. On an adapter without them, Godot prints one warning and runs Mobile;
-`RenderingServer.GetCurrentRenderingMethod()` then returns `mobile`.
+`RenderingServer.GetCurrentRenderingMethod()` then returns `mobile`. A material
+can still exceed an adapter's limit with many textures of its own; that material
+fails to compile and logs the limit.
 
 The backend has no image atomics, multiview or ray tracing. Read/write storage
 textures require native support for their format; unsupported formats fail

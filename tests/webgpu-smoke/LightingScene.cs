@@ -43,8 +43,10 @@ internal sealed class LightingScene : IDisposable
         var method = RenderingServer.GetCurrentRenderingMethod();
         if (method is not ("mobile" or "forward_plus"))
             throw new Exception("A rendering-device renderer was not selected.");
-        if (method == "forward_plus" && RenderingServer.GetRenderingDevice().LimitGet(RenderingDevice.Limit.MaxTexturesPerShaderStage) < 48)
-            throw new Exception("Forward+ requires at least 48 sampled textures per shader stage.");
+        // WebGPU binds a compact Forward+ scene that fits 40 sampled textures per stage; other drivers need 48.
+        long texturesNeeded = RenderingServer.GetCurrentRenderingDriverName() == "webgpu" ? 40 : 48;
+        if (method == "forward_plus" && RenderingServer.GetRenderingDevice().LimitGet(RenderingDevice.Limit.MaxTexturesPerShaderStage) < (ulong)texturesNeeded)
+            throw new Exception($"Forward+ requires at least {texturesNeeded} sampled textures per shader stage.");
         _lights = new OmniLight3D[method == "mobile" ? 8 : 32];
         _viewport = tree.Root;
         tree.Root.AddChild(_root);
