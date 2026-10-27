@@ -154,7 +154,7 @@ export default defineConfig<ThemeConfig>({
         ]
       },
       {
-        text: 'Develop',
+        text: 'Reference',
         items: [
           {
             text: gd('window_terminal') + '2dog (dotnet tool)',
@@ -198,7 +198,7 @@ export default defineConfig<ThemeConfig>({
             ]
           },
           {
-            text: gd('book_open') + 'API Reference',
+            text: gd('book_open') + 'API (C#)',
             link: '/api-reference',
             collapsed: true,
             items: [
@@ -255,7 +255,7 @@ export default defineConfig<ThemeConfig>({
         ]
       },
       {
-        text: 'Configure',
+        text: 'Configuration',
         items: [
           { text: gd('layers') + 'Build Variants', link: '/build-configurations' },
           { text: gd('wrench') + 'Environment Variables', link: '/configuration/environment-variables' },
