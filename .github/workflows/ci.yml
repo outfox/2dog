@@ -2354,7 +2354,9 @@ jobs:
       (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success' &&
       needs.check-natives.outputs.tested-bump != 'true')
     runs-on: macos-26
-    timeout-minutes: 30
+    # The double showcase's Mono AOT compile and link alone take 18-25 minutes on macos-15 runners; the smoke step
+    # keeps its own 6-minute limit.
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
