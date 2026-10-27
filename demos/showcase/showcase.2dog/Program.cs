@@ -73,9 +73,9 @@ internal static class Program
 
         Console.WriteLine("Godot is running, close the window to quit.");
 
-        // Iteration() returns true when the engine wants to quit (window
+        // Update() returns false when the engine wants to quit (window
         // closed, SceneTree.Quit(), --quit-after N, ...).
-        while (!engine.Iteration())
+        while (engine.Update())
         {
             if (quitRequested())
                 engine.Tree.Quit();

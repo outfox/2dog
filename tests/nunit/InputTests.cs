@@ -22,7 +22,7 @@ public class InputTests : GodotTestFixture
     {
         var button = new Button { Position = new Vector2(30, 30), Size = new Vector2(100, 50) };
         _viewport.AddChild(button);
-        Godot.Engine.Iteration();
+        Godot.Engine.Update();
         return button;
     }
 
@@ -44,12 +44,12 @@ public class InputTests : GodotTestFixture
     [Test]
     public void RootViewportClickWorksInsideItsVisibleBounds()
     {
-        Godot.Engine.Iteration();
+        Godot.Engine.Update();
         var button = new Button { Position = new Vector2(5, 5), Size = new Vector2(20, 20) };
         try
         {
             Godot.Tree.Root.AddChild(button);
-            Godot.Engine.Iteration();
+            Godot.Engine.Update();
             using var pressed = GodotAssert.ExpectSignal(button, BaseButton.SignalName.Pressed);
             Godot.Input.Click(button);
             pressed.AssertEmitted();
@@ -115,7 +115,7 @@ public class InputTests : GodotTestFixture
         _viewport.AddChild(clip);
         var button = new Button { Position = new Vector2(50, 50), Size = new Vector2(100, 50) };
         clip.AddChild(button);
-        Godot.Engine.Iteration();
+        Godot.Engine.Update();
         using var pressed = GodotAssert.ExpectSignal(button, BaseButton.SignalName.Pressed);
         Godot.Input.Click(button);
         pressed.AssertEmitted(0);

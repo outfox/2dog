@@ -30,10 +30,10 @@ public bool Iteration()
 ```
 
 Processes one main-loop frame. Returns `true` when Godot requests exit. In new host
-code, call `Engine.Iteration()` instead.
+code, call `Engine.Update()` instead; it returns `false` when Godot quits.
 
 ```csharp
-while (!engine.Iteration())
+while (!instance.Iteration())
 {
     // One frame has completed.
 }
@@ -68,7 +68,7 @@ Notify Godot that the host application has paused or resumed. These lifecycle
 hooks are useful when another application framework owns the outer window.
 
 ::: warning Choose one loop owner
-Call `Engine.Iteration()` yourself or call `Engine.Run()`. Do not use both for
+Call `Engine.Update()` yourself or call `Engine.Run()`. Do not use both for
 the same instance. Do not dispose this borrowed handle. For lifecycle control, use
 `Engine.RequestQuit()`, `Completion`, `Exited`, and engine disposal.
 :::

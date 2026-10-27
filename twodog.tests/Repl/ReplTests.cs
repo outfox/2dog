@@ -14,7 +14,7 @@ public class ReplIntegrationTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-integration", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         var globals = new ReplGlobals(engine);
         using var scratch = globals.world;
@@ -28,7 +28,7 @@ public class ReplIntegrationTests
             {
                 Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "REPL submission stopped making progress");
                 perFrame?.Invoke();
-                Assert.False(engine.Iteration());
+                Assert.True(engine.Update());
                 dispatcher.Pump();
                 Thread.Sleep(1);
             }
@@ -367,7 +367,7 @@ public class ReplIntegrationTests
         Success("madeNode.QueueFree(); spaced.QueueFree();");
         Success("tree.ChangeSceneToFile(\"res://tool_test.tscn\"); await tree.ToSignal(tree, SceneTree.SignalName.SceneChanged);");
         Assert.Equal("true", Success("scene is showcase.ToolNode && $ToolNode.ReadyCalled").Value);
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Empty(engine.Errors.Drain());
     }
 

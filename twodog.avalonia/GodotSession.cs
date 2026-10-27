@@ -96,7 +96,7 @@ public sealed class GodotSession : IDisposable
     public event EventHandler? Started;
 
     /// <summary>
-    /// Raised once per engine frame, right after <c>Iteration()</c> - the place for
+    /// Raised once per engine frame, right after <c>Update()</c> - the place for
     /// host-driven scene updates (the UI thread is the pump thread, so the scene tree
     /// is safe to touch). The Avalonia counterpart of <c>Engine.Run(perFrame)</c>.
     /// </summary>
@@ -128,7 +128,7 @@ public sealed class GodotSession : IDisposable
         // Low-processor mode skips unchanged redraws and delays an off-screen engine even
         // though Avalonia is already pacing it. Keep every compositor tick productive.
         OS.LowProcessorUsageMode = false;
-        // With vsync off, the engine's own limiter (a smoothed sleep inside Iteration())
+        // With vsync off, the engine's own limiter (a smoothed sleep inside Update())
         // paces the pump instead: backends whose composition commits aren't tied to the
         // display (Avalonia's Wayland backend) would otherwise run the engine unbounded.
         // The sleep does block the UI thread, but a host-side nonblocking gate was tried
@@ -388,7 +388,7 @@ public sealed class GodotSession : IDisposable
         {
             ApplyPendingResize();
             _forwarder?.PollCapturedMotion();
-            if (Engine.Iteration())
+            if (!Engine.Update())
             {
                 StopPump();
                 QuitRequested?.Invoke(this, EventArgs.Empty);

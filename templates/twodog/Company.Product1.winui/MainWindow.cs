@@ -156,7 +156,7 @@ internal sealed class MainWindow : Window
     }
 
     // WinUI has no idle event; a self-reposting low-priority dispatcher callback plays that role:
-    // one engine frame per pass, so normal-priority input and layout always interleave. Iteration()
+    // one engine frame per pass, so normal-priority input and layout always interleave. Update()
     // also runs DisplayServer::process_events(), which dispatches this thread's queued messages
     // without XAML's preprocessing, like a classic WinForms idle loop; only closing needs care (OnClosing).
     private void PumpFrame()
@@ -165,9 +165,9 @@ internal sealed class MainWindow : Window
         {
             if (_instance is null || _engine is not { } engine)
                 return;
-            // Iteration() returns true when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...);
+            // Update() returns false when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...);
             // a window close deferred by OnClosing ends here too.
-            if (engine.Iteration() || _closeRequested)
+            if (!engine.Update() || _closeRequested)
             {
                 ShutdownEngine();
                 Close();
@@ -215,7 +215,7 @@ internal sealed class MainWindow : Window
             SetStatus("● Running", Rgb(0x4A, 0xDE, 0x80), running: true);
     }
 
-    // Iteration() dispatches this thread's messages, so a close usually arrives inside an engine frame. A window
+    // Update() dispatches this thread's messages, so a close usually arrives inside an engine frame. A window
     // destroyed there never wakes XAML's own message loop, which would keep running without windows. Closing
     // resumes from the pump instead, between frames.
     private void OnClosing(AppWindow sender, AppWindowClosingEventArgs args)

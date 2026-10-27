@@ -24,7 +24,7 @@ public class EngineRestartTests
             {
                 Assert.Null(fixture.Tree.CurrentScene);
                 Assert.Empty(fixture.Tree.Root.GetChildren());
-                Assert.False(fixture.Engine.Iteration());
+                Assert.True(fixture.Engine.Update());
                 Assert.Empty(fixture.Tree.Root.GetChildren());
 
                 using var scene = Godot.GD.Load<Godot.PackedScene>("res://main.tscn");
@@ -55,15 +55,15 @@ public class EngineRestartTests
             first.Start();
             // Leave a deadline at least two seconds into this lifetime's clock.
             Godot.Engine.MaxFps = 1;
-            Assert.False(first.Iteration());
-            Assert.False(first.Iteration());
+            Assert.True(first.Update());
+            Assert.True(first.Update());
         }
 
         using var second = new Engine("fresh-frame-clock", projectDir, "--headless");
         second.Start();
         Assert.Equal(0, Godot.Engine.MaxFps);
         var frame = System.Diagnostics.Stopwatch.StartNew();
-        Assert.False(second.Iteration());
+        Assert.True(second.Update());
         // The headless pacing delay is only milliseconds. Unix used to retain the
         // previous deadline after resetting its clock, sleeping for seconds here.
         Assert.True(frame.Elapsed < TimeSpan.FromSeconds(1),
@@ -87,14 +87,14 @@ public class EngineRestartTests
         engine.Start();
         try
         {
-            Assert.False(engine.Iteration());
+            Assert.True(engine.Update());
 
             // Only one instance may run at a time. Disposing the failed
             // Engine must not affect the running instance.
             using var concurrent = new Engine("restart-concurrent", projectDir, "--headless");
             Assert.Throws<InvalidOperationException>(() => concurrent.Start());
 
-            Assert.False(engine.Iteration());
+            Assert.True(engine.Update());
         }
         finally
         {
@@ -105,7 +105,7 @@ public class EngineRestartTests
         // in the same process.
         using var engine2 = new Engine("restart-direct-2", projectDir, "--headless");
         engine2.Start();
-        Assert.False(engine2.Iteration());
+        Assert.True(engine2.Update());
     }
 
     [Fact]
@@ -121,17 +121,17 @@ public class EngineRestartTests
 
         engine.RequestQuit();
         engine.RequestQuit();
-        Assert.True(engine.Iteration());
+        Assert.False(engine.Update());
         Assert.False(engine.Completion.IsCompleted);
         engine.Dispose();
         await engine.Completion;
         Assert.Equal(1, exited);
-        Assert.Throws<InvalidOperationException>(() => engine.Iteration());
+        Assert.Throws<InvalidOperationException>(() => engine.Update());
         Assert.Throws<InvalidOperationException>(() => engine.Start());
 
         using var restarted = new Engine("managed-lifecycle-2", projectDir, "--headless");
         restarted.Start();
-        Assert.False(restarted.Iteration());
+        Assert.True(restarted.Update());
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class EngineRestartTests
         AssemblyPreloader.PreloadGameAssemblies(projectDir);
 
         using var unstarted = new Engine("unstarted", projectDir, "--headless");
-        Assert.Throws<InvalidOperationException>(() => unstarted.Iteration());
+        Assert.Throws<InvalidOperationException>(() => unstarted.Update());
         Assert.Throws<InvalidOperationException>(() => unstarted.RequestQuit());
 
         var stale = new Engine("stale", projectDir, "--headless");
@@ -150,9 +150,9 @@ public class EngineRestartTests
 
         using var current = new Engine("current", projectDir, "--headless");
         current.Start();
-        Assert.Throws<InvalidOperationException>(() => stale.Iteration());
+        Assert.Throws<InvalidOperationException>(() => stale.Update());
         Assert.Throws<InvalidOperationException>(() => stale.Start());
-        Assert.False(current.Iteration());
+        Assert.True(current.Update());
     }
 
     [Fact]
@@ -227,12 +227,12 @@ public class EngineRestartTests
         using (var first = new Engine("quit-after", projectDir, "--headless", "--quit-after", "1"))
         {
             first.Start();
-            Assert.True(first.Iteration());
+            Assert.False(first.Update());
         }
 
         using var second = new Engine("after-quit-after", projectDir, "--headless");
         second.Start();
-        Assert.False(second.Iteration());
+        Assert.True(second.Update());
     }
 
     [Fact]
@@ -252,7 +252,7 @@ public class EngineRestartTests
         second.Start();
         Assert.True(Godot.Engine.PrintToStdOut);
         Assert.True(Godot.Engine.PrintErrorMessages);
-        Assert.False(second.Iteration());
+        Assert.True(second.Update());
     }
 
     [Fact]
@@ -282,7 +282,7 @@ public class EngineRestartTests
         // Whatever the first shutdown left pending now runs while the second engine owns the memory.
         stall.Release();
         GC.WaitForPendingFinalizers();
-        Assert.False(second.Iteration());
+        Assert.True(second.Update());
 
         Assert.Empty(first.Errors.Drain());
         Assert.Empty(second.Errors.Drain());
@@ -345,7 +345,7 @@ public class EngineRestartTests
         {
             using var engine = new Engine($"lifetimes-{lifetime}", projectDir, "--headless") { CaptureErrors = true };
             engine.Start();
-            Assert.False(engine.Iteration());
+            Assert.True(engine.Update());
             Assert.Empty(engine.Errors.Drain());
         }
     }
@@ -394,7 +394,7 @@ public class EngineRestartTests
         var instance = engine.Start();
 
         Assert.False(instance.Start());
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
     }
 
     [Fact]
@@ -414,7 +414,7 @@ public class EngineRestartTests
 
         using var recovered = new Engine("after-failed-setup", projectDir, "--headless");
         recovered.Start();
-        Assert.False(recovered.Iteration());
+        Assert.True(recovered.Update());
     }
 
     [Fact]
@@ -430,7 +430,7 @@ public class EngineRestartTests
 
         using var recovered = new Engine("after-failed-second-phase", projectDir, "--headless");
         recovered.Start();
-        Assert.False(recovered.Iteration());
+        Assert.True(recovered.Update());
     }
 
     [Fact]
@@ -446,7 +446,7 @@ public class EngineRestartTests
 
         using var recovered = new Engine("after-failed-main-loop", projectDir, "--headless");
         recovered.Start();
-        Assert.False(recovered.Iteration());
+        Assert.True(recovered.Update());
     }
 
     /// <summary>

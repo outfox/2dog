@@ -21,7 +21,7 @@ public class WindowedFixtureTests(Fixture godot)
         Assert.Empty(godot.Tree.Root.GetChildren());
 
         for (var frame = 0; frame < 10; frame++)
-            godot.Engine.Iteration();
+            godot.Engine.Update();
 
         Assert.True(Godot.Engine.GetFramesDrawn() > 0);
     }

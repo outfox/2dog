@@ -138,15 +138,15 @@ internal sealed class MainForm : Form
             _gamePanel.ClientSize.Width, _gamePanel.ClientSize.Height, SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
-    // Classic WinForms game loop: iterate whenever the message queue is empty. Iteration() also runs
+    // Classic WinForms game loop: iterate whenever the message queue is empty. Update() also runs
     // DisplayServer::process_events(), which dispatches this thread's queued messages without
     // Application's preprocessing; harmless, since the loop yields as soon as anything is queued.
     private void OnApplicationIdle(object? sender, EventArgs e)
     {
         while (_instance is not null && _engine is { } engine && !PeekMessage(out _, 0, 0, 0, 0))
         {
-            // Iteration() returns true when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...).
-            if (engine.Iteration())
+            // Update() returns false when the engine wants to quit (SceneTree.Quit(), --quit-after N, ...).
+            if (!engine.Update())
             {
                 ShutdownEngine();
                 Close();

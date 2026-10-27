@@ -67,7 +67,7 @@ public class EngineRunTests
         {
             frames++;
             Assert.Throws<InvalidOperationException>(() => engine.Run());
-            Assert.Throws<InvalidOperationException>(() => engine.Iteration());
+            Assert.Throws<InvalidOperationException>(() => engine.Update());
             engine.Dispose();
         });
         Assert.Equal(1, frames);
@@ -93,7 +93,7 @@ public class EngineRunTests
             treeSurvived = Godot.GodotObject.IsInstanceValid(engine.Tree.Root);
         };
 
-        Assert.True(engine.Iteration());
+        Assert.False(engine.Update());
         Assert.True(callbackRan);
         Assert.False(completedInsideFrame);
         Assert.True(treeSurvived);
@@ -111,13 +111,13 @@ public class EngineRunTests
         Exception? disposeFailure = null;
         var thread = new Thread(() =>
         {
-            iterateFailure = Record.Exception(() => engine.Iteration());
+            iterateFailure = Record.Exception(() => engine.Update());
             disposeFailure = Record.Exception(() => engine.Dispose());
         });
         thread.Start();
         Assert.True(thread.Join(TimeSpan.FromSeconds(10)));
         Assert.IsType<InvalidOperationException>(iterateFailure);
         Assert.IsType<InvalidOperationException>(disposeFailure);
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
     }
 }

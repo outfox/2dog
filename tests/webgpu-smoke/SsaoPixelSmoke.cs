@@ -45,7 +45,7 @@ internal static class SsaoPixelSmoke
     {
         for (int frame = 0; frame < 16; frame++)
         {
-            if (engine.Iteration()) throw new Exception("Unexpected engine quit while rendering SSAO.");
+            if (!engine.Update()) throw new Exception("Unexpected engine quit while rendering SSAO.");
             Thread.Sleep(20);
         }
     }

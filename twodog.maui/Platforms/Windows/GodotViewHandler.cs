@@ -124,7 +124,7 @@ internal sealed partial class GodotViewHandler : ViewHandler<GodotView, Grid>
         if (_framePending || _engine is null || _stopRequested) return;
         _framePending = true;
         var generation = _generation;
-        // Godot pumps Win32 messages inside Iteration. Enter it between XAML
+        // Godot pumps Win32 messages inside Update. Enter it between XAML
         // callbacks, never recursively from XAML layout or its rendering callback.
         if (!PlatformView.DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, () =>
         {
@@ -141,7 +141,7 @@ internal sealed partial class GodotViewHandler : ViewHandler<GodotView, Grid>
         try
         {
             while (_commands.TryDequeue(out var command)) command(_engine.Tree);
-            if (_engine.Iteration())
+            if (!_engine.Update())
             {
                 _stopRequested = true;
                 VirtualView.NotifyQuit();
@@ -233,7 +233,7 @@ internal sealed partial class GodotViewHandler : ViewHandler<GodotView, Grid>
     private void Stop()
     {
         _stopRequested = true;
-        if (_pumping) return; // Iteration can dispatch an unload/close; dispose between frames.
+        if (_pumping) return; // Update can dispatch an unload/close; dispose between frames.
         CompositionTarget.Rendering -= ScheduleFrame;
         _generation++;
         _framePending = false;

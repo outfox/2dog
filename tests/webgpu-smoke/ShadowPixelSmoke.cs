@@ -38,7 +38,7 @@ internal static class ShadowPixelSmoke
     {
         for (int frame = 0; frame < 16; frame++)
         {
-            if (engine.Iteration()) throw new Exception("Unexpected engine quit while rendering shadows.");
+            if (!engine.Update()) throw new Exception("Unexpected engine quit while rendering shadows.");
             Thread.Sleep(20);
         }
     }

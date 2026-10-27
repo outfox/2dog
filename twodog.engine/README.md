@@ -23,7 +23,7 @@ using twodog;
 using var engine = new Engine("MyGame", args: args);
 engine.Start();
 
-while (!engine.Iteration())
+while (engine.Update())
 {
     // Your code runs here every frame.
 }

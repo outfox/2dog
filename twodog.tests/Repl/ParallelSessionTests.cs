@@ -25,7 +25,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-pipes", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(45));
@@ -124,7 +124,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-checkpoints", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         var globals = new ReplGlobals(engine);
         using var worlds = globals.worlds;
@@ -174,7 +174,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-resources", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         var globals = new ReplGlobals(engine);
         using var worlds = globals.worlds;
@@ -217,7 +217,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-pipe-client", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         var name = ReplDiscoveryInit.PipeName();
@@ -226,7 +226,7 @@ public class ParallelSessionTests
         using var output = new StringWriter();
         Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, input, output, lifetime.Token)), lifetime.Token));
         Assert.Contains("42", output.ToString());
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var nextInput = new StringReader("40+2\n:exit\nthis must not execute\n");
         using var nextOutput = new StringWriter();
         Assert.Equal(0, Pump(engine, dispatcher, Task.Run(() => ReplPipeClient.RunAsync(name, nextInput, nextOutput, lifetime.Token)), lifetime.Token));
@@ -247,7 +247,7 @@ public class ParallelSessionTests
             return await client;
         }, lifetime.Token);
         Assert.Equal(0, Pump(engine, dispatcher, cancelledClient, lifetime.Token));
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Empty(engine.Errors.Drain());
     }
 
@@ -257,7 +257,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-interactive-client", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
@@ -274,7 +274,7 @@ public class ParallelSessionTests
         Assert.Contains("godot> 40+2\n\u2192 42", terminal.Device.Text);
         Assert.Equal("", redirected.ToString());
         Assert.True(terminal.Restored);
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         Assert.Empty(engine.Errors.Drain());
     }
 
@@ -286,7 +286,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-connected-completion", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(45));
@@ -331,7 +331,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-empty-connection", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         engine.Tree.CurrentScene!.Free();
         Assert.Null(engine.Tree.CurrentScene);
         using var dispatcher = new EngineDispatcher();
@@ -362,7 +362,7 @@ public class ParallelSessionTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-client-controls", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         lifetime.CancelAfter(TimeSpan.FromSeconds(30));
@@ -418,7 +418,7 @@ public class ParallelSessionTests
         _ = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-world-names", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         var globals = new ReplGlobals(engine);
         using var worlds = globals.worlds;
         var first = worlds.Add("lab", "res://playground.tscn");
@@ -447,7 +447,7 @@ public class ParallelSessionTests
         {
             token.ThrowIfCancellationRequested();
             Assert.True(watch.Elapsed < TimeSpan.FromSeconds(60), "REPL work stopped making progress.");
-            Assert.False(engine.Iteration());
+            Assert.True(engine.Update());
             dispatcher.Pump();
             Thread.Sleep(1);
         }

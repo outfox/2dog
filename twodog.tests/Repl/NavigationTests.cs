@@ -13,7 +13,7 @@ public class NavigationIntegrationTests
         var game = typeof(showcase.CSharpTicker).Assembly;
         using var engine = new Engine("repl-navigation", Engine.ResolveProjectDir(), "--headless") { CaptureErrors = true };
         engine.Start();
-        Assert.False(engine.Iteration());
+        Assert.True(engine.Update());
         using var dispatcher = new EngineDispatcher();
         var globals = new ReplGlobals(engine);
         using var scratch = globals.world;
@@ -25,7 +25,7 @@ public class NavigationIntegrationTests
             while (!task.IsCompleted)
             {
                 Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "Navigation stopped making progress");
-                Assert.False(engine.Iteration());
+                Assert.True(engine.Update());
                 dispatcher.Pump();
                 Thread.Sleep(1);
             }

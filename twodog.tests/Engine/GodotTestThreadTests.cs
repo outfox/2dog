@@ -15,8 +15,8 @@ public class GodotTestThreadTests(HeadlessFixture godot)
         // AppKit aborts a windowed engine anywhere but on the process main thread.
         if (OperatingSystem.IsMacOS()) Assert.Equal(1, pthread_main_np());
 
-        // Iteration throws unless called on the thread that started the engine.
-        godot.Engine.Iteration();
+        // Update throws unless called on the thread that started the engine.
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class GodotTestThreadTests(HeadlessFixture godot)
         await Task.Delay(10, TestContext.Current.CancellationToken);
         Assert.Equal(thread, Environment.CurrentManagedThreadId);
 
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [DllImport("/usr/lib/libSystem.dylib")]

@@ -31,7 +31,7 @@ public class GodotErrorCaptureTests(HeadlessFixture godot)
     public void ExceptionInDeferredCallback_IsCaptured()
     {
         Callable.From(() => throw new InvalidOperationException("expected callback exception")).CallDeferred();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
 
         godot.Errors.Expect("expected callback exception");
     }

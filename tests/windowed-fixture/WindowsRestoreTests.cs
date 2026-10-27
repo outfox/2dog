@@ -121,7 +121,7 @@ public class WindowsRestoreTests(Fixture godot, ITestOutputHelper output)
             // Rendering is suspended here, but lifecycle messages must keep flowing.
             while (elapsed.Elapsed < TimeSpan.FromSeconds(7))
             {
-                Assert.False(godot.Engine.Iteration());
+                Assert.True(godot.Engine.Update());
                 Thread.Sleep(10);
             }
             Assert.False(IsHungAppWindow(hwnd));
@@ -138,7 +138,7 @@ public class WindowsRestoreTests(Fixture godot, ITestOutputHelper output)
         while (!condition())
         {
             Assert.True(timeout.Elapsed < TimeSpan.FromSeconds(5), "Windows did not complete the window transition.");
-            Assert.False(godot.Engine.Iteration());
+            Assert.True(godot.Engine.Update());
         }
     }
 

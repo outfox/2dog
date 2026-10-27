@@ -18,7 +18,7 @@ public class GodotSignalTests(HeadlessFixture godot)
         Assert.True(fired);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class GodotSignalTests(HeadlessFixture godot)
         Assert.Equal(child, received);
 
         parent.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class GodotSignalTests(HeadlessFixture godot)
 
         child.Free();
         parent.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class GodotSignalTests(HeadlessFixture godot)
         Assert.True(fired);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 
     [Fact]
@@ -135,7 +135,7 @@ public class GodotSignalTests(HeadlessFixture godot)
             var timeout = TimeSpan.FromSeconds(10);
             var clock = System.Diagnostics.Stopwatch.StartNew();
             while (counters.Any(counter => Received(counter) <= before[counter]) && clock.Elapsed < timeout)
-                godot.Engine.Iteration();
+                godot.Engine.Update();
 
             var stalled = counters.Where(counter => Received(counter) <= before[counter]).ToList();
             Assert.True(stalled.Count == 0,
@@ -158,6 +158,6 @@ public class GodotSignalTests(HeadlessFixture godot)
         Assert.Equal(3, count);
 
         node.QueueFree();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
     }
 }

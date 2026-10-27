@@ -39,7 +39,7 @@ public class BasicTests : GodotTestFixture
         await Task.Delay(1, TestContext.CurrentContext.CancellationToken);
 
         Assert.That(System.Environment.CurrentManagedThreadId, Is.EqualTo(ownerThread));
-        EngineFixture.Engine.Iteration(); // Lifecycle calls also enforce the owner thread.
+        EngineFixture.Engine.Update(); // Lifecycle calls also enforce the owner thread.
     }
 
     [Test]

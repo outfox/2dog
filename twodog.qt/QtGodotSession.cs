@@ -216,11 +216,11 @@ public sealed unsafe class QtGodotSession : IDisposable
     {
         if (rendering != _rendering) RenderingServer.RenderLoopEnabled = _rendering = rendering;
         bool quit;
-        // Godot's message pump can run Qt's events, and with them another frame request, inside Iteration().
+        // Godot's message pump can run Qt's events, and with them another frame request, inside Update().
         _inFrame = true;
         try
         {
-            quit = _engine!.Iteration();
+            quit = !_engine!.Update();
         }
         finally
         {

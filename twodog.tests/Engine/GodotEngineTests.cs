@@ -42,20 +42,19 @@ public class GodotEngineTests(HeadlessFixture godot)
     }
 
     [Fact]
-    public void Iteration_AdvancesFrameCount()
+    public void Update_AdvancesFrameCount()
     {
         var before = Godot.Engine.GetProcessFrames();
-        godot.Engine.Iteration();
+        godot.Engine.Update();
         var after = Godot.Engine.GetProcessFrames();
 
         Assert.True(after > before);
     }
 
     [Fact]
-    public void Iteration_ReturnsFalse_WhenNotQuitting()
+    public void Update_ReturnsTrue_WhenNotQuitting()
     {
-        var result = godot.Engine.Iteration();
-        Assert.False(result);
+        Assert.True(godot.Engine.Update());
     }
 
     [Fact]

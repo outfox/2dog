@@ -20,7 +20,7 @@ public class LifecycleTests : GodotTestFixture
         await Task.Yield();
         await Task.Delay(1);
         Assert.That(Environment.CurrentManagedThreadId, Is.EqualTo(_owner));
-        Godot.Engine.Iteration();
+        Godot.Engine.Update();
     }
 
     [OneTimeSetUp]

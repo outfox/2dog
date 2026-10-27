@@ -52,13 +52,13 @@ const tricks: { title: string; description: string; href: string; diagram: Diagr
 </script>
 
 <template>
-  <section class="home-section tricks" aria-labelledby="new-tricks-title">
+  <section class="home-section tricks" id="new-tricks" aria-labelledby="new-tricks-title">
     <div class="home-wrap">
       <p class="home-kicker">
         <span class="gd-icon" :style="{ '--gd-icon': iconUrl('magic_wand') }" aria-hidden="true"></span>Experimental
         &amp; power-user features
       </p>
-      <h2 id="new-tricks-title" class="home-h2">New Tricks</h2>
+      <h2 id="new-tricks-title" class="home-h2">New Tricks<a class="home-anchor" href="#new-tricks" aria-label="Permalink to this section">#</a></h2>
       <p class="home-intro">
         <strong>2dog</strong> offers a variety of optional features on top of Godot. They add popular capabilities and optimizations, and stay compatible with core Godot.
       </p>
