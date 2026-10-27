@@ -227,7 +227,8 @@
         </Task>
     </UsingTask>
 
-    <!-- The export bakes WebGPU shaders only with a renderer running the web method; headless exports skip baking. -->
+    <!-- The export bakes WebGPU shaders only with a rendering device running the web method; the headless export keeps a
+         window-less one when the renderer is requested explicitly. -->
     <UsingTask TaskName="TwoDogReadWebShaderBake" TaskFactory="RoslynCodeTaskFactory"
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
         <ParameterGroup>
@@ -343,10 +344,10 @@
             <_TwoDogWebBakeDriver Condition="$([MSBuild]::IsOSPlatform('OSX'))">metal</_TwoDogWebBakeDriver>
             <_TwoDogWebBakeDriver Condition="!$([MSBuild]::IsOSPlatform('OSX'))">vulkan</_TwoDogWebBakeDriver>
             <_TwoDogWebBakeArgs Condition="'$(_TwoDogWebBakeMethod)' != ''">--rendering-driver $(_TwoDogWebBakeDriver) --rendering-method $(_TwoDogWebBakeMethod)</_TwoDogWebBakeArgs>
-            <_TwoDogWebHeadlessArg Condition="'$(_TwoDogWebBakeMethod)' == ''">--headless</_TwoDogWebHeadlessArg>
+            <_TwoDogWebHeadlessArg>--headless</_TwoDogWebHeadlessArg>
         </PropertyGroup>
         <Message Condition="'$(_TwoDogWebBakeMethod)' != ''" Importance="high"
-                 Text="TwoDog: baking $(_TwoDogWebBakeMethod) WebGPU shaders; the export runs a $(_TwoDogWebBakeDriver) editor, which needs a GPU and a display."/>
+                 Text="TwoDog: baking $(_TwoDogWebBakeMethod) WebGPU shaders; the headless export runs a window-less $(_TwoDogWebBakeDriver) rendering device, which needs a GPU."/>
 
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"

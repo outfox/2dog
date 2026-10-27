@@ -114,7 +114,7 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
     Console.Error.WriteLine("  --debug            Export debug resources and GDExtensions (with --export-pack).");
     Console.Error.WriteLine("  --rendering-driver <driver> --rendering-method <method>");
-    Console.Error.WriteLine("                     Export with a renderer instead of headless, as the shader");
+    Console.Error.WriteLine("                     Export with a window-less rendering device, as the shader");
     Console.Error.WriteLine("                     baker needs one (with --export-pack).");
     Console.Error.WriteLine("  --list-pack <pck>  List a .pck's contents by size (no engine involved).");
     Console.Error.WriteLine("  --embed-pack <pck> --into <exe>  Embed a .pck where Godot finds it in a PE or ELF executable.");
@@ -173,8 +173,8 @@ if (editorPath != null)
     if (exportPreset != null)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(exportOutput!)!);
-        // An explicit renderer replaces headless mode, like libgodot_export_pack.
-        if (renderingDriver == null) process.StartInfo.ArgumentList.Add("--headless");
+        // Headless keeps a window-less rendering device when a renderer is requested, like libgodot_export_pack.
+        process.StartInfo.ArgumentList.Add("--headless");
         foreach (var a in new[] { "--export-pack", exportPreset, exportOutput!, "--path", projectPath })
             process.StartInfo.ArgumentList.Add(a);
         if (exportDebug)
@@ -283,7 +283,7 @@ unsafe
                     exportExtra[count++] = pDebug;
                     exportExtra[count++] = pPreset;
                 }
-                // A rendering driver makes libgodot_export_pack run with a renderer, as the shader baker needs.
+                // A rendering driver makes the headless libgodot_export_pack keep a window-less rendering device for the baker.
                 if (renderingDriver != null)
                 {
                     exportExtra[count++] = pDriverOption;
