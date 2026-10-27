@@ -886,25 +886,23 @@ jobs:
             exit 1
           fi
 
-      - name: Verify WebGPU capability rejections
+      - name: Verify WebGPU capability rejections and headless startup
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          # Rejection happens before creating a display or GPU device.
+          # Single precision supports Forward+ and Mobile; only double precision rejects WebGPU,
+          # before creating a display or GPU device.
           METHOD=forward_plus
-          REASON='WebGPU currently supports only the Mobile rendering method'
           if [ '${{ matrix.precision }}' = double ]; then
             METHOD=mobile
             REASON='WebGPU is unavailable in double-precision runtimes'
-          fi
-          if dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only > webgpu-rejection.log 2>&1; then
+            if dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only > webgpu-rejection.log 2>&1; then
+              cat webgpu-rejection.log
+              echo 'Unsupported WebGPU startup unexpectedly succeeded'
+              exit 1
+            fi
             cat webgpu-rejection.log
-            echo 'Unsupported WebGPU startup unexpectedly succeeded'
-            exit 1
-          fi
-          cat webgpu-rejection.log
-          grep -q "$REASON" webgpu-rejection.log
-          if [ '${{ matrix.precision }}' = double ]; then
+            grep -q "$REASON" webgpu-rejection.log
             if dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --startup-only --project-settings > webgpu-project-rejection.log 2>&1; then
               cat webgpu-project-rejection.log
               exit 1
@@ -912,6 +910,7 @@ jobs:
             cat webgpu-project-rejection.log
             grep -q "$REASON" webgpu-project-rejection.log
           fi
+          # Headless imports and exports start without a WebGPU device.
           dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only --headless --project-settings > webgpu-headless.log 2>&1
           cat webgpu-headless.log
           grep -q NATIVE_RENDERER_STARTUP_PASSED webgpu-headless.log

@@ -53,7 +53,12 @@ in `wwwroot/index.html` before you create `Engine`:
 'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'forward_plus'],
 ```
 
-Adapters that can't run Forward+ start Mobile instead, with one console warning.
+Adapters with fewer than 40 sampled textures or 10 storage buffers per shader
+stage start Mobile instead, with one console warning. Adapters without
+`texture-formats-tier2`, such as Firefox, run Forward+ without SDFGI and VoxelGI;
+see [adapter and shader limits](/build-configurations#adapter-and-shader-limits).
+Firefox 158 on Linux needs `dom.webgpu.enabled` in `about:config` before it
+exposes WebGPU; without it, the shell starts Compatibility.
 
 Without baking, the browser translates every Forward+ shader variant on its main thread at the first start, which can
 take a minute and trigger the browser's unresponsive-page prompt. Enable `shader_baker/enabled` in the `Web` export

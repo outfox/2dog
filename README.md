@@ -30,7 +30,9 @@ for the Mobile renderer:
 --rendering-driver webgpu
 ```
 
-Adapters that can't run Forward+ fall back to Mobile with one warning. Android,
+Adapters with too few bindings for Forward+ fall back to Mobile with one warning;
+adapters without `texture-formats-tier2`, such as Firefox, run Forward+ without
+SDFGI and VoxelGI. Android,
 double precision and threaded browser runtimes do not support this experimental
 driver. Unsupported selections fail with a runtime-specific
 error. See [build configurations](docs/content/build-configurations.md#experimental-webgpu)

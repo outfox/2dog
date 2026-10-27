@@ -123,12 +123,21 @@ Forward+ on WebGPU binds a compact scene: 4 lightmaps and 2 VoxelGIs per frame
 instead of 8, with the lightmap data in a uniform buffer. That keeps the scene
 shader within Safari's 44 sampled textures and Chrome on Metal's 10 storage
 buffers per shader stage. Forward+ needs at least 40 sampled textures and 10
-storage buffers per shader stage, and read/write storage from the
+storage buffers per shader stage. On an adapter without them, Godot prints one
+warning and runs Mobile; `RenderingServer.GetCurrentRenderingMethod()` then
+returns `mobile`. A material can still exceed an adapter's limit with many
+textures of its own; that material fails to compile and logs the limit.
+
+SDFGI, VoxelGI and the compute depth of field read and write RGBA8, RGBA16 and
+RGBA32 storage textures in place, which needs the
 [`texture-formats-tier2`](https://gpuweb.github.io/gpuweb/#texture-formats-tier2)
-feature. On an adapter without them, Godot prints one warning and runs Mobile;
-`RenderingServer.GetCurrentRenderingMethod()` then returns `mobile`. A material
-can still exceed an adapter's limit with many textures of its own; that material
-fails to compile and logs the limit.
+feature. Chrome exposes it on desktop GPUs; Firefox and software adapters such
+as lavapipe do not. Without it, Forward+ still runs: SDFGI and VoxelGI are
+disabled with one warning when a scene asks for them, and depth of field uses
+the raster passes of the Mobile renderer. SSIL needs 8-bit read/write storage,
+which an adapter has without `texture-formats-tier1` (8-bit storage is promoted
+to 32-bit) or with tier2; the rare adapter with tier1 but not tier2 disables SSIL
+with one warning.
 
 The backend has no image atomics, multiview or ray tracing. Read/write storage
 textures require native support for their format; unsupported formats fail

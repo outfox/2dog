@@ -7,6 +7,7 @@ internal sealed class LightingScene : IDisposable
     private readonly Node3D _root = new();
     private readonly OmniLight3D[] _lights;
     private readonly Window _viewport;
+    private readonly Camera3D _camera = new() { Position = new Vector3(0, 0, 4), Current = true };
     private readonly MeshInstance3D _subject = new() { Name = "Subject" };
     private readonly BoxMesh _boxMesh = new() { AddUV2 = true };
     private ArrayMesh? _pointMesh;
@@ -26,6 +27,8 @@ internal sealed class LightingScene : IDisposable
         Roughness = 1,
         MetallicSpecular = 0,
     };
+    public Camera3D Camera => _camera;
+
     private readonly Godot.Environment _environment = new()
     {
         BackgroundMode = Godot.Environment.BGMode.Color,
@@ -54,7 +57,7 @@ internal sealed class LightingScene : IDisposable
         _subject.Mesh = _boxMesh;
         _subject.MaterialOverride = _material;
         _root.AddChild(_subject);
-        _root.AddChild(new Camera3D { Position = new Vector3(0, 0, 4), Current = true });
+        _root.AddChild(_camera);
         for (int i = 0; i < _lights.Length; i++)
         {
             _lights[i] = new OmniLight3D
