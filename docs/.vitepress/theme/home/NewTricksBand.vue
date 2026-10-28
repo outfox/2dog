@@ -8,7 +8,7 @@ import TrickDiagram, { type Diagram } from './TrickDiagram.vue'
 const tricks: { title: string; description: string; href: string; diagram: Diagram }[] = [
   {
     title: 'WebGPU driver',
-    description: "Forward+ and Mobile Renderers on <code>browser-wasm</code>, fallback to Compatibility Renderer.",
+    description: "Forward+ and Mobile Renderers on <code>browser-wasm</code>, an alternative to Compatibility Renderer.",
     href: '/build-configurations#experimental-webgpu',
     diagram: 'webgpu',
   },
