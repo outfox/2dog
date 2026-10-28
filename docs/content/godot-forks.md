@@ -1,13 +1,14 @@
 ---
-title: Godot Forks
+title: Integrating Custom Godot Forks
 description: "Merge your Godot fork into 2dog, build matching engine and C# packages, and configure NuGet to use them locally."
 tagline: "Bring your Godot fork to 2dog and make sure your game runs it."
 keywords: "Godot fork, custom Godot engine, libgodot, local NuGet packages"
 ---
 
-# Godot Forks
+# Integrating Custom Godot Forks
 
-If your game uses a custom Godot fork, 2dog needs those engine changes too.
+If your game uses a custom Godot fork, you can still use 2dog... you just need to fork it, too. 😎
+
 Merge your fork into the `godot/` submodule of a 2dog checkout, build the native
 engine and matching C# bindings, then point your game's NuGet configuration at
 the resulting packages.
