@@ -3,6 +3,12 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 const [url, port = '9233', timeout = '240000', output] = process.argv.slice(2);
 if (!url) throw new Error('Usage: webgpu-mobile-smoke.mjs <url> [CDP port] [timeout ms] [screenshot directory]');
+// The page's ?method= selects the renderer; ?expect=mobile pins a Forward+ downgrade on a limited adapter.
+const query = new URL(url).searchParams;
+const requested = query.get('method') ?? 'mobile';
+const expected = query.get('expect') ?? requested;
+const forwardPlus = expected === 'forward_plus';
+const phases = forwardPlus ? 7 : 13;
 const cdp = `http://127.0.0.1:${port}`;
 const target = await (await fetch(`${cdp}/json/new?about:blank`, { method: 'PUT' })).json();
 const socket = new WebSocket(target.webSocketDebuggerUrl);
@@ -20,7 +26,10 @@ socket.onmessage = event => {
     } else if (message.method === 'Runtime.consoleAPICalled') {
         const text = message.params.args.map(arg => arg.value ?? arg.description ?? arg.type).join(' ');
         console.log(`${message.params.type}: ${text}`);
-        if (message.params.type === 'error' || message.params.type === 'warning') errors.push(text);
+        // The expected downgrade warning and its source location arrive as two console messages.
+        const downgrade = requested !== expected &&
+            (text.includes('Defaulting to Mobile renderer') || /^\s*at: RendererCompositorRD \(/.test(text));
+        if ((message.params.type === 'error' || message.params.type === 'warning') && !downgrade) errors.push(text);
     } else if (message.method === 'Runtime.exceptionThrown') {
         errors.push(message.params.exceptionDetails.exception?.description ?? message.params.exceptionDetails.text);
     }
@@ -52,12 +61,19 @@ async function waitFor(expression) {
 try {
     await send('Runtime.enable');
     await send('Page.enable');
+    // A new target can open behind other tabs (Edge first-run pages), where requestAnimationFrame never runs.
+    await send('Page.bringToFront');
     await send('Page.navigate', { url });
     if (output) await mkdir(output, { recursive: true });
     const samples = [];
-    for (let phase = 0; phase < 13; phase++) {
+    for (let phase = 0; phase < phases; phase++) {
         if (phase) await evaluate(`document.documentElement.dataset.requestPhase='${phase}'`);
         await waitFor(`document.documentElement?.dataset.readyPhase==='${phase}'`);
+        if (phase === 0) {
+            const actual = await evaluate('document.documentElement.dataset.renderingMethod');
+            if (actual !== expected) throw new Error(`WebGPU ${requested} ran ${actual}, expected ${expected}.`);
+            console.log('BROWSER_RENDERING_METHOD', actual);
+        }
         await delay(200);
         const clip = await evaluate(`(() => {
             const r = document.querySelector('canvas').getBoundingClientRect();
@@ -73,10 +89,18 @@ try {
             canvas.height = bitmap.height;
             const context = canvas.getContext('2d');
             context.drawImage(bitmap, 0, 0);
-            return [...context.getImageData(canvas.width / 2, canvas.height / 2, 1, 1).data];
+            return [...context.getImageData(${forwardPlus && phase === 4 ? '8, 8' : 'canvas.width / 2, canvas.height / 2'}, 1, 1).data];
         })()`);
-        console.log('BROWSER_MOBILE_PIXEL', phase, pixel);
-        if (phase === 4) {
+        console.log(forwardPlus ? 'BROWSER_FORWARD_PLUS_PIXEL' : 'BROWSER_MOBILE_PIXEL', phase, pixel);
+        if (forwardPlus && phase === 4) {
+            if (pixel[0] < 0.5 * 255 || pixel[0] <= pixel[2] + 0.2 * 255)
+                throw new Error(`Volumetric fog did not produce the expected red background: ${pixel}`);
+            console.log('BROWSER_VOLUMETRIC_FOG_PASSED');
+        } else if (forwardPlus && phase === 5) {
+            if (pixel[2] < 0.025 * 255 || pixel[2] <= pixel[0] + 0.01 * 255)
+                throw new Error(`SDFGI did not transfer blue emission to the unlit target: ${pixel}`);
+            console.log('BROWSER_SDFGI_INDIRECT_LIGHT_PASSED');
+        } else if (phase === 4) {
             if (pixel[0] < 0.5 * 255 || pixel[0] <= pixel[2] + 0.2 * 255)
                 throw new Error(`Depth fog did not produce the expected red target: ${pixel}`);
             console.log('BROWSER_DEPTH_FOG_PASSED');
@@ -114,10 +138,10 @@ try {
             samples.push((pixel[0] + pixel[1] + pixel[2]) / (3 * 255));
         }
     }
-    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='13'`);
+    await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='${phases}'`);
     await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
     if (errors.length) throw new Error(errors.join('\n'));
-    console.log('BROWSER_MOBILE_LIGHT_LIST_PASSED', samples);
+    console.log(forwardPlus ? 'BROWSER_FORWARD_PLUS_CLUSTERED_LIGHTING_PASSED' : 'BROWSER_MOBILE_LIGHT_LIST_PASSED', samples);
 } finally {
     socket.close();
     await fetch(`${cdp}/json/close/${target.id}`);

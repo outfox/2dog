@@ -64,6 +64,24 @@ test('WebGPU preparation requests adapter limits and reuses the device across li
     assert.deepEqual(descriptor.requiredLimits, { maxStorageBuffersPerShaderStage: 16, maxBufferSize: 1000 });
 });
 
+test('WebGPU preparation falls back to OpenGL without a browser GPU', async () => {
+    const v = await view();
+    Object.defineProperty(globalThis, 'navigator', { configurable: true, value: {} });
+    globalThis.fetch = async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
+    const warn = console.warn;
+    const warnings = [];
+    console.warn = (...values) => warnings.push(values.join(' '));
+    try {
+        v.options.renderingDriver = 'webgpu';
+        assert.equal(await v.prepare(v.canvas, v.options), 'opengl3');
+    } finally {
+        console.warn = warn;
+    }
+    assert.match(warnings.join('\n'), /falling back to WebGL 2 Compatibility/);
+    assert.equal(globalThis.Blazor.runtime.Module.preinitializedWebGPUDevice, undefined);
+    assert.deepEqual(v.calls, ['copy', 'observe', 'configure']);
+});
+
 test('cancelling WebGPU preparation destroys the unclaimed device', async () => {
     const v = await view();
     const pending = deferred();

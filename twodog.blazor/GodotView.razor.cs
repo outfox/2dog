@@ -167,7 +167,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             renderingDriver ??= "opengl3";
             if (renderingDriver is not ("opengl3" or "webgpu"))
                 throw new ArgumentException("Blazor supports the opengl3 or webgpu rendering driver.", nameof(RenderingDriver));
-            await _module.InvokeVoidAsync("prepare", _disposeCancellation.Token, _canvas, new
+            var bootDriver = await _module.InvokeAsync<string>("prepare", _disposeCancellation.Token, _canvas, new
             {
                 packUrl = PackUrl,
                 packName,
@@ -183,9 +183,27 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             Engine.WebExitRuntimeOnQuit = false;
 
             var args = new List<string> { "--main-pack", packName };
-            if (renderingDriver == "webgpu") args.AddRange(["--rendering-driver", "webgpu"]);
-            if (Args is not null) args.AddRange(Args);
-            if (RenderingDriver is not null) args.AddRange(["--rendering-driver", RenderingDriver]);
+            if (bootDriver != renderingDriver)
+            {
+                // Without WebGPU, boot Compatibility like Godot's shell: drop renderer args before "--".
+                args.AddRange(["--rendering-driver", "opengl3", "--rendering-method", "gl_compatibility"]);
+                for (int i = 0; Args is not null && i < Args.Count; i++)
+                {
+                    if (Args[i] is "--" or "++")
+                    {
+                        args.AddRange(Args.Skip(i));
+                        break;
+                    }
+                    if (Args[i] is "--rendering-driver" or "--rendering-method") i++;
+                    else args.Add(Args[i]);
+                }
+            }
+            else
+            {
+                if (renderingDriver == "webgpu") args.AddRange(["--rendering-driver", "webgpu"]);
+                if (Args is not null) args.AddRange(Args);
+                if (RenderingDriver is not null) args.AddRange(["--rendering-driver", RenderingDriver]);
+            }
 
             var engine = new Engine(Project, args: args.ToArray());
             Engine = engine;

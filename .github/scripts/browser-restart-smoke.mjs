@@ -109,8 +109,13 @@ const movePointer = async () => {
 const waitFor = async (what, predicate) => {
     let last = null;
     while (Date.now() < deadline) {
-        last = await state();
+        // An evaluation racing the page's initial load returns no value; poll again.
+        last = await state().catch((error) => error instanceof SyntaxError ? null : Promise.reject(error));
         if (browserFailure) throw new Error(`Browser runtime error: ${browserFailure}`);
+        if (!last) {
+            await sleep(250);
+            continue;
+        }
         if (last.smoke === 'failed' || last.status?.startsWith('Failed:')) {
             throw new Error(`Browser reported failure: ${JSON.stringify(last)}`);
         }

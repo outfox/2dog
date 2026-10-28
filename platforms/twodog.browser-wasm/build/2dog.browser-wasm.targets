@@ -206,7 +206,7 @@
             <Code Type="Fragment" Language="cs"><![CDATA[
                 // Pack-only exports bypass Godot's HTML exporter, which normally supplies renderingDriver.
                 var section = "";
-                var mobile = false;
+                var rd = false;
                 if (File.Exists(ProjectFile))
                     foreach (var line in File.ReadLines(ProjectFile))
                     {
@@ -215,14 +215,58 @@
                         if (header.Success) section = header.Groups[1].Value;
                         if (section != "rendering") continue;
                         var setting = Regex.Match(text, "^renderer/rendering_method\\.web\\s*=\\s*\"([^\"]*)\"");
-                        if (setting.Success) mobile = setting.Groups[1].Value == "mobile";
+                        if (setting.Success) rd = setting.Groups[1].Value == "mobile" || setting.Groups[1].Value == "forward_plus";
                     }
-                var driver = mobile && WebGpuEnabled ? "webgpu" : "opengl3";
+                var driver = rd && WebGpuEnabled ? "webgpu" : "opengl3";
                 var shell = File.ReadAllText(ShellFile);
                 var slot = new Regex(@"renderingDriver: '[^']*',");
                 if (slot.Matches(shell).Count != 1)
                     throw new Exception("TwoDog: cannot find the web shell's renderingDriver default.");
                 File.WriteAllText(ShellFile, slot.Replace(shell, "renderingDriver: '" + driver + "',"));
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <!-- The export bakes WebGPU shaders only with a rendering device running the web method; the headless export keeps a
+         window-less one when the renderer is requested explicitly. -->
+    <UsingTask TaskName="TwoDogReadWebShaderBake" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <ProjectFile ParameterType="System.String" Required="true"/>
+            <PresetsFile ParameterType="System.String" Required="true"/>
+            <PresetName ParameterType="System.String" Required="true"/>
+            <RenderingMethod ParameterType="System.String" Output="true"/>
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Text.RegularExpressions"/>
+            <Code Type="Fragment" Language="cs"><![CDATA[
+                // Returns the setting's value in the given section, or null.
+                Func<string, Func<string, bool>, string, string> read = (file, isSection, key) =>
+                {
+                    var section = "";
+                    string value = null;
+                    if (File.Exists(file))
+                        foreach (var line in File.ReadLines(file))
+                        {
+                            var text = line.Trim();
+                            var header = Regex.Match(text, @"^\[([^\]]+)\]\s*(?:;.*)?$");
+                            if (header.Success) section = header.Groups[1].Value;
+                            else if (isSection(section) && text.StartsWith(key + "="))
+                                value = text.Substring(key.Length + 1).Trim('"');
+                        }
+                    return value;
+                };
+                var preset = "";
+                var currentSection = "";
+                foreach (var line in File.Exists(PresetsFile) ? File.ReadLines(PresetsFile) : new string[0])
+                {
+                    var header = Regex.Match(line.Trim(), @"^\[(preset\.\d+)\]$");
+                    if (header.Success) currentSection = header.Groups[1].Value;
+                    else if (line.Trim() == "name=\"" + PresetName + "\"") preset = currentSection;
+                }
+                var bake = preset != "" && read(PresetsFile, s => s == preset + ".options", "shader_baker/enabled") == "true";
+                var method = read(ProjectFile, s => s == "rendering", "renderer/rendering_method.web");
+                RenderingMethod = bake && (method == "forward_plus" || method == "mobile") ? method : "";
             ]]></Code>
         </Task>
     </UsingTask>
@@ -291,19 +335,33 @@
 
         <MakeDir Directories="$([System.IO.Path]::GetDirectoryName('$(_TwoDogWebPackFullPath)'))"/>
 
+        <TwoDogReadWebShaderBake ProjectFile="$(TwoDogGodotProjectFullPath)/project.godot"
+                                 PresetsFile="$(_TwoDogExportPresetsPath)" PresetName="$(TwoDogWebExportPreset)"
+                                 Condition="'$(_TwoDogWebGpuPort)' != ''">
+            <Output TaskParameter="RenderingMethod" PropertyName="_TwoDogWebBakeMethod"/>
+        </TwoDogReadWebShaderBake>
+        <PropertyGroup>
+            <_TwoDogWebBakeDriver Condition="$([MSBuild]::IsOSPlatform('OSX'))">metal</_TwoDogWebBakeDriver>
+            <_TwoDogWebBakeDriver Condition="!$([MSBuild]::IsOSPlatform('OSX'))">vulkan</_TwoDogWebBakeDriver>
+            <_TwoDogWebBakeArgs Condition="'$(_TwoDogWebBakeMethod)' != ''">--rendering-driver $(_TwoDogWebBakeDriver) --rendering-method $(_TwoDogWebBakeMethod)</_TwoDogWebBakeArgs>
+            <_TwoDogWebHeadlessArg>--headless</_TwoDogWebHeadlessArg>
+        </PropertyGroup>
+        <Message Condition="'$(_TwoDogWebBakeMethod)' != ''" Importance="high"
+                 Text="TwoDog: baking $(_TwoDogWebBakeMethod) WebGPU shaders; the headless export runs a window-less $(_TwoDogWebBakeDriver) rendering device, which needs a GPU."/>
+
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; $(_TwoDogWebExportDebugArg) --output &quot;$(_TwoDogWebPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; $(_TwoDogWebExportDebugArg) $(_TwoDogWebBakeArgs) --output &quot;$(_TwoDogWebPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(TwoDogExternalGodotEditor)&quot; --headless --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg) ++ --2dog-host-pack"
+              Command="&quot;$(TwoDogExternalGodotEditor)&quot; $(_TwoDogWebHeadlessArg) --export-pack &quot;$(TwoDogWebExportPreset)&quot; &quot;$(_TwoDogWebPackFullPath)&quot; --path &quot;$(TwoDogGodotProjectFullPath)&quot; $(_TwoDogWebEditorDebugArg) $(_TwoDogWebBakeArgs) ++ --2dog-host-pack"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; $(_TwoDogWebExportDebugArg) --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogWebExportPreset)&quot; $(_TwoDogWebExportDebugArg) $(_TwoDogWebBakeArgs) --output &quot;$(_TwoDogWebPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
