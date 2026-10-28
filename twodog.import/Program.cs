@@ -14,6 +14,8 @@ string? listPackPath = null;
 string? assemblyHash = null;
 string? embedPackPath = null;
 string? embedIntoPath = null;
+string? renderingDriver = null;
+string? renderingMethod = null;
 var verbose = false;
 var exportDebug = false;
 
@@ -51,6 +53,12 @@ for (var i = 0; i < args.Length; i++)
         case "--into" when i + 1 < args.Length:
             embedIntoPath = args[++i];
             break;
+        case "--rendering-driver" when i + 1 < args.Length:
+            renderingDriver = args[++i];
+            break;
+        case "--rendering-method" when i + 1 < args.Length:
+            renderingMethod = args[++i];
+            break;
         case "--debug":
             exportDebug = true;
             break;
@@ -87,7 +95,8 @@ if (embedPackPath != null && embedIntoPath != null)
 
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
     (editorPath == null && libgodotPath == null) ||
-    (exportPreset != null && exportOutput == null) || (exportDebug && exportPreset == null))
+    (exportPreset != null && exportOutput == null) || (exportDebug && exportPreset == null) ||
+    ((renderingDriver != null || renderingMethod != null) && exportPreset == null))
 {
     Console.Error.WriteLine("Usage: twodog.import [--libgodot <libgodot-library>] [--editor <godot-binary>]");
     Console.Error.WriteLine("                     [--export-pack <preset> --output <pck-path>] <path-to-godot-project>");
@@ -104,6 +113,9 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
     Console.Error.WriteLine("  --debug            Export debug resources and GDExtensions (with --export-pack).");
+    Console.Error.WriteLine("  --rendering-driver <driver> --rendering-method <method>");
+    Console.Error.WriteLine("                     Export with a window-less rendering device, as the shader");
+    Console.Error.WriteLine("                     baker needs one (with --export-pack).");
     Console.Error.WriteLine("  --list-pack <pck>  List a .pck's contents by size (no engine involved).");
     Console.Error.WriteLine("  --embed-pack <pck> --into <exe>  Embed a .pck where Godot finds it in a PE or ELF executable.");
     Console.Error.WriteLine("  --assembly-hash <hash>  Refresh cached export scenes when managed assemblies change.");
@@ -161,12 +173,20 @@ if (editorPath != null)
     if (exportPreset != null)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(exportOutput!)!);
-        foreach (var a in new[] { "--headless", "--export-pack", exportPreset, exportOutput!, "--path", projectPath })
+        // Headless keeps a window-less rendering device when a renderer is requested, like libgodot_export_pack.
+        process.StartInfo.ArgumentList.Add("--headless");
+        foreach (var a in new[] { "--export-pack", exportPreset, exportOutput!, "--path", projectPath })
             process.StartInfo.ArgumentList.Add(a);
         if (exportDebug)
         {
             process.StartInfo.ArgumentList.Add("--export-debug");
             process.StartInfo.ArgumentList.Add(exportPreset);
+        }
+        foreach (var (option, value) in new[] { ("--rendering-driver", renderingDriver), ("--rendering-method", renderingMethod) })
+        {
+            if (value == null) continue;
+            process.StartInfo.ArgumentList.Add(option);
+            process.StartInfo.ArgumentList.Add(value);
         }
     }
     else
@@ -241,13 +261,21 @@ unsafe
             var presetUtf8 = Encoding.UTF8.GetBytes(exportPreset + "\0");
             var outputUtf8 = Encoding.UTF8.GetBytes(exportOutput + "\0");
             var debugUtf8 = "--export-debug\0"u8.ToArray();
+            var driverOptionUtf8 = "--rendering-driver\0"u8.ToArray();
+            var methodOptionUtf8 = "--rendering-method\0"u8.ToArray();
+            var driverUtf8 = Encoding.UTF8.GetBytes(renderingDriver + "\0");
+            var methodUtf8 = Encoding.UTF8.GetBytes(renderingMethod + "\0");
             fixed (byte* pPreset = presetUtf8)
             fixed (byte* pOutput = outputUtf8)
             fixed (byte* pDebug = debugUtf8)
+            fixed (byte* pDriverOption = driverOptionUtf8)
+            fixed (byte* pMethodOption = methodOptionUtf8)
+            fixed (byte* pDriver = driverUtf8)
+            fixed (byte* pMethod = methodUtf8)
             {
                 // Keep the native helper ABI: --export-pack chooses pack-only output;
                 // --export-debug adds debug features without switching to a full export.
-                var exportExtra = stackalloc byte*[3];
+                var exportExtra = stackalloc byte*[7];
                 var count = 0;
                 if (verbose) exportExtra[count++] = pVerbose;
                 if (exportDebug)
@@ -255,7 +283,32 @@ unsafe
                     exportExtra[count++] = pDebug;
                     exportExtra[count++] = pPreset;
                 }
-                rc = exportPack(pProject, pPreset, pOutput, count, count == 0 ? null : exportExtra);
+                // A rendering driver makes the headless libgodot_export_pack keep a window-less rendering device for the baker.
+                if (renderingDriver != null)
+                {
+                    exportExtra[count++] = pDriverOption;
+                    exportExtra[count++] = pDriver;
+                }
+                if (renderingMethod != null)
+                {
+                    exportExtra[count++] = pMethodOption;
+                    exportExtra[count++] = pMethod;
+                }
+                byte* project = pProject, preset = pPreset, output = pOutput;
+                byte** extraArgs = count == 0 ? null : exportExtra;
+                if (renderingDriver != null && OperatingSystem.IsWindows())
+                {
+                    // A renderer opens a window, whose drag-and-drop registration needs a single-threaded apartment.
+                    // Godot makes the thread running its setup the main thread; give it the editor's 8 MiB stack and more.
+                    var exportRc = 0;
+                    var thread = new Thread(() => exportRc = exportPack(project, preset, output, count, extraArgs), 16 * 1024 * 1024);
+                    thread.SetApartmentState(ApartmentState.STA);
+                    thread.Start();
+                    thread.Join();
+                    rc = exportRc;
+                }
+                else
+                    rc = exportPack(project, preset, output, count, extraArgs);
             }
         }
         else
@@ -270,6 +323,11 @@ if (rc == -1)
     Console.Error.WriteLine($"{libgodotPath} is not an editor build of libgodot; {(exportPreset != null ? "export" : "import")} requires the editor variant.");
 
 RecordExportAssemblyHash(rc);
+
+// After a windowed engine, libgodot's static destructors crash under the loader lock at process exit on Windows;
+// unload it first, as twodog.Engine does.
+if (renderingDriver != null && OperatingSystem.IsWindows())
+    NativeLibrary.Free(lib);
 
 // Engine cleanup can leave non-background threads; exit hard so the helper
 // process reliably terminates.

@@ -23,14 +23,18 @@ browser, inside a .NET UI, or under **xUnit and NUnit with a real Godot engine**
 
 Single-precision Windows, Linux and macOS packages include native Dawn/WebGPU.
 Single-threaded browser packages include WebGPU alongside WebGL. Existing
-renderer defaults are preserved. Select the Mobile renderer with:
+renderer defaults are preserved. Select Forward+, or add `--rendering-method mobile`
+for the Mobile renderer:
 
 ```text
---rendering-driver webgpu --rendering-method mobile
+--rendering-driver webgpu
 ```
 
-Forward+, Android, double precision and threaded browser runtimes do not support
-this experimental driver. Unsupported selections fail with a runtime-specific
+Adapters with too few bindings for Forward+ fall back to Mobile with one warning;
+adapters without `texture-formats-tier2`, such as Firefox, run Forward+ without
+SDFGI and VoxelGI. Android,
+double precision and threaded browser runtimes do not support this experimental
+driver. Unsupported selections fail with a runtime-specific
 error. See [build configurations](docs/content/build-configurations.md#experimental-webgpu)
 for browser setup, adapter limitations and source builds.
 

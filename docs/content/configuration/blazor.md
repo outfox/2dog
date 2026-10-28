@@ -45,13 +45,16 @@ package references. See the [Blazor host guide](/hosts/blazor) for `GodotView`.
 
 ## Experimental WebGPU
 
-Set `RenderingDriver="webgpu"` on `GodotView` to select WebGPU Mobile. The default
-remains OpenGL/WebGL Compatibility. `--rendering-driver webgpu` in `Args` also
-selects WebGPU when `RenderingDriver` is unset.
+Set `RenderingDriver="webgpu"` on `GodotView` to select WebGPU Forward+; add
+`--rendering-method mobile` to `Args` for Mobile. The default remains
+OpenGL/WebGL Compatibility. `--rendering-driver webgpu` in `Args` also selects
+WebGPU when `RenderingDriver` is unset.
 
 WebGPU requires the single-precision, single-threaded browser payload, a secure
 context and a browser that supports WebGPU. Other payloads fail before 2dog
-creates a device. Later views reuse the same device. If initialization is cancelled, 2dog
+creates a device. If the browser has no WebGPU device, `GodotView` logs a warning
+and starts `opengl3` with `gl_compatibility`, ignoring the renderer options in
+`Args`. Later views reuse the same device. If initialization is cancelled, 2dog
 releases a device that no view has claimed.
 
 See [build configurations](/build-configurations#experimental-webgpu).

@@ -84,25 +84,28 @@ extension built for the other precision reads them wrongly.
 
 ## Experimental WebGPU
 
-WebGPU is opt-in. It currently supports the Mobile renderer on these targets:
+WebGPU is opt-in. It supports the Forward+ and Mobile renderers on these targets:
 
 - Windows, Linux and macOS, in single precision
 - single-threaded browser runtimes
 
 2dog does not change your existing renderer defaults. If you use WebGPU with
-Android, double precision, threaded browser payloads or Forward+, you get a
-clear error. Native threading remains supported.
+Android, double precision or threaded browser payloads, you get a clear error.
+Native threading remains supported.
 Headless imports and exports do not require a WebGPU device.
 
+`--rendering-driver webgpu` selects Forward+ unless you also pass
+`--rendering-method mobile`:
+
 ```bash
-dotnet run --project MyGame.2dog -- --rendering-driver webgpu --rendering-method mobile
+dotnet run --project MyGame.2dog -- --rendering-driver webgpu
 ```
 
 For project settings, select both the renderer and the platform driver:
 
 ```ini
 [rendering]
-renderer/rendering_method="mobile"
+renderer/rendering_method="forward_plus"
 rendering_device/driver="webgpu"
 rendering_device/driver.windows="webgpu"
 rendering_device/driver.linuxbsd="webgpu"
@@ -115,6 +118,26 @@ See [web configuration](/configuration/web#experimental-webgpu) and
 WebXR's immersive rendering is outside this experimental scope.
 
 ### Adapter and shader limits
+
+Forward+ on WebGPU binds a compact scene: 4 lightmaps and 2 VoxelGIs per frame
+instead of 8, with the lightmap data in a uniform buffer. That keeps the scene
+shader within Safari's 44 sampled textures and Chrome on Metal's 10 storage
+buffers per shader stage. Forward+ needs at least 40 sampled textures and 10
+storage buffers per shader stage. On an adapter without them, Godot prints one
+warning and runs Mobile; `RenderingServer.GetCurrentRenderingMethod()` then
+returns `mobile`. A material can still exceed an adapter's limit with many
+textures of its own; that material fails to compile and logs the limit.
+
+SDFGI, VoxelGI and the compute depth of field read and write RGBA8, RGBA16 and
+RGBA32 storage textures in place, which needs the
+[`texture-formats-tier2`](https://gpuweb.github.io/gpuweb/#texture-formats-tier2)
+feature. Chrome exposes it on desktop GPUs; Firefox and software adapters such
+as lavapipe do not. Without it, Forward+ still runs: SDFGI and VoxelGI are
+disabled with one warning when a scene asks for them, and depth of field uses
+the raster passes of the Mobile renderer. SSIL needs 8-bit read/write storage,
+which an adapter has without `texture-formats-tier1` (8-bit storage is promoted
+to 32-bit) or with tier2; the rare adapter with tier1 but not tier2 disables SSIL
+with one warning.
 
 The backend has no image atomics, multiview or ray tracing. Read/write storage
 textures require native support for their format; unsupported formats fail

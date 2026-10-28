@@ -28,7 +28,7 @@ const engine = new Engine({
     executable: 'godot',
     canvas: document.getElementById('canvas'),
     renderingDriver: 'webgpu',
-    args: ['--rendering-driver', 'webgpu', '--rendering-method', 'mobile'],
+    args: ['--rendering-driver', 'webgpu', '--rendering-method', options.get('method') || 'mobile'],
     onPrint: text => { console.log(text); document.getElementById('status').textContent = text; },
     onPrintError: text => { console.error(text); document.getElementById('status').textContent = text; },
 });

@@ -886,25 +886,23 @@ jobs:
             exit 1
           fi
 
-      - name: Verify WebGPU capability rejections
+      - name: Verify WebGPU capability rejections and headless startup
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          # Rejection happens before creating a display or GPU device.
+          # Single precision supports Forward+ and Mobile; only double precision rejects WebGPU,
+          # before creating a display or GPU device.
           METHOD=forward_plus
-          REASON='WebGPU currently supports only the Mobile rendering method'
           if [ '${{ matrix.precision }}' = double ]; then
             METHOD=mobile
             REASON='WebGPU is unavailable in double-precision runtimes'
-          fi
-          if dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only > webgpu-rejection.log 2>&1; then
+            if dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only > webgpu-rejection.log 2>&1; then
+              cat webgpu-rejection.log
+              echo 'Unsupported WebGPU startup unexpectedly succeeded'
+              exit 1
+            fi
             cat webgpu-rejection.log
-            echo 'Unsupported WebGPU startup unexpectedly succeeded'
-            exit 1
-          fi
-          cat webgpu-rejection.log
-          grep -q "$REASON" webgpu-rejection.log
-          if [ '${{ matrix.precision }}' = double ]; then
+            grep -q "$REASON" webgpu-rejection.log
             if dotnet run --project tests/webgpu-smoke -c Release -- webgpu mobile --startup-only --project-settings > webgpu-project-rejection.log 2>&1; then
               cat webgpu-project-rejection.log
               exit 1
@@ -912,6 +910,7 @@ jobs:
             cat webgpu-project-rejection.log
             grep -q "$REASON" webgpu-project-rejection.log
           fi
+          # Headless imports and exports start without a WebGPU device.
           dotnet run --project tests/webgpu-smoke -c Release -- webgpu "$METHOD" --startup-only --headless --project-settings > webgpu-headless.log 2>&1
           cat webgpu-headless.log
           grep -q NATIVE_RENDERER_STARTUP_PASSED webgpu-headless.log
@@ -1419,7 +1418,7 @@ jobs:
           from pathlib import Path
           project = Path('demos/showcase/project.godot')
           content = project.read_text()
-          setting = 'renderer/rendering_method.web="mobile"'
+          setting = 'renderer/rendering_method.web="forward_plus"'
           assert content.count(setting) == 1, 'Showcase web renderer setting changed'
           project.write_text(content.replace(setting, 'renderer/rendering_method.web="gl_compatibility"'))
           PY
@@ -2346,7 +2345,10 @@ jobs:
             timeout 15s "$ANDROID_HOME/platform-tools/adb" kill-server
           fi
 
-  # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding.
+  # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding. The
+  # Release cell's Mono AOT compile and link take 18-25 minutes on macos-26 runners, so it runs on version tags only
+  # (where deploy gates on it) until iteration speed matters less again, after GodotFest 2026; the Debug cells run
+  # on the interpreter in about 10 minutes.
   ios-smoke:
     name: iOS Smoke (${{ matrix.app }}, ${{ matrix.configuration }}) [${{ matrix.precision }}]
     needs: [check-natives, pack, maui-pack]
@@ -2355,14 +2357,16 @@ jobs:
       (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success' &&
       needs.check-natives.outputs.tested-bump != 'true')
     runs-on: macos-26
-    timeout-minutes: 30
+    # Room for the Release cell's AOT build on tag runs; the smoke step keeps its own 6-minute limit.
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - {app: smoke, configuration: Debug, precision: single, bundle: dev.twodog.smoke, marker: 2DOG_IOS_CSHARP_SMOKE_PASSED}
-          - {app: showcase, configuration: Release, precision: double, bundle: dev.twodog.showcase, marker: 2DOG_IOS_SHOWCASE_SMOKE_PASSED}
-          - {app: maui, configuration: Debug, precision: single, bundle: com.companyname.showcase.maui, marker: 2DOG_MAUI_SHOWCASE_SMOKE_PASSED}
+        # The strategy context has no env, so the cells are JSON literals; the Release cell is appended on tags.
+        include: >-
+          ${{ fromJSON(format('[{0}{1}]',
+          '{"app":"smoke","configuration":"Debug","precision":"single","bundle":"dev.twodog.smoke","marker":"2DOG_IOS_CSHARP_SMOKE_PASSED"},{"app":"maui","configuration":"Debug","precision":"single","bundle":"com.companyname.showcase.maui","marker":"2DOG_MAUI_SHOWCASE_SMOKE_PASSED"}',
+          startsWith(github.ref, 'refs/tags/v') && ',{"app":"showcase","configuration":"Release","precision":"double","bundle":"dev.twodog.showcase","marker":"2DOG_IOS_SHOWCASE_SMOKE_PASSED"}' || '')) }}
     env:
       TwoDogPrecision: ${{ matrix.precision }}
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer

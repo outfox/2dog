@@ -113,7 +113,8 @@ function observeContainer(canvas) {
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {{packUrl: string, packName: string, resize: number, focusCanvas: boolean, locale: ?string}} options
+ * @param {{packUrl: string, packName: string, resize: number, focusCanvas: boolean, locale: ?string, renderingDriver: string}} options
+ * @returns {Promise<string>} The rendering driver to boot, 'opengl3' when WebGPU is unavailable.
  */
 export async function prepare(canvas, options) {
     const Module = runtimeModule();
@@ -134,18 +135,27 @@ export async function prepare(canvas, options) {
         Module.__twodogLocateFile = true;
     }
 
+    let renderingDriver = options.renderingDriver;
     try {
-        if (options.renderingDriver === 'webgpu' && !Module.preinitializedWebGPUDevice) {
-            const device = await requestWebGpuDevice();
+        if (renderingDriver === 'webgpu' && !Module.preinitializedWebGPUDevice) {
+            // Like engine.js, a missing WebGPU device falls back to WebGL 2 Compatibility.
+            const device = await requestWebGpuDevice().catch(error => {
+                console.warn('2dog.blazor: WebGPU device unavailable; falling back to WebGL 2 Compatibility.', error);
+                return null;
+            });
             if (controller.signal.aborted) {
-                device.destroy();
+                device?.destroy();
                 controller.signal.throwIfAborted();
             }
-            Module.preinitializedWebGPUDevice = device;
-            device.lost.then(info => {
-                if (info.reason !== 'destroyed') console.error('2dog.blazor: WebGPU device lost: ' + info.message);
-                if (Module.preinitializedWebGPUDevice === device) delete Module.preinitializedWebGPUDevice;
-            });
+            if (device) {
+                Module.preinitializedWebGPUDevice = device;
+                device.lost.then(info => {
+                    if (info.reason !== 'destroyed') console.error('2dog.blazor: WebGPU device lost: ' + info.message);
+                    if (Module.preinitializedWebGPUDevice === device) delete Module.preinitializedWebGPUDevice;
+                });
+            } else {
+                renderingDriver = 'opengl3';
+            }
         }
         // An interop cancellation can release the lease while initFS is still running.
         // The next view must join that initialization instead of mounting IDBFS twice.
@@ -186,6 +196,7 @@ export async function prepare(canvas, options) {
         'onExecute': null,
         'onExit': null,
     });
+    return renderingDriver;
 }
 
 export function release(canvas) {
