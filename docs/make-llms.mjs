@@ -94,8 +94,8 @@ const SECTIONS = [
     'known-issues/xunit-discovery.md', 'known-issues/gd-print-output.md',
     'known-issues/spaced-project-names.md',
   ]],
-  ['Optional', [
-    'faq.md', 'troubleshooting.md',
+  ['More', [
+    'godot-forks.md', 'faq.md', 'troubleshooting.md',
   ]],
 ];
 
