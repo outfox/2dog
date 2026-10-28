@@ -90,8 +90,11 @@ internal sealed class StagedProject
             var name = Path.GetFileName(file);
             if ((name == ".gdignore" && !framework) || name == ".git" || name.EndsWith(".csproj", StringComparison.OrdinalIgnoreCase)
                 || name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) || name.EndsWith(".slnx", StringComparison.OrdinalIgnoreCase)) continue;
-            if (File.GetAttributes(file).HasFlag(FileAttributes.ReparsePoint))
-                throw new IOException($"Staging linked files is unsupported: {file}");
+            // A linked file stages as a copy of its target's bytes, which is what Godot reads and exports. Vendored
+            // native libraries commonly ship as links (libfmod.so -> libfmod.so.13). Linked directories stay rejected.
+            if (File.GetAttributes(file).HasFlag(FileAttributes.ReparsePoint)
+                && File.ResolveLinkTarget(file, returnFinalTarget: true) is not FileInfo { Exists: true })
+                throw new IOException($"Staging a linked file requires an existing file target: {file}");
             File.Copy(file, Path.Combine(destination, name), overwrite: true);
         }
         foreach (var directory in Directory.EnumerateDirectories(source).Order(StringComparer.Ordinal))

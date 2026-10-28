@@ -126,8 +126,8 @@ Set these properties on `GdUnitOptions` in `Program.cs`:
 Each request keeps `project/`, `import.log`, `godot.log`, and `events.json` in a
 fresh artifact directory. The source game and its import cache are unchanged.
 Selected test roots become visible only in the stage; nested `.gdignore` trees
-remain excluded. Symlinks and an existing game copy of `addons/gdUnit4` are
-rejected. Source edits appear in the next fresh stage.
+remain excluded. Linked files stage as copies of their targets. Linked
+directories and an existing game copy of `addons/gdUnit4` are rejected. Source edits appear in the next fresh stage.
 
 The host is headless and serializes requests within its load context. It pumps
 and destroys Godot on the thread that started it, then waits for engine

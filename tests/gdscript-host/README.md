@@ -45,6 +45,8 @@ build output still goes to its SDK-managed `.godot/mono` directory.
 - A normal import skips the test host's `.gdignore` tree. A stage beneath that
   ignored host imports only the selected test roots, with original `res://`
   paths. A nested ignored directory containing invalid GDScript stays excluded.
+- A linked file stages as a copy of its target, while a linked directory is
+  rejected.
 - Game global classes and existing UIDs survive staging. Test UIDs, textures,
   and the test suite's global class appear only in the private project. Source
   resources, settings, sidecars, and import caches remain byte-for-byte unchanged

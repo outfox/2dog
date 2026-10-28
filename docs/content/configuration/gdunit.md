@@ -134,8 +134,9 @@ Set these properties on `GdUnitOptions` in `Program.cs`:
 For tests under a nested host, include that host in each root, for example
 `MyGame.gdunit/tests`. Roots must remain inside the source game. A root can
 be in a directory that the game ignores, such as `MyGame.gdunit/`. Nested
-`.gdignore` trees inside a root stay excluded. Linked
-files and directories are unsupported. Timeouts must be positive.
+`.gdignore` trees inside a root stay excluded. A linked file, such as a vendored
+`libfmod.so` pointing at its versioned library, stages as a copy of its target.
+Linked directories are unsupported. Timeouts must be positive.
 
 For a mixed C#/GDScript game, build the game through a `ProjectReference` from
 the host. If you stage the game

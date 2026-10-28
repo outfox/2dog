@@ -39,6 +39,15 @@ try
             throw new InvalidOperationException("Staging accepted a test root outside the game.");
         }
         catch (ArgumentException) { }
+        var linkedDirectory = Path.Combine(original, "linked");
+        Directory.CreateSymbolicLink(linkedDirectory, host);
+        try
+        {
+            _ = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(gdunit, "bridge"), Path.Combine(output, "linked"));
+            throw new InvalidOperationException("Staging accepted a linked directory.");
+        }
+        catch (IOException) { }
+        Directory.Delete(linkedDirectory);
         // The stage itself lives beneath the ignored host, as it would in a real scaffold.
         var project = new StagedProject(original, [host + "/tests"], gdunit, Path.Combine(gdunit, "bridge"),
             Path.Combine(original, host, "obj", "run-1", "project"));
@@ -48,6 +57,11 @@ try
         Require(!Directory.Exists(Path.Combine(project.Root, host, "tests", "ignored")), "A nested ignored directory became visible.");
         Require(!Directory.EnumerateFiles(project.Root, "*.csproj", SearchOption.AllDirectories).Any(),
             "Build project files should not be needed for resource loading.");
+        // Vendored native libraries ship as links (libfmod.so -> libfmod.so.13); a stage holds the target's bytes.
+        var stagedLibrary = Path.Combine(project.Root, "addons", "vendor", "linux", "libvendor.so");
+        Require(name != "pure" || (File.Exists(stagedLibrary) && File.ResolveLinkTarget(stagedLibrary, returnFinalTarget: false) == null
+            && File.ReadAllText(stagedLibrary) == File.ReadAllText(Path.Combine(original, "addons", "vendor", "linux", "libvendor.so.13"))),
+            "A linked file was not staged as a copy of its target.");
         EmbeddedRunner.Import(project.Root, Path.Combine(output, "stage-import.log"));
         var stageCache = File.ReadAllText(Path.Combine(project.Root, ".godot", "global_script_class_cache.cfg"));
         Require(stageCache.Contains(name == "pure" ? "IsolatedGdUnitSuite" : "MixedGdUnitSuite", StringComparison.Ordinal),
@@ -144,7 +158,12 @@ static Dictionary<string, string> Fingerprint(string root) => Directory.Enumerat
 static void CopyFixture(string source, string destination)
 {
     Directory.CreateDirectory(destination);
-    foreach (var file in Directory.EnumerateFiles(source)) File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
+    foreach (var file in Directory.EnumerateFiles(source))
+    {
+        // Keep links as links so the copy exercises the same staging paths as the checked-in fixture.
+        if (new FileInfo(file).LinkTarget is { } target) File.CreateSymbolicLink(Path.Combine(destination, Path.GetFileName(file)), target);
+        else File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
+    }
     foreach (var directory in Directory.EnumerateDirectories(source))
         if (Path.GetFileName(directory) is not (".godot" or "bin" or "obj")) CopyFixture(directory, Path.Combine(destination, Path.GetFileName(directory)));
 }
