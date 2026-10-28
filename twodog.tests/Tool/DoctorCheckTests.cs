@@ -268,6 +268,25 @@ public class DoctorCheckTests : IDisposable
     }
 
     [Fact]
+    public void CustomPropsVersions_WarnAndSurviveDoctorFix()
+    {
+        var dir = Scaffold("--generic");
+        Edit(dir, "Directory.Build.props", $"<TwoDogVersion>{ToolVersions.TwoDogVersion}</TwoDogVersion>",
+            "<TwoDogVersion>4.7.2.139-sora</TwoDogVersion>");
+        Edit(dir, "Directory.Build.props", $"<TwoDogNativesVersion>{ToolVersions.NativesVersion}</TwoDogNativesVersion>",
+            "<TwoDogNativesVersion>4.7.2.55-sora</TwoDogNativesVersion>");
+        var before = File.ReadAllText(Path.Combine(dir, "Directory.Build.props"));
+
+        var run = Doctor(dir, "--json", "--fix");
+
+        Issue(run.Stdout, "ver.custom-versions", "warn", fixable: false);
+        Assert.Empty(Findings(run.Stdout, "ver.crashed"));
+        Assert.Empty(Findings(run.Stdout, "ver.props-invalid"));
+        Assert.Empty(Findings(run.Stdout, "ver.twodog-outdated"));
+        Assert.Equal(before, File.ReadAllText(Path.Combine(dir, "Directory.Build.props")));
+    }
+
+    [Fact]
     public void MalformedCompanionVersion_Fails()
     {
         var dir = Scaffold("--generic");

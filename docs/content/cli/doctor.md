@@ -10,6 +10,11 @@ Checks the project and this machine without a build, and applies the fixes
 that it can. Use `--fix` for safe repairs. Use `--fix-all` or the interactive
 checklist for announced fixes.
 
+Custom or prerelease engine versions produce a `ver.custom-versions` warning.
+Doctor checks full version labels for consistency and uses their numeric parts
+to check the Godot line. It skips public release upgrade comparisons; matching
+labels cannot establish compatibility between a fork and its GDExtensions.
+
 ```bash
 2dog doctor [path] [options]
 ```
@@ -153,6 +158,7 @@ Ids are stable; `--ignore <id>` drops one.
 |-----------------------------|-----------------------------------------------------------------------------------|
 | `ver.managed-elsewhere`     | doctor notes versions that come from your own properties, but does not check them |
 | `ver.props-invalid`         | the TwoDog* versions in Directory.Build.props are readable versions               |
+| `ver.custom-versions`       | custom versions receive best-effort checks without public release upgrade advice |
 | `ver.literal-versions`      | host csprojs use the shared version properties, not literals                      |
 | `ver.twodog-consistent`     | every 2dog package uses the same version                                          |
 | `ver.twodog-outdated`       | the 2dog packages are at this tool's version                                      |

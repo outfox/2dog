@@ -5,6 +5,11 @@ The .NET Tool for [2dog](https://2dog.dev), which runs Godot as a library from y
 Blazor, WinForms, WinUI 3, MAUI, Android, a C# REPL, and xUnit, NUnit or gdUnit tests. Then it keeps them healthy with
 `2dog doctor` and current with `2dog update`.
 
+Doctor warns about custom or prerelease engine versions and checks them on a
+best-effort basis. It checks version consistency and the numeric Godot line,
+but skips public release upgrade comparisons and cannot verify a fork's binary
+compatibility with its GDExtensions.
+
 The `dotnet new` templates ship separately as [`2dog.templates`](https://www.nuget.org/packages/2dog.templates).
 To reference the engine from your own code, use [`2dog.engine`](https://www.nuget.org/packages/2dog.engine) instead.
 
