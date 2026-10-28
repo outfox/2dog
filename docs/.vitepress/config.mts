@@ -305,13 +305,13 @@ export default defineConfig<ThemeConfig>({
                 ]
               }
             ]
-          }
+          },
+          { text: gd('gobot') + 'Godot Forks', link: '/godot-forks' },
         ]
       },
       {
         text: 'More',
         items: [
-          { text: gd('gobot') + 'Godot Forks', link: '/godot-forks' },
           { text: gd('speech_bubble_question') + 'FAQ', link: '/faq' },
           { text: gd('bug') + 'Troubleshooting', link: '/troubleshooting' },
           {
