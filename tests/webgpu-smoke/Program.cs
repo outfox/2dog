@@ -16,8 +16,30 @@ internal static class Program
             if (args.Contains("--project-settings")) options = ["--audio-driver", "Dummy"];
             if (OperatingSystem.IsLinux()) options = [.. options, "--display-driver", "x11"];
             if (args.Contains("--headless")) options = [.. options, "--headless"];
+            if (args.Contains("--msaa")) options = [.. options, "--script", "res://msaa.gd"];
             using var engine = new Engine("NativeWebGpuSmoke", AppContext.BaseDirectory, options) { CaptureErrors = true, NativePath = System.Environment.GetEnvironmentVariable("TWODOG_WEBGPU_NATIVE_PATH") };
             engine.Start();
+            if (args.Contains("--msaa"))
+            {
+                var deadline = DateTime.UtcNow.AddSeconds(60);
+                while (engine.Update())
+                {
+                    if (DateTime.UtcNow > deadline) throw new Exception("MSAA smoke timed out.");
+                    Thread.Sleep(10);
+                }
+                engine.Dispose();
+                engine.Completion.GetAwaiter().GetResult();
+                var msaaErrors = engine.Errors.Drain();
+                var unexpected = msaaErrors.Where(error => !error.Text.StartsWith("WebGPU: texture format does not support the requested sample count.", StringComparison.Ordinal)
+                    && !error.Text.StartsWith("WebGPU: render pipelines only support sample counts 1 and 4.", StringComparison.Ordinal)
+                    && !error.Text.StartsWith("WebGPU: color attachment format does not support the pipeline sample count.", StringComparison.Ordinal)
+                    && !(error.File.EndsWith("render_scene_buffers_rd.cpp", StringComparison.Ordinal) && error.Text.StartsWith("Requested ", StringComparison.Ordinal))
+                    && !(error.File.EndsWith("rendering_device.cpp", StringComparison.Ordinal)
+                        && (error.Code.Contains("!texture.driver_id", StringComparison.Ordinal) || error.Code.Contains("!pipeline.driver_id", StringComparison.Ordinal)))).ToArray();
+                if (unexpected.Length != 0)
+                    throw new Exception("Unexpected MSAA errors: " + string.Join("\n", unexpected.Select(error => error.ToString())));
+                return;
+            }
             if (OperatingSystem.IsLinux() && DisplayServer.GetName() == "X11") X11EventQueueSmoke.Run();
             if (args.Contains("--startup-only"))
             {
