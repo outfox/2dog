@@ -316,6 +316,7 @@
 
             const missing = Engine.getMissingFeatures({
                 threads: GODOT_THREADS_ENABLED,
+                renderingDriver: GODOT_CONFIG['renderingDriver'],
             });
 
             if (missing.length !== 0) {
