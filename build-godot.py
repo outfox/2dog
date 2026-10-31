@@ -678,8 +678,10 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
             suffix = ".double" if getattr(args, "precision", "single") == "double" else ""
             dev = ".dev" if use_dev_build == "yes" else ""
+            # SCons gives shared libraries a `lib` prefix everywhere except Windows.
+            source_prefix = "godot" if platform_config.lib_extension == ".dll" else "libgodot"
             source = Path("godot/bin") / (
-                f"godot.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
+                f"{source_prefix}.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
             )
             destination = native_output_dir(getattr(args, "precision", "single")) / "sdl3" / (
                 f"godot.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
