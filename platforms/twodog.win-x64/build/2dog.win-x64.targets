@@ -4,7 +4,7 @@
     <PropertyGroup>
         <_TwoDogWinX64TargetsDir>$(MSBuildThisFileDirectory.TrimEnd('\').TrimEnd('/'))</_TwoDogWinX64TargetsDir>
         <TwoDogWinX64PackageVersion Condition="'$(TwoDogWinX64PackageVersion)' == ''">$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(_TwoDogWinX64TargetsDir)'))))</TwoDogWinX64PackageVersion>
-        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
+        <TwoDogLocalGodotBin Condition="'$(TwoDogLocalGodotBin)' == ''">$(MSBuildThisFileDirectory)../../../../godot/bin/$(TwoDogNativeOutputSubdir)/</TwoDogLocalGodotBin>
     </PropertyGroup>
 
     <!-- Editor libgodot location for 2dog.engine's TwoDogImportGodotProject; host-OS guarded (not RID) because the
@@ -22,6 +22,7 @@
             <LibPrefix>libgodot</LibPrefix>
             <Ext>dll</Ext>
             <HostOs>Windows</HostOs>
+            <GodotArch>x86_64</GodotArch>
             <RidPrefix>win</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
             <LocalRelease>godot.windows.template_release$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll</LocalRelease>
