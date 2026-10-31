@@ -22,6 +22,7 @@
             <LibPrefix>libgodot</LibPrefix>
             <Ext>dylib</Ext>
             <HostOs>OSX</HostOs>
+            <GodotArch>arm64</GodotArch>
             <RidPrefix>osx</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
             <LocalRelease>libgodot.macos.template_release$(TwoDogNativePrecisionSuffix).arm64.shared_library.dylib</LocalRelease>

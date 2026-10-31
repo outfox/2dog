@@ -22,6 +22,7 @@
             <LibPrefix>libgodot</LibPrefix>
             <Ext>so</Ext>
             <HostOs>Linux</HostOs>
+            <GodotArch>x86_64</GodotArch>
             <RidPrefix>linux</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
             <LocalRelease>libgodot.linuxbsd.template_release$(TwoDogNativePrecisionSuffix).x86_64.shared_library.so</LocalRelease>

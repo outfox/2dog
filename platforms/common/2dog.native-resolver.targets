@@ -11,9 +11,11 @@
             <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == '' And '$(Configuration)' == 'Debug'">debug</_TwoDogNativeVariant>
             <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == '' And '$(Configuration)' == 'Editor'">editor</_TwoDogNativeVariant>
             <_TwoDogNativeVariant Condition="'$(_TwoDogNativeVariant)' == ''">release</_TwoDogNativeVariant>
+            <TwoDogSdl3NativeTarget>template_$(_TwoDogNativeVariant)</TwoDogSdl3NativeTarget>
         </PropertyGroup>
         <ItemGroup>
-            <_TwoDogNativeResolved Include="@(TwoDogNativeResolver)"/>
+            <_TwoDogNativeResolved Include="@(TwoDogNativeResolver)">
+                            </_TwoDogNativeResolved>
             <_TwoDogNativeResolved>
                 <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'release'">%(LocalRelease)</LocalFile>
                 <LocalFile Condition="'$(_TwoDogNativeVariant)' == 'debug'">%(LocalDebug)</LocalFile>
@@ -28,7 +30,9 @@
                 <LocalPath>%(LocalBin)%(LocalFile)</LocalPath>
                 <SidecarDir>%(LocalBin)webgpu/%(Identity)/</SidecarDir>
             </_TwoDogNativeResolved>
-            <_TwoDogNativeResolved>
+
+            <!-- Conditional, not just its metadata: an unconditional block replaces the item above. -->
+            <_TwoDogNativeResolved Condition="'%(Resolved)' == ''">
                 <Resolved Condition="Exists('%(PkgPath)')">%(PkgPath)</Resolved>
                 <SidecarDir Condition="Exists('%(PkgPath)')">%(PkgNativeDir)</SidecarDir>
             </_TwoDogNativeResolved>
@@ -38,9 +42,27 @@
         </ItemGroup>
     </Target>
 
+    <!-- TwoDogSdl3Natives: swap each resolved native for the sdl3 engine staged in godot/bin/sdl3/.
+         Runs after TwoDogResolveNativeLibs so $(TwoDogSdl3NativeTarget) is already computed. -->
+    <Target Name="TwoDogResolveSdl3Natives" DependsOnTargets="TwoDogResolveNativeLibs" Condition="'$(TwoDogSdl3Natives)' == 'true'">
+        <ItemGroup>
+            <_TwoDogSdl3Resolved Include="@(_TwoDogNativeResolved)" Condition="Exists('$(TwoDogLocalGodotBin)sdl3/godot.sdl3.$(TwoDogSdl3NativeTarget)$(TwoDogNativePrecisionSuffix).%(GodotArch).shared_library.%(Ext)')">
+                <Resolved>$(TwoDogLocalGodotBin)sdl3/godot.sdl3.$(TwoDogSdl3NativeTarget)$(TwoDogNativePrecisionSuffix).%(GodotArch).shared_library.%(Ext)</Resolved>
+                <!-- The package folder holds the stock engine under the same file name; point the sidecar glob at nothing. -->
+                <SidecarDir>$(TwoDogLocalGodotBin)sdl3/sidecar/</SidecarDir>
+            </_TwoDogSdl3Resolved>
+        </ItemGroup>
+        <Error Condition="'@(_TwoDogSdl3Resolved)' == ''"
+               Text="2dog: TwoDogSdl3Natives is set but no sdl3 engine is staged at $(TwoDogLocalGodotBin)sdl3/. Build it with: uv run build-godot.py --platform sdl3 --no-editor --no-glue" />
+        <ItemGroup>
+            <_TwoDogNativeResolved Remove="@(_TwoDogNativeResolved)" />
+            <_TwoDogNativeResolved Include="@(_TwoDogSdl3Resolved)" />
+        </ItemGroup>
+    </Target>
+
     <Target Name="TwoDogCopyNativeLibs"
             AfterTargets="Build"
-            DependsOnTargets="TwoDogResolveNativeLibs"
+            DependsOnTargets="TwoDogResolveNativeLibs;TwoDogResolveSdl3Natives"
             Condition="'$(DesignTimeBuild)' != 'true' And '$(TargetPlatformIdentifier)' != 'android' And '$(TargetPlatformIdentifier)' != 'ios'">
         <ItemGroup>
             <_TwoDogNativeForBuild Include="@(_TwoDogNativeResolved)"
@@ -50,7 +72,7 @@
                  Text="2dog: could not locate %(_TwoDogNativeForBuild.OutName) for %(_TwoDogNativeForBuild.Identity). Searched NuGet: %(_TwoDogNativeForBuild.PkgPath) - local: %(_TwoDogNativeForBuild.LocalPath). The application will fail at runtime with DllNotFoundException."/>
         <Copy SourceFiles="%(_TwoDogNativeForBuild.Resolved)"
               DestinationFiles="$(OutputPath)%(_TwoDogNativeForBuild.OutName)"
-              SkipUnchangedFiles="true"
+              SkipUnchangedFiles="false"
               Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
         <ItemGroup>
             <_TwoDogSidecarForBuild Include="%(_TwoDogNativeForBuild.SidecarDir)**/*"
