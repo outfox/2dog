@@ -54,6 +54,12 @@
         </ItemGroup>
         <Error Condition="'@(_TwoDogSdl3Resolved)' == ''"
                Text="2dog: TwoDogSdl3Natives is set but no sdl3 engine is staged at $(TwoDogLocalGodotBin)sdl3/. Build it with: uv run build-godot.py --platform sdl3 --no-editor --no-glue" />
+        <!-- Every item needs a staged engine: a partial swap would mix the stock and sdl3 engines in one process. -->
+        <ItemGroup>
+            <_TwoDogSdl3Missing Include="@(_TwoDogNativeResolved)" Exclude="@(_TwoDogSdl3Resolved)" />
+        </ItemGroup>
+        <Error Condition="'@(_TwoDogSdl3Missing)' != ''"
+               Text="2dog: TwoDogSdl3Natives is set but no sdl3 engine is staged for: @(_TwoDogSdl3Missing->'%(Identity)', ', '). Build each with: uv run build-godot.py --platform sdl3 --target template_$(_TwoDogNativeVariant) --no-editor --no-glue" />
         <ItemGroup>
             <_TwoDogNativeResolved Remove="@(_TwoDogNativeResolved)" />
             <_TwoDogNativeResolved Include="@(_TwoDogSdl3Resolved)" />
@@ -70,9 +76,14 @@
         </ItemGroup>
         <Warning Condition="'@(_TwoDogNativeForBuild)' != '' And '%(_TwoDogNativeForBuild.Resolved)' == ''"
                  Text="2dog: could not locate %(_TwoDogNativeForBuild.OutName) for %(_TwoDogNativeForBuild.Identity). Searched NuGet: %(_TwoDogNativeForBuild.PkgPath) - local: %(_TwoDogNativeForBuild.LocalPath). The application will fail at runtime with DllNotFoundException."/>
+        <PropertyGroup>
+            <!-- The sdl3 engine and the stock one share OutName, so a swap must overwrite even at an equal timestamp. -->
+            <_TwoDogSkipUnchangedNativeCopy Condition="'$(TwoDogSdl3Natives)' != 'true'">true</_TwoDogSkipUnchangedNativeCopy>
+            <_TwoDogSkipUnchangedNativeCopy Condition="'$(TwoDogSdl3Natives)' == 'true'">false</_TwoDogSkipUnchangedNativeCopy>
+        </PropertyGroup>
         <Copy SourceFiles="%(_TwoDogNativeForBuild.Resolved)"
               DestinationFiles="$(OutputPath)%(_TwoDogNativeForBuild.OutName)"
-              SkipUnchangedFiles="false"
+              SkipUnchangedFiles="$(_TwoDogSkipUnchangedNativeCopy)"
               Condition="'%(_TwoDogNativeForBuild.Resolved)' != ''"/>
         <ItemGroup>
             <_TwoDogSidecarForBuild Include="%(_TwoDogNativeForBuild.SidecarDir)**/*"
@@ -89,7 +100,7 @@
 
     <!-- A RID-less publish targets the build host, so an empty RuntimeIdentifier counts when the host OS matches;
          otherwise the publish folder ships without the native (DllNotFoundException). -->
-    <Target Name="TwoDogSelectPublishNativeLibs" DependsOnTargets="TwoDogResolveNativeLibs">
+    <Target Name="TwoDogSelectPublishNativeLibs" DependsOnTargets="TwoDogResolveNativeLibs;TwoDogResolveSdl3Natives">
         <ItemGroup>
             <_TwoDogNativeForPublish Include="@(_TwoDogNativeResolved)"
                                      Condition="('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))) Or $([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('%(_TwoDogNativeResolved.RidPrefix)'))"/>

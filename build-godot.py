@@ -171,9 +171,8 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
         )
 
     if plat == Platform.SDL3:
-        # A single SDL3 port serves desktop and the consoles: windowing, input and
-        # surfaces all come from SDL, so the engine carries no platform-specific
-        # OS or DisplayServer for any of them.
+        # SDL3 provides windowing, input and surfaces, so this port needs no
+        # platform-specific OS or DisplayServer. Windows and Linux desktop only for now.
         return PlatformConfig(
             godot_platform=Platform.SDL3.value,
             godot_arch=arch_str,
@@ -596,11 +595,10 @@ def build_libgodot(args, platform_config: PlatformConfig):
     else:
         targets = [args.target]
 
-    if platform_config.godot_platform == Platform.SDL3.value and "editor" in targets:
-        # --target all asks for the editor too; skip it rather than fail, but say why.
-        console.print("[yellow]sdl3 has no editor target; glue still comes from a desktop editor build.[/yellow]")
-        targets = [t for t in targets if t != "editor"]
+    if platform_config.godot_platform == Platform.ANDROID.value and "editor" in targets:
         raise ValueError("Android .NET library builds have no editor target; use a desktop editor for glue")
+    if platform_config.godot_platform == Platform.SDL3.value and "editor" in targets:
+        raise ValueError("sdl3 library builds have no editor target; use a desktop editor for glue")
     if is_ios and "editor" in targets:
         raise ValueError("iOS .NET library builds have no editor target; use a desktop editor for glue")
 
@@ -683,8 +681,9 @@ def build_libgodot(args, platform_config: PlatformConfig):
             source = Path("godot/bin") / (
                 f"{source_prefix}.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
             )
+            # Staged without .dev: the resolver matches this name, and dev_build only changes engine behaviour.
             destination = native_output_dir(getattr(args, "precision", "single")) / "sdl3" / (
-                f"godot.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
+                f"godot.sdl3.{target}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
             )
             destination.parent.mkdir(parents=True, exist_ok=True)
             # copy2 keeps the source mtime, which can be older than the file being

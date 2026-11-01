@@ -96,15 +96,18 @@ The generic host does this only in Release. To keep console output, set
 ### Shader baking
 
 Enable `shader_baker/enabled` in the `Windows Desktop`, `Linux`, or `macOS`
-preset to ship compiled Vulkan shaders in the `.pck` instead of compiling
-every variant on the player's machine at first use. Publishing then runs the
+preset to ship compiled Vulkan shaders in the `.pck`, which cuts the shader
+compilation a player's machine does on first use. Publishing then runs the
 export with a window-less Vulkan device, so the build machine needs a GPU or a
 software Vulkan driver such as lavapipe, but no display. Projects on the
 Compatibility renderer skip baking: OpenGL compiles its shaders at runtime.
 
-The renderer reads the baked files from `res://.godot/shader_cache` before it
-compiles anything, so a publish without baking still works, just slower on the
-first run.
+The bake covers the shaders the engine and the project's materials are known
+to use while exporting. Shaders created only at runtime, such as those a
+plugin builds from new source, and the final GPU pipeline compilation still
+happen on the player's machine. The renderer loads any baked file it finds
+under `res://.godot/shader_cache` before compiling that shader, so a publish
+without baking still works, just slower on the first run.
 
 ## Native AOT
 

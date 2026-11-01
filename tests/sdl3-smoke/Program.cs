@@ -22,7 +22,7 @@ internal static class Program
             if (args.Contains("--opengl")) options = [.. options, "--rendering-method", "gl_compatibility", "--rendering-driver", "opengl3"];
             if (args.Contains("--verbose")) options = [.. options, "--verbose"];
 
-            using var engine = new Engine("Sdl3Smoke", AppContext.BaseDirectory, options) { CaptureErrors = !args.Contains("--verbose") };
+            using var engine = new Engine("Sdl3Smoke", AppContext.BaseDirectory, options) { CaptureErrors = true };
             engine.Start();
 
             string expectedDisplay = args.Contains("--headless") ? "headless" : "sdl3";
@@ -83,17 +83,24 @@ internal static class Program
             if (errors.Length != 0)
             {
                 Console.Error.WriteLine(string.Join("\n", errors.Select(error => error.ToString())));
+                ReportFailures();
                 return 1;
             }
         }
 
         if (Failures.Count != 0)
         {
-            foreach (var failure in Failures) Console.Error.WriteLine($"SDL3_SMOKE_FAILED: {failure}");
+            ReportFailures();
             return 1;
         }
 
         Console.WriteLine("SDL3_SMOKE_PASSED");
         return 0;
+
+        // Every check that failed before the engine reported its own errors, so neither list hides the other.
+        static void ReportFailures()
+        {
+            foreach (var failure in Failures) Console.Error.WriteLine($"SDL3_SMOKE_FAILED: {failure}");
+        }
     }
 }
