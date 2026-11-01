@@ -55,6 +55,9 @@ internal static class Program
                 if (!string.IsNullOrEmpty(shot)) image.SavePng(shot);
             }
 
+            if (lifetime == 0 && args.Contains("--input") && !args.Contains("--headless"))
+                InputChecks.Run(engine, Check);
+
             // where.exe / which exit 1 when they find nothing and 0 when they do.
             string finder = OperatingSystem.IsWindows() ? "where.exe" : "which";
             string known = OperatingSystem.IsWindows() ? "cmd.exe" : "sh";

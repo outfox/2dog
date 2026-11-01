@@ -21,6 +21,12 @@ a `.gdignore`):
   Explicitly references `2dog.engine.double` and builds the shared game against double bindings. Requires the
   matching `.double` packages in the local feed until they are published. The API smoke checks native double
   support and large-coordinate round trips on startup; use `-- --headless --quit-after 10` for a short smoke run.
+- SDL3 platform: the same `showcase.2dog` host runs on the SDL3 engine port (`godot/platform/sdl3`), which opens its
+  own window and feeds keyboard, mouse and gamepad through SDL. Build it with
+  `uv run build-godot.py --platform sdl3 --target template_debug --no-editor --no-glue --webgpu no`, then run
+  `dotnet run --project demos/showcase/showcase.2dog -p:TwoDogSdl3Natives=true -- --display-driver sdl3`. The platform
+  packages must be packed from this checkout so the resolver knows `TwoDogSdl3Natives`. CI covers it in the
+  `SDL3 Smoke` job, which also runs `tests/sdl3-smoke`.
 - `showcase.web/` - browser (wasm) host: `dotnet publish` from that folder (defaults to Release; needs the wasm-tools workload)
 - `showcase.webmt/` - experimental multithreaded browser host (`WasmEnableThreads`): needs the threaded natives
   (`uv run build-godot.py --platform web --threads`) and a server sending COOP/COEP headers, opened via
