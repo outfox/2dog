@@ -43,6 +43,12 @@
             <_Parameter1>TwoDogVariant</_Parameter1>
             <_Parameter2>$(TwoDogVariant)</_Parameter2>
         </AssemblyAttribute>
+        <!-- Set by a host that links libgodot into its own executable: the loader then uses the program
+             handle instead of probing for a shared library. -->
+        <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute" Condition="'$(TwoDogLinkedLibGodot)' == 'true'">
+            <_Parameter1>TwoDogLinkedLibGodot</_Parameter1>
+            <_Parameter2>true</_Parameter2>
+        </AssemblyAttribute>
     </ItemGroup>
 
     <!-- Hosts referencing both a Godot.NET.Sdk game project and 2dog.engine get Godot.SourceGenerators twice.

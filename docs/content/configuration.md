@@ -17,6 +17,7 @@ shared settings in the root
 | `GodotProjectDir` | None | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()` |
 | `TwoDogVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android/iOS native variant; explicit settings override the default. Android and iOS do not support `editor`; browser hosts use `TwoDogWebVariant` |
 | `TwoDogRemoveDuplicateGodotAnalyzers` | `false` | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project |
+| `TwoDogLinkedLibGodot` | `false` | The host links libgodot into its own executable instead of loading a shared library; the loader then uses the program image |
 
 For a host nested directly inside the Godot project:
 
@@ -128,6 +129,28 @@ Native AOT trims the app. See [Trimming](#trimming) for assemblies that your
 code uses only through reflection. Android has [experimental Native AOT](./configuration/android#native-aot)
 with NDK requirements and different trimmer roots. Browser hosts use Mono's
 AOT compiler through `RunAOTCompilation`, described in their host references.
+
+## Statically linked hosts
+
+A host whose target cannot load shared libraries links libgodot into its own
+executable. Set `TwoDogLinkedLibGodot` and the P/Invoke resolver uses the
+program image instead of probing for a shared library; `libgodot` must be
+linked with the entry points exported, which `build-godot.py --static`
+produces. This is how an [iOS](./configuration/ios) app links the engine, and
+it is the seam any other static-link target reuses; the build and linker setup
+for such a target live outside this repository.
+
+```xml
+<PropertyGroup>
+  <TwoDogLinkedLibGodot>true</TwoDogLinkedLibGodot>
+</PropertyGroup>
+```
+
+The same substitution works for SDL: `build-godot.py --platform sdl3
+--sdl3-external-root <dir> --sdl3-external-sources "@<file>"` builds against an
+SDL tree kept outside this repository, instead of `thirdparty/sdl3-full`. The
+tree needs `include/` and a build config, and the file lists its sources
+relative to that root, one per line.
 
 ## Single-file
 

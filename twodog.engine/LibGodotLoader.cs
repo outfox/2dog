@@ -85,8 +85,9 @@ internal static class LibGodotLoader
         // LoadExact already picked this context's module (hosted mode).
         if (LoadedLibraryHandle != 0) return LoadedLibraryHandle;
 
-        // iOS apps link libgodot.a into their executable (the 2dog.ios targets force-load it).
-        if (OperatingSystem.IsIOS())
+        // A statically linked target (iOS apps link libgodot.a into their executable; a console app links
+        // libgodot into its own binary) exports the entry points itself, so the program handle resolves them.
+        if (OperatingSystem.IsIOS() || UsesLinkedLibGodot(typeof(LibGodotLoader).Assembly))
         {
             var program = NativeLibrary.GetMainProgramHandle();
             Record("__Internal", null, program);
@@ -158,6 +159,18 @@ internal static class LibGodotLoader
         }
 
         return null;
+    }
+
+    /// <summary>True when the host links libgodot into its own executable (<c>TwoDogLinkedLibGodot=true</c>):
+    /// no shared library exists to probe for, and the entry points are in the program image.</summary>
+    internal static bool UsesLinkedLibGodot(Assembly assembly)
+    {
+        foreach (var value in AssemblyMetadata.Values(assembly, "TwoDogLinkedLibGodot"))
+        {
+            if (bool.TryParse(value, out var linked) && linked) return true;
+        }
+
+        return false;
     }
 
     private static string? MetadataVariant(Assembly assembly)

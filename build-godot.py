@@ -254,6 +254,22 @@ def parse_arguments():
         action="store_true",
         help="Skip building libgodot library",
     )
+    parser.add_argument(
+        "--static",
+        action="store_true",
+        help="Build libgodot as a static archive for a host that links it into its own executable.",
+    )
+    parser.add_argument(
+        "--sdl3-external-root",
+        default="",
+        help="sdl3 only: an SDL tree kept outside this repository, used instead of thirdparty/sdl3-full.",
+    )
+    parser.add_argument(
+        "--sdl3-external-sources",
+        default="",
+        help="sdl3 only: the external tree's sources (whitespace-separated, relative to its root). "
+        "Passed as @FILE when it starts with '@' to keep long lists off the command line.",
+    )
 
     parser.add_argument(
         "--no-editor",
@@ -622,9 +638,10 @@ def build_libgodot(args, platform_config: PlatformConfig):
             "module_mono_enabled=yes",
             f"precision={getattr(args, 'precision', 'single')}",
             "d3d12=no",
-            # iOS is always a static archive; the library_type adds the libgodot entry points (platform/ios/libgodot_ios.mm).
-            "library_type=static_library" if is_ios else "library_type=shared_library",
-            *([] if is_ios else ["extra_suffix=shared_library"]),
+            # iOS is always a static archive, and a host that links libgodot into its own executable asks for
+            # one with --static. The library_type adds the libgodot entry points for both.
+            "library_type=static_library" if (is_ios or args.static) else "library_type=shared_library",
+            *([] if (is_ios or args.static) else ["extra_suffix=shared_library"]),
             # Godot's Metal driver, no MoltenVK; the Simulator has neither and falls back to GLES3. iOS 15.0 is the
             # hosts' SupportedOSPlatformVersion and the floor this SDK's libc++ still supports.
             *(["vulkan=no", "generate_bundle=no", "ios_min_version=15.0", f"simulator={'yes' if getattr(args, 'simulator', False) else 'no'}"] if is_ios else []),
@@ -637,6 +654,18 @@ def build_libgodot(args, platform_config: PlatformConfig):
         ]
         if args.cache_path:
             cmd.append(f"cache_path={args.cache_path}")
+        if platform_config.godot_platform == Platform.SDL3.value and args.sdl3_external_root:
+            if not args.sdl3_external_sources:
+                raise ValueError("--sdl3-external-root needs --sdl3-external-sources")
+            sources = args.sdl3_external_sources
+            # @FILE: a fork's source list can run to hundreds of entries.
+            if sources.startswith("@"):
+                sources = Path(sources[1:]).read_text()
+            cmd += [
+                "sdl3_host=external",
+                f"sdl3_external_root={args.sdl3_external_root}",
+                f"sdl3_external_sources={' '.join(sources.split())}",
+            ]
         cmd.extend(webgpu_flags(args, platform_config))
         run_with_live_output(cmd, cwd="godot", description=task_desc)
 
@@ -676,15 +705,25 @@ def build_libgodot(args, platform_config: PlatformConfig):
 
             suffix = ".double" if getattr(args, "precision", "single") == "double" else ""
             dev = ".dev" if use_dev_build == "yes" else ""
-            # SCons gives shared libraries a `lib` prefix everywhere except Windows.
-            source_prefix = "godot" if platform_config.lib_extension == ".dll" else "libgodot"
-            source = Path("godot/bin") / (
-                f"{source_prefix}.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
-            )
-            # Staged without .dev: the resolver matches this name, and dev_build only changes engine behaviour.
-            destination = native_output_dir(getattr(args, "precision", "single")) / "sdl3" / (
-                f"godot.sdl3.{target}{suffix}.{platform_config.godot_arch}.shared_library{platform_config.lib_extension}"
-            )
+            if args.static:
+                # SCons names the archive bin/libgodot<LIBSUFFIX>: the platform/target/dev/precision/arch
+                # suffix from SConstruct, then the toolchain's `.a`.
+                source_name = f"libgodot.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.a"
+                staged_name = f"libgodot.sdl3.{target}{suffix}.{platform_config.godot_arch}.a"
+            else:
+                # SCons gives shared libraries a `lib` prefix everywhere except Windows.
+                source_prefix = "godot" if platform_config.lib_extension == ".dll" else "libgodot"
+                source_name = (
+                    f"{source_prefix}.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library"
+                    f"{platform_config.lib_extension}"
+                )
+                # Staged without .dev: the resolver matches this name, and dev_build only changes behaviour.
+                staged_name = (
+                    f"godot.sdl3.{target}{suffix}.{platform_config.godot_arch}.shared_library"
+                    f"{platform_config.lib_extension}"
+                )
+            source = Path("godot/bin") / source_name
+            destination = native_output_dir(getattr(args, "precision", "single")) / "sdl3" / staged_name
             destination.parent.mkdir(parents=True, exist_ok=True)
             # copy2 keeps the source mtime, which can be older than the file being
             # replaced; consumers copy by timestamp, so stamp it now.
