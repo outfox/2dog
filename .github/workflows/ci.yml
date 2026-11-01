@@ -899,6 +899,16 @@ jobs:
           "${run[@]}" | tee sdl3-input.log
           grep -q SDL3_SMOKE_PASSED sdl3-input.log
 
+      # The compatibility renderer: SDL owns the GL context, the port makes it current and selects RasterizerGLES3.
+      - name: Smoke test, OpenGL with input
+        shell: bash
+        run: |
+          set -o pipefail
+          run=(dotnet run --project tests/sdl3-smoke -c Release -p:TwoDogSdl3Natives=true -- --opengl --input)
+          if [ "$RUNNER_OS" = Linux ]; then run=(xvfb-run -a "${run[@]}"); fi
+          "${run[@]}" | tee sdl3-opengl.log
+          grep -q SDL3_SMOKE_PASSED sdl3-opengl.log
+
       - name: Showcase on the SDL3 engine
         shell: bash
         run: |

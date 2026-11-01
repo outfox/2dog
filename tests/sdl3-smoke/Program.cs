@@ -19,13 +19,17 @@ internal static class Program
         {
             string[] options = ["--display-driver", "sdl3", "--audio-driver", "Dummy"];
             if (args.Contains("--headless")) options = [.. options, "--headless"];
+            if (args.Contains("--opengl")) options = [.. options, "--rendering-method", "gl_compatibility", "--rendering-driver", "opengl3"];
+            if (args.Contains("--verbose")) options = [.. options, "--verbose"];
 
-            using var engine = new Engine("Sdl3Smoke", AppContext.BaseDirectory, options) { CaptureErrors = true };
+            using var engine = new Engine("Sdl3Smoke", AppContext.BaseDirectory, options) { CaptureErrors = !args.Contains("--verbose") };
             engine.Start();
 
             string expectedDisplay = args.Contains("--headless") ? "headless" : "sdl3";
             Check(DisplayServer.GetName() == expectedDisplay, $"display server is {DisplayServer.GetName()}, not {expectedDisplay}");
             Check(OS.HasFeature("sdl3"), "OS.HasFeature(\"sdl3\") is false");
+            if (!args.Contains("--headless"))
+                Check(RenderingServer.GetRenderingDevice() is null == args.Contains("--opengl"), "rendering driver mismatch");
 
             // Bias is minutes with east negative, so it stays within +/-14 hours.
             long bias = Time.GetTimeZoneFromSystem()["bias"].As<long>();

@@ -93,6 +93,19 @@ Generated desktop hosts build as `WinExe`, which hides the Windows console.
 The generic host does this only in Release. To keep console output, set
 `OutputType=Exe`. Linux and macOS treat `WinExe` as `Exe`.
 
+### Shader baking
+
+Enable `shader_baker/enabled` in the `Windows Desktop`, `Linux`, or `macOS`
+preset to ship compiled Vulkan shaders in the `.pck` instead of compiling
+every variant on the player's machine at first use. Publishing then runs the
+export with a window-less Vulkan device, so the build machine needs a GPU or a
+software Vulkan driver such as lavapipe, but no display. Projects on the
+Compatibility renderer skip baking: OpenGL compiles its shaders at runtime.
+
+The renderer reads the baked files from `res://.godot/shader_cache` before it
+compiles anything, so a publish without baking still works, just slower on the
+first run.
+
 ## Native AOT
 
 Generic, Avalonia, and WinUI hosts support `PublishAot=true` with debug or
