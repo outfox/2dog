@@ -821,6 +821,9 @@ jobs:
       SCONS_CACHE_MSVC_CONFIG: true
       PYTHONIOENCODING: utf8
       DOTNET_DISABLE_GUI_ERRORS: '1'
+      # The packaged targets default TwoDogLocalGodotBin to a path relative to the NuGet package cache; this job
+      # builds the sdl3 engine into the checkout, so point the resolver there for every dotnet invocation.
+      TwoDogLocalGodotBin: ${{ github.workspace }}/godot/bin/
 
     steps:
       # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
