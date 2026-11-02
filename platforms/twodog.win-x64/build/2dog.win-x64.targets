@@ -22,6 +22,7 @@
             <LibPrefix>libgodot</LibPrefix>
             <Ext>dll</Ext>
             <HostOs>Windows</HostOs>
+            <GodotArch>x86_64</GodotArch>
             <RidPrefix>win</RidPrefix>
             <LocalBin>$(TwoDogLocalGodotBin)</LocalBin>
             <LocalRelease>godot.windows.template_release$(TwoDogNativePrecisionSuffix).x86_64.shared_library.dll</LocalRelease>
