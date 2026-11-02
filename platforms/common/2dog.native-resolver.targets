@@ -45,8 +45,12 @@
     <!-- TwoDogSdl3Natives: swap each resolved native for the sdl3 engine staged in godot/bin/sdl3/.
          Runs after TwoDogResolveNativeLibs so $(TwoDogSdl3NativeTarget) is already computed. -->
     <Target Name="TwoDogResolveSdl3Natives" DependsOnTargets="TwoDogResolveNativeLibs" Condition="'$(TwoDogSdl3Natives)' == 'true'">
+        <!-- Only host-OS items: 2dog.engine imports every desktop platform's targets, but sdl3 engines are built for
+             the build host only. Other-OS items keep their stock resolution. -->
         <ItemGroup>
-            <_TwoDogSdl3Resolved Include="@(_TwoDogNativeResolved)" Condition="Exists('$(TwoDogLocalGodotBin)sdl3/godot.sdl3.$(TwoDogSdl3NativeTarget)$(TwoDogNativePrecisionSuffix).%(GodotArch).shared_library.%(Ext)')">
+            <_TwoDogSdl3Candidate Include="@(_TwoDogNativeResolved)"
+                                  Condition="$([MSBuild]::IsOSPlatform('%(_TwoDogNativeResolved.HostOs)'))" />
+            <_TwoDogSdl3Resolved Include="@(_TwoDogSdl3Candidate)" Condition="Exists('$(TwoDogLocalGodotBin)sdl3/godot.sdl3.$(TwoDogSdl3NativeTarget)$(TwoDogNativePrecisionSuffix).%(GodotArch).shared_library.%(Ext)')">
                 <Resolved>$(TwoDogLocalGodotBin)sdl3/godot.sdl3.$(TwoDogSdl3NativeTarget)$(TwoDogNativePrecisionSuffix).%(GodotArch).shared_library.%(Ext)</Resolved>
                 <!-- The package folder holds the stock engine under the same file name; point the sidecar glob at nothing. -->
                 <SidecarDir>$(TwoDogLocalGodotBin)sdl3/sidecar/</SidecarDir>
@@ -56,12 +60,12 @@
                Text="2dog: TwoDogSdl3Natives is set but no sdl3 engine is staged at $(TwoDogLocalGodotBin)sdl3/. Build it with: uv run build-godot.py --platform sdl3 --no-editor --no-glue" />
         <!-- Every item needs a staged engine: a partial swap would mix the stock and sdl3 engines in one process. -->
         <ItemGroup>
-            <_TwoDogSdl3Missing Include="@(_TwoDogNativeResolved)" Exclude="@(_TwoDogSdl3Resolved)" />
+            <_TwoDogSdl3Missing Include="@(_TwoDogSdl3Candidate)" Exclude="@(_TwoDogSdl3Resolved)" />
         </ItemGroup>
         <Error Condition="'@(_TwoDogSdl3Missing)' != ''"
                Text="2dog: TwoDogSdl3Natives is set but no sdl3 engine is staged for: @(_TwoDogSdl3Missing->'%(Identity)', ', '). Build each with: uv run build-godot.py --platform sdl3 --target template_$(_TwoDogNativeVariant) --no-editor --no-glue" />
         <ItemGroup>
-            <_TwoDogNativeResolved Remove="@(_TwoDogNativeResolved)" />
+            <_TwoDogNativeResolved Remove="@(_TwoDogSdl3Candidate)" />
             <_TwoDogNativeResolved Include="@(_TwoDogSdl3Resolved)" />
         </ItemGroup>
     </Target>
