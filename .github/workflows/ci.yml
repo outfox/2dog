@@ -99,7 +99,7 @@ jobs:
              ! echo "$lines" | grep -qv '<TwoDogRevision>'; then
             parent=$(git rev-parse HEAD^)
             # Any run that tested the parent's content counts, also one on the branch the parent merged.
-            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
+            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "SDL3 Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
               read -r run sha <<<"$found"
               echo "::notice::Parent ${parent:0:7}'s content passed CI in run $run (${sha:0:7}); skipping test, desktop and Android jobs."
               tested=true
@@ -123,7 +123,7 @@ jobs:
               >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
+          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "SDL3 Smoke" "WebGPU Desktop" \
                "Web Smoke" "WebGPU Browser" "MAUI Pack" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
             read -r run sha <<<"$found"
             url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
@@ -792,6 +792,149 @@ jobs:
         with:
           name: test-dumps-win-x64-rendering-${{ matrix.precision }}
           path: '**/TestResults/**'
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # The SDL3 platform port (godot/platform/sdl3): builds the engine from source, then runs the smoke test
+  # (window, Vulkan frames, injected keyboard/mouse/gamepad input) and the showcase against it. The stock natives
+  # from the natives release are unaffected; the sdl3 engine is only selected by -p:TwoDogSdl3Natives=true.
+  sdl3-smoke:
+    name: SDL3 Smoke (${{ matrix.name }})
+    needs: [check-natives, pack]
+    # See the test job for why this cannot rely on the implicit success().
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: win-x64
+            runner: windows-2025
+          - name: linux-x64
+            runner: blacksmith-4vcpu-ubuntu-2404
+    # A cold SCons cache builds all of Godot plus SDL.
+    timeout-minutes: 60
+
+    env:
+      SCONS_CACHE_MSVC_CONFIG: true
+      PYTHONIOENCODING: utf8
+      DOTNET_DISABLE_GUI_ERRORS: '1'
+      # The packaged targets default TwoDogLocalGodotBin to a path relative to the NuGet package cache; this job
+      # builds the sdl3 engine into the checkout, so point the resolver there for every dotnet invocation.
+      TwoDogLocalGodotBin: ${{ github.workspace }}/godot/bin/
+
+    steps:
+      # demos/showcase links files to templates/; Git for Windows checks symlinks out as text files by default.
+      - name: Enable symlinks
+        if: runner.os == 'Windows'
+        run: git config --global core.symlinks true
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+          submodules: recursive
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # SDL loads the X11 libraries at run time but compiles against their headers; lavapipe and xvfb give the
+      # windowed run a display and a Vulkan device.
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential pkg-config xvfb mesa-vulkan-drivers libvulkan1 \
+            libgl1-mesa-dri libglx-mesa0 \
+            libx11-dev libxext-dev libxcursor-dev libxfixes-dev libxi-dev libxrandr-dev libxinerama-dev \
+            libdbus-1-dev libudev-dev
+
+      # Windows VMs have no GPU; render real frames with CPU Vulkan.
+      - name: Setup Windows software rendering
+        if: runner.os == 'Windows'
+        timeout-minutes: 5
+        run: .github/scripts/setup-windows-software-rendering.ps1 -RegisterDriver
+
+      - name: Download native and NuGet inputs concurrently
+        uses: ./.github/actions/download-ci-inputs
+        with:
+          precision: single
+
+      - name: Cache SCons
+        uses: actions/cache@v6
+        with:
+          path: godot/.scons_cache
+          key: sdl3-${{ matrix.name }}-${{ needs.check-natives.outputs.hash }}
+          restore-keys: |
+            sdl3-${{ matrix.name }}-
+
+      # Glue and GodotSharp come from the downloaded desktop build, like every other library build. Release, because
+      # every consumer below runs -c Release and the resolver picks the template matching the configuration.
+      - name: Build SDL3 engine
+        shell: bash
+        run: |
+          uv run build-godot.py --platform sdl3 --target template_release \
+            --no-editor --no-glue --webgpu no \
+            --dev-build no --debug-symbols no --scu-build yes \
+            --cache-path godot/.scons_cache
+
+      - name: Build import helper
+        run: dotnet build twodog.import -c Release
+
+      - name: Smoke test, headless
+        shell: bash
+        run: dotnet run --project tests/sdl3-smoke -c Release -p:TwoDogSdl3Natives=true -- --headless | tee sdl3-headless.log && grep -q SDL3_SMOKE_PASSED sdl3-headless.log
+
+      - name: Smoke test, windowed with input
+        shell: bash
+        run: |
+          set -o pipefail
+          run=(dotnet run --project tests/sdl3-smoke -c Release -p:TwoDogSdl3Natives=true -- --input)
+          if [ "$RUNNER_OS" = Linux ]; then run=(xvfb-run -a "${run[@]}"); fi
+          "${run[@]}" | tee sdl3-input.log
+          grep -q SDL3_SMOKE_PASSED sdl3-input.log
+
+      # The compatibility renderer: SDL owns the GL context, the port makes it current and selects RasterizerGLES3.
+      # Linux only: the Windows runners have no GL 3.3 driver (the software setup installs Vulkan's lavapipe only),
+      # while xvfb plus Mesa's llvmpipe on Linux is a real GL 3.3 implementation.
+      - name: Smoke test, OpenGL with input
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -o pipefail
+          xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 \
+            dotnet run --project tests/sdl3-smoke -c Release -p:TwoDogSdl3Natives=true -- --opengl --input \
+            | tee sdl3-opengl.log
+          grep -q SDL3_SMOKE_PASSED sdl3-opengl.log
+
+      - name: Showcase on the SDL3 engine
+        shell: bash
+        run: |
+          set -o pipefail
+          run=(dotnet run --project demos/showcase/showcase.2dog -c Release -p:TwoDogSdl3Natives=true
+            -- --display-driver sdl3 --quit-after 120 -- --2dog-smoke-markers)
+          if [ "$RUNNER_OS" = Linux ]; then run=(xvfb-run -a "${run[@]}"); fi
+          "${run[@]}" 2>&1 | tee sdl3-showcase.log
+          grep -q '2DOG_CSHARP_SCRIPT_SMOKE_PASSED' sdl3-showcase.log
+          grep -q '2DOG_API_SMOKE_PASSED' sdl3-showcase.log
+          if grep -Eq '^(ERROR|WARNING):' sdl3-showcase.log; then exit 1; fi
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: sdl3-smoke-logs-${{ matrix.name }}
+          path: sdl3-*.log
           if-no-files-found: ignore
           retention-days: 7
 
@@ -2473,10 +2616,12 @@ jobs:
     # web-smoke and android-smoke gate deploy because the 2dog.browser-wasm and
     # 2dog.android packages they exercise are among the packages being
     # published; desktop-smoke gates it because it is the only check that runs
-    # a Release-only publish; tool-smoke because it installs the packed `2dog`
-    # tool the way users get it. A tested revision bump (see check-natives) takes
-    # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui-pack, maui]
+    # a Release-only publish; sdl3-smoke because the sdl3 platform port is part
+    # of this repo's engine surface; tool-smoke because it installs the packed
+    # `2dog` tool the way users get it. A tested revision bump (see
+    # check-natives) takes the test, desktop, sdl3 and Android verdicts from its
+    # parent commit's run.
+    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, sdl3-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui-pack, maui]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     # Explicit result checks (not the implicit success()) for the same
@@ -2488,7 +2633,7 @@ jobs:
       needs.test-build-configuration.result == 'success' && needs.test-binding-packages.result == 'success' &&
       (needs.check-natives.outputs.tested-bump == 'true' ||
       (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
-      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
+      needs.desktop-smoke.result == 'success' && needs.sdl3-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
       needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
       needs.tool-smoke.result == 'success' && needs.maui-pack.result == 'success' && needs.maui.result == 'success')
     permissions:
