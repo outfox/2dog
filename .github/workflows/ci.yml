@@ -202,6 +202,7 @@ jobs:
       - name: Test build configuration and package fixtures
         run: |
           uv run python -m unittest discover -s tests/precision -v
+          uv run python -m unittest discover -s tests/sdl3 -v
           uv run python -m unittest discover -s tests/webgpu -v
           uv run python -m unittest discover -s tests/ci_packages -v
           uv run python -m unittest discover -s tests/ios -v

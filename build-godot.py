@@ -596,6 +596,16 @@ def build_libgodot_web(args):
 
 def build_libgodot(args, platform_config: PlatformConfig):
     """Build the libgodot library."""
+    # Programmatic callers (and older argument namespaces) may not carry the newer options.
+    static = getattr(args, "static", False)
+    external_root = getattr(args, "sdl3_external_root", "")
+    external_sources = getattr(args, "sdl3_external_sources", "")
+    if external_sources and not external_root:
+        raise ValueError("--sdl3-external-sources needs --sdl3-external-root")
+    if external_root:
+        # SCons runs with cwd=godot, so a relative root must be resolved from here first.
+        external_root = str(Path(external_root).resolve())
+
     if platform_config.godot_platform == Platform.WEB.value:
         build_libgodot_web(args)
         return
@@ -640,8 +650,8 @@ def build_libgodot(args, platform_config: PlatformConfig):
             "d3d12=no",
             # iOS is always a static archive, and a host that links libgodot into its own executable asks for
             # one with --static. The library_type adds the libgodot entry points for both.
-            "library_type=static_library" if (is_ios or args.static) else "library_type=shared_library",
-            *([] if (is_ios or args.static) else ["extra_suffix=shared_library"]),
+            "library_type=static_library" if (is_ios or static) else "library_type=shared_library",
+            *([] if (is_ios or static) else ["extra_suffix=shared_library"]),
             # Godot's Metal driver, no MoltenVK; the Simulator has neither and falls back to GLES3. iOS 15.0 is the
             # hosts' SupportedOSPlatformVersion and the floor this SDK's libc++ still supports.
             *(["vulkan=no", "generate_bundle=no", "ios_min_version=15.0", f"simulator={'yes' if getattr(args, 'simulator', False) else 'no'}"] if is_ios else []),
@@ -654,16 +664,16 @@ def build_libgodot(args, platform_config: PlatformConfig):
         ]
         if args.cache_path:
             cmd.append(f"cache_path={args.cache_path}")
-        if platform_config.godot_platform == Platform.SDL3.value and args.sdl3_external_root:
-            if not args.sdl3_external_sources:
+        if platform_config.godot_platform == Platform.SDL3.value and external_root:
+            if not external_sources:
                 raise ValueError("--sdl3-external-root needs --sdl3-external-sources")
-            sources = args.sdl3_external_sources
+            sources = external_sources
             # @FILE: a fork's source list can run to hundreds of entries.
             if sources.startswith("@"):
                 sources = Path(sources[1:]).read_text()
             cmd += [
                 "sdl3_host=external",
-                f"sdl3_external_root={args.sdl3_external_root}",
+                f"sdl3_external_root={external_root}",
                 f"sdl3_external_sources={' '.join(sources.split())}",
             ]
         cmd.extend(webgpu_flags(args, platform_config))
@@ -673,7 +683,6 @@ def build_libgodot(args, platform_config: PlatformConfig):
             # Android's SCsub moves the build into java/lib/libs, including the NDK's C++ runtime.
             # Preserve libgodot_android.so: GodotLib.java and the ELF SONAME depend on this name.
             import shutil
-            from pathlib import Path
 
             variant = "release" if target == "template_release" else "debug"
             abi = "arm64-v8a" if platform_config.godot_arch == "arm64" else "x86_64"
@@ -686,7 +695,6 @@ def build_libgodot(args, platform_config: PlatformConfig):
         elif is_ios:
             # Stage the archive per RID, where the 2dog.ios-* packages and resolver look for it.
             import shutil
-            from pathlib import Path
 
             simulator = getattr(args, "simulator", False)
             rid = "iossimulator-arm64" if simulator else "ios-arm64"
@@ -701,11 +709,10 @@ def build_libgodot(args, platform_config: PlatformConfig):
             # and `pack platforms` copies that file into the NuGet native payload.
             # Select it with -p:TwoDogSdl3Natives=true.
             import shutil
-            from pathlib import Path
 
             suffix = ".double" if getattr(args, "precision", "single") == "double" else ""
             dev = ".dev" if use_dev_build == "yes" else ""
-            if args.static:
+            if static:
                 # SCons names the archive bin/libgodot<LIBSUFFIX>: the platform/target/dev/precision/arch
                 # suffix from SConstruct, then the toolchain's `.a`.
                 source_name = f"libgodot.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.a"
@@ -734,7 +741,6 @@ def build_libgodot(args, platform_config: PlatformConfig):
         elif getattr(args, "precision", "single") == "double":
             # SCons names double binaries separately; stage all double payloads together.
             import shutil
-            from pathlib import Path
 
             prefix = "godot" if platform_config.godot_platform == "windows" else "libgodot"
             name = (f"{prefix}.{platform_config.godot_platform}.{target}.double."

@@ -135,7 +135,7 @@ AOT compiler through `RunAOTCompilation`, described in their host references.
 A host whose target cannot load shared libraries links libgodot into its own
 executable. Set `TwoDogLinkedLibGodot` and the P/Invoke resolver uses the
 program image instead of probing for a shared library; `libgodot` must be
-linked with the entry points exported, which `build-godot.py --static`
+linked with the entry points exported, which `uv run build-godot.py --static`
 produces. This is how an [iOS](./configuration/ios) app links the engine, and
 it is the seam any other static-link target reuses; the build and linker setup
 for such a target live outside this repository.
@@ -146,11 +146,17 @@ for such a target live outside this repository.
 </PropertyGroup>
 ```
 
-The same substitution works for SDL: `build-godot.py --platform sdl3
---sdl3-external-root <dir> --sdl3-external-sources "@<file>"` builds against an
-SDL tree kept outside this repository, instead of `thirdparty/sdl3-full`. The
-tree needs `include/` and a build config, and the file lists its sources
-relative to that root, one per line.
+The same substitution works for SDL. Run this from the repository root:
+
+```bash
+uv run build-godot.py --platform sdl3 --static \
+  --sdl3-external-root <dir> --sdl3-external-sources "@<file>"
+```
+
+It builds against an SDL tree kept outside this repository, instead of
+`thirdparty/sdl3-full`. The tree needs `include/` and a build config, and the
+file lists its sources relative to that root, one per line. Supply both options
+together; a relative root resolves from the repository root.
 
 ## Single-file
 

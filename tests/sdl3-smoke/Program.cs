@@ -32,10 +32,14 @@ internal static class Program
                 Check(RenderingServer.GetRenderingDevice() is null == args.Contains("--opengl"), "rendering driver mismatch");
 
             // The engine's bias must match the OS's, sign included: this port once had it inverted, and a
-            // magnitude-only range check cannot tell. In minutes, east-positive.
+            // magnitude-only range check cannot tell. In minutes, east-positive. Both offsets are sampled around
+            // the engine call, since a DST transition between them would otherwise look like a mismatch.
+            var sampledAt = DateTime.UtcNow;
             long bias = Time.GetTimeZoneFromSystem()["bias"].As<long>();
-            long expectedBias = (long)TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalMinutes;
-            Check(bias == expectedBias, $"time zone bias {bias} does not match the system's {expectedBias}");
+            long beforeBias = (long)TimeZoneInfo.Local.GetUtcOffset(sampledAt).TotalMinutes;
+            long afterBias = (long)TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalMinutes;
+            Check(bias == beforeBias || bias == afterBias,
+                $"time zone bias {bias} does not match the system's {beforeBias} (before) or {afterBias} (after)");
 
             ulong before = Time.GetTicksUsec();
             OS.DelayUsec(2000);
