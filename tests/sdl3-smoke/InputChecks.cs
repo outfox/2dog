@@ -16,8 +16,9 @@ internal static class InputChecks
     private const ushort ModLeftShift = 0x0001;
 
     // SDL scancodes and keycodes (SDL_SCANCODE_TO_KEYCODE(x) = x | 1 << 30).
-    private const uint ScanA = 4, ScanH = 11, ScanI = 12, ScanLeft = 80, ScanLShift = 225;
-    private const uint KeyLeft = (1u << 30) | 80, KeyLShift = (1u << 30) | 225;
+    private const uint ScanA = 4, ScanH = 11, ScanI = 12, Scan1 = 30, ScanLeft = 80, ScanLShift = 225;
+    // SDL_SCANCODE_TO_KEYCODE: the keycode field carries the bare key even when a modifier is held.
+    private const uint KeyLeft = (1u << 30) | 80, KeyLShift = (1u << 30) | 225, KeyKey1 = (1u << 30) | 30;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] private delegate byte PushEvent(nint sdlEvent);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] private delegate byte SetHint([MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string value);
@@ -99,9 +100,26 @@ internal static class InputChecks
         check(edit.Text == "hiA", $"shift+A produced \"{edit.Text}\", expected \"hiA\"");
         var keyA = events.OfType<InputEventKey>().FirstOrDefault(e => e.Pressed && e.Keycode == Key.A);
         check(keyA is { ShiftPressed: true, Unicode: 'A' }, $"shift+A event: {(keyA is null ? "missing" : $"shift={keyA.ShiftPressed} unicode={keyA.Unicode}")}");
+
         Push(KeyUp, e => { U(e, 24, ScanLShift); U(e, 28, KeyLShift); B(e, 36, 0); });
         Pump(engine);
         check(!Input.IsKeyPressed(Key.Shift), "shift still pressed after release");
+
+        // Shift+digit: SDL's keycode is the bare digit (it clears the modifiers when building a key event), so the
+        // event stays bound to the "1" action while the unicode carries '!'.
+        events.Clear();
+        Push(KeyDown, e => { U(e, 24, ScanLShift); U(e, 28, KeyLShift); S(e, 32, ModLeftShift); B(e, 36, 1); });
+        Push(KeyDown, e => { U(e, 24, Scan1); U(e, 28, KeyKey1); S(e, 32, ModLeftShift); B(e, 36, 1); });
+        Push(TextInput, e => P(e, 24, "!"));
+        Push(KeyUp, e => { U(e, 24, Scan1); U(e, 28, KeyKey1); S(e, 32, ModLeftShift); B(e, 36, 0); });
+        Push(KeyUp, e => { U(e, 24, ScanLShift); U(e, 28, KeyLShift); B(e, 36, 0); });
+        Pump(engine);
+        check(edit.Text == "hiA!", $"shift+1 produced \"{edit.Text}\", expected \"hiA!\"");
+        var key1 = events.OfType<InputEventKey>().FirstOrDefault(e => e.Pressed && e.PhysicalKeycode == Key.Key1);
+        check(key1 is { ShiftPressed: true }, $"shift+1 event: {(key1 is null ? "missing" : $"keycode={key1.Keycode} shift={key1.ShiftPressed} unicode={key1.Unicode}")}");
+        // Back to "hiA" and caret at the end, which the checks below assume.
+        edit.Text = "hiA";
+        edit.CaretColumn = 3;
 
         // Keys that type nothing must not carry a unicode, or LineEdit inserts it.
         events.Clear();

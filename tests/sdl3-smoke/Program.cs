@@ -31,9 +31,11 @@ internal static class Program
             if (!args.Contains("--headless"))
                 Check(RenderingServer.GetRenderingDevice() is null == args.Contains("--opengl"), "rendering driver mismatch");
 
-            // Bias is minutes with east negative, so it stays within +/-14 hours.
+            // The engine's bias must match the OS's, sign included: this port once had it inverted, and a
+            // magnitude-only range check cannot tell. In minutes, east-positive.
             long bias = Time.GetTimeZoneFromSystem()["bias"].As<long>();
-            Check(Math.Abs(bias) <= 14 * 60, $"time zone bias {bias} is out of range");
+            long expectedBias = (long)TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalMinutes;
+            Check(bias == expectedBias, $"time zone bias {bias} does not match the system's {expectedBias}");
 
             ulong before = Time.GetTicksUsec();
             OS.DelayUsec(2000);
