@@ -108,7 +108,7 @@
         </Exec>
         <PropertyGroup>
             <RepositoryType>git</RepositoryType>
-            <RepositoryUrl>https://github.com/thygrrr/godot</RepositoryUrl>
+            <RepositoryUrl>https://github.com/outfox/godot</RepositoryUrl>
             <RepositoryCommit>$(GodotSubmoduleCommit.Trim())</RepositoryCommit>
         </PropertyGroup>
     </Target>
