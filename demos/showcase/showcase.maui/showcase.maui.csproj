@@ -35,6 +35,8 @@
         <_TwoDogAndroidRids>;$(RuntimeIdentifier);$(RuntimeIdentifiers);</_TwoDogAndroidRids>
         <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <!-- APK compression makes seeking within the PCK expensive. -->
+        <AndroidStoreUncompressedFileExtensions>$(AndroidStoreUncompressedFileExtensions);.pck</AndroidStoreUncompressedFileExtensions>
         <TwoDogAndroidGameAssembly>showcase</TwoDogAndroidGameAssembly>
     </PropertyGroup>
     <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">

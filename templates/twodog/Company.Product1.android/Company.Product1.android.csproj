@@ -23,6 +23,8 @@
         <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
         <!-- Keep the assemblies in the APK in Debug too, so it runs without a deployment session -->
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <!-- APK compression makes seeking within the PCK expensive. -->
+        <AndroidStoreUncompressedFileExtensions>$(AndroidStoreUncompressedFileExtensions);.pck</AndroidStoreUncompressedFileExtensions>
     </PropertyGroup>
 
     <ItemGroup>

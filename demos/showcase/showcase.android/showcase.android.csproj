@@ -22,6 +22,8 @@
         <!-- A sideloadable APK; Release publishes would otherwise default to an app bundle (.aab) -->
         <AndroidPackageFormats Condition="'$(AndroidPackageFormats)' == ''">apk</AndroidPackageFormats>
         <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <!-- APK compression makes seeking within the PCK expensive. -->
+        <AndroidStoreUncompressedFileExtensions>$(AndroidStoreUncompressedFileExtensions);.pck</AndroidStoreUncompressedFileExtensions>
     </PropertyGroup>
     <!-- Godot project = the parent directory (solution root); nested hosts are hidden from the Godot editor by
          their .gdignore. The build imports it and exports its pck for the APK. -->
