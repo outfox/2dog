@@ -85,8 +85,10 @@ internal static class LibGodotLoader
         // LoadExact already picked this context's module (hosted mode).
         if (LoadedLibraryHandle != 0) return LoadedLibraryHandle;
 
-        // iOS apps link libgodot.a into their executable (the 2dog.ios targets force-load it).
-        if (OperatingSystem.IsIOS())
+        // A statically linked target (iOS apps link libgodot.a into their executable; a console app links
+        // libgodot into its own binary) exports the entry points itself, so the program handle resolves them.
+        // The metadata is written into the entry assembly, which is where TwoDogVariant is read too.
+        if (OperatingSystem.IsIOS() || UsesLinkedLibGodot())
         {
             var program = NativeLibrary.GetMainProgramHandle();
             Record("__Internal", null, program);
@@ -158,6 +160,33 @@ internal static class LibGodotLoader
         }
 
         return null;
+    }
+
+    /// <summary>True when the host links libgodot into its own executable (<c>TwoDogLinkedLibGodot=true</c>):
+    /// no shared library exists to probe for, and the entry points are in the program image.</summary>
+    internal static bool UsesLinkedLibGodot()
+    {
+        // The attribute goes into the host project, not twodog.dll. Entry assembly first, the same fallback
+        // ResolveVariant uses for dotnet test and for hosts that leave it undeclared.
+        if (Assembly.GetEntryAssembly() is { } entry && DeclaresLinkedLibGodot(entry)) return true;
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            // A program image is never emitted at runtime, and tests or plugins that emit assemblies with the
+            // attribute must not turn every later resolve into a program-image lookup.
+            if (!assembly.IsDynamic && DeclaresLinkedLibGodot(assembly)) return true;
+        }
+
+        return false;
+    }
+
+    private static bool DeclaresLinkedLibGodot(Assembly assembly)
+    {
+        foreach (var value in AssemblyMetadata.Values(assembly, "TwoDogLinkedLibGodot"))
+        {
+            if (bool.TryParse(value, out var linked) && linked) return true;
+        }
+
+        return false;
     }
 
     private static string? MetadataVariant(Assembly assembly)

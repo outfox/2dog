@@ -1,0 +1,9 @@
+config_version=5
+
+[application]
+config/name="2dog SDL3 platform smoke"
+run/main_scene="res://main.tscn"
+
+[display]
+window/size/viewport_width=96
+window/size/viewport_height=96

@@ -35,6 +35,7 @@ class Platform(Enum):
     WEB = "web"
     ANDROID = "android"
     IOS = "ios"
+    SDL3 = "sdl3"
 
 
 class Arch(Enum):
@@ -169,6 +170,19 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
             lib_prefix="libgodot",
         )
 
+    if plat == Platform.SDL3:
+        # SDL3 provides windowing, input and surfaces, so this port needs no
+        # platform-specific OS or DisplayServer. Windows and Linux desktop only for now.
+        return PlatformConfig(
+            godot_platform=Platform.SDL3.value,
+            godot_arch=arch_str,
+            godot_exe="",  # No editor build; glue comes from the desktop editor build.
+            lib_path_var="PATH" if platform.system() == "Windows" else "LD_LIBRARY_PATH",
+            path_separator=";" if platform.system() == "Windows" else ":",
+            lib_extension=".dll" if platform.system() == "Windows" else ".so",
+            lib_prefix="libgodot",
+        )
+
     if plat == Platform.WEB:
         # Emscripten static library (linked into the consumer's
         # dotnet.native.wasm at publish time); there is no web editor and the
@@ -240,6 +254,22 @@ def parse_arguments():
         action="store_true",
         help="Skip building libgodot library",
     )
+    parser.add_argument(
+        "--static",
+        action="store_true",
+        help="Build libgodot as a static archive for a host that links it into its own executable.",
+    )
+    parser.add_argument(
+        "--sdl3-external-root",
+        default="",
+        help="sdl3 only: an SDL tree kept outside this repository, used instead of thirdparty/sdl3-full.",
+    )
+    parser.add_argument(
+        "--sdl3-external-sources",
+        default="",
+        help="sdl3 only: the external tree's sources (whitespace-separated, relative to its root). "
+        "Passed as @FILE when it starts with '@' to keep long lists off the command line.",
+    )
 
     parser.add_argument(
         "--no-editor",
@@ -257,7 +287,7 @@ def parse_arguments():
     parser.add_argument(
         "--platform",
         type=str,
-        choices=["auto", "windows", "linuxbsd", "macos", "web", "android", "ios"],
+        choices=["auto", "windows", "linuxbsd", "macos", "web", "android", "ios", "sdl3"],
         default="auto",
         help="Override target platform (for CI/cross-compilation)",
     )
@@ -566,6 +596,16 @@ def build_libgodot_web(args):
 
 def build_libgodot(args, platform_config: PlatformConfig):
     """Build the libgodot library."""
+    # Programmatic callers (and older argument namespaces) may not carry the newer options.
+    static = getattr(args, "static", False)
+    external_root = getattr(args, "sdl3_external_root", "")
+    external_sources = getattr(args, "sdl3_external_sources", "")
+    if external_sources and not external_root:
+        raise ValueError("--sdl3-external-sources needs --sdl3-external-root")
+    if external_root:
+        # SCons runs with cwd=godot, so a relative root must be resolved from here first.
+        external_root = str(Path(external_root).resolve())
+
     if platform_config.godot_platform == Platform.WEB.value:
         build_libgodot_web(args)
         return
@@ -576,13 +616,15 @@ def build_libgodot(args, platform_config: PlatformConfig):
     is_ios = platform_config.godot_platform == Platform.IOS.value
     if args.target == "all":
         targets = ["template_release", "template_debug"]
-        if platform_config.godot_platform != Platform.ANDROID.value and not is_ios:
+        if platform_config.godot_platform not in (Platform.ANDROID.value, Platform.SDL3.value) and not is_ios:
             targets.append("editor")
     else:
         targets = [args.target]
 
     if platform_config.godot_platform == Platform.ANDROID.value and "editor" in targets:
         raise ValueError("Android .NET library builds have no editor target; use a desktop editor for glue")
+    if platform_config.godot_platform == Platform.SDL3.value and "editor" in targets:
+        raise ValueError("sdl3 library builds have no editor target; use a desktop editor for glue")
     if is_ios and "editor" in targets:
         raise ValueError("iOS .NET library builds have no editor target; use a desktop editor for glue")
 
@@ -606,9 +648,10 @@ def build_libgodot(args, platform_config: PlatformConfig):
             "module_mono_enabled=yes",
             f"precision={getattr(args, 'precision', 'single')}",
             "d3d12=no",
-            # iOS is always a static archive; the library_type adds the libgodot entry points (platform/ios/libgodot_ios.mm).
-            "library_type=static_library" if is_ios else "library_type=shared_library",
-            *([] if is_ios else ["extra_suffix=shared_library"]),
+            # iOS is always a static archive, and a host that links libgodot into its own executable asks for
+            # one with --static. The library_type adds the libgodot entry points for both.
+            "library_type=static_library" if (is_ios or static) else "library_type=shared_library",
+            *([] if (is_ios or static) else ["extra_suffix=shared_library"]),
             # Godot's Metal driver, no MoltenVK; the Simulator has neither and falls back to GLES3. iOS 15.0 is the
             # hosts' SupportedOSPlatformVersion and the floor this SDK's libc++ still supports.
             *(["vulkan=no", "generate_bundle=no", "ios_min_version=15.0", f"simulator={'yes' if getattr(args, 'simulator', False) else 'no'}"] if is_ios else []),
@@ -621,6 +664,18 @@ def build_libgodot(args, platform_config: PlatformConfig):
         ]
         if args.cache_path:
             cmd.append(f"cache_path={args.cache_path}")
+        if platform_config.godot_platform == Platform.SDL3.value and external_root:
+            if not external_sources:
+                raise ValueError("--sdl3-external-root needs --sdl3-external-sources")
+            sources = external_sources
+            # @FILE: a fork's source list can run to hundreds of entries.
+            if sources.startswith("@"):
+                sources = Path(sources[1:]).read_text()
+            cmd += [
+                "sdl3_host=external",
+                f"sdl3_external_root={external_root}",
+                f"sdl3_external_sources={' '.join(sources.split())}",
+            ]
         cmd.extend(webgpu_flags(args, platform_config))
         run_with_live_output(cmd, cwd="godot", description=task_desc)
 
@@ -628,7 +683,6 @@ def build_libgodot(args, platform_config: PlatformConfig):
             # Android's SCsub moves the build into java/lib/libs, including the NDK's C++ runtime.
             # Preserve libgodot_android.so: GodotLib.java and the ELF SONAME depend on this name.
             import shutil
-            from pathlib import Path
 
             variant = "release" if target == "template_release" else "debug"
             abi = "arm64-v8a" if platform_config.godot_arch == "arm64" else "x86_64"
@@ -641,7 +695,6 @@ def build_libgodot(args, platform_config: PlatformConfig):
         elif is_ios:
             # Stage the archive per RID, where the 2dog.ios-* packages and resolver look for it.
             import shutil
-            from pathlib import Path
 
             simulator = getattr(args, "simulator", False)
             rid = "iossimulator-arm64" if simulator else "ios-arm64"
@@ -650,10 +703,44 @@ def build_libgodot(args, platform_config: PlatformConfig):
             destination.mkdir(parents=True, exist_ok=True)
             shutil.copy2(Path("godot/bin") / name, destination / "libgodot.a")
 
+        elif platform_config.godot_platform == Platform.SDL3.value:
+            # sdl3 keeps its own artifact name. Staging under the desktop platform's
+            # name would silently replace a working engine with an experimental one,
+            # and `pack platforms` copies that file into the NuGet native payload.
+            # Select it with -p:TwoDogSdl3Natives=true.
+            import shutil
+
+            suffix = ".double" if getattr(args, "precision", "single") == "double" else ""
+            dev = ".dev" if use_dev_build == "yes" else ""
+            if static:
+                # SCons names the archive bin/libgodot<LIBSUFFIX>: the platform/target/dev/precision/arch
+                # suffix from SConstruct, then the toolchain's `.a`.
+                source_name = f"libgodot.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.a"
+                staged_name = f"libgodot.sdl3.{target}{suffix}.{platform_config.godot_arch}.a"
+            else:
+                # SCons gives shared libraries a `lib` prefix everywhere except Windows.
+                source_prefix = "godot" if platform_config.lib_extension == ".dll" else "libgodot"
+                source_name = (
+                    f"{source_prefix}.sdl3.{target}{dev}{suffix}.{platform_config.godot_arch}.shared_library"
+                    f"{platform_config.lib_extension}"
+                )
+                # Staged without .dev: the resolver matches this name, and dev_build only changes behaviour.
+                staged_name = (
+                    f"godot.sdl3.{target}{suffix}.{platform_config.godot_arch}.shared_library"
+                    f"{platform_config.lib_extension}"
+                )
+            source = Path("godot/bin") / source_name
+            destination = native_output_dir(getattr(args, "precision", "single")) / "sdl3" / staged_name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            # copy2 keeps the source mtime, which can be older than the file being
+            # replaced; consumers copy by timestamp, so stamp it now.
+            shutil.copy(source, destination)
+            os.utime(destination, None)
+            console.print(f"[green]Staged {destination}[/green]")
+
         elif getattr(args, "precision", "single") == "double":
             # SCons names double binaries separately; stage all double payloads together.
             import shutil
-            from pathlib import Path
 
             prefix = "godot" if platform_config.godot_platform == "windows" else "libgodot"
             name = (f"{prefix}.{platform_config.godot_platform}.{target}.double."
@@ -722,7 +809,12 @@ def main():
         precision=args.precision,
     )
 
-    if platform_config.godot_platform in (Platform.WEB.value, Platform.ANDROID.value, Platform.IOS.value):
+    if platform_config.godot_platform in (
+        Platform.WEB.value,
+        Platform.ANDROID.value,
+        Platform.IOS.value,
+        Platform.SDL3.value,
+    ):
         # Editor/glue come from desktop builds for the cross-compilation targets.
         args.no_editor = True
         args.no_glue = True

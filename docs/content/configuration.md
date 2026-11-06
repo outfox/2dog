@@ -17,6 +17,7 @@ shared settings in the root
 | `GodotProjectDir` | None | Directory containing `project.godot`; enables resource import and is embedded for `Engine.ResolveProjectDir()` |
 | `TwoDogVariant` | `debug` in Debug, `editor` in Editor, `release` otherwise | Desktop/Android/iOS native variant; explicit settings override the default. Android and iOS do not support `editor`; browser hosts use `TwoDogWebVariant` |
 | `TwoDogRemoveDuplicateGodotAnalyzers` | `false` | Removes duplicate analyzers from a host that also references a `Godot.NET.Sdk` game project |
+| `TwoDogLinkedLibGodot` | `false` | The host links libgodot into its own executable instead of loading a shared library; the loader then uses the program image |
 
 For a host nested directly inside the Godot project:
 
@@ -93,6 +94,22 @@ Generated desktop hosts build as `WinExe`, which hides the Windows console.
 The generic host does this only in Release. To keep console output, set
 `OutputType=Exe`. Linux and macOS treat `WinExe` as `Exe`.
 
+### Shader baking
+
+Enable `shader_baker/enabled` in the `Windows Desktop`, `Linux`, or `macOS`
+preset to ship compiled Vulkan shaders in the `.pck`, which cuts the shader
+compilation a player's machine does on first use. Publishing then runs the
+export with a window-less Vulkan device, so the build machine needs a GPU or a
+software Vulkan driver such as lavapipe, but no display. Projects on the
+Compatibility renderer skip baking: OpenGL compiles its shaders at runtime.
+
+The bake covers the shaders the engine and the project's materials are known
+to use while exporting. Shaders created only at runtime, such as those a
+plugin builds from new source, and the final GPU pipeline compilation still
+happen on the player's machine. The renderer loads any baked file it finds
+under `res://.godot/shader_cache` before compiling that shader, so a publish
+without baking still works, just slower on the first run.
+
 ## Native AOT
 
 Generic, Avalonia, and WinUI hosts support `PublishAot=true` with debug or
@@ -112,6 +129,34 @@ Native AOT trims the app. See [Trimming](#trimming) for assemblies that your
 code uses only through reflection. Android has [experimental Native AOT](./configuration/android#native-aot)
 with NDK requirements and different trimmer roots. Browser hosts use Mono's
 AOT compiler through `RunAOTCompilation`, described in their host references.
+
+## Statically linked hosts
+
+A host whose target cannot load shared libraries links libgodot into its own
+executable. Set `TwoDogLinkedLibGodot` and the P/Invoke resolver uses the
+program image instead of probing for a shared library; `libgodot` must be
+linked with the entry points exported, which `uv run build-godot.py --static`
+produces. This is how an [iOS](./configuration/ios) app links the engine, and
+it is the seam any other static-link target reuses; the build and linker setup
+for such a target live outside this repository.
+
+```xml
+<PropertyGroup>
+  <TwoDogLinkedLibGodot>true</TwoDogLinkedLibGodot>
+</PropertyGroup>
+```
+
+The same substitution works for SDL. Run this from the repository root:
+
+```bash
+uv run build-godot.py --platform sdl3 --static \
+  --sdl3-external-root <dir> --sdl3-external-sources "@<file>"
+```
+
+It builds against an SDL tree kept outside this repository, instead of
+`thirdparty/sdl3-full`. The tree needs `include/` and a build config, and the
+file lists its sources relative to that root, one per line. Supply both options
+together; a relative root resolves from the repository root.
 
 ## Single-file
 

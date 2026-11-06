@@ -1,3 +1,3 @@
 [submodule "godot"]
 	path = godot
-	url = git@github.com:thygrrr/godot.git
+	url = git@github.com:outfox/godot.git
