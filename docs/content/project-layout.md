@@ -150,5 +150,5 @@ standard layout when you can. If the structure of an existing repository or
 application gives you a concrete reason, use a different layout.
 
 For one minimal alternative, see the
-[Parallel xUnit Collections Demo](https://github.com/outfox/2dog/tree/main/demos/xunit/parallel_collections),
+[Parallel xUnit Collections Demo](https://github.com/outfox/2dog/tree/HEAD/demos/xunit/parallel_collections),
 which uses a small Godot project stub beside MSBuild projects with native dependencies.

@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       revision:
-        description: 'New TwoDogRevision (default: current + 1)'
+        description: 'New TwoDogRevision (default: one above the highest revision released on any line)'
         required: false
         type: string
       native:
@@ -43,12 +43,6 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Verify dispatched from main
-        if: github.ref != 'refs/heads/main'
-        run: |
-          echo "::error::Release must be dispatched from main (got ${{ github.ref }})."
-          exit 1
-
       - name: Checkout repository
         uses: actions/checkout@v7
 
@@ -61,34 +55,45 @@ jobs:
           GODOT_VERSION=$(sed -n 's:.*<GodotVersion>\(.*\)</GodotVersion>.*:\1:p' Directory.Build.props)
           CURRENT_REV=$(sed -n 's:.*<TwoDogRevision>\(.*\)</TwoDogRevision>.*:\1:p' Directory.Build.props)
           CURRENT_NATIVE_REV=$(sed -n 's:.*<NativesRevision>\(.*\)</NativesRevision>.*:\1:p' Directory.Build.props)
-          if [[ ! "$GODOT_VERSION" =~ ^[0-9.]+$ || ! "$CURRENT_REV" =~ ^[0-9]+$ || ! "$CURRENT_NATIVE_REV" =~ ^[0-9]+$ ]]; then
-            echo "::error::Failed to parse GodotVersion/TwoDogRevision/NativesRevision from Directory.Build.props."
+          if [[ ! "$CURRENT_REV" =~ ^[0-9]+$ || ! "$CURRENT_NATIVE_REV" =~ ^[0-9]+$ ]]; then
+            echo "::error::Failed to parse TwoDogRevision/NativesRevision from Directory.Build.props."
+            exit 1
+          fi
+          # Godot's own C# package versions. An unnumbered label (master's "beta" between betas) would sort above
+          # the numbered prereleases after it, so only releases and numbered prereleases ship.
+          if [[ ! "$GODOT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(beta|rc)\.[0-9]+)?$ ]]; then
+            echo "::error::GodotVersion '$GODOT_VERSION' must be a Godot release or numbered prerelease: 4.7.2, 4.8.0-beta.1, 4.8.0-rc.1."
+            exit 1
+          fi
+          BRANCH=$(echo "$GODOT_VERSION" | cut -d. -f1,2)
+          if [ "$GITHUB_REF" != "refs/heads/$BRANCH" ]; then
+            echo "::error::Release Godot $GODOT_VERSION from the $BRANCH branch (got $GITHUB_REF)."
             exit 1
           fi
 
-          NEW_REV="${INPUT_REVISION:-$((CURRENT_REV + 1))}"
+          # One revision sequence across every Godot line: continue after the highest revision any release tag uses.
+          HIGHEST=$(git ls-remote --tags origin 'refs/tags/v*' | awk '{ print $2 }' | sed -nE 's:^refs/tags/v.*\.([0-9]+)$:\1:p' |
+            sort -n | tail -n 1)
+          HIGHEST=$(( ${HIGHEST:-0} > CURRENT_REV ? ${HIGHEST:-0} : CURRENT_REV ))
+          NEW_REV="${INPUT_REVISION:-$((HIGHEST + 1))}"
           if [[ ! "$NEW_REV" =~ ^[0-9]+$ ]]; then
             echo "::error::revision input must be a number (got '$NEW_REV')."
             exit 1
           fi
-          if (( NEW_REV <= CURRENT_REV )); then
-            echo "::error::New revision $NEW_REV must be greater than current revision $CURRENT_REV."
+          if (( NEW_REV <= HIGHEST )); then
+            echo "::error::New revision $NEW_REV must be greater than $HIGHEST, the highest revision released on any line."
             exit 1
           fi
 
           TAG="v${GODOT_VERSION}.${NEW_REV}"
-          if git ls-remote --exit-code origin "refs/tags/$TAG" > /dev/null; then
-            echo "::error::Tag $TAG already exists on origin."
-            exit 1
-          fi
-
-          echo "Releasing $TAG (revision $CURRENT_REV -> $NEW_REV)"
+          echo "Releasing $TAG from $BRANCH (revision $CURRENT_REV -> $NEW_REV)"
           NEW_NATIVE_REV="$CURRENT_NATIVE_REV"
           if [ "$INPUT_NATIVE" = true ]; then
             NEW_NATIVE_REV=$((CURRENT_NATIVE_REV + 1))
           fi
           echo "NativesRevision $CURRENT_NATIVE_REV -> $NEW_NATIVE_REV"
           {
+            echo "branch=$BRANCH"
             echo "current_rev=$CURRENT_REV"
             echo "new_rev=$NEW_REV"
             echo "tag=$TAG"
@@ -119,7 +124,7 @@ jobs:
 
       - name: Push commit and tag
         if: ${{ !inputs.dry_run }}
-        run: git push --atomic origin main "${{ steps.version.outputs.tag }}"
+        run: git push --atomic origin "HEAD:refs/heads/${{ steps.version.outputs.branch }}" "${{ steps.version.outputs.tag }}"
 
       # Tags pushed with GITHUB_TOKEN don't fire `on: push`, so trigger the CI
       # (and thereby the deploy) explicitly on the new tag.

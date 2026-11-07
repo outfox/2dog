@@ -30,6 +30,10 @@ if bash "$script"; then echo 'Ignored the annotated tag commit'; exit 1; fi
 export REMOTE_EXIT=1
 if bash "$script"; then echo 'Delegated after a failed remote lookup'; exit 1; fi
 unset REMOTE_EXIT
+# A Godot prerelease line releases the same way.
+printf '<GodotVersion>4.8.0-rc.1</GodotVersion>\n<TwoDogRevision>136</TwoDogRevision>\n' > Directory.Build.props
+REMOTE=$(printf 'current-commit\t%s\n' refs/tags/v4.8.0-rc.1.136)
+test "$(bash "$script")" = v4.8.0-rc.1.136
 printf '<GodotVersion>broken</GodotVersion>\n<TwoDogRevision>135</TwoDogRevision>\n' > Directory.Build.props
 if bash "$script"; then echo 'Accepted malformed release properties'; exit 1; fi
 echo 'PASS: branch delegation requires the exact remote release tag commit'

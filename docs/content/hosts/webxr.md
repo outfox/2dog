@@ -40,7 +40,7 @@ shaders/enabled.web=true
 
 Add an `XROrigin3D` with an `XRCamera3D`. Start Godot's `WebXRInterface` when the
 user presses a button. When the session starts, enable `Viewport.UseXR`.
-See the [showcase scene](https://github.com/outfox/2dog/tree/main/demos/showcase)
+See the [showcase scene](https://github.com/outfox/2dog/tree/HEAD/demos/showcase)
 for an example.
 
 Use an XR-capable browser and device, or the

@@ -29,7 +29,7 @@ A `GodotSession` owns the engine and runs frames on the UI thread.
 `GodotControl` displays the viewport and forwards input. UI event handlers can
 access game state through `session.Engine.Tree`.
 
-See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.avalonia)
+See the [showcase host](https://github.com/outfox/2dog/tree/HEAD/demos/showcase/showcase.avalonia)
 for a pause button, time-scale slider, and FPS display.
 
 ## Publish It

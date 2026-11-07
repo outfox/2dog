@@ -3,7 +3,7 @@ name: 2dog Android build and package tests
 on:
   workflow_dispatch:
   push:
-    branches: [main, 'android*']
+    branches: ['[0-9]+.[0-9]+', 'android*'] # Godot line branches (4.7, 4.8)
     paths:
       - 'platforms/**'
       - 'scripts/*android*.py'
