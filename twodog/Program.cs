@@ -178,7 +178,8 @@ internal static class Program
 
     /// <summary>
     /// The tool version, then every package the scaffolded projects reference. checkLatest asks nuget.org (best
-    /// effort) and marks one package per publish group: latest stable, newer stable available, or unknown.
+    /// effort) and marks one package per publish group: latest, newer available, or unknown
+    /// (stable releases, or for a Godot prerelease, any newer 2dog for that Godot version).
     /// </summary>
     private static void PrintVersion(bool checkLatest, Report report)
     {
@@ -188,7 +189,7 @@ internal static class Program
             ("native binaries", ToolVersions.NativesVersion, "2dog.win-x64", "2dog.win-x64, 2dog.linux-x64, 2dog.osx-arm64, 2dog.browser-wasm, 2dog.android, 2dog.android-arm64, 2dog.android-x64, 2dog.ios-arm64, 2dog.iossimulator-arm64, 2dog.tools"),
             ("GodotSharp", ToolVersions.TwoDogVersion, "2dog.godotsharp", "2dog.godotsharp, 2dog.godotsharp.editor"),
         };
-        var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => r.Probe)) : null;
+        var latest = checkLatest ? NuGetLatest.Query(rows.Select(r => (r.Probe, r.Version))) : null;
         var marked = rows
             .Select(r => (r.Label, r.Version, Latest: latest?[r.Probe], r.Packages))
             .Select(r => (r.Label, r.Version, r.Latest, Mark: NuGetLatest.Mark(r.Version, r.Latest), r.Packages))

@@ -419,7 +419,7 @@ public class UpdateTests
         var literals = VersionRewriter.Literals(csproj);
         Assert.Equal(["2dog.engine", "2dog.browser-wasm"], literals.Select(l => l.Id));
         Assert.True(literals[1].IsPinned);
-        Assert.Equal(new Version(4, 7, 1, 1), literals[1].Parsed);
+        Assert.Equal(PackageVersion.Parse("4.7.1.1"), literals[1].Parsed);
         Assert.Equal("[$(TwoDogNativesVersion)]", VersionRewriter.Reference("2dog.browser-wasm"));
         Assert.Equal("[$(TwoDogNativesVersion)]", VersionRewriter.Reference("2dog.android-arm64"));
         Assert.Null(VersionRewriter.PropertyFor("Avalonia.Controls.DataGrid"));

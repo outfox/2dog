@@ -89,7 +89,7 @@ public class PropsPatcherTests
 
         Assert.Equal("TwoDogVersion", PropsPatcher.Read(props).Keys.Single());
         // The downgrade guard and the version checks look the value up by its canonical name.
-        Assert.Equal(new Version(9, 9, 9, 9), ProjectVersions.Current(ProjectModel.Load(tmp.Dir))["TwoDogVersion"]);
+        Assert.Equal(PackageVersion.Parse("9.9.9.9"), ProjectVersions.Current(ProjectModel.Load(tmp.Dir))["TwoDogVersion"]);
     }
 
     [Fact]

@@ -7,7 +7,7 @@ namespace twodog.cli;
 internal sealed record PackageRef(string Id, string RawVersion)
 {
     /// <summary>The version without exact-pin brackets, when it is a literal; null for properties and wildcards.</summary>
-    public Version? Parsed => Version.TryParse(RawVersion.Trim('[', ']'), out var v) ? v : null;
+    public PackageVersion? Parsed => RawVersion.Contains("$(", StringComparison.Ordinal) ? null : PackageVersion.Parse(RawVersion);
 
     /// <summary>An exact pin, "[4.7.1.1]" or "[$(TwoDogNativesVersion)]": a range such as "[4.7.1,5.0.0]" still floats.</summary>
     public bool IsPinned => RawVersion.StartsWith('[') && RawVersion.EndsWith(']') && !RawVersion.Contains(',');
@@ -140,14 +140,14 @@ internal static class VersionRewriter
 
     /// <summary>Whether a Godot.NET.Sdk version is older than the one this tool targets (unparsable = no).</summary>
     public static bool IsOlderGodotSdk(string version) =>
-        Version.TryParse(version, out var v) && Version.TryParse(ToolVersions.GodotSdkVersion, out var tool) && v < tool;
+        PackageVersion.Parse(version) is { } v && PackageVersion.Parse(ToolVersions.GodotSdkVersion) is { } tool && v < tool;
 
     /// <summary>
     /// The warning a Godot.NET.Sdk move across Godot lines (major.minor) deserves: the matching editor must be
     /// installed and the project opened once. Null when the line stays.
     /// </summary>
     public static string? GodotLineChangeWarning(string? from, string to) =>
-        Version.TryParse(from, out var was) && Version.TryParse(to, out var now) && (was.Major != now.Major || was.Minor != now.Minor)
+        PackageVersion.Parse(from) is { } was && PackageVersion.Parse(to) is { } now && (was.Major != now.Major || was.Minor != now.Minor)
             ? $"this moves the project from Godot {was.Major}.{was.Minor} to {now.Major}.{now.Minor}: install the " +
               $"matching Godot {now.Major}.{now.Minor} .NET editor, open the project once so it updates " +
               "config/features, then run '2dog doctor --build'"

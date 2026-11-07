@@ -23,8 +23,8 @@ internal static class ToolVersions
     public static string QtBridgeVersion => Metadata("QtBridgeVersion");
 
     /// <summary>The lowest version a literal or floating NuGet version ("10.0.*") admits; null when unreadable.</summary>
-    public static Version? Floor(string text) =>
-        Version.TryParse(text.EndsWith(".*", StringComparison.Ordinal) ? text[..^1] + "0" : text, out var v) ? v : null;
+    public static PackageVersion? Floor(string text) =>
+        PackageVersion.Parse(text.EndsWith(".*", StringComparison.Ordinal) ? text[..^1] + "0" : text);
 
     /// <summary>
     /// NuGet's order for versions System.Version cannot read because of a prerelease label ("0.4.0-beta",
@@ -63,7 +63,7 @@ internal static class ToolVersions
     }
 
     /// <summary>Whether a floating NuGet version ("10.0.*") already admits <paramref name="version"/>.</summary>
-    public static bool Admits(string text, Version version) =>
+    public static bool Admits(string text, PackageVersion version) =>
         text.EndsWith(".*", StringComparison.Ordinal) && $"{version}.".StartsWith(text[..^1], StringComparison.Ordinal);
 }
 

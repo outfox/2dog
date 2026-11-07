@@ -21,7 +21,7 @@ internal static class GodotSettingsChecks
         var features = godot.Get("application", "config/features");
         var sdk = p.GameCsprojText is { } text ? VersionRewriter.GodotSdkVersion(text) : null;
         if (features != null && sdk != null && Regex.Match(features, @"""(?<line>\d+\.\d+)""") is { Success: true } m
-            && Version.TryParse(sdk, out var sdkVersion))
+            && PackageVersion.Parse(sdk) is { } sdkVersion)
         {
             var line = m.Groups["line"].Value;
             if (line != $"{sdkVersion.Major}.{sdkVersion.Minor}")

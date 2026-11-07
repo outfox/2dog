@@ -92,13 +92,15 @@ internal static class UpdateCommand
     }
 
     /// <summary>The engine, natives and Godot line follow the tool; a newer companion is kept instead (see Targets).</summary>
-    private static void RefuseDowngrade(Dictionary<string, Version> current)
+    private static void RefuseDowngrade(Dictionary<string, PackageVersion> current)
     {
         foreach (var (name, value) in PropsPatcher.ToolValues.Take(3))
         {
-            if (!current.TryGetValue(name, out var have) || !Version.TryParse(value, out var tool) || have <= tool) continue;
+            if (!current.TryGetValue(name, out var have) || PackageVersion.Parse(value) is not { } tool || have <= tool) continue;
+            // `dnx 2dog` resolves stable releases only: a prerelease project names the tool it needs.
             throw new ToolException($"the project already uses {name} {have}, newer than this tool's {tool} - " +
-                                    "run the newest tool instead: dnx 2dog update");
+                                    (have.IsPrerelease ? $"run a tool at least as new: dnx 2dog@{current.GetValueOrDefault("TwoDogVersion") ?? have} update"
+                                        : "run the newest tool instead: dnx 2dog update"));
         }
     }
 
@@ -119,32 +121,19 @@ internal static class UpdateCommand
     /// Core, Qt Bridge) the project already has at a newer version keeps it - a migrated literal must never go
     /// backwards. A floating tool value ("10.0.*") that already admits the project's version replaces it.
     /// </summary>
-    internal static List<(string Name, string Value)> Targets(Dictionary<string, Version> current, ProjectModel model) =>
-        PropsPatcher.ToolValues.Select(v => (v.Name, Kept(v, current, model) ?? v.Value)).ToList();
+    internal static List<(string Name, string Value)> Targets(Dictionary<string, PackageVersion> current, ProjectModel model) =>
+        PropsPatcher.ToolValues.Select(v => (v.Name, Kept(v, current) ?? v.Value)).ToList();
 
-    private static string? Kept((string Name, string Value) tool, Dictionary<string, Version> current, ProjectModel model)
-    {
-        var kept = current.TryGetValue(tool.Name, out var have)
-                   && (ToolVersions.Floor(tool.Value) is { } floor
-                       ? have > floor && !ToolVersions.Admits(tool.Value, have)
-                       : ToolVersions.CompareNuGet(have.ToString(), tool.Value) > 0)
+    private static string? Kept((string Name, string Value) tool, Dictionary<string, PackageVersion> current) =>
+        current.TryGetValue(tool.Name, out var have)
+        && (ToolVersions.Floor(tool.Value) is { } floor
+            ? have > floor && !ToolVersions.Admits(tool.Value, have)
+            : ToolVersions.CompareNuGet(have.ToString(), tool.Value) > 0)
             ? have.ToString()
             : null;
-        // System.Version cannot read a prerelease ("0.5.0-beta"), so current never holds one: compare those as NuGet does.
-        foreach (var raw in RawVersions(tool.Name, model).Where(v => v.Contains('-')))
-            if (ToolVersions.CompareNuGet(raw, kept ?? tool.Value) > 0)
-                kept = raw;
-        return kept;
-    }
-
-    private static IEnumerable<string> RawVersions(string property, ProjectModel model) =>
-        model.Hosts.SelectMany(h => h.Packages)
-            .Where(r => !r.IsProperty && VersionRewriter.PropertyFor(r.Id) == property)
-            .Select(r => r.RawVersion.Trim('[', ']'))
-            .Concat(model.PropsValues.TryGetValue(property, out var value) ? [value] : []);
 
     /// <summary>Shared with `2dog add`: an existing block follows the tool there too, so new hosts resolve.</summary>
-    internal static void PlanPropsValues(List<PlannedAction> plan, ProjectModel model, Dictionary<string, Version> current)
+    internal static void PlanPropsValues(List<PlannedAction> plan, ProjectModel model, Dictionary<string, PackageVersion> current)
     {
         var path = Path.Combine(model.Dir, PropsPatcher.FileName);
         var values = Targets(current, model);

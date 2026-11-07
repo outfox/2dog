@@ -139,7 +139,7 @@ internal static class EnvironmentChecks
 
         if (ctx.Versions.TryGetValue("TwoDogVersion", out var engine) && ctx.GlobalPackages is { } cache)
         {
-            var expected = new List<(string Id, Version Version)> { ("2dog.engine", engine) };
+            var expected = new List<(string Id, PackageVersion Version)> { ("2dog.engine", engine) };
             if (ctx.Versions.TryGetValue("TwoDogNativesVersion", out var natives))
             {
                 expected.Add(("2dog.tools", natives));
@@ -270,13 +270,10 @@ internal static class EnvironmentChecks
     }
 
     /// <summary>NuGet lowercases ids and normalizes versions (4.7.2.0 becomes 4.7.2) in the cache layout.</summary>
-    private static bool Restored(IEnvironment env, string cache, string id, Version version)
+    private static bool Restored(IEnvironment env, string cache, string id, PackageVersion version)
     {
         var folder = Path.Combine(cache, id.ToLowerInvariant());
-        string[] candidates = [version.ToString(), Normalize(version)];
+        string[] candidates = [version.Text, version.Normalized];
         return candidates.Distinct().Any(v => env.DirectoryExists(Path.Combine(folder, v)));
     }
-
-    internal static string Normalize(Version v) =>
-        v.Revision == 0 ? $"{v.Major}.{v.Minor}.{v.Build}" : v.ToString();
 }

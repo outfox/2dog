@@ -23,14 +23,16 @@
         <ItemGroup>
             <_TwoDogStockBinding Include="@(ResolvedCompileFileDefinitions);@(RuntimeCopyLocalItems)"
                 Condition="'%(NuGetPackageId)' == 'GodotSharp' Or '%(NuGetPackageId)' == 'GodotSharpEditor'">
-                <GodotLine>$([System.Text.RegularExpressions.Regex]::Match('%(NuGetPackageVersion)', '^\d+\.\d+\.\d+').Value)</GodotLine>
+                <GodotLine>%(NuGetPackageVersion)</GodotLine>
             </_TwoDogStockBinding>
             <_TwoDogCorePackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp$(TwoDogPackageSuffix)'" />
             <_TwoDogEditorPackage Include="@(ResolvedCompileFileDefinitions)" Condition="'%(NuGetPackageId)' == '2dog.godotsharp.editor$(TwoDogPackageSuffix)'" />
         </ItemGroup>
         <PropertyGroup>
             <_TwoDogCorePackageVersion>%(_TwoDogCorePackage.NuGetPackageVersion)</_TwoDogCorePackageVersion>
-            <_TwoDogGodotLine>$([System.Text.RegularExpressions.Regex]::Match('$(_TwoDogCorePackageVersion)', '^\d+\.\d+\.\d+').Value)</_TwoDogGodotLine>
+            <!-- The Godot release 2dog is built for: its version without the 2dog revision (4.7.2.152 -> 4.7.2,
+                 4.8.0-beta.1.154 -> 4.8.0-beta.1); a fork's four-part version drops its suffix (4.7.2.139-sora -> 4.7.2). -->
+            <_TwoDogGodotLine>$([System.Text.RegularExpressions.Regex]::Replace('$(_TwoDogCorePackageVersion)', '^(\d+\.\d+\.\d+)(?:\.\d+.*|(-.+)\.\d+)$', '$1$2'))</_TwoDogGodotLine>
             <_TwoDogNeedsEditor Condition="'%(_TwoDogStockBinding.Filename)' == 'GodotSharpEditor' Or ('$(UsingGodotNETSdk)' == 'true' And ('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Editor'))">true</_TwoDogNeedsEditor>
         </PropertyGroup>
         <Error Code="TDG001"

@@ -10,10 +10,12 @@ Checks the project and this machine without a build, and applies the fixes
 that it can. Use `--fix` for safe repairs. Use `--fix-all` or the interactive
 checklist for announced fixes.
 
-Custom or prerelease engine versions produce a `ver.custom-versions` warning.
-Doctor checks full version labels for consistency and uses their numeric parts
-to check the Godot line. It skips public release upgrade comparisons; matching
-labels cannot establish compatibility between a fork and its GDExtensions.
+Custom engine versions, such as a fork's version suffix, produce a
+`ver.custom-versions` warning. Doctor checks full version labels for consistency
+and uses their numeric parts to check the Godot line. It skips public release
+upgrade comparisons; matching labels cannot establish compatibility between a
+fork and its GDExtensions. 2dog's own Godot prerelease versions are checked like
+releases, including the Godot label of the natives and `Godot.NET.Sdk`.
 
 ```bash
 2dog doctor [path] [options]
