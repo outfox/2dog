@@ -359,7 +359,7 @@ public class CsprojPatcherTests
 
     /// <summary>A Godot.NET.Sdk older than the tool's on its own Godot line: the previous patch of a release, otherwise
     /// a prerelease of the tool's Godot version (4.8.0-beta and 4.8.0 have no older patch).</summary>
-    private static string OlderSdkOnTheToolsLine()
+    internal static string OlderSdkOnTheToolsLine()
     {
         var sdk = PackageVersion.Parse(ToolVersions.GodotSdkVersion)!;
         return !sdk.IsPrerelease && sdk.Build > 0 ? $"{sdk.Major}.{sdk.Minor}.{sdk.Build - 1}" : $"{sdk.Major}.{sdk.Minor}.{sdk.Build}-alpha.1";
@@ -1063,7 +1063,7 @@ public class AddEndToEndTests
 
         var csprojPath = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj");
         var propsPath = System.IO.Path.Combine(tmp.Dir, "Directory.Build.props");
-        var olderSdk = OlderSdkOnTheToolsLine();
+        var olderSdk = CsprojPatcherTests.OlderSdkOnTheToolsLine();
         File.WriteAllText(csprojPath, File.ReadAllText(csprojPath).Replace($"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", $"Godot.NET.Sdk/{olderSdk}"));
         File.WriteAllText(propsPath, File.ReadAllText(propsPath)
             .Replace($"<TwoDogVersion>{ToolVersions.TwoDogVersion}</TwoDogVersion>", "<TwoDogVersion>4.7.0.1</TwoDogVersion>")
