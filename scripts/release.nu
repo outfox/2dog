@@ -32,9 +32,10 @@ def main [
 ] {
     cd ($env.FILE_PWD | path dirname)
     let branch = (git branch --show-current)
-    let line = ($branch | parse --regex '^(?<numbers>\d+\.\d+(?:\.\d+)?)(?:-(?<label>[A-Za-z]+))?$')
+    # The 2dog tool treats exactly these labels as official prereleases.
+    let line = ($branch | parse --regex '^(?<numbers>\d+\.\d+(?:\.\d+)?)(?:-(?<label>dev|beta|rc))?$')
     if $branch != 'main' and ($line | is-empty) {
-        error make {msg: $"Release from main or a release branch such as 4.7 or 4.8.0-beta \(on '($branch)')."}
+        error make {msg: $"Release from main or a release branch such as 4.7, 4.8.0-beta or 4.8-rc \(on '($branch)')."}
     }
     if (git status --porcelain | is-not-empty) {
         error make {msg: 'Commit or stash pending changes, including submodule changes, before releasing.'}
@@ -95,11 +96,19 @@ def main [
         | set-property TwoDogRevision $"($next)"
         | set-property NativesRevision $"($next_natives)"
         | set-property TwoDogPrerelease $label)
+    # Old releases must keep resolving their godot commit after the fork's line branch (2dog-4.7) moves on.
+    let pinned = (git rev-parse HEAD:godot)
+    let fork_tag = [-C godot push (git config --file .gitmodules submodule.godot.url) $"($pinned):refs/tags/2dog-($tag)"]
     if $dry_run {
-        print $"Would commit the version bump, tag ($tag), and atomically push ($branch) and the tag to origin."
+        print $"Would tag the fork's godot ($pinned) as 2dog-($tag), commit the version bump, tag ($tag), and atomically push ($branch) and the tag to origin."
         return
     }
 
+    if ('godot/.git' | path exists) {
+        git ...$fork_tag | ignore
+    } else {
+        print --stderr $"warning: godot is not checked out; protect the pinned commit by hand: git ($fork_tag | str join ' ')"
+    }
     $updated | save --force Directory.Build.props
     git add -- Directory.Build.props | ignore
     let sign = if $no_sign { [] } else { [-c commit.gpgsign=true] }

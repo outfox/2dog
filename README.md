@@ -181,14 +181,16 @@ nu scripts/release.nu            # bump, tag, push; CI tests and stages on int.n
 ```
 
 Release branches are `main` and Godot lines such as `4.7` (stable versions) or `4.8.0-beta` and `4.8-rc`
-(prereleases labeled `-beta`, `-rc`). A line's numbers must match `GodotVersion`, whose own Godot label
-(`4.8.0-beta`) stays out of 2dog versions. Each release takes the next
+(prereleases labeled `-dev`, `-beta` or `-rc`). A line's numbers must match `GodotVersion`, whose own Godot label
+(`4.8.0-beta.2`) stays out of 2dog versions. Each release takes the next
 number after every `v*` tag on origin, so all lines share one counter: `v4.7.2.153`, `v4.8.0.154-beta`. The native
 packages keep the number of the release that built them until the godot submodule, `platforms/`, `nuget/`,
 `build/` or the natives staging script change.
 
 The script requires a clean checkout containing the latest origin branch, signs the bump commit using your Git
-configuration, and pushes the branch and `v<TwoDogVersion>` atomically. Only the tag push triggers release CI;
+configuration, and pushes the branch and `v<TwoDogVersion>` atomically. It first tags the pinned godot commit in
+the fork as `2dog-v<TwoDogVersion>`, so old releases still resolve it after the fork's line branch (`2dog-4.7`,
+`2dog-4.8`) moves on. Only the tag push triggers release CI;
 ordinary branch pushes do not run CI. Unpushed local commits can be included in that same push. The GitHub
 **2dog Release** action runs the same script as an emergency/manual fallback.
 

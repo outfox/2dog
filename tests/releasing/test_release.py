@@ -38,6 +38,9 @@ def --wrapped main [...args: string] {
         tag => { if ($args | get 1) == '--list' { print ($env.LOCAL_TAG? | default '') } }
         cat-file => { if ($env.MISSING_OBJECT? | default '') != '' { exit 1 } }
         diff => { if ($env.NATIVES_CHANGED? | default '') != '' { exit 1 } }
+        rev-parse => { print 'pinned-godot' }
+        config => { print 'git@example.com:fork/godot.git' }
+        '-C' => {}
         merge-base => {}
         fetch => {}
         add => {}
@@ -96,6 +99,29 @@ class ReleaseScript(unittest.TestCase):
             ["tag", "v4.7.2.141"],
             ["push", "--atomic", "origin", "HEAD:refs/heads/main", "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141"],
         ], self.calls()[-4:])
+
+    def test_release_tags_the_pinned_godot_commit_in_the_fork_first(self):
+        (self.root / "godot").mkdir()
+        (self.root / "godot/.git").write_text("gitdir: ../.git/modules/godot\n")
+        result = self.run_release()
+        self.assertEqual(0, result.returncode, result.stderr)
+        fork_tag = ["-C", "godot", "push", "git@example.com:fork/godot.git", "pinned-godot:refs/tags/2dog-v4.7.2.141"]
+        self.assertEqual(fork_tag, self.calls()[-5])
+
+    def test_fork_tag_failure_never_mutates(self):
+        (self.root / "godot").mkdir()
+        (self.root / "godot/.git").write_text("gitdir: ../.git/modules/godot\n")
+        result = self.run_release(
+            FAIL_GIT="-C godot push git@example.com:fork/godot.git pinned-godot:refs/tags/2dog-v4.7.2.141")
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(PROPS, self.props())
+        self.assertFalse(any(call[0] in ("add", "-c", "commit", "push") for call in self.calls()))
+
+    def test_without_a_godot_checkout_the_fork_tag_is_left_to_the_user(self):
+        result = self.run_release("--no-sign")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("protect the pinned commit by hand", result.stderr)
+        self.assertNotIn("-C", [call[0] for call in self.calls()])
 
     def test_changed_native_inputs_take_the_release_number(self):
         result = self.run_release(NATIVES_CHANGED="1", MISSING_OBJECT="1")
@@ -165,6 +191,7 @@ class ReleaseScript(unittest.TestCase):
             {"TEST_BRANCH": "topic"},
             {"TEST_BRANCH": "4.8.0-beta"},  # GodotVersion 4.7.2 is not on this line
             {"TEST_BRANCH": "4.7-2"},
+            {"TEST_BRANCH": "4.7-preview"},  # the tool would call it a fork's label
             {"TEST_STATUS": " M source.cs"},
             {"LOCAL_TAG": "v4.7.2.141"},
             {"FAIL_GIT": "ls-remote origin refs/heads/main refs/tags/v*"},
