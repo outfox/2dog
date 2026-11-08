@@ -37,8 +37,8 @@ See [update](/cli/update) for details.
 ## Godot prereleases
 
 `dnx 2dog` runs the newest release. 2dog also ships prereleases for Godot betas
-and release candidates: their versions end in `-beta` or `-rc`, such as
-`4.8.0.154-beta`. Pin one with `@` like any other version. Its `doctor` and
+and release candidates: their versions end in Godot's status, such as
+`4.8.0.156-beta2` for Godot 4.8 beta 2. Pin one with `@` like any other version. Its `doctor` and
 `update` then stay on that Godot version: they offer its later prereleases and
 its release, never the next Godot version's previews.
 

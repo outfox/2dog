@@ -72,10 +72,10 @@ public class DoctorVersionTests
     [Theory]
     [InlineData("4.8.0.152", false)]
     [InlineData("4.7.2.62", true)] // natives from another Godot release than the engine
-    public void LinePrereleases_AreOfficial_AndMatchNativesByGodotNumbers(string natives, bool mismatch)
+    public void GodotPrereleases_AreOfficial_AndMatchNativesByGodotNumbers(string natives, bool mismatch)
     {
-        var findings = VersionChecks.Run(Context("4.8.0.154-beta", natives, godot: "4.8.0-beta.2"),
-            "4.8.0.154-beta", "4.8.0.152").ToList();
+        var findings = VersionChecks.Run(Context("4.8.0.156-beta2", natives, godot: "4.8.0-beta.2"),
+            "4.8.0.156-beta2", "4.8.0.152").ToList();
 
         Assert.DoesNotContain(findings, f => f.Id == "ver.custom-versions");
         Assert.Equal(mismatch ? Severity.Fail : Severity.Pass, Assert.Single(findings, f => f.Id == "ver.natives").Severity);
@@ -85,10 +85,10 @@ public class DoctorVersionTests
     [Fact]
     public void PrereleaseProjects_HearAboutNewerPrereleasesOfTheTool()
     {
-        var findings = VersionChecks.Run(Context("4.8.0.154-beta", "4.8.0.152", godot: "4.8.0-beta.2"),
-            "4.8.0.156-rc", "4.8.0.156").ToList();
+        var findings = VersionChecks.Run(Context("4.8.0.156-beta2", "4.8.0.152", godot: "4.8.0-beta.2"),
+            "4.8.0.158-rc1", "4.8.0.158").ToList();
 
-        Assert.Contains(findings, f => f.Id == "ver.twodog-outdated" && f.Title.Contains("-> 4.8.0.156-rc"));
+        Assert.Contains(findings, f => f.Id == "ver.twodog-outdated" && f.Title.Contains("-> 4.8.0.158-rc1"));
     }
 
     [Fact]

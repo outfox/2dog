@@ -30,5 +30,5 @@ GodotSharp       :2dog-version: ✅  2dog.godotsharp, 2dog.godotsharp.editor
 | none                      | The tool could not reach nuget.org |
 
 A release means a stable release, unless the tool is itself built for a Godot
-prerelease such as `4.8.0.154-beta`: then any newer 2dog for that Godot version
+prerelease such as `4.8.0.156-beta2`: then any newer 2dog for that Godot version
 counts, including its later betas and release candidates.

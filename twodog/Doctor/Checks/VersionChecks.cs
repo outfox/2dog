@@ -76,9 +76,9 @@ internal static class VersionChecks
             yield return new Finding("ver.twodog-consistent", c, Severity.Fail,
                 $"2dog packages at mixed versions: {string.Join(", ", twoDog)}", "hosts must share one engine version",
                 custom.Count > 0 ? "align the full package versions, including custom suffixes" : "2dog update");
-        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && PackageVersion.Parse(twoDog[0]) < tool)
+        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && PackageVersion.Parse(twoDog[0])! < tool)
             yield return new Finding("ver.twodog-outdated", c, Severity.Warn, $"2dog packages {twoDog[0]} -> {tool} available", null, "2dog update");
-        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && PackageVersion.Parse(twoDog[0]) > tool)
+        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && PackageVersion.Parse(twoDog[0])! > tool)
             yield return new Finding("ver.twodog-newer", c, Severity.Info, $"2dog packages {twoDog[0]} are newer than this tool ({tool})",
                 null, "run the newest tool: dnx 2dog doctor");
         else if (custom.Count == 0 && twoDog.Count == 1 && tool != null)
@@ -93,7 +93,7 @@ internal static class VersionChecks
         {
             var natives = PackageVersion.Parse(nativeVersion)!;
             var engine = PackageVersion.Parse(twoDog[^1])!;
-            if (natives.GodotVersion != engine.GodotVersion)
+            if (natives.GodotRelease != engine.GodotRelease)
                 yield return new Finding("ver.natives", c, Severity.Fail, $"natives {nativeVersion} are not on the engine's Godot line ({twoDog[^1]})",
                     "the native payloads and the engine must come from the same Godot build",
                     custom.Count > 0 ? "select matching native packages from your fork" : "2dog update");

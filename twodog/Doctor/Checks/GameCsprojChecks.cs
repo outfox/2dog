@@ -28,10 +28,11 @@ internal static class GameCsprojChecks
         else
             yield return Finding.Pass("game.sdk", c, $"Godot.NET.Sdk/{sdk}");
 
-        // The tool knows the exact Godot version of its own engine; other 2dog versions only name Godot's numbers.
+        // The tool knows its own engine's Godot version; a label without Godot's number leaves only the release numbers.
         var ownEngine = ctx.Versions.TryGetValue("TwoDogVersion", out var engine) && engine == PackageVersion.Parse(ToolVersions.TwoDogVersion);
-        var line = engine == null ? null : ownEngine ? ToolVersions.GodotSdkVersion : engine.GodotVersion;
-        var compared = ownEngine ? sdk : PackageVersion.Parse(sdk)?.GodotVersion;
+        var exact = ownEngine || engine is { NamesGodotVersion: true };
+        var line = engine == null ? null : ownEngine ? ToolVersions.GodotSdkVersion : exact ? engine.GodotVersion : engine.GodotRelease;
+        var compared = exact ? sdk : PackageVersion.Parse(sdk)?.GodotRelease;
         if (compared != null && line != null && ToolVersions.CompareNuGet(compared, line) is { } order)
         {
             if (order != 0)

@@ -55,7 +55,7 @@ internal static class NuGetLatest
 
     /// <summary>
     /// The highest release, or for a prerelease <paramref name="current"/> the highest version of its Godot release,
-    /// prereleases included: 4.8.0.154-beta hears about 4.8.0.156-rc and 4.8.0.160, never 4.9 previews.
+    /// prereleases included: 4.8.0.156-beta2 hears about 4.8.0.158-rc1 and 4.8.0.160, never 4.9 previews.
     /// </summary>
     internal static string? Latest(IEnumerable<string> versions, string? current)
     {

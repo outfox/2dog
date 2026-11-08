@@ -180,10 +180,12 @@ nu scripts/release.nu --dry-run  # preview the versions
 nu scripts/release.nu            # bump, tag, push; CI tests and stages on int.nugettest.org
 ```
 
-Release branches are `main` and Godot lines such as `4.7` (stable versions) or `4.8.0-beta` and `4.8-rc`
-(prereleases labeled `-dev`, `-beta` or `-rc`). A line's numbers must match `GodotVersion`, whose own Godot label
-(`4.8.0-beta.2`) stays out of 2dog versions. Each release takes the next
-number after every `v*` tag on origin, so all lines share one counter: `v4.7.2.153`, `v4.8.0.154-beta`. The native
+Release branches are `main` and Godot lines such as `4.7` or `4.8`, whose numbers must match the godot submodule.
+The script reads the Godot version from `godot/version.py` and writes `GodotVersion` and every committed
+`Godot.NET.Sdk` pin itself. A Godot prerelease labels the release with Godot's status (`status = "beta2"` releases
+`v4.8.0.156-beta2`; nuget.org has only numbered Godot prereleases, so an unnumbered `beta` is refused). On a stable
+Godot, a branch label marks a 2dog prerelease (`4.7-rc` releases `v4.7.2.170-rc`; `-dev`, `-beta` or `-rc`). Each
+release takes the next number after every `v*` tag on origin, so all lines share one counter. The native
 packages keep the number of the release that built them until the godot submodule, `platforms/`, `nuget/`,
 `build/` or the natives staging script change.
 
