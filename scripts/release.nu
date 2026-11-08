@@ -148,5 +148,5 @@ def main [
         error make {msg: $"($err.msg)\nLocal commit and tag remain. After resolving the push failure, retry:\ngit ($push | str join ' ')"}
     }
     print $"Follow CI: https://github.com/outfox/2dog/actions?query=branch%3A($tag)"
-    print $"Promote to nuget.org afterwards: gh workflow run publish.yml --ref ($tag) -f feed=nuget"
+    print $"Promote to nuget.org afterwards: gh workflow run publish.yml -f tag=($tag) -f feed=nuget"
 }

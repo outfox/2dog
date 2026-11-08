@@ -2439,7 +2439,7 @@ jobs:
   # Stage the release when running on a version tag — either pushed directly or dispatched on the tag by
   # release.yml (tags pushed with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead):
   # attach every package to a GitHub prerelease, then dispatch publish.yml to push them to int.nugettest.org.
-  # Promotion to nuget.org is a manual publish.yml dispatch on the tag (see publish.yml).
+  # Promotion to nuget.org is a manual publish.yml dispatch for the tag (see publish.yml).
   deploy:
     name: Stage Release
     # web-smoke and android-smoke gate staging because the 2dog.browser-wasm and
@@ -2508,8 +2508,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
-          gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" --ref "$TAG" -f feed=test
+          gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" -f tag="$TAG" -f feed=test
           {
             echo "Staging $TAG on int.nugettest.org via publish.yml."
-            echo "Promote to nuget.org: \`gh workflow run publish.yml --ref $TAG -f feed=nuget\`"
+            echo "Promote to nuget.org: \`gh workflow run publish.yml -f tag=$TAG -f feed=nuget\`"
           } >> "$GITHUB_STEP_SUMMARY"

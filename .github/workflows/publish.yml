@@ -1,13 +1,18 @@
 # Pushes a release tag's packages, exactly as CI attached them to its GitHub release, to one NuGet feed.
 # CI stages every release tag on the test feed; promote a tested release to nuget.org with:
-#   gh workflow run publish.yml --ref v4.7.2.153 -f feed=nuget
-# The Trusted Publishing policies on int.nugettest.org and nuget.org both name this file, so it must stay the
-# top-level workflow (dispatched, never called from ci.yml).
+#   gh workflow run publish.yml -f tag=v4.7.2.153 -f feed=nuget
+# It runs from the default branch, so publishing fixes also reach older tags. The Trusted Publishing policies on
+# int.nugettest.org and nuget.org both name this file, so it must stay the top-level workflow (dispatched, never
+# called from ci.yml).
 name: 2dog Publish
 
 on:
   workflow_dispatch:
     inputs:
+      tag:
+        description: 'Release tag whose GitHub release holds the packages (v4.7.2.153)'
+        required: true
+        type: string
       feed:
         description: 'test = int.nugettest.org, nuget = nuget.org'
         required: true
@@ -19,18 +24,18 @@ permissions:
   id-token: write # request the GitHub OIDC token for Trusted Publishing
 
 concurrency:
-  group: publish-${{ github.ref }}-${{ inputs.feed }}
+  group: publish-${{ inputs.tag }}-${{ inputs.feed }}
   cancel-in-progress: false
 
 jobs:
   publish:
-    if: github.repository == 'outfox/2dog' && startsWith(github.ref, 'refs/tags/v')
-    name: Publish ${{ github.ref_name }} to ${{ inputs.feed }}
+    if: github.repository == 'outfox/2dog' && startsWith(inputs.tag, 'v')
+    name: Publish ${{ inputs.tag }} to ${{ inputs.feed }}
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     env:
       GH_TOKEN: ${{ github.token }}
-      TAG: ${{ github.ref_name }}
+      TAG: ${{ inputs.tag }}
 
     steps:
       - name: Checkout CI helpers
@@ -86,7 +91,7 @@ jobs:
       # CI creates every GitHub release as a prerelease; a stable version becomes a full release once on nuget.org,
       # and the latest one only when no published release has a higher version (an older line stays below).
       - name: Publish GitHub release
-        if: inputs.feed == 'nuget' && !contains(github.ref_name, '-')
+        if: inputs.feed == 'nuget' && !contains(inputs.tag, '-')
         run: |
           newest=$( (gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --exclude-pre-releases --limit 200 \
             --json tagName -q '.[].tagName' | grep '^v'; echo "$TAG") | sort -V | tail -1)

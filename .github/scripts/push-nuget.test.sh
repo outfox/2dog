@@ -7,6 +7,7 @@ mkdir "$scratch/bin" "$scratch/feed" "$scratch/calls"
 export PATH="$scratch/bin:$PATH" NUGET_API_KEY=test-key CALLS="$scratch/calls"
 cat > "$scratch/bin/dotnet" <<'MOCK'
 #!/usr/bin/env bash
+[[ "$1" == nuget && "$2" == locals ]] && exit 0
 [[ "$1" == nuget && "$2" == push && "$4" == --source && "$5" == "$EXPECTED_SOURCE" ]] || exit 1
 printf '%s\n' "$3" > "$CALLS/started.$BASHPID"
 # A serial publisher cannot release the first four workers.
