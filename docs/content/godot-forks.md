@@ -39,7 +39,7 @@ The submodule URL uses GitHub SSH. If you use HTTPS instead, clone without
 
 ```bash
 git submodule init
-git config submodule.godot.url https://github.com/thygrrr/godot.git
+git config submodule.godot.url https://github.com/outfox/godot.git
 git submodule update --recursive
 ```
 
