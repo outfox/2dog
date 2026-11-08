@@ -38,6 +38,7 @@ def --wrapped main [...args: string] {
         tag => { if ($args | get 1) == '--list' { print ($env.LOCAL_TAG? | default '') } }
         cat-file => { if ($env.MISSING_OBJECT? | default '') != '' { exit 1 } }
         diff => { if ($env.NATIVES_CHANGED? | default '') != '' { exit 1 } }
+        grep => { print ($env.SDK_PINS? | default '') }
         rev-parse => { print 'pinned-godot' }
         config => { print 'git@example.com:fork/godot.git' }
         '-C' => {}
@@ -152,6 +153,29 @@ class ReleaseScript(unittest.TestCase):
             ["push", "--atomic", "origin", "HEAD:refs/heads/4.7-beta",
              "refs/tags/v4.7.2.141-beta:refs/tags/v4.7.2.141-beta"],
         ], self.calls()[-3:])
+
+    def write_version_py(self, status):
+        (self.root / "godot").mkdir(exist_ok=True)
+        (self.root / "godot/version.py").write_text(
+            f'short_name = "godot"\nmajor = 4\nminor = 8\npatch = 0\nstatus = "{status}"\n')
+
+    def test_godot_version_must_match_the_submodule(self):
+        for status, accepted in [("beta2", True), ("beta.2", False), ("beta", False), ("stable", False)]:
+            with self.subTest(status=status):
+                props = PROPS.replace("4.7.2", "4.8.0-beta.2")
+                (self.root / "Directory.Build.props").write_text(props)
+                self.write_version_py(status)
+                result = self.run_release("--dry-run", TEST_BRANCH="4.8.0-beta")
+                self.assertEqual(accepted, result.returncode == 0, result.stderr)
+                if not accepted:
+                    self.assertIn("does not match the C# packages godot/version.py builds", result.stderr)
+
+    def test_csproj_sdk_pins_must_match_godot_version(self):
+        pins = 'Godot.NET.Sdk/4.7.2\nGodot.NET.Sdk" Version="4.7.2'
+        self.assertEqual(0, self.run_release("--dry-run", SDK_PINS=pins).returncode)
+        result = self.run_release("--dry-run", SDK_PINS=pins + "\nGodot.NET.Sdk/4.7.1")
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("pins 4.7.1 in csproj files differ from GodotVersion 4.7.2", result.stderr)
 
     def test_unnumbered_godot_prerelease_is_refused(self):
         props = PROPS.replace("4.7.2", "4.8.0-beta")

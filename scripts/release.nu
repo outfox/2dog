@@ -17,6 +17,18 @@ def property [props: string, name: string] {
     $values.0.value
 }
 
+# The C# package version godot/version.py builds, as Godot's build_assemblies.py derives it ("beta2" -> -beta.2).
+def godot-csharp-version [] {
+    let py = (open --raw godot/version.py)
+    let field = {|name| $py | parse --regex ('(?m)^' + $name + ' = "?(?<value>[^"\r\n]*)"?') | get 0.value }
+    let status = (do $field status)
+    let numbered = ($status | parse --regex '^(?<word>.*?)(?<n>\d+)$')
+    let suffix = if $status == 'stable' { '' } else if ($numbered | is-empty) { $"-($status)" } else {
+        $"-($numbered.0.word).($numbered.0.n)"
+    }
+    $"(do $field major).(do $field minor).(do $field patch)($suffix)"
+}
+
 def set-property [name: string, value: string]: string -> string {
     $in | str replace --regex ('<' + $name + '>[^<]*</' + $name + '>') $'<($name)>($value)</($name)>'
 }
@@ -47,10 +59,20 @@ def main [
     if ($godot | is-empty) {
         error make {msg: 'GodotVersion must be a Godot version such as 4.7.2 or 4.8.0-beta.2.'}
     }
+    let godot_version = (property $props GodotVersion)
+    if ('godot/version.py' | path exists) and (godot-csharp-version) != $godot_version {
+        error make {msg: $"GodotVersion ($godot_version) in Directory.Build.props does not match the C# packages godot/version.py builds: (godot-csharp-version). Godot numbers a status itself \(status = \"beta2\" builds 4.8.0-beta.2)."}
+    }
+    # Committed Godot projects pin Godot.NET.Sdk literally: an Sdk attribute cannot use a property.
+    let stale = (^git grep -h -o -E 'Godot\.NET\.Sdk(/|" Version=")[0-9][^"]*' -- '*.csproj' | lines
+        | parse --regex '(?:/|Version=")(?<pin>.+)$' | get pin | uniq | where $it != $godot_version)
+    if ($stale | is-not-empty) {
+        error make {msg: $"Godot.NET.Sdk pins ($stale | str join ', ') in csproj files differ from GodotVersion ($godot_version)."}
+    }
     # Scaffolded games pin Godot.NET.Sdk to GodotVersion; nuget.org only has Godot's numbered prereleases.
     let godot_label = ($godot.0.label | default '')
     if $godot_label != '' and $godot_label !~ '^-(dev|beta|rc)\.\d+$' {
-        error make {msg: $"GodotVersion ($godot.0.release)($godot_label) has no Godot.NET.Sdk on nuget.org: pin the godot submodule at a numbered Godot prerelease \(4.8.0-beta.2) first."}
+        error make {msg: $"GodotVersion ($godot_version) has no Godot.NET.Sdk on nuget.org: build a numbered Godot prerelease \(status = \"beta2\" in godot/version.py, GodotVersion 4.8.0-beta.2 in Directory.Build.props)."}
     }
     let version = $godot.0.release
     let label = if ($line | is-empty) { '' } else { $line.0.label | default '' }
