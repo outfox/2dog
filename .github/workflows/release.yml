@@ -1,28 +1,15 @@
-# Emergency/manual fallback to scripts/release.nu: bumps revisions in Directory.Build.props, commits,
-# tags the bump commit, and pushes both — so the tag can never point at a commit
-# with a stale version (the failure mode behind the mislabeled v4.7.0.26 release).
+# Emergency/manual fallback to running scripts/release.nu locally: dispatch it on the branch to release (main, 4.7,
+# 4.8.0-beta, ...). The script computes the versions, commits the bump, tags it and pushes both atomically.
 #
-# Uses only the default GITHUB_TOKEN. Tags pushed with GITHUB_TOKEN do not fire
-# `on: push` (GitHub's anti-recursion rule), so after pushing, this workflow
-# explicitly dispatches ci.yml on the new tag — workflow_dispatch is exempt from
-# that rule. ci.yml gates its tag guard and deploy job on the ref alone, so a
-# dispatched tag run deploys exactly like a pushed tag.
+# Uses only the default GITHUB_TOKEN. Tags pushed with GITHUB_TOKEN do not fire `on: push` (GitHub's anti-recursion
+# rule), so this workflow then dispatches ci.yml on the new tag; workflow_dispatch is exempt from that rule.
 name: 2dog Release
 
 on:
   workflow_dispatch:
     inputs:
-      revision:
-        description: 'New TwoDogRevision (default: one above the highest revision released on any line)'
-        required: false
-        type: string
-      native:
-        description: 'Also increment NativesRevision for native NuGet packages'
-        required: false
-        type: boolean
-        default: false
       dry_run:
-        description: 'Compute, commit, and tag locally without pushing'
+        description: 'Compute and preview without committing, tagging or pushing'
         required: false
         type: boolean
         default: false
@@ -46,97 +33,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Compute new version
-        id: version
+      - name: Setup Nushell
+        uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29
+        with:
+          version: '0.111.0'
+
+      - name: Release
         env:
-          INPUT_REVISION: ${{ inputs.revision }}
-          INPUT_NATIVE: ${{ inputs.native }}
-        run: |
-          GODOT_VERSION=$(sed -n 's:.*<GodotVersion>\(.*\)</GodotVersion>.*:\1:p' Directory.Build.props)
-          CURRENT_REV=$(sed -n 's:.*<TwoDogRevision>\(.*\)</TwoDogRevision>.*:\1:p' Directory.Build.props)
-          CURRENT_NATIVE_REV=$(sed -n 's:.*<NativesRevision>\(.*\)</NativesRevision>.*:\1:p' Directory.Build.props)
-          if [[ ! "$CURRENT_REV" =~ ^[0-9]+$ || ! "$CURRENT_NATIVE_REV" =~ ^[0-9]+$ ]]; then
-            echo "::error::Failed to parse TwoDogRevision/NativesRevision from Directory.Build.props."
-            exit 1
-          fi
-          # Godot's own C# package versions. An unnumbered label (master's "beta" between betas) would sort above
-          # the numbered prereleases after it, so only releases and numbered prereleases ship.
-          if [[ ! "$GODOT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(beta|rc)\.[0-9]+)?$ ]]; then
-            echo "::error::GodotVersion '$GODOT_VERSION' must be a Godot release or numbered prerelease: 4.7.2, 4.8.0-beta.1, 4.8.0-rc.1."
-            exit 1
-          fi
-          BRANCH=$(echo "$GODOT_VERSION" | cut -d. -f1,2)
-          if [ "$GITHUB_REF" != "refs/heads/$BRANCH" ]; then
-            echo "::error::Release Godot $GODOT_VERSION from the $BRANCH branch (got $GITHUB_REF)."
-            exit 1
-          fi
-
-          # One revision sequence across every Godot line: continue after the highest revision any release tag uses.
-          HIGHEST=$(git ls-remote --tags origin 'refs/tags/v*' | awk '{ print $2 }' | sed -nE 's:^refs/tags/v.*\.([0-9]+)$:\1:p' |
-            sort -n | tail -n 1)
-          HIGHEST=$(( ${HIGHEST:-0} > CURRENT_REV ? ${HIGHEST:-0} : CURRENT_REV ))
-          NEW_REV="${INPUT_REVISION:-$((HIGHEST + 1))}"
-          if [[ ! "$NEW_REV" =~ ^[0-9]+$ ]]; then
-            echo "::error::revision input must be a number (got '$NEW_REV')."
-            exit 1
-          fi
-          if (( NEW_REV <= HIGHEST )); then
-            echo "::error::New revision $NEW_REV must be greater than $HIGHEST, the highest revision released on any line."
-            exit 1
-          fi
-
-          TAG="v${GODOT_VERSION}.${NEW_REV}"
-          echo "Releasing $TAG from $BRANCH (revision $CURRENT_REV -> $NEW_REV)"
-          NEW_NATIVE_REV="$CURRENT_NATIVE_REV"
-          if [ "$INPUT_NATIVE" = true ]; then
-            NEW_NATIVE_REV=$((CURRENT_NATIVE_REV + 1))
-          fi
-          echo "NativesRevision $CURRENT_NATIVE_REV -> $NEW_NATIVE_REV"
-          {
-            echo "branch=$BRANCH"
-            echo "current_rev=$CURRENT_REV"
-            echo "new_rev=$NEW_REV"
-            echo "tag=$TAG"
-            echo "current_native_rev=$CURRENT_NATIVE_REV"
-            echo "new_native_rev=$NEW_NATIVE_REV"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Bump revisions
-        run: |
-          sed -i 's:<TwoDogRevision>${{ steps.version.outputs.current_rev }}</TwoDogRevision>:<TwoDogRevision>${{ steps.version.outputs.new_rev }}</TwoDogRevision>:' Directory.Build.props
-          if ! grep -q '<TwoDogRevision>${{ steps.version.outputs.new_rev }}</TwoDogRevision>' Directory.Build.props; then
-            echo "::error::Failed to update <TwoDogRevision> in Directory.Build.props."
-            exit 1
-          fi
-          sed -i 's:<NativesRevision>${{ steps.version.outputs.current_native_rev }}</NativesRevision>:<NativesRevision>${{ steps.version.outputs.new_native_rev }}</NativesRevision>:' Directory.Build.props
-          if ! grep -q '<NativesRevision>${{ steps.version.outputs.new_native_rev }}</NativesRevision>' Directory.Build.props; then
-            echo "::error::Failed to update <NativesRevision> in Directory.Build.props."
-            exit 1
-          fi
-          git diff Directory.Build.props
-
-      - name: Commit and tag
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "chore: release ${{ steps.version.outputs.tag }}"
-          git tag "${{ steps.version.outputs.tag }}"
+          if [ "$DRY_RUN" = true ]; then
+            nu scripts/release.nu --no-sign --dry-run
+          else
+            nu scripts/release.nu --no-sign
+          fi
 
-      - name: Push commit and tag
-        if: ${{ !inputs.dry_run }}
-        run: git push --atomic origin "HEAD:refs/heads/${{ steps.version.outputs.branch }}" "${{ steps.version.outputs.tag }}"
-
-      # Tags pushed with GITHUB_TOKEN don't fire `on: push`, so trigger the CI
-      # (and thereby the deploy) explicitly on the new tag.
+      # Tags pushed with GITHUB_TOKEN don't fire `on: push`, so trigger the CI (and thereby the staging) explicitly.
       - name: Dispatch CI on the new tag
         if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "${{ steps.version.outputs.tag }}"
-
-      - name: Dry run summary
-        if: ${{ inputs.dry_run }}
-        run: |
-          echo "Dry run — nothing pushed. Would have pushed:"
-          git log -1 --oneline
-          echo "Tag: ${{ steps.version.outputs.tag }}"
+        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$(git describe --tags --exact-match HEAD)"

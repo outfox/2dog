@@ -1,18 +1,20 @@
 <Project>
     <PropertyGroup>
-        <!-- Godot engine version: Godot's C# package version of the godot submodule (godot/version.py), such as 4.7.2,
-             4.8.0-beta.1 or 4.8.0-rc.1. Releases need a Godot release or numbered prerelease. -->
+        <!-- Godot's C# package version of the godot submodule (godot/version.py): 4.7.2, 4.8.0-beta. -->
         <GodotVersion>4.8.0-beta</GodotVersion>
-        <!-- One 2dog revision sequence across all Godot lines (4.7, 4.8): scripts/release.nu continues after the highest
-             v* tag of any line, so revisions order releases in time (4.7.2.155 is newer than 4.8.0-beta.1.154).
-             Never reset; a merge conflict between lines can take either side. -->
+        <!-- The next three are written by scripts/release.nu; do not edit them by hand.
+             Release number, one counter across all release branches (the next number after every v* tag). -->
         <TwoDogRevision>152</TwoDogRevision>
-        <!-- Bump when the godot submodule or the natives package layout changes (deploy skips duplicates);
-             reset to 0 when GodotVersion changes, also between Godot prereleases. NuGet normalizes a trailing .0
-             (4.7.0.0 publishes as 4.7.0). -->
-        <NativesRevision>0</NativesRevision>
-        <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
-        <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
+        <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
+             release's tag sets its own number. -->
+        <NativesRevision>152</NativesRevision>
+        <!-- Prerelease label from the release branch name (4.8.0-beta releases 4.8.0.N-beta); empty on main. -->
+        <TwoDogPrerelease>beta</TwoDogPrerelease>
+        <!-- 2dog versions take Godot's release numbers without Godot's label: 4.8.0-beta -> 4.8.0.153-beta. -->
+        <TwoDogGodotRelease>$([System.Text.RegularExpressions.Regex]::Replace('$(GodotVersion)', '-.*', ''))</TwoDogGodotRelease>
+        <TwoDogVersion>$(TwoDogGodotRelease).$(TwoDogRevision)</TwoDogVersion>
+        <TwoDogVersion Condition="'$(TwoDogPrerelease)' != ''">$(TwoDogVersion)-$(TwoDogPrerelease)</TwoDogVersion>
+        <NativesVersion>$(TwoDogGodotRelease).$(NativesRevision)</NativesVersion>
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
              AVALONIA_PKG_VERSION token, substituted on pack and scaffold. -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>

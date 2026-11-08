@@ -34,7 +34,8 @@ def api(repo, endpoint):
 def versions(path):
     props = ET.parse(path).getroot()
     godot = props.findtext(".//GodotVersion")
-    managed = f"{godot}.{props.findtext('.//TwoDogRevision')}"
+    label = props.findtext(".//TwoDogPrerelease")
+    managed = f"{godot}.{props.findtext('.//TwoDogRevision')}" + (f"-{label}" if label else "")
     native = f"{godot}.{props.findtext('.//NativesRevision')}"
     return godot, normalize_version(managed), normalize_version(native)
 
