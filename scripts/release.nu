@@ -21,11 +21,33 @@ def set-property [name: string, value: string]: string -> string {
     $in | str replace --regex ('<' + $name + '>[^<]*</' + $name + '>') $'<($name)>($value)</($name)>'
 }
 
+# godot/version.py at the pinned commit: the checkout (a clean tree has it at that commit) or the fork on GitHub.
+def godot-version-py [pinned: string] {
+    if ('godot/version.py' | path exists) { return (open --raw godot/version.py) }
+    let fork = (git config --file .gitmodules submodule.godot.url | parse --regex 'github\.com[:/](?<repo>.+?)(?:\.git)?$')
+    if ($fork | is-empty) { error make {msg: 'Check out godot: its fork is not on GitHub.'} }
+    http get --raw $"https://raw.githubusercontent.com/($fork.0.repo)/($pinned)/version.py"
+}
+
+# Godot's release numbers, its status ("stable", "beta2") and the C# package version Godot's build_assemblies.py
+# derives from them ("beta2" -> 4.8.0-beta.2).
+def godot-version [py: string] {
+    let field = {|name| $py | parse --regex ('(?m)^' + $name + ' = "?(?<value>[^"\r\n]*)"?') | get 0.value }
+    let release = $"(do $field major).(do $field minor).(do $field patch)"
+    let status = (do $field status)
+    let numbered = ($status | parse --regex '^(?<word>.*?)(?<n>\d+)$')
+    let csharp = if $status == 'stable' { $release } else if ($numbered | is-empty) { $"($release)-($status)" } else {
+        $"($release)-($numbered.0.word).($numbered.0.n)"
+    }
+    {release: $release, status: $status, csharp: $csharp}
+}
+
 # Files whose changes alter the native packages (platform packages, their staging and metadata).
 const NATIVE_INPUTS = [godot platforms nuget build scripts/stage_natives_release.py]
 
-# Release the current branch: `main` and stable lines (4.7) publish stable versions, a labeled line (4.8.0-beta)
-# publishes prereleases (4.8.0.153-beta). Every release takes the next number after all release tags on origin.
+# Release the current branch at the Godot version its fork builds: a stable Godot publishes stable versions (or a
+# 2dog prerelease labeled by the branch, 4.7-rc), a Godot prerelease publishes under Godot's status (4.8.0.155-beta2).
+# Every release takes the next number after all release tags on origin.
 def main [
     --dry-run  # Check and preview without changing files, commits, tags or remote refs.
     --no-sign  # Do not force a signed commit (the CI fallback has no signing key).
@@ -35,21 +57,24 @@ def main [
     # The 2dog tool treats exactly these labels as official prereleases.
     let line = ($branch | parse --regex '^(?<numbers>\d+\.\d+(?:\.\d+)?)(?:-(?<label>dev|beta|rc))?$')
     if $branch != 'main' and ($line | is-empty) {
-        error make {msg: $"Release from main or a release branch such as 4.7, 4.8.0-beta or 4.8-rc \(on '($branch)')."}
+        error make {msg: $"Release from main or a release branch such as 4.7, 4.8 or 4.7-rc \(on '($branch)')."}
     }
     if (git status --porcelain | is-not-empty) {
         error make {msg: 'Commit or stash pending changes, including submodule changes, before releasing.'}
     }
 
     let props = (open --raw Directory.Build.props)
-    let version = (property $props GodotVersion)
-    if $version !~ '^\d+\.\d+\.\d+$' {
-        error make {msg: 'GodotVersion must have three numeric components.'}
+    let pinned = (git rev-parse HEAD:godot)
+    let godot = (godot-version (godot-version-py $pinned))
+    # Scaffolded games pin Godot.NET.Sdk to it; nuget.org only has Godot's numbered prereleases.
+    if $godot.status != 'stable' and $godot.status !~ '^(dev|beta|rc)\d+$' {
+        error make {msg: $"godot/version.py has status \"($godot.status)\", which builds Godot.NET.Sdk ($godot.csharp): nuget.org has only numbered Godot prereleases \(status = \"beta2\")."}
     }
-    let label = if ($line | is-empty) { '' } else { $line.0.label | default '' }
+    let version = $godot.release
     if ($line | is-not-empty) and not ($"($version)." | str starts-with $"($line.0.numbers).") {
-        error make {msg: $"Branch ($branch) releases Godot ($line.0.numbers), but GodotVersion is ($version)."}
+        error make {msg: $"Branch ($branch) releases Godot ($line.0.numbers), but the godot submodule is Godot ($godot.csharp)."}
     }
+    let label = if $godot.status != 'stable' { $godot.status } else if ($line | is-empty) { '' } else { $line.0.label | default '' }
     let current = (property $props TwoDogRevision | into int)
     let natives = (property $props NativesRevision | into int)
 
@@ -84,13 +109,20 @@ def main [
     }
     let next_natives = if $reuse { $natives } else { $next }
 
-    print $"Release ($tag): TwoDogRevision ($current) -> ($next), NativesRevision ($natives) -> ($next_natives)"
+    # GodotVersion and the committed Godot.NET.Sdk pins follow the fork (an Sdk attribute cannot use a property).
+    let repin = {|text| $text | str replace --all --regex '(Godot\.NET\.Sdk(?:/|" Version="))[0-9][^"]*' ('${1}' + $godot.csharp) }
+    let pinned_files = (^git grep -l -E 'Godot\.NET\.Sdk(/|" Version=")[0-9]' -- '*.csproj' | complete | get stdout | lines | where $it != '')
+    let repinned = ($pinned_files | where {|file| (open --raw $file) != (do $repin (open --raw $file)) })
+    let was = (property $props GodotVersion)
+    print ($"Release ($tag): TwoDogRevision ($current) -> ($next), NativesRevision ($natives) -> ($next_natives)"
+        + (if $was == $godot.csharp { '' } else { $", GodotVersion ($was) -> ($godot.csharp)" })
+        + (if ($repinned | is-empty) { '' } else { $", Godot.NET.Sdk ($godot.csharp) in ($repinned | str join ', ')" }))
     let updated = ($props
+        | set-property GodotVersion $godot.csharp
         | set-property TwoDogRevision $"($next)"
         | set-property NativesRevision $"($next_natives)"
         | set-property TwoDogPrerelease $label)
     # Old releases must keep resolving their godot commit after the fork's line branch (2dog-4.7) moves on.
-    let pinned = (git rev-parse HEAD:godot)
     let fork_tag = [-C godot push (git config --file .gitmodules submodule.godot.url) $"($pinned):refs/tags/2dog-($tag)"]
     if $dry_run {
         print $"Would tag the fork's godot ($pinned) as 2dog-($tag), commit the version bump, tag ($tag), and atomically push ($branch) and the tag to origin."
@@ -103,7 +135,8 @@ def main [
         print --stderr $"warning: godot is not checked out; protect the pinned commit by hand: git ($fork_tag | str join ' ')"
     }
     $updated | save --force Directory.Build.props
-    git add -- Directory.Build.props | ignore
+    for file in $repinned { do $repin (open --raw $file) | save --force --raw $file }
+    git add -- Directory.Build.props ...$repinned | ignore
     let sign = if $no_sign { [] } else { [-c commit.gpgsign=true] }
     git ...$sign commit -m $"chore: release ($tag)" | print
     git tag $tag | ignore

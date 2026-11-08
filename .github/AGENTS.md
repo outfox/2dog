@@ -66,9 +66,10 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
-- `scripts/release.nu` is the normal release path from `main` or a line branch (`4.7`, `4.8.0-beta`): it computes
-  `TwoDogRevision` (next after every `v*` tag), `NativesRevision` (kept while the native inputs match that release's
-  tag) and `TwoDogPrerelease` (the branch label: `dev`, `beta` or `rc`, the labels the tool treats as official), tags
+- `scripts/release.nu` is the normal release path from `main` or a line branch (`4.7`, `4.8`): it computes
+  `GodotVersion` and the committed `Godot.NET.Sdk` pins (from `godot/version.py`), `TwoDogRevision` (next after every
+  `v*` tag), `NativesRevision` (kept while the native inputs match that release's tag) and `TwoDogPrerelease` (Godot's
+  numbered status such as `beta2`, else the branch label `dev`, `beta` or `rc`: the labels the tool treats as official), tags
   the pinned godot commit in the fork (`2dog-v<version>`), signs the commit and atomically pushes branch + tag. Only the tag
   push triggers release CI. `release.yml` runs the same script as the emergency/manual fallback and dispatches
   `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.

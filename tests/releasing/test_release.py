@@ -38,6 +38,7 @@ def --wrapped main [...args: string] {
         tag => { if ($args | get 1) == '--list' { print ($env.LOCAL_TAG? | default '') } }
         cat-file => { if ($env.MISSING_OBJECT? | default '') != '' { exit 1 } }
         diff => { if ($env.NATIVES_CHANGED? | default '') != '' { exit 1 } }
+        grep => { print ($env.SDK_FILES? | default '') }
         rev-parse => { print 'pinned-godot' }
         config => { print 'git@example.com:fork/godot.git' }
         '-C' => {}
@@ -75,6 +76,13 @@ class ReleaseScript(unittest.TestCase):
         self.log = self.root / "git.jsonl"
         self.env = {**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"], "GIT_LOG": str(self.log),
                     "REMOTE_TAGS": REMOTE_TAGS}
+        self.write_version_py("4.7.2", "stable")
+
+    def write_version_py(self, version, status):
+        (self.root / "godot").mkdir(exist_ok=True)
+        major, minor, patch = version.split(".")
+        (self.root / "godot/version.py").write_text(
+            f'short_name = "godot"\nmajor = {major}\nminor = {minor}\npatch = {patch}\nstatus = "{status}"\n')
 
     def run_release(self, *args, **env):
         return subprocess.run([NU, "--no-config-file", str(self.root / "scripts/release.nu"), *args],
@@ -101,7 +109,6 @@ class ReleaseScript(unittest.TestCase):
         ], self.calls()[-4:])
 
     def test_release_tags_the_pinned_godot_commit_in_the_fork_first(self):
-        (self.root / "godot").mkdir()
         (self.root / "godot/.git").write_text("gitdir: ../.git/modules/godot\n")
         result = self.run_release()
         self.assertEqual(0, result.returncode, result.stderr)
@@ -109,7 +116,6 @@ class ReleaseScript(unittest.TestCase):
         self.assertEqual(fork_tag, self.calls()[-5])
 
     def test_fork_tag_failure_never_mutates(self):
-        (self.root / "godot").mkdir()
         (self.root / "godot/.git").write_text("gitdir: ../.git/modules/godot\n")
         result = self.run_release(
             FAIL_GIT="-C godot push git@example.com:fork/godot.git pinned-godot:refs/tags/2dog-v4.7.2.141")
@@ -153,6 +159,37 @@ class ReleaseScript(unittest.TestCase):
              "refs/tags/v4.7.2.141-beta:refs/tags/v4.7.2.141-beta"],
         ], self.calls()[-3:])
 
+    def test_godot_prerelease_labels_the_release_and_syncs_godot_version_and_pins(self):
+        self.write_version_py("4.8.0", "beta2")
+        (self.root / "game").mkdir()
+        (self.root / "game/game.csproj").write_bytes(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta">\r\n</Project>\r\n')
+        (self.root / "double.csproj").write_text('<Import Sdk="Godot.NET.Sdk" Version="4.8.0-beta.2" />\n')
+        result = self.run_release(TEST_BRANCH="4.8", SDK_FILES="game/game.csproj\ndouble.csproj",
+                                  REMOTE_TAGS=REMOTE_TAGS + "\nnat80\trefs/tags/v4.8.0.46-beta")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<GodotVersion>4.8.0-beta.2</GodotVersion>", self.props())
+        self.assertIn("<TwoDogPrerelease>beta2</TwoDogPrerelease>", self.props())
+        self.assertEqual(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2">\r\n</Project>\r\n',
+                         (self.root / "game/game.csproj").read_bytes())
+        self.assertIn(["diff", "--quiet", "nat80", "HEAD", "--", *INPUTS], self.calls())
+        self.assertIn(["add", "--", "Directory.Build.props", "game/game.csproj"], self.calls())
+        self.assertEqual(["tag", "v4.8.0.141-beta2"], self.calls()[-2])
+
+    def test_godot_status_wins_over_the_branch_label(self):
+        self.write_version_py("4.8.0", "rc1")
+        result = self.run_release("--dry-run", TEST_BRANCH="4.8.0-beta")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("Release v4.8.0.141-rc1:", result.stdout)
+
+    def test_unnumbered_godot_prerelease_is_refused(self):
+        for status in ["beta", "beta.2"]:
+            with self.subTest(status=status):
+                self.write_version_py("4.8.0", status)
+                result = self.run_release(TEST_BRANCH="4.8")
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn("nuget.org has only numbered Godot prereleases", result.stderr)
+                self.assertEqual(PROPS, self.props())
+
     def test_stable_branch_clears_the_label(self):
         (self.root / "Directory.Build.props").write_text(PROPS.replace(
             "<TwoDogPrerelease></TwoDogPrerelease>", "<TwoDogPrerelease>rc</TwoDogPrerelease>"))
@@ -172,7 +209,7 @@ class ReleaseScript(unittest.TestCase):
     def test_preflight_failures_never_mutate(self):
         for env in [
             {"TEST_BRANCH": "topic"},
-            {"TEST_BRANCH": "4.8.0-beta"},  # GodotVersion 4.7.2 is not on this line
+            {"TEST_BRANCH": "4.8.0-beta"},  # the godot submodule (4.7.2) is not on this line
             {"TEST_BRANCH": "4.7-2"},
             {"TEST_BRANCH": "4.7-preview"},  # the tool would call it a fork's label
             {"TEST_STATUS": " M source.cs"},
