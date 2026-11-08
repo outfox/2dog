@@ -2,31 +2,34 @@ using twodog.cli;
 
 namespace twodog.tests.ToolTests;
 
-// 2dog versions are <GodotVersion>.<TwoDogRevision>, with one revision sequence across every Godot line, so a Godot
-// prerelease line (4.8.0-beta.1) and the release line (4.7.2) publish side by side and NuGet orders both correctly.
+// 2dog versions are <Godot numbers>.<TwoDogRevision>[-<branch label>], with one revision sequence across every line, so
+// a prerelease line (4.8.0.154-beta) and the release line (4.7.2) publish side by side and NuGet orders both correctly.
 [Trait("Precision", "Independent")]
 public class PackageVersionTests
 {
     [Fact]
     public void ReleasesAcrossTwoLines_OrderAsNuGetOrdersThem()
     {
-        string[] published = ["4.7.2.153", "4.8.0-beta.1.154", "4.7.2.155", "4.8.0-rc.1.156", "4.8.0.160"];
+        string[] published = ["4.7.2.153", "4.8.0.154-beta", "4.7.2.155", "4.8.0.156-rc", "4.8.0.160"];
         var ordered = published.Select(v => PackageVersion.Parse(v)!).Order().Select(v => v.Text).ToArray();
-        Assert.Equal(["4.7.2.153", "4.7.2.155", "4.8.0-beta.1.154", "4.8.0-rc.1.156", "4.8.0.160"], ordered);
+        Assert.Equal(["4.7.2.153", "4.7.2.155", "4.8.0.154-beta", "4.8.0.156-rc", "4.8.0.160"], ordered);
     }
 
     [Theory]
     [InlineData("4.7.2.152", "4.7.2", false)]
-    [InlineData("4.8.0-beta.1.154", "4.8.0-beta.1", true)]
-    [InlineData("4.8.0-rc.2.0", "4.8.0-rc.2", true)] // natives at NativesRevision 0
-    [InlineData("4.8.0-beta.152", "4.8.0-beta", true)] // a development build between Godot betas
-    [InlineData("4.7.2.139-sora", "4.7.2", false)] // a fork's suffix is not a Godot label
+    [InlineData("4.8.0.154-beta", "4.8.0", true)] // a release from the 4.8.0-beta branch
+    [InlineData("4.8.0.156-RC", "4.8.0", true)]
+    [InlineData("4.8.0.157-dev", "4.8.0", true)]
+    [InlineData("4.8.0-beta.2", "4.8.0", true)] // Godot.NET.Sdk's own form
+    [InlineData("4.8.0-dev.7", "4.8.0", true)]
+    [InlineData("4.8.0.154-beta.1", "4.8.0", false)] // 2dog line labels carry no numbers
+    [InlineData("4.7.2.139-sora", "4.7.2", false)] // a fork's suffix is not an official label
     [InlineData("4.7.2.139-sora.2", "4.7.2", false)]
-    public void GodotVersion_IsTheVersionWithoutTheRevision(string version, string godot, bool official)
+    public void GodotVersion_IsTheGodotReleaseNumbers(string version, string godot, bool official)
     {
         var parsed = PackageVersion.Parse(version)!;
         Assert.Equal(godot, parsed.GodotVersion);
-        Assert.Equal(official, parsed.IsGodotPrerelease);
+        Assert.Equal(official, parsed.IsOfficialPrerelease);
     }
 
     [Theory]
@@ -46,9 +49,9 @@ public class PackageVersionTests
     [Fact]
     public void Latest_PrereleaseStaysOnItsGodotVersion()
     {
-        string[] versions = ["4.7.2.155", "4.8.0-beta.1.154", "4.8.0-rc.1.156", "4.9.0-beta.1.170"];
-        Assert.Equal("4.8.0-rc.1.156", NuGetLatest.Latest(versions, "4.8.0-beta.1.154"));
-        Assert.Equal("4.8.0.160", NuGetLatest.Latest([.. versions, "4.8.0.160"], "4.8.0-beta.1.154"));
+        string[] versions = ["4.7.2.155", "4.8.0.154-beta", "4.8.0.156-rc", "4.9.0.170-beta"];
+        Assert.Equal("4.8.0.156-rc", NuGetLatest.Latest(versions, "4.8.0.154-beta"));
+        Assert.Equal("4.8.0.160", NuGetLatest.Latest([.. versions, "4.8.0.160"], "4.8.0.154-beta"));
         // `dnx 2dog` users on a release only hear about releases.
         Assert.Equal("4.7.2.155", NuGetLatest.Latest(versions, "4.7.2.153"));
     }

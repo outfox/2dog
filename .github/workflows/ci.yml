@@ -108,7 +108,7 @@ jobs:
           [ "$tested" = true ] || echo "::notice::Not a revision bump on a tested commit; running every job."
           echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
-      # An atomic line-branch (4.7, 4.8) + release-tag push leaves testing to the tag run. Otherwise a branch push whose
+      # An atomic release-branch (main, 4.7, 4.8.0-beta) + release-tag push leaves testing to the tag run. Otherwise a branch push whose
       # content already passed every job family elsewhere skips natives, pack, test and smoke jobs.
       # Tags keep their own rule above; manual dispatches always run in full.
       - name: Check for already-tested content
@@ -117,7 +117,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [[ "$GITHUB_REF" =~ ^refs/heads/[0-9]+\.[0-9]+$ ]] && tag=$(bash .github/scripts/release-push.sh); then
+          if [[ "$GITHUB_REF" =~ ^refs/heads/(main|[0-9]+\.[0-9]+(\.[0-9]+)?(-[A-Za-z]+)?)$ ]] && tag=$(bash .github/scripts/release-push.sh); then
             echo "release-push=true" >> "$GITHUB_OUTPUT"
             echo "Release [$tag]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions?query=branch%3A$tag) owns testing and deployment; skipping duplicate branch jobs." \
               >> "$GITHUB_STEP_SUMMARY"

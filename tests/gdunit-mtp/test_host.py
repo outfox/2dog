@@ -212,7 +212,8 @@ class GdUnitHostTests(unittest.TestCase):
         suffix = ".double" if PRECISION == "double" else ""
         props = ElementTree.parse(REPO / "Directory.Build.props").getroot()
         label = props.findtext(".//TwoDogPrerelease")
-        version = f'{props.findtext(".//GodotVersion")}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
+        godot = props.findtext(".//GodotVersion").split("-")[0]
+        version = f'{godot}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
         package = REPO / "packages" / f"2dog.gdunit{suffix}.{version}.nupkg"
         with zipfile.ZipFile(package) as archive:
             names = archive.namelist()
@@ -260,7 +261,8 @@ class GdUnitHostTests(unittest.TestCase):
         readme = (REPO / "twodog.gdunit" / "README.md").read_text(encoding="utf-8")
         props = ElementTree.parse(REPO / "Directory.Build.props").getroot()
         label = props.findtext(".//TwoDogPrerelease")
-        version = f'{props.findtext(".//GodotVersion")}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
+        godot = props.findtext(".//GodotVersion").split("-")[0]
+        version = f'{godot}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
         project = re.search(r"```xml\n(.*?)```", readme, re.S).group(1).replace("YOUR_2DOG_VERSION", version)
         if PRECISION == "double":
             project = project.replace('Include="2dog.gdunit"', 'Include="2dog.gdunit.double"')

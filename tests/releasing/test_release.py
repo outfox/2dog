@@ -127,11 +127,19 @@ class ReleaseScript(unittest.TestCase):
              "refs/tags/v4.7.2.141-beta:refs/tags/v4.7.2.141-beta"],
         ], self.calls()[-3:])
 
+    def test_unnumbered_godot_prerelease_is_refused(self):
+        props = PROPS.replace("4.7.2", "4.8.0-beta")
+        (self.root / "Directory.Build.props").write_text(props)
+        result = self.run_release(TEST_BRANCH="4.8.0-beta")
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("numbered Godot prerelease", result.stderr)
+        self.assertEqual(props, self.props())
+
     def test_godot_prerelease_releases_under_its_numbers(self):
-        (self.root / "Directory.Build.props").write_text(PROPS.replace("4.7.2", "4.8.0-beta"))
+        (self.root / "Directory.Build.props").write_text(PROPS.replace("4.7.2", "4.8.0-beta.2"))
         result = self.run_release(TEST_BRANCH="4.8.0-beta", REMOTE_TAGS=REMOTE_TAGS + "\nnat80\trefs/tags/v4.8.0.46-beta")
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("<GodotVersion>4.8.0-beta</GodotVersion>", self.props())
+        self.assertIn("<GodotVersion>4.8.0-beta.2</GodotVersion>", self.props())
         self.assertIn("<TwoDogPrerelease>beta</TwoDogPrerelease>", self.props())
         self.assertIn(["diff", "--quiet", "nat80", "HEAD", "--", *INPUTS], self.calls())
         self.assertEqual(["tag", "v4.8.0.141-beta"], self.calls()[-2])

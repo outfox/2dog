@@ -13,6 +13,7 @@
             <PackageId ParameterType="System.String" Required="true" />
             <MarkerTemplatePath ParameterType="System.String" Required="true" />
             <Precision ParameterType="System.String" Required="true" />
+            <GodotVersion ParameterType="System.String" />
             <Assets ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
         </ParameterGroup>
         <Task>
@@ -49,7 +50,9 @@
                     foreach (var file in files)
                     {
                         var name = Path.GetFileName(file);
+                        // 2dog versions omit Godot's prerelease label, so packages state the Godot version they bind.
                         var text = File.ReadAllText(file);
+                        if (!string.IsNullOrEmpty(GodotVersion)) text = text.Replace("__TWODOG_GODOT_VERSION__", GodotVersion);
                         foreach (var ext in new [] { ".props", ".targets" })
                         {
                             text = text.Replace(baseId + ext, PackageId + ext);
@@ -110,7 +113,7 @@
     <Target Name="TwoDogStagePrecisionAssets" BeforeTargets="_GetPackageFiles;GenerateNuspec"
             Condition="'$(IsPackable)' == 'true' And $(PackageId.StartsWith('2dog.')) And '$(PackageId)' != '2dog.android' And '$(TwoDogPrecisionNeutral)' != 'true'">
         <StageTwoDogPrecisionAssets ProjectDir="$(MSBuildProjectDirectory)" AssetDir="$(TwoDogPrecisionAssetDir)"
-                                   PackageId="$(PackageId)" Precision="$(TwoDogPrecision)"
+                                   PackageId="$(PackageId)" Precision="$(TwoDogPrecision)" GodotVersion="$(GodotVersion)"
                                    MarkerTemplatePath="$(MSBuildThisFileDirectory)2dog.precision.props">
             <Output TaskParameter="Assets" ItemName="_TwoDogPrecisionAsset" />
         </StageTwoDogPrecisionAssets>

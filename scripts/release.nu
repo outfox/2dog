@@ -42,9 +42,14 @@ def main [
 
     let props = (open --raw Directory.Build.props)
     # 2dog versions keep Godot's numbers but not its label (GodotVersion 4.8.0-beta releases 4.8.0.N[-label]).
-    let godot = (property $props GodotVersion | parse --regex '^(?<release>\d+\.\d+\.\d+)(?:-[0-9A-Za-z.]+)?$')
+    let godot = (property $props GodotVersion | parse --regex '^(?<release>\d+\.\d+\.\d+)(?<label>-[0-9A-Za-z.]+)?$')
     if ($godot | is-empty) {
-        error make {msg: 'GodotVersion must be a Godot version such as 4.7.2 or 4.8.0-beta.'}
+        error make {msg: 'GodotVersion must be a Godot version such as 4.7.2 or 4.8.0-beta.2.'}
+    }
+    # Scaffolded games pin Godot.NET.Sdk to GodotVersion; nuget.org only has Godot's numbered prereleases.
+    let godot_label = ($godot.0.label | default '')
+    if $godot_label != '' and $godot_label !~ '^-(dev|beta|rc)\.\d+$' {
+        error make {msg: $"GodotVersion ($godot.0.release)($godot_label) has no Godot.NET.Sdk on nuget.org: pin the godot submodule at a numbered Godot prerelease \(4.8.0-beta.2) first."}
     }
     let version = $godot.0.release
     let label = if ($line | is-empty) { '' } else { $line.0.label | default '' }

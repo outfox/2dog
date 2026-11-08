@@ -39,10 +39,12 @@ const nativesRevision = msbuildProperty(props, 'NativesRevision')
 
 const prerelease = msbuildProperty(props, 'TwoDogPrerelease')
 
-export const twodogVersion = `${godotVersion}.${twodogRevision}${prerelease ? `-${prerelease}` : ''}`
+// 2dog versions use Godot's numbers only (GodotVersion 4.8.0-beta -> 4.8.0.152-beta).
+const godotRelease = godotVersion.split('-')[0]
+export const twodogVersion = `${godotRelease}.${twodogRevision}${prerelease ? `-${prerelease}` : ''}`
 // NuGet normalizes a trailing zero revision away (4.7.0.0 publishes as 4.7.0).
 export const nativesVersion =
-  nativesRevision === '0' ? godotVersion : `${godotVersion}.${nativesRevision}`
+  nativesRevision === '0' ? godotRelease : `${godotRelease}.${nativesRevision}`
 
 function versionMarkerPlugin(marker: string, value: string) {
   const pattern = new RegExp(

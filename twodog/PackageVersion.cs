@@ -1,7 +1,7 @@
 namespace twodog.cli;
 
 /// <summary>
-/// A NuGet version as 2dog compares them, release or prerelease: 4.7.2.152, 4.8.0-beta.1.154, 4.8.0.160. Ordered as
+/// A NuGet version as 2dog compares them, release or prerelease: 4.7.2.152, 4.8.0.154-beta, 4.8.0.160. Ordered as
 /// NuGet orders them (<see cref="ToolVersions.CompareNuGet"/>); <see cref="Text"/> keeps it as written.
 /// </summary>
 internal sealed class PackageVersion : IComparable<PackageVersion>, IEquatable<PackageVersion>
@@ -17,7 +17,7 @@ internal sealed class PackageVersion : IComparable<PackageVersion>, IEquatable<P
 
     public string Text { get; }
 
-    /// <summary>The prerelease label ("beta.1.154"), or null for a release.</summary>
+    /// <summary>The prerelease label ("beta"), or null for a release.</summary>
     public string? Label { get; }
 
     public int Major => _numbers.Major;
@@ -30,25 +30,18 @@ internal sealed class PackageVersion : IComparable<PackageVersion>, IEquatable<P
         (_numbers.Revision > 0 ? _numbers.ToString() : $"{Major}.{Minor}.{Build}") + (Label is { } l ? "-" + l.ToLowerInvariant() : "");
 
     /// <summary>
-    /// The Godot release a 2dog engine or natives version is built for: the version without its 2dog revision,
-    /// "4.7.2" for 4.7.2.152 and "4.8.0-beta.1" for 4.8.0-beta.1.154. A prerelease carries its revision at the end
-    /// of the label; a version with four numbers already has it, so a fork's suffix ("4.7.2.139-sora.2") is not Godot's.
+    /// The Godot release numbers a 2dog engine or natives version is built for: "4.7.2" for 4.7.2.152, "4.8.0" for
+    /// 4.8.0.154-beta. 2dog versions do not carry Godot's prerelease label (that engine may bind 4.8.0-beta.2).
     /// </summary>
-    public string GodotVersion
-    {
-        get
-        {
-            var godot = $"{Major}.{Minor}.{Build}";
-            if (Label is not { } label || _numbers.Revision >= 0) return godot;
-            var dot = label.LastIndexOf('.');
-            return dot > 0 && int.TryParse(label[(dot + 1)..], out _) ? $"{godot}-{label[..dot]}" : godot;
-        }
-    }
+    public string GodotVersion => $"{Major}.{Minor}.{Build}";
 
-    /// <summary>A Godot prerelease label in Godot's own package form ("beta", "beta.1", "rc.2", with or without a 2dog
-    /// revision): official 2dog prereleases, as opposed to a fork's custom suffix.</summary>
-    public bool IsGodotPrerelease =>
-        Label is { } label && _numbers.Revision < 0 && System.Text.RegularExpressions.Regex.IsMatch(label, @"^(beta|rc)(\.\d+)*$",
+    /// <summary>
+    /// An official prerelease, as opposed to a fork's custom suffix ("4.7.2.139-sora.2"): a 2dog line's label
+    /// (4.8.0.154-beta, 4.8.0.160-rc) or Godot's own package form (Godot.NET.Sdk 4.8.0-beta.2, 4.8.0-dev.7).
+    /// </summary>
+    public bool IsOfficialPrerelease =>
+        Label is { } label && System.Text.RegularExpressions.Regex.IsMatch(label,
+            _numbers.Revision < 0 ? @"^(dev|beta|rc)(\.\d+)*$" : "^(dev|beta|rc)$",
             System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
     /// <summary>The version in a NuGet version string, exact-pin brackets and build metadata ignored; null when unreadable.</summary>

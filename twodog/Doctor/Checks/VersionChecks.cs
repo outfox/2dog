@@ -52,7 +52,7 @@ internal static class VersionChecks
             .Concat(refs.Where(x => VersionRewriter.IsTwoDogPackage(x.Ref.Id) || VersionRewriter.IsPinnedPackage(x.Ref.Id)
                                    || x.Ref.Id.Equals("GodotSharpEditor", StringComparison.OrdinalIgnoreCase)).Select(x => x.Ref.RawVersion))
             .Concat(new[] { toolVersion, toolNativesVersion, ToolVersions.GodotSdkVersion, sdkVersion }.OfType<string>())
-            .Where(v => !v.Contains("$(") && v.IndexOfAny(['-', '+']) >= 0 && PackageVersion.Parse(v) is not { IsGodotPrerelease: true })
+            .Where(v => !v.Contains("$(") && v.IndexOfAny(['-', '+']) >= 0 && PackageVersion.Parse(v) is not { IsOfficialPrerelease: true })
             .Select(v => v.Trim('[', ']')).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         if (custom.Count > 0)
             yield return new Finding("ver.custom-versions", c, Severity.Warn,
