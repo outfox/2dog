@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <!-- Godot's C# package version of the godot submodule (godot/version.py): 4.7.2, 4.8.0-beta. -->
-        <GodotVersion>4.8.0-beta</GodotVersion>
+        <GodotVersion>4.8.0-beta.2</GodotVersion>
         <!-- The next three are written by scripts/release.nu; do not edit them by hand.
              Release number, one counter across all release branches (the next number after every v* tag). -->
         <TwoDogRevision>152</TwoDogRevision>
