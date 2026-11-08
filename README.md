@@ -200,7 +200,7 @@ CI attaches the packages to a GitHub prerelease and pushes them to int.nugettest
 nuget.org (and a stable version's GitHub release out of prerelease) with:
 
 ```nu
-gh workflow run publish.yml --ref v4.7.2.153 -f feed=nuget
+gh workflow run publish.yml -f tag=v4.7.2.153 -f feed=nuget
 ```
 
 
