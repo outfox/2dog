@@ -173,21 +173,30 @@ and run `git config --global core.symlinks true` before cloning. To repair an
 existing clone, run `git config core.symlinks true`, then
 `git checkout -- demos/showcase/fps_counter.tscn`.
 
-To release, commit your changes on `main`, then run with [Nushell](https://www.nushell.sh/):
+To release, commit your changes on a release branch, then run with [Nushell](https://www.nushell.sh/):
 
 ```nu
-nu scripts/release.nu --native --dry-run  # preview both revision bumps
-nu scripts/release.nu --native            # bump TwoDogRevision and NativesRevision
-nu scripts/release.nu                     # bump TwoDogRevision only
+nu scripts/release.nu --dry-run  # preview the versions
+nu scripts/release.nu            # bump, tag, push; CI tests and stages on int.nugettest.org
 ```
 
-Use `--revision 140` to choose the managed revision explicitly. The script requires a clean checkout
-containing the latest `origin/main`, signs the bump commit using your Git configuration, and pushes
-`main` and `v<TwoDogVersion>` atomically. Only the tag push triggers release CI; ordinary branch pushes
-do not run CI. Unpushed local commits can be included in that same push.
-`--native` versions the native NuGet packages; existing engine binaries keyed by the Godot commit
-remain reusable. The GitHub **2dog Release** action is an emergency/manual fallback, with the same
-optional native revision bump.
+Release branches are `main` and Godot lines such as `4.7` (stable versions) or `4.8.0-beta` and `4.8-rc`
+(prereleases labeled `-beta`, `-rc`). A line's numbers must match `GodotVersion`. Each release takes the next
+number after every `v*` tag on origin, so all lines share one counter: `v4.7.2.153`, `v4.8.0.154-beta`. The native
+packages keep the number of the release that built them until the godot submodule, `platforms/`, `nuget/`,
+`build/` or the natives staging script change.
+
+The script requires a clean checkout containing the latest origin branch, signs the bump commit using your Git
+configuration, and pushes the branch and `v<TwoDogVersion>` atomically. Only the tag push triggers release CI;
+ordinary branch pushes do not run CI. Unpushed local commits can be included in that same push. The GitHub
+**2dog Release** action runs the same script as an emergency/manual fallback.
+
+CI attaches the packages to a GitHub prerelease and pushes them to int.nugettest.org. Promote the same packages to
+nuget.org (and a stable version's GitHub release out of prerelease) with:
+
+```nu
+gh workflow run publish.yml --ref v4.7.2.153 -f feed=nuget
+```
 
 
 ## Acknowledgements

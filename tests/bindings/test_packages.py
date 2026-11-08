@@ -24,7 +24,8 @@ parser.add_argument("--precision", choices=["single", "double"], default="single
 args, remaining = parser.parse_known_args()
 if not args.version:
     props = ET.parse(REPO / "Directory.Build.props")
-    args.version = props.findtext(".//GodotVersion") + "." + props.findtext(".//TwoDogRevision")
+    label = props.findtext(".//TwoDogPrerelease")
+    args.version = props.findtext(".//GodotVersion") + "." + props.findtext(".//TwoDogRevision") + (f"-{label}" if label else "")
 FEED = args.feed.resolve()
 VERSION = args.version
 GODOT = ET.parse(REPO / "Directory.Build.props").findtext(".//GodotVersion")

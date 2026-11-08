@@ -1,0 +1,94 @@
+# Pushes a release tag's packages, exactly as CI attached them to its GitHub release, to one NuGet feed.
+# CI stages every release tag on the test feed; promote a tested release to nuget.org with:
+#   gh workflow run publish.yml --ref v4.7.2.153 -f feed=nuget
+# The Trusted Publishing policies on int.nugettest.org and nuget.org both name this file, so it must stay the
+# top-level workflow (dispatched, never called from ci.yml).
+name: 2dog Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      feed:
+        description: 'test = int.nugettest.org, nuget = nuget.org'
+        required: true
+        type: choice
+        options: [test, nuget]
+
+permissions:
+  contents: write # read release assets, publish the GitHub release after promotion
+  id-token: write # request the GitHub OIDC token for Trusted Publishing
+
+concurrency:
+  group: publish-${{ github.ref }}-${{ inputs.feed }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'outfox/2dog' && startsWith(github.ref, 'refs/tags/v')
+    name: Publish ${{ github.ref_name }} to ${{ inputs.feed }}
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.ref_name }}
+
+    steps:
+      - name: Checkout CI helpers
+        uses: actions/checkout@v7
+
+      - name: Download release packages
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir packages --pattern '*.nupkg' --pattern '*.snupkg'
+
+      # Refuse to publish unless the release really holds packages at the tag's version.
+      - name: Verify packages match tag
+        run: |
+          VERSION="${TAG#v}"
+          for pkg in "2dog" "2dog.templates" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.qt" "2dog.repl" "2dog.gdunit" "2dog.maui" "2dog.ios"; do
+            if [[ ! -f "packages/${pkg}.${VERSION}.nupkg" ]]; then
+              echo "::error::Release $TAG does not contain ${pkg}.${VERSION}.nupkg; refusing to publish."
+              ls -lh packages/
+              exit 1
+            fi
+          done
+
+      - name: Select feed
+        id: feed
+        env:
+          FEED: ${{ inputs.feed }}
+        run: |
+          if [ "$FEED" = nuget ]; then
+            host=https://www.nuget.org index=https://api.nuget.org/v3/index.json
+          else
+            host=https://int.nugettest.org index=https://apiint.nugettest.org/v3/index.json
+          fi
+          { echo "host=$host"; echo "index=$index"; } >> "$GITHUB_OUTPUT"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # Exchanges the GitHub OIDC token for a short-lived API key. `NUGET_USER` is a repo secret holding the account
+      # that owns the policy on both feeds.
+      - name: NuGet login (Trusted Publishing)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+          token-service-url: ${{ steps.feed.outputs.host }}/api/v2/token
+          audience: ${{ steps.feed.outputs.host }}
+
+      - name: Push packages
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: bash .github/scripts/push-nuget.sh packages "${{ steps.feed.outputs.index }}"
+
+      # CI creates every GitHub release as a prerelease; a stable version becomes a full release once on nuget.org,
+      # and the latest one only when no published release has a higher version (an older line stays below).
+      - name: Publish GitHub release
+        if: inputs.feed == 'nuget' && !contains(github.ref_name, '-')
+        run: |
+          newest=$( (gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --exclude-pre-releases --limit 200 \
+            --json tagName -q '.[].tagName' | grep '^v'; echo "$TAG") | sort -V | tail -1)
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --prerelease=false --latest="$([ "$newest" = "$TAG" ] && echo true || echo false)"
+          echo "Published $TAG to nuget.org: https://www.nuget.org/packages/2dog/${TAG#v}" >> "$GITHUB_STEP_SUMMARY"

@@ -211,9 +211,9 @@ class GdUnitHostTests(unittest.TestCase):
     def test_pack_contains_runtime_templates_license_and_no_self_tests(self):
         suffix = ".double" if PRECISION == "double" else ""
         props = ElementTree.parse(REPO / "Directory.Build.props").getroot()
-        godot_version = props.findtext(".//GodotVersion")
-        revision = props.findtext(".//TwoDogRevision")
-        package = REPO / "packages" / f"2dog.gdunit{suffix}.{godot_version}.{revision}.nupkg"
+        label = props.findtext(".//TwoDogPrerelease")
+        version = f'{props.findtext(".//GodotVersion")}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
+        package = REPO / "packages" / f"2dog.gdunit{suffix}.{version}.nupkg"
         with zipfile.ZipFile(package) as archive:
             names = archive.namelist()
             for name in ("runtime/.gdignore", "runtime/bridge/runner.tscn", "runtime/addons/gdUnit4/LICENSE",
@@ -259,7 +259,8 @@ class GdUnitHostTests(unittest.TestCase):
         (consumer / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Consumer"\n', encoding="utf-8")
         readme = (REPO / "twodog.gdunit" / "README.md").read_text(encoding="utf-8")
         props = ElementTree.parse(REPO / "Directory.Build.props").getroot()
-        version = f'{props.findtext(".//GodotVersion")}.{props.findtext(".//TwoDogRevision")}'
+        label = props.findtext(".//TwoDogPrerelease")
+        version = f'{props.findtext(".//GodotVersion")}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
         project = re.search(r"```xml\n(.*?)```", readme, re.S).group(1).replace("YOUR_2DOG_VERSION", version)
         if PRECISION == "double":
             project = project.replace('Include="2dog.gdunit"', 'Include="2dog.gdunit.double"')

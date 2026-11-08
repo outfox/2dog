@@ -66,12 +66,15 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
-- `scripts/release.nu` is the normal local release path: bump `TwoDogRevision`, optionally `NativesRevision`
-  with `--native`, sign the commit and atomically push main + tag. Only the tag push triggers release CI.
-  `release.yml` is the emergency/manual fallback with a `native` boolean. It tags `v<TwoDogVersion>` and
-  dispatches `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
-  When the tag's parent passed CI and the tag only bumps
-  the revision, the tag run skips the test, desktop and Android jobs. `android.yml` runs Android build and
+- `scripts/release.nu` is the normal release path from `main` or a line branch (`4.7`, `4.8.0-beta`): it computes
+  `TwoDogRevision` (next after every `v*` tag), `NativesRevision` (kept while the native inputs match that release's
+  tag) and `TwoDogPrerelease` (the branch label), signs the commit and atomically pushes branch + tag. Only the tag
+  push triggers release CI. `release.yml` runs the same script as the emergency/manual fallback and dispatches
+  `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
+  When the tag's parent passed CI and the tag only bumps the revision and label, the tag run skips the test,
+  desktop and Android jobs. The tag run's `deploy` job only stages: a GitHub prerelease with every package, then a
+  `publish.yml` dispatch to int.nugettest.org. `publish.yml` (also the nuget.org promotion) must stay a dispatched
+  top-level workflow: both feeds' Trusted Publishing policies name it. `android.yml` runs Android build and
   package tests; `docs.yml` builds the documentation site.
 - A branch push whose content already passed every job family in a recent successful run skips natives, pack,
   test and smoke jobs; the run summary links the verifying run. Content means the tree without root Markdown
@@ -90,7 +93,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 ## Scripts
 
 - After changing `scripts/release.nu`, run `uv run python -m unittest discover -s tests/releasing -v`
-  with Nushell installed. CI runs `release-push.test.sh` and `release-workflow.test.sh` with the other helpers.
+  with Nushell installed; the Test Build Configuration job runs it too. CI runs `release-push.test.sh` with the
+  other helpers.
 - `test-with-watchdog.sh <Config> [idle-seconds] [budget-seconds]` runs `dotnet test` under a hang watchdog
   that dumps the test processes. It sets `TWODOG_GODOT_LOG_DIR` to `twodog.tests/TestResults/godot-<Config>`,
   so failed runs upload Godot's native logs with the test results. `TWODOG_TEST_FILTER` adds a `--filter`.

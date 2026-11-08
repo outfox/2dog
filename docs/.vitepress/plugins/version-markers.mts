@@ -4,7 +4,7 @@
 // Directory.Build.props. This module parses it at docs build time and
 // provides markdown-it plugins that replace the markers
 //
-//   :2dog-version:     -> e.g. 4.7.0.24  (GodotVersion.TwoDogRevision)
+//   :2dog-version:     -> e.g. 4.7.0.24  (GodotVersion.TwoDogRevision[-TwoDogPrerelease])
 //   :godot-version:    -> e.g. 4.7.0     (GodotVersion)
 //   :natives-version:  -> e.g. 4.7.0     (GodotVersion.NativesRevision,
 //                                         NuGet-normalized: a trailing .0
@@ -24,7 +24,7 @@ const propsPath = resolve(
 )
 
 function msbuildProperty(xml: string, name: string): string {
-  const match = xml.match(new RegExp(`<${name}>([^<]+)</${name}>`))
+  const match = xml.match(new RegExp(`<${name}>([^<]*)</${name}>`))
   if (!match) {
     throw new Error(`Property <${name}> not found in ${propsPath}`)
   }
@@ -37,7 +37,9 @@ export const godotVersion = msbuildProperty(props, 'GodotVersion')
 const twodogRevision = msbuildProperty(props, 'TwoDogRevision')
 const nativesRevision = msbuildProperty(props, 'NativesRevision')
 
-export const twodogVersion = `${godotVersion}.${twodogRevision}`
+const prerelease = msbuildProperty(props, 'TwoDogPrerelease')
+
+export const twodogVersion = `${godotVersion}.${twodogRevision}${prerelease ? `-${prerelease}` : ''}`
 // NuGet normalizes a trailing zero revision away (4.7.0.0 publishes as 4.7.0).
 export const nativesVersion =
   nativesRevision === '0' ? godotVersion : `${godotVersion}.${nativesRevision}`

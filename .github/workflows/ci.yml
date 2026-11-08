@@ -54,7 +54,6 @@ jobs:
         run: |
           bash .github/scripts/find-tested-run.test.sh
           bash .github/scripts/release-push.test.sh
-          bash .github/scripts/release-workflow.test.sh
           bash .github/scripts/push-nuget.test.sh
           bash .github/scripts/stage-ci-inputs.test.sh
           bash .github/scripts/test-with-watchdog.test.sh
@@ -81,9 +80,10 @@ jobs:
             echo "double-ready=false" >> $GITHUB_OUTPUT
           fi
 
-      # release.yml tags a commit that only bumps <TwoDogRevision> on top of main. When that parent already passed
-      # the test, desktop and Android jobs, the tag run skips them; it still packs, runs the web and tool smoke
-      # jobs against the versioned packages and deploys. Anything else gets the full run.
+      # release.nu tags a commit that only bumps <TwoDogRevision> (and the prerelease label) on top of its branch. When
+      # that parent already passed the test, desktop and Android jobs, the tag run skips them; it still packs, runs the
+      # web and tool smoke jobs against the versioned packages and stages the release. A bump that also moves
+      # <NativesRevision> (changed native inputs) or anything else gets the full run.
       - name: Check for a tested revision bump
         id: release
         if: startsWith(github.ref, 'refs/tags/v')
@@ -95,8 +95,8 @@ jobs:
           changed=$(git diff --name-only HEAD^ HEAD 2>/dev/null || true)
           lines=$(git diff -U0 HEAD^ HEAD -- Directory.Build.props 2>/dev/null |
             grep -E '^[+-]' | grep -vE '^(\+\+\+|---) ' || true)
-          if [ "$parents" -eq 2 ] && [ "$changed" = "Directory.Build.props" ] && [ "$(echo "$lines" | wc -l)" -eq 2 ] &&
-             ! echo "$lines" | grep -qv '<TwoDogRevision>'; then
+          if [ "$parents" -eq 2 ] && [ "$changed" = "Directory.Build.props" ] && echo "$lines" | grep -q '<TwoDogRevision>' &&
+             ! echo "$lines" | grep -qvE '<(TwoDogRevision|TwoDogPrerelease)>'; then
             parent=$(git rev-parse HEAD^)
             # Any run that tested the parent's content counts, also one on the branch the parent merged.
             if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
@@ -199,9 +199,15 @@ jobs:
           python-version: '3.12'
           enable-cache: false
 
+      - name: Setup Nushell
+        uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29
+        with:
+          version: '0.111.0'
+
       - name: Test build configuration and package fixtures
         run: |
           uv run python -m unittest discover -s tests/precision -v
+          uv run python -m unittest discover -s tests/releasing -v
           uv run python -m unittest discover -s tests/webgpu -v
           uv run python -m unittest discover -s tests/ci_packages -v
           uv run python -m unittest discover -s tests/ios -v
@@ -246,8 +252,8 @@ jobs:
           dotnet-version: '10.0.x'
 
       # Release tags must point at a commit whose Directory.Build.props composes the
-      # same version, otherwise the packed binaries would be labeled with a stale
-      # version (see v4.7.0.26, which shipped 4.7.0.25 binaries).
+      # same version (revision and prerelease label), otherwise the packed binaries would
+      # be labeled with a stale version (see v4.7.0.26, which shipped 4.7.0.25 binaries).
       # Ref check only (no event check): tag builds arrive either as a direct tag
       # push or as a workflow_dispatch on the tag from release.yml.
       - name: Verify tag matches TwoDogVersion
@@ -259,16 +265,17 @@ jobs:
           echo "Props version: $PROPS_VERSION"
           if [[ "$TAG_VERSION" != "$PROPS_VERSION" ]]; then
             echo "::error::Tag v$TAG_VERSION does not match TwoDogVersion $PROPS_VERSION from Directory.Build.props." \
-                 "Tag the commit that bumps <TwoDogRevision>, or use the Release workflow."
+                 "Release with scripts/release.nu or the Release workflow, which tag their own bump commit."
             exit 1
           fi
 
-      # The platform packages are versioned by <NativesRevision>, which must be
-      # bumped whenever the godot submodule changes. If it isn't, deploy's
+      # The platform packages are versioned by <NativesRevision>, which release.nu
+      # moves whenever the native inputs (godot submodule, platforms/, ...) differ
+      # from the release that built them. If it misses a change, publishing's
       # skip-duplicate push silently keeps the previously published natives.
       # Each platform package records the submodule commit it was built from in
       # its repository metadata (see platforms/Directory.Build.props) — compare
-      # the published package's commit with ours and fail on a mismatch.
+      # the published packages' commit on both feeds with ours and fail on a mismatch.
       - name: Verify NativesVersion is not already published from different natives
         run: |
           NATIVES_VERSION="$(dotnet msbuild twodog.engine/twodog.engine.csproj -getProperty:NativesVersion | tr -d '[:space:]')"
@@ -282,25 +289,27 @@ jobs:
           # .editor) — the meta packages use a custom NuspecFile and carry no
           # repository stamp.
           ID="2dog.win-x64.debug${TWODOG_NATIVE_SUFFIX}"
-          URL="https://api.nuget.org/v3-flatcontainer/$ID/$NORMALIZED/$ID.$NORMALIZED.nupkg"
-          if ! curl -fsSL -o /tmp/published-natives.nupkg "$URL"; then
-            echo "Natives $NORMALIZED not on nuget.org yet — nothing to collide with."
-            exit 0
-          fi
+          for FEED in https://api.nuget.org/v3-flatcontainer https://apiint.nugettest.org/v3-flatcontainer; do
+            URL="$FEED/$ID/$NORMALIZED/$ID.$NORMALIZED.nupkg"
+            if ! curl -fsSL -o /tmp/published-natives.nupkg "$URL"; then
+              echo "Natives $NORMALIZED not on ${FEED%%/v3*} yet — nothing to collide with."
+              continue
+            fi
 
-          # Note: packages published before the stamping target existed carry
-          # the SDK's automatic SourceLink stamp (the 2dog repo commit, not the
-          # submodule) — those hit the mismatch path below, which is the right
-          # verdict: they cannot be confirmed to contain the current natives.
-          PUBLISHED_COMMIT="$(unzip -p /tmp/published-natives.nupkg '*.nuspec' | sed -n 's/.*commit="\([0-9a-f]*\)".*/\1/p' | head -1)"
-          if [ -z "$PUBLISHED_COMMIT" ]; then
-            echo "::warning::Natives $NORMALIZED is on nuget.org without any recorded commit. Cannot verify — if the submodule changed since that release, bump <NativesRevision>."
-          elif [ "$PUBLISHED_COMMIT" != "$CURRENT_COMMIT" ]; then
-            echo "::error::Natives $NORMALIZED is already on nuget.org and its recorded source commit ${PUBLISHED_COMMIT:0:7} does not match the current godot submodule ${CURRENT_COMMIT:0:7}. Deploy would skip-duplicate and keep the stale natives. Bump <NativesRevision> in Directory.Build.props."
-            exit 1
-          else
-            echo "Natives $NORMALIZED already published from the same godot commit — repack is identical, skip-duplicate is harmless."
-          fi
+            # Note: packages published before the stamping target existed carry
+            # the SDK's automatic SourceLink stamp (the 2dog repo commit, not the
+            # submodule) — those hit the mismatch path below, which is the right
+            # verdict: they cannot be confirmed to contain the current natives.
+            PUBLISHED_COMMIT="$(unzip -p /tmp/published-natives.nupkg '*.nuspec' | sed -n 's/.*commit="\([0-9a-f]*\)".*/\1/p' | head -1)"
+            if [ -z "$PUBLISHED_COMMIT" ]; then
+              echo "::warning::Natives $NORMALIZED is on ${FEED%%/v3*} without any recorded commit. Cannot verify that it holds the current natives."
+            elif [ "$PUBLISHED_COMMIT" != "$CURRENT_COMMIT" ]; then
+              echo "::error::Natives $NORMALIZED is already on ${FEED%%/v3*} and its recorded source commit ${PUBLISHED_COMMIT:0:7} does not match the current godot submodule ${CURRENT_COMMIT:0:7}. Publishing would skip-duplicate and keep the stale natives. Release with scripts/release.nu, which moves <NativesRevision> when the native inputs change."
+              exit 1
+            else
+              echo "Natives $NORMALIZED already on ${FEED%%/v3*} from the same godot commit — repack is identical, skip-duplicate is harmless."
+            fi
+          done
 
       - name: Download native libraries from release
         env:
@@ -2464,13 +2473,13 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  # Deploy to NuGet and create GitHub release when running on a version tag —
-  # either pushed directly or dispatched on the tag by release.yml (tags pushed
-  # with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead).
-  # Uses NuGet Trusted Publishing (OIDC) — no long-lived API key is stored.
+  # Stage the release when running on a version tag — either pushed directly or dispatched on the tag by
+  # release.yml (tags pushed with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead):
+  # attach every package to a GitHub prerelease, then dispatch publish.yml to push them to int.nugettest.org.
+  # Promotion to nuget.org is a manual publish.yml dispatch on the tag (see publish.yml).
   deploy:
-    name: Deploy to NuGet
-    # web-smoke and android-smoke gate deploy because the 2dog.browser-wasm and
+    name: Stage Release
+    # web-smoke and android-smoke gate staging because the 2dog.browser-wasm and
     # 2dog.android packages they exercise are among the packages being
     # published; desktop-smoke gates it because it is the only check that runs
     # a Release-only publish; tool-smoke because it installs the packed `2dog`
@@ -2492,13 +2501,10 @@ jobs:
       needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
       needs.tool-smoke.result == 'success' && needs.maui-pack.result == 'success' && needs.maui.result == 'success')
     permissions:
-      contents: write # required to create the GitHub Release for the tag
-      id-token: write # required to request the GitHub OIDC token for Trusted Publishing
+      contents: write # create the GitHub release for the tag
+      actions: write  # dispatch publish.yml
 
     steps:
-      - name: Checkout CI helpers
-        uses: actions/checkout@v7
-
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
@@ -2520,48 +2526,27 @@ jobs:
           name: nuget-packages-maui
           path: packages
 
-      # Defense in depth: the pack job already verified the tag against the props
-      # file, but refuse to publish unless the artifact really contains packages
-      # at the tag's version.
-      - name: Verify packages match tag
-        run: |
-          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-          for pkg in "2dog" "2dog.templates" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.qt" "2dog.repl" "2dog.gdunit" "2dog.maui" "2dog.ios"; do
-            if [[ ! -f "packages/${pkg}.${TAG_VERSION}.nupkg" ]]; then
-              echo "::error::packages/ does not contain ${pkg}.${TAG_VERSION}.nupkg — refusing to publish."
-              echo "Artifact contents:"
-              ls -lh packages/
-              exit 1
-            fi
-          done
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: '10.0.x'
-
-      # Exchange the GitHub OIDC token for a short-lived NuGet API key via the
-      # Trusted Publishing policy configured on nuget.org. `NUGET_USER` is a repo
-      # secret holding the nuget.org account that owns the policy.
-      - name: NuGet login (Trusted Publishing)
-        id: nuget-login
-        uses: NuGet/login@v1
-        with:
-          user: ${{ secrets.NUGET_USER }}
-
-      - name: Push to NuGet
-        env:
-          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
-        run: |
-          bash .github/scripts/push-nuget.sh packages
-
-      - name: Create GitHub Release
+      # Every release starts as a GitHub prerelease; publish.yml makes a stable one a full release on promotion.
+      # A rerun never replaces assets: they may already be promoted. Delete the release to restage it.
+      - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
-          gh release create "$TAG" \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$TAG" \
-            --generate-notes \
-            packages/*.nupkg packages/*.snupkg
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "::notice::Release $TAG already exists; keeping its packages."
+          else
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes --prerelease \
+              packages/*.nupkg packages/*.snupkg
+          fi
+
+      - name: Stage on int.nugettest.org
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" --ref "$TAG" -f feed=test
+          {
+            echo "Staging $TAG on int.nugettest.org via publish.yml."
+            echo "Promote to nuget.org: \`gh workflow run publish.yml --ref $TAG -f feed=nuget\`"
+          } >> "$GITHUB_STEP_SUMMARY"

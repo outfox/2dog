@@ -2,13 +2,16 @@
     <PropertyGroup>
         <!-- Godot engine version. Must match the godot submodule (godot/version.py). -->
         <GodotVersion>4.7.2</GodotVersion>
-        <!-- Global 2dog iteration shared across all Godot lines (4.6.2.31 and 4.7.0.31 are the same iteration).
-             Bump every release; never reset when GodotVersion changes. -->
+        <!-- The next three are written by scripts/release.nu; do not edit them by hand.
+             Release number, one counter across all release branches (the next number after every v* tag). -->
         <TwoDogRevision>152</TwoDogRevision>
-        <!-- Bump when the godot submodule or the natives package layout changes (deploy skips duplicates);
-             reset to 0 when GodotVersion changes. NuGet normalizes a trailing .0 (4.7.0.0 publishes as 4.7.0). -->
+        <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
+             release's tag sets its own number. -->
         <NativesRevision>62</NativesRevision>
+        <!-- Prerelease label from the release branch name (4.8.0-beta releases 4.8.0.N-beta); empty on main. -->
+        <TwoDogPrerelease></TwoDogPrerelease>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
+        <TwoDogVersion Condition="'$(TwoDogPrerelease)' != ''">$(TwoDogVersion)-$(TwoDogPrerelease)</TwoDogVersion>
         <NativesVersion>$(GodotVersion).$(NativesRevision)</NativesVersion>
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
              AVALONIA_PKG_VERSION token, substituted on pack and scaffold. -->
