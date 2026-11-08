@@ -22,7 +22,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - Desktop publish and editor lifecycle checks use the normal renderer settings. `webgpu-desktop` alone
   runs the native WebGPU pixels, restart and shader-contract checks, once per supported OS in single precision.
   Its Linux host also verifies the engine's ignored-X11-event fallback, which prevents libX11 cookie cleanup crashes.
-  Keep it in both tested-content/revision-bump family lists and the deployment gate.
+  Keep it in the revision-bump family list and the deployment gate.
 - The native build runs the real C++ shader compiler regressions once, against the single-precision,
   non-threaded Web debug archive. Source-level WebGPU checks run where the submodule source is checked out.
   Precision-independent package and browser-script checks run once rather than in every precision/AOT cell.
@@ -31,8 +31,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   Compatibility before publishing because double precision and threads do not support WebGPU. Keep
   WebGPU image coverage and single-precision Blazor WebGPU restart coverage enabled independently.
 - `webgpu-browser-build` publishes the single-precision image-test bundle after pack; `webgpu-browser`
-  consumes it without waiting for Web Smoke. Both belong to the `WebGPU Browser` tested-content family;
-  the browser job gates deployment and requires the bundle job to succeed.
+  consumes it without waiting for Web Smoke. The browser job gates deployment and requires the bundle job to
+  succeed.
 - Android Smoke uses one APK per precision/variant matrix cell. `android-prepare` warms the SDK and a clean
   emulator snapshot in parallel with packing; consumers mount SDK/snapshot disks with `commit: false` and
   use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates deployment.
@@ -60,15 +60,16 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   and staging must require all four archives. Pack uploads scoped iOS inputs, excluding raw archives from godot-bin.
   The Windows `maui-pack` job packs the precision-neutral iOS host and all MAUI TFMs; `ios-smoke` and the `maui`
   showcase builds consume its artifact, so the Simulator cells never wait for the showcase builds. Keep `MAUI Pack`
-  in the tested-content family list and the deployment gate. Its .NET SDK/workload pins must match the Xcode
+  in the deployment gate. Its .NET SDK/workload pins must match the Xcode
   selected by `ios-smoke`. Three Simulator cells cover single Debug pixels, double Release showcase
-  and single Debug MAUI; keep `iOS Smoke` in both reuse family lists and the deployment gate. Device signing
+  and single Debug MAUI; keep `iOS Smoke` in the revision-bump family list and the deployment gate. Device signing
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
 - `scripts/release.nu` is the normal release path from `main` or a line branch (`4.7`, `4.8.0-beta`): it computes
   `TwoDogRevision` (next after every `v*` tag), `NativesRevision` (kept while the native inputs match that release's
-  tag) and `TwoDogPrerelease` (the branch label), signs the commit and atomically pushes branch + tag. Only the tag
+  tag) and `TwoDogPrerelease` (the branch label: `dev`, `beta` or `rc`, the labels the tool treats as official), tags
+  the pinned godot commit in the fork (`2dog-v<version>`), signs the commit and atomically pushes branch + tag. Only the tag
   push triggers release CI. `release.yml` runs the same script as the emergency/manual fallback and dispatches
   `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
   When the tag's parent passed CI and the tag only bumps the revision and label, the tag run skips the test,
@@ -76,10 +77,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   `publish.yml` dispatch to int.nugettest.org. `publish.yml` (also the nuget.org promotion) must stay a dispatched
   top-level workflow: both feeds' Trusted Publishing policies name it. `android.yml` runs Android build and
   package tests; `docs.yml` builds the documentation site.
-- A branch push whose content already passed every job family in a recent successful run skips natives, pack,
-  test and smoke jobs; the run summary links the verifying run. Content means the tree without root Markdown
-  and `AGENTS.md` files, so merging a tested, up-to-date branch costs one short job. `docs/` counts, because
-  tool tests read it. `scripts/find-tested-run.sh` does the matching for this rule and the tag rule; keep its
+- `scripts/find-tested-run.sh` matches a release tag's parent with a successful run on the same content (the tree
+  without root Markdown and `AGENTS.md` files; `docs/` counts, because tool tests read it). Keep the tag step's
   family list in step with the job names, and never ignore files a test reads. Manual dispatches always run in full.
 - Keep the `github.repository == 'outfox/2dog'` gate on jobs that build, test or release.
 - Downstream jobs must tolerate skipped `build-natives` with explicit
@@ -93,8 +92,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 ## Scripts
 
 - After changing `scripts/release.nu`, run `uv run python -m unittest discover -s tests/releasing -v`
-  with Nushell installed; the Test Build Configuration job runs it too. CI runs `release-push.test.sh` with the
-  other helpers.
+  with Nushell installed; the Test Build Configuration job runs it too.
 - `test-with-watchdog.sh <Config> [idle-seconds] [budget-seconds]` runs `dotnet test` under a hang watchdog
   that dumps the test processes. It sets `TWODOG_GODOT_LOG_DIR` to `twodog.tests/TestResults/godot-<Config>`,
   so failed runs upload Godot's native logs with the test results. `TWODOG_TEST_FILTER` adds a `--filter`.

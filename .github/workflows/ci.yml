@@ -42,8 +42,6 @@ jobs:
       double-ready: ${{ steps.check.outputs.double-ready }}
       hash: ${{ steps.check.outputs.hash }}
       tested-bump: ${{ steps.release.outputs.tested-bump }}
-      tested-content: ${{ steps.content.outputs.tested-content }}
-      release-push: ${{ steps.content.outputs.release-push }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -53,7 +51,6 @@ jobs:
       - name: Test CI helpers
         run: |
           bash .github/scripts/find-tested-run.test.sh
-          bash .github/scripts/release-push.test.sh
           bash .github/scripts/push-nuget.test.sh
           bash .github/scripts/stage-ci-inputs.test.sh
           bash .github/scripts/test-with-watchdog.test.sh
@@ -108,33 +105,6 @@ jobs:
           [ "$tested" = true ] || echo "::notice::Not a revision bump on a tested commit; running every job."
           echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
-      # An atomic main + release-tag push leaves testing to the tag run. Otherwise a branch push whose
-      # content already passed every job family elsewhere skips natives, pack, test and smoke jobs.
-      # Tags keep their own rule above; manual dispatches always run in full.
-      - name: Check for already-tested content
-        id: content
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if [ "$GITHUB_REF" = refs/heads/main ] && tag=$(bash .github/scripts/release-push.sh); then
-            echo "release-push=true" >> "$GITHUB_OUTPUT"
-            echo "Release [$tag]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions?query=branch%3A$tag) owns testing and deployment; skipping duplicate branch jobs." \
-              >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          if found=$(bash .github/scripts/find-tested-run.sh "$GITHUB_SHA" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" \
-               "Web Smoke" "WebGPU Browser" "MAUI Pack" "MAUI Builds" "Tool Smoke" "Android Smoke" "iOS Smoke"); then
-            read -r run sha <<<"$found"
-            url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$run"
-            echo "::notice::This content passed CI in run $run (${sha:0:7}); skipping natives, pack, test and smoke jobs."
-            echo "Content already verified by [run $run]($url) on \`${sha:0:7}\`: natives, pack, test and smoke jobs skipped." \
-              >> "$GITHUB_STEP_SUMMARY"
-            echo "tested-content=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "tested-content=false" >> "$GITHUB_OUTPUT"
-          fi
-
   # Build missing natives inline via the reusable workflow. The concurrency
   # group makes a second run that needs the same hash wait instead of building
   # twice; when it proceeds, the callee's preflight finds the release and
@@ -146,8 +116,7 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (needs.check-natives.outputs.ready != 'true' && needs.check-natives.outputs.tested-content != 'true' &&
-      needs.check-natives.outputs.release-push != 'true')
+      needs.check-natives.outputs.ready != 'true'
     permissions:
       contents: write # callee's release job creates the godot-<hash> release
     concurrency:
@@ -162,8 +131,7 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (needs.check-natives.outputs.double-ready != 'true' && needs.check-natives.outputs.tested-content != 'true' &&
-      needs.check-natives.outputs.release-push != 'true')
+      needs.check-natives.outputs.double-ready != 'true'
     permissions:
       contents: write
     concurrency:
@@ -180,8 +148,7 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.check-natives.result == 'success' && needs.check-natives.outputs.tested-content != 'true' &&
-      needs.check-natives.outputs.release-push != 'true')
+      (!cancelled() && needs.check-natives.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
     steps:
@@ -219,13 +186,10 @@ jobs:
     name: Pack NuGet Packages (${{ matrix.precision }})
     needs: [check-natives, build-natives, build-double-natives]
     # Skip-tolerant gate, not always(): run when build-natives succeeded or was
-    # skipped (natives already existed), never after a failed natives build. Skipping
-    # pack for already-tested content skips every job downstream of it.
+    # skipped (natives already existed), never after a failed natives build.
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && needs.check-natives.result == 'success' &&
-      needs.check-natives.outputs.tested-content != 'true' &&
-      needs.check-natives.outputs.release-push != 'true' &&
       (needs.build-natives.result == 'success' || needs.build-natives.result == 'skipped') &&
       (needs.build-double-natives.result == 'success' || needs.build-double-natives.result == 'skipped'))
     runs-on: blacksmith-4vcpu-ubuntu-2404
@@ -2096,8 +2060,7 @@ jobs:
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && needs.check-natives.result == 'success' &&
-      needs.check-natives.outputs.tested-content != 'true' && needs.check-natives.outputs.tested-bump != 'true' &&
-      needs.check-natives.outputs.release-push != 'true')
+      needs.check-natives.outputs.tested-bump != 'true')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     outputs:
