@@ -16,14 +16,17 @@ const HOST = 'https://2dog.dev';
 // the llms files read like the rendered site.
 const props = readFileSync(join(here, '..', 'Directory.Build.props'), 'utf8');
 const msbuildProperty = (name) => {
-  const match = props.match(new RegExp(`<${name}>([^<]+)</${name}>`));
+  const match = props.match(new RegExp(`<${name}>([^<]*)</${name}>`));
   if (!match) throw new Error(`Property <${name}> not found in Directory.Build.props`);
   return match[1].trim();
 };
 const godotVersion = msbuildProperty('GodotVersion');
-const twodogVersion = `${godotVersion}.${msbuildProperty('TwoDogRevision')}`;
+// 2dog versions use Godot's numbers only (GodotVersion 4.8.0-beta.2 -> 4.8.0.152-beta), as in version-markers.mts.
+const godotRelease = godotVersion.split('-')[0];
+const prerelease = msbuildProperty('TwoDogPrerelease');
+const twodogVersion = `${godotRelease}.${msbuildProperty('TwoDogRevision')}${prerelease ? `-${prerelease}` : ''}`;
 const nativesRevision = msbuildProperty('NativesRevision');
-const nativesVersion = nativesRevision === '0' ? godotVersion : `${godotVersion}.${nativesRevision}`;
+const nativesVersion = nativesRevision === '0' ? godotRelease : `${godotRelease}.${nativesRevision}`;
 
 const resolveMarkers = (text) => text
   .replaceAll(':2dog-version:', twodogVersion)

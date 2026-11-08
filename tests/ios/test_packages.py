@@ -37,7 +37,7 @@ class IosPackages(unittest.TestCase):
             '</packageSources></configuration>')
         cls.restore_packages = os.environ.get("TWODOG_TEST_RESTORE_PACKAGES", str(cls.root / "restore"))
         props = ET.parse(REPO / "Directory.Build.props")
-        cls.version = props.findtext(".//GodotVersion") + "." + props.findtext(".//NativesRevision")
+        cls.version = props.findtext(".//GodotVersion").split("-")[0] + "." + props.findtext(".//NativesRevision")
         cls.packages = cls.root / "cache"
         for rid in RIDS:
             for target in ("template_debug", "template_release"):

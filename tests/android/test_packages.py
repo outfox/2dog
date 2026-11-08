@@ -36,7 +36,7 @@ class AndroidPackages(unittest.TestCase):
             '</packageSources></configuration>')
         cls.restore_packages = os.environ.get("TWODOG_TEST_RESTORE_PACKAGES", str(cls.root / "restore"))
         props = ET.parse(REPO / "Directory.Build.props")
-        cls.version = props.findtext(".//GodotVersion") + "." + props.findtext(".//NativesRevision")
+        cls.version = props.findtext(".//GodotVersion").split("-")[0] + "." + props.findtext(".//NativesRevision")
         cls.packages = cls.root / "cache"
         for arch in ("arm64", "x86_64"):
             for target in ("template_debug", "template_release"):
