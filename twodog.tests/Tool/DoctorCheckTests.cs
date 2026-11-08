@@ -226,6 +226,24 @@ public class DoctorCheckTests : IDisposable
         Assert.Empty(Findings(Doctor(dir, "--json").Stdout, "host.webxr-threads"));
     }
 
+    // Hosts scaffolded before the precision split relied on these packages to bring 2dog.engine along.
+    [Theory]
+    [InlineData("xunit")]
+    [InlineData("nunit")]
+    [InlineData("repl")]
+    [InlineData("avalonia")]
+    public void EngineReference_FailsWhenMissingAndIsAddedByFix(string kind)
+    {
+        var dir = Scaffold($"--{kind}");
+        var csproj = $"Game.{kind}/Game.{kind}.csproj";
+        Edit(dir, csproj, "<PackageReference Include=\"2dog.engine\"", "<PackageReference Include=\"removed.engine\"");
+        Issue(Doctor(dir, "--json").Stdout, "host.engine-reference", "fail", fixable: true);
+
+        Doctor(dir, "--fix");
+        Assert.Contains("<PackageReference Include=\"2dog.engine\" Version=\"$(TwoDogVersion)\" />", File.ReadAllText(Path.Combine(dir, csproj)));
+        Assert.All(Findings(Doctor(dir, "--json").Stdout, "host.engine-reference"), f => Assert.Equal("pass", f.GetProperty("severity").GetString()));
+    }
+
     [Fact]
     public void PublishSingleFile_FailsOnlyForTheRepl()
     {

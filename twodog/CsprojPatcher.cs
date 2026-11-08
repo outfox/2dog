@@ -129,5 +129,36 @@ internal static class CsprojPatcher
         return changed;
     }
 
+    /// <summary>Packages that work with either engine precision, so the host must reference its engine itself.</summary>
+    internal static readonly string[] PrecisionNeutralPackages = ["2dog.xunit", "2dog.nunit", "2dog.repl", "2dog.avalonia", "2dog.qt"];
+
+    /// <summary>
+    /// The precision-neutral package a host references without any 2dog.engine, or null. Hosts scaffolded before
+    /// the precision split relied on it bringing the engine along.
+    /// </summary>
+    internal static string? MissingEngineFor(XDocument doc)
+    {
+        var includes = doc.Descendants().Where(e => e.Name.LocalName == "PackageReference")
+            .Select(e => (string?)e.Attribute("Include") ?? "").ToList();
+        // Prefix match: 2dog.engine, 2dog.engine.double and 2dog.engine$(TwoDogPackageSuffix) all count.
+        if (includes.Any(i => i.StartsWith("2dog.engine", StringComparison.OrdinalIgnoreCase))) return null;
+        return PrecisionNeutralPackages.FirstOrDefault(id => includes.Contains(id, StringComparer.OrdinalIgnoreCase));
+    }
+
+    /// <summary>The csproj with a 2dog.engine reference added next to its precision-neutral package; null if none is missing.</summary>
+    internal static string? PatchEngineReference(string csprojPath, bool doublePrecision)
+    {
+        var doc = MsBuildXml.Load(csprojPath);
+        if (MissingEngineFor(doc) is not { } neutral) return null;
+        var library = doc.Descendants().First(e => e.Name.LocalName == "PackageReference"
+            && string.Equals((string?)e.Attribute("Include"), neutral, StringComparison.OrdinalIgnoreCase));
+        var whitespace = (library.PreviousNode as XText)?.Value ?? "";
+        var indent = "\n" + whitespace[(whitespace.LastIndexOf('\n') + 1)..];
+        library.AddAfterSelf(new XText(indent), new XElement(library.Name,
+            new XAttribute("Include", "2dog.engine" + (doublePrecision ? ".double" : "")),
+            new XAttribute("Version", (string?)library.Attribute("Version") ?? "$(TwoDogVersion)")));
+        return MsBuildXml.Serialize(doc);
+    }
+
     private static XElement Element(XNamespace ns, string name, string value) => new(ns + name, value);
 }

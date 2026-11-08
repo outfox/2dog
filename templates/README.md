@@ -199,7 +199,7 @@ The optional xUnit test project references `2dog.xunit`, which needs to be packa
 
 **To make it resolve:**
 
-1. Package `2dog.xunit` as a NuGet package (it depends on `2dog.engine`, which carries the fixtures)
+1. Package `2dog.xunit` as a NuGet package (the test project references `2dog.engine` itself, which carries the fixtures)
 2. Publish it to NuGet or a local feed
 3. Ensure it's available when creating projects
 

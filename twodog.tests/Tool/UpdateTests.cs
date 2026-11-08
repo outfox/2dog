@@ -231,6 +231,29 @@ public class UpdateTests
         Assert.Contains("Version=\"99.0.0.1\"", File.ReadAllText(game));
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Update_AddsTheEngineThatTestPackagesNoLongerBring(bool doublePrecision)
+    {
+        using var tmp = new TempProjectDir();
+        var dir = Path.Combine(tmp.Dir, "Game");
+        Assert.Equal(0, CliConsole.Run(["new", "Game", dir, "--xunit", "--no-restore", .. doublePrecision ? new[] { "--double-precision" } : []]).ExitCode);
+        var xunit = Path.Combine(dir, "Game.xunit", "Game.xunit.csproj");
+        var engine = "2dog.engine" + (doublePrecision ? ".double" : "");
+        var reference = $"<PackageReference Include=\"{engine}\" Version=\"$(TwoDogVersion)\" />";
+        // The xunit host as scaffolded before the precision split: no engine reference of its own.
+        File.WriteAllText(xunit, Regex.Replace(File.ReadAllText(xunit), @"\s*<PackageReference Include=""2dog\.engine[^""]*""[^>]*/>", ""));
+
+        var dry = CliConsole.Run("update", dir, "--dry-run", "--no-restore", "--allow-dirty");
+        Assert.Contains("would: add 2dog.engine to Game.xunit/Game.xunit.csproj (2dog.xunit no longer brings it)", dry.Stdout);
+        Assert.DoesNotContain(reference, File.ReadAllText(xunit));
+
+        Assert.Equal(0, CliConsole.Run("update", dir, "--no-restore", "--allow-dirty").ExitCode);
+        Assert.Contains(reference, File.ReadAllText(xunit));
+        Assert.Contains("Nothing to do", CliConsole.Run("update", dir, "--no-restore", "--allow-dirty").Stdout);
+    }
+
     [Fact]
     public void Update_RefusesADirtyTree_UnlessAllowed()
     {

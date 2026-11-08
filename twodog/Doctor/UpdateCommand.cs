@@ -30,6 +30,7 @@ internal static class UpdateCommand
         var plan = new List<PlannedAction>();
         var warnings = new List<string>();
         PlanMigrations(plan, model);
+        PlanEngineReferences(plan, model);
         ScaffoldCommand.PlanRootBuildProps(plan, project.Dir);
         PlanPropsValues(plan, model, current);
         PlanGodotSdk(plan, model, warnings);
@@ -111,6 +112,21 @@ internal static class UpdateCommand
             var relative = Path.GetRelativePath(model.Dir, csproj).Replace('\\', '/');
             plan.Add(new PlannedAction($"switch {relative} to the shared version properties ({changes.Count} reference(s))",
                 ActionKind.Patch, () => MsBuildXml.Write(csproj, newText)));
+        }
+    }
+
+    private static void PlanEngineReferences(List<PlannedAction> plan, ProjectModel model)
+    {
+        var doublePrecision = BuildSettings.IsDouble(model.Dir);
+        foreach (var csproj in model.HostCsprojs)
+        {
+            if (CsprojPatcher.MissingEngineFor(MsBuildXml.Load(csproj)) is not { } neutral) continue;
+            var relative = Path.GetRelativePath(model.Dir, csproj).Replace('\\', '/');
+            plan.Add(new PlannedAction($"add 2dog.engine to {relative} ({neutral} no longer brings it)", ActionKind.Patch, () =>
+            {
+                // Re-read: the version migration may have rewritten the same file earlier in the plan.
+                if (CsprojPatcher.PatchEngineReference(csproj, doublePrecision) is { } text) MsBuildXml.Write(csproj, text);
+            }));
         }
     }
 

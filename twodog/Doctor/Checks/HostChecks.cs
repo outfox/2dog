@@ -20,6 +20,7 @@ internal static class HostChecks
         new("host.web-props-shim", Category.Hosts, "browser hosts chain to the root Directory.Build.props"),
         new("host.web-global-json", Category.Hosts, "browser hosts carry their own global.json"),
         new("host.trimmer-root", Category.Hosts, "browser hosts root the game assembly for the trimmer"),
+        new("host.engine-reference", Category.Hosts, "hosts using a precision-neutral 2dog package reference 2dog.engine"),
         new("host.blazor-client", Category.Hosts, "the Blazor client project exists and publishes 2dog.engine"),
         new("host.blazor-launch-settings", Category.Hosts, "Blazor hosts carry a Development launchSettings.json"),
         new("host.windows-only", Category.Hosts, "Windows-only hosts are noted on other platforms"),
@@ -83,6 +84,20 @@ internal static class HostChecks
 
             foreach (var variantFinding in VariantChecks.Check(ctx, host))
                 yield return Issue(variantFinding);
+
+            if (CsprojPatcher.MissingEngineFor(host.Doc) is { } neutral)
+            {
+                var doublePrecision = BuildSettings.IsDouble(p.Dir);
+                var engine = "2dog.engine" + (doublePrecision ? ".double" : "");
+                yield return Issue(new Finding("host.engine-reference", c, Severity.Fail, $"{csproj} references {neutral} but no 2dog.engine",
+                    $"{neutral} works with either precision and no longer brings the engine, so twodog types such as the fixtures are missing",
+                    null, csproj,
+                    new Fix($"csproj:{host.Folder}:engine", FixClass.Safe, $"add a {engine} PackageReference to {csproj}", () =>
+                    {
+                        if (CsprojPatcher.PatchEngineReference(host.CsprojPath, doublePrecision) is { } text)
+                            MsBuildXml.Write(host.CsprojPath, text);
+                    })));
+            }
 
             if (host.HasProperty("TwoDogBuildType"))
                 yield return Issue(new Finding("host.buildtype-deprecated", c, Severity.Warn, $"{csproj} sets the deprecated TwoDogBuildType",
@@ -194,7 +209,7 @@ internal static class HostChecks
         foreach (var (id, title) in new[]
                  {
                      ("host.gdignore", ".gdignore"), ("host.project-reference", "references"), ("host.godot-project-dir", "GodotProjectDir"),
-                     ("host.variant", "variants"), ("host.duplicate-analyzers", "analyzers"),
+                     ("host.variant", "variants"), ("host.duplicate-analyzers", "analyzers"), ("host.engine-reference", "engine references"),
                  })
             if (!issues.Contains(id))
                 yield return Finding.Pass(id, c, title);
