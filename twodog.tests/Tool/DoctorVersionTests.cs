@@ -5,7 +5,7 @@ namespace twodog.tests.ToolTests;
 [Trait("Precision", "Independent")]
 public class DoctorVersionTests
 {
-    private static DoctorContext Context(string engine, string natives, string? reference = null) => new()
+    private static DoctorContext Context(string engine, string natives, string? reference = null, string godot = "4.7.2") => new()
     {
         Project = new ProjectModel
         {
@@ -14,10 +14,10 @@ public class DoctorVersionTests
             {
                 ["twodogversion"] = engine,
                 ["TwoDogNativesVersion"] = natives,
-                ["TwoDogGodotVersion"] = "4.7.2"
+                ["TwoDogGodotVersion"] = godot
             },
             GameCsprojText = $"""
-                <Project Sdk="Godot.NET.Sdk/4.7.2">
+                <Project Sdk="Godot.NET.Sdk/{godot}">
                   <ItemGroup><PackageReference Include="2dog.godotsharp" Version="[{reference ?? engine}]" /></ItemGroup>
                 </Project>
                 """
@@ -67,6 +67,28 @@ public class DoctorVersionTests
         var native = Assert.Single(findings, f => f.Id == "ver.natives");
         Assert.Equal(mismatch ? Severity.Fail : Severity.Pass, native.Severity);
         Assert.Contains(natives, native.Title);
+    }
+
+    [Theory]
+    [InlineData("4.8.0-beta.1.3", false)]
+    [InlineData("4.8.0-beta.2.0", true)] // natives from another Godot beta than the engine
+    public void GodotPrereleases_AreOfficial_AndMatchNativesByTheirLabel(string natives, bool mismatch)
+    {
+        var findings = VersionChecks.Run(Context("4.8.0-beta.1.154", natives, godot: "4.8.0-beta.1"),
+            "4.8.0-beta.1.154", "4.8.0-beta.1.3").ToList();
+
+        Assert.DoesNotContain(findings, f => f.Id == "ver.custom-versions");
+        Assert.Equal(mismatch ? Severity.Fail : Severity.Pass, Assert.Single(findings, f => f.Id == "ver.natives").Severity);
+        Assert.Contains(findings, f => f.Id == "ver.twodog-outdated" && f.Severity == Severity.Pass);
+    }
+
+    [Fact]
+    public void GodotPrereleaseProjects_HearAboutNewerPrereleasesOfTheTool()
+    {
+        var findings = VersionChecks.Run(Context("4.8.0-beta.1.154", "4.8.0-beta.1.3", godot: "4.8.0-beta.1"),
+            "4.8.0-rc.1.156", "4.8.0-rc.1.0").ToList();
+
+        Assert.Contains(findings, f => f.Id == "ver.twodog-outdated" && f.Title.Contains("-> 4.8.0-rc.1.156"));
     }
 
     [Fact]

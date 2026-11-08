@@ -68,7 +68,7 @@ private static FastNoiseLite Noise =>
 ## Concurrent engines
 
 The repository contains experimental `twodog.hosting*` projects and
-[hosting demos](https://github.com/outfox/2dog/tree/main/demos) for concurrent
+[hosting demos](https://github.com/outfox/2dog/tree/HEAD/demos) for concurrent
 desktop engines. They are not published NuGet packages: each engine needs its
 own assembly load context and physical native library copy. CWD, environment
 variables and signal handlers remain process-global; macOS hosting is unsupported.

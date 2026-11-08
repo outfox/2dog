@@ -173,7 +173,8 @@ and run `git config --global core.symlinks true` before cloning. To repair an
 existing clone, run `git config core.symlinks true`, then
 `git checkout -- demos/showcase/fps_counter.tscn`.
 
-To release, commit your changes on `main`, then run with [Nushell](https://www.nushell.sh/):
+Each Godot line has its own branch (`4.7`, `4.8`). To release, commit your changes on the line's branch, then
+run with [Nushell](https://www.nushell.sh/):
 
 ```nu
 nu scripts/release.nu --native --dry-run  # preview both revision bumps
@@ -181,9 +182,12 @@ nu scripts/release.nu --native            # bump TwoDogRevision and NativesRevis
 nu scripts/release.nu                     # bump TwoDogRevision only
 ```
 
-Use `--revision 140` to choose the managed revision explicitly. The script requires a clean checkout
-containing the latest `origin/main`, signs the bump commit using your Git configuration, and pushes
-`main` and `v<TwoDogVersion>` atomically. Only the tag push triggers release CI; ordinary branch pushes
+All lines share one revision sequence: a release takes the next number after the highest `v*` tag of any
+line, so revisions order releases in time (`4.7.2.155` is newer than `4.8.0-beta.1.154`). Use `--revision 160`
+to choose the managed revision explicitly. Only Godot releases and numbered prereleases (`4.8.0-beta.1`,
+`4.8.0-rc.1`) can be released; prereleases publish as NuGet and GitHub prereleases. The script requires a clean
+checkout containing the latest origin branch of its line, signs the bump commit using your Git configuration,
+and pushes the branch and `v<TwoDogVersion>` atomically. Only the tag push triggers release CI; ordinary branch pushes
 do not run CI. Unpushed local commits can be included in that same push.
 `--native` versions the native NuGet packages; existing engine binaries keyed by the Godot commit
 remain reusable. The GitHub **2dog Release** action is an emergency/manual fallback, with the same

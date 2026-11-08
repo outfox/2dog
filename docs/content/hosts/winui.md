@@ -29,7 +29,7 @@ dotnet run --project MyGame.winui
 
 Edit the generated host to add controls. Its UI thread runs Godot frames, so
 event handlers can access the scene tree through `_engine.Tree`.
-See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winui)
+See the [showcase host](https://github.com/outfox/2dog/tree/HEAD/demos/showcase/showcase.winui)
 for an example.
 
 The app runs without an MSIX package. WinUI controls cannot overlap the game

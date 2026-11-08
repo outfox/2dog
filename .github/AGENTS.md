@@ -66,8 +66,11 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
-- `scripts/release.nu` is the normal local release path: bump `TwoDogRevision`, optionally `NativesRevision`
-  with `--native`, sign the commit and atomically push main + tag. Only the tag push triggers release CI.
+- Each Godot line has a branch named `<major>.<minor>` (`4.7`, `4.8`); there is no `main`. `scripts/release.nu`
+  is the normal local release path: set `TwoDogRevision` one above the highest `v*` tag of any line, optionally
+  bump `NativesRevision` with `--native`, sign the commit and atomically push the line branch + tag. It releases
+  only Godot releases and numbered prereleases (`4.8.0-beta.1`) from their line branch; prerelease tags deploy
+  as GitHub prereleases whose notes start at the line's previous tag. Only the tag push triggers release CI.
   `release.yml` is the emergency/manual fallback with a `native` boolean. It tags `v<TwoDogVersion>` and
   dispatches `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
   When the tag's parent passed CI and the tag only bumps

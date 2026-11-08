@@ -81,7 +81,7 @@ jobs:
             echo "double-ready=false" >> $GITHUB_OUTPUT
           fi
 
-      # release.yml tags a commit that only bumps <TwoDogRevision> on top of main. When that parent already passed
+      # release.yml tags a commit that only bumps <TwoDogRevision> on top of a line branch. When that parent already passed
       # the test, desktop and Android jobs, the tag run skips them; it still packs, runs the web and tool smoke
       # jobs against the versioned packages and deploys. Anything else gets the full run.
       - name: Check for a tested revision bump
@@ -108,7 +108,7 @@ jobs:
           [ "$tested" = true ] || echo "::notice::Not a revision bump on a tested commit; running every job."
           echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
-      # An atomic main + release-tag push leaves testing to the tag run. Otherwise a branch push whose
+      # An atomic line-branch (4.7, 4.8) + release-tag push leaves testing to the tag run. Otherwise a branch push whose
       # content already passed every job family elsewhere skips natives, pack, test and smoke jobs.
       # Tags keep their own rule above; manual dispatches always run in full.
       - name: Check for already-tested content
@@ -117,7 +117,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ "$GITHUB_REF" = refs/heads/main ] && tag=$(bash .github/scripts/release-push.sh); then
+          if [[ "$GITHUB_REF" =~ ^refs/heads/[0-9]+\.[0-9]+$ ]] && tag=$(bash .github/scripts/release-push.sh); then
             echo "release-push=true" >> "$GITHUB_OUTPUT"
             echo "Release [$tag]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions?query=branch%3A$tag) owns testing and deployment; skipping duplicate branch jobs." \
               >> "$GITHUB_STEP_SUMMARY"
@@ -2560,8 +2560,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
+          # Godot prerelease lines (v4.8.0-beta.1.154) publish GitHub prereleases; Latest stays a release.
+          OPTIONS=()
+          [[ "$TAG" != *-* ]] || OPTIONS+=(--prerelease)
+          # Notes start at the previous release of this line (4.7, 4.8): another line's newer tag is on another branch.
+          REVISION="${TAG##*.}"
+          LINE=$(echo "${TAG#v}" | cut -d. -f1,2)
+          PREVIOUS=$(git ls-remote --tags origin "refs/tags/v$LINE.*" | awk '{ print $2 }' |
+            sed -nE 's:^refs/tags/(v.*\.([0-9]+))$:\2 \1:p' | awk -v rev="$REVISION" '$1 < rev' | sort -n | tail -n 1 | cut -d' ' -f2)
+          [ -z "$PREVIOUS" ] || OPTIONS+=(--notes-start-tag "$PREVIOUS")
           gh release create "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
             --title "$TAG" \
             --generate-notes \
+            "${OPTIONS[@]}" \
             packages/*.nupkg packages/*.snupkg

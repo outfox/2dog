@@ -28,7 +28,7 @@ dotnet run --project MyGame.winforms
 
 Edit the generated form to add controls. Its UI thread runs Godot frames, so
 event handlers can access the scene tree through `_engine.Tree`.
-See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.winforms)
+See the [showcase host](https://github.com/outfox/2dog/tree/HEAD/demos/showcase/showcase.winforms)
 for an example.
 
 Controls cannot overlap the game window. Use [Avalonia](./avalonia) or

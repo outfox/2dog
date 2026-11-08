@@ -63,7 +63,7 @@ internal sealed class DoctorContext
     private Lazy<List<string>?> _workloads;
     private readonly Lazy<string?> _globalPackages;
     private Task<IReadOnlyDictionary<string, string?>>? _latest;
-    private Dictionary<string, Version>? _versions;
+    private Dictionary<string, PackageVersion>? _versions;
 
     public DoctorContext()
     {
@@ -91,7 +91,7 @@ internal sealed class DoctorContext
     /// <summary>Kicks off the nuget.org lookup in the background (unless --offline).</summary>
     public DoctorContext Prefetch()
     {
-        if (!Options.Offline) _latest ??= Task.Run(() => NuGetLatest.Query(["2dog"]));
+        if (!Options.Offline) _latest ??= Task.Run(() => NuGetLatest.Query([("2dog", ToolVersions.TwoDogVersion)]));
         return this;
     }
 
@@ -119,7 +119,7 @@ internal sealed class DoctorContext
     public string? LatestTool => _latest?.GetAwaiter().GetResult().GetValueOrDefault("2dog");
 
     /// <summary>The versions the project uses, by property name (props block, literals, the game Sdk).</summary>
-    public Dictionary<string, Version> Versions => _versions ??= ProjectVersions.Current(Project);
+    public Dictionary<string, PackageVersion> Versions => _versions ??= ProjectVersions.Current(Project);
 
     private ProcessResult? Dotnet(params string[] args)
     {
@@ -137,10 +137,10 @@ internal sealed class DoctorContext
 /// <summary>The versions a project uses, read from wherever it keeps them.</summary>
 internal static class ProjectVersions
 {
-    public static Dictionary<string, Version> Current(ProjectModel project)
+    public static Dictionary<string, PackageVersion> Current(ProjectModel project)
     {
         // MSBuild property names are case-insensitive; a lookup by the canonical name must find a lower-cased block.
-        var current = new Dictionary<string, Version>(StringComparer.OrdinalIgnoreCase);
+        var current = new Dictionary<string, PackageVersion>(StringComparer.OrdinalIgnoreCase);
         void Note(string property, PackageRef reference)
         {
             if (reference.Parsed is { } v && (!current.TryGetValue(property, out var have) || v > have))

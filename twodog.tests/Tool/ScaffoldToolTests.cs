@@ -357,6 +357,14 @@ public class CsprojPatcherTests
         Assert.NotNull(result.NewContent);
     }
 
+    /// <summary>A Godot.NET.Sdk older than the tool's on its own Godot line: the previous patch of a release, otherwise
+    /// a prerelease of the tool's Godot version (4.8.0-beta and 4.8.0 have no older patch).</summary>
+    internal static string OlderSdkOnTheToolsLine()
+    {
+        var sdk = PackageVersion.Parse(ToolVersions.GodotSdkVersion)!;
+        return !sdk.IsPrerelease && sdk.Build > 0 ? $"{sdk.Major}.{sdk.Minor}.{sdk.Build - 1}" : $"{sdk.Major}.{sdk.Minor}.{sdk.Build}-alpha.1";
+    }
+
     [Fact]
     public void OlderGodotSdk_Warns_OrIsRaisedToTheToolsWhenAsked()
     {
@@ -374,8 +382,7 @@ public class CsprojPatcherTests
         Assert.Contains(raised.Warnings, w => w.Contains("moves the project from Godot 4.2"));
 
         // Same line, only the patch level differs: raised silently.
-        var patchLevel = new Version(ToolVersions.GodotSdkVersion);
-        var older = new Version(patchLevel.Major, patchLevel.Minor, Math.Max(patchLevel.Build - 1, 0));
+        var older = OlderSdkOnTheToolsLine();
         tmp.Write("MyGame.csproj", $"<Project Sdk=\"Godot.NET.Sdk/{older}\">\n</Project>");
         var sameLine = CsprojPatcher.Patch(path, HostFolders, upgradeGodotSdk: true);
         Assert.Contains($"Godot.NET.Sdk: {older} -> {ToolVersions.GodotSdkVersion}", sameLine.Added);
@@ -1056,8 +1063,7 @@ public class AddEndToEndTests
 
         var csprojPath = System.IO.Path.Combine(tmp.Dir, "SpaceMiner.csproj");
         var propsPath = System.IO.Path.Combine(tmp.Dir, "Directory.Build.props");
-        var sdk = new Version(ToolVersions.GodotSdkVersion);
-        var olderSdk = new Version(sdk.Major, sdk.Minor, Math.Max(sdk.Build - 1, 0)).ToString();
+        var olderSdk = CsprojPatcherTests.OlderSdkOnTheToolsLine();
         File.WriteAllText(csprojPath, File.ReadAllText(csprojPath).Replace($"Godot.NET.Sdk/{ToolVersions.GodotSdkVersion}", $"Godot.NET.Sdk/{olderSdk}"));
         File.WriteAllText(propsPath, File.ReadAllText(propsPath)
             .Replace($"<TwoDogVersion>{ToolVersions.TwoDogVersion}</TwoDogVersion>", "<TwoDogVersion>4.7.0.1</TwoDogVersion>")

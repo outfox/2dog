@@ -28,15 +28,15 @@ internal static class GameCsprojChecks
         else
             yield return Finding.Pass("game.sdk", c, $"Godot.NET.Sdk/{sdk}");
 
-        if (sdk != null && Version.TryParse(sdk, out var sdkVersion) && ctx.Versions.TryGetValue("TwoDogVersion", out var engine))
+        if (sdk != null && ctx.Versions.TryGetValue("TwoDogVersion", out var engine)
+            && ToolVersions.CompareNuGet(sdk, engine.GodotVersion) is { } order)
         {
-            var line = new Version(engine.Major, engine.Minor, Math.Max(engine.Build, 0));
-            var sdkLine = new Version(sdkVersion.Major, sdkVersion.Minor, Math.Max(sdkVersion.Build, 0));
-            if (sdkLine != line)
+            var line = engine.GodotVersion;
+            if (order != 0)
                 yield return new Finding("game.sdk-mismatch", c, Severity.Fail,
                     $"{name} uses Godot.NET.Sdk/{sdk} but 2dog.engine {engine} is built for Godot {line}",
                     "mixed versions crash at runtime (the build stops with the same message)",
-                    sdkLine < line ? "2dog update" : $"run the tool that ships Godot {sdkLine}: dnx 2dog@<version> update", name);
+                    order < 0 ? "2dog update" : $"run the tool that ships Godot {sdk}: dnx 2dog@<version> update", name);
             else
                 yield return Finding.Pass("game.sdk-mismatch", c, "matches 2dog.engine");
         }

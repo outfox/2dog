@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# An atomic main + release-tag push delegates validation and deployment to the tag run.
+# An atomic line-branch + release-tag push delegates validation and deployment to the tag run.
 set -euo pipefail
 
 version=$(sed -n 's:.*<GodotVersion>\(.*\)</GodotVersion>.*:\1:p' Directory.Build.props)
 revision=$(sed -n 's:.*<TwoDogRevision>\(.*\)</TwoDogRevision>.*:\1:p' Directory.Build.props)
-[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$revision" =~ ^[0-9]+$ ]] || exit 1
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(beta|rc)\.[0-9]+)?$ && "$revision" =~ ^[0-9]+$ ]] || exit 1
 tag="refs/tags/v$version.$revision"
 # Prefer the peeled commit for annotated/signed tags; lightweight tags already hold a commit.
 remote=$(git ls-remote origin "$tag" "$tag^{}")

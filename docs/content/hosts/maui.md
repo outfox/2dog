@@ -81,7 +81,7 @@ code on the engine thread. The `Started`, `QuitRequested` and `Failed` events
 run on the MAUI UI thread. On Android, do not call `Engine.Start()`, because
 Android starts the engine.
 
-See the [MAUI showcase](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.maui)
+See the [MAUI showcase](https://github.com/outfox/2dog/tree/HEAD/demos/showcase/showcase.maui)
 for pause and time-scale controls.
 
 ## Rendering and Lifecycle

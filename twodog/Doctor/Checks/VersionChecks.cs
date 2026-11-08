@@ -38,7 +38,7 @@ internal static class VersionChecks
                 $"versions come from your own properties ({string.Join(", ", foreign.Take(3))}) - not checked");
 
         var malformed = PropsPatcher.ToolValues.Select(v => v.Name)
-            .Where(n => p.PropsValues.TryGetValue(n, out var v) && !v.Contains("$(") && ToolVersions.Floor(v.Trim('[', ']').Split('-', '+')[0]) == null)
+            .Where(n => p.PropsValues.TryGetValue(n, out var v) && !v.Contains("$(") && ToolVersions.Floor(v.Trim('[', ']').Split('+')[0]) == null)
             .Select(n => $"{n}='{p.PropsValues[n]}'").ToList();
         if (malformed.Count > 0)
             yield return new Finding("ver.props-invalid", c, Severity.Fail,
@@ -52,7 +52,7 @@ internal static class VersionChecks
             .Concat(refs.Where(x => VersionRewriter.IsTwoDogPackage(x.Ref.Id) || VersionRewriter.IsPinnedPackage(x.Ref.Id)
                                    || x.Ref.Id.Equals("GodotSharpEditor", StringComparison.OrdinalIgnoreCase)).Select(x => x.Ref.RawVersion))
             .Concat(new[] { toolVersion, toolNativesVersion, ToolVersions.GodotSdkVersion, sdkVersion }.OfType<string>())
-            .Where(v => !v.Contains("$(") && v.IndexOfAny(['-', '+']) >= 0)
+            .Where(v => !v.Contains("$(") && v.IndexOfAny(['-', '+']) >= 0 && PackageVersion.Parse(v) is not { IsGodotPrerelease: true })
             .Select(v => v.Trim('[', ']')).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         if (custom.Count > 0)
             yield return new Finding("ver.custom-versions", c, Severity.Warn,
@@ -62,7 +62,7 @@ internal static class VersionChecks
 
         // Keep suffix handling local to doctor: update must not mistake a fork for its numeric release version.
         var literals = refs.Where(x => !x.Ref.IsProperty && VersionRewriter.PropertyFor(x.Ref.Id) != null
-                                       && NumericVersion(x.Ref.RawVersion) != null).ToList();
+                                       && PackageVersion.Parse(x.Ref.RawVersion) != null).ToList();
         if (literals.Count > 0)
             yield return new Finding("ver.literal-versions", c, Severity.Warn,
                 $"{literals.Count} literal package version(s) in {literals.Select(x => x.In).Distinct().Count()} host csproj(s)",
@@ -70,15 +70,15 @@ internal static class VersionChecks
 
         var twoDog = literals.Where(x => VersionRewriter.IsTwoDogPackage(x.Ref.Id)).Select(x => x.Ref.RawVersion.Trim('[', ']'))
             .Concat(p.PropsValues.TryGetValue("TwoDogVersion", out var propsValue) ? [propsValue.Trim('[', ']')] : [])
-            .Where(v => NumericVersion(v) != null).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(NumericVersion).ToList();
-        var tool = NumericVersion(toolVersion);
+            .Where(v => PackageVersion.Parse(v) != null).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(PackageVersion.Parse).ToList();
+        var tool = PackageVersion.Parse(toolVersion);
         if (twoDog.Count > 1)
             yield return new Finding("ver.twodog-consistent", c, Severity.Fail,
                 $"2dog packages at mixed versions: {string.Join(", ", twoDog)}", "hosts must share one engine version",
                 custom.Count > 0 ? "align the full package versions, including custom suffixes" : "2dog update");
-        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && NumericVersion(twoDog[0]) < tool)
+        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && PackageVersion.Parse(twoDog[0]) < tool)
             yield return new Finding("ver.twodog-outdated", c, Severity.Warn, $"2dog packages {twoDog[0]} -> {tool} available", null, "2dog update");
-        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && NumericVersion(twoDog[0]) > tool)
+        else if (custom.Count == 0 && twoDog.Count == 1 && tool != null && PackageVersion.Parse(twoDog[0]) > tool)
             yield return new Finding("ver.twodog-newer", c, Severity.Info, $"2dog packages {twoDog[0]} are newer than this tool ({tool})",
                 null, "run the newest tool: dnx 2dog doctor");
         else if (custom.Count == 0 && twoDog.Count == 1 && tool != null)
@@ -87,13 +87,13 @@ internal static class VersionChecks
         var nativeVersions = literals.Where(x => VersionRewriter.PropertyFor(x.Ref.Id) == "TwoDogNativesVersion")
             .Select(x => x.Ref.RawVersion.Trim('[', ']'))
             .Concat(p.PropsValues.TryGetValue("TwoDogNativesVersion", out var nativeValue) ? [nativeValue.Trim('[', ']')] : [])
-            .Where(v => NumericVersion(v) != null).OrderBy(NumericVersion).ToList();
-        var toolNatives = NumericVersion(toolNativesVersion);
+            .Where(v => PackageVersion.Parse(v) != null).OrderBy(PackageVersion.Parse).ToList();
+        var toolNatives = PackageVersion.Parse(toolNativesVersion);
         if (nativeVersions.LastOrDefault() is { } nativeVersion && twoDog.Count > 0)
         {
-            var natives = NumericVersion(nativeVersion)!;
-            var engine = NumericVersion(twoDog[^1])!;
-            if (natives.Major != engine.Major || natives.Minor != engine.Minor || natives.Build != engine.Build)
+            var natives = PackageVersion.Parse(nativeVersion)!;
+            var engine = PackageVersion.Parse(twoDog[^1])!;
+            if (natives.GodotVersion != engine.GodotVersion)
                 yield return new Finding("ver.natives", c, Severity.Fail, $"natives {nativeVersion} are not on the engine's Godot line ({twoDog[^1]})",
                     "the native payloads and the engine must come from the same Godot build",
                     custom.Count > 0 ? "select matching native packages from your fork" : "2dog update");
@@ -102,7 +102,7 @@ internal static class VersionChecks
                 yield return new Finding("ver.natives", c, Severity.Warn, $"{floating.Id} is not exact-pinned ([version] or [$(TwoDogNativesVersion)])",
                     "a floating reference can drift away from the engine's build",
                     custom.Count > 0 ? "exact-pin the custom native version with [version] or [$(TwoDogNativesVersion)]" : "2dog update");
-            else if (custom.Count == 0 && engine == tool && toolNatives != null && EnvironmentChecks.Normalize(natives) != EnvironmentChecks.Normalize(toolNatives))
+            else if (custom.Count == 0 && engine == tool && toolNatives != null && natives != toolNatives)
                 yield return new Finding("ver.natives", c, Severity.Warn, $"natives {natives} -> {toolNativesVersion} available", null, "2dog update");
             else
                 yield return Finding.Pass("ver.natives", c, $"natives [{nativeVersion}]");
@@ -137,12 +137,9 @@ internal static class VersionChecks
                     $"{host.Folder} mixes Avalonia versions: {string.Join(", ", avalonia)}", "Avalonia packages must match", "align them (2dog update raises the template's set)");
         }
 
-        if (custom.Count == 0 && tool != null && ctx.LatestTool is { } newest && Version.TryParse(newest, out var newestVersion) && newestVersion > tool)
+        if (custom.Count == 0 && tool != null && ctx.LatestTool is { } newest && PackageVersion.Parse(newest) is { } newestVersion && newestVersion > tool)
             yield return new Finding("ver.tool-latest", c, Severity.Info, $"a newer 2dog tool exists: {newest}", null, $"dnx 2dog@{newest} doctor");
     }
-
-    private static Version? NumericVersion(string text) =>
-        Version.TryParse(text.Trim('[', ']').Split('-', '+')[0], out var version) ? version : null;
 
     /// <summary>The client csproj's references; an unparseable client is a load problem (ProjectModel parses it), not reported here.</summary>
     private static List<PackageRef> ClientReferences(string text)

@@ -25,6 +25,10 @@ GodotSharp       :2dog-version: ✅  2dog.godotsharp, 2dog.godotsharp.editor
 
 | Mark                      | Meaning                            |
 |---------------------------|------------------------------------|
-| ✅ (`ok` when redirected) | The latest stable release          |
-| 🔄 (`new`)                | A newer stable release exists      |
+| ✅ (`ok` when redirected) | The latest release                 |
+| 🔄 (`new`)                | A newer release exists             |
 | none                      | The tool could not reach nuget.org |
+
+A release means a stable release, unless the tool is itself built for a Godot
+prerelease such as `4.8.0-beta.1`: then any newer 2dog for that Godot version
+counts, including its later betas and release candidates.

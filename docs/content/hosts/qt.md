@@ -87,7 +87,7 @@ directly, for example through `session.Engine.Tree`. See
 [C# and QML](https://github.com/qt/qtbridge-csharp/blob/dev/docs/csharp-and-qml.md)
 to learn how to expose C# types to QML.
 
-See the [showcase host](https://github.com/outfox/2dog/tree/main/demos/showcase/showcase.qt)
+See the [showcase host](https://github.com/outfox/2dog/tree/HEAD/demos/showcase/showcase.qt)
 for a pause button, time-scale slider, and FPS display.
 
 ## Rendering and Lifecycle

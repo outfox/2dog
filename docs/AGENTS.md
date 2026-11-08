@@ -47,7 +47,7 @@
   fail the build. Cards use `:::: columns` around `::: column <title>` blocks; the outer fence needs four
   colons. Callouts use `::: tip`, `::: info` and `::: warning`.
 - Link pages without `.md`, site-absolute (`/hosts/web`) or relative (`./web#properties`). Link repository
-  files through `https://github.com/outfox/2dog/tree/main/`.
+  files through `https://github.com/outfox/2dog/tree/HEAD/`, which follows the default branch.
 - Examples call the game `MyGame` and its hosts `MyGame.<host>`.
 - Wrap prose near 80 columns. Use tables for options and properties, `bash` fences for commands and `text`
   fences for output.

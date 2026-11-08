@@ -22,7 +22,7 @@ editor or export templates does not change the engine a 2dog host runs.
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), the .NET SDK
 selected by the repository's
-[`global.json`](https://github.com/outfox/2dog/tree/main/global.json), and the
+[`global.json`](https://github.com/outfox/2dog/tree/HEAD/global.json), and the
 [Godot build prerequisites](https://docs.godotengine.org/en/stable/contributing/development/compiling/index.html)
 for your operating system. `uv` manages Python, SCons and Poe for this checkout.
 The desktop packages target Windows x64, Linux x64 and macOS arm64.
@@ -44,7 +44,7 @@ git submodule update --recursive
 ```
 
 On Windows, enable Developer Mode and `core.symlinks` before cloning; see the
-[contributor instructions](https://github.com/outfox/2dog/tree/main/README.md#compile-your-own-teach-2dog-new-tricks-contributors).
+[contributor instructions](https://github.com/outfox/2dog/tree/HEAD/README.md#compile-your-own-teach-2dog-new-tricks-contributors).
 
 ## Merge your engine changes
 
@@ -67,7 +67,7 @@ cd ..
 Resolve conflicts so both your fork's changes and 2dog's libgodot integration
 survive. Use a compatible Godot base; merging a different Godot release can
 require porting changes. Keep `GodotVersion` in the outer
-[`Directory.Build.props`](https://github.com/outfox/2dog/tree/main/Directory.Build.props)
+[`Directory.Build.props`](https://github.com/outfox/2dog/tree/HEAD/Directory.Build.props)
 consistent with `godot/version.py` and the generated Godot SDK package version.
 
 When saving or sharing the result, commit and push the merged engine branch to
