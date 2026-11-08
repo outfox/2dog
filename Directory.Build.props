@@ -1,14 +1,15 @@
 <Project>
     <PropertyGroup>
-        <!-- Godot engine version. Must match the godot submodule (godot/version.py). -->
+        <!-- The next four are written by scripts/release.nu; do not edit them by hand.
+             Godot's C# package version of the godot submodule (godot/version.py status "beta2" -> 4.8.0-beta.2). -->
         <GodotVersion>4.7.2</GodotVersion>
-        <!-- The next three are written by scripts/release.nu; do not edit them by hand.
-             Release number, one counter across all release branches (the next number after every v* tag). -->
+        <!-- Release number, one counter across all release branches (the next number after every v* tag). -->
         <TwoDogRevision>154</TwoDogRevision>
         <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
              release's tag sets its own number. -->
         <NativesRevision>154</NativesRevision>
-        <!-- Prerelease label from the release branch name (4.8.0-beta releases 4.8.0.N-beta); empty on main. -->
+        <!-- Prerelease label: Godot's status for a Godot prerelease (4.8.0.156-beta2), else the release branch label
+             (4.7-rc releases 4.7.2.N-rc); empty for stable releases. -->
         <TwoDogPrerelease></TwoDogPrerelease>
         <TwoDogVersion>$(GodotVersion).$(TwoDogRevision)</TwoDogVersion>
         <TwoDogVersion Condition="'$(TwoDogPrerelease)' != ''">$(TwoDogVersion)-$(TwoDogPrerelease)</TwoDogVersion>
