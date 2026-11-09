@@ -68,9 +68,12 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
 - Every branch runs its own copy of the workflows and scripts, so line-agnostic changes (`.github`, `scripts`, the
   tool, tests) land on `main` and reach the line branches (`4.8.0-beta`) by merging `main` into them. Only
-  line-specific work (godot submodule, Godot API ports, version fields) lives on a line branch. When a merge
-  conflicts in `Directory.Build.props` versions or `Godot.NET.Sdk` pins, keep the line branch's side, run
+  line-specific work (godot submodule and its `.gitmodules` branch, Godot API ports, version fields) lives on a
+  line branch. When a merge conflicts in `.gitmodules`, `Directory.Build.props` versions or `Godot.NET.Sdk` pins,
+  keep the line branch's side, run
   `nu scripts/release.nu --sync` and commit its changes with the merge (CI's version check fails otherwise).
+- `.gitmodules` names each line's fork branch (`2dog-4.7.2` on `main`, `2dog-4.8.0-beta` on `4.8.0-beta`); CI fails
+  when the godot pin is not on it, so push the fork branch before the 2dog commit that bumps the submodule.
 - `scripts/release.nu` is the normal release path from `main` or a line branch (`4.7`, `4.8`): it computes
   `GodotVersion` and the committed `Godot.NET.Sdk` pins (from `godot/version.py`), `TwoDogRevision` (next after every
   `v*` tag), `NativesRevision` (kept while the native inputs match that release's tag) and `TwoDogPrerelease` (Godot's
