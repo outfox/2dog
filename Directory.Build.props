@@ -2,7 +2,7 @@
     <PropertyGroup>
         <!-- The next four are written by scripts/release.nu; do not edit them by hand.
              Godot's C# package version of the godot submodule (godot/version.py status "beta2" -> 4.8.0-beta.2). -->
-        <GodotVersion>4.8.0-beta.2</GodotVersion>
+        <GodotVersion>4.8.0-beta.3</GodotVersion>
         <!-- Release number, one counter across all release branches (the next number after every v* tag). -->
         <TwoDogRevision>158</TwoDogRevision>
         <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
@@ -10,7 +10,7 @@
         <NativesRevision>158</NativesRevision>
         <!-- Prerelease label: Godot's status for a Godot prerelease (4.8.0.156-beta2), else the release branch label
              (4.7-rc releases 4.7.2.N-rc); empty for stable releases. -->
-        <TwoDogPrerelease>beta2</TwoDogPrerelease>
+        <TwoDogPrerelease>beta3</TwoDogPrerelease>
         <!-- 2dog versions take Godot's release numbers; the label carries the rest (4.8.0-beta.2 -> 4.8.0.156-beta2). -->
         <TwoDogGodotRelease>$([System.Text.RegularExpressions.Regex]::Replace('$(GodotVersion)', '-.*', ''))</TwoDogGodotRelease>
         <TwoDogVersion>$(TwoDogGodotRelease).$(TwoDogRevision)</TwoDogVersion>

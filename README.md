@@ -178,6 +178,7 @@ To release, commit your changes on a release branch, then run with [Nushell](htt
 ```nu
 nu scripts/release.nu --dry-run  # preview the versions
 nu scripts/release.nu            # bump, tag, push; CI tests and stages on int.nugettest.org
+nu scripts/release.nu --sync     # after bumping the godot submodule: align the Godot versions, commit with the bump
 ```
 
 Release branches are `main` and Godot lines such as `4.7` or `4.8`, whose numbers must match the godot submodule.

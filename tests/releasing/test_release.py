@@ -175,6 +175,18 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn(["add", "--", "Directory.Build.props", "game/game.csproj"], self.calls())
         self.assertEqual(["tag", "v4.8.0.141-beta2"], self.calls()[-2])
 
+    def test_sync_aligns_versions_with_a_bumped_fork_without_committing(self):
+        self.write_version_py("4.8.0", "beta3")
+        (self.root / "game.csproj").write_bytes(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2">\r\n</Project>\r\n')
+        result = self.run_release("--sync", TEST_BRANCH="4.8.0-beta", TEST_STATUS=" M godot", SDK_FILES="game.csproj")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<GodotVersion>4.8.0-beta.3</GodotVersion>", self.props())
+        self.assertIn("<TwoDogPrerelease>beta3</TwoDogPrerelease>", self.props())
+        self.assertIn("<TwoDogRevision>134</TwoDogRevision>", self.props())
+        self.assertEqual(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta.3">\r\n</Project>\r\n',
+                         (self.root / "game.csproj").read_bytes())
+        self.assertFalse([call for call in self.calls() if call[0] in ("add", "commit", "tag", "push")])
+
     def test_godot_status_wins_over_the_branch_label(self):
         self.write_version_py("4.8.0", "rc1")
         result = self.run_release("--dry-run", TEST_BRANCH="4.8.0-beta")

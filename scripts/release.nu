@@ -42,6 +42,17 @@ def godot-version [py: string] {
     {release: $release, status: $status, csharp: $csharp}
 }
 
+# GodotVersion and the committed Godot.NET.Sdk pins follow the fork (an Sdk attribute cannot use a property).
+def repin [csharp: string]: string -> string {
+    $in | str replace --all --regex '(Godot\.NET\.Sdk(?:/|" Version="))[0-9][^"]*' ('${1}' + $csharp)
+}
+
+# The csproj files whose Godot.NET.Sdk pin differs from csharp.
+def repinned-files [csharp: string] {
+    (^git grep -l -E 'Godot\.NET\.Sdk(/|" Version=")[0-9]' -- '*.csproj' | complete | get stdout | lines
+        | where {|file| $file != '' and (open --raw $file) != (open --raw $file | repin $csharp) })
+}
+
 # Files whose changes alter the native packages (platform packages, their staging and metadata).
 const NATIVE_INPUTS = [godot platforms nuget build scripts/stage_natives_release.py]
 
@@ -51,6 +62,7 @@ const NATIVE_INPUTS = [godot platforms nuget build scripts/stage_natives_release
 def main [
     --dry-run  # Check and preview without changing files, commits, tags or remote refs.
     --no-sign  # Do not force a signed commit (the CI fallback has no signing key).
+    --sync     # Only align GodotVersion, TwoDogPrerelease and the Godot.NET.Sdk pins with godot/version.py (after a fork bump).
 ] {
     cd ($env.FILE_PWD | path dirname)
     let branch = (git branch --show-current)
@@ -58,6 +70,17 @@ def main [
     let line = ($branch | parse --regex '^(?<numbers>\d+\.\d+(?:\.\d+)?)(?:-(?<label>dev|beta|rc))?$')
     if $branch != 'main' and ($line | is-empty) {
         error make {msg: $"Release from main or a release branch such as 4.7, 4.8 or 4.7-rc \(on '($branch)')."}
+    }
+    if $sync {
+        # The checked-out fork, so a submodule bump can be synced before it is committed.
+        let godot = (godot-version (open --raw godot/version.py))
+        let label = if $godot.status != 'stable' { $godot.status } else if ($line | is-empty) { '' } else { $line.0.label | default '' }
+        let repinned = (repinned-files $godot.csharp)
+        let props = (open --raw Directory.Build.props | set-property GodotVersion $godot.csharp | set-property TwoDogPrerelease $label)
+        $props | save --force --raw Directory.Build.props
+        for file in $repinned { open --raw $file | repin $godot.csharp | save --force --raw $file }
+        print $"GodotVersion ($godot.csharp), TwoDogPrerelease '($label)', Godot.NET.Sdk repinned in ($repinned | length) files."
+        return
     }
     if (git status --porcelain | is-not-empty) {
         error make {msg: 'Commit or stash pending changes, including submodule changes, before releasing.'}
@@ -109,10 +132,7 @@ def main [
     }
     let next_natives = if $reuse { $natives } else { $next }
 
-    # GodotVersion and the committed Godot.NET.Sdk pins follow the fork (an Sdk attribute cannot use a property).
-    let repin = {|text| $text | str replace --all --regex '(Godot\.NET\.Sdk(?:/|" Version="))[0-9][^"]*' ('${1}' + $godot.csharp) }
-    let pinned_files = (^git grep -l -E 'Godot\.NET\.Sdk(/|" Version=")[0-9]' -- '*.csproj' | complete | get stdout | lines | where $it != '')
-    let repinned = ($pinned_files | where {|file| (open --raw $file) != (do $repin (open --raw $file)) })
+    let repinned = (repinned-files $godot.csharp)
     let was = (property $props GodotVersion)
     print ($"Release ($tag): TwoDogRevision ($current) -> ($next), NativesRevision ($natives) -> ($next_natives)"
         + (if $was == $godot.csharp { '' } else { $", GodotVersion ($was) -> ($godot.csharp)" })
@@ -135,7 +155,7 @@ def main [
         print --stderr $"warning: godot is not checked out; protect the pinned commit by hand: git ($fork_tag | str join ' ')"
     }
     $updated | save --force Directory.Build.props
-    for file in $repinned { do $repin (open --raw $file) | save --force --raw $file }
+    for file in $repinned { open --raw $file | repin $godot.csharp | save --force --raw $file }
     git add -- Directory.Build.props ...$repinned | ignore
     let sign = if $no_sign { [] } else { [-c commit.gpgsign=true] }
     git ...$sign commit -m $"chore: release ($tag)" | print
