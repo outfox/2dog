@@ -187,6 +187,14 @@ class ReleaseScript(unittest.TestCase):
                          (self.root / "game.csproj").read_bytes())
         self.assertFalse([call for call in self.calls() if call[0] in ("add", "commit", "tag", "push")])
 
+    def test_sync_off_a_release_branch_keeps_the_committed_label_of_a_stable_godot(self):
+        (self.root / "Directory.Build.props").write_text(PROPS.replace("<TwoDogPrerelease></TwoDogPrerelease>",
+                                                                       "<TwoDogPrerelease>rc</TwoDogPrerelease>"))
+        result = self.run_release("--sync", TEST_BRANCH="")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<TwoDogPrerelease>rc</TwoDogPrerelease>", self.props())
+        self.assertIn("<GodotVersion>4.7.2</GodotVersion>", self.props())
+
     def test_godot_status_wins_over_the_branch_label(self):
         self.write_version_py("4.8.0", "rc1")
         result = self.run_release("--dry-run", TEST_BRANCH="4.8.0-beta")

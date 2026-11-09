@@ -74,7 +74,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   push triggers release CI. `release.yml` runs the same script as the emergency/manual fallback and dispatches
   `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
   After a godot submodule bump that changes `version.py` (beta2 -> beta3), run `release.nu --sync` and commit its
-  changes with the bump: branch CI packs from the committed versions and fails TDG001 until they match the fork.
+  changes with the bump: packages bake the committed versions in. CI's first job runs the same sync and fails fast
+  when it changes anything.
   When the tag's parent passed CI and the tag only bumps the revision and label, the tag run skips the test,
   desktop and Android jobs. The tag run's `deploy` job only stages: a GitHub prerelease with every package (notes
   start at the line's previous tag), then a

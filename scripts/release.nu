@@ -68,19 +68,21 @@ def main [
     let branch = (git branch --show-current)
     # The 2dog tool treats exactly these labels as official prereleases.
     let line = ($branch | parse --regex '^(?<numbers>\d+\.\d+(?:\.\d+)?)(?:-(?<label>dev|beta|rc))?$')
-    if $branch != 'main' and ($line | is-empty) {
-        error make {msg: $"Release from main or a release branch such as 4.7, 4.8 or 4.7-rc \(on '($branch)')."}
-    }
     if $sync {
-        # The checked-out fork, so a submodule bump can be synced before it is committed.
-        let godot = (godot-version (open --raw godot/version.py))
-        let label = if $godot.status != 'stable' { $godot.status } else if ($line | is-empty) { '' } else { $line.0.label | default '' }
+        # The checked-out fork (so an uncommitted bump syncs), else version.py at the pinned commit (CI).
+        let godot = (godot-version (godot-version-py (git rev-parse HEAD:godot)))
+        let props = (open --raw Directory.Build.props)
+        # Off a release branch (CI's detached checkouts), a stable Godot keeps the committed branch label.
+        let label = if $godot.status != 'stable' { $godot.status } else if ($line | is-empty) { property $props TwoDogPrerelease } else { $line.0.label | default '' }
         let repinned = (repinned-files $godot.csharp)
-        let props = (open --raw Directory.Build.props | set-property GodotVersion $godot.csharp | set-property TwoDogPrerelease $label)
+        let props = ($props | set-property GodotVersion $godot.csharp | set-property TwoDogPrerelease $label)
         $props | save --force --raw Directory.Build.props
         for file in $repinned { open --raw $file | repin $godot.csharp | save --force --raw $file }
         print $"GodotVersion ($godot.csharp), TwoDogPrerelease '($label)', Godot.NET.Sdk repinned in ($repinned | length) files."
         return
+    }
+    if $branch != 'main' and ($line | is-empty) {
+        error make {msg: $"Release from main or a release branch such as 4.7, 4.8 or 4.7-rc \(on '($branch)')."}
     }
     if (git status --porcelain | is-not-empty) {
         error make {msg: 'Commit or stash pending changes, including submodule changes, before releasing.'}
