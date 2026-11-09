@@ -1,4 +1,4 @@
 [submodule "godot"]
 	path = godot
 	url = git@github.com:outfox/godot.git
-	branch = 2dog-4.8.0-beta
+	branch = 2dog-4.8
