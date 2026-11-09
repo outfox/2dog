@@ -69,6 +69,20 @@ jobs:
             exit 1
           fi
 
+      # The pin must be on the fork branch .gitmodules names: an unpushed or force-pushed-away commit fails every job.
+      - name: Check the godot pin is on its fork branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REPO=$(git config -f .gitmodules submodule.godot.url | sed -E 's#.*github\.com[:/]##; s#\.git$##')
+          BRANCH=$(git config -f .gitmodules submodule.godot.branch)
+          PIN=$(git rev-parse HEAD:godot)
+          STATUS=$(gh api "repos/$REPO/compare/$BRANCH...$PIN" --jq .status 2>/dev/null || echo missing)
+          if [ "$STATUS" != identical ] && [ "$STATUS" != behind ]; then
+            echo "::error::The godot pin $PIN is not on $REPO's $BRANCH branch ($STATUS). Push the fork branch, or fix the pin or the branch in .gitmodules."
+            exit 1
+          fi
+
       - name: Check native library availability
         id: check
         env:
