@@ -39,6 +39,10 @@ def godot-version [py: string] {
     let csharp = if $status == 'stable' { $release } else if ($numbered | is-empty) { $"($release)-($status)" } else {
         $"($release)-($numbered.0.word).($numbered.0.n)"
     }
+    # Scaffolded games pin Godot.NET.Sdk to it; nuget.org only has Godot's numbered prereleases.
+    if $status != 'stable' and $status !~ '^(dev|beta|rc)\d+$' {
+        error make {msg: $"godot/version.py has status \"($status)\", which builds Godot.NET.Sdk ($csharp): nuget.org has only numbered Godot prereleases \(status = \"beta2\")."}
+    }
     {release: $release, status: $status, csharp: $csharp}
 }
 
@@ -76,9 +80,11 @@ def main [
         let label = if $godot.status != 'stable' { $godot.status } else if ($line | is-empty) { property $props TwoDogPrerelease } else { $line.0.label | default '' }
         let repinned = (repinned-files $godot.csharp)
         let props = ($props | set-property GodotVersion $godot.csharp | set-property TwoDogPrerelease $label)
+        let summary = $"GodotVersion ($godot.csharp), TwoDogPrerelease '($label)', Godot.NET.Sdk pins in ($repinned | length) files."
+        if $dry_run { print $"Would set ($summary)"; return }
         $props | save --force --raw Directory.Build.props
         for file in $repinned { open --raw $file | repin $godot.csharp | save --force --raw $file }
-        print $"GodotVersion ($godot.csharp), TwoDogPrerelease '($label)', Godot.NET.Sdk repinned in ($repinned | length) files."
+        print $"Set ($summary)"
         return
     }
     if $branch != 'main' and ($line | is-empty) {
@@ -91,10 +97,6 @@ def main [
     let props = (open --raw Directory.Build.props)
     let pinned = (git rev-parse HEAD:godot)
     let godot = (godot-version (godot-version-py $pinned))
-    # Scaffolded games pin Godot.NET.Sdk to it; nuget.org only has Godot's numbered prereleases.
-    if $godot.status != 'stable' and $godot.status !~ '^(dev|beta|rc)\d+$' {
-        error make {msg: $"godot/version.py has status \"($godot.status)\", which builds Godot.NET.Sdk ($godot.csharp): nuget.org has only numbered Godot prereleases \(status = \"beta2\")."}
-    }
     let version = $godot.release
     if ($line | is-not-empty) and not ($"($version)." | str starts-with $"($line.0.numbers).") {
         error make {msg: $"Branch ($branch) releases Godot ($line.0.numbers), but the godot submodule is Godot ($godot.csharp)."}
