@@ -49,6 +49,7 @@ internal static unsafe class NativeAotPlugins
             }
 
             NativeFuncs.Initialize(unmanagedCallbacks, unmanagedCallbacksSize);
+            Marshaling.Initialize();
             if (reinitializing)
                 ScriptManagerBridge.ResetForEngineReinitialization();
             else
