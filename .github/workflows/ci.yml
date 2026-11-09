@@ -55,6 +55,20 @@ jobs:
           bash .github/scripts/stage-ci-inputs.test.sh
           bash .github/scripts/test-with-watchdog.test.sh
 
+      - name: Setup Nushell
+        uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29
+        with:
+          version: '0.111.0'
+
+      # Packages bake GodotVersion in, so a fork bump without a sync only fails much later (TDG001); stop here instead.
+      - name: Check versions against the godot fork
+        run: |
+          nu scripts/release.nu --sync
+          if ! git diff --exit-code; then
+            echo "::error::GodotVersion, TwoDogPrerelease or a Godot.NET.Sdk pin does not match godot/version.py at the pinned commit. Run 'nu scripts/release.nu --sync' and commit the result."
+            exit 1
+          fi
+
       - name: Check native library availability
         id: check
         env:
@@ -2499,8 +2513,17 @@ jobs:
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "::notice::Release $TAG already exists; keeping its packages."
           else
+            # Notes start at the previous release of this line (4.7, 4.8): another line's newer tag is on another branch.
+            OPTIONS=()
+            VERSION="${TAG#v}"
+            REVISION=$(echo "${VERSION%%-*}" | cut -d. -f4)
+            LINE=$(echo "$VERSION" | cut -d. -f1,2)
+            PREVIOUS=$(git ls-remote --tags "https://github.com/$GITHUB_REPOSITORY" "refs/tags/v$LINE.*" | awk '{ print $2 }' |
+              sed -nE 's:^refs/tags/(v[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)(-[0-9A-Za-z.-]+)?)$:\2 \1:p' |
+              awk -v rev="$REVISION" '$1 < rev' | sort -n | tail -n 1 | cut -d' ' -f2)
+            [ -z "$PREVIOUS" ] || OPTIONS+=(--notes-start-tag "$PREVIOUS")
             gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes --prerelease \
-              packages/*.nupkg packages/*.snupkg
+              "${OPTIONS[@]}" packages/*.nupkg packages/*.snupkg
           fi
 
       - name: Stage on int.nugettest.org

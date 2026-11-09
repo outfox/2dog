@@ -175,6 +175,35 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn(["add", "--", "Directory.Build.props", "game/game.csproj"], self.calls())
         self.assertEqual(["tag", "v4.8.0.141-beta2"], self.calls()[-2])
 
+    def test_sync_aligns_versions_with_a_bumped_fork_without_committing(self):
+        self.write_version_py("4.8.0", "beta3")
+        (self.root / "game.csproj").write_bytes(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2">\r\n</Project>\r\n')
+        result = self.run_release("--sync", TEST_BRANCH="4.8.0-beta", TEST_STATUS=" M godot", SDK_FILES="game.csproj")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<GodotVersion>4.8.0-beta.3</GodotVersion>", self.props())
+        self.assertIn("<TwoDogPrerelease>beta3</TwoDogPrerelease>", self.props())
+        self.assertIn("<TwoDogRevision>134</TwoDogRevision>", self.props())
+        self.assertEqual(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta.3">\r\n</Project>\r\n',
+                         (self.root / "game.csproj").read_bytes())
+        self.assertFalse([call for call in self.calls() if call[0] in ("add", "-c", "commit", "tag", "push")])
+
+    def test_sync_dry_run_previews_without_writing(self):
+        self.write_version_py("4.8.0", "beta3")
+        (self.root / "game.csproj").write_text('<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2" />')
+        result = self.run_release("--sync", "--dry-run", TEST_BRANCH="4.8.0-beta", SDK_FILES="game.csproj")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("Would set GodotVersion 4.8.0-beta.3", result.stdout)
+        self.assertEqual(PROPS, self.props())
+        self.assertEqual('<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2" />', (self.root / "game.csproj").read_text())
+
+    def test_sync_off_a_release_branch_keeps_the_committed_label_of_a_stable_godot(self):
+        (self.root / "Directory.Build.props").write_text(PROPS.replace("<TwoDogPrerelease></TwoDogPrerelease>",
+                                                                       "<TwoDogPrerelease>rc</TwoDogPrerelease>"))
+        result = self.run_release("--sync", TEST_BRANCH="")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<TwoDogPrerelease>rc</TwoDogPrerelease>", self.props())
+        self.assertIn("<GodotVersion>4.7.2</GodotVersion>", self.props())
+
     def test_godot_status_wins_over_the_branch_label(self):
         self.write_version_py("4.8.0", "rc1")
         result = self.run_release("--dry-run", TEST_BRANCH="4.8.0-beta")
@@ -182,10 +211,10 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn("Release v4.8.0.141-rc1:", result.stdout)
 
     def test_unnumbered_godot_prerelease_is_refused(self):
-        for status in ["beta", "beta.2"]:
-            with self.subTest(status=status):
+        for status, args in [("beta", []), ("beta.2", []), ("beta", ["--sync"])]:
+            with self.subTest(status=status, args=args):
                 self.write_version_py("4.8.0", status)
-                result = self.run_release(TEST_BRANCH="4.8")
+                result = self.run_release(*args, TEST_BRANCH="4.8")
                 self.assertNotEqual(0, result.returncode)
                 self.assertIn("nuget.org has only numbered Godot prereleases", result.stderr)
                 self.assertEqual(PROPS, self.props())

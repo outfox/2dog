@@ -66,6 +66,11 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
+- Every branch runs its own copy of the workflows and scripts, so line-agnostic changes (`.github`, `scripts`, the
+  tool, tests) land on `main` and reach the line branches (`4.8.0-beta`) by merging `main` into them. Only
+  line-specific work (godot submodule, Godot API ports, version fields) lives on a line branch. When a merge
+  conflicts in `Directory.Build.props` versions or `Godot.NET.Sdk` pins, keep the line branch's side, run
+  `nu scripts/release.nu --sync` and commit its changes with the merge (CI's version check fails otherwise).
 - `scripts/release.nu` is the normal release path from `main` or a line branch (`4.7`, `4.8`): it computes
   `GodotVersion` and the committed `Godot.NET.Sdk` pins (from `godot/version.py`), `TwoDogRevision` (next after every
   `v*` tag), `NativesRevision` (kept while the native inputs match that release's tag) and `TwoDogPrerelease` (Godot's
@@ -73,8 +78,12 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   the pinned godot commit in the fork (`2dog-v<version>`), signs the commit and atomically pushes branch + tag. Only the tag
   push triggers release CI. `release.yml` runs the same script as the emergency/manual fallback and dispatches
   `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
+  After a godot submodule bump that changes `version.py` (beta2 -> beta3), run `release.nu --sync` and commit its
+  changes with the bump: packages bake the committed versions in. CI's first job runs the same sync and fails fast
+  when it changes anything.
   When the tag's parent passed CI and the tag only bumps the revision and label, the tag run skips the test,
-  desktop and Android jobs. The tag run's `deploy` job only stages: a GitHub prerelease with every package, then a
+  desktop and Android jobs. The tag run's `deploy` job only stages: a GitHub prerelease with every package (notes
+  start at the line's previous tag), then a
   `publish.yml` dispatch to int.nugettest.org. `publish.yml` (also the nuget.org promotion) must stay a dispatched
   top-level workflow: both feeds' Trusted Publishing policies name it. `android.yml` runs Android build and
   package tests; `docs.yml` builds the documentation site.
