@@ -603,7 +603,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           if ! pinned=$(set -o pipefail; gh api "repos/$GITHUB_REPOSITORY/branches" --paginate \
-              --jq '.[].name | select(test("^[0-9]+[.][0-9]+"))' |
+              --jq '.[].name | select(test("^[0-9]+[.][0-9]+([.][0-9]+)?(-(dev|beta|rc))?$"))' |
             while read -r branch; do
               gh api "repos/$GITHUB_REPOSITORY/contents/godot?ref=$branch" --jq '"godot-\(.sha[0:7])"' || exit 1
             done); then
