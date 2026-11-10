@@ -2,6 +2,9 @@ name: 2dog Android build and package tests
 
 on:
   workflow_dispatch:
+  # Every pull request, unfiltered: a required status check has to report, and a path-filtered workflow that is
+  # skipped never does.
+  pull_request:
   push:
     branches: [main, 'android*']
     paths:

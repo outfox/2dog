@@ -83,7 +83,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   `v*` tag), `NativesRevision` (kept while the native inputs match that release's tag) and `TwoDogPrerelease` (Godot's
   numbered status such as `beta2`, else the branch label `dev`, `beta` or `rc`: the labels the tool treats as official), tags
   the pinned godot commit in the fork (`2dog-v<version>`), signs the commit and atomically pushes branch + tag. Only the tag
-  push triggers release CI. `release.yml` runs the same script as the emergency/manual fallback and dispatches
+  push triggers release CI. `release.yml` runs the same script from GitHub (inputs: dry run, line) with the built-in token, so it cannot push
+  the release commit to a protected `main`: there, release locally. It dispatches
   `ci.yml` on the tag, because tags pushed with `GITHUB_TOKEN` start no workflows.
   After a godot submodule bump that changes `version.py` (beta2 -> beta3), run `release.nu --sync` and commit its
   changes with the bump: packages bake the committed versions in. CI's first job runs the same sync and fails fast
@@ -93,7 +94,8 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   start at the line's previous tag), then a
   `publish.yml` dispatch to int.nugettest.org. `publish.yml` (also the nuget.org promotion) must stay a dispatched
   top-level workflow: both feeds' Trusted Publishing policies name it. `android.yml` runs Android build and
-  package tests; `docs.yml` builds the documentation site.
+  package tests on every pull request, unfiltered, so it can be a required check (a path-filtered workflow that is
+  skipped never reports); `docs.yml` builds the documentation site.
 - `scripts/find-tested-run.sh` matches a release tag's parent with a successful run on the same content (the tree
   without root Markdown and `AGENTS.md` files; `docs/` counts, because tool tests read it). Keep the tag step's
   family list in step with the job names, and never ignore files a test reads. Manual dispatches always run in full.
