@@ -594,19 +594,28 @@ jobs:
           )" \
             release-assets/*
 
-      # Keep the newest 5 cache releases per precision; --cleanup-tag also
-      # removes the side-effect git tag gh release create left behind.
-      # Accepted consequence: a long-lived branch whose hash was pruned
-      # rebuilds inline on its next push.
+      # Keep the newest 5 cache releases per precision, plus whatever a line branch (4.7, 4.8) pins: a stable line
+      # bumps godot rarely and would otherwise rebuild every native once another line went through five pins.
+      # --cleanup-tag also removes the side-effect git tag gh release create left behind.
+      # Accepted consequence: any other branch whose hash was pruned rebuilds inline on its next push.
       - name: Prune old native releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if ! pinned=$(set -o pipefail; gh api "repos/$GITHUB_REPOSITORY/branches" --paginate \
+              --jq '.[].name | select(test("^[0-9]+[.][0-9]+"))' |
+            while read -r branch; do
+              gh api "repos/$GITHUB_REPOSITORY/contents/godot?ref=$branch" --jq '"godot-\(.sha[0:7])"' || exit 1
+            done); then
+            echo "::warning::Could not read the line branches' godot pins; pruning nothing this time."
+            exit 0
+          fi
           gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,publishedAt \
             -q '[.[] | select(.tagName | test("^godot-[0-9a-f]{7}${{ env.RELEASE_SUFFIX }}$"))] | sort_by(.publishedAt) | reverse | .[5:] | .[].tagName' |
           while read -r tag; do
             # createdAt is the target commit's date; always preserve this run's release.
             if [ "$tag" = "godot-${{ needs.preflight.outputs.submodule-hash }}${RELEASE_SUFFIX}" ]; then continue; fi
+            if grep -qx "${tag%"$RELEASE_SUFFIX"}" <<< "$pinned"; then echo "Keeping $tag (a line branch pins it)"; continue; fi
             echo "Pruning $tag"
             gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
           done
