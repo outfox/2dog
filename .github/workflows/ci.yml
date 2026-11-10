@@ -2528,7 +2528,7 @@ jobs:
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             echo "::notice::Release $TAG already exists; keeping its packages."
           else
-            # Notes start at the previous release of this line (4.7, 4.8): another line's newer tag is on another branch.
+            # Notes start at the previous release of this line (4.7, 4.8): the newest tag overall may be another line's.
             OPTIONS=()
             VERSION="${TAG#v}"
             REVISION=$(echo "${VERSION%%-*}" | cut -d. -f4)

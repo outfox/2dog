@@ -1,6 +1,5 @@
-# Emergency/manual fallback to running scripts/release.nu locally: dispatch it on the branch to release (main, 4.7,
-# 4.8.0-beta, ...). The script computes the versions, commits the bump, tags it and pushes both atomically.
-# shortcut: releases the line in the tree only; add a line input passing --line when another line needs this fallback.
+# Emergency/manual fallback to running scripts/release.nu locally: dispatch it on main. The script computes the
+# versions, commits the bump, tags it and pushes; another Godot line (godot-lines.json) pushes only its tag.
 #
 # Uses only the default GITHUB_TOKEN. Tags pushed with GITHUB_TOKEN do not fire `on: push` (GitHub's anti-recursion
 # rule), so this workflow then dispatches ci.yml on the new tag; workflow_dispatch is exempt from that rule.
@@ -14,6 +13,11 @@ on:
         required: false
         type: boolean
         default: false
+      line:
+        description: 'Another Godot line from godot-lines.json (4.7); empty releases the line in the tree'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: write # push the bump commit and tag
@@ -42,18 +46,19 @@ jobs:
       - name: Release
         env:
           DRY_RUN: ${{ inputs.dry_run }}
+          LINE: ${{ inputs.line }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ "$DRY_RUN" = true ]; then
-            nu scripts/release.nu --no-sign --dry-run
-          else
-            nu scripts/release.nu --no-sign
-          fi
+          args=(--no-sign)
+          if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
+          if [ -n "$LINE" ]; then args+=(--line "$LINE"); fi
+          nu scripts/release.nu "${args[@]}"
 
       # Tags pushed with GITHUB_TOKEN don't fire `on: push`, so trigger the CI (and thereby the staging) explicitly.
+      # Another line's release leaves HEAD on main, so the tag is found by name: this checkout fetched no other tag.
       - name: Dispatch CI on the new tag
         if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$(git describe --tags --exact-match HEAD)"
+        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$(git tag --list 'v*' --sort=-creatordate | head -n 1)"
