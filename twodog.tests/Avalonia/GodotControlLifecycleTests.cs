@@ -10,7 +10,10 @@ namespace twodog.tests.AvaloniaTests;
 public class HeadlessTestApp : Application
 {
     public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<HeadlessTestApp>().UseHeadless(new AvaloniaHeadlessPlatformOptions());
+        AppBuilder.Configure<HeadlessTestApp>().UseHeadless(new AvaloniaHeadlessPlatformOptions())
+            // Tests drain the dispatcher at Render priority. After a second without input-priority work Avalonia posts
+            // renders at Input priority, below that drain: a test that starts an engine slowly then never renders.
+            .With(new Avalonia.Threading.DispatcherOptions { InputStarvationTimeout = TimeSpan.MaxValue });
 }
 
 // Control/session attachment lifecycle on the headless Avalonia platform. The engine is
