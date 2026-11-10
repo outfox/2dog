@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
+        <!-- Every listed change must reach the running engine instead of relaunching the activity: a relaunch destroys
+             the engine, and the new activity cannot start another one in the same process. -->
         <activity android:name="dev.twodog.host.TwoDogActivity"
                   android:exported="false" android:screenOrientation="sensor"
-                  android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|density|keyboard|navigation"
+                  android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|density|keyboard|navigation|locale|layoutDirection|assetsPaths"
                   android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
     </application>
 </manifest>
