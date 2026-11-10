@@ -179,8 +179,12 @@ To release, commit your changes on a release branch, then run with [Nushell](htt
 nu scripts/release.nu --dry-run  # preview the versions
 nu scripts/release.nu            # bump, tag, push; CI tests and stages on int.nugettest.org
 nu scripts/release.nu --sync     # after bumping the godot submodule: align the Godot versions, commit with the bump
+nu scripts/release.nu --line 4.7 # the same for another Godot line (also with --dry-run and --sync)
+nu scripts/release.nu --ci --line 4.7  # run CI for that line: pushes its tree as the branch ci/4.7/<commit>
 ```
 
+`main` carries one Godot line in its tree and lists the others in `godot-lines.json`; `--line` builds one of those
+from the same commit, and its release commit is tagged without landing on `main`.
 Release branches are `main` and Godot lines such as `4.7` or `4.8`, whose numbers must match the godot submodule.
 The script reads the Godot version from `godot/version.py` and writes `GodotVersion` and every committed
 `Godot.NET.Sdk` pin itself. A Godot prerelease labels the release with Godot's status (`status = "beta2"` releases

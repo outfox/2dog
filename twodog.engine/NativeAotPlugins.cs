@@ -49,7 +49,9 @@ internal static unsafe class NativeAotPlugins
             }
 
             NativeFuncs.Initialize(unmanagedCallbacks, unmanagedCallbacksSize);
-            Marshaling.Initialize();
+#if GODOT4_8_OR_GREATER
+            Marshaling.Initialize(); // 4.8 hands its string and array layout to managed code here; 4.7 has no such call.
+#endif
             if (reinitializing)
                 ScriptManagerBridge.ResetForEngineReinitialization();
             else

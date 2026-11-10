@@ -1,5 +1,6 @@
 # Emergency/manual fallback to running scripts/release.nu locally: dispatch it on the branch to release (main, 4.7,
 # 4.8.0-beta, ...). The script computes the versions, commits the bump, tags it and pushes both atomically.
+# shortcut: releases the line in the tree only; add a line input passing --line when another line needs this fallback.
 #
 # Uses only the default GITHUB_TOKEN. Tags pushed with GITHUB_TOKEN do not fire `on: push` (GitHub's anti-recursion
 # rule), so this workflow then dispatches ci.yml on the new tag; workflow_dispatch is exempt from that rule.

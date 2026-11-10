@@ -66,16 +66,20 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
-- Every branch runs its own copy of the workflows and scripts, so line-agnostic changes (`.github`, `scripts`, the
-  tool, tests) land on the default branch (the stable line, `4.7`) and reach the other line (`4.8`) by merging it in. Only
-  line-specific work (godot submodule and its `.gitmodules` branch, Godot API ports, version fields) lives on a
-  line branch. When a merge conflicts in `.gitmodules`, `Directory.Build.props` versions or `Godot.NET.Sdk` pins,
-  keep the line branch's side, run
-  `nu scripts/release.nu --sync` and commit its changes with the merge (CI's version check fails otherwise).
-- `.gitmodules` names each line's fork branch (`2dog-4.7` on `4.7`, `2dog-4.8` on `4.8`); CI fails
-  when the godot pin is not on it, so push the fork branch before the 2dog commit that bumps the submodule.
-- `scripts/release.nu` is the normal release path from a line branch (`4.7`, `4.8`): it computes
-  `GodotVersion` and the committed `Godot.NET.Sdk` pins (from `godot/version.py`), `TwoDogRevision` (next after every
+- `main` builds every Godot line from one tree. The tree is one line (4.8 today): the `godot` gitlink, the
+  `.gitmodules` branch, the version fields, the `Godot.NET.Sdk` pins and the `project.godot` feature tags.
+  `godot-lines.json` lists the other lines' fork branch and commit (4.7). `nu scripts/release.nu --line 4.7` builds
+  that line from the same commit: with `--sync` it turns the working tree into it, with `--ci` it pushes that tree as
+  the branch `ci/4.7/<commit>` (CI runs on it; delete the branch afterwards), and alone it releases it. A line's
+  release commit is tagged but stays off `main`, and its `NativesRevision` is read from its latest release tag.
+- Code that needs a newer Godot's API goes behind `#if GODOT4_8_OR_GREATER` (set from `GodotVersion` in
+  `Directory.Build.props`); everything else must compile against every line.
+- `.gitmodules` names the fork branch of the line in the tree (`2dog-4.8`) and `godot-lines.json` those of the other
+  lines; CI fails when the godot pin is not on it, so push the fork branch before the 2dog commit that bumps a pin.
+- Transitional: the branches `4.7` and `4.8` predate `main` and go once `main` has released both lines. Fixes made
+  there still have to reach `main`.
+- `scripts/release.nu` is the normal release path from `main`: it computes
+  `GodotVersion`, the committed `Godot.NET.Sdk` pins and feature tags (from `godot/version.py`), `TwoDogRevision` (next after every
   `v*` tag), `NativesRevision` (kept while the native inputs match that release's tag) and `TwoDogPrerelease` (Godot's
   numbered status such as `beta2`, else the branch label `dev`, `beta` or `rc`: the labels the tool treats as official), tags
   the pinned godot commit in the fork (`2dog-v<version>`), signs the commit and atomically pushes branch + tag. Only the tag

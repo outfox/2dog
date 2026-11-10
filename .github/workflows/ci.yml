@@ -3,6 +3,7 @@ name: 2dog CI
 on:
   push:
     tags: ['v*']
+    branches: ['ci/**'] # another Godot line's tree, pushed by `release.nu --ci --line`
   pull_request:
     paths-ignore:
       - 'docs/**'

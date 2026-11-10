@@ -45,6 +45,9 @@
         <TwoDogNativeOutputSubdir Condition="'$(TwoDogPrecision)' == 'double'">double/</TwoDogNativeOutputSubdir>
         <GodotFloat64 Condition="'$(TwoDogPrecision)' == 'double'">true</GodotFloat64>
         <DefineConstants Condition="'$(TwoDogPrecision)' == 'double'">$(DefineConstants);REAL_T_IS_DOUBLE</DefineConstants>
+        <!-- One tree builds every Godot line (godot-lines.json): guard calls only a newer Godot has with Godot.NET.Sdk's
+             own constant names, which 2dog's libraries do not get from that SDK. -->
+        <DefineConstants Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(TwoDogGodotRelease)', '4.8'))">$(DefineConstants);GODOT4_8_OR_GREATER</DefineConstants>
         <BaseIntermediateOutputPath Condition="'$(TwoDogPrecision)' == 'double'">obj/double/</BaseIntermediateOutputPath>
         <BaseOutputPath Condition="'$(TwoDogPrecision)' == 'double'">bin/double/</BaseOutputPath>
         <!-- Both precision trees can exist in one checkout. Exclude the whole artifact roots,

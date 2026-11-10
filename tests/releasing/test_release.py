@@ -39,9 +39,17 @@ def --wrapped main [...args: string] {
         cat-file => { if ($env.MISSING_OBJECT? | default '') != '' { exit 1 } }
         diff => { if ($env.NATIVES_CHANGED? | default '') != '' { exit 1 } }
         grep => { print ($env.SDK_FILES? | default '') }
-        rev-parse => { print 'pinned-godot' }
+        rev-parse => {
+            # A release tag's godot gitlink (<sha>:godot); everything else resolves to the tree's pin.
+            let tagged = (($args | last) | str ends-with ':godot') and ($args | last) != 'HEAD:godot'
+            print (if $tagged { $env.TAG_GODOT? | default 'pinned-godot' } else { 'pinned-godot' })
+        }
         config => { print 'git@example.com:fork/godot.git' }
-        '-C' => {}
+        '-C' => { if 'show' in $args { print ($env.LINE_VERSION_PY? | default '') } }
+        show => { print ($env.LINE_TAG_PROPS? | default '') }
+        update-index => {}
+        checkout => {}
+        submodule => {}
         merge-base => {}
         fetch => {}
         add => {}
@@ -52,7 +60,14 @@ def --wrapped main [...args: string] {
     }
 }
 '''
-INPUTS = ["godot", "platforms", "nuget", "build", "scripts/stage_natives_release.py"]
+INPUTS = ["platforms", "nuget", "build", "scripts/stage_natives_release.py"]
+# main carries the 4.8 line; godot-lines.json adds 4.7, last released as v4.7.2.139 with natives 120.
+LINES = '{ "4.7": { "branch": "2dog-4.7", "commit": "line-commit" } }\n'
+LINE_ENV = {
+    "LINE_VERSION_PY": 'major = 4\nminor = 7\npatch = 2\nstatus = "stable"\n',
+    "LINE_TAG_PROPS": "<NativesRevision>120</NativesRevision>",
+    "REMOTE_TAGS": REMOTE_TAGS + "\nline139\trefs/tags/v4.7.2.139",
+}
 
 
 @unittest.skipUnless(NU, "Nushell is required")
@@ -90,6 +105,29 @@ class ReleaseScript(unittest.TestCase):
 
     def calls(self):
         return [json.loads(line) for line in self.log.read_text().splitlines()]
+
+    def main_tree_with_another_line(self):
+        """The tree of main: Godot 4.8 beta3 checked in, 4.7 in godot-lines.json, a game pinned to the 4.8 SDK."""
+        self.write_version_py("4.8.0", "beta3")
+        (self.root / "godot/.git").write_text("gitdir: ../.git/modules/godot\n")
+        (self.root / "Directory.Build.props").write_text(
+            PROPS.replace("<GodotVersion>4.7.2<", "<GodotVersion>4.8.0-beta.3<")
+            .replace("<TwoDogPrerelease><", "<TwoDogPrerelease>beta3<"))
+        (self.root / "godot-lines.json").write_text(LINES)
+        (self.root / ".gitmodules").write_bytes(b'[submodule "godot"]\r\n\tpath = godot\r\n\tbranch = 2dog-4.8\r\n')
+        (self.root / "game.csproj").write_text('<Project Sdk="Godot.NET.Sdk/4.8.0-beta.3" />')
+        (self.root / "project.godot").write_text('config/features=PackedStringArray("4.8", "C#")\n')
+        return {**LINE_ENV, "SDK_FILES": "game.csproj\nproject.godot"}
+
+    def assert_tree_is_the_other_line(self):
+        self.assertIn("<GodotVersion>4.7.2</GodotVersion>", self.props())
+        self.assertIn("<TwoDogPrerelease></TwoDogPrerelease>", self.props())
+        self.assertEqual(b'[submodule "godot"]\r\n\tpath = godot\r\n\tbranch = 2dog-4.7\r\n',
+                         (self.root / ".gitmodules").read_bytes())
+        self.assertEqual('<Project Sdk="Godot.NET.Sdk/4.7.2" />', (self.root / "game.csproj").read_text())
+        self.assertEqual('config/features=PackedStringArray("4.7", "C#")\n', (self.root / "project.godot").read_text())
+        self.assertIn(["update-index", "--cacheinfo", "160000,line-commit,godot"], self.calls())
+        self.assertIn(["-C", "godot", "checkout", "--quiet", "--detach", "line-commit"], self.calls())
 
     def props(self):
         return (self.root / "Directory.Build.props").read_text()
@@ -203,6 +241,106 @@ class ReleaseScript(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("<TwoDogPrerelease>rc</TwoDogPrerelease>", self.props())
         self.assertIn("<GodotVersion>4.7.2</GodotVersion>", self.props())
+
+    def test_sync_retargets_project_feature_tags(self):
+        self.write_version_py("4.8.0", "beta3")
+        (self.root / "project.godot").write_text('config/features=PackedStringArray("4.7", "C#")\n')
+        result = self.run_release("--sync", TEST_BRANCH="4.8", SDK_FILES="project.godot")
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual('config/features=PackedStringArray("4.8", "C#")\n', (self.root / "project.godot").read_text())
+
+    def test_sync_line_switches_the_tree_to_another_line_without_committing(self):
+        env = self.main_tree_with_another_line()
+        result = self.run_release("--sync", "--line", "4.7", **env)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assert_tree_is_the_other_line()
+        # The natives of the line's latest release (v4.7.2.139), not the tree's.
+        self.assertIn("<NativesRevision>120</NativesRevision>", self.props())
+        self.assertIn(["show", "line139:Directory.Build.props"], self.calls())
+        self.assertIn("<TwoDogRevision>134</TwoDogRevision>", self.props())
+        self.assertFalse([call for call in self.calls() if call[0] in ("add", "-c", "commit", "tag", "push")])
+
+    def test_ci_line_pushes_the_line_as_a_branch_and_returns_to_the_start(self):
+        env = self.main_tree_with_another_line()
+        result = self.run_release("--ci", "--line", "4.7", **env)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assert_tree_is_the_other_line()
+        self.assertIn(["checkout", "--quiet", "--detach"], self.calls())
+        self.assertEqual([
+            ["add", "--", "Directory.Build.props", ".gitmodules", "game.csproj", "project.godot"],
+            ["commit", "--quiet", "-m", "ci: Godot 4.7 line of pinned-godot"],
+            ["push", "origin", "HEAD:refs/heads/ci/4.7/pinned-godot"],
+            ["checkout", "--quiet", "--force", "main"],
+            ["submodule", "update", "--quiet", "godot"],
+        ], self.calls()[-5:])
+
+    def test_line_release_tags_a_commit_off_the_branch_and_pushes_only_the_tag(self):
+        env = self.main_tree_with_another_line()
+        result = self.run_release("--no-sign", "--line", "4.7", **env)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("Release v4.7.2.141:", result.stdout)
+        self.assertIn(["-C", "godot", "push", "git@example.com:fork/godot.git", "line-commit:refs/tags/2dog-v4.7.2.141"],
+                      self.calls())
+        self.assertEqual([
+            ["add", "--", "Directory.Build.props", ".gitmodules", "game.csproj", "project.godot"],
+            ["commit", "-m", "chore: release v4.7.2.141"],
+            ["tag", "v4.7.2.141"],
+            ["push", "origin", "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141"],
+            ["checkout", "--quiet", "--force", "main"],
+            ["submodule", "update", "--quiet", "godot"],
+        ], self.calls()[-6:])
+        # v4.7.2.120 built the line's natives, but no such tag is on origin, so this release builds them.
+        self.assertIn("<NativesRevision>141</NativesRevision>", self.props())
+
+    def test_line_release_reuses_the_natives_of_the_lines_last_release(self):
+        env = self.main_tree_with_another_line()
+        env["REMOTE_TAGS"] += "\nnat120\trefs/tags/v4.7.2.120"
+        result = self.run_release("--no-sign", "--line", "4.7", TAG_GODOT="line-commit", **env)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<NativesRevision>120</NativesRevision>", self.props())
+        self.assertIn(["rev-parse", "nat120:godot"], self.calls())
+        self.assertIn(["diff", "--quiet", "nat120", "HEAD", "--", *INPUTS], self.calls())
+
+    def test_line_release_with_another_godot_pin_builds_its_natives(self):
+        env = self.main_tree_with_another_line()
+        env["REMOTE_TAGS"] += "\nnat120\trefs/tags/v4.7.2.120"
+        result = self.run_release("--no-sign", "--line", "4.7", TAG_GODOT="an-older-pin", **env)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("<NativesRevision>141</NativesRevision>", self.props())
+
+    def test_failed_line_release_returns_to_the_branch(self):
+        env = self.main_tree_with_another_line()
+        result = self.run_release("--no-sign", "--line", "4.7", FAIL_GIT="commit -m chore: release v4.7.2.141", **env)
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(["submodule", "update", "--quiet", "godot"], self.calls()[-1])
+        self.assertEqual(["checkout", "--quiet", "--force", "main"], self.calls()[-2])
+        self.assertFalse([call for call in self.calls() if call[0] in ("tag", "push") and call[1] != "--list"])
+
+    def test_line_preflight_failures_never_mutate(self):
+        env = self.main_tree_with_another_line()
+        before = self.props()
+        for args, overrides in [
+            (["--line", "4.6"], {}),                                 # not in godot-lines.json
+            (["--line", "4.7"], {"TEST_BRANCH": "4.8"}),             # other lines release from main
+            (["--line", "4.7"], {"TEST_STATUS": " M source.cs"}),
+            (["--sync", "--line", "4.7"], {"TEST_STATUS": " M source.cs"}),
+            (["--ci"], {}),                                          # --ci is for another line
+            (["--line", "4.7"], {"LINE_VERSION_PY": 'major = 4\nminor = 8\npatch = 0\nstatus = "stable"\n'}),
+            (["--dry-run", "--line", "4.7"], {}),
+            (["--sync", "--dry-run", "--line", "4.7"], {}),
+        ]:
+            with self.subTest(args=args, overrides=overrides):
+                self.log.unlink(missing_ok=True)
+                result = self.run_release(*args, **{**env, **overrides})
+                if "--dry-run" in args:
+                    self.assertEqual(0, result.returncode, result.stderr)
+                    self.assertIn("4.7.2", result.stdout)
+                else:
+                    self.assertNotEqual(0, result.returncode)
+                self.assertEqual(before, self.props())
+                self.assertEqual('<Project Sdk="Godot.NET.Sdk/4.8.0-beta.3" />', (self.root / "game.csproj").read_text())
+                self.assertFalse(self.log.exists() and any(
+                    call[0] in ("add", "-c", "commit", "push", "update-index", "checkout") for call in self.calls()))
 
     def test_godot_status_wins_over_the_branch_label(self):
         self.write_version_py("4.8.0", "rc1")
