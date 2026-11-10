@@ -4,10 +4,10 @@
              Godot's C# package version of the godot submodule (godot/version.py status "beta2" -> 4.8.0-beta.2). -->
         <GodotVersion>4.7.2</GodotVersion>
         <!-- Release number, one counter across all release branches (the next number after every v* tag). -->
-        <TwoDogRevision>158</TwoDogRevision>
+        <TwoDogRevision>159</TwoDogRevision>
         <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
              release's tag sets its own number. -->
-        <NativesRevision>158</NativesRevision>
+        <NativesRevision>159</NativesRevision>
         <!-- Prerelease label: Godot's status for a Godot prerelease (4.8.0.156-beta2), else the release branch label
              (4.7-rc releases 4.7.2.N-rc); empty for stable releases. -->
         <TwoDogPrerelease></TwoDogPrerelease>
