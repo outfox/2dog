@@ -10,6 +10,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   PRs must originate in `outfox/2dog`; the base repository check alone also matches fork PRs.
   PRs that only touch root Markdown or `AGENTS.md` files skip it. Docs changes run the CLI documentation contracts.
   `scripts/native_inputs.py` owns the committed native build/package inputs. Release counters and labels are excluded.
+  Only Poe's native entry point and global settings affect the native build identity; full pack recipes affect package stamps.
   Native releases are immutable: force builds may validate them, never replace published assets. Publish through a draft
   and keep old identities available to release tags and imported packages. Staging verifies the manifest's ZIP checksums.
   `release.nu` compares package fingerprints before reusing NativesRevision; payload packages carry that stamp too.

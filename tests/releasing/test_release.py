@@ -52,8 +52,13 @@ def --wrapped main [...args: string] {
         config => { print 'git@example.com:fork/godot.git' }
         '-C' => { if 'show' in $args { print ($env.LINE_VERSION_PY? | default '') } }
         show => {
-            print ($env.TEST_PROPS | str replace --regex '<NativesRevision>[^<]*</NativesRevision>'
-                ($env.LINE_TAG_PROPS? | default '<NativesRevision>46</NativesRevision>'))
+            if (($args | last) | str ends-with ':pyproject.toml') {
+                print '[tool.poe.tasks.build-godot]'
+                print 'cmd = "python build-godot.py"'
+            } else {
+                print ($env.TEST_PROPS | str replace --regex '<NativesRevision>[^<]*</NativesRevision>'
+                    ($env.LINE_TAG_PROPS? | default '<NativesRevision>46</NativesRevision>'))
+            }
         }
         update-index => {}
         checkout => {}

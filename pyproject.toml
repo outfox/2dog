@@ -33,8 +33,8 @@ cmd = "python build-godot.py"
 
 [tool.poe.tasks.build-managed]
 help = "dotnet pack: bindings, engine, Avalonia, Blazor, Qt, xUnit, NUnit, gdUnit, REPL, tool, templates and restore"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
-env = {TwoDogPrecision = "${precision}"}
+# Poe exports named arguments directly; env templates are evaluated before those arguments exist.
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
     { cmd = "python scripts/dotnet_build.py pack twodog.godotsharp ${POE_EXTRA_ARGS}" },
     { cmd = "python scripts/dotnet_build.py pack twodog.godotsharp.editor ${POE_EXTRA_ARGS}" },
@@ -53,11 +53,10 @@ sequence = [
 
 [tool.poe.tasks.build]
 help = "dotnet build: Platform packages (all platforms), twodog library, and NuGet packages"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
-env = {TwoDogPrecision = "${precision}"}
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
     { cmd = "python scripts/dotnet_build.py pack platforms -p:ForcePackAllPlatforms=true ${POE_EXTRA_ARGS}" },
-    { ref = "build-managed --precision ${precision} -- ${POE_EXTRA_ARGS}" },
+    { ref = "build-managed --precision ${TwoDogPrecision} -- ${POE_EXTRA_ARGS}" },
 ]
 
 [tool.poe.tasks.build-maui]
@@ -77,10 +76,10 @@ cmd = "python build-godot.py --no-editor --no-glue"
 # for other platforms from nuget.org, since 2dog.engine references all platforms.
 [tool.poe.tasks.build-local]
 help = "Fast partial build: incremental host-only libgodot (skips editor/glue), then the normal package build"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { ref = "build-godot-local --precision ${precision} ${POE_EXTRA_ARGS}" },
-    { ref = "build --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
+    { ref = "build-godot-local --precision ${TwoDogPrecision} ${POE_EXTRA_ARGS}" },
+    { ref = "build --precision ${TwoDogPrecision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.nuget-retire]
@@ -89,26 +88,25 @@ cmd = "python scripts/nuget_retire.py"
 
 [tool.poe.tasks.build-all]
 help = "Complete build: Godot engine, platform packages, twodog library, and NuGet packages"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { ref = "build-godot --precision ${precision} ${POE_EXTRA_ARGS}" },
-    { ref = "build --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
+    { ref = "build-godot --precision ${TwoDogPrecision} ${POE_EXTRA_ARGS}" },
+    { ref = "build --precision ${TwoDogPrecision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.build-android]
 help = "Experimental Android arm64/x64 natives and Java payloads (requires Android SDK, JDK 17 and desktop Mono glue)"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { ref = "build-godot --platform android --arch arm64 --precision ${precision} ${POE_EXTRA_ARGS}" },
-    { ref = "build-godot --platform android --arch x86_64 --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { ref = "build-godot --platform android --arch arm64 --precision ${TwoDogPrecision} ${POE_EXTRA_ARGS}" },
+    { ref = "build-godot --platform android --arch x86_64 --precision ${TwoDogPrecision} ${POE_EXTRA_ARGS}" },
     { cmd = "python scripts/build_android_java.py" },
-    { ref = "pack-android --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
+    { ref = "pack-android --precision ${TwoDogPrecision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.pack-android]
 help = "Pack experimental Android runtime and Java host packages"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
-env = {TwoDogPrecision = "${precision}"}
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
     { cmd = "python scripts/dotnet_build.py pack platforms/twodog.android-arm64/twodog.android-arm64.csproj ${POE_EXTRA_ARGS}" },
     { cmd = "python scripts/dotnet_build.py pack platforms/twodog.android-x64/twodog.android-x64.csproj ${POE_EXTRA_ARGS}" },
@@ -117,17 +115,16 @@ sequence = [
 
 [tool.poe.tasks.build-ios]
 help = "Experimental iOS device and Simulator archives (requires macOS with Xcode and desktop Mono glue)"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { ref = "build-godot --platform ios --precision ${precision} ${POE_EXTRA_ARGS}" },
-    { ref = "build-godot --platform ios --simulator --precision ${precision} ${POE_EXTRA_ARGS}" },
-    { ref = "pack-ios --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
+    { ref = "build-godot --platform ios --precision ${TwoDogPrecision} ${POE_EXTRA_ARGS}" },
+    { ref = "build-godot --platform ios --simulator --precision ${TwoDogPrecision} ${POE_EXTRA_ARGS}" },
+    { ref = "pack-ios --precision ${TwoDogPrecision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.pack-ios]
 help = "Pack experimental iOS runtime packages (the 2dog.ios host glue packs with build-maui, which needs the ios workload)"
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
-env = {TwoDogPrecision = "${precision}"}
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
     { cmd = "python scripts/dotnet_build.py pack platforms/twodog.ios-arm64/twodog.ios-arm64.csproj ${POE_EXTRA_ARGS}" },
     { cmd = "python scripts/dotnet_build.py pack platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.csproj ${POE_EXTRA_ARGS}" },
@@ -168,8 +165,7 @@ help = "Build and pack a complete host-platform double-precision 2dog distributi
 ref = "build-all --precision double"
 
 [tool.poe.tasks.build-engine-configurations]
-args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
-env = {TwoDogPrecision = "${precision}"}
+args = [{name = "TwoDogPrecision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
     {cmd = "python scripts/dotnet_build.py build twodog.engine -c Debug ${POE_EXTRA_ARGS}"},
     {cmd = "python scripts/dotnet_build.py build twodog.engine -c Release ${POE_EXTRA_ARGS}"},

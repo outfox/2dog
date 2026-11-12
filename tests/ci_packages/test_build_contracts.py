@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class NativeIdentityTests(unittest.TestCase):
-    def identity(self, props, tree=b"recipe", godot=b"a" * 40, kind="build"):
+    def identity(self, props, tree=b"recipe", godot=b"a" * 40, kind="build", poe=None):
         def git(command, *args, **kwargs):
             if command == "rev-parse":
                 return godot
@@ -27,6 +27,8 @@ class NativeIdentityTests(unittest.TestCase):
                 self.assertIn("nuget/webgpu", args)
                 self.assertIn("global.json", args)
                 return tree
+            if args[0].endswith(":pyproject.toml"):
+                return (poe or '[tool.poe.tasks.build-godot]\ncmd = "python build-godot.py"\n').encode()
             return props.encode()
         with patch.object(native_inputs, "git", side_effect=git):
             return native_inputs.fingerprint(kind=kind)
@@ -51,6 +53,14 @@ class NativeIdentityTests(unittest.TestCase):
         for stamp in (None, "old"):
             with self.subTest(stamp=stamp), self.assertRaises(ValueError):
                 check_published_natives.verify(package(stamp), "new")
+
+    def test_managed_poe_edits_do_not_invalidate_native_builds(self):
+        props = "<Project><EmscriptenVersion>3.1.56</EmscriptenVersion></Project>"
+        poe = '[tool.poe.tasks.build-godot]\ncmd = "python build-godot.py"\n'
+        baseline = self.identity(props, poe=poe)
+        self.assertEqual(baseline, self.identity(props, poe=poe + '[tool.poe.tasks.build]\ncmd = "pack differently"\n'))
+        self.assertNotEqual(baseline, self.identity(props, poe=poe.replace('build-godot.py', 'other-native-builder.py')))
+        self.assertNotEqual(baseline, self.identity(props, poe=poe + '[tool.poe.executor]\ntype = "uv"\nlocked = true\n'))
 
     def test_optional_workloads_use_pin_without_requiring_it_for_desktop_resolution(self):
         config = json.loads((ROOT / "global.json").read_text())

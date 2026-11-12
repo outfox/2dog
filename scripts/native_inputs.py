@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import tomllib
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,9 +14,9 @@ BUILD_INPUTS = (
     "build-godot.py", "scripts/native_inputs.py", "scripts/webgpu.py", "scripts/dotnet_build.py",
     "scripts/build_godot_assemblies.py",
     "scripts/build_android_java.py", "nuget/webgpu",
-    ".github/workflows/build-natives.yml", "global.json", "pyproject.toml", "uv.lock",
+    ".github/workflows/build-natives.yml", "global.json", "uv.lock",
 )
-PACKAGE_INPUTS = ("platforms", "nuget", "build", "Directory.Build.targets", "scripts/stage_natives_release.py")
+PACKAGE_INPUTS = ("platforms", "nuget", "build", "Directory.Build.targets", "scripts/stage_natives_release.py", "pyproject.toml")
 
 
 def git(*args, root=ROOT):
@@ -26,6 +27,11 @@ def fingerprint(ref="HEAD", godot=None, kind="build", root=ROOT):
     godot = godot or git("rev-parse", f"{ref}:godot", root=root).decode().strip()
     paths = (*BUILD_INPUTS, *(PACKAGE_INPUTS if kind == "package" else ()))
     tree = git("ls-tree", "-r", "--full-tree", ref, "--", *paths, root=root)
+    project = tomllib.loads(git("show", f"{ref}:pyproject.toml", root=root).decode())
+    poe = dict(project["tool"]["poe"])
+    # Managed pack/test recipe edits do not change natives; retain global Poe settings and the native entry point.
+    poe["tasks"] = {"build-godot": poe["tasks"]["build-godot"]}
+    native_poe = json.dumps(poe, sort_keys=True).encode()
     props = git("show", f"{ref}:Directory.Build.props", root=root).decode()
     emscripten = ET.fromstring(props).findtext(".//EmscriptenVersion")
     if kind == "package":
@@ -33,7 +39,7 @@ def fingerprint(ref="HEAD", godot=None, kind="build", root=ROOT):
         props = re.sub(r"<(GodotVersion|TwoDogRevision|NativesRevision|TwoDogPrerelease)>[^<]*</\1>", "", props)
     else:
         props = emscripten or ""
-    return hashlib.sha256(godot.encode() + b"\0" + tree + props.replace("\r\n", "\n").encode()).hexdigest()
+    return hashlib.sha256(godot.encode() + b"\0" + tree + native_poe + props.replace("\r\n", "\n").encode()).hexdigest()
 
 
 def file_hash(path):
