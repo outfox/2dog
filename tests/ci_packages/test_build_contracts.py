@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import unittest
 from unittest.mock import patch
+import xml.etree.ElementTree as ET
 import zipfile
 
 from scripts import check_published_natives, install_workloads, native_inputs, release_packages
@@ -85,6 +86,19 @@ class NativeIdentityTests(unittest.TestCase):
 
 
 class ReleaseGateTests(unittest.TestCase):
+    def test_release_includes_precision_specific_project_packages(self):
+        managed, _ = release_packages.expected_packages()
+        for project in ROOT.glob("twodog*/*.csproj"):
+            package_id = ET.fromstring(project.read_text()).findtext(".//PackageId", "")
+            if "$(TwoDogPackageSuffix)" not in package_id:
+                continue
+            for precision in ("single", "double"):
+                result = subprocess.run(["dotnet", "msbuild", str(project), "-nologo",
+                    f"-p:TwoDogPrecision={precision}", "-getProperty:PackageId"],
+                    capture_output=True, text=True, timeout=60)
+                self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                self.assertIn(result.stdout.strip().lower(), managed)
+
     def feed(self, root):
         managed, native = release_packages.expected_packages()
         for name in managed | native:

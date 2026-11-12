@@ -27,7 +27,7 @@ def expected_packages():
         "templates", "godotsharp", "godotsharp.editor", "engine", "avalonia", "blazor", "qt", "repl", "gdunit", "xunit", "nunit", "maui", "ios"))}
     native = {"2dog.android"}
     for precision in ("", ".double"):
-        managed.update(f"2dog.{name}{precision}" for name in ("engine", "godotsharp", "godotsharp.editor"))
+        managed.update(f"2dog.{name}{precision}" for name in ("engine", "godotsharp", "godotsharp.editor", "gdunit"))
         native.add(f"2dog.tools{precision}")
         for rid, variants in (("win-x64", ("debug", "release", "editor")), ("linux-x64", ("debug", "release", "editor")),
                               ("osx-arm64", ("debug", "release", "editor")), ("browser-wasm", ("debug", "release")),
