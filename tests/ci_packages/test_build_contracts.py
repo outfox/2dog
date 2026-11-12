@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import tempfile
 import shutil
+import subprocess
 import unittest
 from unittest.mock import patch
 import zipfile
@@ -16,6 +17,17 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class NativeIdentityTests(unittest.TestCase):
+    def test_native_stamp_is_only_the_fingerprint_with_locked_uv(self):
+        with tempfile.TemporaryDirectory(prefix="2dog-native-stamp-") as directory:
+            result = subprocess.run(["dotnet", "msbuild",
+                str(ROOT / "platforms/twodog.win-x64/twodog.win-x64.release.csproj"),
+                "-t:StampNativeInputs", f"-p:IntermediateOutputPath={Path(directory).as_posix()}/", "-nologo"],
+                env=os.environ | {"UV_LOCKED": "1"}, capture_output=True, text=True, timeout=60)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertNotIn("warning", result.stdout + result.stderr)
+            stamp = (Path(directory) / "native-inputs.txt").read_text().strip()
+            self.assertEqual(native_inputs.fingerprint(kind="package"), stamp)
+
     def identity(self, props, tree=b"recipe", godot=b"a" * 40, kind="build", poe=None):
         def git(command, *args, **kwargs):
             if command == "rev-parse":

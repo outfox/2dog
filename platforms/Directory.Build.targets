@@ -114,7 +114,7 @@
     </Target>
 
     <Target Name="StampNativeInputs" BeforeTargets="_GetPackageFiles">
-        <Exec Command="uv run --no-project python &quot;$(MSBuildThisFileDirectory)../scripts/native_inputs.py&quot; --kind package"
+        <Exec Command="uv run --project &quot;$(MSBuildThisFileDirectory)..&quot; --locked python &quot;$(MSBuildThisFileDirectory)../scripts/native_inputs.py&quot; --kind package"
               ConsoleToMSBuild="true" StandardOutputImportance="low">
             <Output TaskParameter="ConsoleOutput" PropertyName="NativePackageIdentity"/>
         </Exec>
