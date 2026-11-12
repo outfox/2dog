@@ -1,5 +1,5 @@
 name: Download CI inputs
-description: Download native and NuGet artifacts concurrently, then restore the expected workspace layout.
+description: Stage native and NuGet inputs and prepare uv for source builds that stamp native packages.
 inputs:
   precision:
     description: Package precision
@@ -13,6 +13,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      with:
+        python-version: '3.12'
+        enable-cache: false
     - uses: actions/download-artifact@v8
       with:
         pattern: "{godot-bin,${{ inputs.mobile == 'true' && 'nuget-packages' || 'runtime-packages' }}}-${{ inputs.precision }}"
