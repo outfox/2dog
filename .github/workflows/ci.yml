@@ -50,6 +50,11 @@ jobs:
           python-version: '3.12'
           enable-cache: false
 
+      - name: Warm pinned Chrome cache
+        uses: ./.github/actions/setup-chrome
+        with:
+          commit: if-missing
+
       - name: Test CI helpers
         run: |
           bash .github/scripts/find-tested-run.test.sh
@@ -1375,6 +1380,9 @@ jobs:
       - name: Install wasm-tools workload
         run: uv run poe install-workloads wasm-tools
 
+      - name: Setup pinned Chrome
+        uses: ./.github/actions/setup-chrome
+
       - name: Verify MSBuild configuration defaults
         if: matrix.flavor == 'checks'
         env:
@@ -1521,7 +1529,6 @@ jobs:
       - name: Run browser API smoke
         if: matrix.flavor == 'web' || matrix.flavor == 'webxr' || matrix.flavor == 'webmt'
         run: |
-          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           if [ -z "$CHROME" ]; then
             echo "::error::No Chrome/Chromium executable is available on the runner"
             exit 1
@@ -1610,7 +1617,6 @@ jobs:
       - name: Run gzip-only browser smoke
         if: matrix.flavor == 'web'
         run: |
-          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           cleanup() {
             if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
             if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
@@ -1695,7 +1701,6 @@ jobs:
             -p:WasmAppDir="$PWD/browser-exceptions-probe" -v:quiet
           uv run python -m http.server 8091 --bind 127.0.0.1 --directory browser-exceptions-probe > /tmp/2dog-exceptions-server.log 2>&1 &
           SERVER_PID=$!
-          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           "$CHROME" --headless=new --no-sandbox --disable-dev-shm-usage \
             --remote-debugging-port=9231 --user-data-dir=/tmp/2dog-exceptions-chrome \
             http://127.0.0.1:8091/index.html > /tmp/2dog-exceptions-chrome.log 2>&1 &
@@ -1711,7 +1716,6 @@ jobs:
       - name: Run Blazor browser smoke
         if: matrix.flavor == 'blazor'
         run: |
-          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           cleanup() {
             if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
             if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
@@ -1785,7 +1789,6 @@ jobs:
       - name: Run Blazor WebGPU browser restart smoke
         if: matrix.flavor == 'blazor' && matrix.precision == 'single' && matrix.aot == false
         run: |
-          CHROME=$(command -v google-chrome || command -v chromium || command -v chromium-browser)
           cleanup() {
             if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
             if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi
@@ -1901,6 +1904,9 @@ jobs:
           node-version: '24'
           package-manager-cache: false
 
+      - name: Setup pinned Chrome
+        uses: ./.github/actions/setup-chrome
+
       - name: Download WebGPU Mobile browser image test
         uses: actions/download-artifact@v8
         with:
@@ -1909,7 +1915,6 @@ jobs:
 
       - name: Verify browser WebGPU light lists, depth fog, ambient light and MSAA
         run: |
-          CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
           cleanup() {
             if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
             if [ -n "${SERVER_PID:-}" ]; then kill "$SERVER_PID" 2>/dev/null || true; fi

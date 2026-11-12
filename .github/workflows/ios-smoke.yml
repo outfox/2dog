@@ -32,7 +32,8 @@ jobs:
     name: Test iOS Simulator
     if: github.repository == 'outfox/2dog'
     runs-on: macos-26
-    timeout-minutes: 45
+    # Cold Release/AOT compilation takes about 25 minutes before Simulator boot and app checks.
+    timeout-minutes: ${{ inputs.configuration == 'Release' && 60 || 45 }}
     env:
       TwoDogPrecision: ${{ inputs.precision }}
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer

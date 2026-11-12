@@ -39,6 +39,9 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   its single `checks` cell runs MSBuild contracts and browser diagnostics. Portable showcase cells select
   Compatibility before publishing because double precision and threads do not support WebGPU. Keep
   WebGPU image coverage and single-precision Blazor WebGPU restart coverage enabled independently.
+  Pin Chrome through `actions/setup-chrome` and use its `CHROME` environment variable in every browser probe.
+  The image's Chrome 151 intermittently crashes threaded Wasm; Chrome 157 passed 64 identical Blacksmith probes.
+  `check-natives` warms the versioned Linux browser disk; consumers mount it read-only. macOS uses its tool cache.
 - `webgpu-browser-build` publishes the single-precision image-test bundle after pack; `webgpu-browser`
   consumes it without waiting for Web Smoke. The browser job gates deployment and requires the bundle job to
   succeed.

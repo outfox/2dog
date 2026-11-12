@@ -1,0 +1,30 @@
+name: Setup CI Chrome
+description: Pin the browser and reuse an immutable Chrome tool cache on Blacksmith.
+inputs:
+  commit:
+    description: Sticky disk commit mode; only the cache producer saves it.
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - id: pin
+      shell: bash
+      run: echo 'version=157.0.8103.78' >> "$GITHUB_OUTPUT"
+    - uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
+      if: runner.os == 'Linux'
+      with:
+        key: ${{ github.repository }}-chrome-${{ steps.pin.outputs.version }}-${{ runner.os }}-${{ runner.arch }}-v1
+        path: /tmp/2dog-chrome
+        commit: ${{ inputs.commit }}
+    - id: chrome
+      uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
+      env:
+        RUNNER_TOOL_CACHE: ${{ runner.os == 'Linux' && '/tmp/2dog-chrome' || runner.tool_cache }}
+      with:
+        chrome-version: ${{ steps.pin.outputs.version }}
+    - shell: bash
+      env:
+        CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+      run: |
+        echo "CHROME=$CHROME_PATH" >> "$GITHUB_ENV"
+        "$CHROME_PATH" --version
