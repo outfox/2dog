@@ -4,6 +4,7 @@ Run with: uv run python -m unittest discover -s tests/precision -v
 """
 import argparse
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -15,6 +16,8 @@ import unittest
 from unittest.mock import patch
 from xml.sax.saxutils import escape
 import zipfile
+from rich.console import Console
+from scripts import build_godot_assemblies
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("precision_build", ROOT / "build-godot.py")
@@ -35,18 +38,87 @@ class NativePrecisionTests(unittest.TestCase):
             old = Path.cwd()
             try:
                 os.chdir(scratch)
-                api = Path("godot/bin/GodotSharp/Api/Debug/GodotSharp.dll")
+                single = Path("godot/bin/GodotSharp/Api/Debug/GodotSharp.dll")
+                single.parent.mkdir(parents=True)
+                single.write_bytes(b"single bindings")
+                api = Path("godot/bin/double/GodotSharp/Api/Debug/GodotSharp.dll")
                 api.parent.mkdir(parents=True)
                 api.write_bytes(b"double bindings")
+                Path("godot/bin/double/GodotSharp/Tools/nupkgs").mkdir(parents=True)
                 build.generate_glue(config, "double")
                 self.assertEqual(b"double bindings", Path("godot/bin/double/GodotSharp/Api/Debug/GodotSharp.dll").read_bytes())
+                self.assertEqual(b"single bindings", single.read_bytes())
             finally:
                 os.chdir(old)
         commands = [call.args[0] for call in run.call_args_list]
         self.assertEqual(config.godot_exe, commands[0][0])
         self.assertEqual(["uv", "run"], commands[1][:2])
         self.assertEqual("double", commands[1][commands[1].index("--precision") + 1])
+        self.assertEqual("./bin/double", commands[1][commands[1].index("--godot-output-dir") + 1])
         self.assertFalse(any("--clear" in command for command in commands))
+
+    def test_editor_honors_the_symbol_option(self):
+        args = argparse.Namespace(precision="single", dev_build="no", scu_build="yes", cache_path="", debug_symbols="no")
+        with patch.object(build, "run_with_live_output") as run:
+            build.build_editor(args, build.get_platform_config("windows", "x86_64"))
+        self.assertIn("debug_symbols=no", run.call_args.args[0])
+        self.assertIn("separate_debug_symbols=no", run.call_args.args[0])
+
+    def test_tools_builder_isolates_its_hardcoded_output_and_preserves_failure(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            source = root / "godot/modules/mono/build_scripts/build_assemblies.py"
+            source.parent.mkdir(parents=True)
+            source.write_text('''from pathlib import Path
+import sys
+def run_msbuild(tools, sln, chdir_to, msbuild_args=None):
+    output = Path("bin/GodotSharp")
+    for arg in msbuild_args or []:
+        if arg.startswith("/p:GodotOutputDataDir="):
+            output = Path(arg.split("=", 1)[1])
+    output.mkdir(parents=True, exist_ok=True)
+    (output / "GodotTools.dll").write_bytes(b"double tools")
+    return 7
+def main():
+    sys.exit(run_msbuild(None, sln="GodotTools.sln", chdir_to=".", msbuild_args=["/p:GodotFloat64=true"]))
+''')
+            single = root / "godot/bin/GodotSharp/GodotTools.dll"
+            single.parent.mkdir(parents=True)
+            single.write_bytes(b"single tools")
+            old = Path.cwd()
+            try:
+                os.chdir(root / "godot")
+                with patch.object(build_godot_assemblies, "__file__", str(root / "scripts/wrapper.py")), \
+                        patch.object(sys, "argv", ["wrapper", "--godot-output-dir", "bin/double"]), \
+                        self.assertRaises(SystemExit) as error:
+                    build_godot_assemblies.main()
+                self.assertEqual(7, error.exception.code)
+                self.assertEqual(b"single tools", single.read_bytes())
+                self.assertEqual(b"double tools", (root / "godot/bin/double/GodotSharp/GodotTools.dll").read_bytes())
+            finally:
+                os.chdir(old)
+
+    def test_web_rejects_incompatible_emscripten_versions(self):
+        with patch.object(build, "read_pinned_emscripten_version", return_value="3.1.56"):
+            for version in ("3.1.560", "4.0.1"):
+                with patch.object(build.subprocess, "run", return_value=argparse.Namespace(
+                        stdout=f"emcc version {version}", returncode=0)), self.assertRaises(SystemExit):
+                    build.check_emscripten_version()
+
+
+class BuildOutputTests(unittest.TestCase):
+    def test_silent_success_and_failure_preserve_exit_codes_and_complete_logs(self):
+        with tempfile.TemporaryDirectory() as scratch, patch.object(build, "console", Console(file=io.StringIO(), force_terminal=False)):
+            old = Path.cwd()
+            try:
+                os.chdir(scratch)
+                build.run_with_live_output([sys.executable, "-c", "pass"])
+                with self.assertRaises(SystemExit) as error:
+                    build.run_with_live_output([sys.executable, "-c", "print('early diagnostic'); print('line\\n' * 70); raise SystemExit(7)"])
+                self.assertEqual(7, error.exception.code)
+                self.assertTrue(any("early diagnostic" in path.read_text() for path in Path("artifacts/native-logs").glob("*.log")))
+            finally:
+                os.chdir(old)
 
     def test_desktop_stages_only_the_double_native(self):
         with tempfile.TemporaryDirectory() as scratch:

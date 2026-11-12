@@ -1,7 +1,9 @@
 {
-  "$comment": "Any .NET 10 SDK works: latestFeature rolls forward to the newest installed 10.0.* band (that band needs the wasm-tools workload to publish the web host)",
+  "$comment": "Poe's optional installer reads workloadVersion. Keeping it outside sdk lets desktop builds run without that workload set. iOS matches Xcode 26.6.",
+  "workloadVersion": "10.0.401",
   "sdk": {
-    "version": "10.0.100",
-    "rollForward": "latestFeature"
+    "version": "10.0.403",
+    "rollForward": "disable",
+    "allowPrerelease": false
   }
 }

@@ -16,6 +16,23 @@ public class PackageVersionTests
         Assert.Equal(["4.7.2.153", "4.7.2.155", "4.8.0.156-beta2", "4.8.0.157-beta10", "4.8.0.158-rc1", "4.8.0.160"], ordered);
     }
 
+    // CI builds carry a ci label (Directory.Build.props) that sorts them after the release they follow and before the
+    // next: a labelled line keeps its revision, an unlabelled one takes the next.
+    [Fact]
+    public void CiBuilds_OrderBetweenReleases()
+    {
+        string[] versions = ["4.7.2.165", "4.7.2.165-ci.812", "4.7.2.164", "4.8.0.163-beta3.ci.812", "4.8.0.163-beta3", "4.8.0.164-beta3"];
+        var ordered = versions.Select(v => PackageVersion.Parse(v)!).Order().Select(v => v.Text).ToArray();
+        Assert.Equal(["4.7.2.164", "4.7.2.165-ci.812", "4.7.2.165", "4.8.0.163-beta3", "4.8.0.163-beta3.ci.812", "4.8.0.164-beta3"], ordered);
+    }
+
+    [Fact]
+    public void CiBuilds_OrderLargeRunIdsNumerically()
+    {
+        string[] versions = ["4.8.0.163-beta3.ci.100000000000", "4.8.0.163-beta3.ci.99999999999", "4.8.0.163-beta3.ci.9999999999"];
+        Assert.Equal(versions.Reverse(), versions.Select(v => PackageVersion.Parse(v)!).Order().Select(v => v.Text));
+    }
+
     [Theory]
     [InlineData("4.7.2.152", "4.7.2", false)]
     [InlineData("4.8.0.156-beta2", "4.8.0-beta.2", true)] // Godot's status names the Godot prerelease
@@ -27,6 +44,10 @@ public class PackageVersionTests
     [InlineData("4.8.0.154-beta.1", "4.8.0", false)] // 2dog labels carry no dot
     [InlineData("4.7.2.139-sora", "4.7.2", false)] // a fork's suffix is not an official label
     [InlineData("4.7.2.139-sora.2", "4.7.2", false)]
+    [InlineData("4.8.0.163-beta3.ci.812", "4.8.0-beta.3", true)] // a CI build means what the release it precedes means
+    [InlineData("4.7.2.165-ci.812", "4.7.2", true)]
+    [InlineData("4.7.2.139-sora.ci.3", "4.7.2", false)]
+    [InlineData("4.8.0.163-beta3.ci.43226235920", "4.8.0-beta.3", true)]
     public void GodotVersion_FollowsGodotsStatus(string version, string godot, bool official)
     {
         var parsed = PackageVersion.Parse(version)!;

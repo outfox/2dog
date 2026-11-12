@@ -57,6 +57,8 @@ class AndroidInputsTests(unittest.TestCase):
                 self.assertNotIn('2dog.avalonia', names)
                 self.assertTrue(ci.matches(output, precision, 'run:sha'))
                 self.assertFalse(ci.matches(output, precision, 'other-run:sha'))
+                ci.stage(feed, sdk, output, precision, 'run:1:sha', Path(directory) / 'natives')
+                self.assertFalse(ci.matches(output, precision, 'run:2:sha'))
                 self.assertFalse(ci.matches(output, 'double' if precision == 'single' else 'single', 'run:sha'))
 
     def test_missing_dependency_fails_before_replacing_a_good_input_set(self):

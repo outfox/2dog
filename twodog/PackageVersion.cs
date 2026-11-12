@@ -38,22 +38,34 @@ internal sealed class PackageVersion : IComparable<PackageVersion>, IEquatable<P
     /// 4.7.2.170-rc, or the early 4.8.0.155-beta) names only <see cref="GodotRelease"/>.
     /// </summary>
     public string GodotVersion =>
-        Label is { } label && _numbers.Revision >= 0
+        ReleaseLabel is { } label
         && System.Text.RegularExpressions.Regex.Match(label, @"^(dev|beta|rc)(\d+)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase) is { Success: true } godot
             ? $"{GodotRelease}-{godot.Groups[1].Value.ToLowerInvariant()}.{godot.Groups[2].Value}"
             : GodotRelease;
 
     /// <summary>Whether <see cref="GodotVersion"/> is all of the Godot version: false for a label without Godot's number.</summary>
-    public bool NamesGodotVersion => Label is null || GodotVersion != GodotRelease;
+    public bool NamesGodotVersion => (_numbers.Revision >= 0 ? ReleaseLabel : Label) is null || GodotVersion != GodotRelease;
+
+    /// <summary>
+    /// A 2dog version's label without the "ci.N" a CI build adds (4.8.0.163-beta3.ci.812 -> beta3, 4.7.2.165-ci.812 ->
+    /// null): CI builds mean what the release they precede means.
+    /// </summary>
+    private string? ReleaseLabel =>
+        Label is { } label && _numbers.Revision >= 0
+        && System.Text.RegularExpressions.Regex.Replace(label, @"(^|\.)ci\.\d+$", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase) is { Length: > 0 } release
+            ? release
+            : null;
 
     /// <summary>
     /// An official prerelease, as opposed to a fork's custom suffix ("4.7.2.139-sora.2"): a 2dog label (4.8.0.156-beta2,
     /// 4.7.2.170-rc) or Godot's own package form (Godot.NET.Sdk 4.8.0-beta.2, 4.8.0-dev.7).
     /// </summary>
     public bool IsOfficialPrerelease =>
-        Label is { } label && System.Text.RegularExpressions.Regex.IsMatch(label,
-            _numbers.Revision < 0 ? @"^(dev|beta|rc)(\.\d+)*$" : @"^(dev|beta|rc)\d*$",
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        Label is { } label && (_numbers.Revision < 0
+            ? System.Text.RegularExpressions.Regex.IsMatch(label, @"^(dev|beta|rc)(\.\d+)*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+            // No release label left: a CI build of a release (4.7.2.165-ci.812).
+            : ReleaseLabel is not { } release
+              || System.Text.RegularExpressions.Regex.IsMatch(release, @"^(dev|beta|rc)\d*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase));
 
     /// <summary>The version in a NuGet version string, exact-pin brackets and build metadata ignored; null when unreadable.</summary>
     public static PackageVersion? Parse(string? text)

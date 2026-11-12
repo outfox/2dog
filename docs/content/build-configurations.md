@@ -186,6 +186,16 @@ x64, macOS arm64, browser and Android packages. It also does these steps:
   checkout.
 - It restores `2dog.tests.slnf`.
 
+Branch and pull-request builds carry a `ci.<run-id>` prerelease suffix.
+They sort above the release they follow and below the next release. Repacking
+on another attempt keeps the same version so consumer-only retries work.
+Importing refreshed artifacts replaces changed bytes in the local cache.
+Release-tag builds keep their release versions.
+The downloader records the suffix in `packages/ci-packages.props`; local
+builds use it only while the checkout's Godot and revision values still match.
+Native SDK/binding downloads use the recorded native build identity, which
+includes the build scripts and toolchain pins as well as the Godot commit.
+
 Use the same command in the checkout on each operating system.
 
 These options change what the command does:

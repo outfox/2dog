@@ -31,14 +31,17 @@ def api(repo, endpoint):
     return json.loads(command("gh", "api", f"repos/{repo}/{endpoint}", capture=True))
 
 
-def versions(path):
-    props = ET.parse(path).getroot()
-    godot = props.findtext(".//GodotVersion")
-    release = godot.split("-")[0]  # 2dog versions use Godot's numbers only
-    label = props.findtext(".//TwoDogPrerelease")
-    managed = f"{release}.{props.findtext('.//TwoDogRevision')}" + (f"-{label}" if label else "")
-    native = f"{release}.{props.findtext('.//NativesRevision')}"
-    return godot, normalize_version(managed), normalize_version(native)
+def build_suffix(run, ref):
+    """The ci label of a run's packages (TwoDogBuildSuffix); empty for a release tag's run."""
+    return "" if ref.startswith("refs/tags/v") else f"ci.{run['id']}"
+
+
+def versions(suffix):
+    # A global property beats Directory.Build.props' CI rule and the imported ci-packages.props.
+    props = json.loads(command("dotnet", "msbuild", "twodog.engine/twodog.engine.csproj", f"-p:TwoDogBuildSuffix={suffix}",
+                               "-getProperty:GodotVersion", "-getProperty:TwoDogVersion", "-getProperty:NativesVersion",
+                               capture=True))["Properties"]
+    return props["GodotVersion"], normalize_version(props["TwoDogVersion"]), normalize_version(props["NativesVersion"])
 
 
 def normalize_version(value):
@@ -143,7 +146,9 @@ def collect_packages(staging, precisions, expected, source_commit, native_commit
     return list(packages.values())
 
 
-def extract_checked(path, destination, required):
+def extract_checked(path, destination, required, expected_sha256=None):
+    if expected_sha256 is not None and file_hash(path).hex() != expected_sha256:
+        raise ValueError(f"Native archive checksum mismatch: {path.name}")
     with zipfile.ZipFile(path) as archive:
         members = archive.namelist()
         for pattern in required:
@@ -206,7 +211,6 @@ def pull(args):
               f"expires {artifact['expires_at']}", flush=True)
     if args.plan:
         return
-    expected = versions(ROOT / "Directory.Build.props")
     scratch = ROOT / "temp"
     scratch.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="ci-packages-", dir=scratch) as directory:
@@ -214,12 +218,33 @@ def pull(args):
         for name in names:
             command("gh", "run", "download", run["id"], "--repo", args.repo,
                     "--name", name, "--dir", staging / name)
+        metadata = staging / names[0] / "ci-build.json"
+        # Older runs have unsuffixed packages. New runs record the actual ref, including tag/branch kind.
+        suffix = ""
+        if metadata.is_file():
+            build = json.loads(metadata.read_text(encoding="utf-8"))
+            if (str(run["id"]) != build["GITHUB_RUN_ID"] or build["GITHUB_SHA"] != run["head_sha"]
+                    or not 1 <= int(build["GITHUB_RUN_ATTEMPT"]) <= int(run["run_attempt"])):
+                raise ValueError("Package artifacts belong to a different CI attempt")
+            suffix = build_suffix(run, build["GITHUB_REF"])
+        expected = versions(suffix)
         packages = collect_packages(staging, precisions, expected, run["head_sha"], native_commit)
         bindings = []
         for precision in precisions:
             assets = staging / f"bindings-{precision}"
             assets.mkdir()
-            tag = f"godot-{native_commit[:7]}" + ("-double" if precision == "double" else "")
+            native_build = None
+            metadata = staging / f"nuget-packages-{precision}" / f"native-build-{precision}.json"
+            if metadata.is_file():
+                native_build = json.loads(metadata.read_text(encoding="utf-8"))
+                tag = native_build["tag"]
+                if (native_build["godot"] != native_commit or native_build["precision"] != precision
+                        or not re.fullmatch(r"godot-[0-9a-f]{64}" + ("-double" if precision == "double" else ""), tag)
+                        or tag != f"godot-{native_build['identity']}" + ("-double" if precision == "double" else "")):
+                    raise ValueError("Native build metadata does not match the selected run")
+            else:
+                # Legacy runs predate input fingerprints and used the shortened gitlink.
+                tag = f"godot-{native_commit[:7]}" + ("-double" if precision == "double" else "")
             command("gh", "release", "download", tag, "--repo", args.repo, "--dir", assets,
                     "--pattern", "godotsharp.zip", "--pattern", "godotsharp-nupkgs.zip",
                     "--pattern", "godot-source-generators.zip")
@@ -228,7 +253,8 @@ def pull(args):
                 ("godotsharp-nupkgs", [f"Godot.NET.Sdk.{expected[0]}.nupkg"]),
                 ("godot-source-generators", ["Godot.SourceGenerators.dll"]),
             ):
-                extract_checked(assets / f"{name}.zip", assets / name, required)
+                extract_checked(assets / f"{name}.zip", assets / name, required,
+                                native_build["assets"][f"{name}.zip"] if native_build else None)
             sdk = [inspect_package(p) for p in (assets / "godotsharp-nupkgs").glob("*.nupkg")]
             if any(p.version != expected[0] for p in sdk):
                 raise ValueError("Godot SDK package versions do not match this checkout")
@@ -251,6 +277,13 @@ def pull(args):
         manifest = {"run": run["html_url"], "commit": run["head_sha"], "godot": native_commit,
                     "precision": args.precision, "packages": {p.id: p.version for p in packages}}
         (feed / "ci-packages.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        # Directory.Build.props imports this, so local builds and the restore below ask for the imported versions.
+        checkout = ET.parse(ROOT / "Directory.Build.props").getroot()
+        condition = " And ".join(f"'$({name})' == '{checkout.findtext('.//' + name)}'" for name in
+                                 ("GodotVersion", "TwoDogRevision", "NativesRevision", "TwoDogPrerelease"))
+        (feed / "ci-packages.props").write_text(
+            f'<Project><PropertyGroup Condition="{condition}"><TwoDogBuildSuffix>{suffix}</TwoDogBuildSuffix></PropertyGroup></Project>\n',
+            encoding="utf-8")
         print(f"Imported {len(packages)} packages into {feed}; refreshed {refreshed} stale cache entries.", flush=True)
     if not args.no_restore:
         for precision in precisions:

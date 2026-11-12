@@ -34,4 +34,18 @@ for missing in godot-bin nuget-packages; do
   test ! -e "$root/godot"
   test ! -e "$root/packages"
 done
+root="$scratch/web-inputs"
+mkdir -p "$root/.ci/downloads/godot-bin-single/bin" "$root/.ci/downloads/runtime-packages-single"
+printf 'core package' > "$root/.ci/downloads/runtime-packages-single/core.nupkg"
+if (cd "$root" && WEB_INPUTS=true PACKAGE_INPUT=runtime-packages bash "$script" single); then
+  echo 'Accepted missing Web inputs'; exit 1
+fi
+test ! -e "$root/godot"
+mkdir -p "$root/.ci/downloads/godot-web-single/godot/bin/web" "$root/.ci/downloads/godot-web-single/packages"
+printf 'web payload' > "$root/.ci/downloads/godot-web-single/godot/bin/web/native"
+printf 'web package' > "$root/.ci/downloads/godot-web-single/packages/browser.nupkg"
+(cd "$root" && WEB_INPUTS=true PACKAGE_INPUT=runtime-packages bash "$script" single)
+test "$(cat "$root/godot/bin/web/native")" = 'web payload'
+test "$(cat "$root/packages/core.nupkg")" = 'core package'
+test "$(cat "$root/packages/browser.nupkg")" = 'web package'
 echo 'PASS: concurrent artifact staging preserves both layouts and rejects incomplete downloads'

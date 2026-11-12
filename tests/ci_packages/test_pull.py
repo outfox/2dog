@@ -10,6 +10,19 @@ from scripts import pull_ci_packages as pull
 
 
 class PullPackagesTests(unittest.TestCase):
+    def test_native_archive_checksum_is_checked_before_extraction(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "sdk.zip"
+            with zipfile.ZipFile(archive, "w") as package:
+                package.writestr("SDK.nupkg", b"fork SDK")
+            output = root / "extracted"
+            with self.assertRaisesRegex(ValueError, "checksum"):
+                pull.extract_checked(archive, output, ["SDK.nupkg"], "wrong build")
+            self.assertFalse(output.exists())
+            pull.extract_checked(archive, output, ["SDK.nupkg"], pull.file_hash(archive).hex())
+            self.assertEqual(b"fork SDK", (output / "SDK.nupkg").read_bytes())
+
     def test_selects_previous_available_run_when_latest_only_reuses_checks(self):
         def api(_repo, endpoint):
             if endpoint.endswith("/artifacts?per_page=100"):
@@ -22,6 +35,22 @@ class PullPackagesTests(unittest.TestCase):
                 patch.object(pull, "api", side_effect=api):
             run, _artifacts = pull.choose_run("outfox/2dog", "webgpu", None, ("single",))
         self.assertEqual(run["id"], 1)
+
+    def test_branch_runs_import_the_next_revision_with_their_ci_label(self):
+        run = {"id": 9, "run_attempt": 2}
+        self.assertEqual(pull.build_suffix(run, "refs/tags/v4.7.2.164"), "")
+        self.assertEqual(pull.build_suffix(run, "refs/tags/v4.8.0.163-beta3"), "")
+        self.assertEqual(pull.build_suffix(run, "refs/heads/ci/4.7/abc1234"), "ci.9")
+        self.assertEqual(pull.build_suffix(run, "refs/heads/v4.7.2.164"), "ci.9")
+        self.assertEqual(pull.build_suffix(run | {"run_attempt": 3}, "refs/heads/main"), "ci.9")
+        _, release, _ = pull.versions("")
+        _, managed, native = pull.versions("ci.9")
+        self.assertRegex(managed, r"[.-]ci\.9$")
+        self.assertRegex(native, r"-ci\.9$")
+        # Between the release it follows and the next: a labelled line keeps its revision (the longer label sorts
+        # higher), an unlabelled one takes the next revision.
+        revision = lambda version: int(version.split("-")[0].split(".")[3])
+        self.assertEqual(revision(managed), revision(release) + (0 if "-" in release else 1))
 
     def test_rejects_expired_or_missing_precision(self):
         artifacts = [{"name": "nuget-packages-single", "expired": False},

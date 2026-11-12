@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 # Exits 0 when the natives release <tag> holds every asset build-natives.yml produces and ci.yml's pack job stages.
-# A release missing any of them (left by an interrupted upload, or created before the Android payloads existed) is
-# rebuilt rather than reused. Keep this list in step with the build-natives.yml artifacts.
+# An incomplete draft can be repaired; incomplete published identities require intervention.
+# Keep this list in step with the build-natives.yml artifacts.
 set -euo pipefail
 tag="$1"
+if [ "$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json isDraft -q .isDraft 2>/dev/null)" != false ]; then
+  echo "Release $tag is missing or still a draft"
+  exit 1
+fi
 if ! assets=$(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets -q '.assets[].name' 2>/dev/null); then
   echo "Release $tag does not exist"
   exit 1
 fi
-expected=(godotsharp.zip godotsharp-nupkgs.zip godot-source-generators.zip godot-editor-linux-x64.zip
+expected=(native-build.json godotsharp.zip godotsharp-nupkgs.zip godot-source-generators.zip godot-editor-linux-x64.zip
   godot-android-java.zip
   libgodot-browser-wasm-template_debug.zip libgodot-browser-wasm-template_release.zip
   libgodot-browser-wasm-threads-template_debug.zip libgodot-browser-wasm-threads-template_release.zip)

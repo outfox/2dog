@@ -43,8 +43,8 @@ internal static class ToolVersions
         var bParts = bLabel.Split('.');
         for (var i = 0; i < Math.Min(aParts.Length, bParts.Length); i++)
         {
-            var aNumeric = int.TryParse(aParts[i], out var aValue);
-            var bNumeric = int.TryParse(bParts[i], out var bValue);
+            var aNumeric = long.TryParse(aParts[i], out var aValue);
+            var bNumeric = long.TryParse(bParts[i], out var bValue);
             var part = aNumeric && bNumeric ? aValue.CompareTo(bValue)
                 : aNumeric != bNumeric ? aNumeric ? -1 : 1
                 : string.Compare(aParts[i], bParts[i], StringComparison.OrdinalIgnoreCase);

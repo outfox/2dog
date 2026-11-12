@@ -1,5 +1,7 @@
 """Exercise CI's native release layout without requiring native toolchains."""
 import importlib.util
+import hashlib
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -75,6 +77,22 @@ class NativeReleaseStagingTests(unittest.TestCase):
             (root / "assets/libgodot-iossimulator-arm64-template_debug.zip").unlink()
             with self.assertRaises(FileNotFoundError):
                 staging.stage(root / "assets", root, "double")
+            self.assertFalse((root / "godot/bin").exists())
+
+    def test_release_checksums_and_identity_are_verified_before_any_extraction(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            assets = root / "assets"
+            self.release(assets, "single")
+            metadata = dict(identity="current", precision="single", tag="godot-current", assets={
+                path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in assets.glob("*.zip")})
+            (assets / "native-build.json").write_text(json.dumps(metadata))
+            with self.assertRaisesRegex(ValueError, "identity"):
+                staging.stage(assets, root, "single", "old")
+            path = assets / "libgodot-ios-arm64-template_release.zip"
+            path.write_bytes(path.read_bytes() + b"corrupt")
+            with self.assertRaisesRegex(ValueError, "checksum"):
+                staging.stage(assets, root, "single", "current")
             self.assertFalse((root / "godot/bin").exists())
 
 

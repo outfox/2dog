@@ -111,10 +111,6 @@ def detached [start: string, work: closure] {
     if $failure != null { error make {msg: $failure} }
 }
 
-# Files whose changes alter the native packages (platform packages, their staging and metadata), besides the godot
-# pin: that is compared on its own, because another line's pin is not HEAD's.
-const NATIVE_INPUTS = [platforms nuget build scripts/stage_natives_release.py]
-
 # Release the current branch at the Godot version its fork builds: a stable Godot publishes stable versions (or a
 # 2dog prerelease labeled by the branch, 4.7-rc), a Godot prerelease publishes under Godot's status (4.8.0.155-beta2).
 # Every release takes the next number after all release tags on origin.
@@ -234,7 +230,12 @@ def main [
         if (^git cat-file -e $"($sha)^{commit}" | complete).exit_code != 0 {
             git fetch --quiet --no-tags origin $sha | ignore
         }
-        (git rev-parse $"($sha):godot") == $pinned and (^git diff --quiet $sha HEAD -- ...$NATIVE_INPUTS | complete).exit_code == 0
+        let built_inputs = (^uv run --no-project python scripts/native_inputs.py --kind package --ref $sha | complete)
+        let current_inputs = (^uv run --no-project python scripts/native_inputs.py --kind package --godot $pinned | complete)
+        if $built_inputs.exit_code != 0 or $current_inputs.exit_code != 0 {
+            error make {msg: $"Cannot identify native inputs: ($built_inputs.stderr)($current_inputs.stderr)"}
+        }
+        ($built_inputs.stdout | str trim) == ($current_inputs.stdout | str trim)
     }
     let next_natives = if $reuse { $natives } else { $next }
 

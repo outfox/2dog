@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+from collections import deque
 import os
 import platform
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -299,10 +301,15 @@ def parse_arguments():
 def run_with_live_output(cmd, cwd=None, description="Running command..."):
     """Run a subprocess with live output streaming and elapsed time."""
     start_time = time.time()
-    all_output: list[str] = []  # Capture all output for error reporting
+    all_output = deque(maxlen=50)
+    last_line = "(no output)"
+    mins = secs = 0
+    log_dir = Path("artifacts/native-logs")
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_path = log_dir / f"build-{time.time_ns()}.log"
 
     # Create a display for the running command
-    with Live(console=console, refresh_per_second=4) as live:
+    with log_path.open("w", encoding="utf-8") as log, Live(console=console, refresh_per_second=4, auto_refresh=console.is_terminal) as live:
         process = subprocess.Popen(
             cmd,
             cwd=cwd,
@@ -318,6 +325,10 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
             if line:
                 line_stripped = line.rstrip()
                 all_output.append(line_stripped)
+                log.write(line)
+                log.flush()
+                if not console.is_terminal:
+                    console.print(line, end="", markup=False, highlight=False)
 
                 if line_stripped:
                     last_line = line_stripped
@@ -335,6 +346,7 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
                     live.update(display)
 
         process.wait()
+        process.stdout.close()
 
         # Final display update
         display = Text()
@@ -358,11 +370,12 @@ def run_with_live_output(cmd, cwd=None, description="Running command..."):
             console.print()
             console.print(
                 Panel(
-                    rich.markup.escape("\n".join(all_output[-50:])),  # Show last 50 lines
+                    rich.markup.escape("\n".join(all_output)),
                     title="[bold red]Error Output (last 50 lines)[/bold red]",
                     border_style="red",
                 )
             )
+            console.print(f"Full log: {log_path}")
             sys.exit(process.returncode)
 
         total_elapsed = time.time() - global_start_time
@@ -427,8 +440,8 @@ def build_editor(args, platform_config: PlatformConfig):
         "d3d12=no",
         f"dev_build={args.dev_build}",
         f"scu_build={args.scu_build}",
-        "debug_symbols=true",
-        "separate_debug_symbols=true",
+        f"debug_symbols={getattr(args, 'debug_symbols', 'no')}",
+        f"separate_debug_symbols={getattr(args, 'debug_symbols', 'no')}",
     ]
     if args.cache_path:
         cmd.append(f"cache_path={args.cache_path}")
@@ -463,24 +476,25 @@ def read_pinned_emscripten_version() -> str:
 
 
 def check_emscripten_version():
-    """Warn if the local emcc does not match the pinned version. The web
+    """Reject an emcc that does not match the pinned version. The web
     libgodot.a is statically linked into dotnet.native.wasm, so the
     toolchains must agree."""
     pinned = read_pinned_emscripten_version()
     if not pinned:
         console.print("[bold yellow]No <EmscriptenVersion> pin found in Directory.Build.props[/bold yellow]")
-        return
+        sys.exit(1)
     try:
         out = subprocess.run(["emcc", "--version"], capture_output=True, text=True, shell=(sys.platform == "win32"))
         first_line = out.stdout.splitlines()[0] if out.stdout else ""
     except FileNotFoundError:
         console.print("[bold red]emcc not found on PATH - install/activate emsdk " f"{pinned}[/bold red]")
         sys.exit(1)
-    if pinned not in first_line:
+    if out.returncode != 0 or not re.search(r"(?<![\d.])" + re.escape(pinned) + r"(?![\d.])", first_line):
         console.print(
             f"[bold yellow]WARNING: emcc version mismatch - pinned {pinned}, found: {first_line}\n"
             "The web libgodot.a must be built with the same emscripten as the .NET runtime pack.[/bold yellow]"
         )
+        sys.exit(1)
 
 
 def build_libgodot_web(args):
@@ -696,11 +710,11 @@ def generate_glue(platform_config: PlatformConfig, precision: str = "single"):
     run_with_live_output(
         [
             "uv", "run", "--project", "..", "python",
-            "./modules/mono/build_scripts/build_assemblies.py",
+            "../scripts/build_godot_assemblies.py",
             "--godot-platform",
             platform_config.godot_platform,
             "--godot-output-dir",
-            "./bin",
+            "./bin/double" if precision == "double" else "./bin",
             "--precision", precision,
         ],
         cwd="godot",
@@ -708,7 +722,8 @@ def generate_glue(platform_config: PlatformConfig, precision: str = "single"):
     )
     if precision == "double":
         import shutil
-        shutil.copytree("godot/bin/GodotSharp", "godot/bin/double/GodotSharp", dirs_exist_ok=True)
+        # The fork SDK feed is precision-neutral; API and tool assemblies stay in the selected tree.
+        shutil.copytree("godot/bin/double/GodotSharp/Tools/nupkgs", "godot/bin/GodotSharp/Tools/nupkgs", dirs_exist_ok=True)
 
 
 def main():

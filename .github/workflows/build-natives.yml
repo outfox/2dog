@@ -16,7 +16,7 @@ on:
         type: boolean
         default: true
       force:
-        description: 'Force rebuild even if release exists'
+        description: 'Rebuild for validation, keeping existing published assets'
         type: boolean
         default: false
   workflow_dispatch:
@@ -31,7 +31,7 @@ on:
         type: boolean
         default: true
       force:
-        description: 'Force rebuild even if release exists'
+        description: 'Rebuild for validation, keeping existing published assets'
         type: boolean
         default: false
 
@@ -39,19 +39,20 @@ permissions:
   contents: write
 
 env:
+  UV_LOCKED: '1'
   NATIVE_SUBDIR: ${{ inputs.precision == 'double' && 'double/' || '' }}
   NATIVE_SUFFIX: ${{ inputs.precision == 'double' && '.double' || '' }}
   RELEASE_SUFFIX: ${{ inputs.precision == 'double' && '-double' || '' }}
 
 jobs:
-  # Quick check: compute submodule hash and see if a complete release already exists.
+  # Reuse only a complete release of these committed native build inputs.
   preflight:
     if: github.repository == 'outfox/2dog'
     name: Preflight
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 5
     outputs:
-      submodule-hash: ${{ steps.hash.outputs.hash }}
+      build-identity: ${{ steps.hash.outputs.hash }}
       line: ${{ steps.hash.outputs.line }}
       skip: ${{ steps.check-release.outputs.skip }}
 
@@ -59,12 +60,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Compute submodule hash
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Compute native input fingerprint
         id: hash
         run: |
-          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
+          HASH=$(uv run --no-project python scripts/native_inputs.py)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "Godot submodule hash: $HASH"
+          echo "Native input fingerprint: $HASH"
           # The SCons caches' fallback prefixes would otherwise restore the other Godot line's cache.
           LINE=$(sed -nE 's#.*<GodotVersion>([0-9]+\.[0-9]+)\..*#\1#p' Directory.Build.props)
           test -n "$LINE" || { echo "::error::No <GodotVersion> in Directory.Build.props."; exit 1; }
@@ -114,7 +121,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Install Linux dependencies
         run: |
@@ -140,7 +147,7 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ needs.preflight.outputs.submodule-hash }}
+          key: godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ needs.preflight.outputs.build-identity }}
           restore-keys: |
             godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-
 
@@ -152,7 +159,7 @@ jobs:
 
       - name: Build editor + GodotSharp assemblies
         run: |
-          uv run build-godot.py --precision ${{ inputs.precision }} \
+          uv run poe build-godot --precision ${{ inputs.precision }} \
             --no-library \
             --debug-symbols no \
             --dev-build no \
@@ -161,6 +168,7 @@ jobs:
       - name: Upload GodotSharp assemblies
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: godotsharp-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}GodotSharp/
           if-no-files-found: error
@@ -169,6 +177,7 @@ jobs:
       - name: Upload GodotSharp NuGet packages
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: godotsharp-nupkgs-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}GodotSharp/Tools/nupkgs/
           if-no-files-found: error
@@ -177,6 +186,7 @@ jobs:
       - name: Upload source generators
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: godot-source-generators-${{ inputs.precision }}
           path: godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/Godot.SourceGenerators.dll
           if-no-files-found: error
@@ -185,12 +195,23 @@ jobs:
       - name: Upload Linux editor binary
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: godot-editor-linux-x64-${{ inputs.precision }}
           path: |
             godot/bin/godot.linuxbsd.editor${{ env.NATIVE_SUFFIX }}.x86_64.executable.mono
             godot/bin/libgodot_webgpu_dawn.so
             godot/bin/webgpu/linux-x64/licenses/
           if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve native build logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          overwrite: true
+          name: native-${{ needs.preflight.outputs.line }}-godotsharp-${{ inputs.precision }}-logs
+          path: artifacts/native-logs/
+          if-no-files-found: ignore
           retention-days: 7
 
   # Build native libgodot libraries for all platform/variant combinations.
@@ -408,14 +429,14 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
+          key: libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.build-identity }}
           restore-keys: |
             libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
 
       # Build using build-godot.py with platform/arch overrides
       - name: Build libgodot (${{ matrix.target }})
         run: |
-          uv run build-godot.py --precision ${{ inputs.precision }} \
+          uv run poe build-godot --precision ${{ inputs.precision }} \
             --platform ${{ matrix.platform }} \
             --arch ${{ matrix.arch }} \
             --target ${{ matrix.target }} \
@@ -439,6 +460,7 @@ jobs:
         if: matrix.platform != 'web' && matrix.platform != 'android' && matrix.platform != 'ios'
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
           path: |
             godot/bin/${{ env.NATIVE_SUBDIR }}*godot.${{ matrix.platform }}.${{ matrix.target }}${{ env.NATIVE_SUFFIX }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
@@ -453,6 +475,7 @@ jobs:
         if: matrix.platform == 'web'
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: libgodot-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}web${{ matrix.flavor }}/${{ matrix.target }}/
           if-no-files-found: error
@@ -464,6 +487,7 @@ jobs:
         if: matrix.platform == 'android'
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}android/${{ matrix.target }}/${{ matrix.arch }}/
           if-no-files-found: error
@@ -473,9 +497,20 @@ jobs:
         if: matrix.platform == 'ios'
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}ios/${{ matrix.target }}/${{ matrix.rid }}/
           if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve native build logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          overwrite: true
+          name: native-${{ needs.preflight.outputs.line }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ inputs.precision }}-logs
+          path: artifacts/native-logs/
+          if-no-files-found: ignore
           retention-days: 7
 
   # Godot's Android Java host (godot.aar, debug + release) for the 2dog.android package. Gradle only compiles Java and
@@ -520,6 +555,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: godot-android-java-${{ inputs.precision }}
           path: godot/bin/android/java/
           if-no-files-found: error
@@ -534,13 +570,21 @@ jobs:
     if: github.repository == 'outfox/2dog' && (needs.preflight.outputs.skip != 'true' && inputs.create_release)
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
-    # Serialize the delete+create against concurrent creators of the same hash
-    # (including manual force dispatches).
+    # Serialize draft publication against concurrent creators, including manual force dispatches.
     concurrency:
-      group: natives-release-${{ inputs.precision }}-${{ needs.preflight.outputs.submodule-hash }}
+      group: natives-release-${{ inputs.precision }}-${{ needs.preflight.outputs.build-identity }}
       cancel-in-progress: false
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
       # In workflow_call mode this downloads all artifacts of the *caller's*
       # run. Safe only because `needs` orders this job strictly before ci.yml's
       # pack job uploads its own artifacts.
@@ -563,21 +607,35 @@ jobs:
           done
           echo "Release assets:"
           ls -lh release-assets/
+          uv run --no-project python scripts/native_inputs.py --assets release-assets --precision '${{ inputs.precision }}'
 
       - name: Create Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="godot-${{ needs.preflight.outputs.submodule-hash }}${RELEASE_SUFFIX}"
-          # Delete existing release if present (force rebuild case)
-          gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          TAG="godot-${{ needs.preflight.outputs.build-identity }}${RELEASE_SUFFIX}"
+          # Published identities are immutable, including after a manual force rebuild.
+          if bash scripts/check_natives_release.sh "$TAG"; then
+            echo "Keeping the complete published release $TAG"
+            exit 0
+          fi
+          if draft=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [ "$draft" != true ]; then
+              echo "::error::Published release $TAG is incomplete; refusing to replace published bytes."
+              exit 1
+            fi
+            gh release upload "$TAG" --repo "$GITHUB_REPOSITORY" --clobber release-assets/*
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false
+            exit 0
+          fi
           gh release create "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
             --latest=false \
             --prerelease \
+            --draft --target "$GITHUB_SHA" \
             --title "Godot Native Libraries ($TAG)" \
             --notes "$(cat <<'EOF'
-          ## ${{ inputs.precision }}-precision Native Libraries for Godot submodule ${{ needs.preflight.outputs.submodule-hash }}
+          ## ${{ inputs.precision }}-precision Native Libraries for input fingerprint ${{ needs.preflight.outputs.build-identity }}
 
           Auto-generated native library build. Used by the `ci.yml` workflow to avoid rebuilding Godot from source on every push.
 
@@ -598,27 +656,6 @@ jobs:
           EOF
           )" \
             release-assets/*
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false
 
-      # Keep the newest 5 cache releases per precision, plus every Godot line's pin on the default branch (its godot
-      # gitlink and godot-lines.json): a stable line bumps godot rarely and would otherwise rebuild every native once
-      # another line went through five pins. --cleanup-tag also removes the git tag gh release create left behind.
-      # Accepted consequence: any other branch whose hash was pruned rebuilds inline on its next push.
-      - name: Prune old native releases
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if ! pinned=$(gh api "repos/$GITHUB_REPOSITORY/contents/godot" --jq '"godot-\(.sha[0:7])"' &&
-              gh api "repos/$GITHUB_REPOSITORY/contents/godot-lines.json" -H "Accept: application/vnd.github.raw" \
-                --jq '.[] | "godot-\(.commit[0:7])"'); then
-            echo "::warning::Could not read the Godot lines' pins; pruning nothing this time."
-            exit 0
-          fi
-          gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,publishedAt \
-            -q '[.[] | select(.tagName | test("^godot-[0-9a-f]{7}${{ env.RELEASE_SUFFIX }}$"))] | sort_by(.publishedAt) | reverse | .[5:] | .[].tagName' |
-          while read -r tag; do
-            # createdAt is the target commit's date; always preserve this run's release.
-            if [ "$tag" = "godot-${{ needs.preflight.outputs.submodule-hash }}${RELEASE_SUFFIX}" ]; then continue; fi
-            if grep -qx "${tag%"$RELEASE_SUFFIX"}" <<< "$pinned"; then echo "Keeping $tag (a Godot line pins it)"; continue; fi
-            echo "Pruning $tag"
-            gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
-          done
+      # Immutable native releases remain available to old tags and imported CI packages.

@@ -4,11 +4,19 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 
 ## Workflows
 
-- `ci.yml` reuses `godot-<submodule-hash>` and `godot-<submodule-hash>-double` native releases or builds missing natives through
+- `ci.yml` reuses `godot-<input-fingerprint>` and `godot-<input-fingerprint>-double` native releases or builds missing natives through
   `build-natives.yml`, then packs and tests both precisions on three OSes in Debug/Release/Editor and runs smoke jobs. `v*` tags
-  also deploy to NuGet. CI runs on pull requests, `v*` tag pushes and manual dispatch, never branch pushes.
+  also deploy to NuGet. CI runs on pull requests, `v*` tags, `ci/**` branch pushes and manual dispatch.
   PRs must originate in `outfox/2dog`; the base repository check alone also matches fork PRs.
-  PRs that only touch `docs/**`, root Markdown or `AGENTS.md` files skip it.
+  PRs that only touch root Markdown or `AGENTS.md` files skip it. Docs changes run the CLI documentation contracts.
+  `scripts/native_inputs.py` owns the committed native build/package inputs. Release counters and labels are excluded.
+  Native releases are immutable: force builds may validate them, never replace published assets. Publish through a draft
+  and keep old identities available to release tags and imported packages. Staging verifies the manifest's ZIP checksums.
+  `release.nu` compares package fingerprints before reusing NativesRevision; payload packages carry that stamp too.
+  Non-release CI packages use `ci.<run-id>` suffixes, stable across retries. `pull-packages` records their actual ref and suffix for
+  local restore; never infer whether a run built a tag from its head_branch name alone.
+  Pack exports per-precision attempts for Android sticky input checks. A repack invalidates its old snapshot; a consumer
+  retry keeps the successful pack's attempt. Artifact producers overwrite their run-scoped uploads on retries.
 - Each OS/configuration pair is its own test job in a fresh workspace, so no configuration relies on files
   another one built. Do not merge configurations back into one job: together they exceed the job timeout.
 - The test matrix is priced by runner: macOS minutes cost 5x Windows and 10x Linux. Linux runs every
@@ -38,7 +46,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates deployment.
   Stop the ADB server in an always-run step before sticky disk teardown; its executable keeps the SDK disk busy.
   Pack fills a scoped Android input disk and uploads the same content as a fallback. Consumers must verify
-  its run/commit/precision before use; reset mismatched inputs before downloading the matching artifact.
+  its run/attempt/commit/precision before use; reset mismatched inputs before downloading the matching artifact.
   Its native hashes come from the original build outputs; check packaged libraries against those hashes
   before using them as the APK inspection reference, so a packaging mistake cannot validate itself.
   Never persist bin/obj or test-modified emulator state. Clear mutable 2dog/fork SDK packages from the
@@ -53,6 +61,9 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - Consumers that need both native outputs and NuGet packages use `actions/download-ci-inputs` to download them
   concurrently and move them into `godot/` and `packages/`, merging directories created by source checks.
   Require both artifacts before staging either.
+  Desktop jobs use the scoped runtime feed and core Godot outputs. Web jobs opt into `web: true`, which adds the Web
+  raw payload and browser packages; MAUI jobs use `mobile: true` for the full feed. Require all selected artifacts before
+  moving any files. Preserve the complete desktop dependency closure even on jobs for a single OS.
   The MAUI jobs install their pinned SDK into a private root through `actions/setup-maui-dotnet`, so workloads
   install as plain files in about a minute rather than as one MSI per pack into the image's root. Do not cache
   that root: it is 5.5 GB, and caches saved by pull request or tag runs are not shared with other refs.
@@ -61,8 +72,11 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   The Windows `maui-pack` job packs the precision-neutral iOS host and all MAUI TFMs; `ios-smoke` and the `maui`
   showcase builds consume its artifact, so the Simulator cells never wait for the showcase builds. Keep `MAUI Pack`
   in the deployment gate. Its .NET SDK/workload pins must match the Xcode
-  selected by `ios-smoke`. Three Simulator cells cover single Debug pixels, double Release showcase
-  and single Debug MAUI; keep `iOS Smoke` in the revision-bump family list and the deployment gate. Device signing
+  selected by `ios-smoke.yml`. Two `iOS Smoke` Debug cells cover pixels and MAUI; keep that family in reuse and deployment
+  gates. The independent `iOS Release Smoke` job covers double Release/AOT on tags, including tested revision bumps.
+  It starts after staging, downloads and verifies the staged package bytes, and runs alongside test-feed upload.
+  Production promotion requires the latest attempt of this job in the staged run to pass. A retry is valid only because
+  it tests the immutable staged packages and matching fork SDK, rather than newly repacked artifacts. Device signing
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
   shut down the created device, including after boot/test failure. Preserve both boot and app logs.
@@ -96,10 +110,13 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   top-level workflow: both feeds' Trusted Publishing policies name it. `android.yml` runs Android build and
   package tests on every pull request, unfiltered, so it can be a required check (a path-filtered workflow that is
   skipped never reports); `docs.yml` builds the documentation site.
-- `scripts/find-tested-run.sh` matches a release tag's parent with a successful run on the same content (the tree
+- `.github/scripts/find-tested-run.sh` matches a release tag's parent with a successful run on the same content (the tree
   without root Markdown and `AGENTS.md` files; `docs/` counts, because tool tests read it). Keep the tag step's
   family list in step with the job names, and never ignore files a test reads. Manual dispatches always run in full.
 - Keep the `github.repository == 'outfox/2dog'` gate on jobs that build, test or release.
+- Poe owns the ordered pack recipes and source/browser checks; CI calls those same tasks. Use `UV_LOCKED=1` in CI.
+  global.json pins the SDK. Its top-level workloadVersion is read by `poe install-workloads` and the private MAUI setup;
+  do not move it under sdk: that makes ordinary desktop builds demand installed workload manifests.
 - Downstream jobs must tolerate skipped `build-natives` with explicit
   `!cancelled() && needs.<job>.result == 'success'` gates; implicit `success()` skips them transitively.
 - New Linux jobs run on `blacksmith-4vcpu-ubuntu-2404`. Do not change an existing job's runner size; the

@@ -4,15 +4,28 @@ inputs:
   precision:
     description: Package precision
     default: single
+  web:
+    description: Include raw Web payloads and browser packages
+    default: 'false'
+  mobile:
+    description: Include the full feed for MAUI Android/iOS builds
+    default: 'false'
 runs:
   using: composite
   steps:
     - uses: actions/download-artifact@v8
       with:
-        pattern: '{godot-bin,nuget-packages}-${{ inputs.precision }}'
+        pattern: "{godot-bin,${{ inputs.mobile == 'true' && 'nuget-packages' || 'runtime-packages' }}}-${{ inputs.precision }}"
         path: .ci/downloads
         merge-multiple: false
+    - uses: actions/download-artifact@v8
+      if: inputs.web == 'true'
+      with:
+        name: godot-web-${{ inputs.precision }}
+        path: .ci/downloads/godot-web-${{ inputs.precision }}
     - shell: bash
       env:
         PRECISION: ${{ inputs.precision }}
+        WEB_INPUTS: ${{ inputs.web }}
+        PACKAGE_INPUT: ${{ inputs.mobile == 'true' && 'nuget-packages' || 'runtime-packages' }}
       run: bash .github/scripts/stage-ci-inputs.sh "$PRECISION"

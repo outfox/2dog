@@ -113,6 +113,17 @@
         </PropertyGroup>
     </Target>
 
+    <Target Name="StampNativeInputs" BeforeTargets="_GetPackageFiles">
+        <Exec Command="uv run --no-project python &quot;$(MSBuildThisFileDirectory)../scripts/native_inputs.py&quot; --kind package"
+              ConsoleToMSBuild="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="NativePackageIdentity"/>
+        </Exec>
+        <WriteLinesToFile File="$(IntermediateOutputPath)native-inputs.txt" Lines="$(NativePackageIdentity)" Overwrite="true"/>
+        <ItemGroup>
+            <None Include="$(IntermediateOutputPath)native-inputs.txt" Pack="true" PackagePath="2dog-native-inputs.txt"/>
+        </ItemGroup>
+    </Target>
+
     <Target Name="TwoDogDeepClean" AfterTargets="Clean">
         <RemoveDir Directories="$(BaseIntermediateOutputPath)"/>
         <RemoveDir Directories="$(BaseOutputPath)"/>

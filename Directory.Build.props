@@ -11,11 +11,27 @@
         <!-- Prerelease label: Godot's status for a Godot prerelease (4.8.0.156-beta2), else the release branch label
              (4.7-rc releases 4.7.2.N-rc); empty for stable releases. -->
         <TwoDogPrerelease>beta3</TwoDogPrerelease>
+    </PropertyGroup>
+    <!-- Imported suffixes apply only to the checkout versions recorded by pull-packages. -->
+    <Import Project="$(MSBuildThisFileDirectory)packages/ci-packages.props"
+            Condition="'$(GITHUB_ACTIONS)' != 'true' And Exists('$(MSBuildThisFileDirectory)packages/ci-packages.props')"/>
+    <PropertyGroup>
         <!-- 2dog versions take Godot's release numbers; the label carries the rest (4.8.0-beta.2 -> 4.8.0.156-beta2). -->
         <TwoDogGodotRelease>$([System.Text.RegularExpressions.Regex]::Replace('$(GodotVersion)', '-.*', ''))</TwoDogGodotRelease>
-        <TwoDogVersion>$(TwoDogGodotRelease).$(TwoDogRevision)</TwoDogVersion>
+        <!-- CI builds other than release tags must never carry a published version (a cached or nuget.org copy would
+             stand in for their bits). A ci label sorts them between the release they follow and the next one:
+             4.8.0.163-beta3.ci.812 (a longer label sorts higher), 4.7.2.165-ci.812 (no label: the next revision). -->
+        <TwoDogBuildSuffix Condition="'$(TwoDogBuildSuffix)' == '' And '$(GITHUB_ACTIONS)' == 'true' And !$([System.String]::Copy('$(GITHUB_REF)').StartsWith('refs/tags/v'))">ci.$(GITHUB_RUN_ID)</TwoDogBuildSuffix>
+        <TwoDogBuildRevision>$(TwoDogRevision)</TwoDogBuildRevision>
+        <TwoDogBuildRevision Condition="'$(TwoDogBuildSuffix)' != '' And '$(TwoDogPrerelease)' == ''">$([MSBuild]::Add($(TwoDogRevision), 1))</TwoDogBuildRevision>
+        <TwoDogBuildNatives>$(NativesRevision)</TwoDogBuildNatives>
+        <TwoDogBuildNatives Condition="'$(TwoDogBuildSuffix)' != ''">$([MSBuild]::Add($(NativesRevision), 1))</TwoDogBuildNatives>
+        <TwoDogVersion>$(TwoDogGodotRelease).$(TwoDogBuildRevision)</TwoDogVersion>
         <TwoDogVersion Condition="'$(TwoDogPrerelease)' != ''">$(TwoDogVersion)-$(TwoDogPrerelease)</TwoDogVersion>
-        <NativesVersion>$(TwoDogGodotRelease).$(NativesRevision)</NativesVersion>
+        <TwoDogVersion Condition="'$(TwoDogBuildSuffix)' != '' And '$(TwoDogPrerelease)' != ''">$(TwoDogVersion).$(TwoDogBuildSuffix)</TwoDogVersion>
+        <TwoDogVersion Condition="'$(TwoDogBuildSuffix)' != '' And '$(TwoDogPrerelease)' == ''">$(TwoDogVersion)-$(TwoDogBuildSuffix)</TwoDogVersion>
+        <NativesVersion>$(TwoDogGodotRelease).$(TwoDogBuildNatives)</NativesVersion>
+        <NativesVersion Condition="'$(TwoDogBuildSuffix)' != ''">$(NativesVersion)-$(TwoDogBuildSuffix)</NativesVersion>
         <!-- Mixed Avalonia versions fail at runtime, so bump in one place. The template consumes it via its
              AVALONIA_PKG_VERSION token, substituted on pack and scaffold. -->
         <AvaloniaVersion>12.1.1</AvaloniaVersion>

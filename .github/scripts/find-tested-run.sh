@@ -12,7 +12,7 @@ api="repos/$GITHUB_REPOSITORY"
 # Longest first: a job belongs to the first family it matches, so "Test Rendering" is not counted as "Test".
 families="[$(printf '%s\n' "$@" | awk '{ print length "\t" $0 }' | sort -rn | cut -f2- | sed 's/.*/"&"/' | paste -sd,)]"
 
-# The recursive tree from the API, so candidate commits need no fetch. Unlike ci.yml's paths-ignore, docs/ counts:
+# The recursive tree from the API, so candidate commits need no fetch. Docs count in this identity:
 # DocsDriftTests read its pages and sidebar.
 content_key() {
   gh api "$api/git/trees/$1?recursive=1" --jq '

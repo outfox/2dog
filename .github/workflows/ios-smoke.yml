@@ -1,0 +1,139 @@
+name: iOS Simulator check
+on:
+  workflow_call:
+    inputs:
+      app:
+        type: string
+        required: true
+      configuration:
+        type: string
+        default: Debug
+      precision:
+        type: string
+        default: single
+      bundle:
+        type: string
+        required: true
+      marker:
+        type: string
+        required: true
+      line:
+        type: string
+        required: true
+      release-tag:
+        type: string
+        default: ''
+permissions:
+  contents: read
+env:
+  UV_LOCKED: '1'
+jobs:
+  smoke:
+    name: Test iOS Simulator
+    if: github.repository == 'outfox/2dog'
+    runs-on: macos-26
+    timeout-minutes: 45
+    env:
+      TwoDogPrecision: ${{ inputs.precision }}
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Install iOS workloads
+        run: uv run poe install-workloads ios maui-ios
+
+      - name: Download iOS inputs
+        if: inputs.release-tag == ''
+        uses: actions/download-artifact@v8
+        with:
+          name: ios-inputs-${{ inputs.precision }} # shared across lines: one line per caller run
+
+      - name: Download iOS host and MAUI packages
+        if: inputs.release-tag == ''
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages-maui # shared across lines: one line per caller run
+          path: packages
+
+      - name: Download and verify staged release inputs
+        if: inputs.release-tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release-tag }}
+        run: uv run python -m scripts.release_packages ios-inputs "$RELEASE_TAG"
+
+      - name: Build and inspect Simulator app
+        run: >-
+          uv run poe build-ios-app --app '${{ inputs.app }}' --feed packages
+          --configuration '${{ inputs.configuration }}' --output artifacts/ios-app
+
+      # Preserve permissions, symlinks and bundle layout; artifact upload alone does not.
+      - name: Archive Simulator app and inspection report
+        run: ditto -c -k --sequesterRsrc --keepParent artifacts/ios-app/app/*.app artifacts/ios-app/simulator-app.zip
+
+      - name: Upload Simulator app
+        uses: actions/upload-artifact@v7
+        with:
+          overwrite: true
+          name: ios-simulator-${{ inputs.line }}-${{ inputs.app }}-${{ inputs.precision }}-${{ inputs.configuration }}
+          path: |
+            artifacts/ios-app/simulator-app.zip
+            artifacts/ios-app/app-report.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+      # First-boot data migration can take five minutes before app installation even starts.
+      - name: Boot iOS Simulator
+        id: simulator
+        timeout-minutes: 8
+        shell: bash
+        run: |
+          runtime=$(xcrun simctl list runtimes --json | jq -r '[.runtimes[] | select(.isAvailable and (.identifier | contains(".iOS-")))] | last | .identifier // empty')
+          test -n "$runtime"
+          device=$(xcrun simctl create 2dog-ci com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$runtime")
+          echo "device=$device" >> "$GITHUB_OUTPUT"
+          xcrun simctl boot "$device"
+          xcrun simctl bootstatus "$device" -b 2>&1 | tee artifacts/ios-app/simulator-boot.log
+
+      - name: Install app and run C# smoke
+        env:
+          SIMCTL_CHILD_CI: 'true'
+          SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          uv run scripts/test_ios_simulator.py artifacts/ios-app/app/*.app --device "$SIMULATOR_DEVICE" \
+            --bundle '${{ inputs.bundle }}' --marker '${{ inputs.marker }}' --timeout 120 \
+            2>&1 | tee artifacts/ios-app/simulator.log
+
+      - name: Shut down iOS Simulator
+        if: always() && steps.simulator.outputs.device != ''
+        timeout-minutes: 2
+        env:
+          SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
+        run: xcrun simctl shutdown "$SIMULATOR_DEVICE" || true
+
+      - name: Upload Simulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          overwrite: true
+          name: ios-simulator-log-${{ inputs.line }}-${{ inputs.app }}-${{ inputs.precision }}-${{ inputs.configuration }}
+          path: artifacts/ios-app/simulator*.log
+          if-no-files-found: ignore
+          retention-days: 7

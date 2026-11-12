@@ -17,10 +17,14 @@ on:
       - '2dog.slnx'
       - 'global.json'
       - 'pyproject.toml'
+      - 'uv.lock'
       - '.github/workflows/android.yml'
 
 permissions:
   contents: read
+
+env:
+  UV_LOCKED: '1'
 
 concurrency:
   group: android-${{ github.ref }}
@@ -33,12 +37,12 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           python-version: '3.12'
+          enable-cache: false
       - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
-      - run: python -m pip install 'rich>=14.2.0'
+          global-json-file: global.json
       - name: Test native build commands and packed Android targets
-        run: python -m unittest discover -s tests/android -p 'test_*.py' -v
+        run: uv run poe test-android-build

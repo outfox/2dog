@@ -164,6 +164,14 @@ cd 2dog
 uv run poe build-all
 ```
 
+The SDK is pinned in `global.json`. Desktop builds restore only the desktop/test
+solution filter. Use `uv run poe build-local` for incremental native changes,
+or add `--precision double` to either task for double precision. Extra native
+options follow `--`, for example `uv run poe build-all -- --debug-symbols yes`.
+Run source/package checks with `uv run poe test-build-configuration` (requires
+Nushell). Optional hosts use `uv run poe install-workloads wasm-tools`, `android`,
+or `ios maui-ios`; this uses the committed workload-set pin.
+
 Run the showcase with `dotnet run --project demos/showcase/showcase.2dog` and the tests with
 `dotnet test twodog.tests`. 
 

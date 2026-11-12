@@ -15,57 +15,61 @@ dependencies = [
 ]
 
 
-[tool.poetry]
-package-mode = false
+[tool.poe.executor]
+type = "uv"
+locked = true
 
-[tool.poe.tasks]
-version = "version:echo"
+[tool.poe.tasks.version]
+help = "Print the effective package version"
+cmd = "dotnet msbuild twodog.engine/twodog.engine.csproj -getProperty:TwoDogVersion"
 
 [tool.poe.tasks.pull-packages]
 help = "Download tested CI NuGet packages and matching SDK/bindings, refresh stale local cache entries, and restore"
-cmd = "uv run scripts/pull_ci_packages.py"
+cmd = "python scripts/pull_ci_packages.py"
 
 [tool.poe.tasks.build-godot]
 help = "Godot build: build libgodot and glue code"
-sequence = [
-    { cmd = "uv run build-godot.py" },
-]
+cmd = "python build-godot.py"
 
 [tool.poe.tasks.build-managed]
 help = "dotnet pack: bindings, engine, Avalonia, Blazor, Qt, xUnit, NUnit, gdUnit, REPL, tool, templates and restore"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+env = {TwoDogPrecision = "${precision}"}
 sequence = [
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp.editor" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.engine" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.avalonia" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.blazor" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.qt" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.xunit" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.nunit" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.gdunit" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.repl" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.templates" },
-    { cmd = "uv run scripts/dotnet_build.py restore" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.godotsharp ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.godotsharp.editor ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.engine ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.avalonia ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.blazor ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.qt ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.xunit ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.nunit ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.gdunit ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.repl ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.templates ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py restore 2dog.tests.slnf ${POE_EXTRA_ARGS}" },
 ]
 
 [tool.poe.tasks.build]
 help = "dotnet build: Platform packages (all platforms), twodog library, and NuGet packages"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+env = {TwoDogPrecision = "${precision}"}
 sequence = [
-    { cmd = "uv run scripts/dotnet_build.py pack platforms -p:ForcePackAllPlatforms=true" },
-    { ref = "build-managed" },
+    { cmd = "python scripts/dotnet_build.py pack platforms -p:ForcePackAllPlatforms=true ${POE_EXTRA_ARGS}" },
+    { ref = "build-managed --precision ${precision} -- ${POE_EXTRA_ARGS}" },
 ]
 
 [tool.poe.tasks.build-maui]
 help = "Pack the Windows/Android/iOS MAUI integration and the iOS host glue (requires maui-windows, maui-android, maui-ios and ios workloads on Windows)"
 sequence = [
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.ios" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.maui" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.ios -c Release ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack twodog.maui -c Release -p:TwoDogMauiIos=true ${POE_EXTRA_ARGS}" },
 ]
 
 [tool.poe.tasks.build-godot-local]
 help = "Fast incremental libgodot build for the host platform only (skips editor executable and mono glue; needs one prior full build-godot)"
-cmd = "uv run build-godot.py --no-editor --no-glue"
+cmd = "python build-godot.py --no-editor --no-glue"
 
 # Note: build-local still force-packs all platform packages. Non-host packages
 # without natives pack as tiny empty stubs in seconds - and those stubs are what
@@ -73,100 +77,127 @@ cmd = "uv run build-godot.py --no-editor --no-glue"
 # for other platforms from nuget.org, since 2dog.engine references all platforms.
 [tool.poe.tasks.build-local]
 help = "Fast partial build: incremental host-only libgodot (skips editor/glue), then the normal package build"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { ref = "build-godot-local" },
-    { ref = "build" },
+    { ref = "build-godot-local --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { ref = "build --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.nuget-retire]
 help = "Retire old package versions on nuget.org: plan (default) / unlist / deprecate. Args are passed through, see scripts/nuget_retire.py --help"
-cmd = "uv run scripts/nuget_retire.py"
+cmd = "python scripts/nuget_retire.py"
 
 [tool.poe.tasks.build-all]
 help = "Complete build: Godot engine, platform packages, twodog library, and NuGet packages"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { ref = "build-godot" },
-    { ref = "build" },
+    { ref = "build-godot --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { ref = "build --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.build-android]
 help = "Experimental Android arm64/x64 natives and Java payloads (requires Android SDK, JDK 17 and desktop Mono glue)"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { cmd = "uv run build-godot.py --platform android --arch arm64" },
-    { cmd = "uv run build-godot.py --platform android --arch x86_64" },
-    { cmd = "uv run scripts/build_android_java.py" },
-    { ref = "pack-android" },
+    { ref = "build-godot --platform android --arch arm64 --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { ref = "build-godot --platform android --arch x86_64 --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/build_android_java.py" },
+    { ref = "pack-android --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.pack-android]
 help = "Pack experimental Android runtime and Java host packages"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+env = {TwoDogPrecision = "${precision}"}
 sequence = [
-    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android-arm64/twodog.android-arm64.csproj" },
-    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android-x64/twodog.android-x64.csproj" },
-    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.android/twodog.android.csproj" },
+    { cmd = "python scripts/dotnet_build.py pack platforms/twodog.android-arm64/twodog.android-arm64.csproj ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack platforms/twodog.android-x64/twodog.android-x64.csproj ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack platforms/twodog.android/twodog.android.csproj ${POE_EXTRA_ARGS}" },
 ]
 
 [tool.poe.tasks.build-ios]
 help = "Experimental iOS device and Simulator archives (requires macOS with Xcode and desktop Mono glue)"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
 sequence = [
-    { cmd = "uv run build-godot.py --platform ios" },
-    { cmd = "uv run build-godot.py --platform ios --simulator" },
-    { ref = "pack-ios" },
+    { ref = "build-godot --platform ios --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { ref = "build-godot --platform ios --simulator --precision ${precision} ${POE_EXTRA_ARGS}" },
+    { ref = "pack-ios --precision ${precision}", env = {POE_EXTRA_ARGS = ""} },
 ]
 
 [tool.poe.tasks.pack-ios]
 help = "Pack experimental iOS runtime packages (the 2dog.ios host glue packs with build-maui, which needs the ios workload)"
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+env = {TwoDogPrecision = "${precision}"}
 sequence = [
-    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.ios-arm64/twodog.ios-arm64.csproj" },
-    { cmd = "uv run scripts/dotnet_build.py pack platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.csproj" },
+    { cmd = "python scripts/dotnet_build.py pack platforms/twodog.ios-arm64/twodog.ios-arm64.csproj ${POE_EXTRA_ARGS}" },
+    { cmd = "python scripts/dotnet_build.py pack platforms/twodog.iossimulator-arm64/twodog.iossimulator-arm64.csproj ${POE_EXTRA_ARGS}" },
 ]
 
 [tool.poe.tasks.test-ios-build]
 help = "iOS build, package and script tests (no Mac, device or workload required)"
-cmd = "uv run python -m unittest discover -s tests/ios -p 'test_*.py'"
+cmd = "python -m unittest discover -s tests/ios -p 'test_*.py'"
 
 [tool.poe.tasks.build-ios-app]
 help = "Build and inspect the iOS smoke (or --app showcase) app bundle from local packages; macOS with Xcode only"
-cmd = "uv run scripts/build_ios_app.py"
+cmd = "python scripts/build_ios_app.py"
 
 [tool.poe.tasks.test-android-build]
 help = "Android build and package tests (no device/workload required)"
-cmd = "uv run python -m unittest discover -s tests/android -p 'test_*.py'"
+cmd = "python -m unittest discover -s tests/android -p 'test_*.py'"
 
 [tool.poe.tasks.build-android-apk]
 help = "Build and inspect the Android smoke (or --app showcase) APK from local packages; pass --editor"
-cmd = "uv run scripts/build_android_apk.py"
+cmd = "python scripts/build_android_apk.py"
 
 [tool.poe.tasks.publish-android]
 help = "Publish an experimental Android host to APK/AAB; pass project and --pack"
-cmd = "uv run scripts/publish_android.py"
+cmd = "python scripts/publish_android.py"
 
 
 # Double precision builds keep native and managed ABIs together. The CLI/template is precision-neutral.
 [tool.poe.tasks.build-double-godot]
 help = "Build host natives, editor and C# glue with double precision"
-cmd = "uv run build-godot.py --precision double"
+ref = "build-godot --precision double"
 
 [tool.poe.tasks.pack-double]
 help = "Pack .double engine/bindings/natives and ordinary precision-neutral integrations"
-sequence = [
-    { cmd = "uv run scripts/dotnet_build.py pack platforms -p:TwoDogPrecision=double -p:ForcePackAllPlatforms=true" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.godotsharp.editor -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.engine -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.avalonia -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.blazor -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.qt -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.xunit -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.nunit -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.gdunit -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py pack twodog.repl -p:TwoDogPrecision=double" },
-    { cmd = "uv run scripts/dotnet_build.py restore -p:TwoDogPrecision=double" },
-]
+ref = "build --precision double"
 
 [tool.poe.tasks.build-double]
 help = "Build and pack a complete host-platform double-precision 2dog distribution"
+ref = "build-all --precision double"
+
+[tool.poe.tasks.build-engine-configurations]
+args = [{name = "precision", options = ["--precision"], choices = ["single", "double"], default = "single"}]
+env = {TwoDogPrecision = "${precision}"}
 sequence = [
-    { ref = "build-double-godot" },
-    { ref = "pack-double" },
+    {cmd = "python scripts/dotnet_build.py build twodog.engine -c Debug ${POE_EXTRA_ARGS}"},
+    {cmd = "python scripts/dotnet_build.py build twodog.engine -c Release ${POE_EXTRA_ARGS}"},
+    {cmd = "python scripts/dotnet_build.py build twodog.engine -c Editor ${POE_EXTRA_ARGS}"},
 ]
+
+[tool.poe.tasks.test-build-configuration]
+sequence = [
+    {cmd = "python -m unittest discover -s tests/precision -v"},
+    {cmd = "python -m unittest discover -s tests/releasing -v"},
+    {cmd = "python -m unittest discover -s tests/webgpu -v"},
+    {cmd = "python -m unittest discover -s tests/ci_packages -v"},
+    {cmd = "python -m unittest discover -s tests/ios -v"},
+]
+
+[tool.poe.tasks.test-browser-helpers]
+help = "Browser helper regressions; requires the staged Web native payload"
+cmd = "node --test .github/scripts/*.test.mjs"
+
+[tool.poe.tasks.release]
+cmd = "nu scripts/release.nu"
+
+[tool.poe.tasks.sync-versions]
+cmd = "nu scripts/release.nu --sync"
+
+[tool.poe.tasks.stage-natives]
+cmd = "python scripts/stage_natives_release.py"
+
+[tool.poe.tasks.install-workloads]
+help = "Install optional workload IDs using the committed workload-set pin"
+cmd = "python scripts/install_workloads.py"

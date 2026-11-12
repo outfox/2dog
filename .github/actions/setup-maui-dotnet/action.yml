@@ -1,12 +1,6 @@
 name: Set up the MAUI .NET SDK
-description: Install the pinned .NET SDK and the MAUI workloads into a private root and pin it with global.json.
+description: Install the SDK and MAUI workload set from global.json into a private root.
 inputs:
-  sdk-version:
-    description: .NET SDK version
-    required: true
-  workload-version:
-    description: Workload set version
-    required: true
   workloads:
     description: Space-separated workload IDs
     default: maui-windows maui-android maui-ios ios
@@ -19,14 +13,13 @@ runs:
       env:
         DOTNET_INSTALL_DIR: ${{ runner.temp }}/maui-dotnet
       with:
-        dotnet-version: ${{ inputs.sdk-version }}
+        global-json-file: global.json
 
     - shell: bash
       env:
-        SDK_VERSION: ${{ inputs.sdk-version }}
-        WORKLOAD_VERSION: ${{ inputs.workload-version }}
         WORKLOADS: ${{ inputs.workloads }}
       run: |
-        dotnet new globaljson --sdk-version "$SDK_VERSION" --roll-forward disable --force
         # shellcheck disable=SC2086 # the list is word-split on purpose
-        dotnet workload install $WORKLOADS --version "$WORKLOAD_VERSION" --source https://api.nuget.org/v3/index.json
+        version=$(sed -nE 's/.*"workloadVersion": "([^"]+)".*/\1/p' global.json)
+        test -n "$version"
+        dotnet workload install $WORKLOADS --version "$version" --source https://api.nuget.org/v3/index.json

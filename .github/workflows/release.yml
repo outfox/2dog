@@ -23,6 +23,9 @@ permissions:
   contents: write # push the bump commit and tag
   actions: write  # dispatch ci.yml on the new tag
 
+env:
+  UV_LOCKED: '1'
+
 concurrency:
   group: release
   cancel-in-progress: false
@@ -43,6 +46,12 @@ jobs:
         with:
           version: '0.111.0'
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
       - name: Release
         env:
           DRY_RUN: ${{ inputs.dry_run }}
@@ -53,7 +62,7 @@ jobs:
           args=(--no-sign)
           if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
           if [ -n "$LINE" ]; then args+=(--line "$LINE"); fi
-          nu scripts/release.nu "${args[@]}"
+          uv run poe release "${args[@]}"
 
       # Tags pushed with GITHUB_TOKEN don't fire `on: push`, so trigger the CI (and thereby the staging) explicitly.
       # Another line's release leaves HEAD on main, so the tag is found by name: this checkout fetched no other tag.

@@ -21,6 +21,12 @@ CONFIGURATION = "Debug"
 PRECISION = os.environ.get("TwoDogPrecision", "single") or "single"
 
 
+def two_dog_version():
+    # MSBuild owns the rule: CI builds other than tags add a ci suffix.
+    return subprocess.run(["dotnet", "msbuild", str(REPO / "twodog.engine/twodog.engine.csproj"),
+                           "-getProperty:TwoDogVersion"], check=True, capture_output=True, text=True).stdout.strip()
+
+
 def fingerprint(root):
     return {
         str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -210,10 +216,7 @@ class GdUnitHostTests(unittest.TestCase):
 
     def test_pack_contains_runtime_templates_license_and_no_self_tests(self):
         suffix = ".double" if PRECISION == "double" else ""
-        props = ElementTree.parse(REPO / "Directory.Build.props").getroot()
-        label = props.findtext(".//TwoDogPrerelease")
-        godot = props.findtext(".//GodotVersion").split("-")[0]
-        version = f'{godot}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
+        version = two_dog_version()
         package = REPO / "packages" / f"2dog.gdunit{suffix}.{version}.nupkg"
         with zipfile.ZipFile(package) as archive:
             names = archive.namelist()
@@ -259,10 +262,7 @@ class GdUnitHostTests(unittest.TestCase):
         (host / ".gdignore").touch()
         (consumer / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Consumer"\n', encoding="utf-8")
         readme = (REPO / "twodog.gdunit" / "README.md").read_text(encoding="utf-8")
-        props = ElementTree.parse(REPO / "Directory.Build.props").getroot()
-        label = props.findtext(".//TwoDogPrerelease")
-        godot = props.findtext(".//GodotVersion").split("-")[0]
-        version = f'{godot}.{props.findtext(".//TwoDogRevision")}' + (f"-{label}" if label else "")
+        version = two_dog_version()
         project = re.search(r"```xml\n(.*?)```", readme, re.S).group(1).replace("YOUR_2DOG_VERSION", version)
         if PRECISION == "double":
             project = project.replace('Include="2dog.gdunit"', 'Include="2dog.gdunit.double"')

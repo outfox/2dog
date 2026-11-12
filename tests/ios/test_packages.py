@@ -36,8 +36,9 @@ class IosPackages(unittest.TestCase):
             '<add key="nuget.org" value="https://api.nuget.org/v3/index.json"/>'
             '</packageSources></configuration>')
         cls.restore_packages = os.environ.get("TWODOG_TEST_RESTORE_PACKAGES", str(cls.root / "restore"))
-        props = ET.parse(REPO / "Directory.Build.props")
-        cls.version = props.findtext(".//GodotVersion").split("-")[0] + "." + props.findtext(".//NativesRevision")
+        # MSBuild owns the rule: CI builds other than tags add a ci suffix.
+        cls.version = subprocess.run(["dotnet", "msbuild", str(REPO / "twodog.engine/twodog.engine.csproj"),
+                                      "-getProperty:NativesVersion"], check=True, capture_output=True, text=True).stdout.strip()
         cls.packages = cls.root / "cache"
         for rid in RIDS:
             for target in ("template_debug", "template_release"):

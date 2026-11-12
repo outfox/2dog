@@ -6,7 +6,6 @@ on:
     branches: ['ci/**'] # another Godot line's tree, pushed by `release.nu --ci --line`
   pull_request:
     paths-ignore:
-      - 'docs/**'
       - '*.md'
       - '**/AGENTS.md'
   workflow_dispatch:
@@ -15,19 +14,14 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }} # never cancel tag/deploy runs
 
-# Keep the iOS bindings/workload matched to the Simulator runner's Xcode.
 env:
-  IOS_DOTNET_VERSION: 10.0.401
-  IOS_WORKLOAD_VERSION: 10.0.401
+  UV_LOCKED: '1'
 
 permissions:
   contents: read # jobs that need more (build-natives, deploy) declare their own
 
 jobs:
-  # Pure gate: compute the godot submodule hash and check whether a complete
-  # pre-built godot-<hash> natives release exists. When it is missing (or predates
-  # the Android payloads), the build-natives job below builds it inline, so every
-  # run self-heals in a single run graph.
+  # Reuse complete natives by committed build inputs, or build the missing identity inline.
   check-natives:
     if: >-
       github.repository == 'outfox/2dog' &&
@@ -50,6 +44,12 @@ jobs:
         with:
           fetch-depth: 2 # a release tag is compared with its parent commit
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
       - name: Test CI helpers
         run: |
           bash .github/scripts/find-tested-run.test.sh
@@ -65,7 +65,7 @@ jobs:
       # Packages bake GodotVersion in, so a fork bump without a sync only fails much later (TDG001); stop here instead.
       - name: Check versions against the godot fork
         run: |
-          nu scripts/release.nu --sync
+          uv run poe sync-versions
           if ! git diff --exit-code; then
             echo "::error::GodotVersion, TwoDogPrerelease or a Godot.NET.Sdk pin does not match godot/version.py at the pinned commit. Run 'nu scripts/release.nu --sync' and commit the result."
             exit 1
@@ -90,9 +90,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
+          HASH=$(uv run --no-project python scripts/native_inputs.py)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
-          echo "Godot submodule hash: $HASH"
+          echo "Native input fingerprint: $HASH"
           # Lines run side by side (ci/<line>/* pushes): caches, sticky disks and diagnostics carry the line.
           LINE=$(sed -nE 's#.*<GodotVersion>([0-9]+\.[0-9]+)\..*#\1#p' Directory.Build.props)
           test -n "$LINE" || { echo "::error::No <GodotVersion> in Directory.Build.props."; exit 1; }
@@ -101,7 +101,7 @@ jobs:
           if bash scripts/check_natives_release.sh "godot-$HASH"; then
             echo "ready=true" >> $GITHUB_OUTPUT
           else
-            echo "::notice::No complete natives release for godot submodule $HASH — building inline."
+            echo "::notice::No complete natives release for input fingerprint $HASH; building inline."
             echo "ready=false" >> $GITHUB_OUTPUT
           fi
           if bash scripts/check_natives_release.sh "godot-$HASH-double"; then
@@ -192,7 +192,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -206,18 +206,16 @@ jobs:
           version: '0.111.0'
 
       - name: Test build configuration and package fixtures
-        run: |
-          uv run python -m unittest discover -s tests/precision -v
-          uv run python -m unittest discover -s tests/releasing -v
-          uv run python -m unittest discover -s tests/webgpu -v
-          uv run python -m unittest discover -s tests/ci_packages -v
-          uv run python -m unittest discover -s tests/ios -v
+        run: uv run poe test-build-configuration
 
   # Download pre-built native libraries, stage godot/bin, and pack all
   # NuGet packages for the test jobs. The game project is imported by the
   # test jobs themselves via the automatic MSBuild import step.
   pack:
     name: Pack NuGet Packages (${{ matrix.precision }})
+    outputs:
+      single-attempt: ${{ steps.identity.outputs.single-attempt }}
+      double-attempt: ${{ steps.identity.outputs.double-attempt }}
     needs: [check-natives, build-natives, build-double-natives]
     # Skip-tolerant gate, not always(): run when build-natives succeeded or was
     # skipped (natives already existed), never after a failed natives build.
@@ -241,13 +239,17 @@ jobs:
       TWODOG_RELEASE_SUFFIX: ${{ matrix.precision == 'double' && '-double' || '' }}
 
     steps:
+      - name: Record this precision's pack attempt
+        id: identity
+        run: echo '${{ matrix.precision }}-attempt=${{ github.run_attempt }}' >> "$GITHUB_OUTPUT"
+
       - name: Checkout repository
         uses: actions/checkout@v7
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       # Release tags must point at a commit whose Directory.Build.props composes the
       # same version (revision and prerelease label), otherwise the packed binaries would
@@ -266,49 +268,6 @@ jobs:
                  "Release with scripts/release.nu or the Release workflow, which tag their own bump commit."
             exit 1
           fi
-
-      # The platform packages are versioned by <NativesRevision>, which release.nu
-      # moves whenever the native inputs (godot submodule, platforms/, ...) differ
-      # from the release that built them. If it misses a change, publishing's
-      # skip-duplicate push silently keeps the previously published natives.
-      # Each platform package records the submodule commit it was built from in
-      # its repository metadata (see platforms/Directory.Build.props) — compare
-      # the published packages' commit on both feeds with ours and fail on a mismatch.
-      - name: Verify NativesVersion is not already published from different natives
-        run: |
-          NATIVES_VERSION="$(dotnet msbuild twodog.engine/twodog.engine.csproj -getProperty:NativesVersion | tr -d '[:space:]')"
-          # NuGet normalizes away a trailing .0 fourth segment (4.7.2.0 -> 4.7.2).
-          NORMALIZED="$(echo "$NATIVES_VERSION" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)\.0$/\1/')"
-          CURRENT_COMMIT="$(git rev-parse HEAD:godot)"
-          echo "NativesVersion: $NORMALIZED, godot submodule: $CURRENT_COMMIT"
-
-          # Probe one representative platform package; all of them are packed
-          # and pushed together. Must be a variant package (.debug/.release/
-          # .editor) — the meta packages use a custom NuspecFile and carry no
-          # repository stamp.
-          ID="2dog.win-x64.debug${TWODOG_NATIVE_SUFFIX}"
-          for FEED in https://api.nuget.org/v3-flatcontainer https://apiint.nugettest.org/v3-flatcontainer; do
-            URL="$FEED/$ID/$NORMALIZED/$ID.$NORMALIZED.nupkg"
-            if ! curl -fsSL -o /tmp/published-natives.nupkg "$URL"; then
-              echo "Natives $NORMALIZED not on ${FEED%%/v3*} yet — nothing to collide with."
-              continue
-            fi
-
-            # Note: packages published before the stamping target existed carry
-            # the SDK's automatic SourceLink stamp (the 2dog repo commit, not the
-            # submodule) — those hit the mismatch path below, which is the right
-            # verdict: they cannot be confirmed to contain the current natives.
-            PUBLISHED_COMMIT="$(unzip -p /tmp/published-natives.nupkg '*.nuspec' | sed -n 's/.*commit="\([0-9a-f]*\)".*/\1/p' | head -1)"
-            if [ -z "$PUBLISHED_COMMIT" ]; then
-              echo "::warning::Natives $NORMALIZED is on ${FEED%%/v3*} without any recorded commit. Cannot verify that it holds the current natives."
-            elif [ "$PUBLISHED_COMMIT" != "$CURRENT_COMMIT" ]; then
-              echo "::error::Natives $NORMALIZED is already on ${FEED%%/v3*} and its recorded source commit ${PUBLISHED_COMMIT:0:7} does not match the current godot submodule ${CURRENT_COMMIT:0:7}. Publishing would skip-duplicate and keep the stale natives. Release with scripts/release.nu, which moves <NativesRevision> when the native inputs change."
-              exit 1
-            else
-              echo "Natives $NORMALIZED already on ${FEED%%/v3*} from the same godot commit — repack is identical, skip-duplicate is harmless."
-            fi
-          done
-
       - name: Download native libraries from release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -327,36 +286,17 @@ jobs:
           enable-cache: false
 
       - name: Stage godot/bin directory
-        run: uv run scripts/stage_natives_release.py release-assets --precision ${{ matrix.precision }}
+        run: uv run poe stage-natives release-assets --precision ${{ matrix.precision }} --identity '${{ needs.check-natives.outputs.hash }}'
 
-      - name: Pack platform NuGet packages
-        run: |
-          mkdir -p packages
-          dotnet pack platforms/ -p:ForcePackAllPlatforms=true
+      - name: Verify published native package inputs
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: uv run python -m scripts.check_published_natives
 
-      - name: Pack managed bindings
-        run: |
-          dotnet pack twodog.godotsharp
-          dotnet pack twodog.godotsharp.editor
+      - name: Pack native and managed packages
+        run: uv run poe build --precision ${{ matrix.precision }}
 
-      - name: Build twodog library (all configs)
-        run: |
-          dotnet build twodog.engine -c Debug
-          dotnet build twodog.engine -c Release
-          dotnet build twodog.engine -c Editor
-
-      - name: Pack twodog packages
-        run: |
-          dotnet pack twodog.engine
-          dotnet pack twodog.avalonia
-          dotnet pack twodog.blazor
-          dotnet pack twodog.qt
-          dotnet pack twodog.xunit
-          dotnet pack twodog.nunit
-          dotnet pack twodog.gdunit
-          dotnet pack twodog.repl
-          dotnet pack twodog
-          dotnet pack twodog.templates
+      - name: Compile every engine configuration
+        run: uv run poe build-engine-configurations --precision ${{ matrix.precision }}
 
       - name: Mount scoped Android input disk
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
@@ -366,11 +306,12 @@ jobs:
           commit: on-change
 
       - name: Stage scoped Android inputs
-        run: uv run --no-project python scripts/stage_android_ci.py stage --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_SHA"
+        run: uv run --no-project python scripts/stage_android_ci.py stage --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_RUN_ATTEMPT:$GITHUB_SHA"
 
       - name: Upload scoped Android inputs
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: android-inputs-${{ matrix.precision }}
           path: |
             .ci/android-inputs/packages/
@@ -385,6 +326,7 @@ jobs:
       - name: Upload iOS inputs
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: ios-inputs-${{ matrix.precision }}
           path: |
             packages/2dog.engine*.nupkg
@@ -396,6 +338,7 @@ jobs:
             packages/2dog.ios-arm64*.nupkg
             packages/2dog.iossimulator-arm64*.nupkg
             godot/bin/GodotSharp/Tools/nupkgs/*.nupkg
+            packages/ci-build.json
           if-no-files-found: error
           compression-level: 0
           retention-days: 3
@@ -403,6 +346,7 @@ jobs:
       - name: Upload godot-bin artifact
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: godot-bin-${{ matrix.precision }}
           path: |
             godot/bin/
@@ -410,12 +354,45 @@ jobs:
             !godot/bin/android/**
             !godot/bin/**/ios/**
             !godot/bin/ios/**
+            !godot/bin/web/**
+            !godot/bin/web-threads/**
+            !godot/bin/double/web/**
+            !godot/bin/double/web-threads/**
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
+          retention-days: 3
+
+      - name: Upload Web inputs
+        uses: actions/upload-artifact@v7
+        with:
+          overwrite: true
+          name: godot-web-${{ matrix.precision }}
+          path: |
+            godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/
+            godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web-threads/
+            packages/2dog.browser-wasm*.nupkg
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 3
+
+      - name: Upload desktop runtime feed
+        uses: actions/upload-artifact@v7
+        with:
+          overwrite: true
+          name: runtime-packages-${{ matrix.precision }}
+          path: |
+            packages/*.nupkg
+            packages/ci-build.json
+            !packages/2dog.browser-wasm*
+            !packages/2dog.android*
+            !packages/2dog.ios*
+          if-no-files-found: error
+          compression-level: 0
           retention-days: 3
 
       - name: Upload NuGet packages
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: nuget-packages-${{ matrix.precision }}
           path: packages/
           compression-level: 0 # nupkg files are already compressed ZIPs
@@ -443,7 +420,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -454,7 +431,7 @@ jobs:
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages-${{ matrix.precision }}
+          name: runtime-packages-${{ matrix.precision }}
           path: packages
 
       - name: Download matching fork SDK
@@ -562,7 +539,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -616,6 +593,7 @@ jobs:
         if: always() && steps.repl-coverage.outcome != 'skipped' && runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: repl-coverage-${{ needs.check-natives.outputs.line }}-${{ matrix.config }}-${{ matrix.precision }}
           path: twodog.tests/TestResults/repl-coverage/**/coverage.cobertura.xml
           if-no-files-found: error
@@ -662,6 +640,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: test-dumps-${{ needs.check-natives.outputs.line }}-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}-${{ matrix.suite }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
@@ -701,7 +680,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -719,6 +698,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: mtp-contracts-${{ needs.check-natives.outputs.line }}-${{ matrix.name }}-Debug-${{ matrix.precision }}
           path: |
             tests/mtp/bin/**/console.log
@@ -766,7 +746,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -797,6 +777,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: test-dumps-${{ needs.check-natives.outputs.line }}-win-x64-rendering-${{ matrix.precision }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
@@ -861,7 +842,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -1270,12 +1251,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
         with:
-          name: nuget-packages-single
+          name: runtime-packages-single
           path: packages
 
       - name: Build packaged WebGPU smoke host
@@ -1330,6 +1311,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: webgpu-desktop-${{ needs.check-natives.outputs.line }}-${{ matrix.name }}
           path: |
             webgpu-smoke.log
@@ -1375,7 +1357,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -1390,7 +1372,7 @@ jobs:
           package-manager-cache: false
 
       - name: Install wasm-tools workload
-        run: dotnet workload install wasm-tools --skip-manifest-update --source https://api.nuget.org/v3/index.json
+        run: uv run poe install-workloads wasm-tools
 
       - name: Verify MSBuild configuration defaults
         if: matrix.flavor == 'checks'
@@ -1402,6 +1384,7 @@ jobs:
         uses: ./.github/actions/download-ci-inputs
         with:
           precision: ${{ matrix.precision }}
+          web: 'true'
 
       - name: Make Linux editor executable
         if: matrix.flavor != 'checks'
@@ -1702,7 +1685,7 @@ jobs:
         if: matrix.flavor == 'checks'
         env:
           GODOT_WEB_JS_LIB_DIR: godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/template_release/libgodot/js_library
-        run: node --test .github/scripts/blazor-lifetime.test.mjs .github/scripts/godot-web-lifetime.test.mjs .github/scripts/web-side-module-exports.test.mjs .github/scripts/web-renderer-default.test.mjs .github/scripts/web-exception-diagnostics.test.mjs
+        run: uv run poe test-browser-helpers
 
       - name: Test managed exception reporting in browser-wasm
         if: matrix.flavor == 'checks'
@@ -1840,6 +1823,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: web-smoke-failure-${{ needs.check-natives.outputs.line }}-${{ matrix.flavor }}-aot-${{ matrix.aot }}-${{ github.run_attempt }}-${{ matrix.precision }}
           path: |
             demos/showcase/showcase.${{ matrix.flavor }}/AppBundle/
@@ -1865,15 +1849,22 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
 
       - name: Install wasm-tools workload
-        run: dotnet workload install wasm-tools --skip-manifest-update --source https://api.nuget.org/v3/index.json
+        run: uv run poe install-workloads wasm-tools
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
         with:
           precision: single
+          web: 'true'
 
       - name: Prepare import helper
         run: |
@@ -1886,6 +1877,7 @@ jobs:
       - name: Upload WebGPU Mobile browser image test
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: webgpu-mobile-bundle
           path: tests/webgpu-browser-smoke/AppBundle/
           if-no-files-found: error
@@ -1942,6 +1934,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: webgpu-mobile-images-${{ needs.check-natives.outputs.line }}
           path: |
             /tmp/2dog-mobile-webgpu-*.log
@@ -1968,9 +1961,6 @@ jobs:
           lfs: true
       - name: Setup .NET with MAUI workloads
         uses: ./.github/actions/setup-maui-dotnet
-        with:
-          sdk-version: ${{ env.IOS_DOTNET_VERSION }}
-          workload-version: ${{ env.IOS_WORKLOAD_VERSION }}
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -1985,13 +1975,13 @@ jobs:
         uses: ./.github/actions/download-ci-inputs
         with:
           precision: single
+          mobile: 'true'
       - name: Pack iOS host and MAUI integration
-        run: |
-          dotnet pack twodog.ios -c Release
-          dotnet pack twodog.maui -c Release -p:TwoDogMauiIos=true
+        run: uv run poe build-maui
       - name: Upload MAUI package
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: nuget-packages-maui
           path: |
             packages/2dog.maui.*nupkg
@@ -2017,9 +2007,6 @@ jobs:
           lfs: true
       - name: Setup .NET with MAUI workloads
         uses: ./.github/actions/setup-maui-dotnet
-        with:
-          sdk-version: ${{ env.IOS_DOTNET_VERSION }}
-          workload-version: ${{ env.IOS_WORKLOAD_VERSION }}
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -2034,6 +2021,7 @@ jobs:
         uses: ./.github/actions/download-ci-inputs
         with:
           precision: single
+          mobile: 'true'
       - name: Download MAUI package
         uses: actions/download-artifact@v8
         with:
@@ -2076,7 +2064,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -2201,6 +2189,7 @@ jobs:
           - {name: showcase-nativeaot, app: showcase, configuration: Release, rid: android-x64, aot: true, package: dev.twodog.showcase, marker: 2DOG_ANDROID_SHOWCASE_SMOKE_PASSED}
     env:
       TwoDogPrecision: ${{ matrix.precision }}
+      PACK_ATTEMPT: ${{ matrix.precision == 'single' && needs.pack.outputs.single-attempt || needs.pack.outputs.double-attempt }}
       ANDROID_HOME: /tmp/2dog-android-sdk
       ANDROID_SDK_ROOT: /tmp/2dog-android-sdk
       ANDROID_NDK_ROOT: /tmp/2dog-android-sdk/ndk/29.0.14206865
@@ -2220,7 +2209,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       - name: Setup Java
         uses: actions/setup-java@v5
@@ -2247,7 +2236,7 @@ jobs:
         run: ln -sfnT 22.0 "$ANDROID_HOME/cmdline-tools/latest"
 
       - name: Install Android workload
-        run: dotnet workload install android --skip-manifest-update --source https://api.nuget.org/v3/index.json
+        run: uv run poe install-workloads android
 
       - name: Mount Android inputs
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
@@ -2259,7 +2248,8 @@ jobs:
       - name: Check inputs belong to this run
         id: inputs
         run: |
-          if uv run --no-project python scripts/stage_android_ci.py check --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_SHA"; then
+          test -n "$PACK_ATTEMPT"
+          if uv run --no-project python scripts/stage_android_ci.py check --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$PACK_ATTEMPT:$GITHUB_SHA"; then
             echo 'ready=true' >> "$GITHUB_OUTPUT"
           else
             uv run --no-project python scripts/stage_android_ci.py reset
@@ -2282,7 +2272,7 @@ jobs:
 
       - name: Prepare fork SDK and selected native reference bytes
         run: |
-          uv run --no-project python scripts/stage_android_ci.py check --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_SHA"
+          uv run --no-project python scripts/stage_android_ci.py check --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$PACK_ATTEMPT:$GITHUB_SHA"
           uv run --no-project python scripts/stage_android_ci.py prepare --precision "$TwoDogPrecision" --rid '${{ matrix.apk.rid }}' --configuration '${{ matrix.apk.configuration }}'
 
       - name: Build and inspect APK
@@ -2299,6 +2289,7 @@ jobs:
       - name: Upload APK and inspection report
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: android-apks-${{ matrix.precision }}-${{ matrix.apk.name }}
           path: |
             artifacts/android-apk/apk/*-Signed.apk
@@ -2338,6 +2329,7 @@ jobs:
         if: always() && matrix.apk.rid == 'android-x64'
         uses: actions/upload-artifact@v7
         with:
+          overwrite: true
           name: android-emulator-logcat-${{ needs.check-natives.outputs.line }}-${{ matrix.precision }}-${{ matrix.apk.name }}
           path: artifacts/android-apk/logcat.txt
           if-no-files-found: ignore
@@ -2351,124 +2343,42 @@ jobs:
             timeout 15s "$ANDROID_HOME/platform-tools/adb" kill-server
           fi
 
-  # Three complementary cells cover the bare host, trimmed double showcase/GDExtension, and MAUI embedding. The
-  # Release cell's Mono AOT compile and link take 18-25 minutes on macos-26 runners, so it runs on version tags only
-  # (where deploy gates on it) until iteration speed matters less again, after GodotFest 2026; the Debug cells run
-  # on the interpreter in about 10 minutes.
   ios-smoke:
-    name: iOS Smoke (${{ matrix.app }}, ${{ matrix.configuration }}) [${{ matrix.precision }}]
+    name: iOS Smoke (${{ matrix.app }}, Debug) [single]
     needs: [check-natives, pack, maui-pack]
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success' &&
       needs.check-natives.outputs.tested-bump != 'true')
-    runs-on: macos-26
-    # Room for the Release cell's AOT build on tag runs; the smoke step keeps its own 6-minute limit.
-    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        # The strategy context has no env, so the cells are JSON literals; the Release cell is appended on tags.
-        include: >-
-          ${{ fromJSON(format('[{0}{1}]',
-          '{"app":"smoke","configuration":"Debug","precision":"single","bundle":"dev.twodog.smoke","marker":"2DOG_IOS_CSHARP_SMOKE_PASSED"},{"app":"maui","configuration":"Debug","precision":"single","bundle":"com.companyname.showcase.maui","marker":"2DOG_MAUI_SHOWCASE_SMOKE_PASSED"}',
-          startsWith(github.ref, 'refs/tags/v') && ',{"app":"showcase","configuration":"Release","precision":"double","bundle":"dev.twodog.showcase","marker":"2DOG_IOS_SHOWCASE_SMOKE_PASSED"}' || '')) }}
-    env:
-      TwoDogPrecision: ${{ matrix.precision }}
-      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          lfs: true
+        include:
+          - {app: smoke, bundle: dev.twodog.smoke, marker: 2DOG_IOS_CSHARP_SMOKE_PASSED}
+          - {app: maui, bundle: com.companyname.showcase.maui, marker: 2DOG_MAUI_SHOWCASE_SMOKE_PASSED}
+    uses: ./.github/workflows/ios-smoke.yml
+    with:
+      app: ${{ matrix.app }}
+      bundle: ${{ matrix.bundle }}
+      marker: ${{ matrix.marker }}
+      line: ${{ needs.check-natives.outputs.line }}
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: ${{ env.IOS_DOTNET_VERSION }}
-
-      - name: Pin SDK to the iOS workload
-        run: dotnet new globaljson --sdk-version ${{ env.IOS_DOTNET_VERSION }} --roll-forward disable --force
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
-        with:
-          python-version: '3.12'
-          enable-cache: false
-
-      - name: Install iOS workloads
-        run: dotnet workload install ios maui-ios --version ${{ env.IOS_WORKLOAD_VERSION }} --source https://api.nuget.org/v3/index.json
-
-      - name: Download iOS inputs
-        uses: actions/download-artifact@v8
-        with:
-          name: ios-inputs-${{ matrix.precision }}
-
-      - name: Download iOS host and MAUI packages
-        uses: actions/download-artifact@v8
-        with:
-          name: nuget-packages-maui
-          path: packages
-
-      - name: Build and inspect Simulator app
-        run: >-
-          uv run scripts/build_ios_app.py --app '${{ matrix.app }}' --feed packages
-          --configuration '${{ matrix.configuration }}' --output artifacts/ios-app
-
-      # Preserve permissions, symlinks and bundle layout; artifact upload alone does not.
-      - name: Archive Simulator app and inspection report
-        run: ditto -c -k --sequesterRsrc --keepParent artifacts/ios-app/app/*.app artifacts/ios-app/simulator-app.zip
-
-      - name: Upload Simulator app
-        uses: actions/upload-artifact@v7
-        with:
-          name: ios-simulator-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
-          path: |
-            artifacts/ios-app/simulator-app.zip
-            artifacts/ios-app/app-report.json
-          if-no-files-found: error
-          compression-level: 0
-          retention-days: 7
-
-      # First-boot data migration can take five minutes before app installation even starts.
-      - name: Boot iOS Simulator
-        id: simulator
-        timeout-minutes: 8
-        shell: bash
-        run: |
-          runtime=$(xcrun simctl list runtimes --json | jq -r '[.runtimes[] | select(.isAvailable and (.identifier | contains(".iOS-")))] | last | .identifier // empty')
-          test -n "$runtime"
-          device=$(xcrun simctl create 2dog-ci com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$runtime")
-          echo "device=$device" >> "$GITHUB_OUTPUT"
-          xcrun simctl boot "$device"
-          xcrun simctl bootstatus "$device" -b 2>&1 | tee artifacts/ios-app/simulator-boot.log
-
-      - name: Install app and run C# smoke
-        env:
-          SIMCTL_CHILD_CI: 'true'
-          SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
-        timeout-minutes: 6
-        shell: bash
-        run: |
-          uv run scripts/test_ios_simulator.py artifacts/ios-app/app/*.app --device "$SIMULATOR_DEVICE" \
-            --bundle '${{ matrix.bundle }}' --marker '${{ matrix.marker }}' --timeout 120 \
-            2>&1 | tee artifacts/ios-app/simulator.log
-
-      - name: Shut down iOS Simulator
-        if: always() && steps.simulator.outputs.device != ''
-        timeout-minutes: 2
-        env:
-          SIMULATOR_DEVICE: ${{ steps.simulator.outputs.device }}
-        run: xcrun simctl shutdown "$SIMULATOR_DEVICE" || true
-
-      - name: Upload Simulator diagnostics
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: ios-simulator-log-${{ needs.check-natives.outputs.line }}-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
-          path: artifacts/ios-app/simulator*.log
-          if-no-files-found: ignore
-          retention-days: 7
+  # Run after staging alongside test-feed upload, even when Debug checks are reused.
+  ios-release:
+    name: iOS Release Smoke
+    needs: [check-natives, deploy]
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && needs.deploy.result == 'success' && startsWith(github.ref, 'refs/tags/v'))
+    uses: ./.github/workflows/ios-smoke.yml
+    with:
+      app: showcase
+      configuration: Release
+      precision: double
+      bundle: dev.twodog.showcase
+      marker: 2DOG_IOS_SHOWCASE_SMOKE_PASSED
+      line: ${{ needs.check-natives.outputs.line }}
+      release-tag: ${{ github.ref_name }}
 
   # Stage the release when running on a version tag — either pushed directly or dispatched on the tag by
   # release.yml (tags pushed with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead):
@@ -2515,13 +2425,29 @@ jobs:
           path: packages-double
 
       - name: Include precision-specific double packages
-        run: cp packages-double/2dog.*.double.*nupkg packages/
+        run: |
+          cp packages-double/2dog.*.double.*nupkg packages/
+          cp packages-double/native-build-double.json packages/
 
       - name: Download MAUI package
         uses: actions/download-artifact@v8
         with:
           name: nuget-packages-maui
           path: packages
+
+      - name: Checkout release validators
+        uses: actions/checkout@v7
+        with:
+          path: .ci/release-source
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Validate complete release and record source attempt
+        run: uv run --no-project python .ci/release-source/scripts/release_packages.py stage "${GITHUB_REF#refs/tags/}"
 
       # Every release starts as a GitHub prerelease; publish.yml makes a stable one a full release on promotion.
       # A rerun never replaces assets: they may already be promoted. Delete the release to restage it.
@@ -2543,7 +2469,7 @@ jobs:
               awk -v rev="$REVISION" '$1 < rev' | sort -n | tail -n 1 | cut -d' ' -f2)
             [ -z "$PREVIOUS" ] || OPTIONS+=(--notes-start-tag "$PREVIOUS")
             gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes --prerelease \
-              "${OPTIONS[@]}" packages/*.nupkg packages/*.snupkg
+              "${OPTIONS[@]}" packages/*.nupkg packages/*.snupkg packages/native-build-*.json packages/release-manifest.json
           fi
 
       - name: Stage on int.nugettest.org

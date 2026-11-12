@@ -7,6 +7,8 @@ import subprocess
 import tempfile
 import unittest
 
+from scripts.native_inputs import BUILD_INPUTS, PACKAGE_INPUTS
+
 REPO = Path(__file__).resolve().parents[2]
 NU = shutil.which("nu")
 PROPS = """<Project>
@@ -38,6 +40,9 @@ def --wrapped main [...args: string] {
         tag => { if ($args | get 1) == '--list' { print ($env.LOCAL_TAG? | default '') } }
         cat-file => { if ($env.MISSING_OBJECT? | default '') != '' { exit 1 } }
         diff => { if ($env.NATIVES_CHANGED? | default '') != '' { exit 1 } }
+        ls-tree => {
+            if ($env.NATIVES_CHANGED? | default '') != '' and $args.3 != 'HEAD' { print 'old-tree' } else { print 'same-tree' }
+        }
         grep => { print ($env.SDK_FILES? | default '') }
         rev-parse => {
             # A release tag's godot gitlink (<sha>:godot); everything else resolves to the tree's pin.
@@ -46,7 +51,10 @@ def --wrapped main [...args: string] {
         }
         config => { print 'git@example.com:fork/godot.git' }
         '-C' => { if 'show' in $args { print ($env.LINE_VERSION_PY? | default '') } }
-        show => { print ($env.LINE_TAG_PROPS? | default '') }
+        show => {
+            print ($env.TEST_PROPS | str replace --regex '<NativesRevision>[^<]*</NativesRevision>'
+                ($env.LINE_TAG_PROPS? | default '<NativesRevision>46</NativesRevision>'))
+        }
         update-index => {}
         checkout => {}
         submodule => {}
@@ -60,7 +68,7 @@ def --wrapped main [...args: string] {
     }
 }
 '''
-INPUTS = ["platforms", "nuget", "build", "scripts/stage_natives_release.py"]
+INPUTS = [*BUILD_INPUTS, *PACKAGE_INPUTS]
 # main carries the 4.8 line; godot-lines.json adds 4.7, last released as v4.7.2.139 with natives 120.
 LINES = '{ "4.7": { "branch": "2dog-4.7", "commit": "line-commit" } }\n'
 LINE_ENV = {
@@ -78,6 +86,7 @@ class ReleaseScript(unittest.TestCase):
         self.root = Path(self.temp.name)
         (self.root / "scripts").mkdir()
         shutil.copyfile(REPO / "scripts/release.nu", self.root / "scripts/release.nu")
+        shutil.copyfile(REPO / "scripts/native_inputs.py", self.root / "scripts/native_inputs.py")
         (self.root / "Directory.Build.props").write_text(PROPS)
         bin_dir = self.root / "bin"
         bin_dir.mkdir()
@@ -90,7 +99,7 @@ class ReleaseScript(unittest.TestCase):
             launcher.chmod(0o755)
         self.log = self.root / "git.jsonl"
         self.env = {**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"], "GIT_LOG": str(self.log),
-                    "REMOTE_TAGS": REMOTE_TAGS}
+                    "REMOTE_TAGS": REMOTE_TAGS, "TEST_PROPS": PROPS}
         self.write_version_py("4.7.2", "stable")
 
     def write_version_py(self, version, status):
@@ -138,7 +147,7 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn("<TwoDogRevision>141</TwoDogRevision>", self.props())
         self.assertIn("<NativesRevision>46</NativesRevision>", self.props())
         self.assertIn("<TwoDogPrerelease></TwoDogPrerelease>", self.props())
-        self.assertIn(["diff", "--quiet", "nat46", "HEAD", "--", *INPUTS], self.calls())
+        self.assertIn(["ls-tree", "-r", "--full-tree", "nat46", "--", *INPUTS], self.calls())
         self.assertEqual([
             ["add", "--", "Directory.Build.props"],
             ["-c", "commit.gpgsign=true", "commit", "-m", "chore: release v4.7.2.141"],
@@ -184,7 +193,7 @@ class ReleaseScript(unittest.TestCase):
                                    "tag-object\trefs/tags/v4.7.2.46\nnat46\trefs/tags/v4.7.2.46^{}")
         result = self.run_release(REMOTE_TAGS=tags)
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn(["diff", "--quiet", "nat46", "HEAD", "--", *INPUTS], self.calls())
+        self.assertIn(["ls-tree", "-r", "--full-tree", "nat46", "--", *INPUTS], self.calls())
 
     def test_labeled_branch_releases_a_prerelease(self):
         result = self.run_release("--no-sign", TEST_BRANCH="4.7-beta")
@@ -209,7 +218,7 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn("<TwoDogPrerelease>beta2</TwoDogPrerelease>", self.props())
         self.assertEqual(b'<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2">\r\n</Project>\r\n',
                          (self.root / "game/game.csproj").read_bytes())
-        self.assertIn(["diff", "--quiet", "nat80", "HEAD", "--", *INPUTS], self.calls())
+        self.assertIn(["ls-tree", "-r", "--full-tree", "nat80", "--", *INPUTS], self.calls())
         self.assertIn(["add", "--", "Directory.Build.props", "game/game.csproj"], self.calls())
         self.assertEqual(["tag", "v4.8.0.141-beta2"], self.calls()[-2])
 
@@ -299,7 +308,7 @@ class ReleaseScript(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("<NativesRevision>120</NativesRevision>", self.props())
         self.assertIn(["rev-parse", "nat120:godot"], self.calls())
-        self.assertIn(["diff", "--quiet", "nat120", "HEAD", "--", *INPUTS], self.calls())
+        self.assertIn(["ls-tree", "-r", "--full-tree", "nat120", "--", *INPUTS], self.calls())
 
     def test_line_release_with_another_godot_pin_builds_its_natives(self):
         env = self.main_tree_with_another_line()

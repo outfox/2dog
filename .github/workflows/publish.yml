@@ -22,6 +22,10 @@ on:
 permissions:
   contents: write # read release assets, publish the GitHub release after promotion
   id-token: write # request the GitHub OIDC token for Trusted Publishing
+  actions: read # verify the staged attempt's independent iOS Release check before production promotion
+
+env:
+  UV_LOCKED: '1'
 
 concurrency:
   group: publish-${{ inputs.tag }}-${{ inputs.feed }}
@@ -42,19 +46,21 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Download release packages
-        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir packages --pattern '*.nupkg' --pattern '*.snupkg'
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir packages --pattern '*.nupkg' --pattern '*.snupkg' --pattern 'native-build-*.json' --pattern release-manifest.json
 
-      # Refuse to publish unless the release really holds packages at the tag's version.
-      - name: Verify packages match tag
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Verify complete release and production gate
+        env:
+          FEED: ${{ inputs.feed }}
         run: |
-          VERSION="${TAG#v}"
-          for pkg in "2dog" "2dog.templates" "2dog.godotsharp" "2dog.godotsharp.editor" "2dog.engine" "2dog.avalonia" "2dog.blazor" "2dog.qt" "2dog.repl" "2dog.gdunit" "2dog.maui" "2dog.ios"; do
-            if [[ ! -f "packages/${pkg}.${VERSION}.nupkg" ]]; then
-              echo "::error::Release $TAG does not contain ${pkg}.${VERSION}.nupkg; refusing to publish."
-              ls -lh packages/
-              exit 1
-            fi
-          done
+          options=()
+          if [ "$FEED" = nuget ]; then options+=(--production); fi
+          uv run --no-project python scripts/release_packages.py verify "$TAG" "${options[@]}"
 
       - name: Select feed
         id: feed
@@ -71,7 +77,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: global.json
 
       # Exchanges the GitHub OIDC token for a short-lived API key. `NUGET_USER` is a repo secret holding the account
       # that owns the policy on both feeds.

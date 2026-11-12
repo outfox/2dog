@@ -1,10 +1,13 @@
 """Stage one precision's complete native release for CI packing."""
 import argparse
+import hashlib
+import json
+import os
 from pathlib import Path
 import zipfile
 
 
-def stage(assets, root, precision):
+def stage(assets, root, precision, identity=None):
     if precision not in ("single", "double"):
         raise ValueError("precision must be single or double")
     suffix = ".double" if precision == "double" else ""
@@ -37,7 +40,17 @@ def stage(assets, root, precision):
         for rid in ("ios-arm64", "iossimulator-arm64"):
             manifest.append((f"libgodot-{rid}-{target}", selected / f"ios/{target}/{rid}", ["libgodot.a"]))
     # Validate every archive before extracting anything. Never turn missing platforms into publishable stubs.
+    metadata_path = assets / "native-build.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.exists() else None
+    if identity and (not metadata or metadata["identity"] != identity or metadata["precision"] != precision
+                     or metadata["tag"] != f"godot-{identity}" + ("-double" if precision == "double" else "")):
+        raise ValueError("Native release identity or precision does not match this build")
     for name, destination, expected in manifest:
+        if metadata:
+            with (assets / f"{name}.zip").open("rb") as stream:
+                actual = hashlib.file_digest(stream, "sha256").hexdigest()
+            if metadata["assets"].get(f"{name}.zip") != actual:
+                raise ValueError(f"Native release checksum mismatch: {name}.zip")
         with zipfile.ZipFile(assets / f"{name}.zip") as archive:
             members = [p.removeprefix("./") for p in archive.namelist()]
             for pattern in expected:
@@ -52,6 +65,13 @@ def stage(assets, root, precision):
         with zipfile.ZipFile(assets / f"{name}.zip") as archive:
             archive.extractall(destination)
     (bin_dir / editor).chmod(0o755)
+    if metadata:
+        (root / "packages").mkdir(exist_ok=True)
+        (root / "packages" / f"native-build-{precision}.json").write_text(json.dumps(metadata) + "\n", encoding="utf-8")
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            build = {name: os.environ[name] for name in ("GITHUB_REF", "GITHUB_RUN_ID", "GITHUB_RUN_ATTEMPT", "GITHUB_SHA")}
+            build["precision"] = precision
+            (root / "packages/ci-build.json").write_text(json.dumps(build) + "\n", encoding="utf-8")
     print(f"Staged complete {precision}-precision release ({len(manifest)} archives)")
 
 
@@ -60,5 +80,6 @@ if __name__ == "__main__":
     parser.add_argument("assets", type=Path)
     parser.add_argument("--precision", choices=("single", "double"), default="single")
     parser.add_argument("--root", type=Path, default=Path.cwd())
+    parser.add_argument("--identity", help="Require a matching immutable native release and verify its checksums")
     args = parser.parse_args()
-    stage(args.assets, args.root, args.precision)
+    stage(args.assets, args.root, args.precision, args.identity)

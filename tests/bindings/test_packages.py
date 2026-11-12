@@ -23,10 +23,9 @@ parser.add_argument("--version")
 parser.add_argument("--precision", choices=["single", "double"], default="single")
 args, remaining = parser.parse_known_args()
 if not args.version:
-    props = ET.parse(REPO / "Directory.Build.props")
-    label = props.findtext(".//TwoDogPrerelease")
-    args.version = (props.findtext(".//GodotVersion").split("-")[0] + "." + props.findtext(".//TwoDogRevision")
-                    + (f"-{label}" if label else ""))
+    # MSBuild owns the rule: CI builds other than tags add a ci suffix.
+    args.version = subprocess.run(["dotnet", "msbuild", str(REPO / "twodog.engine/twodog.engine.csproj"),
+                                   "-getProperty:TwoDogVersion"], check=True, capture_output=True, text=True).stdout.strip()
 FEED = args.feed.resolve()
 VERSION = args.version
 GODOT = ET.parse(REPO / "Directory.Build.props").findtext(".//GodotVersion")
