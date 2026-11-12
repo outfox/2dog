@@ -14,9 +14,9 @@ def main():
     run_msbuild = builder.run_msbuild
 
     def isolated_msbuild(tools, sln, chdir_to, msbuild_args=None):
-        # Upstream's output-dir option covers API assemblies, but GodotTools hardcodes bin/GodotSharp.
+        # GodotTools hardcodes this root; the SDK copy target concatenates Tools/nupkgs without a separator.
         return run_msbuild(tools, sln, chdir_to,
-                           [*(msbuild_args or []), f"/p:GodotOutputDataDir={output.as_posix()}"])
+                           [*(msbuild_args or []), f"/p:GodotOutputDataDir={output.as_posix()}/"])
 
     builder.run_msbuild = isolated_msbuild
     builder.main()

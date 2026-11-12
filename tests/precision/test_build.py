@@ -72,12 +72,15 @@ class NativePrecisionTests(unittest.TestCase):
             source.write_text('''from pathlib import Path
 import sys
 def run_msbuild(tools, sln, chdir_to, msbuild_args=None):
-    output = Path("bin/GodotSharp")
+    output = "bin/GodotSharp/"
     for arg in msbuild_args or []:
         if arg.startswith("/p:GodotOutputDataDir="):
-            output = Path(arg.split("=", 1)[1])
-    output.mkdir(parents=True, exist_ok=True)
-    (output / "GodotTools.dll").write_bytes(b"double tools")
+            output = arg.split("=", 1)[1]
+    Path(output).mkdir(parents=True, exist_ok=True)
+    (Path(output) / "GodotTools.dll").write_bytes(b"double tools")
+    packages = Path(output + "Tools/nupkgs")
+    packages.mkdir(parents=True)
+    (packages / "Godot.NET.Sdk.nupkg").write_bytes(b"fork SDK")
     return 7
 def main():
     sys.exit(run_msbuild(None, sln="GodotTools.sln", chdir_to=".", msbuild_args=["/p:GodotFloat64=true"]))
@@ -95,6 +98,7 @@ def main():
                 self.assertEqual(7, error.exception.code)
                 self.assertEqual(b"single tools", single.read_bytes())
                 self.assertEqual(b"double tools", (root / "godot/bin/double/GodotSharp/GodotTools.dll").read_bytes())
+                self.assertEqual(b"fork SDK", (root / "godot/bin/double/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.nupkg").read_bytes())
             finally:
                 os.chdir(old)
 
