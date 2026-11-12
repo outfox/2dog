@@ -151,7 +151,7 @@ class ReleaseScript(unittest.TestCase):
         self.assertEqual([
             ["add", "--", "Directory.Build.props"],
             ["-c", "commit.gpgsign=true", "commit", "-m", "chore: release v4.7.2.141"],
-            ["tag", "v4.7.2.141"],
+            ["tag", "--message", "Release v4.7.2.141", "v4.7.2.141"],
             ["push", "--atomic", "origin", "HEAD:refs/heads/main", "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141"],
         ], self.calls()[-4:])
 
@@ -201,7 +201,7 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn("<TwoDogPrerelease>beta</TwoDogPrerelease>", self.props())
         self.assertEqual([
             ["commit", "-m", "chore: release v4.7.2.141-beta"],
-            ["tag", "v4.7.2.141-beta"],
+            ["tag", "--message", "Release v4.7.2.141-beta", "v4.7.2.141-beta"],
             ["push", "--atomic", "origin", "HEAD:refs/heads/4.7-beta",
              "refs/tags/v4.7.2.141-beta:refs/tags/v4.7.2.141-beta"],
         ], self.calls()[-3:])
@@ -220,7 +220,7 @@ class ReleaseScript(unittest.TestCase):
                          (self.root / "game/game.csproj").read_bytes())
         self.assertIn(["ls-tree", "-r", "--full-tree", "nat80", "--", *INPUTS], self.calls())
         self.assertIn(["add", "--", "Directory.Build.props", "game/game.csproj"], self.calls())
-        self.assertEqual(["tag", "v4.8.0.141-beta2"], self.calls()[-2])
+        self.assertEqual(["tag", "--message", "Release v4.8.0.141-beta2", "v4.8.0.141-beta2"], self.calls()[-2])
 
     def test_sync_aligns_versions_with_a_bumped_fork_without_committing(self):
         self.write_version_py("4.8.0", "beta3")
@@ -293,7 +293,7 @@ class ReleaseScript(unittest.TestCase):
         self.assertEqual([
             ["add", "--", "Directory.Build.props", ".gitmodules", "game.csproj", "project.godot"],
             ["commit", "-m", "chore: release v4.7.2.141"],
-            ["tag", "v4.7.2.141"],
+            ["tag", "--message", "Release v4.7.2.141", "v4.7.2.141"],
             ["push", "origin", "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141"],
             ["checkout", "--quiet", "--force", "main"],
             ["submodule", "update", "--quiet", "godot"],
@@ -372,7 +372,7 @@ class ReleaseScript(unittest.TestCase):
         result = self.run_release(TEST_BRANCH="4.7.2")
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertIn("<TwoDogPrerelease></TwoDogPrerelease>", self.props())
-        self.assertEqual(["tag", "v4.7.2.141"], self.calls()[-2])
+        self.assertEqual(["tag", "--message", "Release v4.7.2.141", "v4.7.2.141"], self.calls()[-2])
 
     def test_dry_run_does_not_mutate(self):
         result = self.run_release("--dry-run", NATIVES_CHANGED="1")
@@ -404,7 +404,7 @@ class ReleaseScript(unittest.TestCase):
     def test_signing_failure_never_tags_or_pushes(self):
         result = self.run_release(FAIL_GIT="-c commit.gpgsign=true commit -m chore: release v4.7.2.141")
         self.assertNotEqual(0, result.returncode)
-        self.assertFalse(any(call[0] == "push" or call == ["tag", "v4.7.2.141"] for call in self.calls()))
+        self.assertFalse(any(call[0] == "push" or call == ["tag", "--message", "Release v4.7.2.141", "v4.7.2.141"] for call in self.calls()))
 
     def test_push_failure_keeps_recovery_command(self):
         result = self.run_release(

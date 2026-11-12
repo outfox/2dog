@@ -275,7 +275,7 @@ def main [
         git add -- Directory.Build.props ...(if $target == null { [] } else { [.gitmodules] }) ...$retargeted | ignore
         let sign = if $no_sign { [] } else { [-c commit.gpgsign=true] }
         git ...$sign commit -m $"chore: release ($tag)" | print
-        git tag $tag | ignore
+        git tag --message $"Release ($tag)" $tag | ignore
         print $"Pushing (if $target == null { $'($branch) and ' } else { '' })($tag); the tag run tests the release and stages it on int.nugettest.org."
         try {
             git ...$push | print
