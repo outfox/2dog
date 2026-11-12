@@ -14,7 +14,7 @@ custom_features="dotnet"
 
 config/name="showcase"
 run/main_scene="uid://dgiqsv3ntvl3t"
-config/features=PackedStringArray("4.8", "C#")
+config/features=PackedStringArray("4.7", "C#")
 boot_splash/image="uid://ddqqkap6en6iq"
 config/icon="res://icon.svg"
 
