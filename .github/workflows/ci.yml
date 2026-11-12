@@ -42,6 +42,7 @@ jobs:
       ready: ${{ steps.check.outputs.ready }}
       double-ready: ${{ steps.check.outputs.double-ready }}
       hash: ${{ steps.check.outputs.hash }}
+      line: ${{ steps.check.outputs.line }}
       tested-bump: ${{ steps.release.outputs.tested-bump }}
     steps:
       - name: Checkout repository
@@ -92,6 +93,10 @@ jobs:
           HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "Godot submodule hash: $HASH"
+          # Lines run side by side (ci/<line>/* pushes): caches, sticky disks and diagnostics carry the line.
+          LINE=$(sed -nE 's#.*<GodotVersion>([0-9]+\.[0-9]+)\..*#\1#p' Directory.Build.props)
+          test -n "$LINE" || { echo "::error::No <GodotVersion> in Directory.Build.props."; exit 1; }
+          echo "line=$LINE" >> $GITHUB_OUTPUT
 
           if bash scripts/check_natives_release.sh "godot-$HASH"; then
             echo "ready=true" >> $GITHUB_OUTPUT
@@ -356,7 +361,7 @@ jobs:
       - name: Mount scoped Android input disk
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ github.repository }}-android-inputs-${{ matrix.precision }}-v1
+          key: ${{ github.repository }}-android-inputs-${{ needs.check-natives.outputs.line }}-${{ matrix.precision }}-v1
           path: .ci/android-inputs
           commit: on-change
 
@@ -611,7 +616,7 @@ jobs:
         if: always() && steps.repl-coverage.outcome != 'skipped' && runner.os == 'Windows' && matrix.config == 'Debug' && matrix.precision == 'single'
         uses: actions/upload-artifact@v7
         with:
-          name: repl-coverage-${{ matrix.config }}-${{ matrix.precision }}
+          name: repl-coverage-${{ needs.check-natives.outputs.line }}-${{ matrix.config }}-${{ matrix.precision }}
           path: twodog.tests/TestResults/repl-coverage/**/coverage.cobertura.xml
           if-no-files-found: error
           retention-days: 7
@@ -657,7 +662,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-dumps-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}-${{ matrix.suite }}
+          name: test-dumps-${{ needs.check-natives.outputs.line }}-${{ matrix.name }}-${{ matrix.config }}-${{ matrix.precision }}-${{ matrix.suite }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7
@@ -714,7 +719,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: mtp-contracts-${{ matrix.name }}-Debug-${{ matrix.precision }}
+          name: mtp-contracts-${{ needs.check-natives.outputs.line }}-${{ matrix.name }}-Debug-${{ matrix.precision }}
           path: |
             tests/mtp/bin/**/console.log
             tests/mtp/bin/**/fixture.events
@@ -792,7 +797,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-dumps-win-x64-rendering-${{ matrix.precision }}
+          name: test-dumps-${{ needs.check-natives.outputs.line }}-win-x64-rendering-${{ matrix.precision }}
           path: '**/TestResults/**'
           if-no-files-found: ignore
           retention-days: 7
@@ -1325,7 +1330,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: webgpu-desktop-${{ matrix.name }}
+          name: webgpu-desktop-${{ needs.check-natives.outputs.line }}-${{ matrix.name }}
           path: |
             webgpu-smoke.log
             ~/Library/Logs/DiagnosticReports/*NativeWebGpu*.ips
@@ -1338,7 +1343,7 @@ jobs:
   # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
   web-smoke:
     name: Web Smoke (${{ matrix.flavor }}, AOT=${{ matrix.aot }}) [${{ matrix.precision }}]
-    needs: [pack]
+    needs: [check-natives, pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
@@ -1835,7 +1840,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: web-smoke-failure-${{ matrix.flavor }}-aot-${{ matrix.aot }}-${{ github.run_attempt }}-${{ matrix.precision }}
+          name: web-smoke-failure-${{ needs.check-natives.outputs.line }}-${{ matrix.flavor }}-aot-${{ matrix.aot }}-${{ github.run_attempt }}-${{ matrix.precision }}
           path: |
             demos/showcase/showcase.${{ matrix.flavor }}/AppBundle/
             demos/showcase/showcase.blazor/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net10.0/publish/
@@ -1889,7 +1894,7 @@ jobs:
   # Check Mobile pixels on the macOS Metal GPU as well as SwiftShader above.
   webgpu-browser:
     name: WebGPU Browser Mobile
-    needs: [webgpu-browser-build]
+    needs: [check-natives, webgpu-browser-build]
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.webgpu-browser-build.result == 'success')
     runs-on: macos-15
     timeout-minutes: 12
@@ -1937,7 +1942,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: webgpu-mobile-images
+          name: webgpu-mobile-images-${{ needs.check-natives.outputs.line }}
           path: |
             /tmp/2dog-mobile-webgpu-*.log
             /tmp/2dog-mobile-webgpu-captures/
@@ -2101,7 +2106,7 @@ jobs:
       - name: Mount Android SDK
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ github.repository }}-android-sdk-36-ndk29-v1
+          key: ${{ github.repository }}-android-sdk-36-ndk29-v1 # shared across lines: one ci.yml installs one SDK
           path: ${{ env.ANDROID_HOME }}
           commit: on-change
 
@@ -2130,7 +2135,7 @@ jobs:
       - name: Mount pristine emulator snapshot
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ steps.snapshot-key.outputs.key }}
+          key: ${{ steps.snapshot-key.outputs.key }} # shared across lines: a pristine emulator, keyed by its image
           path: ~/.android
           commit: on-change
 
@@ -2226,7 +2231,7 @@ jobs:
       - name: Mount Android SDK
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ github.repository }}-android-sdk-36-ndk29-v1
+          key: ${{ github.repository }}-android-sdk-36-ndk29-v1 # shared across lines: one ci.yml installs one SDK
           path: ${{ env.ANDROID_HOME }}
           commit: 'false'
 
@@ -2247,7 +2252,7 @@ jobs:
       - name: Mount Android inputs
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ github.repository }}-android-inputs-${{ matrix.precision }}-v1
+          key: ${{ github.repository }}-android-inputs-${{ needs.check-natives.outputs.line }}-${{ matrix.precision }}-v1
           path: .ci/android-inputs
           commit: 'false'
 
@@ -2271,7 +2276,7 @@ jobs:
       - name: Mount NuGet cache
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ github.repository }}-android-nuget-linux-${{ matrix.precision }}-v1
+          key: ${{ github.repository }}-android-nuget-linux-${{ needs.check-natives.outputs.line }}-${{ matrix.precision }}-v1
           path: .packages
           commit: on-change
 
@@ -2305,7 +2310,7 @@ jobs:
         if: matrix.apk.rid == 'android-x64'
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          key: ${{ needs.android-prepare.outputs.avd-key }}
+          key: ${{ needs.android-prepare.outputs.avd-key }} # shared across lines: mounted read-only
           path: ~/.android
           commit: 'false'
 
@@ -2333,7 +2338,7 @@ jobs:
         if: always() && matrix.apk.rid == 'android-x64'
         uses: actions/upload-artifact@v7
         with:
-          name: android-emulator-logcat-${{ matrix.precision }}-${{ matrix.apk.name }}
+          name: android-emulator-logcat-${{ needs.check-natives.outputs.line }}-${{ matrix.precision }}-${{ matrix.apk.name }}
           path: artifacts/android-apk/logcat.txt
           if-no-files-found: ignore
           retention-days: 7
@@ -2460,7 +2465,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: ios-simulator-log-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
+          name: ios-simulator-log-${{ needs.check-natives.outputs.line }}-${{ matrix.app }}-${{ matrix.precision }}-${{ matrix.configuration }}
           path: artifacts/ios-app/simulator*.log
           if-no-files-found: ignore
           retention-days: 7

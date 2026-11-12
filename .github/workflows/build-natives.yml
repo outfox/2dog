@@ -52,6 +52,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       submodule-hash: ${{ steps.hash.outputs.hash }}
+      line: ${{ steps.hash.outputs.line }}
       skip: ${{ steps.check-release.outputs.skip }}
 
     steps:
@@ -64,6 +65,10 @@ jobs:
           HASH=$(git ls-tree HEAD godot | awk '{print $3}' | cut -c1-7)
           echo "hash=$HASH" >> $GITHUB_OUTPUT
           echo "Godot submodule hash: $HASH"
+          # The SCons caches' fallback prefixes would otherwise restore the other Godot line's cache.
+          LINE=$(sed -nE 's#.*<GodotVersion>([0-9]+\.[0-9]+)\..*#\1#p' Directory.Build.props)
+          test -n "$LINE" || { echo "::error::No <GodotVersion> in Directory.Build.props."; exit 1; }
+          echo "line=$LINE" >> $GITHUB_OUTPUT
 
       - name: Check if release already exists
         id: check-release
@@ -135,9 +140,9 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: godotsharp-linux-${{ inputs.precision }}-${{ needs.preflight.outputs.submodule-hash }}
+          key: godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ needs.preflight.outputs.submodule-hash }}
           restore-keys: |
-            godotsharp-linux-${{ inputs.precision }}-
+            godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-
 
       - name: Test WebGPU build configuration and browser startup
         if: inputs.precision == 'single'
@@ -403,9 +408,9 @@ jobs:
           path: |
             godot/.scons_cache
             ~/.cache/scons
-          key: libgodot-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
+          key: libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.submodule-hash }}
           restore-keys: |
-            libgodot-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
+            libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
 
       # Build using build-godot.py with platform/arch overrides
       - name: Build libgodot (${{ matrix.target }})
