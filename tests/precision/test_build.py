@@ -44,10 +44,14 @@ class NativePrecisionTests(unittest.TestCase):
                 api = Path("godot/bin/double/GodotSharp/Api/Debug/GodotSharp.dll")
                 api.parent.mkdir(parents=True)
                 api.write_bytes(b"double bindings")
-                Path("godot/bin/double/GodotSharp/Tools/nupkgs").mkdir(parents=True)
+                sdk = Path("godot/bin/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.nupkg")
+                sdk.parent.mkdir(parents=True)
+                sdk.write_bytes(b"shared SDK")
                 build.generate_glue(config, "double")
                 self.assertEqual(b"double bindings", Path("godot/bin/double/GodotSharp/Api/Debug/GodotSharp.dll").read_bytes())
                 self.assertEqual(b"single bindings", single.read_bytes())
+                self.assertEqual(b"shared SDK", sdk.read_bytes())
+                self.assertFalse(Path("godot/bin/double/GodotSharp/Tools/nupkgs").exists())
             finally:
                 os.chdir(old)
         commands = [call.args[0] for call in run.call_args_list]
@@ -78,7 +82,7 @@ def run_msbuild(tools, sln, chdir_to, msbuild_args=None):
             output = arg.split("=", 1)[1]
     Path(output).mkdir(parents=True, exist_ok=True)
     (Path(output) / "GodotTools.dll").write_bytes(b"double tools")
-    packages = Path(output + "Tools/nupkgs")
+    packages = Path("bin/GodotSharp/Tools/nupkgs")
     packages.mkdir(parents=True)
     (packages / "Godot.NET.Sdk.nupkg").write_bytes(b"fork SDK")
     return 7
@@ -98,7 +102,8 @@ def main():
                 self.assertEqual(7, error.exception.code)
                 self.assertEqual(b"single tools", single.read_bytes())
                 self.assertEqual(b"double tools", (root / "godot/bin/double/GodotSharp/GodotTools.dll").read_bytes())
-                self.assertEqual(b"fork SDK", (root / "godot/bin/double/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.nupkg").read_bytes())
+                self.assertEqual(b"fork SDK", (root / "godot/bin/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.nupkg").read_bytes())
+                self.assertFalse((root / "godot/bin/double/GodotSharp/Tools/nupkgs").exists())
             finally:
                 os.chdir(old)
 
@@ -108,6 +113,34 @@ def main():
                 with patch.object(build.subprocess, "run", return_value=argparse.Namespace(
                         stdout=f"emcc version {version}", returncode=0)), self.assertRaises(SystemExit):
                     build.check_emscripten_version()
+
+    def test_fork_sdk_copy_target_stays_in_shared_feed(self):
+        target = ROOT / "godot/modules/mono/Directory.Build.targets"
+        if not target.is_file():
+            self.skipTest("requires the fork checkout; also run by the native GodotSharp job")
+        with tempfile.TemporaryDirectory(prefix="2dog-sdk-copy-") as scratch:
+            root = Path(scratch)
+            package_id = root.name
+            filename = f"{package_id}.1.0.0.nupkg"
+            (root / filename).write_bytes(b"SDK copy contract")
+            project = root / "copy.proj"
+            project.write_text(f'<Project><Import Project="{escape(str(target))}"/></Project>')
+            shared = ROOT / "godot/bin/GodotSharp/Tools/nupkgs" / filename
+            try:
+                for precision in ("single", "double"):
+                    selected = root / precision / "GodotSharp"
+                    result = subprocess.run(["dotnet", "msbuild", str(project), "-nologo",
+                        "-t:CopyNupkgToSConsOutputDir", "-p:GeneratePackageOnBuild=true",
+                        f"-p:PackageId={package_id}", "-p:PackageVersion=1.0.0",
+                        f"-p:PackageOutputPath={root.as_posix()}/",
+                        f"-p:GodotOutputDataDir={selected.as_posix()}/"],
+                        capture_output=True, text=True, timeout=60)
+                    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                    self.assertEqual(b"SDK copy contract", shared.read_bytes())
+                    self.assertFalse((selected / "Tools/nupkgs" / filename).exists())
+                    shared.unlink()
+            finally:
+                shared.unlink(missing_ok=True)
 
 
 class BuildOutputTests(unittest.TestCase):

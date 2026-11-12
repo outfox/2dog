@@ -157,6 +157,10 @@ jobs:
           uv run python -m unittest discover -s godot/drivers/webgpu/tests -p 'test_*.py' -v
           node --test godot/drivers/webgpu/tests/engine_boot.test.mjs
 
+      - name: Verify fork SDK output contract
+        if: inputs.precision == 'single'
+        run: uv run python -m unittest discover -s tests/precision -p test_build.py -k test_fork_sdk_copy_target_stays_in_shared_feed -v
+
       - name: Build editor + GodotSharp assemblies
         run: |
           uv run poe build-godot --precision ${{ inputs.precision }} \
@@ -179,7 +183,7 @@ jobs:
         with:
           overwrite: true
           name: godotsharp-nupkgs-${{ inputs.precision }}
-          path: godot/bin/${{ env.NATIVE_SUBDIR }}GodotSharp/Tools/nupkgs/
+          path: godot/bin/GodotSharp/Tools/nupkgs/
           if-no-files-found: error
           retention-days: 7
 

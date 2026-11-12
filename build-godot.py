@@ -720,10 +720,6 @@ def generate_glue(platform_config: PlatformConfig, precision: str = "single"):
         cwd="godot",
         description=task_desc,
     )
-    if precision == "double":
-        import shutil
-        # The fork SDK feed is precision-neutral; API and tool assemblies stay in the selected tree.
-        shutil.copytree("godot/bin/double/GodotSharp/Tools/nupkgs", "godot/bin/GodotSharp/Tools/nupkgs", dirs_exist_ok=True)
 
 
 def main():

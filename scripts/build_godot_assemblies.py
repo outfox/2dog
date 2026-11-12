@@ -14,7 +14,7 @@ def main():
     run_msbuild = builder.run_msbuild
 
     def isolated_msbuild(tools, sln, chdir_to, msbuild_args=None):
-        # GodotTools hardcodes this root; the SDK copy target concatenates Tools/nupkgs without a separator.
+        # Isolate API/tool assemblies; the fork's SDK copy target keeps its separate shared feed.
         return run_msbuild(tools, sln, chdir_to,
                            [*(msbuild_args or []), f"/p:GodotOutputDataDir={output.as_posix()}/"])
 
