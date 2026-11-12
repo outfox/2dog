@@ -16,136 +16,99 @@
 that your .NET application hosts. Keep your Godot project exactly as it is, and run it on the desktop, in the
 browser, inside a .NET UI, or under **xUnit and NUnit with a real Godot engine**, all with `dotnet` and your IDE.
 
-📖 Full documentation: **[2dog.dev](https://2dog.dev)**
+📖 End-user documentation: **[2dog.dev](https://2dog.dev)**
 
+## Build and develop locally
 
-## Experimental WebGPU
+Poe is the build entry point; tasks live in [pyproject.toml](pyproject.toml).
+`uv run --locked` installs the Python tools from `uv.lock`; [global.json](global.json)
+pins the .NET SDK and optional workload set. Install **uv**, **Git LFS**, that .NET SDK,
+and your platform's [Godot build dependencies](https://docs.godotengine.org/en/stable/engine_details/development/compiling/index.html).
+Configuration checks and releases also need [Nushell](https://www.nushell.sh/).
+Configure GitHub SSH access for the Godot submodule before cloning.
 
-Single-precision Windows, Linux and macOS packages include native Dawn/WebGPU.
-Single-threaded browser packages include WebGPU alongside WebGL. Existing
-renderer defaults are preserved. Select Forward+, or add `--rendering-method mobile`
-for the Mobile renderer:
-
-```text
---rendering-driver webgpu
-```
-
-Adapters with too few bindings for Forward+ fall back to Mobile with one warning;
-adapters without `texture-formats-tier2`, such as Firefox, run Forward+ without
-SDFGI and VoxelGI. Android,
-double precision and threaded browser runtimes do not support this experimental
-driver. Unsupported selections fail with a runtime-specific
-error. See [build configurations](docs/content/build-configurations.md#experimental-webgpu)
-for browser setup, adapter limitations and source builds.
-
-## Features
-
-- **Your Godot project stays yours.** Scenes, scripts and assets stay where they are; keep editing them in the
-  official Godot .NET editor.
-- **Godot C# on the web.** `dotnet publish` your C# game to WebAssembly, with optional WebXR and experimental
-  multithreading. [More](https://2dog.dev/hosts/web)
-- **Real-engine tests.** xUnit and NUnit fixtures run headless in CI, with Godot-aware assertions for signals,
-  frames and deferred deletion; Godot errors fail tests. GDScript tests run through gdUnit.
-  [More](https://2dog.dev/testing)
-- **Godot inside .NET UIs.** Embed the engine in Avalonia, Blazor, Qt Quick, WinForms, WinUI 3 or MAUI, with
-  native controls over the game.
-- **A C# REPL in your running game.** Inspect and change live nodes from a terminal or a coding agent.
-- **One tool for setup and upkeep.** `2dog new`, `add`, `doctor` and `update` set up hosts, diagnose build
-  problems and keep package versions in step. [More](https://2dog.dev/dnx-2dog)
-- **No engine compile.** Prebuilt natives for Windows, Linux, macOS, WebAssembly and Android come from NuGet.
-- **Automatic import.** Changed resources are imported during the build; no `godot --import` step.
-- **Plain .NET projects.** Each host is a normal project in your solution: build, debug and publish it like any
-  other, including self-contained and NativeAOT desktop builds.
-
-### Hosts
-
-The tool adds each host as a small nested project with its own .NET entry point:
-
-| Host | What it does | `2dog add` flag |
-| --- | --- | --- |
-| [Desktop](https://2dog.dev/hosts/generic) | Run Godot from your own `Main` on Windows, Linux and macOS. | `--generic` |
-| [Web](https://2dog.dev/hosts/web) | Publish your Godot C# game to the browser. | `--web` |
-| [WebXR](https://2dog.dev/hosts/webxr) | Take your game into browser VR and AR. | `--webxr` |
-| [Avalonia](https://2dog.dev/hosts/avalonia) | Embed Godot in a cross-platform desktop UI. | `--avalonia` |
-| [Blazor](https://2dog.dev/hosts/blazor) | Put Godot in a Blazor page and drive it from Razor components. | `--blazor` |
-| [Qt Quick](https://2dog.dev/hosts/qt) · experimental | Embed Godot in a QML app built with Qt Bridge for C#. | `--qt` |
-| [WinForms](https://2dog.dev/hosts/winforms) | Embed Godot in a Windows Forms application. | `--winforms` |
-| [WinUI 3](https://2dog.dev/hosts/winui) | Embed Godot in a Windows App SDK application. | `--winui` |
-| [MAUI](https://2dog.dev/hosts/maui) | Embed Godot in a MAUI page on Windows or Android. | `--maui` |
-| [Android](https://2dog.dev/hosts/android) · experimental | Build an APK with `dotnet publish`. | `--android` |
-| [xUnit](https://2dog.dev/hosts/xunit) | Test your game with xUnit. | `--xunit` |
-| [NUnit](https://2dog.dev/hosts/nunit) | Test your game with NUnit. | `--nunit` |
-| [gdUnit](https://2dog.dev/hosts/gdunit) | Run GDScript gdUnit tests with `dotnet test`. | `--gdunit` |
-| [C# REPL](https://2dog.dev/hosts/repl) | Explore and change your running game from a prompt. | `--repl` |
-
-The [showcase](demos/showcase/README.md) runs one Godot project across desktop, web, UI and Android hosts.
-
-
-## Getting started
-
-You need the [.NET 10 SDK](https://dotnet.microsoft.com/download). The Godot editor is optional and only needed
-to edit scenes visually.
-
-**Existing Godot project:** from the folder with `project.godot`, pick hosts and run the desktop one.
+On Windows, enable [Developer Mode](https://learn.microsoft.com/windows/advanced-settings/developer-mode)
+and run `git config --global core.symlinks true` before cloning.
 
 ```bash
-cd path/to/MyGame
-dnx 2dog add
-dotnet run --project MyGame.2dog
+git clone --recursive https://github.com/outfox/2dog
+cd 2dog
+git lfs pull
+uv run --locked poe build-all
 ```
 
-**New project:**
+`build-all` builds the host's Godot editor, C# glue and native libraries, then packs
+platform packages, bindings, the engine and integrations in dependency order. Packages
+land in `packages/`, and the desktop/test solution filter is restored last.
+
+| Command | When to use it |
+| --- | --- |
+| `uv run --locked poe build-local` | Incremental native work after a full build of the same precision; skips the editor and glue, then repacks. |
+| `uv run --locked poe build` | Repack platform and managed packages from existing native outputs. Unbuilt platforms get empty stubs. |
+| `uv run --locked poe build-managed` | Repack bindings, engine and integrations using existing platform packages; no C++ build. |
+
+Add `--precision double` to these build tasks for matching double-precision natives
+and managed packages. Direct `dotnet` commands then need `-p:TwoDogPrecision=double`.
+Native build options go after `--`; for example, to keep an SCons cache and debug symbols:
 
 ```bash
-dnx 2dog new MyGame
-cd MyGame
-dotnet run --project MyGame.2dog
+uv run --locked poe build-all -- --cache-path temp/scons-cache --debug-symbols yes
 ```
 
-`MyGame` stands for your project's name. Run `dnx 2dog add` again at any time to add another host, for example:
+For managed work without compiling Godot, use
+`uv run --locked poe pull-packages --run RUN_ID` with an authenticated GitHub CLI (`gh`).
+Replace `RUN_ID` with a successful CI run matching the checkout's Godot pin and package
+versions; add `--precision double` if needed. This imports validated packages and matching
+SDK/bindings, records CI package versions and restores the desktop/test solution.
+After importing, use `build-managed` or direct `dotnet` commands to keep the downloaded
+platform packages. Run CI again if its package artifacts have expired.
 
 ```bash
-dnx 2dog add --web --xunit
-dotnet publish MyGame.web     # game and index.html land in MyGame.web/AppBundle/
-dotnet test MyGame.xunit
+dotnet run --project demos/showcase/showcase.2dog
+dotnet test 2dog.tests.slnf
+uv run --locked poe test-build-configuration
 ```
 
-Each host is a nested folder that Godot ignores, so your project looks like this:
+Install optional workloads with `uv run --locked poe install-workloads wasm-tools`
+(substitute `android` or `ios maui-ios` as needed), using the committed workload-set pin.
+`uv run --locked poe --help` lists the mobile build tasks and other commands.
 
-```text
-MyGame/
-├── project.godot      your scenes, scripts and assets, unchanged
-├── MyGame.csproj      your Godot C# game
-├── MyGame.slnx
-├── MyGame.2dog/       desktop host
-├── MyGame.web/        browser host
-└── MyGame.xunit/      tests
+## Release
+
+After changing the Godot submodule, run `uv run --locked poe sync-versions` and commit
+its version/pin updates with the submodule bump. This sync does not create a release.
+Then release from a clean, up-to-date `main` checkout with Git signing and push access
+to both this repository and the Godot fork:
+
+```bash
+uv run --locked poe release --dry-run       # preview versions and pushes
+uv run --locked poe release                 # release the line in main (currently 4.8)
+uv run --locked poe release --line 4.7      # release another configured Godot line
 ```
 
-Continue with the [getting started guide](https://2dog.dev/getting-started), then the page for each host you added.
-Later, `dnx 2dog update` moves the project to new 2dog releases and `dnx 2dog doctor` finds and fixes problems.
+The default release signs a version-bump commit and atomically pushes `main` and its tag.
+With `--line`, only the other line's tag is pushed; its release commit stays off `main`.
+[godot-lines.json](godot-lines.json) defines those lines. All lines share one release
+counter; native package revisions are reused while their input fingerprints match.
 
+CI calls the same Poe recipes, reuses verified native builds by input fingerprint,
+and uses Blacksmith caches and sticky disks. It tests both precisions, stages a complete
+package set on a GitHub prerelease, and uploads it to **int.nugettest.org**. The independent
+iOS Release/AOT check runs after staging alongside upload; production promotion requires
+it to pass. Promote the staged packages with an authenticated GitHub CLI, replacing `TAG`:
 
-## Requirements and status
+```bash
+gh workflow run publish.yml -f tag=TAG -f feed=nuget
+```
 
-- .NET SDK 10.0 or later on `win-x64`, `linux-x64` or `osx-arm64`
-- Godot 4.7, with the official .NET editor for visual editing
-- Published builds: `win-x64`, `linux-x64`, `osx-arm64` and `browser-wasm`; Android arm64/x64 and iOS device/Simulator arm64 are experimental
-- Web, WebXR and Blazor hosts need the `wasm-tools` workload; Android needs the `android` workload, the Android SDK
-  and JDK 17. iOS needs the `ios` workload and a Mac with Xcode. `2dog` offers to install the workloads, and desktop and test builds need neither.
-
-Packages are on [NuGet](https://www.nuget.org/packages/2dog) and [GitHub](https://github.com/outfox/2dog/releases).
-The main ones are [`2dog`](twodog/README.md) (the tool), [`2dog.templates`](templates/README.md)
-(the `dotnet new` templates) and [`2dog.engine`](twodog.engine/README.md) (the library); the tool adds the rest to your hosts.
-
-Experimental iOS support: `dnx 2dog add --ios` sets up a host that shows Godot's view
-controller; it builds on a Mac with Xcode (`dotnet build -r iossimulator-arm64` for the Simulator).
-See the [iOS host](https://2dog.dev/hosts/ios) and [2dog.ios](twodog.ios/README.md).
-
+For CI on another line without releasing, run
+`uv run --locked poe release --ci --line 4.7`; delete its temporary `ci/4.7/<commit>`
+branch after the run.
 
 ## Dogs and robots are nice
 
 🦴♥️👾 **2dog** is proudly made by human maintainers and contributors. We permit extensive use of LLMs:
+
 - Forked `libgodot` features/fixes consist of similar amounts of human-written and machine-written code
 - Commits/PRs are reviewed & gated by both humans and machines (over 90%/90%) and signed by humans
 - .NET Host applications are mostly human-written, while boilerplate assets (e.g. XAML) are mostly machine-written
@@ -153,81 +116,6 @@ See the [iOS host](https://2dog.dev/hosts/ios) and [2dog.ios](twodog.ios/README.
 - Documentation aims to be human-authored, but new feature docs are generated and later gradually rewritten
 - Releases on NuGet use Trusted Publishing and may only be invoked via direct human interaction
 
-
-## Compile your own: Teach 2dog new tricks (Contributors)
-
-Want to contribute, modify, or add to 2dog itself? Clone with submodules, then build the native and .NET packages:
-
-```bash
-git clone --recursive https://github.com/outfox/2dog
-cd 2dog
-uv run poe build-all
-```
-
-The SDK is pinned in `global.json`. Desktop builds restore only the desktop/test
-solution filter. Use `uv run poe build-local` for incremental native changes,
-or add `--precision double` to either task for double precision. Extra native
-options follow `--`, for example `uv run poe build-all -- --debug-symbols yes`.
-Run source/package checks with `uv run poe test-build-configuration` (requires
-Nushell). Optional hosts use `uv run poe install-workloads wasm-tools`, `android`,
-or `ios maui-ios`; this uses the committed workload-set pin.
-
-Run the showcase with `dotnet run --project demos/showcase/showcase.2dog` and the tests with
-`dotnet test twodog.tests`. 
-
-The repository contains symlinks. On Windows, enable
-[Developer Mode](https://learn.microsoft.com/windows/advanced-settings/developer-mode)
-and run `git config --global core.symlinks true` before cloning. To repair an
-existing clone, run `git config core.symlinks true`, then
-`git checkout -- demos/showcase/fps_counter.tscn`.
-
-To release, commit your changes on a release branch, then run with [Nushell](https://www.nushell.sh/):
-
-```nu
-nu scripts/release.nu --dry-run  # preview the versions
-nu scripts/release.nu            # bump, tag, push; CI tests and stages on int.nugettest.org
-nu scripts/release.nu --sync     # after bumping the godot submodule: align the Godot versions, commit with the bump
-nu scripts/release.nu --line 4.7 # the same for another Godot line (also with --dry-run and --sync)
-nu scripts/release.nu --ci --line 4.7  # run CI for that line: pushes its tree as the branch ci/4.7/<commit>
-```
-
-`main` carries one Godot line in its tree and lists the others in `godot-lines.json`; `--line` builds one of those
-from the same commit, and its release commit is tagged without landing on `main`.
-Release branches are `main` and Godot lines such as `4.7` or `4.8`, whose numbers must match the godot submodule.
-The script reads the Godot version from `godot/version.py` and writes `GodotVersion` and every committed
-`Godot.NET.Sdk` pin itself. A Godot prerelease labels the release with Godot's status (`status = "beta2"` releases
-`v4.8.0.156-beta2`; nuget.org has only numbered Godot prereleases, so an unnumbered `beta` is refused). On a stable
-Godot, a branch label marks a 2dog prerelease (`4.7-rc` releases `v4.7.2.170-rc`; `-dev`, `-beta` or `-rc`). Each
-release takes the next number after every `v*` tag on origin, so all lines share one counter. The native
-packages keep the number of the release that built them until the godot submodule, `platforms/`, `nuget/`,
-`build/` or the natives staging script change.
-
-The script requires a clean checkout containing the latest origin branch, signs the bump commit using your Git
-configuration, and pushes the branch and `v<TwoDogVersion>` atomically. It first tags the pinned godot commit in
-the fork as `2dog-v<TwoDogVersion>`, so old releases still resolve it after the fork's line branch (`2dog-4.7`,
-`2dog-4.8`) moves on. Only the tag push triggers release CI;
-ordinary branch pushes do not run CI. Unpushed local commits can be included in that same push. The GitHub
-**2dog Release** action runs the same script as an emergency/manual fallback.
-
-CI attaches the packages to a GitHub prerelease and pushes them to int.nugettest.org. Promote the same packages to
-nuget.org (and a stable version's GitHub release out of prerelease) with:
-
-```nu
-gh workflow run publish.yml -f tag=v4.7.2.153 -f feed=nuget
-```
-
-
 ## Acknowledgements
 
 Continuous Integration compute graciously supported by [Blacksmith](https://blacksmith.sh).
-
-
-## Join us at the dog park
-
-We have a dedicated channel for 2dog. Come say hello!
-
-[![Discord Invite](https://img.shields.io/badge/discord-_%E2%A4%9Coutfox%E2%A4%8F-blue?logo=discord&logoColor=f5f5f5)](https://discord.gg/GAXdbZCNGT)
-
----
-
-### *No squirrels were harmed in the making of this README.*
