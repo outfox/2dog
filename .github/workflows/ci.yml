@@ -303,7 +303,8 @@ jobs:
         with:
           key: ${{ github.repository }}-android-inputs-${{ needs.check-natives.outputs.line }}-${{ matrix.precision }}-v1
           path: .ci/android-inputs
-          commit: on-change
+          # on-change compares disk usage; a new run can replace all inputs at the same size.
+          commit: 'true'
 
       - name: Stage scoped Android inputs
         run: uv run --no-project python scripts/stage_android_ci.py stage --precision "$TwoDogPrecision" --identity "$GITHUB_RUN_ID:$GITHUB_RUN_ATTEMPT:$GITHUB_SHA"

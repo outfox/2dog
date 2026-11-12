@@ -46,8 +46,10 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   emulator snapshot in parallel with packing; consumers mount SDK/snapshot disks with `commit: false` and
   use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates deployment.
   Stop the ADB server in an always-run step before sticky disk teardown; its executable keeps the SDK disk busy.
-  Pack fills a scoped Android input disk and uploads the same content as a fallback. Consumers must verify
-  its run/attempt/commit/precision before use; reset mismatched inputs before downloading the matching artifact.
+  Pack fills a scoped Android input disk and uploads the same content as a fallback.
+  Always commit the producer disk: Sticky Disk's on-change mode checks usage, so same-size replacements can be lost.
+  Consumers must verify its run/attempt/commit/precision before use; reset mismatched inputs before downloading
+  the matching artifact.
   Its native hashes come from the original build outputs; check packaged libraries against those hashes
   before using them as the APK inspection reference, so a packaging mistake cannot validate itself.
   Never persist bin/obj or test-modified emulator state. Clear mutable 2dog/fork SDK packages from the
