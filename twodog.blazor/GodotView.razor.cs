@@ -58,7 +58,10 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
     /// <summary>Additional Godot command-line arguments (after the pack argument).</summary>
     [Parameter] public IReadOnlyList<string>? Args { get; set; }
 
-    /// <summary>Browser renderer: "webgpu" or "opengl3". Null follows --rendering-driver in Args, otherwise OpenGL.</summary>
+    /// <summary>
+    /// Browser renderer: "webgpu" or "opengl3". Null follows --rendering-driver in Args, otherwise the project's
+    /// renderer/rendering_method.web (WebGPU for Forward+ and Mobile), like the WASM host.
+    /// </summary>
     [Parameter] public string? RenderingDriver { get; set; }
 
     /// <summary>How the canvas is sized; see <see cref="GodotCanvasResize"/>.</summary>
@@ -164,7 +167,7 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
             if (renderingDriver is null && Args is not null)
                 for (int i = 0; i + 1 < Args.Count; i++)
                     if (Args[i] == "--rendering-driver") renderingDriver = Args[i + 1];
-            renderingDriver ??= "opengl3";
+            renderingDriver ??= BuildRenderingDriver() ?? "opengl3";
             if (renderingDriver is not ("opengl3" or "webgpu"))
                 throw new ArgumentException("Blazor supports the opengl3 or webgpu rendering driver.", nameof(RenderingDriver));
             var bootDriver = await _module.InvokeAsync<string>("prepare", _disposeCancellation.Token, _canvas, new
@@ -420,6 +423,20 @@ public partial class GodotView : ComponentBase, IAsyncDisposable
         {
             Console.Error.WriteLine($"{nameof(GodotView)}: exit handling failed: {e}");
         }
+    }
+
+    /// <summary>
+    /// The renderer the client build derived from the project's web rendering method (TwoDogWebRenderingDriver). Reads
+    /// attribute data untyped, as twodog.engine's AssemblyMetadata does, so trimmers keep no attribute type alive.
+    /// </summary>
+    private static string? BuildRenderingDriver()
+    {
+        if (System.Reflection.Assembly.GetEntryAssembly() is not { } entry) return null;
+        foreach (var attribute in entry.GetCustomAttributesData())
+            if (attribute.AttributeType.FullName == "System.Reflection.AssemblyMetadataAttribute" &&
+                attribute.ConstructorArguments is [{ Value: "TwoDogWebRenderingDriver" }, { Value: string driver }])
+                return driver;
+        return null;
     }
 
     /// <summary>Focuses the canvas so keyboard input reaches Godot.</summary>

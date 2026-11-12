@@ -198,8 +198,9 @@
                AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
         <ParameterGroup>
             <ProjectFile ParameterType="System.String"/>
-            <ShellFile ParameterType="System.String" Required="true"/>
+            <ShellFile ParameterType="System.String"/>
             <WebGpuEnabled ParameterType="System.Boolean"/>
+            <RenderingDriver ParameterType="System.String" Output="true"/>
         </ParameterGroup>
         <Task>
             <Using Namespace="System.Text.RegularExpressions"/>
@@ -218,6 +219,8 @@
                         if (setting.Success) rd = setting.Groups[1].Value == "mobile" || setting.Groups[1].Value == "forward_plus";
                     }
                 var driver = rd && WebGpuEnabled ? "webgpu" : "opengl3";
+                RenderingDriver = driver;
+                if (string.IsNullOrEmpty(ShellFile)) return true;
                 var shell = File.ReadAllText(ShellFile);
                 var slot = new Regex(@"renderingDriver: '[^']*',");
                 if (slot.Matches(shell).Count != 1)
@@ -377,6 +380,23 @@
               DestinationFiles="$(WasmAppDir)/$(TwoDogWebPackName)"
               SkipUnchangedFiles="true"/>
         <Message Importance="high" Text="TwoDog: deployed $(TwoDogWebPackName) to the app bundle"/>
+    </Target>
+
+    <!-- Blazor has no shell to carry the renderer default; GodotView reads it from the client assembly instead, so it
+         pre-initializes the WebGPU device Godot's project settings will ask for. -->
+    <Target Name="TwoDogBlazorRendererDefault"
+            BeforeTargets="GetAssemblyAttributes"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' == 'true' And '$(TwoDogGodotProjectFullPath)' != ''">
+        <TwoDogSetWebRendererDefault ProjectFile="$(TwoDogGodotProjectFullPath)/project.godot"
+                                    WebGpuEnabled="$([System.IO.File]::Exists('$(_TwoDogWebGpuPort)'))">
+            <Output TaskParameter="RenderingDriver" PropertyName="_TwoDogBlazorRenderingDriver"/>
+        </TwoDogSetWebRendererDefault>
+        <ItemGroup>
+            <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+                <_Parameter1>TwoDogWebRenderingDriver</_Parameter1>
+                <_Parameter2>$(_TwoDogBlazorRenderingDriver)</_Parameter2>
+            </AssemblyAttribute>
+        </ItemGroup>
     </Target>
 
     <!-- Blazor: define the worklets and the exported pck as computed static web assets (served at the site root in
