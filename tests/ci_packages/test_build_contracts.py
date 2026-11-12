@@ -155,6 +155,8 @@ class ReleaseGateTests(unittest.TestCase):
                 source, workspace = root / "source", root / "workspace"
                 source.mkdir()
                 workspace.mkdir()
+                (workspace / "packages").mkdir()
+                shutil.copyfile(ROOT / "packages/.gitkeep", workspace / "packages/.gitkeep")
                 self.feed(source)
                 sdk = root / "godotsharp-nupkgs.zip"
                 with zipfile.ZipFile(sdk, "w") as archive:

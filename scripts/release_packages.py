@@ -110,6 +110,8 @@ def ios_inputs(feed, tag, repo):
     if manifest["tag"] != tag:
         raise ValueError("iOS inputs do not belong to the staged release")
     for path in feed.iterdir():
+        if path.name == ".gitkeep":
+            continue
         if path.name not in manifest["files"] or manifest["files"][path.name] != sha256(path):
             if path.name != "release-manifest.json":
                 raise ValueError(f"Staged iOS input checksum mismatch: {path.name}")
