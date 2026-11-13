@@ -141,15 +141,13 @@ jobs:
             libxrandr-dev \
             libwayland-dev
 
-      - name: Cache SCons
-        uses: actions/cache@v6
+      # A sticky disk, not actions/cache: release runs build on new tags, which never see each other's caches.
+      - name: Mount SCons cache
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          path: |
-            godot/.scons_cache
-            ~/.cache/scons
-          key: godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ needs.preflight.outputs.build-identity }}
-          restore-keys: |
-            godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-
+          key: ${{ github.repository }}-scons-godotsharp-linux-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-v1
+          path: godot/.scons_cache
+          commit: 'true'
 
       - name: Test WebGPU build configuration and browser startup
         if: inputs.precision == 'single'
@@ -162,6 +160,10 @@ jobs:
         run: uv run python -m unittest discover -s tests/precision -p test_build.py -k test_fork_sdk_copy_target_stays_in_shared_feed -v
 
       - name: Build editor + GodotSharp assemblies
+        env:
+          # The sticky disk keeps every build; SCons prunes the oldest objects past this size (MiB).
+          # shortcut: deprecated in favor of the cache_limit argument, move there when build-godot.py next changes.
+          SCONS_CACHE_LIMIT: '16384' # Room for one editor build (3–5 GiB without symbols) plus a fork change.
         run: |
           uv run poe build-godot --precision ${{ inputs.precision }} \
             --no-library \
@@ -275,23 +277,23 @@ jobs:
           # iOS static libraries: device and Simulator arm64, no editor target.
           - platform: ios
             target: template_release
-            runner: macos-26
+            runner: blacksmith-12vcpu-macos-latest
             arch: arm64
             rid: ios-arm64
           - platform: ios
             target: template_debug
-            runner: macos-26
+            runner: blacksmith-12vcpu-macos-latest
             arch: arm64
             rid: ios-arm64
           - platform: ios
             target: template_release
-            runner: macos-26
+            runner: blacksmith-12vcpu-macos-latest
             arch: arm64
             rid: iossimulator-arm64
             build_args: --simulator
           - platform: ios
             target: template_debug
-            runner: macos-26
+            runner: blacksmith-12vcpu-macos-latest
             arch: arm64
             rid: iossimulator-arm64
             build_args: --simulator
@@ -426,19 +428,19 @@ jobs:
           packages: ndk;29.0.14206865
           log-accepted-android-sdk-licenses: false
 
-      # Cache SCons build
-      - name: Cache SCons
-        uses: actions/cache@v6
+      # A sticky disk, not actions/cache: release runs build on new tags, which never see each other's caches.
+      - name: Mount SCons cache
+        uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1
         with:
-          path: |
-            godot/.scons_cache
-            ~/.cache/scons
-          key: libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.build-identity }}
-          restore-keys: |
-            libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
+          key: ${{ github.repository }}-scons-libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-v1
+          path: godot/.scons_cache
+          commit: 'true'
 
       # Build using build-godot.py with platform/arch overrides
       - name: Build libgodot (${{ matrix.target }})
+        env:
+          # SCons prunes the oldest cached objects past this size (MiB). shortcut: deprecated, see the GodotSharp build.
+          SCONS_CACHE_LIMIT: ${{ matrix.target == 'editor' && '16384' || '8192' }} # One build: editor 3–5 GiB, templates ~2 GiB.
         run: |
           uv run poe build-godot --precision ${{ inputs.precision }} \
             --platform ${{ matrix.platform }} \

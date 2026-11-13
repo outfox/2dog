@@ -1,0 +1,76 @@
+name: 2dog Natives
+# Builds the natives of the line in main's tree (both precisions) when main changes their inputs, such as a godot pin
+# bump, so the release tag that follows reuses them by fingerprint instead of building them on its critical path.
+# The concurrency groups match ci.yml's: a tag run that needs the same natives waits for this build, then skips.
+# Paths mirror scripts/native_inputs.py BUILD_INPUTS, minus Directory.Build.props: release commits only touch that
+# file, and a props-only change (an Emscripten bump) still builds at tag time. Other lines still build at tag time.
+on:
+  push:
+    branches: [main]
+    paths:
+      - godot
+      - build-godot.py
+      - pyproject.toml
+      - global.json
+      - uv.lock
+      - nuget/webgpu/**
+      - scripts/native_inputs.py
+      - scripts/webgpu.py
+      - scripts/dotnet_build.py
+      - scripts/build_godot_assemblies.py
+      - scripts/build_android_java.py
+      - .github/workflows/build-natives.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  UV_LOCKED: '1'
+
+jobs:
+  fingerprint:
+    if: github.repository == 'outfox/2dog'
+    name: Native Input Fingerprint
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 5
+    outputs:
+      hash: ${{ steps.hash.outputs.hash }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Compute native input fingerprint
+        id: hash
+        run: echo "hash=$(uv run --no-project python scripts/native_inputs.py)" >> "$GITHUB_OUTPUT"
+
+  build-natives:
+    name: Build Natives
+    needs: [fingerprint]
+    permissions:
+      contents: write # callee's release job creates the godot-<hash> release
+    concurrency:
+      group: natives-build-${{ needs.fingerprint.outputs.hash }}
+      cancel-in-progress: false
+    uses: ./.github/workflows/build-natives.yml
+    with:
+      create_release: true
+
+  build-double-natives:
+    name: Build Double Natives
+    needs: [fingerprint]
+    permissions:
+      contents: write
+    concurrency:
+      group: natives-build-double-${{ needs.fingerprint.outputs.hash }}
+      cancel-in-progress: false
+    uses: ./.github/workflows/build-natives.yml
+    with:
+      precision: double
+      create_release: true
