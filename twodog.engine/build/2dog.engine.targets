@@ -431,6 +431,7 @@
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">Linux</TwoDogDesktopExportPreset>
             <TwoDogDesktopExportPreset Condition="'$(TwoDogDesktopExportPreset)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">macOS</TwoDogDesktopExportPreset>
 
+            <_TwoDogPartialPack>$(_TwoDogDesktopPackFullPath)</_TwoDogPartialPack>
             <_TwoDogDesktopExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogDesktopExportPresetsPath>
             <_TwoDogHasDesktopPreset>false</_TwoDogHasDesktopPreset>
             <_TwoDogHasDesktopPreset Condition="Exists('$(_TwoDogDesktopExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogDesktopExportPresetsPath)').Contains('name=&quot;$(TwoDogDesktopExportPreset)&quot;'))">true</_TwoDogHasDesktopPreset>
@@ -464,6 +465,12 @@
                Text="TwoDog: desktop publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to publish without a pck."/>
 
         <Message Importance="high" Text="TwoDog: exported $(TargetName).pck to $(_TwoDogDesktopPackDir)"/>
+        <OnError ExecuteTargets="_TwoDogDeletePartialPack"/>
+    </Target>
+
+    <!-- A failed export can leave a partial pack newer than its inputs, which the next build would take as up to date. -->
+    <Target Name="_TwoDogDeletePartialPack">
+        <Delete Files="$(_TwoDogPartialPack)" Condition="'$(_TwoDogPartialPack)' != ''"/>
     </Target>
 
     <!-- The SDK regenerates or recopies only a missing executable, and an embedded one is never up to date. -->
@@ -572,6 +579,7 @@
             Condition="'$(TargetPlatformIdentifier)' == 'android' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogAndroidPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
         <PropertyGroup>
+            <_TwoDogPartialPack>$(_TwoDogAndroidPackFullPath)</_TwoDogPartialPack>
             <_TwoDogAndroidExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogAndroidExportPresetsPath>
             <_TwoDogHasAndroidPreset>false</_TwoDogHasAndroidPreset>
             <_TwoDogHasAndroidPreset Condition="Exists('$(_TwoDogAndroidExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogAndroidExportPresetsPath)').Contains('name=&quot;$(TwoDogAndroidExportPreset)&quot;'))">true</_TwoDogHasAndroidPreset>
@@ -600,6 +608,7 @@
                Text="TwoDog: the Android build needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, restore the 2dog.&lt;build-machine-rid&gt;.editor and 2dog.tools packages, or set &lt;TwoDogAndroidPack&gt; to a pre-exported pck."/>
 
         <Message Importance="high" Text="TwoDog: exported the game pck for the APK to $(_TwoDogAndroidPackFullPath)"/>
+        <OnError ExecuteTargets="_TwoDogDeletePartialPack"/>
     </Target>
 
     <!-- ============================================ -->
@@ -636,6 +645,7 @@
             Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogIosPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
         <PropertyGroup>
+            <_TwoDogPartialPack>$(_TwoDogIosPackFullPath)</_TwoDogPartialPack>
             <_TwoDogIosExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogIosExportPresetsPath>
             <_TwoDogHasIosPreset>false</_TwoDogHasIosPreset>
             <_TwoDogHasIosPreset Condition="Exists('$(_TwoDogIosExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogIosExportPresetsPath)').Contains('name=&quot;$(TwoDogIosExportPreset)&quot;'))">true</_TwoDogHasIosPreset>
@@ -664,6 +674,7 @@
                Text="TwoDog: the iOS build needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, restore the 2dog.&lt;build-machine-rid&gt;.editor and 2dog.tools packages, or set &lt;TwoDogIosPack&gt; to a pre-exported pck."/>
 
         <Message Importance="high" Text="TwoDog: exported the game pck for the app bundle to $(_TwoDogIosPackFullPath)"/>
+        <OnError ExecuteTargets="_TwoDogDeletePartialPack"/>
     </Target>
 
 </Project>

@@ -327,6 +327,7 @@
         <!-- Editor/helper/tools capability comes from TwoDogResolveContentCapability (2dog.engine.targets) -->
         <PropertyGroup>
             <_TwoDogWebPackFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(_TwoDogWebPackPath)'))))</_TwoDogWebPackFullPath>
+            <_TwoDogPartialPack>$(_TwoDogWebPackFullPath)</_TwoDogPartialPack>
             <_TwoDogExportPresetsPath>$(TwoDogGodotProjectFullPath)/export_presets.cfg</_TwoDogExportPresetsPath>
             <_TwoDogHasWebPreset>false</_TwoDogHasWebPreset>
             <_TwoDogHasWebPreset Condition="Exists('$(_TwoDogExportPresetsPath)') And $([System.IO.File]::ReadAllText('$(_TwoDogExportPresetsPath)').Contains('name=&quot;$(TwoDogWebExportPreset)&quot;'))">true</_TwoDogHasWebPreset>
@@ -370,6 +371,7 @@
 
         <Error Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' != 'true'"
                Text="TwoDog: web publish needs to export '$(TwoDogGodotProjectFullPath)' as a .pck, but no export capability was found (editor libgodot='$(TwoDogEditorLibGodotPath)', helper='$(TwoDogImportHelperPath)', tools='$(_TwoDogToolsDir)'). Set &lt;GodotEditor&gt; to a Godot editor binary, or restore the 2dog.&lt;host-rid&gt;.editor and 2dog.tools packages. Set &lt;TwoDogExportPack&gt;false&lt;/TwoDogExportPack&gt; to provide the pck yourself (wwwroot/$(TwoDogWebPackName))."/>
+        <OnError ExecuteTargets="_TwoDogDeletePartialPack"/>
     </Target>
 
     <!-- Separate from the export so an up-to-date (skipped) export still deploys -->
