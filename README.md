@@ -92,13 +92,14 @@ With `--line`, only the other line's tag is pushed; its release commit stays off
 counter; native package revisions are reused while their input fingerprints match.
 
 CI calls the same Poe recipes, reuses verified native builds by input fingerprint,
-and uses Blacksmith caches and sticky disks. It tests both precisions, stages a complete
-package set on a GitHub prerelease, and uploads it to **int.nugettest.org**. The independent
-iOS Release/AOT check runs after staging alongside upload; production promotion requires
-it to pass. Promote the staged packages with an authenticated GitHub CLI, replacing `TAG`:
+and uses Blacksmith caches and sticky disks. As soon as packing finishes, it stages a complete
+package set on a GitHub prerelease and uploads it to **int.nugettest.org**, so manual testing
+can start while both precisions are tested. The independent iOS Release/AOT check runs on the
+staged packages. Promotion requires the whole tag run to succeed, including its Release Gate
+(the test verdicts) and that iOS check. Promote one or more tags with an authenticated GitHub CLI:
 
 ```bash
-gh workflow run publish.yml -f tag=TAG -f feed=nuget
+uv run poe promote v4.7.2.189 v4.8.0.188-beta3
 ```
 
 For CI on another line without releasing, run

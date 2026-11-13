@@ -84,19 +84,31 @@ def validate(feed, tag, manifest=None):
     return files
 
 
-def require_ios_release(manifest, repo):
+# Staging runs ahead of the tests, so promotion requires the staged run to have finished green. A skipped job does not
+# fail a run, so the jobs that carry the verdicts must also have run and passed in their latest attempt. Staging
+# records them in the manifest; releases staged before that waited for the tests and only lack the iOS check.
+PROMOTION_GATES = ("Release Gate", "iOS Release Smoke")
+LEGACY_PROMOTION_GATES = ("iOS Release Smoke",)
+
+
+def require_passed_run(manifest, repo):
     run = int(manifest["run_id"])
     source = json.loads(subprocess.check_output(["gh", "api", f"repos/{repo}/actions/runs/{run}"], text=True))
     if source["head_sha"] != manifest["commit"] or source["path"] != ".github/workflows/ci.yml":
         raise ValueError("Release manifest does not identify the source CI run")
+    if (source["status"] != "completed" or source["conclusion"] != "success"
+            or int(source["run_attempt"]) < int(manifest["run_attempt"])):
+        raise ValueError(f"The staged CI run {run} has not completed successfully "
+                         f"({source['status']}, {source['conclusion']}); promotion is blocked")
     pages = json.loads(subprocess.check_output(["gh", "api", "--paginate", "--slurp",
                     f"repos/{repo}/actions/runs/{run}/jobs?filter=all&per_page=100"], text=True))
-    jobs = [job for page in pages for job in page["jobs"]
-            if job["name"] == "iOS Release Smoke" or job["name"].startswith("iOS Release Smoke / ")]
-    attempt = max((int(job["run_attempt"]) for job in jobs), default=0)
-    if (attempt < int(manifest["run_attempt"]) or not jobs
-            or any(job["conclusion"] != "success" for job in jobs if int(job["run_attempt"]) == attempt)):
-        raise ValueError("The staged run's iOS Release Smoke has not succeeded; promotion is blocked")
+    for gate in manifest.get("promotion_gates", LEGACY_PROMOTION_GATES):
+        jobs = [job for page in pages for job in page["jobs"]
+                if job["name"] == gate or job["name"].startswith(f"{gate} / ")]
+        attempt = max((int(job["run_attempt"]) for job in jobs), default=0)
+        if (attempt < int(manifest["run_attempt"]) or not jobs
+                or any(job["conclusion"] != "success" for job in jobs if int(job["run_attempt"]) == attempt)):
+            raise ValueError(f"The staged run's {gate} has not succeeded; promotion is blocked")
 
 
 def ios_inputs(feed, tag, repo):
@@ -144,8 +156,9 @@ if __name__ == "__main__":
     files = validate(args.feed, args.tag, manifest)
     if args.command == "stage":
         manifest = dict(tag=args.tag, files=files, commit=os.environ["GITHUB_SHA"],
-                        run_id=os.environ["GITHUB_RUN_ID"], run_attempt=os.environ["GITHUB_RUN_ATTEMPT"])
+                        run_id=os.environ["GITHUB_RUN_ID"], run_attempt=os.environ["GITHUB_RUN_ATTEMPT"],
+                        promotion_gates=list(PROMOTION_GATES))
         path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     if args.production:
-        require_ios_release(manifest, os.environ["GITHUB_REPOSITORY"])
+        require_passed_run(manifest, os.environ["GITHUB_REPOSITORY"])
     print(f"Validated {len(files)} release assets for {args.tag}")

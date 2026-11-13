@@ -125,28 +125,59 @@ class ReleaseGateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "differ from"):
                 release_packages.validate(root, manifest["tag"], manifest)
 
-    def test_production_gate_requires_the_latest_ios_release_attempt_to_pass(self):
-        manifest = dict(run_id="42", run_attempt="2", commit="source")
-        source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=3)
-        for conclusion in ("success", None, "failure", "skipped"):
-            pages = [{"jobs": [{"name": "iOS Release Smoke / Test iOS Simulator", "conclusion": conclusion, "run_attempt": 3},
-                                {"name": "iOS Release Smoke / Test iOS Simulator", "conclusion": "success", "run_attempt": 2}]}]
-            with self.subTest(conclusion=conclusion), patch.object(release_packages.subprocess, "check_output",
-                    side_effect=[json.dumps(source), json.dumps(pages)]) as command:
-                if conclusion == "success":
-                    release_packages.require_ios_release(manifest, "outfox/2dog")
-                else:
-                    with self.assertRaisesRegex(ValueError, "promotion is blocked"):
-                        release_packages.require_ios_release(manifest, "outfox/2dog")
-                self.assertIn("repos/outfox/2dog/actions/runs/42/jobs?filter=all&per_page=100", command.call_args.args[0])
+    def test_production_gate_requires_the_latest_gate_attempts_to_pass(self):
+        manifest = dict(run_id="42", run_attempt="2", commit="source", promotion_gates=list(release_packages.PROMOTION_GATES))
+        source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=3, status="completed", conclusion="success")
+        for gate in ("iOS Release Smoke / Test iOS Simulator", "Release Gate"):
+            for conclusion in ("success", None, "failure", "skipped"):
+                others = [{"name": name, "conclusion": "success", "run_attempt": 3}
+                          for name in ("iOS Release Smoke / Test iOS Simulator", "Release Gate") if name != gate]
+                pages = [{"jobs": [{"name": gate, "conclusion": conclusion, "run_attempt": 3},
+                                    {"name": gate, "conclusion": "success", "run_attempt": 2}, *others]}]
+                with self.subTest(gate=gate, conclusion=conclusion), patch.object(release_packages.subprocess, "check_output",
+                        side_effect=[json.dumps(source), json.dumps(pages)]) as command:
+                    if conclusion == "success":
+                        release_packages.require_passed_run(manifest, "outfox/2dog")
+                    else:
+                        with self.assertRaisesRegex(ValueError, "promotion is blocked"):
+                            release_packages.require_passed_run(manifest, "outfox/2dog")
+                    self.assertIn("repos/outfox/2dog/actions/runs/42/jobs?filter=all&per_page=100", command.call_args.args[0])
+
+    def test_production_gate_requires_the_staged_run_to_finish_green(self):
+        manifest = dict(run_id="42", run_attempt="2", commit="source", promotion_gates=list(release_packages.PROMOTION_GATES))
+        pages = [{"jobs": [{"name": name, "conclusion": "success", "run_attempt": 2} for name in release_packages.PROMOTION_GATES]}]
+        for status, conclusion, attempt in (("in_progress", None, 2), ("completed", "failure", 2), ("completed", "cancelled", 2),
+                                             ("completed", "success", 1)):
+            source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=attempt, status=status, conclusion=conclusion)
+            with self.subTest(status=status, conclusion=conclusion, attempt=attempt), patch.object(
+                    release_packages.subprocess, "check_output", side_effect=[json.dumps(source), json.dumps(pages)]):
+                with self.assertRaisesRegex(ValueError, "promotion is blocked"):
+                    release_packages.require_passed_run(manifest, "outfox/2dog")
+
+    def test_production_gate_keeps_releases_staged_after_the_tests_promotable(self):
+        manifest = dict(run_id="42", run_attempt="1", commit="source")
+        source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=1, status="completed", conclusion="success")
+        pages = [{"jobs": [{"name": "iOS Release Smoke / Test iOS Simulator", "conclusion": "success", "run_attempt": 1}]}]
+        with patch.object(release_packages.subprocess, "check_output", side_effect=[json.dumps(source), json.dumps(pages)]):
+            release_packages.require_passed_run(manifest, "outfox/2dog")
 
     def test_ios_release_is_not_reused_or_an_upload_dependency(self):
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()
         release = workflow.split("  ios-release:", 1)[1].split("  deploy:", 1)[0]
         self.assertNotIn("tested-bump", release)
-        deploy = workflow.split("  deploy:", 1)[1]
+        deploy = workflow.split("  deploy:", 1)[1].split("  release-gate:", 1)[0]
         self.assertNotIn("ios-release", deploy.split("    runs-on:", 1)[0])
         self.assertIn("scripts/release_packages.py", deploy)
+
+    def test_staging_waits_only_for_packages_and_promotion_for_the_release_gate(self):
+        workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+        deploy = workflow.split("  deploy:", 1)[1].split("  release-gate:", 1)[0]
+        self.assertIn("    needs: [pack, maui-pack]\n", deploy)
+        gate = workflow.split("  release-gate:", 1)[1]
+        self.assertIn("    name: Release Gate\n", gate)
+        self.assertIn("Release Gate", release_packages.PROMOTION_GATES)
+        for job in ("test", "test-contracts", "desktop-smoke", "webgpu-desktop", "web-smoke", "android-smoke", "ios-smoke", "tool-smoke", "maui"):
+            self.assertIn(f"needs.{job}.result == 'success'", gate)
 
     def test_ios_download_uses_staged_package_and_sdk_checksums(self):
         for corrupt in (False, True):

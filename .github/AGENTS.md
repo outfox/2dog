@@ -26,12 +26,12 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   stay in both precisions. Windows Debug single excludes `FullyQualifiedName~Repl` from its ordinary pass
   and runs that exact selection under the 95% coverage gate. Keep native-state collections serialized.
 - `test-contracts` runs independently after pack, preserving Debug adapter coverage in both precisions on
-  Linux/Windows and single on macOS. Keep `Test Contracts` in both reuse family lists and the deployment gate.
+  Linux/Windows and single on macOS. Keep `Test Contracts` in both reuse family lists and the release gate.
   Preserve the harness's cancellation, cleanup and source-isolation assertions and subprocess deadlines.
 - Desktop publish and editor lifecycle checks use the normal renderer settings. `webgpu-desktop` alone
   runs the native WebGPU pixels, restart and shader-contract checks, once per supported OS in single precision.
   Its Linux host also verifies the engine's ignored-X11-event fallback, which prevents libX11 cookie cleanup crashes.
-  Keep it in the revision-bump family list and the deployment gate.
+  Keep it in the revision-bump family list and the release gate.
 - The native build runs the real C++ shader compiler regressions once, against the single-precision,
   non-threaded Web debug archive. Source-level WebGPU checks run where the submodule source is checked out.
   Precision-independent package and browser-script checks run once rather than in every precision/AOT cell.
@@ -43,11 +43,11 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   The image's Chrome 151 intermittently crashes threaded Wasm; Chrome 157 passed 64 identical Blacksmith probes.
   `check-natives` warms the versioned Linux browser disk; consumers mount it read-only. macOS uses its tool cache.
 - `webgpu-browser-build` publishes the single-precision image-test bundle after pack; `webgpu-browser`
-  consumes it without waiting for Web Smoke. The browser job gates deployment and requires the bundle job to
+  consumes it without waiting for Web Smoke. The browser job gates the release and requires the bundle job to
   succeed.
 - Android Smoke uses one APK per precision/variant matrix cell. `android-prepare` warms the SDK and a clean
   emulator snapshot in parallel with packing; consumers mount SDK/snapshot disks with `commit: false` and
-  use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates deployment.
+  use `-no-snapshot-save`. Keep both jobs in the `Android Smoke` family; the matrix gates the release.
   Stop the ADB server in an always-run step before sticky disk teardown; its executable keeps the SDK disk busy.
   Pack fills a scoped Android input disk and uploads the same content as a fallback.
   Always commit the producer disk: Sticky Disk's on-change mode checks usage, so same-size replacements can be lost.
@@ -61,7 +61,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - NuGet publishing uses four concurrent pushes; any failure blocks the release. Packing remains ordered
   within each precision because the managed packages consume the freshly packed platform/binding packages.
   `test-build-configuration` runs source/fixture checks independently of pack; `test-binding-packages` validates
-  both precisions after pack, alongside consumers. Both gate deployment even on revision-only tags and belong
+  both precisions after pack, alongside consumers. Both gate the release even on revision-only tags and belong
   in both reuse family lists. Binding checks download the matching fork SDK only, rather than all of godot-bin.
   Upload NuGet artifacts with compression disabled because their payloads are already compressed.
 - Consumers that need both native outputs and NuGet packages use `actions/download-ci-inputs` to download them
@@ -77,11 +77,11 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   and staging must require all four archives. Pack uploads scoped iOS inputs, excluding raw archives from godot-bin.
   The Windows `maui-pack` job packs the precision-neutral iOS host and all MAUI TFMs; `ios-smoke` and the `maui`
   showcase builds consume its artifact, so the Simulator cells never wait for the showcase builds. Keep `MAUI Pack`
-  in the deployment gate. Its .NET SDK/workload pins must match the Xcode
-  selected by `ios-smoke.yml`. Two `iOS Smoke` Debug cells cover pixels and MAUI; keep that family in reuse and deployment
+  in the release gate. Its .NET SDK/workload pins must match the Xcode
+  selected by `ios-smoke.yml`. Two `iOS Smoke` Debug cells cover pixels and MAUI; keep that family in reuse and release
   gates. The independent `iOS Release Smoke` job covers double Release/AOT on tags, including tested revision bumps.
   It starts after staging, downloads and verifies the staged package bytes, and runs alongside test-feed upload.
-  Production promotion requires the latest attempt of this job in the staged run to pass. A retry is valid only because
+  Production promotion requires the latest attempt of this job and of `Release Gate` in the staged run to pass. A retry is valid only because
   it tests the immutable staged packages and matching fork SDK, rather than newly repacked artifacts. Device signing
   stays with the app developer; CI publishes native packages and downloadable Simulator apps.
   Simulator first boot and app testing have separate time budgets; keep installation bounded and always
@@ -110,9 +110,13 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
   changes with the bump: packages bake the committed versions in. CI's first job runs the same sync and fails fast
   when it changes anything.
   When the tag's parent passed CI and the tag only bumps the revision and label, the tag run skips the test,
-  desktop and Android jobs. The tag run's `deploy` job only stages: a GitHub prerelease with every package (notes
-  start at the line's previous tag), then a
-  `publish.yml` dispatch to int.nugettest.org. `publish.yml` (also the nuget.org promotion) must stay a dispatched
+  desktop and Android jobs. The tag run's `deploy` job only stages, as soon as `pack` and `maui-pack` finish so
+  manual testing can start from the test feed: a GitHub prerelease with every package (notes start at the line's
+  previous tag), then a `publish.yml` dispatch to int.nugettest.org. The no-op `release-gate` job carries the test
+  verdicts that used to gate staging (keep its `needs`/`if` in step with the jobs that gate the release). Promotion
+  (`poe promote <tag>...`, `publish.yml` with `feed=nuget`) requires the staged run to have completed successfully
+  and its `Release Gate` and `iOS Release Smoke` jobs to have passed: a skipped job does not fail a run.
+  `publish.yml` (also the nuget.org promotion) must stay a dispatched
   top-level workflow: both feeds' Trusted Publishing policies name it. `android.yml` runs Android build and
   package tests on every pull request, unfiltered, so it can be a required check (a path-filtered workflow that is
   skipped never reports); `docs.yml` builds the documentation site.

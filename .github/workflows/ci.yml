@@ -2389,30 +2389,18 @@ jobs:
   # Stage the release when running on a version tag — either pushed directly or dispatched on the tag by
   # release.yml (tags pushed with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead):
   # attach every package to a GitHub prerelease, then dispatch publish.yml to push them to int.nugettest.org.
-  # Promotion to nuget.org is a manual publish.yml dispatch for the tag (see publish.yml).
+  # Staging starts as soon as every package is packed, so manual testing from the test feed runs alongside the
+  # tests. Promotion to nuget.org (a manual publish.yml dispatch) requires this run to complete successfully,
+  # including release-gate, which holds the test verdicts.
   deploy:
     name: Stage Release
-    # web-smoke and android-smoke gate staging because the 2dog.browser-wasm and
-    # 2dog.android packages they exercise are among the packages being
-    # published; desktop-smoke gates it because it is the only check that runs
-    # a Release-only publish; tool-smoke because it installs the packed `2dog`
-    # tool the way users get it. A tested revision bump (see check-natives) takes
-    # the test, desktop and Android verdicts from its parent commit's run.
-    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui-pack, maui]
+    needs: [pack, maui-pack]
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
-    # Explicit result checks (not the implicit success()) for the same
-    # transitive-skip reason as the test job — deploy must still require all
-    # gates to have actually succeeded.
     if: >-
       github.repository == 'outfox/2dog' &&
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
-      needs.test-build-configuration.result == 'success' && needs.test-binding-packages.result == 'success' &&
-      (needs.check-natives.outputs.tested-bump == 'true' ||
-      (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
-      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
-      needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
-      needs.tool-smoke.result == 'success' && needs.maui-pack.result == 'success' && needs.maui.result == 'success')
+      needs.pack.result == 'success' && needs.maui-pack.result == 'success')
     permissions:
       contents: write # create the GitHub release for the tag
       actions: write  # dispatch publish.yml
@@ -2485,6 +2473,30 @@ jobs:
           TAG="${GITHUB_REF#refs/tags/}"
           gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" -f tag="$TAG" -f feed=test
           {
-            echo "Staging $TAG on int.nugettest.org via publish.yml."
-            echo "Promote to nuget.org: \`gh workflow run publish.yml -f tag=$TAG -f feed=nuget\`"
+            echo "Staging $TAG on int.nugettest.org via publish.yml, ahead of the tests."
+            echo "Once this whole run has succeeded, promote to nuget.org: \`uv run poe promote $TAG\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  # The test verdicts that used to gate staging: promotion requires this job to succeed in the staged run. A skipped
+  # job does not fail a run, so the run's own conclusion is not enough. web-smoke and android-smoke gate because the
+  # 2dog.browser-wasm and 2dog.android packages they exercise are released; desktop-smoke because it is the only
+  # check that runs a Release-only publish; tool-smoke because it installs the packed `2dog` tool the way users get
+  # it. A tested revision bump (see check-natives) takes the test, desktop and Android verdicts from its parent
+  # commit's run. Explicit result checks (not the implicit success()) for the same transitive-skip reason as the
+  # test job.
+  release-gate:
+    name: Release Gate
+    needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui-pack, maui]
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 5
+    if: >-
+      github.repository == 'outfox/2dog' &&
+      (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
+      needs.test-build-configuration.result == 'success' && needs.test-binding-packages.result == 'success' &&
+      (needs.check-natives.outputs.tested-bump == 'true' ||
+      (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
+      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
+      needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
+      needs.tool-smoke.result == 'success' && needs.maui-pack.result == 'success' && needs.maui.result == 'success')
+    steps:
+      - run: echo "Every release gate passed."

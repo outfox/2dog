@@ -1,6 +1,7 @@
 # Pushes a release tag's packages, exactly as CI attached them to its GitHub release, to one NuGet feed.
-# CI stages every release tag on the test feed; promote a tested release to nuget.org with:
-#   gh workflow run publish.yml -f tag=v4.7.2.153 -f feed=nuget
+# CI stages every release tag on the test feed as soon as it is packed, ahead of the tests. Promotion to nuget.org
+# refuses until that CI run has completed successfully, with its Release Gate and iOS Release Smoke passed:
+#   uv run poe promote v4.7.2.153 [tag ...]    (or: gh workflow run publish.yml -f tag=v4.7.2.153 -f feed=nuget)
 # It runs from the default branch, so publishing fixes also reach older tags. The Trusted Publishing policies on
 # int.nugettest.org and nuget.org both name this file, so it must stay the top-level workflow (dispatched, never
 # called from ci.yml).
