@@ -107,18 +107,14 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898283+github-actions[bot]@users.noreply.github.com'
-          source=$(git rev-parse --short HEAD)
           builds='[]' refs=''
           for line in $(jq -r 'keys[]' godot-lines.json); do
-            uv run poe release --ci --line "$line"
-            ref="ci/$line/$source"
+            # The branch name comes from release.nu: git's automatic abbreviation length can differ between calls.
+            ref=$(uv run poe release --ci --line "$line" | tee /dev/stderr | sed -n 's#^Pushed \(ci/[^ ]*\) with .*#\1#p')
+            test -n "$ref" || { echo "::error::release.nu --ci --line $line pushed no ci/ branch"; exit 1; }
             refs="$refs $ref"
             echo "refs=$refs" >> "$GITHUB_OUTPUT" # Written per push: a later failure still deletes the branch.
-            # A branch the step just pushed can take a moment to become fetchable.
-            for attempt in 1 2 3 4 5; do
-              git fetch --quiet --depth=1 origin "+refs/heads/$ref:refs/remotes/origin/$ref" && break
-              sleep 5
-            done
+            git fetch --quiet --depth=1 origin "+refs/heads/$ref:refs/remotes/origin/$ref"
             sha=$(git rev-parse --verify "refs/remotes/origin/$ref^{commit}")
             hash=$(uv run --no-project python scripts/native_inputs.py --ref "$sha")
             echo "Line $line: $ref, native input fingerprint $hash"
