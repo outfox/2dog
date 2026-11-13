@@ -188,6 +188,10 @@ cmd = "node --test .github/scripts/*.test.mjs"
 [tool.poe.tasks.release]
 cmd = "nu scripts/release.nu"
 
+[tool.poe.tasks.promote]
+help = "Promote tested release tags to nuget.org (dispatches publish.yml per tag): poe promote <tag> [tag ...]"
+cmd = "python scripts/promote.py"
+
 [tool.poe.tasks.sync-versions]
 cmd = "nu scripts/release.nu --sync"
 
