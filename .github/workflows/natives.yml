@@ -1,14 +1,16 @@
 name: 2dog Natives
-# Builds the natives of the line in main's tree (both precisions) when main changes their inputs, such as a godot pin
-# bump, so the release tag that follows reuses them by fingerprint instead of building them on its critical path.
+# Builds the natives of every Godot line (both precisions) when main changes their inputs, such as a godot pin bump,
+# so the release tag that follows reuses them by fingerprint instead of building them on its critical path.
+# Another line's tree (godot-lines.json) is pushed as ci/<line>/<commit> with the workflow token, which starts no CI.
 # The concurrency groups match ci.yml's: a tag run that needs the same natives waits for this build, then skips.
 # Paths mirror scripts/native_inputs.py BUILD_INPUTS, minus Directory.Build.props: release commits only touch that
-# file, and a props-only change (an Emscripten bump) still builds at tag time. Other lines still build at tag time.
+# file, and a props-only change (an Emscripten bump) still builds at tag time.
 on:
   push:
     branches: [main]
     paths:
       - godot
+      - godot-lines.json
       - build-godot.py
       - pyproject.toml
       - global.json
@@ -74,3 +76,82 @@ jobs:
     with:
       precision: double
       create_release: true
+
+  line-trees:
+    if: github.repository == 'outfox/2dog'
+    name: Other Line Trees
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 10
+    permissions:
+      contents: write # pushes ci/<line>/<commit>
+    outputs:
+      builds: ${{ steps.trees.outputs.builds }}
+      refs: ${{ steps.trees.outputs.refs }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: false
+
+      - name: Setup Nushell
+        uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29
+        with:
+          version: '0.111.0'
+
+      - name: Push each line's tree
+        id: trees
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898283+github-actions[bot]@users.noreply.github.com'
+          source=$(git rev-parse --short HEAD)
+          builds='[]' refs=''
+          for line in $(jq -r 'keys[]' godot-lines.json); do
+            uv run poe release --ci --line "$line"
+            ref="ci/$line/$source"
+            sha=$(git ls-remote origin "refs/heads/$ref" | cut -f1)
+            hash=$(uv run --no-project python scripts/native_inputs.py --ref "$sha")
+            echo "Line $line: $ref, native input fingerprint $hash"
+            builds=$(jq -c --arg ref "$ref" --arg hash "$hash" '. + [{ref: $ref, precision: "single", group: "natives-build-\($hash)"},
+              {ref: $ref, precision: "double", group: "natives-build-double-\($hash)"}]' <<< "$builds")
+            refs="$refs $ref"
+          done
+          { echo "builds=$builds"; echo "refs=$refs"; } >> "$GITHUB_OUTPUT"
+
+  # Same concurrency groups as ci.yml: a tag run of that line waits for this build, then reuses it.
+  build-line-natives:
+    name: Build ${{ matrix.ref }} ${{ matrix.precision }} Natives
+    needs: [line-trees]
+    if: needs.line-trees.outputs.builds != '[]'
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.line-trees.outputs.builds) }}
+    concurrency:
+      group: ${{ matrix.group }}
+      cancel-in-progress: false
+    uses: ./.github/workflows/build-natives.yml
+    with:
+      ref: ${{ matrix.ref }}
+      precision: ${{ matrix.precision }}
+      create_release: true
+
+  delete-line-trees:
+    name: Delete Line Trees
+    needs: [line-trees, build-line-natives]
+    if: always() && needs.line-trees.outputs.refs != ''
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REFS: ${{ needs.line-trees.outputs.refs }}
+    steps:
+      - name: Delete pushed branches
+        run: for ref in $REFS; do gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$ref"; done

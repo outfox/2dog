@@ -4,10 +4,13 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 
 ## Workflows
 
-- `natives.yml` builds the natives of main's line as soon as main changes their inputs, so release tags reuse them.
-  Its `paths` mirror `BUILD_INPUTS` in `scripts/native_inputs.py`, minus `Directory.Build.props` (release commits).
-  Native builds keep their SCons caches on per-job Blacksmith sticky disks: tag runs never see each other's
-  `actions/cache` entries.
+- `natives.yml` builds every line's natives as soon as main changes their inputs, so release tags reuse them. Other
+  lines build from `poe release --ci --line` trees (`build-natives.yml` `ref`), pushed with the workflow token (which
+  starts no CI) and deleted afterwards. Its `paths` mirror `BUILD_INPUTS` in `scripts/native_inputs.py` plus
+  `godot-lines.json`, minus `Directory.Build.props` (release commits).
+  Tag runs never see each other's `actions/cache` entries: Linux native builds keep their SCons caches on per-job
+  sticky disks (Blacksmith has none on Windows or macOS), and Windows/macOS tag runs restore the caches natives.yml
+  saves on main.
 - `ci.yml` reuses `godot-<input-fingerprint>` and `godot-<input-fingerprint>-double` native releases or builds missing natives through
   `build-natives.yml`, then packs and tests both precisions on three OSes in Debug/Release/Editor and runs smoke jobs. `v*` tags
   also deploy to NuGet. CI runs on pull requests, `v*` tags, `ci/**` branch pushes and manual dispatch.
