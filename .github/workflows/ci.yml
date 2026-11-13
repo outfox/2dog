@@ -9,10 +9,19 @@ on:
       - '*.md'
       - '**/AGENTS.md'
   workflow_dispatch:
+    inputs:
+      release_line:
+        description: 'Godot line of a release tag (4.7), set by release.yml: a newer release cancels the line''s older run'
+        required: false
+        type: string
+        default: ''
 
+# Release runs (dispatched with their line) share one group per line, so a newer release of a line cancels its
+# older run; the other line keeps running. A cancelled release stays staged but can't be promoted. Other runs
+# group by ref; a pushed tag never cancels.
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }} # never cancel tag/deploy runs
+  group: ci-${{ inputs.release_line != '' && format('line-{0}', inputs.release_line) || github.ref }}
+  cancel-in-progress: ${{ inputs.release_line != '' || !startsWith(github.ref, 'refs/tags/') }}
 
 env:
   UV_LOCKED: '1'

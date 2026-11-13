@@ -70,4 +70,7 @@ jobs:
         if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$(git tag --list 'v*' --sort=-creatordate | head -n 1)"
+        run: |
+          tag=$(git tag --list 'v*' --sort=-creatordate | head -n 1)
+          line=$(echo "${tag#v}" | cut -d. -f1-2) # Each line's versions start with it (v4.7.2.192 -> 4.7).
+          gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$tag" -f release_line="$line"
