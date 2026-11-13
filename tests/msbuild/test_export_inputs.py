@@ -35,7 +35,8 @@ class ExportInputsTests(unittest.TestCase):
             tree = ET.parse(source)
             target = tree.find(f"Target[@Name='{target_name}']")
             if target is not None:
-                for task in target.findall("Exec"):
+                # OnError must stay the target's last element, and the probes below are appended.
+                for task in target.findall("Exec") + target.findall("OnError"):
                     target.remove(task)
                 ET.SubElement(target, "WriteLinesToFile", File="$(ProbePack)",
                               Lines="exported", Overwrite="true")
