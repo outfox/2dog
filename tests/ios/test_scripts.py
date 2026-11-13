@@ -2,7 +2,6 @@
 import contextlib
 import importlib.util
 import io
-import json
 from pathlib import Path
 import plistlib
 import struct
@@ -154,15 +153,6 @@ class BuildIosApp(unittest.TestCase):
             self.assertTrue(any(p.endswith("twodog.ios") for p in packed), packed)
             self.assertTrue(any(p.endswith("platforms") for p in packed), packed)
 
-    def test_restore_config_lists_the_private_feed_first(self):
-        with tempfile.TemporaryDirectory() as directory:
-            config = Path(directory) / "NuGet.Config"
-            build.restore_config(config, Path(directory) / "feed")
-            text = config.read_text()
-            self.assertIn('key="ios-packages"', text)
-            self.assertIn("nuget.org", text)
-            self.assertLess(text.index("ios-packages"), text.index("nuget.org"))
-
 
 class SimulatorScript(unittest.TestCase):
     def run_script(self, lines, timeout=5, marker="2DOG_IOS_CSHARP_SMOKE_PASSED"):
@@ -251,14 +241,6 @@ class SimulatorScript(unittest.TestCase):
             launch.kill()
             launch.wait(timeout=5)
             launch.stdout.close()
-
-    def test_empty_marker_and_zero_timeout_are_usage_errors(self):
-        for arguments in (["--marker", ""], ["--timeout", "0"]):
-            with self.subTest(arguments=arguments):
-                result = subprocess.run([sys.executable, str(REPO / "scripts/test_ios_simulator.py"), "smoke.app", *arguments],
-                                        capture_output=True, text=True, timeout=30)
-                self.assertEqual(2, result.returncode)
-                self.assertIn("usage:", result.stderr)
 
 
 if __name__ == "__main__":

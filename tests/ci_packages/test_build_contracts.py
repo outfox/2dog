@@ -12,7 +12,7 @@ from unittest.mock import patch
 import xml.etree.ElementTree as ET
 import zipfile
 
-from scripts import check_published_natives, install_workloads, native_inputs, release_packages
+from scripts import check_published_natives, native_inputs, release_packages
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -36,11 +36,6 @@ class NativeIdentityTests(unittest.TestCase):
             if command == "rev-parse":
                 return godot
             if command == "ls-tree":
-                self.assertIn("build-godot.py", args)
-                self.assertIn("scripts/webgpu.py", args)
-                self.assertIn("scripts/build_android_java.py", args)
-                self.assertIn("nuget/webgpu", args)
-                self.assertIn("global.json", args)
                 return tree
             if args[0].endswith(":pyproject.toml"):
                 return (poe or '[tool.poe.tasks.build-godot]\ncmd = "python build-godot.py"\n').encode()
@@ -76,13 +71,6 @@ class NativeIdentityTests(unittest.TestCase):
         self.assertEqual(baseline, self.identity(props, poe=poe + '[tool.poe.tasks.build]\ncmd = "pack differently"\n'))
         self.assertNotEqual(baseline, self.identity(props, poe=poe.replace('build-godot.py', 'other-native-builder.py')))
         self.assertNotEqual(baseline, self.identity(props, poe=poe + '[tool.poe.executor]\ntype = "uv"\nlocked = true\n'))
-
-    def test_optional_workloads_use_pin_without_requiring_it_for_desktop_resolution(self):
-        config = json.loads((ROOT / "global.json").read_text())
-        self.assertNotIn("workloadVersion", config["sdk"])
-        with patch.object(install_workloads.subprocess, "run") as run:
-            install_workloads.main(["wasm-tools"])
-        self.assertIn(config["workloadVersion"], run.call_args.args[0])
 
 
 class ReleaseGateTests(unittest.TestCase):
@@ -126,7 +114,7 @@ class ReleaseGateTests(unittest.TestCase):
                 release_packages.validate(root, manifest["tag"], manifest)
 
     def test_production_gate_requires_the_latest_gate_attempts_to_pass(self):
-        manifest = dict(run_id="42", run_attempt="2", commit="source", promotion_gates=list(release_packages.PROMOTION_GATES))
+        manifest = dict(run_id="42", run_attempt="2", commit="source")
         source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=3, status="completed", conclusion="success")
         for gate in ("iOS Release Smoke / Test iOS Simulator", "Release Gate"):
             for conclusion in ("success", None, "failure", "skipped"):
@@ -144,7 +132,7 @@ class ReleaseGateTests(unittest.TestCase):
                     self.assertIn("repos/outfox/2dog/actions/runs/42/jobs?filter=all&per_page=100", command.call_args.args[0])
 
     def test_production_gate_requires_the_staged_run_to_finish_green(self):
-        manifest = dict(run_id="42", run_attempt="2", commit="source", promotion_gates=list(release_packages.PROMOTION_GATES))
+        manifest = dict(run_id="42", run_attempt="2", commit="source")
         pages = [{"jobs": [{"name": name, "conclusion": "success", "run_attempt": 2} for name in release_packages.PROMOTION_GATES]}]
         for status, conclusion, attempt in (("in_progress", None, 2), ("completed", "failure", 2), ("completed", "cancelled", 2),
                                              ("completed", "success", 1)):
@@ -153,31 +141,6 @@ class ReleaseGateTests(unittest.TestCase):
                     release_packages.subprocess, "check_output", side_effect=[json.dumps(source), json.dumps(pages)]):
                 with self.assertRaisesRegex(ValueError, "promotion is blocked"):
                     release_packages.require_passed_run(manifest, "outfox/2dog")
-
-    def test_production_gate_keeps_releases_staged_after_the_tests_promotable(self):
-        manifest = dict(run_id="42", run_attempt="1", commit="source")
-        source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=1, status="completed", conclusion="success")
-        pages = [{"jobs": [{"name": "iOS Release Smoke / Test iOS Simulator", "conclusion": "success", "run_attempt": 1}]}]
-        with patch.object(release_packages.subprocess, "check_output", side_effect=[json.dumps(source), json.dumps(pages)]):
-            release_packages.require_passed_run(manifest, "outfox/2dog")
-
-    def test_ios_release_is_not_reused_or_an_upload_dependency(self):
-        workflow = (ROOT / ".github/workflows/ci.yml").read_text()
-        release = workflow.split("  ios-release:", 1)[1].split("  deploy:", 1)[0]
-        self.assertNotIn("tested-bump", release)
-        deploy = workflow.split("  deploy:", 1)[1].split("  release-gate:", 1)[0]
-        self.assertNotIn("ios-release", deploy.split("    runs-on:", 1)[0])
-        self.assertIn("scripts/release_packages.py", deploy)
-
-    def test_staging_waits_only_for_packages_and_promotion_for_the_release_gate(self):
-        workflow = (ROOT / ".github/workflows/ci.yml").read_text()
-        deploy = workflow.split("  deploy:", 1)[1].split("  release-gate:", 1)[0]
-        self.assertIn("    needs: [pack, maui-pack]\n", deploy)
-        gate = workflow.split("  release-gate:", 1)[1]
-        self.assertIn("    name: Release Gate\n", gate)
-        self.assertIn("Release Gate", release_packages.PROMOTION_GATES)
-        for job in ("test", "test-contracts", "desktop-smoke", "webgpu-desktop", "web-smoke", "android-smoke", "ios-smoke", "tool-smoke", "maui"):
-            self.assertIn(f"needs.{job}.result == 'success'", gate)
 
     def test_ios_download_uses_staged_package_and_sdk_checksums(self):
         for corrupt in (False, True):

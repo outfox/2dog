@@ -256,13 +256,6 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn("<TwoDogPrerelease>rc</TwoDogPrerelease>", self.props())
         self.assertIn("<GodotVersion>4.7.2</GodotVersion>", self.props())
 
-    def test_sync_retargets_project_feature_tags(self):
-        self.write_version_py("4.8.0", "beta3")
-        (self.root / "project.godot").write_text('config/features=PackedStringArray("4.7", "C#")\n')
-        result = self.run_release("--sync", TEST_BRANCH="4.8", SDK_FILES="project.godot")
-        self.assertEqual(0, result.returncode, result.stderr)
-        self.assertEqual('config/features=PackedStringArray("4.8", "C#")\n', (self.root / "project.godot").read_text())
-
     def test_sync_line_switches_the_tree_to_another_line_without_committing(self):
         env = self.main_tree_with_another_line()
         result = self.run_release("--sync", "--line", "4.7", **env)

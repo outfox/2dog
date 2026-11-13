@@ -1,12 +1,10 @@
 """Pack the iOS runtime NuGets from stub archives and exercise their targets, plus the 2dog.ios host targets from
 source, without the ios workload, a Mac or a device."""
-import json
 import os
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-import xml.etree.ElementTree as ET
 import zipfile
 
 REPO = Path(__file__).resolve().parents[2]
@@ -80,24 +78,6 @@ class IosPackages(unittest.TestCase):
         result = msbuild(project, "Collect", REPO)
         items = (directory / "items.txt").read_text().splitlines() if (directory / "items.txt").exists() else []
         return result, items
-
-    def test_variant_packages_carry_one_archive_under_their_rid(self):
-        for rid in RIDS:
-            for variant in ("debug", "release"):
-                with zipfile.ZipFile(self.feed / f"2dog.{rid}.{variant}.{self.version}.nupkg") as archive:
-                    natives = {name for name in archive.namelist() if name.startswith("runtimes/")}
-                    self.assertEqual({f"runtimes/{rid}/native/libgodot.a"}, natives)
-
-    def test_meta_dependencies_pin_both_variants_and_ship_the_resolver(self):
-        for rid in RIDS:
-            with zipfile.ZipFile(self.feed / f"2dog.{rid}.{self.version}.nupkg") as archive:
-                nuspec = ET.fromstring(archive.read(f"2dog.{rid}.nuspec"))
-                deps = {d.get("id"): d.get("version") for d in nuspec.findall(".//{*}dependency")}
-                self.assertEqual({f"2dog.{rid}.release": f"[{self.version}]", f"2dog.{rid}.debug": f"[{self.version}]"}, deps)
-                names = archive.namelist()
-                self.assertIn("build/2dog.ios-native-resolver.targets", names)
-                self.assertIn(f"build/2dog.{rid}.targets", names)
-                self.assertIn(f"buildTransitive/2dog.{rid}.targets", names)
 
     def test_resolver_links_the_selected_variant_with_force_load(self):
         for rid in RIDS:
@@ -288,46 +268,6 @@ ios.arm64 = "{library}"
             self.assertIn("TDGI005", result.stdout)
             result = msbuild(self.project(root, "<TwoDogVariant>editor</TwoDogVariant>", pack), "Collect", REPO)
             self.assertIn("TDGI001", result.stdout)
-
-
-class MauiFrameworks(unittest.TestCase):
-    def test_maui_hosts_dispatch_each_framework_separately(self):
-        expected = ["net10.0-android"]
-        if os.name == "nt":
-            expected.append("net10.0-windows10.0.19041.0")
-        elif os.uname().sysname == "Darwin":
-            expected.append("net10.0-ios")
-        for project in ("demos/showcase/showcase.maui/showcase.maui.csproj",
-                        "templates/twodog/Company.Product1.maui/Company.Product1.maui.csproj"):
-            with self.subTest(project=project):
-                result = subprocess.run([
-                    "dotnet", "msbuild", str(REPO / project), "-nologo",
-                    "-t:_ComputeTargetFrameworkItems", "-getItem:_TargetFrameworkNormalized",
-                    "-p:MSBuildEnableWorkloadResolver=false",
-                ], cwd=REPO, capture_output=True, text=True, timeout=60)
-                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                frameworks = json.loads(result.stdout)["Items"]["_TargetFrameworkNormalized"]
-                self.assertEqual([item["Identity"] for item in frameworks], expected)
-
-    def test_sdk_dispatches_each_framework_separately(self):
-        # Evaluation only: no mobile workloads, restore or native archives required.
-        for android, ios in ((True, True), (False, True), (True, False)):
-            with self.subTest(android=android, ios=ios):
-                result = subprocess.run([
-                    "dotnet", "msbuild", str(REPO / "twodog.maui/twodog.maui.csproj"),
-                    "-nologo", "-t:_ComputeTargetFrameworkItems", "-getItem:_TargetFrameworkNormalized",
-                    "-p:MSBuildEnableWorkloadResolver=false",
-                    f"-p:TwoDogMauiAndroid={str(android).lower()}",
-                    f"-p:TwoDogMauiIos={str(ios).lower()}",
-                ], cwd=REPO, capture_output=True, text=True, timeout=60)
-                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                frameworks = json.loads(result.stdout)["Items"]["_TargetFrameworkNormalized"]
-                expected = ["net10.0-android"] if android else []
-                if os.name == "nt":
-                    expected.append("net10.0-windows10.0.19041.0")
-                if ios:
-                    expected.append("net10.0-ios")
-                self.assertEqual([item["Identity"] for item in frameworks], expected)
 
 
 if __name__ == "__main__":

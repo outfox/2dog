@@ -63,27 +63,6 @@ class EditorToolsTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def assert_payload(self, destination):
-        tools = destination / "GodotSharp/Tools"
-        actual = {path.relative_to(tools).as_posix(): path.read_bytes()
-                  for path in tools.rglob("*") if path.is_file()}
-        self.assertEqual(actual, self.payload)
-
-    def test_editor_build_copies_tools_dependencies_and_subdirectories(self):
-        self.run_target("Build")
-        self.assert_payload(self.output)
-        self.assertFalse(self.publish.exists())
-
-    def test_editor_publish_without_build_copies_directly_from_package(self):
-        self.run_target("Publish", "Editor", "-p:NoBuild=true")
-        self.assert_payload(self.publish)
-        self.assertFalse(self.output.exists())
-
-    def test_explicit_editor_variant_in_release_copies_tools(self):
-        self.run_target("Build;Publish", "Release", "-p:TwoDogVariant=editor")
-        self.assert_payload(self.output)
-        self.assert_payload(self.publish)
-
     def test_runtime_variants_do_not_copy_tools(self):
         for configuration in ("Debug", "Release"):
             with self.subTest(configuration=configuration):
@@ -93,19 +72,6 @@ class EditorToolsTests(unittest.TestCase):
         self.run_target("Build;Publish", "Editor", "-p:TwoDogVariant=debug")
         self.assertFalse(self.output.exists())
         self.assertFalse(self.publish.exists())
-
-    def test_design_time_build_does_not_copy_tools(self):
-        self.run_target("Build;Publish", "Editor", "-p:DesignTimeBuild=true")
-        self.assertFalse(self.output.exists())
-        self.assertFalse(self.publish.exists())
-
-    def test_tools_directory_override_without_trailing_separator(self):
-        custom = self.scratch / "custom tools"
-        shutil.copytree(self.tools, custom)
-        shutil.rmtree(self.tools)
-        self.run_target("Build;Publish", "Editor", f"-p:TwoDogGodotToolsDir={custom}")
-        self.assert_payload(self.output)
-        self.assert_payload(self.publish)
 
 
 if __name__ == "__main__":

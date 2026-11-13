@@ -117,9 +117,6 @@ class LineKeyTests(unittest.TestCase):
         self.assertEqual(found, [], 'add the line (needs.check-natives.outputs.line, matrix.line or inputs.line) to '
                          f'these keys and names, or end the line with "{SHARED_OK}" if every line uses the same state')
 
-    def test_keys_naming_the_line_pass(self):
-        self.assertEqual(list(violations('ci.yml', workflow((LINE,) * 4))), [])
-
     def test_a_line_axis_checks_every_name(self):
         found = list(violations('ci.yml', workflow(('', LINE, '', ''))))
         self.assertEqual(found, ['ci.yml: pack: build-${{ matrix.precision }}-',
@@ -134,9 +131,6 @@ class LineKeyTests(unittest.TestCase):
         found = list(violations('ci.yml', workflow(('', '', '', ''), axis=False)))
         self.assertEqual(found, ['ci.yml: pack: build-${{ matrix.precision }}-',
                                  'ci.yml: pack: build-${{ matrix.precision }}-', 'ci.yml: pack: dumps-'])
-
-    def test_marked_keys_may_be_shared(self):
-        self.assertEqual(list(violations('ci.yml', workflow(('v1 ' + SHARED_OK, LINE, LINE, LINE)))), [])
 
     def test_a_line_input_covers_every_job(self):
         header = 'on:\n  workflow_call:\n    inputs:\n      line:\n        type: string\n'

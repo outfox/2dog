@@ -85,10 +85,8 @@ def validate(feed, tag, manifest=None):
 
 
 # Staging runs ahead of the tests, so promotion requires the staged run to have finished green. A skipped job does not
-# fail a run, so the jobs that carry the verdicts must also have run and passed in their latest attempt. Staging
-# records them in the manifest; releases staged before that waited for the tests and only lack the iOS check.
+# fail a run, so the jobs that carry the verdicts must also have run and passed in their latest attempt.
 PROMOTION_GATES = ("Release Gate", "iOS Release Smoke")
-LEGACY_PROMOTION_GATES = ("iOS Release Smoke",)
 
 
 def require_passed_run(manifest, repo):
@@ -102,7 +100,7 @@ def require_passed_run(manifest, repo):
                          f"({source['status']}, {source['conclusion']}); promotion is blocked")
     pages = json.loads(subprocess.check_output(["gh", "api", "--paginate", "--slurp",
                     f"repos/{repo}/actions/runs/{run}/jobs?filter=all&per_page=100"], text=True))
-    for gate in manifest.get("promotion_gates", LEGACY_PROMOTION_GATES):
+    for gate in PROMOTION_GATES:
         jobs = [job for page in pages for job in page["jobs"]
                 if job["name"] == gate or job["name"].startswith(f"{gate} / ")]
         attempt = max((int(job["run_attempt"]) for job in jobs), default=0)
@@ -156,8 +154,7 @@ if __name__ == "__main__":
     files = validate(args.feed, args.tag, manifest)
     if args.command == "stage":
         manifest = dict(tag=args.tag, files=files, commit=os.environ["GITHUB_SHA"],
-                        run_id=os.environ["GITHUB_RUN_ID"], run_attempt=os.environ["GITHUB_RUN_ATTEMPT"],
-                        promotion_gates=list(PROMOTION_GATES))
+                        run_id=os.environ["GITHUB_RUN_ID"], run_attempt=os.environ["GITHUB_RUN_ATTEMPT"])
         path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     if args.production:
         require_passed_run(manifest, os.environ["GITHUB_REPOSITORY"])

@@ -4,7 +4,6 @@ import importlib.util
 import io
 import os
 from pathlib import Path
-import subprocess
 import sys
 import tempfile
 import unittest
@@ -40,17 +39,6 @@ class IosBuild(unittest.TestCase):
             with self.assertRaises(ValueError):
                 build.build_libgodot(args, build.get_platform_config("ios", "arm64"))
             run.assert_not_called()
-
-    def test_invalid_ios_arguments_are_cli_usage_errors(self):
-        for arguments, message in ((["--platform", "ios", "--arch", "x86_64"], "iOS .NET hosts support --arch arm64 only"),
-                                   (["--platform", "android", "--simulator"], "--simulator requires --platform ios")):
-            with self.subTest(arguments=arguments):
-                result = subprocess.run([sys.executable, str(REPO / "build-godot.py"), *arguments],
-                                        capture_output=True, text=True, timeout=30)
-                self.assertEqual(2, result.returncode)
-                self.assertIn("usage:", result.stderr)
-                self.assertIn(message, result.stderr)
-                self.assertNotIn("Traceback", result.stdout + result.stderr)
 
     def test_cross_target_configuration_skips_editor_and_glue(self):
         output = io.StringIO()

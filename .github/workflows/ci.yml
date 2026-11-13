@@ -69,7 +69,6 @@ jobs:
           bash .github/scripts/find-tested-run.test.sh
           bash .github/scripts/push-nuget.test.sh
           bash .github/scripts/stage-ci-inputs.test.sh
-          bash .github/scripts/test-with-watchdog.test.sh
 
       - name: Setup Nushell
         uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29

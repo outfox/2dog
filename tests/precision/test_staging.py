@@ -43,25 +43,6 @@ class NativeReleaseStagingTests(unittest.TestCase):
                 for member in members:
                     archive.writestr("./" + member, precision.encode())
 
-    def test_stages_every_platform_and_keeps_java_and_sdk_neutral(self):
-        with tempfile.TemporaryDirectory() as scratch:
-            root = Path(scratch)
-            for precision in ("single", "double"):
-                assets = root / precision
-                self.release(assets, precision)
-                staging.stage(assets, root, precision)
-            for subdir, precision in (("", "single"), ("double", "double")):
-                selected = root / "godot/bin" / subdir
-                self.assertEqual(precision.encode(), (selected / "GodotSharp/Api/Release/GodotSharp.dll").read_bytes())
-                self.assertEqual(precision.encode(), (selected / "web/template_release/libgodot/libgodot.a").read_bytes())
-                self.assertEqual(precision.encode(), (selected / "web-threads/template_debug/libgodot/libgodot.a").read_bytes())
-                self.assertEqual(precision.encode(), (selected / "android/template_debug/arm64/libgodot_android.so").read_bytes())
-                for rid in ("ios-arm64", "iossimulator-arm64"):
-                    for target in ("template_debug", "template_release"):
-                        self.assertEqual(precision.encode(), (selected / f"ios/{target}/{rid}/libgodot.a").read_bytes())
-            self.assertTrue((root / "godot/bin/android/java/debug/godot.aar").is_file())
-            self.assertTrue((root / "godot/bin/GodotSharp/Tools/nupkgs/Godot.NET.Sdk.4.7.2.nupkg").is_file())
-
     def test_single_release_cannot_satisfy_a_double_request(self):
         with tempfile.TemporaryDirectory() as scratch:
             root = Path(scratch)

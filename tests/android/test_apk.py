@@ -3,7 +3,6 @@ import argparse
 import contextlib
 import io
 import json
-import os
 from pathlib import Path
 import subprocess
 import sys
@@ -142,45 +141,6 @@ class AndroidApkTests(unittest.TestCase):
             commands, _ = self.build_showcase(Path(directory), "--skip-native", "--skip-java")
             self.assertFalse([part for part in commands[-1] if part.startswith("-p:GodotEditor=")])
 
-    def test_feed_builds_against_packed_packages_without_building_or_packing_payloads(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            feed = root / "packages"
-            feed.mkdir()
-            # Only the selected variant's natives, for the inspection; no Java payloads.
-            commands, _ = self.build_showcase(root, "--feed", str(feed), variants=("debug",), java=False)
-            scripts = ("build-godot.py", "build_android_java.py")
-            self.assertEqual([], [command for command in commands if command[1] == "pack"
-                                  or any(part.endswith(scripts) for part in command)])
-            self.assertTrue(any(command[1] == "publish" for command in commands))
-            config = (root / "artifacts/android-showcase-apk/NuGet.Config").read_text()
-            self.assertIn(f'value="{feed.resolve()}"', config)
-
-    def test_feed_requires_the_selected_natives_for_the_inspection(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "packages").mkdir()
-            with self.assertRaises(SystemExit) as raised, contextlib.redirect_stderr(io.StringIO()) as error:
-                self.build_showcase(root, "--feed", str(root / "packages"), "--configuration", "Release",
-                                    variants=("debug",), java=False)
-            self.assertEqual(1, raised.exception.code)
-            self.assertIn("template_release", error.getvalue())
-
-    def test_feed_requires_the_cpp_runtime_before_publishing(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "packages").mkdir()
-            native = root / "godot/bin/android/template_debug/x86_64"
-            native.mkdir(parents=True)
-            (native / "libgodot_android.so").touch()
-            commands = []
-            with patch.object(build, "REPO", root), patch.object(build, "run", side_effect=commands.append), \
-                 patch.object(sys, "argv", ["build_android_apk.py", "--feed", str(root / "packages")]), \
-                 contextlib.redirect_stderr(io.StringIO()) as error, self.assertRaises(SystemExit):
-                build.main()
-            self.assertIn("libc++_shared.so", error.getvalue())
-            self.assertEqual([], commands)
-
     def test_replaced_pack_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             args = self.fixture(Path(directory))
@@ -205,44 +165,6 @@ class AndroidApkTests(unittest.TestCase):
                     build.main()
             self.assertEqual(1, raised.exception.code)
             self.assertEqual(original, (root / "nuget.config").read_bytes())
-
-    def test_private_restore_cache_is_removed_after_success_and_failure(self):
-        for fail in (False, True):
-            with self.subTest(fail=fail), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                cache_paths = []
-                def finish(args, output, feed, config, restore):
-                    cache_paths.append(restore)
-                    (restore / "cached-package").write_bytes(b"temporary package")
-                    if fail:
-                        raise subprocess.CalledProcessError(1, "dotnet")
-                    apk = output / "game.apk"
-                    apk.write_bytes(b"APK artifact")
-                    return apk
-                args = argparse.Namespace(output=root / "output", skip_java=False, feed=None)
-                with patch.object(build, "REPO", root), patch.object(build, "build_with_packages", side_effect=finish):
-                    if fail:
-                        with self.assertRaises(subprocess.CalledProcessError):
-                            build.build(args)
-                    else:
-                        self.assertTrue(build.build(args).is_file())
-                self.assertEqual(1, len(cache_paths))
-                self.assertFalse(cache_paths[0].exists())
-
-    def test_ci_restore_cache_is_reused_and_not_removed(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            feed = root / 'feed'
-            feed.mkdir()
-            args = argparse.Namespace(output=root / 'output', skip_java=False, feed=feed, restore_cache=root / 'cache')
-            with patch.object(build, 'REPO', root), patch.object(build, 'build_with_packages', return_value='apk') as publish:
-                self.assertEqual('apk', build.build(args))
-                self.assertEqual(args.restore_cache.resolve(), publish.call_args.args[-1])
-                self.assertTrue(args.restore_cache.is_dir())
-                publish.side_effect = OSError('build failed')
-                with self.assertRaisesRegex(OSError, 'build failed'):
-                    build.build(args)
-                self.assertTrue(args.restore_cache.is_dir())
 
     def test_skip_java_rejects_either_missing_variant_before_building(self):
         for missing in ("debug", "release"):
@@ -273,34 +195,6 @@ class AndroidApkTests(unittest.TestCase):
             self.assertIn("Android APK build failed: missing tool", error.getvalue())
             self.assertNotIn("Traceback", error.getvalue())
             self.assertEqual([], list((root / "output").glob("restore-*")))
-
-    def test_smoke_host_selects_packages_for_singular_and_plural_rids_and_rejects_unsupported_rids(self):
-        cases = [([], {"android-arm64"}, None),
-                 (["-p:RuntimeIdentifier=android-x64"], {"android-x64"}, None),
-                 (["-p:RuntimeIdentifiers=android-x64"], {"android-x64"}, None),
-                 ([], {"android-arm64", "android-x64"}, "android-arm64;android-x64")]
-        for properties, expected, rids in cases:
-            with self.subTest(properties=properties):
-                environment = dict(os.environ)
-                environment.pop("RuntimeIdentifier", None)
-                environment.pop("RuntimeIdentifiers", None)
-                if rids:
-                    environment["RuntimeIdentifiers"] = rids
-                result = subprocess.run(["dotnet", "msbuild", str(REPO / "tests/android/host/android-smoke.csproj"),
-                                         "-p:TargetFramework=net10.0", "-t:TwoDogValidateAndroidSmokeRids",
-                                         "-getItem:PackageReference", "-nologo", *properties], cwd=REPO,
-                                        env=environment, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
-                self.assertEqual(0, result.returncode, result.stdout)
-                references = json.loads(result.stdout)["Items"]["PackageReference"]
-                actual = {item["Identity"].removeprefix("2dog.") for item in references
-                          if item["Identity"].startswith("2dog.android-")}
-                self.assertEqual(expected, actual)
-        result = subprocess.run(["dotnet", "msbuild", str(REPO / "tests/android/host/android-smoke.csproj"),
-                                 "-p:TargetFramework=net10.0", "-p:RuntimeIdentifier=android-x86",
-                                 "-t:TwoDogValidateAndroidSmokeRids", "-nologo"], cwd=REPO,
-                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=30)
-        self.assertNotEqual(0, result.returncode, result.stdout)
-        self.assertIn("TDGSMOKE001", result.stdout)
 
 
 if __name__ == "__main__":

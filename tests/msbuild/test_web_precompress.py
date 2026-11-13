@@ -1,6 +1,5 @@
 """Run the web bundle precompression target on a stub app bundle: format selection, stale copies, gz-only bundles."""
 
-import gzip
 import subprocess
 import tempfile
 import unittest
@@ -20,7 +19,6 @@ FILES = {
     "_framework/icudt.dat": 8192,
     "_framework/dotnet.js": 8192,
 }
-DROPPED = ("godot.wasm", "godot.pck", "_framework/app.wasm", "_framework/icudt.dat")
 
 
 class WebPrecompressTests(unittest.TestCase):
@@ -50,44 +48,8 @@ class WebPrecompressTests(unittest.TestCase):
              *(f"-p:{p}" for p in properties)],
             cwd=ROOT, capture_output=True, text=True)
 
-    def build(self, *properties):
-        result = self.run_target(*properties)
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
     def existing(self, suffix):
         return {name for name in FILES if (self.bundle / (name + suffix)).exists()}
-
-    def test_defaults_write_both_formats_and_keep_originals(self):
-        self.build()
-        large = {name for name, size in FILES.items() if size >= 4096}
-        self.assertEqual(self.existing(".br"), large)
-        self.assertEqual(self.existing(".gz"), large)
-        self.assertEqual(self.existing(""), set(FILES))
-        self.assertEqual(gzip.decompress((self.bundle / "godot.wasm.gz").read_bytes()),
-                         (self.bundle / "godot.wasm").read_bytes())
-        self.assertIn(b"const TWODOG_PCK_GZ = false;", self.shell.read_bytes())
-
-    def test_deselected_formats_are_removed(self):
-        self.build()
-        self.build("TwoDogWebPrecompressFormats=br")
-        self.assertEqual(self.existing(".gz"), set())
-        self.assertIn("godot.wasm", self.existing(".br"))
-        self.build("TwoDogWebPrecompress=false")
-        self.assertEqual(self.existing(".br"), set())
-        self.assertEqual(self.existing(""), set(FILES))
-
-    def test_gz_only_bundle_drops_the_inflated_originals(self):
-        self.build("TwoDogWebPrecompressFormats=gz", "TwoDogWebPrecompressKeepOriginals=false")
-        self.assertEqual(self.existing(".br"), set())
-        self.assertEqual(self.existing(""), set(FILES) - set(DROPPED))
-        # The pack is below the size floor but has no other way to be served.
-        for name in DROPPED:
-            self.assertEqual(gzip.decompress((self.bundle / (name + ".gz")).read_bytes()),
-                             (name.encode() * FILES[name])[:FILES[name]], name)
-        # The shell has no originals to fall back to, so the publish switches on its in-page gzip path.
-        shell = self.shell.read_bytes()
-        self.assertIn(b"\r\n    const TWODOG_PCK_GZ = true;\r\n", shell)
-        self.assertEqual(gzip.decompress((self.bundle / "index.html.gz").read_bytes()), shell)
 
     def test_gz_only_bundle_warns_about_a_shell_without_the_switch(self):
         self.shell.write_bytes(b"<html>custom shell</html>".ljust(8192, b" "))

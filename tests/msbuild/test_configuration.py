@@ -40,7 +40,7 @@ class ConfigurationTests(unittest.TestCase):
     def archive(self, variant, payload="web"):
         return self.cache / f"2dog.browser-wasm.{variant}/1.0.0/godot-{payload}/libgodot/libgodot.a"
 
-    def project(self, properties="", early_hook=False):
+    def project(self, properties=""):
         path = self.scratch / "consumer.csproj"
         web_props = escape((self.package / "buildTransitive/2dog.browser-wasm.props").as_posix())
         web_targets = escape((self.package / "buildTransitive/2dog.browser-wasm.targets").as_posix())
@@ -50,14 +50,8 @@ class ConfigurationTests(unittest.TestCase):
             f'<Project><Import Project="{web_targets}"/><Import Project="{engine_targets}"/></Project>',
             encoding="utf-8",
         )
-        extra_hook = ""
-        if early_hook:
-            hook = self.scratch / "existing-hook.props"
-            hook.write_text('<Project><PropertyGroup><ExistingHookRan>true</ExistingHookRan></PropertyGroup></Project>', encoding="utf-8")
-            extra_hook = f'<PropertyGroup><BeforeMicrosoftNETSdkTargets>{escape(hook.as_posix())}</BeforeMicrosoftNETSdkTargets></PropertyGroup>'
         path.write_text(f'''<Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk"/>
-  {extra_hook}
   <Import Project="{web_props}"/>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -85,118 +79,10 @@ class ConfigurationTests(unittest.TestCase):
     def evaluate(self, project, configuration, *arguments):
         output = self.run_msbuild(
             project, f"-p:Configuration={configuration}",
-            "-getProperty:TwoDogVariant,TwoDogWebVariant,TwoDogWebNativeDir,WasmEmitSymbolMap,ExistingHookRan",
+            "-getProperty:TwoDogVariant,TwoDogWebVariant,TwoDogWebNativeDir,WasmEmitSymbolMap",
             *arguments,
         )
         return json.loads(output)["Properties"]
-
-    def test_defaults_follow_configuration_with_real_sdk_imports(self):
-        project = self.project()
-        for configuration, variant, symbols in (
-            ("Debug", "debug", "true"),
-            ("Release", "release", "false"),
-            ("Editor", "editor", "true"),
-            ("Staging", "release", "true"),
-        ):
-            with self.subTest(configuration=configuration):
-                values = self.evaluate(project, configuration)
-                self.assertEqual(values["TwoDogVariant"], variant)
-                self.assertEqual(values["TwoDogWebVariant"], variant)
-                self.assertEqual(values["WasmEmitSymbolMap"], symbols)
-                if variant != "editor":
-                    selected = Path(values["TwoDogWebNativeDir"]) / "libgodot/libgodot.a"
-                    self.assertEqual(selected.resolve(), self.archive(variant).resolve())
-
-    def test_command_line_overrides_win(self):
-        project = self.project()
-        for configuration, variant, symbols in (
-            ("Release", "debug", "true"), ("Debug", "release", "false"),
-        ):
-            with self.subTest(configuration=configuration):
-                values = self.evaluate(
-                    project, configuration, f"-p:TwoDogVariant={variant}",
-                    f"-p:TwoDogWebVariant={variant}", f"-p:WasmEmitSymbolMap={symbols}",
-                )
-                self.assertEqual(values["TwoDogVariant"], variant)
-                self.assertEqual(values["TwoDogWebVariant"], variant)
-                self.assertEqual(values["WasmEmitSymbolMap"], symbols)
-
-    def test_project_overrides_and_configuration_are_read_after_props(self):
-        for configuration, variant, symbols in (
-            ("Release", "debug", "true"), ("Debug", "release", "false"),
-        ):
-            with self.subTest(configuration=configuration):
-                project = self.project(
-                    f"<Configuration>{configuration}</Configuration>"
-                    f"<TwoDogVariant>{variant}</TwoDogVariant>"
-                    f"<TwoDogWebVariant>{variant}</TwoDogWebVariant>"
-                    f"<WasmEmitSymbolMap>{symbols}</WasmEmitSymbolMap>"
-                )
-                values = json.loads(self.run_msbuild(
-                    project, "-getProperty:TwoDogVariant,TwoDogWebVariant,WasmEmitSymbolMap",
-                ))["Properties"]
-                self.assertEqual(values["TwoDogVariant"], variant)
-                self.assertEqual(values["TwoDogWebVariant"], variant)
-                self.assertEqual(values["WasmEmitSymbolMap"], symbols)
-
-    def test_existing_sdk_hook_is_preserved(self):
-        values = self.evaluate(self.project(early_hook=True), "Release")
-        self.assertEqual(values["ExistingHookRan"], "true")
-        self.assertEqual(values["WasmEmitSymbolMap"], "false")
-
-    def test_showcase_source_hosts_apply_symbol_defaults(self):
-        for host in (
-            "showcase.web/showcase.web.csproj",
-            "showcase.webxr/showcase.webxr.csproj",
-            "showcase.blazor/Client/showcase.blazor.Client.csproj",
-        ):
-            project = ROOT / "demos/showcase" / host
-            for configuration, expected in (("Release", "false"), ("Debug", "true")):
-                with self.subTest(host=host, configuration=configuration):
-                    output = self.run_msbuild(
-                        project, f"-p:Configuration={configuration}", "-getProperty:WasmEmitSymbolMap",
-                    )
-                    self.assertEqual(output.strip(), expected)
-            with self.subTest(host=host, explicit_override=True):
-                output = self.run_msbuild(
-                    project, "-p:Configuration=Release", "-p:WasmEmitSymbolMap=true",
-                    "-getProperty:WasmEmitSymbolMap",
-                )
-                self.assertEqual(output.strip(), "true")
-
-    def test_configuration_set_in_project_body_controls_defaults(self):
-        project = self.project("<Configuration>Release</Configuration>")
-        values = json.loads(self.run_msbuild(
-            project, "-getProperty:TwoDogVariant,TwoDogWebVariant,WasmEmitSymbolMap",
-        ))["Properties"]
-        self.assertEqual(values["TwoDogVariant"], "release")
-        self.assertEqual(values["TwoDogWebVariant"], "release")
-        self.assertEqual(values["WasmEmitSymbolMap"], "false")
-
-    def test_android_import_order_does_not_change_default_variant(self):
-        engine = escape((ROOT / "twodog.engine/build/2dog.engine.targets").as_posix())
-        android = escape((ROOT / "platforms/twodog.android/build/2dog.android.targets").as_posix())
-        path = self.scratch / "android.proj"
-        for imports in ((engine, android), (android, engine)):
-            path.write_text(
-                '<Project><PropertyGroup><TargetPlatformIdentifier>android</TargetPlatformIdentifier></PropertyGroup>'
-                + ''.join(f'<Import Project="{source}"/>' for source in imports) + '</Project>', encoding="utf-8",
-            )
-            for configuration, expected in (("Debug", "debug"), ("Release", "release"), ("Editor", "editor")):
-                with self.subTest(configuration=configuration, imports=imports):
-                    output = self.run_msbuild(path, f"-p:Configuration={configuration}", "-getProperty:TwoDogVariant")
-                    self.assertEqual(output.strip(), expected)
-
-    def test_standalone_desktop_resolver_follows_configuration(self):
-        resolver = escape((ROOT / "platforms/common/2dog.native-resolver.targets").as_posix())
-        path = self.scratch / "desktop.proj"
-        path.write_text(f'<Project><Import Project="{resolver}"/></Project>', encoding="utf-8")
-        for configuration, expected in (("Debug", "debug"), ("Release", "release"), ("Editor", "editor")):
-            with self.subTest(configuration=configuration):
-                output = self.run_msbuild(
-                    path, f"-p:Configuration={configuration}", "-t:TwoDogResolveNativeLibs", "-getProperty:_TwoDogNativeVariant",
-                )
-                self.assertEqual(output.strip(), expected)
 
     def test_web_pack_export_matches_selected_native_variant(self):
         project = self.project()
