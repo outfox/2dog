@@ -112,14 +112,20 @@ jobs:
           for line in $(jq -r 'keys[]' godot-lines.json); do
             uv run poe release --ci --line "$line"
             ref="ci/$line/$source"
-            sha=$(git ls-remote origin "refs/heads/$ref" | cut -f1)
+            refs="$refs $ref"
+            echo "refs=$refs" >> "$GITHUB_OUTPUT" # Written per push: a later failure still deletes the branch.
+            # A branch the step just pushed can take a moment to become fetchable.
+            for attempt in 1 2 3 4 5; do
+              git fetch --quiet --depth=1 origin "+refs/heads/$ref:refs/remotes/origin/$ref" && break
+              sleep 5
+            done
+            sha=$(git rev-parse --verify "refs/remotes/origin/$ref^{commit}")
             hash=$(uv run --no-project python scripts/native_inputs.py --ref "$sha")
             echo "Line $line: $ref, native input fingerprint $hash"
             builds=$(jq -c --arg ref "$ref" --arg hash "$hash" '. + [{ref: $ref, precision: "single", group: "natives-build-\($hash)"},
               {ref: $ref, precision: "double", group: "natives-build-double-\($hash)"}]' <<< "$builds")
-            refs="$refs $ref"
           done
-          { echo "builds=$builds"; echo "refs=$refs"; } >> "$GITHUB_OUTPUT"
+          echo "builds=$builds" >> "$GITHUB_OUTPUT"
 
   # Same concurrency groups as ci.yml: a tag run of that line waits for this build, then reuses it.
   build-line-natives:
