@@ -1,7 +1,7 @@
 // Version markers for the docs.
 //
-// The single source of truth for all versions is the repo-root
-// Directory.Build.props. This module parses it at docs build time and
+// All versions come from the Directory.Build.props of the newest stable release (stable-props.mjs), so the docs
+// describe the release plain `dnx 2dog` installs. This module parses it at docs build time and
 // provides markdown-it plugins that replace the markers
 //
 //   :2dog-version:     -> e.g. 4.7.0.24  (GodotVersion.TwoDogRevision[-TwoDogPrerelease])
@@ -13,25 +13,18 @@
 // everywhere in the markdown, including inside fenced code blocks and
 // inline code.
 
-import { readFileSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import type MarkdownIt from 'markdown-it'
-
-const propsPath = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  '../../../Directory.Build.props'
-)
+import { stableProps } from '../../stable-props.mjs'
 
 function msbuildProperty(xml: string, name: string): string {
   const match = xml.match(new RegExp(`<${name}>([^<]*)</${name}>`))
   if (!match) {
-    throw new Error(`Property <${name}> not found in ${propsPath}`)
+    throw new Error(`Property <${name}> not found in the stable release's Directory.Build.props`)
   }
   return match[1].trim()
 }
 
-const props = readFileSync(propsPath, 'utf-8')
+const props = stableProps()
 
 export const godotVersion = msbuildProperty(props, 'GodotVersion')
 const twodogRevision = msbuildProperty(props, 'TwoDogRevision')

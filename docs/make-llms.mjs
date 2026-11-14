@@ -2,22 +2,23 @@
 // (https://llmstxt.org) from the site's markdown sources, using each page's
 // frontmatter title and description. Sections mirror the sidebar. Runs
 // automatically before `npm run dev` / `npm run build`.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadPages } from './llms-pages.mjs';
+import { stableProps } from './stable-props.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const content = join(here, 'content');
 const HOST = 'https://2dog.dev';
 
-// Same version source as .vitepress/plugins/version-markers.mts: the repo-root
-// Directory.Build.props. Markers in page bodies resolve to real versions so
+// Same version source as .vitepress/plugins/version-markers.mts: the newest stable
+// release's Directory.Build.props. Markers in page bodies resolve to real versions so
 // the llms files read like the rendered site.
-const props = readFileSync(join(here, '..', 'Directory.Build.props'), 'utf8');
+const props = stableProps();
 const msbuildProperty = (name) => {
   const match = props.match(new RegExp(`<${name}>([^<]*)</${name}>`));
-  if (!match) throw new Error(`Property <${name}> not found in Directory.Build.props`);
+  if (!match) throw new Error(`Property <${name}> not found in the stable release's Directory.Build.props`);
   return match[1].trim();
 };
 const godotVersion = msbuildProperty('GodotVersion');
