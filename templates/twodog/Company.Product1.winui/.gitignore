@@ -1,0 +1,24 @@
+# .NET build outputs
+[Bb]in/
+[Oo]bj/
+artifacts/
+*.binlog
+
+# User-specific files
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+*.DotSettings.user
+.vs/
+.idea/
+
+# Test results and coverage reports
+[Tt]est[Rr]esults/
+*.coverage
+*.coveragexml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
