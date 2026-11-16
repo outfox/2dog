@@ -26,7 +26,7 @@
   dot-grid background with an accent glow, a 304px-wide logo at top right and section pill at top left
   (sections map from the page path in `social-metadata.mjs`), page title and tagline below,
   a "Read the dogs!" button at bottom left, and the
-  first article illustration at bottom right, at 2x with nearest-neighbor scaling. Use the vendored Inter
+  first article illustration at bottom right, at 2x with nearest-neighbor scaling, or at native size when 2x does not fit beside the copy. Use the vendored Inter
   fonts for the copy. Prefer a matching non-`-big` PNG when available. Pages without artwork use
   `img/2dog-walkies.png`. Generated images are not sources.
 - List a new page in the sidebar in `.vitepress/config.mts` and in the matching section of `SECTIONS` in

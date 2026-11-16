@@ -43,7 +43,8 @@ match.
 
 See [New Tricks: WebGPU](/configuration/new-tricks/webgpu#web-host) for browser
 requirements, boot settings, and Compatibility fallback. See
-[Forward+](/configuration/new-tricks/forward-plus) to select the web renderer
+[Forward+ and Mobile on the web](/configuration/new-tricks/web-renderers) to
+select the web renderer
 and enable shader baking before export.
 
 ## Precompression

@@ -178,7 +178,7 @@ function preferredIllustration(illustration) {
   return standardName !== name && existsSync(standard) ? standard : illustration;
 }
 
-/** Double each illustration pixel with nearest-neighbor sampling before compositing.
+/** Double each illustration pixel with nearest-neighbor sampling when it fits, then composite.
  * @param {string | Buffer} [illustration]
  * @param {{section?: string, title?: string, tagline?: string}} [copy]
  */
@@ -194,11 +194,15 @@ export async function renderSocialImage(illustration = fallback, { section = '',
     }
     throw error;
   }
-  const scaledWidth = width * 2;
-  const scaledHeight = height * 2;
-  if (scaledWidth > socialImageWidth - inset - copyWidth - artInset || scaledHeight > socialImageHeight) {
-    throw new Error(`Social illustration ${width}x${height} at 2x (${scaledWidth}x${scaledHeight}) exceeds the space beside the copy on the 1200x630 canvas.`);
+  const fits = (scale) =>
+    width * scale <= socialImageWidth - inset - copyWidth - artInset && height * scale <= socialImageHeight;
+  // Art too large to double keeps its native pixels.
+  const scale = fits(2) ? 2 : 1;
+  if (!fits(scale)) {
+    throw new Error(`Social illustration ${width}x${height} exceeds the space beside the copy on the 1200x630 canvas.`);
   }
+  const scaledWidth = width * scale;
+  const scaledHeight = height * scale;
   const illustrationImage = await sharp(illustration)
     .resize({ width: scaledWidth, height: scaledHeight, kernel: 'nearest' })
     .png().toBuffer();

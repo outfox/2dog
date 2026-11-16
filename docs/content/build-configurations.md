@@ -86,7 +86,8 @@ extension built for the other precision reads them wrongly.
 
 See [New Tricks: WebGPU](/configuration/new-tricks/webgpu) for supported targets,
 desktop and browser setup, fallback behavior, and source builds. For web renderer
-selection and shader baking, see [Forward+](/configuration/new-tricks/forward-plus).
+selection and shader baking, see
+[Forward+ and Mobile on the web](/configuration/new-tricks/web-renderers).
 
 ### Adapter and shader limits
 

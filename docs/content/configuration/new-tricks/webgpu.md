@@ -52,7 +52,8 @@ double-precision payloads reject explicit WebGPU requests before device creation
 
 The project's `renderer/rendering_method.web` selects WebGPU for Forward+ and
 Mobile, or OpenGL/WebGL for Compatibility (the default). See
-[Forward+](./forward-plus) for the manual `project.godot` setting and
+[Forward+ and Mobile on the web](./web-renderers) for the manual
+`project.godot` setting and
 **shader baking**, which reduces first-load compilation time.
 
 On Linux, if Firefox does not expose WebGPU, check `dom.webgpu.enabled` in

@@ -47,5 +47,6 @@ package references. See the [Blazor host guide](/hosts/blazor) for `GodotView`.
 
 See [New Tricks: WebGPU](/configuration/new-tricks/webgpu#blazor) for
 `GodotView` renderer settings, browser requirements, and Compatibility fallback.
-See [Forward+](/configuration/new-tricks/forward-plus) to select the web
+See [Forward+ and Mobile on the web](/configuration/new-tricks/web-renderers)
+to select the web
 renderer and bake shaders before export.

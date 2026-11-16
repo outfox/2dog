@@ -127,9 +127,24 @@ test('names Git LFS pointers instead of reporting an unsupported image format', 
   await assert.rejects(renderSocialImage(pointer), /Git LFS pointer/);
 });
 
-test('rejects illustrations that would run into the copy at 2x instead of overlapping it', async () => {
+test('keeps illustrations too large to double at their native size', async () => {
+  const marker = [240, 40, 120, 255];
   const illustration = await sharp({
-    create: { width: 257, height: 10, channels: 4, background: '#fff' }
+    create: { width: 257, height: 10, channels: 4, background: { r: 240, g: 40, b: 120, alpha: 1 } }
+  }).png().toBuffer();
+  const { data, info } = await sharp(await renderSocialImage(illustration))
+    .ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const pixel = (x, y) => [...data.subarray((y * info.width + x) * 4, (y * info.width + x) * 4 + 4)];
+  const left = 1200 - 48 - 257;
+  assert.deepEqual(pixel(left, 620), marker);
+  assert.deepEqual(pixel(left + 256, 629), marker);
+  assert.notDeepEqual(pixel(left - 1, 620), marker);
+  assert.notDeepEqual(pixel(left, 619), marker);
+});
+
+test('rejects illustrations that would run into the copy instead of overlapping it', async () => {
+  const illustration = await sharp({
+    create: { width: 513, height: 10, channels: 4, background: '#fff' }
   }).png().toBuffer();
   await assert.rejects(renderSocialImage(illustration), /exceeds the space beside the copy/);
 });

@@ -259,9 +259,10 @@ export default defineConfig<ThemeConfig>({
         items: [
           {
             text: gd('bone') + 'New Tricks',
+            link: '/configuration/new-tricks/',
             collapsed: true,
             items: [
-              { text: 'Forward+', link: '/configuration/new-tricks/forward-plus' },
+              { text: 'Forward+ & Mobile (Web)', link: '/configuration/new-tricks/web-renderers' },
               { text: 'WebGPU', link: '/configuration/new-tricks/webgpu' }
             ]
           },
