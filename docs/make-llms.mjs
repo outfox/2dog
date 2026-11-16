@@ -75,6 +75,9 @@ const SECTIONS = [
     'testing/index.md', 'testing/gdunit.md', 'testing/nunit.md', 'testing/xunit.md',
     'testing/writing-tests.md', 'testing/input.md',
   ]],
+  ['New Tricks', [
+    'configuration/new-tricks/forward-plus.md', 'configuration/new-tricks/webgpu.md',
+  ]],
   ['MSBuild Configuration', [
     'configuration.md',
   ]],

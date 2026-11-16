@@ -45,17 +45,7 @@ package references. See the [Blazor host guide](/hosts/blazor) for `GodotView`.
 
 ## Experimental WebGPU
 
-Set `RenderingDriver="webgpu"` on `GodotView` to select WebGPU Forward+; add
-`--rendering-method mobile` to `Args` for Mobile. `--rendering-driver webgpu` in
-`Args` also selects WebGPU when `RenderingDriver` is unset. Without either, the
-project's `renderer/rendering_method.web` decides, as on the WASM host: Forward+
-and Mobile use WebGPU, Compatibility (the default) uses OpenGL/WebGL.
-
-WebGPU requires the single-precision, single-threaded browser payload, a secure
-context and a browser that supports WebGPU. Other payloads fail before 2dog
-creates a device. If the browser has no WebGPU device, `GodotView` logs a warning
-and starts `opengl3` with `gl_compatibility`, ignoring the renderer options in
-`Args`. Later views reuse the same device. If initialization is cancelled, 2dog
-releases a device that no view has claimed.
-
-See [build configurations](/build-configurations#experimental-webgpu).
+See [New Tricks: WebGPU](/configuration/new-tricks/webgpu#blazor) for
+`GodotView` renderer settings, browser requirements, and Compatibility fallback.
+See [Forward+](/configuration/new-tricks/forward-plus) to select the web
+renderer and bake shaders before export.

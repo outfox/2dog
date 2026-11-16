@@ -257,6 +257,14 @@ export default defineConfig<ThemeConfig>({
       {
         text: 'Configuration',
         items: [
+          {
+            text: gd('bone') + 'New Tricks',
+            collapsed: true,
+            items: [
+              { text: 'Forward+', link: '/configuration/new-tricks/forward-plus' },
+              { text: 'WebGPU', link: '/configuration/new-tricks/webgpu' }
+            ]
+          },
           { text: gd('layers') + 'Build Variants', link: '/build-configurations' },
           { text: gd('wrench') + 'Environment Variables', link: '/configuration/environment-variables' },
           {

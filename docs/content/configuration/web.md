@@ -41,57 +41,10 @@ match.
 
 ## Experimental WebGPU
 
-Single-precision, single-threaded browser packages include WebGPU and WebGL.
-During bundling, `renderer/rendering_method.web="forward_plus"` or `"mobile"` in
-`project.godot` selects WebGPU when the native payload includes it. Other
-settings select WebGL. The showcase uses Forward+. A new template project uses
-Compatibility by default. To request WebGPU explicitly, configure `GODOT_CONFIG`
-in `wwwroot/index.html` before you create `Engine`:
-
-```javascript
-'renderingDriver': 'webgpu',
-'args': ['--rendering-driver', 'webgpu', '--rendering-method', 'forward_plus'],
-```
-
-Adapters with fewer than 40 sampled textures or 10 storage buffers per shader
-stage start Mobile instead, with one console warning. Adapters without
-`texture-formats-tier2`, such as Firefox, run Forward+ without SDFGI and VoxelGI;
-see [adapter and shader limits](/build-configurations#adapter-and-shader-limits).
-Firefox 158 on Linux needs `dom.webgpu.enabled` in `about:config` before it
-exposes WebGPU; without it, the shell starts Compatibility.
-
-Without baking, the browser translates every Forward+ shader variant on its main thread at the first start, which can
-take a minute and trigger the browser's unresponsive-page prompt. Enable `shader_baker/enabled` in the `Web` export
-preset to ship the translated shaders in the pack. Publishing then runs the headless export with a window-less
-rendering device (Vulkan, or Metal on macOS), so it needs a GPU or a software adapter such as lavapipe, but no
-display. Baked shaders make the pack larger, by about 18 MB compressed for a small Forward+ project.
-
-The shell requests a device before it initializes Godot. If one of these
-conditions occurs, the shell logs a warning and starts with `opengl3` and
-`gl_compatibility`, with the same runtime and game pack:
-
-- WebGPU is unavailable.
-- No adapter is available.
-- The adapter or device request fails.
-
-This fallback happens before startup; it does not recover from later device loss
-or native renderer failures. Game content must also work with Compatibility.
-
-To always use Compatibility, set `renderer/rendering_method.web` to
-`"gl_compatibility"`, or override both command-line options:
-
-```javascript
-'renderingDriver': 'opengl3',
-'args': ['--rendering-driver', 'opengl3', '--rendering-method', 'gl_compatibility'],
-```
-
-The `opengl3` driver uses WebGL 2 in browsers (OpenGL ES 3.0), not WebGL 3.
-WebGPU requires a secure context and browser support. Threaded and
-double-precision payloads reject explicit WebGPU requests before device
-creation. The package supplies the Emscripten port, link flags and writable
-cache.
-
-See [build configurations](/build-configurations#experimental-webgpu) for limits.
+See [New Tricks: WebGPU](/configuration/new-tricks/webgpu#web-host) for browser
+requirements, boot settings, and Compatibility fallback. See
+[Forward+](/configuration/new-tricks/forward-plus) to select the web renderer
+and enable shader baking before export.
 
 ## Precompression
 

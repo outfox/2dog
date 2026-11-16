@@ -84,87 +84,17 @@ extension built for the other precision reads them wrongly.
 
 ## Experimental WebGPU
 
-WebGPU is opt-in. It supports the Forward+ and Mobile renderers on these targets:
-
-- Windows, Linux and macOS, in single precision
-- single-threaded browser runtimes
-
-2dog does not change your existing renderer defaults. If you use WebGPU with
-Android, double precision or threaded browser payloads, you get a clear error.
-Native threading remains supported.
-Headless imports and exports do not require a WebGPU device.
-
-`--rendering-driver webgpu` selects Forward+ unless you also pass
-`--rendering-method mobile`:
-
-```bash
-dotnet run --project MyGame.2dog -- --rendering-driver webgpu
-```
-
-For project settings, select both the renderer and the platform driver:
-
-```ini
-[rendering]
-renderer/rendering_method="forward_plus"
-rendering_device/driver="webgpu"
-rendering_device/driver.windows="webgpu"
-rendering_device/driver.linuxbsd="webgpu"
-rendering_device/driver.macos="webgpu"
-```
-
-Configure `.web` and `.mobile` feature overrides explicitly when present.
-See [web configuration](/configuration/web#experimental-webgpu) and
-[Blazor configuration](/configuration/blazor#experimental-webgpu) for browser boot.
-WebXR's immersive rendering is outside this experimental scope.
+See [New Tricks: WebGPU](/configuration/new-tricks/webgpu) for supported targets,
+desktop and browser setup, fallback behavior, and source builds. For web renderer
+selection and shader baking, see [Forward+](/configuration/new-tricks/forward-plus).
 
 ### Adapter and shader limits
 
-Forward+ on WebGPU binds a compact scene: 4 lightmaps and 2 VoxelGIs per frame
-instead of 8, with the lightmap data in a uniform buffer. That keeps the scene
-shader within Safari's 44 sampled textures and Chrome on Metal's 10 storage
-buffers per shader stage. Forward+ needs at least 40 sampled textures and 10
-storage buffers per shader stage. On an adapter without them, Godot prints one
-warning and runs Mobile; `RenderingServer.GetCurrentRenderingMethod()` then
-returns `mobile`. A material can still exceed an adapter's limit with many
-textures of its own; that material fails to compile and logs the limit.
-
-SDFGI, VoxelGI and the compute depth of field read and write RGBA8, RGBA16 and
-RGBA32 storage textures in place, which needs the
-[`texture-formats-tier2`](https://gpuweb.github.io/gpuweb/#texture-formats-tier2)
-feature. Chrome exposes it on desktop GPUs; Firefox and software adapters such
-as lavapipe do not. Without it, Forward+ still runs: SDFGI and VoxelGI are
-disabled with one warning when a scene asks for them, and depth of field uses
-the raster passes of the Mobile renderer. SSIL needs 8-bit read/write storage,
-which an adapter has without `texture-formats-tier1` (8-bit storage is promoted
-to 32-bit) or with tier2; the rare adapter with tier1 but not tier2 disables SSIL
-with one warning.
-
-The backend has no image atomics, multiview or ray tracing. Read/write storage
-textures require native support for their format; unsupported formats fail
-shader creation. Use supported R32 formats or separate read and write resources.
-Overlapping writable storage-buffer bindings are rejected instead of redirected
-to dummy buffers. GPU timestamp and memory statistics are not implemented.
-Translated WGSL is cached; GPU pipeline compilation still happens at runtime.
-
-Native Dawn loads only when selected. WebGPU requires macOS 13 or newer; other
-renderers retain their existing runtime requirements. Desktop packages include
-Dawn and the compiler sidecars and notices needed by the selected backend.
+See [WebGPU adapter and shader limits](/configuration/new-tricks/webgpu#adapter-and-shader-limits).
 
 ### Source builds
 
-Normal `uv run poe build-all` enables WebGPU on supported configurations. Keep
-the Emscripten SDK pinned to `EmscriptenVersion` from `Directory.Build.props`.
-
-```text
-uv run build-godot.py --webgpu auto
-uv run build-godot.py --platform web --webgpu yes
-```
-
-Use `--webgpu no` to omit the driver. `--webgpu-native-path <sdk>` supplies an
-existing native Dawn boundary SDK, including its runtime libraries and licenses.
-Unsupported configurations reject `--webgpu yes`; `auto` preserves their renderer.
-Browser packages supply a prepared port and a writable cache. Override that cache
-with `TwoDogWebGpuCachePath` when needed.
+See [WebGPU source builds](/configuration/new-tricks/webgpu#source-builds).
 
 ## Downloading CI Packages
 
