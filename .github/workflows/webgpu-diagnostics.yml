@@ -1,0 +1,59 @@
+name: Windows WebGPU Diagnostics
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        type: string
+        default: v4.8.0.200-beta3
+      run_id:
+        type: string
+        default: '44194321316'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  diagnose:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.source_ref }}
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - uses: actions/download-artifact@v8
+        with:
+          name: runtime-packages-single
+          path: packages
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+      - name: Build packaged smoke host
+        run: |
+          New-Item -ItemType Directory -Force godot/bin/GodotSharp/Tools/nupkgs | Out-Null
+          dotnet build tests/webgpu-smoke -c Release
+      - name: Capture process exit and Windows fault event
+        shell: pwsh
+        run: |
+          $started = Get-Date
+          $smoke = 'tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke.exe'
+          & $smoke webgpu mobile *> webgpu-process.log
+          $nativeExit = $LASTEXITCODE
+          Get-Content webgpu-process.log
+          Write-Output ('NATIVE_EXIT_CODE={0} (0x{1:X8})' -f $nativeExit, ([long]$nativeExit -band 0xffffffffL))
+          if ($nativeExit -ne 0) {
+            Start-Sleep -Seconds 5
+            Get-WinEvent -FilterHashtable @{LogName='Application'; Id=1000,1001; StartTime=$started} -ErrorAction SilentlyContinue |
+              Format-List TimeCreated,Id,Message
+            & gdb --batch -ex 'set pagination off' -ex run -ex 'thread apply all bt' --args $smoke webgpu mobile *> webgpu-gdb.log
+            Get-Content webgpu-gdb.log
+          }
+          exit $nativeExit
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: windows-webgpu-exit
+          path: webgpu-*.log
