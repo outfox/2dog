@@ -708,6 +708,10 @@ jobs:
         # Includes cold builds/restores now; individual subprocess deadlines remain in the harness.
         timeout-minutes: 10
         run: uv run --no-project python tests/mtp/test_hosts.py --configuration Debug --precision ${{ matrix.precision }}
+      - name: Test GDExtension shutdown
+        if: runner.os == 'Windows'
+        timeout-minutes: 5
+        run: uv run --no-project python tests/mtp/test_extension_shutdown.py --configuration Release --precision ${{ matrix.precision }}
       - name: Upload MTP contract diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
@@ -717,6 +721,7 @@ jobs:
           path: |
             tests/mtp/bin/**/console.log
             tests/mtp/bin/**/fixture.events
+            tests/mtp/bin/**/extension-*.events
             tests/mtp/bin/**/godot/*.log
             tests/gdunit-mtp/bin/contracts/**/*.log
             tests/gdunit-mtp/bin/contracts/**/events.json

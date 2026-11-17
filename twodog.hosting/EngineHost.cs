@@ -291,9 +291,7 @@ public sealed class EngineHost : IDisposable
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "2dog", "native-pool", identityKey, $"slot-{slot}");
         Directory.CreateDirectory(dir);
-        // Distinct base name per slot: name-based module lookups (and the
-        // legacy name-sweep fallback in twodog's exit unload) must never match
-        // a sibling copy or the original.
+        // Distinct base names keep module lookups from matching a sibling copy or the original.
         var dest = Path.Combine(dir,
             $"{Path.GetFileNameWithoutExtension(source.Name)}.slot-{slot}{source.Extension}");
         foreach (var dependency in dependencies)

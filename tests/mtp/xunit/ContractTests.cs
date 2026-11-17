@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using twodog.Testing;
 using Xunit;
 
@@ -30,6 +31,18 @@ public sealed class ContractTests(ProbeFixture fixture) : IClassFixture<ProbeFix
         await Task.Yield();
         Assert.Equal(fixture.OwnerThreadId, Environment.CurrentManagedThreadId);
         Assert.True(fixture.Engine.Update());
+        if (Environment.GetEnvironmentVariable("MTP_CONTRACT_EXTENSION") is { } extension)
+        {
+            Assert.Equal(Godot.GDExtensionManager.LoadStatus.Ok, Godot.GDExtensionManager.LoadExtension(extension));
+            if (Environment.GetEnvironmentVariable("MTP_CONTRACT_RETAIN_EXTENSION") is "exit-handler" or "process-detach")
+            {
+                var handle = NativeLibrary.Load(Environment.GetEnvironmentVariable("MTP_CONTRACT_EXTENSION_LIBRARY")!);
+                if (Environment.GetEnvironmentVariable("MTP_CONTRACT_RETAIN_EXTENSION") == "exit-handler")
+                    AppDomain.CurrentDomain.ProcessExit += (_, _) => NativeLibrary.Free(handle);
+            }
+            var node = new Godot.Node();
+            fixture.Tree.Root.AddChild(node);
+        }
         ProbeFixture.Record("Passing");
     }
 

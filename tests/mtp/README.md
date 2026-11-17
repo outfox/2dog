@@ -11,6 +11,17 @@ and the embedded GdUnit MTP framework. It checks discovery, stable IDs,
 parameter-row selection, empty selections, results, native warnings, native
 .NET 10 `dotnet test`, cancellation and Godot owner-thread teardown.
 
+On Windows, also run the native extension shutdown regression (requires CMake and a C++ compiler):
+
+```text
+uv run python tests/mtp/test_extension_shutdown.py --configuration Release --precision single
+```
+
+It checks engine teardown and process exit with a GDExtension whose static destructor calls Godot's allocator.
+The DLL unloads normally, from a later `ProcessExit` handler, or during OS process teardown. Both the process
+exit code and a completed destructor marker are required: the test runner can report success despite a failed
+DLL detach. CI runs this check for both precisions on Windows.
+
 The minimal game has a main scene because Godot validates its presence
 before the fixture can bypass loading it. Normal resource import generates
 the script cache; tests never instantiate that scene.

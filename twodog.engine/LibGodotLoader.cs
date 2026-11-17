@@ -16,15 +16,14 @@ internal static class LibGodotLoader
     private static readonly string[] KnownVariants = ["release", "debug", "editor"];
 
     /// <summary>
-    /// File name of the libgodot actually loaded; used to unload it by name at process exit on Windows.
+    /// File name of the libgodot actually loaded.
     /// </summary>
     internal static string? LoadedLibraryFileName { get; private set; }
 
     /// <summary>Full path of the loaded libgodot, when known (LoadExact or file probing).</summary>
     internal static string? LoadedLibraryPath { get; private set; }
 
-    /// <summary>OS handle of the loaded libgodot; lets the exit sweep free exactly this
-    /// context's module regardless of file naming (pooled copies use per-slot names).</summary>
+    /// <summary>OS handle of this context's libgodot, retained until process termination.</summary>
     internal static nint LoadedLibraryHandle { get; private set; }
 
     /// <summary>
@@ -59,6 +58,7 @@ internal static class LibGodotLoader
 
     private static void Record(string fileName, string? path, nint handle)
     {
+        // GDExtension destructors and later exit handlers can still call into libgodot after engine destruction.
         LoadedLibraryFileName = fileName;
         LoadedLibraryPath = path;
         LoadedLibraryHandle = handle;

@@ -66,58 +66,10 @@ public class Engine : IDisposable, IAsyncDisposable
         _projectPath = string.IsNullOrEmpty(path) ? null : Path.GetFullPath(path);
     }
 
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern IntPtr GetModuleHandleW([MarshalAs(UnmanagedType.LPWStr)] string name);
-
-    [DllImport("kernel32", SetLastError = true)]
-    private static extern bool FreeLibrary(IntPtr module);
-
     static Engine()
     {
         if (OperatingSystem.IsBrowser())
             WebExceptionDiagnostics.Install();
-
-        // Windows: unload libgodot before loader shutdown, else its static destructors run under loader lock and
-        // CoreMessaging.dll fail-fasts (0xE0464645). macOS aborts similarly but dyld pins ObjC images (fork TODO).
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            AppDomain.CurrentDomain.ProcessExit += (_, _) => UnloadLibGodot();
-    }
-
-    private static void UnloadLibGodot()
-    {
-        // A running instance still needs the library; its teardown at process
-        // exit is safe because the display server was never destroyed.
-        lock (ProcessSync)
-        {
-            if (_godotInstancePtr != IntPtr.Zero) return;
-        }
-
-        // No Godot calls past this point (ProcessExit). Prefer the recorded handle: with hosted multi-instance
-        // every sweep must free exactly its own module.
-        var handle = LibGodotLoader.LoadedLibraryHandle;
-        if (handle != 0)
-        {
-            var attempts = 0;
-            while (FreeLibrary(handle) && ++attempts < 32)
-            {
-            }
-            return;
-        }
-
-        // The loaded module name is variant-specific (libgodot-editor.dll etc.);
-        // when the resolver never ran, sweep all known names.
-        string[] names = LibGodotLoader.LoadedLibraryFileName is { } loaded
-            ? [loaded]
-            : ["libgodot.dll", "libgodot-release.dll", "libgodot-debug.dll", "libgodot-editor.dll"];
-        foreach (var name in names)
-        {
-            var module = GetModuleHandleW(name);
-            var attempts = 0;
-            while (module != IntPtr.Zero && FreeLibrary(module) && ++attempts < 32)
-            {
-                module = GetModuleHandleW(name);
-            }
-        }
     }
 
     /// <summary>The running engine's scene tree. Throws unless the engine is running.</summary>
