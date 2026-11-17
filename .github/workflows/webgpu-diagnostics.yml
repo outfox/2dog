@@ -44,15 +44,12 @@ jobs:
           $nativeExit = $LASTEXITCODE
           Get-Content webgpu-process.log
           Write-Output ('NATIVE_EXIT_CODE={0} (0x{1:X8})' -f $nativeExit, ([long]$nativeExit -band 0xffffffffL))
-          & bash --noprofile --norc -c './tests/webgpu-smoke/bin/Release/net10.0/NativeWebGpuSmoke.exe webgpu mobile > webgpu-bash.log 2>&1; result=$?; echo "BASH_NATIVE_EXIT=$result"; exit "$result"'
-          $bashExit = $LASTEXITCODE
-          Get-Content webgpu-bash.log
-          if ($nativeExit -eq 0) { $nativeExit = $bashExit }
           if ($nativeExit -ne 0) {
             Start-Sleep -Seconds 5
             Get-WinEvent -FilterHashtable @{LogName='Application'; Id=1000,1001; StartTime=$started} -ErrorAction SilentlyContinue |
               Format-List TimeCreated,Id,Message
-            & gdb --batch -ex 'set pagination off' -ex run -ex 'thread apply all bt' --args $smoke webgpu mobile *> webgpu-gdb.log
+            @('set pagination off', 'run', 'thread apply all bt', 'info sharedlibrary') | Set-Content webgpu.gdb
+            & gdb --batch -x webgpu.gdb --args $smoke webgpu mobile *> webgpu-gdb.log
             Get-Content webgpu-gdb.log
           }
           exit $nativeExit
