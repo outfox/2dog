@@ -1311,6 +1311,7 @@ jobs:
             "$SMOKE.exe" webgpu mobile > webgpu-smoke.log 2>&1 || status=$?
           fi
           cat webgpu-smoke.log
+          echo "WebGPU process exit code: $status"
           [ "$status" -eq 0 ]
           grep -q 'NATIVE_WEBGPU_SMOKE_PASSED: lifetime 2' webgpu-smoke.log
           if grep -Eq '^ERROR:|^WARNING:' webgpu-smoke.log; then exit 1; fi
