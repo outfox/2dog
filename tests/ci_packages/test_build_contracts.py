@@ -4,6 +4,7 @@ import fnmatch
 import json
 import os
 from pathlib import Path
+import re
 import tempfile
 import shutil
 import subprocess
@@ -15,6 +16,28 @@ import zipfile
 from scripts import check_published_natives, native_inputs, release_packages
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+class NativeArtifactTests(unittest.TestCase):
+    def test_artifacts_and_downloads_isolate_godot_lines_and_precisions(self):
+        workflow = (ROOT / ".github/workflows/build-natives.yml").read_text()
+        templates = set(re.findall(
+            r"^\s+name: ((?:godotsharp|godot-source-generators|godot-editor-linux-x64|godot-android-java|libgodot)-.+)$",
+            workflow, re.MULTILINE))
+        self.assertTrue(templates)
+        pattern = re.search(r"pattern: '([^']+)'", workflow).group(1)
+
+        def render(text, line, precision):
+            return text.replace("${{ needs.preflight.outputs.line }}", line).replace("${{ inputs.precision }}", precision)
+
+        builds = {(line, precision): {render(name, line, precision) for name in templates}
+                  for line in ("4.7", "4.8") for precision in ("single", "double")}
+        artifacts = set().union(*builds.values())
+        self.assertEqual(sum(map(len, builds.values())), len(artifacts), "Native build artifacts overwrite another line")
+        for (line, precision), expected in builds.items():
+            with self.subTest(line=line, precision=precision):
+                selected = {name for name in artifacts if fnmatch.fnmatchcase(name, render(pattern, line, precision))}
+                self.assertEqual(expected, selected)
 
 
 class NativeIdentityTests(unittest.TestCase):

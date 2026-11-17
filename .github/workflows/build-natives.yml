@@ -186,7 +186,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: godotsharp-${{ inputs.precision }}
+          name: godotsharp-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}GodotSharp/
           if-no-files-found: error
           retention-days: 7
@@ -195,7 +195,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: godotsharp-nupkgs-${{ inputs.precision }}
+          name: godotsharp-nupkgs-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/bin/GodotSharp/Tools/nupkgs/
           if-no-files-found: error
           retention-days: 7
@@ -204,7 +204,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: godot-source-generators-${{ inputs.precision }}
+          name: godot-source-generators-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/Godot.SourceGenerators.dll
           if-no-files-found: error
           retention-days: 7
@@ -213,7 +213,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: godot-editor-linux-x64-${{ inputs.precision }}
+          name: godot-editor-linux-x64-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: |
             godot/bin/godot.linuxbsd.editor${{ env.NATIVE_SUFFIX }}.x86_64.executable.mono
             godot/bin/libgodot_webgpu_dawn.so
@@ -490,7 +490,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: |
             godot/bin/${{ env.NATIVE_SUBDIR }}*godot.${{ matrix.platform }}.${{ matrix.target }}${{ env.NATIVE_SUFFIX }}.${{ matrix.arch }}.shared_library.${{ matrix.lib_ext }}
             godot/bin/${{ env.NATIVE_SUBDIR }}webgpu/${{ matrix.rid }}/
@@ -505,7 +505,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: libgodot-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ inputs.precision }}
+          name: libgodot-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}web${{ matrix.flavor }}/${{ matrix.target }}/
           if-no-files-found: error
           retention-days: 7
@@ -517,7 +517,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}android/${{ matrix.target }}/${{ matrix.arch }}/
           if-no-files-found: error
           retention-days: 7
@@ -527,7 +527,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ inputs.precision }}
+          name: libgodot-${{ matrix.rid }}-${{ matrix.target }}-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/bin/${{ env.NATIVE_SUBDIR }}ios/${{ matrix.target }}/${{ matrix.rid }}/
           if-no-files-found: error
           retention-days: 7
@@ -586,7 +586,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
-          name: godot-android-java-${{ inputs.precision }}
+          name: godot-android-java-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}
           path: godot/bin/android/java/
           if-no-files-found: error
           retention-days: 7
@@ -617,24 +617,22 @@ jobs:
           python-version: '3.12'
           enable-cache: false
 
-      # In workflow_call mode this downloads all artifacts of the *caller's*
-      # run. Safe only because `needs` orders this job strictly before ci.yml's
-      # pack job uploads its own artifacts.
+      # Reusable calls for different Godot lines share the caller's artifacts.
       - name: Download all artifacts
         uses: actions/download-artifact@v8
         with:
-          pattern: '*-${{ inputs.precision }}'
+          pattern: '*-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}'
           path: artifacts
 
       - name: Prepare release assets
         run: |
-          chmod +x artifacts/godot-editor-linux-x64-${{ inputs.precision }}/godot.linuxbsd.editor${NATIVE_SUFFIX}.x86_64.executable.mono
+          chmod +x artifacts/godot-editor-linux-x64-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}/godot.linuxbsd.editor${NATIVE_SUFFIX}.x86_64.executable.mono
           mkdir -p release-assets
           # One zip per artifact, named after the artifact, with the artifact's
           # files at the zip root under their original names.
           for dir in artifacts/*/; do
             name=$(basename "$dir")
-            name="${name%-${{ inputs.precision }}}"
+            name="${name%-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}}"
             (cd "$dir" && zip -9 -r "$GITHUB_WORKSPACE/release-assets/$name.zip" .)
           done
           echo "Release assets:"
