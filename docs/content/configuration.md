@@ -7,7 +7,7 @@ tagline: "Learn how to tune 2dog's MSBuild settings for every host."
 # MSBuild Configuration
 
 ![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their blue robot dog tinkering with electronics](img/2dog-tinker.png)
-*(getting your paws dirty)*
+*"Let's put it together exactly like you need it."*
 
 Set host properties inside a `<PropertyGroup>` in the host's `.csproj`. Set
 shared settings in the root
