@@ -20,6 +20,6 @@ break compatibility on some platforms.
 :::
 
 - A trick may work on some platforms only, or only in some
-[build variants](/build-configurations).
+[build variants](/build-variants).
 - A project that depends on a trick may not run on official Godot builds.
 - Behavior may change between 2dog releases while a trick matures.

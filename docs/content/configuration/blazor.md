@@ -15,7 +15,7 @@ It normally sets `GodotProjectDir=../..`; see the
 
 | Property                     | Default                                            | Purpose                                                                                                |
 |------------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `TwoDogWebVariant`           | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                                            |
+| `TwoDogWebVariant`           | Follows the [configuration](/build-variants) | Native engine variant: `debug` or `release`                                                            |
 | `TwoDogExportPack`           | `true`                                             | Export the game pack as a static web asset; `false` uses an existing `wwwroot/godot.pck` in the client |
 | `TwoDogWebExportPreset`      | `Web`                                              | Preset in `export_presets.cfg`                                                                         |
 | `TwoDogWebPackName`          | `godot.pck`                                        | Exported pack name; if you change it, set the same name in `GodotView.PackUrl`                         |

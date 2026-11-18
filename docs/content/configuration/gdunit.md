@@ -14,7 +14,7 @@ dependencies that private resource imports need. You do not need a GdUnit
 checkout or a separate addon installation.
 
 Debug, Release and Editor select the matching
-[native variant](/build-configurations). The host always runs headlessly.
+[native variant](/build-variants). The host always runs headlessly.
 The host project disables the normal game import and pack export. Discovery
 and execution import their own private stages.
 

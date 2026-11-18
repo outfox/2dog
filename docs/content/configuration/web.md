@@ -16,7 +16,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 | Property                            | Default                                            | Purpose                                                                                                          |
 |-------------------------------------|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| `TwoDogWebVariant`                  | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                                                      |
+| `TwoDogWebVariant`                  | Follows the [configuration](/build-variants) | Native engine variant: `debug` or `release`                                                                      |
 | `TwoDogExportPack`                  | `true`                                             | Export game content; `false` uses an existing `wwwroot/godot.pck`                                                |
 | `TwoDogWebExportPreset`             | `Web`                                              | Preset in `export_presets.cfg`                                                                                   |
 | `TwoDogWebPackName`                 | `godot.pck`                                        | Deployed pack name                                                                                               |

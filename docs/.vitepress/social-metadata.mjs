@@ -50,7 +50,7 @@ const sections = [
   [/^index\.md$/, ''],
   [/^api(?:\/|-reference\.md$)/, 'API Reference'],
   [/^(?:cli\/|dnx-2dog\.md$)/, 'CLI'],
-  [/^(?:configuration|build-configurations)\b/, 'Configuration'],
+  [/^(?:configuration|build-variants)\b/, 'Configuration'],
   [/^hosts\//, 'Hosts'],
   [/^known-issues\//, 'Known Issues'],
   [/^testing\//, 'Testing'],

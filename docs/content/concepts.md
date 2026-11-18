@@ -51,7 +51,7 @@ Almost, but... yay for free and libre open source!
 
 `2dog.engine` adds the native `libgodot` for your platform in three variants:
 `debug`, `release` and `editor`. They match the Debug, Release and Editor .NET
-configurations. [Build Variants](./build-configurations) is the complete guide.
+configurations. [Build Variants](./build-variants) is the complete guide.
 
 ## Lookin' sharp... GodotSharp ... !
 

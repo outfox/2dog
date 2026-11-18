@@ -15,7 +15,7 @@ collection.
 The [global settings](/configuration#properties) control the game directory,
 resource import, analyzers and native variant.
 
-Debug, Release, and Editor select the matching [native variant](/build-configurations).
+Debug, Release, and Editor select the matching [native variant](/build-variants).
 For tests that use Editor APIs:
 
 ```bash

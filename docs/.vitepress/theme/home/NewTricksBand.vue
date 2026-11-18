@@ -9,7 +9,7 @@ const tricks: { title: string; description: string; href: string; diagram: Diagr
   {
     title: 'WebGPU driver',
     description: "Forward+ and Mobile Renderers on <code>browser-wasm</code>, an alternative to Compatibility Renderer.",
-    href: '/build-configurations#experimental-webgpu',
+    href: '/build-variants#experimental-webgpu',
     diagram: 'webgpu',
   },
   {
@@ -21,7 +21,7 @@ const tricks: { title: string; description: string; href: string; diagram: Diagr
   {
     title: 'Double precision',
     description: 'Build bigger worlds with pre-built double-precision Godot binaries.',
-    href: '/build-configurations#double-precision',
+    href: '/build-variants#double-precision',
     diagram: 'double',
   },
   {

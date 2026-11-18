@@ -268,7 +268,7 @@ and source-generator packages if they changed. `--force-evaluate` and
   Check the merge and rebuild extensions against the same fork and precision.
 - **Missing native method binds, including editor methods:** check that native
   variants and managed bindings came from the same full build. Editor APIs
-  additionally require the [Editor variant](/build-configurations#editor-variants):
+  additionally require the [Editor variant](/build-variants#editor-variants):
   `dotnet run --project MyGame.2dog -c Editor -- --editor`. This does not repair
   mismatched bindings or a missing method in the fork.
 - **Restore hangs or keeps old behavior:** check the effective NuGet config,

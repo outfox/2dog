@@ -15,7 +15,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 
 | Property                    | Default                                            | Purpose                                                                               |
 |-----------------------------|----------------------------------------------------|---------------------------------------------------------------------------------------|
-| `TwoDogVariant`             | Follows the [configuration](/build-configurations) | Native engine variant: `debug` or `release`                                           |
+| `TwoDogVariant`             | Follows the [configuration](/build-variants) | Native engine variant: `debug` or `release`                                           |
 | `TwoDogAndroidGameAssembly` | Set by the generated host                          | Game assembly that Godot loads; kept whole by the trimmer                             |
 | `TwoDogAndroidExportPreset` | `Android`                                          | Preset in `export_presets.cfg`                                                        |
 | `TwoDogAndroidPack`         | Exported by the build                              | Use an existing game pack instead of exporting one                                    |

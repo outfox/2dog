@@ -11,7 +11,7 @@ double precision, use `2dog.engine.double`. Submissions use the bindings that
 the host has loaded. The [global settings](/configuration#properties) also apply.
 
 Debug (the default), Editor and Release select the matching
-[native variant](/build-configurations).
+[native variant](/build-variants).
 
 ```bash
 dotnet run --project MyGame.repl -c Editor

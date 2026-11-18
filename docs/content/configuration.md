@@ -6,6 +6,9 @@ tagline: "Learn how to tune 2dog's MSBuild settings for every host."
 
 # MSBuild Configuration
 
+![Illus. Moritz Voss: a white anthro dog in a hacker hoodie and their blue robot dog tinkering with electronics](img/2dog-tinker.png)
+*(getting your paws dirty)*
+
 Set host properties inside a `<PropertyGroup>` in the host's `.csproj`. Set
 shared settings in the root
 [`Directory.Build.props`](https://learn.microsoft.com/visualstudio/msbuild/customize-by-directory).
@@ -32,7 +35,7 @@ it as an absolute path. The game project keeps its Godot source generator; only 
 host should remove duplicate analyzers. Blazor clients are nested an extra
 level and normally use `../..`.
 
-See [Build Variants](./build-configurations) for native selection and
+See [Build Variants](./build-variants) for native selection and
 [Resource Import](./import-tool) for import controls, including
 `TwoDogAutoImport`, `TwoDogRequireImport`, and `GodotEditor`.
 

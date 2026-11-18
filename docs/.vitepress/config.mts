@@ -266,7 +266,7 @@ export default defineConfig<ThemeConfig>({
               { text: 'WebGPU', link: '/configuration/new-tricks/webgpu' }
             ]
           },
-          { text: gd('layers') + 'Build Variants', link: '/build-configurations' },
+          { text: gd('layers') + 'Build Variants', link: '/build-variants' },
           { text: gd('wrench') + 'Environment Variables', link: '/configuration/environment-variables' },
           {
             text: gd('wrench') + 'MSBuild Config',

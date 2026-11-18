@@ -117,7 +117,7 @@ test('labels cards with the part of the docs a page belongs to', async () => {
   });
   const paths = [
     'index.md', 'getting-started.md', 'api-reference.md', 'api/engine.md', 'dnx-2dog.md', 'cli/new.md',
-    'configuration.md', 'build-configurations.md', 'configuration/web.md', 'hosts/index.md',
+    'configuration.md', 'build-variants.md', 'configuration/web.md', 'hosts/index.md',
     'known-issues/index.md', 'testing/xunit.md', 'faq.md', 'troubleshooting.md'
   ];
   for (const relativePath of paths) {

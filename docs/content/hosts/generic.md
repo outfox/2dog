@@ -50,6 +50,6 @@ Release builds hide the Windows console. See
 single-file, Native AOT and ReadyToRun builds.
 
 See [Engine](/api/engine) to customize the frame loop and
-[Build Variants](/build-configurations) to select an engine build. See
+[Build Variants](/build-variants) to select an engine build. See
 [Generic .NET Configuration](/configuration/generic) for build and publish settings.
 
