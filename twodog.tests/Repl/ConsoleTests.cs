@@ -17,13 +17,19 @@ public class ConsoleTests
     {
         var captured = new StringBuilder();
         var errors = new StringBuilder();
+        var writes = new List<string>();
         var originalOut = Console.Out;
-        using (var stdio = new ReplStdio((text, error) => { lock (captured) (error ? errors : captured).Append(text); }))
+        using (var stdio = new ReplStdio((text, error) =>
         {
+            lock (captured)
+            {
+                (error ? errors : captured).Append(text);
+                writes.Add(text);
+            }
+        }))
+        {
+            // Native output can arrive between separate managed writes.
             Console.Write('m');
-            Console.Write("anaged ");
-            Console.Out.Write("chars".ToCharArray(), 0, 5);
-            Console.WriteLine();
             Console.Out.Write((string?)null);
             Console.Error.WriteLine("managed error");
             Assert.Equal(Encoding.UTF8, Console.Out.Encoding);
@@ -36,10 +42,16 @@ public class ConsoleTests
                     if (captured.ToString().Contains("native out", StringComparison.Ordinal) && errors.ToString().Contains("native error", StringComparison.Ordinal)) break;
                 Thread.Sleep(5);
             }
+            Console.Write("anaged ");
+            Console.Out.Write("chars".ToCharArray(), 0, 5);
+            Console.WriteLine();
             stdio.Dispose();
         }
         Assert.Same(originalOut, Console.Out);
-        Assert.Contains("managed chars" + Environment.NewLine, captured.ToString());
+        Assert.Contains("m", writes);
+        Assert.Contains("anaged ", writes);
+        Assert.Contains("chars", writes);
+        Assert.Contains(Environment.NewLine, writes);
         Assert.Contains("native out é\n", captured.ToString());
         Assert.Contains("managed error", errors.ToString());
         Assert.Contains("ERROR: native error", errors.ToString());
