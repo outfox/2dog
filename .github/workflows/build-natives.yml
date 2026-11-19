@@ -70,6 +70,9 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      - uses: ./.github/actions/apply-release-tag
+        if: inputs.ref == '' && startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -121,6 +124,9 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           submodules: recursive
+
+      - uses: ./.github/actions/apply-release-tag
+        if: inputs.ref == '' && startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -359,6 +365,9 @@ jobs:
           ref: ${{ inputs.ref }}
           submodules: recursive
 
+      - uses: ./.github/actions/apply-release-tag
+        if: inputs.ref == '' && startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -559,6 +568,9 @@ jobs:
           ref: ${{ inputs.ref }}
           submodules: recursive
 
+      - uses: ./.github/actions/apply-release-tag
+        if: inputs.ref == '' && startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -610,6 +622,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref }}
+
+      - uses: ./.github/actions/apply-release-tag
+        if: inputs.ref == '' && startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0

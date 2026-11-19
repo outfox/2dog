@@ -9,19 +9,10 @@ on:
       - '*.md'
       - '**/AGENTS.md'
   workflow_dispatch:
-    inputs:
-      release_line:
-        description: 'Godot line of a release tag (4.7), set by release.yml: a newer release cancels the line''s older run'
-        required: false
-        type: string
-        default: ''
 
-# Release runs (dispatched with their line) share one group per line, so a newer release of a line cancels its
-# older run; the other line keeps running. A cancelled release stays staged but can't be promoted. Other runs
-# group by ref; a pushed tag never cancels.
 concurrency:
-  group: ci-${{ inputs.release_line != '' && format('line-{0}', inputs.release_line) || github.ref }}
-  cancel-in-progress: ${{ inputs.release_line != '' || !startsWith(github.ref, 'refs/tags/') }}
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 env:
   UV_LOCKED: '1'
@@ -40,18 +31,17 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
-      actions: read # find the CI run of a release tag's parent commit
     outputs:
       ready: ${{ steps.check.outputs.ready }}
       double-ready: ${{ steps.check.outputs.double-ready }}
       hash: ${{ steps.check.outputs.hash }}
       line: ${{ steps.check.outputs.line }}
-      tested-bump: ${{ steps.release.outputs.tested-bump }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 2 # a release tag is compared with its parent commit
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -74,6 +64,7 @@ jobs:
         uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29
         with:
           version: '0.111.0'
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
       # Packages bake GodotVersion in, so a fork bump without a sync only fails much later (TDG001); stop here instead.
       - name: Check versions against the godot fork
@@ -84,14 +75,22 @@ jobs:
             exit 1
           fi
 
-      # The pin must be on the fork branch .gitmodules names: an unpushed or force-pushed-away commit fails every job.
-      - name: Check the godot pin is on its fork branch
+      # Release pins survive fork branch moves. Development pins still have to be on the configured branch.
+      - name: Verify the Godot fork pin
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           REPO=$(git config -f .gitmodules submodule.godot.url | sed -E 's#.*github\.com[:/]##; s#\.git$##')
           BRANCH=$(git config -f .gitmodules submodule.godot.branch)
-          PIN=$(git rev-parse HEAD:godot)
+          PIN=$(git rev-parse :godot)
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            REF="refs/tags/2dog-pin-$PIN"
+            if [[ "$(git ls-remote "https://github.com/$REPO.git" "$REF")" != "$(printf '%s\t%s' "$PIN" "$REF")" ]]; then
+              echo "::error::Missing or incorrect fork pin $REF in $REPO."
+              exit 1
+            fi
+            exit
+          fi
           STATUS=$(gh api "repos/$REPO/compare/$BRANCH...$PIN" --jq .status 2>/dev/null || echo missing)
           if [ "$STATUS" != identical ] && [ "$STATUS" != behind ]; then
             echo "::error::The godot pin $PIN is not on $REPO's $BRANCH branch ($STATUS). Push the fork branch, or fix the pin or the branch in .gitmodules."
@@ -123,34 +122,6 @@ jobs:
             echo "::notice::No double-precision natives for $HASH; building inline."
             echo "double-ready=false" >> $GITHUB_OUTPUT
           fi
-
-      # release.nu tags a commit that only bumps <TwoDogRevision> (and the prerelease label) on top of its branch. When
-      # that parent already passed the test, desktop and Android jobs, the tag run skips them; it still packs, runs the
-      # web and tool smoke jobs against the versioned packages and stages the release. A bump that also moves
-      # <NativesRevision> (changed native inputs) or anything else gets the full run.
-      - name: Check for a tested revision bump
-        id: release
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          tested=false
-          parents=$(git rev-list --parents -n 1 HEAD | wc -w)
-          changed=$(git diff --name-only HEAD^ HEAD 2>/dev/null || true)
-          lines=$(git diff -U0 HEAD^ HEAD -- Directory.Build.props 2>/dev/null |
-            grep -E '^[+-]' | grep -vE '^(\+\+\+|---) ' || true)
-          if [ "$parents" -eq 2 ] && [ "$changed" = "Directory.Build.props" ] && echo "$lines" | grep -q '<TwoDogRevision>' &&
-             ! echo "$lines" | grep -qvE '<(TwoDogRevision|TwoDogPrerelease)>'; then
-            parent=$(git rev-parse HEAD^)
-            # Any run that tested the parent's content counts, also one on the branch the parent merged.
-            if found=$(bash .github/scripts/find-tested-run.sh "$parent" Test "Test Contracts" "Test Build Configuration" "Test Binding Packages" "Test Rendering" "Desktop Smoke" "WebGPU Desktop" "Android Smoke" "iOS Smoke"); then
-              read -r run sha <<<"$found"
-              echo "::notice::Parent ${parent:0:7}'s content passed CI in run $run (${sha:0:7}); skipping test, desktop and Android jobs."
-              tested=true
-            fi
-          fi
-          [ "$tested" = true ] || echo "::notice::Not a revision bump on a tested commit; running every job."
-          echo "tested-bump=$tested" >> "$GITHUB_OUTPUT"
 
   # Build missing natives inline via the reusable workflow. The concurrency
   # group makes a second run that needs the same hash wait instead of building
@@ -201,6 +172,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -259,16 +233,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
-      # Release tags must point at a commit whose Directory.Build.props composes the
-      # same version (revision and prerelease label), otherwise the packed binaries would
-      # be labeled with a stale version (see v4.7.0.26, which shipped 4.7.0.25 binaries).
-      # Ref check only (no event check): tag builds arrive either as a direct tag
-      # push or as a workflow_dispatch on the tag from release.yml.
+      # Fail before packing if the applied release version disagrees with its signed tag.
       - name: Verify tag matches TwoDogVersion
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
@@ -277,8 +250,7 @@ jobs:
           echo "Tag version: $TAG_VERSION"
           echo "Props version: $PROPS_VERSION"
           if [[ "$TAG_VERSION" != "$PROPS_VERSION" ]]; then
-            echo "::error::Tag v$TAG_VERSION does not match TwoDogVersion $PROPS_VERSION from Directory.Build.props." \
-                 "Release with scripts/release.nu or the Release workflow, which tag their own bump commit."
+            echo "::error::Tag v$TAG_VERSION does not match the applied TwoDogVersion $PROPS_VERSION."
             exit 1
           fi
       - name: Download native libraries from release
@@ -431,6 +403,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
@@ -471,7 +446,7 @@ jobs:
     # job too — a green run with zero testing.
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -549,6 +524,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -667,7 +645,7 @@ jobs:
     needs: [check-natives, pack]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 15
     strategy:
@@ -691,6 +669,10 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
@@ -737,7 +719,7 @@ jobs:
     # See the test job for why this cannot rely on the implicit success().
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success')
     runs-on: windows-2025
     timeout-minutes: 30
 
@@ -761,6 +743,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -813,7 +798,7 @@ jobs:
     # See the test job for why this cannot rely on the implicit success().
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -857,6 +842,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -1250,7 +1238,7 @@ jobs:
     needs: [check-natives, pack]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success')
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 12
     strategy:
@@ -1266,6 +1254,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -1373,6 +1364,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -1864,6 +1858,9 @@ jobs:
         with:
           lfs: true
 
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
@@ -1911,6 +1908,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -1979,6 +1979,10 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET with MAUI workloads
         uses: ./.github/actions/setup-maui-dotnet
       - name: Setup uv
@@ -2025,6 +2029,10 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET with MAUI workloads
         uses: ./.github/actions/setup-maui-dotnet
       - name: Setup uv
@@ -2081,6 +2089,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
@@ -2101,8 +2112,7 @@ jobs:
     needs: [check-natives]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.check-natives.result == 'success' &&
-      needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.check-natives.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
     outputs:
@@ -2193,8 +2203,7 @@ jobs:
     needs: [check-natives, pack, android-prepare]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.android-prepare.result == 'success' &&
-      needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success' && needs.android-prepare.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 20
     strategy:
@@ -2219,6 +2228,9 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -2368,8 +2380,7 @@ jobs:
     needs: [check-natives, pack, maui-pack]
     if: >-
       github.repository == 'outfox/2dog' &&
-      (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success' &&
-      needs.check-natives.outputs.tested-bump != 'true')
+      (!cancelled() && needs.pack.result == 'success' && needs.maui-pack.result == 'success')
     strategy:
       fail-fast: false
       matrix:
@@ -2383,7 +2394,7 @@ jobs:
       marker: ${{ matrix.marker }}
       line: ${{ needs.check-natives.outputs.line }}
 
-  # Run after staging alongside test-feed upload, even when Debug checks are reused.
+  # Run after staging alongside test-feed upload.
   ios-release:
     name: iOS Release Smoke
     needs: [check-natives, deploy]
@@ -2400,8 +2411,7 @@ jobs:
       line: ${{ needs.check-natives.outputs.line }}
       release-tag: ${{ github.ref_name }}
 
-  # Stage the release when running on a version tag — either pushed directly or dispatched on the tag by
-  # release.yml (tags pushed with GITHUB_TOKEN don't fire push events, so release.yml dispatches instead):
+  # Stage the release when running on a version tag:
   # attach every package to a GitHub prerelease, then dispatch publish.yml to push them to int.nugettest.org.
   # Staging starts as soon as every package is packed, so manual testing from the test feed runs alongside the
   # tests. Promotion to nuget.org (a manual publish.yml dispatch) requires this run to complete successfully,
@@ -2495,9 +2505,7 @@ jobs:
   # job does not fail a run, so the run's own conclusion is not enough. web-smoke and android-smoke gate because the
   # 2dog.browser-wasm and 2dog.android packages they exercise are released; desktop-smoke because it is the only
   # check that runs a Release-only publish; tool-smoke because it installs the packed `2dog` tool the way users get
-  # it. A tested revision bump (see check-natives) takes the test, desktop and Android verdicts from its parent
-  # commit's run. Explicit result checks (not the implicit success()) for the same transitive-skip reason as the
-  # test job.
+  # it. Explicit result checks handle transitive skips the same way as the test job.
   release-gate:
     name: Release Gate
     needs: [check-natives, test-build-configuration, test-binding-packages, test, test-contracts, windows-rendering, desktop-smoke, webgpu-desktop, web-smoke, webgpu-browser, android-smoke, ios-smoke, tool-smoke, maui-pack, maui]
@@ -2507,9 +2515,8 @@ jobs:
       github.repository == 'outfox/2dog' &&
       (!cancelled() && startsWith(github.ref, 'refs/tags/v') &&
       needs.test-build-configuration.result == 'success' && needs.test-binding-packages.result == 'success' &&
-      (needs.check-natives.outputs.tested-bump == 'true' ||
-      (needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
-      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success')) &&
+      needs.test.result == 'success' && needs.test-contracts.result == 'success' && needs.windows-rendering.result == 'success' &&
+      needs.desktop-smoke.result == 'success' && needs.webgpu-desktop.result == 'success' && needs.android-smoke.result == 'success' && needs.ios-smoke.result == 'success' &&
       needs.web-smoke.result == 'success' && needs.webgpu-browser.result == 'success' &&
       needs.tool-smoke.result == 'success' && needs.maui-pack.result == 'success' && needs.maui.result == 'success')
     steps:

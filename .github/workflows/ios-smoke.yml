@@ -43,6 +43,9 @@ jobs:
         with:
           lfs: true
 
+      - uses: ./.github/actions/apply-release-tag
+        if: startsWith(github.ref, 'refs/tags/v')
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:

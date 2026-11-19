@@ -47,10 +47,21 @@ class PullPackagesTests(unittest.TestCase):
         _, managed, native = pull.versions("ci.9")
         self.assertRegex(managed, r"[.-]ci\.9$")
         self.assertRegex(native, r"-ci\.9$")
-        # Between the release it follows and the next: a labelled line keeps its revision (the longer label sorts
-        # higher), an unlabelled one takes the next revision.
+        # A labelled line keeps its base revision; an unlabelled line takes the next revision.
         revision = lambda version: int(version.split("-")[0].split(".")[3])
         self.assertEqual(revision(managed), revision(release) + (0 if "-" in release else 1))
+
+    def test_release_artifacts_use_the_tagged_godot_pin(self):
+        run = {"head_branch": "v4.7.2.205", "head_sha": "source"}
+        target = {"object": {"type": "tag", "sha": "annotation"}}
+        for sha in ("source", "different"):
+            annotated = {"message": f"2dog-release-v1 {'a' * 40} 203\n", "object": {"sha": sha}}
+            with self.subTest(sha=sha), patch.object(pull, "api", side_effect=[target, annotated]):
+                if sha == "source":
+                    self.assertEqual(pull.run_godot_pin("outfox/2dog", run), "a" * 40)
+                else:
+                    with self.assertRaisesRegex(ValueError, "does not match the selected CI commit"):
+                        pull.run_godot_pin("outfox/2dog", run)
 
     def test_rejects_expired_or_missing_precision(self):
         artifacts = [{"name": "nuget-packages-single", "expired": False},

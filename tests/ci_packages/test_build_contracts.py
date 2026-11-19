@@ -137,8 +137,9 @@ class ReleaseGateTests(unittest.TestCase):
                 release_packages.validate(root, manifest["tag"], manifest)
 
     def test_production_gate_requires_the_latest_gate_attempts_to_pass(self):
-        manifest = dict(run_id="42", run_attempt="2", commit="source")
-        source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=3, status="completed", conclusion="success")
+        manifest = dict(run_id="42", run_attempt="2", commit="source", tag="v4.7.2.205")
+        source = dict(head_sha="source", head_branch=manifest["tag"], path=".github/workflows/ci.yml",
+                      run_attempt=3, status="completed", conclusion="success")
         for gate in ("iOS Release Smoke / Test iOS Simulator", "Release Gate"):
             for conclusion in ("success", None, "failure", "skipped"):
                 others = [{"name": name, "conclusion": "success", "run_attempt": 3}
@@ -155,15 +156,23 @@ class ReleaseGateTests(unittest.TestCase):
                     self.assertIn("repos/outfox/2dog/actions/runs/42/jobs?filter=all&per_page=100", command.call_args.args[0])
 
     def test_production_gate_requires_the_staged_run_to_finish_green(self):
-        manifest = dict(run_id="42", run_attempt="2", commit="source")
+        manifest = dict(run_id="42", run_attempt="2", commit="source", tag="v4.7.2.205")
         pages = [{"jobs": [{"name": name, "conclusion": "success", "run_attempt": 2} for name in release_packages.PROMOTION_GATES]}]
         for status, conclusion, attempt in (("in_progress", None, 2), ("completed", "failure", 2), ("completed", "cancelled", 2),
                                              ("completed", "success", 1)):
-            source = dict(head_sha="source", path=".github/workflows/ci.yml", run_attempt=attempt, status=status, conclusion=conclusion)
+            source = dict(head_sha="source", head_branch=manifest["tag"], path=".github/workflows/ci.yml",
+                          run_attempt=attempt, status=status, conclusion=conclusion)
             with self.subTest(status=status, conclusion=conclusion, attempt=attempt), patch.object(
                     release_packages.subprocess, "check_output", side_effect=[json.dumps(source), json.dumps(pages)]):
                 with self.assertRaisesRegex(ValueError, "promotion is blocked"):
                     release_packages.require_passed_run(manifest, "outfox/2dog")
+
+    def test_production_gate_rejects_a_different_tag_on_the_same_commit(self):
+        manifest = dict(run_id="42", run_attempt="1", commit="source", tag="v4.7.2.205")
+        source = dict(head_sha="source", head_branch="v4.8.0.205-beta3", path=".github/workflows/ci.yml")
+        with patch.object(release_packages.subprocess, "check_output", return_value=json.dumps(source)):
+            with self.assertRaisesRegex(ValueError, "does not identify the source CI run"):
+                release_packages.require_passed_run(manifest, "outfox/2dog")
 
     def test_ios_download_uses_staged_package_and_sdk_checksums(self):
         for corrupt in (False, True):

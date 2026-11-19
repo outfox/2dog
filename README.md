@@ -77,30 +77,25 @@ Install optional workloads with `uv run --locked poe install-workloads wasm-tool
 
 After changing the Godot submodule, run `uv run --locked poe sync-versions` and commit
 its version/pin updates with the submodule bump. This sync does not create a release.
-Dispatch the release from the terminal with an authenticated GitHub CLI, or run
-**2dog Release** on `main` in GitHub Actions:
+Release from a clean, up-to-date `main` checkout in your own shell, with your Git
+signing key and push access to 2dog and its Godot fork:
 
 ```bash
-uv run --locked poe release --dry-run       # preview both release tags in Actions
+uv run --locked poe release --dry-run       # preview both release tags locally
 uv run --locked poe release                 # release all configured lines
 uv run --locked poe release --lines 4.7     # release only the 4.7 line
 ```
 
-The workflow queues release requests and allocates one revision from the tags on
-`origin` for each batch. It signs every release commit and tag, protects the Godot
-fork pins, and atomically pushes all release tags. It advances `main` only when you
-select the line checked out there. [godot-lines.json](godot-lines.json) defines the
-other lines, and each line reuses its native revision while its inputs match.
+Run one release at a time. Each batch shares one revision from the tags on `origin`.
+The command signs the tags against the current source commit, protects the Godot fork
+pins, and pushes the 2dog tags together. Each line reuses its native revision while
+its inputs match. [godot-lines.json](godot-lines.json) defines the other lines.
 
-For workflow setup, register a dedicated SSH signing public key on the signer
-account and add the private key as the repository secret `RELEASE_SIGNING_KEY`.
-Set `RELEASE_SIGNING_EMAIL` to that account's verified email. Register a separate
-write deploy key on `outfox/godot` and store its private key in the 2dog repository
-secret `GODOT_RELEASE_DEPLOY_KEY`. Run a dry run after setup to check that the
-signing key loads and that the runner can connect to the fork for a push.
-
-Each tag starts its own CI run. If a dispatch fails, run the retry command from
-the release workflow log to resume CI for the existing tag.
+Each tag starts its own CI run. CI verifies the tag against
+[the release signers](.github/release-signers) and applies its Godot pin and package
+versions to the build checkout. To reproduce that checkout locally, check out
+the tag and run `nu scripts/release.nu --apply-tag <tag>`. This updates the
+working tree and index without creating a commit.
 
 CI calls the same Poe recipes, reuses verified native builds by input fingerprint,
 and uses Blacksmith caches and sticky disks. As soon as packing finishes, it stages a complete

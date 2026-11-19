@@ -38,16 +38,25 @@ def --wrapped main [...args: string] {
             print $env.REMOTE_TAGS
         }
         tag => { if ($args | get 1) == '--list' { print ($env.LOCAL_TAG? | default '') } }
-        cat-file => { if ($env.MISSING_OBJECT? | default '') != '' { exit 1 } }
+        cat-file => {
+            if $args.1 == '-e' and ($env.MISSING_OBJECT? | default '') != '' { exit 1 }
+            if $args.1 == '-t' { print (if ($args.2 == 'tag-object' or $args.2 == ($env.TAG_OBJECT? | default '')) {
+                'tag'
+            } else { 'commit' }) }
+            if $args.1 == '-p' {
+                print $"object remote-head\ntype commit\ntag ($env.TAG_NAME? | default legacy)\n\n($env.TAG_INFO? | default '')"
+            }
+        }
+        '-c' => {}
         ls-tree => {
             if ($env.NATIVES_CHANGED? | default '') != '' and $args.3 != 'HEAD' { print 'old-tree' } else { print 'same-tree' }
         }
         grep => { print ($env.SDK_FILES? | default '') }
         rev-parse => {
             # A release tag's godot gitlink (<sha>:godot); everything else resolves to the tree's pin.
-            let tagged = (($args | last) | str ends-with ':godot') and ($args | last) != 'HEAD:godot'
-            print (if $args.1 == 'HEAD' { $env.TEST_HEAD? | default 'remote-head' } else if ($args.1 | str ends-with '^{}') {
-                'main-release'
+            let tagged = (($args | last) | str ends-with ':godot') and ($args | last) not-in ['HEAD:godot' ':godot']
+            print (if $args.1 == 'HEAD' { $env.TEST_HEAD? | default 'remote-head' } else if ($args.1 | str starts-with 'refs/tags/') {
+                ($env.TAG_SOURCE? | default 'remote-head')
             } else if $tagged { $env.TAG_GODOT? | default 'pinned-godot' } else { 'pinned-godot' })
         }
         config => { print 'git@example.com:fork/godot.git' }
@@ -104,11 +113,9 @@ class ReleaseScript(unittest.TestCase):
             launcher.chmod(0o755)
         git_launcher = bin_dir / ("git.cmd" if os.name == "nt" else "git")
         shutil.copy2(git_launcher, git_launcher.with_name("gh.cmd" if os.name == "nt" else "gh"))
-        self.output = self.root / "output"
         self.log = self.root / "git.jsonl"
         self.env = {**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"], "GIT_LOG": str(self.log),
-                    "REMOTE_TAGS": REMOTE_TAGS, "TEST_PROPS": PROPS, "GITHUB_ACTIONS": "true",
-                    "GITHUB_OUTPUT": str(self.output)}
+                    "REMOTE_TAGS": REMOTE_TAGS, "TEST_PROPS": PROPS}
         self.write_version_py("4.7.2", "stable")
         (self.root / "godot-lines.json").write_text("{}")
         (self.root / "godot/.git").write_text("gitdir: ../.git/modules/godot\n")
@@ -120,8 +127,7 @@ class ReleaseScript(unittest.TestCase):
             f'short_name = "godot"\nmajor = {major}\nminor = {minor}\npatch = {patch}\nstatus = "{status}"\n')
 
     def run_release(self, *args, **env):
-        mode = [] if {"--sync", "--ci"}.intersection(args) else ["--batch"]
-        return subprocess.run([NU, "--no-config-file", str(self.root / "scripts/release.nu"), *mode, *args],
+        return subprocess.run([NU, "--no-config-file", str(self.root / "scripts/release.nu"), *args],
                               env={**self.env, **env}, capture_output=True, text=True, timeout=60)
 
     def calls(self):
@@ -153,55 +159,39 @@ class ReleaseScript(unittest.TestCase):
     def props(self):
         return (self.root / "Directory.Build.props").read_text()
 
-    def test_pair_shares_revision_and_pushes_once(self):
+    def test_pair_signs_tags_on_the_same_source_and_pushes_them_together(self):
         env = self.main_tree_with_another_line()
+        before = self.props()
         result = self.run_release(**env)
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("v4.8.0.141-beta3: NativesRevision 46 -> 141", result.stdout)
-        self.assertIn("v4.7.2.141: NativesRevision 120 -> 141", result.stdout)
-        self.assert_tree_is_the_other_line()
-        self.assertIn("<TwoDogRevision>141</TwoDogRevision>", self.props())
-        self.assertEqual("tags=v4.8.0.141-beta3 v4.7.2.141\n", self.output.read_text())
+        self.assertEqual(before, self.props())
         calls = self.calls()
         self.assertEqual(1, sum(call[0] == "ls-remote" for call in calls))
-        self.assertEqual(2, calls.count(["checkout", "--quiet", "--force", "main"]))
         self.assertEqual([
-            ["commit", "-S", "-m", "chore: release v4.8.0.141-beta3"],
-            ["tag", "-s", "--message", "Release v4.8.0.141-beta3", "v4.8.0.141-beta3"],
-            ["commit", "-S", "-m", "chore: release v4.7.2.141"],
-            ["tag", "-s", "--message", "Release v4.7.2.141", "v4.7.2.141"],
+            ["tag", "-s", "--message", "2dog-release-v1 pinned-godot 141", "v4.8.0.141-beta3", "remote-head"],
+            ["tag", "-s", "--message", "2dog-release-v1 line-commit 141", "v4.7.2.141", "remote-head"],
             ["-C", "godot", "push", "--atomic", "git@example.com:fork/godot.git",
              "pinned-godot:refs/tags/2dog-pin-pinned-godot", "line-commit:refs/tags/2dog-pin-line-commit"],
-            ["push", "--atomic", "origin", "main-release:refs/heads/main",
+            ["push", "--atomic", "origin",
              "refs/tags/v4.8.0.141-beta3:refs/tags/v4.8.0.141-beta3", "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141"],
-        ], [call for call in calls if call[0] in ("commit", "push") or call[:2] == ["tag", "-s"]
+        ], [call for call in calls if call[:2] == ["tag", "-s"] or call[0] == "push"
             or call[:3] == ["-C", "godot", "push"]])
+        self.assertFalse(any(call[0] in ("add", "checkout", "commit", "update-index", "workflow") for call in calls))
 
-    def test_single_secondary_line_keeps_native_reuse_and_does_not_push_main(self):
+    def test_single_secondary_line_reuses_legacy_native_packages(self):
         env = self.main_tree_with_another_line()
         env["REMOTE_TAGS"] += "\nnat120\trefs/tags/v4.7.2.120"
         result = self.run_release("--lines", " 4.7,4.7 ", TAG_GODOT="line-commit", **env)
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("<NativesRevision>120</NativesRevision>", self.props())
         self.assertIn(["ls-tree", "-r", "--full-tree", "nat120", "--", *INPUTS], self.calls())
+        self.assertIn(["tag", "-s", "--message", "2dog-release-v1 line-commit 120", "v4.7.2.141", "remote-head"],
+                      self.calls())
         self.assertEqual(["push", "--atomic", "origin", "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141"], self.calls()[-1])
-        self.assertEqual("tags=v4.7.2.141\n", self.output.read_text())
 
-    def test_latest_tags_supply_the_next_batch_revision_and_annotated_native_pin(self):
-        tags = REMOTE_TAGS.replace("nat46\trefs/tags/v4.7.2.46",
-                                   "tag-object\trefs/tags/v4.7.2.46\nnat46\trefs/tags/v4.7.2.46^{}")
-        tags += "\nfirst-batch\trefs/tags/v4.8.0.141-beta3\nsecond-line\trefs/tags/v4.7.2.141"
-        result = self.run_release("--lines", "4.7", REMOTE_TAGS=tags)
-        self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("<TwoDogRevision>142</TwoDogRevision>", self.props())
-        self.assertIn("<NativesRevision>46</NativesRevision>", self.props())
-        self.assertIn(["ls-tree", "-r", "--full-tree", "nat46", "--", *INPUTS], self.calls())
-        self.assertEqual("tags=v4.7.2.142\n", self.output.read_text())
-
-    def test_changed_native_inputs_take_the_batch_revision(self):
+    def test_changed_native_inputs_take_next_revision(self):
         result = self.run_release(NATIVES_CHANGED="1", MISSING_OBJECT="1")
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("<NativesRevision>141</NativesRevision>", self.props())
+        self.assertIn("v4.7.2.141: NativesRevision 46 -> 141", result.stdout)
         self.assertIn(["fetch", "--quiet", "--no-tags", "origin", "nat46"], self.calls())
 
     def test_pair_previews_both_tags_without_mutation(self):
@@ -212,12 +202,11 @@ class ReleaseScript(unittest.TestCase):
         self.assertIn("Release v4.8.0.141-beta3:", result.stdout)
         self.assertIn("Release v4.7.2.141:", result.stdout)
         self.assertEqual(before, self.props())
-        self.assert_no_push_or_output()
+        self.assert_no_push()
         self.assertFalse(any(call[0] in ("checkout", "commit") or call[:2] == ["tag", "-s"] for call in self.calls()))
 
-    def assert_no_push_or_output(self):
+    def assert_no_push(self):
         self.assertFalse(any(call[0] == "push" or call[:3] == ["-C", "godot", "push"] for call in self.calls()))
-        self.assertFalse(self.output.exists())
 
     def test_preflight_failure_blocks_all_selected_lines(self):
         env = self.main_tree_with_another_line()
@@ -225,7 +214,6 @@ class ReleaseScript(unittest.TestCase):
             (["--lines", "4.8,4.6"], {}),
             ([], {"TEST_STATUS": " M source.cs"}),
             ([], {"TEST_HEAD": "stale-head"}),
-            ([], {"GITHUB_ACTIONS": "false"}),
             ([], {"LOCAL_TAG": "v4.8.0.141-beta3"}),
             ([], {"LINE_VERSION_PY": 'major = 4\nminor = 8\npatch = 0\nstatus = "stable"\n'}),
             ([], {"FAIL_GIT": "ls-remote origin refs/heads/main refs/tags/v*"}),
@@ -234,39 +222,38 @@ class ReleaseScript(unittest.TestCase):
                 self.log.unlink(missing_ok=True)
                 result = self.run_release(*args, **{**env, **overrides})
                 self.assertNotEqual(0, result.returncode)
-                self.assert_no_push_or_output()
+                self.assert_no_push()
                 self.assertFalse(any(call[0] == "commit" or call[:2] == ["tag", "-s"] for call in self.calls()))
 
     def test_failed_second_signature_leaves_no_remote_tags(self):
         env = self.main_tree_with_another_line()
-        result = self.run_release(FAIL_GIT="commit -S -m chore: release v4.7.2.141", **env)
+        result = self.run_release(
+            FAIL_GIT="tag -s --message 2dog-release-v1 line-commit 141 v4.7.2.141 remote-head", **env)
         self.assertNotEqual(0, result.returncode)
         self.assertIn("simulated failure", result.stderr)
-        self.assertEqual(["submodule", "update", "--quiet", "godot"], self.calls()[-1])
-        self.assert_no_push_or_output()
+        self.assert_no_push()
 
-    def test_fork_push_failure_blocks_origin_and_dispatch(self):
+    def test_fork_failure_reports_retry_and_blocks_the_release_tags(self):
         result = self.run_release(FAIL_GIT="-C godot push --atomic git@example.com:fork/godot.git "
                                    "pinned-godot:refs/tags/2dog-pin-pinned-godot")
         self.assertNotEqual(0, result.returncode)
-        self.assertIn("simulated failure", result.stderr)
+        self.assertIn("The signed tags remain local.", result.stderr)
+        self.assertIn("git push --atomic origin refs/tags/v4.7.2.141:refs/tags/v4.7.2.141", result.stderr)
         self.assertFalse(any(call[0] == "push" for call in self.calls()))
-        self.assertFalse(self.output.exists())
 
-    def test_failed_atomic_origin_push_does_not_publish_ci_targets(self):
-        result = self.run_release(FAIL_GIT="push --atomic origin main-release:refs/heads/main "
-                                   "refs/tags/v4.7.2.141:refs/tags/v4.7.2.141")
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("simulated failure", result.stderr)
-        self.assertFalse(self.output.exists())
-
-    def test_local_command_dispatches_main_without_touching_git(self):
-        result = subprocess.run([NU, "--no-config-file", str(self.root / "scripts/release.nu"),
-                                 "--lines", "4.7,4.8", "--dry-run"], env=self.env, capture_output=True,
-                                text=True, timeout=60)
+    def test_applies_verified_stable_tag_to_the_alternate_line_without_a_commit(self):
+        env = self.main_tree_with_another_line()
+        tag, pin = "v4.7.2.141", "a" * 40
+        (self.root / "godot-lines.json").write_text(LINES.replace("line-commit", pin))
+        result = self.run_release("--apply-tag", tag, TAG_NAME=tag, TAG_OBJECT=f"refs/tags/{tag}",
+                                  TAG_INFO=f"2dog-release-v1 {pin} 120", **env)
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertEqual([["workflow", "run", "release.yml", "--repo", "outfox/2dog", "--ref", "main",
-                           "-f", "lines=4.7,4.8", "-f", "dry_run=true"]], self.calls())
+        self.assertIn("<GodotVersion>4.7.2</GodotVersion>", self.props())
+        self.assertIn("<TwoDogRevision>141</TwoDogRevision>", self.props())
+        self.assertIn("<NativesRevision>120</NativesRevision>", self.props())
+        self.assertIn("<TwoDogPrerelease></TwoDogPrerelease>", self.props())
+        self.assertIn(["update-index", "--cacheinfo", f"160000,{pin},godot"], self.calls())
+        self.assertFalse(any(call[0] in ("commit", "push") for call in self.calls()))
 
     def test_sync_aligns_versions_with_a_bumped_fork_without_committing(self):
         self.write_version_py("4.8.0", "beta3")

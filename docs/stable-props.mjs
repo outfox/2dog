@@ -25,7 +25,19 @@ export function stableProps() {
     } catch {
       git('fetch', '--quiet', '--no-tags', repo, `refs/tags/${tag}`)
     }
-    return git('show', `${sha}^{commit}:Directory.Build.props`)
+    let props = git('show', `${sha}^{commit}:Directory.Build.props`)
+    // Older releases store their versions in the tagged commit.
+    if (git('cat-file', '-t', sha) === 'tag') {
+      const signed = git('cat-file', '-p', sha).match(/^2dog-release-v1 [0-9a-f]{40} (\d+)\r?$/m)
+      if (signed) {
+        const [, godot, revision] = /^v(\d+\.\d+\.\d+)\.(\d+)$/.exec(tag)
+        const values = { GodotVersion: godot, TwoDogRevision: revision, NativesRevision: signed[1], TwoDogPrerelease: '' }
+        for (const [name, value] of Object.entries(values)) {
+          props = props.replace(new RegExp(`<${name}>[^<]*</${name}>`), `<${name}>${value}</${name}>`)
+        }
+      }
+    }
+    return props
   } catch (err) {
     console.warn(`stable-props: no stable release tag (${err.message.split('\n')[0]}); using the working tree's versions`)
     return readFileSync(join(root, 'Directory.Build.props'), 'utf8')

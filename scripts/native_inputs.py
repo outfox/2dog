@@ -24,7 +24,7 @@ def git(*args, root=ROOT):
 
 
 def fingerprint(ref="HEAD", godot=None, kind="build", root=ROOT):
-    godot = godot or git("rev-parse", f"{ref}:godot", root=root).decode().strip()
+    godot = godot or git("rev-parse", ":godot" if ref == "HEAD" else f"{ref}:godot", root=root).decode().strip()
     paths = (*BUILD_INPUTS, *(PACKAGE_INPUTS if kind == "package" else ()))
     tree = git("ls-tree", "-r", "--full-tree", ref, "--", *paths, root=root)
     project = tomllib.loads(git("show", f"{ref}:pyproject.toml", root=root).decode())
@@ -49,7 +49,7 @@ def file_hash(path):
 
 def release_manifest(assets, precision):
     identity = fingerprint()
-    manifest = {"identity": identity, "godot": git("rev-parse", "HEAD:godot").decode().strip(),
+    manifest = {"identity": identity, "godot": git("rev-parse", ":godot").decode().strip(),
                 "precision": precision, "tag": f"godot-{identity}" + ("-double" if precision == "double" else ""),
                 "assets": {p.name: file_hash(p) for p in sorted(assets.glob("*.zip"))}}
     (assets / "native-build.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

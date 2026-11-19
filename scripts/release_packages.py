@@ -92,7 +92,8 @@ PROMOTION_GATES = ("Release Gate", "iOS Release Smoke")
 def require_passed_run(manifest, repo):
     run = int(manifest["run_id"])
     source = json.loads(subprocess.check_output(["gh", "api", f"repos/{repo}/actions/runs/{run}"], text=True))
-    if source["head_sha"] != manifest["commit"] or source["path"] != ".github/workflows/ci.yml":
+    if (source["head_sha"] != manifest["commit"] or source["path"] != ".github/workflows/ci.yml"
+            or source["head_branch"] != manifest["tag"]):
         raise ValueError("Release manifest does not identify the source CI run")
     if (source["status"] != "completed" or source["conclusion"] != "success"
             or int(source["run_attempt"]) < int(manifest["run_attempt"])):

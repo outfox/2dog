@@ -1,9 +1,8 @@
 <Project>
     <PropertyGroup>
-        <!-- The next four are written by scripts/release.nu; do not edit them by hand.
-             Godot's C# package version of the godot submodule (godot/version.py status "beta2" -> 4.8.0-beta.2). -->
+        <!-- Source checkout defaults. scripts/release.nu applies the versions recorded in signed release tags. -->
         <GodotVersion>4.8.0-beta.3</GodotVersion>
-        <!-- Release number, one counter across all release branches (the next number after every v* tag). -->
+        <!-- Development revision fallback; release batches allocate from the tags on origin. -->
         <TwoDogRevision>202</TwoDogRevision>
         <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
              release's tag sets its own number. -->
@@ -18,9 +17,7 @@
     <PropertyGroup>
         <!-- 2dog versions take Godot's release numbers; the label carries the rest (4.8.0-beta.2 -> 4.8.0.156-beta2). -->
         <TwoDogGodotRelease>$([System.Text.RegularExpressions.Regex]::Replace('$(GodotVersion)', '-.*', ''))</TwoDogGodotRelease>
-        <!-- CI builds other than release tags must never carry a published version (a cached or nuget.org copy would
-             stand in for their bits). A ci label sorts them between the release they follow and the next one:
-             4.8.0.163-beta3.ci.812 (a longer label sorts higher), 4.7.2.165-ci.812 (no label: the next revision). -->
+        <!-- A run-specific CI suffix keeps unpublished builds distinct from released packages. -->
         <TwoDogBuildSuffix Condition="'$(TwoDogBuildSuffix)' == '' And '$(GITHUB_ACTIONS)' == 'true' And !$([System.String]::Copy('$(GITHUB_REF)').StartsWith('refs/tags/v'))">ci.$(GITHUB_RUN_ID)</TwoDogBuildSuffix>
         <TwoDogBuildRevision>$(TwoDogRevision)</TwoDogBuildRevision>
         <TwoDogBuildRevision Condition="'$(TwoDogBuildSuffix)' != '' And '$(TwoDogPrerelease)' == ''">$([MSBuild]::Add($(TwoDogRevision), 1))</TwoDogBuildRevision>

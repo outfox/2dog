@@ -74,6 +74,20 @@ def choose_run(repo, branch, run_id, precisions):
                      "Run CI on the branch again, or select another --run.")
 
 
+def run_godot_pin(repo, run):
+    tag = run.get("head_branch") or ""
+    if re.fullmatch(r"v\d+(?:\.\d+){3}(?:-[a-zA-Z0-9.-]+)?", tag):
+        target = api(repo, f"git/ref/tags/{tag}")["object"]
+        if target["type"] == "tag":
+            annotated = api(repo, f"git/tags/{target['sha']}")
+            pin = re.match(r"2dog-release-v1 ([0-9a-f]{40}) [0-9]+(?:\r?\n|$)", annotated["message"])
+            if pin:
+                if annotated["object"]["sha"] != run["head_sha"]:
+                    raise ValueError("The release tag does not match the selected CI commit")
+                return pin[1]
+    return api(repo, f"contents/godot?ref={run['head_sha']}")["sha"]
+
+
 @dataclass(frozen=True)
 class Package:
     path: Path
@@ -196,8 +210,8 @@ def pull(args):
     if not branch and not args.run:
         raise ValueError("Detached checkout: specify --branch or --run")
     run, artifacts = choose_run(args.repo, branch, args.run, precisions)
-    native_commit = api(args.repo, f"contents/godot?ref={run['head_sha']}")["sha"]
-    checkout_native = command("git", "rev-parse", "HEAD:godot", capture=True).strip()
+    native_commit = run_godot_pin(args.repo, run)
+    checkout_native = command("git", "rev-parse", ":godot", capture=True).strip()
     if native_commit != checkout_native:
         raise ValueError("The selected run uses a different Godot commit. Update the checkout "
                          "or select a matching --run before importing its packages.")

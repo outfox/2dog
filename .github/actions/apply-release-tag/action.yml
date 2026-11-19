@@ -1,0 +1,10 @@
+name: Apply signed release tag
+description: Set the Godot line and package versions for this job without a release commit
+runs:
+  using: composite
+  steps:
+    - uses: hustcer/setup-nu@eacad52a4634c4f8d17a94916f93be6856861b9c # v3.29
+      with:
+        version: '0.111.0'
+    - shell: bash
+      run: nu scripts/release.nu --apply-tag "$GITHUB_REF_NAME"

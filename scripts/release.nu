@@ -1,5 +1,5 @@
 #!/usr/bin/env nu
-# The terminal dispatches the workflow, which calls --batch after taking the release lock.
+# Sign and push release tags from the maintainer's shell.
 
 def --wrapped git [...args: string] {
     let result = (^git ...$args | complete)
@@ -70,22 +70,35 @@ def remote-refs [branch: string] {
     git ls-remote origin $"refs/heads/($branch)" 'refs/tags/v*' | lines | parse '{sha}	{ref}'
 }
 
-# Another Godot line built from this tree (godot-lines.json): its fork branch and commit, and the NativesRevision of
-# its latest release. A line's releases are tagged off the branch, so that tag is where its natives state lives.
-def line-target [name: string, remote: list] {
+def line-target [name: string] {
     let lines = (open godot-lines.json)
     if $name not-in ($lines | columns) {
         error make {msg: $"godot-lines.json has no line '($name)' \(it lists: ($lines | columns | str join ', '))."}
     }
+    $lines | get $name
+}
+
+# Historic tags kept their native revision in the release commit.
+def latest-natives [name: string, remote: list, fallback: string] {
     let tags = ($remote | where ref =~ ('^refs/tags/v' + ($name | str replace --all '.' '\.') + '\.\d+\.\d+(-[0-9A-Za-z.-]+)?$'))
-    let natives = if ($tags | is-empty) { '0' } else {
+    if ($tags | is-empty) { $fallback } else {
         let latest = ($tags | sort-by {|tag| $tag.ref | parse --regex '\.(?<n>\d+)(?:-[0-9A-Za-z.-]+)?$' | get 0.n | into int } | last)
-        if (^git cat-file -e $"($latest.sha)^{commit}" | complete).exit_code != 0 {
-            git fetch --quiet --no-tags origin $latest.sha | ignore
-        }
-        property (git show $"($latest.sha):Directory.Build.props") NativesRevision
+        let info = (tag-info $latest.sha)
+        if $info == null { property (git show $"($latest.sha):Directory.Build.props") NativesRevision } else { $info.natives }
     }
-    $lines | get $name | insert natives $natives
+}
+
+def tag-info [object: string] {
+    if (^git cat-file -e $object | complete).exit_code != 0 {
+        let refspec = if ($object | str starts-with 'refs/tags/') { $"($object):($object)" } else { $object }
+        git fetch --quiet --no-tags origin $refspec | ignore
+    }
+    if (git cat-file -t $object) != 'tag' { return null }
+    let contents = (git cat-file -p $object)
+    let info = ($contents | parse --regex '(?m)^2dog-release-v1 (?<pin>[0-9a-f]{40}) (?<natives>0|[1-9][0-9]*)\r?$')
+    if ($info | length) == 1 {
+        $info.0 | insert name ($contents | lines | get 2 | str replace --regex '^tag ' '')
+    }
 }
 
 # Point the tree at a line's fork commit: the gitlink, the submodule checkout when there is one, and the fork branch
@@ -94,7 +107,7 @@ def checkout-line [target: record] {
     git update-index --cacheinfo $"160000,($target.commit),godot" | ignore
     if ('godot/.git' | path exists) {
         if (^git -C godot cat-file -e $"($target.commit)^{commit}" | complete).exit_code != 0 {
-            git -C godot fetch --quiet origin $target.branch | ignore
+            git -C godot fetch --quiet --no-tags --depth 1 origin $target.commit | ignore
         }
         git -C godot checkout --quiet --detach $target.commit | ignore
     }
@@ -114,7 +127,7 @@ def detached [start: string, work: closure] {
 def main [
     --dry-run       # Preview without changing tracked files, commits, tags or remote refs.
     --lines: string = '' # Comma-separated Godot lines to release; empty selects every configured line.
-    --batch         # Prepare and publish tags in the release workflow.
+    --apply-tag: string # Apply a signed release to this checkout for building.
     --sync          # Only align GodotVersion, TwoDogPrerelease, the Godot.NET.Sdk pins and feature tags with godot/version.py (after a fork bump). With --line: switch the working tree to that line.
     --ci            # With --line: push that line's tree to the branch ci/<line>/<commit>, which runs CI on it.
     --line: string  # Another Godot line from godot-lines.json (4.7) instead of the one in the tree.
@@ -122,14 +135,17 @@ def main [
     if $line != null and not ($sync or $ci) {
         error make {msg: '--line is for --sync or --ci; use --lines to select release lines.'}
     }
-    if ($batch or $lines != '') and ($sync or $ci) {
-        error make {msg: '--batch and --lines are only for releases.'}
-    }
-    if not ($batch or $sync or $ci) {
-        ^gh workflow run release.yml --repo outfox/2dog --ref main -f $"lines=($lines)" -f $"dry_run=($dry_run)"
+    cd ($env.FILE_PWD | path dirname)
+    if $apply_tag != null {
+        if $dry_run or $sync or $ci or $line != null or $lines != '' {
+            error make {msg: '--apply-tag cannot be combined with other release options.'}
+        }
+        apply-release-tag $apply_tag
         return
     }
-    cd ($env.FILE_PWD | path dirname)
+    if $lines != '' and ($sync or $ci) {
+        error make {msg: '--lines is only for releases.'}
+    }
     let branch = (git branch --show-current)
     if $ci and $line == null {
         error make {msg: '--ci needs --line: CI for the line in the tree runs on the branch itself.'}
@@ -139,9 +155,9 @@ def main [
         if $line != null and (git status --porcelain | is-not-empty) {
             error make {msg: 'Commit or stash pending changes, including submodule changes, before switching lines.'}
         }
-        let target = if $line == null { null } else { line-target $line (remote-refs $branch) }
+        let target = if $line == null { null } else { line-target $line }
         # The checked-out fork (so an uncommitted bump syncs), else version.py at the pinned commit (CI).
-        let godot = if $target == null { godot-version (godot-version-py (git rev-parse HEAD:godot)) } else {
+        let godot = if $target == null { godot-version (godot-version-py (git rev-parse :godot)) } else {
             godot-version (godot-version-py $target.commit --other-line)
         }
         if $target != null and not ($"($godot.release)." | str starts-with $"($line).") {
@@ -153,9 +169,10 @@ def main [
         let label = if $godot.status != 'stable' { $godot.status } else if $target != null { '' } else if ($named | is-empty) { property $props TwoDogPrerelease } else { $named.0.label | default '' }
         let retargeted = (retargeted-files $godot)
         let props = ($props | set-property GodotVersion $godot.csharp | set-property TwoDogPrerelease $label)
-        let props = if $target == null { $props } else { $props | set-property NativesRevision $target.natives }
+        let natives = if $target == null { null } else { latest-natives $line (remote-refs $branch) '0' }
+        let props = if $natives == null { $props } else { $props | set-property NativesRevision $natives }
         let summary = ($"GodotVersion ($godot.csharp), TwoDogPrerelease '($label)', Godot.NET.Sdk pins and feature tags in ($retargeted | length) files"
-            + (if $target == null { '.' } else { $", godot ($target.commit | str substring 0..<7) on ($target.branch), NativesRevision ($target.natives)." }))
+            + (if $target == null { '.' } else { $", godot ($target.commit | str substring 0..<7) on ($target.branch), NativesRevision ($natives)." }))
         if $dry_run { print $"Would set ($summary)"; return }
         let apply = {||
             if $target != null { checkout-line $target }
@@ -181,12 +198,9 @@ def main [
         print $"Delete the branch afterwards: git push origin --delete ($ref)"
         return
     }
-    if $branch != 'main' { error make {msg: 'The release workflow must check out main.'} }
+    if $branch != 'main' { error make {msg: 'Check out main before releasing.'} }
     if (git status --porcelain | is-not-empty) {
         error make {msg: 'The release checkout must be clean, including the Godot submodule.'}
-    }
-    if not $dry_run and ($env.GITHUB_ACTIONS? != 'true' or $env.GITHUB_OUTPUT? == null) {
-        error make {msg: 'Dispatch the release workflow with uv run --locked poe release.'}
     }
     if not ('godot/.git' | path exists) {
         error make {msg: 'Initialize the Godot submodule before releasing.'}
@@ -195,7 +209,7 @@ def main [
     let remote = (remote-refs $branch)
     let source = (git rev-parse HEAD)
     if not ($remote | any {|ref| $ref.ref == 'refs/heads/main' and $ref.sha == $source }) {
-        error make {msg: 'main moved before release planning. Dispatch the release workflow again.'}
+        error make {msg: 'Release from an up-to-date main checkout.'}
     }
     let main_pin = (git rev-parse HEAD:godot)
     let main_godot = (godot-version (godot-version-py $main_pin))
@@ -211,7 +225,7 @@ def main [
         | get n | into int)
     let next = ([(property $props TwoDogRevision | into int) ...$revisions] | math max) + 1
     let plans = ($selected | each {|line|
-        let target = if $line == $main_godot.feature { null } else { line-target $line $remote }
+        let target = if $line == $main_godot.feature { null } else { line-target $line }
         let pinned = if $target == null { $main_pin } else { $target.commit }
         if $target != null and (^git -C godot cat-file -e $"($pinned)^{commit}" | complete).exit_code != 0 {
             git -C godot fetch --quiet --no-tags --depth 1 origin $pinned | ignore
@@ -220,36 +234,43 @@ def main [
         if $godot.feature != $line {
             error make {msg: $"godot-lines.json pins line ($line) to a commit of Godot ($godot.csharp)."}
         }
-        let natives = (if $target == null { property $props NativesRevision } else { $target.natives } | into int)
-        release-plan $target $pinned $godot $props $next $natives $remote
+        let fallback = if $target == null { property $props NativesRevision } else { '0' }
+        let natives = (latest-natives $line $remote $fallback | into int)
+        release-plan $pinned $godot $next $natives $remote
     })
     if $dry_run { return }
 
+    # shortcut: One maintainer allocates revisions; add a shared reservation ref if concurrent releases are needed.
     for plan in $plans {
-        detached main {||
-            if $plan.target != null { checkout-line $plan.target }
-            $plan.props | save --force Directory.Build.props
-            for file in $plan.files { open --raw $file | retarget $plan.godot | save --force --raw $file }
-            git add -- Directory.Build.props ...(if $plan.target == null { [] } else { [.gitmodules] }) ...$plan.files | ignore
-            git commit -S -m $"chore: release ($plan.tag)" | print
-            git tag -s --message $"Release ($plan.tag)" $plan.tag | ignore
-        }
+        git tag -s --message $"2dog-release-v1 ($plan.pinned) ($plan.natives)" $plan.tag $source | ignore
+        git -c 'gpg.ssh.allowedSignersFile=.github/release-signers' verify-tag $plan.tag | ignore
     }
     let fork = (git config --file .gitmodules submodule.godot.url)
     # A failed 2dog push can leave fork pins behind, so name them by commit for safe retries.
     let fork_refs = ($plans | get pinned | uniq | each {|pin| $"($pin):refs/tags/2dog-pin-($pin)" })
-    git -C godot push --atomic $fork ...$fork_refs | print
-
     let tags = ($plans | get tag)
     let tag_refs = ($tags | each {|tag| $"refs/tags/($tag):refs/tags/($tag)" })
-    let branch_refs = ($plans | where {|plan| $plan.target == null } | each {|plan|
-        $"(git rev-parse $"($plan.tag)^{}"):refs/heads/main"
-    })
-    git push --atomic origin ...$branch_refs ...$tag_refs | print
-    ($"tags=($tags | str join ' ')" + "\n") | save --append $env.GITHUB_OUTPUT
+    try {
+        git -C godot push --atomic $fork ...$fork_refs | print
+        git push --atomic origin ...$tag_refs | print
+    } catch {|err|
+        error make {msg: $"($err.msg)\nThe signed tags remain local. Retry in this order:\ngit -C godot push --atomic ($fork) ($fork_refs | str join ' ')\ngit push --atomic origin ($tag_refs | str join ' ')"}
+    }
+    # GitHub omits push events for batches of more than three tags.
+    if ($tags | length) > 3 {
+        mut failed = false
+        for tag in $tags {
+            let result = (^gh workflow run ci.yml --repo outfox/2dog --ref $tag | complete)
+            if $result.exit_code != 0 {
+                $failed = true
+                print --stderr $"Retry CI for ($tag): gh workflow run ci.yml --repo outfox/2dog --ref ($tag)\n($result.stderr)"
+            }
+        }
+        if $failed { error make {msg: 'Tags were pushed, but some CI dispatches failed.'} }
+    }
 }
 
-def release-plan [target: any, pinned: string, godot: record, props: string, next: int, natives: int, remote: list] {
+def release-plan [pinned: string, godot: record, next: int, natives: int, remote: list] {
     let version = $godot.release
     let label = if $godot.status == 'stable' { '' } else { $godot.status }
     let suffix = if $label == '' { '' } else { $"-($label)" }
@@ -259,15 +280,13 @@ def release-plan [target: any, pinned: string, godot: record, props: string, nex
     }
 
     # NativesRevision names the release that built the natives; reuse them while the inputs match that release.
-    let built_ref = ('^refs/tags/v' + ($"($version).($natives)" | str replace --all '.' '\.') + '(-[0-9A-Za-z.-]+)?(\^\{\})?$')
+    let built_ref = ('^refs/tags/v' + ($"($version).($natives)" | str replace --all '.' '\.') + '(-[0-9A-Za-z.-]+)?$')
     let built = ($remote | where ref =~ $built_ref)
     let reuse = if ($built | is-empty) { false } else {
-        # An annotated tag's peeled commit (^{}) sorts after the tag object.
         let sha = ($built | sort-by ref | last | get sha)
-        if (^git cat-file -e $"($sha)^{commit}" | complete).exit_code != 0 {
-            git fetch --quiet --no-tags origin $sha | ignore
-        }
-        let built_inputs = (^uv run --no-project python scripts/native_inputs.py --kind package --ref $sha | complete)
+        let info = (tag-info $sha)
+        let old_pin = if $info == null { git rev-parse $"($sha):godot" } else { $info.pin }
+        let built_inputs = (^uv run --no-project python scripts/native_inputs.py --kind package --ref $sha --godot $old_pin | complete)
         let current_inputs = (^uv run --no-project python scripts/native_inputs.py --kind package --godot $pinned | complete)
         if $built_inputs.exit_code != 0 or $current_inputs.exit_code != 0 {
             error make {msg: $"Cannot identify native inputs: ($built_inputs.stderr)($current_inputs.stderr)"}
@@ -276,12 +295,39 @@ def release-plan [target: any, pinned: string, godot: record, props: string, nex
     }
     let next_natives = if $reuse { $natives } else { $next }
 
-    let files = (retargeted-files $godot)
     print $"Release ($tag): NativesRevision ($natives) -> ($next_natives), Godot SDK ($godot.csharp)"
-    let updated = ($props
-        | set-property GodotVersion $godot.csharp
-        | set-property TwoDogRevision $"($next)"
-        | set-property NativesRevision $"($next_natives)"
-        | set-property TwoDogPrerelease $label)
-    {tag: $tag, target: $target, pinned: $pinned, godot: $godot, props: $updated, files: $files}
+    {tag: $tag, pinned: $pinned, natives: $next_natives}
+}
+
+def apply-release-tag [tag: string] {
+    let parsed = ($tag | parse --regex '^v(?<release>(?<feature>\d+\.\d+)\.\d+)\.(?<revision>[1-9][0-9]*)(?:-(?<label>beta\d+|rc\d+|dev\d+))?$')
+    if ($parsed | is-empty) { error make {msg: $"Invalid release tag: ($tag)"} }
+    let version = $parsed.0
+    let ref = $"refs/tags/($tag)"
+    let info = (tag-info $ref)
+    if $info == null or $info.name != $tag or (git rev-parse $"($ref)^{commit}") != (git rev-parse HEAD) {
+        error make {msg: $"Release tag ($tag) does not describe this checkout."}
+    }
+    git -c 'gpg.ssh.allowedSignersFile=.github/release-signers' verify-tag $ref | ignore
+    if (git status --porcelain | is-not-empty) { error make {msg: 'Apply a release tag to a clean checkout.'} }
+    let props = (open --raw Directory.Build.props)
+    let main_line = ((property $props GodotVersion) | split row '.' | first 2 | str join '.')
+    let target = if $version.feature == $main_line { null } else { line-target $version.feature }
+    let expected_pin = if $target == null { git rev-parse HEAD:godot } else { $target.commit }
+    if $info.pin != $expected_pin or ($info.natives | into int) > ($version.revision | into int) {
+        error make {msg: $"Invalid Godot pin or native revision in ($tag)."}
+    }
+    if $target != null { checkout-line $target }
+    let label = ($version.label | default '')
+    let csharp = if $label == '' { $version.release } else {
+        $version.release + '-' + ($label | str replace --regex '(\d+)$' '.${1}')
+    }
+    let godot = {csharp: $csharp, feature: $version.feature}
+    let files = (retargeted-files $godot)
+    for file in $files { open --raw $file | retarget $godot | save --force --raw $file }
+    ($props | set-property GodotVersion $csharp
+        | set-property TwoDogRevision $version.revision
+        | set-property NativesRevision $info.natives
+        | set-property TwoDogPrerelease $label) | save --force --raw Directory.Build.props
+    git add -- Directory.Build.props .gitmodules ...$files | ignore
 }
