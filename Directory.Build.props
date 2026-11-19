@@ -1,15 +1,15 @@
 <Project>
     <PropertyGroup>
         <!-- Source checkout defaults. scripts/release.nu applies the versions recorded in signed release tags. -->
-        <GodotVersion>4.8.0-beta.3</GodotVersion>
+        <GodotVersion>4.7.2</GodotVersion>
         <!-- Development revision fallback; release batches allocate from the tags on origin. -->
         <TwoDogRevision>202</TwoDogRevision>
         <!-- The release whose native packages this line reuses; a release whose native inputs differ from that
              release's tag sets its own number. -->
-        <NativesRevision>202</NativesRevision>
+        <NativesRevision>203</NativesRevision>
         <!-- Prerelease label: Godot's status for a Godot prerelease (4.8.0.156-beta2), else the release branch label
              (4.7-rc releases 4.7.2.N-rc); empty for stable releases. -->
-        <TwoDogPrerelease>beta3</TwoDogPrerelease>
+        <TwoDogPrerelease></TwoDogPrerelease>
     </PropertyGroup>
     <!-- Imported suffixes apply only to the checkout versions recorded by pull-packages. -->
     <Import Project="$(MSBuildThisFileDirectory)packages/ci-packages.props"
