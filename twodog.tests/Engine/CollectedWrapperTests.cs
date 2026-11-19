@@ -16,23 +16,12 @@ public class CollectedWrapperTests(HeadlessFixture godot)
     public void NativeReferencesAfterCollectionReportNoErrors()
     {
         const string path = "res://collected-wrapper-native-references.tres";
-        var stall = FinalizerStall.Begin();
-        try
-        {
-            DropCachedResource<Resource>(path);
-            GC.Collect();
-            // The loader keeps a native reference to the cached resource without asking for a wrapper.
-            Assert.Equal(Error.Ok, ResourceLoader.LoadThreadedRequest(path));
-        }
-        finally
-        {
-            stall.Release();
-        }
+        // The loader keeps a native reference to the cached resource without asking for a wrapper.
+        var requested = BeforeTheFinalizer<Resource, Error>(path, () => ResourceLoader.LoadThreadedRequest(path));
 
-        GC.WaitForPendingFinalizers();
+        Assert.Equal(Error.Ok, requested);
         // The loader holds the only reference now; handing it out references the resource once more.
         var resource = ResourceLoader.LoadThreadedGet(path);
-
         Assert.Equal(path, resource.ResourcePath);
         Assert.Empty(godot.Errors.Drain());
     }
@@ -41,20 +30,7 @@ public class CollectedWrapperTests(HeadlessFixture godot)
     public void ReplacementWrapperOutlivesTheCollectedWrappersFinalizer()
     {
         const string path = "res://collected-wrapper-replacement.tres";
-        Resource replacement;
-        var stall = FinalizerStall.Begin();
-        try
-        {
-            DropCachedResource<Resource>(path);
-            GC.Collect();
-            replacement = ResourceLoader.Load(path);
-        }
-        finally
-        {
-            stall.Release();
-        }
-
-        GC.WaitForPendingFinalizers();
+        var replacement = BeforeTheFinalizer<Resource, Resource>(path, () => ResourceLoader.Load(path));
 
         Assert.Same(replacement, ResourceLoader.Load(path));
         Assert.Empty(godot.Errors.Drain());
@@ -64,25 +40,36 @@ public class CollectedWrapperTests(HeadlessFixture godot)
     public void ScriptInstanceIsRecreatedAfterCollection()
     {
         const string path = "res://collected-wrapper-script.tres";
+        // The collected instance's finalizer finds the resource referenced and gives it a new managed instance.
+        var requested = BeforeTheFinalizer<ScriptedResource, Error>(
+            path, () => ResourceLoader.LoadThreadedRequest(path));
+
+        Assert.Equal(Error.Ok, requested);
+        var resource = ResourceLoader.LoadThreadedGet(path);
+        Assert.IsType<ScriptedResource>(resource);
+        Assert.Same(resource, ResourceLoader.Load(path));
+        Assert.Empty(godot.Errors.Drain());
+    }
+
+    /// <summary>
+    /// Caches a new <typeparamref name="T"/> under <paramref name="path"/>, collects its wrapper and runs
+    /// <paramref name="whileCollected"/> before that wrapper's finalizer, which has run when this returns.
+    /// </summary>
+    private static TResult BeforeTheFinalizer<T, TResult>(string path, Func<TResult> whileCollected)
+        where T : Resource, new()
+    {
         var stall = FinalizerStall.Begin();
         try
         {
-            DropCachedResource<ScriptedResource>(path);
+            DropCachedResource<T>(path);
             GC.Collect();
-            Assert.Equal(Error.Ok, ResourceLoader.LoadThreadedRequest(path));
+            return whileCollected();
         }
         finally
         {
             stall.Release();
+            GC.WaitForPendingFinalizers();
         }
-
-        // The collected instance's finalizer finds the resource referenced and gives it a new managed instance.
-        GC.WaitForPendingFinalizers();
-        var resource = ResourceLoader.LoadThreadedGet(path);
-
-        Assert.IsType<ScriptedResource>(resource);
-        Assert.Same(resource, ResourceLoader.Load(path));
-        Assert.Empty(godot.Errors.Drain());
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
