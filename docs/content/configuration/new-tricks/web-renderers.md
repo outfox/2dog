@@ -38,9 +38,9 @@ The Godot Editor does not offer this web override in its renderer selector.
 The setting sticks unless you explicitly clear it in Project Settings.
 
 During bundling, Forward+ and Mobile select WebGPU when the native payload
-includes it; other settings select WebGL. Use a single-precision,
-single-threaded browser payload. See [WebGPU](./webgpu) for browser support,
-host overrides, fallback behavior, and adapter limits.
+includes it; other settings select WebGL. Use a single-precision browser
+payload. See [WebGPU](./webgpu) for packaged runtime support, the threaded
+source-build prototype, host overrides, fallback behavior, and adapter limits.
 
 ## Bake shaders before exporting
 

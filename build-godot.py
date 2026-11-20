@@ -228,7 +228,7 @@ def parse_arguments():
         help="Web only: multithreaded payload for WasmEnableThreads hosts, staged under bin/web-threads/",
     )
     parser.add_argument("--webgpu", choices=["auto", "yes", "no"], default="auto",
-                        help="Include WebGPU (auto: single-precision desktop and single-threaded web)")
+                        help="Include WebGPU (auto: single-precision desktop and single-threaded web; yes: also threaded web)")
     parser.add_argument("--webgpu-native-path", default="",
                         help="Use an existing Dawn boundary SDK instead of preparing the pinned SDK")
     parser.add_argument(
