@@ -10,10 +10,10 @@ keywords: "Godot WebGPU, Godot Forward+ browser, Godot C# WebGPU"
 WebGPU is opt-in. It supports the Forward+ and Mobile renderers on these targets:
 
 - Windows, Linux and macOS, in single precision
-- single-precision, single-threaded browser runtimes
+- single-precision browser runtimes, including an opt-in threaded source build
 
 2dog does not change your existing renderer defaults. If you use WebGPU with
-Android, double precision or threaded browser payloads, you get a clear error.
+Android or double precision, you get a clear error.
 Native threading remains supported. Headless imports and exports do not require
 a WebGPU device. WebXR's immersive rendering is outside this experimental scope.
 
@@ -44,11 +44,17 @@ Native Dawn loads only when selected. WebGPU requires macOS 13 or newer; other
 renderers retain their existing runtime requirements. Desktop packages include
 Dawn and the compiler sidecars and notices needed by the selected backend.
 
+For a WebGPU desktop export, enable `shader_baker/enabled` in the preset and
+select `webgpu` as that preset's project rendering driver. The baker uses the
+preset's driver when writing the pack. Passing `--rendering-driver webgpu` at
+launch can otherwise make the game compile its Forward+ shaders on the first
+run. Dawn also caches device-specific pipelines on the player's machine.
+
 ## Browser requirements
 
 Single-precision, single-threaded browser packages include WebGPU and WebGL.
-WebGPU requires a secure context and a browser that supports it. Threaded and
-double-precision payloads reject explicit WebGPU requests before device creation.
+WebGPU requires a secure context and a browser that supports it. Packaged threaded
+runtimes and double-precision payloads reject explicit WebGPU requests before device creation.
 
 The project's `renderer/rendering_method.web` selects WebGPU for Forward+ and
 Mobile, or OpenGL/WebGL for Compatibility (the default). See
@@ -149,3 +155,25 @@ Unsupported configurations reject `--webgpu yes`; `auto` preserves their rendere
 Browser packages supply the Emscripten port, link flags and a writable cache.
 Override that cache with
 [`TwoDogWebGpuCachePath`](/configuration/web#properties) when needed.
+
+### Threaded browser prototype
+
+Web builds default to `--web-threads no`. To enable both threads and WebGPU,
+build the single-precision release payload from the repository root. Use its
+absolute directory, including the trailing slash, when publishing a threaded host.
+
+```bash
+uv run build-godot.py --platform web --target template_release --web-threads yes --webgpu yes
+dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true -p:TwoDogWebNativeDir=/absolute/path/to/2dog/godot/bin/web-threads/template_release/
+node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000
+```
+
+The .NET worker that runs Godot owns the WebGPU device and queue. The shell
+transfers the game canvas to that worker after its device request succeeds.
+Godot can then encode and submit frames directly to the canvas. Input and
+layout stay on the browser main thread. Other workers send GPU operations to
+the device owner, including while it waits for shader compilation. Hosts that
+supply their own main-thread device keep that device and its ownership.
+
+The image regression exercises this build with `?threads=1`. The host needs
+cross-origin isolation for shared Wasm memory. The server above supplies those headers.

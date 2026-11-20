@@ -4,10 +4,13 @@ import argparse
 import hashlib
 import tempfile
 import unittest
+from importlib import import_module
 from pathlib import Path
 from unittest.mock import patch
 
 from scripts import webgpu
+
+build = import_module("build-godot")
 
 
 class WebGpuBuildTests(unittest.TestCase):
@@ -17,9 +20,9 @@ class WebGpuBuildTests(unittest.TestCase):
             ("linuxbsd", "single", False, True),
             ("macos", "single", False, True),
             ("web", "single", False, True),
-            ("web", "single", True, False),
             ("windows", "double", False, False),
             ("web", "double", False, False),
+            ("web", "double", True, False),
             ("android", "single", False, False),
         ):
             with self.subTest(platform=platform, precision=precision, threads=threads):
@@ -31,6 +34,26 @@ class WebGpuBuildTests(unittest.TestCase):
                     args.webgpu = "yes"
                     with self.assertRaises(ValueError):
                         webgpu.enabled(args, platform)
+
+    def test_threaded_web_prototype_requires_explicit_opt_in(self):
+        for value, expected in (("auto", False), ("no", False), ("yes", True)):
+            args = build.parse_arguments(["--platform", "web", "--web-threads", "yes", "--webgpu", value])
+            self.assertEqual(webgpu.enabled(args, "web"), expected)
+
+    def test_web_thread_options(self):
+        for flags, threaded in (([], False), (["--web-threads", "no"], False),
+                                (["--web-threads", "yes"], True), (["--threads"], True)):
+            with self.subTest(flags=flags):
+                args = build.parse_arguments(["--platform", "web", *flags])
+                self.assertIs(args.threads, threaded)
+                self.assertEqual(webgpu.enabled(args, "web"), not threaded)
+
+    def test_web_threads_rejects_invalid_usage(self):
+        for flags in (["--platform", "windows", "--web-threads", "yes"],
+                      ["--platform", "web", "--web-threads", "auto"], ["--platform", "web", "--web-threads"]):
+            with self.subTest(flags=flags), patch("sys.stderr"), self.assertRaises(SystemExit) as error:
+                build.parse_arguments(flags)
+            self.assertEqual(error.exception.code, 2)
 
     def test_download_rejects_wrong_checksum_and_replaces_a_bad_cache(self):
         with tempfile.TemporaryDirectory() as directory:

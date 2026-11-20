@@ -33,11 +33,12 @@ def enabled(args, platform):
     supported = (
         platform in ("windows", "linuxbsd", "macos", "web")
         and getattr(args, "precision", "single") == "single"
-        and not getattr(args, "threads", False)
     )
     value = getattr(args, "webgpu", "no")
     if value == "yes" and not supported:
-        raise ValueError("WebGPU currently supports single-precision desktop and single-threaded web builds only")
+        raise ValueError("WebGPU requires a single-precision desktop or web build")
+    if platform == "web" and getattr(args, "threads", False):
+        return supported and value == "yes"
     return supported and value != "no"
 
 
