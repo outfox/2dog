@@ -10,6 +10,10 @@
 <script src="godot.js"></script>
 <script>
 const options = new URLSearchParams(location.search);
+const gameCanvas = document.querySelector('canvas');
+if (options.get('threads') === '1') {
+    gameCanvas.id = options.has('limited-compute') ? 'pinball:table.1' : '';
+}
 restrictWebGPUAdapter(options);
 const post = Worker.prototype.postMessage;
 Worker.prototype.postMessage = function (message, ...args) {
@@ -22,7 +26,7 @@ Worker.prototype.postMessage = function (message, ...args) {
 };
 const engine = new Engine({
     executable: 'godot',
-    canvas: document.getElementById('canvas'),
+    canvas: gameCanvas,
     renderingDriver: 'webgpu',
     args: ['--rendering-driver', 'webgpu', '--rendering-method', options.get('method') || 'mobile'],
     onPrint: text => { console.log(text); document.getElementById('status').textContent = text; },
