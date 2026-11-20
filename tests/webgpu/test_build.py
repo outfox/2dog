@@ -35,18 +35,29 @@ class WebGpuBuildTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         webgpu.enabled(args, platform)
 
-    def test_threaded_web_prototype_requires_explicit_opt_in(self):
-        for value, expected in (("auto", False), ("no", False), ("yes", True)):
-            args = build.parse_arguments(["--platform", "web", "--web-threads", "yes", "--webgpu", value])
-            self.assertEqual(webgpu.enabled(args, "web"), expected)
+    def test_threaded_web_requires_fork_support(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(webgpu, "ROOT", Path(directory)):
+            args = build.parse_arguments(["--platform", "web", "--web-threads", "yes"])
+            self.assertFalse(webgpu.enabled(args, "web"))
+            args.webgpu = "yes"
+            with self.assertRaisesRegex(ValueError, "does not support threaded WebGPU"):
+                webgpu.enabled(args, "web")
 
     def test_web_thread_options(self):
-        for flags, threaded in (([], False), (["--web-threads", "no"], False),
-                                (["--web-threads", "yes"], True), (["--threads"], True)):
-            with self.subTest(flags=flags):
-                args = build.parse_arguments(["--platform", "web", *flags])
-                self.assertIs(args.threads, threaded)
-                self.assertEqual(webgpu.enabled(args, "web"), not threaded)
+        with tempfile.TemporaryDirectory() as directory, patch.object(webgpu, "ROOT", Path(directory)):
+            bootstrap = Path(directory) / "godot/platform/web/js/engine/webgpu_device.js"
+            bootstrap.parent.mkdir(parents=True)
+            bootstrap.touch()
+            for flags, threaded in (([], False), (["--web-threads", "no"], False),
+                                    (["--web-threads", "yes"], True), (["--threads"], True)):
+                with self.subTest(flags=flags):
+                    args = build.parse_arguments(["--platform", "web", *flags])
+                    self.assertIs(args.threads, threaded)
+                    self.assertTrue(webgpu.enabled(args, "web"))
+                    args.webgpu = "yes"
+                    self.assertTrue(webgpu.enabled(args, "web"))
+                    args.webgpu = "no"
+                    self.assertFalse(webgpu.enabled(args, "web"))
 
     def test_web_threads_rejects_invalid_usage(self):
         for flags in (["--platform", "windows", "--web-threads", "yes"],

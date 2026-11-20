@@ -37,8 +37,12 @@ def enabled(args, platform):
     value = getattr(args, "webgpu", "no")
     if value == "yes" and not supported:
         raise ValueError("WebGPU requires a single-precision desktop or web build")
-    if platform == "web" and getattr(args, "threads", False):
-        return supported and value == "yes"
+    if supported and platform == "web" and getattr(args, "threads", False):
+        # Older forks reject WebGPU on pthreads and lack the worker-owned device bootstrap.
+        if not (ROOT / "godot/platform/web/js/engine/webgpu_device.js").is_file():
+            if value == "yes":
+                raise ValueError("This Godot fork does not support threaded WebGPU")
+            return False
     return supported and value != "no"
 
 
