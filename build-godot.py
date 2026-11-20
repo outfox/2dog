@@ -189,7 +189,7 @@ def get_platform_config(platform_override: str | None = None, arch_override: str
     sys.exit(1)
 
 
-def parse_arguments():
+def parse_arguments(argv=None):
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         description="2dog libgodot + GodotSharp Build System",
@@ -224,9 +224,10 @@ def parse_arguments():
         help="Floating-point precision; double builds require matching .double packages",
     )
     parser.add_argument(
-        "--threads", action="store_true",
+        "--web-threads", dest="threads", choices=["yes", "no"], default="no",
         help="Web only: multithreaded payload for WasmEnableThreads hosts, staged under bin/web-threads/",
     )
+    parser.add_argument("--threads", dest="threads", action="store_const", const="yes", help=argparse.SUPPRESS)
     parser.add_argument("--webgpu", choices=["auto", "yes", "no"], default="auto",
                         help="Include WebGPU (auto: single-precision desktop and single-threaded web; yes: also threaded web)")
     parser.add_argument("--webgpu-native-path", default="",
@@ -284,7 +285,8 @@ def parse_arguments():
         help="SCons cache directory path (passed as cache_path= to scons)",
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    args.threads = args.threads == "yes"
     if args.platform == Platform.ANDROID.value and args.arch not in (
         "auto", Arch.ARM64.value, Arch.X86_64.value,
     ):
@@ -292,7 +294,7 @@ def parse_arguments():
     if args.platform == Platform.IOS.value and args.arch not in ("auto", Arch.ARM64.value):
         parser.error("iOS .NET hosts support --arch arm64 only (or auto)")
     if args.threads and args.platform != Platform.WEB.value:
-        parser.error("--threads requires --platform web")
+        parser.error("--web-threads yes requires --platform web")
     if args.simulator and args.platform != Platform.IOS.value:
         parser.error("--simulator requires --platform ios")
     return args

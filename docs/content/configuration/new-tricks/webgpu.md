@@ -158,11 +158,12 @@ Override that cache with
 
 ### Threaded browser prototype
 
-Build the single-precision release payload from the repository root. Use its
+Web builds default to `--web-threads no`. To enable both threads and WebGPU,
+build the single-precision release payload from the repository root. Use its
 absolute directory, including the trailing slash, when publishing a threaded host.
 
 ```bash
-uv run build-godot.py --platform web --target template_release --threads --webgpu yes
+uv run build-godot.py --platform web --target template_release --web-threads yes --webgpu yes
 dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true -p:TwoDogWebNativeDir=/absolute/path/to/2dog/godot/bin/web-threads/template_release/
 node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000
 ```

@@ -1905,7 +1905,7 @@ jobs:
       - name: Build and publish the threaded WebGPU smoke fixture
         if: needs.check-natives.outputs.line == '4.8'
         run: |
-          uv run poe build-godot --platform web --target template_release --threads --webgpu yes --scu-build yes
+          uv run poe build-godot --platform web --target template_release --web-threads yes --webgpu yes --scu-build yes
           dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true \
             -p:TwoDogWebNativeDir="$PWD/godot/bin/web-threads/template_release/" \
             -p:WasmAppDir="$RUNNER_TEMP/threaded-webgpu"
