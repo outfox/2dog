@@ -329,7 +329,7 @@ jobs:
             arch: wasm32
             rid: browser-wasm
             lib_ext: a
-          # WasmEnableThreads hosts link a -pthread build staged under web-threads/ (build-godot.py --threads).
+          # WasmEnableThreads hosts link a -pthread build staged under web-threads/.
           - platform: web
             target: template_release
             runner: blacksmith-4vcpu-ubuntu-2404
@@ -337,7 +337,7 @@ jobs:
             rid: browser-wasm
             lib_ext: a
             flavor: -threads
-            build_args: --threads
+            build_args: --web-threads yes
           - platform: web
             target: template_debug
             runner: blacksmith-4vcpu-ubuntu-2404
@@ -345,7 +345,7 @@ jobs:
             rid: browser-wasm
             lib_ext: a
             flavor: -threads
-            build_args: --threads
+            build_args: --web-threads yes
 
     # From Godot upstream CI (windows_builds.yml): cache SCons's MSVC
     # environment detection, and keep Python console output UTF-8 clean on

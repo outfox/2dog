@@ -1846,10 +1846,10 @@ jobs:
   # Produce the image test independently so macOS does not wait for the Web Smoke matrix.
   webgpu-browser-build:
     name: WebGPU Browser Bundle
-    needs: [pack]
+    needs: [pack, check-natives]
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    timeout-minutes: 20
+    timeout-minutes: 60
     env:
       TwoDogPrecision: single
     steps:
@@ -1857,6 +1857,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           lfs: true
+          submodules: ${{ needs.check-natives.outputs.line == '4.8' }}
 
       - uses: ./.github/actions/apply-release-tag
         if: startsWith(github.ref, 'refs/tags/v')
@@ -1889,6 +1890,27 @@ jobs:
       - name: Publish WebGPU Mobile image regression
         run: dotnet publish tests/webgpu-browser-smoke -c Release
 
+      - name: Read Emscripten version for the threaded prototype
+        if: needs.check-natives.outputs.line == '4.8'
+        id: threaded-emsdk
+        run: echo "version=$(dotnet msbuild tests/webgpu-browser-smoke/WebGpuBrowserSmoke.csproj -getProperty:EmscriptenVersion)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Emscripten for the threaded prototype
+        if: needs.check-natives.outputs.line == '4.8'
+        uses: emscripten-core/setup-emsdk@v16
+        with:
+          version: ${{ steps.threaded-emsdk.outputs.version }}
+          actions-cache-folder: emsdk-cache
+
+      - name: Build and publish the threaded WebGPU smoke fixture
+        if: needs.check-natives.outputs.line == '4.8'
+        run: |
+          uv run poe build-godot --platform web --target template_release --web-threads yes --webgpu yes --scu-build yes
+          dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true \
+            -p:TwoDogWebNativeDir="$PWD/godot/bin/web-threads/template_release/" \
+            -p:WasmAppDir="$RUNNER_TEMP/threaded-webgpu"
+          mv "$RUNNER_TEMP/threaded-webgpu" tests/webgpu-browser-smoke/AppBundle/threaded
+
       - name: Upload WebGPU Mobile browser image test
         uses: actions/upload-artifact@v7
         with:
@@ -1904,7 +1926,7 @@ jobs:
     needs: [check-natives, webgpu-browser-build]
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.webgpu-browser-build.result == 'success')
     runs-on: macos-15
-    timeout-minutes: 12
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -1928,6 +1950,8 @@ jobs:
           path: tests/webgpu-browser-smoke/AppBundle
 
       - name: Verify browser WebGPU light lists, depth fog, ambient light and MSAA
+        env:
+          GODOT_LINE: ${{ needs.check-natives.outputs.line }}
         run: |
           cleanup() {
             if [ -n "${CHROME_PID:-}" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
@@ -1949,6 +1973,12 @@ jobs:
             http://127.0.0.1:8000/ 9233 240000 /tmp/2dog-mobile-webgpu-captures
           node .github/scripts/webgpu-mobile-smoke.mjs \
             'http://127.0.0.1:8000/?limited-compute=1&base-formats=1&limited-bindings=1' 9233 240000 /tmp/2dog-mobile-webgpu-captures-limited
+          if [[ "$GODOT_LINE" == '4.8' ]]; then
+            node .github/scripts/webgpu-mobile-smoke.mjs \
+              'http://127.0.0.1:8000/threaded/?threads=1&method=forward_plus' 9233 240000 /tmp/2dog-mobile-webgpu-captures-threaded
+            node .github/scripts/webgpu-mobile-smoke.mjs \
+              'http://127.0.0.1:8000/threaded/?threads=1&method=forward_plus&expect=mobile&limited-compute=1&base-formats=1&limited-bindings=1' 9233 240000 /tmp/2dog-mobile-webgpu-captures-threaded-limited
+          fi
 
       - name: Preserve WebGPU browser images and diagnostics
         if: always()
@@ -1960,6 +1990,7 @@ jobs:
             /tmp/2dog-mobile-webgpu-*.log
             /tmp/2dog-mobile-webgpu-captures/
             /tmp/2dog-mobile-webgpu-captures-limited/
+            /tmp/2dog-mobile-webgpu-captures-threaded*/
           retention-days: 7
 
   # Packs the precision-neutral iOS host and every MAUI TFM. The iOS Simulator cells only need these packages, so

@@ -23,7 +23,7 @@ a `.gdignore`):
   support and large-coordinate round trips on startup; use `-- --headless --quit-after 10` for a short smoke run.
 - `showcase.web/` - browser (wasm) host: `dotnet publish` from that folder (defaults to Release; needs the wasm-tools workload)
 - `showcase.webmt/` - experimental multithreaded browser host (`WasmEnableThreads`): needs the threaded natives
-  (`uv run build-godot.py --platform web --threads`) and a server sending COOP/COEP headers, opened via
+  (`uv run build-godot.py --platform web --web-threads yes`) and a server sending COOP/COEP headers, opened via
   `localhost` or HTTPS (hard-reload if the page was cached without them):
 
   ```
