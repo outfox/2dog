@@ -25,6 +25,7 @@ internal sealed class FakeEnvironment(bool isWindows = true, bool isMacOS = fals
     public string? Var(string name) => Vars.GetValueOrDefault(name);
     public bool IsWindows => isWindows;
     public bool IsMacOS => isMacOS;
+    public bool LongPathsEnabled { get; init; } = true;
     public Architecture Architecture => Architecture.X64;
     public bool FileExists(string path) => File.Exists(path);
     public bool DirectoryExists(string path) => Directory.Exists(path);

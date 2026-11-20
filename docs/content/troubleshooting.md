@@ -127,6 +127,29 @@ Godot 4.8 moves to .NET 10, so this mismatch is less common for `net10.0`
 projects. But the problem can occur again when a game targets a later .NET
 version than the runtime that the editor selects.
 
+## Emscripten issues
+
+### `emcc` cannot find a file that exists (Windows path limit)
+
+On Windows, a browser publish can fail in the native link step:
+
+```text
+emcc : error ../../../../../../../../Program Files/dotnet/packs/Microsoft.NET.Runtime.Emscripten.3.1.56.Sdk.win-x64/10.0.15/tools/emscripten/system/lib/libc/emscripten_memset_bulkmem.S: No such file or directory
+emcc : error subprocess 3/4 failed (returned 1)!
+BrowserWasmApp.targets(522,5): error MSB3073: The command "emcc ..." exited with code 1.
+```
+
+Browser hosts need long path support in Windows, which is off by default.
+The first browser publish builds Emscripten's system libraries in a
+[writable cache](/configuration/web#properties) in the temporary directory.
+Emscripten names the library sources relative to that cache, and those paths
+exceed the 260-character path limit of Windows.
+
+Enable long paths as described in
+[Maximum Path Length Limitation](https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation).
+Then publish again. [`2dog doctor`](/cli/doctor#environment) warns about the
+disabled setting as `env.long-paths`.
+
 ## Mixed Godot bindings (TDG001-TDG005)
 
 At build time, 2dog replaces the stock GodotSharp assemblies with its own.

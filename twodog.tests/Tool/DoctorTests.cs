@@ -290,6 +290,20 @@ public class DoctorTests : IDisposable
         Assert.Contains("2dog.tools", Finding(unrestored.Stdout, "env.packages-restored")!.Value.GetProperty("title").GetString());
     }
 
+    [Fact]
+    public void WebHost_WarnsWhenWindowsLongPathsAreDisabled()
+    {
+        var dir = Scaffold("--web");
+        Severity? LongPaths(FakeEnvironment env) => EnvironmentChecks.Run(new DoctorContext
+        {
+            Project = ProjectModel.Load(dir), Env = env, Runner = Runner(), Options = new DoctorOptions(),
+        }).SingleOrDefault(f => f.Id == "env.long-paths")?.Severity;
+
+        Assert.Equal(Severity.Pass, LongPaths(new FakeEnvironment()));
+        Assert.Equal(Severity.Warn, LongPaths(new FakeEnvironment { LongPathsEnabled = false }));
+        Assert.Null(LongPaths(new FakeEnvironment(isWindows: false) { LongPathsEnabled = false }));
+    }
+
     [Theory]
     [InlineData("--install-wasm-tools")]
     [InlineData("--fix-all")]

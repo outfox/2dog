@@ -13,6 +13,7 @@ internal static class EnvironmentChecks
         new("env.dotnet-sdk", Category.Environment, "a .NET 10 SDK is installed"),
         new("env.global-json", Category.Environment, "the root global.json pin is satisfied by an installed SDK"),
         new("env.wasm-tools", Category.Environment, "the wasm-tools workload is available for selected browser builds"),
+        new("env.long-paths", Category.Environment, "Windows long paths are enabled for browser hosts"),
         new("env.android-workload", Category.Environment, "the android workload is available for selected Android builds"),
         new("env.maui-workload", Category.Environment, "MAUI workloads are available for selected MAUI builds"),
         new("env.android-sdk", Category.Environment, "Android SDK paths and components are available for selected Android builds"),
@@ -59,6 +60,12 @@ internal static class EnvironmentChecks
                      project.Hosts.Where(h => h.IsWebLike), "browser hosts publish through the .NET WebAssembly SDK",
                      ctx.Options.InstallWasmTools))
             yield return finding;
+        if (ctx.Env.IsWindows && project.HasWebLikeHost)
+            yield return ctx.Env.LongPathsEnabled
+                ? Finding.Pass("env.long-paths", c, "Windows long paths enabled")
+                : new Finding("env.long-paths", c, Severity.Warn, "Windows long paths are disabled",
+                    "browser publishes build Emscripten's system libraries through paths longer than 260 characters",
+                    "enable long paths: https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation");
         foreach (var finding in WorkloadFindings(ctx, Workload.Android, "env.android-workload",
                      project.Hosts.Where(h => h.Kind == HostKind.Android), "Android hosts build with .NET for Android",
                      ctx.Options.InstallAndroidWorkload))

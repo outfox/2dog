@@ -9,6 +9,8 @@ internal interface IEnvironment
     string? Var(string name);
     bool IsWindows { get; }
     bool IsMacOS { get; }
+    /// <summary>False only on Windows with the 260-character path limit in force.</summary>
+    bool LongPathsEnabled { get; }
     Architecture Architecture { get; }
     bool FileExists(string path);
     bool DirectoryExists(string path);
@@ -21,6 +23,8 @@ internal sealed class SystemEnvironment : IEnvironment
     public string? Var(string name) => Environment.GetEnvironmentVariable(name);
     public bool IsWindows => OperatingSystem.IsWindows();
     public bool IsMacOS => OperatingSystem.IsMacOS();
+    public bool LongPathsEnabled => !OperatingSystem.IsWindows() || Microsoft.Win32.Registry.GetValue(
+        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0) is 1;
     public Architecture Architecture => RuntimeInformation.OSArchitecture;
     public bool FileExists(string path) => File.Exists(path);
     public bool DirectoryExists(string path) => Directory.Exists(path);
