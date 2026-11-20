@@ -10,7 +10,7 @@ keywords: "Godot WebGPU, Godot Forward+ browser, Godot C# WebGPU"
 WebGPU is opt-in. It supports the Forward+ and Mobile renderers on these targets:
 
 - Windows, Linux and macOS, in single precision
-- single-precision browser runtimes, including an opt-in threaded source build
+- single-precision browser runtimes, including supported threaded packages
 
 2dog does not change your existing renderer defaults. If you use WebGPU with
 Android or double precision, you get a clear error.
@@ -52,10 +52,11 @@ run. Dawn also caches device-specific pipelines on the player's machine.
 
 ## Browser requirements
 
-Single-precision browser packages on the 4.8 line include WebGPU and WebGL in
-both threading modes. Set `WasmEnableThreads=true` to select the threaded
-payload. Earlier threaded packages, the 4.7 threaded runtime and double-precision
-runtimes use WebGL. WebGPU requires a secure context and browser support.
+Single-precision browser packages include WebGPU and WebGL. For threaded WebGPU,
+use a 4.8 native release after `4.8.0.207` and set `WasmEnableThreads=true`.
+The stock `4.8.0.207` package includes WebGPU only in its single-threaded
+payload. The 4.7 threaded runtime and double-precision runtimes use WebGL.
+WebGPU requires a secure context and browser support.
 
 The project's `renderer/rendering_method.web` selects WebGPU for Forward+ and
 Mobile, or OpenGL/WebGL for Compatibility (the default). See
@@ -166,8 +167,14 @@ dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true
 node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000
 ```
 
-To build the native payload from source, run
-`uv run build-godot.py --platform web --target template_release --web-threads yes`.
+For a source build, select the generated payload explicitly when publishing.
+Use its absolute path with a trailing slash.
+
+```bash
+uv run build-godot.py --platform web --target template_release --web-threads yes
+dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true \
+  -p:TwoDogWebNativeDir="$PWD/godot/bin/web-threads/template_release/"
+```
 
 The .NET worker that runs Godot owns the WebGPU device and queue. The shell
 transfers the game canvas to that worker after its device request succeeds.

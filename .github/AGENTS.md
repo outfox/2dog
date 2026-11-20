@@ -45,7 +45,7 @@ These rules add to the root `AGENTS.md` for `.github/workflows/` and `.github/sc
 - `web-smoke` runs Web, WebXR, threaded Web and Blazor in separate flavor/precision/AOT matrix cells;
   its single `checks` cell runs MSBuild contracts and browser diagnostics. Portable showcase cells select
   Compatibility before publishing. The WebGPU image tests use the shipped single-precision packages,
-  including the threaded payload on supported lines. Keep Blazor WebGPU restart coverage enabled independently.
+  including the threaded payload on supported lines. Keep single-precision Blazor WebGPU restart coverage independent.
   Pin Chrome through `actions/setup-chrome` and use its `CHROME` environment variable in every browser probe.
   The image's Chrome 151 intermittently crashes threaded Wasm; Chrome 157 passed 64 identical Blacksmith probes.
   `check-natives` warms the versioned Linux browser disk; consumers mount it read-only. macOS uses its tool cache.

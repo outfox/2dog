@@ -229,7 +229,8 @@ def parse_arguments(argv=None):
     )
     parser.add_argument("--threads", dest="threads", action="store_const", const="yes", help=argparse.SUPPRESS)
     parser.add_argument("--webgpu", choices=["auto", "yes", "no"], default="auto",
-                        help="Include WebGPU (auto: supported single-precision desktop and web builds, including threaded web)")
+                        help="Include WebGPU (auto: supported single-precision desktop and web builds; "
+                             "threaded web needs a fork with a worker-owned device; yes: require support)")
     parser.add_argument("--webgpu-native-path", default="",
                         help="Use an existing Dawn boundary SDK instead of preparing the pinned SDK")
     parser.add_argument(
