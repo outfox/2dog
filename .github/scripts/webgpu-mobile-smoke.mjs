@@ -61,6 +61,9 @@ async function waitFor(expression) {
 try {
     await send('Runtime.enable');
     await send('Page.enable');
+    if (query.get('threads') === '1') {
+        await send('Emulation.setDeviceMetricsOverride', { width: 512, height: 512, deviceScaleFactor: 1, mobile: false });
+    }
     // A new target can open behind other tabs (Edge first-run pages), where requestAnimationFrame never runs.
     await send('Page.bringToFront');
     await send('Page.navigate', { url });
@@ -72,6 +75,12 @@ try {
         if (phase === 0) {
             const actual = await evaluate('document.documentElement.dataset.renderingMethod');
             if (actual !== expected) throw new Error(`WebGPU ${requested} ran ${actual}, expected ${expected}.`);
+            if (query.has('threads') && await evaluate('document.documentElement.dataset.threads') !== query.get('threads'))
+                throw new Error('The browser runtime does not match the requested thread mode.');
+            if (query.get('threads') === '1') {
+                await send('Emulation.setDeviceMetricsOverride', { width: 640, height: 480, deviceScaleFactor: 1, mobile: false });
+                await waitFor("document.querySelector('canvas').width === 640 && document.querySelector('canvas').height === 480");
+            }
             console.log('BROWSER_RENDERING_METHOD', actual);
         }
         await delay(200);
@@ -140,6 +149,9 @@ try {
     }
     await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='${phases}'`);
     await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
+    if (query.get('threads') === '1' && !await evaluate('window.workerIndexedDraw === true')) {
+        throw new Error('Threaded WebGPU never encoded a vertex binding and indexed draw in the same rendering worker task.');
+    }
     if (errors.length) throw new Error(errors.join('\n'));
     console.log(forwardPlus ? 'BROWSER_FORWARD_PLUS_CLUSTERED_LIGHTING_PASSED' : 'BROWSER_MOBILE_LIGHT_LIST_PASSED', samples);
 } finally {

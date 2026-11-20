@@ -17,9 +17,9 @@ class WebGpuBuildTests(unittest.TestCase):
             ("linuxbsd", "single", False, True),
             ("macos", "single", False, True),
             ("web", "single", False, True),
-            ("web", "single", True, False),
             ("windows", "double", False, False),
             ("web", "double", False, False),
+            ("web", "double", True, False),
             ("android", "single", False, False),
         ):
             with self.subTest(platform=platform, precision=precision, threads=threads):
@@ -31,6 +31,11 @@ class WebGpuBuildTests(unittest.TestCase):
                     args.webgpu = "yes"
                     with self.assertRaises(ValueError):
                         webgpu.enabled(args, platform)
+
+    def test_threaded_web_prototype_requires_explicit_opt_in(self):
+        for value, expected in (("auto", False), ("no", False), ("yes", True)):
+            args = argparse.Namespace(webgpu=value, precision="single", threads=True)
+            self.assertEqual(webgpu.enabled(args, "web"), expected)
 
     def test_download_rejects_wrong_checksum_and_replaces_a_bad_cache(self):
         with tempfile.TemporaryDirectory() as directory:

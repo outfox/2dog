@@ -22,6 +22,7 @@ internal static class Program
             throw new Exception("WebGPU Forward+ or Mobile was not selected.");
         // The page script compares this with the method its adapter is expected to run.
         JavaScriptBridge.Eval($"document.documentElement.dataset.renderingMethod='{method}'");
+        JavaScriptBridge.Eval($"document.documentElement.dataset.threads='{(OS.HasFeature("threads") ? 1 : 0)}'");
         bool forwardPlus = method == "forward_plus";
         // Forward+ phases: four light-list samples, volumetric fog, SDFGI and MSAA.
         int phaseCount = forwardPlus ? 7 : LightingScene.StageCount;
