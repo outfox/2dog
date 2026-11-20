@@ -171,7 +171,7 @@ For a source build, select the generated payload explicitly when publishing.
 Use its absolute path with a trailing slash.
 
 ```bash
-uv run build-godot.py --platform web --target template_release --web-threads yes
+uv run build-godot.py --platform web --target template_release --web-threads yes --webgpu yes
 dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true \
   -p:TwoDogWebNativeDir="$PWD/godot/bin/web-threads/template_release/"
 ```
