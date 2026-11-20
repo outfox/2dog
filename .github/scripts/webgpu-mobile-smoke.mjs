@@ -149,8 +149,8 @@ try {
     }
     await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='${phases}'`);
     await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
-    if (query.get('threads') === '1' && !await evaluate('window.workerIndexedDraw === true')) {
-        throw new Error('Threaded WebGPU never encoded a vertex binding and indexed draw in the same rendering worker task.');
+    if (query.get('threads') === '1') {
+        await waitFor('window.workerIndexedDraw === true');
     }
     if (errors.length) throw new Error(errors.join('\n'));
     console.log(forwardPlus ? 'BROWSER_FORWARD_PLUS_CLUSTERED_LIGHTING_PASSED' : 'BROWSER_MOBILE_LIGHT_LIST_PASSED', samples);
