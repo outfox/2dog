@@ -483,7 +483,8 @@ jobs:
             --dev-build no \
             --debug-symbols no \
             --scu-build yes \
-            --cache-path godot/.scons_cache ${{ matrix.build_args }}
+            --cache-path godot/.scons_cache ${{ matrix.build_args }} \
+            ${{ matrix.flavor == '-threads' && inputs.precision == 'single' && needs.preflight.outputs.line != '4.7' && '--webgpu yes' || '' }}
 
       - name: Test the real WebGPU shader compiler
         if: matrix.platform == 'web' && matrix.target == 'template_debug' && inputs.precision == 'single' && matrix.flavor != '-threads'

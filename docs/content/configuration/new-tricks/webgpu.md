@@ -52,9 +52,10 @@ run. Dawn also caches device-specific pipelines on the player's machine.
 
 ## Browser requirements
 
-Single-precision, single-threaded browser packages include WebGPU and WebGL.
-WebGPU requires a secure context and a browser that supports it. Packaged threaded
-runtimes and double-precision payloads reject explicit WebGPU requests before device creation.
+Single-precision browser packages on the 4.8 line include WebGPU and WebGL in
+both threading modes. Set `WasmEnableThreads=true` to select the threaded
+payload. Earlier threaded packages, the 4.7 threaded runtime and double-precision
+runtimes use WebGL. WebGPU requires a secure context and browser support.
 
 The project's `renderer/rendering_method.web` selects WebGPU for Forward+ and
 Mobile, or OpenGL/WebGL for Compatibility (the default). See
@@ -156,17 +157,17 @@ Browser packages supply the Emscripten port, link flags and a writable cache.
 Override that cache with
 [`TwoDogWebGpuCachePath`](/configuration/web#properties) when needed.
 
-### Threaded browser prototype
+### Threaded browser builds
 
-Web builds default to `--web-threads no`. To enable both threads and WebGPU,
-build the single-precision release payload from the repository root. Use its
-absolute directory, including the trailing slash, when publishing a threaded host.
+Set `WasmEnableThreads=true` when publishing with a threaded WebGPU package.
 
 ```bash
-uv run build-godot.py --platform web --target template_release --web-threads yes --webgpu yes
-dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true -p:TwoDogWebNativeDir=/absolute/path/to/2dog/godot/bin/web-threads/template_release/
+dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true
 node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000
 ```
+
+To build the native payload from source, run
+`uv run build-godot.py --platform web --target template_release --web-threads yes`.
 
 The .NET worker that runs Godot owns the WebGPU device and queue. The shell
 transfers the game canvas to that worker after its device request succeeds.
