@@ -10,7 +10,7 @@ keywords: "Godot WebGPU, Godot Forward+ browser, Godot C# WebGPU"
 WebGPU is opt-in. It supports the Forward+ and Mobile renderers on these targets:
 
 - Windows, Linux and macOS, in single precision
-- single-precision browser runtimes, including an opt-in threaded source build
+- single-precision browser runtimes, including supported threaded packages
 
 2dog does not change your existing renderer defaults. If you use WebGPU with
 Android or double precision, you get a clear error.
@@ -52,9 +52,11 @@ run. Dawn also caches device-specific pipelines on the player's machine.
 
 ## Browser requirements
 
-Single-precision, single-threaded browser packages include WebGPU and WebGL.
-WebGPU requires a secure context and a browser that supports it. Packaged threaded
-runtimes and double-precision payloads reject explicit WebGPU requests before device creation.
+Single-precision browser packages include WebGPU and WebGL. For threaded WebGPU,
+use a 4.8 native release after `4.8.0.207` and set `WasmEnableThreads=true`.
+The stock `4.8.0.207` package includes WebGPU only in its single-threaded
+payload. The 4.7 threaded runtime and double-precision runtimes use WebGL.
+WebGPU requires a secure context and browser support.
 
 The project's `renderer/rendering_method.web` selects WebGPU for Forward+ and
 Mobile, or OpenGL/WebGL for Compatibility (the default). See
@@ -156,16 +158,22 @@ Browser packages supply the Emscripten port, link flags and a writable cache.
 Override that cache with
 [`TwoDogWebGpuCachePath`](/configuration/web#properties) when needed.
 
-### Threaded browser prototype
+### Threaded browser builds
 
-Web builds default to `--web-threads no`. To enable both threads and WebGPU,
-build the single-precision release payload from the repository root. Use its
-absolute directory, including the trailing slash, when publishing a threaded host.
+Set `WasmEnableThreads=true` when publishing with a threaded WebGPU package.
+
+```bash
+dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true
+node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000
+```
+
+For a source build, select the generated payload explicitly when publishing.
+Use its absolute path with a trailing slash.
 
 ```bash
 uv run build-godot.py --platform web --target template_release --web-threads yes --webgpu yes
-dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true -p:TwoDogWebNativeDir=/absolute/path/to/2dog/godot/bin/web-threads/template_release/
-node .github/scripts/serve-isolated.mjs tests/webgpu-browser-smoke/AppBundle 8000
+dotnet publish tests/webgpu-browser-smoke -c Release -p:WasmEnableThreads=true \
+  -p:TwoDogWebNativeDir="$PWD/godot/bin/web-threads/template_release/"
 ```
 
 The .NET worker that runs Godot owns the WebGPU device and queue. The shell

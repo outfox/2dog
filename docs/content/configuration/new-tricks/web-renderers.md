@@ -39,8 +39,8 @@ The setting sticks unless you explicitly clear it in Project Settings.
 
 During bundling, Forward+ and Mobile select WebGPU when the native payload
 includes it; other settings select WebGL. Use a single-precision browser
-payload. See [WebGPU](./webgpu) for packaged runtime support, the threaded
-source-build prototype, host overrides, fallback behavior, and adapter limits.
+payload. See [WebGPU](./webgpu) for threaded package support, host overrides,
+fallback behavior, and adapter limits.
 
 ## Bake shaders before exporting
 
