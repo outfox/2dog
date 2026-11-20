@@ -6,27 +6,27 @@
 <style>body{background:#111;color:white;font:16px sans-serif}canvas{width:512px;height:512px;image-rendering:pixelated}</style>
 <p id="status">Starting WebGPU Mobile…</p>
 <canvas id="canvas" width="128" height="128"></canvas>
+<script src="webgpu-limits.js"></script>
 <script src="godot.js"></script>
 <script>
 const options = new URLSearchParams(location.search);
-if (options.has('limited-compute') || options.has('base-formats') || options.has('limited-bindings')) {
-    const requestDevice = GPUAdapter.prototype.requestDevice;
-    GPUAdapter.prototype.requestDevice = function (descriptor = {}) {
-        return requestDevice.call(this, {
-            ...descriptor,
-            requiredLimits: {
-                ...descriptor.requiredLimits,
-                ...(options.has('limited-compute') ? { maxComputeInvocationsPerWorkgroup: 256 } : {}),
-                ...(options.has('limited-bindings') ? { maxSampledTexturesPerShaderStage: 16, maxInterStageShaderVariables: 16 } : {}),
-            },
-            requiredFeatures: [...(descriptor.requiredFeatures || [])].filter(feature =>
-                !options.has('base-formats') || !['texture-formats-tier1', 'texture-formats-tier2', 'depth32float-stencil8'].includes(feature)),
-        });
-    };
+const gameCanvas = document.querySelector('canvas');
+if (options.get('threads') === '1') {
+    gameCanvas.id = options.has('limited-compute') ? 'pinball:table.1' : '';
 }
+restrictWebGPUAdapter(options);
+const post = Worker.prototype.postMessage;
+Worker.prototype.postMessage = function (message, ...args) {
+    if (message?.godotWebGPU) {
+        const { port1, port2 } = new MessageChannel();
+        port1.onmessage = () => { window.workerIndexedDraw = true; port1.close(); };
+        post.call(this, { smokeQuery: location.search, port: port2 }, [port2]);
+    }
+    return post.call(this, message, ...args);
+};
 const engine = new Engine({
     executable: 'godot',
-    canvas: document.getElementById('canvas'),
+    canvas: gameCanvas,
     renderingDriver: 'webgpu',
     args: ['--rendering-driver', 'webgpu', '--rendering-method', options.get('method') || 'mobile'],
     onPrint: text => { console.log(text); document.getElementById('status').textContent = text; },
