@@ -1,0 +1,52 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Pipeline replay</title>
+<script type="module">
+// Replays captured GPUDevice create calls. ?mode=sync|async selects how the pipelines are created.
+const mode = new URLSearchParams(location.search).get('mode') ?? 'sync';
+const cap = await (await fetch('capture.json')).json();
+const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
+const requiredLimits = {};
+for (const k in adapter.limits) requiredLimits[k] = adapter.limits[k];
+const device = await adapter.requestDevice({ requiredFeatures: [...adapter.features], requiredLimits });
+let errors = 0, firstError = null;
+device.addEventListener('uncapturederror', e => { errors++; firstError ??= e.error.message; });
+
+const objs = {};
+const revive = desc => JSON.parse(desc, (k, v) => v && v.$ref ? objs[v.$ref] : v);
+const isPipeline = o => o.op === 'createRenderPipeline' || o.op === 'createComputePipeline';
+
+// Only build what the pipelines reference, so unused shader variants don't dominate the setup time.
+const needed = new Set(), byId = new Map(cap.map(o => [o.id, o]));
+const mark = o => { for (const m of o.desc.matchAll(/"\$ref":(\d+)/g)) if (!needed.has(+m[1])) { needed.add(+m[1]); mark(byId.get(+m[1])); } };
+cap.filter(isPipeline).forEach(mark);
+
+let t = performance.now();
+for (const o of cap) if (!isPipeline(o) && needed.has(o.id)) objs[o.id] = device[o.op](revive(o.desc));
+await device.queue.onSubmittedWorkDone();
+const setupMs = performance.now() - t;
+
+const only = new URLSearchParams(location.search).get('only') ?? '';
+const pipes = cap.filter(o => isPipeline(o) && o.op.includes(only));
+t = performance.now();
+if (mode === 'async') {
+  await Promise.all(pipes.map(o => device[o.op + 'Async'](revive(o.desc)).catch(e => { errors++; firstError ??= e.message; })));
+} else if (mode.startsWith('prewarm') || mode === 'warmsync') {
+  const all = Promise.all(pipes.map(o => device[o.op + 'Async'](revive(o.desc))));
+  if (mode === 'warmsync') { await all; t = performance.now(); }
+  const relabel = new URLSearchParams(location.search).has('relabel');
+  pipes.forEach((o, i) => { const d = revive(o.desc); if (relabel) d.label = 'relabel' + i; device[o.op](d); });
+  await device.queue.onSubmittedWorkDone();
+  var kept = await all;
+} else {
+  for (const o of pipes) device[o.op](revive(o.desc));
+  await device.queue.onSubmittedWorkDone();
+}
+const pipelineMs = performance.now() - t;
+console.log('REPLAY ' + JSON.stringify({
+  mode, pipelines: pipes.length, render: pipes.filter(o => o.op === 'createRenderPipeline').length,
+  modules: cap.filter(o => o.op === 'createShaderModule' && needed.has(o.id)).length, setupMs: Math.round(setupMs),
+  pipelineMs: Math.round(pipelineMs), cores: navigator.hardwareConcurrency, errors, firstError,
+  adapter: adapter.info?.description || adapter.info?.vendor,
+}));
+</script>
