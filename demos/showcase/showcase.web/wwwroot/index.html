@@ -334,15 +334,22 @@
                     const started = twodogGz
                         ? startWithGzPack(fileSizes, makeEngine)
                         : makeEngine('').startGame({});
-                    // Engines that report frames keep the splash over the first four, which still compile shaders.
+                    // Engines that report frames keep the splash over the first four complete frames.
                     if (Engine.reportsFrames) {
-                        window.addEventListener('2dog:frame', (event) => {
+                        const onFrame = (event) => {
                             if (event.detail === 1) reportTimings();
-                            if (event.detail > 4) setStatusMode('hidden');
+                            if (event.detail > 4) {
+                                window.removeEventListener('2dog:frame', onFrame);
+                                setStatusMode('hidden');
+                            }
+                        };
+                        window.addEventListener('2dog:frame', onFrame);
+                        return started.then(null, (err) => {
+                            window.removeEventListener('2dog:frame', onFrame);
+                            displayFailureNotice(err);
                         });
                     }
                     return started.then(() => {
-                        if (Engine.reportsFrames) return;
                         reportTimings();
                         setStatusMode('hidden');
                     }, displayFailureNotice);
