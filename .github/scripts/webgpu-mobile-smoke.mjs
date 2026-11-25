@@ -72,6 +72,8 @@ try {
     for (let phase = 0; phase < phases; phase++) {
         if (phase) await evaluate(`document.documentElement.dataset.requestPhase='${phase}'`);
         await waitFor(`document.documentElement?.dataset.readyPhase==='${phase}'`);
+        // Like the templates' splash, wait out boot until shaders are prewarmed and frames complete.
+        if (phase === 0) await waitFor('!Engine.reportsFrames || Number(document.documentElement.dataset.frames) > 4');
         if (phase === 0) {
             const actual = await evaluate('document.documentElement.dataset.renderingMethod');
             if (actual !== expected) throw new Error(`WebGPU ${requested} ran ${actual}, expected ${expected}.`);
@@ -83,69 +85,19 @@ try {
             }
             console.log('BROWSER_RENDERING_METHOD', actual);
         }
-        await delay(200);
-        const clip = await evaluate(`(() => {
-            const r = document.querySelector('canvas').getBoundingClientRect();
-            return { x: r.x, y: r.y, width: r.width, height: r.height, scale: 1 };
-        })()`);
-        const shot = await send('Page.captureScreenshot', { format: 'png', clip });
-        if (output) await writeFile(`${output}/phase-${phase}.png`, Buffer.from(shot.data, 'base64'));
-        const pixel = await evaluate(`(async () => {
-            const blob = await (await fetch('data:image/png;base64,${shot.data}')).blob();
-            const bitmap = await createImageBitmap(blob);
-            const canvas = document.createElement('canvas');
-            canvas.width = bitmap.width;
-            canvas.height = bitmap.height;
-            const context = canvas.getContext('2d');
-            context.drawImage(bitmap, 0, 0);
-            return [...context.getImageData(${forwardPlus && phase === 4 ? '8, 8' : 'canvas.width / 2, canvas.height / 2'}, 1, 1).data];
-        })()`);
+        // Pipelines new after boot (lightmaps, point/depth materials) compile in the background with their draws
+        // skipped until ready, and no event reports that: poll until the target appears.
+        const settle = Date.now() + 30000;
+        let pixel, verdict;
+        do {
+            await delay(200);
+            pixel = await capture(phase);
+            verdict = check(phase, pixel);
+        } while (verdict?.error && Date.now() < settle);
         console.log(forwardPlus ? 'BROWSER_FORWARD_PLUS_PIXEL' : 'BROWSER_MOBILE_PIXEL', phase, pixel);
-        if (forwardPlus && phase === 4) {
-            if (pixel[0] < 0.5 * 255 || pixel[0] <= pixel[2] + 0.2 * 255)
-                throw new Error(`Volumetric fog did not produce the expected red background: ${pixel}`);
-            console.log('BROWSER_VOLUMETRIC_FOG_PASSED');
-        } else if (forwardPlus && phase === 5) {
-            if (pixel[2] < 0.025 * 255 || pixel[2] <= pixel[0] + 0.01 * 255)
-                throw new Error(`SDFGI did not transfer blue emission to the unlit target: ${pixel}`);
-            console.log('BROWSER_SDFGI_INDIRECT_LIGHT_PASSED');
-        } else if (phase === 4) {
-            if (pixel[0] < 0.5 * 255 || pixel[0] <= pixel[2] + 0.2 * 255)
-                throw new Error(`Depth fog did not produce the expected red target: ${pixel}`);
-            console.log('BROWSER_DEPTH_FOG_PASSED');
-        } else if (phase === 5) {
-            if (pixel[2] < 0.025 * 255 || pixel[2] <= pixel[0] + 0.01 * 255)
-                throw new Error(`Ambient light did not produce the expected blue target: ${pixel}`);
-            console.log('BROWSER_AMBIENT_LIGHT_PASSED');
-        } else if (phase === 6) {
-            if (pixel[0] < 0.5 * 255) throw new Error(`MSAA lost the lit target: ${pixel}`);
-            console.log('BROWSER_MSAA_PIXELS_PASSED');
-        } else if (phase === 7) {
-            if (pixel[0] < 0.5 * 255 || pixel[2] < 0.5 * 255 || pixel[1] > 0.1 * 255)
-                throw new Error(`User varyings did not produce a magenta target: ${pixel}`);
-            console.log('BROWSER_USER_VARYINGS_PASSED');
-        } else if (phase === 8) {
-            if (pixel[1] < 0.2 * 255 || pixel[1] <= pixel[0] + 0.15 * 255)
-                throw new Error(`The textured lightmapped material did not produce a green target: ${pixel}`);
-            console.log('BROWSER_LIGHTMAP_BINDING_BUDGET_PASSED');
-        } else if (phase === 9) {
-            if (pixel[0] < 0.5 * 255 || pixel[1] < 0.5 * 255 || pixel[2] > 0.1 * 255)
-                throw new Error(`Point coordinates did not produce a yellow target: ${pixel}`);
-            console.log('BROWSER_POINT_COORDINATES_PASSED');
-        } else if (phase === 10) {
-            if (pixel[0] < 0.1 * 255) throw new Error(`Depth texture returned the zero fallback: ${pixel}`);
-            console.log('BROWSER_DEPTH_TEXTURE_PASSED');
-        } else if (phase === 11) {
-            if (pixel[0] < 0.8 * 255 || pixel[1] < 0.3 * 255 || pixel[1] > 0.8 * 255 || pixel[2] > 0.1 * 255)
-                throw new Error(`DXT5 RA_AS_RG lost its channels: ${pixel}`);
-            console.log('BROWSER_DXT5_RA_AS_RG_PASSED');
-        } else if (phase === 12) {
-            if (pixel[1] < 0.3 * 255 || pixel[0] > 0.2 * 255 || pixel[2] > 0.1 * 255)
-                throw new Error(`ETC2 RA_AS_RG lost its channels: ${pixel}`);
-            console.log('BROWSER_ETC2_RA_AS_RG_PASSED');
-        } else {
-            samples.push((pixel[0] + pixel[1] + pixel[2]) / (3 * 255));
-        }
+        if (verdict?.error) throw new Error(verdict.error);
+        if (verdict) console.log(verdict.passed);
+        else samples.push((pixel[0] + pixel[1] + pixel[2]) / (3 * 255));
     }
     await evaluate(`document.documentElement.dataset.samples='${samples.join(',')}';document.documentElement.dataset.requestPhase='${phases}'`);
     await waitFor(`document.documentElement?.dataset.twodogSmoke==='passed'`);
@@ -157,4 +109,59 @@ try {
 } finally {
     socket.close();
     await fetch(`${cdp}/json/close/${target.id}`);
+}
+
+async function capture(phase) {
+    const clip = await evaluate(`(() => {
+        const r = document.querySelector('canvas').getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height, scale: 1 };
+    })()`);
+    const shot = await send('Page.captureScreenshot', { format: 'png', clip });
+    if (output) await writeFile(`${output}/phase-${phase}.png`, Buffer.from(shot.data, 'base64'));
+    return await evaluate(`(async () => {
+        const blob = await (await fetch('data:image/png;base64,${shot.data}')).blob();
+        const bitmap = await createImageBitmap(blob);
+        const canvas = document.createElement('canvas');
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(bitmap, 0, 0);
+        return [...context.getImageData(${forwardPlus && phase === 4 ? '8, 8' : 'canvas.width / 2, canvas.height / 2'}, 1, 1).data];
+    })()`);
+}
+
+// Returns undefined for light-list samples, else { passed } or { error }.
+function check(phase, pixel) {
+    const expect = (ok, passed, error) => ok ? { passed } : { error: `${error}: ${pixel}` };
+    if (forwardPlus && phase === 4)
+        return expect(pixel[0] >= 0.5 * 255 && pixel[0] > pixel[2] + 0.2 * 255, 'BROWSER_VOLUMETRIC_FOG_PASSED',
+            'Volumetric fog did not produce the expected red background');
+    if (forwardPlus && phase === 5)
+        return expect(pixel[2] >= 0.025 * 255 && pixel[2] > pixel[0] + 0.01 * 255, 'BROWSER_SDFGI_INDIRECT_LIGHT_PASSED',
+            'SDFGI did not transfer blue emission to the unlit target');
+    if (phase === 4)
+        return expect(pixel[0] >= 0.5 * 255 && pixel[0] > pixel[2] + 0.2 * 255, 'BROWSER_DEPTH_FOG_PASSED',
+            'Depth fog did not produce the expected red target');
+    if (phase === 5)
+        return expect(pixel[2] >= 0.025 * 255 && pixel[2] > pixel[0] + 0.01 * 255, 'BROWSER_AMBIENT_LIGHT_PASSED',
+            'Ambient light did not produce the expected blue target');
+    if (phase === 6)
+        return expect(pixel[0] >= 0.5 * 255, 'BROWSER_MSAA_PIXELS_PASSED', 'MSAA lost the lit target');
+    if (phase === 7)
+        return expect(pixel[0] >= 0.5 * 255 && pixel[2] >= 0.5 * 255 && pixel[1] <= 0.1 * 255,
+            'BROWSER_USER_VARYINGS_PASSED', 'User varyings did not produce a magenta target');
+    if (phase === 8)
+        return expect(pixel[1] >= 0.2 * 255 && pixel[1] > pixel[0] + 0.15 * 255, 'BROWSER_LIGHTMAP_BINDING_BUDGET_PASSED',
+            'The textured lightmapped material did not produce a green target');
+    if (phase === 9)
+        return expect(pixel[0] >= 0.5 * 255 && pixel[1] >= 0.5 * 255 && pixel[2] <= 0.1 * 255,
+            'BROWSER_POINT_COORDINATES_PASSED', 'Point coordinates did not produce a yellow target');
+    if (phase === 10)
+        return expect(pixel[0] >= 0.1 * 255, 'BROWSER_DEPTH_TEXTURE_PASSED', 'Depth texture returned the zero fallback');
+    if (phase === 11)
+        return expect(pixel[0] >= 0.8 * 255 && pixel[1] >= 0.3 * 255 && pixel[1] <= 0.8 * 255 && pixel[2] <= 0.1 * 255,
+            'BROWSER_DXT5_RA_AS_RG_PASSED', 'DXT5 RA_AS_RG lost its channels');
+    if (phase === 12)
+        return expect(pixel[1] >= 0.3 * 255 && pixel[0] <= 0.2 * 255 && pixel[2] <= 0.1 * 255,
+            'BROWSER_ETC2_RA_AS_RG_PASSED', 'ETC2 RA_AS_RG lost its channels');
 }

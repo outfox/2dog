@@ -32,6 +32,8 @@ const engine = new Engine({
     onPrint: text => { console.log(text); document.getElementById('status').textContent = text; },
     onPrintError: text => { console.error(text); document.getElementById('status').textContent = text; },
 });
+// Counts complete boot frames (no skipped draws), the signal the templates hold their splash for.
+addEventListener('2dog:frame', event => { document.documentElement.dataset.frames = event.detail; });
 engine.startGame().catch(error => { console.error(error); document.documentElement.dataset.twodogSmoke = 'failed'; });
 </script>
 </html>
