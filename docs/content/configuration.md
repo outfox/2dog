@@ -85,6 +85,7 @@ These properties apply to the generic, Avalonia, WinForms and WinUI hosts:
 | Property                    | Default                   | Purpose                                                                                                         |
 |-----------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------|
 | `TwoDogExportPack`          | `true`                    | Export game content to a `.pck` next to the executable; `false` skips export, so supply game content separately |
+| `TwoDogBakeShaders` | Unset on desktop | Rendering methods to bake for the target driver. Use `forward_plus;mobile`, either method alone, or `none`. Enable `shader_baker/enabled` in the preset. |
 | `TwoDogDesktopExportPreset` | RID-mapped                | Preset in `export_presets.cfg`: `Windows Desktop`, `Linux`, or `macOS`, according to the publish target         |
 | `TwoDogEmbedPack`           | `false`                   | Ship the `.pck` [inside the app](#single-file): in the executable, or a `.app` bundle on macOS                  |
 | `PublishSelfContained`      | `true` in generated hosts | Bundle the .NET runtime; `false` requires an installed runtime                                                  |

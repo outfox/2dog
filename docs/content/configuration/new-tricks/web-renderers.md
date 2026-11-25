@@ -62,8 +62,15 @@ shader_baker/enabled=true
 
 Publishing then runs the headless export with a window-less rendering device
 (Vulkan, or Metal on macOS), so it needs a GPU or a software adapter such as
-lavapipe, but no display. Baked shaders make the pack larger, by about 18 MB
-compressed for a small Forward+ project.
+lavapipe, but no display. The web SDK includes both Forward+ and Mobile shaders so an adapter that falls
+back to Mobile can use the same pack. Set `<TwoDogBakeShaders>forward_plus</TwoDogBakeShaders>`
+to include just Forward+, or `none` to omit shader caches. Compatibility compiles
+on the device. Publish logs the bytes added by each renderer after deduplication.
+
+The same property opts desktop, Android and iOS packs into shader baking.
+Enable the shader baker in the target preset. Its target driver determines the
+cache format. Bake Metal on macOS and Direct3D 12 on Windows. Cross-publishing
+from a host without the target baker leaves runtime compilation available.
 
 ## Choosing between Forward+ and Mobile
 

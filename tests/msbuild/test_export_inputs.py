@@ -79,6 +79,19 @@ class ExportInputsTests(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         return (root / "exports.log").read_text().splitlines()
 
+    def test_webgpu_default_includes_the_mobile_fallback(self):
+        root, game, project, target = self.fixture("web")
+        (game / "project.godot").write_text('[rendering]\nrenderer/rendering_method.web="forward_plus"\n')
+        (game / "export_presets.cfg").write_text('[preset.0]\nname="Web"\n[preset.0.options]\nshader_baker/enabled=true\n')
+        for overrides, expected in [([], "forward_plus,mobile"), (["-p:TwoDogBakeShaders=mobile"], "mobile")]:
+            result = subprocess.run(
+                ["dotnet", "msbuild", str(project), "-nologo", f"-t:{target}", "-getProperty:_TwoDogShaderBakeArg",
+                 "-p:_TwoDogWebGpuPort=fixture", f"-p:TwoDogImportHelperPath={project}", *overrides],
+                cwd=root, capture_output=True, text=True, timeout=60)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertEqual(result.stdout.strip().replace('"', ''), f"--bake-shaders {expected}")
+        self.assertEqual(2, len((root / "exports.log").read_text().splitlines()))
+
     def test_resource_deletions_and_old_additions_invalidate_every_export(self):
         for platform in ("desktop", "web", "android"):
             with self.subTest(platform=platform):

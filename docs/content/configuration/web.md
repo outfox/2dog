@@ -24,6 +24,7 @@ See [global settings](/configuration#properties) for the game directory and impo
 | `TwoDogWebStripMaps`                | `true` with the release engine                     | Remove JavaScript source maps                                                                                    |
 | `TwoDogWebPrecompress`              | `true` with the dotnet CLI                         | Write Brotli (`.br`) and gzip (`.gz`) copies of large bundle files                                               |
 | `TwoDogWebPrecompressLevel`         | `Optimal`                                          | `Optimal` (balance speed and size), `Fastest`, `SmallestSize` (slower), or `NoCompression`; case-insensitive     |
+| `TwoDogBakeShaders` | `forward_plus;mobile` for a baking-enabled WebGPU preset | Rendering methods to bake. Use a single method to reduce pack size, or `none` to disable baking. |
 | `TwoDogWebPrecompressFormats`       | `br;gz`                                            | Compressed copies to write: `br`, `gz`, or `br;gz`                                                               |
 | `TwoDogWebPrecompressKeepOriginals` | `true`                                             | `false` removes the uncompressed engine, pack and .NET binaries; needs `gz` ([upload limits](#web-hosting-with-upload-limits)) |
 | `TwoDogWebSideModuleExports`        | `true`                                             | Export native symbols used by GDExtensions                                                                       |

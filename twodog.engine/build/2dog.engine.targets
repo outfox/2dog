@@ -284,11 +284,15 @@
             Condition="'$(TwoDogGodotProjectFullPath)' != ''">
         <!-- File timestamps alone cannot detect removed resources or added files with old timestamps. -->
         <PropertyGroup>
-            <_TwoDogExportInputsStamp>$(BaseIntermediateOutputPath)twodog-export-inputs.list</_TwoDogExportInputsStamp>
+            <_TwoDogBakeList>$(TwoDogBakeShaders.Replace(';', ','))</_TwoDogBakeList>
+            <_TwoDogShaderBakeArg Condition="'$(_TwoDogBakeList)' != ''">--bake-shaders &quot;$(_TwoDogBakeList)&quot;</_TwoDogShaderBakeArg>
+            <_TwoDogExportInputsStamp>$(IntermediateOutputPath)twodog-export-inputs.list</_TwoDogExportInputsStamp>
         </PropertyGroup>
-        <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+        <MakeDir Directories="$(IntermediateOutputPath)" />
+        <Error Condition="'$(_TwoDogBakeList)' != '' And !$([System.Text.RegularExpressions.Regex]::IsMatch('$(_TwoDogBakeList)', '^\s*(none|(forward_plus|mobile|gl_compatibility)(\s*,\s*(forward_plus|mobile|gl_compatibility))*)\s*$'))" Text="TwoDogBakeShaders accepts forward_plus, mobile, gl_compatibility, or none on its own." />
+        <Error Condition="'$(_TwoDogShaderBakeArg)' != '' And !Exists('$(TwoDogImportHelperPath)')" Text="TwoDogBakeShaders requires the 2dog import helper." />
         <WriteLinesToFile File="$(_TwoDogExportInputsStamp)"
-                          Lines="@(TwoDogDesktopExportInputs);@(TwoDogAndroidExportInputs);@(TwoDogWebExportInputs)"
+                          Lines="shaders=$(_TwoDogBakeList);@(TwoDogDesktopExportInputs);@(TwoDogAndroidExportInputs);@(TwoDogIosExportInputs);@(TwoDogWebExportInputs)"
                           Overwrite="true" WriteOnlyWhenDifferent="true" />
     </Target>
 
@@ -447,7 +451,7 @@
 
         <!-- An external editor still runs through the helper when available, sharing its export cache lock. -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; --output &quot;$(_TwoDogDesktopPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; --output &quot;$(_TwoDogDesktopPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) $(_TwoDogShaderBakeArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
@@ -457,7 +461,7 @@
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; --output &quot;$(_TwoDogDesktopPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogDesktopExportPreset)&quot; --output &quot;$(_TwoDogDesktopPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) $(_TwoDogShaderBakeArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
@@ -590,7 +594,7 @@
 
         <!-- (1) explicitly configured external editor, through the helper when available -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; --output &quot;$(_TwoDogAndroidPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; --output &quot;$(_TwoDogAndroidPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) $(_TwoDogShaderBakeArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
@@ -600,7 +604,7 @@
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; --output &quot;$(_TwoDogAndroidPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogAndroidExportPreset)&quot; --output &quot;$(_TwoDogAndroidPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) $(_TwoDogShaderBakeArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 
@@ -640,7 +644,7 @@
     <Target Name="TwoDogExportIosPack"
             BeforeTargets="TwoDogAddIosPack"
             DependsOnTargets="TwoDogImportGodotProject;TwoDogPrepareExport;_TwoDogResolveIosExportPath"
-            Inputs="@(TwoDogIosExportInputs);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
+            Inputs="@(TwoDogIosExportInputs);$(_TwoDogExportInputsStamp);@(_TwoDogExportGameAssembly);$(_TwoDogExportAssemblyStamp);$(MSBuildThisFileFullPath)"
             Outputs="$(_TwoDogIosPackFullPath)"
             Condition="'$(TargetPlatformIdentifier)' == 'ios' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogIosPack)' == '' And '$(TwoDogGodotProjectFullPath)' != '' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
 
@@ -656,7 +660,7 @@
 
         <!-- (1) explicitly configured external editor, through the helper when available -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And Exists('$(TwoDogImportHelperPath)')"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogIosExportPreset)&quot; --output &quot;$(_TwoDogIosPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --editor &quot;$(TwoDogExternalGodotEditor)&quot; --export-pack &quot;$(TwoDogIosExportPreset)&quot; --output &quot;$(_TwoDogIosPackFullPath)&quot; $(_TwoDogExportAssemblyHashArg) $(_TwoDogShaderBakeArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
         <Exec Condition="'$(TwoDogExternalGodotEditor)' != '' And !Exists('$(TwoDogImportHelperPath)')"
@@ -666,7 +670,7 @@
 
         <!-- (2) in-process export helper against the packaged editor libgodot -->
         <Exec Condition="'$(TwoDogExternalGodotEditor)' == '' And '$(TwoDogCanUseImportHelper)' == 'true'"
-              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogIosExportPreset)&quot; --output &quot;$(_TwoDogIosPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
+              Command="&quot;$(_TwoDogDotNetHost)&quot; exec &quot;$(TwoDogImportHelperPath)&quot; --export-pack &quot;$(TwoDogIosExportPreset)&quot; --output &quot;$(_TwoDogIosPackFullPath)&quot; --libgodot &quot;$(TwoDogEditorLibGodotPath)&quot; --api-dir &quot;$(_TwoDogApiDirArg)&quot; --tools-dir &quot;$(_TwoDogToolsDirArg)&quot; $(_TwoDogExportAssemblyHashArg) $(_TwoDogShaderBakeArg) &quot;$(TwoDogGodotProjectFullPath)&quot;"
               EnvironmentVariables="GODOTSHARP_DIR=$(_TwoDogApiDirArg);GODOT_TOOLS_DIR=$(_TwoDogToolsDirArg);GODOT_PROJECT_ASSEMBLY_DIR=$(_TwoDogExportAssemblyDir)"
               IgnoreStandardErrorWarningFormat="true"/>
 

@@ -16,6 +16,7 @@ string? embedPackPath = null;
 string? embedIntoPath = null;
 string? renderingDriver = null;
 string? renderingMethod = null;
+string? bakeShaders = null;
 var verbose = false;
 var exportDebug = false;
 
@@ -59,6 +60,9 @@ for (var i = 0; i < args.Length; i++)
         case "--rendering-method" when i + 1 < args.Length:
             renderingMethod = args[++i];
             break;
+        case "--bake-shaders" when i + 1 < args.Length:
+            bakeShaders = args[++i];
+            break;
         case "--debug":
             exportDebug = true;
             break;
@@ -96,7 +100,7 @@ if (embedPackPath != null && embedIntoPath != null)
 if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot")) ||
     (editorPath == null && libgodotPath == null) ||
     (exportPreset != null && exportOutput == null) || (exportDebug && exportPreset == null) ||
-    ((renderingDriver != null || renderingMethod != null) && exportPreset == null))
+    ((renderingDriver != null || renderingMethod != null || bakeShaders != null) && exportPreset == null))
 {
     Console.Error.WriteLine("Usage: twodog.import [--libgodot <libgodot-library>] [--editor <godot-binary>]");
     Console.Error.WriteLine("                     [--export-pack <preset> --output <pck-path>] <path-to-godot-project>");
@@ -112,6 +116,7 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine("                     content as a .pck using the named export preset");
     Console.Error.WriteLine("                     (from export_presets.cfg). Requires --output.");
     Console.Error.WriteLine("  --output <path>    Output .pck path for --export-pack.");
+    Console.Error.WriteLine("  --bake-shaders <list>  Pack forward_plus and/or mobile shaders, or none.");
     Console.Error.WriteLine("  --debug            Export debug resources and GDExtensions (with --export-pack).");
     Console.Error.WriteLine("  --rendering-driver <driver> --rendering-method <method>");
     Console.Error.WriteLine("                     Export with a window-less rendering device, as the shader");
@@ -123,6 +128,16 @@ if (projectPath == null || !File.Exists(Path.Combine(projectPath, "project.godot
     Console.Error.WriteLine();
     Console.Error.WriteLine("  The project path must contain a project.godot file.");
     return 1;
+}
+
+if (bakeShaders != null && exportOutput != null && exportPreset != null)
+{
+    try { return ShaderBakes.Export(args, bakeShaders, exportOutput); }
+    catch (Exception ex) when (ex is ArgumentException or IOException or InvalidDataException)
+    {
+        Console.Error.WriteLine($"twodog.import: {ex.Message}");
+        return 1;
+    }
 }
 
 // Serialize concurrent imports of the same project (parallel MSBuild nodes
