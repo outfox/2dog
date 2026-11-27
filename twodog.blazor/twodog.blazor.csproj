@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <!-- Public types share the engine's 'twodog' namespace, like 2dog.avalonia. -->
@@ -28,6 +28,10 @@
     <!-- PrivateAssets=all: the package must NOT depend on 2dog.engine. A Blazor Web App server references this
          package (transitively, to serve _content/2dog.blazor/*), and 2dog.engine's build targets and native
          packages must stay out of that server. The wasm client references 2dog.engine itself. -->
+    <!-- The components package follows the app's framework major. -->
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net11.0'">
+        <AspNetCoreVersion>11.0.*</AspNetCoreVersion>
+    </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" PrivateAssets="all"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="$(AspNetCoreVersion)"/>

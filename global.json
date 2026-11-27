@@ -1,8 +1,8 @@
 {
-  "$comment": "Poe's optional installer reads workloadVersion. Keeping it outside sdk lets desktop builds run without that workload set. iOS matches Xcode 26.6.",
-  "workloadVersion": "10.0.401",
+  "$comment": "Poe's optional installer reads workloadVersion. Keeping it outside sdk lets desktop builds run without that workload set. The .NET 11 SDK builds both net10.0 and net11.0.",
+  "workloadVersion": "11.0.100.1",
   "sdk": {
-    "version": "10.0.403",
+    "version": "11.0.100",
     "rollForward": "disable",
     "allowPrerelease": false
   }
