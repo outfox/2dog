@@ -27,6 +27,8 @@ permissions:
 
 env:
   UV_LOCKED: '1'
+  # No CLI telemetry in CI: on Blacksmith runners its environment probing stalls every .NET 11 call for seconds.
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
 
 concurrency:
   group: publish-${{ inputs.tag }}-${{ inputs.feed }}
@@ -79,6 +81,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       # Exchanges the GitHub OIDC token for a short-lived API key. `NUGET_USER` is a repo secret holding the account
       # that owns the policy on both feeds.

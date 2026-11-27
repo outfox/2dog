@@ -209,7 +209,13 @@ internal static class ReplRemoteTerminalClient
                 catch (OperationCanceledException) when (token.IsCancellationRequested) { }
                 catch (IOException) { lifetime.Cancel(); }
             }, token);
-            while (await reader.ReadLineAsync(token).ConfigureAwait(false) is { } line)
+            // A host that closes with client input still unread resets the connection: the session ended, like on EOF.
+            async Task<string?> ReadLineAsync()
+            {
+                try { return await reader.ReadLineAsync(token).ConfigureAwait(false); }
+                catch (IOException) { return null; }
+            }
+            while (await ReadLineAsync().ConfigureAwait(false) is { } line)
             {
                 var message = JsonSerializer.Deserialize<ReplTerminalMessage>(line) ?? throw new IOException("Empty terminal message.");
                 switch (message.Method)

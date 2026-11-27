@@ -117,7 +117,7 @@ Ids are stable; `--ignore <id>` drops one.
 |------------------------------|----------------------------------------------------------------|
 | `game.sdk`                   | the game csproj uses Godot.NET.Sdk                             |
 | `game.sdk-mismatch`          | Godot.NET.Sdk matches the Godot line 2dog.engine was built for |
-| `game.target-framework`      | the game csproj targets net10.0                                |
+| `game.target-framework`      | the game csproj targets net10.0 or net11.0                     |
 | `game.properties`            | EnableDynamicLoading and AllowUnsafeBlocks are set             |
 | `game.bindings`              | the game csproj references 2dog.godotsharp                     |
 | `game.default-item-excludes` | every host folder is excluded from the game's default globs    |
