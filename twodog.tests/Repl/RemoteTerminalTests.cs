@@ -160,6 +160,7 @@ public class RemoteTerminalTests
         var resetting = ReplRemoteTerminalClient.RunAsync(reset, output, resetTerminal, resetLifetime);
         reset.Complete(new IOException("Connection reset by peer"));
         Assert.Equal(0, await resetting);
+        Assert.True(resetLifetime.IsCancellationRequested);
 
         using var cancelled = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var idle = new Messages();
