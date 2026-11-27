@@ -29,9 +29,20 @@ async function probe(mode) {
             } });
         }
         send(json) {
-            const { id, method, params } = JSON.parse(json);
+            const { id, method, params, sessionId } = JSON.parse(json);
             queueMicrotask(() => {
-                if (method === 'Page.getFrameTree') {
+                if (sessionId) {
+                    // A worker's own default context must not replace the page's.
+                    this.message({ sessionId, method: 'Runtime.executionContextCreated', params: { context: {
+                        id: 9, uniqueId: 'worker', origin: new URL(targetUrl).origin,
+                        auxData: { frameId: 'main', isDefault: true } } } });
+                    this.message({ sessionId, method: 'Runtime.exceptionThrown', params: { exceptionDetails: {
+                        exception: { description: 'RuntimeError: null function\n    at worker-frame' } } } });
+                    this.message({ sessionId, id, result: {} });
+                } else if (method === 'Target.setAutoAttach') {
+                    this.message({ method: 'Target.attachedToTarget', params: { sessionId: 'worker-1' } });
+                    this.message({ id, result: {} });
+                } else if (method === 'Page.getFrameTree') {
                     this.message({ id, result: { frameTree: { frame: { id: 'main' } } } });
                 } else if (method === 'Runtime.enable') {
                     this.context(2, 'subframe');
@@ -92,6 +103,13 @@ test('waits for the replacement context when navigation invalidates an evaluatio
     const result = await probe('navigation');
     assert.equal(result.exitCode, 0, result.output);
     assert.deepEqual(result.evaluations, ['context-1', 'replacement']);
+});
+
+test('prints the stack of an uncaught exception on a worker', async () => {
+    const result = await probe('delayed');
+    assert.equal(result.exitCode, 0, result.output);
+    assert.deepEqual(result.evaluations, ['context-1']);
+    assert.match(result.output, /\[worker:exception\] RuntimeError: null function\n    at worker-frame/);
 });
 
 test('still fails for unrelated protocol errors', async () => {

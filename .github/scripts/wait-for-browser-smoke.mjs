@@ -92,6 +92,21 @@ async function run() {
 
         const message = JSON.parse(event.data);
 
+        // Worker sessions report only their uncaught exceptions: the page sees a thread crash without its stack.
+        if (message.sessionId) {
+            if (message.method === "Runtime.exceptionThrown") {
+                const details = message.params.exceptionDetails;
+                console.error(`[worker:exception] ${details.exception?.description ?? details.text}`);
+            }
+            return;
+        }
+
+        if (message.method === "Target.attachedToTarget") {
+            socket.send(JSON.stringify({
+                id: ++commandId, sessionId: message.params.sessionId, method: "Runtime.enable" }));
+            return;
+        }
+
         if (message.id) {
             const request = pending.get(message.id);
             if (!request) {
@@ -195,6 +210,7 @@ async function run() {
         mainFrameId = frameTree.frame.id;
         await command("Runtime.enable");
         await command("Log.enable");
+        await command("Target.setAutoAttach", { autoAttach: true, waitForDebuggerOnStart: false, flatten: true });
 
         while (Date.now() < deadline) {
             lastState = await evaluate(`(() => {
