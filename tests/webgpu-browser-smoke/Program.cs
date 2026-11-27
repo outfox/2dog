@@ -17,6 +17,17 @@ internal static class Program
         Engine.RegisterWebPluginsInitializer(GodotPlugins.Game.Main.PluginsInitializer());
         var engine = new Engine("WebGpuBrowserSmoke", args: args);
         engine.Start();
+#if GODOT4_8_OR_GREATER
+        var physics = Godot.Engine.GetPhysicsFrames();
+        var framesBefore = Godot.Engine.GetProcessFrames();
+        foreach (double delta in new[] { 1.0 / 30, 1.0 / 60, 1.0 / 60 })
+        {
+            if (!engine.Update(delta) || engine.Tree.Root.GetProcessDeltaTime() != delta)
+                throw new Exception($"Timed WebGPU frame did not deliver {delta:R} seconds.");
+        }
+        if (Godot.Engine.GetProcessFrames() != framesBefore + 3 || Godot.Engine.GetPhysicsFrames() != physics + 4)
+            throw new Exception("Timed WebGPU updates must run three idle passes and four physics ticks.");
+#endif
         var method = RenderingServer.GetCurrentRenderingMethod();
         if (RenderingServer.GetCurrentRenderingDriverName() != "webgpu" || method is not ("mobile" or "forward_plus"))
             throw new Exception("WebGPU Forward+ or Mobile was not selected.");
