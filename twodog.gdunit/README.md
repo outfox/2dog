@@ -69,7 +69,7 @@ root file does not select MTP:
 
 ```json
 {
-  "sdk": { "version": "10.0.100", "rollForward": "latestFeature" },
+  "sdk": { "version": "10.0.100", "rollForward": "latestMajor" },
   "test": { "runner": "Microsoft.Testing.Platform" }
 }
 ```

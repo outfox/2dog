@@ -1,8 +1,8 @@
 {
-  "$comment": "Pins the .NET 10 SDK for browser and MAUI workloads and selects Microsoft.Testing.Platform for dotnet test, including from the project root (global.json applies at or below its own directory).",
+  "$comment": "Needs a .NET 10 or newer SDK for browser and MAUI workloads and selects Microsoft.Testing.Platform for dotnet test, including from the project root (global.json applies at or below its own directory).",
   "sdk": {
     "version": "10.0.100",
-    "rollForward": "latestFeature"
+    "rollForward": "latestMajor"
   },
   "test": {
     "runner": "Microsoft.Testing.Platform"
