@@ -70,6 +70,8 @@ public class ExportPackToolTests(ExportPackEngineFixture fixture)
                 <TargetName>host</TargetName>
                 <PublishDir>{Escape(scratch.Dir)}/out/</PublishDir>
                 <BaseIntermediateOutputPath>obj/</BaseIntermediateOutputPath>
+                <!-- As in SDK projects: the export inputs stamp lands here, outside the Godot project's inputs. -->
+                <IntermediateOutputPath>obj/Release/</IntermediateOutputPath>
                 <TwoDogExportPack>true</TwoDogExportPack>
                 <TwoDogDesktopExportPreset>Web</TwoDogDesktopExportPreset>
                 <TwoDogImportHelperPath>{Escape(HelperPath)}</TwoDogImportHelperPath>
