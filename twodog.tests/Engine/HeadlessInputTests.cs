@@ -23,7 +23,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
             $"native={DisplayServer.WindowGetSize()}; root={root.Size}; visible={root.GetVisibleRect()}; " +
             $"content={root.ContentScaleSize}; mode={root.ContentScaleMode}; aspect={root.ContentScaleAspect}");
         Assert.Equal("headless", DisplayServer.GetName());
-        Assert.Equal(Vector2I.Zero, DisplayServer.WindowGetSize());
+        Assert.Equal(NativeSize(root), DisplayServer.WindowGetSize());
         Assert.Equal(root.MinSize, root.Size);
         Assert.NotEqual(ProjectViewportSize(), root.Size);
     }
@@ -56,7 +56,7 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
             godot.Input.Click(button);
             pressed.AssertEmitted();
             Assert.False(button.IsPressed());
-            Assert.Equal(Vector2I.Zero, DisplayServer.WindowGetSize());
+            Assert.Equal(NativeSize(root), DisplayServer.WindowGetSize());
         }
         finally { panel.Free(); }
     }
@@ -300,6 +300,14 @@ public class HeadlessInputTests(HeadlessFixture godot, ITestOutputHelper output)
             else godot.Input.PushToViewport(inputEvent);
         }
     }
+
+    // Godot 4.8 keeps the size a headless window is given (64x64 at first); 4.7 always reports zero.
+    private static Vector2I NativeSize(Window root) =>
+#if GODOT4_8_OR_GREATER
+        root.Size;
+#else
+        Vector2I.Zero;
+#endif
 
     private static Vector2I ProjectViewportSize() => new(
         ProjectSettings.GetSettingWithOverride("display/window/size/viewport_width").AsInt32(),
