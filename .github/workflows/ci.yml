@@ -1666,7 +1666,7 @@ jobs:
 
           BUNDLE=demos/showcase/showcase.web/AppBundle
           dotnet msbuild demos/showcase/showcase.web/showcase.web.csproj -nologo -v:m -p:Configuration=Release \
-            -t:TwoDogWebPrecompressBundle \
+            -t:TwoDogWebPrecompressBundle -p:TwoDogDemoFramework=${{ matrix.framework }} \
             -p:TwoDogWebPrecompressFormats=gz -p:TwoDogWebPrecompressKeepOriginals=false
           LEFTOVERS=$(find "$BUNDLE" -name '*.br' -o -name 'godot.wasm' -o -name 'godot.pck' \
             -o -path "$BUNDLE/_framework/*.wasm" -o -path "$BUNDLE/_framework/*.dat")
