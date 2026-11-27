@@ -120,7 +120,6 @@
         <TwoDogGodotEmccExtraLDFlag Include="-sOFFSCREEN_FRAMEBUFFER=1"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sGL_ENABLE_GET_PROC_ADDRESS=0"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sWASM_BIGINT"/>
-        <TwoDogGodotEmccExtraLDFlag Include="-sMEMORY64=0"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sENVIRONMENT=web,worker"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sALLOW_MEMORY_GROWTH=1"/>
         <TwoDogGodotEmccExtraLDFlag Include="-sINVOKE_RUN=0"/>
