@@ -16,6 +16,8 @@ concurrency:
 
 env:
   UV_LOCKED: '1'
+  # The .NET 11 CLI stalls for seconds per call on self-hosted runners while its telemetry probes the environment.
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
 
 permissions:
   contents: read # jobs that need more (build-natives, deploy) declare their own
@@ -1380,11 +1382,12 @@ jobs:
         # Contracts and exception diagnostics run once, independently of the app publishes.
         include:
           - {flavor: checks, precision: single, aot: false, framework: net10.0}
-          # The net11.0 payloads (another emscripten) and bundle path, plain and threaded.
-          - {flavor: web, precision: single, aot: false, framework: net11.0}
-          - {flavor: web, precision: double, aot: false, framework: net11.0}
-          - {flavor: webmt, precision: single, aot: false, framework: net11.0}
-          - {flavor: webmt, precision: double, aot: false, framework: net11.0}
+          # The net11.0 payloads (another emscripten) and bundle path, plain and threaded. The 4.7 line ships none:
+          # there these entries name net10.0 and so merge into the jobs above instead of adding any.
+          - {flavor: web, precision: single, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
+          - {flavor: web, precision: double, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
+          - {flavor: webmt, precision: single, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
+          - {flavor: webmt, precision: double, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
 
     env:
       TwoDogPrecision: ${{ matrix.precision }}

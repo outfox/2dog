@@ -60,6 +60,19 @@ class NativeReleaseStagingTests(unittest.TestCase):
                 staging.stage(root / "assets", root, "double")
             self.assertFalse((root / "godot/bin").exists())
 
+    def test_net11_web_payloads_are_required_except_on_the_47_line(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            self.release(root / "assets", "single")
+            for payload in (root / "assets").glob("*-net11-*.zip"):
+                payload.unlink()
+            with self.assertRaises(FileNotFoundError):
+                staging.stage(root / "assets", root, "single")
+            (root / "Directory.Build.props").write_text("<Project><GodotVersion>4.7.2</GodotVersion></Project>")
+            staging.stage(root / "assets", root, "single")
+            self.assertTrue((root / "godot/bin/web/template_release/libgodot/libgodot.a").is_file())
+            self.assertFalse((root / "godot/bin/web-net11").exists())
+
     def test_release_checksums_and_identity_are_verified_before_any_extraction(self):
         with tempfile.TemporaryDirectory() as scratch:
             root = Path(scratch)

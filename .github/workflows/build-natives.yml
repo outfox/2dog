@@ -48,6 +48,8 @@ permissions:
 
 env:
   UV_LOCKED: '1'
+  # The .NET 11 CLI stalls for seconds per call on self-hosted runners while its telemetry probes the environment.
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
   NATIVE_SUBDIR: ${{ inputs.precision == 'double' && 'double/' || '' }}
   NATIVE_SUFFIX: ${{ inputs.precision == 'double' && '.double' || '' }}
   RELEASE_SUFFIX: ${{ inputs.precision == 'double' && '-double' || '' }}
@@ -534,7 +536,10 @@ jobs:
             libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
 
       # Build using build-godot.py with platform/arch overrides
+      # The 4.7 line ships no net11.0 web payloads (its fork branch lacks the Emscripten 6 fixes): those jobs build
+      # and upload nothing there. A job-level condition cannot read the matrix.
       - name: Build libgodot (${{ matrix.target }})
+        if: ${{ !(matrix.emscripten && needs.preflight.outputs.line == '4.7') }}
         env:
           # SCons prunes the oldest cached objects past this size (MiB). shortcut: deprecated, see the GodotSharp build.
           SCONS_CACHE_LIMIT: ${{ matrix.target == 'editor' && '16384' || '8192' }} # One build: editor 3–5 GiB, templates ~2 GiB.
@@ -575,7 +580,7 @@ jobs:
       # shell/ boot files) - the contract with ci.yml's staging step and the
       # 2dog.browser-wasm packages.
       - name: Upload artifact (web payload)
-        if: matrix.platform == 'web'
+        if: matrix.platform == 'web' && !(matrix.emscripten && needs.preflight.outputs.line == '4.7')
         uses: actions/upload-artifact@v7
         with:
           overwrite: true
