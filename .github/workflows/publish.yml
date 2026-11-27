@@ -79,6 +79,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       # Exchanges the GitHub OIDC token for a short-lived API key. `NUGET_USER` is a repo secret holding the account
       # that owns the policy on both feeds.

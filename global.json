@@ -1,5 +1,5 @@
 {
-  "$comment": "Poe's optional installer reads workloadVersion. Keeping it outside sdk lets desktop builds run without that workload set. The .NET 11 SDK builds both net10.0 and net11.0.",
+  "$comment": "Poe's optional installer reads workloadVersion. Keeping it outside sdk lets desktop builds run without that workload set. The .NET 11 SDK builds both net10.0 and net11.0. CI also installs the .NET 10 SDK for its net10.0 packs, which offline test feeds cannot download.",
   "workloadVersion": "11.0.100.1",
   "sdk": {
     "version": "11.0.100",

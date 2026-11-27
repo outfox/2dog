@@ -139,6 +139,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Install Linux dependencies
         run: |
@@ -456,19 +457,47 @@ jobs:
       # pack was built with (the static libgodot.a is linked into
       # dotnet.native.wasm at consumer publish time, so they must match).
       - name: Read pinned emscripten version
-        if: matrix.platform == 'web'
+        if: matrix.platform == 'web' && !matrix.emscripten
         id: emsdk-version
         run: |
-          VERSION=$(sed -n 's/.*<${{ matrix.emscripten || 'EmscriptenVersion' }}>\(.*\)<\/.*/\1/p' Directory.Build.props)
+          VERSION=$(sed -n 's/.*<EmscriptenVersion>\(.*\)<\/EmscriptenVersion>.*/\1/p' Directory.Build.props)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Pinned emscripten: $VERSION"
 
       - name: Setup emsdk
-        if: matrix.platform == 'web'
+        if: matrix.platform == 'web' && !matrix.emscripten
         uses: emscripten-core/setup-emsdk@v16
         with:
           version: ${{ steps.emsdk-version.outputs.version }}
           actions-cache-folder: emsdk-cache
+
+      # net11.0 payloads: the runtime pack's own emscripten, the one consumers link with. Upstream's emsdk of the
+      # same version carries another LLVM build, whose clang crashes on HarfBuzz's raster sources.
+      - name: Setup .NET (workload emscripten)
+        if: matrix.emscripten
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Activate the wasm-tools workload's emscripten
+        if: matrix.emscripten
+        run: |
+          version=$(sed -nE 's/.*"workloadVersion": "([^"]+)".*/\1/p' global.json)
+          dotnet workload install wasm-tools --version "$version" --source https://api.nuget.org/v3/index.json
+          pack() { ls -d "$DOTNET_ROOT"/packs/Microsoft.NET.Runtime.Emscripten.*."$1".linux-x64/*/tools | sort -V | tail -1; }
+          sdk=$(pack Sdk)
+          cp -r "$(pack Cache)/emscripten/cache" "$RUNNER_TEMP/em-cache"
+          {
+            echo "DOTNET_EMSCRIPTEN_LLVM_ROOT=$sdk/bin"
+            echo "DOTNET_EMSCRIPTEN_BINARYEN_ROOT=$sdk"
+            echo "DOTNET_EMSCRIPTEN_NODE_JS=$(pack Node)/bin/node"
+            echo "EM_CONFIG=$sdk/emscripten/.emscripten"
+            # The pack's cache is read-only and frozen; the build adds libraries to a copy.
+            echo "EM_CACHE=$RUNNER_TEMP/em-cache"
+            echo "FROZEN_CACHE="
+          } >> "$GITHUB_ENV"
+          echo "$sdk/emscripten" >> "$GITHUB_PATH"
+          echo "$sdk/bin" >> "$GITHUB_PATH"
 
       # Android: the NDK pinned in godot/platform/android/detect.py; sdkmanager needs Java 17
       - name: Setup Java (Android)
