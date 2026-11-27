@@ -48,6 +48,8 @@ permissions:
 
 env:
   UV_LOCKED: '1'
+  # No CLI telemetry in CI: on Blacksmith runners its environment probing stalls every .NET 11 call for seconds.
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
   NATIVE_SUBDIR: ${{ inputs.precision == 'double' && 'double/' || '' }}
   NATIVE_SUFFIX: ${{ inputs.precision == 'double' && '.double' || '' }}
   RELEASE_SUFFIX: ${{ inputs.precision == 'double' && '-double' || '' }}
@@ -139,6 +141,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Install Linux dependencies
         run: |
@@ -346,6 +349,42 @@ jobs:
             lib_ext: a
             flavor: -threads
             build_args: --web-threads yes
+          # The same four payloads for net11.0 hosts, built with that runtime pack's emscripten and staged
+          # under web-net11/ and web-threads-net11/ (build-godot.py names the folder after the active emcc).
+          - platform: web
+            target: template_release
+            runner: blacksmith-8vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -net11
+            emscripten: EmscriptenVersionNet11
+          - platform: web
+            target: template_debug
+            runner: blacksmith-8vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -net11
+            emscripten: EmscriptenVersionNet11
+          - platform: web
+            target: template_release
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -threads-net11
+            emscripten: EmscriptenVersionNet11
+            build_args: --web-threads yes
+          - platform: web
+            target: template_debug
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -threads-net11
+            emscripten: EmscriptenVersionNet11
+            build_args: --web-threads yes
 
     # From Godot upstream CI (windows_builds.yml): cache SCons's MSVC
     # environment detection, and keep Python console output UTF-8 clean on
@@ -420,7 +459,7 @@ jobs:
       # pack was built with (the static libgodot.a is linked into
       # dotnet.native.wasm at consumer publish time, so they must match).
       - name: Read pinned emscripten version
-        if: matrix.platform == 'web'
+        if: matrix.platform == 'web' && !matrix.emscripten
         id: emsdk-version
         run: |
           VERSION=$(sed -n 's/.*<EmscriptenVersion>\(.*\)<\/EmscriptenVersion>.*/\1/p' Directory.Build.props)
@@ -428,11 +467,39 @@ jobs:
           echo "Pinned emscripten: $VERSION"
 
       - name: Setup emsdk
-        if: matrix.platform == 'web'
+        if: matrix.platform == 'web' && !matrix.emscripten
         uses: emscripten-core/setup-emsdk@v16
         with:
           version: ${{ steps.emsdk-version.outputs.version }}
           actions-cache-folder: emsdk-cache
+
+      # net11.0 payloads: the runtime pack's own emscripten, the one consumers link with. Upstream's emsdk of the
+      # same version carries another LLVM build, whose clang crashes on HarfBuzz's raster sources.
+      - name: Setup .NET (workload emscripten)
+        if: matrix.emscripten && needs.preflight.outputs.line != '4.7'
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Activate the wasm-tools workload's emscripten
+        if: matrix.emscripten && needs.preflight.outputs.line != '4.7'
+        run: |
+          version=$(sed -nE 's/.*"workloadVersion": "([^"]+)".*/\1/p' global.json)
+          dotnet workload install wasm-tools --version "$version" --source https://api.nuget.org/v3/index.json
+          pack() { ls -d "$DOTNET_ROOT"/packs/Microsoft.NET.Runtime.Emscripten.*."$1".linux-x64/*/tools | sort -V | tail -1; }
+          sdk=$(pack Sdk)
+          cp -r "$(pack Cache)/emscripten/cache" "$RUNNER_TEMP/em-cache"
+          {
+            echo "DOTNET_EMSCRIPTEN_LLVM_ROOT=$sdk/bin"
+            echo "DOTNET_EMSCRIPTEN_BINARYEN_ROOT=$sdk"
+            echo "DOTNET_EMSCRIPTEN_NODE_JS=$(pack Node)/bin/node"
+            echo "EM_CONFIG=$sdk/emscripten/.emscripten"
+            # The pack's cache is read-only and frozen; the build adds libraries to a copy.
+            echo "EM_CACHE=$RUNNER_TEMP/em-cache"
+            echo "FROZEN_CACHE="
+          } >> "$GITHUB_ENV"
+          echo "$sdk/emscripten" >> "$GITHUB_PATH"
+          echo "$sdk/bin" >> "$GITHUB_PATH"
 
       # Android: the NDK pinned in godot/platform/android/detect.py; sdkmanager needs Java 17
       - name: Setup Java (Android)
@@ -469,7 +536,10 @@ jobs:
             libgodot-${{ needs.preflight.outputs.line }}-${{ inputs.precision }}-${{ matrix.rid }}${{ matrix.flavor }}-${{ matrix.target }}-
 
       # Build using build-godot.py with platform/arch overrides
+      # The 4.7 line ships no net11.0 web payloads (its fork branch lacks the Emscripten 6 fixes): those jobs build
+      # and upload nothing there. A job-level condition cannot read the matrix.
       - name: Build libgodot (${{ matrix.target }})
+        if: ${{ !(matrix.emscripten && needs.preflight.outputs.line == '4.7') }}
         env:
           # SCons prunes the oldest cached objects past this size (MiB). shortcut: deprecated, see the GodotSharp build.
           SCONS_CACHE_LIMIT: ${{ matrix.target == 'editor' && '16384' || '8192' }} # One build: editor 3–5 GiB, templates ~2 GiB.
@@ -486,7 +556,7 @@ jobs:
             --cache-path godot/.scons_cache ${{ matrix.build_args }}
 
       - name: Test the real WebGPU shader compiler
-        if: matrix.platform == 'web' && matrix.target == 'template_debug' && inputs.precision == 'single' && matrix.flavor != '-threads'
+        if: matrix.platform == 'web' && matrix.target == 'template_debug' && inputs.precision == 'single' && !matrix.flavor
         run: |
           uv run --no-project python godot/drivers/webgpu/tests/run_port_regressions.py \
             --emscripten "$EMSDK/upstream/emscripten" \
@@ -510,7 +580,7 @@ jobs:
       # shell/ boot files) - the contract with ci.yml's staging step and the
       # 2dog.browser-wasm packages.
       - name: Upload artifact (web payload)
-        if: matrix.platform == 'web'
+        if: matrix.platform == 'web' && !(matrix.emscripten && needs.preflight.outputs.line == '4.7')
         uses: actions/upload-artifact@v7
         with:
           overwrite: true

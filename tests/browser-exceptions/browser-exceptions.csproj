@@ -13,6 +13,8 @@
     </ItemGroup>
     <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
         <WasmMainJSPath>main.js</WasmMainJSPath>
+        <!-- The .NET 11 SDK no longer defaults this for plain SDK browser projects. -->
+        <SelfContained>true</SelfContained>
     </PropertyGroup>
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
         <WasmExtraFilesToDeploy Include="index.html" />
