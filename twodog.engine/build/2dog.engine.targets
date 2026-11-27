@@ -494,8 +494,10 @@
             Condition="'$(TwoDogEmbedPack)' == 'true' And '$(RuntimeIdentifier)' != 'browser-wasm' And '$(DesignTimeBuild)' != 'true' And '$(TwoDogExportPack)' == 'true' And Exists('$(TwoDogGodotProjectFullPath)/project.godot')">
         <ItemGroup>
             <_TwoDogPackSidecar Include="$(_TwoDogDesktopPackDir)**/*" Exclude="$(_TwoDogDesktopPackFullPath)"/>
+            <!-- AssetType: from .NET 11 the SDK bundles only files it knows as native, no longer by file content. -->
             <ResolvedFileToPublish Include="@(_TwoDogPackSidecar)"
                                    RelativePath="%(RecursiveDir)%(Filename)%(Extension)"
+                                   AssetType="native"
                                    CopyToPublishDirectory="PreserveNewest"/>
         </ItemGroup>
     </Target>

@@ -6,6 +6,9 @@
         <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Debug'">debug</TwoDogVariant>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == '' And '$(Configuration)' == 'Editor'">editor</TwoDogVariant>
         <TwoDogVariant Condition="'$(TwoDogVariant)' == ''">release</TwoDogVariant>
+        <!-- The .NET 11 SDK builds net10.0-ios with an iOS SDK that insists on the Xcode it shipped for (26.0); a
+             newer Xcode 26 builds 2dog hosts as well. -->
+        <ValidateXcodeVersion Condition="'$(ValidateXcodeVersion)' == ''">false</ValidateXcodeVersion>
         <!-- 2dog.engine exports iOS packs during the build (TwoDogExportIosPack); its desktop export after Publish
              never applies to an app bundle. -->
         <TwoDogExportPack>false</TwoDogExportPack>
