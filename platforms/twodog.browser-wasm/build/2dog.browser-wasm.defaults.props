@@ -5,4 +5,10 @@
         <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == '' And '$(Configuration)' == 'Release'">false</WasmEmitSymbolMap>
         <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == ''">true</WasmEmitSymbolMap>
     </PropertyGroup>
+    <!-- Plain-shell hosts on the WebAssembly SDK: the Godot shell loads fixed file names, and the finished bundle is
+         precompressed by TwoDogWebPrecompressBundle. Blazor fingerprints and compresses itself. -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(UsingMicrosoftNETSdkWebAssembly)' == 'true' And '$(UsingMicrosoftNETSdkBlazorWebAssembly)' != 'true'">
+        <WasmFingerprintAssets Condition="'$(WasmFingerprintAssets)' == ''">false</WasmFingerprintAssets>
+        <CompressionEnabled Condition="'$(CompressionEnabled)' == ''">false</CompressionEnabled>
+    </PropertyGroup>
 </Project>

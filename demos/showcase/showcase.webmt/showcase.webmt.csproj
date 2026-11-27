@@ -1,10 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
     <!-- Multithreaded browser-wasm proof of concept: showcase.web on .NET's threaded runtime and the threaded Godot
          payload (build-godot.py for the web platform with threads). Publish from the repo root, then serve AppBundle/
          with COOP/COEP headers (SharedArrayBuffer needs cross-origin isolation):
          dotnet publish demos/showcase/showcase.webmt -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <!-- CI also builds this host for net11.0: -p:TwoDogDemoFramework=net11.0 -->
+        <TargetFramework Condition="'$(TwoDogDemoFramework)' != ''">$(TwoDogDemoFramework)</TargetFramework>
         <OutputType>Exe</OutputType>
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
         <ImplicitUsings>enable</ImplicitUsings>

@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <!-- CI also builds this host for net11.0: -p:TwoDogDemoFramework=net11.0 -->
+        <TargetFramework Condition="'$(TwoDogDemoFramework)' != ''">$(TwoDogDemoFramework)</TargetFramework>
         <!-- Release is windowed (no console window on Windows); Debug/Editor keep the console -->
         <OutputType>Exe</OutputType>
         <OutputType Condition="'$(Configuration)' == 'Release'">WinExe</OutputType>

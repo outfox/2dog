@@ -15,6 +15,9 @@
              The two cannot be mixed: a -pthread archive only links into a threaded runtime. -->
         <_TwoDogWebPayloadName Condition="'$(WasmEnableThreads)' == 'true'">web-threads</_TwoDogWebPayloadName>
         <_TwoDogWebPayloadName Condition="'$(WasmEnableThreads)' != 'true'">web</_TwoDogWebPayloadName>
+        <!-- libgodot.a links into the runtime, so each .NET version has a payload built with its emscripten. -->
+        <!-- From TargetFramework: source checkouts import this file before the SDK infers TargetFrameworkVersion. -->
+        <_TwoDogWebPayloadName Condition="'$(TargetFramework)' != '' And $([MSBuild]::VersionGreaterThanOrEquals($([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')), '11.0'))">$(_TwoDogWebPayloadName)-net11</_TwoDogWebPayloadName>
         <_TwoDogWebDebugPackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.debug$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-$(_TwoDogWebPayloadName)/</_TwoDogWebDebugPackageDir>
         <_TwoDogWebReleasePackageDir>$(NuGetPackageRoot)/2dog.browser-wasm.release$(TwoDogPackageSuffix)/$(TwoDogWebPackageVersion)/godot-$(_TwoDogWebPayloadName)/</_TwoDogWebReleasePackageDir>
 
@@ -158,7 +161,7 @@
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And Exists('$(TwoDogWebNativeDir)libgodot/emdawnwebgpu/emdawnwebgpu.port.py')">
         <PropertyGroup>
             <TwoDogWebGpuCachePath Condition="'$(TwoDogWebGpuCachePath)' == '' And '$(WasmCachePath)' != '' And '$(WasmCachePath)' != '$(EmscriptenCacheSdkCacheDir)'">$(WasmCachePath)</TwoDogWebGpuCachePath>
-            <TwoDogWebGpuCachePath Condition="'$(TwoDogWebGpuCachePath)' == ''">$([System.IO.Path]::GetTempPath())2dog-webgpu-dotnet-emscripten-3.1.56</TwoDogWebGpuCachePath>
+            <TwoDogWebGpuCachePath Condition="'$(TwoDogWebGpuCachePath)' == ''">$([System.IO.Path]::GetTempPath())2dog-webgpu-dotnet-$(TargetFrameworkVersion)</TwoDogWebGpuCachePath>
         </PropertyGroup>
         <ItemGroup>
             <EmscriptenEnvVars Remove="@(EmscriptenEnvVars)"
@@ -188,6 +191,8 @@
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(DesignTimeBuild)' != 'true'">
         <Error Condition="'$(TwoDogWebVariant)' == 'editor'"
                Text="TwoDog: the editor native variant is not available for Web hosts. Use Debug or Release, or explicitly set TwoDogWebVariant to debug or release."/>
+        <Error Condition="'$(TwoDogWebBlazor)' != 'true' And '$(UsingMicrosoftNETSdkWebAssembly)' != 'true' And $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFrameworkVersion)', '11.0'))"
+               Text="TwoDog: .NET 11 no longer builds an AppBundle for plain SDK projects. Set Sdk=&quot;Microsoft.NET.Sdk.WebAssembly&quot; on this Web host project."/>
         <Error Condition="'$(TwoDogWebVariant)' != 'release' And '$(TwoDogWebVariant)' != 'debug'"
                Text="TwoDog: invalid TwoDogWebVariant '$(TwoDogWebVariant)'. Allowed values for Web hosts: release, debug."/>
         <Error Condition="'$(TwoDogWebNativeDir)' == '' Or !Exists('$(TwoDogWebNativeDir)libgodot/libgodot.a')"
@@ -276,6 +281,21 @@
 
     <!-- The engine preloader fetches <executable>.wasm (outside _framework) and hands it to dotnet.js; also prunes the
          stray archive copy. Hooks after bundle generation: AfterTargets="Publish" precedes the nested wasm publish. -->
+    <!-- WebAssembly SDK hosts (the only route from .NET 11, which dropped the AppBundle builder): the SDK publishes
+         the web root with the relinked runtime; mirror it and the shell into the bundle dir, like the old builder. -->
+    <Target Name="TwoDogWebStageBundle"
+            AfterTargets="Publish"
+            Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' != 'true' And '$(UsingMicrosoftNETSdkWebAssembly)' == 'true'">
+        <ItemGroup>
+            <_TwoDogWebRoot Include="$(PublishDir)wwwroot/**"/>
+        </ItemGroup>
+        <RemoveDir Directories="$(WasmAppDir)"/>
+        <Copy SourceFiles="@(_TwoDogWebRoot)" DestinationFiles="@(_TwoDogWebRoot->'$(WasmAppDir)/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <Copy SourceFiles="@(WasmExtraFilesToDeploy)" DestinationFiles="@(WasmExtraFilesToDeploy->'$(WasmAppDir)/%(RecursiveDir)%(Filename)%(Extension)')"/>
+        <!-- Not AfterTargets on the finalizer: a condition-skipped target still fires its AfterTargets. -->
+        <CallTarget Targets="TwoDogWebFinalizeBundle"/>
+    </Target>
+
     <Target Name="TwoDogWebFinalizeBundle"
             AfterTargets="_WasmGenerateAppBundle"
             Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(TwoDogWebBlazor)' != 'true'">

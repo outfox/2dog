@@ -1,8 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
     <!-- showcase.web plus the WebXR Layers polyfill. Publish from the repo root (global.json pins the SDK band):
          dotnet publish demos/showcase/showcase.webxr -> AppBundle/, serve over localhost or HTTPS -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <!-- CI also builds this host for net11.0: -p:TwoDogDemoFramework=net11.0 -->
+        <TargetFramework Condition="'$(TwoDogDemoFramework)' != ''">$(TwoDogDemoFramework)</TargetFramework>
         <OutputType>Exe</OutputType>
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
         <ImplicitUsings>enable</ImplicitUsings>
