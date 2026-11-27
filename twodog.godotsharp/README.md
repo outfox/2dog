@@ -15,7 +15,9 @@ library can also reference the core package directly:
 No DisableImplicitGodotSharpReferences or DisableImplicitGodotGeneratorReferences properties
 are required. Normal Godot.NET.Sdk defaults work on the first restore and subsequent restores.
 The package selects fork assemblies in place of compatible stock package assets and keeps
-one fork source generator. Dependencies targeting a different Godot version still fail TDG001.
+one fork source generator. If a stock Godot editor changes the game's SDK version, building
+the game directly uses that SDK's bindings and generator. Building through a 2dog host
+still reports TDG001 until the versions match.
 
 The core package carries a private editor binding fallback. It becomes a reference only when
 Godot.NET.Sdk requests editor APIs (Debug/Editor), or a dependency requests GodotSharpEditor.

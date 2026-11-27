@@ -280,6 +280,37 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
         project = self.project(packages=[(CORE, VERSION), ("GodotSharp", "0.0.1-test")])
         self.dotnet("build", project, error="TDG001")
 
+    def test_editor_build_accepts_other_godot_version_but_host_rejects_it(self):
+        game = self.project("Game", sdk=f"Godot.NET.Sdk/{GODOT}",
+                            extra="<PropertyGroup><PackageVersion_GodotSharp>0.0.1-test</PackageVersion_GodotSharp>"
+                                  "</PropertyGroup>", source="public partial class Example : Godot.Node { }")
+        for config in ("Debug", "ExportRelease"):
+            with self.subTest(config=config):
+                output = self.dotnet("msbuild", game, "-restore", f"-p:Configuration={config}",
+                                     "-t:Build;ComputeResolvedFilesToPublishList",
+                                     "-getItem:ReferencePath,ResolvedFileToPublish,Analyzer")
+                items = json.loads(output[output.index("{"):])["Items"]
+                expected = {"GodotSharp", "GodotSharpEditor"} if config == "Debug" else {"GodotSharp"}
+                for kind in ("ReferencePath", "ResolvedFileToPublish"):
+                    sources = {item.get("NuGetPackageId") for item in items[kind]
+                               if item["Filename"] in ("GodotSharp", "GodotSharpEditor")}
+                    self.assertEqual(expected, sources, kind)
+                generators = [item.get("NuGetPackageId") for item in items["Analyzer"]
+                              if item["Filename"] == "Godot.SourceGenerators"]
+                self.assertEqual(["Godot.SourceGenerators"], generators)
+
+        host = self.project("Host", packages=[(ENGINE, VERSION)],
+                            extra='<ItemGroup><ProjectReference Include="../Game/Game.csproj"/></ItemGroup>')
+        solution = self.dir / "Game.slnx"
+        solution.write_text('<Solution><Project Path="Game/Game.csproj"/><Project Path="Host/Host.csproj"/></Solution>')
+        self.dotnet("build", solution, error="TDG001")
+
+        # Even when the host cannot see the game's private packages, its project reference must enforce the guard.
+        game.write_text(game.read_text().replace("</Project>", "<ItemDefinitionGroup><PackageReference>"
+                        "<PrivateAssets>all</PrivateAssets></PackageReference></ItemDefinitionGroup></Project>"))
+        output = self.dotnet("build", host, error="TDG001")
+        self.assertIn(f"[{game}]", output)
+
     def test_incompatible_stock_editor_package_rejected(self):
         project = self.project(packages=[(CORE, VERSION), ("GodotSharpEditor", "0.0.1-test")])
         self.dotnet("build", project, error="TDG001")

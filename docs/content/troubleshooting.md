@@ -152,9 +152,10 @@ disabled setting as `env.long-paths`.
 
 ## Mixed Godot bindings (TDG001-TDG005)
 
-At build time, 2dog replaces the stock GodotSharp assemblies with its own.
-`2dog update` sets this up in an existing game; `2dog add` and new projects do
-it already.
+When you build a 2dog host, the game's Godot SDK and dependencies must match
+the host's Godot version. If a stock Godot editor updates the game's SDK,
+you can still build and export the game directly with that editor. Those
+builds use the editor SDK's bindings and source generator.
 
 | Code     | Cause                                               | Fix                                                                                           |
 |----------|-----------------------------------------------------|-----------------------------------------------------------------------------------------------|

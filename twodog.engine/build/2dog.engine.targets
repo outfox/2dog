@@ -3,6 +3,15 @@
          Consumer knobs: TwoDogVariant (release|debug|editor), TwoDogExportPack, TwoDogDesktopExportPreset,
          TwoDogAndroidExportPreset, TwoDogIosExportPreset. -->
 
+    <PropertyGroup>
+        <_TwoDogHostBuild>true</_TwoDogHostBuild>
+    </PropertyGroup>
+    <!-- A solution builds the game separately. Share that project instance and validate the host's resolved bindings. -->
+    <ItemGroup Condition="'$(BuildingSolutionFile)' != 'true'">
+        <ProjectReference Update="@(ProjectReference)"
+                          AdditionalProperties="%(ProjectReference.AdditionalProperties);_TwoDogHostBuild=true" />
+    </ItemGroup>
+
     <!-- ============================================ -->
     <!-- GodotProjectDir Assembly Metadata             -->
     <!-- ============================================ -->
