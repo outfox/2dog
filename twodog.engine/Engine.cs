@@ -480,6 +480,9 @@ public class Engine : IDisposable, IAsyncDisposable
             throw new ArgumentOutOfRangeException(nameof(deltaSeconds), "Elapsed seconds must be finite and nonnegative.");
         return UpdateCore(deltaSeconds);
     }
+
+    /// <inheritdoc cref="Update(double)"/>
+    public bool Update(TimeSpan deltaTime) => Update(deltaTime.TotalSeconds);
 #endif
 
     /// <summary>Runs one engine frame. A true result means Godot requested exit; dispose this Engine afterward.</summary>
