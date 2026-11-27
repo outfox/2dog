@@ -126,6 +126,7 @@ completion, `Start()` throws `InvalidOperationException`.
 ```csharp
 public bool Update()
 public bool Update(double deltaSeconds)
+public bool Update(TimeSpan deltaTime)
 ```
 
 Processes one main-loop frame. Returns `true` while Godot keeps running and
@@ -133,8 +134,8 @@ Processes one main-loop frame. Returns `true` while Godot keeps running and
 stops. `Update()` throws `InvalidOperationException` if you call it recursively
 or while `Run()` owns the main loop.
 
-On the 4.8 line, pass finite, nonnegative elapsed seconds to drive one frame
-from the host clock. For stopwatch timestamps, use
+On the 4.8 line, pass finite, nonnegative elapsed seconds, or the same span as a
+`TimeSpan`, to drive one frame from the host clock. For stopwatch timestamps, use
 `engine.Update((now - previous) / (double)Stopwatch.Frequency)`. For integer
 microsecond timestamps, use `engine.Update((nowUs - previousUs) / 1_000_000.0)`.
 One call runs one idle pass, including for zero elapsed time. Physics consumes
