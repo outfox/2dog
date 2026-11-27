@@ -526,7 +526,9 @@ public class ParallelSessionTests
         {
             if (disposed) return;
             disposed = true;
-            writer.Dispose();
+            // The writer flushes on dispose, which throws once a read has seen the host close the pipe first.
+            try { writer.Dispose(); }
+            catch (IOException) { }
             Reader.Dispose();
             pipe.Dispose();
         }

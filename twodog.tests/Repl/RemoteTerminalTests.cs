@@ -153,6 +153,14 @@ public class RemoteTerminalTests
         Assert.True(lifetime.IsCancellationRequested);
         Assert.Contains("hello", terminal.Device.Text);
 
+        // Unix sockets report a host that closed with client input unread as a reset instead of EOF.
+        using var resetLifetime = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        using var reset = new Messages();
+        using var resetTerminal = new ScriptedTerminal(null, [], resetLifetime.Token);
+        var resetting = ReplRemoteTerminalClient.RunAsync(reset, output, resetTerminal, resetLifetime);
+        reset.Complete(new IOException("Connection reset by peer"));
+        Assert.Equal(0, await resetting);
+
         using var cancelled = new CancellationTokenSource(TimeSpan.FromSeconds(15));
         using var idle = new Messages();
         using var idleTerminal = new ScriptedTerminal(null, [], cancelled.Token);
@@ -165,7 +173,7 @@ public class RemoteTerminalTests
     {
         private readonly Channel<string> lines = Channel.CreateUnbounded<string>();
         public void Send(string line) => lines.Writer.TryWrite(line);
-        public void Complete() => lines.Writer.TryComplete();
+        public void Complete(Exception? error = null) => lines.Writer.TryComplete(error);
         public override async ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken)
         {
             while (await lines.Reader.WaitToReadAsync(cancellationToken))
