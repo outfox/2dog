@@ -51,6 +51,15 @@
               Pack="true"
               PackagePath="godot-web-threads/"
               Visible="false"/>
+        <!-- The same payloads for net11.0 hosts, built with that runtime pack's emscripten. -->
+        <None Include="$(GodotBinDir)web-net11/$(BuildVariant)/**"
+              Pack="true"
+              PackagePath="godot-web-net11/"
+              Visible="false"/>
+        <None Include="$(GodotBinDir)web-threads-net11/$(BuildVariant)/**"
+              Pack="true"
+              PackagePath="godot-web-threads-net11/"
+              Visible="false"/>
     </ItemGroup>
 
     <!-- Meta packages don't have native libraries, so close the conditional PropertyGroup above -->

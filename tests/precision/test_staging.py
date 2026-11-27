@@ -31,8 +31,8 @@ class NativeReleaseStagingTests(unittest.TestCase):
             for target in ("template_release", "template_debug", "editor"):
                 files[f"libgodot-{rid}-{target}"] = [f"{prefix}.{platform}.{target}{suffix}.{arch}.shared_library.{ext}"]
         for target in ("template_release", "template_debug"):
-            files[f"libgodot-browser-wasm-{target}"] = ["libgodot/libgodot.a"]
-            files[f"libgodot-browser-wasm-threads-{target}"] = ["libgodot/libgodot.a"]
+            for flavor in ("", "-threads", "-net11", "-threads-net11"):
+                files[f"libgodot-browser-wasm{flavor}-{target}"] = ["libgodot/libgodot.a"]
             for rid in ("android-arm64", "android-x64"):
                 files[f"libgodot-{rid}-{target}"] = ["libgodot_android.so", "libc++_shared.so"]
             for rid in ("ios-arm64", "iossimulator-arm64"):

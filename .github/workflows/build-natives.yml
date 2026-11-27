@@ -346,6 +346,42 @@ jobs:
             lib_ext: a
             flavor: -threads
             build_args: --web-threads yes
+          # The same four payloads for net11.0 hosts, built with that runtime pack's emscripten and staged
+          # under web-net11/ and web-threads-net11/ (build-godot.py names the folder after the active emcc).
+          - platform: web
+            target: template_release
+            runner: blacksmith-8vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -net11
+            emscripten: EmscriptenVersionNet11
+          - platform: web
+            target: template_debug
+            runner: blacksmith-8vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -net11
+            emscripten: EmscriptenVersionNet11
+          - platform: web
+            target: template_release
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -threads-net11
+            emscripten: EmscriptenVersionNet11
+            build_args: --web-threads yes
+          - platform: web
+            target: template_debug
+            runner: blacksmith-4vcpu-ubuntu-2404
+            arch: wasm32
+            rid: browser-wasm
+            lib_ext: a
+            flavor: -threads-net11
+            emscripten: EmscriptenVersionNet11
+            build_args: --web-threads yes
 
     # From Godot upstream CI (windows_builds.yml): cache SCons's MSVC
     # environment detection, and keep Python console output UTF-8 clean on
@@ -423,7 +459,7 @@ jobs:
         if: matrix.platform == 'web'
         id: emsdk-version
         run: |
-          VERSION=$(sed -n 's/.*<EmscriptenVersion>\(.*\)<\/EmscriptenVersion>.*/\1/p' Directory.Build.props)
+          VERSION=$(sed -n 's/.*<${{ matrix.emscripten || 'EmscriptenVersion' }}>\(.*\)<\/.*/\1/p' Directory.Build.props)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Pinned emscripten: $VERSION"
 
@@ -486,7 +522,7 @@ jobs:
             --cache-path godot/.scons_cache ${{ matrix.build_args }}
 
       - name: Test the real WebGPU shader compiler
-        if: matrix.platform == 'web' && matrix.target == 'template_debug' && inputs.precision == 'single' && matrix.flavor != '-threads'
+        if: matrix.platform == 'web' && matrix.target == 'template_debug' && inputs.precision == 'single' && !matrix.flavor
         run: |
           uv run --no-project python godot/drivers/webgpu/tests/run_port_regressions.py \
             --emscripten "$EMSDK/upstream/emscripten" \

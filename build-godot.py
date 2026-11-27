@@ -467,45 +467,50 @@ def webgpu_flags(args, config):
     return flags
 
 
-def read_pinned_emscripten_version() -> str:
-    """Read <EmscriptenVersion> from Directory.Build.props (the version the
+def read_pinned_emscripten_version(name="EmscriptenVersion") -> str:
+    """Read a pinned Emscripten version from Directory.Build.props (the version a
     .NET browser-wasm runtime pack was built with)."""
     import re
 
     props = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Directory.Build.props")
     with open(props, encoding="utf-8") as f:
-        m = re.search(r"<EmscriptenVersion>([^<]+)</EmscriptenVersion>", f.read())
+        m = re.search(rf"<{name}>([^<]+)</{name}>", f.read())
     return m.group(1) if m else ""
 
 
-def check_emscripten_version():
-    """Reject an emcc that does not match the pinned version. The web
-    libgodot.a is statically linked into dotnet.native.wasm, so the
-    toolchains must agree."""
-    pinned = read_pinned_emscripten_version()
-    if not pinned:
+def check_emscripten_version() -> str:
+    """Reject an emcc that matches no pinned version. The web libgodot.a is
+    statically linked into dotnet.native.wasm, so the toolchains must agree.
+    Returns the payload directory suffix of the .NET version the emcc on PATH
+    belongs to: "" for .NET 10, "-net11" for .NET 11."""
+    pins = {read_pinned_emscripten_version("EmscriptenVersionNet11"): "-net11", read_pinned_emscripten_version(): ""}
+    pins.pop("", None)
+    if not pins:
         console.print("[bold yellow]No <EmscriptenVersion> pin found in Directory.Build.props[/bold yellow]")
         sys.exit(1)
+    pinned = " or ".join(sorted(pins))
     try:
         out = subprocess.run(["emcc", "--version"], capture_output=True, text=True, shell=(sys.platform == "win32"))
         first_line = out.stdout.splitlines()[0] if out.stdout else ""
     except FileNotFoundError:
         console.print("[bold red]emcc not found on PATH - install/activate emsdk " f"{pinned}[/bold red]")
         sys.exit(1)
-    if out.returncode != 0 or not re.search(r"(?<![\d.])" + re.escape(pinned) + r"(?![\d.])", first_line):
-        console.print(
-            f"[bold yellow]WARNING: emcc version mismatch - pinned {pinned}, found: {first_line}\n"
-            "The web libgodot.a must be built with the same emscripten as the .NET runtime pack.[/bold yellow]"
-        )
-        sys.exit(1)
+    for version, suffix in pins.items():
+        if out.returncode == 0 and re.search(r"(?<![\d.])" + re.escape(version) + r"(?![\d.])", first_line):
+            return suffix
+    console.print(
+        f"[bold yellow]WARNING: emcc version mismatch - pinned {pinned}, found: {first_line}\n"
+        "The web libgodot.a must be built with the same emscripten as the .NET runtime pack.[/bold yellow]"
+    )
+    sys.exit(1)
 
 
 def build_libgodot_web(args):
     """Build the web (emscripten) static library and assemble the packaging
-    payload under godot/bin/web/<target>/."""
+    payload under godot/bin/web[-threads][-net11]/<target>/."""
     console.print("\n[bold yellow]┌── Building libgodot (web static library) ──┐[/bold yellow]")
 
-    check_emscripten_version()
+    dotnet_suffix = check_emscripten_version()
 
     if args.target == "all":
         targets = ["template_release", "template_debug"]
@@ -515,7 +520,7 @@ def build_libgodot_web(args):
     else:
         targets = [args.target]
 
-    web_dir = "web-threads" if args.threads else "web"
+    web_dir = ("web-threads" if args.threads else "web") + dotnet_suffix
     if getattr(args, "precision", "single") == "double":
         web_dir = os.path.join("double", web_dir)
 
