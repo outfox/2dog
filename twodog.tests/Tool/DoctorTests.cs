@@ -714,6 +714,17 @@ public class DoctorTests : IDisposable
     }
 
     [Fact]
+    public void Net11GameProject_KeepsItsTargetFramework()
+    {
+        var dir = Scaffold("--generic");
+        Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>", "<TargetFramework>net11.0</TargetFramework>");
+
+        Assert.Null(Issue(Doctor(dir, null, "--json").Stdout, "game.target-framework"));
+        Assert.Equal(0, Doctor(dir, null, "--fix-all").ExitCode);
+        Assert.Contains("<TargetFramework>net11.0</TargetFramework>", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
+    }
+
+    [Fact]
     public void LoadProblems_CoverTraversalAssemblyNames_AndUnreadableFiles()
     {
         var dir = Scaffold("--generic");

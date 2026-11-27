@@ -7,7 +7,7 @@ internal static class GameCsprojChecks
     [
         new("game.sdk", Category.GameProject, "the game csproj uses Godot.NET.Sdk"),
         new("game.sdk-mismatch", Category.GameProject, "Godot.NET.Sdk matches the Godot line 2dog.engine was built for"),
-        new("game.target-framework", Category.GameProject, "the game csproj targets net10.0"),
+        new("game.target-framework", Category.GameProject, "the game csproj targets net10.0 or net11.0"),
         new("game.properties", Category.GameProject, "EnableDynamicLoading and AllowUnsafeBlocks are set"),
         new("game.bindings", Category.GameProject, "the game csproj references 2dog.godotsharp"),
         new("game.default-item-excludes", Category.GameProject, "every host folder is excluded from the game's default globs"),
@@ -70,12 +70,12 @@ internal static class GameCsprojChecks
 
         var tfm = full.Added.FirstOrDefault(a => a.StartsWith("TargetFramework", StringComparison.Ordinal));
         if (tfm != null)
-            yield return new Finding("game.target-framework", c, Severity.Warn, $"{name} does not target net10.0",
-                "2dog packages are net10.0", null, name,
+            yield return new Finding("game.target-framework", c, Severity.Warn, $"{name} does not target net10.0 or net11.0",
+                "2dog packages are net10.0 and net11.0", null, name,
                 new Fix($"patch:{name}:tfm", FixClass.Announced, $"upgrade {name} to net10.0 (patches the csproj: {string.Join("; ", full.Added)})",
                     () => ApplyPatch(true)));
         else
-            yield return Finding.Pass("game.target-framework", c, "net10.0");
+            yield return Finding.Pass("game.target-framework", c, "net10.0 or net11.0");
 
         var properties = safe.Added.Where(a => a is "EnableDynamicLoading" or "AllowUnsafeBlocks").ToList();
         if (properties.Count > 0)

@@ -55,7 +55,8 @@ internal static class CsprojPatcher
             patch.Add(Element(ns, "TargetFramework", TargetFramework));
             added.Add($"TargetFramework: {TargetFramework}");
         }
-        else if (upgradeTargetFramework && targetFrameworks.Any(e => e.Value != TargetFramework))
+        // 2dog packages carry net10.0 and net11.0 assemblies: either is current, anything else is raised.
+        else if (upgradeTargetFramework && targetFrameworks.Any(e => e.Value is not (TargetFramework or "net11.0")))
         {
             foreach (var targetFramework in targetFrameworks)
                 targetFramework.Value = TargetFramework;
