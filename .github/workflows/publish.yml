@@ -27,7 +27,7 @@ permissions:
 
 env:
   UV_LOCKED: '1'
-  # The .NET 11 CLI stalls for seconds per call on self-hosted runners while its telemetry probes the environment.
+  # No CLI telemetry in CI: on Blacksmith runners its environment probing stalls every .NET 11 call for seconds.
   DOTNET_CLI_TELEMETRY_OPTOUT: '1'
 
 concurrency:

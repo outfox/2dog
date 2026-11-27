@@ -1,8 +1,8 @@
 # gdUnit MTP contracts
 
 These hosts consume the packed `2dog.gdunit` package. They share the pure and
-mixed-scene fixtures with `tests/gdscript-host`, and use .NET 10's native MTP
-runner through this directory's `global.json`.
+mixed-scene fixtures with `tests/gdscript-host`, and use the SDK's native MTP
+runner (.NET 10 or newer) through this directory's `global.json`.
 
 After packing the current engine, bindings, desktop natives and editor tools:
 

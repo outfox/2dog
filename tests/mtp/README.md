@@ -8,8 +8,9 @@ uv run python tests/mtp/test_hosts.py --configuration Debug --precision single
 
 The suite exercises xUnit's MTP v2 runner, NUnit's official MTP v2 bridge,
 and the embedded GdUnit MTP framework. It checks discovery, stable IDs,
-parameter-row selection, empty selections, results, native warnings, native
-.NET 10 `dotnet test`, cancellation and Godot owner-thread teardown.
+parameter-row selection, empty selections, results, native warnings, the SDK's
+native `dotnet test` (.NET 10 or newer; this checkout's SDK 11 through the
+directory's `global.json`), cancellation and Godot owner-thread teardown.
 
 On Windows, also run the native extension shutdown regression (requires CMake and a C++ compiler):
 

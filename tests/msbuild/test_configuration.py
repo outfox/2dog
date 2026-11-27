@@ -1,6 +1,6 @@
 """Check configuration defaults against the installed SDK without linking Godot.
 
-Requires .NET 10 and wasm-tools. Run with: python -m unittest discover -s tests/msbuild -v
+Requires the .NET 11 SDK with the wasm-tools and wasm-tools-net10 workloads. Run with: python -m unittest discover -s tests/msbuild -v
 """
 
 from pathlib import Path

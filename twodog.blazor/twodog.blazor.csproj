@@ -30,7 +30,7 @@
          packages must stay out of that server. The wasm client references 2dog.engine itself. -->
     <!-- The components package follows the app's framework major. -->
     <PropertyGroup Condition="'$(TargetFramework)' == 'net11.0'">
-        <AspNetCoreVersion>11.0.*</AspNetCoreVersion>
+        <AspNetCoreVersion>$(AspNetCoreVersionNet11)</AspNetCoreVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\twodog.engine\twodog.engine.csproj" PrivateAssets="all"/>

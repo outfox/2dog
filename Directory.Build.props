@@ -39,8 +39,10 @@
         <WindowsAppSdkVersion>2.4.0</WindowsAppSdkVersion>
         <!-- ASP.NET Core (Blazor) packages for 2dog.blazor and the Blazor host. (The template consumes it via its
              ASPNETCORE_PKG_VERSION token, substituted on pack and scaffold.) Floats on the patch level, so every
-             restore takes the newest 10.0 servicing release and its security fixes. -->
+             restore takes the newest 10.0 servicing release and its security fixes. 2dog.blazor's net11.0 assembly
+             takes the Net11 pin: the components package follows the app's framework major. -->
         <AspNetCoreVersion>10.0.*</AspNetCoreVersion>
+        <AspNetCoreVersionNet11>11.0.*</AspNetCoreVersionNet11>
         <!-- Qt Bridge for C# (pre-release) for the Qt Quick host demo. Its packages are per RID; only win-x64 bundles Qt. -->
         <QtBridgeVersion>0.4.0-beta</QtBridgeVersion>
         <!-- Must match the emscripten of the .NET browser-wasm runtime pack (libgodot.a links into dotnet.native.wasm):

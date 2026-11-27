@@ -92,18 +92,22 @@ async function run() {
 
         const message = JSON.parse(event.data);
 
+        // Auto-attach covers one level, so each worker session enables it for the workers it starts itself.
+        // Runtime.enable replays exceptions thrown before the probe attached.
+        if (message.method === "Target.attachedToTarget") {
+            const { sessionId } = message.params;
+            socket.send(JSON.stringify({ id: ++commandId, sessionId, method: "Runtime.enable" }));
+            socket.send(JSON.stringify({ id: ++commandId, sessionId, method: "Target.setAutoAttach",
+                params: { autoAttach: true, waitForDebuggerOnStart: false, flatten: true } }));
+            return;
+        }
+
         // Worker sessions report only their uncaught exceptions: the page sees a thread crash without its stack.
         if (message.sessionId) {
             if (message.method === "Runtime.exceptionThrown") {
                 const details = message.params.exceptionDetails;
                 console.error(`[worker:exception] ${details.exception?.description ?? details.text}`);
             }
-            return;
-        }
-
-        if (message.method === "Target.attachedToTarget") {
-            socket.send(JSON.stringify({
-                id: ++commandId, sessionId: message.params.sessionId, method: "Runtime.enable" }));
             return;
         }
 

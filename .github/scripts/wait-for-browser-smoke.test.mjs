@@ -32,12 +32,17 @@ async function probe(mode) {
             const { id, method, params, sessionId } = JSON.parse(json);
             queueMicrotask(() => {
                 if (sessionId) {
-                    // A worker's own default context must not replace the page's.
-                    this.message({ sessionId, method: 'Runtime.executionContextCreated', params: { context: {
-                        id: 9, uniqueId: 'worker', origin: new URL(targetUrl).origin,
-                        auxData: { frameId: 'main', isDefault: true } } } });
-                    this.message({ sessionId, method: 'Runtime.exceptionThrown', params: { exceptionDetails: {
-                        exception: { description: 'RuntimeError: null function\n    at worker-frame' } } } });
+                    if (method === 'Runtime.enable') {
+                        // A worker's own default context must not replace the page's.
+                        this.message({ sessionId, method: 'Runtime.executionContextCreated', params: { context: {
+                            id: 9, uniqueId: 'worker', origin: new URL(targetUrl).origin,
+                            auxData: { frameId: 'main', isDefault: true } } } });
+                        this.message({ sessionId, method: 'Runtime.exceptionThrown', params: { exceptionDetails: {
+                            exception: { description: `RuntimeError: null function\n    at ${sessionId}-frame` } } } });
+                    } else if (method === 'Target.setAutoAttach' && sessionId === 'worker-1') {
+                        // A worker started by a worker is announced on its parent's session.
+                        this.message({ sessionId, method: 'Target.attachedToTarget', params: { sessionId: 'worker-2' } });
+                    }
                     this.message({ sessionId, id, result: {} });
                 } else if (method === 'Target.setAutoAttach') {
                     this.message({ method: 'Target.attachedToTarget', params: { sessionId: 'worker-1' } });
@@ -105,11 +110,12 @@ test('waits for the replacement context when navigation invalidates an evaluatio
     assert.deepEqual(result.evaluations, ['context-1', 'replacement']);
 });
 
-test('prints the stack of an uncaught exception on a worker', async () => {
+test('prints the stack of an uncaught exception on a worker, and on a worker it started', async () => {
     const result = await probe('delayed');
     assert.equal(result.exitCode, 0, result.output);
     assert.deepEqual(result.evaluations, ['context-1']);
-    assert.match(result.output, /\[worker:exception\] RuntimeError: null function\n    at worker-frame/);
+    assert.match(result.output, /\[worker:exception\] RuntimeError: null function\n    at worker-1-frame/);
+    assert.match(result.output, /\[worker:exception\] RuntimeError: null function\n    at worker-2-frame/);
 });
 
 test('still fails for unrelated protocol errors', async () => {

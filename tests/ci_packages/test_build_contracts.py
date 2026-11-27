@@ -73,7 +73,9 @@ class NativeIdentityTests(unittest.TestCase):
         self.assertNotEqual(baseline, self.identity(props, tree=b"new compiler flags"))
         self.assertNotEqual(baseline, self.identity(props, godot=b"b" * 40))
         self.assertNotEqual(baseline, self.identity(props.replace("3.1.56", "4.0.1")))
-        self.assertNotEqual(baseline, self.identity(props.replace("<TwoDogRevision>", "<EmscriptenVersionNet11>6.0.3</EmscriptenVersionNet11><TwoDogRevision>")))
+        net11 = props.replace("<TwoDogRevision>", "<EmscriptenVersionNet11>6.0.3</EmscriptenVersionNet11><TwoDogRevision>")
+        self.assertNotEqual(baseline, self.identity(net11))
+        self.assertNotEqual(self.identity(net11), self.identity(net11.replace("6.0.3", "6.0.4")))
         self.assertEqual(self.identity(props, kind="package"), self.identity(props.replace(">1<", ">2<"), kind="package"))
 
     def test_published_native_version_requires_matching_input_stamp(self):
