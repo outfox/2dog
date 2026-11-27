@@ -125,12 +125,29 @@ completion, `Start()` throws `InvalidOperationException`.
 
 ```csharp
 public bool Update()
+public bool Update(double deltaSeconds)
 ```
 
 Processes one main-loop frame. Returns `true` while Godot keeps running and
 `false` once it quits or requests exit. Dispose the engine after the main loop
 stops. `Update()` throws `InvalidOperationException` if you call it recursively
 or while `Run()` owns the main loop.
+
+On the 4.8 line, pass finite, nonnegative elapsed seconds to drive one frame
+from the host clock. For stopwatch timestamps, use
+`engine.Update((now - previous) / (double)Stopwatch.Frequency)`. For integer
+microsecond timestamps, use `engine.Update((nowUs - previousUs) / 1_000_000.0)`.
+One call runs one idle pass, including for zero elapsed time. Physics consumes
+fixed ticks up to `Godot.Engine.MaxPhysicsStepsPerFrame`, discards excess whole
+ticks, and retains the fraction for interpolation. Idle and any draw use the
+full interval with Godot's time scale. The overload bypasses automatic frame pacing and delta smoothing.
+Call `Update()` to resume Godot's clock.
+
+On WebGPU, the automatic browser loop uses the project's
+`rendering/rendering_device/vsync/frame_queue_size` at startup. With a queue
+size of 3, it defers the next iteration while three presented submissions are
+outstanding. Firefox keeps its existing exemption. An explicit `Update(deltaSeconds)`
+advances even when the automatic loop would defer.
 
 ### `Iteration`
 
