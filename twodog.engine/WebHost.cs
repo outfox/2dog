@@ -34,6 +34,13 @@ internal static unsafe partial class WebHost
 
     internal static bool Iteration() => libgodot_web_iteration() != 0;
 
+#if GODOT4_8_OR_GREATER
+    [LibraryImport("libgodot")]
+    private static partial byte libgodot_web_iteration_with_delta(double deltaSeconds);
+
+    internal static bool Iteration(double deltaSeconds) => libgodot_web_iteration_with_delta(deltaSeconds) != 0;
+#endif
+
     // Emscripten runtime functions, resolved statically against the main
     // module by the wasm pinvoke table ("*" convention).
     [DllImport("*")]

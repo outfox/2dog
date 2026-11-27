@@ -469,18 +469,33 @@ public class Engine : IDisposable, IAsyncDisposable
     }
 
     /// <summary>Runs one engine frame. A false result means Godot quit or requested exit; dispose this Engine afterward.</summary>
-    public bool Update()
+    public bool Update() => UpdateCore(null);
+
+#if GODOT4_8_OR_GREATER
+    /// <summary>Runs one iteration using the host's elapsed seconds. Returns false when Godot requests exit.</summary>
+    /// <remarks>Zero runs an idle pass. Physics uses fixed ticks up to the configured catch-up limit.</remarks>
+    public bool Update(double deltaSeconds)
     {
-        if (_runActive)
-            throw new InvalidOperationException($"{nameof(Engine)}: Run() already owns the frame loop.");
-        return !IterateCore();
+        if (!double.IsFinite(deltaSeconds) || deltaSeconds < 0)
+            throw new ArgumentOutOfRangeException(nameof(deltaSeconds), "Elapsed seconds must be finite and nonnegative.");
+        return UpdateCore(deltaSeconds);
     }
+#endif
 
     /// <summary>Runs one engine frame. A true result means Godot requested exit; dispose this Engine afterward.</summary>
     [Obsolete("Use Update() instead; it returns false when Godot quits, the inverse of Iteration().")]
     public bool Iteration() => !Update();
 
-    private bool IterateCore()
+    private bool UpdateCore(double? deltaSeconds)
+    {
+        if (_runActive)
+            throw new InvalidOperationException($"{nameof(Engine)}: Run() already owns the frame loop.");
+        return !IterateCore(deltaSeconds);
+    }
+
+    private bool IterateCore() => IterateCore(null);
+
+    private bool IterateCore(double? deltaSeconds)
     {
         GodotInstance instance;
         lock (_sync)
@@ -496,7 +511,13 @@ public class Engine : IDisposable, IAsyncDisposable
         _lifecycleTrace?.IterationStarted();
         try
         {
-            var quit = OperatingSystem.IsBrowser() ? WebHost.Iteration() : instance.Iteration();
+            bool quit;
+#if GODOT4_8_OR_GREATER
+            if (deltaSeconds is double seconds)
+                quit = OperatingSystem.IsBrowser() ? WebHost.Iteration(seconds) : instance.IterationWithDelta(seconds);
+            else
+#endif
+                quit = OperatingSystem.IsBrowser() ? WebHost.Iteration() : instance.Iteration();
             if (quit) _lifecycleTrace?.Log("quit-returned");
             return quit || _disposeRequested;
         }

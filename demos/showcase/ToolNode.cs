@@ -12,6 +12,8 @@ public partial class ToolNode : Node
     [Export]
     public int ProcessCount { get; set; }
 
+    public double LastProcessDelta { get; private set; }
+
     public override void _Ready()
     {
         ReadyCalled = true;
@@ -20,5 +22,6 @@ public partial class ToolNode : Node
     public override void _Process(double delta)
     {
         ProcessCount++;
+        LastProcessDelta = delta;
     }
 }
