@@ -33,7 +33,8 @@ def fingerprint(ref="HEAD", godot=None, kind="build", root=ROOT):
     poe["tasks"] = {"build-godot": poe["tasks"]["build-godot"]}
     native_poe = json.dumps(poe, sort_keys=True).encode()
     props = git("show", f"{ref}:Directory.Build.props", root=root).decode()
-    emscripten = ET.fromstring(props).findtext(".//EmscriptenVersion")
+    root_element = ET.fromstring(props)
+    emscripten = " ".join(root_element.findtext(f".//{name}") or "" for name in ("EmscriptenVersion", "EmscriptenVersionNet11")).strip()
     if kind == "package":
         # Another line supplies its own gitlink; release counters and labels never change native bytes.
         props = re.sub(r"<(GodotVersion|TwoDogRevision|NativesRevision|TwoDogPrerelease)>[^<]*</\1>", "", props)

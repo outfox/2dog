@@ -16,6 +16,11 @@ expected=(native-build.json godotsharp.zip godotsharp-nupkgs.zip godot-source-ge
   godot-android-java.zip
   libgodot-browser-wasm-template_debug.zip libgodot-browser-wasm-template_release.zip
   libgodot-browser-wasm-threads-template_debug.zip libgodot-browser-wasm-threads-template_release.zip)
+# The 4.7 line ships no net11.0 web payloads: its fork branch lacks the Emscripten 6 fixes.
+if ! grep -q '<GodotVersion>4\.7\.' Directory.Build.props; then
+  expected+=(libgodot-browser-wasm-net11-template_debug.zip libgodot-browser-wasm-net11-template_release.zip
+    libgodot-browser-wasm-threads-net11-template_debug.zip libgodot-browser-wasm-threads-net11-template_release.zip)
+fi
 for rid in linux-x64 win-x64 osx-arm64; do
   for target in template_debug template_release editor; do
     expected+=("libgodot-$rid-$target.zip")

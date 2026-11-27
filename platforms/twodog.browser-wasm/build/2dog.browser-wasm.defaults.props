@@ -4,5 +4,14 @@
              An explicit project or command-line setting takes precedence. -->
         <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == '' And '$(Configuration)' == 'Release'">false</WasmEmitSymbolMap>
         <WasmEmitSymbolMap Condition="'$(WasmEmitSymbolMap)' == ''">true</WasmEmitSymbolMap>
+        <!-- The .NET 11 SDK sets this only in Microsoft.NET.Sdk.WebAssembly; net10.0 hosts on the plain or the Godot
+             SDK need it to publish (NETSDK1102 otherwise). -->
+        <SelfContained Condition="'$(SelfContained)' == ''">true</SelfContained>
+    </PropertyGroup>
+    <!-- Plain-shell hosts on the WebAssembly SDK: the Godot shell loads fixed file names, and the finished bundle is
+         precompressed by TwoDogWebPrecompressBundle. Blazor fingerprints and compresses itself. -->
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' And '$(UsingMicrosoftNETSdkWebAssembly)' == 'true' And '$(UsingMicrosoftNETSdkBlazorWebAssembly)' != 'true'">
+        <WasmFingerprintAssets Condition="'$(WasmFingerprintAssets)' == ''">false</WasmFingerprintAssets>
+        <CompressionEnabled Condition="'$(CompressionEnabled)' == ''">false</CompressionEnabled>
     </PropertyGroup>
 </Project>

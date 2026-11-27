@@ -16,6 +16,8 @@ concurrency:
 
 env:
   UV_LOCKED: '1'
+  # No CLI telemetry in CI: on Blacksmith runners its environment probing stalls every .NET 11 call for seconds.
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
 
 permissions:
   contents: read # jobs that need more (build-natives, deploy) declare their own
@@ -180,6 +182,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -240,6 +243,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       # Fail before packing if the applied release version disagrees with its signed tag.
       - name: Verify tag matches TwoDogVersion
@@ -348,10 +352,8 @@ jobs:
             !godot/bin/android/**
             !godot/bin/**/ios/**
             !godot/bin/ios/**
-            !godot/bin/web/**
-            !godot/bin/web-threads/**
-            !godot/bin/double/web/**
-            !godot/bin/double/web-threads/**
+            !godot/bin/web*/**
+            !godot/bin/double/web*/**
             godot/modules/mono/editor/Godot.NET.Sdk/Godot.SourceGenerators/bin/Release/netstandard2.0/
           retention-days: 3
 
@@ -363,6 +365,8 @@ jobs:
           path: |
             godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web/
             godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web-threads/
+            godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web-net11/
+            godot/bin/${{ env.TWODOG_BUILD_SUBDIR }}web-threads-net11/
             packages/2dog.browser-wasm*.nupkg
           if-no-files-found: error
           compression-level: 0
@@ -418,6 +422,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -540,6 +545,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -685,6 +691,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
@@ -759,6 +766,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -858,6 +866,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -1240,6 +1249,17 @@ jobs:
           fi
           exit $fail
 
+      # Last, because it re-restores the host for another framework: the engine's net11.0 build on the .NET 11 runtime.
+      - name: Publish and run showcase desktop host on .NET 11
+        shell: bash
+        run: |
+          out=demos/showcase/showcase.2dog/bin/${{ env.TWODOG_BUILD_SUBDIR }}Release/net11.0/publish-net11
+          dotnet publish demos/showcase/showcase.2dog -c Release -r ${{ matrix.rid }} -p:TwoDogDemoFramework=net11.0 -o "$out"
+          "$out/${{ matrix.exe }}" --headless --quit-after 120 -- --2dog-smoke-markers 2>&1 | tee smoke-net11.log
+          for marker in 2DOG_CSHARP_SCRIPT_SMOKE_PASSED 2DOG_GDSCRIPT_LINKER_SMOKE_PASSED 2DOG_GDEXTENSION_SMOKE_PASSED 2DOG_API_SMOKE_PASSED; do
+            grep -q "$marker" smoke-net11.log || { echo "::error::[net11] $marker missing"; exit 1; }
+          done
+
   # Exercise packaged Dawn once per native platform, separately from the normal desktop lifecycle.
   webgpu-desktop:
     name: WebGPU Desktop (${{ matrix.name }})
@@ -1270,6 +1290,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Download NuGet packages
         uses: actions/download-artifact@v8
@@ -1343,7 +1364,7 @@ jobs:
   # is complete. Consumers never install emsdk — the workload ships the
   # matching emscripten (see <EmscriptenVersion> in Directory.Build.props).
   web-smoke:
-    name: Web Smoke (${{ matrix.flavor }}, AOT=${{ matrix.aot }}) [${{ matrix.precision }}]
+    name: Web Smoke (${{ matrix.flavor }}, AOT=${{ matrix.aot }}, ${{ matrix.framework }}) [${{ matrix.precision }}]
     needs: [check-natives, pack]
     # See the test job for why this cannot rely on the implicit success().
     if: github.repository == 'outfox/2dog' && (!cancelled() && needs.pack.result == 'success')
@@ -1357,9 +1378,16 @@ jobs:
         # AOT is the slowest smoke build; keep it as a release gate for both
         # pushed v* tags and release.yml's workflow_dispatch on the new tag.
         aot: ${{ fromJSON((startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/double-precision') && '[false, true]' || '[false]') }}
+        framework: [net10.0]
         # Contracts and exception diagnostics run once, independently of the app publishes.
         include:
-          - {flavor: checks, precision: single, aot: false}
+          - {flavor: checks, precision: single, aot: false, framework: net10.0}
+          # The net11.0 payloads (another emscripten) and bundle path, plain and threaded. The 4.7 line ships none:
+          # there these entries name net10.0 and so merge into the jobs above instead of adding any.
+          - {flavor: web, precision: single, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
+          - {flavor: web, precision: double, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
+          - {flavor: webmt, precision: single, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
+          - {flavor: webmt, precision: double, aot: false, framework: "${{ needs.check-natives.outputs.line == '4.7' && 'net10.0' || 'net11.0' }}"}
 
     env:
       TwoDogPrecision: ${{ matrix.precision }}
@@ -1380,6 +1408,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -1394,7 +1423,7 @@ jobs:
           package-manager-cache: false
 
       - name: Install wasm-tools workload
-        run: uv run poe install-workloads wasm-tools
+        run: uv run poe install-workloads wasm-tools wasm-tools-net10
 
       - name: Setup pinned Chrome
         uses: ./.github/actions/setup-chrome
@@ -1440,17 +1469,17 @@ jobs:
       # Keep the documented from-root publish flow under the root SDK pin.
       - name: Publish showcase.${{ matrix.flavor }}
         if: matrix.flavor != 'checks'
-        run: dotnet publish demos/showcase/showcase.${{ matrix.flavor }} -c Release -p:RunAOTCompilation=${{ matrix.aot }}
+        run: dotnet publish demos/showcase/showcase.${{ matrix.flavor }} -c Release -p:RunAOTCompilation=${{ matrix.aot }} -p:TwoDogDemoFramework=${{ matrix.framework }}
 
       - name: Verify app bundle
         if: matrix.flavor == 'web' || matrix.flavor == 'webmt'
         run: |
           BUNDLE=demos/showcase/showcase.${{ matrix.flavor }}/AppBundle
-          # The last four dotnet.* files back the shell's modulepreload hints;
+          # The last three dotnet.* files back the shell's modulepreload hints;
           # a rename there would 404 on every page load while CI stays green.
           for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" \
                    "$BUNDLE/twodog.sizes.json" "$BUNDLE/godot.wasm.br" "$BUNDLE/godot.wasm.gz" "$BUNDLE/godot.pck.gz" \
-                   "$BUNDLE/_framework/dotnet.js" "$BUNDLE/_framework/dotnet.boot.js" \
+                   "$BUNDLE/_framework/dotnet.js" \
                    "$BUNDLE/_framework/dotnet.runtime.js" "$BUNDLE/_framework/dotnet.native.js"; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing $f in the published app bundle"
@@ -1486,7 +1515,7 @@ jobs:
           for f in "$BUNDLE/godot.wasm" "$BUNDLE/godot.pck" "$BUNDLE/godot.js" "$BUNDLE/index.html" \
                    "$BUNDLE/twodog.sizes.json" "$BUNDLE/godot.wasm.br" "$BUNDLE/godot.wasm.gz" "$BUNDLE/godot.pck.gz" \
                    "$BUNDLE/webxr-layers-polyfill.min.js" \
-                   "$BUNDLE/_framework/dotnet.js" "$BUNDLE/_framework/dotnet.boot.js" \
+                   "$BUNDLE/_framework/dotnet.js" \
                    "$BUNDLE/_framework/dotnet.runtime.js" "$BUNDLE/_framework/dotnet.native.js"; do
             if [ ! -f "$f" ]; then
               echo "::error::Missing $f in the published webxr app bundle"
@@ -1640,7 +1669,7 @@ jobs:
 
           BUNDLE=demos/showcase/showcase.web/AppBundle
           dotnet msbuild demos/showcase/showcase.web/showcase.web.csproj -nologo -v:m -p:Configuration=Release \
-            -t:TwoDogWebPrecompressBundle \
+            -t:TwoDogWebPrecompressBundle -p:TwoDogDemoFramework=${{ matrix.framework }} \
             -p:TwoDogWebPrecompressFormats=gz -p:TwoDogWebPrecompressKeepOriginals=false
           LEFTOVERS=$(find "$BUNDLE" -name '*.br' -o -name 'godot.wasm' -o -name 'godot.pck' \
             -o -path "$BUNDLE/_framework/*.wasm" -o -path "$BUNDLE/_framework/*.dat")
@@ -1872,6 +1901,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Setup uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -1880,7 +1910,7 @@ jobs:
           enable-cache: false
 
       - name: Install wasm-tools workload
-        run: uv run poe install-workloads wasm-tools
+        run: uv run poe install-workloads wasm-tools wasm-tools-net10
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -2119,6 +2149,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Download native and NuGet inputs concurrently
         uses: ./.github/actions/download-ci-inputs
@@ -2265,6 +2296,7 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+          dotnet-version: 10.0.x
 
       - name: Setup Java
         uses: actions/setup-java@v5

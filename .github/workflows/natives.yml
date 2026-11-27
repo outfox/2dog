@@ -29,6 +29,8 @@ permissions:
 
 env:
   UV_LOCKED: '1'
+  # No CLI telemetry in CI: on Blacksmith runners its environment probing stalls every .NET 11 call for seconds.
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
 
 jobs:
   fingerprint:

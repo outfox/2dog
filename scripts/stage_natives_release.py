@@ -31,9 +31,12 @@ def stage(assets, root, precision, identity=None):
             name = f"{prefix}.{platform}.{target}{suffix}.{arch}.shared_library.{extension}"
             manifest.append((f"libgodot-{rid}-{target}", selected, [name]))
     for target in ("template_release", "template_debug"):
-        manifest.append((f"libgodot-browser-wasm-{target}", selected / f"web/{target}", ["libgodot/libgodot.a"]))
-        manifest.append((f"libgodot-browser-wasm-threads-{target}", selected / f"web-threads/{target}",
-                         ["libgodot/libgodot.a"]))
+        # One payload per .NET browser-wasm runtime pack: net10.0 (no suffix) and net11.0, which the 4.7 line lacks.
+        props = root / "Directory.Build.props"
+        net11 = not (props.is_file() and "<GodotVersion>4.7." in props.read_text(encoding="utf-8"))
+        for flavor in ("", "-threads", *(("-net11", "-threads-net11") if net11 else ())):
+            manifest.append((f"libgodot-browser-wasm{flavor}-{target}", selected / f"web{flavor}/{target}",
+                             ["libgodot/libgodot.a"]))
         for rid, arch in (("android-arm64", "arm64"), ("android-x64", "x86_64")):
             manifest.append((f"libgodot-{rid}-{target}", selected / f"android/{target}/{arch}",
                              ["libgodot_android.so", "libc++_shared.so"]))

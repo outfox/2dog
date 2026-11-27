@@ -1,6 +1,6 @@
 """Check configuration defaults against the installed SDK without linking Godot.
 
-Requires .NET 10 and wasm-tools. Run with: python -m unittest discover -s tests/msbuild -v
+Requires the .NET 11 SDK with the wasm-tools and wasm-tools-net10 workloads. Run with: python -m unittest discover -s tests/msbuild -v
 """
 
 from pathlib import Path
@@ -116,6 +116,17 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(values["TwoDogWebNativeDir"], "")
         output = self.run_msbuild(project, "-p:Configuration=Debug", "-t:TwoDogWebCheckNativeDir", success=False)
         self.assertIn("debug web payload (libgodot.a) not found", output)
+
+    def test_net11_hosts_select_the_payload_built_for_their_runtime(self):
+        for threads, payload in (("false", "web-net11"), ("true", "web-threads-net11")):
+            with self.subTest(payload=payload):
+                selected = self.archive("release", payload)
+                selected.parent.mkdir(parents=True)
+                selected.write_bytes(b"fixture archive; no native linking required")
+                project = self.project(
+                    f"<TargetFramework>net11.0</TargetFramework><WasmEnableThreads>{threads}</WasmEnableThreads>")
+                found = self.run_msbuild(project, "-p:Configuration=Release", "-getProperty:TwoDogWebNativeDir").strip()
+                self.assertEqual((Path(found) / "libgodot/libgodot.a").resolve(), selected.resolve())
 
     def test_threaded_hosts_select_the_threaded_payload_only(self):
         threaded = self.archive("release", "web-threads")

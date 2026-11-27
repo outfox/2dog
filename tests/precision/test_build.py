@@ -33,6 +33,14 @@ class NativePrecisionTests(unittest.TestCase):
                         stdout=f"emcc version {version}", returncode=0)), self.assertRaises(SystemExit):
                     build.check_emscripten_version()
 
+    def test_web_payload_directory_follows_the_active_emscripten(self):
+        pins = {"EmscriptenVersion": "3.1.56", "EmscriptenVersionNet11": "6.0.3"}
+        with patch.object(build, "read_pinned_emscripten_version", side_effect=lambda name="EmscriptenVersion": pins[name]):
+            for version, suffix in (("3.1.56", ""), ("6.0.3", "-net11")):
+                with patch.object(build.subprocess, "run", return_value=argparse.Namespace(
+                        stdout=f"emcc version {version}", returncode=0)):
+                    self.assertEqual(suffix, build.check_emscripten_version())
+
     def test_fork_sdk_copy_target_stays_in_shared_feed(self):
         target = ROOT / "godot/modules/mono/Directory.Build.targets"
         if not target.is_file():

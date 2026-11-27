@@ -88,7 +88,8 @@ internal static class SolutionOps
     {
         // `dotnet sln add` is idempotent (already-present projects are reported
         // and skipped) and handles both .sln and .slnx.
-        var args = new List<string> { "sln", solutionPath, "add" };
+        // Every project is listed: with references followed, the .NET 11 SDK fails on a project it already added itself.
+        var args = new List<string> { "sln", solutionPath, "add", "--include-references", "false" };
         args.AddRange(projectPaths);
         Run(Path.GetDirectoryName(solutionPath)!, $"updating {Path.GetFileName(solutionPath)}", args.ToArray());
     }

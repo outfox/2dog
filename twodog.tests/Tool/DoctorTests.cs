@@ -714,6 +714,30 @@ public class DoctorTests : IDisposable
     }
 
     [Fact]
+    public void Net11GameProject_KeepsItsTargetFramework()
+    {
+        var dir = Scaffold("--generic");
+        Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>", "<TargetFramework>net11.0</TargetFramework>");
+
+        Assert.Null(Issue(Doctor(dir, null, "--json").Stdout, "game.target-framework"));
+        Assert.Equal(0, Doctor(dir, null, "--fix-all").ExitCode);
+        Assert.Contains("<TargetFramework>net11.0</TargetFramework>", File.ReadAllText(Path.Combine(dir, "Game.csproj")));
+    }
+
+    [Fact]
+    public void OutdatedTargetFramework_IsRaisedWithoutLoweringANet11One()
+    {
+        var dir = Scaffold("--generic");
+        Edit(dir, "Game.csproj", "<TargetFramework>net10.0</TargetFramework>",
+            "<TargetFramework>net11.0</TargetFramework><TargetFramework Condition=\"'$(Legacy)' == 'true'\">net8.0</TargetFramework>");
+
+        Assert.Equal(0, Doctor(dir, null, "--fix-all").ExitCode);
+        var csproj = File.ReadAllText(Path.Combine(dir, "Game.csproj"));
+        Assert.Contains("<TargetFramework>net11.0</TargetFramework>", csproj);
+        Assert.Contains("<TargetFramework Condition=\"'$(Legacy)' == 'true'\">net10.0</TargetFramework>", csproj);
+    }
+
+    [Fact]
     public void LoadProblems_CoverTraversalAssemblyNames_AndUnreadableFiles()
     {
         var dir = Scaffold("--generic");
