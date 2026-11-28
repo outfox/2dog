@@ -284,6 +284,7 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
         game = self.project("Game", sdk=f"Godot.NET.Sdk/{GODOT}",
                             extra="<PropertyGroup><PackageVersion_GodotSharp>0.0.1-test</PackageVersion_GodotSharp>"
                                   "</PropertyGroup>", source="public partial class Example : Godot.Node { }")
+        (game.parent / "project.godot").write_text("")  # What marks the reference as the game for a host.
         for config in ("Debug", "ExportRelease"):
             with self.subTest(config=config):
                 output = self.dotnet("msbuild", game, "-restore", f"-p:Configuration={config}",
@@ -310,6 +311,27 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
                         "<PrivateAssets>all</PrivateAssets></PackageReference></ItemDefinitionGroup></Project>"))
         output = self.dotnet("build", host, error="TDG001")
         self.assertIn(f"[{game}]", output)
+
+    def test_host_builds_each_referenced_library_once(self):
+        # The host's flag changes a project's identity for MSBuild. Reaching a library both with and without it
+        # builds that library twice in parallel, and the two builds collide on its output files.
+        compiled = ('<Target Name="Say" BeforeTargets="CoreCompile"><Message Importance="high" Text="LIB_COMPILED"/>'
+                    '</Target>')
+        library = '<ItemGroup><ProjectReference Include="../Lib/Lib.csproj"/></ItemGroup>'
+        self.project("Lib", packages=[], extra=compiled, source="public class LibApi { }")
+        self.project("Mid", packages=[], extra=library, source="public class MidApi { }")
+        game = self.project("Game", sdk=f"Godot.NET.Sdk/{GODOT}", extra=library,
+                            source="public partial class Example : Godot.Node { }")
+        # A game on the plain .NET SDK receives the flag as well and must not pass it on either.
+        plain = self.project("Plain", extra=library)
+        for project in (game, plain):
+            (project.parent / "project.godot").write_text("")
+        host = self.project("Host", packages=[(ENGINE, VERSION)], source="public class HostApi { }",
+                            extra='<ItemGroup><ProjectReference Include="../Game/Game.csproj"/>'
+                                  '<ProjectReference Include="../Plain/Plain.csproj"/>'
+                                  '<ProjectReference Include="../Mid/Mid.csproj"/></ItemGroup>')
+        output = self.dotnet("build", host)
+        self.assertEqual(1, output.count("LIB_COMPILED"), output)
 
     def test_incompatible_stock_editor_package_rejected(self):
         project = self.project(packages=[(CORE, VERSION), ("GodotSharpEditor", "0.0.1-test")])
