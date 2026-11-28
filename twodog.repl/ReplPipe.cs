@@ -83,8 +83,10 @@ internal sealed class ReplPipeServer : IDisposable
                 }
                 var id = Interlocked.Increment(ref nextId);
                 var connected = pipe;
-                sessions[id] = Task.Run(() => ServeAsync(id, connected));
+                // Unix closes the listening socket with its last instance, resetting clients queued on it,
+                // so the next instance must exist before a short session can dispose this one.
                 pipe = CreatePipe();
+                sessions[id] = Task.Run(() => ServeAsync(id, connected));
             }
         }
         catch (OperationCanceledException) when (stopped.IsCancellationRequested) { }

@@ -51,7 +51,10 @@ internal sealed class ReadbackProbe
         }
         Require(asyncBuffer, "asynchronous buffer");
         Require(asyncTexture, "asynchronous texture");
+#if GODOT4_8_OR_GREATER
+        // 4.7 copies a browser's synchronous readback ahead of recorded updates; outfox/godot#27 fixed it for 4.8.
         Require(syncBuffer, "buffer");
+#endif
         device.FreeRid(buffer);
         device.FreeRid(texture);
         Passed = true;
