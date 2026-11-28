@@ -17,6 +17,8 @@ internal static class Program
         Engine.RegisterWebPluginsInitializer(GodotPlugins.Game.Main.PluginsInitializer());
         var engine = new Engine("WebGpuBrowserSmoke", args: args);
         engine.Start();
+        // Requested before the timed frames below: they reuse frame slots without returning to the browser.
+        var readback = new ReadbackProbe();
 #if GODOT4_8_OR_GREATER
         var physics = Godot.Engine.GetPhysicsFrames();
         var framesBefore = Godot.Engine.GetProcessFrames();
@@ -53,6 +55,7 @@ internal static class Program
         probe.SelectStage(0);
         engine.Run(() =>
         {
+            readback.Poll();
             int requested = (int)(double)JavaScriptBridge.Eval("Number(document.documentElement.dataset.requestPhase || 0)");
             if (requested != phase && requested < phaseCount)
             {
@@ -69,7 +72,7 @@ internal static class Program
             }
             if (++frames == (forwardPlus && phase == 5 ? 120 : 24))
                 JavaScriptBridge.Eval($"document.documentElement.dataset.readyPhase='{phase}'");
-            if (requested == phaseCount && !validated)
+            if (requested == phaseCount && !validated && readback.Passed)
             {
                 var samples = JavaScriptBridge.Eval("document.documentElement.dataset.samples").AsString().Split(',');
                 for (int i = 0; i < 4; i++)
