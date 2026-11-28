@@ -17,6 +17,9 @@ internal static class Program
         Engine.RegisterWebPluginsInitializer(GodotPlugins.Game.Main.PluginsInitializer());
         var engine = new Engine("WebGpuBrowserSmoke", args: args);
         engine.Start();
+        var method = RenderingServer.GetCurrentRenderingMethod();
+        if (RenderingServer.GetCurrentRenderingDriverName() != "webgpu" || method is not ("mobile" or "forward_plus"))
+            throw new Exception("WebGPU Forward+ or Mobile was not selected.");
         // Requested before the timed frames below: they reuse frame slots without returning to the browser.
         var readback = new ReadbackProbe();
 #if GODOT4_8_OR_GREATER
@@ -30,9 +33,6 @@ internal static class Program
         if (Godot.Engine.GetProcessFrames() != framesBefore + 3 || Godot.Engine.GetPhysicsFrames() != physics + 4)
             throw new Exception("Timed WebGPU updates must run three idle passes and four physics ticks.");
 #endif
-        var method = RenderingServer.GetCurrentRenderingMethod();
-        if (RenderingServer.GetCurrentRenderingDriverName() != "webgpu" || method is not ("mobile" or "forward_plus"))
-            throw new Exception("WebGPU Forward+ or Mobile was not selected.");
         // The page script compares this with the method its adapter is expected to run.
         JavaScriptBridge.Eval($"document.documentElement.dataset.renderingMethod='{method}'");
         JavaScriptBridge.Eval($"document.documentElement.dataset.threads='{(OS.HasFeature("threads") ? 1 : 0)}'");
