@@ -322,9 +322,13 @@ Console.WriteLine("Shared integration binaries loaded with " + typeof(Vector2).G
         self.project("Mid", packages=[], extra=library, source="public class MidApi { }")
         game = self.project("Game", sdk=f"Godot.NET.Sdk/{GODOT}", extra=library,
                             source="public partial class Example : Godot.Node { }")
-        (game.parent / "project.godot").write_text("")
+        # A game on the plain .NET SDK receives the flag as well and must not pass it on either.
+        plain = self.project("Plain", extra=library)
+        for project in (game, plain):
+            (project.parent / "project.godot").write_text("")
         host = self.project("Host", packages=[(ENGINE, VERSION)], source="public class HostApi { }",
                             extra='<ItemGroup><ProjectReference Include="../Game/Game.csproj"/>'
+                                  '<ProjectReference Include="../Plain/Plain.csproj"/>'
                                   '<ProjectReference Include="../Mid/Mid.csproj"/></ItemGroup>')
         output = self.dotnet("build", host)
         self.assertEqual(1, output.count("LIB_COMPILED"), output)
