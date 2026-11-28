@@ -6,10 +6,12 @@
     <PropertyGroup>
         <_TwoDogHostBuild>true</_TwoDogHostBuild>
     </PropertyGroup>
-    <!-- A solution builds the game separately. Share that project instance and validate the host's resolved bindings. -->
+    <!-- A solution builds the game separately. Share that project instance and validate the host's resolved bindings.
+         Only the game gets the flag: any other project would build a second time for references that lack it. -->
     <ItemGroup Condition="'$(BuildingSolutionFile)' != 'true'">
-        <ProjectReference Update="@(ProjectReference)"
-                          AdditionalProperties="%(ProjectReference.AdditionalProperties);_TwoDogHostBuild=true" />
+        <ProjectReference Update="@(ProjectReference)">
+            <AdditionalProperties Condition="Exists('%(RootDir)%(Directory)project.godot')">%(ProjectReference.AdditionalProperties);_TwoDogHostBuild=true</AdditionalProperties>
+        </ProjectReference>
     </ItemGroup>
 
     <!-- ============================================ -->

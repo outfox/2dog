@@ -9,6 +9,10 @@
              stock bindings; 2dog hosts never build those configurations. -->
         <TwoDogUseStockBindings Condition="'$(TwoDogUseStockBindings)' == '' And ('$(Configuration)' == 'ExportDebug' Or '$(Configuration)' == 'ExportRelease')">true</TwoDogUseStockBindings>
     </PropertyGroup>
+    <!-- The host's flag is for the game alone: passed on, it would build the game's references a second time. -->
+    <PropertyGroup Condition="'$(_TwoDogHostBuild)' == 'true' And '$(UsingGodotNETSdk)' == 'true'">
+        <_GlobalPropertiesToRemoveFromProjectReferences>$(_GlobalPropertiesToRemoveFromProjectReferences);_TwoDogHostBuild</_GlobalPropertiesToRemoveFromProjectReferences>
+    </PropertyGroup>
     <!-- Compile with the generator that belongs to the selected bindings. -->
     <Target Name="TwoDogSelectGodotGenerator" BeforeTargets="CoreCompile">
         <ItemGroup Condition="'$(TwoDogUseStockBindings)' == 'true'">
